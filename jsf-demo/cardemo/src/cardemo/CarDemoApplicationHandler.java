@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoApplicationHandler.java,v 1.5 2003/02/11 08:55:07 rkitain Exp $
+ * $Id: CarDemoApplicationHandler.java,v 1.6 2003/02/12 20:53:51 rkitain Exp $
  */
 /*
  *
@@ -139,13 +139,6 @@ public class CarDemoApplicationHandler implements ApplicationHandler{
                 treeId = "/thanks.jsp";
             }
             
-            // Reconfigure button - reset to default package "Custom"
-
-            else if (formEvent.getCommandName().equals("more")) {
-                resetToCustom(optServer);
-                treeId = "/more.jsp";
-            }
-            
             returnValue = true;
             
         }
@@ -167,37 +160,5 @@ public class CarDemoApplicationHandler implements ApplicationHandler{
         }
         
         return returnValue;
-    }
-
-    private void resetToCustom(CurrentOptionServer optServer) {
-        ResourceBundle rb = ResourceBundle.getBundle(
-            "cardemo/Resources", (FacesContext.getCurrentInstance().
-                getLocale()));
-        int i = 0;
-        String[] engines = {"V4", "V6", "V8"};
-        ArrayList engineOption = new ArrayList(engines.length);
-        for (i=0; i<engines.length; i++) {
-            engineOption.add(new SelectItem(
-                engines[i], engines[i], engines[i]));
-        }
-        optServer.setEngineOption(engineOption);
-
-        String[] suspensions = new String[2];
-        suspensions[0] = (String)rb.getObject("Regular");
-        suspensions[1] = (String)rb.getObject("Performance");
-        ArrayList suspensionOption = new ArrayList(suspensions.length);
-        for (i=0; i<suspensions.length; i++) {
-            suspensionOption.add(new SelectItem(suspensions[i],
-                suspensions[i], suspensions[i]));
-        }
-        optServer.setSuspensionOption(suspensionOption);
-        optServer.setCurrentPackage("custom");
-        optServer.setSunRoof(false);
-        optServer.setCruiseControl(false);
-        optServer.setKeylessEntry(false);
-        optServer.setSecuritySystem(false);
-        optServer.setSkiRack(false);
-        optServer.setTowPackage(false);
-        optServer.setGps(false);
     }
 }

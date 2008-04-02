@@ -1,5 +1,5 @@
 /*
- * $Id: PackageAction.java,v 1.7 2003/02/11 19:08:38 rkitain Exp $
+ * $Id: CarActionListener.java,v 1.1 2003/02/12 20:53:50 rkitain Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// PackageAction.java
+// CarActionListener.java
 
 package cardemo;
 
@@ -18,26 +18,30 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
+import javax.faces.event.ValueChangedEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  *
- *  <B>PackageAction</B> is a class ...
+ *  <B>CarActionListener</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: PackageAction.java,v 1.7 2003/02/11 19:08:38 rkitain Exp $
+ * @version $Id: CarActionListener.java,v 1.1 2003/02/12 20:53:50 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class PackageAction implements ActionListener {
+public class CarActionListener implements ActionListener {
 //
 // Protected Constants
 //
@@ -50,6 +54,7 @@ public class PackageAction implements ActionListener {
 // Instance Variables
 //
 
+    private static Log log = LogFactory.getLog(CarActionListener.class);
 // Attribute Instance Variables
 
 // Relationship Instance Variables
@@ -58,7 +63,7 @@ public class PackageAction implements ActionListener {
 // Constructors and Initializers    
 //
 
-    public PackageAction() {
+    public CarActionListener() {
     }
 
 //
@@ -77,7 +82,7 @@ public class PackageAction implements ActionListener {
     }
 
     public void processAction(ActionEvent event) {
-        System.out.println("PackageAction.processAction : actionCommand : "+
+        log.debug("CarActionListener.processAction : actionCommand : "+
             event.getActionCommand());
         String actionCommand = event.getActionCommand();
 
@@ -107,7 +112,12 @@ public class PackageAction implements ActionListener {
             } else if (currentPackage.equals("deluxe")) {
                 processDeluxe(event, rb);
             }
+        } else if (actionCommand.equals("buy")) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.setModelValue("CurrentOptionServer.packagePrice",
+                context.getModelValue("CurrentOptionServer.carCurrentPrice"));
         }
+            
             
     }
 
@@ -122,8 +132,6 @@ public class PackageAction implements ActionListener {
 
         FacesContext context = FacesContext.getCurrentInstance();
 
-        context.setModelValue("CurrentOptionServer.currentPackage", "custom");
-
         String[] engines = {"V4", "V6", "V8"};
         ArrayList engineOption = new ArrayList(engines.length);
         for (i=0; i<engines.length; i++) {
@@ -131,6 +139,20 @@ public class PackageAction implements ActionListener {
                 engines[i], engines[i], engines[i]));
         }
         context.setModelValue("CurrentOptionServer.engineOption", engineOption);
+
+        foundComponent = component.findComponent("currentEngine");
+        String value = null;
+        boolean packageChange = false;
+        if (!context.getModelValue("CurrentOptionServer.currentPackage")
+            .equals("custom")) {
+            value = engines[0];
+            packageChange = true;
+        } else {
+            value = (String)foundComponent.getValue();
+        }
+        foundComponent.setValue(value);
+        context.setModelValue("CurrentOptionServer.currentEngineOption", 
+            value);
 
         String[] suspensions = new String[2];
         suspensions[0] = (String)rb.getObject("Regular");
@@ -142,6 +164,17 @@ public class PackageAction implements ActionListener {
         }
         context.setModelValue("CurrentOptionServer.suspensionOption",
             suspensionOption);
+        foundComponent = component.findComponent("currentSuspension");
+        if (packageChange) {
+            value = suspensions[0];
+        } else {
+            value = (String)foundComponent.getValue();
+        }
+        foundComponent.setValue(value);
+        context.setModelValue("CurrentOptionServer.currentSuspensionOption",
+            value);
+
+        context.setModelValue("CurrentOptionServer.currentPackage", "custom");
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "false");
@@ -192,6 +225,8 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("deluxe");
         foundComponent.setAttribute("commandClass", "package-unselected");
+
+        context.renderResponse();
     }
 
     // helper method to set UI values for "standard" package selection
@@ -205,8 +240,6 @@ public class PackageAction implements ActionListener {
  
         FacesContext context = FacesContext.getCurrentInstance();
 
-        context.setModelValue("CurrentOptionServer.currentPackage", "standard");
-
         String[] engines = {"V4", "V6"};
         ArrayList engineOption = new ArrayList(engines.length);
         for (i=0; i<engines.length; i++) {
@@ -215,6 +248,20 @@ public class PackageAction implements ActionListener {
         }
         context.setModelValue("CurrentOptionServer.engineOption", engineOption);
 
+        foundComponent = component.findComponent("currentEngine");
+        String value = null;
+        boolean packageChange = false;
+        if (!context.getModelValue("CurrentOptionServer.currentPackage")
+            .equals("standard")) {
+            value = engines[0];
+            packageChange = true;
+        } else {
+            value = (String)foundComponent.getValue();
+        }
+        foundComponent.setValue(value);
+        context.setModelValue("CurrentOptionServer.currentEngineOption",
+            value);
+
         String[] suspensions = new String[1];
         suspensions[0] = (String)rb.getObject("Regular");
         ArrayList suspensionOption = new ArrayList();
@@ -222,6 +269,17 @@ public class PackageAction implements ActionListener {
             suspensions[0], suspensions[0]));
         context.setModelValue("CurrentOptionServer.suspensionOption",
             suspensionOption);
+        foundComponent = component.findComponent("currentSuspension");
+        if (packageChange) {
+            value = suspensions[0];
+        } else {
+            value = (String)foundComponent.getValue();
+        } 
+        foundComponent.setValue(value);
+        context.setModelValue("CurrentOptionServer.currentSuspensionOption",
+            value);
+
+        context.setModelValue("CurrentOptionServer.currentPackage", "standard");
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "true");
@@ -279,8 +337,8 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("deluxe");
         foundComponent.setAttribute("commandClass", "package-unselected");
-        //PENDING(rajprem): uncomment this?
-        //context.renderResponse();
+
+        context.renderResponse();
     }
 
     // helper method to set UI values for "performance" package selection
@@ -293,12 +351,24 @@ public class PackageAction implements ActionListener {
 
         FacesContext context = FacesContext.getCurrentInstance();
 
-        context.setModelValue("CurrentOptionServer.currentPackage", "performance");
-
         String[] engines = {"V8"};
         ArrayList engineOption = new ArrayList();
         engineOption.add(new SelectItem(engines[0], engines[0], engines[0]));
         context.setModelValue("CurrentOptionServer.engineOption", engineOption);
+
+        foundComponent = component.findComponent("currentEngine");
+        String value = null;
+        boolean packageChange = false;
+        if (!context.getModelValue("CurrentOptionServer.currentPackage")
+            .equals("performance")) {
+            value = engines[0];
+            packageChange = true;
+        } else {
+            value = (String)foundComponent.getValue();
+        }
+        foundComponent.setValue(value);
+        context.setModelValue("CurrentOptionServer.currentEngineOption",
+            value);
 
         String[] suspensions = new String[1];
         suspensions[0] = (String)rb.getObject("Performance");
@@ -307,6 +377,17 @@ public class PackageAction implements ActionListener {
             suspensions[0], suspensions[0]));
         context.setModelValue("CurrentOptionServer.suspensionOption",
             suspensionOption);
+        foundComponent = component.findComponent("currentSuspension");
+        if (packageChange) {
+            value = suspensions[0];
+        } else {
+            value = (String)foundComponent.getValue();
+        }
+        foundComponent.setValue(value);
+        context.setModelValue("CurrentOptionServer.currentSuspensionOption",
+            value);
+
+        context.setModelValue("CurrentOptionServer.currentPackage", "performance");
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "true");
@@ -377,8 +458,6 @@ public class PackageAction implements ActionListener {
 
         FacesContext context = FacesContext.getCurrentInstance();
 
-        context.setModelValue("CurrentOptionServer.currentPackage", "deluxe");
-
 //PENDING(rogerk) application data should be read from config file..
 
         String[] engines = {"V4", "V6", "V8"};
@@ -389,6 +468,20 @@ public class PackageAction implements ActionListener {
         }
         context.setModelValue("CurrentOptionServer.engineOption", engineOption);
 
+        foundComponent = component.findComponent("currentEngine");
+        String value = null;
+        boolean packageChange = false;
+        if (!context.getModelValue("CurrentOptionServer.currentPackage")
+            .equals("deluxe")) {
+            value = engines[0];
+            packageChange = true;
+        } else {
+            value = (String)foundComponent.getValue();
+        }
+        foundComponent.setValue(value);
+        context.setModelValue("CurrentOptionServer.currentEngineOption",
+            value);
+
         String[] suspensions = new String[1];
         suspensions[0] = (String)rb.getObject("Performance");
         ArrayList suspensionOption = new ArrayList();
@@ -396,6 +489,18 @@ public class PackageAction implements ActionListener {
             suspensions[0], suspensions[0]));
         context.setModelValue("CurrentOptionServer.suspensionOption",
             suspensionOption);
+
+        foundComponent = component.findComponent("currentSuspension");
+        if (packageChange) {
+            value = suspensions[0];
+        } else {
+            value = (String)foundComponent.getValue();
+        } 
+        foundComponent.setValue(value);
+        context.setModelValue("CurrentOptionServer.currentSuspensionOption",
+            value);
+
+        context.setModelValue("CurrentOptionServer.currentPackage", "deluxe");
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "true");
@@ -457,4 +562,4 @@ public class PackageAction implements ActionListener {
         context.renderResponse();
     }
 
-} // end of class PackageAction
+} // end of class CarActionListener

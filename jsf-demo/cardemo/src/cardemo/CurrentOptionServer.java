@@ -1,5 +1,5 @@
 /*
- * $Id: CurrentOptionServer.java,v 1.5 2003/02/11 08:55:07 rkitain Exp $
+ * $Id: CurrentOptionServer.java,v 1.6 2003/02/12 20:53:51 rkitain Exp $
  */
 /*
  *
@@ -64,6 +64,7 @@ public class CurrentOptionServer extends Object {
     protected String carDesc = "This description should never be seen. If it is, your properties files aren't being read.";
     protected String basePrice = "300";
     protected String currentPrice = "250";
+    protected String packagePrice = "100";
     protected String engines[] = {
         "V4", "V6", "V8"
     };
@@ -299,6 +300,14 @@ public class CurrentOptionServer extends Object {
     
     public String getCarCurrentPrice() {
         return currentPrice;
+    }
+
+    public void setPackagePrice(String pp) {
+        packagePrice = pp;
+    }
+
+    public String getPackagePrice() {
+        return packagePrice;
     }
     
     public void setEngineOption(Collection eng) {

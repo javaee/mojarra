@@ -137,7 +137,7 @@
      <h:panel_group>
         <h:output_text  key="yourPriceLabel" bundle="carDemoBundle"  />
         &nbsp;
-        <h:output_text  modelReference="CurrentOptionServer.carCurrentPrice" />
+        <h:output_text  modelReference="CurrentOptionServer.packagePrice" />
      </h:panel_group>
   </f:facet>
 
@@ -147,8 +147,6 @@
 <TR>
 <TD>
 <P>
-<h:command_button  key="configureButton" bundle="carDemoBundle"
-				     commandName="more" />
 <h:command_button key="buy" bundle="carDemoBundle"
                   commandName="customer"/>
 
