@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.8 2003/05/03 06:57:08 rkitain Exp $
+ * $Id: ConfigListener.java,v 1.9 2003/05/04 03:08:09 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -118,14 +118,12 @@ public class ConfigListener implements ServletContextListener
 	Assert.assert_it(null != configBase);
 	// It's an error if this doesn't load.
 
-	// Store the ConfigBase in the Application's AppConfig.
-        ApplicationFactory aFactory = 
-	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application = 
-	    (ApplicationImpl)aFactory.getApplication();
-	application.getAppConfig().setConfigBase(configBase);
+	// Step 1: scan the META-INF directory of all jar files in
+	// "/WEB-INF/lib" for "faces-config.xml" files.
+	scanJarsForConfigFiles(servletContext, configParser, configBase);
 
-	// If the init parameter exists, load the config from there
+	// Step 2. If the init parameter exists, load the config from
+	// there
 	if (null != (initParamFileList = 
 		     servletContext.getInitParameter(RIConstants.CONFIG_FILES_INITPARAM))) {
 	    StringTokenizer toker = new StringTokenizer(initParamFileList, 
@@ -150,7 +148,7 @@ public class ConfigListener implements ServletContextListener
 	    }
 	}
 	else {
-	    // Step 2, load the app's "/WEB-INF/faces-config.xml"
+	    // Step 3, load the app's "/WEB-INF/faces-config.xml"
 	    try {
 		configBase = configParser.parseConfig("/WEB-INF/faces-config.xml",
 						      servletContext,
@@ -160,6 +158,14 @@ public class ConfigListener implements ServletContextListener
 		// do nothing, apps are not required to have a faces-config file
 	    }
 	}	
+
+
+	// Store the ConfigBase in the Application's AppConfig.
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = 
+	    (ApplicationImpl)aFactory.getApplication();
+	application.getAppConfig().setConfigBase(configBase);
 
         servletContext.setAttribute(RIConstants.CONFIG_ATTR, 
 					   configBase);
@@ -174,5 +180,23 @@ public class ConfigListener implements ServletContextListener
         if (log.isTraceEnabled()) {
             log.trace("CONFIG BASE REMOVED FROM CONTEXT...");
         }
+    }
+
+    /**
+     * <p>Algorithm:</p>
+     *
+     * <p>Scan the ServletContext's resourcePaths space for all jars in
+     * "/WEB-INF/lib".</p>
+     *
+     * <p>For each jar, look for a file called
+     * "/META-INF/faces-config.xml".  If that file is present, parse it
+     * into the argument configBase.</p>
+     *
+     *
+     */
+
+    protected void scanJarsForConfigFiles(ServletContext servletContext, 
+					  ConfigParser configParser, 
+					  ConfigBase configBase) {
     }
 } 
