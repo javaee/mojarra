@@ -1,5 +1,5 @@
 /*
- * $Id: UIPageBaseTestCase.java,v 1.1 2003/07/28 22:22:29 eburns Exp $
+ * $Id: UIPageBaseTestCase.java,v 1.2 2003/07/29 16:38:05 eburns Exp $
  */
 
 /*
@@ -84,7 +84,8 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
 
 	// test page with treeId and no renderKitId
 	testParent.getChildren().clear();
-	preSave = new UIPageBase("treeId");
+	preSave = new UIPageBase();
+	preSave.setTreeId("treeId");
 	preSave.setId("page");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
@@ -92,8 +93,8 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIPageBase("different tree id for testing purposes");
-	postSave.setId("page");
+	postSave = new UIPageBase();
+	postSave.setId("newTreeId");
 	testParent.getChildren().add(postSave);
 	try {
 	    postSave.restoreState(facesContext, state);
@@ -105,7 +106,8 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
 
 	// test page with treeId and renderKitId
 	testParent.getChildren().clear();
-	preSave = new UIPageBase("treeId");
+	preSave = new UIPageBase();
+	preSave.setTreeId("treeId");
 	preSave.setId("page");
 	preSave.setRenderKitId("renderKitId");
 	preSave.setRendererType(null); // necessary: we have no renderkit
@@ -114,8 +116,8 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIPageBase("different tree id for testing purposes");
-	postSave.setId("page");
+	postSave = new UIPageBase();
+	postSave.setId("newTreeId1");
 	testParent.getChildren().add(postSave);
 	try {
 	    postSave.restoreState(facesContext, state);

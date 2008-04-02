@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.7 2003/07/29 14:55:25 eburns Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.8 2003/07/29 16:38:06 eburns Exp $
  */
 
 /*
@@ -117,7 +117,9 @@ public class UIComponentTagTestCase extends TestCase {
             new MockExternalContext(servletContext, request, response);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
-        facesContext.setRoot(new UIPageBase("/root"));
+	UIPageBase root = new UIPageBase();
+	root.setTreeId("/root");
+        facesContext.setRoot(root);
         ApplicationFactory applicationFactory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (MockApplication) applicationFactory.getApplication();

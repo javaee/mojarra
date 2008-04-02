@@ -1,5 +1,5 @@
 /*
- * $Id: UIPageBase.java,v 1.2 2003/07/29 14:55:24 eburns Exp $
+ * $Id: UIPageBase.java,v 1.3 2003/07/29 16:38:04 eburns Exp $
  */
 
 /*
@@ -18,13 +18,9 @@ public class UIPageBase extends UINamingContainerBase implements UIPage {
 
     // -------------------------------------------------------- Constructors
 
-    public UIPageBase(String newTreeId) {
-	treeId = newTreeId;
-        setRendererType(null);
-
+    public UIPageBase() { 
+	setRendererType(null);
     }
-
-    public UIPageBase() { }
 
     // ------------------------------------------------------------- Properties
 
@@ -38,7 +34,7 @@ public class UIPageBase extends UINamingContainerBase implements UIPage {
 	renderKitId = newRenderKitId;
     }
 
-    private String treeId;
+    private String treeId = null;
 
     public String getTreeId() {
 	return treeId;

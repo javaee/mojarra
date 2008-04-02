@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.5 2003/07/29 00:42:32 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.6 2003/07/29 16:38:05 eburns Exp $
  */
 
 /*
@@ -97,7 +97,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
             new MockExternalContext(servletContext, request, response);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
-        facesContext.setRoot(new UIPageBase("/treeId"));
+	UIPageBase root = new UIPageBase();
+	root.setTreeId("/treeId");
+        facesContext.setRoot(root);
         ApplicationFactory applicationFactory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (MockApplication) applicationFactory.getApplication();
