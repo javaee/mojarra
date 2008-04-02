@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.97 2003/09/23 20:35:48 eburns Exp $
+ * $Id: UIComponent.java,v 1.98 2003/09/23 21:21:25 eburns Exp $
  */
 
 /*
@@ -548,6 +548,10 @@ public interface UIComponent extends StateHolder {
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
      * <li>Call the <code>decode()</code> method of this component.</li>
+     * <li>If a <code>RuntimeException</code> is thrown during
+     *     decode processing, call {@link FacesContext#renderResponse}
+     *     and re-throw the exception.</li>
+     * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
@@ -571,6 +575,10 @@ public interface UIComponent extends StateHolder {
      * <li>If the <code>isValid()</code> method of this component returns
      *     <code>false</code>, call the <code>renderResponse()</code> method
      *     on the {@link FacesContext} instance for this request.</li>
+     * <li>If a <code>RuntimeException</code> is thrown during
+     *     validation processing, call {@link FacesContext#renderResponse}
+     *     and re-throw the exception.</li>
+     *
      * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing
@@ -595,6 +603,9 @@ public interface UIComponent extends StateHolder {
      *     is now <code>false</code>, call
      *     <code>FacesContext.renderResponse()</code>
      *     to transfer control at the end of the current phase.</li>
+     * <li>If a <code>RuntimeException</code> is thrown during
+     *     update model processing, call {@link FacesContext#renderResponse}
+     *     and re-throw the exception.</li>
      * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing

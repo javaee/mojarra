@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.23 2003/09/23 20:35:50 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.24 2003/09/23 21:21:26 eburns Exp $
  */
 
 /*
@@ -1191,7 +1191,13 @@ public abstract class UIComponentBase implements UIComponent {
         }
 
         // Process this component itself
-        decode(context);
+	try {
+	    decode(context);
+	}
+	catch (RuntimeException e) {
+	    context.renderResponse();
+	    throw e;
+	}
 
     }
 
@@ -1211,8 +1217,14 @@ public abstract class UIComponentBase implements UIComponent {
 
 	// Validate this component itself
 	if (this instanceof UIInput) {
-	    // PENDING(craigmcc): shouldn't this be in UIInputBase
-	    ((UIInput) this).validate(context);
+	    try {
+		// PENDING(craigmcc): shouldn't this be in UIInputBase
+		((UIInput) this).validate(context);
+	    }
+	    catch (RuntimeException e) {
+		context.renderResponse();
+		throw e;
+	    }
 	}
 
 	// Advance to Render Response if this component is not valid
@@ -1240,8 +1252,15 @@ public abstract class UIComponentBase implements UIComponent {
 
         // Process this component itself
         if (this instanceof UIInput) {
-	    // PENDING(craigmcc): shouldn't this be in UIInputBase
-            ((UIInput) this).updateModel(context);
+	    try {
+		// PENDING(craigmcc): shouldn't this be in UIInputBase
+		((UIInput) this).updateModel(context);
+	    }
+	    catch (RuntimeException e) {
+		context.renderResponse();
+		throw e;
+	    }
+
             if (!((UIInput) this).isValid()) {
                 context.renderResponse();
             }
