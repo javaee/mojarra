@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
 <%-- Confirm duplicate ID's are found --%>
-<% pageContext.setAttribute("duplicate", "output1"); %>
+<% request.setAttribute("duplicate", "output1"); %>
 <% try { %>
 <f:view>
     <h:output_text id="#{duplicate}"/>

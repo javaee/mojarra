@@ -115,7 +115,7 @@ import java.util.Map;
  * 
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
  **/
 
 public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
@@ -130,8 +130,7 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
 
     /** The mapping from expression String to its parsed form (String,
      Expression, or ExpressionString) **/
-    static Map sCachedExpressionStrings =
-        Collections.synchronizedMap(new HashMap());
+    Map cachedExpressionStrings = null;
 
     /** The mapping from ExpectedType to Maps mapping literal String to
      parsed value **/
@@ -162,7 +161,7 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
     public ExpressionEvaluatorImpl(String parserClass, boolean pBypassCache) {
         mBypassCache = pBypassCache;
         if (!mBypassCache) {
-            sCachedExpressionStrings =
+            cachedExpressionStrings =
                 Collections.synchronizedMap(new HashMap());
             sCachedExpectedTypes = new HashMap();
         }
@@ -256,7 +255,7 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
         Object ret =
             mBypassCache ?
             null :
-            sCachedExpressionStrings.get(pExpressionString);
+            cachedExpressionStrings.get(pExpressionString);
 
         if (ret == null) {
             // Parse the expression      
@@ -265,7 +264,7 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
             try {
                 ret = parser.ExpressionString();
                 if (!mBypassCache)
-                    sCachedExpressionStrings.put(pExpressionString, ret);
+                    cachedExpressionStrings.put(pExpressionString, ret);
             } catch (ElParseException exc) {
                 if (exc instanceof ParseException) {
                     String message = formatParseException(pExpressionString, (ParseException) exc);

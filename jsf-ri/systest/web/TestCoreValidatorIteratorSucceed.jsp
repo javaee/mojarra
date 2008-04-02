@@ -19,9 +19,12 @@ This page should succeed.
 
 <f:view>
 
-  <c:forEach var="i" begin="0" end="3" varStatus="status">
+  <c:forEach begin="0" end="3"  var="i" varStatus="status">
+    <c:set var="i" scope="request" value="${i}"/>
+    <c:set var="status" scope="request" value="${status}"/>
+    <c:set var="id" scope="request" value="foo${status.index}"/>
     Array[<c:out value="${i}"/>]: 
-    <h:output_text id="#{id}" value="Has ID"/><br>
+    <h:output_text id="#{id}" value="#{i}"/><br>
   </c:forEach>
 
 </f:view>
