@@ -225,8 +225,7 @@ public class ModelBean {
             CharacterBean item = (CharacterBean) iter.next();
 
             //If a character has been selected, do not include it
-            if (!item.getName().equals(firstSelection) &&
-		!item.getName().equals(secondSelection)) {
+            if (!item.getName().equals(firstSelection)) {
                 selectItem = new SelectItem(item.getName());
                 selectItemList.add(selectItem);
             }
