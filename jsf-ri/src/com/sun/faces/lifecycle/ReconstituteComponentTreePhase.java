@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteComponentTreePhase.java,v 1.8 2003/05/15 22:25:48 rkitain Exp $
+ * $Id: ReconstituteComponentTreePhase.java,v 1.9 2003/05/21 18:46:00 rkitain Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteComponentTreePhase.java,v 1.8 2003/05/15 22:25:48 rkitain Exp $
+ * @version $Id: ReconstituteComponentTreePhase.java,v 1.9 2003/05/21 18:46:00 rkitain Exp $
  * 
  */
 
@@ -121,6 +121,18 @@ public void execute(FacesContext facesContext) throws FacesException
 	throw new FacesException(Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
     }
 
+    // If an app had explicitely set the tree in the context, use that;
+    //
+    Tree contextTree = facesContext.getTree();
+    Locale locale = null;
+    if (contextTree != null) {
+        locale = facesContext.getExternalContext().getRequestLocale();
+        facesContext.setLocale(locale);
+        processTree(facesContext);
+	return;
+    }
+
+    // Otherwise, we will look to get the tree from the page or session;
     // Create the requested component tree
     Tree requestTree = null;
     
@@ -155,6 +167,10 @@ public void restoreTreeFromPage(FacesContext facesContext) {
         treeId = facesContext.getExternalContext().getRequestPathInfo();
     }
     
+    if (treeId == null) {
+        throw new FacesException(Util.getExceptionMessage(Util.NULL_REQUEST_TREE_ERROR_MESSAGE_ID));
+    }
+
     String treeRootString = (String)requestMap.get(RIConstants.FACES_TREE);
     if ( treeRootString == null ) {
         requestTree = treeFactory.getTree(facesContext, treeId);
@@ -203,6 +219,13 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
     if (treeId == null) {
         treeId = facesContext.getExternalContext().getRequestPathInfo();
     }
+
+    //PENDING (rogerk) throw exception
+    if (treeId == null) {
+        throw new FacesException(Util.getExceptionMessage(Util.NULL_REQUEST_TREE_ERROR_MESSAGE_ID));
+	// throw exception;
+    }
+
     requestTree = (Tree) sessionMap.get(RIConstants.FACES_TREE);
     // If there is nothing in the session, 
     if (requestTree == null) {
