@@ -1,5 +1,5 @@
 /*
- * $Id: EnumConverter.java,v 1.5 2006/08/25 09:50:17 tony_robertson Exp $
+ * $Id: EnumConverter.java,v 1.6 2006/10/05 14:18:39 rogerk Exp $
  */
 
 /*
@@ -105,8 +105,8 @@ public class EnumConverter implements Converter, StateHolder {
      * containing the {@link #ENUM_NO_CLASS_ID} message with proper 
      * parameters.  If the <code>value</code> argument is <code>null</code> 
      * or it  has a length of zero, return <code>null</code>.  
-     * Otherwise, call <code>Enum.valueOf</code> using target class
-     * and <code>value</code> as arguments and return the <code>Object</code>.
+     * Otherwise, perform the equivalent of <code>Enum.valueOf</code> using 
+     * target class and <code>value</code> and return the <code>Object</code>.
      * If the conversion fails, throw a <code>ConverterException</code> 
      * containing the {@link #ENUM_ID} message with proper parameters. 
      * </p>
