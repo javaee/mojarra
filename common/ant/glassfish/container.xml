@@ -30,8 +30,7 @@
     <path id="compile.classpath">
         <pathelement location="${container.home}/lib/javaee.jar"/>
         <pathelement location="${container.home}/lib/appserv-rt.jar"/>
-        <pathelement location="${container.home}/lib/appserv-jstl.jar"/>
-        <pathelement location="${container.home}/lib/commons-logging.jar"/>
+        <pathelement location="${container.home}/lib/appserv-jstl.jar"/>        
     </path>
 
     <!-- JARs that may be packaged in WEB-INF/lib

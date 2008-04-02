@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.63 2006/02/24 20:39:44 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.64 2006/03/06 16:40:26 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -101,7 +101,7 @@ import com.sun.faces.el.DummyVariableResolverImpl;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 
-import org.apache.commons.digester.Digester;
+import com.sun.org.apache.commons.digester.Digester;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

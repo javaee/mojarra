@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.7 2006/02/21 20:37:50 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.8 2006/03/06 16:40:27 rlubke Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 
-import org.apache.commons.beanutils.PropertyUtils;
+import com.sun.org.apache.commons.beanutils.PropertyUtils;
 
 /**
  * <p>This class creates a managed bean instance. It has a contract with

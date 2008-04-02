@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelTestCaseBase.java,v 1.11 2005/08/22 22:08:27 ofung Exp $
+ * $Id: DataModelTestCaseBase.java,v 1.12 2006/03/06 16:40:23 rlubke Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import javax.faces.model.DataModelListener;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.apache.commons.beanutils.PropertyUtils;
+import com.sun.org.apache.commons.beanutils.PropertyUtils;
 
 
 /**

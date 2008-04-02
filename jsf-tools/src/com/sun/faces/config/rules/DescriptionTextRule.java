@@ -1,5 +1,5 @@
 /*
- * $Id: DescriptionTextRule.java,v 1.5 2005/08/22 22:12:20 ofung Exp $
+ * $Id: DescriptionTextRule.java,v 1.6 2006/03/06 16:40:33 rlubke Exp $
  */
 
 /*
@@ -30,8 +30,8 @@
 package com.sun.faces.config.rules;
 
 
-import org.apache.commons.digester.NodeCreateRule;
-import org.apache.commons.digester.Rule;
+import com.sun.org.apache.commons.digester.NodeCreateRule;
+import com.sun.org.apache.commons.digester.Rule;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

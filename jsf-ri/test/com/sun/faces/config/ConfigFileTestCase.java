@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.71 2005/12/14 22:27:59 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.72 2006/03/06 16:40:28 rlubke Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
-import org.apache.commons.digester.Digester;
+import com.sun.org.apache.commons.digester.Digester;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;

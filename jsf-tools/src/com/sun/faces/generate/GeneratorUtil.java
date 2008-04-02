@@ -1,5 +1,5 @@
 /*
- * $Id: GeneratorUtil.java,v 1.4 2005/08/25 17:11:02 rlubke Exp $
+ * $Id: GeneratorUtil.java,v 1.5 2006/03/06 16:40:37 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.config.DigesterFactory;
 import com.sun.faces.config.rules.FacesConfigRuleSet;
 
 import org.xml.sax.InputSource;
-import org.apache.commons.digester.Digester;
+import com.sun.org.apache.commons.digester.Digester;
 
 /**
  * <p>Utility methods that may be useful to all <code>Generators</code>.</p>

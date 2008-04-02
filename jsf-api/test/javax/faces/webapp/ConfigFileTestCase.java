@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.9 2005/08/22 22:08:31 ofung Exp $
+ * $Id: ConfigFileTestCase.java,v 1.10 2006/03/06 16:40:24 rlubke Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.digester.Digester;
+import com.sun.org.apache.commons.digester.Digester;
 
 import org.xml.sax.InputSource;
 import com.sun.faces.config.DigesterFactory;

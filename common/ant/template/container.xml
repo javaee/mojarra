@@ -30,10 +30,7 @@
         This definition should include all
         the compile dependencies required
         by Sun's Javaserver Faces implementation.
-        
-        commons-digester (version 1.5)
-        commons-beanutils (version 1.6.1)
-        commons-logging (latest)       
+                      
         Servlet (version 2.5)
         JSP (version 2.1)
         JSTL (version 1.2)

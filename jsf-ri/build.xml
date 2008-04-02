@@ -62,7 +62,8 @@
     
     <path id="impl.compile.classpath">
         <pathelement location="${jsf-api.jar}"/>
-        <path refid="compile.classpath"/>
+        <path refid="sun.commons.classpath"/>
+        <path refid="compile.classpath"/>        
     </path>
 
 
@@ -399,9 +400,14 @@
     -->
 
     <target name="jars" depends="compile,create.runtime.config">
+        <unjar dest="${build.classes.dir}">
+            <fileset dir="${jsf.build.home}/common/lib"
+                     includes="com-sun-commons*.jar"/>
+        </unjar>
         <jsf.manifested.jar jarfile="${build.dir}/lib/${name}.jar"
                             basedir="${build.classes.dir}"
-                            extension-name="com.sun.faces"/>                                               
+                            extension-name="com.sun.faces"/>
+        <delete dir="${build.classes.dir}/com/sun/org"/>
     </target>
 
     <target name="main" depends="jars"/>

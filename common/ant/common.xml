@@ -115,20 +115,25 @@
         <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
     </path>
 
+    <!-- Make sure to compile/run with the special cactus jar 
+         in our source repository, rather than the stock version -->
     <path id="cactus.compile.classpath">
         <path refid="junit.classpath"/>
+        <fileset dir="${jsf.build.home}/lib" includes="cactus-*.jar"/>
         <fileset dir="${cactus.home}/lib" includes="cactus-*.jar"
                  excludes="*ant*.jar"/>
-    </path>
-
-    <!-- Make sure to run with the special cactus jar 
-         in our source repository, rather than the stock version -->
+    </path>            
 
     <path id="cactus.runtime.classpath">
         <path refid="junit.classpath"/>
         <fileset dir="${cactus.home}/lib" includes="*.jar" 
                  excludes="cactus-1.7.1.jar"/>
         <fileset dir="${jsf.build.home}/lib" includes="cactus-*.jar"/>
+    </path>
+    
+    <path id="sun.commons.classpath">
+        <fileset dir="${jsf.build.home}/common/lib"
+                 includes="com-sun-commons*.jar"/>
     </path>
 
     <!-- Common Targets -->
@@ -267,12 +272,13 @@
 
         <sequential>
             <mkdir dir="${tools.dir}/build/classes"/>
-            <javac srcdir="${tools.dir}/src"
+            <jsf.javac srcdir="${tools.dir}/src"
                    destdir="${tools.dir}/build/classes">
                 <classpath>
-                    <path refid="compile.classpath"/>
+                    <path refid="compile.classpath"/>  
+                    <path refid="sun.commons.classpath"/>
                 </classpath>
-            </javac>
+            </jsf.javac>
             <taskdef name="generateComponents"
                      classname="com.sun.faces.ant.ComponentGenTask">
                 <classpath>

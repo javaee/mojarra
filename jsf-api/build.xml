@@ -66,6 +66,7 @@
         <pathelement location="${build.test.dir}"/>
         <pathelement location="${jsf.test.jar}"/>
         <pathelement location="${tools.dir}/build/classes"/>
+        <path refid="sun.commons.classpath"/>
         <path refid="compile.classpath"/>
         <path refid="junit.classpath"/>
     </path>
@@ -231,6 +232,7 @@
                    destdir="${tools.dir}/build/classes">
             <classpath>
                 <path refid="compile.classpath"/>
+                <path refid="sun.commons.classpath"/>
                 <path refid="ant.classpath"/>
             </classpath>
         </jsf.javac>
@@ -327,6 +329,7 @@
                    destdir="${build.test.dir}">
             <classpath>
                 <path refid="test.classpath"/>
+                <path refid="sun.commons.classpath"/>
             </classpath>
         </jsf.javac>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: DigesterFactory.java,v 1.10 2006/02/24 18:05:07 edburns Exp $
+ * $Id: DigesterFactory.java,v 1.11 2006/03/06 16:40:28 rlubke Exp $
  */
 
 /*
@@ -37,8 +37,8 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.digester.Digester;
-import org.apache.commons.logging.impl.NoOpLog;
+import com.sun.org.apache.commons.digester.Digester;
+import com.sun.org.apache.commons.logging.impl.NoOpLog;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

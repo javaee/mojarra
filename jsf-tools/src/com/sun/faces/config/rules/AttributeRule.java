@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeRule.java,v 1.6 2005/08/22 22:12:19 ofung Exp $
+ * $Id: AttributeRule.java,v 1.7 2006/03/06 16:40:31 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
 package com.sun.faces.config.rules;
 
 
-import org.apache.commons.digester.Rule;
+import com.sun.org.apache.commons.digester.Rule;
 import org.xml.sax.Attributes;
 import com.sun.faces.config.beans.AttributeBean;
 import com.sun.faces.config.beans.AttributeHolder;

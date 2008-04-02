@@ -1,5 +1,5 @@
 /*
- * $Id: NullValueRule.java,v 1.4 2005/08/22 22:12:22 ofung Exp $
+ * $Id: NullValueRule.java,v 1.5 2006/03/06 16:40:36 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
 package com.sun.faces.config.rules;
 
 
-import org.apache.commons.digester.Rule;
+import com.sun.org.apache.commons.digester.Rule;
 import org.xml.sax.Attributes;
 import com.sun.faces.config.beans.NullValueHolder;
 import com.sun.faces.config.beans.FacesConfigBean;
