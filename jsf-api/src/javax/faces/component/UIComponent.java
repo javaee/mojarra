@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.123 2004/01/27 20:29:16 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.124 2004/01/29 06:56:20 craigmcc Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ public abstract class UIComponent implements StateHolder {
      * <ul>
      * <li>The <code>Map</code> implementation must implement
      *     the <code>java.io.Serializable</code> interface.</li>
-     * <li>Any attempt to add a <code>null</code> key or value must
+     * <li>Any attempt to add a <code>null</code> key must
      *     throw a <code>NullPointerException</code>.</li>
      * <li>Any attempt to add a key that is not a String must throw
      *     a <code>ClassCastException</code>.</li>

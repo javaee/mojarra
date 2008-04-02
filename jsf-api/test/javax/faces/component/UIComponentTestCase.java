@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.42 2004/01/28 20:16:20 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.43 2004/01/29 06:56:22 craigmcc Exp $
  */
 
 /*
@@ -11,11 +11,14 @@ package javax.faces.component;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.validator.Validator;
@@ -108,6 +111,81 @@ public class UIComponentTestCase extends TestCase {
 
 
     // ------------------------------------------------- Individual Test Methods
+
+
+    // Test behavior of Map returned by getAttributes()
+    public void testAttributesMap() {
+
+        // Initialize some attributes
+        Map attributes = component.getAttributes();
+        attributes.put("foo", "bar");
+        attributes.put("baz", "bop");
+
+        // Test containsKey()
+        assertTrue(attributes.containsKey("foo"));
+        assertTrue(attributes.containsKey("baz"));
+        assertTrue(!attributes.containsKey("bar"));
+        assertTrue(!attributes.containsKey("bop"));
+        assertTrue(!attributes.containsKey("id")); // Property name
+        assertTrue(!attributes.containsKey("parent")); // Property name
+
+        // Test get()
+        assertEquals("bar", (String) attributes.get("foo"));
+        assertEquals("bop", (String) attributes.get("baz"));
+        assertNull((String) attributes.get("bar"));
+        assertNull((String) attributes.get("bop"));
+        component.setId("oldvalue");
+        assertEquals("oldvalue", (String) attributes.get("id")); // Property
+        component.setRendered(false);
+        assertTrue(!((Boolean) attributes.get("rendered")).booleanValue());
+        component.setRendered(true);
+        assertTrue(((Boolean) attributes.get("rendered")).booleanValue());
+
+        // Test put()
+        try {
+            attributes.put(null, "dummy");
+            fail("Should have thrown NullPointerException");
+        } catch (NullPointerException e) {
+            ; // Expected result
+        }
+        try {
+            attributes.put(new java.util.Date(), "dummy");
+            fail("Should have thrown ClassCastException");
+        } catch (ClassCastException e) {
+            ; // Expected result
+        }
+        try {
+            attributes.put("rendersChildren", null); // Primitive property
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+        try {
+            attributes.put("rendersChildren", Boolean.TRUE); // Write-only
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+        attributes.put("id", "newvalue");
+        assertEquals("newvalue", (String) attributes.get("id"));
+        assertEquals("newvalue", component.getId());
+        attributes.put("rendered", Boolean.TRUE);
+        assertTrue(component.isRendered());
+        attributes.put("rendered", Boolean.FALSE);
+        assertTrue(!component.isRendered());
+
+        // Test remove()
+        attributes.remove("baz");
+        assertTrue(!attributes.containsKey("baz"));
+        assertNull(attributes.get("baz"));
+        try {
+            attributes.remove("id");
+            fail("Should have thrown IllegalArgumentException()");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+    }
 
 
     // Negative tests on attribute methods
@@ -763,6 +841,567 @@ public class UIComponentTestCase extends TestCase {
     }
 
 
+    // Test Set returned by getFacets().entrySet()
+    public void testFacetsMapEntrySet() {
+
+        Map facets;
+        Set matches;
+        Set entrySet;
+        Iterator entries;
+
+        // Construct the pre-load set of facets we will need
+        UIComponent facet1 = new TestComponent("facet1");
+        UIComponent facet2 = new TestComponent("facet2");
+        UIComponent facet3 = new TestComponent("facet3");
+        UIComponent facet4 = new TestComponent("facet4");
+        UIComponent facet5 = new TestComponent("facet5");
+        UIComponent facet6 = new TestComponent("facet6"); // Not normally added
+        Map preload = new HashMap();
+        preload.put("a", facet1);
+        preload.put("b", facet2);
+        preload.put("c", facet3);
+        preload.put("d", facet4);
+        preload.put("e", facet5);
+
+        // Test add()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        entrySet = facets.entrySet();
+        try {
+            entrySet.add(new TestComponent("facet0"));
+            fail("Should have thrown UnsupportedOperationExcepton");
+        } catch (UnsupportedOperationException e) {
+            ; // Expected result
+        }
+
+        // Test addAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        entrySet = facets.entrySet();
+        try {
+            entrySet.addAll(preload.values());
+            fail("Should have thrown UnsupportedOperationExcepton");
+        } catch (UnsupportedOperationException e) {
+            ; // Expected result
+        }
+            
+
+        // Test clear()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        entrySet = facets.entrySet();
+        assertEquals(5, facets.size());
+        assertEquals(5, entrySet.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetPresent(component, "b", facet2);
+        checkFacetPresent(component, "c", facet3);
+        checkFacetPresent(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+        entrySet.clear();
+        assertEquals(0, facets.size());
+        assertEquals(0, entrySet.size());
+        checkFacetMissing(component, "a", facet1);
+        checkFacetMissing(component, "b", facet2);
+        checkFacetMissing(component, "c", facet3);
+        checkFacetMissing(component, "d", facet4);
+        checkFacetMissing(component, "e", facet5);
+
+        // Test contains()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        entrySet = facets.entrySet();
+        assertTrue(entrySet.contains(new TestMapEntry("a", facet1)));
+        assertTrue(entrySet.contains(new TestMapEntry("b", facet2)));
+        assertTrue(entrySet.contains(new TestMapEntry("c", facet3)));
+        assertTrue(entrySet.contains(new TestMapEntry("d", facet4)));
+        assertTrue(entrySet.contains(new TestMapEntry("e", facet5)));
+        assertTrue(!entrySet.contains(new TestMapEntry("f", facet6)));
+
+        // Test containsAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        entrySet = facets.entrySet();
+        matches = new HashSet();
+        matches.add(new TestMapEntry("a", facet1));
+        matches.add(new TestMapEntry("c", facet3));
+        matches.add(new TestMapEntry("d", facet4));
+        assertTrue(entrySet.containsAll(matches));
+        matches = new HashSet();
+        matches.add(new TestMapEntry("a", facet1));
+        matches.add(new TestMapEntry("c", facet3));
+        matches.add(new TestMapEntry("f", facet6));
+        assertTrue(!entrySet.containsAll(matches));
+
+        // Test iterator().hasNext() and iterator().next()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        entrySet = facets.entrySet();
+        matches = new HashSet();
+        entries = entrySet.iterator();
+        while (entries.hasNext()) {
+            matches.add(entries.next());
+        }
+        assertTrue(entrySet.equals(matches));
+
+        // Test iterator().remove()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        entrySet = facets.entrySet();
+        entries = entrySet.iterator();
+        while (entries.hasNext()) {
+            Map.Entry entry = (Map.Entry) entries.next();
+            if ("b".equals(entry.getKey()) || "d".equals(entry.getKey())) {
+                entries.remove();
+            }
+        }
+        assertEquals(3, facets.size());
+        assertEquals(3, entrySet.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetMissing(component, "b", facet2);
+        checkFacetPresent(component, "c", facet3);
+        checkFacetMissing(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+
+        // Test iterator() based modify-value
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        entrySet = facets.entrySet();
+        entries = entrySet.iterator();
+        while (entries.hasNext()) {
+            Map.Entry entry = (Map.Entry) entries.next();
+            if ("c".equals(entry.getKey())) {
+                entry.setValue(facet6);
+            }
+        }
+        assertEquals(5, facets.size());
+        assertEquals(5, entrySet.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetPresent(component, "b", facet2);
+        checkFacetPresent(component, "c", facet6);
+        checkFacetPresent(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+
+        // Test remove()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        entrySet = facets.entrySet();
+        entrySet.remove(new TestMapEntry("c", facet3));
+        assertEquals(4, facets.size());
+        assertEquals(4, entrySet.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetPresent(component, "b", facet2);
+        checkFacetMissing(component, "c", facet3);
+        checkFacetPresent(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+
+        // Test removeAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        entrySet = facets.entrySet();
+        matches = new HashSet();
+        matches.add(new TestMapEntry("b", facet2));
+        matches.add(new TestMapEntry("d", facet4));
+        entrySet.removeAll(matches);
+        assertEquals(3, facets.size());
+        assertEquals(3, entrySet.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetMissing(component, "b", facet2);
+        checkFacetPresent(component, "c", facet3);
+        checkFacetMissing(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+
+        // Test retainAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        entrySet = facets.entrySet();
+        matches = new HashSet();
+        matches.add(new TestMapEntry("b", facet2));
+        matches.add(new TestMapEntry("d", facet4));
+        matches.add(new TestMapEntry("f", facet6));
+        entrySet.retainAll(matches);
+        assertEquals(2, facets.size());
+        assertEquals(2, entrySet.size());
+        checkFacetMissing(component, "a", facet1);
+        checkFacetPresent(component, "b", facet2);
+        checkFacetMissing(component, "c", facet3);
+        checkFacetPresent(component, "d", facet4);
+        checkFacetMissing(component, "e", facet5);
+
+    }
+
+
+    // Test Set returned by getFacets().keySet()
+    public void testFacetsMapKeySet() {
+
+        Map facets;
+        Set matches;
+        Set keySet;
+        Iterator keys;
+
+        // Construct the pre-load set of facets we will need
+        UIComponent facet1 = new TestComponent("facet1");
+        UIComponent facet2 = new TestComponent("facet2");
+        UIComponent facet3 = new TestComponent("facet3");
+        UIComponent facet4 = new TestComponent("facet4");
+        UIComponent facet5 = new TestComponent("facet5");
+        UIComponent facet6 = new TestComponent("facet6"); // Not normally added
+        Map preload = new HashMap();
+        preload.put("a", facet1);
+        preload.put("b", facet2);
+        preload.put("c", facet3);
+        preload.put("d", facet4);
+        preload.put("e", facet5);
+
+        // Test add()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        keySet = facets.keySet();
+        try {
+            keySet.add(new TestComponent("facet0"));
+            fail("Should have thrown UnsupportedOperationExcepton");
+        } catch (UnsupportedOperationException e) {
+            ; // Expected result
+        }
+
+        // Test addAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        keySet = facets.keySet();
+        try {
+            keySet.addAll(preload.values());
+            fail("Should have thrown UnsupportedOperationExcepton");
+        } catch (UnsupportedOperationException e) {
+            ; // Expected result
+        }
+            
+
+        // Test clear()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        keySet = facets.keySet();
+        assertEquals(5, facets.size());
+        assertEquals(5, keySet.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetPresent(component, "b", facet2);
+        checkFacetPresent(component, "c", facet3);
+        checkFacetPresent(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+        keySet.clear();
+        assertEquals(0, facets.size());
+        assertEquals(0, keySet.size());
+        checkFacetMissing(component, "a", facet1);
+        checkFacetMissing(component, "b", facet2);
+        checkFacetMissing(component, "c", facet3);
+        checkFacetMissing(component, "d", facet4);
+        checkFacetMissing(component, "e", facet5);
+
+        // Test contains()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        keySet = facets.keySet();
+        assertTrue(keySet.contains("a"));
+        assertTrue(keySet.contains("b"));
+        assertTrue(keySet.contains("c"));
+        assertTrue(keySet.contains("d"));
+        assertTrue(keySet.contains("e"));
+        assertTrue(!keySet.contains("f"));
+
+        // Test containsAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        keySet = facets.keySet();
+        matches = new HashSet();
+        matches.add("a");
+        matches.add("c");
+        matches.add("d");
+        assertTrue(keySet.containsAll(matches));
+        matches = new HashSet();
+        matches.add("a");
+        matches.add("c");
+        matches.add("f");
+        assertTrue(!keySet.containsAll(matches));
+
+        // Test iterator().hasNext() and iterator().next()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        keySet = facets.keySet();
+        matches = new HashSet();
+        keys = keySet.iterator();
+        while (keys.hasNext()) {
+            matches.add(keys.next());
+        }
+        assertTrue(keySet.equals(matches));
+
+        // Test iterator().remove()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        keySet = facets.keySet();
+        keys = keySet.iterator();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            if ("b".equals(key) || "d".equals(key)) {
+                keys.remove();
+            }
+        }
+        assertEquals(3, facets.size());
+        assertEquals(3, keySet.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetMissing(component, "b", facet2);
+        checkFacetPresent(component, "c", facet3);
+        checkFacetMissing(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+
+
+        // Test remove()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        keySet = facets.keySet();
+        keySet.remove("c");
+        assertEquals(4, facets.size());
+        assertEquals(4, keySet.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetPresent(component, "b", facet2);
+        checkFacetMissing(component, "c", facet3);
+        checkFacetPresent(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+
+        // Test removeAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        keySet = facets.keySet();
+        matches = new HashSet();
+        matches.add("b");
+        matches.add("d");
+        keySet.removeAll(matches);
+        assertEquals(3, facets.size());
+        assertEquals(3, keySet.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetMissing(component, "b", facet2);
+        checkFacetPresent(component, "c", facet3);
+        checkFacetMissing(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+
+        // Test retainAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        keySet = facets.keySet();
+        matches = new HashSet();
+        matches.add("b");
+        matches.add("d");
+        matches.add("f");
+        keySet.retainAll(matches);
+        assertEquals(2, facets.size());
+        assertEquals(2, keySet.size());
+        checkFacetMissing(component, "a", facet1);
+        checkFacetPresent(component, "b", facet2);
+        checkFacetMissing(component, "c", facet3);
+        checkFacetPresent(component, "d", facet4);
+        checkFacetMissing(component, "e", facet5);
+
+    }
+
+
+    // Test Collection returned by getFacets().values()
+    public void testFacetsMapValues() {
+
+        Map facets;
+        Collection matches;
+        Collection values;
+        Iterator vals;
+
+        // Construct the pre-load set of facets we will need
+        UIComponent facet1 = new TestComponent("facet1");
+        UIComponent facet2 = new TestComponent("facet2");
+        UIComponent facet3 = new TestComponent("facet3");
+        UIComponent facet4 = new TestComponent("facet4");
+        UIComponent facet5 = new TestComponent("facet5");
+        UIComponent facet6 = new TestComponent("facet6"); // Not normally added
+        Map preload = new HashMap();
+        preload.put("a", facet1);
+        preload.put("b", facet2);
+        preload.put("c", facet3);
+        preload.put("d", facet4);
+        preload.put("e", facet5);
+
+        // Test add()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        values = facets.values();
+        try {
+            values.add(new TestComponent("facet0"));
+            fail("Should have thrown UnsupportedOperationExcepton");
+        } catch (UnsupportedOperationException e) {
+            ; // Expected result
+        }
+
+        // Test addAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        values = facets.values();
+        try {
+            values.addAll(preload.values());
+            fail("Should have thrown UnsupportedOperationExcepton");
+        } catch (UnsupportedOperationException e) {
+            ; // Expected result
+        }
+            
+
+        // Test clear()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        values = facets.values();
+        assertEquals(5, facets.size());
+        assertEquals(5, values.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetPresent(component, "b", facet2);
+        checkFacetPresent(component, "c", facet3);
+        checkFacetPresent(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+        values.clear();
+        assertEquals(0, facets.size());
+        assertEquals(0, values.size());
+        checkFacetMissing(component, "a", facet1);
+        checkFacetMissing(component, "b", facet2);
+        checkFacetMissing(component, "c", facet3);
+        checkFacetMissing(component, "d", facet4);
+        checkFacetMissing(component, "e", facet5);
+
+        // Test contains()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        values = facets.values();
+        assertTrue(values.contains(facet1));
+        assertTrue(values.contains(facet2));
+        assertTrue(values.contains(facet3));
+        assertTrue(values.contains(facet4));
+        assertTrue(values.contains(facet5));
+        assertTrue(!values.contains(facet6));
+
+        // Test containsAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        values = facets.values();
+        matches = new ArrayList();
+        matches.add(facet1);
+        matches.add(facet3);
+        matches.add(facet4);
+        assertTrue(values.containsAll(matches));
+        matches = new ArrayList();
+        matches.add(facet1);
+        matches.add(facet3);
+        matches.add(facet6);
+        assertTrue(!values.containsAll(matches));
+
+        // Test iterator().hasNext() and iterator().next()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        values = facets.values();
+        matches = new ArrayList();
+        vals = values.iterator();
+        while (vals.hasNext()) {
+            matches.add(vals.next());
+        }
+        assertTrue(matches.containsAll(values));
+
+        // Test iterator().remove()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        values = facets.values();
+        vals = values.iterator();
+        while (vals.hasNext()) {
+            UIComponent val = (UIComponent) vals.next();
+            if (facet2.equals(val) || facet4.equals(val)) {
+                vals.remove();
+            }
+        }
+        assertEquals(3, facets.size());
+        assertEquals(3, values.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetMissing(component, "b", facet2);
+        checkFacetPresent(component, "c", facet3);
+        checkFacetMissing(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+
+        // Test remove()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        values = facets.values();
+        values.remove(facet3);
+        assertEquals(4, facets.size());
+        assertEquals(4, values.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetPresent(component, "b", facet2);
+        checkFacetMissing(component, "c", facet3);
+        checkFacetPresent(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+
+        // Test removeAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        values = facets.values();
+        matches = new ArrayList();
+        matches.add(facet2);
+        matches.add(facet4);
+        values.removeAll(matches);
+        assertEquals(3, facets.size());
+        assertEquals(3, values.size());
+        checkFacetPresent(component, "a", facet1);
+        checkFacetMissing(component, "b", facet2);
+        checkFacetPresent(component, "c", facet3);
+        checkFacetMissing(component, "d", facet4);
+        checkFacetPresent(component, "e", facet5);
+
+        // Test retainAll()
+        facets = component.getFacets();
+        facets.clear();
+        facets.putAll(preload);
+        values = facets.values();
+        matches = new ArrayList();
+        matches.add(facet2);
+        matches.add(facet4);
+        matches.add(facet6);
+        values.retainAll(matches);
+        assertEquals(2, facets.size());
+        assertEquals(2, values.size());
+        checkFacetMissing(component, "a", facet1);
+        checkFacetPresent(component, "b", facet2);
+        checkFacetMissing(component, "c", facet3);
+        checkFacetPresent(component, "d", facet4);
+        checkFacetMissing(component, "e", facet5);
+
+    }
+
+
     // Negative tests on facet methods
     public void testFacetsNegative() {
 
@@ -840,6 +1479,7 @@ public class UIComponentTestCase extends TestCase {
         UIComponent facet3 = new TestComponent("facet3");
         UIComponent facet4 = new TestComponent("facet4");
         UIComponent facet5 = new TestComponent("facet5");
+        UIComponent facet6 = new TestComponent("facet6");
 
         // Verify initial conditions
         Map facets = component.getFacets();
@@ -854,13 +1494,13 @@ public class UIComponentTestCase extends TestCase {
 
         // containsValue(Object) is tested in checkFacetMissing / checkFacetPresent
 
-        // PENDING(craigmcc) - tests for entrySet()
+        // entrySet() is tested in testFacetsMapEntrySet()
 
         // get(Object) is tested in checkFacetMissing / checkFacetPresent
 
         // isEmpty() is tested in checkFacetCount
 
-        // PENDING(craigmcc) - tests for keySet()
+        // keySet() is tested in testFacetsMapKeySet()
 
         // put(Object,Object)
         facets.put("facet1", facet1);
@@ -892,16 +1532,6 @@ public class UIComponentTestCase extends TestCase {
         checkFacetPresent(component, "facet4", facet4);
         checkFacetMissing(component, "facet5", facet5);
 
-        // put(Object,Object) with replace
-        // PENDING(craigmcc) - For some reason the swap fails
-        map.put("facet3", facet5);
-        checkFacetCount(component, 4);
-        checkFacetPresent(component, "facet1", facet1);
-        checkFacetPresent(component, "facet2", facet2);
-        // checkFacetPresent(component, "facet3", facet5);
-        checkFacetPresent(component, "facet4", facet4);
-        // checkFacetMissing(component, "facet5", facet3);
-
         // remove(Object)
         facets.remove("facet3");
         checkFacetCount(component, 3);
@@ -911,7 +1541,7 @@ public class UIComponentTestCase extends TestCase {
         checkFacetPresent(component, "facet4", facet4);
         checkFacetMissing(component, "facet5", facet5);
 
-        // values() is tested in checkFacetMissing / checkFacetPresent
+        // values() is tested in testFacetsMapValues()
 
         // clear()
         facets.clear();
@@ -1230,6 +1860,72 @@ public class UIComponentTestCase extends TestCase {
             fail("facet " + name + " not found in values");
         }
     }
+
+
+    // --------------------------------------------------------- Private Classes
+
+
+    // Test Implementation of Map.Entry
+    private class TestMapEntry implements Map.Entry {
+
+        public TestMapEntry(Object key, Object value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        private Object key;
+        private Object value;
+
+        public boolean equals(Object o) {
+            if (o == null) {
+                return (false);
+            }
+            if (!(o instanceof Map.Entry)) {
+                return (false);
+            }
+            Map.Entry e = (Map.Entry) o;
+            if (key == null) {
+                if (e.getKey() != null) {
+                    return (false);
+                }
+            } else {
+                if (!key.equals(e.getKey())) {
+                    return (false);
+                }
+            }
+            if (value == null) {
+                if (e.getValue() != null) {
+                    return (false);
+                }
+            } else {
+                if (!value.equals(e.getValue())) {
+                    return (false);
+                }
+            }
+            return (true);
+        }
+
+        public Object getKey() {
+            return (key);
+        }
+
+        public Object getValue() {
+            return (value);
+        }
+
+        public int hashCode() {
+            return (((key == null) ? 0 : key.hashCode()) ^
+                    ((value == null) ? 0 : value.hashCode()));
+        }
+
+        public Object setValue(Object value) {
+            Object previous = this.value;
+            this.value = value;
+            return (previous);
+        }
+
+    }
+
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.96 2004/01/28 20:16:17 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.97 2004/01/29 06:56:20 craigmcc Exp $
  */
 
 /*
@@ -16,6 +16,8 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.AbstractCollection;
+import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -137,116 +139,7 @@ public abstract class UIComponentBase extends UIComponent {
     public Map getAttributes() {
 
         if (attributes == null) {
-            attributes = new HashMap() {
-
-                    public boolean containsKey(Object key) {
-                        PropertyDescriptor pd =
-                            getPropertyDescriptor((String) key);
-                        if (pd == null) {
-                            return (super.containsKey(key));
-                        } else {
-                            return (false);
-                        }
-                    }
-
-                    public Object get(Object key) {
-                        if (key == null) {
-                            throw new NullPointerException();
-                        }
-                        String name = (String) key;
-                        PropertyDescriptor pd =
-                            getPropertyDescriptor(name);
-                        if (pd != null) {
-                            try {
-                                Method readMethod = pd.getReadMethod();
-                                if (readMethod != null) {
-                                    return (readMethod.invoke
-                                            (UIComponentBase.this, empty));
-                                } else {
-                                    throw new IllegalArgumentException(name);
-                                }
-                            } catch (IllegalAccessException e) {
-                                throw new FacesException(e);
-                            } catch (InvocationTargetException e) {
-                                throw new FacesException
-                                    (e.getTargetException());
-                            }
-			} else if (super.containsKey(name)) {
-                            return (super.get(key));
-			}
-			ValueBinding vb = getValueBinding(name);
-			if (vb != null) {
-			    return (vb.getValue(getFacesContext()));
-                        }
-			return (null);
-                    }
-
-                    public Object put(Object key, Object value) {
-                        if (key == null) {
-                            throw new NullPointerException();
-                        }
-                        String name = (String) key;
-                        PropertyDescriptor pd =
-                            getPropertyDescriptor(name);
-                        if (pd != null) {
-                            try {
-                                Object result = null;
-                                Method readMethod = pd.getReadMethod();
-                                if (readMethod != null) {
-                                    result = readMethod.invoke
-                                        (UIComponentBase.this, empty);
-                                }
-                                Method writeMethod = pd.getWriteMethod();
-                                if (writeMethod != null) {
-                                    writeMethod.invoke
-                                        (UIComponentBase.this,
-                                         new Object[] { value });
-                                } else {
-                                    throw new IllegalArgumentException(null);
-                                }
-                                return (result);
-                            } catch (IllegalAccessException e) {
-                                throw new FacesException(e);
-                            } catch (InvocationTargetException e) {
-                                throw new FacesException
-                                    (e.getTargetException());
-                            }
-                        } else {
-                            if (value == null) {
-                                throw new NullPointerException();
-                            }
-                            return (super.put(key, value));
-                        }
-                    }
-
-                    public void putAll(Map map) {
-                        if (map == null) {
-                            throw new NullPointerException();
-                        }
-                        Iterator keys = map.keySet().iterator();
-                        while (keys.hasNext()) {
-                            Object key = keys.next();
-                            put(key, map.get(key));
-                        }
-                    }
-
-                    public Object remove(Object key) {
-                        if (key == null) {
-                            throw new NullPointerException();
-                        }
-                        String name = (String) key;
-                        PropertyDescriptor pd =
-                            getPropertyDescriptor(name);
-                        if (pd != null) {
-                            throw new IllegalArgumentException(name);
-                        } else {
-                            return (super.remove(key));
-                        }
-                    }
-
-
-                };
-
+            attributes = new AttributesMap();
         }
         return (attributes);
 
@@ -686,71 +579,7 @@ public abstract class UIComponentBase extends UIComponent {
     public Map getFacets() {
 
         if (facets == null) {
-            facets = new HashMap() {
-
-                    public void clear() {
-                        Iterator values = values().iterator();
-                        while (values.hasNext()) {
-                            UIComponent value = (UIComponent) values.next();
-                            value.setParent(null);
-                        }
-                        super.clear();
-                    }
-
-                    public Set entrySet() {
-                        // PENDING(craigmcc) - Custom remove support needed
-                        return (super.entrySet());
-                    }
-
-                    public Set keySet() {
-                        // PENDING(craigmcc) - Custom remove support needed
-                        return (super.keySet());
-                    }
-
-                    public Object put(Object key, Object value) {
-                        if ((key == null) || (value == null)) {
-                            throw new NullPointerException();
-                        } else if (!(key instanceof String) ||
-                                   !(value instanceof UIComponent)) {
-                            throw new ClassCastException();
-                        }
-                        UIComponent previous = (UIComponent) super.get(key);
-                        if (previous != null) {
-                            previous.setParent(null);
-                        }
-                        UIComponent current = (UIComponent) value;
-                        eraseParent(current);
-                        current.setParent(UIComponentBase.this);
-                        return (super.put(key, value));
-                    }
-
-                    public void putAll(Map map) {
-                        if (map == null) {
-                            throw new NullPointerException();
-                        }
-                        Iterator keys = map.keySet().iterator();
-                        while (keys.hasNext()) {
-                            Object key = keys.next();
-                            put(key, map.get(key));
-                        }
-                    }
-
-                    public Object remove(Object key) {
-                        UIComponent previous = (UIComponent) get(key);
-                        if (previous != null) {
-                            previous.setParent(null);
-                        }
-                        super.remove(key);
-                        return (previous);
-                    }
-
-                    public Collection values() {
-                        // PENDING(craigmcc) - Custom remove support needed
-                        return (super.values());
-                    }
-
-                };
-
+            facets = new FacetsMap();
         }
         return (facets);
 
@@ -771,31 +600,20 @@ public abstract class UIComponentBase extends UIComponent {
 
     public Iterator getFacetsAndChildren() {
 
-        List combined = null;
+        List combined = new ArrayList();
         if (this.facets != null) {
             Iterator facets = getFacets().values().iterator();
             while (facets.hasNext()) {
-                if (combined == null) {
-                    combined = new ArrayList();
-                }
                 combined.add(facets.next());
             }
         }
         if (this.children != null) {
             Iterator kids = getChildren().iterator();
             while (kids.hasNext()) {
-                if (combined == null) {
-                    combined = new ArrayList();
-                }
                 combined.add(kids.next());
             }
         }
-        if (combined == null) {
-            return (Collections.EMPTY_LIST.iterator());
-        } else {
-            // PENDING(craigmcc) - need to disable remove() method
-            return (combined.iterator());
-        }
+        return (new FacetsAndChildrenIterator(combined));
 
     }
 
@@ -1502,6 +1320,118 @@ public abstract class UIComponentBase extends UIComponent {
     // --------------------------------------------------------- Private Classes
 
 
+    // Private implementation of Map that supports the functionality
+    // required by UIComponent.getFacets()
+    private class AttributesMap extends HashMap {
+
+        public boolean containsKey(Object key) {
+            PropertyDescriptor pd =
+                getPropertyDescriptor((String) key);
+            if (pd == null) {
+                return (super.containsKey(key));
+            } else {
+                return (false);
+            }
+        }
+
+        public Object get(Object key) {
+            if (key == null) {
+                throw new NullPointerException();
+            }
+            String name = (String) key;
+            PropertyDescriptor pd =
+                getPropertyDescriptor(name);
+            if (pd != null) {
+                try {
+                    Method readMethod = pd.getReadMethod();
+                    if (readMethod != null) {
+                        return (readMethod.invoke
+                                (UIComponentBase.this, empty));
+                    } else {
+                        throw new IllegalArgumentException(name);
+                    }
+                } catch (IllegalAccessException e) {
+                    throw new FacesException(e);
+                } catch (InvocationTargetException e) {
+                    throw new FacesException
+                        (e.getTargetException());
+                }
+            } else if (super.containsKey(name)) {
+                return (super.get(key));
+            }
+            ValueBinding vb = getValueBinding(name);
+            if (vb != null) {
+                return (vb.getValue(getFacesContext()));
+            }
+            return (null);
+        }
+
+        public Object put(Object key, Object value) {
+            if (key == null) {
+                throw new NullPointerException();
+            }
+            String name = (String) key;
+            PropertyDescriptor pd =
+                getPropertyDescriptor(name);
+            if (pd != null) {
+                try {
+                    Object result = null;
+                    Method readMethod = pd.getReadMethod();
+                    if (readMethod != null) {
+                        result = readMethod.invoke
+                            (UIComponentBase.this, empty);
+                    }
+                    Method writeMethod = pd.getWriteMethod();
+                    if (writeMethod != null) {
+                        writeMethod.invoke
+                            (UIComponentBase.this,
+                             new Object[] { value });
+                    } else {
+                        throw new IllegalArgumentException(null);
+                    }
+                    return (result);
+                } catch (IllegalAccessException e) {
+                    throw new FacesException(e);
+                } catch (InvocationTargetException e) {
+                    throw new FacesException
+                        (e.getTargetException());
+                }
+            } else {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+                return (super.put(key, value));
+            }
+        }
+
+        public void putAll(Map map) {
+            if (map == null) {
+                throw new NullPointerException();
+            }
+            Iterator keys = map.keySet().iterator();
+            while (keys.hasNext()) {
+                Object key = keys.next();
+                put(key, map.get(key));
+            }
+        }
+
+        public Object remove(Object key) {
+            if (key == null) {
+                throw new NullPointerException();
+            }
+            String name = (String) key;
+            PropertyDescriptor pd =
+                getPropertyDescriptor(name);
+            if (pd != null) {
+                throw new IllegalArgumentException(name);
+            } else {
+                return (super.remove(key));
+            }
+        }
+
+    }
+
+
     // Private implementation of List that supports the functionality
     // required by UIComponent.getChildren()
     private class ChildrenList extends ArrayList {
@@ -1746,6 +1676,475 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new IllegalStateException();
             }
             list.set(last, o);
+        }
+
+    }
+
+
+    // Private implementation of Iterator for getFacetsAndChildren()
+    private class FacetsAndChildrenIterator implements Iterator {
+
+        public FacetsAndChildrenIterator(List list) {
+            this.iterator = list.iterator();
+        }
+
+        private Iterator iterator;
+
+        public boolean hasNext() {
+            return (iterator.hasNext());
+        }
+
+        public Object next() {
+            return (iterator.next());
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+
+    // Private implementation of Map that supports the functionality
+    // required by UIComponent.getFacets()
+    private class FacetsMap extends HashMap {
+
+        public void clear() {
+            Iterator keys = keySet().iterator();
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
+                keys.remove();
+            }
+            super.clear();
+        }
+
+        public Set entrySet() {
+            return (new FacetsMapEntrySet(this));
+        }
+
+        public Set keySet() {
+            return (new FacetsMapKeySet(this));
+        }
+
+        public Object put(Object key, Object value) {
+            if ((key == null) || (value == null)) {
+                throw new NullPointerException();
+            } else if (!(key instanceof String) ||
+                       !(value instanceof UIComponent)) {
+                throw new ClassCastException();
+            }
+            UIComponent previous = (UIComponent) super.get(key);
+            if (previous != null) {
+                previous.setParent(null);
+            }
+            UIComponent current = (UIComponent) value;
+            eraseParent(current);
+            current.setParent(UIComponentBase.this);
+            return (super.put(key, value));
+        }
+
+        public void putAll(Map map) {
+            if (map == null) {
+                throw new NullPointerException();
+            }
+            Iterator keys = map.keySet().iterator();
+            while (keys.hasNext()) {
+                Object key = keys.next();
+                put(key, map.get(key));
+            }
+        }
+
+        public Object remove(Object key) {
+            UIComponent previous = (UIComponent) get(key);
+            if (previous != null) {
+                previous.setParent(null);
+            }
+            super.remove(key);
+            return (previous);
+        }
+
+        public Collection values() {
+            return (new FacetsMapValues(this));
+        }
+
+        Iterator keySetIterator() {
+            return ((new ArrayList(super.keySet())).iterator());
+        }
+
+    }
+
+
+    // Private implementation of Set for FacetsMap.getEntrySet()
+    private class FacetsMapEntrySet extends AbstractSet {
+
+        public FacetsMapEntrySet(FacetsMap map) {
+            this.map = map;
+        }
+
+        private FacetsMap map = null;
+
+        public boolean add(Object o) {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean add(Collection c) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void clear() {
+            map.clear();
+        }
+
+        public boolean contains(Object o) {
+            if (o == null) {
+                throw new NullPointerException();
+            }
+            if (!(o instanceof Map.Entry)) {
+                return (false);
+            }
+            Map.Entry e = (Map.Entry) o;
+            Object k = e.getKey();
+            Object v = e.getValue();
+            if (!map.containsKey(k)) {
+                return (false);
+            }
+            if (v == null) {
+                return (map.get(k) == null);
+            } else {
+                return (v.equals(map.get(k)));
+            }
+        }
+
+        public boolean isEmpty() {
+            return (map.isEmpty());
+        }
+
+        public Iterator iterator() {
+            return (new FacetsMapEntrySetIterator(map));
+        }
+
+        public boolean remove(Object o) {
+            if (o == null) {
+                throw new NullPointerException();
+            }
+            if (!(o instanceof Map.Entry)) {
+                return (false);
+            }
+            Object k = ((Map.Entry) o).getKey();
+            if (map.containsKey(k)) {
+                map.remove(k);
+                return (true);
+            } else {
+                return (false);
+            }
+        }
+
+        public boolean removeAll(Collection c) {
+            boolean result = false;
+            Iterator v = c.iterator();
+            while (v.hasNext()) {
+                if (remove(v.next())) {
+                    result = true;
+                }
+            }
+            return (result);
+        }
+
+        public boolean retainAll(Collection c) {
+            boolean result = false;
+            Iterator v = iterator();
+            while (v.hasNext()) {
+                if (!c.contains(v.next())) {
+                    v.remove();
+                    result = true;
+                }
+            }
+            return (result);
+        }
+
+        public int size() {
+            return (map.size());
+        }
+
+    }
+
+
+    // Private implementation of Map.Entry for FacetsMapEntrySet
+    private class FacetsMapEntrySetEntry implements Map.Entry {
+
+        public FacetsMapEntrySetEntry(FacetsMap map, Object key) {
+            this.map = map;
+            this.key = key;
+        }
+
+        private FacetsMap map;
+        private Object key;
+
+        public boolean equals(Object o) {
+            if (o == null) {
+                return (false);
+            }
+            if (!(o instanceof Map.Entry)) {
+                return (false);
+            }
+            Map.Entry e = (Map.Entry) o;
+            if (key == null) {
+                if (e.getKey() != null) {
+                    return (false);
+                }
+            } else {
+                if (!key.equals(e.getKey())) {
+                    return (false);
+                }
+            }
+            Object v = map.get(key);
+            if (v == null) {
+                if (e.getValue() != null) {
+                    return (false);
+                }
+            } else {
+                if (!v.equals(e.getValue())) {
+                    return (false);
+                }
+            }
+            return (true);
+        }
+
+        public Object getKey() {
+            return (key);
+        }
+
+        public Object getValue() {
+            return (map.get(key));
+        }
+
+        public int hashCode() {
+            Object value = map.get(key);
+            return (((key == null) ? 0 : key.hashCode()) ^
+                    ((value == null) ? 0 : value.hashCode()));
+        }
+
+        public Object setValue(Object value) {
+            Object previous = map.get(key);
+            map.put(key, value);
+            return (previous);
+        }
+
+    }
+
+
+    // Private implementation of Set for FacetsMap.getEntrySet().iterator()
+    private class FacetsMapEntrySetIterator implements Iterator {
+
+        public FacetsMapEntrySetIterator(FacetsMap map) {
+            this.map = map;
+            this.iterator = map.keySetIterator();
+        }
+
+        private FacetsMap map = null;
+        private Iterator iterator = null;
+        private Object last = null;
+
+        public boolean hasNext() {
+            return (iterator.hasNext());
+        }
+
+        public Object next() {
+            last = new FacetsMapEntrySetEntry(map, iterator.next());
+            return (last);
+        }
+
+        public void remove() {
+            if (last == null) {
+                throw new IllegalStateException();
+            }
+            map.remove(((Map.Entry) last).getKey());
+            last = null;
+        }
+
+    }
+
+
+    // Private implementation of Set for FacetsMap.getKeySet()
+    private class FacetsMapKeySet extends AbstractSet {
+
+        public FacetsMapKeySet(FacetsMap map) {
+            this.map = map;
+        }
+
+        private FacetsMap map = null;
+
+        public boolean add(Object o) {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean add(Collection c) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void clear() {
+            map.clear();
+        }
+
+        public boolean contains(Object o) {
+            return (map.containsKey(o));
+        }
+
+        public boolean containsAll(Collection c) {
+            Iterator v = c.iterator();
+            while (v.hasNext()) {
+                if (!map.containsKey(v.next())) {
+                    return (false);
+                }
+            }
+            return (true);
+        }
+
+        public boolean isEmpty() {
+            return (map.size() == 0);
+        }
+
+        public Iterator iterator() {
+            return (new FacetsMapKeySetIterator(map));
+        }
+
+        public boolean remove(Object o) {
+            if (map.containsKey(o)) {
+                map.remove(o);
+                return (true);
+            } else {
+                return (false);
+            }
+        }
+
+        public boolean removeAll(Collection c) {
+            boolean result = false;
+            Iterator v = c.iterator();
+            while (v.hasNext()) {
+                Object o = v.next();
+                if (map.containsKey(o)) {
+                    map.remove(o);
+                    result = true;
+                }
+            }
+            return (result);
+        }
+
+        public boolean retainAll(Collection c) {
+            boolean result = false;
+            Iterator v = iterator();
+            while (v.hasNext()) {
+                if (!c.contains(v.next())) {
+                    v.remove();
+                    result = true;
+                }
+            }
+            return (result);
+        }
+
+        public int size() {
+            return (map.size());
+        }
+
+    }
+
+
+    // Private implementation of Set for FacetsMap.getKeySet().iterator()
+    private class FacetsMapKeySetIterator implements Iterator {
+
+        public FacetsMapKeySetIterator(FacetsMap map) {
+            this.map = map;
+            this.iterator = map.keySetIterator();
+        }
+
+        private FacetsMap map = null;
+        private Iterator iterator = null;
+        private Object last = null;
+
+        public boolean hasNext() {
+            return (iterator.hasNext());
+        }
+
+        public Object next() {
+            last = iterator.next();
+            return (last);
+        }
+
+        public void remove() {
+            if (last == null) {
+                throw new IllegalStateException();
+            }
+            map.remove(last);
+            last = null;
+        }
+
+    }
+
+
+    // Private implementation of Collection for FacetsMap.values()
+    private class FacetsMapValues extends AbstractCollection {
+
+        public FacetsMapValues(FacetsMap map) {
+            this.map = map;
+        }
+
+        private FacetsMap map;
+
+        public boolean add(Object o) {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean addAll(Collection c) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void clear() {
+            map.clear();
+        }
+
+        public boolean isEmpty() {
+            return (map.size() == 0);
+        }
+
+        public Iterator iterator() {
+            return (new FacetsMapValuesIterator(map));
+        }
+
+        public int size() {
+            return (map.size());
+        }
+
+
+    }
+
+
+    // Private implementation of Iterator for FacetsMap.values().iterator()
+    private class FacetsMapValuesIterator implements Iterator {
+
+        public FacetsMapValuesIterator(FacetsMap map) {
+            this.map = map;
+            this.iterator = map.keySetIterator();
+        }
+
+        private FacetsMap map = null;
+        private Iterator iterator = null;
+        private Object last = null;
+
+        public boolean hasNext() {
+            return (iterator.hasNext());
+        }
+
+        public Object next() {
+            last = iterator.next();
+            return (map.get(last));
+        }
+
+        public void remove() {
+            if (last == null) {
+                throw new IllegalStateException();
+            }
+            map.remove(last);
+            last = null;
         }
 
     }
