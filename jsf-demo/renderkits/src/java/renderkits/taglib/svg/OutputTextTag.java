@@ -81,6 +81,12 @@ public final class OutputTextTag extends UIComponentELTag {
         this.dy = dy;
     }
 
+    // PROPERTY: textAnchor 
+    private javax.el.ValueExpression textAnchor;
+    public void setTextAnchor(javax.el.ValueExpression textAnchor) {
+        this.textAnchor =  textAnchor;
+    }
+
     // PROPERTY: rotate 
     private javax.el.ValueExpression rotate;
     public void setRotate(javax.el.ValueExpression rotate) {
@@ -181,6 +187,13 @@ public final class OutputTextTag extends UIComponentELTag {
                 output.setValueExpression("dy", dy);
             } else {
                 output.getAttributes().put("dy", dy.getExpressionString());
+            }
+        }
+        if (textAnchor != null) {
+            if (!textAnchor.isLiteralText()) {
+                output.setValueExpression("textAnchor", textAnchor);
+            } else {
+                output.getAttributes().put("textAnchor", textAnchor.getExpressionString());
             }
         }
         if (rotate != null) {
