@@ -20,20 +20,24 @@
     </managed-bean-class>
     <managed-bean-scope>none</managed-bean-scope>
     <managed-property>
-      <property-name>inner</property-name>
-      <value>#{innerBean}</value>
+      <property-name>customerBean</property-name>
+      <value>#{customerBean}</value>
     </managed-property>
   </managed-bean>
 
   <managed-bean>
-    <managed-bean-name>mybean</managed-bean-name>
+    <managed-bean-name>customerBean</managed-bean-name>
     <managed-bean-class>
-      com.sun.faces.TestBean.InnerBean
+      com.sun.faces.CustomerBean
     </managed-bean-class>
     <managed-bean-scope>none</managed-bean-scope>
     <managed-property>
-      <property-name>two</property-name>
-      <value>This is the String Property</value>
+      <property-name>name</property-name>
+      <value>Bobby</value>
+    </managed-property>
+    <managed-property>
+      <property-name>symbol</property-name>
+      <value>GDP</value>
     </managed-property>
   </managed-bean>
 

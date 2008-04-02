@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.10 2004/04/07 03:51:01 eburns Exp $
+ * $Id: ConfigureListener.java,v 1.11 2004/04/07 17:22:11 eburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
@@ -114,6 +114,9 @@ public class ConfigureListener implements ServletContextListener {
 
     // -------------------------------------------------------- Static Variables
 
+    protected static String FACES_CONFIG_BEAN_KEY = RIConstants.FACES_PREFIX +
+	"FACES_CONFIG_BEAN";
+
 
     /**
      * <p>The set of <code>ClassLoader</code> instances that have
@@ -136,6 +139,18 @@ public class ConfigureListener implements ServletContextListener {
         Digester digester = null;
         FacesConfigBean fcb = new FacesConfigBean();
         ServletContext context = sce.getServletContext();
+	// see if we're operating in the unit test environment
+	try {
+	    if (RIConstants.IS_UNIT_TEST_MODE) {
+		// if so, put the fcb in the servletContext
+		context.setAttribute(FACES_CONFIG_BEAN_KEY, fcb);
+	    }
+	}
+	catch (Exception e) {
+	    if (log.isDebugEnabled()) {
+		log.debug("Can't query for test environment");
+	    }
+	}
         URL url = null;
         if (log.isDebugEnabled()) {
             log.debug("contextInitialized(" + context.getServletContextName()
@@ -147,9 +162,9 @@ public class ConfigureListener implements ServletContextListener {
             return;
         }
 
-        // Step 0, parse obtain the url-pattern information
-        // for the FacesServlet.  This information is passed
-        // onto the ConfigParser for later use.
+        // Step 0, parse the url-pattern information for the
+        // FacesServlet.  This information is passed onto the
+        // ConfigParser for later use.
         WebXmlParser webXmlParser = new WebXmlParser(context);
         List mappings = webXmlParser.getFacesServletMappings();
 
@@ -365,7 +380,7 @@ public class ConfigureListener implements ServletContextListener {
      * @param config  <code>FacesConfigBean</code> that is the root of the
      *                tree of configuration information
      */
-    private void configure(ServletContext context, FacesConfigBean config,
+    protected void configure(ServletContext context, FacesConfigBean config,
                            List mappings) throws Exception {
         configure(config.getFactory());
         configure(config.getLifecycle());

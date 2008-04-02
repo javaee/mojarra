@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.56 2004/04/07 03:51:03 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.57 2004/04/07 17:22:14 eburns Exp $
  */
 
 /*
@@ -57,10 +57,11 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     ConfigParser parser = new ConfigParser();
 
     public static class ConfigParser extends ConfigureListener {
-	public void parseFromStr(ServletContext context, 
-				 FacesConfigBean fcb, String str) throws Exception {
+	public void parseFromStr(ServletContext context, String str) throws Exception {
 	    Digester digester = null;
 	    URL url = null;
+	    FacesConfigBean fcb = 
+		(FacesConfigBean) context.getAttribute(FACES_CONFIG_BEAN_KEY);
 	    
 	    // Step 1, configure a Digester instance we can use
 	    boolean validateXml = validateTheXml(context);
@@ -69,6 +70,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    url = (new File(System.getProperty("testRootDir"))).toURL();
 	    url = new URL(url, str);
 	    parse(digester, url, fcb);
+	    configure(context, fcb, java.util.Collections.EMPTY_LIST);
 	}
     }
     
@@ -113,21 +115,19 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     }
 
 
-    protected void parseConfig(FacesConfigBean fcb,
-                               String resource,
+    protected void parseConfig(String resource,
                                ServletContext context)
         throws Exception {
-	parser.parseFromStr(context, fcb, resource);
+	parser.parseFromStr(context, resource);
     }
 
 
     // Test parsing a full configuration file
     public void testFull() throws Exception {
-        FacesConfigBean fcb = new FacesConfigBean();
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-        parseConfig(fcb, "WEB-INF/faces-config.xml",
+        parseConfig("WEB-INF/faces-config.xml",
                     config.getServletContext());
 
         // <application>
@@ -204,8 +204,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
     public void testEmpty() throws Exception {
-        FacesConfigBean fcb = new FacesConfigBean();
-        parseConfig(fcb, "WEB-INF/faces-config-empty.xml",
+        parseConfig("WEB-INF/faces-config-empty.xml",
                     config.getServletContext());
     }
 
@@ -214,8 +213,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
  
     public void testConfigManagedBeanFactory() throws Exception {
 
-        FacesConfigBean fcb = new FacesConfigBean();
-        parseConfig(fcb, "WEB-INF/faces-config.xml",
+        parseConfig("WEB-INF/faces-config.xml",
                     config.getServletContext());
 
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
@@ -252,12 +250,12 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     }
 
 
+    /********** PENDING return to running
     public void testMapAndListPropertyPositive() throws Exception {
-        FacesConfigBean fcb = new FacesConfigBean();
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-        parseConfig(fcb, "WEB-INF/faces-config.xml",
+        parseConfig("WEB-INF/faces-config.xml",
                     config.getServletContext());
 
         ValueBinding valueBinding =
@@ -309,13 +307,11 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     }
 
 
-    /********** PENDING return to running
     public void testMapAndListPositive() throws Exception {
-        FacesConfigBean fcb = new FacesConfigBean();
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-        parseConfig(fcb, "WEB-INF/config-lists-and-maps.xml",
+        parseConfig("WEB-INF/config-lists-and-maps.xml",
                     config.getServletContext());
 
         ValueBinding valueBinding =
@@ -417,8 +413,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
     public void testNavigationCase() throws Exception {
-        FacesConfigBean fcb = new FacesConfigBean();
-        parseConfig(fcb, "WEB-INF/faces-config.xml",
+        parseConfig("WEB-INF/faces-config.xml",
                     config.getServletContext());
         ApplicationFactory aFactory =
             (ApplicationFactory) FactoryFinder.getFactory(
@@ -484,30 +479,28 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
      * <p>Test that using the same name for different artifacts works.</p>
      */
 
+    /****************** PENDING return to running
     public void testDuplicateNames() throws Exception {
-        FacesConfigBean fcb = new FacesConfigBean();
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-        parseConfig(fcb, "config1.xml", config.getServletContext());
+        parseConfig("config1.xml", config.getServletContext());
     }
 
 
-    /**
+
      * <p>Parse a config file that has a managed-bean entry that has an
      * error.  Make sure the expected behavior occurrs.</p>
-     */
 
-    /****************** PENDING return to running
+
 
     public void testConversionErrorDuringParse() throws Exception {
-        FacesConfigBean fcb = new FacesConfigBean();
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         boolean exceptionThrown = false;
         try {
-            parseConfig(fcb, "config-with-failing-property-conversion.xml",
+            parseConfig("config-with-failing-property-conversion.xml",
                         config.getServletContext());
         } catch (RuntimeException re) {
             exceptionThrown = true;
@@ -519,12 +512,11 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
     public void testLifecyclePhaseListener() throws Exception {
         final String HANDLED_BEFORE_AFTER = "Handled Before After";
-        FacesConfigBean fcb = new FacesConfigBean();
         LifecycleFactory lFactory = (LifecycleFactory) FactoryFinder.getFactory(
             FactoryFinder.LIFECYCLE_FACTORY);
         Lifecycle lifecycle = lFactory.getLifecycle(
             LifecycleFactory.DEFAULT_LIFECYCLE);
-        parseConfig(fcb, "config1.xml", config.getServletContext());
+        parseConfig("config1.xml", config.getServletContext());
 
         UIViewRoot page = new UIViewRoot();
         page.setViewId("/login.jsp");
@@ -543,7 +535,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
     public void testFileNotFoundWhenParsing() throws Exception {
-	FacesConfigBean fcb = new FacesConfigBean();
         // make sure we get a FileNotFoundException on null input for
         // all variants of parseConfig.
         boolean exceptionThrown = false;
@@ -574,7 +565,15 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     ********************/
 
     public void testNoneScopedBeans() throws Exception {
-	FacesConfigBean fcb = new FacesConfigBean();
-	parseConfig(fcb, "WEB-INF/none-scoped-beans.xml", config.getServletContext());
+	parseConfig("WEB-INF/none-scoped-beans.xml", config.getServletContext());
+        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+	com.sun.faces.TestBean bean = (com.sun.faces.TestBean)
+	    application.createAndMaybeStoreManagedBeans(getFacesContext(),
+							"outer");
+	assertNotNull(bean.getCustomerBean());
+	assertTrue(bean.getCustomerBean() instanceof com.sun.faces.CustomerBean);
+	
     }
 }

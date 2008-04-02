@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.16 2004/03/31 18:48:25 eburns Exp $
+ * $Id: ManagedBeanFactory.java,v 1.17 2004/04/07 17:22:12 eburns Exp $
  */
 
 /*
@@ -862,6 +862,14 @@ public class ManagedBeanFactory extends Object {
             }
             return true;
         }
+        if (scope.equalsIgnoreCase(RIConstants.NONE)) {
+	    if (valueScope == null) {
+		// we can't tell the scope until the bean has been
+		// instantiated.
+		return true;
+	    }
+	}
+
 
         //if the managed bean's scope is "request" it is able to refer
         //to objects in any scope

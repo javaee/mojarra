@@ -169,6 +169,16 @@ public class TestBean extends Object {
         return shortProp;
     }
 
+    protected CustomerBean customerBean;
+    public CustomerBean getCustomerBean() {
+	return customerBean;
+    }
+
+    public void setCustomerBean(CustomerBean newCustomerBean) {
+	customerBean = newCustomerBean;
+    }
+
+
 
     protected InnerBean inner = null;
 
@@ -251,6 +261,8 @@ public class TestBean extends Object {
 
 
     public static class InnerBean extends Object {
+
+	public InnerBean() {}
 
         protected String two = null;
         protected Integer pin = null;
