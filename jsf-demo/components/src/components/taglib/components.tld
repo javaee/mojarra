@@ -1100,7 +1100,7 @@
     <tag-class>components.taglib.ChartTag</tag-class>
     <body-content>JSP</body-content>
     <description>
-      Displays various types of Charts such as Bar, Pie, Line etc.
+      Displays a chart as either a bar chart or pie chart.
     </description>
 
     <attribute>
@@ -1108,7 +1108,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Width of the Chart
+        The width of the Chart
       </description>
     </attribute>
 
@@ -1117,7 +1117,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        height of the Chart
+        The height of the Chart
       </description>
     </attribute>
 
@@ -1135,7 +1135,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Orientation of the Chart. This attribute applies only to Pie chart.
+	 Orientation of the chart. This attribute applies only to bar chart.
       </description>
     </attribute>
     
@@ -1144,7 +1144,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-         Points to a collection of ChartItem. Currently the only array type
+         Points to a collection of chart items. Currently the only array type
          is supported. So either value should be present or
          a set of nested chartItem tags should be present. If both are
          present, value takes precedence and nested ChartItem tags are ignored.
@@ -1197,7 +1197,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Color of the Chart entry
+        The Color of the Chart entry
       </description>
     </attribute>
 
@@ -1206,7 +1206,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Label of the Chart entry
+        The label of the Chart entry
       </description>
     </attribute>
 
@@ -1215,7 +1215,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-         Value of Chart entry of type Integer.
+	A chart item value defined as a primitive integer.
       </description>
     </attribute>
     
@@ -1227,16 +1227,6 @@
          Points of a ChartItem instance. So either value should be present or
          itemColor, itemLabel and itemValue should be present. If both are
          present, value takes precedence and other attributes are ignored.
-      </description>
-    </attribute>
-    
-    <attribute>
-      <name>value</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-         Pointing to a collection of ChartItem. Currently the only array type
-         is supported.
       </description>
     </attribute>
   </tag>

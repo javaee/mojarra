@@ -1,5 +1,5 @@
 /*
- * $Id: ChartServlet.java,v 1.5 2004/03/27 01:12:34 jvisvanathan Exp $
+ * $Id: ChartServlet.java,v 1.6 2004/04/01 20:55:06 rkitain Exp $
  */
 
 /*
@@ -275,14 +275,26 @@ public final class ChartServlet extends HttpServlet {
 		totalHeight = cy + (4 * titleFont.getSize()); 
 		break;
 	    }
-
 	}
 	if (orientation == VERTICAL) {
             totalHeight = maxDataValue + (8 * titleFont.getSize());
+	    totalWidth = totalWidth + 50;
 	} else {
 	    totalWidth = maxDataValue + (4 * titleFont.getSize() +
-		(Integer.toString(maxDataValue).length() * titleFont.getSize()));
+		(Integer.toString(maxDataValue).length() * titleFont.getSize())+50);
 	}
+
+	// Make sure the the total height of the chart provides enough room
+	// for the vertical label..
+	//
+	int yLabelHeight = 0;
+	for (int i=0; i<yLabel.length(); i++) {
+	    yLabelHeight += titleFontMetrics.getAscent();
+	}
+	if ((yLabelHeight+(12 * titleFontMetrics.getDescent())) > totalHeight) {
+	    totalHeight = yLabelHeight+(8*titleFont.getSize());
+	}
+	    
 
         bi = new BufferedImage(totalWidth, totalHeight, BufferedImage.TYPE_INT_RGB);
         g2d = bi.createGraphics();
@@ -318,7 +330,14 @@ public final class ChartServlet extends HttpServlet {
 	    totalHeight - (6 * titleFontMetrics.getDescent()));
 
 	// draw the y axis label
-
+	i = titleFontMetrics.stringWidth(yLabel);
+	cx = totalWidth-(totalWidth-6);
+	cy = totalHeight - (12 * titleFontMetrics.getDescent());
+	for (int j=yLabel.length(); j>0; j--) {
+	    g2d.drawString(yLabel.substring(j-1,j), cx, cy);
+	    cy -= titleFontMetrics.getAscent();
+	}
+	    
 	// loop through to draw the chart items.
         for (i=0; i < columns; i++) {
 	    chartItem = chartItems[i];
@@ -334,7 +353,7 @@ public final class ChartServlet extends HttpServlet {
 		// set the next X coordinate to account for the label
 		// being wider than the bar width.
 		cx = (Math.max((barWidth + barSpacing),maxLabelWidth) * i) +
-		    barSpacing;
+		    barSpacing + 12;
 
 		// center the bar chart
 		cx += Math.max((totalWidth - (columns * (barWidth + 
@@ -363,7 +382,9 @@ public final class ChartServlet extends HttpServlet {
 	      case HORIZONTAL:
 		barWidth = titleFont.getSize();
 		// set the Y coordinate
-		cy = ((barWidth + barSpacing) * i) + barSpacing;
+	        cy = totalHeight - (((barWidth + barSpacing) * i) + barSpacing + 
+		    (12 * titleFontMetrics.getDescent()));
+		
 
 		// set the X coordinate to be the width of the widest label
 		cx = maxLabelWidth + 1;
