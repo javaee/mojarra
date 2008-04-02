@@ -95,6 +95,10 @@
       <h:commandButton action="#{modelBean.select}" value="Next Page"/>
       <h:commandButton action="#{modelBean.addCustomName}" value="Add Name"/>
     </h:panelGrid>
+
+    <jsp:include page="wizard-buttons.jsp"/>
+
+
   </h:form>
 
 </body>

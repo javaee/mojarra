@@ -12,6 +12,14 @@
     <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <managed-bean-name>wizardButtons</managed-bean-name>
+    <managed-bean-class>characterCombat.WizardButtons</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <!-- temporary navigation rules -->
+
   <navigation-rule>
     <from-view-id>/main.jsp</from-view-id>
     <navigation-case>
@@ -59,5 +67,81 @@
       <to-view-id>/main.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
+
+  <!-- wizard based navigation rules -->
+
+  <navigation-rule>
+    <from-view-id>/main.jsp</from-view-id>
+    <navigation-case>
+      <description>
+        If the action returns "next", goto
+        firstSelection.jsp
+      </description>
+      <from-outcome>next</from-outcome>
+      <to-view-id>/firstSelection.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/firstSelection.jsp</from-view-id>
+    <navigation-case>
+      <description>
+        If the action returns "next", goto
+        secondSelection.jsp
+      </description>
+      <from-outcome>next</from-outcome>
+      <to-view-id>/secondSelection.jsp</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <description>
+        If the action returns "back", goto
+        main.jsp
+      </description>
+      <from-outcome>back</from-outcome>
+      <to-view-id>/main.jsp</to-view-id>
+    </navigation-case>
+
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/secondSelection.jsp</from-view-id>
+    <navigation-case>
+      <description>
+        If the action returns "next", goto
+        results.jsp
+      </description>
+      <from-outcome>next</from-outcome>
+      <to-view-id>/results.jsp</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <description>
+        If the action returns "back", goto
+        firstSelection.jsp
+      </description>
+      <from-outcome>back</from-outcome>
+      <to-view-id>/firstSelection.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/results.jsp</from-view-id>
+    <navigation-case>
+      <description>
+        If the action returns "next", goto
+        main.jsp
+      </description>
+      <from-outcome>next</from-outcome>
+      <to-view-id>/main.jsp</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <description>
+        If the action returns "back", goto
+        results.jsp
+      </description>
+      <from-outcome>next</from-outcome>
+      <to-view-id>/results.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
 
 </faces-config>
