@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.4 2003/04/30 06:31:21 eburns Exp $
+ * $Id: MenuBarRenderer.java,v 1.5 2003/05/14 20:21:44 eburns Exp $
  */
 
 /*
@@ -235,8 +235,8 @@ public class MenuBarRenderer extends BaseRenderer {
                         }    
                     }
                     writer.write("</li>");
-                    // FIXME - marker for submenu
-                    // FIXME - expanded submenu?
+                    // PENDING - marker for submenu
+                    // PENDING - expanded submenu?
                 }
                 writer.write("</ul>");
             } else {
