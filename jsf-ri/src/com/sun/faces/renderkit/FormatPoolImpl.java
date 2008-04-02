@@ -1,5 +1,5 @@
 /*
- * $Id: FormatPoolImpl.java,v 1.9 2002/09/10 21:47:51 edburns Exp $
+ * $Id: FormatPoolImpl.java,v 1.10 2002/10/11 00:58:34 jvisvanathan Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormatPoolImpl.java,v 1.9 2002/09/10 21:47:51 edburns Exp $
+ * @version $Id: FormatPoolImpl.java,v 1.10 2002/10/11 00:58:34 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -137,16 +137,16 @@ public FormatPoolImpl()
 	    dateStyleInt = DEFAULT_DATE_STYLE_INT;
 	}
 	else {
-	    if (dateStyle.equals("SHORT")) {
+	    if (dateStyle.equals("short")) {
 		dateStyleInt = DateFormat.SHORT;
 	    }
-	    else if (dateStyle.equals("MEDIUM")) {
+	    else if (dateStyle.equals("medium")) {
 		dateStyleInt = DateFormat.MEDIUM;
 	    }
-	    else if (dateStyle.equals("LONG")) {
+	    else if (dateStyle.equals("long")) {
 		dateStyleInt = DateFormat.LONG;
 	    }
-	    else if (dateStyle.equals("FULL")) {
+	    else if (dateStyle.equals("full")) {
 		dateStyleInt = DateFormat.FULL;
 	    }
 	    else {
@@ -159,16 +159,16 @@ public FormatPoolImpl()
 	    timeStyleInt = DEFAULT_DATE_STYLE_INT;
 	}
 	else {
-	    if (timeStyle.equals("SHORT")) {
+	    if (timeStyle.equals("short")) {
 		timeStyleInt = DateFormat.SHORT;
 	    }
-	    else if (timeStyle.equals("MEDIUM")) {
+	    else if (timeStyle.equals("medium")) {
 		timeStyleInt = DateFormat.MEDIUM;
 	    }
-	    else if (timeStyle.equals("LONG")) {
+	    else if (timeStyle.equals("long")) {
 		timeStyleInt = DateFormat.LONG;
 	    }
-	    else if (timeStyle.equals("FULL")) {
+	    else if (timeStyle.equals("full")) {
 		timeStyleInt = DateFormat.FULL;
 	    }
 	    else {
@@ -264,13 +264,13 @@ public FormatPoolImpl()
                 if ( formatStyle == null ) {
                     numberFormat = NumberFormat.getNumberInstance(locale);
                 }    
-                else if (formatStyle.equalsIgnoreCase("CURRENCY")) {
+                else if (formatStyle.equals("currency")) {
                     numberFormat = NumberFormat.getCurrencyInstance(locale);
 	        }
-	        else if (formatStyle.equalsIgnoreCase("PERCENT")) {
+	        else if (formatStyle.equals("percent")) {
 		    numberFormat = NumberFormat.getPercentInstance(locale);
                 }
-	        else if (formatStyle.equalsIgnoreCase("INTEGER")) {
+	        else if (formatStyle.equals("integer")) {
                     // PENDING (visvan) use Integer instance once we migrate
                     // to JDK 1.4
                     numberFormat = NumberFormat.getNumberInstance(locale);

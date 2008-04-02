@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.31 2002/10/07 22:58:06 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.32 2002/10/11 00:58:36 jvisvanathan Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.31 2002/10/07 22:58:06 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.32 2002/10/11 00:58:36 jvisvanathan Exp $
  * 
  *
  */
@@ -592,7 +592,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         UIInput input = new UIInput();
         input.setValue(null);
         input.setComponentId("my_input_date");
-	input.setAttribute("dateStyle", "MEDIUM");
+	input.setAttribute("dateStyle", "medium");
         root.addChild(input);
 
         DateRenderer dateRenderer = new DateRenderer();
@@ -633,7 +633,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         UIInput input = new UIInput();
         input.setValue(null);
         input.setComponentId("my_input_time");
-	input.setAttribute("timeStyle", "MEDIUM");
+	input.setAttribute("timeStyle", "medium");
         root.addChild(input);
 
         TimeRenderer timeRenderer = new TimeRenderer();
@@ -748,7 +748,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         UIInput input = new UIInput();
         input.setValue(null);
         input.setComponentId("my_number");
-	input.setAttribute("numberStyle", "PERCENT");
+	input.setAttribute("numberStyle", "percent");
         root.addChild(input);
 
         NumberRenderer numberRenderer = new NumberRenderer();
@@ -820,7 +820,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         UIOutput output = new UIOutput();
         output.setValue(new Double(.99));
         output.setComponentId("my_number3");
-	output.setAttribute("numberStyle", "PERCENT");
+	output.setAttribute("numberStyle", "percent");
         root.addChild(output);
 
         NumberRenderer numberRenderer = new NumberRenderer();
@@ -872,7 +872,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("Testing Output_DateRenderer");
         UIOutput output = new UIOutput();
         output.setComponentId("my_output_date");
-	output.setAttribute("dateStyle", "MEDIUM");
+	output.setAttribute("dateStyle", "medium");
 	output.setValue(DATE_STR);
         root.addChild(output);
 
@@ -910,7 +910,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("Testing Output_TimeRenderer");
         UIOutput output = new UIOutput();
         output.setComponentId("my_output_time");
-	output.setAttribute("timeStyle", "MEDIUM");
+	output.setAttribute("timeStyle", "medium");
 	output.setValue(TIME_STR);
         root.addChild(output);
 

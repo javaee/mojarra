@@ -3,14 +3,14 @@
              <td>
 
                <h:output_text id="output_time1_label" 
-                     value="output_time MEDIUM readonly"/>
+                     value="output_time medium readonly"/>
 
              </td>
 
 
              <td>
 
-               <h:output_time id="output_time1" timeStyle="MEDIUM"
+               <h:output_time id="output_time1" timeStyle="medium"
                          modelReference="LoginBean.date"/>
 
 
@@ -23,7 +23,7 @@
              <td>
 
                <h:output_text id="output_time2_label" 
-                     value="output_time LONG "/>
+                     value="output_time long "/>
 
              </td>
 
@@ -31,7 +31,7 @@
              <td>
 
                <h:output_time id="output_time2" 
-                                 timeStyle="LONG"
+                                 timeStyle="long"
                          modelReference="LoginBean.date"/>
 
              </td>

@@ -16,7 +16,7 @@
 				<tr>
 					<td>Multi-select checklistmodel:</td>
 					<td><h:selectmany_checkboxlist id="checklistmodel"
-						modelReference="LoginBean.currentOption">
+						modelReference="LoginBean.currentOptions">
 						<h:selectitems id="checklistmodelitems"
 							modelReference="LoginBean.options" />
 					</h:selectmany_checkboxlist></td>

@@ -3,20 +3,20 @@
              <td>
 
                <h:output_text id="input_number1_label" 
-                     value="input_number NUMBER readonly"/>
+                     value="input_number number readonly"/>
 
              </td>
 
 
              <td>
 
-               <h:input_number id="input_number1" numberStyle="NUMBER"
+               <h:input_number id="input_number1" numberStyle="number"
                                  value="1239989.6079" 
                                  readonly="true"
                                  size="10" maxlength="20"
-                                 alt="input_number NUMBER readonly"
+                                 alt="input_number number readonly"
                                  accesskey="N"
-                               title="input_number NUMBER readonly" />
+                               title="input_number number readonly" />
 
              </td>
              <td>
@@ -32,17 +32,17 @@
              <td>
 
                <h:output_text id="input_number2_label" 
-                     value="input_number CURRENCY"/>
+                     value="input_number currency"/>
 
              </td>
 
 
              <td>
 
-               <h:input_number id="input_number2" numberStyle="CURRENCY"
+               <h:input_number id="input_number2" numberStyle="currency"
                                  value="$1234789.60" 
-                                 alt="input_number CURRENCY"
-                                  title="input_number CURRENCY" />
+                                 alt="input_number currency"
+                                  title="input_number currency" />
              </td>
 
 	      <td>
@@ -59,18 +59,18 @@
              <td>
 
                <h:output_text id="input_number3_label" 
-                     value="input_number PERCENT "/>
+                     value="input_number percent "/>
 
              </td>
 
 
              <td>
 
-               <h:input_number id="input_number3" numberStyle="PERCENT"
+               <h:input_number id="input_number3" numberStyle="percent"
                                  value="45%" 
                                  size="10"
-                                 alt="input_number PERCENT"
-                                  title="input_number PERCENT" />
+                                 alt="input_number percent"
+                                  title="input_number percent" />
 
              </td>
 
@@ -117,20 +117,20 @@
              <td>
 
                <h:output_text id="input_number5_label"
-                     value="input_number INTEGER with modelReference"/>
+                     value="input_number integer with modelReference"/>
 
              </td>
 
 
              <td>
 
-               <h:input_number id="input_number5" numberStyle="INTEGER"
+               <h:input_number id="input_number5" numberStyle="integer"
                                  value="9"
                                  size="2" maxlength="10"
                                  modelReference="LoginBean.char"
-                                 alt="input_number INTEGER with modelReference"
+                                 alt="input_number integer with modelReference"
                                  accesskey="d"
-                               title="input_number INTEGER with modelReference" />
+                               title="input_number integer with modelReference" />
              </td>
 
               <td>

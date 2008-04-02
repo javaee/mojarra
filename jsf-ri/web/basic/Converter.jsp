@@ -71,7 +71,7 @@
                    <h:input_text id="byteInput"
                        modelReference="LoginBean.byte"
                        converter="number">
-                       <f:attribute name="numberStyle" value="INTEGER"/>
+                       <f:attribute name="numberStyle" value="integer"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errByte"
@@ -84,7 +84,7 @@
                    <h:input_text id="doubleInput"
                        modelReference="LoginBean.double"
                        converter="number">
-                       <f:attribute name="numberStyle" value="NUMBER"/>
+                       <f:attribute name="numberStyle" value="number"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errDouble"
@@ -97,7 +97,7 @@
                    <h:input_text id="floatInput"
                        modelReference="LoginBean.float"
                        converter="number">
-                       <f:attribute name="numberStyle" value="NUMBER"/>
+                       <f:attribute name="numberStyle" value="number"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errFloat"
@@ -110,7 +110,7 @@
                    <h:input_text id="intInput"
                        modelReference="LoginBean.int"
                        converter="number">
-                       <f:attribute name="numberStyle" value="INTEGER"/>
+                       <f:attribute name="numberStyle" value="integer"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errInt"
@@ -123,7 +123,7 @@
                    <h:input_text id="longInput"
                        modelReference="LoginBean.long"
                        converter="number">
-                       <f:attribute name="numberStyle" value="NUMBER"/>
+                       <f:attribute name="numberStyle" value="number"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errLong"
@@ -136,7 +136,7 @@
                    <h:input_text id="shortInput"
                        modelReference="LoginBean.short"
                        converter="number">
-                       <f:attribute name="numberStyle" value="NUMBER"/>
+                       <f:attribute name="numberStyle" value="number"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errShort"
@@ -153,18 +153,18 @@
                     <h:output_text id="dateOutput"
                         modelReference="LoginBean.date"
                         converter="date">
-                        <f:attribute name="dateStyle" value="LONG"/>
+                        <f:attribute name="dateStyle" value="long"/>
                     </h:output_text>
                 </td>
             </tr>
             <tr>
                 <td><b><h:output_text id="otimeLabel"
-                           value="Time [LONG Format]:"/></b></td>
+                           value="Time [long Format]:"/></b></td>
                 <td>
                     <h:output_text id="timeOutput"
                         modelReference="LoginBean.time"
                         converter="time">
-                        <f:attribute name="timeStyle" value="LONG"/>
+                        <f:attribute name="timeStyle" value="long"/>
                     </h:output_text>
                 </td>
             </tr>
@@ -175,7 +175,7 @@
                     <h:output_text id="currencyOutput"
                         modelReference="LoginBean.double"
                         converter="number">
-                        <f:attribute name="numberStyle" value="CURRENCY"/>
+                        <f:attribute name="numberStyle" value="currency"/>
                     </h:output_text>
                 </td>
             </tr>
@@ -186,7 +186,7 @@
                     <h:output_text id="percentOutput"
                         modelReference="LoginBean.double"
                         converter="number">
-                        <f:attribute name="numberStyle" value="PERCENT"/>
+                        <f:attribute name="numberStyle" value="percent"/>
                     </h:output_text>
                 </td>
             </tr>

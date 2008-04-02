@@ -1,5 +1,5 @@
 /*
- * $Id: TestFormatPoolImpl.java,v 1.6 2002/08/17 00:57:07 jvisvanathan Exp $
+ * $Id: TestFormatPoolImpl.java,v 1.7 2002/10/11 00:58:35 jvisvanathan Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFormatPoolImpl.java,v 1.6 2002/08/17 00:57:07 jvisvanathan Exp $
+ * @version $Id: TestFormatPoolImpl.java,v 1.7 2002/10/11 00:58:35 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,7 +94,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	catch (ParseException e) {
 	    assertTrue(false);
 	}
-	input.setAttribute("dateStyle", "SHORT");
+	input.setAttribute("dateStyle", "short");
 
 	result = formatPool.dateFormat_format(getFacesContext(), input, date);
 	assertTrue(null != result);
@@ -109,7 +109,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	catch (ParseException e) {
 	    assertTrue(false);
 	}
-	input.setAttribute("dateStyle", "MEDIUM");
+	input.setAttribute("dateStyle", "medium");
 	result = formatPool.dateFormat_format(getFacesContext(), input, date);
 	assertTrue(null != result);
 	assertTrue(result.equals("Jan 12, 1952"));
@@ -123,7 +123,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	catch (ParseException e) {
 	    assertTrue(false);
 	}
-	input.setAttribute("dateStyle", "LONG");
+	input.setAttribute("dateStyle", "long");
 	result = formatPool.dateFormat_format(getFacesContext(), input, date);
 	assertTrue(null != result);
 	assertTrue(result.equals("January 12, 1952"));
@@ -137,7 +137,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	catch (ParseException e) {
 	    assertTrue(false);
 	}
-	input.setAttribute("dateStyle", "FULL");
+	input.setAttribute("dateStyle", "full");
 	result = formatPool.dateFormat_format(getFacesContext(), input, date);
 	assertTrue(null != result);
 	assertTrue(result.equals("Saturday, April 12, 1952"));
@@ -170,7 +170,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	try {
 	    getFacesContext().setLocale(Locale.US);
 	    date = "12/31/52";
-	    input.setAttribute("dateStyle", "SHORT");
+	    input.setAttribute("dateStyle", "short");
 	    result = formatPool.dateFormat_parse(getFacesContext(), input, date);
 	    assertTrue(null != result);
 	    assertTrue(DateFormat.
@@ -185,7 +185,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	try {
 	    getFacesContext().setLocale(Locale.US);
 	    date = "Jan 12, 1952";
-	    input.setAttribute("dateStyle", "MEDIUM");
+	    input.setAttribute("dateStyle", "medium");
 	    result = formatPool.dateFormat_parse(getFacesContext(), input, date);
 	    assertTrue(null != result);
 	    assertTrue(DateFormat.
@@ -200,7 +200,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	try {
 	    getFacesContext().setLocale(Locale.US);
 	    date = "January 12, 1952";
-	    input.setAttribute("dateStyle", "LONG");
+	    input.setAttribute("dateStyle", "long");
 	    result = formatPool.dateFormat_parse(getFacesContext(), input, date);
 	    assertTrue(null != result);
 	    assertTrue(DateFormat.
@@ -215,7 +215,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	try {
 	    getFacesContext().setLocale(Locale.US);
 	    date = "Saturday, April 12, 1952";
-	    input.setAttribute("dateStyle", "FULL");
+	    input.setAttribute("dateStyle", "full");
 	    result = formatPool.dateFormat_parse(getFacesContext(), input, date);
 	    assertTrue(null != result);
 	    assertTrue(DateFormat.
@@ -302,8 +302,8 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 
 	// dateStyle == short, timezone == null, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
-	input1.setAttribute("dateStyle", "SHORT");
-	input2.setAttribute("dateStyle", "SHORT");
+	input1.setAttribute("dateStyle", "short");
+	input2.setAttribute("dateStyle", "short");
 	dateFormat1 = formatPool.getDateFormat(getFacesContext(), input1,
 					       FormatPoolImpl.DATEINSTANCE);
 	dateFormat2 = formatPool.getDateFormat(getFacesContext(), input2, 
@@ -355,13 +355,13 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	String formatStr = null;
         
         FacesContext context = getFacesContext();
-	// style == NUMBER, format method
-        input.setAttribute("numberStyle", "NUMBER");
+	// style == number, format method
+        input.setAttribute("numberStyle", "number");
 	getFacesContext().setLocale(Locale.US);
         formatStr = formatPool.numberFormat_format(context, input,
                 testNum);
         
-	// style == NUMBER, parse method
+	// style == number, parse method
         try {
 	    resultNum = formatPool.numberFormat_parse(context, input,formatStr);
 	}
@@ -371,13 +371,13 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
         assertTrue( formatStr.equals("1,239,989.6"));
         assertTrue(testNum.doubleValue() == resultNum.doubleValue());
         
-        // style == PERCENT, format method
+        // style == percent, format method
         testNum = new Double(.99);
-        input.setAttribute("numberStyle", "PERCENT");
+        input.setAttribute("numberStyle", "percent");
 	formatStr = formatPool.numberFormat_format(context, input,testNum);
         assertTrue(formatStr.equals("99%"));
         
-        // style == PERCENT, parse method
+        // style == percent, parse method
         try {
 	    resultNum = formatPool.numberFormat_parse(context, input,formatStr);
 	}
@@ -386,13 +386,13 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	}
         assertTrue( testNum.equals(resultNum ));
         
-         // style == CURRENCY, format method
+         // style == currency, format method
         testNum = new Double(1234789.60);
-        input.setAttribute("numberStyle", "CURRENCY");
+        input.setAttribute("numberStyle", "currency");
 	formatStr = formatPool.numberFormat_format(context, input, testNum);
         assertTrue( formatStr.equals("$1,234,789.60"));
         
-        // style == PERCENT, parse method
+        // style == percent, parse method
         try {
 	    resultNum = formatPool.numberFormat_parse(context, input,formatStr);
 	}
@@ -407,7 +407,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
         formatStr = formatPool.numberFormat_format(context, input, testNum);
         assertTrue(formatStr.equals("9999.988"));
         
-        // style == PERCENT, parse method
+        // style == percent, parse method
         try {
 	    resultNum = formatPool.numberFormat_parse(context, input,formatStr);
 	}
@@ -428,15 +428,15 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	input2 = new UIInput();
 	input2.setComponentId("input2");
 
-	// style == PERCENT, get Locale from FacesContext
+	// style == percent, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
-	input1.setAttribute("numberStyle", "PERCENT");
-	input2.setAttribute("numberStyle", "PERCENT");
+	input1.setAttribute("numberStyle", "percent");
+	input2.setAttribute("numberStyle", "percent");
 	numberFormat1 = formatPool.getNumberFormat(getFacesContext(), input1);
 	numberFormat2 = formatPool.getNumberFormat(getFacesContext(), input2);
 	assertTrue(numberFormat1.equals(numberFormat2));
 
-        //style="PERCENT", get locale from attribute.
+        //style="percent", get locale from attribute.
         LocalizationContext locCtx = 
 	    new LocalizationContext(null, Locale.FRANCE);
 	getFacesContext().getHttpSession().setAttribute("basicBundle", locCtx);

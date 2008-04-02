@@ -232,7 +232,7 @@
 
 	<TD><h:input_date id="date1" value="Wed, Jul 10, 1996"
                               inputClass="inputClass"
-                              dateStyle="LONG" />
+                              dateStyle="long" />
 	</TD>
 
       </TR>
@@ -244,7 +244,7 @@
         </TD>
 
 	<TD><h:input_date id="date2" value="Thu, Jul 11, 1996"
-                        dateStyle="LONG" disabled="true"
+                        dateStyle="long" disabled="true"
                         size="3" maxlength="20" tabindex="1" accesskey="D"/>
 	</TD>
 
@@ -276,7 +276,7 @@
       <tr>
           <td> <h:output_text outputClass="outputClass" id="percentLabel" value="OUTPUT-PERCENT" /> </td>
               <td>
-                   <h:output_number id="testPercent" numberStyle="PERCENT"
+                   <h:output_number id="testPercent" numberStyle="percent"
                         value="45%"/>
               </td>
       </tr>
@@ -287,7 +287,7 @@
         </TD>
 
 	<TD><h:output_date id="date4" value="Wed, Jul 10, 1996"
-                              outputClass="outputClass" dateStyle="LONG" />
+                              outputClass="outputClass" dateStyle="long" />
 	</TD>
 
       </TR>
@@ -311,7 +311,7 @@
 
 	<TD><h:input_time id="date6" 
                           value="12:31:31 PM"
-                          timeStyle="MEDIUM" />
+                          timeStyle="medium" />
 	</TD>
 
       </TR>
@@ -323,7 +323,7 @@
 
 	<TD><h:output_time id="date7" 
                           value="12:31:31 PM"
-                          timeStyle="MEDIUM" />
+                          timeStyle="medium" />
 	</TD>
 
       </TR>
@@ -332,13 +332,13 @@
 
              <td>
 
-               <h:input_date id="input_date1" dateStyle="MEDIUM"
+               <h:input_date id="input_date1" dateStyle="medium"
                                  value="Jan 12, 1952" 
                                  readonly="true"
                                  size="10" maxlength="20"
-                                 alt="input_date MEDIUM readonly"
+                                 alt="input_date medium readonly"
                                  accesskey="D" 
-                               title="input_date MEDIUM readonly"/>
+                               title="input_date medium readonly"/>
 
 
              </td>
@@ -349,10 +349,10 @@
 
              <td>
 
-               <h:input_date id="input_date2" dateStyle="MEDIUM"
+               <h:input_date id="input_date2" dateStyle="medium"
                                  value="Jan 12, 1952" 
-                                 alt="input_date MEDIUM"
-                                  title="input_date MEDIUM"/>
+                                 alt="input_date medium"
+                                  title="input_date medium"/>
 
              </td>
 
@@ -362,10 +362,10 @@
 
              <td>
 
-               <h:input_date id="input_date3" dateStyle="SHORT"
+               <h:input_date id="input_date3" dateStyle="short"
                                  value="01/12/1952" 
-                                 alt="input_date SHORT"
-                                  title="input_date SHORT"/>
+                                 alt="input_date short"
+                                  title="input_date short"/>
 
 
              </td>
@@ -376,12 +376,12 @@
 
              <td>
 
-               <h:input_date id="input_date4" dateStyle="LONG" 
+               <h:input_date id="input_date4" dateStyle="long" 
                                  value="January 12, 1952" 
                                  size="20" maxlength="40"
-                                 alt="input_date LONG"
+                                 alt="input_date long"
                                  accesskey="d"
-                               title="input_date LONG"/>
+                               title="input_date long"/>
 
 
              </td>

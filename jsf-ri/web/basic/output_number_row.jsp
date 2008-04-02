@@ -3,14 +3,14 @@
              <td>
 
                <h:output_text id="output_number1_label" 
-                     value="output_number NUMBER"/>
+                     value="output_number number"/>
 
              </td>
 
 
              <td>
 
-               <h:output_number id="output_number1" numberStyle="NUMBER"
+               <h:output_number id="output_number1" numberStyle="number"
                                modelReference="LoginBean.floater"/>
 
              </td>
@@ -27,14 +27,14 @@
              <td>
 
                <h:output_text id="output_number2_label" 
-                     value="output_number CURRENCY"/>
+                     value="output_number currency"/>
 
              </td>
 
 
              <td>
 
-               <h:output_number id="output_number2" numberStyle="CURRENCY"
+               <h:output_number id="output_number2" numberStyle="currency"
                           modelReference="LoginBean.floater"/>
              </td>
 
@@ -52,14 +52,14 @@
              <td>
 
                <h:output_text id="output_number3_label" 
-                     value="output_number PERCENT "/>
+                     value="output_number percent "/>
 
              </td>
 
 
              <td>
 
-               <h:output_number id="output_number3" numberStyle="PERCENT"
+               <h:output_number id="output_number3" numberStyle="percent"
                           modelReference="LoginBean.floater" />
 
              </td>
@@ -103,14 +103,14 @@
              <td>
 
                <h:output_text id="output_number5_label"
-                     value="output_number INTEGER with modelReference"/>
+                     value="output_number integer with modelReference"/>
 
              </td>
 
 
              <td>
 
-               <h:output_number id="output_number5" numberStyle="INTEGER"
+               <h:output_number id="output_number5" numberStyle="integer"
                                  modelReference="${LoginBean.char}" />
              </td>
 

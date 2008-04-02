@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.15 2002/10/04 23:44:15 eburns Exp $
+ * $Id: LoginBean.java,v 1.16 2002/10/11 00:58:42 jvisvanathan Exp $
  */
 
 /*
@@ -213,6 +213,7 @@ public class LoginBean {
 
     public Object[] getCurrentOptions()
     {
+        System.out.println("get current options");
 	return currentOptions.toArray();
     }
     
@@ -228,6 +229,7 @@ public class LoginBean {
 	for (int i = 0; i < len; i++) {
 	    currentOptions.add(newCurrentOptions[i]);
 	}
+        System.out.println("set current options");
     }
 
 

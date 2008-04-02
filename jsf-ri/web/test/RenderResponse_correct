@@ -342,7 +342,7 @@
 
              <td>
 
-               <input type="text" name="/basicForm/input_date1" id="input_date1" value="Jan 12, 1952" accesskey="D" alt="input_date MEDIUM readonly" maxlength="20" size="10" title="input_date MEDIUM readonly"  readonly >
+               <input type="text" name="/basicForm/input_date1" id="input_date1" value="Jan 12, 1952" accesskey="D" alt="input_date medium readonly" maxlength="20" size="10" title="input_date medium readonly"  readonly >
 
 
              </td>
@@ -353,7 +353,7 @@
 
              <td>
 
-               <input type="text" name="/basicForm/input_date2" id="input_date2" value="Jan 12, 1952" alt="input_date MEDIUM" title="input_date MEDIUM" >
+               <input type="text" name="/basicForm/input_date2" id="input_date2" value="Jan 12, 1952" alt="input_date medium" title="input_date medium" >
 
              </td>
 
@@ -363,7 +363,7 @@
 
              <td>
 
-               <input type="text" name="/basicForm/input_date3" id="input_date3" value="01/12/1952" alt="input_date SHORT" title="input_date SHORT" >
+               <input type="text" name="/basicForm/input_date3" id="input_date3" value="01/12/1952" alt="input_date short" title="input_date short" >
 
 
              </td>
@@ -374,7 +374,7 @@
 
              <td>
 
-               <input type="text" name="/basicForm/input_date4" id="input_date4" value="January 12, 1952" accesskey="d" alt="input_date LONG" maxlength="40" size="20" title="input_date LONG" >
+               <input type="text" name="/basicForm/input_date4" id="input_date4" value="January 12, 1952" accesskey="d" alt="input_date long" maxlength="40" size="20" title="input_date long" >
 
 
              </td>

@@ -3,14 +3,14 @@
              <td>
 
                <h:output_text id="output_date3_label" 
-                     value="output_date SHORT"/>
+                     value="output_date short"/>
 
              </td>
 
 
              <td>
 
-               <h:output_date id="output_date3" dateStyle="SHORT"
+               <h:output_date id="output_date3" dateStyle="short"
                                      modelReference="LoginBean.date"/>
 
 
@@ -30,7 +30,7 @@
              <td>
                <h:output_label id="date1id" for="output_date1">
                <h:output_text id="output_date1_label" 
-                     value="output_date MEDIUM"/>
+                     value="output_date medium"/>
                </h:output_label>
 
              </td>
@@ -38,7 +38,7 @@
 
              <td>
 
-               <h:output_date id="output_date1" dateStyle="MEDIUM"
+               <h:output_date id="output_date1" dateStyle="medium"
                                modelReference="LoginBean.date"/>
 
 
@@ -51,14 +51,14 @@
              <td>
 
                <h:output_text id="output_date4_label" 
-                     value="output_date LONG"/>
+                     value="output_date long"/>
 
              </td>
 
 
              <td>
 
-               <h:output_date id="output_date4" dateStyle="LONG" 
+               <h:output_date id="output_date4" dateStyle="long" 
                                modelReference="LoginBean.date"/>
 
 
@@ -85,7 +85,7 @@
 
              <td>
 
-               <h:output_date id="output_date2" dateStyle="FULL"
+               <h:output_date id="output_date2" dateStyle="full"
                                   modelReference="LoginBean.date"/>
 
 

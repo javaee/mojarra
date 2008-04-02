@@ -16,7 +16,7 @@
 				<tr>
 					<td>Multi-select listmodel:</td>
 					<td><h:selectmany_listbox id="listmodel"
-						modelReference="LoginBean.currentOption">
+						modelReference="LoginBean.currentOptions">
 						<h:selectitems id="listmodelitems"
 							modelReference="LoginBean.options" />
 					</h:selectmany_listbox></td>

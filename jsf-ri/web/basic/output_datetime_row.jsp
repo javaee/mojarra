@@ -30,7 +30,7 @@
              <td>
 
                <h:output_text id="output_datetime3_label" 
-                     value="output_datetime dateStyle=SHORT timeStyle=FULL"/>
+                     value="output_datetime dateStyle=short timeStyle=full"/>
 
              </td>
 
@@ -38,7 +38,7 @@
              <td>
 
                <h:output_datetime id="output_datetime3" 
-                    dateStyle="SHORT" timeStyle="FULL"
+                    dateStyle="short" timeStyle="full"
                                modelReference="LoginBean.date"/>
 
              </td>

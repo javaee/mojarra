@@ -32,21 +32,21 @@
             </tr> 
 
             <tr>
-              <td> <h:output_text id="numberLabel" value="NUMBER" /> </td>
-              <td> <h:input_number id="testNumber" numberStyle="NUMBER"
+              <td> <h:output_text id="numberLabel" value="number" /> </td>
+              <td> <h:input_number id="testNumber" numberStyle="number"
                        value="1239989.6079"/> </td>
             </tr>
 
             <tr> 
               <td> <h:output_text id="currLabel" value="CURRENCY" /> </td>
-              <td> <h:input_number id="testcurrency" numberStyle="CURRENCY"  
+              <td> <h:input_number id="testcurrency" numberStyle="currency"  
                        value="$1234789.60"/> </td>
             </tr>
 
              <tr>
               <td> <h:output_text id="percentLabel" value="PERCENT" /> </td>
               <td> 
-                   <h:input_number id="testPercent" numberStyle="PERCENT" 
+                   <h:input_number id="testPercent" numberStyle="percent" 
                         value="45%"/>
               </td>
 
@@ -64,7 +64,7 @@
             <tr>
               <td> <h:output_text id="byteLabel" value="BYTE" /> </td>
               <td>
-                   <h:input_number id="byteInput" numberStyle="INTEGER"
+                   <h:input_number id="byteInput" numberStyle="integer"
                         modelReference="LoginBean.byte"/>
               </td>
               <td> <h:output_errors id="errByte" compoundId="/numberForm/byteInput"/> </td>
@@ -73,7 +73,7 @@
              <tr>
               <td> <h:output_text id="doubleLabel" value="DOUBLE" /> </td>
               <td>
-                   <h:input_number id="doubleInput" numberStyle="NUMBER"
+                   <h:input_number id="doubleInput" numberStyle="number"
                         modelReference="LoginBean.double"/>
               </td>
               <td> <h:output_errors id="errDouble" compoundId="/numberForm/doubleInput"/> </td>
@@ -82,16 +82,16 @@
              <tr>
               <td> <h:output_text id="floatLabel" value="FLOAT" /> </td>
               <td>
-                   <h:input_number id="floatInput" numberStyle="NUMBER"
+                   <h:input_number id="floatInput" numberStyle="number"
                         modelReference="LoginBean.float"/>
               </td>
               <td> <h:output_errors id="errFloat" compoundId="/numberForm/floatInput"/> </td>
              </tr>
 
              <tr>
-              <td> <h:output_text id="intLabel" value="INTEGER" /> </td>
+              <td> <h:output_text id="intLabel" value="integer" /> </td>
               <td>
-                   <h:input_number id="intInput" numberStyle="INTEGER"
+                   <h:input_number id="intInput" numberStyle="integer"
                         modelReference="LoginBean.int"/>
               </td>
               <td> <h:output_errors id="errInt" compoundId="/numberForm/intInput"/> </td>
@@ -100,7 +100,7 @@
              <tr>
               <td> <h:output_text id="longLabel" value="LONG" /> </td>
               <td>
-                   <h:input_number id="longInput" numberStyle="NUMBER"
+                   <h:input_number id="longInput" numberStyle="number"
                         modelReference="LoginBean.long"/>
               </td>
               <td> <h:output_errors id="errLong" compoundId="/numberForm/longInput"/> </td>
@@ -109,7 +109,7 @@
               <tr>
               <td> <h:output_text id="shortLabel" value="SHORT" /> </td>
               <td>
-                   <h:input_number id="shortInput" numberStyle="NUMBER"
+                   <h:input_number id="shortInput" numberStyle="number"
                         modelReference="LoginBean.short"/>
               </td>
               <td> <h:output_errors id="errShort" compoundId="/numberForm/shortInput"/> </td>
@@ -118,7 +118,7 @@
              <tr>
               <td> <h:output_text id="charLabel" value="CHARACTER" /> </td>
               <td>
-                   <h:input_number id="charInput" numberStyle="INTEGER"
+                   <h:input_number id="charInput" numberStyle="integer"
                         modelReference="LoginBean.char"/>
               </td>
               <td> <h:output_errors id="errChar" compoundId="/numberForm/charInput"/> </td>

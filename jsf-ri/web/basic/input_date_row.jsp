@@ -3,7 +3,7 @@
              <td>
                <h:output_label id="date1id" for="input_date1">
                <h:output_text id="input_date1_label" 
-                     value="input_date MEDIUM readonly"/>
+                     value="input_date medium readonly"/>
                </h:output_label>
 
              </td>
@@ -11,13 +11,13 @@
 
              <td>
 
-               <h:input_date id="input_date1" dateStyle="MEDIUM"
+               <h:input_date id="input_date1" dateStyle="medium"
                                  value="Jan 12, 1952" 
                                  readonly="true"
                                  size="10" maxlength="20"
-                                 alt="input_date MEDIUM readonly"
+                                 alt="input_date medium readonly"
                                  accesskey="D" 
-                               title="input_date MEDIUM readonly"/>
+                               title="input_date medium readonly"/>
 
 
              </td>
@@ -29,17 +29,17 @@
              <td>
 
                <h:output_text id="input_date2_label" 
-                     value="input_date MEDIUM"/>
+                     value="input_date medium"/>
 
              </td>
 
 
              <td>
 
-               <h:input_date id="input_date2" dateStyle="MEDIUM"
+               <h:input_date id="input_date2" dateStyle="medium"
                                  value="Jan 12, 1952" 
-                                 alt="input_date MEDIUM"
-                                  title="input_date MEDIUM"/>
+                                 alt="input_date medium"
+                                  title="input_date medium"/>
 
 
              </td>
@@ -58,18 +58,18 @@
              <td>
 
                <h:output_text id="input_date3_label" 
-                     value="input_date SHORT"/>
+                     value="input_date short"/>
 
              </td>
 
 
              <td>
 
-               <h:input_date id="input_date3" dateStyle="SHORT"
+               <h:input_date id="input_date3" dateStyle="short"
                                  value="01/12/1952" 
                                  size="10"
-                                 alt="input_date SHORT"
-                                  title="input_date SHORT"/>
+                                 alt="input_date short"
+                                  title="input_date short"/>
 
 
              </td>
@@ -88,19 +88,19 @@
              <td>
 
                <h:output_text id="input_date4_label" 
-                     value="input_date LONG"/>
+                     value="input_date long"/>
 
              </td>
 
 
              <td>
 
-               <h:input_date id="input_date4" dateStyle="LONG" 
+               <h:input_date id="input_date4" dateStyle="long" 
                                  value="January 12, 1952" 
                                  size="20" maxlength="40"
-                                 alt="input_date LONG"
+                                 alt="input_date long"
                                  accesskey="d"
-                               title="input_date LONG"/>
+                               title="input_date long"/>
 
 
              </td>
