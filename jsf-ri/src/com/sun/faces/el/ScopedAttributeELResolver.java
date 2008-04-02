@@ -1,7 +1,7 @@
 package com.sun.faces.el;
 
 /*
- * $Id: ScopedAttributeELResolver.java,v 1.10 2006/09/01 01:22:50 tony_robertson Exp $
+ * $Id: ScopedAttributeELResolver.java,v 1.11 2007/02/14 02:23:57 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -59,7 +59,7 @@ public class ScopedAttributeELResolver extends ELResolver {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
-
+        context.setPropertyResolved(true);
         Object result = null;
         String attribute = (String) property;
         FacesContext facesContext = (FacesContext)
@@ -70,9 +70,7 @@ public class ScopedAttributeELResolver extends ELResolver {
                 result = ec.getApplicationMap().get(attribute);
             }
         }
-        if ( result != null) {
-            context.setPropertyResolved(true);
-        }
+        
         return result;
     }
 
