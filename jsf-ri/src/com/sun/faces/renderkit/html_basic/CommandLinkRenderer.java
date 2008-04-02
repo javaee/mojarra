@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.48 2006/03/29 23:03:47 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.49 2006/05/05 17:26:29 rlubke Exp $
  */
 
 /*
@@ -313,7 +313,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         RenderKitUtils.renderPassThruAttributes(context, 
                                       writer, 
                                       command,
-                                      new String[] { "target" });
+                                      new String[] { "target", "onclick" });
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, command);
 
         // render onclick

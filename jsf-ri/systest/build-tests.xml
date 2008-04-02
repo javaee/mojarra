@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.113 2006/05/05 16:29:11 rlubke Exp $
+ $Id: build-tests.xml,v 1.114 2006/05/05 17:26:29 rlubke Exp $
 -->
 
 <!--
@@ -978,6 +978,10 @@
         <jsf.tester
             request="${context.path}/faces/regression/SelectOneManySizeAttrTest.jsp"
             golden="${golden.path}/regression/SelectOneManySizeAttrTest.txt"/>
+        <jsf.tester
+            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+            request="${context.path}/faces/regression/InjectUserDefJS.jsp"
+            golden="${golden.path}/regression/InjectUserDefJS.txt"/>
     </target>
 
 </project>
