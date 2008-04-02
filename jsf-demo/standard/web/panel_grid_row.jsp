@@ -128,8 +128,12 @@
                     <h:output_text value=""/>
 
                     <f:facet         name="footer">
-                      <h:output_text
-                                    value="Enter username and password to login"/>
+                      <h:panel_group   id="footerGroup">
+                        <h:output_text
+                                    value="Enter username and password "/>
+                        <h:output_text
+                                    value="to login"/>
+                      </h:panel_group>
                     </f:facet>
 
                   </h:panel_grid>

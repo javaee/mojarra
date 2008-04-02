@@ -1,14 +1,24 @@
 <table>
-<thead><tr><th colspan="2"><span id="header">header1 header2 </span></th></tr></thead>
-<tbody><tr>
+<thead>
+<tr><th colspan="2" scope="colgroup"><span id="header">header1 header2 </span></th></tr>
+</thead>
+<tfoot>
+<tr><td colspan="2"><span id="footer">footer1 footer2 </span></td></tr>
+</tfoot>
+<tbody>
+<tr>
 <td>body1</td>
 <td>body2</td>
 </tr>
-</tbody><tfoot><tr><td colspan="2"><span id="footer">footer1 footer2 </span></td></tr></tfoot>
+</tbody>
 </table>
 <table>
-<tbody><tr>
+<tfoot>
+<tr><td colspan="2"><span id="footer">footer1 footer2 </span></td></tr>
+</tfoot>
+<tbody>
+<tr>
 <td>body2</td>
 </tr>
-</tbody><tfoot><tr><td colspan="2"><span id="footer">footer1 footer2 </span></td></tr></tfoot>
+</tbody>
 </table>

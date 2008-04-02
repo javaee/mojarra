@@ -47,7 +47,8 @@
                     
 
                 <table id="basicForm:logonPanel1" title="Grid with hardcoded data" border="1" cellspacing="3" cellpadding="3" summary="Grid with hardcoded data">
-<tbody><tr>
+<tbody>
+<tr>
 <td><span id="basicForm:formHeader2"><span id="basicForm:A2">Logon&amp;nbsp;</span><span id="basicForm:B2">Form</span></span></td>
 <td><span id="basicForm:text1">Username:</span></td>
 </tr>
@@ -63,7 +64,8 @@
 <td><input id="basicForm:submit1" type="submit" name="basicForm:submit1" value="Login" class="commandClass" /></td>
 <td><input id="basicForm:reset1" type="reset" name="basicForm:reset1" value="Reset" /></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 
              </td>
            </tr>
@@ -681,7 +683,9 @@ see the <i>angle brackets</i> on this text
    
 
 <table>
-<tbody></tbody></table>
+<tbody>
+</tbody>
+</table>
 
 
 
@@ -689,7 +693,9 @@ see the <i>angle brackets</i> on this text
    
 
 <table>
-<tbody></tbody></table>
+<tbody>
+</tbody>
+</table>
 
 
 
@@ -697,10 +703,8 @@ see the <i>angle brackets</i> on this text
    
 
 <table rows="0">
-<tr>
-</tr>
-<tbody></tbody><tr>
-</tr>
+<tbody>
+</tbody>
 </table>
 
 

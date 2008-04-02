@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIData.jsp,v 1.13 2004/01/19 19:38:05 craigmcc Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.14 2004/01/20 03:04:37 craigmcc Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -68,6 +68,14 @@
                         value="#{list}"
                           var="customer">
 
+    <f:facet             name="header">
+      <h:output_text    value="Overall Table Header"/>
+    </f:facet>
+
+    <f:facet             name="footer">
+      <h:output_text    value="Overall Table Footer"/>
+    </f:facet>
+
     <h:column>
       <%-- Visible checkbox for selection --%>
       <h:selectboolean_checkbox
@@ -84,6 +92,9 @@
       <f:facet           name="header">
         <h:output_text  value="Account Id"/>
       </f:facet>
+      <f:facet           name="footer">
+        <h:output_text  value="A.I. Footer"/>
+      </f:facet>
       <h:input_text        id="accountId"
                       binding="#{UIDataBean.accountId}"
                      required="true"
@@ -99,6 +110,9 @@
       <f:facet           name="header">
         <h:output_text  value="Customer Name"/>
       </f:facet>
+      <f:facet           name="footer">
+        <h:output_text  value="C.N. Footer"/>
+      </f:facet>
       <h:input_text        id="name"
                      required="true"
                          size="50"
@@ -112,6 +126,9 @@
     <h:column>
       <f:facet           name="header">
         <h:output_text  value="Symbol"/>
+      </f:facet>
+      <f:facet           name="footer">
+        <h:output_text  value="S. Footer"/>
       </f:facet>
       <h:input_text        id="symbol"
                      required="true"
@@ -130,6 +147,9 @@
       <f:facet           name="header">
         <h:output_text  value="Total Sales"/>
       </f:facet>
+      <f:facet           name="footer">
+        <h:output_text  value="T.S. Footer"/>
+      </f:facet>
       <h:output_text       id="totalSales"
                         value="#{customer.totalSales}"/>
     </h:column>
@@ -141,9 +161,13 @@
                     immediate="true"
                         value="Header"
                          type="SUBMIT"/>
-<%--
-        <h:output_text  value="Commands"/>
---%>
+      </f:facet>
+      <f:facet           name="footer">
+        <h:command_button  id="footerButton"
+                       action="#{UIDataBean.footer}"
+                    immediate="true"
+                        value="Footer"
+                         type="SUBMIT"/>
       </f:facet>
       <h:command_button    id="press"
                     action="#{UIDataBean.press}"

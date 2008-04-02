@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.14 2004/01/16 23:48:58 horwat Exp $
+ * $Id: TableRenderer.java,v 1.15 2004/01/20 03:04:09 craigmcc Exp $
  */
 
 /*
@@ -73,6 +73,9 @@ public class TableRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
+
+        // suppress rendering if "rendered" property on the component is
+        // false.
 	if (!component.isRendered()) {
 	    return;
 	}
@@ -90,23 +93,96 @@ public class TableRenderer extends HtmlBasicRenderer {
         Util.renderPassThruAttributes(writer, component);
 	writer.writeText("\n", null);
 
-	// Render the header facet (if any)
-	UIComponent header = (UIComponent) data.getFacet("header");
-	if ((header != null) && header.isRendered()) {
-	    String headerClass = (String) data.getAttributes().get("headerClass");
-	    writer.startElement("thead", header);
-            writer.startElement("tr", header);
-            writer.startElement("td", header);
-            writer.writeAttribute("colspan", "" + getColumnCount(data), null);
-	    if (headerClass != null) {
-                writer.writeAttribute("class", headerClass, "headerClass");
-	    }
+	// Render the header facets (if any)
+	UIComponent header = getFacet(data, "header");
+	int headerFacets = getFacetCount(data, "header");
+	String headerClass = (String) data.getAttributes().get("headerClass");
+	if ((header != null) || (headerFacets > 0)) {
+	    writer.startElement("thead", data);
 	    writer.writeText("\n", null);
+	}
+	if (header != null) {
+	    writer.startElement("tr", header);
+	    writer.startElement("th", header);
+	    if (headerClass != null) {
+		writer.writeAttribute("class", headerClass, "headerClass");
+	    }
+	    writer.writeAttribute("colspan", "" + getColumnCount(data), null);
+	    writer.writeAttribute("scope", "colgroup", null);
 	    encodeRecursive(context, header);
+            writer.endElement("th");
+            writer.endElement("tr");
+	    writer.writeText("\n", null);
+	}
+	if (headerFacets > 0) {
+	    writer.startElement("tr", data);
+	    writer.writeText("\n", null);
+	    Iterator columns = getColumns(data);
+	    while (columns.hasNext()) {
+		UIColumn column = (UIColumn) columns.next();
+		writer.startElement("th", column);
+		if (headerClass != null) {
+		    writer.writeAttribute("class", headerClass, "headerClass");
+		}
+		writer.writeAttribute("scope", "col", null);
+		UIComponent facet = getFacet(column, "header");
+		if (facet != null) {
+		    encodeRecursive(context, facet);
+		}
+		writer.endElement("th");
+		writer.writeText("\n", null);
+	    }
+            writer.endElement("tr");
+	    writer.writeText("\n", null);
+	}
+	if ((header != null) || (headerFacets > 0)) {
+	    writer.endElement("thead");
+	    writer.writeText("\n", null);
+	}
+
+	// Render the footer facets (if any)
+	UIComponent footer = getFacet(data, "footer");
+	int footerFacets = getFacetCount(data, "footer");
+	String footerClass = (String) data.getAttributes().get("footerClass");
+	if ((footer != null) || (footerFacets > 0)) {
+	    writer.startElement("tfoot", data);
+	    writer.writeText("\n", null);
+	}
+	if (footer != null) {
+	    writer.startElement("tr", footer);
+	    writer.startElement("td", footer);
+	    if (footerClass != null) {
+		writer.writeAttribute("class", footerClass, "footerClass");
+	    }
+	    writer.writeAttribute("colspan", "" + getColumnCount(data), null);
+	    encodeRecursive(context, footer);
             writer.endElement("td");
             writer.endElement("tr");
-	    writer.endElement("thead");
-            writer.writeText("\n", null);
+	    writer.writeText("\n", null);
+	}
+	if (footerFacets > 0) {
+	    writer.startElement("tr", data);
+	    writer.writeText("\n", null);
+	    Iterator columns = getColumns(data);
+	    while (columns.hasNext()) {
+		UIColumn column = (UIColumn) columns.next();
+		writer.startElement("td", column);
+		if (footerClass != null) {
+		    writer.writeAttribute("class", footerClass, "footerClass");
+		}
+		UIComponent facet = getFacet(column, "footer");
+		if (facet != null) {
+		    encodeRecursive(context, facet);
+		}
+		writer.endElement("td");
+		writer.writeText("\n", null);
+	    }
+            writer.endElement("tr");
+	    writer.writeText("\n", null);
+	}
+	if ((footer != null) || (footerFacets > 0)) {
+	    writer.endElement("tfoot");
+	    writer.writeText("\n", null);
 	}
 
     }
@@ -125,43 +201,14 @@ public class TableRenderer extends HtmlBasicRenderer {
 	UIData data = (UIData) component;
 
         // Set up variables we will need
-        String footerClass = (String) data.getAttributes().get("footerClass");
-        String headerClass = (String) data.getAttributes().get("headerClass");
         String columnClasses[] = getColumnClasses(data);
         int columnStyle = 0;
         int columnStyles = columnClasses.length;
         String rowClasses[] = getRowClasses(data);
         int rowStyles = rowClasses.length;
         ResponseWriter writer = context.getResponseWriter();
-	UIComponent facet = null;
 	Iterator kids = null;
 	Iterator grandkids = null;
-
-	// Render the table header row
-	// PENDING(craigmcc) - what if some or all children do not have one?
-	// PENDING(craigmcc) - this row should be in the <thead> section
-        writer.startElement("tr", data);
-	if (headerClass != null) {
-            writer.writeAttribute("class", headerClass, "headerClass");
-	}
-	writer.writeText("\n", null);
-	kids = data.getChildren().iterator();
-	data.setRowIndex(-1);
-	while (kids.hasNext()) {
-	    UIComponent kid = (UIComponent) kids.next();
-	    if (!(kid instanceof UIColumn) || !kid.isRendered()) {
-		continue;
-	    }
-            writer.startElement("td", kid);
-	    facet = (UIComponent) kid.getFacet("header");
-	    if ((facet != null) && facet.isRendered()) {
-		encodeRecursive(context, facet);
-	    }
-            writer.endElement("td");
-            writer.writeText("\n", null);
-	}
-        writer.endElement("tr");
-        writer.writeText("\n", null);
 
 	// Iterate over the rows of data that are provided
 	int processed = 0;
@@ -170,6 +217,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         int rowStyle = 0;
 
 	writer.startElement("tbody", component);
+	writer.writeText("\n", null);
         while (true) {
 
 	    // Have we displayed the requested number of rows?
@@ -195,15 +243,11 @@ public class TableRenderer extends HtmlBasicRenderer {
 
 	    // Iterate over the child UIColumn components for each row
 	    columnStyle = 0;
-	    kids = data.getChildren().iterator();
+	    kids = getColumns(data);
 	    while (kids.hasNext()) {
 
-		// Identify the next relevant child component
-		UIComponent kid = (UIComponent) kids.next();
-		if (!(kid instanceof UIColumn) || !kid.isRendered()) {
-		    continue;
-		}
-		UIColumn column = (UIColumn) kid;
+		// Identify the next renderable column
+		UIColumn column = (UIColumn) kids.next();
 
 		// Render the beginning of this cell
                 writer.startElement("td", column);
@@ -217,7 +261,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 
 		// Render the contents of this cell by iterating over
 		// the kids of our kids
-		grandkids = column.getChildren().iterator();
+		grandkids = getChildren(column);
 		while (grandkids.hasNext()) {
 		    encodeRecursive(context, (UIComponent) grandkids.next());
 		}
@@ -234,34 +278,10 @@ public class TableRenderer extends HtmlBasicRenderer {
 
 	}
 	writer.endElement("tbody");
+	writer.writeText("\n", null);
 
 	// Clean up after ourselves
 	data.setRowIndex(-1);
-
-	// Render the table footer row
-	// PENDING(craigmcc) - what if some or all children do not have one?
-	// PENDING(craigmcc) - this element should be in the <tfoot> section
-        writer.startElement("tr", data);
-	if (footerClass != null) {
-            writer.writeAttribute("class", footerClass, "footerClass");
-	}
-	writer.writeText("\n", null);
-	kids = data.getChildren().iterator();
-	while (kids.hasNext()) {
-	    UIComponent kid = (UIComponent) kids.next();
-	    if (!(kid instanceof UIColumn) || !kid.isRendered()) {
-		continue;
-	    }
-            writer.startElement("td", kid);
-	    facet = (UIComponent) kid.getFacet("footer");
-	    if ((facet != null) && facet.isRendered()){
-		encodeRecursive(context, facet);
-	    }
-            writer.endElement("td");
-	    writer.writeText("\n", null);
-	}
-        writer.endElement("tr");
-	writer.writeText("\n", null);
 
     }
 
@@ -278,26 +298,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	}
 	UIData data = (UIData) component;
 	data.setRowIndex(-1);
-
-	// Render the footer facet (if any)
-	ResponseWriter writer = context.getResponseWriter();
-	UIComponent footer = (UIComponent) data.getFacet("footer");
-	if ((footer != null) && footer.isRendered()) {
-	    String footerClass = (String) data.getAttributes().get("footerClass");
-	    writer.startElement("tfoot", component);
-            writer.startElement("tr", footer);
-            writer.startElement("td", footer);
-            writer.writeAttribute("colspan", "" + getColumnCount(data), null);
-	    if (footerClass != null) {
-                writer.writeAttribute("class", footerClass, "footerClass");
-	    }
-	    writer.writeText("\n", null);
-	    encodeRecursive(context, footer);
-            writer.endElement("td");
-            writer.endElement("tr");
-	    writer.endElement("tfoot");
-            writer.writeText("\n", null);
-	}
+        ResponseWriter writer = context.getResponseWriter();
 
 	// Render the ending of this table
         writer.endElement("table");
@@ -307,31 +308,6 @@ public class TableRenderer extends HtmlBasicRenderer {
 
 
     // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Render nested child components by invoking the encode methods
-     * on those components.</p>
-     */
-    private void encodeRecursive(FacesContext context, UIComponent component)
-        throws IOException {
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            return;
-        }
-        component.encodeBegin(context);
-        if (component.getRendersChildren()) {
-            component.encodeChildren(context);
-        } else {
-            Iterator kids = component.getChildren().iterator();
-            while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
-                encodeRecursive(context, kid);
-            }
-        }
-        component.encodeEnd(context);
-    }
 
 
     /**
@@ -367,21 +343,64 @@ public class TableRenderer extends HtmlBasicRenderer {
 
     /**
      * <p>Return the number of child <code>UIColumn</code> components
-     * are nested in the specified {@link UIData}.</p>
+     * that are nested in the specified {@link UIData}.</p>
      *
      * @param data {@link UIData} component being analyzed
      */
     private int getColumnCount(UIData data) {
 
 	int columns = 0;
+	Iterator kids = getColumns(data);
+	while (kids.hasNext()) {
+	    UIComponent kid = (UIComponent) kids.next();
+	    columns++;
+	}
+	return (columns);
+
+    }
+
+
+    /**
+     * <p>Return an Iterator over the <code>UIColumn</code> children
+     * of the specified <code>UIData</code> that have a
+     * <code>rendered</code> property of <code>true</code>.</p>
+     *
+     * @param data <code>UIData</code> for which to extract children
+     */
+    private Iterator getColumns(UIData data) {
+
+	List results = new ArrayList();
 	Iterator kids = data.getChildren().iterator();
 	while (kids.hasNext()) {
 	    UIComponent kid = (UIComponent) kids.next();
-	    if (kid instanceof UIColumn) {
-		columns++;
+	    if ((kid instanceof UIColumn) && kid.isRendered()) {
+		results.add(kid);
 	    }
 	}
-	return (columns);
+	return (results.iterator());
+
+    }
+
+
+    /**
+     * <p>Return the number of child <code>UIColumn</code> components
+     * nested in the specified <code>UIData</code> that have a facet with
+     * the specified name.</p>
+     *
+     * @param data <code>UIData</code> component being analyzed
+     * @param name Name of the facet being analyzed
+     */
+    private int getFacetCount(UIData data, String name) {
+
+	int n = 0;
+	Iterator kids = getColumns(data);
+	while (kids.hasNext()) {
+	    UIComponent kid = (UIComponent) kids.next();
+	    if (getFacet(kid, name) != null) {
+		n++;
+	    }
+	}
+	return (n);
 
     }
 

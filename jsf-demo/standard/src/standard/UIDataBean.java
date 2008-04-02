@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataBean.java,v 1.8 2004/01/19 04:44:33 craigmcc Exp $
+ * $Id: UIDataBean.java,v 1.9 2004/01/20 03:04:37 craigmcc Exp $
  */
 
 /*
@@ -257,6 +257,19 @@ public class UIDataBean {
 
         append("first()");
 	scroll(0);
+	return (null);
+
+    }
+
+
+    /**
+     * <p>Acknowledge that the footer button was pressed.</p>
+     */
+    public String footer() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        append("footer()");
+	clear();
 	return (null);
 
     }

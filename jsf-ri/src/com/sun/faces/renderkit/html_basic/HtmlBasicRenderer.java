@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.75 2004/01/14 17:13:02 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.76 2004/01/20 03:04:09 craigmcc Exp $
  */
 
 /*
@@ -381,6 +381,75 @@ public abstract class HtmlBasicRenderer extends Renderer {
                 break;
         }
         return retComp;
+    }
+
+    /**
+     * <p>Render nested child components by invoking the encode methods
+     * on those components, but only when the <code>rendered</code>
+     * property is <code>true</code>.</p>
+     */
+    protected void encodeRecursive(FacesContext context, UIComponent component)
+        throws IOException {
+
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
+
+	// Render this component and its children recursively
+        component.encodeBegin(context);
+        if (component.getRendersChildren()) {
+            component.encodeChildren(context);
+        } else {
+            Iterator kids = getChildren(component);
+            while (kids.hasNext()) {
+                UIComponent kid = (UIComponent) kids.next();
+                encodeRecursive(context, kid);
+            }
+        }
+        component.encodeEnd(context);
+    }
+
+
+    /**
+     * <p>Return an Iterator over the children of the specified
+     * component, selecting only those that have a
+     * <code>rendered</code> property of <code>true</code>.</p>
+     *
+     * @param component <code>UIComponent</code> for which to extract children
+     */
+    protected Iterator getChildren(UIComponent component) {
+
+	List results = new ArrayList();
+	Iterator kids = component.getChildren().iterator();
+	while (kids.hasNext()) {
+	    UIComponent kid = (UIComponent) kids.next();
+	    if (kid.isRendered()) {
+		results.add(kid);
+	    }
+	}
+	return (results.iterator());
+
+    }
+
+
+    /**
+     * <p>Return the specified facet from the specified component, but
+     * <strong>only</strong> if its <code>rendered</code> property is
+     * set to <code>true</code>.
+     *
+     * @param component Component from which to return a facet
+     * @param name Name of the desired facet
+     */
+    protected UIComponent getFacet(UIComponent component, String name) {
+
+	UIComponent facet = component.getFacet(name);
+	if ((facet != null) && !facet.isRendered()) {
+	    facet = null;
+	}
+	return (facet);
+
     }
 
     /**

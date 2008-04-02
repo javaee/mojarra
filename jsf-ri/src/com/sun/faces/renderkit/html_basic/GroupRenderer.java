@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.14 2004/01/14 17:13:02 eburns Exp $
+ * $Id: GroupRenderer.java,v 1.15 2004/01/20 03:04:09 craigmcc Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.context.ResponseWriter;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method. 
  *
- * @version $Id: GroupRenderer.java,v 1.14 2004/01/14 17:13:02 eburns Exp $
+ * @version $Id: GroupRenderer.java,v 1.15 2004/01/20 03:04:09 craigmcc Exp $
  *  
  */
 public class GroupRenderer extends HtmlBasicRenderer {
@@ -69,42 +69,48 @@ public class GroupRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
+
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             return;
         }
+
+	// Render a span around this group if necessary
 	String 
 	    style = (String) component.getAttributes().get("style"),
 	    styleClass = (String) component.getAttributes().get("styleClass");
-	boolean wroteSpan = false;
 	ResponseWriter writer = context.getResponseWriter();
 
-	if (shouldWriteIdAttribute(component)) {
-	    wroteSpan = true;
+	if (spanned(component)) {
 	    writer.startElement("span", component);
 	    writeIdAttributeIfNecessary(context, writer, component);
-	}
-
-	if (null != styleClass || null != style) {
-	    
-	    if (!wroteSpan) {
-		wroteSpan = true;
-		writer.startElement("span", component);
-	    }
-	    if (null != styleClass) {
+	    if (styleClass != null) {
 		writer.writeAttribute("class", styleClass, "styleClass");
 	    }
-	    if (null != style) {
+	    if (style != null) {
 		writer.writeAttribute("style", style, "style");
 	    }
-	    writer.flush();
 	}
+
     }
 
 
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
+
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
+
+	// Render our children recursively
+	Iterator kids = getChildren(component);
+	while (kids.hasNext()) {
+	    encodeRecursive(context, (UIComponent) kids.next());
+	}
+
     }
 
 
@@ -119,45 +125,29 @@ public class GroupRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
-        Iterator kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            encodeRecursive(context, kid);
-        }
-	String 
-	    style = (String) component.getAttributes().get("style"),
-	    styleClass = (String) component.getAttributes().get("styleClass");
+
+	// Close our span element if necessary
 	ResponseWriter writer = context.getResponseWriter();
-	if (null != styleClass || null != style || 
-	    shouldWriteIdAttribute(component)) {
+	if (spanned(component)) {
 	    writer.endElement("span");
 	}
 
     }
 
     /**
-     * Renders nested children of panel by invoking the encode methods
-     * on the components. This handles components nested inside
-     * panel_group.
+     * <p>Return true if we need to render a span element around this group.
+     *
+     * @param component <code>UIComponent</code> for this group
      */
-    private void encodeRecursive(FacesContext context, UIComponent component)
-        throws IOException {
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            return;
-        }
-        component.encodeBegin(context);
-        if (component.getRendersChildren()) {
-            component.encodeChildren(context);
-        } else {
-            Iterator kids = component.getChildren().iterator();
-            while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
-                encodeRecursive(context, kid);
-            }
-        }
-        component.encodeEnd(context);
+    private boolean spanned(UIComponent component) {
+	if (shouldWriteIdAttribute(component) ||
+	    (component.getAttributes().get("style") != null) ||
+	    (component.getAttributes().get("styleClass") != null)) {
+	    return (true);
+	} else {
+	    return (false);
+	}
+
     }
 
 

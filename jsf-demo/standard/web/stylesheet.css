@@ -68,6 +68,13 @@
   width: 15%;
 }
 
+.list-footer { 
+  background-color: #A5A5A5;
+  color: #FFFFFF;
+  font-weight: bold;
+  text-align: center;
+}
+
 .list-header { 
   background-color: #A5A5A5;
   color: #FFFFFF;
