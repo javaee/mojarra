@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.25 2007/02/27 23:10:22 rlubke Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.26 2007/03/01 15:51:37 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,7 @@ import javax.servlet.jsp.JspException;
 
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,10 +53,10 @@ import com.sun.faces.el.ELUtils;
  * <p>ConvertDateTimeTag is a ConverterTag implementation for
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.25 2007/02/27 23:10:22 rlubke Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.26 2007/03/01 15:51:37 rlubke Exp $
  */
 
-public class ConvertDateTimeTag extends ConverterTag {
+public class ConvertDateTimeTag extends AbstractConverterTag {
 
     private static final long serialVersionUID = -5815655767093677438L;
     private static ValueExpression CONVERTER_ID_EXPR = null;
@@ -80,8 +81,9 @@ public class ConvertDateTimeTag extends ConverterTag {
     private String pattern;
     private String timeStyle;
     private TimeZone timeZone;
-    private String type;
-
+    private String type;// Log instance for this class
+    private static final Logger LOGGER =
+            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
 
     // Attribute Instance Variables
 
@@ -283,4 +285,29 @@ public class ConvertDateTimeTag extends ConverterTag {
         }
     }
 
+    protected static Locale getLocale(String string) {
+        if (string == null) {
+            return Locale.getDefault();
+        }
+
+        if (string.length() > 2) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.core.taglib.convertdatetime.invalid_local_value",
+                           string);
+            }
+        } else {
+            String[] langs = Locale.getISOLanguages();
+            Arrays.sort(langs);
+            if (Arrays.binarySearch(langs, string) < 0) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "jsf.core.taglib.convertdatetime.invalid_language",
+                               string);
+                }
+            }
+        }
+
+        return new Locale(string, "");
+    }
 } // end of class ConvertDateTimeTag

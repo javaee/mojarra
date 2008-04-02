@@ -1,5 +1,5 @@
 /*
- * $Id: MaxMinValidatorTag.java,v 1.11 2006/12/18 18:27:28 rlubke Exp $
+ * $Id: MaxMinValidatorTag.java,v 1.12 2007/03/01 15:51:37 rlubke Exp $
  */
 
 /*
@@ -36,10 +36,10 @@ package com.sun.faces.taglib.jsf_core;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MaxMinValidatorTag.java,v 1.11 2006/12/18 18:27:28 rlubke Exp $
+ * @version $Id: MaxMinValidatorTag.java,v 1.12 2007/03/01 15:51:37 rlubke Exp $
  */
 
-public abstract class MaxMinValidatorTag extends ValidatorTag {
+public abstract class MaxMinValidatorTag extends AbstractValidatorTag {
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.5 2006/03/29 23:03:52 rlubke Exp $
+ * $Id: ValidatorTag.java,v 1.6 2007/03/01 15:51:36 rlubke Exp $
  */
 
 /*
@@ -29,105 +29,135 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import javax.el.ELContext;
+import com.sun.faces.util.MessageUtils;
+
 import javax.el.ValueExpression;
+import javax.faces.component.StateHolder;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.ConverterException;
 import javax.faces.validator.Validator;
-import javax.faces.webapp.ValidatorELTag;
+import javax.faces.validator.ValidatorException;
 import javax.servlet.jsp.JspException;
 
 /**
  * Basic implementation of <code>ValidatorELTag</code>.
  */
-public class ValidatorTag extends ValidatorELTag {
+public class ValidatorTag extends AbstractValidatorTag {
 
 
-    // -------------------------------------------------------------- Attributes
+    // --------------------------------------------- Methods from ValidatorELTag
 
 
-    /**
-     * <p>The identifier of the {@link javax.faces.validator.Validator}
-     * instance to be created.</p>
-     */
-    private ValueExpression validatorId = null;
+    @Override
+    protected Validator createValidator() throws JspException {       
 
-    /**
-     * <p>Set the identifer of the {@link javax.faces.validator.Validator}
-     * instance to be created.
-     *
-     * @param validatorId The identifier of the converter instance to be
-     * created.
-     */
-    public void setValidatorId(ValueExpression validatorId) {
+        return new BindingValidator(validatorId, binding);
 
-        this.validatorId = validatorId;
-
-    } // END setValidatorId
+    }
 
 
-    /**
-     * <p>The {@link javax.el.ValueExpression} that evaluates to an object that
-     * implements {@link javax.faces.convert.Converter}.</p>
-     */
-    private ValueExpression binding = null;
-
-    /**
-     * <p>Set the expression that will be used to create a
-     * {@link javax.el.ValueExpression} that references a backing bean property
-     * of the {@link javax.faces.validator.Validator} instance to be created.</p>
-     *
-     * @param binding The new expression
-     */
-    public void setBinding(ValueExpression binding) {
-
-        this.binding = binding;
-
-    } // END setBinding
+    // ----------------------------------------------------------- Inner Classes
 
 
-    // -------------------------------------------- Methods from ValidatorELTag
+    public static class BindingValidator implements Validator, StateHolder {
+
+        private ValueExpression binding;
+        private ValueExpression validatorId;
+
+        // -------------------------------------------------------- Constructors
+
+        /**
+         * <p>Only used during state restoration</p>
+         */
+        public BindingValidator() { }
 
 
-    protected Validator createValidator()
-    throws JspException {
+        public BindingValidator(ValueExpression validatorId,
+                                ValueExpression binding) {
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELContext elContext = facesContext.getELContext();
-        Validator validator = null;
+            this.validatorId = validatorId;
+            this.binding = binding;
 
-        // If "binding" is set, use it to create a validator instance.
-        if (binding != null) {
-            try {
-                validator = (Validator) binding.getValue(elContext);
-                if (validator != null) {
-                    return validator;
-                }
-            } catch (Exception e) {
-                throw new JspException(e);
-            }
         }
 
-        // If "validatorId" is set, use it to create the validator
-        // instance.  If "validatorId" and "binding" are both set, store the
-        // validator instance in the value of the property represented by
-        // the ValueExpression 'binding'.
-        if (validatorId != null) {
-            try {
-                String validatorIdVal = (String)
-                    validatorId.getValue(elContext);
-                validator = facesContext.getApplication()
-                                .createValidator(validatorIdVal);
-                if (validator != null && binding != null) {
-                    binding.setValue(elContext, validator);
-                }
-            } catch (Exception e) {
-                throw new JspException(e);
+
+        private Validator instance;
+
+
+        // -------------------------------------------- Methods from StateHolder
+
+        private Object[] state;
+        public Object saveState(FacesContext context) {
+
+            if (state == null) {
+                state = new Object[2];
             }
+            state[0] = validatorId;
+            state[1] = binding;
+
+            return state;
+            
         }
 
-        return validator;
+        public void restoreState(FacesContext context, Object state) {
 
-    } // END createConverter
+            this.state = (Object[]) state;
+            if (this.state != null) {
+                this.validatorId = (ValueExpression) this.state[0];
+                this.binding = (ValueExpression) this.state[1];
+            }
+
+        }
+
+        public boolean isTransient() {
+
+            return false;
+
+        }
+
+        public void setTransient(boolean newTransientValue) {
+            //no-op
+        }
 
 
+        // ---------------------------------------------- Methods from Validator
+
+
+        /**
+         * <p>Perform the correctness checks implemented by this
+         * {@link javax.faces.validator.Validator} against the specified {@link javax.faces.component.UIComponent}.
+         * If any violations are found, a {@link javax.faces.validator.ValidatorException}
+         * will be thrown containing the {@link javax.faces.application.FacesMessage} describing
+         * the failure.
+         *
+         * @param context   FacesContext for the request we are processing
+         * @param component UIComponent we are checking for correctness
+         * @param value     the value to validate
+         * @throws javax.faces.validator.ValidatorException
+         *                              if validation fails
+         * @throws NullPointerException if <code>context</code>
+         *                              or <code>component</code> is <code>null</code>
+         */
+        public void validate(FacesContext context,
+                             UIComponent component,
+                             Object value)
+        throws ValidatorException {
+
+            if (instance == null) {
+                instance = createValidator(validatorId, binding, context);
+            }
+
+            if (instance != null) {
+                instance.validate(context, component, value);
+            } else {
+                throw new ConverterException(
+                     MessageUtils.getExceptionMessage(
+                          MessageUtils.CANNOT_CONVERT_ID));
+            }
+
+        }
+
+    }
+    
 }

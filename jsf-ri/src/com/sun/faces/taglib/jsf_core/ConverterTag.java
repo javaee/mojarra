@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.5 2006/10/10 16:20:41 rlubke Exp $
+ * $Id: ConverterTag.java,v 1.6 2007/03/01 15:51:36 rlubke Exp $
  */
 
 /*
@@ -29,142 +29,133 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import com.sun.faces.util.MessageUtils;
+
 import javax.el.ValueExpression;
-import javax.el.ELContext;
+import javax.faces.component.StateHolder;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.webapp.ConverterELTag;
+import javax.faces.convert.ConverterException;
 import javax.servlet.jsp.JspException;
-
-import java.util.Locale;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.sun.faces.util.Util;
 
 /**
  * Basic implementation of <code>ConverterELTag</code>.
  */
-public class ConverterTag extends ConverterELTag {
+public class ConverterTag extends AbstractConverterTag {
 
-    // Log instance for this class
-    private static final Logger LOGGER =
-            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
-    
-
-    // -------------------------------------------------------------- Attributes
+    // --------------------------------------------- Methods from ConverterELTag
 
 
-    /**
-     * <p>The identifier of the {@link Converter} instance to be created.</p>
-     */
-    private ValueExpression converterId = null;
+    @Override
+    protected Converter createConverter() throws JspException {
 
-    /**
-     * <p>Set the identifer of the {@link Converter} instance to be created.
-     *
-     * @param converterId The identifier of the converter instance to be
-     * created.
-     */
-    public void setConverterId(ValueExpression converterId) {
+        return new BindingConverter(converterId, binding);
 
-        this.converterId = converterId;
-
-    } // END setConverterId
-
-
-    /**
-     * <p>The {@link ValueExpression} that evaluates to an object that
-     * implements {@link Converter}.</p>
-     */
-    private ValueExpression binding = null;
-
-    /**
-     * <p>Set the expression that will be used to create a {@link ValueExpression}
-     * that references a backing bean property of the {@link Converter} instance to
-     * be created.</p>
-     *
-     * @param binding The new expression
-     */
-    public void setBinding(ValueExpression binding) {
-
-        this.binding = binding;
-
-    } // END setBinding
-
-
-    // -------------------------------------------- Methods from ConverterELTag
-
-
-    protected Converter createConverter()
-    throws JspException {
-
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ELContext elContext = facesContext.getELContext();
-        Converter converter = null;
-
-        // If "binding" is set, use it to create a converter instance.
-        if (binding != null) {
-            try {
-                converter = (Converter) binding.getValue(elContext);
-                if (converter != null) {
-                    return converter;
-                }
-            } catch (Exception e) {
-                throw new JspException(e);
-            }
-        }
-
-        // If "converterId" is set, use it to create the converter
-        // instance.  If "converterId" and "binding" are both set, store the
-        // converter instance in the value of the property represented by
-        // the ValueExpression 'binding'.
-        if (converterId != null) {
-            try {
-                String converterIdVal = (String)
-                    converterId.getValue(elContext);
-                converter = facesContext.getApplication()
-                                .createConverter(converterIdVal);
-                if (converter != null && binding != null) {
-                    binding.setValue(elContext, converter);
-                }
-            } catch (Exception e) {
-                throw new JspException(e);
-            }
-        }
-
-        return converter;
-
-    } // END createConverter
-    
-    
-    // ------------------------------------------------------- Protected Methods
-
-
-    protected static Locale getLocale(String string) {
-        if (string == null) {
-            return Locale.getDefault();
-        }
-        
-        if (string.length() > 2) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
-                           "jsf.core.taglib.convertdatetime.invalid_local_value",
-                           string);
-            }
-        } else {
-            String[] langs = Locale.getISOLanguages();
-            Arrays.sort(langs);
-            if (Arrays.binarySearch(langs, string) < 0) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.core.taglib.convertdatetime.invalid_language",
-                               string);
-                }
-            }
-        }
-
-        return new Locale(string, "");        
     }
+
+    // ----------------------------------------------------------- Inner Classes
+
+
+    public static class BindingConverter implements Converter, StateHolder {
+
+        ValueExpression converterId;
+        ValueExpression binding;
+        Converter instance;
+
+        // -------------------------------------------------------- Constructors
+
+
+        /**
+         * <p>This is only used during state restoration.</p>
+         */
+        public BindingConverter() {
+        }
+
+
+        public BindingConverter(ValueExpression converterId,
+                                ValueExpression binding) {
+
+            this.converterId = converterId;
+            this.binding = binding;
+
+        }
+
+        // ---------------------------------------------- Methods From Converter
+
+
+        public Object getAsObject(FacesContext context, UIComponent component, String value) {
+            Converter delegate = getDelegate(context);
+            if (delegate != null) {
+                return delegate.getAsObject(context, component, value);
+            } else {
+                throw new ConverterException(
+                     MessageUtils.getExceptionMessage(MessageUtils.CANNOT_CONVERT_ID));
+            }
+        }
+
+        public String getAsString(FacesContext context, UIComponent component, Object value) {
+            Converter delegate = getDelegate(context);
+            if (delegate != null) {
+                return delegate.getAsString(context, component, value);
+            } else {
+                throw new ConverterException(
+                     MessageUtils.getExceptionMessage(MessageUtils.CANNOT_CONVERT_ID)); 
+            }
+        }
+
+        // -------------------------------------------- Methods from StateHolder
+
+
+        private Object[] state;
+        public Object saveState(FacesContext context) {
+
+            if (state == null) {
+                state = new Object[2];
+            }
+            state[0] = converterId;
+            state[1] = binding;
+
+            return state;
+
+        }
+
+        public void restoreState(FacesContext context, Object state) {
+
+            this.state = (Object[]) state;
+            if (this.state != null) {
+                this.converterId = (ValueExpression) this.state[0];
+                this.binding = (ValueExpression) this.state[1];
+            }
+
+        }
+
+        public boolean isTransient() {
+
+            return false;
+
+        }
+
+        public void setTransient(boolean newTransientValue) {
+            //no-op
+        }
+
+        // ----------------------------------------------------- Private Methods
+
+
+        private Converter getDelegate(FacesContext context) {
+
+            if (instance == null) {
+                return createConverter(converterId, binding, context);
+            }
+
+            return instance;
+
+        }
+
+    }
+    
 }
+
+
+
