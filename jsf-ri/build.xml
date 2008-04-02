@@ -30,7 +30,7 @@
   <property name="build.home" value="${basedir}/build"/>
 
   <property name="build.generate"   value="${build.home}/generate"/>
-  <property name="build.generate.tld"   value="${build.dir}/generate/conf/share"/>
+  <property name="build.generate.tld"   value="${build.home}/generate/conf/share"/>
 
   <!-- The base directory for the JSF APIs -->
   <property name="jsf-api.home" value ="../jsf-api"/>
