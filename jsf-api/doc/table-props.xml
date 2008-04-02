@@ -1,0 +1,49 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- template
+
+      <property>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+-->
+
+      <property>
+        <description>CSS classes for formatting columns</description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name>columnClasses</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+      <property>
+        <description>CSS classes for formatting footers</description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name>footerClass</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+      <property>
+        <description>CSS classes for formatting headers</description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name>headerClass</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+      <property>
+        <description>CSS classes for formatting rows</description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name>rowClasses</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>

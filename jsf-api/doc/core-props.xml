@@ -1,0 +1,42 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- template
+
+      <property>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+-->
+
+      <property>
+        <description>CSS style class</description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name>styleClass</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+      <property>
+	<description>CSS style</description>
+	<display-name></display-name>
+	<icon></icon>
+	<property-name>style</property-name>
+	<property-class>java.lang.String</property-class>
+      </property>
+
+      <property>
+        <description>advisory title</description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name>title</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
