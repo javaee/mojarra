@@ -171,6 +171,9 @@ jsf-api.jar.
     </echo>
 
     <ant antfile="${jsf-tools.dir}/build.xml" inheritall="false"
+         target="clean.generated"/>
+
+    <ant antfile="${jsf-tools.dir}/build.xml" inheritall="false"
          target="main"/>
 
     <copy todir="${build.generate}">
