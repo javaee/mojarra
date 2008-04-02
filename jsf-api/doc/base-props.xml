@@ -15,27 +15,28 @@
         <property-class>java.lang.String</property-class>
       </property>
 -->
-
-      <property>
+<root>
+    <property>
         <description>The component identifier for the associated component</description>
         <display-name></display-name>
         <icon></icon>
         <property-name>id</property-name>
         <property-class>java.lang.String</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>The value binding expression used to wire up this component to a component property of a JavaBean class</description>
         <display-name></display-name>
         <icon></icon>
         <property-name>binding</property-name>
         <property-class>java.lang.String</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>An override for the rendered attribute associated with our component</description>
         <display-name></display-name>
         <icon></icon>
         <property-name>rendered</property-name>
         <property-class>boolean</property-class>
-      </property>
+    </property>
+</root>

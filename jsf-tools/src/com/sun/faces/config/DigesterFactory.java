@@ -2,7 +2,7 @@
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- * $Id: DigesterFactory.java,v 1.2 2004/11/02 15:59:50 rlubke Exp $
+ * $Id: DigesterFactory.java,v 1.3 2004/11/08 19:23:13 rlubke Exp $
  */
 
 
@@ -19,8 +19,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -36,15 +34,22 @@ public class DigesterFactory {
      * <p><code>Xerces</code> specific feature to enable both
      * DTD and Schema validation.</p>
      */
-    private static final String APACHE_VALIDATION =
+    private static final String XERCES_VALIDATION =
         "http://xml.org/sax/features/validation";
 
     /**
      * <p><code>Xerces</code> specific feature to enable both
      * DTD and Schema validation.</p>
      */
-    private static final String APACHE_SCHEMA_VALIDATION =
+    private static final String XERCES_SCHEMA_VALIDATION =
         "http://apache.org/xml/features/validation/schema";
+
+    /**
+     * <p><code>Xerces</code> specific feature to enabled constraint
+     * validation.</p>
+     */
+    private static final String XERCES_SCHEMA_CONSTRAINT_VALIDATION =
+        "http://apache.org/xml/features/validation/schema-full-checking";
 
     /**
      * <p>Custom <code>EntityResolver</code>.</p>
@@ -151,8 +156,9 @@ public class DigesterFactory {
             // features, then disable validation.
 
             try {
-                digester.setFeature(APACHE_VALIDATION, true);
-                digester.setFeature(APACHE_SCHEMA_VALIDATION, true);
+                digester.setFeature(XERCES_VALIDATION, true);
+                digester.setFeature(XERCES_SCHEMA_VALIDATION, true);
+                digester.setFeature(XERCES_SCHEMA_CONSTRAINT_VALIDATION, true);
                 digester.setValidating(true);
             } catch (SAXNotSupportedException e) {
 
@@ -302,12 +308,13 @@ public class DigesterFactory {
 
                 try {
                     source = new InputSource(new URL(entityURL).openStream());
-                } catch (MalformedURLException mre) {
-                    System.out.println(mre);
-                    ; // won't happen as URL string obtained via classloader
-                } catch (IOException ioe) {
-                    System.out.println(ioe);
-                    // do something
+                } catch (Exception e) {
+                    if (LOG.isWarnEnabled()) {
+                        LOG.warn("Unable to create InputSource for URL '" +
+                            entityURL + "'");
+                    }
+                   
+                    source = null;
                 }
             }
 

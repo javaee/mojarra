@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,8 +21,8 @@
       </property>
 
 -->
-
-      <property>
+<root>
+    <property>
         <description>
           Alternate textual description of the
           element rendered by this component.
@@ -32,11 +32,11 @@
         <property-name>alt</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The maximum number of characters that may
           be entered in this field.
@@ -46,11 +46,11 @@
         <property-name>maxlength</property-name>
         <property-class>int</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The number of characters used to determine
           the width of this field.
@@ -60,7 +60,7 @@
         <property-name>size</property-name>
         <property-class>int</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
-
+    </property>
+</root>

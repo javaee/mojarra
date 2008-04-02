@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -20,10 +20,10 @@
       </property>
 
 -->
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="uicomponent-props.xml" xpointer="xpointer(/root/*)"/>
 
-      &uicomponent-props;
-
-      <property>
+    <property>
         <description>
           Client identifier of the component for which to display messages.
         </description>
@@ -32,11 +32,11 @@
         <property-name>for</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <required>true</required>
+            <required>true</required>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Flag indicating whether the summary portion of displayed messages
           should be included.  Default value is "true".
@@ -46,11 +46,11 @@
         <property-name>showDetail</property-name>
         <property-class>boolean</property-class>
         <property-extension>
-          <default-value>true</default-value>
+            <default-value>true</default-value>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Flag indicating whether the summary portion of displayed messages
           should be included.  Default value is "false".
@@ -60,7 +60,7 @@
         <property-name>showSummary</property-name>
         <property-class>boolean</property-class>
         <property-extension>
-          <default-value>false</default-value>
+            <default-value>false</default-value>
         </property-extension>
-      </property>
-
+    </property>
+</root>

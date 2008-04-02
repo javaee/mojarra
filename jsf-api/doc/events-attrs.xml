@@ -21,8 +21,8 @@
       </attribute>
 
 -->
-
-      <attribute>
+<root>
+    <attribute>
         <description>
           Javascript code executed when a pointer button is
           clicked over this element.
@@ -32,11 +32,11 @@
         <attribute-name>onclick</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Javascript code executed when a pointer button is
           double clicked over this element.
@@ -46,11 +46,11 @@
         <attribute-name>ondblclick</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Javascript code executed when a pointer button is
           pressed down over this element.
@@ -60,11 +60,11 @@
         <attribute-name>onmousedown</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Javascript code executed when a pointer button is
           released over this element.
@@ -74,11 +74,11 @@
         <attribute-name>onmouseup</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Javascript code executed when a pointer button is
           moved onto this element.
@@ -88,11 +88,11 @@
         <attribute-name>onmouseover</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Javascript code executed when a pointer button is
           moved within this element.
@@ -102,11 +102,11 @@
         <attribute-name>onmousemove</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Javascript code executed when a pointer button is
           moved away from this element.
@@ -116,11 +116,11 @@
         <attribute-name>onmouseout</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Javascript code executed when a key is
           pressed and released over this element.
@@ -130,11 +130,11 @@
         <attribute-name>onkeypress</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Javascript code executed when a key is
           pressed down over this element.
@@ -144,11 +144,11 @@
         <attribute-name>onkeydown</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Javascript code executed when a key is
           released over this element.
@@ -158,7 +158,7 @@
         <attribute-name>onkeyup</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
-
+    </attribute>
+</root>

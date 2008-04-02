@@ -225,7 +225,7 @@ must exist.  This is necessary for the MessageFactory class.
     <uptodate property="skip.taglib.generation"
               targetfile="${build.generate}/last-taglib-generation">
        <srcfiles dir="${jsf-api.home}/doc">
-         <include name="*.xml"/>
+         <include name="standard-html-renderkit.xml"/>
        </srcfiles>
     </uptodate>
   </target>
@@ -381,15 +381,12 @@ must exist.  This is necessary for the MessageFactory class.
 
     <copy todir="${build.classes}">
         <fileset dir="${source.home}" includes="**/*.properties"/>
-    </copy>
-    <copy todir="${build.classes}">
-        <fileset dir="${source.home}" includes="**/*.xml"/>
-    </copy>
+    </copy>    
 
     <copy todir="${build.classes}/com/sun/faces">
         <fileset dir="${jsf-api.home}/doc">
           <include name="*.dtd"/>
-          <include name="*.xml"/>
+          <include name="standard-html-renderkit.xml"/>
           <include name="*.xsd"/>
         </fileset>
     </copy>
@@ -655,27 +652,28 @@ must exist.  This is necessary for the MessageFactory class.
       <xslt in="${build.home}/classes/com/sun/faces/standard-html-renderkit.xml"
             out="merged.xml" 
             style="conf/xslt/merge-config.xsl">
-          <xmlcatalog id="facesDTDs">
-             <dtd publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
-                  location="${build.home}/classes/com/sun/faces/web-facesconfig_1_1.dtd"/>
-             <dtd publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
-                  location="${build.home}/classes/com/sun/faces/web-facesconfig_1_0.dtd"/>
-          </xmlcatalog>
       </xslt>
       <xslt in="merged.xml"
             out="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml" 
             style="conf/xslt/prune-tool-data.xsl">
-          <xmlcatalog id="facesDTDs">
-             <dtd publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
-                  location="${build.home}/classes/com/sun/faces/web-facesconfig_1_1.dtd"/>
-             <dtd publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
-                  location="${build.home}/classes/com/sun/faces/web-facesconfig_1_0.dtd"/>
-          </xmlcatalog>
       </xslt>
-      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml" token="xmlns=&quot;http://java.sun.com/JSF/Configuration&quot;" />
-      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml" token="xmlns:jsf=&quot;http://java.sun.com/JSF/Configuration&quot;" />
-      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml" token="&lt;faces-config &gt;" value="&lt;faces-config&gt;"/>
-      <delete file="${basedir}/merged.xml"/>
+      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml">
+          <replacetoken><![CDATA[xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"]]></replacetoken>
+      </replace>
+      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml">
+          <replacetoken><![CDATA[ >]]></replacetoken>
+          <replacevalue><![CDATA[>]]></replacevalue>
+      </replace>
+      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml">
+          <replacetoken><![CDATA[<faces-config>]]></replacetoken>
+          <replacevalue><![CDATA[
+<faces-config xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-facesconfig_1_2.xsd"
+    version="1.2">]]>
+          </replacevalue>
+      </replace>
+      <!--<delete file="${basedir}/merged.xml"/> -->
   </target>
 
   <!--

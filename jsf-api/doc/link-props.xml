@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,8 +21,8 @@
       </property>
 
 -->
-
-      <property>
+<root>
+    <property>
         <description>
           The character encoding of the resource designated
           by this hyperlink.
@@ -32,11 +32,11 @@
         <property-name>charset</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The position and shape of the hot spot on the screen
           (for use in client-side image maps).
@@ -46,11 +46,11 @@
         <property-name>coords</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The language code of the resource designated
           by this hyperlink.
@@ -60,43 +60,43 @@
         <property-name>hreflang</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The relationship from the current document
           to the anchor specified by this hyperlink.
           The value of this attribute is a space-separated
-          list of link types.  
+          list of link types.
         </description>
         <display-name>Relationship</display-name>
         <icon></icon>
         <property-name>rel</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           A reverse link from the anchor specified
           by this hyperlink to the current document.
           The value of this attribute is a space-separated
-          list of link types.  
+          list of link types.
         </description>
         <display-name>Reverse Link</display-name>
         <icon></icon>
         <property-name>rev</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The shape of the hot spot on the screen
           (for use in client-side image maps).  Valid
@@ -109,11 +109,11 @@
         <property-name>shape</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Name of a frame where the resource
           retrieved via this hyperlink is to
@@ -124,11 +124,11 @@
         <property-name>target</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The content type of the resource designated
           by this hyperlink.
@@ -138,7 +138,7 @@
         <property-name>type</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
-
+    </property>
+</root>

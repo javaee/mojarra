@@ -112,7 +112,7 @@
     <mkdir dir="${build.classes}/META-INF"/>
     <mkdir     dir="${build.temp}"/>
     <copy    todir="${build.temp}">
-      <fileset dir="${jsf-api.dir}/doc" includes="*.xml"/>
+      <fileset dir="${jsf-api.dir}/doc" includes="standard-html-renderkit.xml"/>
     </copy>
     <copy    todir="${build.classes}/com/sun/faces">
       <fileset dir="${jsf-api.dir}/doc" includes="*.dtd"/>
@@ -282,7 +282,7 @@ necessary to generate required classes.
     <uptodate property="skip.generation"
               targetfile="${build.generate}/last-generation">
        <srcfiles dir="${jsf-api.dir}/doc">
-         <include name="*.xml"/>               
+         <include name="standard-html-renderkit.xml"/>
        </srcfiles>
     </uptodate>
   </target>
@@ -291,7 +291,7 @@ necessary to generate required classes.
     <uptodate property="skip.taglib.generation"
               targetfile="${build.generate}/last-taglib-generation">
        <srcfiles dir="${jsf-api.dir}/doc">
-         <include name="*.xml"/>               
+         <include name="standard-html-renderkit.xml"/>               
        </srcfiles>
     </uptodate>
   </target>

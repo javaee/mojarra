@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,8 +21,8 @@
       </attribute>
 
 -->
-
-      <attribute>
+<root>
+    <attribute>
         <description>
           Width (in pixels) of the border to be drawn
           around the table containing the options list.
@@ -32,11 +32,11 @@
         <attribute-name>border</attribute-name>
         <attribute-class>int</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           CSS style class to apply to the rendered label
           on disabled options.
@@ -45,9 +45,9 @@
         <icon></icon>
         <attribute-name>disabledClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
+    </attribute>
+
+    <attribute>
         <description>
           CSS style class to apply to the rendered label
           on enabled options.
@@ -56,9 +56,9 @@
         <icon></icon>
         <attribute-name>enabledClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
+    </attribute>
+
+    <attribute>
         <description>
           Orientation of the options list to be created.
           Valid values are "pageDirection" (list is laid
@@ -70,5 +70,6 @@
         <icon></icon>
         <attribute-name>layout</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+    </attribute>
+</root>
 

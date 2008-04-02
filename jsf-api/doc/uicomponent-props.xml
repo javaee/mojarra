@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -20,8 +20,8 @@
       </property>
 
 -->
-
-      <property>
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+    <property>
         <description>
           A mutable Map of the attributes associated with
           this component, keyed by attribute name.
@@ -31,12 +31,12 @@
         <property-name>attributes</property-name>
         <property-class>java.util.Map</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
-          <read-only>true</read-only>
+            <tag-attribute>false</tag-attribute>
+            <read-only>true</read-only>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The number of child components associated with
           this component.
@@ -46,12 +46,12 @@
         <property-name>childCount</property-name>
         <property-class>int</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
-          <read-only>true</read-only>
+            <tag-attribute>false</tag-attribute>
+            <read-only>true</read-only>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           A mutable List of the child components associated with
           this component.
@@ -61,12 +61,12 @@
         <property-name>children</property-name>
         <property-class>java.util.List</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
-          <read-only>true</read-only>
+            <tag-attribute>false</tag-attribute>
+            <read-only>true</read-only>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           A mutable Map of the facets associated with
           this component, keyed by facet name.
@@ -76,12 +76,12 @@
         <property-name>facets</property-name>
         <property-class>java.util.Map</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
-          <read-only>true</read-only>
+            <tag-attribute>false</tag-attribute>
+            <read-only>true</read-only>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The component family to which this component belongs.  This property
           is used to select an appropriate Renderer.
@@ -91,12 +91,12 @@
         <property-name>family</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
-          <read-only>true</read-only>
+            <tag-attribute>false</tag-attribute>
+            <read-only>true</read-only>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The component identifier for this component.  This value must be
           unique within the closest parent component that is a naming
@@ -106,9 +106,9 @@
         <icon></icon>
         <property-name>id</property-name>
         <property-class>java.lang.String</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The parent component for this component.  On the root component
           in the component tree (which must be of type UIViewRoot), this
@@ -119,12 +119,12 @@
         <property-name>parent</property-name>
         <property-class>javax.faces.component.UIComponent</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
-          <read-only>true</read-only>
+            <tag-attribute>false</tag-attribute>
+            <read-only>true</read-only>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Flag indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
@@ -134,9 +134,9 @@
         <icon></icon>
         <property-name>rendered</property-name>
         <property-class>boolean</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Identifier used (in conjunction with the "family" property) to
           select an appropriate Renderer to encode and decode this component.
@@ -146,11 +146,11 @@
         <property-name>rendererType</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
+            <tag-attribute>false</tag-attribute>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Flag indicating whether or not this component takes responsibility
           for rendering its own children.  This decision is normally delegated
@@ -161,8 +161,8 @@
         <property-name>rendersChildren</property-name>
         <property-class>boolean</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
-          <read-only>true</read-only>
+            <tag-attribute>false</tag-attribute>
+            <read-only>true</read-only>
         </property-extension>
-      </property>
-
+    </property>
+</root>

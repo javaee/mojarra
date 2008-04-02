@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,7 +21,7 @@
       </attribute>
 
 -->
-
+<root>
     <attribute>
       <description>
         Alternate textual description of the
@@ -66,4 +66,5 @@
         <default-value>"submit"</default-value>
       </attribute-extension>
     </attribute>
+</root>
 

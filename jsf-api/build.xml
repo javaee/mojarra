@@ -230,7 +230,7 @@ jsf-api.jar.
     <uptodate property="skip.generation"
               targetfile="${build.generate}/last-generation">
        <srcfiles dir="${basedir}/doc">
-         <include name="*.xml"/>               
+         <include name="standard-html-renderkit.xml"/>
        </srcfiles>
     </uptodate>
   </target>
@@ -711,7 +711,27 @@ jsf-api.jar.
     </junit>
   </target>
 
+  <!--
+       ===================================================================
+         Create the standard-html-renderkit.xml document
+       ===================================================================
+  -->
 
+  <target name="create.standard.xml">
+    <copy file="${basedir}/../jsf-ri/src/com/sun/faces/standard-html-renderkit-impl.xml"
+      todir="${basedir}/doc"/>
+    <exec executable="xmllint" dir="${basedir}/doc" failonerror="true">
+        <arg line="--xinclude --format --output standard-html-renderkit.xml standard-html-renderkit-base.xml"/>
+    </exec>
+    <replace file="${basedir}/doc/standard-html-renderkit.xml">
+        <replacetoken><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></replacetoken>
+        <replacevalue><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- DO NOT EDIT     DO NOT EDIT    DO NOT EDIT    DO NOT EDIT    DO NOT EDIT -->]]>
+        </replacevalue>
+    </replace>
+    <delete file="${basedir}/doc/standard-html-renderkit-impl.xml"/>
+  </target>
 
   <!--
        ===================================================================
@@ -740,7 +760,7 @@ jsf-api.jar.
           TCK related
        ==================================================================
   -->
-  
+
   <target name="detect.tck" description="Detect the presence of the JSF TCK">
       <available property="jsf.tck.present" file="${jsf-tck.dir}" type="dir"/>
   </target>
@@ -811,9 +831,9 @@ jsf-api.jar.
        </fileset>
       <classpath refid="compile.classpath"/>
     </javadoc>
-    <copy todir="${build.javadocs}/javax/faces/component" 
+    <copy todir="${build.javadocs}/javax/faces/component"
           file="${src.dir}/javax/faces/component/UIComponentHierarchy.jpg" />
-    <copy todir="${build.javadocs}/javax/faces/event" 
+    <copy todir="${build.javadocs}/javax/faces/event"
           file="${src.dir}/javax/faces/event/EventHierarchy.jpg" />
   </target>
 
@@ -885,32 +905,32 @@ jsf-api.jar.
     <antcall target="copy.template.sources" />
     <antcall target="test.FactoryFinder">
       <param name="build.classes" value="${build.classes.instr}/classes" />
-      <param name="jcov.jvm.args" 
+      <param name="jcov.jvm.args"
              value="-Djcov.file=${build.coverage}/test-FactoryFinder.jcov" />
     </antcall>
     <antcall target="test.FactoryFinder2">
       <param name="build.classes" value="${build.classes.instr}/classes" />
-      <param name="jcov.jvm.args" 
+      <param name="jcov.jvm.args"
              value="-Djcov.file=${build.coverage}/test-FactoryFinder2.jcov" />
     </antcall>
     <antcall target="test.PhaseId">
       <param name="build.classes" value="${build.classes.instr}/classes" />
-      <param name="jcov.jvm.args" 
+      <param name="jcov.jvm.args"
              value="-Djcov.file=${build.coverage}/test-PhaseId.jcov" />
     </antcall>
     <antcall target="test.component">
       <param name="build.classes" value="${build.classes.instr}/classes" />
-      <param name="jcov.jvm.args" 
+      <param name="jcov.jvm.args"
              value="-Djcov.file=${build.coverage}/test-component.jcov" />
     </antcall>
     <antcall target="test.model">
       <param name="build.classes" value="${build.classes.instr}/classes" />
-      <param name="jcov.jvm.args" 
+      <param name="jcov.jvm.args"
              value="-Djcov.file=${build.coverage}/test-model.jcov" />
     </antcall>
     <antcall target="test.webapp">
       <param name="build.classes" value="${build.classes.instr}/classes" />
-      <param name="jcov.jvm.args" 
+      <param name="jcov.jvm.args"
              value="-Djcov.file=${build.coverage}/test-webapp.jcov" />
     </antcall>
     <java classname="com.sun.tdk.jcov.MergerMain" classpath="${jcov.jar}">
@@ -961,7 +981,7 @@ jsf-api.jar.
     <zip     destfile="${dist.dir}/${name}-src-${version}.zip">
       <zipfileset dir="${basedir}"
              includes="build.xml COPYRIGHT LICENSE.html"
-               prefix="${name}"/> 
+               prefix="${name}"/>
       <zipfileset dir="${src.dir}"
              excludes="**/CVS/**"
                prefix="${name}/src"/>
@@ -969,7 +989,7 @@ jsf-api.jar.
              excludes="**/CVS/**"
                prefix="${name}/test"/>
       <zipfileset dir="${doc.dir}"
-             includes="*.dtd,*.xml"
+             includes="*.dtd,*.xsd,standard-html-renderkit.xml"
                prefix="${name}/doc"/>
       <zipfileset dir="${jsf-tools.dir}"
              excludes="**/CVS/**, **/build/**"

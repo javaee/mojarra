@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -20,8 +20,8 @@
       </property>
 
 -->
-
-      &uiinput-props;
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:include href="uiinput-props.xml" xpointer="xpointer(/root/*)"/>
 
       <property>
         <description>
@@ -36,4 +36,5 @@
           <tag-attribute>false</tag-attribute>
         </property-extension>
       </property>
+</root>
 

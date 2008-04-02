@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -20,11 +20,11 @@
       </property>
 
 -->
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="uicomponent-props.xml" xpointer="xpointer(/root/*)"/>
+    <xi:include href="actionsource-props.xml" xpointer="xpointer(/root/*)"/>
 
-      &uicomponent-props;
-      &actionsource-props;
-
-      <property>
+    <property>
         <description>
           The current value of this component.
         </description>
@@ -32,5 +32,6 @@
         <icon></icon>
         <property-name>value</property-name>
         <property-class>java.lang.Object</property-class>
-      </property>
+    </property>
+</root>
 

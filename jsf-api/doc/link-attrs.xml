@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,8 +21,8 @@
       </attribute>
 
 -->
-
-      <attribute>
+<root>
+    <attribute>
         <description>
           The character encoding of the resource designated
           by this hyperlink.
@@ -32,11 +32,11 @@
         <attribute-name>charset</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           The position and shape of the hot spot on the screen
           (for use in client-side image maps).
@@ -46,11 +46,11 @@
         <attribute-name>coords</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           The language code of the resource designated
           by this hyperlink.
@@ -60,43 +60,43 @@
         <attribute-name>hreflang</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           The relationship from the current document
           to the anchor specified by this hyperlink.
           The value of this attribute is a space-separated
-          list of link types.  
+          list of link types.
         </description>
         <display-name>Relationship</display-name>
         <icon></icon>
         <attribute-name>rel</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           A reverse link from the anchor specified
           by this hyperlink to the current document.
           The value of this attribute is a space-separated
-          list of link types.  
+          list of link types.
         </description>
         <display-name>Reverse Link</display-name>
         <icon></icon>
         <attribute-name>rev</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           The shape of the hot spot on the screen
           (for use in client-side image maps).  Valid
@@ -109,11 +109,11 @@
         <attribute-name>shape</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Name of a frame where the resource
           retrieved via this hyperlink is to
@@ -124,11 +124,11 @@
         <attribute-name>target</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           The content type of the resource designated
           by this hyperlink.
@@ -138,7 +138,7 @@
         <attribute-name>type</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
-
+    </attribute>
+</root>

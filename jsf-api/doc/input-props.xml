@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,8 +21,8 @@
       </property>
 
 -->
-
-      <property>
+<root>
+    <property>
         <description>
           Flag indicating that this element must never
           receive focus or be included in a subsequent
@@ -33,11 +33,11 @@
         <property-name>disabled</property-name>
         <property-class>boolean</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Javascript code executed when this element loses focus
           and its value has been modified since gaining focus.
@@ -47,11 +47,11 @@
         <property-name>onchange</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Javascript code executed when text within this
           element is selected by the user.
@@ -61,11 +61,11 @@
         <property-name>onselect</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Flag indicating that this component will prohibit
           changes by the user.  The element may receive focus
@@ -76,7 +76,7 @@
         <property-name>readonly</property-name>
         <property-class>boolean</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
-
+    </property>
+</root>

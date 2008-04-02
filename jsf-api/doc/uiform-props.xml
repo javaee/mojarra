@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -20,10 +20,10 @@
       </property>
 
 -->
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="uicomponent-props.xml" xpointer="xpointer(/root/*)"/>
 
-      &uicomponent-props;
-
-      <property>
+    <property>
         <description>
           Flag indicating whether or not this form was the one submitted by
           the user.  If this flag is not set, child input components are not
@@ -34,7 +34,8 @@
         <property-name>submitted</property-name>
         <property-class>boolean</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
+            <tag-attribute>false</tag-attribute>
         </property-extension>
-      </property>
+    </property>
+</root>
 

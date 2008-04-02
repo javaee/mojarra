@@ -21,8 +21,8 @@
       </property>
 
 -->
-
-      <property>
+<root>
+    <property>
         <description>
           Direction indication for text that does not inherit directionality.
           Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
@@ -32,11 +32,11 @@
         <property-name>dir</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Code describing the language used in the generated markup
           for this component.
@@ -46,7 +46,7 @@
         <property-name>lang</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
-
+    </property>
+</root>

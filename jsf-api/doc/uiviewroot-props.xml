@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -20,10 +20,10 @@
       </property>
 
 -->
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="uicomponent-props.xml" xpointer="xpointer(/root/*)"/>
 
-      &uicomponent-props;
-
-      <property>
+    <property>
         <description>
           Locale to be used in localizing the rendered output of this view.
         </description>
@@ -32,11 +32,11 @@
         <property-name>locale</property-name>
         <property-class>java.util.Locale</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
+            <tag-attribute>false</tag-attribute>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Identifier of the RenderKit being used to display this view.
         </description>
@@ -45,11 +45,11 @@
         <property-name>renderKitId</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
+            <tag-attribute>false</tag-attribute>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Identifier of the view represented by this component tree.
         </description>
@@ -58,7 +58,7 @@
         <property-name>viewId</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
+            <tag-attribute>false</tag-attribute>
         </property-extension>
-      </property>
-
+    </property>
+</root>

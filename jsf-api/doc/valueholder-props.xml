@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -20,8 +20,8 @@
       </property>
 
 -->
-
-      <property>
+<root>
+    <property>
         <description>
           Converter instance registered with this component.
         </description>
@@ -29,9 +29,9 @@
         <icon></icon>
         <property-name>converter</property-name>
         <property-class>javax.faces.convert.Converter</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           For output components, this is the same as the "value" property.
           For input components, this is the most recently user-entered
@@ -44,11 +44,11 @@
         <property-name>localValue</property-name>
         <property-class>java.lang.Object</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
+            <tag-attribute>false</tag-attribute>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The current value of this component.
         </description>
@@ -56,7 +56,5 @@
         <icon></icon>
         <property-name>value</property-name>
         <property-class>java.lang.Object</property-class>
-      </property>
-
-      
-
+    </property>
+</root>

@@ -5,6 +5,11 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
+<!--
+     INTENTIONALLY LEFT TO REFER TO web-facesconfig_1_1.dtd
+     FOR TESTING PURPOSES
+ -->
+
 <!DOCTYPE faces-config PUBLIC
   "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
   "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">

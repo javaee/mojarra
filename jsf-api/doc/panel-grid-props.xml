@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,15 +21,15 @@
       </property>
 
 -->
-
+<root>
     <property>
-      <description>
+        <description>
         The number of columns to render before
         starting a new row.
-      </description>
-      <display-name>Columns</display-name>
-      <icon></icon>
-      <property-name>columns</property-name>
-      <property-class>int</property-class>
+        </description>
+        <display-name>Columns</display-name>
+        <icon></icon>
+        <property-name>columns</property-name>
+        <property-class>int</property-class>
     </property>
-
+</root>

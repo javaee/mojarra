@@ -21,8 +21,8 @@
       </property>
 
 -->
-
-      <property>
+<root>
+    <property>
         <description>
           Name or code of the background color for this table.
         </description>
@@ -31,11 +31,11 @@
         <property-name>bgcolor</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Width (in pixels) of the border to be drawn
           around this table.
@@ -45,11 +45,11 @@
         <property-name>border</property-name>
         <property-class>int</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Definition of how much space the user agent should
           leave between the border of each cell and its contents.
@@ -59,11 +59,11 @@
         <property-name>cellpadding</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Definition of how much space the user agent should
           leave between the left side of the table and the
@@ -77,11 +77,11 @@
         <property-name>cellspacing</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Comma-delimited list of CSS style classes that will be applied
           to the columns of this table.  A space separated list of
@@ -98,9 +98,9 @@
         <icon></icon>
         <property-name>columnClasses</property-name>
         <property-class>java.lang.String</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Space-separated list of CSS style class(es) that will be
           applied to any footer generated for this table.
@@ -109,9 +109,9 @@
         <icon></icon>
         <property-name>footerClass</property-name>
         <property-class>java.lang.String</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Code specifying which sides of the frame surrounding
           this table will be visible.  Valid values are:
@@ -126,11 +126,11 @@
         <property-name>frame</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Space-separated list of CSS style class(es) that will be
           applied to any header generated for this table.
@@ -139,9 +139,9 @@
         <icon></icon>
         <property-name>headerClass</property-name>
         <property-class>java.lang.String</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Comma-delimited list of CSS style classes that will be applied
           to the rows of this table.  A space separated list of classes
@@ -157,9 +157,9 @@
         <icon></icon>
         <property-name>rowClasses</property-name>
         <property-class>java.lang.String</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Code specifying which rules will appear between cells
           within this table.  Valid values are:  none (no rules,
@@ -172,11 +172,11 @@
         <property-name>rules</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Summary of this table's purpose and structure, for
           user agents rendering to non-visual media such as
@@ -187,11 +187,11 @@
         <property-name>summary</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Width of the entire table, for visual user agents.
         </description>
@@ -200,7 +200,7 @@
         <property-name>width</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
-
+    </property>
+</root>

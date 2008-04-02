@@ -21,8 +21,8 @@
       </property>
 
 -->
-
-      <property>
+<root>
+    <property>
         <description>
           Javascript code executed when a pointer button is
           clicked over this element.
@@ -32,11 +32,11 @@
         <property-name>onclick</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Javascript code executed when a pointer button is
           double clicked over this element.
@@ -46,11 +46,11 @@
         <property-name>ondblclick</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Javascript code executed when a pointer button is
           pressed down over this element.
@@ -60,11 +60,11 @@
         <property-name>onmousedown</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Javascript code executed when a pointer button is
           released over this element.
@@ -74,11 +74,11 @@
         <property-name>onmouseup</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Javascript code executed when a pointer button is
           moved onto this element.
@@ -88,11 +88,11 @@
         <property-name>onmouseover</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Javascript code executed when a pointer button is
           moved within this element.
@@ -102,11 +102,11 @@
         <property-name>onmousemove</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Javascript code executed when a pointer button is
           moved away from this element.
@@ -116,11 +116,11 @@
         <property-name>onmouseout</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Javascript code executed when a key is
           pressed and released over this element.
@@ -130,11 +130,11 @@
         <property-name>onkeypress</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Javascript code executed when a key is
           pressed down over this element.
@@ -144,11 +144,11 @@
         <property-name>onkeydown</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Javascript code executed when a key is
           released over this element.
@@ -158,7 +158,7 @@
         <property-name>onkeyup</property-name>
         <property-class>java.lang.String</property-class>
         <property-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </property-extension>
-      </property>
-
+    </property>
+</root>

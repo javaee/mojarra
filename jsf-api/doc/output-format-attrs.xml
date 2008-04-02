@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,19 +21,19 @@
       </attribute>
 
 -->
-
+<root>
     <attribute>
-      <description>
+        <description>
         Flag indicating that characters that are sensitive
         in HTML and XML markup must be escaped.  This flag
         is set to "true" by default.
-      </description>
-      <display-name>Escape Characters</display-name>
-      <icon></icon>
-      <attribute-name>escape</attribute-name>
-      <attribute-class>boolean</attribute-class>
-      <attribute-extension>
-        <default-value>true</default-value>
-      </attribute-extension>
+        </description>
+        <display-name>Escape Characters</display-name>
+        <icon></icon>
+        <attribute-name>escape</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+            <default-value>true</default-value>
+        </attribute-extension>
     </attribute>
-
+</root>

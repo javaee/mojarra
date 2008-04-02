@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,18 +21,19 @@
       </attribute>
 
 -->
-
+<root>
     <attribute>
-      <description>
+        <description>
         Client identifier of the component for which this element
         is a label.
-      </description>
-      <display-name>Label For Identifier</display-name>
-      <icon></icon>
-      <attribute-name>for</attribute-name>
-      <attribute-class>java.lang.String</attribute-class>
-      <attribute-extension>
-        <required>false</required>
-      </attribute-extension>
+        </description>
+        <display-name>Label For Identifier</display-name>
+        <icon></icon>
+        <attribute-name>for</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+            <required>false</required>
+        </attribute-extension>
     </attribute>
+</root>
 

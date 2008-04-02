@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -20,10 +20,10 @@
       </property>
 
 -->
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="uicomponent-props.xml" xpointer="xpointer(/root/*)"/>
 
-      &uicomponent-props;
-
-      <property>
+    <property>
         <description>
           Description of the selection item represented by this component.
           This property may be used by tools.
@@ -32,9 +32,9 @@
         <icon></icon>
         <property-name>itemDescription</property-name>
         <property-class>java.lang.String</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Flag indicating that the selection item represented by this component
           must be rendered as disabled.
@@ -43,9 +43,9 @@
         <icon></icon>
         <property-name>itemDisabled</property-name>
         <property-class>boolean</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Label of the selection item represented by this component.  This
           property is displayed to the user when the containing input
@@ -55,9 +55,9 @@
         <icon></icon>
         <property-name>itemLabel</property-name>
         <property-class>java.lang.String</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The value returned to the server when a user chooses the selection
           item represented by this component.
@@ -66,9 +66,9 @@
         <icon></icon>
         <property-name>itemValue</property-name>
         <property-class>java.lang.Object</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The current value of this component.
         </description>
@@ -76,5 +76,5 @@
         <icon></icon>
         <property-name>value</property-name>
         <property-class>java.lang.Object</property-class>
-      </property>
-
+    </property>
+</root>

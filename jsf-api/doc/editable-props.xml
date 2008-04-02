@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -20,8 +20,8 @@
       </property>
 
 -->
-
-      <property>
+<root>
+    <property>
         <description>
           Flag indicating whether the "localValue" property
           of this component has been set.  This property is
@@ -32,11 +32,11 @@
         <property-name>localValueSet</property-name>
         <property-class>boolean</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
+            <tag-attribute>false</tag-attribute>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Flag indicating that the user is required to provide a submitted
           value for this input component.
@@ -45,9 +45,9 @@
         <icon></icon>
         <property-name>required</property-name>
         <property-class>boolean</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           The value submitted for this input component by the user, prior to
           any required conversion or validation.
@@ -57,11 +57,11 @@
         <property-name>submittedValue</property-name>
         <property-class>java.lang.Object</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
+            <tag-attribute>false</tag-attribute>
         </property-extension>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           MethodBinding representing a validator method that will be called
           during Process Validations to perform correctness checks on the
@@ -73,9 +73,9 @@
         <icon></icon>
         <property-name>validator</property-name>
         <property-class>javax.faces.el.MethodBinding</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           MethodBinding representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
@@ -86,9 +86,9 @@
         <icon></icon>
         <property-name>valueChangeListener</property-name>
         <property-class>javax.faces.el.MethodBinding</property-class>
-      </property>
+    </property>
 
-      <property>
+    <property>
         <description>
           Flag indicating that this component's value must be
           converted and validated immediately (that is, during
@@ -99,9 +99,9 @@
         <icon></icon>
         <property-name>immediate</property-name>
         <property-class>boolean</property-class>
-      </property>
-      
-      <property>
+    </property>
+
+    <property>
         <description>
           Flag indicating whether or not any required conversion or validation
           on this component value has been performed successfully.
@@ -111,6 +111,7 @@
         <property-name>valid</property-name>
         <property-class>valid</property-class>
         <property-extension>
-          <tag-attribute>false</tag-attribute>
+            <tag-attribute>false</tag-attribute>
         </property-extension>
-      </property>
+    </property>
+</root>

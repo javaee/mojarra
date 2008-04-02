@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,30 +21,30 @@
       </property>
 
 -->
-
+<root>
     <property>
-      <description>
+        <description>
         The number of columns to be displayed.
-      </description>
-      <display-name>Columns</display-name>
-      <icon></icon>
-      <property-name>cols</property-name>
-      <property-class>int</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
+        </description>
+        <display-name>Columns</display-name>
+        <icon></icon>
+        <property-name>cols</property-name>
+        <property-class>int</property-class>
+        <property-extension>
+            <pass-through>true</pass-through>
+        </property-extension>
     </property>
 
     <property>
-      <description>
+        <description>
         The number of rows to be displayed.
-      </description>
-      <display-name>Rows</display-name>
-      <icon></icon>
-      <property-name>rows</property-name>
-      <property-class>int</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
+        </description>
+        <display-name>Rows</display-name>
+        <icon></icon>
+        <property-name>rows</property-name>
+        <property-class>int</property-class>
+        <property-extension>
+            <pass-through>true</pass-through>
+        </property-extension>
     </property>
-
+</root>

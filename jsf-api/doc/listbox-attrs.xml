@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,37 +21,37 @@
       </attribute>
 
 -->
-
+<root>
     <attribute>
-       <description>
+        <description>
          CSS style class to apply to the rendered label
          on disabled options.
-       </description>
-       <display-name>Disabled Label Class</display-name>
-       <icon></icon>
-       <attribute-name>disabledClass</attribute-name>
-       <attribute-class>java.lang.String</attribute-class>
+        </description>
+        <display-name>Disabled Label Class</display-name>
+        <icon></icon>
+        <attribute-name>disabledClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
     </attribute>
 
     <attribute>
-       <description>
+        <description>
          CSS style class to apply to the rendered label
          on enabled options.
-       </description>
-       <display-name>Enabled Label Class</display-name>
-       <icon></icon>
-       <attribute-name>enabledClass</attribute-name>
-       <attribute-class>java.lang.String</attribute-class>
+        </description>
+        <display-name>Enabled Label Class</display-name>
+        <icon></icon>
+        <attribute-name>enabledClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
     </attribute>
 
     <attribute>
-      <description>
+        <description>
         Number of available options to be shown at all times.
         If not specified, all available options are shown.
-      </description>
-      <display-name>Size</display-name>
-      <icon></icon>
-      <attribute-name>size</attribute-name>
-      <attribute-class>int</attribute-class>
+        </description>
+        <display-name>Size</display-name>
+        <icon></icon>
+        <attribute-name>size</attribute-name>
+        <attribute-class>int</attribute-class>
     </attribute>
-
+</root>

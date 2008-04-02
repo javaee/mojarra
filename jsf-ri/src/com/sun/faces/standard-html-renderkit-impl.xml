@@ -3,28 +3,78 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<!ENTITY command-button-renderer-class 'com.sun.faces.renderkit.html_basic.ButtonRenderer'>
-<!ENTITY command-link-renderer-class 'com.sun.faces.renderkit.html_basic.CommandLinkRenderer'>
-<!ENTITY data-table-renderer-class 'com.sun.faces.renderkit.html_basic.TableRenderer'>
-<!ENTITY form-form-renderer-class 'com.sun.faces.renderkit.html_basic.FormRenderer'>
-<!ENTITY graphic-image-renderer-class 'com.sun.faces.renderkit.html_basic.ImageRenderer'>
-<!ENTITY input-hidden-renderer-class 'com.sun.faces.renderkit.html_basic.HiddenRenderer'>
-<!ENTITY input-secret-renderer-class 'com.sun.faces.renderkit.html_basic.SecretRenderer'>
-<!ENTITY input-text-renderer-class 'com.sun.faces.renderkit.html_basic.TextRenderer'>
-<!ENTITY input-textarea-renderer-class 'com.sun.faces.renderkit.html_basic.TextareaRenderer'>
-<!ENTITY message-message-renderer-class 'com.sun.faces.renderkit.html_basic.MessageRenderer'>
-<!ENTITY messages-messages-renderer-class 'com.sun.faces.renderkit.html_basic.MessagesRenderer'>
-<!ENTITY output-label-renderer-class 'com.sun.faces.renderkit.html_basic.LabelRenderer'>
-<!ENTITY output-link-renderer-class 'com.sun.faces.renderkit.html_basic.LinkRenderer'>
-<!ENTITY output-format-renderer-class 'com.sun.faces.renderkit.html_basic.OutputMessageRenderer'>
-<!ENTITY output-text-renderer-class 'com.sun.faces.renderkit.html_basic.TextRenderer'>
-<!ENTITY panel-grid-renderer-class 'com.sun.faces.renderkit.html_basic.GridRenderer'>
-<!ENTITY panel-group-renderer-class 'com.sun.faces.renderkit.html_basic.GroupRenderer'>
-<!ENTITY selectboolean-checkbox-renderer-class 'com.sun.faces.renderkit.html_basic.CheckboxRenderer'>
-<!ENTITY selectmany-checkbox-renderer-class 'com.sun.faces.renderkit.html_basic.SelectManyCheckboxListRenderer'>
-<!ENTITY selectmany-listbox-renderer-class 'com.sun.faces.renderkit.html_basic.ListboxRenderer'>
-<!ENTITY selectmany-menu-renderer-class 'com.sun.faces.renderkit.html_basic.MenuRenderer'>
-<!ENTITY selectone-listbox-renderer-class 'com.sun.faces.renderkit.html_basic.ListboxRenderer'>
-<!ENTITY selectone-menu-renderer-class 'com.sun.faces.renderkit.html_basic.MenuRenderer'>
-<!ENTITY selectone-radio-renderer-class 'com.sun.faces.renderkit.html_basic.RadioRenderer'>
+<root>
+    <command-button-renderer-class>
+        com.sun.faces.renderkit.html_basic.ButtonRenderer
+    </command-button-renderer-class>
+    <command-link-renderer-class>
+        com.sun.faces.renderkit.html_basic.CommandLinkRenderer
+    </command-link-renderer-class>
+    <data-table-renderer-class>
+        com.sun.faces.renderkit.html_basic.TableRenderer
+    </data-table-renderer-class>
+    <form-form-renderer-class>
+        com.sun.faces.renderkit.html_basic.FormRenderer
+    </form-form-renderer-class>
+    <graphic-image-renderer-class>
+        com.sun.faces.renderkit.html_basic.ImageRenderer
+    </graphic-image-renderer-class>
+    <input-hidden-renderer-class>
+        com.sun.faces.renderkit.html_basic.HiddenRenderer
+    </input-hidden-renderer-class>
+    <input-secret-renderer-class>
+        com.sun.faces.renderkit.html_basic.SecretRenderer
+    </input-secret-renderer-class>
+    <input-text-renderer-class>
+        com.sun.faces.renderkit.html_basic.TextRenderer
+    </input-text-renderer-class>
+    <input-textarea-renderer-class>
+        com.sun.faces.renderkit.html_basic.TextareaRenderer
+    </input-textarea-renderer-class>
+    <message-message-renderer-class>
+        com.sun.faces.renderkit.html_basic.MessageRenderer
+    </message-message-renderer-class>
+    <messages-messages-renderer-class>
+        com.sun.faces.renderkit.html_basic.MessagesRenderer
+    </messages-messages-renderer-class>
+    <output-label-renderer-class>
+        com.sun.faces.renderkit.html_basic.LabelRenderer
+    </output-label-renderer-class>
+    <output-link-renderer-class>
+       com.sun.faces.renderkit.html_basic.LinkRenderer
+    </output-link-renderer-class>
+    <output-format-renderer-class>
+        com.sun.faces.renderkit.html_basic.OutputMessageRenderer
+    </output-format-renderer-class>
+    <output-text-renderer-class>
+        com.sun.faces.renderkit.html_basic.TextRenderer
+    </output-text-renderer-class>
+    <panel-grid-renderer-class>
+        com.sun.faces.renderkit.html_basic.GridRenderer
+    </panel-grid-renderer-class>
+    <panel-group-renderer-class>
+        com.sun.faces.renderkit.html_basic.GroupRenderer
+    </panel-group-renderer-class>
+    <selectboolean-checkbox-renderer-class>
+        com.sun.faces.renderkit.html_basic.CheckboxRenderer
+    </selectboolean-checkbox-renderer-class>
+    <selectmany-checkbox-renderer-class>
+        com.sun.faces.renderkit.html_basic.SelectManyCheckboxListRenderer
+    </selectmany-checkbox-renderer-class>
+    <selectmany-listbox-renderer-class>
+        com.sun.faces.renderkit.html_basic.ListboxRenderer
+    </selectmany-listbox-renderer-class>
+    <selectmany-menu-renderer-class>
+        com.sun.faces.renderkit.html_basic.MenuRenderer
+    </selectmany-menu-renderer-class>
+    <selectone-listbox-renderer-class>
+        com.sun.faces.renderkit.html_basic.ListboxRenderer
+    </selectone-listbox-renderer-class>
+    <selectone-menu-renderer-class>
+        com.sun.faces.renderkit.html_basic.MenuRenderer
+    </selectone-menu-renderer-class>
+    <selectone-radio-renderer-class>
+        com.sun.faces.renderkit.html_basic.RadioRenderer
+    </selectone-radio-renderer-class>
+</root>
 

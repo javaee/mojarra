@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,16 +21,17 @@
       </attribute>
 
 -->
-
+<root>
     <attribute>
-      <description>
+        <description>
         Orientation of the list to be created.  Valid values
         are "pageDirection" (list is laid out vertically), or
         "lineDirection" (list is laid out horizontally).
-      </description>
-      <display-name>Layout</display-name>
-      <icon></icon>
-      <attribute-name>layout</attribute-name>
-      <attribute-class>java.lang.String</attribute-class>
+        </description>
+        <display-name>Layout</display-name>
+        <icon></icon>
+        <attribute-name>layout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
     </attribute>
+</root>
 

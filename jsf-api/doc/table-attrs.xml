@@ -21,8 +21,8 @@
       </attribute>
 
 -->
-
-      <attribute>
+<root>
+    <attribute>
         <description>
           Name or code of the background color for this table.
         </description>
@@ -31,11 +31,11 @@
         <attribute-name>bgcolor</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Width (in pixels) of the border to be drawn
           around this table.
@@ -45,11 +45,11 @@
         <attribute-name>border</attribute-name>
         <attribute-class>int</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Definition of how much space the user agent should
           leave between the border of each cell and its contents.
@@ -59,11 +59,11 @@
         <attribute-name>cellpadding</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Definition of how much space the user agent should
           leave between the left side of the table and the
@@ -77,11 +77,11 @@
         <attribute-name>cellspacing</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Comma-delimited list of CSS style classes that will be applied
           to the columns of this table.  A space separated list of
@@ -98,9 +98,9 @@
         <icon></icon>
         <attribute-name>columnClasses</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Space-separated list of CSS style class(es) that will be
           applied to any footer generated for this table.
@@ -109,9 +109,9 @@
         <icon></icon>
         <attribute-name>footerClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Code specifying which sides of the frame surrounding
           this table will be visible.  Valid values are:
@@ -126,11 +126,11 @@
         <attribute-name>frame</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Space-separated list of CSS style class(es) that will be
           applied to any header generated for this table.
@@ -139,9 +139,9 @@
         <icon></icon>
         <attribute-name>headerClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Comma-delimited list of CSS style classes that will be applied
           to the rows of this table.  A space separated list of classes
@@ -157,9 +157,9 @@
         <icon></icon>
         <attribute-name>rowClasses</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Code specifying which rules will appear between cells
           within this table.  Valid values are:  none (no rules,
@@ -172,11 +172,11 @@
         <attribute-name>rules</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Summary of this table's purpose and structure, for
           user agents rendering to non-visual media such as
@@ -187,11 +187,11 @@
         <attribute-name>summary</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Width of the entire table, for visual user agents.
         </description>
@@ -200,7 +200,7 @@
         <attribute-name>width</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
-
+    </attribute>
+</root>

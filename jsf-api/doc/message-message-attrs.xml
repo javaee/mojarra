@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,8 +21,8 @@
       </attribute>
 
 -->
-
-      <attribute>
+<root>
+    <attribute>
         <description>
           CSS style class to apply to any message
           with a severity class of "ERROR".
@@ -31,9 +31,9 @@
         <icon></icon>
         <attribute-name>errorClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
+    </attribute>
+
+    <attribute>
         <description>
           CSS style(s) to apply to any message
           with a severity class of "ERROR".
@@ -42,9 +42,9 @@
         <icon></icon>
         <attribute-name>errorStyle</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
+    </attribute>
+
+    <attribute>
         <description>
           CSS style class to apply to any message
           with a severity class of "FATAL".
@@ -53,9 +53,9 @@
         <icon></icon>
         <attribute-name>fatalClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
+    </attribute>
+
+    <attribute>
         <description>
           CSS style(s) to apply to any message
           with a severity class of "FATAL".
@@ -64,9 +64,9 @@
         <icon></icon>
         <attribute-name>fatalStyle</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
+    </attribute>
+
+    <attribute>
         <description>
           CSS style class to apply to any message
           with a severity class of "INFO".
@@ -75,9 +75,9 @@
         <icon></icon>
         <attribute-name>infoClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
+    </attribute>
+
+    <attribute>
         <description>
           CSS style(s) to apply to any message
           with a severity class of "INFO".
@@ -86,9 +86,9 @@
         <icon></icon>
         <attribute-name>infoStyle</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
+    </attribute>
+
+    <attribute>
         <description>
           Flag indicating whether the detail portion of the
           message should be displayed as a tooltip.
@@ -97,9 +97,9 @@
         <icon></icon>
         <attribute-name>tooltip</attribute-name>
         <attribute-class>boolean</attribute-class>
-      </attribute>
-      
-      <attribute>
+    </attribute>
+
+    <attribute>
         <description>
           CSS style class to apply to any message
           with a severity class of "WARN".
@@ -108,9 +108,9 @@
         <icon></icon>
         <attribute-name>warnClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
+    </attribute>
+
+    <attribute>
         <description>
           CSS style(s) to apply to any message
           with a severity class of "WARN".
@@ -119,5 +119,5 @@
         <icon></icon>
         <attribute-name>warnStyle</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
+    </attribute>
+</root>

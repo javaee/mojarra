@@ -21,21 +21,21 @@
       </attribute>
 
 -->
-
-      <attribute>
-	<description>
+<root>
+    <attribute>
+        <description>
           CSS style(s) to be applied when this component is rendered.
         </description>
-	<display-name>CSS Styles</display-name>
-	<icon></icon>
-	<attribute-name>style</attribute-name>
-	<attribute-class>java.lang.String</attribute-class>
+        <display-name>CSS Styles</display-name>
+        <icon></icon>
+        <attribute-name>style</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Space-separated list of CSS style class(es) to be applied when
           this element is rendered.  This value must be passed through
@@ -46,11 +46,11 @@
         <attribute-name>styleClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>false</pass-through>
+            <pass-through>false</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Advisory title information about markup elements generated
           for this component.
@@ -60,7 +60,7 @@
         <attribute-name>title</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
-
+    </attribute>
+</root>

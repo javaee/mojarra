@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,90 +21,90 @@
       </property>
 
 -->
-
+<root>
     <property>
-      <description>
+        <description>
         List of content types that a server processing this form
-        will handle correctly 
-      </description>
-      <display-name>Content Type</display-name>
-      <icon></icon>
-      <property-name>accept</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
+        will handle correctly
+        </description>
+        <display-name>Content Type</display-name>
+        <icon></icon>
+        <property-name>accept</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+            <pass-through>true</pass-through>
+        </property-extension>
     </property>
 
     <property>
-      <description>
+        <description>
         List of character encodings for input data
         that are accepted by the server processing
         this form.
-      </description>
-      <display-name>Character Set</display-name>
-      <icon></icon>
-      <property-name>acceptcharset</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
+        </description>
+        <display-name>Character Set</display-name>
+        <icon></icon>
+        <property-name>acceptcharset</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+            <pass-through>true</pass-through>
+        </property-extension>
     </property>
 
     <property>
-      <description>
+        <description>
         Content type used to submit the form to the server.  If not
         specified, the default value is
         "application/x-www-form-urlencoded".
-      </description>
-      <display-name>Encoding Type</display-name>
-      <icon></icon>
-      <property-name>enctype</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <default-value>"application/x-www-form-urlencoded"</default-value>
-        <pass-through>true</pass-through>
-      </property-extension>
+        </description>
+        <display-name>Encoding Type</display-name>
+        <icon></icon>
+        <property-name>enctype</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+            <default-value>"application/x-www-form-urlencoded"</default-value>
+            <pass-through>true</pass-through>
+        </property-extension>
     </property>
 
     <property>
-      <description>
+        <description>
         Javascript code executed when this form is reset.
-      </description>
-      <display-name>Form Reset Script</display-name>
-      <icon></icon>
-      <property-name>onreset</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
+        </description>
+        <display-name>Form Reset Script</display-name>
+        <icon></icon>
+        <property-name>onreset</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+            <pass-through>true</pass-through>
+        </property-extension>
     </property>
 
     <property>
-      <description>
+        <description>
         Javascript code executed when this form is submitted.
-      </description>
-      <display-name>Form Submit Script</display-name>
-      <icon></icon>
-      <property-name>onsubmit</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
+        </description>
+        <display-name>Form Submit Script</display-name>
+        <icon></icon>
+        <property-name>onsubmit</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+            <pass-through>true</pass-through>
+        </property-extension>
     </property>
 
     <property>
-      <description>
+        <description>
         Name of a frame where the response
         retrieved after this form submit is to
         be displayed.
-      </description>
-      <display-name>Target Frame</display-name>
-      <icon></icon>
-      <property-name>target</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
+        </description>
+        <display-name>Target Frame</display-name>
+        <icon></icon>
+        <property-name>target</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+            <pass-through>true</pass-through>
+        </property-extension>
     </property>
-
+</root>

@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,25 +21,26 @@
       </property>
 
 -->
-
+<root>
     <property>
-       <description>
+        <description>
          CSS style class to apply to the rendered label
          on disabled options.
-       </description>
-       <display-name>Disabled Label Class</display-name>
-       <icon></icon>
-       <property-name>disabledClass</property-name>
-       <property-class>java.lang.String</property-class>
+        </description>
+        <display-name>Disabled Label Class</display-name>
+        <icon></icon>
+        <property-name>disabledClass</property-name>
+        <property-class>java.lang.String</property-class>
     </property>
 
     <property>
-       <description>
+        <description>
          CSS style class to apply to the rendered label
          on enabled options.
-       </description>
-       <display-name>Enabled Label Class</display-name>
-       <icon></icon>
-       <property-name>enabledClass</property-name>
-       <property-class>java.lang.String</property-class>
+        </description>
+        <display-name>Enabled Label Class</display-name>
+        <icon></icon>
+        <property-name>enabledClass</property-name>
+        <property-class>java.lang.String</property-class>
     </property>
+</root>

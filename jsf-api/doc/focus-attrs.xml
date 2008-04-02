@@ -1,4 +1,4 @@
-<?xml encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -21,8 +21,8 @@
       </attribute>
 
 -->
-
-      <attribute>
+<root>
+    <attribute>
         <description>
           Access key that, when pressed, transfers focus
           to this element.
@@ -32,11 +32,11 @@
         <attribute-name>accesskey</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Javascript code executed when this element loses focus.
         </description>
@@ -45,11 +45,11 @@
         <attribute-name>onblur</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Javascript code executed when this element receives focus.
         </description>
@@ -58,11 +58,11 @@
         <attribute-name>onfocus</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
+    </attribute>
 
-      <attribute>
+    <attribute>
         <description>
           Position of this element in the tabbing order
           for the current document.  This value must be
@@ -73,7 +73,7 @@
         <attribute-name>tabindex</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+            <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
-
+    </attribute>
+</root>
