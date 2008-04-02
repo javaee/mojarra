@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.1 2003/10/27 04:14:14 craigmcc Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.2 2003/12/17 15:14:14 rkitain Exp $
  */
 
 /*
@@ -61,8 +61,7 @@ public class ValueChangeListenerTag extends TagSupport {
      */
     private String type = null;
     private String type_ = null;
-
-
+    
     /**
      * <p>Set the fully qualified class name of the
      * {@link ValueChangeListener} instance to be created.
@@ -71,7 +70,7 @@ public class ValueChangeListenerTag extends TagSupport {
      */
     public void setType(String type) {
 
-        this.type = type;
+        this.type_ = type;
 
     }
 
@@ -89,9 +88,7 @@ public class ValueChangeListenerTag extends TagSupport {
      * @exception JspException if a JSP error occurs
      */
     public int doStartTag() throws JspException {
-        // evaluate any expressions that we were passed
-        evaluateExpressions();
-
+        
         // Locate our parent UIComponentTag
         UIComponentTag tag =
             UIComponentTag.getParentUIComponentTag(pageContext);
@@ -104,16 +101,19 @@ public class ValueChangeListenerTag extends TagSupport {
             return (SKIP_BODY);
         }
 
+        // evaluate any VB expression that we were passed
+        type = (String)Util.evaluateVBExpression(type_);
+        
         // Create and register an instance with the appropriate component
-        //We need to cast here because addValueChangeListener
-        //method does not apply to al components (it is not a method on
-        //UIComponent/UIComponentBase).
-
         ValueChangeListener handler = createValueChangeListener();
-        UIComponent component = tag.getComponent();
+       
+        UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
+        // We need to cast here because addValueChangeListener
+        // method does not apply to al components (it is not a method on
+        // UIComponent/UIComponentBase).
         if (component instanceof UIInput) {
             ((UIInput)component).addValueChangeListener(handler);
         }
@@ -152,13 +152,6 @@ public class ValueChangeListenerTag extends TagSupport {
             throw new JspException(e);
         }
 
-    }
-
-    /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
-        if (type_ != null) {
-            type = Util.evaluateElExpression(type_, pageContext);
- 	}
     }
 
 }

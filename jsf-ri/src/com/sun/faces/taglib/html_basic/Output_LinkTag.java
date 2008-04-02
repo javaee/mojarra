@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LinkTag.java,v 1.2 2003/11/09 05:42:03 eburns Exp $
+ * $Id: Output_LinkTag.java,v 1.3 2003/12/17 15:14:10 rkitain Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
 package com.sun.faces.taglib.html_basic;
 
 
-import org.mozilla.util.ParameterCheck;
+
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
@@ -69,8 +69,8 @@ public class Output_LinkTag extends BaseComponentBodyTag
 
 
 
-    protected void overrideProperties(UIComponent component) {
-	super.overrideProperties(component);
+    protected void setProperties(UIComponent component) {
+	super.setProperties(component);
 	UIOutput link = (UIOutput) component;
         // set HTML 4. attributes.
         if (shape != null) {

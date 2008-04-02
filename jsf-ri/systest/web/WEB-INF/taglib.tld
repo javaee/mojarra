@@ -88,7 +88,7 @@
     </description>
 
     <attribute>
-      <name>componentRef</name>
+      <name>binding</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -145,7 +145,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>componentRef</name>
+      <name>binding</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>

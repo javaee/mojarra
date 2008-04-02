@@ -1,5 +1,5 @@
 /*
- * $Id: TestConfigListener.java,v 1.1 2003/09/12 19:48:47 rkitain Exp $
+ * $Id: TestConfigListener.java,v 1.2 2003/12/17 15:15:10 rkitain Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.servlet.ServletContext;
 import javax.faces.component.UIComponent;
 
 import org.apache.cactus.ServletTestCase;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  * <p>Unit tests for Configuration File processing.</p>

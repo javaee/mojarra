@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.10 2003/10/28 04:29:57 eburns Exp $
+ * $Id: HtmlResponseWriter.java,v 1.11 2003/12/17 15:13:55 rkitain Exp $
  */
 
 /*
@@ -121,12 +121,14 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @exception IOException if an input/output error occurs.
      */
     public void flush() throws IOException {
-	// NOTE: Internal buffer's contents (the ivar "buffer") is written to the
-	// contained writer in the HtmlUtils class - see HtmlUtils.flushBuffer
-	// method;  Buffering is done during writeAttribute/writeText - otherwise,
-	// output is written directly to the writer (ex: writer.write(....)..
+	// NOTE: Internal buffer's contents (the ivar "buffer") is
+	// written to the contained writer in the HtmlUtils class - see
+	// HtmlUtils.flushBuffer method; Buffering is done during
+	// writeAttribute/writeText - otherwise, output is written
+	// directly to the writer (ex: writer.write(....)..
 	//
-        writer.flush();
+        // close any previously started element, if necessary
+        closeStartIfNecessary();
     }
 
     /**
@@ -149,6 +151,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 	    throw new NullPointerException(Util.getExceptionMessage(
 	        Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
+	closeStartIfNecessary();
         char firstChar = name.charAt(0);
         if ((firstChar == 's') ||
             (firstChar == 'S')) {
@@ -158,8 +161,6 @@ public class HtmlResponseWriter extends ResponseWriter {
             }
         }
         
-        // close any previously started element, if necessary
-        closeStartIfNecessary();
         
         //PENDING (horwat) using String as a result of Tomcat char writer
         //         ArrayIndexOutOfBoundsException (3584)
@@ -207,14 +208,6 @@ public class HtmlResponseWriter extends ResponseWriter {
         //         ArrayIndexOutOfBoundsException (3584)
         writer.write(">");
     }
-
-    public void closeStartTag(UIComponent component) throws IOException {
-	if (closeStart) {
-            writer.write(">");
-            closeStart = false;
-	}
-    }
-
 
     /**
      * <p>Write a properly escaped attribute name and the corresponding 
@@ -486,26 +479,32 @@ public class HtmlResponseWriter extends ResponseWriter {
      */
 
     public void close() throws IOException {
+	closeStartIfNecessary();
         writer.close();
     }
 
     public void write(char cbuf) throws IOException {
+	closeStartIfNecessary();
         writer.write(cbuf);
     }
 
     public void write(char[] cbuf, int off, int len) throws IOException {
+	closeStartIfNecessary();
         writer.write(cbuf, off, len);
     }
 
     public void write(int c) throws IOException {
+	closeStartIfNecessary();
         writer.write(c);
     }
 
     public void write(String str) throws IOException {
+	closeStartIfNecessary();
         writer.write(str);
     }
     
     public void write(String str, int off, int len) throws IOException {
+	closeStartIfNecessary();
         writer.write(str, off, len);
     }
 }

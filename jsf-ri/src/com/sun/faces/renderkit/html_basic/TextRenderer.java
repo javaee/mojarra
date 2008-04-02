@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.57 2003/11/10 01:08:55 jvisvanathan Exp $
+ * $Id: TextRenderer.java,v 1.58 2003/12/17 15:13:57 rkitain Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  * <B>TextRenderer</B> is a class that renders the current value of 
@@ -85,7 +85,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
         UIComponent component, String currentValue) throws IOException {
         
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
 	boolean isOutput = false;
 
 	String 

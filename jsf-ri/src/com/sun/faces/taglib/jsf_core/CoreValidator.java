@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.5 2003/08/19 21:40:52 horwat Exp $
+ * $Id: CoreValidator.java,v 1.6 2003/12/17 15:14:13 rkitain Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  * <p>A TagLibrary Validator class to allow a TLD to mandate that
@@ -91,7 +91,7 @@ public class CoreValidator extends FacesValidator {
      */
     protected String getFailureMessage(String prefix, String uri) {
 	// we should only get called if this Validator failed
-	Assert.assert_it(failed);
+	Util.doAssert(failed);
         StringBuffer result = new StringBuffer();
 
         if (idTagParser.hasFailed()) {

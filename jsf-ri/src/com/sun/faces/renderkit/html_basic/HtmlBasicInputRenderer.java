@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.14 2003/11/20 01:35:17 eburns Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.15 2003/12/17 15:13:53 rkitain Exp $
  */
 
 /*
@@ -96,10 +96,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             // conversion, acquire an appropriate converter instance.
         
             try {
-                ApplicationFactory aFactory =
-                    (ApplicationFactory)FactoryFinder.getFactory
-                     (FactoryFinder.APPLICATION_FACTORY);
-                Application application = aFactory.getApplication();
+                Application application = context.getApplication();
                 converter = application.createConverter(converterType);
             } catch (Exception e) {
                 return (null);

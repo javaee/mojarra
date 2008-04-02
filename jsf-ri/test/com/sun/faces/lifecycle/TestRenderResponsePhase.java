@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.73 2003/10/30 22:15:45 jvisvanathan Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.74 2003/12/17 15:15:27 rkitain Exp $
  */
 
 /*
@@ -14,8 +14,8 @@ package com.sun.faces.lifecycle;
 import org.apache.cactus.WebRequest;
 import org.apache.cactus.JspTestCase;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -49,7 +49,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.73 2003/10/30 22:15:45 jvisvanathan Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.74 2003/12/17 15:15:27 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

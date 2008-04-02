@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: command_link_test.jsp,v 1.5 2003/11/10 01:08:57 jvisvanathan Exp $ --%>
+<%-- $Id: command_link_test.jsp,v 1.6 2003/12/17 15:14:56 rkitain Exp $ --%>
 
 <html>
 <head>
@@ -18,7 +18,7 @@
         <h:command_link id="hyperlink01"><f:verbatim>My Link</f:verbatim></h:command_link>
         <h:command_link id="hyperlink02"><h:output_text value="#{test1.stringProperty}"/></h:command_link>
         <h:command_link id="hyperlink03"><h:output_text value="#{messageResources.hyperlink_key}"/></h:command_link>
-        <h:command_link id="hyperlink04"><f:verbatim><img src="duke.gif" /></f:verbatim></h:command_link>
+        <h:command_link id="hyperlink04"><f:verbatim escape="false"><img src="duke.gif" /></f:verbatim></h:command_link>
         <h:command_link id="hyperlink05"><h:graphic_image value="#{messageResources.image_key}"/></h:command_link>
         <h:command_link id="hyperlink06"><f:verbatim>Paramter Link</f:verbatim>
             <f:parameter name="param1" value="value1"/>

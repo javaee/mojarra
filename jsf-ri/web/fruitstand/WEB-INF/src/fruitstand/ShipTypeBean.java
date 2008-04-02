@@ -1,5 +1,5 @@
 /*
- * $Id: ShipTypeBean.java,v 1.2 2003/02/20 22:50:46 ofung Exp $
+ * $Id: ShipTypeBean.java,v 1.3 2003/12/17 15:15:49 rkitain Exp $
  */
 
 /*
@@ -10,9 +10,9 @@
 // ShipTypeBean.java
 package fruitstand;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -24,7 +24,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ShipTypeBean.java,v 1.2 2003/02/20 22:50:46 ofung Exp $
+ * @version $Id: ShipTypeBean.java,v 1.3 2003/12/17 15:15:49 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -58,7 +58,7 @@ public class ShipTypeBean extends Object
 public ShipTypeBean()
 {
     super();
-    // ParameterCheck.nonNull();
+    // Util.parameterNonNull();
     this.init();
 }
 

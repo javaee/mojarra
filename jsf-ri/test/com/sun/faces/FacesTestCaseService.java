@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.31 2003/10/21 22:39:43 jvisvanathan Exp $
+ * $Id: FacesTestCaseService.java,v 1.32 2003/12/17 15:14:57 rkitain Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigListener;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -55,7 +55,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.31 2003/10/21 22:39:43 jvisvanathan Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.32 2003/12/17 15:14:57 rkitain Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -144,14 +144,14 @@ public void setUp()
     
     facesContextFactory = (FacesContextFactory) 
 	FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-    Assert.assert_it(null != facesContextFactory);
+    Util.doAssert(null != facesContextFactory);
 
     // Since we run using tomcat's deploy targets, we must obtain the
     // absolute path to where we are to write our output files.
     String testRootDir = 
 	facesTestCase.getConfig().getServletContext().getInitParameter("testRootDir");
     
-    Assert.assert_it(null != testRootDir);
+    Util.doAssert(null != testRootDir);
     System.setProperty("testRootDir", testRootDir);
     
     // See if the testcase wants to have its output sent to a file.
@@ -163,9 +163,9 @@ public void setUp()
 
     LifecycleFactory factory = (LifecycleFactory)
 	FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-    Assert.assert_it(null != factory);
+    Util.doAssert(null != factory);
     lifecycle = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-    Assert.assert_it(null != lifecycle);
+    Util.doAssert(null != lifecycle);
 
 
     facesContext = 
@@ -173,7 +173,7 @@ public void setUp()
 					    getServletContext(),
 					    facesTestCase.getRequest(), 
 					    response, lifecycle);
-    Assert.assert_it(null != facesContext);
+    Util.doAssert(null != facesContext);
         
     if (facesTestCase.sendWriterToFile()){
         ResponseWriter responseWriter = new FileOutputResponseWriter();

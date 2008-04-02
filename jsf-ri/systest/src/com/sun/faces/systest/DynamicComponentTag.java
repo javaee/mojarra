@@ -1,5 +1,5 @@
 /*
- * $Id: DynamicComponentTag.java,v 1.1 2003/09/24 23:58:55 craigmcc Exp $
+ * $Id: DynamicComponentTag.java,v 1.2 2003/12/17 15:14:31 rkitain Exp $
  */
 
 /*
@@ -46,8 +46,8 @@ public class DynamicComponentTag extends UIComponentTag {
     // ------------------------------------------------------- Protected Methods
 
 
-    protected void overrideProperties(UIComponent component) {
-        super.overrideProperties(component);
+    protected void setProperties(UIComponent component) {
+        super.setProperties(component);
     }
 
 

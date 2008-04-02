@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.10 2003/10/13 21:50:47 eburns Exp $
+ * $Id: ManagedBeanFactory.java,v 1.11 2003/12/17 15:13:31 rkitain Exp $
  */
 
 /*
@@ -69,9 +69,11 @@ public class ManagedBeanFactory extends Object {
     }
 
     public void setConfigManagedBean(ConfigManagedBean newBean) {
-        //ConfigManagedBean clone method implemented to return deep copy
-        this.managedBean = (ConfigManagedBean) newBean.clone();
-        scope = null;
+	synchronized (this) {
+	    //ConfigManagedBean clone method implemented to return deep copy
+	    this.managedBean = (ConfigManagedBean) newBean.clone();
+	    scope = null;
+	}
     }
 
     /**
@@ -201,8 +203,8 @@ public class ManagedBeanFactory extends Object {
 		
                 //find properties and set them on the bean
                 if (cmpv.getValueCategory() == 
-                    ConfigManagedBeanPropertyValue.VALUE_REF) {
-                    value = getValueRef((String)cmpv.getValue());
+                    ConfigManagedBeanPropertyValue.VALUE_BINDING) {
+                    value = evaluateValueBindingGet((String)cmpv.getValue());
                 } else {
                     value = cmpv.getValue();
                 }
@@ -248,8 +250,7 @@ public class ManagedBeanFactory extends Object {
      * they are listed, converting values defined by nested
      * &lt;value&gt; elements to the type defined by
      * &lt;value-class&gt;. If a &lt;value-class&gt; is not defined, use
-     * the value as-is (i.e., as a java.lang.String). Add values defined
-     * by &lt;value-ref&gt; as-is, and add null for each
+     * the value as-is (i.e., as a java.lang.String). Add null for each
      * &lt;null-value&gt; element.</p></li>
      *
      * <li><p> If an array was returned in step 2), create a
@@ -409,8 +410,8 @@ public class ManagedBeanFactory extends Object {
 	     i < size; i++) {
 	    cmpv = (ConfigManagedBeanPropertyValue)valuesFromConfig.get(i);
 	    if (cmpv.getValueCategory() == 
-		ConfigManagedBeanPropertyValue.VALUE_REF) {
-		value = getValueRef((String)cmpv.getValue());
+		ConfigManagedBeanPropertyValue.VALUE_BINDING) {
+		value = evaluateValueBindingGet((String)cmpv.getValue());
 	    } else if (cmpv.getValueCategory() == 
 		       ConfigManagedBeanPropertyValue.NULL_VALUE) {
 		value = null;
@@ -441,8 +442,7 @@ public class ManagedBeanFactory extends Object {
      * &lt;value&gt; elements to the type defined by
      * &lt;value-class&gt;. If &lt;key-class&gt; and/or
      * &lt;value-class&gt; are not defined, use the value as-is (i.e.,
-     * as a java.lang.String). Add entry values defined by
-     * &lt;value-ref&gt; as-is, and add null for each &lt;null-value&gt;
+     * as a java.lang.String). Add null for each &lt;null-value&gt;
      * element.</p></li>
      *
      * <li><p>If a new java.util.Map was created in step 2), set the
@@ -503,8 +503,8 @@ public class ManagedBeanFactory extends Object {
 
 	for (int i = 0, len = valuesFromConfig.size(); i < len; i++) {
 	    cmpm = (ConfigManagedPropertyMap) valuesFromConfig.get(i);
-	    if (cmpm.getValueCategory() == ConfigManagedPropertyMap.VALUE_REF){
-		value = getValueRef((String)cmpm.getValue());
+	    if (cmpm.getValueCategory() == ConfigManagedPropertyMap.VALUE_BINDING){
+		value = evaluateValueBindingGet((String)cmpm.getValue());
 	    }
 	    else if (cmpm.getValueCategory() == 
 		     ConfigManagedPropertyMap.NULL_VALUE) {
@@ -589,8 +589,8 @@ public class ManagedBeanFactory extends Object {
         return scope;
     }
 
-    private Object getValueRef(String value) throws FacesException {
-        Object valueRef = null;
+    private Object evaluateValueBindingGet(String value) throws FacesException {
+        Object valueBinding = null;
 
         if (!hasValidLifespan(value)) {
             Object[] obj = new Object[1];
@@ -601,7 +601,7 @@ public class ManagedBeanFactory extends Object {
         ValueBinding binding = Util.getValueBinding(value);
         if (binding != null) {
             try {
-                valueRef = binding.getValue(FacesContext.getCurrentInstance());
+                valueBinding = binding.getValue(FacesContext.getCurrentInstance());
             } catch (PropertyNotFoundException ex) {  
                 Object[] obj = new Object[1];
                 obj[0] = value;
@@ -612,7 +612,7 @@ public class ManagedBeanFactory extends Object {
             obj[0] = value;
             throw new FacesException(Util.getExceptionMessage(Util.ERROR_GETTING_VALUE_BINDING_ERROR_MESSAGE_ID, obj));
         }
-        return valueRef;
+        return valueBinding;
     }
 
     private boolean hasValidLifespan(String value) {
@@ -661,7 +661,7 @@ public class ManagedBeanFactory extends Object {
         //the managed bean is required to be in either "request", "session",
         //"application", or "none" scopes. One of the previous decision
         //statements must be true.
-        org.mozilla.util.Assert.assert_it(false);
+        Util.doAssert(false);
         return false;
     }
     /**

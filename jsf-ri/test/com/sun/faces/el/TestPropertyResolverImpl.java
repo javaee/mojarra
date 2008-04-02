@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.6 2003/10/02 06:50:13 jvisvanathan Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.7 2003/12/17 15:15:19 rkitain Exp $
  */
 
 /*
@@ -11,15 +11,16 @@
 
 package com.sun.faces.el;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
 
 import org.apache.cactus.WebRequest;
 
+import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
@@ -36,7 +37,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.6 2003/10/02 06:50:13 jvisvanathan Exp $
+ * @version $Id: TestPropertyResolverImpl.java,v 1.7 2003/12/17 15:15:19 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -155,6 +156,14 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
             ; // Expected result
         }
             
+        // ---------- Should throw EvaluationException
+	
+	try {
+	    value = resolver.getValue(bean, "nullStringProperty"); 
+            fail("Should have thrown EvaluationException");
+	} catch (EvaluationException e) {
+	    ; // Expected result
+	}
 
         // ---------- Should Throw PropertyNotFoundException
 

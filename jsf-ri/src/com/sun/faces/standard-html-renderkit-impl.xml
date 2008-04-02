@@ -5,7 +5,6 @@
 
 <!ENTITY button-renderer-class 'com.sun.faces.renderkit.html_basic.ButtonRenderer'>
 <!ENTITY checkbox-renderer-class 'com.sun.faces.renderkit.html_basic.CheckboxRenderer'>
-<!ENTITY errors-renderer-class 'com.sun.faces.renderkit.html_basic.ErrorsRenderer'>
 <!ENTITY form-renderer-class 'com.sun.faces.renderkit.html_basic.FormRenderer'>
 <!ENTITY grid-renderer-class 'com.sun.faces.renderkit.html_basic.GridRenderer'>
 <!ENTITY group-renderer-class 'com.sun.faces.renderkit.html_basic.GroupRenderer'>

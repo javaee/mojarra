@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: verbatim_test.jsp,v 1.4 2003/11/10 02:40:32 eburns Exp $ --%>
+<%-- $Id: verbatim_test.jsp,v 1.5 2003/12/17 15:14:41 rkitain Exp $ --%>
 <html>
   <head>
     <title>Test of the Verbatim Tag</title>
@@ -26,7 +26,7 @@
 
 <p>
 
-    <f:verbatim>This text must be echoed verbatim <B>INCLUDING</B> any
+    <f:verbatim escape="false">This text must be echoed verbatim <B>INCLUDING</B> any
     <I>MARKUP</I>.  The angle brackets must be un-escaped.
     </f:verbatim>
 

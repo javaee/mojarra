@@ -15,7 +15,7 @@
   Application appl = afactory.getApplication();
 
   // Acquire a ValueBinding for the bean to be created
-  ValueBinding valueBinding = appl.getValueBinding("test1");
+  ValueBinding valueBinding = appl.createValueBinding("#{test1}");
   if (valueBinding == null) {
     out.println("/managed01.jsp FAILED - No ValueBinding returned");
     return;

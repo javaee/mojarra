@@ -17,6 +17,11 @@
         <param-value>server</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>javax.faces.application.CONFIG_FILES</param-name>
+        <param-value>WEB-INF/init-faces-config.xml</param-value>
+    </context-param>
+
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

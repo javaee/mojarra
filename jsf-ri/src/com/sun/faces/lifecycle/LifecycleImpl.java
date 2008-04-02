@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.38 2003/10/30 23:07:35 craigmcc Exp $
+ * $Id: LifecycleImpl.java,v 1.39 2003/12/17 15:13:43 rkitain Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ package com.sun.faces.lifecycle;
 import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ViewHandlerImpl;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.context.FacesContext;
@@ -45,7 +45,7 @@ import org.apache.commons.logging.LogFactory;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.38 2003/10/30 23:07:35 craigmcc Exp $
+ * @version $Id: LifecycleImpl.java,v 1.39 2003/12/17 15:13:43 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -114,25 +114,28 @@ public class LifecycleImpl extends Lifecycle
         phaseWrappers.add(new PhaseWrapper(new UpdateModelValuesPhase()));
         phaseWrappers.add(new PhaseWrapper(new InvokeApplicationPhase()));
         phaseWrappers.add(new PhaseWrapper(new RenderResponsePhase()));
+        if (log.isDebugEnabled()) {
+            log.debug("Created lifecycle Phases");
+        }
     }
 
     protected Phase getRenderPhase(FacesContext context) throws FacesException {
-        Assert.assert_it(null != phaseWrappers);
+        Util.doAssert(null != phaseWrappers);
         Phase renderPhase = null;
         PhaseWrapper wrapper = null;
   
         Iterator it = phaseWrappers.iterator();
         while ( it.hasNext() ) {
             wrapper = (PhaseWrapper) it.next();
-            Assert.assert_it(wrapper != null);
+            Util.doAssert(wrapper != null);
             renderPhase = wrapper.instance;
-            Assert.assert_it(renderPhase != null);
+            Util.doAssert(renderPhase != null);
             if ((renderPhase).getId() == PhaseId.RENDER_RESPONSE) {
                 break;
             }
         }
     
-        Assert.assert_it(null != renderPhase);
+        Util.doAssert(null != renderPhase);
 	return renderPhase;
     }   
 
@@ -146,23 +149,29 @@ public class LifecycleImpl extends Lifecycle
         Phase curPhase = null;
         Iterator phaseIter = phaseWrappers.iterator();
         int curPhaseId = 0;
-        Assert.assert_it(null != phaseIter);
+        Util.doAssert(null != phaseIter);
 
         if (log.isDebugEnabled()) {
-            log.debug("execute() begin");
+            log.debug("Begin executing lifecycle phases");
         }
 
         while (phaseIter.hasNext()) {
 	    wrapper = (PhaseWrapper)phaseIter.next();
 	    curPhase = wrapper.instance;
             if (log.isTraceEnabled()) {
-                log.trace("execute(phaseId=" + curPhase + ")");
+                log.trace("execute(phaseId=" + curPhase.getId().toString() + ")");
             }
 
 	    maybeCallListeners(curPhase, BEFORE);
 
             // Execute the current phase
+            if (log.isDebugEnabled()) {
+                log.trace("Begin execute(phaseId=" + curPhase.getId().toString() + ")");
+            }
             curPhase.execute(context);
+            if (log.isDebugEnabled()) {
+                log.trace("End execute(phaseId=" + curPhase.getId().toString() + ")");
+            }
 
             // Go to Render Phase?
             if ((curPhase.getId() == PhaseId.RESTORE_VIEW) && 
@@ -177,15 +186,15 @@ public class LifecycleImpl extends Lifecycle
 
             if (context.getResponseComplete()) {
 
-                if (log.isTraceEnabled()) {
-                    log.trace("Response complete was called");
+                if (log.isDebugEnabled()) {
+                    log.debug("Response complete");
                 }
 		maybeCallListeners(curPhase, AFTER);
                 return;
             } else if (context.getRenderResponse()) {
 
-                if (log.isTraceEnabled()) {
-                    log.trace("Render response was called");
+                if (log.isDebugEnabled()) {
+                    log.debug("Skipping to RenderResponsePhase");
                 }
 
 		// If we're skipping to RENDER_RESPONSE, be sure to call
@@ -211,7 +220,7 @@ public class LifecycleImpl extends Lifecycle
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("execute() end");
+            log.debug("End executing lifecycle phases");
         }
 
 
@@ -229,6 +238,9 @@ public class LifecycleImpl extends Lifecycle
         if (request instanceof HttpServletRequest) {
             if ("GET".equals(((HttpServletRequest)request).getMethod())) {
                 //check for request parameters
+                if (log.isTraceEnabled()) {
+                    log.trace("Request Method: GET");
+                }
                 Iterator paramNames = context.getExternalContext().
                     getRequestParameterNames();
                 if (paramNames.hasNext()) {
@@ -238,6 +250,9 @@ public class LifecycleImpl extends Lifecycle
             } else if ("POST".equals(((HttpServletRequest)request).getMethod()) ||
                 "PUT".equals(((HttpServletRequest)request).getMethod())) {
                 //we have to assume there is post data
+                if (log.isTraceEnabled()) {
+                    log.trace("Request Method: POST/PUT");
+                }
                 return true;
             }
         } else if (request instanceof ServletRequest) {
@@ -264,6 +279,9 @@ public class LifecycleImpl extends Lifecycle
 	    }
 	    phaseListeners.add(listener);
 	}
+        if (log.isDebugEnabled()) {
+            log.debug("Added PhaseListener " + listener.getPhaseId().toString());
+        }
     }
 
     public PhaseListener[] getPhaseListeners() {
@@ -287,6 +305,9 @@ public class LifecycleImpl extends Lifecycle
 		phaseListeners.remove(listener);
 	    }
 	}
+        if (log.isDebugEnabled()) {
+            log.debug("Removed PhaseListener " + listener.getPhaseId().toString());
+        }
     }
 
     //
@@ -302,10 +323,10 @@ public class LifecycleImpl extends Lifecycle
 	if (null == phaseListeners) {
 	    return;
 	}
-	Assert.assert_it(null != curPhase);
-	Assert.assert_it(listenerMethod == BEFORE || listenerMethod == AFTER);
+	Util.doAssert(null != curPhase);
+	Util.doAssert(listenerMethod == BEFORE || listenerMethod == AFTER);
 	PhaseEvent event = new PhaseEvent(FacesContext.getCurrentInstance(),
-					  curPhase.getId());
+					  curPhase.getId(), this);
 	
 	synchronized(lock) {
 	    Iterator listenerIter = phaseListeners.iterator();
@@ -316,13 +337,29 @@ public class LifecycleImpl extends Lifecycle
 		    PhaseId.ANY_PHASE == curListener.getPhaseId()) {
 		    switch (listenerMethod) {
 		    case BEFORE:
+                        if (log.isTraceEnabled()) {
+                            log.trace("Begin call to beforePhase on PhaseListener in " + 
+                                curListener.getPhaseId().toString());
+                        }
 			curListener.beforePhase(event);
+                        if (log.isTraceEnabled()) {
+                            log.trace("End call to beforePhase on PhaseListener in " + 
+                                curListener.getPhaseId().toString());
+                        }
 			break;
 		    case AFTER:
+                        if (log.isTraceEnabled()) {
+                            log.trace("Begin call to afterPhase on PhaseListener in " + 
+                                curListener.getPhaseId().toString());
+                        }
 			curListener.afterPhase(event);
+                        if (log.isTraceEnabled()) {
+                            log.trace("End call to afterPhase on PhaseListener in " + 
+                                curListener.getPhaseId().toString());
+                        }
 			break;
 		    default:
-			Assert.assert_it(false);
+			Util.doAssert(false);
 			break;
 		    }
 		}

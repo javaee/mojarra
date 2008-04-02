@@ -1,8 +1,8 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20031023
-jsf-api-spec for this implementation: <JSF_20031023.pdf>
+jsf-api cvs tag for this implementation: JSF_API_20031110_BETA
+jsf-api-spec for this implementation: <JSF_SPEC_PFD.pdf>
 
 Installation Notes
 ==================
@@ -21,997 +21,403 @@ distribution in your WEB-INF/lib directory in your webapp.
 Major changes/features in this release:
 =======================================
 
-SECTION: API Changes
+There have been many changes since the EA4 release of JavaServer
+technology. Here are the major ones that really stand out.  Section
+numbers refer to the spec.
 
-* [NEW] Add an optional <redirect/> element that, if present, causes the
-  default NavigationHandler to perform an HTTP redirect to the URL of the
-  new view id, rather than the normal ViewHandler processing.  Note that
-  this can only be done in a servlet-hosted application; portlets are not
-  allowed to perform redirects.
+UIComponent Hierarchy Shuffling
+===============================
 
-  RI IMPACT:
+The component hierararchy has changed a bit, again.
 
-  * Modify configuration classes that store <navigation-case> information
-    to include a boolean "redirect" property.
+Please see Chapter 3 "User Interface Component Model". Section 4.1
+"Standard User Interface Components" includes a diagram of the component
+package.  
 
-  * Modify NavigationHandlerImpl such that, if the "redirect" property
-    is set on the selected <navigation-case>, then do the following:
-    - Calculate the URL corresponding to the new view id by calling
-      ViewHandler.getViewIdPath(), and prefix it with the context path.
-    - Call ExternalContext.getResponse() and cast to HttpServletResponse.
-    - Call response.sendRedirect() to the new URL
-    - Call FacesContext.responseComplete() to indicate that the
-      response has already been created.
+Note that we have introduced five "behaviorial" interfaces as described
+in this table:
 
-  NOTE:  If we ever extend the RI to support portlets directly, we'll need
-  to make the above behavior conditional on what environment we're running in.
+interface name	behavioral purpose
+ActionSource	implemented by components that can emit ActionEvents
 
-* [NEW] "rendered" property and phase processing
+NamingContainer implemented by components that require all their
+                children to be named uniquely
 
-  Changes to UIComponentBase:
-  * Add protected static isRendered(UIComponent component) that returns
-    false if the component's own rendered property is false, or the
-    component is nested in a parent component that has rendersChildren=true
-    and rendered=false.
-  * Modify the processXxx() methods to not call the local component
-    methods if the new static isRendered() method returns false for this
-    component.
+StateHolder	implemented by components and other objects that need to 
+                save and restore their state between requests
 
-  The net effect of these changes is to skip all processing in Apply Request
-  Values ... Render Response for components whose "rendered" property is false,
-  or who live inside a parent component (like UIPanel) whose "rendered"
-  property is false.
+ValueHolder	implemented by components that have a value
 
-  RI IMPACT:  Verify that tests still operate correctly.  Probably nothing
-  being tested in this regard.
+ConvertibleValueHolder	implemented by component that have a value that 
+                        is subject to type conversion
 
-  DEMO IMPACT:  We should modify the tabbed panes demo to use "rendered"
-  as the mechanism by which a particular pane is to be displayed or not.
-  This will reduce the complexity of the Renderer considerably.
 
-  UIComponent:  Updated the JavaDocs for processDecodes(), processValidators(),
-  and processUpdates() to indicate that calling the corresponding local method
-  (decode(), validate(), or updateModel()) is skipped if this component is not
-  actually rendered.
+These interfaces encapsulate the various behaviors of the classes.
 
-  Document the fact that the local decode(), validate(), and updateModel()
-  methods are called only if the current component was actually rendered
-  (i.e. component's "rendered" property is "true", and not nested in a parent
-  whose "rendersChildren" property is true but whose "rendered" property
-  is "false").
+Bypass validation and model updates
+===================================
 
-* [NEW] SelectModel (Side Issue)
+It is now possible to cause the page submit to bypass the validation and
+model update phases by setting the "immediate" property of UICommand
+which causes the page submit to be true. This is useful for situations
+such as "cancel" buttons.
 
-  M src/javax/faces/model/SelectItem.java
+Please see Section 3.2.1.1 "Properties".
 
-  - Convert into a full-fledged JavaBean by adding a zero-args constructor
-    and property setters.
+Concrete HTML component classes
+===============================
 
-  - Add a "disabled" property that can be used to make this option visible
-    to users, but not selectable.
+To enable tools to deliver "component pallete" type interfaces, a new
+package of UIComponent subclasses has been introduced. These componets
+simply combine the notion of component and renderer for all the
+supported combinations of component and renderer.
 
-  - Add additional convenience constructors.
+Please Section 8.6 "The concrete HTML component classes".
 
-  A src/javax/faces/model/SelectItemGroup.java
+Flexible way to map to FacesServlet
+===============================
 
-  - New subclass of SelectItem that inclues a "selectItems" property, for use
-    in constructing cascading submenus.
+It is no longer required to use /faces/* as the url-mapping for faces
+webapps. You can now use any prefix or extension mapping.
 
+Please see Section 10.1.2 "Servlet Mapping".
 
-  RI IMPACTS:
+ResopnseWriter changes
+======================
 
-  Renderers for <h:selectone_radio> and <h:selectmany_checkbox>:
-  - Pay attention to the disabled property as radio buttons and checkboxes
-    are rendered
-  - When a SelectItemGroup instance is encountered, render just the label
-    of this group, followed by the optoins based on the "selectItems" property
-    of this instance
+Most of the methods on the ResponseWriter class now take an additonal
+argument that will allow tool vendors to gain information at design time
+about the correspondence between page elements and UIComponent
+instances.
 
-  Renderers for <h:selectone_listbox>, <h:selectone_menu>,
-  <h:selectmany_listbox>, and <h:selectmany_menu>:
-  - Pay attention to the disabled property as <option> elements are created
-  - When a SelectGroupInstance is encountered, render an <optgroup> using
-    the label from this instance.  Do this only at the top level (i.e. do not
-    nest <optgroup> elements), because nesting is disallowed in HTML 4.01.
+Please see Section 6.1.6 "ResponseStream and ResponseWriter".
 
+New value binding mechanism
+===========================
 
-  DEMO IMPACTS:
+Nearly all component properties can now be either a literal value, or
+get their value from a ValueBinding. This enables lots of flexibility
+for configuring your components. Here’s a JSP example:
 
-  Consider remodelling the "menu" and "tree" examples to use the revised
-  SelectItem and SelectItemGroup classes as base classes for the graph nodes.
+<h:input_text value="default value" />
 
-* [NEW] SelectModel
+<h:output_text value="#{requestScope.username}" />
 
-  PENDING(Craig/Ed): Spec needs to be updated about selectitem and
-  selectitems tag moving to jsf-core tag library.
+<h:command_button value="#{localizedBundle.buyLabel}" />
 
-  selectitem and selectitems no longer support HTML 4x. attributes
-  except "disabled" added enabledClass and disabledClass selectone_radio
-  and selectmany_checkbox
+The first shows a literal value, the second looking into the scoped
+namespace with the requestScope implicit object, and the third using the
+cascading lookup mechanism to find a bean that answers to the name
+localizedBundle.
 
-* [NEW] SelectModel
+We no longer have two separate attributes, value and valueRef, just one
+value attribute that serves both purposes. We have also introduced a new
+delimiter syntax #{}. This was necessary to prevent the JSP 2.0 page
+engine from interpreting the expression before we it made sense to do
+so.
 
-  standard-html-renderkit.xml 
-  - remove SelectItem/SelectItems - these are now in "core" package
-  - remove "UI" component definitions - these are now in standard-component.xml
+Please see Section 5.1 "Value Binding Expressions".
 
-  M doc/standard-components.xml
-  M doc/standard-html-renderkit.xml
-    Made the following changes to RadioRenderer and SelectManyCheckboxList
-    Renderer.
-    - added disabledClass and enabledClass attributes.
-    - removed disbaled attribute.
+New method binding mechanism
+============================
 
+It is now possible to refer directly to a method in a JavaBean
+accessible in the scoped namespace for things like button press events,
+and value change events. The following attributes accept method binding
+expressions
 
-* Bug Fix
+action
 
-  SECTION: API Changes
+actionListener
 
-  M doc/standard-components.xml
+validate
 
-  - add value property to Graphic
+valueChangeListener
 
-  M doc/standard-html-renderkit.xml
+Please see Section 5.2 "Method Binding Expressions".
 
-  - add value property to GraphicImage
+Component reference mechanism
+=============================
 
-  SECTION: RI Changes
+It is now possible to have the components in the view reside as
+properties of an arbitrary JavaBean. This would be useful, combined with
+the aforementioned value and method binding mechanims, if you wanted to
+have a JavaBean that stands behind each page in your webapp. Here's a
+couple of JSP examples:
 
-  M conf/share/html_basic.tld
+  <h:selectone_menu styleClass="optionValue"
+                       binding="#{carstore.currentModel.engine}"/>
 
-  - Add value attribute to graphic_image.
+  <h:command_button binding="#{carstore.buyButton}"
+                     action="#{carstore.curBuyAction}"/>
 
-  - Add style and styleClass to panel_group
+Here we are saying that the actual UISelectOne instance that stands
+behind this menu widget in the page is returned by invoking the
+getEngine() method on the bean returned by evaluating the expression
+carstore.currentModel and that the actual UICommand component is
+returned from the getBuyButton() method of that same bean.  If the
+getter method returns null, the tag will create a component instance
+(as usual) and call your setter method.  With either alternative, you
+can now manipulate the component instance programmatically in your
+backing bean.
 
-  M src/com/sun/faces/renderkit/html_basic/ErrorsRenderer.java
-  M src/com/sun/faces/renderkit/html_basic/GroupRenderer.java
-  M src/com/sun/faces/renderkit/html_basic/LabelRenderer.java
-  M src/com/sun/faces/renderkit/html_basic/MessageRenderer.java
-  M src/com/sun/faces/renderkit/html_basic/TextRenderer.java
+Please see Section 3.1.3 "Component Reference Expressions".
 
-  - fix logic bug in style rendering.
+Maps and Lists in the faces-config file
+=======================================
 
-  M web/test/RenderResponse_correct
-  M web/test/TestRenderResponsePhase.jsp
+It is now possible to have java.util.Map and java.util.List entries
+directly as managed beans in the faces-config file. It is also possible
+to configure these entities with the existing configuration syntax.
 
-  - new golden file and testcase
+Please see Section 5.3.1.2 "Default VariableResolver Implementation".
 
+State Saving mechanism
+======================
 
+We provide automated saving of the component state between requests. The
+application author can choose to have the state saved in the client or
+on the server. The mechanism supports having multiple forms in the page,
+but having the state of the entire page be restored.
 
-* [TCK related changes]
+Please see Section 2.5.2 "State Management".
 
-  M src/javax/faces/component/UIViewRoot.java   
-    - Updated javadoc to be inline with impl.  If locale not     
-      explicitly set and getLocale() is called, return the default     
-      Locale of the VM. 
-  M src/javax/faces/convert/DateTimeConverter.java   
-    - Updated javadocs for {get,set}Locale to reflect the fact     
-      that the Locale is pulled from UIViewRoot.
-  M src/javax/faces/convert/NumberConverter.java   
-    - Updated javadocs for {get,set}Locale to reflect the fact     
-      that the Locale is pulled from UIViewRoot   
-    - Update impl of getLocale() to use the private getLocale()     
-      method.   
-    - Added static initialization block to initialize the value     
-      of currencyClass.   
-    - Added additional javadocs to describe the behavior WRT     
-      currencySymbol and currencyCode depending on the VM at     
-      runtime (pulled from the JSTL FormatSupport class)   
-    - renamed parseLocale to locale and updated assocated getters     
-      and setters since the locale can be used for parsing and     
-      formatting. 
-  M test/javax/faces/component/ConvertableValueHolderTestCaseBase.java
-    - Updated test to reflect API name changes in NumberConverter.
+Including JSP pages with <jsp:include> or <c:import>
+====================================================
 
-  M src/javax/faces/convert/NumberConverter.java  
-  - Make sure getAsObject()/getAsString() throw NPEs    
-    if context or component are null  
-  - Following DateTimeConverter:     
-    - throw IAE if both type and pattern are both null     
-    - Removed length check on pattern.  If user provided       
-      a zero-length String, pass it through and let       
-      error condition occur
-
-* [JSFA79] Add methods to retrieve registered event listeners and
-  validators.
-
-  Add methods on UIComponent, ActionSource, UIInput, and Lifecycle to return
-  the set of registered event listeners (of appropriate types) or Validators.
-
-  RI Impact:  See next checkin.
-
-  DEMO Impact:  None.
-
-* [JSFA80]
-
-  Javadoc changes for charset.
-
-* [JSFA80] Message and MessageResources: Part I: Removing MessageResources
-
-  Retro-active review.
-
-  This change-bundle removes MessageResources from the API.  It is
-  replaced by a package private utility class called MessageFactory.  The
-  source for MessageFactory lives in jsf-tools/template-src and is copied,
-  using ant filtering, into any package where it is needed.  This approach
-  allows us to avoid copy and paste of the code errors, while preserving
-  the utility offered by a MessageFactory class.
-
-  RI IMPACT: Included in this change bundle
-
-  DEMO IMPACT: move any custom messages to the bundle specified by the
-  message-bundle param.  This change will break some things in cardemo
-  until the change is made there.
-
-  SECTION: API Changes
-
-  M jsf-api/build.xml
-
-  - new
-
-  +  <target name=3D"copy.template.sources" depends=3D"prepare.generate"
-  +     description=3D"Copy template sources from ${jsf-tools.dir}/templa=
-  te-source">
-
-  M jsf-api/doc/web-facesconfig_1_0.dtd
-
-  - make it so the only remaining occurrence of the string "message" is i=
-  n
-    the new element message-bundle.  Remove all other message related
-    elements and attributes.
-
-  M jsf-api/src/javax/faces/application/Application.java
-
-  - remove MessageResources.
-
-  +    /**
-  +     * <p>Set the name of the <code>ResourceBundle</code> to be used f=
-  or
-  +     * faces messages.  The argument can either designate a
-  +     * <code>ResourceBundle</code> class, in which case the value of t=
-  he
-  +     * argument is a regular fully qualified classname. Alternatively,=
-
-  +     * it can designate a properties file in which case the name of th=
-  e
-  +     * properties file should be specified as the basename without the=
-
-  +     * .properties extension relative to the package and using "." as
-  +     * the separator. That is, "foo/bar/messages.properties" should be=
-
-  +     * specified as "foo.bar.messages".</p>
-  +     */=20
-  +    public abstract void setMessageBundle(String messageBundle);
-
-  M jsf-api/src/javax/faces/application/Message.java
-
-  - new constant
-
-  +    public static final String FACES_MESSAGES =3D "javax.faces.Message=
-  s";
-
-  R jsf-api/src/javax/faces/application/MessageResources.java
-
-  - remove.
-
-  M jsf-api/src/javax/faces/component/UIInput.java
-  M jsf-api/src/javax/faces/component/UISelectMany.java
-  M jsf-api/src/javax/faces/component/UISelectOne.java
-  M jsf-api/src/javax/faces/validator/DoubleRangeValidator.java
-  M jsf-api/src/javax/faces/validator/LengthValidator.java
-  M jsf-api/src/javax/faces/validator/LongRangeValidator.java
-
-  - leverage the new MessageFactory package private class.
-
-  M jsf-api/src/javax/faces/validator/Validator.java
-
-  - new home for the NOT_IN_RANGE_MESSAGE_ID
-
-  R jsf-api/src/javax/faces/validator/ValidatorMessages.java
-
-  - no longer need this with advent of package private MessageFactory
-
-  A jsf-api/test/javax/faces/Messages.properties
-
-  - Make the tests work.=20
-
-  M jsf-api/test/javax/faces/mock/MockApplication.java
-
-  - no more addMessage.
-
-  R jsf-api/test/javax/faces/mock/MockMessageResources.java
-
-  - remove thi
-
-  SECTION: RI changes
-
-  A jsf-ri/src/javax/faces/Messages.properties
-  A jsf-ri/src/javax/faces/Messages_fr.properties
-  A jsf-ri/src/javax/faces/Messages_es.properties
-  A jsf-ri/src/javax/faces/Messages_de.properties
-
-  - these contain the message content from the jsf-ri-config file.
-
-  A jsf-ri/src/com/sun/faces/ImplMessages.properties
-  A jsf-ri/src/com/sun/faces/ImplMessages_de.properties
-  A jsf-ri/src/com/sun/faces/ImplMessages_fr.properties
-  A jsf-ri/src/com/sun/faces/ImplMessages_es.properties
-
-  - contains the implementation specific messages.
-
-  A jsf-ri/systest/src/com/sun/faces/CustomMessages_fr.properties
-  A jsf-ri/systest/src/com/sun/faces/CustomMessages.properties
-  A jsf-ri/systest/src/com/sun/faces/CustomMessages_en.properties
-
-  - these allow the message*.jsp tests to work.
-
-  A jsf-ri/test/com/sun/faces/util/TestMessageFactoryImpl.java
-
-  - moved from application.  Just tests the MessageFactory class, which
-    is copied from jsf-tools
-
-  M jsf-ri/build.xml
-
-  - new targe
-  t
-  +  <target name=3D"copy.template.sources" depends=3D"prepare.generate"
-  +     description=3D"Copy template sources from ${jsf-tools.dir}/templa=
-  te-source">
-
-  M jsf-ri/src/com/sun/faces/jsf-ri-config.xml
-
-  - remove all message related content, save the new=20
-
-  +    <message-bundle>com.sun.faces.ImplMessages</message-bundle>
-
-  M jsf-ri/src/com/sun/faces/application/ApplicationImpl.java
-  R jsf-ri/src/com/sun/faces/application/MessageResourcesImpl.java
-
-  - remove MessageResources
-
-  M jsf-ri/src/com/sun/faces/config/ConfigApplication.java
-  M jsf-ri/src/com/sun/faces/config/ConfigParser.java
-
-  - new property "messageBundle".
-
-  -remove MessageResources related code
-
-  M jsf-ri/src/com/sun/faces/lifecycle/UpdateModelValuesPhase.java
-  M jsf-ri/src/com/sun/faces/renderkit/html_basic/ButtonRenderer.java
-  M jsf-ri/src/com/sun/faces/renderkit/html_basic/HtmlBasicRenderer.java
-  M jsf-ri/src/com/sun/faces/util/Util.java
-
-  - leverage the new, copied-in, com.sun.faces.util.MessageFactory
-  M jsf-ri/systest/web/message01.jsp
-  M jsf-ri/systest/web/message02.jsp
-  M jsf-ri/systest/web/message03.jsp
-  M jsf-ri/systest/web/message04.jsp
-  M jsf-ri/systest/web/WEB-INF/faces-config.xml
-  M jsf-ri/systest/web/golden/taglib/command_link_test.txt
-  M jsf-ri/systest/web/standard/componentRef01.jsp
-  M jsf-ri/systest/web/standard/output_errors01.jsp
-  M jsf-ri/systest/web/taglib/command_link_test.jsp
-  M jsf-ri/test/com/sun/faces/application/TestApplicationImpl_Config.java=
-
-  R jsf-ri/test/com/sun/faces/application/TestMessageResourcesImpl.java
-  M jsf-ri/test/com/sun/faces/config/ConfigFileTestCase.java
-  R jsf-ri/web/test/config-with-invalid-message-severity.xml
-
-  - work with new content
-
-  SECTION: jsf-tools changes
-
-  A jsf-tools/template-src/MessageFactory.java
-
-  - new class
-
-* [JSFA80] Message and MessageResources: Part II: rename Message, add features
-
-  SECTION: API Changes
-
-  A jsf-api/src/javax/faces/application/FacesMessage.java
-
-  - Severity is now a typesafe enum.
-
-  - new name
-
-  R jsf-api/src/javax/faces/application/Message.java
-  R jsf-api/src/javax/faces/application/MessageImpl.java
-
-  - no need for these.
-
-  M jsf-api/src/javax/faces/component/UIInput.java
-  M jsf-api/src/javax/faces/component/UISelectMany.java
-  M jsf-api/src/javax/faces/component/UISelectOne.java
-
-  - Leverage FacesMessage
-
-  M jsf-api/src/javax/faces/context/FacesContext.java
-  M jsf-api/src/javax/faces/validator/DoubleRangeValidator.java
-  M jsf-api/src/javax/faces/validator/LengthValidator.java
-  M jsf-api/src/javax/faces/validator/LongRangeValidator.java
-  M jsf-api/src/javax/faces/validator/Validator.java
-
-  - Message->FacesMessage
-
-  M jsf-api/test/javax/faces/component/TestDataValidator.java
-  M jsf-api/test/javax/faces/component/UIDataTestCase.java
-  M jsf-api/test/javax/faces/mock/MockFacesContext.java
-
-  SECTION: RI Changes
-
-  R jsf-ri/src/com/sun/faces/application/MessageCatalog.java
-  R jsf-ri/src/com/sun/faces/application/MessageTemplate.java
-  R jsf-ri/src/com/sun/faces/config/ConfigMessage.java
-  R jsf-ri/src/com/sun/faces/config/ConfigMessageResources.java
-
-  - no need for these any more.
-
-  M jsf-ri/src/com/sun/faces/context/FacesContextImpl.java
-  M jsf-ri/src/com/sun/faces/lifecycle/UpdateModelValuesPhase.java
-  M jsf-ri/src/com/sun/faces/renderkit/html_basic/ErrorsRenderer.java
-  M jsf-ri/src/com/sun/faces/renderkit/html_basic/HtmlBasicRenderer.java
-  M jsf-ri/src/com/sun/faces/util/Util.java
-  M jsf-ri/systest/web/message01.jsp
-  M jsf-ri/systest/web/message02.jsp
-  M jsf-ri/systest/web/message03.jsp
-  M jsf-ri/systest/web/message04.jsp
-  M jsf-ri/systest/web/standard/componentRef01.jsp
-  M jsf-ri/systest/web/standard/output_errors01.jsp
-  M jsf-ri/test/com/sun/faces/config/ConfigFileTestCase.java
-  M jsf-ri/test/com/sun/faces/context/TestFacesContextImpl.java
-  M jsf-ri/test/com/sun/faces/renderkit/html_basic/TestRenderers_2.java
-  M jsf-ri/test/com/sun/faces/util/TestMessageFactoryImpl.java
-
-  - Message->FacesMessage
-
-* [JSFA80] Change structure of <locale-config> element
-
-  It's time to do this.  This was an add-on to the resolution of the
-  "determining the locale" thread.
-
-  SECTION: API Changes
-
-  M jsf-api/doc/web-facesconfig_1_0.dtd
-
-  - remove locale element
-
-  - change supported-locales to supported-locale
-
-  SECTION: RI Changes
-
-  M jsf-ri/src/com/sun/faces/ImplMessages_de.properties
-
-  - start fixing non ASCII characters.
-
-  M jsf-ri/src/com/sun/faces/config/ConfigParser.java
-
-  - account for DTD change in Digester rule
-
-  M jsf-ri/src/com/sun/faces/context/FacesContextImpl.java
-
-  - return null from getMaximumSeverity if no messages are present.
-
-  M jsf-ri/web/test/locale-config.xml
-  M jsf-ri/web/test/locale-config1.xml
-  M jsf-ri/web/test/locale-config2.xml
-  M jsf-ri/web/test/WEB-INF/faces-config.xml
-
-  - use new locale-config syntax
-
-  SECTION: Demo Changes
-
-  M jsf-demo/cardemo/web/more.jsp
-
-  - change valuechanged to valuechange
-
-  M jsf-demo/cardemo/web/WEB-INF/faces-config.xml
-  M jsf-demo/guessNumber/web/WEB-INF/faces-config.xml
-
-  - use new locale-config syntax
-
-  - move messages to ResourceBundles
-
-  A jsf-demo/cardemo/src/cardemo/CardemoMessages.properties
-  A jsf-demo/cardemo/src/cardemo/CardemoMessages_de.properties
-  A jsf-demo/cardemo/src/cardemo/CardemoMessages_fr.properties
-  A jsf-demo/cardemo/src/cardemo/CardemoMessages_es.properties
-
-  - content from faces-config
-
-  A jsf-demo/cardemo/src/cardemo/MessageFactory.java
-
-  - copied from jsf-tools/template-src
-
-* [Enhancement]	UIComponent.java UIComponentBase.java 
-
-  Remove any mention of checking valid component identifiers in the List
-  returned by UIComponent.getChildren().  Such testing was being
-  performed inconsistently, and is totally redundant with the
-  corresponding tests that were done in the UIComponent.setId() method
-  anyway.
-
-  Update behavior (and description) of findComponent() to be more
-  robust.  In particular, as you navigate down through NamingContainers,
-  the public findComponent() method of that component is called.  This
-  gives the component the opportunity to specialize find behavior --
-  which will be important for UIData which is twiddling with child
-  component ids.
-
-
-* [JSFA129] getRendersChildren().
-
-  SECTION: API Changes
-
-  M src/javax/faces/component/UIComponent.java
-
-  - javadoc changes:
-
-	* <p>Return a flag indicating whether this component is responsible
-  +     * for rendering its child components.  The default implementation
-  +     * in {@link UIComponentBase#getRendersChildren} tries to find the
-  +     * renderer for this component.  If it does, it calls {@link
-  +     * Renderer#getRendersChildren} and returns the result.  If it
-  +     * doesn't, it returns false.</p>
-
-  M src/javax/faces/component/UIComponentBase.java
-
-  - default impl as above.
-
-  M src/javax/faces/render/Renderer.java
-
-  +    /**
-  +     * <p>Return a flag indicating whether this renderer is responsible
-  +     * for rendering the children the component it is asked to render.
-  +     * The default implementation returns <code>false</code>.</p>
-  +     */
-  +
-  +    public boolean getRendersChildren() {
-  +	return false;
-  +    }
-  +
-
-  SECTION: RI Impact
-
-  None.  
-
-* [JSFA129] default impl of Renderer.encodeChildren()
-
-  M jsf-api/src/javax/faces/render/Renderer.java
-
-  - copy impl from LinkRenderer
-
-  M jsf-ri/src/com/sun/faces/renderkit/html_basic/LinkRenderer.java
-
-  - remove impl, get it from Renderer.
-
-* [JSFA132] - Complete API Implementation
-
-  M src/javax/faces/webapp/UIComponentTag.java
-
-  - Implement new (JSP-only) "override" attribute on UIComponentTag.
-
-  - Default value for "override" is false if componentTag is also set,
-    otherwise true.
-
-  - If "override" is true, call overrideProperties() even if the component
-    instance was *not* created by this tag, meaning that values explictly
-    set by the page author will always win over any programmatic changes.
-
-
-  RI IMPACT:
-
-  - Add a boolean "override" property to the TLD of very component tag
-    (it's supported in UIComponentTag, so no code changes are needed).
-
-
-  TOOLS IMPACT:
-
-  - Make sure that the generator for TLDs always includes an "override"
-    attribute on component tags, even though it is not visible in the XML.
-
-  [JSFA132] - Complete API Implementation
-
-  M jsf-api/src/javax/faces/webapp/UIComponentTag.java
-
-  - make sure to implement the new behaviour with respect to the
-    "override" ivar in the case where we call overrideProperties for the tag
-    that is bound to UIViewRoot.
-
-* [JSFA29] DataGrid Refactoring
-
-  Remove the usage of javax.faces.event.RepeaterEvent (it was only used to
-  specialize a debugging log message) since that API is going away.
-
-  Remove the "Repeater" interface and associated stuff, and make RepeaterEvent
-  a private class inside UIData (the only place that it's needed).
-
-  RI IMPACT:  Already removed the only place this was used (in a debug log
-  message, no functional impact).
-
-  DEMO IMPACT:  None.
-
-  Due to the simplifications in the recent UIData remodelling, there is
-  no longer enough fancy logic in ValueHolderSupport or
-  ConvertableValueHolder- Support to make them worth supporting.  Modify
-  all components that implement one of these interfaces to support the
-  corresponding properties and methods directly, instead of by
-  delegating to a support object.
-
-  RI IMPACT:  None.
-
-
-  DEMO IMPACT:  None.
-
-* ConvertableValueHolder --> ConvertibleValueHolder.
-
-* [JSFA99] Method Bindings
-
-  Check in fundamental APIs for method bindings, along with a mock
-  implementation that can be used to develop unit tests.
-
-  M src/javax/faces/application/Application.java
-
-  - Allow a null second argument on getMethodBinding() for methods
-    that take no parameters.
-
-  M src/javax/faces/el/MethodBinding.java
-
-  - Allow a null second argument on invoke() for methods
-    that take no parameters
-
-  M build.xml
-  M test/javax/faces/mock/MockMethodBinding.java
-  M test/javax/faces/mock/MockPropertyResolver.java
-  A test/javax/faces/mock/MockObjectsTestCase.java
-  A test/javax/faces/mock/TestMockBean.java
-
-  - Add some unit tests for mock objects that have functionality,
-    including positive tests for MockMethodBinding and MockValueBinding.
-
-* Scarab Issue:  [JSFA99] Method References
-  Scarab Issue:  [NEW] Rename ValueChange{d,}{Event,Listener}
-
-  Completed implementation of changes for method references, as described in
-  more detail below, plus rename of ValueChangedEvent to ValueChangeEvent
-  and ValueChangedListener to ValueChangeListener at the same time.
-
-  R src/javax/faces/application/Action.java
-
-  - Remove this API, since it is obsolete.  An "actionRef" property on an
-    ActionSource now references a method binding to a public method that
-    takes no parameters and returns a String, which was the essential behavior
-    modelled by Action.invoke() previously.
-
-  M src/javax/faces/application/Application.java 
-
-  - Remove references to javax.faces.application.Action, which has been
-    eliminated.
-
-  M src/javax/faces/application/NavigationHandler.java
-
-  - Remove references to javax.faces.application.Action, which has been
-    eliminated.
-
-  M src/javax/faces/component/ActionSource.java
-
-  - Changed description of "actionRef" property to be a *method* reference
-    expression instead of a *value* reference expression.
-
-  - Added "actionListenerRef" property, a method reference expression to a
-    public method that returns void and takes an ActionEvent.
-
-  M src/javax/faces/component/UICommand.java
-
-  - Added implementation of the new "actionListenerRef" property.
-
-  M src/javax/faces/component/UIComponentBase.java
-
-  - The broadcast(FacesEvent,PhaseId) method now includes special handling
-    for forwarding ActionEvents to a method referenced by an
-    "actionListenerRef", and ValueChangeEvents to a method referenced by a
-    "valueChangeListenerRef".  PENDING-this code doesn't belong here, but
-    is co-located for now because it depends on unwrapping RepeaterEvents.
-
-  M src/javax/faces/component/UIInput.java
-
-  - Added implementation for "validateRef" and "valueChangeListenerRef"
-    properties that are method references to corresponding public methods.
-
-  - Extended validate() method to invoke any public method specfied by a
-    "validateRef" method reference expression.
-
-  - Reflected name change on ValueChangeListeners.
-
-  M test/javax/faces/component/UICommandTestCase.java
-  M test/javax/faces/component/UIDataTestCase.java
-  M test/javax/faces/component/UIInputTestCase.java
-  M test/javax/faces/component/UISelectManyTestCase.java
-  M test/javax/faces/component/UISelectOneTestcase.java
-  A test/javax/faces/component/TestCommandActionListener.java
-  A test/javax/faces/component/TestInputValidator.java
-  A test/javax/faces/component/TestInputValueChangeListener.java
-
-  - Reflected name change on ValueChangeListeners.
-
-  - Added tests to verify timing of calls to methods identified by
-    "actionListenerRef", "validateRef", and "valueChangeListenerRef"
-    properties.  (Dealing with "actionRef" remains in the default
-    ActionListener implementation provided by a JSF implementaion.)
-
-  A src/javax/faces/event/ValueChangeEvent.java
-  A src/javax/faces/event/ValueChangeListener.java
-  R src/javax/faces/event/ValueChangedEvent.java
-  R src/javax/faces/event/ValueChangedListener.java
-
-  - Reflected name change on ValueChangeEvents and ValueChangeListeners.
-
-  A test/javax/faces/component/TestDataValueChangeListener.java
-  A test/javax/faces/component/TestValueChangeListener.java
-  A test/javax/faces/component/TestValueChangeListenerWithBackReference.java
-  R test/javax/faces/component/TestDataValueChangedListener.java
-  R test/javax/faces/component/TestValueChangedListener.java
-  R test/javax/faces/component/TestValueChangedListenerWithBackReference.java
-
-  - Reflected name change on ValueChangeEvents and ValueChangeListeners.
-
-
-  RI CHANGES:
-
-  - I have already made the minimum changes necessary to ensure that the
-    HEAD of jsf-ri still executes all unit tests with the HEAD of jsf-api
-    (see subsequent commit).  The following changes are still needed.
-
-  - On all tags related to UICommand:
-
-    - Change description of "actionRef" to be a *method* reference expression
-      rather than a *value* reference expression.
-
-    - Add new attribute for "actionListenerRef".
-
-  - On all tags related to UIInput, UISelectBoolean, UISelectMany, and
-    UISelectOne:
-
-    - Add new attributes for "validateRef" and "valueChangeListenerRef".
-
-
-  DEMO CHANGES:
-
-  - I have already made the minimum changes necessary to ensure that the
-    HEAD of jsf-demo still executes (at least "standard") against the HEAD
-    of jsf-ri and jsf-api.  The following changes are still needed.
-
-  - Modify standard/web/UIData.jsp to use the new validateRef and
-    valueChangeListenerRef attributes (once the RI is updated).
-
-  - Verify that all of the other demo applications still run correctly.
-
-  Refactor the processing for "actionListenerRef" and
-  "valueChangeListenerRef" from UICompoenntBase to UICommand and
-  UIInput, respectively, where it belongs.
-
-  RI IMPACT:  None.
-
-  DEMO IMPACT:  None.
-
-* [JSFA99] Method References
-
-  Expose the appropriate Ref attrs on components in
-  standard-components.xml
-
-* [JSFA99] MethodRef Part II
-
-  SECTION: API Changes
-
-  M jsf-api/src/javax/faces/component/UIInput.java
-
-  - call validator if it comes in the form of validateRef *or* validator list.
-
-  SECTION: RI Changes
-
-  M jsf-ri/src/com/sun/faces/taglib/BaseComponentTag.java
-
-  - ivars and setters for methodRef
-
-  M jsf-ri/systest/src/com/sun/faces/methodref/MethodRefTestCase.java
-
-  - refactor existing test
-
-  - add new testValidateRef
-
-  M jsf-ri/systest/src/com/sun/faces/systest/model/MethodRef.java
-
-  - backing file support for testValidateRef
-
-  M jsf-ri/systest/web/methodref01.jsp
-
-  - jsp support for testValidateRef
-
-* [JSFA127] Link reforms: Part II: Fix command_link
-
-  SECTION: API Changes
-
-  M jsf-api/doc/standard-html-renderkit.xml
-
-  - Introduce OutputLink component-type
-
-  - remove unnecessary attributes from renderer.
-
-  - add new supported-component-type and supported-component-class
-
-  M jsf-api/src/javax/faces/component/UIComponentBase.java
-
-  - performance op on getRendersChildren(), check for non-null rendererType.
-
-  M jsf-api/src/javax/faces/context/ResponseWriter.java
-
-  - new method: closeStartTag().  Used from commandLink renderer.
-
-  M jsf-api/test/javax/faces/mock/MockResponseWriter.java
-
-  - implement closeStartTag().
-
-  SECTION: RI Changes
-
-  M jsf-ri/conf/share/html_basic.tld
-
-  - remove unnecessary attributes.
-
-  R jsf-ri/src/com/sun/faces/renderkit/html_basic/BaseCommandRenderer.java
-  M jsf-ri/src/com/sun/faces/renderkit/html_basic/ButtonRenderer.java
-
-  - Move functionality to from BaseCommandRenderer to ButtonRenderer.
-
-  A jsf-ri/src/com/sun/faces/renderkit/html_basic/CommandLinkRenderer.java
-
-  - new class
-
-  M jsf-ri/src/com/sun/faces/renderkit/html_basic/HtmlResponseWriter.java
-
-  - new method closeStartTag.
-
-  M jsf-ri/src/com/sun/faces/renderkit/html_basic/LinkRenderer.java
-
-  - call through to CommandLinkRenderer
-
-  A jsf-ri/src/com/sun/faces/taglib/BaseComponentBodyTag.java
-
-  - new base class.
-
-  M jsf-ri/src/com/sun/faces/taglib/html_basic/Command_LinkTag.java
-
-  - this is now a BodyTag 
-
-  M jsf-ri/test/com/sun/faces/FileOutputResponseWriter.java
-  M jsf-ri/test/com/sun/faces/context/TestFacesContextImpl.java
-
-  - implement closeStartTag.
-
-  M jsf-ri/test/com/sun/faces/renderkit/html_basic/TestRenderers_1.java
-
-  - follow new nesting syntax for Link.
-
-  M jsf-ri/web/test/CorrectRenderersResponse
-  M jsf-ri/web/test/RenderResponse_correct
-  M jsf-ri/web/test/TestRenderResponsePhase.jsp
-
-  - update tests and golden files.
-
-  SECTION: Demo Changes
-
-  M jsf-demo/standard/web/command_link_row.jsp
-
-
-
-SECTION: SPEC Document Changes
-
-* [7.4.2] Document support for the <redirect/> element on a <navigation-case>.
-
-  [10.3.4] Document that the nested elements inside <lifecycle> (to replace
-  the pluggable implementations) do have runtime impact.
-
-  RI IMPACT:  NavigationHandler changes covered on the jsf-api commit message.
-  No changes required for the <lifecycle> element.
-
-* Scarab Issue:  [JSFA99] Method References
-  Scarab Issue:  [NEW] Rename ValueChange{d,}{Event,Listener}
-
-  Spec updates that correspond to the changes made in jsf-api, jsf-ri,
-  and jsf-demo on the previous commits.  See the jsf-api commit for
-  remaining actions required on jsf-ri and jsf-demo.
-
-* Tweak the spec descriptions for recent API checkins:
-  * Refactoring repeater handling into UIData, remove Repeater*.java APIs.
-  * Add "disabled" property to SelectItem.
-  * Add SelectItemGroup.
-
-* [JSFA127] output_link and a bugfix.
-
-  This checkin is Part III of the JSFA127 work.  
-
-  It also fixes a bug with our rtexprvalue==true where we weren't calling
-  super.evaluateExpressions().
-
-  It also fixes a bug in HtmlUtils where the required objects were not
-  getting initialized as expected.
-
-  SECTION: API Changes
-
-  M jsf-api/doc/standard-html-renderkit.xml
-
-  - get rid of imageKey from OutputLink.
-
-  - clean up attributes
-
-  SECTION: RI Changes
-
-  M jsf-ri/conf/share/html_basic.tld
-
-  - get rid of unnecessary attributes from link tags.
-
-  - new tag, output_link
-
-  M jsf-ri/src/com/sun/faces/jsf-ri-config.xml
-
-  - new component-type OutputLink
-
-  - shuffle attributes.
-
-  M jsf-ri/src/com/sun/faces/renderkit/html_basic/CommandLinkRenderer.java
-  M jsf-ri/src/com/sun/faces/renderkit/html_basic/HtmlBasicRenderer.java
-
-  - move ParamList up to HtmlBasicRenderer
-
-  M jsf-ri/src/com/sun/faces/renderkit/html_basic/LinkRenderer.java
-
-  - new support for OutputLinkRenderer.
-
-  M jsf-ri/src/com/sun/faces/taglib/BaseComponentTag.java
-
-  - bugfix, make evaluateExpressions() protected.
-
-  M jsf-ri/src/com/sun/faces/taglib/html_basic/Command_ButtonTag.java
-  M jsf-ri/src/com/sun/faces/taglib/html_basic/Command_LinkTag.java
-  M jsf-ri/src/com/sun/faces/taglib/html_basic/DataTableTag.java
-  M jsf-ri/src/com/sun/faces/taglib/html_basic/Graphic_ImageTag.java
-  M jsf-ri/src/com/sun/faces/taglib/html_basic/Output_ErrorsTag.java
-  M jsf-ri/src/com/sun/faces/taglib/html_basic/Output_LabelTag.java
-  M jsf-ri/src/com/sun/faces/taglib/html_basic/Panel_GridTag.java
-  M jsf-ri/src/com/sun/faces/taglib/html_basic/SelectItemTag.java
-  M jsf-ri/src/com/sun/faces/taglib/html_basic/SelectMany_CheckboxListTag.java
-  M jsf-ri/src/com/sun/faces/taglib/html_basic/SelectOne_RadioTag.java
-
-  - call super.evaluateExpressions().
-
-  M jsf-ri/src/com/sun/faces/util/HtmlUtils.java
-
-  - bugfix: initialize the objects you use.
-
-  M jsf-ri/test/com/sun/faces/renderkit/html_basic/TestRenderers_1.java
-
-  - tests for OutputLinkRenderer.
-
-  M jsf-ri/web/test/CorrectRenderersResponse
-  M jsf-ri/web/test/RenderResponse_correct
-  M jsf-ri/web/test/TestRenderResponsePhase.jsp
-
-  - new golden file content
-
-  A jsf-ri/src/com/sun/faces/renderkit/html_basic/OutputLinkRenderer.java
-  A jsf-ri/src/com/sun/faces/taglib/html_basic/Output_LinkTag.java
-
-  - new files, see below.
+It is now possible to include JSP pages using either of the above tags.
+
+Please see Section 9.5.7 "<f:subview>".
+
+Localization mechanism
+======================
+
+We now support ResourceBundle based localization for all component
+attributes. In addition, we conform to JSP, JSTL, and Servlet best
+practices for character encoding and Locale support.
+
+Please see Section 2.5.1 "Localization and Internationalization
+(L10N/I18N)".
+
+Adapter pattern for pluggable Factory classes
+=============================================
+
+Several classes in the API have always been pluggable by providing a
+factory for those classes. It is now possible to have the pluggable
+imelementation get access to the previously installed
+implementation. This allows one to override just a subset of the
+functionality, without having to subclass or re-implement
+everything. Please see the javadocs for the javax.faces.FactoryFinder
+class.
+
+New hyperlink component/renderer combinations
+=============================================
+
+The <h:command_hyperlink> tag has been replaced by the <h:output_link>
+and <h:command_link> tags. The former is for linking to other pages
+without doing a post back. The latter is just like a <h:command_button>
+except that the label comes from nested content, and the result shows up
+to the user as a hyperlink.
+
+Please see Section 8.5.1 "Renderer Types for UICommand Components" and
+Section 8.5.6 "Renderer Types for UIOutput Components".
+
+Event mechanism implementation changes
+======================================
+
+Most of the event firing and litener invocation mechanism is implemented
+in the API classes. This implementation has changed dramatically since
+EA4, but there is minimal change on the usage model.
+
+Also, any occurrence of valuechanged, as in valuechanged-listener,
+ValueChangedListener, etc has been changed to valuechange. That is,
+there is no "ed". This is for parity with JavaBeans.
+
+Please see Section 3.4.7 "Event Broadcasting".
+
+New UIData component and Table Renderer
+=======================================
+
+This release introduces a powerful, flexible, way to show data in a
+Table given a number of data sources.
+
+Please see Section 4.1.3 "UIData" and Section 8.5.2 "Renderer Types for
+UIData Components".There have been many changes since the EA4 release of
+JavaServer technology. Here are the major ones that really stand out.
+
+Logging support and configuration steps
+=======================================
+JavaServer Faces Reference Implementation in this release leverages the 
+Jakarta Commons logging API to provide logging functionality. We have followed 
+the guidelines recommended by 
+http://jakarta.apache.org/commons/logging/userguide.html.
+JavaServer Faces Reference Implementation can be configured to provide
+logging information using the steps below.
+
+step 1.
+If you are using Tomcat or JWSDP as your container, you can set the following 
+property to tell the container what logging implementation you are using
+as well as the location of your logging configuration file. 
+set CATALINA_OPTS=-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Jdk14Logger -Djava.util.logging.config.file=D:\Files_2k\j2sdk1.4.1_03\jre\lib\jsf-log.properties
+
+step 2.
+We have shown a sample logging configuration file below that is configured to
+get logging output when you are running a JavaServer Faces application. 
+The default JDK 1.4 logging configuration file is 
+"$JAVA_HOME}/jre/lib/logging.properties". You can either manipulate that as per
+directions below, in which case it's global to all Java apps that you run
+or you can create a jsf.log properties as illustrated below. You can change 
+the "java.util.logging.FileHandler.pattern" property to control
+where your logging information is written.
+
+Here's the jsf-log.properties
+############################################################
+#  	Default Logging Configuration File
+# http://java.sun.com/j2se/1.4.2/docs/guide/util/logging/overview.html#1.2
+# You can use a different file by specifying a filename
+# with the java.util.logging.config.file system property.  
+# For example java -Djava.util.logging.config.file=myfile
+############################################################
+
+############################################################
+#  	Global properties
+############################################################
+
+# "handlers" specifies a comma separated list of log Handler 
+# classes.  These handlers will be installed during VM startup.
+# Note that these classes must be on the system classpath.
+# By default we only configure a ConsoleHandler, which will only
+# show messages at the INFO and above levels.
+
+# To also add the FileHandler, use the following line instead.
+handlers= java.util.logging.FileHandler, java.util.logging.ConsoleHandler
+
+# Default global logging level.
+# This specifies which kinds of events are logged across
+# all loggers.  For any given facility this global level
+# can be overriden by a facility specific level
+# Note that the ConsoleHandler also has a separate level
+# setting to limit messages printed to the console.
+#.level= INFO
+.level= INFO
+
+############################################################
+# Handler specific properties.
+# Describes specific configuration info for Handlers.
+############################################################
+
+# default file output is in user's home directory.
+java.util.logging.FileHandler.pattern = %h/java%u.log
+java.util.logging.FileHandler.limit = 50000
+java.util.logging.FileHandler.count = 1
+java.util.logging.FileHandler.formatter = java.util.logging.XMLFormatter
+
+# Limit the message that are printed on the console to INFO and above.
+java.util.logging.ConsoleHandler.level = INFO
+java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
+
+
+############################################################
+# Facility specific properties.
+# Provides extra control for each logger.
+############################################################
+
+# For example, set the com.xyz.foo logger to only log SEVERE
+# messages:
+com.xyz.foo.level = SEVERE
+com.sun.faces.level = ALL
+
+If you use the ConsoleHandler ( which would direct all the output to catalina.out 
+in the case of standalone Tomcat or launcher.server.log in the case of JWSDP )
+please make sure that the detail level for ConsoleHandler can handle the level set
+for individual packages. For example say you have set the level for 
+"com.sun.faces.el" package to "FINEST" as below.
+    "com.sun.faces.el.level = FINEST"
+
+You won't see any trace or debug messages unless you also set 
+ConsoleHandler.level = FINEST. ConsoleHandler.level caps the detail level to the 
+console, no matter what the underlying loggers are set for.
+
+In this release, the Reference Implementation provides logging support for the
+following packges.
+    * com.sun.faces.application
+    * com.sun.faces.el
+    * com.sun.faces.lifecycle
+
+The logging messages are not localized. Localisation as 
+well as logging for rest of the RI will be done in a future release.
 
 Known Issues With This Release
 ==============================
 
-* cardemo checkboxes do not properly set themselves when choosing a
-  package.
+* When deploying on a non-JWSDP container, you must include all the
+  dependent jars in your webapp's WEB-INF/lib directory.  It's possible
+  it may work without doing this, but this is not a supported
+  configuration.
 
-* cardemo dynamic pricing is broken, the prices always go up!
+* If you're using a tomcat 4 series container, you must use JSTL 1.0
+  instead of JSTL 1.1.
 
-* Some renderer (and therefore tag) attributes have the incorrect type
-  with respect to the HTML 4.01 spec.
+* UIData children that do not use VB expressions fail to maintain their
+  values.  In other words, if you have a literal value in a child of a
+  UIData component, that value will be lost on postback.  Workaround:
+  always use a VB expression with the value attribute for UIData
+  children.
+
+* UIComponent.broadcast() fails to throw IllegalStateException if passed
+  invalid Parameter.
+
+  From the javadocs of UIComponent.broadcast():
+
+  <quote> java.lang.IllegalStateException - if PhaseId.ANY_PHASE is
+  passed for the phase identifier </quote>
+
+  No exception is currently thrown by the RI.
+
+* UIInput.validate() does not store zero-length String into previous property.
+
+* Incorrect type conversion for UISelectMany
+
+  This class doesn't properly deal with conversion for primitives.
+  Workaround: use wrapper classes instead of primitives for model objects.
+
+* <h:message> ignores locale set in <f:view>
+
+    My system locale is French and if I do this...
+    <f:view locale='en'>
+
+        <h:output_text value='#{msgs.namePrompt}'/>
+        <h:input_text id='name' value='#{user.name}'/>
+
+        <h:message for='name'/>
+
+    </f:view>
+
+    <h:output_text> retrieves its output from my English resource bundle
+    (as it should), but <h:message> stubbornly produces its error message
+    in French (as it should not).
+
+* Renderers in the Standard HTML RenderKit are fragile in terms of their
+  support for rendered="false" on children and facets.  Specific known issues
+  include:
+  - GridRenderer emits <td></td> for a child component that is
+    set to rendered="false".
+  - TableRenderer ignores rendered="false" on child UIColumn components.
+  - All renderers that deal with facets are currently ignoring rendered=false
+    on the facet components.
+
+* The non-jsp demo does not deploy under tomcat 4.1.29.  
+
+* Some web containers don't follow the Servlet 2.3 Spec rule of calling
+  ServletContextListeners listeners defined in tld files in the META-INF
+  directory of a jar. Running a faces webapp in such a container
+  requires you to manually declare the ServletContextListener.  The
+  listener-class you need to specify is
+
+  com.sun.faces.config.ConfigListener
+
+
+
 
 Legal Notice
 ============

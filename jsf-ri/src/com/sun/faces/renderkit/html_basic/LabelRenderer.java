@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.20 2003/11/13 02:58:42 jvisvanathan Exp $
+ * $Id: LabelRenderer.java,v 1.21 2003/12/17 15:13:55 rkitain Exp $
  */
 
 /*
@@ -19,9 +19,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -89,7 +89,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
             return;
         }
         writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
 
 	forValue = (String) component.getAttributes().get("for");
         if ( forValue == null ) {
@@ -117,7 +117,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
 	}
         writer.writeText("\n", null);
-        writer.closeStartTag(component);
+        writer.flush();
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {
@@ -137,7 +137,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
         if ( render != null && render.equals("yes")) {
             component.getAttributes().remove(RENDER_END_ELEMENT);
             ResponseWriter writer = context.getResponseWriter();
-            Assert.assert_it(writer != null );
+            Util.doAssert(writer != null );
 	    writer.endElement("label");
         }
     }

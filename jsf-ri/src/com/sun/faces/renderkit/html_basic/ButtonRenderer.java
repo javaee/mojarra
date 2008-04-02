@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.66 2003/11/10 01:08:53 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.67 2003/12/17 15:13:50 rkitain Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 import java.io.IOException;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.66 2003/11/10 01:08:53 jvisvanathan Exp $
+ * @version $Id: ButtonRenderer.java,v 1.67 2003/12/17 15:13:50 rkitain Exp $
  *
  */
 
@@ -143,7 +143,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
         
         String label = "";
         Object value = ((UICommand) component).getValue();

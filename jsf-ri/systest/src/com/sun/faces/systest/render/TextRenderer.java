@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.4 2003/10/02 22:34:58 craigmcc Exp $
+ * $Id: TextRenderer.java,v 1.5 2003/12/17 15:14:35 rkitain Exp $
  */
 
 /*
@@ -19,10 +19,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
+
 
 import java.io.IOException;
 
@@ -32,7 +32,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.4 2003/10/02 22:34:58 craigmcc Exp $
+ * @version $Id: TextRenderer.java,v 1.5 2003/12/17 15:14:35 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,7 +102,7 @@ public class TextRenderer extends Renderer {
     public void encodeEnd(FacesContext context, UIComponent component) 
             throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-	Assert.assert_it(writer != null );
+	Util.doAssert(writer != null );
 
 	String styleClass = null;
         

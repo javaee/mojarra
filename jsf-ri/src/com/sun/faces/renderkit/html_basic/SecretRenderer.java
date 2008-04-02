@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.48 2003/10/07 13:05:30 eburns Exp $
+ * $Id: SecretRenderer.java,v 1.49 2003/12/17 15:13:57 rkitain Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  * <B>SecretRenderer</B> is a class that renders the current value of 
@@ -81,7 +81,7 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
     protected void getEndTextToRender(FacesContext context, 
         UIComponent component, String currentValue) throws IOException {
 	ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
 
         String styleClass = null;
         

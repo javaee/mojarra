@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateDoubleRangeTag.java,v 1.3 2003/05/20 23:08:00 jvisvanathan Exp $
+ * $Id: ValidateDoubleRangeTag.java,v 1.4 2003/12/17 15:14:14 rkitain Exp $
  */
 
 /*
@@ -11,8 +11,8 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import javax.faces.validator.DoubleRangeValidator;
 import javax.faces.validator.Validator;
@@ -20,16 +20,8 @@ import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
 
 /**
- *
- *  <B>ValidateDoubleRangeTag</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: ValidateDoubleRangeTag.java,v 1.3 2003/05/20 23:08:00 jvisvanathan Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * ValidateDoubleRangeTag is the tag handler class for 
+ * <code>validate_doublerange</code> tag.
  */
 
 public class ValidateDoubleRangeTag extends MaxMinValidatorTag
@@ -48,8 +40,10 @@ public class ValidateDoubleRangeTag extends MaxMinValidatorTag
 
 // Attribute Instance Variables
 
-    protected double maximum = 0;
-    protected double minimum = 0;
+protected String maximum_ = null;
+protected double maximum = 0;
+protected String minimum_ = null;
+protected double minimum = 0;
 
 
 // Relationship Instance Variables
@@ -61,7 +55,7 @@ public class ValidateDoubleRangeTag extends MaxMinValidatorTag
 public ValidateDoubleRangeTag()
 {
     super();
-    super.setId("DoubleRange");
+    super.setValidatorId("DoubleRange");
 }
 
 //
@@ -72,26 +66,16 @@ public ValidateDoubleRangeTag()
 // General Methods
 //
 
-public double getMaximum()
-{
-    return maximum;
-}
-
-public void setMaximum(double newMaximum)
+public void setMaximum(String newMaximum)
 {
     maximumSet = true;
-    maximum = newMaximum;
+    maximum_ = newMaximum;
 }
 
-public double getMinimum()
-{
-    return minimum;
-}
-
-public void setMinimum(double newMinimum)
+public void setMinimum(String newMinimum)
 {
     minimumSet = true;
-    minimum = newMinimum;
+    minimum_ = newMinimum;
 }
 
 // 
@@ -103,17 +87,41 @@ protected Validator createValidator() throws JspException
     DoubleRangeValidator result = null;
 
     result = (DoubleRangeValidator) super.createValidator();
-    Assert.assert_it(null != result);
+    Util.doAssert(null != result);
 
+    evaluateExpressions();
     if (maximumSet) {
-	result.setMaximum(getMaximum());
+	result.setMaximum(maximum);
     }
 
     if (minimumSet) {
-	result.setMinimum(getMinimum());
+	result.setMinimum(minimum);
     }
 
     return result;
+}
+
+/* Evaluates expressions as necessary */
+private void evaluateExpressions() throws JspException {
+   
+    if (minimum_ != null) {
+        if (Util.isVBExpression(minimum_)) {  
+            Double doubleObj = (Double)Util.evaluateVBExpression(minimum_);
+            Util.doAssert(null != doubleObj);
+            minimum = doubleObj.doubleValue();
+        } else {
+            minimum = new Double(minimum_).doubleValue();
+        }
+    }
+    if (maximum_ != null) {
+        if (Util.isVBExpression(maximum_)) {  
+            Double doubleObj = (Double)Util.evaluateVBExpression(maximum_);
+            Util.doAssert(null != doubleObj);
+            maximum = doubleObj.doubleValue();
+        } else {
+            maximum = new Double(maximum_).doubleValue();
+        }
+    }
 }
 
 } // end of class ValidateDoubleRangeTag

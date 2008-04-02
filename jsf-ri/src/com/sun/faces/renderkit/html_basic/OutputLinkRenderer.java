@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.1 2003/10/28 21:00:30 eburns Exp $
+ * $Id: OutputLinkRenderer.java,v 1.2 2003/12/17 15:13:56 rkitain Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.1 2003/10/28 21:00:30 eburns Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.2 2003/12/17 15:13:56 rkitain Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -104,7 +104,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it( writer != null );
+        Util.doAssert( writer != null );
 
 	clientId = output.getClientId(context);
 
@@ -139,7 +139,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
 	if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-	writer.closeStartTag(component);
+	writer.flush();
 
     }
 
@@ -167,7 +167,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it( writer != null );
+        Util.doAssert( writer != null );
 
 	//Write Anchor inline elements
 

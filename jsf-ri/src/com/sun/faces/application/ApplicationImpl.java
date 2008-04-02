@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.35 2003/11/13 04:46:03 craigmcc Exp $
+ * $Id: ApplicationImpl.java,v 1.36 2003/12/17 15:13:22 rkitain Exp $
  */
 
 /*
@@ -9,19 +9,24 @@
 
 package com.sun.faces.application;
 
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Collections;
-import java.util.Collection;
-import java.util.Locale;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeSet;
 
+import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.application.NavigationHandler;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.event.ActionListener;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.MethodNotFoundException;
 import javax.faces.el.PropertyNotFoundException;
@@ -29,24 +34,24 @@ import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.ReferenceSyntaxException;
-import javax.faces.application.NavigationHandler;
-import javax.faces.application.ViewHandler;
+import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
 import javax.faces.validator.Validator;
-import javax.faces.FacesException;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.ConfigNavigationCase;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.el.MethodBindingImpl;
-import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.el.PropertyResolverImpl;
+import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.el.VariableResolverImpl;
 import com.sun.faces.el.impl.ElException;
 import com.sun.faces.el.impl.ExpressionEvaluator;
 import com.sun.faces.el.impl.ExpressionInfo;
 import com.sun.faces.util.Util;
 
-import org.mozilla.util.Assert;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 
@@ -58,6 +63,8 @@ import org.mozilla.util.Assert;
  * required by JavaServer Faces.
  */
 public class ApplicationImpl extends Application {
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(ApplicationImpl.class);
 
 // Relationship Instance Variables
 
@@ -85,6 +92,33 @@ public class ApplicationImpl extends Application {
     //
     private Map managedBeanFactoriesMap = null;
 
+    // These maps stores "navigation rule" mappings.
+    //
+
+    /**
+     * Overall Map containing <code>from-view-id</code> key and
+     * <code>ArrayList</code> of <code>ConfigNavigationCase</code>
+     * objects for that key; The <code>from-view-id</code> strings in
+     * this map will be stored as specified in the configuration file -
+     * some of them will have a trailing asterisk "*" signifying wild
+     * card, and some may be specified as an asterisk "*".
+     */ 
+    private Map caseListMap = null;
+
+    /**
+     * The List that contains the <code>ConfigNavigationCase</code>
+     * objects for a <code>from-view-id</code>.
+     */ 
+    private List caseList = null;
+
+    /**
+     * The List that contains all view identifier strings ending in an
+     * asterisk "*".  The entries are stored without the trailing
+     * asterisk.
+     */
+    private TreeSet wildcardMatchList= null;
+    
+
     private String messageBundle = null;        
 
     // Flag indicating that a response has been rendered.
@@ -105,14 +139,14 @@ public class ApplicationImpl extends Application {
 	converterTypeMap = new HashMap();
 	validatorMap = new HashMap();
 	managedBeanFactoriesMap = new HashMap();
+	caseListMap = new HashMap();
+	wildcardMatchList = new TreeSet(new SortIt());
+
+        if (log.isDebugEnabled()) {
+            log.debug("Created Application instance ");
+        }
     }
 
-    /**
-     * <p>Return the {@link ActionListener} that will be the default
-     * {@link ActionListener} to be registered with relevant components
-     * during the <em>Restore View</em> phase of the
-     * request processing lifecycle.
-     */
     public ActionListener getActionListener() {
         return actionListener;
     }
@@ -128,134 +162,169 @@ public class ApplicationImpl extends Application {
                     Util.getExceptionMessage(
                             Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+	synchronized (this) {
         if (responseRendered) {
             // at least one response has been rendered.
+                if (log.isErrorEnabled()) {
+                     log.error("Response for this request has been rendered already ");
+                }
             throw new IllegalStateException(
                     Util.getExceptionMessage(
                             Util.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID));            
         }        
         viewHandler = handler;    
-    }   
+            if (log.isDebugEnabled()) {
+                log.debug("set ViewHandler Instance to " + viewHandler);
+            }
+	}   
+    }
 
-    
-    /**
-     * <p>Replace the default {@link ActionListener} that will be registered
-     * with relevant components during the <em>Restore View</em>
-     * phase of the requset processing lifecycle.  This
-     * listener must return <code>PhaseId.INVOKE_APPLICATION</code> from its
-     * <code>getPhaseId()</code> method.</p>
-     *
-     * @param listener The new {@link ActionListener}
-     *
-     * @exception IllegalArgumentException if the specified
-     *	<code>listener</code> does not return
-     *	<code>PhaseId.INVOKE_APPLICATION</code> from its
-     *	<code>getPhaseId()</code> method
-     * @exception NullPointerException if <code>listener</code>
-     *	is <code>null</code>
-     */
     public void setActionListener(ActionListener listener) {
         if (listener == null) {
             throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (listener.getPhaseId() != PhaseId.INVOKE_APPLICATION) {
-            throw new IllegalArgumentException(listener.getPhaseId().toString());
-        }
-
+	synchronized (this) {
         this.actionListener = listener;
+    }
+        if (log.isDebugEnabled()) {
+            log.debug("set ActionListener Instance to " + actionListener);
+        }
     }
 
     /**
-     * <p>Return the {@link NavigationHandler} instance that will be passed
-     * the outcome returned by any invoked {@link javax.faces.application.Action} for this
-     * web application.	 The default implementation must provide the behavior
-     * described in the {@link NavigationHandler} class description.</p>
+     * Return the <code>NavigationHandler</code> instance
+     * installed present in this application instance.  If
+     * an instance does not exist, it will be created.
      */
     public NavigationHandler getNavigationHandler() {
+	synchronized (this) {
         if (null == navigationHandler) {
             navigationHandler = new NavigationHandlerImpl();
         }
+	}
         return navigationHandler;
     }
 
     /**
-     * <p>Set the {@link NavigationHandler} instance that will be passed
-     * the outcome returned by any invoked {@link javax.faces.application.Action} for this
-     * web application.</p>
+     * Set a <code>NavigationHandler</code> instance for this
+     * application instance.
      *
-     * @param handler The new {@link NavigationHandler} instance
-     *
-     * @exception NullPointerException if <code>handler</code>
-     *	is <code>null</code>
+     * @param handler The <code>NavigationHandler</code> instance.
      */
     public void setNavigationHandler(NavigationHandler handler) {
         if (handler == null) {
             throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
+	synchronized (this) {
         this.navigationHandler = handler;
+    }
+        if (log.isDebugEnabled()) {
+            log.debug("set NavigationHandler Instance to " + navigationHandler);
+        }
     }
 
     /**
-     * <p>Return the {@link PropertyResolver} instance that will be utilized
-     * to resolve action and valus references.	The default implementation
-     * must provide the behavior described in the
-     * {@link PropertyResolver} class description.</p>
+     * Add a navigation case to the internal case list.  If a case list
+     * does not already exist in the case list map containing this case
+     * (identified by <code>from-view-id</code>), start a new list,
+     * add the case to it, and store the list in the case list map.
+     * If a case list already exists, see if a case entry exists in the list
+     * with a matching <code>from-view-id</code><code>from-action</code>
+     * <code>from-outcome</code> combination.  If there is suach an entry, 
+     * overwrite it with this new case.  Otherwise, add the case to the list.
+     *
+     * @param navigationCase the navigation case containing navigation 
+     *    mapping information from the configuration file.
      */
+    public void addNavigationCase(ConfigNavigationCase navigationCase) {
+
+        String fromViewId = navigationCase.getFromViewId();
+	synchronized (this) {
+            caseList = (List)caseListMap.get(fromViewId);
+	    if (caseList == null) {
+	        caseList = new ArrayList();
+	        caseList.add(navigationCase);
+	        caseListMap.put(fromViewId, caseList);
+	    } else {
+	        String key = navigationCase.getKey();
+		boolean foundIt = false;
+	        for (int i=0; i<caseList.size(); i++) {
+	            ConfigNavigationCase navCase = 
+		        (ConfigNavigationCase)caseList.get(i);
+		    // if there already is a case existing for the
+		    // fromviewid/fromaction.fromoutcome combination,
+		    // replace it ...  (last one wins).
+		    //
+		    if (key.equals(navCase.getKey())) {
+		        caseList.set(i, navigationCase);
+			foundIt = true;
+		        break;
+		    }
+		}
+		if (!foundIt) {
+	            caseList.add(navigationCase);
+	        }
+	    }
+	    if (fromViewId.endsWith("*")) {
+	        fromViewId = 
+		    fromViewId.substring(0,fromViewId.lastIndexOf("*"));
+	        wildcardMatchList.add(fromViewId);
+	    }
+	}
+    }
+
+    /**
+     * Return a <code>Map</code> of navigation mappings loaded from 
+     * the configuration system.  The key for the returned <code>Map</code>
+     * is <code>from-view-id</code>, and the value is a <code>List</code>
+     * of navigation cases.
+     *
+     * @return Map the map of navigation mappings.
+     */
+    public Map getNavigationCaseListMappings() {
+	if (caseListMap == null) {
+	    return Collections.EMPTY_MAP;
+	}
+        return caseListMap;
+    }
+
+    /**
+     * Return all navigation mappings whose <code>from-view-id</code>
+     * contained a trailing "*".
+     *
+     * @return <code>TreeSet</code> The navigation mappings sorted in
+     *   descending order.
+     */
+    public TreeSet getNavigationWildCardList() {
+        return wildcardMatchList;
+    }
+
     public PropertyResolver getPropertyResolver() {
+	synchronized (this) {
         if (null == propertyResolver) {
             propertyResolver = new PropertyResolverImpl();
         }
+	}
         return propertyResolver;
     }
 
-    /**
-     * <p>Set the {@link PropertyResolver} instance that will be utilized
-     * to resolve action and value references.</p>
-     *
-     * @param resolver The new {@link PropertyResolver} instance
-     *
-     * @exception NullPointerException if <code>resolver</code>
-     *	is <code>null</code>
-     */
     public void setPropertyResolver(PropertyResolver resolver) {
         if (resolver == null) {
             throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
+	synchronized (this) {
         this.propertyResolver = resolver;
+    }
+        if (log.isDebugEnabled()) {
+            log.debug("set PropertyResolver Instance to " + propertyResolver);
+        }
     }
 
 
-    /**
-     * <p>Return a {@link MethodBinding} for the specified method
-     * reference expression, which may be used to call the corresponding
-     * method later.  The returned {@link MethodBinding} instance must
-     * utilize the {@link PropertyResolver} and {@link VariableResolver}
-     * instances registered with this {@link Application} instance at the
-     * time that the {@link MethodBinding} instance was initially created.</p>
-     *
-     * <p>For maximum performance, implementations of {@link Application}
-     * may, but are not required to, cache {@link MethodBinding} instances
-     * in order to avoid repeated parsing of the reference expression.
-     * However, under no circumstances may a particular {@link MethodBinding}
-     * instance be shared across multiple web applications.</p>
-     *
-     * @param ref Reference expression for which to return a
-     *  {@link MethodBinding} instance
-     * @param params Parameter signatures that must match exactly on the
-     *  method to be invoked, or <code>null</code> for a method that takes
-     *  no parameters
-     *
-     * @exception NullPointerException if <code>ref</code>
-     *  is <code>null</code>
-     * @exception ReferenceSyntaxException if the specified <code>ref</code>
-     *  has invalid syntax
-     */
-    public MethodBinding getMethodBinding(String ref, Class params[]) {
+    public MethodBinding createMethodBinding(String ref, Class params[]) {
 
         if (ref == null) {
             throw new NullPointerException
@@ -268,118 +337,66 @@ public class ApplicationImpl extends Application {
 
     }
 
-
-    /**
-     * <p>Return a {@link ValueBinding} for the specified action or value
-     * reference expression, which may be used to manipulate the corresponding
-     * property value later.  The returned {@link ValueBinding} instance must
-     * utilize the {@link PropertyResolver} and {@link VariableResolver}
-     * instances registered with this {@link Application} instance at the
-     * time that the {@link ValueBinding} instance was initially created.</p>
-     *
-     * <p>For maximum performance, implementations of {@link Application}
-     * may, but are not required to, cache {@link ValueBinding} instances
-     * in order to avoid repeated parsing of the reference expression.
-     * However, under no circumstances may a particular {@link ValueBinding}
-     * instance be shared across multiple web applications.</p>
-     *
-     * @param ref Reference expression for which to return a
-     *	{@link ValueBinding} instance
-     *
-     * @exception NullPointerException if <code>ref</code>
-     *	is <code>null</code>
-     * @exception ReferenceSyntaxException if the specified <code>ref</code>
-     *	has invalid syntax
-     */
-    public ValueBinding getValueBinding(String ref)
+    public ValueBinding createValueBinding(String ref)
 	throws ReferenceSyntaxException {
+        ValueBinding valueBinding = null;
         if (ref == null) {
             throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        // Check the ValueBinding cache for an existing binding
-        ValueBinding valueBinding = (ValueBinding) valueBindingMap.get(ref);       
-      
-        if (valueBinding == null) {  
-            // the binding doesn't exist.  Check the syntax of the reference
-            // expression.  If the expression is valid, this has the side
-            // effect of caching the expression in the ExpressionEvaluator.
+        } else {
+            if (!(ref.startsWith("#{") && ref.endsWith("}"))) {
+                if (log.isErrorEnabled()) {
+                    log.error(" Expression " + ref + 
+                        " does not follow the syntax #{...}");
+                }
+	        throw new ReferenceSyntaxException(ref);
+	    }
+            // PENDING: Need to impelement the performance enhancement suggested
+            // by Hans in the EG on 17 November 2003.
 	    ref = Util.stripBracketsIfNecessary(ref);
             checkSyntax(ref);
             valueBinding = new ValueBindingImpl (this);
             ((ValueBindingImpl) valueBinding).setRef(ref);
-            valueBindingMap.put(ref, valueBinding);
         }
         return valueBinding;
     }
 
-    /**
-     * <p>Return the {@link VariableResolver} instance that will be utilized
-     * to resolve action and value references.	The default implementation
-     * must provide the behavior described in the
-     * {@link VariableResolver} class description.</p>
-     */
     public VariableResolver getVariableResolver() {
+	synchronized (this) {
         if (null == variableResolver) {
             variableResolver = new VariableResolverImpl();
         }
+	}
         return variableResolver;
     }
 
-    /**
-     * <p>Set the {@link VariableResolver} instance that will be utilized
-     * to resolve action and value references.</p>
-     *
-     * @param resolver The new {@link VariableResolver} instance
-     *
-     * @exception NullPointerException if <code>resolver</code>
-     *	is <code>null</code>
-     */
     public void setVariableResolver(VariableResolver resolver) {
         if (resolver == null) {
             throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
+	synchronized (this) {
         this.variableResolver = resolver;
     }
+        if (log.isDebugEnabled()) {
+            log.debug("set VariableResolver Instance to " + variableResolver);
+        }
+    }
 
-    /**
-     *<p>Register a new mapping of component type to the name of the 
-     * {@link UIComponent} class.  Subsequent calls to
-     * <code>createComponent()</code> will serve as a factory for {@link UIComponent}
-     *  instances.
-     *
-     * @param componentType The component type to be registered
-     * @param componentClass The fully qualified class name of the corresponding
-     *  {@link UIComponent} implementation
-     *
-     * @exception NullPointerException if <code>componentType</code> or
-     *  <code>componentClass</code> is <code>null</code>
-     */
     public void addComponent(String componentType, String componentClass) {
 	if (componentType == null || componentClass == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
+	synchronized (this) {
 	componentMap.put(componentType, componentClass);
     }
+        if (log.isTraceEnabled()) {
+            log.trace("added component of type " + componentType + 
+                 " class " + componentClass);
+        }
+    }
 
-    /**
-     * <p>Instantiate and return a new instance of {@link UIComponent} instance of the 
-     * class specified by a previous call to <code>addComponent()</code> for the
-     * specified component type.</p>
-     * 
-     * @param componentType The componentType that identifies the component instance
-     *  that will be created and returned.
-     *  
-     * @return {@link UIComponent} instance
-     *
-     * @exception FacesException if a {@link UIComponent} of the specified type cannot
-     *  be created.
-     * @exception NullPointerException if <code>componentType</code> is <code>null</code>.
-     */
     public UIComponent createComponent(String componentType) throws FacesException {
 	if (componentType == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
@@ -387,37 +404,25 @@ public class ApplicationImpl extends Application {
 	}
 	UIComponent returnVal = (UIComponent)newThing(componentType, componentMap);
 	if (returnVal == null) {
+            if (log.isErrorEnabled()) {
+                log.error("Could not instantiate component of type " + componentType);
+            }
             Object[] params = {componentType};
 	    throw new FacesException(Util.getExceptionMessage(
                 Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,params));
 	}
+        if (log.isTraceEnabled()) {
+            log.trace("Created component " + componentType);
+        }
 	return returnVal;
     }
 
-    /**
-     * <p>Instantiate and return a new instance of {@link UIComponent} instance
-     * using either the component reference argument or the component type
-     * argument.</p>
-     *
-     * @param componentRef The component reference that may identify the component
-     *  instance that will be returned.
-     * @param context The Faces context.
-     * @param componentType The componentType that identifies the component instance
-     *  that will be created and returned (if the componentref argument is not a
-     *  {@link UIComponent} instance.
-     *
-     * @return {@link UIComponent} instance
-     *
-     * @exception FacesException if a {@link UIComponent} of the specified type cannot
-     *  be created.
-     * @exception NullPointerException if <code>componentType</code> is <code>null</code>.
-     */
     public UIComponent createComponent(
-            ValueBinding componentRef,
+            ValueBinding componentBinding,
             FacesContext context,
             String componentType)
             throws FacesException {
-        if (null == componentRef || null == context || null == componentType) {
+        if (null == componentBinding || null == context || null == componentType) {
             throw new NullPointerException(
                     Util.getExceptionMessage(
                             Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -426,48 +431,40 @@ public class ApplicationImpl extends Application {
         Object result = null;
         boolean createOne = false;
 
-        if (null != (result = componentRef.getValue(context))) {
+        if (null != (result = componentBinding.getValue(context))) {
             // if the result is not an instance of UIComponent
             createOne = (!(result instanceof UIComponent));
             // we have to create one.
         }
         if (null == result || createOne) {
             result = this.createComponent(componentType);
-            componentRef.setValue(context, result);
+            componentBinding.setValue(context, result);
         }
 
         return (UIComponent) result;
     }
 
-    /**
-     * <p>Return an <code>Iterator</code> over the set of currently defined
-     * component types for this <code>Application</code>.</p>
-     *
-     * @return Iteration of component types.
-     */
     public Iterator getComponentTypes() {
-	return componentMap.keySet().iterator();
+	Iterator result = Collections.EMPTY_LIST.iterator();
+	synchronized (this) {
+	    result = componentMap.keySet().iterator();
+	}
+
+	return result;
     }
 
-    /**
-     *<p>Register a new mapping of converter id to the name of the 
-     * {@link Converter} class.  Subsequent calls to
-     * <code>createConverter()</code> will serve as a factory for {@link Converter}
-     *  instances.
-     *
-     * @param converterId The converter identifier to be registered
-     * @param converterClass The fully qualified class name of the corresponding
-     *  {@link Converter} implementation
-     *
-     * @exception NullPointerException if <code>converterId</code> or
-     *  <code>converterClass</code> is <code>null</code>
-     */
     public void addConverter(String converterId, String converterClass) {
         if (converterId == null || converterClass == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
+	synchronized (this) {
 	converterIdMap.put(converterId, converterClass);
+    }
+        if (log.isTraceEnabled()) {
+            log.trace("added converter of type " + converterId + 
+                 " and class " + converterClass);
+        }
     }
 
     public void addConverter(Class targetClass, String converterClass) {
@@ -475,8 +472,12 @@ public class ApplicationImpl extends Application {
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
+	synchronized (this) {
 	converterTypeMap.put(targetClass, converterClass);
+    }
+        if (log.isTraceEnabled()) {
+            log.trace("added converter of class type " + converterClass); 
+        }
     }
     
     public Converter createConverter(String converterId) {
@@ -486,9 +487,16 @@ public class ApplicationImpl extends Application {
         }
         Converter returnVal = (Converter)newThing(converterId, converterIdMap);	
         if (returnVal == null) {
+            if (log.isErrorEnabled()) {
+                log.error("Couldn't instantiate converter of the type " + 
+                        converterId); 
+            }
             Object[] params = {converterId};
             throw new FacesException(Util.getExceptionMessage(
                 Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,params));
+        }
+        if (log.isTraceEnabled()) {
+            log.trace("created converter of type " + converterId); 
         }
         return returnVal;
     }
@@ -498,10 +506,14 @@ public class ApplicationImpl extends Application {
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        Converter returnVal = (Converter)newThing
-            (targetClass, converterTypeMap);
+        Converter returnVal = (Converter)newThing(targetClass, 
+						  converterTypeMap);
 
         if (returnVal != null) {
+            if (log.isTraceEnabled()) {
+                log.trace("Created converter of type " + 
+                    returnVal.getClass().getName()); 
+            }
             return returnVal;
         }
 
@@ -512,6 +524,10 @@ public class ApplicationImpl extends Application {
             for (int i = 0; i < interfaces.length; i++) {
                 returnVal = createConverter(interfaces[i]);
                 if (returnVal != null) {
+                    if (log.isTraceEnabled()) {
+                        log.trace("Created converter of type " + 
+                            returnVal.getClass().getName()); 
+                    }
                     return returnVal;
                 }
             }
@@ -522,6 +538,10 @@ public class ApplicationImpl extends Application {
         if (superclass != null) {
             returnVal = createConverter(superclass);
             if (returnVal != null) {
+                if (log.isTraceEnabled()) {
+                        log.trace("Created converter of type " + 
+                            returnVal.getClass().getName()); 
+                }
                 return returnVal;
             }
         }
@@ -529,25 +549,31 @@ public class ApplicationImpl extends Application {
         return returnVal;
     }
 
-    /**
-     * <p>Return an <code>Iterator</code> over the set of currently defined
-     * converter identifiers for this <code>Application</code>.</p>
-     *
-     * @return Iteration of {@link Converter} identifiers.
-     */
     public Iterator getConverterIds() {
-        return converterIdMap.keySet().iterator();
+	Iterator result = Collections.EMPTY_LIST.iterator();
+	synchronized (this) {
+	    result = converterIdMap.keySet().iterator();
+	}
+
+        return result;
     }
 
     public Iterator getConverterTypes() {
-	return converterTypeMap.keySet().iterator();
+	Iterator result = Collections.EMPTY_LIST.iterator();
+	synchronized (this) {
+	    result = converterTypeMap.keySet().iterator();
+	}
+	return result;
     }
 
     ArrayList supportedLocales = null;
     public Iterator getSupportedLocales() {
 	Iterator result = Collections.EMPTY_LIST.iterator();
+
+	synchronized (this) {
 	if (null != supportedLocales) {
 	    result = supportedLocales.iterator();
+	}
 	}
 	return result;
     }
@@ -556,57 +582,51 @@ public class ApplicationImpl extends Application {
 	if (null == newLocales) {
 	    throw new NullPointerException();
 	}
+	synchronized (this) {
 	supportedLocales = new ArrayList(newLocales);
+    }
+        if (log.isTraceEnabled()) {
+            log.trace("set Supported Locales"); 
+        }
     }
 
     protected Locale defaultLocale = null;
     public Locale getDefaultLocale(){
 	Locale result = defaultLocale;
+	synchronized (this) {
 	if (null == defaultLocale) {
 	    result = Locale.getDefault();
 	}
+	}
+        if (log.isTraceEnabled()) {
+            log.trace("get defaultLocale " + result); 
+        }
 	return result;
     }
     
     public void setDefaultLocale(Locale newLocale) {	
+	synchronized (this) {
 	    defaultLocale = newLocale;
     }
+        if (log.isTraceEnabled()) {
+            log.trace("set defaultLocale " + defaultLocale); 
+        }
+    }
     
-    /**
-     *<p>Register a new mapping of validator id to the name of the 
-     * {@link Validator} class.  Subsequent calls to
-     * <code>createValidator()</code> will serve as a factory for {@link Validator}
-     *  instances.
-     *
-     * @param validatorId The validator identifier to be registered
-     * @param validatorClass The fully qualified class name of the corresponding
-     *  {@link Validator} implementation
-     *
-     * @exception NullPointerException if <code>validatorId</code> or
-     *  <code>validatorClass</code> is <code>null</code>
-     */
     public void addValidator(String validatorId, String validatorClass) {
         if (validatorId == null || validatorClass == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
+	synchronized (this) {
 	validatorMap.put(validatorId, validatorClass);
     }
+        if (log.isTraceEnabled()) {
+            log.trace("added validator of type " + validatorId + 
+                 " class " + validatorClass);
+        }
+    }
 
-    /**
-     * <p>Instantiate and return a new instance of {@link Validator} instance of the 
-     * class specified by a previous call to <code>addValidator()</code> for the
-     * specified validator identifier.</p>
-     * 
-     * @param validatorId The validatorId that identifies the validator instance
-     *  that will be created and returned.
-     *  
-     * @return {@link Validator} instance.
-     *
-     * @exception FacesException if a {@link Validator} of the specified identifier
-     * cannot be created.
-     * @exception NullPointerException if <code>validatorId</code> is <code>null</code>.
-     */
     public Validator createValidator(String validatorId) throws FacesException {
 	if (validatorId == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
@@ -614,28 +634,38 @@ public class ApplicationImpl extends Application {
 	}
 	Validator returnVal = (Validator)newThing(validatorId, validatorMap);
 	if (returnVal == null) {
+            if (log.isErrorEnabled()) {
+                log.error("Couldn't instantiate Validator of the type " + 
+                        validatorId); 
+            }
             Object[] params = {validatorId};
 	    throw new FacesException(Util.getExceptionMessage(
                 Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,params));
 	}
+        if (log.isTraceEnabled()) {
+            log.trace("created validator of type " + validatorId); 
+        }
 	return returnVal;
     }
 
-    /**
-     * <p>Return an <code>Iterator</code> over the set of currently defined
-     * validator identifiers for this <code>Application</code>.</p>
-     *
-     * @return Iteration of {@link Validator} identifiers.
-     */
     public Iterator getValidatorIds() {
-        return validatorMap.keySet().iterator();
+	Iterator result = Collections.EMPTY_LIST.iterator();
+	synchronized (this) {
+	    result = validatorMap.keySet().iterator();
+	}
+        return result;
     }
 
     public void setMessageBundle(String messageBundle) {
+	synchronized (this) {
 	this.messageBundle = messageBundle;
     }
+        if (log.isTraceEnabled()) {
+            log.trace("set messageBundle " + messageBundle); 
+        }
+    }
     
-    public String getMessageBundle() {
+    synchronized public String getMessageBundle() {
 	return messageBundle;
     }
 
@@ -651,9 +681,13 @@ public class ApplicationImpl extends Application {
      *  be created by the managed bean factory instance.
      * @param factory the managed bean factory instance.
      */
-    public void addManagedBeanFactory(String managedBeanName,
+    synchronized public void addManagedBeanFactory(String managedBeanName,
         ManagedBeanFactory factory) {
         managedBeanFactoriesMap.put(managedBeanName, factory);
+        if (log.isTraceEnabled()) {
+            log.trace("Added managedBeanFactory " + factory + " for" + 
+                    managedBeanName); 
+        }
     }
 
     /**
@@ -676,22 +710,25 @@ public class ApplicationImpl extends Application {
      * @return The new object instance.
      */
     protected Object newThing(Object key, Map map) {
-        Assert.assert_it(key != null);
-        Assert.assert_it(map != null);
-        Assert.assert_it(key instanceof String || key instanceof Class);
+        Util.doAssert(key != null);
+        Util.doAssert(map != null);
+        Util.doAssert(key instanceof String || key instanceof Class);
 
         Object result = null;
         Class clazz = null;
-        Object value = map.get(key);
+	Object value = null;
+
+	synchronized (this) {
+	    value = map.get(key);
 
         if (value == null) {
 	    return null;
         }
-        Assert.assert_it(value instanceof String || value instanceof Class);
+	    Util.doAssert(value instanceof String || value instanceof Class);
         if (value instanceof String) {
 	    try {
                 clazz = Util.loadClass((String)value, value);
-                Assert.assert_it(clazz != null);
+		    Util.doAssert(clazz != null);
 	        map.put(key, clazz);
 	    } catch (Throwable t) {
                 Object[] params = {t.getMessage()};
@@ -700,6 +737,7 @@ public class ApplicationImpl extends Application {
 	    }
         } else {
             clazz = (Class)value;
+	    }
         }
 
         try {
@@ -726,27 +764,38 @@ public class ApplicationImpl extends Application {
      * @exception PropertyNotFoundException if the managed bean
      *  could not be created.
      */
-    public Object createAndMaybeStoreManagedBeans(FacesContext context,
+    synchronized public Object createAndMaybeStoreManagedBeans(FacesContext context,
         String managedBeanName) throws PropertyNotFoundException {
-
         ManagedBeanFactory managedBean = (ManagedBeanFactory)
             managedBeanFactoriesMap.get(managedBeanName);
         if ( managedBean == null ) {
+            if (log.isDebugEnabled()) {
+                log.debug("Couldn't find a factory for " + managedBeanName); 
+            }
             return null;
         }
 
         Object bean;
         try {
             bean = managedBean.newInstance();
+            if (log.isDebugEnabled()) {
+                log.debug("Created bean" + managedBeanName + " successfully "); 
+            }
         } catch (Exception ex) {
             Object []params = {ex.getMessage()};
+            if (log.isErrorEnabled()) {
+                log.error(ex.getMessage(), ex); 
+            }
             throw new PropertyNotFoundException(Util.getExceptionMessage(
                 Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
         }
         //add bean to appropriate scope
         String scope = managedBean.getScope();
         //scope cannot be null
-        Assert.assert_it(null != scope);
+	Util.doAssert(null != scope);
+	if (log.isTraceEnabled()) {
+            log.trace("Storing " + managedBeanName + " in scope " + scope); 
+        }
 
         if (scope.equalsIgnoreCase(RIConstants.APPLICATION)) {
             context.getExternalContext().
@@ -759,7 +808,6 @@ public class ApplicationImpl extends Application {
             context.getExternalContext().
                 getRequestMap().put(managedBeanName, bean);
         }
-
         return bean;
     }    
         
@@ -772,22 +820,47 @@ public class ApplicationImpl extends Application {
             // this will be cached so it won't have to be parsed again when
             // evaluated.
             evaluator.parseExpression(exprInfo);
+            if (log.isTraceEnabled()) {
+                log.trace("Expression " + ref + " passed syntax check"); 
+            }
         } catch (ElException elex) {
             // t will not be null if an error occurred.
             Throwable t = elex.getCause();
             if (t != null) {
                 throw new ReferenceSyntaxException(t.getMessage(), t);
             }
+            if (log.isErrorEnabled()) {
+                log.error(elex.getMessage(), elex); 
+            }
             throw new ReferenceSyntaxException(elex.getMessage(), elex);
         }
     }
    
-    // This is called by FacesContextImpl.responseRendered().
-   void responseRendered() {
+    // This is called by ViewHandlerImpl.renderView().
+    synchronized void responseRendered() {
        responseRendered = true;
    }
-   
-    // The testcase for this class is com.sun.faces.application.TestApplicationImpl.java 
-    // The testcase for this class is com.sun.faces.application.TestApplicationImpl_Config.java 
+    /**
+     * This Comparator class will help sort the <code>ConfigNavigationCase</code> objects
+     * based on their <code>fromViewId</code> properties in descending order -
+     * largest string to smallest string.
+     */
+    class SortIt implements Comparator {
+        public int compare(Object o1, Object o2) {
+            String fromViewId1 = (String)o1;
+            String fromViewId2 = (String)o2;
+            return -(fromViewId1.compareTo(fromViewId2));
+        }
+    }
 
+    class CaseStruct {
+	String viewId;
+	ConfigNavigationCase navCase;
+    }
+   
+    // The testcase for this class is
+    // com.sun.faces.application.TestApplicationImpl.java
+
+    // The testcase for this class is
+    // com.sun.faces.application.TestApplicationImpl_Config.java
 }

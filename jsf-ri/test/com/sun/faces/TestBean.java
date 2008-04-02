@@ -5,7 +5,7 @@
 
 package com.sun.faces;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import java.util.Collection;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class TestBean extends Object {
 
     public void setOne(String newOne) {
         one = newOne;
-        Assert.assert_it(newOne.equals("one"));
+        Util.doAssert(newOne.equals("one"));
         System.setProperty(PROP, TRUE);
     }
 
@@ -210,7 +210,7 @@ public class TestBean extends Object {
 
         public void setTwo(String newTwo) {
             two = newTwo;
-            Assert.assert_it(newTwo.equals("two"));
+            Util.doAssert(newTwo.equals("two"));
             System.setProperty(PROP, TRUE);
         }
 
@@ -269,7 +269,7 @@ public class TestBean extends Object {
 
         public void setThree(String newThree) {
             three = newThree;
-            Assert.assert_it(newThree.equals("three"));
+            Util.doAssert(newThree.equals("three"));
             System.setProperty(PROP, TRUE);
         }
 

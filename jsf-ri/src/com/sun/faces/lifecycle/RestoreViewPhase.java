@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.9 2003/10/22 22:17:39 eburns Exp $
+ * $Id: RestoreViewPhase.java,v 1.10 2003/12/17 15:13:44 rkitain Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ package com.sun.faces.lifecycle;
 import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -39,7 +39,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.9 2003/10/22 22:17:39 eburns Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.10 2003/12/17 15:13:44 rkitain Exp $
  * 
  */
 
@@ -105,6 +105,9 @@ public class RestoreViewPhase extends Phase {
 
     public void execute(FacesContext facesContext) throws FacesException
     {
+        if (log.isDebugEnabled()) {
+            log.debug("Entering RestoreViewPhase");
+        }
         if (null == facesContext) {
             throw new FacesException(Util.getExceptionMessage(
                      Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
@@ -115,6 +118,9 @@ public class RestoreViewPhase extends Phase {
         UIViewRoot viewRoot = facesContext.getViewRoot();
         Locale locale = null;
         if (viewRoot != null) {
+            if (log.isDebugEnabled()) {
+                log.debug("Found a pre created view in FacesContext");
+            }
             locale = facesContext.getExternalContext().getRequestLocale();
             facesContext.getViewRoot().setLocale(locale);
             doPerComponentActions(facesContext, viewRoot);
@@ -145,22 +151,38 @@ public class RestoreViewPhase extends Phase {
         }
         
         if (viewId == null) {
+            if (log.isDebugEnabled()) {
+                log.debug("viewId is null");
+            }
             throw new FacesException(Util.getExceptionMessage(
                     Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
+        
 	
 	// try to restore the view
 	if (null == (viewRoot = (Util.getViewHandler(facesContext)).
 		     restoreView(facesContext, viewId))) {
+             
+            if (log.isDebugEnabled()) {
+                log.debug("New request: creating a view for " + viewId);
+            }
 	    // if that fails, create one
 	    viewRoot = (Util.getViewHandler(facesContext)).
                 createView(facesContext, viewId);
             facesContext.renderResponse();
-	}
-	Assert.assert_it(null != viewRoot);
+	} else {
+            if (log.isDebugEnabled()) {
+                 log.debug("Postback: Restored view for " + viewId);
+            }
+        }
+	Util.doAssert(null != viewRoot);
 
         facesContext.setViewRoot(viewRoot);
         doPerComponentActions(facesContext, viewRoot);
+        
+        if (log.isDebugEnabled()) {
+           log.debug("Exiting RestoreViewPhase");
+        }
     }    
 
     /**
@@ -168,7 +190,6 @@ public class RestoreViewPhase extends Phase {
       */
     protected void doPerComponentActions(FacesContext context, UIComponent uic) {
         Iterator kids = uic.getFacetsAndChildren();
-        String componentRef = null;
         while (kids.hasNext()) {
             doPerComponentActions(context, (UIComponent) kids.next());
         }
@@ -176,12 +197,11 @@ public class RestoreViewPhase extends Phase {
             ((UIInput)uic).setValid(true);
         }
       
-        // if this component has a componentRef, make sure to populate the
-        // ValueBinding for it.
-        if (null != (componentRef = uic.getComponentRef())) {
-            ValueBinding valueBinding = 
-                context.getApplication().getValueBinding(componentRef);
-            valueBinding.setValue(context, uic);
+        // if this component has a component value reference expression,
+        // make sure to populate the ValueBinding for it.
+	ValueBinding valueBinding = null;
+	if (null != (valueBinding = uic.getValueBinding("binding"))) {
+	    valueBinding.setValue(context, uic);
         }
     }
 

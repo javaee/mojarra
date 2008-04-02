@@ -44,9 +44,9 @@
     <managed-bean-scope>request</managed-bean-scope>
     <list-entries>
       <value-class>com.sun.faces.config.SimpleBean</value-class>
-      <value-ref>SimpleBean</value-ref>
-      <value-ref>SimpleBean</value-ref>
-      <value-ref>SimpleBean</value-ref>
+      <value>#{SimpleBean}</value>
+      <value>#{SimpleBean}</value>
+      <value>#{SimpleBean}</value>
       <null-value/>
     </list-entries>
   </managed-bean>
@@ -61,11 +61,11 @@
       <value-class>java.util.Map</value-class>
       <map-entry>
         <key>one</key>
-        <value-ref>floatMap</value-ref>
+        <value>#{floatMap}</value>
       </map-entry>
       <map-entry>
         <key>two</key>
-        <value-ref>floatMap</value-ref>
+        <value>#{floatMap}</value>
       </map-entry>
       <map-entry>
         <key>three</key>
@@ -85,15 +85,15 @@
       <value-class>com.sun.faces.config.SimpleBean</value-class>
       <map-entry>
         <key>3.1415</key>
-        <value-ref>SimpleBean</value-ref>
+        <value>#{SimpleBean}</value>
       </map-entry>
       <map-entry>
         <key>3.14</key>
-        <value-ref>SimpleBean</value-ref>
+        <value>#{SimpleBean}</value>
       </map-entry>
       <map-entry>
         <key>6.02</key>
-        <value-ref>SimpleBean</value-ref>
+        <value>#{SimpleBean}</value>
       </map-entry>
       <map-entry>
         <key>0.00001</key>

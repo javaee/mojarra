@@ -63,7 +63,7 @@
     </managed-property>
     <managed-property>
       <property-name>userName</property-name>
-      <value-ref>usernamecomponent</value-ref>
+      <value>#{usernamecomponent}</value>
     </managed-property>
   </managed-bean>
 
@@ -161,7 +161,7 @@
   <navigation-rule>
     <from-view-id>/redirect.jsp</from-view-id>
     <navigation-case>
-      <description>If the action or ActionRef returns "success", goto
+      <description>If the action returns "success", goto
       redirect1.jsp</description> 
       <display-name>The Generic Rule</display-name> 
       <from-outcome>success</from-outcome>

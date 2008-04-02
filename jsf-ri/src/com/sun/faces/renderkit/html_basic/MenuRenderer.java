@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.34 2003/11/20 01:35:18 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.35 2003/12/17 15:13:55 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -34,7 +34,7 @@ import javax.faces.convert.ConverterException;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 import javax.faces.el.ValueBinding;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import com.sun.faces.util.Util;
 import java.lang.reflect.Array;
@@ -103,7 +103,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         setPreviousValue(component, ((UIInput)component).getValue());
 
         String clientId = component.getClientId(context);
-        Assert.assert_it(clientId != null);
+        Util.doAssert(clientId != null);
         // currently we assume the model type to be of type string or 
         // convertible to string and localised by the application.
         if (component instanceof UISelectMany) {
@@ -246,7 +246,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	    }
 	}
 	
-	Assert.assert_it(null != result);
+	Util.doAssert(null != result);
 	if (elementType.isPrimitive()) {
 	    for (i = 0; i < len; i++) {
 		if (elementType.equals(Boolean.TYPE)) {
@@ -355,7 +355,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }    
           
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
         
 	String styleClass = null;
         if (null != (styleClass = (String) component.getAttributes().get("styleClass"))) {
@@ -374,7 +374,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         UIComponent component) throws IOException {
         
 	ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
 
 	writer.startElement("select", component);
 	writer.writeAttribute("name", component.getClientId(context), "clientId");
@@ -416,7 +416,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	throws IOException {
         
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
         
         Iterator items = Util.getSelectItems(context, component);
         SelectItem curItem = null;
@@ -442,7 +442,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     protected void renderOption(FacesContext context, UIComponent component,
             SelectItem curItem) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
         
         writer.writeText("\t", null);
         writer.startElement("option", component);

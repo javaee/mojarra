@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.46 2003/10/31 01:12:11 eburns Exp $
+ * $Id: ConfigParser.java,v 1.47 2003/12/17 15:13:31 rkitain Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 
@@ -51,6 +51,8 @@ import javax.faces.render.Renderer;
 import javax.servlet.ServletContext;
 
 import java.io.InputStream;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
@@ -177,15 +179,24 @@ public class ConfigParser {
     /**
      *
      * <p>Parse the input stream.</p>
+     *
+     * @exception FileNotFoundException if input is null.
      */
 
-    protected void parseConfig(InputStream input) {        
+    void parseConfig(InputStream input) throws FileNotFoundException {        
+	if (null == input) {
+	    throw new FileNotFoundException();
+	}
 	try {
             digester.clear();
             digester.parse(input);
         } catch (Exception e) {
             Object[] obj = new Object[1];
-            obj[0] = input.toString(); 
+            obj[0] = (null != input) ? input.toString() : ""; 
+	    if (log.isFatalEnabled()) {
+		log.fatal(Util.getExceptionMessage(
+                Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj)+e.getMessage(), e);
+	    }
             throw new FacesException(Util.getExceptionMessage(
                 Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj)+e.getMessage(), e);
         } finally {
@@ -193,10 +204,11 @@ public class ConfigParser {
 		if (input != null) {
 	            input.close();
 		}
-	    } catch (Exception ee) {
-	        if (log.isWarnEnabled()) {
-	            log.warn(Util.getExceptionMessage(Util.CANT_CLOSE_INPUT_STREAM_ID), ee);
+	    } catch (IOException ee) {
+		if (log.isFatalEnabled()) {
+	            log.fatal(Util.getExceptionMessage(Util.CANT_CLOSE_INPUT_STREAM_ID), ee);
 	        }
+		throw new FacesException(ee);
             }
 	}
     }
@@ -205,18 +217,28 @@ public class ConfigParser {
 
     * <p>Add to the configuration the
     * config information at the specified configPath.</p>
+    *
+    * @exception FileNotFoundException if the configPath or the stream
+    * obtained from the config path is null.
 
     */
 
     // Parse the configuration file at the specified path; 
-    protected void parseConfig(String configPath, ServletContext servletContext) {
+    void parseConfig(String configPath, ServletContext servletContext) throws FileNotFoundException {
         InputStream input = null;
+	if (null == configPath) {
+	    throw new FileNotFoundException();
+	}
 
         try {
             input = servletContext.getResourceAsStream(configPath);
 	    // Input Stream should be closed when this method completes;
 	    this.parseConfig(input);
-        } catch (Exception e) {
+        } 
+	catch (FileNotFoundException fnfe) {
+	    throw fnfe;
+	} 
+	catch (Exception e) {
             Object[] obj = new Object[1];
             obj[0] = configPath;
             throw new FacesException(Util.getExceptionMessage(
@@ -250,15 +272,23 @@ public class ConfigParser {
 	}
     }
     */
-    protected void parseConfig(InputSource input) {
+
+    /**
+     * @exception FileNotFoundException if the input is null
+     */
+
+    void parseConfig(InputSource input) throws FileNotFoundException {
+	if (null == input) {
+	    throw new FileNotFoundException();
+	}
         try {
             digester.clear();
             digester.parse(input);
         } catch (Throwable t) {
             Object[] obj = new Object[1];
-            obj[0] = input.toString(); 
-            throw new RuntimeException(Util.getExceptionMessage(
-                Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj)+t.getMessage());
+            obj[0] = (null != input) ? input.toString() : ""; 
+            throw new FacesException(Util.getExceptionMessage(
+                Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj)+t.getMessage(), t);
         }
 	
         try {
@@ -440,29 +470,25 @@ public class ConfigParser {
     protected void configureRulesManagedBeanListAndMap(Digester digester, 
 						      String base) {
         // these rules set the value category of the individual property
-        // value the category can be one of: value, value-ref,
-        // value-class, null-value
+        // value the category can be one of: VALUE, VALUE_BINDING,
+        // VALUE_CLASS, NULL_VALUE
         
 	ConfigManagedBeanPropertyValueRule cpvRule = 
 	    new ConfigManagedBeanPropertyValueRule();
-        ConfigManagedBeanPropertyValueRefRule cpvrRule = 
-	    new ConfigManagedBeanPropertyValueRefRule();
         ConfigManagedBeanPropertyValueTypeRule cpvtRule = 
 	    new ConfigManagedBeanPropertyValueTypeRule();
         ConfigManagedBeanPropertyValueNullRule cpvnRule = 
 	    new ConfigManagedBeanPropertyValueNullRule();
 	
         // these rules set the value category of the individual property
-        // map entries the category can be one of: value, value-ref,
-        // null-value.  Note that we don't have a rule for value-class,
+        // map entries the category can be one of: VALUE, VALUE_BINDING,
+        // NULL_VALUE.  Note that we don't have a rule for VALUE_CLASS,
         // this is because the value-class/key class thing is handled by
         // method calls directly on the ConfigManagedBeanProperty
         // instance.
 	
         ConfigManagedPropertyMapValueRule cpmvRule = 
 	    new ConfigManagedPropertyMapValueRule();
-        ConfigManagedPropertyMapRefRule cpmrRule = 
-	    new ConfigManagedPropertyMapRefRule();
         ConfigManagedPropertyMapNullRule cpmnRule = 
 	    new ConfigManagedPropertyMapNullRule();
 	
@@ -484,7 +510,6 @@ public class ConfigParser {
 	
         configureRulesManagedPropertyMap(digester, prefix + "/map-entry");
         digester.addRule(prefix+"/map-entry/value", cpmvRule);
-        digester.addRule(prefix+"/map-entry/value-ref", cpmrRule);
         digester.addRule(prefix+"/map-entry/null-value", cpmnRule);
 
 	//
@@ -500,12 +525,10 @@ public class ConfigParser {
         digester.addSetNext(prefix, "setListOrMap", "com.sun.faces.config.ConfigManagedBeanProperty");
 
         configureRulesManagedBeanPropertyValueArr(digester, prefix + "/value");
-        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/value-ref");
         configureRulesManagedBeanPropertyValueArr(digester, prefix + "/value-class");
         configureRulesManagedBeanPropertyValueArr(digester, prefix + "/null-value");
         digester.addRule(prefix+"/value-class", cpvtRule);
         digester.addRule(prefix+"/value", cpvRule);
-        digester.addRule(prefix+"/value-ref", cpvrRule);
         digester.addRule(prefix+"/null-value", cpvnRule);
 	
     }
@@ -513,19 +536,19 @@ public class ConfigParser {
     // Configure the rules for a <managed-bean><managed-property> element
     protected void configureRulesManagedBeanProperty(Digester digester, String prefix) {
 
-        // these rules set the value category of the individual property value
-        // the category can be one of: value, value-ref, value-class, null-value
+        // these rules set the value category of the individual property
+        // value the category can be one of: VALUE, VALUE_BINDING,
+        // VALUE_CLASS, NULL_VALUE
 
         ConfigManagedBeanPropertyValueRule cpvRule = new ConfigManagedBeanPropertyValueRule();
-        ConfigManagedBeanPropertyValueRefRule cpvrRule = new ConfigManagedBeanPropertyValueRefRule();
         ConfigManagedBeanPropertyValueTypeRule cpvtRule = new ConfigManagedBeanPropertyValueTypeRule();
         ConfigManagedBeanPropertyValueNullRule cpvnRule = new ConfigManagedBeanPropertyValueNullRule();
 
-        // these rules set the value category of the individual property map entries 
-        // the category can be one of: value, value-ref, null-value
+        // these rules set the value category of the individual property
+        // map entries the category can be one of: VALUE, VALUE_BINDING,
+        // NULL_VALUE
 
         ConfigManagedPropertyMapValueRule cpmvRule = new ConfigManagedPropertyMapValueRule();
-        ConfigManagedPropertyMapRefRule cpmrRule = new ConfigManagedPropertyMapRefRule();
         ConfigManagedPropertyMapNullRule cpmnRule = new ConfigManagedPropertyMapNullRule();
 
         // these method calls create a property, set the property name, add
@@ -537,37 +560,29 @@ public class ConfigParser {
         digester.addCallMethod(prefix + "/map-entries/key-class", "setMapKeyClass", 0);
         digester.addCallMethod(prefix + "/map-entries/value-class", "setMapValueClass", 0);
 
-        // for "simple" values
+        // for "simple" values and value bindings
 
         configureRulesManagedBeanPropertyValue(digester, prefix + "/value");
         digester.addRule(prefix+"/value", cpvRule);
 
-        // for "simple" value-ref
-
-        configureRulesManagedBeanPropertyValueRef(digester, prefix + "/value-ref");
-        digester.addRule(prefix+"/value-ref", cpvrRule);
-
         // for "simple" null-value
 
-        configureRulesManagedBeanPropertyValueRef(digester, prefix + "/null-value");
+        configureRulesManagedBeanPropertyValue(digester, prefix + "/null-value");
         digester.addRule(prefix+"/null-value", cpvnRule);
 
         // for value arrays or Lists
 
         configureRulesManagedBeanPropertyValueArr(digester, prefix + "/list-entries/value");
-        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/list-entries/value-ref");
         configureRulesManagedBeanPropertyValueArr(digester, prefix + "/list-entries/value-class");
         configureRulesManagedBeanPropertyValueArr(digester, prefix + "/list-entries/null-value");
         digester.addRule(prefix+"/list-entries/value-class", cpvtRule);
         digester.addRule(prefix+"/list-entries/value", cpvRule);
-        digester.addRule(prefix+"/list-entries/value-ref", cpvrRule);
         digester.addRule(prefix+"/list-entries/null-value", cpvnRule);
 
         // for map entries
     
         configureRulesManagedPropertyMap(digester, prefix + "/map-entries/map-entry");
         digester.addRule(prefix+"/map-entries/map-entry/value", cpmvRule);
-        digester.addRule(prefix+"/map-entries/map-entry/value-ref", cpmrRule);
         digester.addRule(prefix+"/map-entries/map-entry/null-value", cpmnRule);
     }
 
@@ -580,21 +595,12 @@ public class ConfigParser {
         digester.addCallMethod(prefix, "setValue", 0);
     }
 
-    // Configure the rules for the values of a <managed-bean><property><value-ref> element
-    // This method creates property value object, sets the value, and sets it in the property object
-
-    protected void configureRulesManagedBeanPropertyValueRef(Digester digester, String prefix) {
-        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigManagedBeanPropertyValue");
-        digester.addSetNext(prefix, "setValue", "com.sun.faces.config.ConfigManagedBeanPropertyValue");
-        digester.addCallMethod(prefix, "setValue", 0);
-    }
-
-    // Configure the rules for the list-entries of <managed-bean><property><list-entries><value>,
-    // <managed-bean><property><list-entries><value-ref>,
+    // Configure the rules for the list-entries of
+    // <managed-bean><property><list-entries><value>,
     // <managed-bean><property><list-entries><value-class>
     // <managed-bean><property><list-entries><null-value> elements.
-    // This method creates property value object, sets the value, and adds it to
-    // the property list-entries array in the property object
+    // This method creates property value object, sets the value, and
+    // adds it to the property list-entries array in the property object
  
     protected void configureRulesManagedBeanPropertyValueArr(Digester digester, String prefix) {
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigManagedBeanPropertyValue");
@@ -607,7 +613,6 @@ public class ConfigParser {
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigManagedPropertyMap");
         digester.addCallMethod(prefix+"/key", "setKey", 0);
         digester.addCallMethod(prefix+"/value", "setValue", 0);
-        digester.addCallMethod(prefix+"/value-ref", "setValue", 0);
         digester.addCallMethod(prefix+"/null-value", "setValue", 0);
         digester.addSetNext(prefix, "addMapEntry", "com.sun.faces.config.ConfigManagedPropertyMap");
     }
@@ -619,7 +624,7 @@ public class ConfigParser {
         digester.addCallMethod("faces-config/navigation-rule/from-view-id", "setFromViewId", 0);
         prefix = "faces-config/navigation-rule/navigation-case";
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigNavigationCase");
-        digester.addCallMethod(prefix + "/from-action-ref", "setFromActionRef", 0);
+        digester.addCallMethod(prefix + "/from-action", "setFromAction", 0);
         digester.addCallMethod(prefix + "/from-outcome", "setFromOutcome", 0);
         digester.addCallMethod(prefix + "/to-view-id", "setToViewId", 0);
         digester.addCallMethod(prefix + "/redirect", "setRedirect", 0);
@@ -690,8 +695,9 @@ public class ConfigParser {
 }
 
 /**
- * These specialized rules set the appropriate value category (value,value-ref,
- * null-value,value-class)  on the managed bean property value object;
+ * These specialized rules set the appropriate value category
+ * (VALUE,VALUE_BINDING, NULL_VALUE,VALUE_CLASS) on the managed bean
+ * property value object;
  */
 final class ConfigManagedBeanPropertyValueRule extends Rule {
     public ConfigManagedBeanPropertyValueRule() {
@@ -703,15 +709,6 @@ final class ConfigManagedBeanPropertyValueRule extends Rule {
     }
 }
 
-final class ConfigManagedBeanPropertyValueRefRule extends Rule {
-    public ConfigManagedBeanPropertyValueRefRule() {
-        super();
-    }
-    public void begin(String namespace, String name, Attributes attributes) throws Exception {
-        ConfigManagedBeanPropertyValue cpv = (ConfigManagedBeanPropertyValue)digester.peek();
-        cpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_REF);
-    }
-}
 
 final class ConfigManagedBeanPropertyValueTypeRule extends Rule {
     public ConfigManagedBeanPropertyValueTypeRule() {
@@ -734,8 +731,9 @@ final class ConfigManagedBeanPropertyValueNullRule extends Rule {
 }
 
 /**
- * These specialized rules set the appropriate value category (value,value-ref,null-value)
- * on the managed bean property map object;
+ * These specialized rules set the appropriate value category
+ * (VALUE,VALUE_BINDING,NULL_VALUE) on the managed bean property map
+ * object;
  */
 
 final class ConfigManagedPropertyMapValueRule extends Rule {
@@ -745,16 +743,6 @@ final class ConfigManagedPropertyMapValueRule extends Rule {
     public void begin(String namespace, String name, Attributes attributes) throws Exception {
         ConfigManagedPropertyMap cpm = (ConfigManagedPropertyMap)digester.peek();
         cpm.setValueCategory(ConfigManagedPropertyMap.VALUE);
-    }
-}
-
-final class ConfigManagedPropertyMapRefRule extends Rule {
-    public ConfigManagedPropertyMapRefRule() {
-        super();
-    }
-    public void begin(String namespace, String name, Attributes attributes) throws Exception {
-        ConfigManagedPropertyMap cpm = (ConfigManagedPropertyMap)digester.peek();
-        cpm.setValueCategory(ConfigManagedPropertyMap.VALUE_REF);
     }
 }
 
@@ -941,7 +929,7 @@ final class ApplicationRule extends Rule {
         ApplicationFactory aFactory =
             (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         Application application = aFactory.getApplication();
-	Assert.assert_it(null != application);
+	Util.doAssert(null != application);
 	
 	Object returnObject = Util.createInstance(ca.getActionListener());
 	if (returnObject != null) {
@@ -1049,16 +1037,28 @@ final class NavigationCaseRule extends Rule {
     public void end(String namespace, String name) throws Exception {
         ConfigNavigationCase cnc = (ConfigNavigationCase)digester.pop();
         ConfigNavigationRule cnr = (ConfigNavigationRule)digester.peek();
-        cnc.setFromViewId(cnr.getFromViewId());
+	if (cnr.getFromViewId() == null) {
+	    cnc.setFromViewId("*");
+	} else {
+            cnc.setFromViewId(cnr.getFromViewId());
+	}
+	String fromAction = cnc.getFromAction();
+	String fromOutcome = cnc.getFromOutcome();
+	if (fromAction == null) {
+	    fromAction = "-";
+	}
+	if (fromOutcome == null) {
+	    fromOutcome = "-";
+	}
+	cnc.setKey(cnc.getFromViewId()+fromAction+fromOutcome);
         digester.push(cnc);
         ApplicationFactory aFactory =
             (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         Application application = aFactory.getApplication();
-        Assert.assert_it(null != application);
-        NavigationHandlerImpl navHandler = (NavigationHandlerImpl)application.
-            getNavigationHandler();
-        Assert.assert_it(null != navHandler);
-        navHandler.addNavigationCase(cnc);
+        Util.doAssert(null != application);
+        if (application instanceof ApplicationImpl) {
+            ((ApplicationImpl) application).addNavigationCase(cnc);
+	}
     }
 }
 
@@ -1136,7 +1136,7 @@ final class LifecycleRule extends Rule {
         LifecycleFactory lFactory =
             (LifecycleFactory)FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
         Lifecycle lifecycle = lFactory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-	Assert.assert_it(null != lifecycle);
+	Util.doAssert(null != lifecycle);
 	
 	Object returnObject = Util.createInstance(cl.getPhaseListener());
 	if (returnObject != null) {

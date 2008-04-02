@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.15 2003/10/07 02:43:00 eburns Exp $
+ * $Id: TestUtil.java,v 1.16 2003/12/17 15:15:46 rkitain Exp $
  */
 
 /*
@@ -11,8 +11,8 @@
 
 package com.sun.faces.util;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.RIConstants;
@@ -38,7 +38,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.15 2003/10/07 02:43:00 eburns Exp $
+ * @version $Id: TestUtil.java,v 1.16 2003/12/17 15:15:46 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

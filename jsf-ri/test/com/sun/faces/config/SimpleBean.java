@@ -21,4 +21,11 @@ public class SimpleBean {
     public Integer getIntProperty() {
 	return intProp;
     }
+
+    public boolean getTrueValue() {
+	return true;
+    }
+    public boolean getFalseValue() {
+	return false;
+    }
 }

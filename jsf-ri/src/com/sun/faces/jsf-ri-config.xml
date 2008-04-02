@@ -11,6 +11,7 @@
   <!ENTITY core-attrs SYSTEM "core-attrs.xml">
   <!ENTITY events-attrs SYSTEM "events-attrs.xml">
   <!ENTITY i18n-attrs SYSTEM "i18n-attrs.xml">
+  <!ELEMENT tag-attribute    (#PCDATA)>
 ]>
 
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
@@ -121,70 +122,81 @@
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
-      <tag-attribute>yes</tag-attribute>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>type</property-name>
       <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>title</property-name>
       <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>charset</property-name>
       <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>styleClass</property-name>
       <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>accessKey</property-name>
       <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>valueRef</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -307,6 +319,46 @@
       <converter-class>javax.faces.convert.NumberConverter</converter-class>
   </converter>
   <converter>
+      <converter-id>Boolean</converter-id>
+      <converter-class>javax.faces.convert.BooleanConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-id>Byte</converter-id>
+      <converter-class>javax.faces.convert.ByteConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-id>Double</converter-id>
+      <converter-class>javax.faces.convert.DoubleConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-id>Float</converter-id>
+      <converter-class>javax.faces.convert.FloatConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-id>Integer</converter-id>
+      <converter-class>javax.faces.convert.IntegerConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-id>Character</converter-id>
+      <converter-class>javax.faces.convert.CharacterConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-id>Long</converter-id>
+      <converter-class>javax.faces.convert.LongConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-id>Short</converter-id>
+      <converter-class>javax.faces.convert.ShortConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-id>BigInteger</converter-id>
+      <converter-class>javax.faces.convert.BigIntegerConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-id>BigDecimal</converter-id>
+      <converter-class>javax.faces.convert.BigDecimalConverter</converter-class>
+  </converter>
+  <converter>
       <converter-for-class>java.lang.Boolean</converter-for-class>
       <converter-class>javax.faces.convert.BooleanConverter</converter-class>
   </converter>
@@ -337,6 +389,14 @@
   <converter>
       <converter-for-class>java.lang.Short</converter-for-class>
       <converter-class>javax.faces.convert.ShortConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-for-class>java.math.BigInteger</converter-for-class>
+      <converter-class>javax.faces.convert.BigIntegerConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-for-class>java.math.BigDecimal</converter-for-class>
+      <converter-class>javax.faces.convert.BigDecimalConverter</converter-class>
   </converter>
 
   <!-- Standard Validators -->
@@ -530,21 +590,6 @@
 
       <supported-component-class>
         <component-class>javax.faces.component.UISelectBoolean</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Errors</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.ErrorsRenderer</renderer-class>
-      <!-- PENDING(edburns): make sure we render DIV and stuff the below
-           attrs there.  -->
-
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UIOutput</component-class>
       </supported-component-class>
     </renderer>
 
@@ -1287,6 +1332,14 @@
         <display-name></display-name>
         <icon></icon>
         <attribute-name>readonly</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>if true, this component becomes disabled</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
         <attribute-class>boolean</attribute-class>
       </attribute>
 

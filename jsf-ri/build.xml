@@ -11,8 +11,8 @@
 <project name="JSF-RI" default="main" basedir=".">
 
   <property name="Name" value="JavaServer Faces RI"/>
-  <property name="name" value="jsf-ri"/>
-  <property name="version" value="20031110_BETA_SCF"/>
+  <property name="name" value="jsf-impl"/>
+  <property name="version" value="20031214_BETA"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -62,7 +62,6 @@
   <!-- ************ Dependencies **** *************************************** -->
 
   <!-- The locations of necessary jar files -->
-  <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
   <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
   <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
   <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
@@ -159,8 +158,6 @@
     <mkdir dir="${build.home}/javadocs"/>
     <mkdir dir="${build.home}/tlddocs"/>
     <mkdir dir="${build.home}/lib"/>
-    <!-- unjar mozutil to classes, so we don't have to expose it -->
-    <unjar src="${mozutil.jar}" dest="${build.home}/classes"/>
   </target>
 
   <target name="prepare.generate"
@@ -313,9 +310,6 @@ must exist.  This is necessary for the MessageFactory class.
       <zipfileset dir="${source.home}"
              excludes="**/CVS/**"
                prefix="jsf-ri-src-${version}/src"/>
-      <zipfileset dir="${lib.home}"
-             excludes="**/CVS/**"
-               prefix="jsf-ri-src-${version}/lib"/>
       <zipfileset dir="${test.home}"
              excludes="**/CVS/**"
                prefix="jsf-ri-src-${version}/test"/>
@@ -412,7 +406,7 @@ must exist.  This is necessary for the MessageFactory class.
       <available property="jsf.tck.present" file="${jsf-tck.home}" type="dir"/>
   </target>
                                                                                 
-  <target name="copy.to.tck" description="Copy the jsf-ri.jar to TCK_HOME/weblib"
+  <target name="copy.to.tck" description="Copy the jsf-impl.jar to TCK_HOME/weblib"
           if="jsf.tck.present">
       <copy file="${build.home}/lib/${name}.jar" todir="${jsf-tck.home}/weblib"
             overwrite="true"/>

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationFactoryImpl.java,v 1.1 2003/03/28 18:32:18 horwat Exp $
+ * $Id: ApplicationFactoryImpl.java,v 1.2 2003/12/17 15:13:22 rkitain Exp $
  */
 
 /*
@@ -14,6 +14,9 @@ import javax.faces.application.Application;
 
 import com.sun.faces.util.Util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * <p><strong>ApplicationFactory</strong> is a factory object that creates
  * (if needed) and returns {@link Application} instances.</p>
@@ -27,6 +30,9 @@ import com.sun.faces.util.Util;
  * </pre>
  */
 public class ApplicationFactoryImpl extends ApplicationFactory {
+
+// Log instance for this class
+protected static Log log = LogFactory.getLog(ApplicationFactoryImpl.class);
 
 //
 // Protected Constants
@@ -53,6 +59,9 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
     public ApplicationFactoryImpl() {
         super();
         application = null;
+        if (log.isDebugEnabled()) {
+            log.debug("Created ApplicationFactory ");
+        }
     }
 
     /**
@@ -63,6 +72,9 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
 
         if (application == null) {
             application = new ApplicationImpl();
+            if (log.isDebugEnabled()) {
+                log.debug("Created Application instance " + application);
+            }
         }
         return application;
     }
@@ -79,5 +91,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
         }
 
         this.application = application;
+        if (log.isDebugEnabled()) {
+            log.debug("set Application Instance to " + application);
+        }
     }
 }

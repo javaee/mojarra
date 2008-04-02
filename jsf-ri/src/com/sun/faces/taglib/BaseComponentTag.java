@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.15 2003/11/10 05:07:39 craigmcc Exp $
+ * $Id: BaseComponentTag.java,v 1.16 2003/12/17 15:14:07 rkitain Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.15 2003/11/10 05:07:39 craigmcc Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.16 2003/12/17 15:14:07 rkitain Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -143,12 +143,6 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     protected Converter converter = null;
 
-    protected String actionListenerRef = null; 
-
-    protected String validateRef = null;
-   
-    protected String valueChangeListenerRef = null;
-
 
     // Relationship Instance Variables
 
@@ -168,17 +162,6 @@ public abstract class BaseComponentTag extends UIComponentTag
     // 
     // Accessors
     //
-    public void setActionListenerRef(String newActionListenerRef) {
-	actionListenerRef = newActionListenerRef;
-    }
-
-    public void setValidateRef(String newValidateRef) {
-	validateRef = newValidateRef;
-    }
-    
-    public void setValueChangeListenerRef(String newValueChangeListenerRef) {
-	valueChangeListenerRef = newValueChangeListenerRef;
-    }
 
     public void setConverter(Converter converter) {
         this.converter = converter;
@@ -682,8 +665,8 @@ public abstract class BaseComponentTag extends UIComponentTag
     //
     // Methods from Superclass
     // 
-    protected void overrideProperties(UIComponent component) {
-        super.overrideProperties(component);
+    protected void setProperties(UIComponent component) {
+        super.setProperties(component);
 
         if ( component instanceof ValueHolder ) {
             ValueHolder valueHolder = (ValueHolder)component;
@@ -925,18 +908,6 @@ public abstract class BaseComponentTag extends UIComponentTag
 	    else {
 		component.getAttributes().put("styleClass", styleClass);
 	    }
-        }
-	if (null != actionListenerRef) {
-            component.getAttributes().put("actionListenerRef", 
-					  actionListenerRef);
-        }
-	if (null != validateRef) {
-            component.getAttributes().put("validateRef", 
-					  validateRef);
-        }
-	if (null != valueChangeListenerRef) {
-            component.getAttributes().put("valueChangeListenerRef", 
-					  valueChangeListenerRef);
         }
 	    
     }

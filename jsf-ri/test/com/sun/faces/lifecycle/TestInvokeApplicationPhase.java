@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.19 2003/10/30 22:15:44 jvisvanathan Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.20 2003/12/17 15:15:24 rkitain Exp $
  */
 
 /*
@@ -13,8 +13,8 @@ package com.sun.faces.lifecycle;
 
 import org.apache.cactus.WebRequest;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -36,7 +36,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.19 2003/10/30 22:15:44 jvisvanathan Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.20 2003/12/17 15:15:24 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

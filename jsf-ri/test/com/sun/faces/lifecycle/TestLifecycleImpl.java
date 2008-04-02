@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.22 2003/10/07 19:53:18 rlubke Exp $
+ * $Id: TestLifecycleImpl.java,v 1.23 2003/12/17 15:15:25 rkitain Exp $
  */
 
 /*
@@ -13,8 +13,8 @@ package com.sun.faces.lifecycle;
 
 import org.apache.cactus.WebRequest;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import javax.servlet.http.HttpSession;
 import javax.faces.lifecycle.LifecycleFactory;
@@ -41,7 +41,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.22 2003/10/07 19:53:18 rlubke Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.23 2003/12/17 15:15:25 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.6 2003/10/20 21:32:52 jvisvanathan Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.7 2003/12/17 15:13:48 rkitain Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.io.ObjectOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -97,6 +97,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     public Object getComponentStateToRestore(FacesContext context) {
      
+        // requestMap is a local variable so we don't need to synchronize
         Map requestMap = context.getExternalContext().getRequestMap();
         Object state = requestMap.get(FACES_VIEW_STATE);
         // null out the temporary attribute, since we don't need it anymore.

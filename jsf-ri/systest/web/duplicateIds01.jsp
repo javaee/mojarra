@@ -2,12 +2,11 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
 <%-- Confirm duplicate ID's are found --%>
-<% request.setAttribute("duplicate", "output1"); %>
 <% try { %>
 <f:view>
-    <h:output_text id="#{duplicate}"/>
+    <h:output_text id="duplicate1"/>
     <h:output_text id="output2"/>
-    <h:output_text id="#{duplicate}"/>
+    <h:output_text id="duplicate1"/>
 </f:view>
 <% 
   } catch (JspException je) {

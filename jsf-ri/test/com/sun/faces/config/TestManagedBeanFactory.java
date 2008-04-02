@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.10 2003/10/13 17:07:39 eburns Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.11 2003/12/17 15:15:10 rkitain Exp $
  */
 
 /*
@@ -378,8 +378,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp.setPropertyName("one");
 
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_REF);
-        cmbpv.setValue("TestRefBean.one");
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_BINDING);
+        cmbpv.setValue("#{TestRefBean.one}");
 
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
@@ -422,8 +422,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp.setPropertyName("one");
 
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_REF);
-        cmbpv.setValue("TestRefBean.one");
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_BINDING);
+        cmbpv.setValue("#{TestRefBean.one}");
 
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
@@ -458,8 +458,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp.setPropertyName("one");
 
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_REF);
-        cmbpv.setValue("TestRefBean.one");
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_BINDING);
+        cmbpv.setValue("#{TestRefBean.one}");
 
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
@@ -499,8 +499,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp.setPropertyName("one");
 
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_REF);
-        cmbpv.setValue("sessionScope.TestRefBean.one");
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_BINDING);
+        cmbpv.setValue("#{sessionScope.TestRefBean.one}");
 
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
@@ -552,7 +552,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(exceptionThrown);
         
         
-        // value category set to VALUE_REF
+        // value category set to VALUE_BINDING
         cmb = new ConfigManagedBean();
         cmb.setManagedBeanClass(beanName);
         cmb.setManagedBeanScope("session");
@@ -560,7 +560,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp = new ConfigManagedBeanProperty();
         cmbp.setPropertyName("boolProp");
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_REF);
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_BINDING);
         cmbpv.setValue((new Boolean(testBoolean)).toString());
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp);

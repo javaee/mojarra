@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.19 2003/11/19 23:08:46 rkitain Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.20 2003/12/17 15:13:57 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -28,7 +28,7 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  * <B>SelectManyCheckboxListRenderer</B> is a class that renders the 
@@ -76,7 +76,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         throws IOException {
 	
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
        
         String alignStr = null;
 	Object borderObj = null;
@@ -131,7 +131,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             SelectItem curItem, boolean alignVertical ) throws IOException {
                 
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
         
         Object selectedValues[] = getCurrentSelectedValues(context, component);
         
@@ -207,7 +207,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
            boolean alignVertical, FacesContext context ) throws IOException {
             
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
         
 	writer.startElement("table", component);
          if (border != Integer.MIN_VALUE) {
@@ -226,7 +226,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             FacesContext context ) throws IOException {
                 
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
         
         if (!alignVertical) {
 	    writer.writeText("\t", null);

@@ -15,14 +15,15 @@
   pageContext.setAttribute("ford", new String("harrison"), PageContext.REQUEST_SCOPE);
 %>
 
-<h1>TLV command_button, valid 'componentRef' expression</h1>
-This page should Succeed.
+<h1>TLV command_button, invalid 'binding' expression</h1>
+This page should Fail.
 <br>
 <br>
 
 <f:view>
 
-  <h:command_button value="hello" componentRef="requestScope.ford" />
+  <p>This command button has an invalid component expression</p>
+  <h:command_button value="hello" binding=".ford"/>
 
 </f:view>
 

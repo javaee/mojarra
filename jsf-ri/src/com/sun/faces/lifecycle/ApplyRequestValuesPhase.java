@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.13 2003/09/25 21:02:58 jvisvanathan Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.14 2003/12/17 15:13:42 rkitain Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 package com.sun.faces.lifecycle;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.event.PhaseId;
@@ -66,11 +66,14 @@ public class ApplyRequestValuesPhase extends Phase {
     }
 
     public void execute(FacesContext facesContext) throws FacesException {
-
-        UIComponent component = facesContext.getViewRoot();
-        Assert.assert_it(null != component);
         
-       
+        if (log.isDebugEnabled()) {
+            log.debug("Entering ApplyRequestValuesPhase");
+        }
+         
+        UIComponent component = facesContext.getViewRoot();
+        Util.doAssert(null != component);
+        
         try {
             component.processDecodes(facesContext);
         } catch (RuntimeException re) {
@@ -81,6 +84,9 @@ public class ApplyRequestValuesPhase extends Phase {
                 }
             }
             throw new FacesException(exceptionMessage, re);
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("Exiting ApplyRequestValuesPhase");
         }
     }
 

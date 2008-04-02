@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.12 2003/11/10 22:18:39 eburns Exp $
+ * $Id: ViewTag.java,v 1.13 2003/12/17 15:14:15 rkitain Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.sun.faces.util.Util;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  *
@@ -45,7 +45,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.12 2003/11/10 22:18:39 eburns Exp $
+ * @version $Id: ViewTag.java,v 1.13 2003/12/17 15:14:15 rkitain Exp $
  * 
  *
  */
@@ -126,14 +126,14 @@ public class ViewTag extends UIComponentBodyTag
         }
 	
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Assert.assert_it(facesContext != null);
+        Util.doAssert(facesContext != null);
 
 	// this must happen after our overriderProperties executes.
 	((ServletResponse)facesContext.getExternalContext().getResponse()).
 	    setLocale(facesContext.getViewRoot().getLocale());
 
 	ResponseWriter writer = facesContext.getResponseWriter();
-        Assert.assert_it(writer != null);
+        Util.doAssert(writer != null);
 	
 	try {
             writer.startDocument();
@@ -217,7 +217,7 @@ public class ViewTag extends UIComponentBodyTag
 	// have a facesContext ivar.
         FacesContext context = FacesContext.getCurrentInstance();
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null);
+        Util.doAssert(writer != null);
         try {
             writer.endDocument();
         } catch (IOException e) {
@@ -243,7 +243,7 @@ public class ViewTag extends UIComponentBodyTag
      * This should never get called for PageTag.
      */ 
     public String getComponentType() {
-	Assert.assert_it(false);
+	Util.doAssert(false);
 	throw new IllegalStateException();
     }    
 
@@ -262,8 +262,8 @@ public class ViewTag extends UIComponentBodyTag
     //
     // Methods from Superclass
     // 
-    protected void overrideProperties(UIComponent component) {
-        super.overrideProperties(component);
+    protected void setProperties(UIComponent component) {
+        super.setProperties(component);
 	Locale viewLocale = null;
 	ValueBinding vb = null;
 	if (null != locale) {

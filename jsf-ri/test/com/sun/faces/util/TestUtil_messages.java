@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.25 2003/11/13 02:58:47 jvisvanathan Exp $
+ * $Id: TestUtil_messages.java,v 1.26 2003/12/17 15:15:47 rkitain Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.25 2003/11/13 02:58:47 jvisvanathan Exp $
+ * @version $Id: TestUtil_messages.java,v 1.26 2003/12/17 15:15:47 rkitain Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -80,7 +80,6 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.SAVING_STATE_ERROR_MESSAGE_ID, "2"},
         {Util.RENDERER_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
         {Util.MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID, "1"},
-        {Util.NO_ACTION_FROM_ACTIONREF_ERROR_MESSAGE_ID, "1"},
         {Util.NULL_CONFIGURATION_ERROR_MESSAGE_ID, "0"},
         {Util.ERROR_OPENING_FILE_ERROR_MESSAGE_ID, "1"},
         {Util.ERROR_REGISTERING_DTD_ERROR_MESSAGE_ID, "1"},
@@ -107,8 +106,9 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED_ID, "1"},
         {Util.ILLEGAL_VIEW_ID_ID, "1"},
         {Util.INVALID_EXPRESSION_ID, "1"},
-        {Util.NULL_FORVALUE_ID, "1"}
-        
+        {Util.NULL_FORVALUE_ID, "1"},
+        {Util.EMPTY_PARAMETER_ID, "0"},
+        {Util.ASSERTION_FAILED_ID, "0"}
     };
 
 // Attribute Instance Variables

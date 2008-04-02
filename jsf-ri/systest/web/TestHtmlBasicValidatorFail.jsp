@@ -11,6 +11,10 @@
 </head>
 <body>
 
+<%
+  pageContext.setAttribute("hello", new String("hello"), PageContext.REQUEST_SCOPE);
+%>
+
 <h1>TLV command_button, no lable or key</h1>
 This page should FAIL.
 <br>
@@ -20,7 +24,7 @@ This page should FAIL.
 
   <p>This must have either a label or key attribute.</p>
   <h:command_button>
-    <h:output_text value="hello"/>
+    <h:output_text value="#{hello}"/>
   </h:command_button>
 
 </f:view>

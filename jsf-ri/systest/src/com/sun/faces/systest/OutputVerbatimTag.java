@@ -1,5 +1,5 @@
 /*
- * $Id: OutputVerbatimTag.java,v 1.2 2003/09/05 18:57:10 eburns Exp $
+ * $Id: OutputVerbatimTag.java,v 1.3 2003/12/17 15:14:32 rkitain Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ public class OutputVerbatimTag extends UIComponentBodyTag {
         if (getBodyContent() != null) {
             String value = getBodyContent().getString().trim();
             if (value != null) {
-                ((UIOutput) getComponent()).setValue(value);
+                ((UIOutput) getComponentInstance()).setValue(value);
             }
         }
 

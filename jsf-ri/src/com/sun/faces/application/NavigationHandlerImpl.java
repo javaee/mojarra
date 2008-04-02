@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.20 2003/10/24 17:34:19 eburns Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.21 2003/12/17 15:13:23 rkitain Exp $
  */
 
 /*
@@ -9,10 +9,9 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.config.ConfigNavigationCase;
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,16 +23,18 @@ import java.util.TreeSet;
 
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
-import javax.faces.component.UIViewRoot;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
-import javax.faces.component.UIViewRoot;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.mozilla.util.Assert;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -47,8 +48,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
     // Protected Constants
     //
 
-    private static final Log log = 
-	LogFactory.getLog(NavigationHandlerImpl.class);
+    private static final Log log = LogFactory.getLog(NavigationHandlerImpl.class);
 
     //
     // Class Variables
@@ -57,61 +57,37 @@ public class NavigationHandlerImpl extends NavigationHandler {
     // Instance Variables
 
     /**
-     * The original (entire) list of navigation cases.
+     * Application instance that contains navigation mappings loaded from
+     * configuration file(s).
      */
+    private ApplicationImpl application = null;
 
-    private List navigationCases = null;
-
-    /**
-     * Overall Map containing <code>from-view-id</code> key and <code>ArrayList</code>
-     *  of <code>ConfigNavigationCase</code> objects for that key; 
-     * The <code>from-view-id</code> strings in this map will be stored as specified
-     * in the configuration file - some of them will have a trailing asterisk "*"
-     * signifying wild card, and some may be specified as an asterisk "*".
-     */ 
-
-    protected Map caseListMap = null;
 
     /**
-     * The List that contains the <code>ConfigNavigationCase</code> objects for a
-     * <code>from-view-id</code>.
-     */ 
-
-    private List caseList = null;
-
-    /**
-     * The List that contains all view identifier strings ending in an asterisk "*".
-     * The entries are stored without the trailing asterisk. 
+     * This constructor uses the current <code>Application</code>
+     * instance to obtain the navigation mappings used to make
+     * navigational decisions.
      */
-
-    private TreeSet wildcardMatchList= null;
-
-
-    /**
-     * Constructor 
-     */
-
     public NavigationHandlerImpl() {
         super();
-	if (caseListMap == null) {
-	   caseListMap = new HashMap();
-	}
-	if (wildcardMatchList == null) {
-           wildcardMatchList = new TreeSet(new SortIt());
-	}
+        if (log.isDebugEnabled()) {
+            log.debug("Created NavigationHandler instance ");
+        }
+        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        application = (ApplicationImpl)aFactory.getApplication();
     }
 
     /**
-     * This method uses helper methods to set the new <code>view</code> identifier;
-     * If the new <code>view</code> identifier could not be determined, then the original
-     * <code>view</code> identifier is left alone.
+     * Determine the next view based on the current view
+     * (<code>from-view-id</code> stored in <code>FacesContext</code>),
+     * <code>fromAction</code> and <code>outcome</code>.
      *
-     * @param context The Faces Context
-     * @param actionRef The action reference string
-     * @param outcome The outcome string
+     * @param context The <code>FacesContext</code>
+     * @param fromAction the action reference string
+     * @param outcome the outcome string
      */
-
-    public void handleNavigation(FacesContext context, String actionRef, 
+    public void handleNavigation(FacesContext context, String fromAction, 
         String outcome) {
         if (context == null) {
             throw new NullPointerException(
@@ -119,13 +95,18 @@ public class NavigationHandlerImpl extends NavigationHandler {
                             Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (outcome == null) {
+          if (log.isDebugEnabled()) {
+               log.debug("No navigation rule found for outcome " + outcome + 
+                   "and viewId " + context.getViewRoot().getViewId() + 
+                   " Explicitly remain on the current view ");
+          }
           return; // Explicitly remain on the current view
         }
-	CaseStruct caseStruct = getViewId(context, actionRef, outcome);
+	CaseStruct caseStruct = getViewId(context, fromAction, outcome);
 	ExternalContext extContext = context.getExternalContext();
         if (caseStruct != null) {
 	    ViewHandler viewHandler = Util.getViewHandler(context);
-	    Assert.assert_it(null != viewHandler);
+	    Util.doAssert(null != viewHandler);
 	    
 	    if (caseStruct.navCase.hasRedirect()) {
 		// perform a 302 redirect.
@@ -134,6 +115,11 @@ public class NavigationHandlerImpl extends NavigationHandler {
 		String newPath = extContext.getRequestContextPath() + "/" + 
 		    viewHandler.getViewIdPath(context, caseStruct.viewId);
 		try {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Redirecting to path " + newPath 
+                            + " for outcome " + outcome + 
+                            "and viewId " + caseStruct.viewId);
+                    }
 		    response.sendRedirect(newPath);
 		}
 		catch (java.io.IOException ioe) {
@@ -143,12 +129,18 @@ public class NavigationHandlerImpl extends NavigationHandler {
 		    }
 		    throw new FacesException(message, ioe);
 		}
-		context.responseComplete();
+                context.responseComplete();
+                if (log.isDebugEnabled()) {
+                    log.debug("Response complete for " + caseStruct.viewId);
+                }
 	    }
 	    else {
 		UIViewRoot newRoot = viewHandler.createView(context, 
 							    caseStruct.viewId);
 		context.setViewRoot(newRoot);
+                if (log.isDebugEnabled()) {
+                    log.debug("Set new view in FacesContext for " + caseStruct.viewId);
+                }
 	    }
         }
     }
@@ -158,70 +150,51 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * Refer to section 7.4.2 of the specification for more details.
      *
      * @param context The Faces Context
-     * @param actionRef The action reference string
+     * @param fromAction The action reference string
      * @param outcome The outcome string
      *
      * @return The <code>view</code> identifier. 
      */
-     private CaseStruct getViewId(FacesContext context, String actionRef, String outcome) {
+     private CaseStruct getViewId(FacesContext context, String fromAction, 
+				  String outcome) {
         String nextViewId = null;
         String viewId = context.getViewRoot().getViewId();
 	CaseStruct caseStruct = null;
 
-        caseStruct = findExactMatch(viewId, actionRef, outcome);
-      
-        if (caseStruct == null) {
-            caseStruct = findWildCardMatch(viewId, actionRef, outcome);        
-        }
-      
-        if (caseStruct == null) {
-            caseStruct = findDefaultMatch(actionRef, outcome);            
-        }
+	synchronized (this) {
+	    caseStruct = findExactMatch(viewId, fromAction, outcome);
+	    
+	    if (caseStruct == null) {
+		caseStruct = findWildCardMatch(viewId, fromAction, outcome);
+	    }
+	    
+	    if (caseStruct == null) {
+		caseStruct = findDefaultMatch(fromAction, outcome);            
+	    }
+	}
         return caseStruct;
     }
 
-
-    public void addNavigationCase(ConfigNavigationCase navigationCase) {
-
-        String fromViewId = navigationCase.getFromViewId();
-        if (fromViewId == null) {
-            fromViewId = "*";
-        }
-        if (fromViewId != null) {
-            caseList = (List)caseListMap.get(fromViewId);
-            if (caseList == null) {
-                caseList = new ArrayList();
-                caseList.add(navigationCase);
-                caseListMap.put(fromViewId, caseList);
-            } else {
-                caseList.add(navigationCase);
-            }
-            if (fromViewId.endsWith("*")) {
-                fromViewId = fromViewId.substring(0,fromViewId.lastIndexOf("*"));
-                wildcardMatchList.add(fromViewId);
-            }
-        }
-    }
-        
-        
     /**
      * This method finds the List of cases for the current <code>view</code> identifier.
-     * After the cases are found, the <code>from-action-ref</code> and <code>from-outcome</code>
+     * After the cases are found, the <code>from-action</code> and <code>from-outcome</code>
      * values are evaluated to determine the new <code>view</code> identifier.
      * Refer to section 7.4.2 of the specification for more details.
      *
      * @param viewId  The current <code>view</code> identifier.
-     * @param actionRef The action reference string.
+     * @param fromAction The action reference string.
      * @param outcome The outcome string.
      *
      * @return The <code>view</code> identifier.
      */
 
-    private CaseStruct findExactMatch(String viewId, String actionRef, 
-				      String outcome) {
+    synchronized private CaseStruct findExactMatch(String viewId, 
+						   String fromAction, 
+						   String outcome) {
         String returnViewId = null;
 
-        Assert.assert_it(null != caseListMap);
+        Map caseListMap = application.getNavigationCaseListMappings();
+        Util.doAssert(null != caseListMap);
 
         List caseList = (List)caseListMap.get(viewId);
 
@@ -230,14 +203,14 @@ public class NavigationHandlerImpl extends NavigationHandler {
         }
 
         // We've found an exact match for the viewId.  Now we need to evaluate
-        // actionref/outcome in the following order:
-        // 1) elements specifying both from-action-ref and from-outcome
+        // from-action/outcome in the following order:
+        // 1) elements specifying both from-action and from-outcome
         // 2) elements specifying only from-outcome
-        // 3) elements specifying only from-action-ref
-        // 4) elements where both from-action-ref and from-outcome are null
+        // 3) elements specifying only from-action
+        // 4) elements where both from-action and from-outcome are null
 
 
-        return determineViewFromActionRefOutcome(caseList, actionRef, outcome);
+        return determineViewFromActionOutcome(caseList, fromAction, outcome);
     }
 
     /**
@@ -246,16 +219,21 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * Refer to section 7.4.2 of the specification for more details.
      *
      * @param viewId  The current <code>view</code> identifier.
-     * @param actionRef The action reference string.
+     * @param fromAction The action reference string.
      * @param outcome The outcome string.
      *
      * @return The <code>view</code> identifier.
      */
 
-    private CaseStruct findWildCardMatch(String viewId, String actionRef, String outcome) {
+    synchronized private CaseStruct findWildCardMatch(String viewId, 
+						      String fromAction, 
+						      String outcome) {
 	CaseStruct result = null;
 
-        Assert.assert_it(null != wildcardMatchList);
+        Map caseListMap = application.getNavigationCaseListMappings();
+        Util.doAssert(null != caseListMap);
+        TreeSet wildcardMatchList = application.getNavigationWildCardList();
+        Util.doAssert(null != wildcardMatchList);
 
 	Iterator iter = wildcardMatchList.iterator();
 	while (iter.hasNext()) {
@@ -279,13 +257,14 @@ public class NavigationHandlerImpl extends NavigationHandler {
                 return null;
             }
 
-            // If we've found a match, then we need to evaluate actionref/outcome in the following
-            // order:  1)elements specifying both from-action-ref and from-outcome
+            // If we've found a match, then we need to evaluate
+            // from-action/outcome in the following order:  
+	    // 1) elements specifying both from-action and from-outcome
             // 2) elements specifying only from-outcome
-            // 3) elements specifying only from-action-ref
-            // 4) elements where both from-action-ref and from-outcome are null
+            // 3) elements specifying only from-action
+            // 4) elements where both from-action and from-outcome are null
 
-            result = determineViewFromActionRefOutcome(caseList, actionRef, 
+            result = determineViewFromActionOutcome(caseList, fromAction, 
 						       outcome);
             if (result != null) {
                 break;
@@ -299,16 +278,18 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * an asterisk "*".
      * Refer to section 7.4.2 of the specification for more details.
      *
-     * @param actionRef The action reference string.
+     * @param fromAction The action reference string.
      * @param outcome The outcome string.
      *
      * @return The <code>view</code> identifier.
      */
 
-    private CaseStruct findDefaultMatch(String actionRef, String outcome) {
+    synchronized private CaseStruct findDefaultMatch(String fromAction, 
+						     String outcome) {
         String returnViewId = null;
 
-        Assert.assert_it(null != caseListMap);
+        Map caseListMap = application.getNavigationCaseListMappings();
+        Util.doAssert(null != caseListMap);
 
         List caseList = (List)caseListMap.get("*"); 
 
@@ -316,13 +297,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
             return null;
         }
 
-        // We need to evaluate actionref/outcome in the follow
-        // order:  1)elements specifying both from-action-ref and from-outcome
+        // We need to evaluate from-action/outcome in the follow
+        // order:  1)elements specifying both from-action and from-outcome
         // 2) elements specifying only from-outcome
-        // 3) elements specifying only from-action-ref
-        // 4) elements where both from-action-ref and from-outcome are null
+        // 3) elements specifying only from-action
+        // 4) elements where both from-action and from-outcome are null
 
-        return determineViewFromActionRefOutcome(caseList, actionRef, outcome);
+        return determineViewFromActionOutcome(caseList, fromAction, outcome);
     }
         
     /**
@@ -330,25 +311,28 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * and outcome.  Refer to section 7.4.2 of the specification for more details.
      *
      * @param caseList The list of navigation cases.
-     * @param actionRef The action reference string.
+     * @param fromAction The action reference string.
      * @param outcome The outcome string.
      *
      * @return The <code>view</code> identifier.
      */
      
-    private CaseStruct determineViewFromActionRefOutcome(List caseList, String actionRef, String outcome) {
+    private synchronized 
+	CaseStruct determineViewFromActionOutcome(List caseList, 
+						  String fromAction, 
+						  String outcome) {
 
-        String fromActionRef = null;
+        String cncFromAction = null;
         String fromOutcome = null;
         String toViewId = null;
 	CaseStruct result = new CaseStruct();
         for (int i = 0; i < caseList.size(); i++) {
             ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-            fromActionRef = cnc.getFromActionRef();
+            cncFromAction = cnc.getFromAction();
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
-            if ((fromActionRef != null) && (fromOutcome != null)) {
-                if ((fromActionRef.equals(actionRef)) && (fromOutcome.equals(outcome))) {
+            if ((cncFromAction != null) && (fromOutcome != null)) {
+                if ((cncFromAction.equals(fromAction)) && (fromOutcome.equals(outcome))) {
 		    result.viewId = toViewId;
 		    result.navCase = cnc;
 		    return result;
@@ -358,10 +342,10 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
         for (int i = 0; i < caseList.size(); i++) {
             ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-            fromActionRef = cnc.getFromActionRef();
+            cncFromAction = cnc.getFromAction();
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
-            if ((fromActionRef == null) && (fromOutcome != null)) {
+            if ((cncFromAction == null) && (fromOutcome != null)) {
                 if (fromOutcome.equals(outcome)) {
 		    result.viewId = toViewId;
 		    result.navCase = cnc;
@@ -372,11 +356,11 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
         for (int i = 0; i < caseList.size(); i++) {
             ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-            fromActionRef = cnc.getFromActionRef();
+            cncFromAction = cnc.getFromAction();
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
-            if ((fromActionRef != null) && (fromOutcome == null)) {
-                if (fromActionRef.equals(actionRef)) {
+            if ((cncFromAction != null) && (fromOutcome == null)) {
+                if (cncFromAction.equals(fromAction)) {
 		    result.viewId = toViewId;
 		    result.navCase = cnc;
 		    return result;
@@ -386,10 +370,10 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
         for (int i = 0; i < caseList.size(); i++) {
             ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-            fromActionRef = cnc.getFromActionRef();
+            cncFromAction = cnc.getFromAction();
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
-            if ((fromActionRef == null) && (fromOutcome == null)) {
+            if ((cncFromAction == null) && (fromOutcome == null)) {
 		result.viewId = toViewId;
 		result.navCase = cnc;
 		return result;
@@ -397,19 +381,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
         }
 
         return null;
-    }
-
-    /**
-     * This Comparator class will help sort the <code>ConfigNavigationCase</code> objects
-     * based on their <code>fromViewId</code> properties in descending order -
-     * largest string to smallest string.
-     */
-    class SortIt implements Comparator {
-        public int compare(Object o1, Object o2) {
-            String fromViewId1 = (String)o1;
-            String fromViewId2 = (String)o2;
-            return -(fromViewId1.compareTo(fromViewId2));
-        }
     }
 
     class CaseStruct {

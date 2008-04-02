@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.2 2003/11/11 01:22:36 eburns Exp $
+ * $Id: OutputMessageRenderer.java,v 1.3 2003/12/17 15:13:56 rkitain Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.component.UIParameter;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.FacesContext;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  *
@@ -98,7 +98,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
 	    styleClass = (String) component.getAttributes().get("styleClass");
 
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
 
         // suppress rendering if "rendered" property on the component is
         // false.
@@ -157,7 +157,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
 	    }
 	}
         writer.writeText(message, null);
-	if (null != styleClass) {
+	if (null != styleClass || null != style) {
 	    writer.endElement("span");
 	}
     }

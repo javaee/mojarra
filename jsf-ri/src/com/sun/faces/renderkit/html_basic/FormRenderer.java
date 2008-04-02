@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.64 2003/10/08 00:43:21 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.65 2003/12/17 15:13:52 rkitain Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  *
@@ -30,7 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.64 2003/10/08 00:43:21 rlubke Exp $ 
+ * @version $Id: FormRenderer.java,v 1.65 2003/12/17 15:13:52 rkitain Exp $ 
  */
 
 public class FormRenderer extends HtmlBasicRenderer {
@@ -99,7 +99,7 @@ public class FormRenderer extends HtmlBasicRenderer {
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it( writer != null );
+        Util.doAssert( writer != null );
         // since method and action are rendered here they are not added
         // to the pass through attributes in Util class.
 	writer.startElement("form", component);
@@ -180,7 +180,7 @@ public class FormRenderer extends HtmlBasicRenderer {
 
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null);
+        Util.doAssert(writer != null);
 
 	// this hidden field will be checked in the decode method to determine if
 	// this form has been submitted.

@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextFactoryImpl.java,v 1.7 2003/08/21 14:18:10 rlubke Exp $
+ * $Id: TestFacesContextFactoryImpl.java,v 1.8 2003/12/17 15:15:15 rkitain Exp $
  */
 
 /*
@@ -11,9 +11,9 @@
 
 package com.sun.faces.context;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
@@ -39,7 +39,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextFactoryImpl.java,v 1.7 2003/08/21 14:18:10 rlubke Exp $
+ * @version $Id: TestFacesContextFactoryImpl.java,v 1.8 2003/12/17 15:15:15 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

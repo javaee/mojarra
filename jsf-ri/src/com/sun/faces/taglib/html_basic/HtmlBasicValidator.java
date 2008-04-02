@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicValidator.java,v 1.4 2003/08/19 21:40:50 horwat Exp $
+ * $Id: HtmlBasicValidator.java,v 1.5 2003/12/17 15:14:10 rkitain Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
 
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  * <p>Top level validator for the html_basic tld</p>
@@ -60,7 +60,7 @@ public class HtmlBasicValidator extends FacesValidator {
 
     protected String getFailureMessage(String prefix, String uri) {
 	// we should only get called if this Validator failed
-	Assert.assert_it(failed);	
+	Util.doAssert(failed);	
 
         StringBuffer result = new StringBuffer();
         if (commandTagParser.hasFailed()) {

@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.24 2003/10/22 22:17:38 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.25 2003/12/17 15:13:23 rkitain Exp $ 
  */ 
 
 
@@ -18,7 +18,7 @@ import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -35,14 +35,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Iterator;
 import java.util.Enumeration;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.24 2003/10/22 22:17:38 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.25 2003/12/17 15:13:23 rkitain Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -89,7 +91,10 @@ public class ViewHandlerImpl extends Object
         
 
     public ViewHandlerImpl() {
-	    stateManagerImpl = new StateManagerImpl();            
+        if (log.isDebugEnabled()) {
+            log.debug("Created ViewHandler instance ");
+        }
+	stateManagerImpl = new StateManagerImpl();            
     }
 
     public void renderView(FacesContext context, 
@@ -105,42 +110,41 @@ public class ViewHandlerImpl extends Object
             ((ApplicationImpl) application).responseRendered();
         }
         String requestURI = viewToRender.getViewId();       
+        if (log.isDebugEnabled()) {
+            log.debug("About to render view " + requestURI);
+        }
         
         String mapping = getFacesMapping(context);
+        String newViewId = requestURI;
         // If we have a valid mapping (meaning we were invoked via the
         // FacesServlet) and we're extension mapped, do the replacement.
         if (mapping != null && !isPrefixMapped(mapping)) {            
-            
-            if (contextDefaultSuffix == null) {
-                contextDefaultSuffix = context.getExternalContext().
-                    getInitParameter(ViewHandler.DEFAULT_SUFFIX_PARAM_NAME);
-                if (contextDefaultSuffix == null) {
-                    contextDefaultSuffix = ViewHandler.DEFAULT_SUFFIX;
-                }
+            if (log.isDebugEnabled()) {
+                log.debug("Found URL pattern mapping to FacesServlet " + mapping);
             }
-            
-            // if the viewId doesn't already use the above suffix,
-            // replace or append.
-            if (!requestURI.endsWith(contextDefaultSuffix)) {
-                StringBuffer buffer = new StringBuffer(requestURI);
-                int extIdx = requestURI.lastIndexOf('.');
-                if (extIdx != -1) {
-                    buffer.replace(extIdx, requestURI.length(), 
-                                   contextDefaultSuffix);
-                } else {
-                    // no extension in the provided viewId, append the suffix
-                    buffer.append(contextDefaultSuffix);
-                }
-                requestURI = buffer.toString();
+            newViewId = convertViewId(context, requestURI);
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("Found no URL patterns mapping to FacesServlet ");
             }
         }
+        
+
+        viewToRender.setViewId(newViewId);
+
         // update the JSTL locale attribute in request scope so that JSTL
         // picks up the locale from viewRoot. This attribute must be updated
         // before the JSTL setBundle tag is called because that is when the
         // new LocalizationContext object is created based on the locale.
         Config.set((ServletRequest) context.getExternalContext().getRequest(), 
                 Config.FMT_LOCALE, context.getViewRoot().getLocale());
-        context.getExternalContext().dispatchMessage(requestURI);
+        if (log.isTraceEnabled()) {
+            log.trace("Before dispacthMessage to newViewId " + newViewId);
+        }
+        context.getExternalContext().dispatchMessage(newViewId);
+        if (log.isTraceEnabled()) {
+            log.trace("After dispacthMessage to newViewId " + newViewId);
+        }
 
     }
 
@@ -152,11 +156,15 @@ public class ViewHandlerImpl extends Object
         if (context == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
-        }
-        
+        }        
+
         ExternalContext extContext = context.getExternalContext();
         String mapping = getFacesMapping(context);
         UIViewRoot viewRoot = null;
+        
+        if (mapping != null && !isPrefixMapped(mapping)) {
+            viewId = convertViewId(context, viewId);
+        }
         
         // maping could be null if a non-faces request triggered
         // this response.
@@ -167,7 +175,9 @@ public class ViewHandlerImpl extends Object
             try {
                 Object response = extContext.getResponse();
                 context.responseComplete();
-                    
+                if (log.isDebugEnabled()) {
+                    log.debug("Response Complete for" + viewId);
+                }
                 // PENDING -- Need to consider Portlets
                 if (response instanceof HttpServletResponse) {
                     ((HttpServletResponse) response).sendRedirect(
@@ -213,9 +223,15 @@ public class ViewHandlerImpl extends Object
 	}
 	if (null != charEnc) {
 	    try {
+                if (log.isTraceEnabled()) {
+                    log.trace("set character encoding on request to " + charEnc);
+                }
 		request.setCharacterEncoding(charEnc);
 	    }
 	    catch (java.io.UnsupportedEncodingException uee) {
+                if (log.isErrorEnabled()) {
+                    log.error(uee.getMessage(), uee);
+                }
 		throw new FacesException(uee);
 	    }
 	}
@@ -237,6 +253,9 @@ public class ViewHandlerImpl extends Object
         }
 	UIViewRoot result = new UIViewRoot();
 	result.setViewId(viewId);
+        if (log.isDebugEnabled()) {
+            log.debug("Created new view for " + viewId);
+        }
 	// PENDING(): not sure if we should set the RenderKitId here.
 	// The UIViewRoot ctor sets the renderKitId to the default
 	// one.
@@ -244,6 +263,14 @@ public class ViewHandlerImpl extends Object
         // for this view.
         if (locale == null) {
             locale = calculateLocale(context);
+            if (log.isDebugEnabled()) {
+                log.debug("Locale for this view as determined by calculateLocale " 
+                        + locale.toString());
+            }
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("Using locale from previous view " + locale.toString());
+            }
         }
         result.setLocale(locale);
 	return result;
@@ -315,9 +342,17 @@ public class ViewHandlerImpl extends Object
             throw new NullPointerException(Util.getExceptionMessage(
 								    Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
+        if (log.isTraceEnabled()) {
+            log.trace("Begin writing state to response for viewId" + 
+                    context.getViewRoot().getViewId());
+        }
 	if (getStateManager().isSavingStateInClient(context)) {
 	    context.getResponseWriter().writeText(RIConstants.SAVESTATE_FIELD_MARKER,null);
 	}
+        if (log.isTraceEnabled()) {
+            log.trace("End writing state to response for viewId" + 
+                    context.getViewRoot().getViewId());
+        }
     }
     
     
@@ -328,10 +363,13 @@ public class ViewHandlerImpl extends Object
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }               
         
-        if (viewId.charAt(0) != '/') {            
-            throw new IllegalArgumentException(Util.getExceptionMessage(
-                Util.ILLEGAL_VIEW_ID_ID,
-                new Object[] { viewId }));
+        if (viewId.charAt(0) != '/') {
+            String message = Util.getExceptionMessage(Util.ILLEGAL_VIEW_ID_ID,
+                new Object[] { viewId });
+            if (log.isErrorEnabled()) {
+                log.error(message + " " + viewId);
+            }
+            throw new IllegalArgumentException(message);
         }
         
         // Check our cache for a processed result        
@@ -351,6 +389,9 @@ public class ViewHandlerImpl extends Object
                 // if the mapping returned is only "/*", then the 
                 // return the viewId with no modifications
                 if (mapping.equals("/*")) {
+                    if (log.isTraceEnabled()) {
+                        log.trace("viewId returned with no modifications " + viewId);
+                    }
                     return viewId;
                 } else {
                     buffer.insert(0, mapping);
@@ -368,6 +409,9 @@ public class ViewHandlerImpl extends Object
                         // no extension in the provided viewId, append
                         // the current value
                         buffer.append(mapping);
+                    }
+                    if (log.isTraceEnabled()) {
+                        log.trace("viewId after modifications " + buffer.toString());
                     }
                 }
             }
@@ -392,19 +436,25 @@ public class ViewHandlerImpl extends Object
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }  
-        
-        int size = mappings.size();
-        if (mappings.size() > 1) {
-            for (int i = 0; i < size; i++) {
-                String mapping = (String) mappings.get(i);
-                if (mapping.charAt(0) == '.') {
-                    defaultMappingExtension = mapping;
-                    break;
-                }
-            }
+	
+        if (log.isTraceEnabled()) {
+             log.debug("Setting a list of URL patterns mappings");
         }
-            
-        facesServletMappings = mappings;
+	synchronized (this) {
+	    facesServletMappings = 
+		Collections.unmodifiableList(new ArrayList(mappings));
+        
+	    int size = facesServletMappings.size();
+	    if (facesServletMappings.size() > 1) {
+		for (int i = 0; i < size; i++) {
+		    String mapping = (String) facesServletMappings.get(i);
+		    if (mapping.charAt(0) == '.') {
+			defaultMappingExtension = mapping;
+			break;
+		    }
+		}
+	    }
+	}
     }
 
     /**
@@ -471,7 +521,10 @@ public class ViewHandlerImpl extends Object
         if (mapping != null) {
             extContext.getRequestMap().put(INVOCATION_PATH, mapping);
         }
-        
+        if (log.isDebugEnabled()) {
+            log.debug("URL pattern of the FacesServlet executing the current request "
+                + mapping);
+        }
         return mapping;        
     }
     
@@ -489,7 +542,10 @@ public class ViewHandlerImpl extends Object
         if (servletPath == null) {
             return null;
         }                
-                             
+        if (log.isTraceEnabled()) {
+            log.trace("servletPath "+ servletPath);
+            log.trace("pathInfo " + pathInfo);
+        }                  
         String mapping = null;
         
         // If the path returned by HttpServletRequest.getServletPath()
@@ -497,10 +553,13 @@ public class ViewHandlerImpl extends Object
         // been mapped to '/*'.
         if (servletPath.length() == 0) {
             int idx = facesServletMappings.indexOf("/*");
-            if (idx != 1) {
+            if (idx != -1) {
                 return "/*";
             } else {
                 // Shouldn't happen...
+                if (log.isWarnEnabled()) {
+                    log.warn("Error: FacesServlet mapping does not contain \"/*\" ");
+                }
                 return null;
             }
         }
@@ -542,6 +601,9 @@ public class ViewHandlerImpl extends Object
             // default mapping extension.
             if (mapping == null) {
                 mapping = defaultMappingExtension;
+                if (log.isDebugEnabled()) {
+                    log.debug("Using default mapping extension "+ mapping);
+                }
             }
         }
             
@@ -549,7 +611,7 @@ public class ViewHandlerImpl extends Object
     }
     
     /**
-     * </p>Returns true if the provided <code>url-mapping</code> is
+     * <p>Returns true if the provided <code>url-mapping</code> is
      * a prefix path mapping (starts with <code>/</code>).</p>
      * @param mapping a <code>url-pattern</code>
      * @return true if the mapping starts with <code>/</code>
@@ -557,5 +619,48 @@ public class ViewHandlerImpl extends Object
     private static boolean isPrefixMapped(String mapping) {
         return (mapping.charAt(0) == '/');
     }
+    
+    /**
+     * <p>Adjust the viewID per the requirements of {@link #renderView}.</p>
+     * @param context current {@link FacesContext}
+     * @param viewId incoming view ID
+     * @return the view ID with an altered suffix mapping (if necessary)
+     */ 
+    private String convertViewId(FacesContext context, String viewId) {
+        synchronized (this) {
+            if (contextDefaultSuffix == null) {
+                contextDefaultSuffix = context.getExternalContext().
+                        getInitParameter(ViewHandler.DEFAULT_SUFFIX_PARAM_NAME);
+                if (contextDefaultSuffix == null) {
+                    contextDefaultSuffix = ViewHandler.DEFAULT_SUFFIX;
+                }
+                if (log.isDebugEnabled()) {
+                    log.debug("contextDefaultSuffix " + contextDefaultSuffix);
+                }
+            }
+        }
+        String convertedViewId = viewId;    
+        // if the viewId doesn't already use the above suffix,
+        // replace or append.
+        if (!convertedViewId.endsWith(contextDefaultSuffix)) {
+            StringBuffer buffer = new StringBuffer(convertedViewId);
+            int extIdx = convertedViewId.lastIndexOf('.');
+            if (extIdx != -1) {
+                buffer.replace(extIdx, convertedViewId.length(),
+                        contextDefaultSuffix);
+            } else {
+                // no extension in the provided viewId, append the suffix
+                buffer.append(contextDefaultSuffix);
+            }
+            convertedViewId = buffer.toString();
+            if (log.isDebugEnabled()) {
+                log.debug("viewId after appending the context suffix " +
+                        convertedViewId);
+            }
+
+        }
+        return convertedViewId;
+    }
+
         
 } 

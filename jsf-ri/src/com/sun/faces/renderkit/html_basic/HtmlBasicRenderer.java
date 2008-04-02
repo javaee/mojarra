@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.69 2003/11/13 02:58:42 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.70 2003/12/17 15:13:53 rkitain Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageFactory;
 
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ArrayList;
@@ -40,8 +39,8 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
@@ -77,8 +76,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     // Relationship Instance Variables
 
-    private Hashtable attributeTable;
-
     //
     // Constructors and Initializers    
     //
@@ -90,31 +87,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
     //
     // Class methods
     //
-
-    //
-    // General Methods
-    //
-    public void registerAttribute(String name, String displayName, 
-			     String description, String typeClassName) {
-	Class typeClass = null;
-        try {
-            typeClass = Util.loadClass(typeClassName, this);
-        } catch (ClassNotFoundException cnf) {
-	    Object [] params = { cnf.getMessage() };
-            throw new RuntimeException(Util.getExceptionMessage(Util.MISSING_RESOURCE_ERROR_MESSAGE_ID, params));
-        }
-	if (attributeTable == null) {
-	    attributeTable = new Hashtable();
-	}
-    }
-
-    public boolean hasAttributeWithName(String name) {
-	if (null == attributeTable) {
-	    return false;
-	}
-	return (null != attributeTable.get(name));
-    }
-	
 
     //
     // Methods From Renderer
@@ -156,9 +128,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	String key = null, bundleName = null;
 	ResourceBundle bundle = null;
 
-	ParameterCheck.nonNull(context);
-	ParameterCheck.nonNull(component);
-	ParameterCheck.nonNull(keyAttr);
+	Util.parameterNonNull(context);
+	Util.parameterNonNull(component);
+	Util.parameterNonNull(keyAttr);
 
         key = (String) component.getAttributes().get(keyAttr);
         bundleName = (String)component.getAttributes().get(RIConstants.BUNDLE_ATTR);
@@ -167,7 +139,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // been set on the root component.
         if ( bundleName == null ) {
             UIComponent root = context.getViewRoot();
-            Assert.assert_it(root != null);
+            Util.doAssert(root != null);
             bundleName = (String)root.getAttributes().get(RIConstants.BUNDLE_ATTR);
         }
 	// verify our component has the proper attributes for key and bundle.
@@ -221,7 +193,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         } 
         
         String clientId = component.getClientId(context);
-        Assert.assert_it(clientId != null );
+        Util.doAssert(clientId != null );
         
         // set previous value = current value (converted if necessary)
         // we should convert because we want to compare the converted
@@ -284,7 +256,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }    
           
         writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
         
         currentValue = getCurrentValue(context, component);
         // PENDING (visvan) here is where we'd hook in a buffer pooling scheme

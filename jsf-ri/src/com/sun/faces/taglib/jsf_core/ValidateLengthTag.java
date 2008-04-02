@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLengthTag.java,v 1.3 2003/05/20 23:08:00 jvisvanathan Exp $
+ * $Id: ValidateLengthTag.java,v 1.4 2003/12/17 15:14:14 rkitain Exp $
  */
 
 /*
@@ -11,8 +11,8 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.Validator;
@@ -20,16 +20,8 @@ import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
 
 /**
- *
- *  <B>ValidateLengthTag</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: ValidateLengthTag.java,v 1.3 2003/05/20 23:08:00 jvisvanathan Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * ValidateLengthTag is the tag handler class for 
+ * <code>validate_length</code> tag
  */
 
 public class ValidateLengthTag extends MaxMinValidatorTag
@@ -47,9 +39,10 @@ public class ValidateLengthTag extends MaxMinValidatorTag
 //
 
 // Attribute Instance Variables
-
-    protected int maximum = 0;
-    protected int minimum = 0;
+protected String maximum_ = null;
+protected int maximum = 0;
+protected String minimum_ = null;
+protected int minimum = 0;
 
 
 // Relationship Instance Variables
@@ -61,7 +54,7 @@ public class ValidateLengthTag extends MaxMinValidatorTag
 public ValidateLengthTag()
 {
     super();
-    super.setId("Length");
+    super.setValidatorId("Length");
 }
 
 //
@@ -72,26 +65,16 @@ public ValidateLengthTag()
 // General Methods
 //
 
-public int getMaximum()
-{
-    return maximum;
-}
-
-public void setMaximum(int newMaximum)
+public void setMaximum(String newMaximum)
 {
     maximumSet = true;
-    maximum = newMaximum;
+    maximum_ = newMaximum;
 }
 
-public int getMinimum()
-{
-    return minimum;
-}
-
-public void setMinimum(int newMinimum)
+public void setMinimum(String newMinimum)
 {
     minimumSet = true;
-    minimum = newMinimum;
+    minimum_ = newMinimum;
 }
 
 // 
@@ -103,17 +86,41 @@ protected Validator createValidator() throws JspException
     LengthValidator result = null;
 
     result = (LengthValidator) super.createValidator();
-    Assert.assert_it(null != result);
+    Util.doAssert(null != result);
 
+    evaluateExpressions();
     if (maximumSet) {
-	result.setMaximum(getMaximum());
+	result.setMaximum(maximum);
     }
 
     if (minimumSet) {
-	result.setMinimum(getMinimum());
+	result.setMinimum(minimum);
     }
 
     return result;
+}
+
+/* Evaluates expressions as necessary */
+private void evaluateExpressions() throws JspException {
+   
+    if (minimum_ != null) {
+        if (Util.isVBExpression(minimum_)) {  
+            Integer intObj = (Integer)Util.evaluateVBExpression(minimum_);
+            Util.doAssert(null != intObj);
+            minimum = intObj.intValue();
+        } else {
+            minimum = new Integer(minimum_).intValue();
+        }
+    }
+    if (maximum_ != null) {
+        if (Util.isVBExpression(maximum_)) {  
+            Integer intObj = (Integer)Util.evaluateVBExpression(maximum_);
+            Util.doAssert(null != intObj);
+            maximum = intObj.intValue();
+        } else {
+            maximum = new Integer(maximum_).intValue();
+        }
+    }
 }
 
 } // end of class ValidateLengthTag

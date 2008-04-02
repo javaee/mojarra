@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.9 2003/10/20 21:32:53 jvisvanathan Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.10 2003/12/17 15:15:27 rkitain Exp $
  */
 
 /*
@@ -33,8 +33,8 @@ import javax.faces.render.RenderKitFactory;
 
 import org.apache.cactus.WebRequest;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 /**
  *
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.9 2003/10/20 21:32:53 jvisvanathan Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.10 2003/12/17 15:15:27 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -268,14 +268,10 @@ public void testRegisterListeners() {
 
 public static class TestCommand extends UICommand {
     public int getDefaultListenerCount() {
-	List list = null;
-	int ordinal = PhaseId.INVOKE_APPLICATION.getOrdinal();
 	if (listeners != null) {
-            list = listeners[ordinal]; 
-            return list.size();
-	} else {
-            return 0;
-	}
+            return listeners.size();
+	} 
+	return 0;
     }
 }
 

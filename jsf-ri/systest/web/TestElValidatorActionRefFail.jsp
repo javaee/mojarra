@@ -15,15 +15,15 @@
   pageContext.setAttribute("ford", new String("harrison"), PageContext.REQUEST_SCOPE);
 %>
 
-<h1>TLV command_button, invalid 'actionRef' expression</h1>
+<h1>TLV command_button, invalid 'action' expression</h1>
 This page should Fail.
 <br>
 <br>
 
 <f:view>
 
-  <p>This command button has an invalid actionRef expression</p>
-  <h:command_button value="hello" actionRef="#{ford < 1"/>
+  <p>This command button has an invalid action expression</p>
+  <h:command_button value="hello" action="#{ford < 1}"/>
 
 </f:view>
 

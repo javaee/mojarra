@@ -1,5 +1,5 @@
 /*
- * $Id: TreeStructure.java,v 1.2 2003/09/04 21:15:09 jvisvanathan Exp $
+ * $Id: TreeStructure.java,v 1.3 2003/12/17 15:14:22 rkitain Exp $
  */
 
 /*
@@ -9,8 +9,8 @@
 
 package com.sun.faces.util;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,7 +38,7 @@ public class TreeStructure implements java.io.Serializable{
     }    
     
     public TreeStructure( UIComponent component) {
-        ParameterCheck.nonNull(component);
+        Util.parameterNonNull(component);
         this.id = component.getId();
         className = component.getClass().getName();
     }    
@@ -79,7 +79,7 @@ public class TreeStructure implements java.io.Serializable{
      * Adds treeStruct as a child of this TreeStructure instance.
      */
     public void addChild(TreeStructure treeStruct) {
-        ParameterCheck.nonNull(treeStruct);
+        Util.parameterNonNull(treeStruct);
         if (children == null ) {
             children = new ArrayList();
         }    
@@ -90,8 +90,8 @@ public class TreeStructure implements java.io.Serializable{
       * Adds treeStruct as a facet belonging to this TreeStructure instance.
      */
     public void addFacet(String facetName, TreeStructure treeStruct) {
-        ParameterCheck.nonNull(facetName);
-        ParameterCheck.nonNull(treeStruct);
+        Util.parameterNonNull(facetName);
+        Util.parameterNonNull(treeStruct);
         if (facets == null ) {
             facets = new HashMap();
         }    
@@ -103,7 +103,7 @@ public class TreeStructure implements java.io.Serializable{
      * the facet list
      */
     public TreeStructure getTreeStructureForFacet(String facetName) {
-        ParameterCheck.nonNull(facetName);
+        Util.parameterNonNull(facetName);
         if (facets != null ) {
             return ((TreeStructure)(facets.get(facetName)));
         } else {
@@ -127,7 +127,7 @@ public class TreeStructure implements java.io.Serializable{
             Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, 
                 params));
         }
-        Assert.assert_it(component != null);
+        Util.doAssert(component != null);
         component.setId(id);
         return component;
     }

@@ -24,7 +24,7 @@ This page should Succeed.
 
 <f:view>
   <c:set var="temp" scope="request" value="${pageScope.first}${pageScope.last}"/>
-  <h:command_button id="#{temp}" value="indiana" />
+  <h:command_button id="temp" value="indiana" />
 
 </f:view>
 

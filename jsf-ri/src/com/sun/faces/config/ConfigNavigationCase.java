@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigNavigationCase.java,v 1.3 2003/10/24 17:34:19 eburns Exp $
+ * $Id: ConfigNavigationCase.java,v 1.4 2003/12/17 15:13:30 rkitain Exp $
  */
 
 /*
@@ -16,6 +16,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.FacesException;
+
+import com.sun.faces.util.Util;
+
 
 /**
  * <p>Config Bean for a Navigation Rule .</p>
@@ -23,9 +27,10 @@ import java.util.Map;
 public class ConfigNavigationCase {
 
     private String fromViewId = null;
-    private String fromActionRef = null;
+    private String fromAction = null;
     private String fromOutcome = null;
     private String toViewId = null;
+    private String key = null;
 
     public String getFromViewId() {
         return (this.fromViewId);
@@ -34,11 +39,11 @@ public class ConfigNavigationCase {
         this.fromViewId = fromViewId;
     }
 
-    public String getFromActionRef() {
-        return (this.fromActionRef);
+    public String getFromAction() {
+        return (this.fromAction);
     }
-    public void setFromActionRef(String fromActionRef) {
-        this.fromActionRef= fromActionRef;
+    public void setFromAction(String fromAction) {
+        this.fromAction= fromAction;
     }
 
     public String getFromOutcome() {
@@ -63,10 +68,22 @@ public class ConfigNavigationCase {
 	this.redirect = redirect;
     }
 
+    /**
+     * The "key" is defined as the combination of
+     * <code>from-view-id</code><code>from-action</code>
+     * <code>from-outcome</code>.
+     */
+    public String getKey() {
+        return key;
+    }
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("FROM VIEW ID:"+getFromViewId());
-        sb.append("\nFROM ACTION REF:"+getFromActionRef());
+        sb.append("\nFROM ACTION:"+getFromAction());
         sb.append("\nFROM OUTCOME:"+getFromOutcome());
         sb.append("\nTO VIEW ID:"+getToViewId());
 	sb.append("\nREDIRECT:"+hasRedirect());

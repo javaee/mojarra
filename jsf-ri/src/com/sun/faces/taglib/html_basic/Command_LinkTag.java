@@ -1,5 +1,5 @@
 /*
- * $Id: Command_LinkTag.java,v 1.4 2003/11/09 05:42:03 eburns Exp $
+ * $Id: Command_LinkTag.java,v 1.5 2003/12/17 15:14:09 rkitain Exp $
  */
 
 /*
@@ -10,11 +10,14 @@
 package com.sun.faces.taglib.html_basic;
 
 
-import org.mozilla.util.ParameterCheck;
+
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.component.UICommand;
 import javax.faces.el.ValueBinding;
+import javax.faces.el.MethodBinding;
+import javax.faces.event.ActionEvent;
 import javax.servlet.jsp.JspException;
 
 import com.sun.faces.taglib.BaseComponentBodyTag;
@@ -43,8 +46,8 @@ public class Command_LinkTag extends BaseComponentBodyTag
 
     // Attribute Instance Variables
     protected String commandname = null;
-    protected String actionRef = null;
     protected String immediate = null;
+    protected String actionListener = null;
 
     
     // Relationship Instance Variables
@@ -62,18 +65,18 @@ public class Command_LinkTag extends BaseComponentBodyTag
     //
 
     public void setCommandName(String newCommandname) {
-        ParameterCheck.nonNull(newCommandname);
+        Util.parameterNonNull(newCommandname);
         commandname = newCommandname;
     }
  
-    public void setActionRef(String newActionRef) {
-        actionRef = newActionRef;
-    }
-
     public void setImmediate(String newImmediate) {
         immediate = newImmediate;
     }
 
+    public void setActionListener(String newActionListener) {
+	actionListener = newActionListener;
+    }
+    
     //
     // General Methods
     //
@@ -87,20 +90,30 @@ public class Command_LinkTag extends BaseComponentBodyTag
 
 
 
-    protected void overrideProperties(UIComponent component) {
-	super.overrideProperties(component);
+    protected void setProperties(UIComponent component) {
+	super.setProperties(component);
 	UICommand link = (UICommand) component;
-        if (actionRef != null ) {
-	    link.setActionRef(actionRef);
-	}
-        if (action != null ) {
+	MethodBinding binding = null;
+	if (action != null ) {
 	    if (isValueReference(action)) {
-		link.setValueBinding("action", Util.getValueBinding(action));
+		binding = Util.createMethodBinding(action, null);
 	    }
 	    else {
-		link.setAction(action);
+		binding = Util.createConstantMethodBinding(action);
 	    }
+	    link.setAction(binding);
 	}
+	if (null != actionListener) {
+            if (isValueReference(actionListener)) {
+                Class args[] = { ActionEvent.class };
+                binding = FacesContext.getCurrentInstance().getApplication().createMethodBinding(actionListener, args);
+                link.setActionListener(binding);
+            } else {
+		Object params [] = {actionListener};
+		throw new javax.faces.FacesException(Util.getExceptionMessage(Util.INVALID_EXPRESSION_ID, params));
+            }
+	}
+	    
         if (value != null) {
 	    if (isValueReference(value)) {
 		link.setValueBinding("value", Util.getValueBinding(value));

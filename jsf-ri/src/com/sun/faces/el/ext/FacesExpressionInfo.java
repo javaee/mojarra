@@ -1,5 +1,5 @@
 /*
- * $Id: FacesExpressionInfo.java,v 1.1 2003/08/13 18:10:45 rlubke Exp $
+ * $Id: FacesExpressionInfo.java,v 1.2 2003/12/17 15:13:40 rkitain Exp $
  */
 
 /*
@@ -17,6 +17,10 @@ import javax.faces.context.FacesContext;
 
 public class FacesExpressionInfo extends ExpressionInfo {
    
+    // PENDING(visvan): this should be a typesafe enum.
+    public static final String OPERATION_TYPE_SET = "set";
+    public static final String OPERATION_TYPE_GET = "get";
+    
     //
     // Instance Variables
     //
@@ -24,6 +28,8 @@ public class FacesExpressionInfo extends ExpressionInfo {
     private PropertyResolver propertyResolver;
     private FacesContext facesContext;  
     private Object rValue;
+    private String operationType=null;
+    private boolean lastSegment = false;
 
     //
     // General Methods
@@ -91,6 +97,30 @@ public class FacesExpressionInfo extends ExpressionInfo {
      */ 
     public void setRValue(Object rValue) {
         this.rValue = rValue;
+    }
+    
+    /**
+     * Returns the operation type, could be a set or a get.
+     * @return operationType the operationType
+     */ 
+    public String getOperationType() {
+        return operationType;
+    }
+
+    /**
+     * Sets the operation type, whether its a set or a get.
+     * @param opType the operationType
+     */ 
+    public void setOperationType(String opType) {
+        this.operationType = opType;
+    }
+
+    public boolean isLastSegment() {
+	return lastSegment;
+    }
+
+    public void setLastSegment(boolean lastSegment) {
+	this.lastSegment = lastSegment;
     }
 
 } // end of class FacesExpressionInfo

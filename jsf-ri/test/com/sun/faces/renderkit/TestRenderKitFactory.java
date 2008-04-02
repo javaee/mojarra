@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.7 2003/10/06 19:29:51 rkitain Exp $
+ * $Id: TestRenderKitFactory.java,v 1.8 2003/12/17 15:15:34 rkitain Exp $
  */
 
 /*
@@ -21,9 +21,9 @@ import javax.faces.render.RenderKitFactory;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import com.sun.faces.ServletFacesTestCase;
 
@@ -33,7 +33,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.7 2003/10/06 19:29:51 rkitain Exp $
+ * @version $Id: TestRenderKitFactory.java,v 1.8 2003/12/17 15:15:34 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

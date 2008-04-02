@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.9 2003/10/28 04:30:01 eburns Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.10 2003/12/17 15:14:58 rkitain Exp $
  */
 
 /*
@@ -13,9 +13,9 @@ package com.sun.faces;
 
 import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
@@ -34,7 +34,7 @@ import java.io.Writer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.9 2003/10/28 04:30:01 eburns Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.10 2003/12/17 15:14:58 rkitain Exp $
  * 
  *
  */
@@ -76,7 +76,7 @@ public FileOutputResponseWriter()
         writer = new HtmlResponseWriter(out, "text/html", "ISO-8859-1"); 
     } catch ( Exception e ) {
         System.out.println(e.getMessage());
-	Assert.assert_it(false);
+	Util.doAssert(false);
     }
 }
 
@@ -89,7 +89,7 @@ public FileOutputResponseWriter()
 	    String testRootDir;
 	    // prepend the testRootDir to the RESPONSE_WRITER_FILENAME
 	    testRootDir = System.getProperty("testRootDir");
-	    Assert.assert_it(null != testRootDir);
+	    Util.doAssert(null != testRootDir);
 	    FACES_RESPONSE_ROOT = testRootDir + "/";
 	    RESPONSE_WRITER_FILENAME = 
 		FACES_RESPONSE_ROOT + RESPONSE_WRITER_FILENAME;
@@ -168,10 +168,6 @@ public void startElement(String name, UIComponent componentForElement)
 public void endElement(String name) throws IOException {
     writer.endElement(name);
 }    
-
-public void closeStartTag(UIComponent component) throws IOException {
-    writer.closeStartTag(component);
-}
 
 public void startDocument() throws IOException {
     writer.startDocument();

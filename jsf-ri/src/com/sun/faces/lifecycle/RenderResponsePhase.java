@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.10 2003/10/30 22:15:33 jvisvanathan Exp $
+ * $Id: RenderResponsePhase.java,v 1.11 2003/12/17 15:13:44 rkitain Exp $
  */
 
 /*
@@ -12,7 +12,7 @@
 package com.sun.faces.lifecycle;
 
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -21,13 +21,16 @@ import javax.faces.context.FacesContext;
 
 import java.io.IOException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
 
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.10 2003/10/30 22:15:33 jvisvanathan Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.11 2003/12/17 15:13:44 rkitain Exp $
  *
  */
 
@@ -35,6 +38,8 @@ public class RenderResponsePhase extends Phase {
 //
 // Protected Constants
 //
+// Log instance for this class
+protected static Log log = LogFactory.getLog(RenderResponsePhase.class);
 
 //
 // Class Variables
@@ -74,11 +79,20 @@ public PhaseId getId() {
 
 public void execute(FacesContext facesContext) throws FacesException
 {
+    if (log.isDebugEnabled()) {
+        log.debug("Entering RenderResponsePhase");
+    }
+    if (log.isDebugEnabled()) {
+        log.debug("About to render view " + facesContext.getViewRoot().getViewId());
+    }
     try { 
 	facesContext.getApplication().getViewHandler().
                 renderView(facesContext, facesContext.getViewRoot()); 
     } catch (IOException e) { 
 	throw new FacesException(e.getMessage(), e);
+    }
+    if (log.isDebugEnabled()) {
+        log.debug("Exiting RenderResponsePhase");
     }
 }
 

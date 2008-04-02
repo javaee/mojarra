@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.17 2003/11/09 05:11:10 eburns Exp $
+ * $Id: DebugUtil.java,v 1.18 2003/12/17 15:14:22 rkitain Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.io.PrintStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.17 2003/11/09 05:11:10 eburns Exp $
+ * @version $Id: DebugUtil.java,v 1.18 2003/12/17 15:14:22 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -61,7 +61,7 @@ private static int curDepth = 0;
 public DebugUtil()
 {
     super();
-    // ParameterCheck.nonNull();
+    // Util.parameterNonNull();
     this.init();
 }
 
@@ -180,6 +180,33 @@ public static void printTree(UIComponent root, PrintStream out)
     Iterator it = root.getChildren().iterator();
     while (it.hasNext()) {
 	printTree((UIComponent) it.next(), out);
+    }
+    curDepth--;
+}
+
+public static void printTree(TreeStructure root, PrintStream out) 
+{
+    if (null == root) {
+	return;
+    }
+    int i = 0;
+    Object value = null;
+    
+/* PENDING
+    indentPrintln(out, "===>Type:" + root.getComponentType());
+*/
+    indentPrintln(out, "id:"+root.id);
+
+    Iterator items = null;
+    SelectItem curItem = null;
+    int j = 0;
+
+    curDepth++;
+    if (null != root.children) {
+	Iterator it = root.children.iterator();
+	while (it.hasNext()) {
+	    printTree((TreeStructure) it.next(), out);
+	}
     }
     curDepth--;
 }

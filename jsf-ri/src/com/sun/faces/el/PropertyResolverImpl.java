@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.8 2003/10/23 22:00:03 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.9 2003/12/17 15:13:37 rkitain Exp $
  */
 
 /*
@@ -13,16 +13,21 @@ package com.sun.faces.el;
 import com.sun.faces.RIConstants;
 
 import javax.faces.component.UIComponent;
+import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -34,6 +39,7 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // ------------------------------------------------------- Static Variables
 
+    private static final Log log = LogFactory.getLog(PropertyResolver.class);
 
     /**
      * <p>Parameters passed to the property getter method of a JavaBean.</p>
@@ -67,10 +73,15 @@ public class PropertyResolverImpl extends PropertyResolver {
             if (readMethod != null) {
                 try {
                     return (readMethod.invoke(base, readParams));
-                } catch (Exception e) {
-                    throw new PropertyNotFoundException(e);
-                }
+                } catch (IllegalAccessException e) {
+                    throw new EvaluationException(e);
+                } catch (InvocationTargetException ite) {
+	            throw new EvaluationException(ite.getTargetException());
+		}
             } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("getValue:Property not found:" + name);
+                }
                 throw new PropertyNotFoundException(name);
             }
         }
@@ -91,6 +102,9 @@ public class PropertyResolverImpl extends PropertyResolver {
         } else if (base instanceof UIComponent) {
             return (((UIComponent) base).getChildren().get(index));
         } else {
+            if (log.isDebugEnabled()) {
+                log.debug("getValue:Property not found at index:" + index);
+            }
             throw new PropertyNotFoundException("" + index);
         }
 
@@ -106,6 +120,9 @@ public class PropertyResolverImpl extends PropertyResolver {
         if (base instanceof Map) {
             ((Map) base).put(name, value);
         } else if (base instanceof UIComponent) {
+            if (log.isDebugEnabled()) {
+                log.debug("setValue:Property not found:" + name);
+            }
             throw new PropertyNotFoundException(name);
         } else {
             PropertyDescriptor descriptor = descriptor(base, name);
@@ -114,9 +131,15 @@ public class PropertyResolverImpl extends PropertyResolver {
                 try {
                     writeMethod.invoke(base, new Object[] { value });
                 } catch (Exception e) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("setValue:Property not found error:", e);
+                    }
                     throw new PropertyNotFoundException(e);
                 }
             } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("setValue:Property not found:" + name);
+                }
                 throw new PropertyNotFoundException(name);
             }
         }
@@ -135,6 +158,9 @@ public class PropertyResolverImpl extends PropertyResolver {
         } else if (base instanceof List) {
             ((List) base).set(index, value);
         } else {
+            if (log.isDebugEnabled()) {
+                log.debug("setValue:Property not found at index:" + index);
+            }
             throw new PropertyNotFoundException("" + index);
         }
 
@@ -175,6 +201,9 @@ public class PropertyResolverImpl extends PropertyResolver {
         } else if (base instanceof UIComponent) {
             return (true);
         } else {
+            if (log.isDebugEnabled()) {
+                log.debug("isReadOnly:Property not found at index:" + index);
+            }
             throw new PropertyNotFoundException("" + index);
         }
 
@@ -218,11 +247,17 @@ public class PropertyResolverImpl extends PropertyResolver {
             if (index >= 0 && index <= Array.getLength(base) - 1) {
                 return baseClass.getComponentType();
             } else {                
+                if (log.isDebugEnabled()) {
+                    log.debug("getType:index out of bounds:" + index);
+                }
                 throw new IndexOutOfBoundsException("" + index);
             }            
         } else if (base instanceof List) {
             result = ((List) base).get(index).getClass();
         } else {
+            if (log.isDebugEnabled()) {
+                log.debug("getType:Property not found at index:" + index);
+            }
             throw new PropertyNotFoundException("" + index);
         }
         return result;
@@ -255,8 +290,14 @@ public class PropertyResolverImpl extends PropertyResolver {
                     return (descriptors[i]);
                 }
             }
+            if (log.isDebugEnabled()) {
+                log.debug("Property not found while getting Descriptor for:" + name);
+            }
             throw new PropertyNotFoundException(name);
         } catch (Exception e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Property not found exception while getting Descriptor:", e);
+            }
             throw new PropertyNotFoundException(e);
         }
 
@@ -276,6 +317,9 @@ public class PropertyResolverImpl extends PropertyResolver {
         try {
             return (Integer.parseInt(name));
         } catch (NumberFormatException e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Property not found while converting name:"+name+" to an 'int':", e);
+            }
             throw new PropertyNotFoundException(name);
         }
 

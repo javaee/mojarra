@@ -1,12 +1,10 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.17 2003/10/22 20:43:47 eburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.18 2003/12/17 15:13:34 rkitain Exp $
  */
 
 /*
- * Licensed Material - Property of IBM
- * (C) Copyright IBM Corp. 2002, 2003 - All Rights Reserved.
- * US Government Users Restricted Rights - Use, duplication or disclosure
- * restricted by GSA ADP Schedule Contract with IBM Corp.
+ * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 package com.sun.faces.context;
 
@@ -36,7 +34,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.mozilla.util.ParameterCheck;
+
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
@@ -46,7 +44,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.17 2003/10/22 20:43:47 eburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.18 2003/12/17 15:13:34 rkitain Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {
@@ -70,9 +68,9 @@ public class ExternalContextImpl extends ExternalContext {
 
         // Validate the incoming parameters
         try {
-            ParameterCheck.nonNull(sc);
-            ParameterCheck.nonNull(request);
-            ParameterCheck.nonNull(response);
+            Util.parameterNonNull(sc);
+            Util.parameterNonNull(request);
+            Util.parameterNonNull(response);
         } catch (Exception e ) {
             throw new FacesException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }

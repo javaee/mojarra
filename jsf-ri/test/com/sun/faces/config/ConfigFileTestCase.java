@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.47 2003/10/31 22:30:16 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.48 2003/12/17 15:15:09 rkitain Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package com.sun.faces.config;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.application.ApplicationImpl;
 import org.apache.cactus.WebRequest;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
@@ -29,11 +29,15 @@ import javax.faces.el.ValueBinding;
 import javax.servlet.ServletContext;
 
 import java.io.InputStream;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.xml.sax.InputSource;
+
 
 /**
  * <p>Unit tests for Configuration File processing.</p>
@@ -197,14 +201,16 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    Class c = bean.getClass();
 	    Method m[] = c.getDeclaredMethods();
 	    for (int i=0; i<m.length; i++) {
-                Assert.assert_it(m[i].getName().equals("setSimpleProperty") ||
+                Util.doAssert(m[i].getName().equals("setSimpleProperty") ||
 				 m[i].getName().equals("getSimpleProperty") ||
 				 m[i].getName().equals("setIntProperty") ||
-				 m[i].getName().equals("getIntProperty"));
+				 m[i].getName().equals("getIntProperty") || 
+				 m[i].getName().equals("getTrueValue") ||
+				 m[i].getName().equals("getFalseValue"));
 		if (m[i].getName().equals("getSimpleProperty")) {
 		    Object args[] = null;
 	            Object value = m[i].invoke(bean, args);
-		    Assert.assert_it(((String)value).equals("Bobby Orr"));
+		    Util.doAssert(((String)value).equals("Bobby Orr"));
 		}
 	    }
 	} catch (Throwable t) {
@@ -221,7 +227,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
                            config.getServletContext());
 
 	ValueBinding valueBinding = 
-	    application.getValueBinding("NewCustomerFormHandler.claimAmounts");
+	    application.createValueBinding("#{NewCustomerFormHandler.claimAmounts}");
 	assertNotNull(valueBinding);
 
 	Map claimAmounts = (Map) valueBinding.getValue(getFacesContext());
@@ -232,7 +238,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	assertNull(claimAmounts.get("water"));
 	assertNull(claimAmounts.get("earthquake"));
 
-	valueBinding = application.getValueBinding("NewCustomerFormHandler.allowableValues");
+	valueBinding = application.createValueBinding("#{NewCustomerFormHandler.allowableValues}");
 	assertNotNull(valueBinding);
 	
 	List list1 = (List) valueBinding.getValue(getFacesContext());
@@ -247,7 +253,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 		     new Integer(60), list1.get(2));
 	assertNull("allowableValues.get(3) not as expected", list1.get(3));
 
-	valueBinding = application.getValueBinding("NewCustomerFormHandler.firstNames");
+	valueBinding = application.createValueBinding("#{NewCustomerFormHandler.firstNames}");
 	assertNotNull(valueBinding);
 	
 	String [] strings = 
@@ -272,7 +278,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 		    config.getServletContext());
 	
 	ValueBinding valueBinding = 
-	    application.getValueBinding("simpleList");
+	    application.createValueBinding("#{simpleList}");
 	assertNotNull(valueBinding);
 	
 	List list = (List) valueBinding.getValue(getFacesContext());
@@ -287,7 +293,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 		     new Integer(60), list.get(2));
 	assertNull("simpleList.get(3) not as expected", list.get(3));
 
-	valueBinding = application.getValueBinding("objectList");
+	valueBinding = application.createValueBinding("#{objectList}");
 	assertNotNull(valueBinding);
 	
 	list = (List) valueBinding.getValue(getFacesContext());
@@ -303,7 +309,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	assertNull("simpleList.get(3) not as expected", list.get(3));
 	
 
-	valueBinding = application.getValueBinding("floatMap");
+	valueBinding = application.createValueBinding("#{floatMap}");
 	assertNotNull(valueBinding);
 	
 	Map 
@@ -336,7 +342,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 		   map.get(key3) instanceof SimpleBean);
 	assertNull("map.get(key4) not null",map.get(key4));
 
-	valueBinding = application.getValueBinding("crazyMap");
+	valueBinding = application.createValueBinding("#{crazyMap}");
 	assertNotNull(valueBinding);
 	
 	map = (Map) valueBinding.getValue(getFacesContext());
@@ -380,7 +386,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         UIViewRoot page = new UIViewRoot();
         page.setViewId("/login.jsp");
 	getFacesContext().setViewRoot(page);
-        navHandler.handleNavigation(getFacesContext(), "UserBean.login",
+        navHandler.handleNavigation(getFacesContext(), "#{UserBean.login}",
 	    "success");
         String newViewId = getFacesContext().getViewRoot().getViewId();
         assertTrue(newViewId.equals("/home.jsp"));	
@@ -399,7 +405,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	String defaultRenderers [] = {
 	    "Button",
 	    "Checkbox",
-	    "Errors",
 	    "Form",
 	    "Grid",
 	    "Group",
@@ -485,5 +490,38 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         String handledBeforeAfter = System.getProperty(HANDLED_BEFORE_AFTER);
         assertTrue(handledBeforeAfter != null);
         assertTrue(handledBeforeAfter.equals(HANDLED_BEFORE_AFTER));
-    }       
+    }
+
+    public void testFileNotFoundWhenParsing() throws Exception {
+        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
+	// make sure we get a FileNotFoundException on null input for
+	// all variants of parseConfig.
+	boolean exceptionThrown = false;
+	try {
+	    cp.parseConfig((InputStream) null);
+	}
+	catch (FileNotFoundException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	exceptionThrown = false;
+	try {
+	    cp.parseConfig(null, config.getServletContext());
+	}
+	catch (FileNotFoundException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	exceptionThrown = false;
+	try {
+	    cp.parseConfig((InputSource) null);
+	}
+	catch (FileNotFoundException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);	
+	
+    }
 }

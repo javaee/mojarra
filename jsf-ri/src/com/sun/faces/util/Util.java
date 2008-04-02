@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.115 2003/11/13 02:58:43 jvisvanathan Exp $
+ * $Id: Util.java,v 1.116 2003/12/17 15:14:22 rkitain Exp $
  */
 
 /*
@@ -39,6 +39,7 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
+import javax.faces.el.MethodBinding;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
@@ -53,8 +54,7 @@ import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+
 
 import com.sun.faces.el.impl.ElException;
 import com.sun.faces.el.impl.ExpressionInfo;
@@ -66,7 +66,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.115 2003/11/13 02:58:43 jvisvanathan Exp $ 
+ * @version $Id: Util.java,v 1.116 2003/12/17 15:14:22 rkitain Exp $ 
  */
 
 public class Util extends Object
@@ -204,9 +204,6 @@ public class Util extends Object
    public static final String MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID =
          "com.sun.faces.MAXIMUM_EVENTS_REACHED";
 
-   public static final String NO_ACTION_FROM_ACTIONREF_ERROR_MESSAGE_ID = 
-        "com.sun.faces.NO_ACTION_FROM_ACTIONREF";
-
    public static final String NULL_CONFIGURATION_ERROR_MESSAGE_ID = 
         "com.sun.faces.NULL_CONFIGURATION";
 
@@ -289,6 +286,10 @@ public class Util extends Object
          "com.sun.faces.INVALID_EXPRESSION";
     public static final String NULL_FORVALUE_ID =
          "com.sun.faces.NULL_FORVALUE";
+    public static final String EMPTY_PARAMETER_ID =
+         "com.sun.faces.EMPTY_PARAMETER";
+    public static final String ASSERTION_FAILED_ID =
+         "com.sun.faces.ASSERTION_FAILED";
     
 
 // README - make sure to add the message identifier constant
@@ -372,7 +373,6 @@ public class Util extends Object
         "acceptcharset", 
         "accept", 
         "target", 
-        "onsubmit", 
         "onreset",
         "rel",
         "rev",
@@ -381,7 +381,6 @@ public class Util extends Object
         "hreflang"
     };
 
-private static long id = 0;
 
 //
 // Instance Variables
@@ -463,19 +462,19 @@ private Util()
 
 	renderKitFactory = (RenderKitFactory)
 	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-	Assert.assert_it(null != renderKitFactory);
+	Util.doAssert(null != renderKitFactory);
 
 	lifecycleFactory = (LifecycleFactory)
 	    FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-	Assert.assert_it(null != lifecycleFactory);	
+	Util.doAssert(null != lifecycleFactory);	
 
 	facesContextFactory = (FacesContextFactory)
 	    FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-	Assert.assert_it(null != facesContextFactory);
+	Util.doAssert(null != facesContextFactory);
 
 	applicationFactory = (ApplicationFactory)
 	    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-	Assert.assert_it(null != applicationFactory);
+	Util.doAssert(null != applicationFactory);
 
 	defaultRenderKit = 
 	    renderKitFactory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
@@ -558,7 +557,7 @@ private Util()
     public static void releaseFactoriesAndDefaultRenderKit(ServletContext context) throws FacesException {
 	FactoryFinder.releaseFactories();
 
-	Assert.assert_it(null != 
+	Util.doAssert(null != 
 		 context.getAttribute(RIConstants.DEFAULT_RENDER_KIT));
 	context.removeAttribute(RIConstants.DEFAULT_RENDER_KIT);
 	context.removeAttribute(RIConstants.CONFIG_ATTR);
@@ -675,8 +674,8 @@ private Util()
 	Locale result = null;
 	String bundleName = null, bundleAttr = "bundle";
 	
-	ParameterCheck.nonNull(context);
-	ParameterCheck.nonNull(component);
+	Util.parameterNonNull(context);
+	Util.parameterNonNull(component);
 	
 	// verify our component has the proper attributes for bundle.
 	if (null != (bundleName = (String)component.getAttributes().get(bundleAttr))){
@@ -686,7 +685,7 @@ private Util()
 			 (javax.servlet.jsp.jstl.fmt.LocalizationContext) 
                          (Util.getValueBinding(bundleName)).getValue(context))) {
                 result = locCtx.getLocale();
-		Assert.assert_it(null != result);
+		Util.doAssert(null != result);
 	    }
 	}
 	if (null == result) {
@@ -704,8 +703,8 @@ private Util()
     */
     public static void renderBooleanPassThruAttributes(ResponseWriter writer,
         UIComponent component) throws IOException {
-	Assert.assert_it(null != writer);
-	Assert.assert_it(null != component);
+	Util.doAssert(null != writer);
+	Util.doAssert(null != component);
 
         int i = 0, len = booleanPassthruAttributes.length;
         Object value = null;
@@ -742,8 +741,8 @@ private Util()
     */
     public static void renderPassThruAttributes(ResponseWriter writer,
         UIComponent component) throws IOException {
-	Assert.assert_it(null != writer);
-	Assert.assert_it(null != component);
+	Util.doAssert(null != writer);
+	Util.doAssert(null != component);
 
         int i = 0, len = passthruAttributes.length;
 	Object value = null;
@@ -838,13 +837,37 @@ private Util()
 	return result.toString();
     }
     
+    public static Object evaluateVBExpression(String expression) {
+        if (expression == null || (!isVBExpression(expression))) {
+            return expression;
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        Object result = 
+        context.getApplication().createValueBinding(expression).getValue(context);
+        return result;
+        
+    }
+    
     public static ValueBinding getValueBinding(String valueRef) {
+        ApplicationFactory af = (ApplicationFactory)
+            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application a = af.getApplication();
+        return (a.createValueBinding(valueRef));
+    }         
+
+    public static MethodBinding createMethodBinding(String methodRef, 
+						    Class [] params) {
         ApplicationFactory factory = (ApplicationFactory)
                 FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         Application application = factory.getApplication();
-        ValueBinding binding = application.getValueBinding(valueRef);
+        MethodBinding binding = application.createMethodBinding(methodRef, 
+								params);
         return binding;
     }         
+
+    public static MethodBinding createConstantMethodBinding(String outcome){
+	return new ConstantMethodBinding(outcome);
+    }
 
     /**
      * This method will return a <code>SessionMap</code> for the current
@@ -896,7 +919,7 @@ private Util()
      * @return an ExpressionEvaluator using the specified parser
      */
     public static ExpressionEvaluator getExpressionEvaluator(String parser) {       
-        Assert.assert_it(parser != null);
+        Util.doAssert(parser != null);
         if (parser.equals(RIConstants.FACES_RE_PARSER)) 
             return FACES_EXPRESSION_EVALUATOR;
         else if (parser.equals(RIConstants.JSP_EL_PARSER))
@@ -982,11 +1005,11 @@ private Util()
             throws FacesException {
 	// Get Application instance
         Application application = context.getApplication();
-	Assert.assert_it(application != null);
+	Util.doAssert(application != null);
         
 	// Get the ViewHandler
         ViewHandler viewHandler = application.getViewHandler();
-        Assert.assert_it(viewHandler != null);
+        Util.doAssert(viewHandler != null);
         
         return viewHandler;
     }
@@ -1000,16 +1023,16 @@ private Util()
 
 	renderKitFactory = (RenderKitFactory)
 	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-	Assert.assert_it(null != renderKitFactory);
+	Util.doAssert(null != renderKitFactory);
 
 	if (context.getViewRoot() == null || 
 	    (renderKitId = context.getViewRoot().getRenderKitId()) == null) {
             renderKitId = RenderKitFactory.DEFAULT_RENDER_KIT;
 	}
-	Assert.assert_it(null != renderKitId);
+	Util.doAssert(null != renderKitId);
 
 	renderKit = renderKitFactory.getRenderKit(renderKitId);
-	Assert.assert_it(null != renderKit);
+	Util.doAssert(null != renderKit);
 
 	result = renderKit.getResponseStateManager();
         return result;
@@ -1167,7 +1190,7 @@ private Util()
         
     public static String stripBracketsIfNecessary(String expression)
         throws ReferenceSyntaxException {
-        Assert.assert_it(null != expression);
+        Util.doAssert(null != expression);
         int len = 0;
         // look for invalid expressions
         if ('#' == expression.charAt(0)) {
@@ -1189,5 +1212,25 @@ private Util()
     //
     // General Methods
     //
+
+    private static boolean assertEnabled = true;
+
+    public static void doAssert(boolean cond) throws FacesException {
+	if (assertEnabled && !cond) {
+	    throw new FacesException(getExceptionMessage(ASSERTION_FAILED_ID));
+	}
+    }
+
+    public static void parameterNonNull(Object param) throws FacesException {
+	if (null == param) {
+	    throw new FacesException(getExceptionMessage(NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+    }
+
+    public static void parameterNonEmpty(String param) throws FacesException {
+	if (null == param || 0 == param.length()) {
+	    throw new FacesException(getExceptionMessage(EMPTY_PARAMETER_ID));
+	}
+    }
 
 } // end of class Util

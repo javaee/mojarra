@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.42 2003/10/30 20:30:40 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.43 2003/12/17 15:15:15 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.42 2003/10/30 20:30:40 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.43 2003/12/17 15:15:15 rkitain Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase
@@ -149,7 +149,6 @@ public void testAccessors()
             public void writeURIAttribute(String name, Object value) {}
             public void writeAttribute(String name, Object value) {}
             public void endElement(String name) {}
-            public void closeStartTag(UIComponent component) {}
             public void startElement(String name) {}
             public void endDocument() {}
             public void startDocument() {}

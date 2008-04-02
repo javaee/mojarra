@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.4 2003/10/24 17:46:32 rlubke Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.5 2003/12/17 15:14:12 rkitain Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.faces.convert.DateTimeConverter;
 import javax.faces.webapp.ConverterTag;
 
 import javax.servlet.jsp.JspException;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import com.sun.faces.util.Util;
 
@@ -26,7 +26,7 @@ import com.sun.faces.util.Util;
  * <p>ConvertDateTimeTag is a ConverterTag implementation for 
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.4 2003/10/24 17:46:32 rlubke Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.5 2003/12/17 15:14:12 rkitain Exp $
  * 
  */
 
@@ -44,11 +44,13 @@ public class ConvertDateTimeTag extends ConverterTag {
     //
     private String dateStyle;
     private String dateStyle_;
+    private String locale_;
     private Locale locale;
     private String pattern;
     private String pattern_;
     private String timeStyle;
     private String timeStyle_;
+    private String timeZone_;
     private TimeZone timeZone;
     private String type;
     private String type_;
@@ -62,7 +64,7 @@ public class ConvertDateTimeTag extends ConverterTag {
     //
     public ConvertDateTimeTag() {
         super();
-        super.setId("DateTime");
+        super.setConverterId("DateTime");
         init();
     }
 
@@ -75,11 +77,13 @@ public class ConvertDateTimeTag extends ConverterTag {
         dateStyle = "default";
         dateStyle_ = "default";
         locale = null;
+        locale_ = null;
         pattern = null;
         pattern_ = null;
         timeStyle = "default";
         timeStyle_ = "default";
         timeZone = null;
+        timeZone_ = null;
         type = "date";
         type_ = "date";
     }
@@ -92,49 +96,28 @@ public class ConvertDateTimeTag extends ConverterTag {
     // General Methods
     //
 
-    public String getDateStyle() {
-        return (this.dateStyle);
-    }
-
     public void setDateStyle(String dateStyle) {
         this.dateStyle_ = dateStyle;
     }
 
-    public Locale getLocale() {
-        return (this.locale);
+    public void setLocale(String locale) {
+        this.locale_ = locale;
     }
 
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
-
-    public String getPattern() {
-        return (this.pattern);
-    }
 
     public void setPattern(String pattern) {
         this.pattern_ = pattern;
-    }
-
-    public String getTimeStyle() {
-        return (this.timeStyle);
     }
 
     public void setTimeStyle(String timeStyle) {
         this.timeStyle_ = timeStyle;
     }
 
-    public TimeZone getTimeZone() {
-        return (this.timeZone);
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone_ = timeZone;
     }
 
-    public void setTimeZone(TimeZone timeZone) {
-        this.timeZone = timeZone;
-    }
-
-    public String getType() {
-        return (this.type);
-    }
 
     public void setType(String type) {
         this.type_ = type;
@@ -150,8 +133,9 @@ public class ConvertDateTimeTag extends ConverterTag {
         DateTimeConverter result = null;
 
         result = (DateTimeConverter) super.createConverter();
-        Assert.assert_it(null != result);
+        Util.doAssert(null != result);
 
+        evaluateExpressions();
         result.setDateStyle(dateStyle);
         result.setLocale(locale);
         result.setPattern(pattern);
@@ -165,32 +149,31 @@ public class ConvertDateTimeTag extends ConverterTag {
     /* Evaluates expressions as necessary */
     private void evaluateExpressions() throws JspException {
         if (dateStyle_ != null) {
-            dateStyle = Util.evaluateElExpression(dateStyle_, pageContext);
+            dateStyle = (String) Util.evaluateVBExpression(dateStyle_);
         }
         if (pattern_ != null) {
-            pattern = Util.evaluateElExpression(pattern_, pageContext);
+            pattern = (String)Util.evaluateVBExpression(pattern_);
         }
         if (timeStyle_ != null) {
-            timeStyle = Util.evaluateElExpression(timeStyle_, pageContext);
+            timeStyle = (String)Util.evaluateVBExpression(timeStyle_);
         }
         if (type_ != null) {
-            type = Util.evaluateElExpression(type_, pageContext);
+            type = (String)Util.evaluateVBExpression(type_);
+        }
+        if (locale_ != null) {
+            if (Util.isVBExpression(locale_)) {  
+                locale = (Locale)Util.evaluateVBExpression(locale_);
+            } else {
+                locale = new Locale(locale_);
+            }
+        }
+        if (timeZone_ != null) {
+            if (Util.isVBExpression(timeZone_)) {  
+                timeZone = (TimeZone)Util.evaluateVBExpression(timeZone_);
+            } else {
+                timeZone = TimeZone.getTimeZone(timeZone_);
+            }
         }
     }
-
-    //
-    // Methods from TagSupport
-    //
-
-    public int doStartTag() throws JspException {
-        // evaluate any expressions that we were passed
-        evaluateExpressions();
-
-        // chain to the parent implementation
-        return super.doStartTag();
-    }
-
-
-
 
 } // end of class ConvertDateTimeTag

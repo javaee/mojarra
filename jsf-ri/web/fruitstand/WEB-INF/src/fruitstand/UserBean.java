@@ -4,16 +4,16 @@
  */
 
 /*
- * $Id: UserBean.java,v 1.2 2003/02/20 22:50:47 ofung Exp $
+ * $Id: UserBean.java,v 1.3 2003/12/17 15:15:49 rkitain Exp $
  */
 
 package fruitstand;
 
 // UserBean.java
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import java.util.Collection;
 
@@ -25,7 +25,7 @@ import java.io.Serializable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: UserBean.java,v 1.2 2003/02/20 22:50:47 ofung Exp $
+ * @version $Id: UserBean.java,v 1.3 2003/12/17 15:15:49 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,7 +85,7 @@ public class UserBean extends Object implements Serializable
 public UserBean()
 {
     super();
-    // ParameterCheck.nonNull();
+    // Util.parameterNonNull();
     this.init();
 }
 

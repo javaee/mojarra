@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.15 2003/10/27 04:14:16 craigmcc Exp $
+ * $Id: TestActionListenerImpl.java,v 1.16 2003/12/17 15:15:03 rkitain Exp $
  */
 
 /*
@@ -22,19 +22,22 @@ import com.sun.faces.util.DebugUtil;
 import java.util.List;
 
 import javax.faces.component.UICommand;
+import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ReferenceSyntaxException;
+import javax.faces.el.MethodNotFoundException;
 import javax.faces.event.ActionEvent;
 import javax.faces.FactoryFinder;
+import javax.faces.el.MethodBinding;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
 
 import org.apache.cactus.WebRequest;
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 /**
  *
@@ -42,7 +45,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.15 2003/10/27 04:14:16 craigmcc Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.16 2003/12/17 15:15:03 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,7 +100,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         System.out.println("Testing With Action Literal Set...");
 
         UICommand command = new UICommand();
-        command.setAction("loginRequired");
+        command.setAction(context.getApplication().createMethodBinding("#{newCustomer.loginRequired}", null));
         UIViewRoot page = new UIViewRoot();
         page.setViewId("/login.jsp");
         context.setViewRoot(page);
@@ -110,10 +113,13 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         String newViewId = context.getViewRoot().getViewId();
         assertTrue(newViewId.equals("/must-login-first.jsp"));
 
-        System.out.println("Testing With ActionRef Set...");
+        System.out.println("Testing With Action Set...");
 
         command = new UICommand();
-        command.setActionRef("userBean.login");
+	MethodBinding binding = 
+	    context.getApplication().createMethodBinding("#{userBean.login}",
+							 null);
+        command.setAction(binding);
 
         UserBean user = new UserBean();
         context.getExternalContext().getSessionMap().put("userBean", user);
@@ -145,13 +151,17 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         assertTrue(user == context.getExternalContext().getApplicationMap().get("UserBean"));
 
         UICommand command = new UICommand();
-        command.setActionRef("Foo");
+	MethodBinding binding = 
+	    context.getApplication().createMethodBinding("#{UserBean.noMeth}", 
+							 null);
+        command.setAction(binding);
         ActionEvent actionEvent = new ActionEvent(command);
 
         ActionListenerImpl actionListener = new ActionListenerImpl();
         try {
             actionListener.processAction(actionEvent);
-        } catch (ReferenceSyntaxException e) {
+        } catch (FacesException e) {
+	    assertTrue(e.getCause() instanceof MethodNotFoundException);
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);

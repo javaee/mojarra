@@ -14,7 +14,7 @@
 </head>
 <body>
 <h:output_text value="Begin test <c:import> with iterator tag in imported page"/>
-<f:subview>
+<f:subview id="subviewOuter">
 <br>
 <c:import url="subviewIterator01.jsp"/>
 </f:subview>

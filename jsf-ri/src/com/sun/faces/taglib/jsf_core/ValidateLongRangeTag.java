@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLongRangeTag.java,v 1.3 2003/05/20 23:08:01 jvisvanathan Exp $
+ * $Id: ValidateLongRangeTag.java,v 1.4 2003/12/17 15:14:14 rkitain Exp $
  */
 
 /*
@@ -11,8 +11,8 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import javax.faces.validator.LongRangeValidator;
 import javax.faces.validator.Validator;
@@ -20,16 +20,8 @@ import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
 
 /**
- *
- *  <B>ValidateLongRangeTag</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: ValidateLongRangeTag.java,v 1.3 2003/05/20 23:08:01 jvisvanathan Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * ValidateLongRangeTag is the tag handler class for 
+ * <code>validate_longrange</code> tag.
  */
 
 public class ValidateLongRangeTag extends MaxMinValidatorTag
@@ -47,9 +39,10 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag
 //
 
 // Attribute Instance Variables
-
-    protected long maximum = 0;
-    protected long minimum = 0;
+protected String maximum_ = null;
+protected long maximum = 0;
+protected String minimum_ = null;
+protected long minimum = 0;
 
 
 // Relationship Instance Variables
@@ -61,7 +54,7 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag
 public ValidateLongRangeTag()
 {
     super();
-    super.setId("LongRange");
+    super.setValidatorId("LongRange");
 }
 
 //
@@ -72,26 +65,16 @@ public ValidateLongRangeTag()
 // General Methods
 //
 
-public long getMaximum()
-{
-    return maximum;
-}
-
-public void setMaximum(long newMaximum)
+public void setMaximum(String newMaximum)
 {
     maximumSet = true;
-    maximum = newMaximum;
+    maximum_ = newMaximum;
 }
 
-public long getMinimum()
-{
-    return minimum;
-}
-
-public void setMinimum(long newMinimum)
+public void setMinimum(String newMinimum)
 {
     minimumSet = true;
-    minimum = newMinimum;
+    minimum_ = newMinimum;
 }
 
 // 
@@ -103,17 +86,41 @@ protected Validator createValidator() throws JspException
     LongRangeValidator result = null;
 
     result = (LongRangeValidator) super.createValidator();
-    Assert.assert_it(null != result);
+    Util.doAssert(null != result);
 
+    evaluateExpressions();
     if (maximumSet) {
-	result.setMaximum(getMaximum());
+	result.setMaximum(maximum);
     }
 
     if (minimumSet) {
-	result.setMinimum(getMinimum());
+	result.setMinimum(minimum);
     }
 
     return result;
+}
+
+/* Evaluates expressions as necessary */
+private void evaluateExpressions() throws JspException {
+   
+    if (minimum_ != null) {
+        if (Util.isVBExpression(minimum_)) {  
+            Long longObj = (Long)Util.evaluateVBExpression(minimum_);
+            Util.doAssert(null != longObj);
+            minimum = longObj.longValue();
+        } else {
+            minimum = new Long(minimum_).longValue();
+        }
+    }
+    if (maximum_ != null) {
+        if (Util.isVBExpression(maximum_)) {  
+            Long longObj = (Long)Util.evaluateVBExpression(maximum_);
+            Util.doAssert(null != longObj);
+            maximum = longObj.longValue();
+        } else {
+            maximum = new Long(maximum_).longValue();
+        }
+    }
 }
 
 } // end of class ValidateLongRangeTag

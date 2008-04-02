@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.3 2003/10/24 17:46:33 rlubke Exp $
+ * $Id: ConvertNumberTag.java,v 1.4 2003/12/17 15:14:12 rkitain Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.convert.NumberConverter;
 import javax.faces.webapp.ConverterTag;
 
 import javax.servlet.jsp.JspException;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 import com.sun.faces.util.Util;
 
 /**
@@ -24,7 +24,7 @@ import com.sun.faces.util.Util;
  * javax.faces.convert.NumberConverter</p>
  *
  *
- * @version $Id: ConvertNumberTag.java,v 1.3 2003/10/24 17:46:33 rlubke Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.4 2003/12/17 15:14:12 rkitain Exp $
  * 
  */
 
@@ -45,15 +45,22 @@ public class ConvertNumberTag extends ConverterTag {
     private String currencySymbol;
     private String currencySymbol_;
     private boolean groupingUsed;
+    private String groupingUsed_;
     private boolean integerOnly;
+    private String integerOnly_;
     private int maxFractionDigits;
+    private String maxFractionDigits_;
     private boolean maxFractionDigitsSpecified;
     private int maxIntegerDigits;
+    private String maxIntegerDigits_;
     private boolean maxIntegerDigitsSpecified;
     private int minFractionDigits;
+    private String minFractionDigits_;
     private boolean minFractionDigitsSpecified;
     private int minIntegerDigits;
+    private String minIntegerDigits_;
     private boolean minIntegerDigitsSpecified;
+    private String locale_;
     private Locale locale;
     private String pattern;
     private String pattern_;
@@ -70,7 +77,7 @@ public class ConvertNumberTag extends ConverterTag {
     //
     public ConvertNumberTag() {
         super();
-        super.setId("Number");
+        super.setConverterId("Number");
         init();
     }
 
@@ -85,16 +92,23 @@ public class ConvertNumberTag extends ConverterTag {
         currencySymbol = null;
         currencySymbol_ = null;
         groupingUsed = true;
+        groupingUsed_ = null;
         integerOnly = false;
+        integerOnly_ = null;
         maxFractionDigits = 0;
+        maxFractionDigits_ = null;
         maxFractionDigitsSpecified = false;
         maxIntegerDigits = 0;
+        maxIntegerDigits_ = null;
         maxIntegerDigitsSpecified = false;
         minFractionDigits = 0;
+        minFractionDigits_ = null;
         minFractionDigitsSpecified = false;
         minIntegerDigits = 0;
+        minIntegerDigits_ = null;
         minIntegerDigitsSpecified = false;
         locale = null;
+        locale_ = null;
         pattern = null;
         pattern_ = null;
         type = "number";
@@ -110,92 +124,48 @@ public class ConvertNumberTag extends ConverterTag {
     // General Methods
     //
 
-    public String getCurrencyCode() {
-        return (this.currencyCode);
-    }
-
     public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
-
-    public String getCurrencySymbol() {
-        return (this.currencySymbol);
+        this.currencyCode_ = currencyCode;
     }
 
     public void setCurrencySymbol(String currencySymbol) {
         this.currencySymbol_ = currencySymbol;
     }
 
-    public boolean isGroupingUsed() {
-        return (this.groupingUsed);
+    public void setGroupingUsed(String groupingUsed) {
+        this.groupingUsed_ = groupingUsed;
     }
 
-    public void setGroupingUsed(boolean groupingUsed) {
-        this.groupingUsed = groupingUsed;
+    public void setIntegerOnly(String integerOnly) {
+        this.integerOnly_ = integerOnly;
     }
 
-    public boolean isIntegerOnly() {
-        return (this.integerOnly);
-    }
-
-    public void setIntegerOnly(boolean integerOnly) {
-        this.integerOnly = integerOnly;
-    }
-
-    public int getMaxFractionDigits() {
-        return (this.maxFractionDigits);
-    }
-
-    public void setMaxFractionDigits(int maxFractionDigits) {
-        this.maxFractionDigits = maxFractionDigits;
+    public void setMaxFractionDigits(String maxFractionDigits) {
+        this.maxFractionDigits_ = maxFractionDigits;
         this.maxFractionDigitsSpecified = true;
     }
 
-    public int getMaxIntegerDigits() {
-        return (this.maxIntegerDigits);
-    }
-
-    public void setMaxIntegerDigits(int maxIntegerDigits) {
-        this.maxIntegerDigits = maxIntegerDigits;
+    public void setMaxIntegerDigits(String maxIntegerDigits) {
+        this.maxIntegerDigits_ = maxIntegerDigits;
         this.maxIntegerDigitsSpecified = true;
     }
 
-    public int getMinFractionDigits() {
-        return (this.minFractionDigits);
-    }
 
-    public void setMinFractionDigits(int minFractionDigits) {
-        this.minFractionDigits = minFractionDigits;
+    public void setMinFractionDigits(String minFractionDigits) {
+        this.minFractionDigits_ = minFractionDigits;
         this.minFractionDigitsSpecified = true;
     }
 
-    public int getMinIntegerDigits() {
-        return (this.minIntegerDigits);
+    public void setMinIntegerDigits(String minIntegerDigits) {
+        this.minIntegerDigits_ = minIntegerDigits;
     }
 
-    public void setMinIntegerDigits(int minIntegerDigits) {
-        this.minIntegerDigits = minIntegerDigits;
-        this.minIntegerDigitsSpecified = true;
-    }
-
-    public Locale getLocale() {
-        return (this.locale);
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
-
-    public String getPattern() {
-        return (this.pattern);
+    public void setLocale(String locale) {
+        this.locale_ = locale;
     }
 
     public void setPattern(String pattern) {
         this.pattern_ = pattern;
-    }
-
-    public String getType() {
-        return (this.type);
     }
 
     public void setType(String type) {
@@ -212,8 +182,9 @@ public class ConvertNumberTag extends ConverterTag {
         NumberConverter result = null;
 
         result = (NumberConverter) super.createConverter();
-        Assert.assert_it(null != result);
+        Util.doAssert(null != result);
 
+        evaluateExpressions();
         result.setCurrencyCode(currencyCode);
         result.setCurrencySymbol(currencySymbol);
         result.setGroupingUsed(groupingUsed);
@@ -239,33 +210,81 @@ public class ConvertNumberTag extends ConverterTag {
 
     /* Evaluates expressions as necessary */
     private void evaluateExpressions() throws JspException {
+        Integer intObj = null;
+        
         if (currencyCode_ != null) {
-            currencyCode = Util.evaluateElExpression(currencyCode_, pageContext);
+            currencyCode = (String)Util.evaluateVBExpression(currencyCode_);
         }
         if (currencySymbol_ != null) {
-            currencySymbol = Util.evaluateElExpression(currencySymbol_, pageContext);
+            currencySymbol = (String)Util.evaluateVBExpression(currencySymbol_);
         }
         if (pattern_ != null) {
-            pattern = Util.evaluateElExpression(pattern_, pageContext);
+            pattern = (String)Util.evaluateVBExpression(pattern_);
         }
         if (type_ != null) {
-            type = Util.evaluateElExpression(type_, pageContext);
+            type = (String)Util.evaluateVBExpression(type_);
+        }
+        if (groupingUsed_ != null) {
+            if (Util.isVBExpression(groupingUsed_)) {  
+                Boolean booleanObj = (Boolean)Util.evaluateVBExpression(groupingUsed_);
+                Util.doAssert(null != booleanObj);
+                groupingUsed = booleanObj.booleanValue();
+            } else {
+                groupingUsed = new Boolean(groupingUsed_).booleanValue();
+            }
+        }
+        if (integerOnly_ != null) {
+            if (Util.isVBExpression(integerOnly_)) {  
+                Boolean booleanObj = (Boolean)Util.evaluateVBExpression(integerOnly_);
+                Util.doAssert(null != booleanObj);
+                integerOnly = booleanObj.booleanValue();
+            } else {
+                integerOnly = new Boolean(integerOnly_).booleanValue();
+            }
+        }
+        if (maxFractionDigits_ != null) {
+            if (Util.isVBExpression(maxFractionDigits_)) {  
+                intObj = (Integer)Util.evaluateVBExpression(maxFractionDigits_);
+                Util.doAssert(null != intObj);
+                maxFractionDigits = intObj.intValue();
+            } else {
+                maxFractionDigits = new Integer(maxFractionDigits_).intValue();
+            }
+        }
+        if (maxIntegerDigits_ != null) {
+            if (Util.isVBExpression(maxIntegerDigits_)) {  
+                intObj = (Integer)Util.evaluateVBExpression(maxIntegerDigits_);
+                Util.doAssert(null != intObj);
+                maxIntegerDigits = intObj.intValue();
+            } else {
+                maxIntegerDigits = new Integer(maxIntegerDigits_).intValue();
+            }
+        }
+        if (minFractionDigits_ != null) {
+            if (Util.isVBExpression(minFractionDigits_)) {  
+                intObj = (Integer)Util.evaluateVBExpression(minFractionDigits_);
+                Util.doAssert(null != intObj);
+                minFractionDigits = intObj.intValue();
+            } else {
+                minFractionDigits = new Integer(minFractionDigits_).intValue();
+            }
+        }
+        if (minIntegerDigits_ != null) {
+            if (Util.isVBExpression(minIntegerDigits_)) {  
+                intObj = (Integer)Util.evaluateVBExpression(minIntegerDigits_);
+                Util.doAssert(null != intObj);
+                minIntegerDigits = intObj.intValue();
+            } else {
+                minIntegerDigits = new Integer(minIntegerDigits_).intValue();
+            }
+        }
+        if (locale_ != null) {
+            if (Util.isVBExpression(locale_)) {  
+                locale = (Locale)Util.evaluateVBExpression(locale_);
+            } else {
+                locale = new Locale(locale_);
+            }
         }
     }
-
-    //
-    // Methods from TagSupport
-    //
-
-    public int doStartTag() throws JspException {
-        // evaluate any expressions that we were passed
-        evaluateExpressions();
-
-        // chain to the parent implementation
-        return super.doStartTag();
-    }
-
-
-
 
 } // end of class ConvertNumberTag

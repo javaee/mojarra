@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.56 2003/11/19 23:08:45 rkitain Exp $
+ * $Id: RadioRenderer.java,v 1.57 2003/12/17 15:13:56 rkitain Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import com.sun.faces.util.Util;
 
 import java.io.IOException;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  * <B>ReadoRenderer</B> is a class that renders the current value of 
@@ -73,7 +73,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             SelectItem curItem, boolean alignVertical ) throws IOException {
                 
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
         
         Object curValue = ((UISelectOne)component).getValue();
         if (alignVertical) {

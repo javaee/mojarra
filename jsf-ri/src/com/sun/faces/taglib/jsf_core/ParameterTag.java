@@ -1,5 +1,5 @@
 /*
- * $Id: ParameterTag.java,v 1.10 2003/11/11 06:30:47 eburns Exp $
+ * $Id: ParameterTag.java,v 1.11 2003/12/17 15:14:14 rkitain Exp $
  */
 
 /*
@@ -59,8 +59,8 @@ public class ParameterTag extends BaseComponentTag {
     public String getRendererType() { return null; }
     public String getComponentType() { return "Parameter"; }
 
-    protected void overrideProperties(UIComponent component) {
-        super.overrideProperties(component);
+    protected void setProperties(UIComponent component) {
+        super.setProperties(component);
         UIParameter parameter = (UIParameter)component;
 
         if (name != null) {

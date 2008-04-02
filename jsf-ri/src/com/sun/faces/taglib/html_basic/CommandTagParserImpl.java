@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTagParserImpl.java,v 1.5 2003/11/12 19:04:34 horwat Exp $
+ * $Id: CommandTagParserImpl.java,v 1.6 2003/12/17 15:14:09 rkitain Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
 import com.sun.faces.taglib.TagParser;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  * <p> Parses the command tag attributes and verifies that the required

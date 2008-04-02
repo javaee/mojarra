@@ -12,7 +12,7 @@
 
   <property name="Name" value="JavaServer Faces RI System Test"/>
   <property name="name" value="jsf-ri-systest"/>
-  <property name="version" value="20031110_BETA_SCF"/>
+  <property name="version" value="20031121_BETA"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -78,7 +78,7 @@
             value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
   <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
   <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_0.dtd"/>
-  <property name="jsf-ri.jar"  value="${jsf-ri.home}/build/lib/jsf-ri.jar"/>
+  <property name="jsf-impl.jar"  value="${jsf-ri.home}/build/lib/jsf-impl.jar"/>
 
 
 
@@ -102,7 +102,7 @@
     <pathelement location="${commons-digester.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
     <pathelement location="${jsf-api.jar}"/>
-    <pathelement location="${jsf-ri.jar}"/>
+    <pathelement location="${jsf-impl.jar}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${jstl.jar}"/>
@@ -207,7 +207,7 @@
     <copy file="${jstl.jar}" todir="${build.home}/WEB-INF/lib"/>
     <copy file="${standard.jar}" todir="${build.home}/WEB-INF/lib"/>
     <copy file="${jsf-api.jar}" todir="${build.home}/WEB-INF/lib"/>
-    <copy file="${jsf-ri.jar}" todir="${build.home}/WEB-INF/lib"/>
+    <copy file="${jsf-impl.jar}" todir="${build.home}/WEB-INF/lib"/>
   </target>
 
 

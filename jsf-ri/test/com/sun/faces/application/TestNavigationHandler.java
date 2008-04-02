@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.12 2003/10/02 06:50:08 jvisvanathan Exp $
+ * $Id: TestNavigationHandler.java,v 1.13 2003/12/17 15:15:05 rkitain Exp $
  */
 
 /*
@@ -36,9 +36,9 @@ import javax.servlet.ServletContext;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.CallMethodRule;
 import org.apache.commons.digester.CallParamRule;
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 
 import com.sun.faces.ServletFacesTestCase;
@@ -54,7 +54,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.12 2003/10/02 06:50:08 jvisvanathan Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.13 2003/12/17 15:15:05 rkitain Exp $
  * 
  */
 
@@ -113,7 +113,7 @@ public class TestNavigationHandler extends ServletFacesTestCase
 
         digester.addRule("*/test", new CallMethodRule("createAndAccrueTestResult", 4));
         digester.addRule("*/test", new CallParamRule(0, "fromViewId"));
-        digester.addRule("*/test", new CallParamRule(1, "fromActionRef"));
+        digester.addRule("*/test", new CallParamRule(1, "fromAction"));
         digester.addRule("*/test", new CallParamRule(2, "fromOutcome"));
         digester.addRule("*/test", new CallParamRule(3, "toViewId"));
 
@@ -137,14 +137,14 @@ public class TestNavigationHandler extends ServletFacesTestCase
         }
     }
 
-    public void createAndAccrueTestResult(String fromViewId, String fromActionRef,
+    public void createAndAccrueTestResult(String fromViewId, String fromAction,
         String fromOutcome, String toViewId) {
         if (testResultList == null) {
             testResultList = new ArrayList();
         }
         TestResult testResult = new TestResult();
         testResult.fromViewId = fromViewId;
-        testResult.fromActionRef = fromActionRef;
+        testResult.fromAction = fromAction;
         testResult.fromOutcome = fromOutcome;
         testResult.toViewId = toViewId;
         testResultList.add(testResult);
@@ -156,7 +156,6 @@ public class TestNavigationHandler extends ServletFacesTestCase
         Application application = (ApplicationImpl) aFactory.getApplication();
         loadTestResultList();
         NavigationHandlerImpl navHandler = (NavigationHandlerImpl)application.getNavigationHandler();
-	((com.sun.faces.TestNavigationHandler)navHandler).getCaseListMap().size();
         FacesContext context = getFacesContext();
 
         String newViewId = null;
@@ -166,14 +165,14 @@ public class TestNavigationHandler extends ServletFacesTestCase
         for (int i=0; i<testResultList.size(); i++) {
             TestResult testResult = (TestResult)testResultList.get(i);
             System.out.println("Testing from-view-id="+testResult.fromViewId+
-                " from-action-ref="+testResult.fromActionRef+
+                " from-action="+testResult.fromAction+
                 " from-outcome="+testResult.fromOutcome);
             page = new UIViewRoot();
             page.setViewId(testResult.fromViewId);
             context.setViewRoot(page);
             try {
                 navHandler.handleNavigation(
-	            context, testResult.fromActionRef, testResult.fromOutcome);
+	            context, testResult.fromAction, testResult.fromOutcome);
             } catch (Exception e ) {
                 // exception is valid only if context or fromoutcome is null.
                 assertTrue(testResult.fromOutcome == null);
@@ -201,10 +200,9 @@ public class TestNavigationHandler extends ServletFacesTestCase
         int cnt = 0;
         ApplicationFactory aFactory = 
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        Application application = (ApplicationImpl) aFactory.getApplication();
-        NavigationHandlerImpl navHandler = (NavigationHandlerImpl)application.
-            getNavigationHandler();
-	Map caseListMap = ((com.sun.faces.TestNavigationHandler)navHandler).getCaseListMap();
+        Application application = aFactory.getApplication();
+	assertTrue(application instanceof ApplicationImpl);
+	Map caseListMap = ((ApplicationImpl)application).getNavigationCaseListMappings();
 	Iterator iter = caseListMap.keySet().iterator();
 	while (iter.hasNext()) {
 	    String fromViewId = (String)iter.next();
@@ -223,7 +221,7 @@ public class TestNavigationHandler extends ServletFacesTestCase
 
     class TestResult extends Object {
         public String fromViewId = null;
-        public String fromActionRef = null;
+        public String fromAction = null;
         public String fromOutcome = null;
         public String toViewId = null;
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.13 2003/09/18 15:02:07 rlubke Exp $
+ * $Id: VariableResolverImpl.java,v 1.14 2003/12/17 15:13:38 rkitain Exp $
  */
 
 /*
@@ -14,12 +14,14 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
+import javax.faces.el.EvaluationException;
 import javax.faces.el.VariableResolver;
 import javax.faces.FactoryFinder;
 
 import com.sun.faces.application.ApplicationImpl;
 
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -28,12 +30,15 @@ import com.sun.faces.application.ApplicationImpl;
 
 public class VariableResolverImpl extends VariableResolver {
 
+    private static final Log log = LogFactory.getLog(VariableResolverImpl.class);
+
     //
     // Relationship Instance Variables
     // 
 
     // Specified by javax.faces.el.VariableResolver.resolveVariable()
-    public Object resolveVariable(FacesContext context, String name) {
+    public Object resolveVariable(FacesContext context, String name) 
+        throws EvaluationException {
 
 	ExternalContext ec = context.getExternalContext();
 
@@ -64,18 +69,21 @@ public class VariableResolverImpl extends VariableResolver {
             Object value = null;
 
 	    if (null == (value = ec.getRequestMap().get(name))) {
-            if (null == (value = ec.getSessionMap().get(name))) {
-                if (null == (value = ec.getApplicationMap().get(name))) {
-                    // if it's a managed bean try and create it
-                    ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+                if (null == (value = ec.getSessionMap().get(name))) {
+                    if (null == (value = ec.getApplicationMap().get(name))) {
+                        // if it's a managed bean try and create it
+                        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
                             FactoryFinder.APPLICATION_FACTORY);
-                    Application application = aFactory.getApplication();
-                    if (application instanceof ApplicationImpl) {
-                        value = ((ApplicationImpl) application).createAndMaybeStoreManagedBeans(context, name);
+                        Application application = aFactory.getApplication();
+                        if (application instanceof ApplicationImpl) {
+                            value = ((ApplicationImpl) application).createAndMaybeStoreManagedBeans(context, name);
+                        }
                     }
                 }
             }
-        }
+            if (log.isDebugEnabled()) {
+                log.debug("resolveVariable: Resolved variable:" + value);
+            }
             return (value);
         }
 

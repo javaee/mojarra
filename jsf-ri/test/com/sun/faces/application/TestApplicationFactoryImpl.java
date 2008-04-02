@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationFactoryImpl.java,v 1.1 2003/03/28 18:32:21 horwat Exp $
+ * $Id: TestApplicationFactoryImpl.java,v 1.2 2003/12/17 15:15:04 rkitain Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import com.sun.faces.application.ApplicationImpl;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 import com.sun.faces.JspFacesTestCase;
 
 /**
@@ -26,7 +26,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationFactoryImpl.java,v 1.1 2003/03/28 18:32:21 horwat Exp $
+ * @version $Id: TestApplicationFactoryImpl.java,v 1.2 2003/12/17 15:15:04 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

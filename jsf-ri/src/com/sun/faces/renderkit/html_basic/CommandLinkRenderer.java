@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.2 2003/10/28 21:00:29 eburns Exp $
+ * $Id: CommandLinkRenderer.java,v 1.3 2003/12/17 15:13:51 rkitain Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandLinkRenderer.java,v 1.2 2003/10/28 21:00:29 eburns Exp $
+ * @version $Id: CommandLinkRenderer.java,v 1.3 2003/12/17 15:13:51 rkitain Exp $
  */
 
 public class CommandLinkRenderer extends HtmlBasicRenderer {
@@ -121,7 +121,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	}
 	Integer formsInt = (Integer)
 	    form.getAttributes().get(RIConstants.FORM_NUMBER_ATTR);
-	Assert.assert_it(null != formsInt);
+	Util.doAssert(null != formsInt);
 	return formsInt.intValue();
     }
 
@@ -144,7 +144,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it( writer != null );
+        Util.doAssert( writer != null );
 
 	clientId = command.getClientId(context);
 
@@ -195,7 +195,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-	writer.closeStartTag(component);
+	writer.flush();
 
     }
 
@@ -229,7 +229,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it( writer != null );
+        Util.doAssert( writer != null );
 
 	//Write Anchor inline elements
 

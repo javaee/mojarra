@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.12 2003/10/06 19:27:58 rkitain Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.13 2003/12/17 15:13:47 rkitain Exp $
  */
 
 /*
@@ -22,8 +22,8 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.context.FacesContext;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 public class RenderKitFactoryImpl extends RenderKitFactory {
 

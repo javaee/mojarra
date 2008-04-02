@@ -1,5 +1,5 @@
 /*
- * $Id: FacetComponentTag.java,v 1.2 2003/09/05 18:57:09 eburns Exp $
+ * $Id: FacetComponentTag.java,v 1.3 2003/12/17 15:14:31 rkitain Exp $
  */
 
 /*
@@ -53,8 +53,8 @@ public class FacetComponentTag extends UIComponentTag {
     // ------------------------------------------------------- Protected Methods
 
 
-    protected void overrideProperties(UIComponent component) {
-        super.overrideProperties(component);
+    protected void setProperties(UIComponent component) {
+        super.setProperties(component);
         if (value != null) {
             ((FacetComponent) component).setValue(value);
         }

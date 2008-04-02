@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.21 2003/11/07 18:45:31 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.22 2003/12/17 15:15:19 rkitain Exp $
  */
 
 /*
@@ -11,9 +11,9 @@
 
 package com.sun.faces.el;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.ServletFacesTestCase;
@@ -25,6 +25,8 @@ import org.apache.cactus.WebRequest;
 
 import javax.servlet.http.Cookie;
 
+import javax.faces.FacesException;
+import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
@@ -48,7 +50,7 @@ import java.io.Serializable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.21 2003/11/07 18:45:31 eburns Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.22 2003/12/17 15:15:19 rkitain Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase
@@ -231,11 +233,30 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         myBean = new TestBean();
         map.put("myBean", myBean);
         extContext.getRequestMap().put("myMap", myMap);
+
+	// test that we can set null as the value
+        valueBinding.setRef("myMap.myBean.prop");
+        valueBinding.setValue(getFacesContext(), null);   
+        map = (Map) extContext.getRequestMap().get("myMap");
+        assertEquals(null, ((TestBean) map.get("myBean")).getOne());
+        myBean = new TestBean();
+        map.put("myBean", myBean);
+        extContext.getRequestMap().put("myMap", myMap);
+
         
         valueBinding.setRef("myMap[\"myBean\"].one");
         valueBinding.setValue(getFacesContext(), "one");
         map = (Map) extContext.getRequestMap().get("myMap");
         assertTrue("one".equals(((TestBean) map.get("myBean")).getOne()));
+        myBean = new TestBean();
+        map.put("myBean", myBean);
+        extContext.getRequestMap().put("myMap", myMap);
+
+	// test that we can set the property to null
+        valueBinding.setRef("myMap[\"myBean\"].prop");
+        valueBinding.setValue(getFacesContext(), null);
+        map = (Map) extContext.getRequestMap().get("myMap");
+        assertEquals(null, ((TestBean) map.get("myBean")).getProp());
         myBean = new TestBean();
         map.put("myBean", myBean);
         extContext.getRequestMap().put("myMap", myMap);
@@ -247,6 +268,16 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         myBean = new TestBean();
         map.put("myBean", myBean);
         extContext.getRequestMap().put("myMap", myMap);
+
+	// set the prop to null
+        valueBinding.setRef("myMap.myBean['prop']");
+        valueBinding.setValue(getFacesContext(), null);
+        map = (Map) extContext.getRequestMap().get("myMap");
+        assertEquals(null, ((TestBean) map.get("myBean")).getOne());
+        myBean = new TestBean();
+        map.put("myBean", myBean);
+        extContext.getRequestMap().put("myMap", myMap);
+
         
     valueBinding.setRef("NonExist");
     valueBinding.setValue(getFacesContext(), "value");
@@ -577,48 +608,78 @@ public class TestValueBindingImpl extends ServletFacesTestCase
     public void testGetScopePositive() {
         ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
         TestBean testBean = new TestBean();
-
         getFacesContext().getExternalContext().getApplicationMap().
             put("TestApplicationBean", testBean);
+        
+        valueBinding.setRef("TestApplicationBean");
         assertEquals("application", 
             valueBinding.getScope("TestApplicationBean"));
+        
+        valueBinding.setRef("TestApplicationBean.one");
         assertEquals("application", 
             valueBinding.getScope("TestApplicationBean.one"));
+        
+        valueBinding.setRef("TestApplicationBean.inner.two");
         assertEquals("application", 
             valueBinding.getScope("TestApplicationBean.inner.two"));
+        
+        valueBinding.setRef("applicationScope.TestApplicationBean");
         assertEquals("application", 
             valueBinding.getScope("applicationScope.TestApplicationBean"));
+        valueBinding.setRef("applicationScope.TestApplicationBean.inner.two");
         assertEquals("application", 
             valueBinding.getScope("applicationScope.TestApplicationBean.inner.two"));
 
         getFacesContext().getExternalContext().getSessionMap().
             put("TestSessionBean", testBean);
+        valueBinding.setRef("TestSessionBean");
         assertEquals("session", 
             valueBinding.getScope("TestSessionBean"));
+        
+        valueBinding.setRef("TestSessionBean.one");
         assertEquals("session", 
             valueBinding.getScope("TestSessionBean.one"));
+        
+        valueBinding.setRef("TestSessionBean.inner.two");
         assertEquals("session", 
             valueBinding.getScope("TestSessionBean.inner.two"));
+        
+        valueBinding.setRef("sessionScope.TestSessionBean");
         assertEquals("session", 
             valueBinding.getScope("sessionScope.TestSessionBean"));
+        
+        valueBinding.setRef("sessionScope.TestSessionBean.inner.two");
         assertEquals("session", 
             valueBinding.getScope("sessionScope.TestSessionBean.inner.two"));
 
         getFacesContext().getExternalContext().getRequestMap().
             put("TestRequestBean", testBean);
+        valueBinding.setRef("TestRequestBean");
         assertEquals("request", 
             valueBinding.getScope("TestRequestBean"));
+        
+        valueBinding.setRef("TestRequestBean.one");
         assertEquals("request", 
             valueBinding.getScope("TestRequestBean.one"));
+        
+        valueBinding.setRef("TestRequestBean.inner.two");
         assertEquals("request", 
             valueBinding.getScope("TestRequestBean.inner.two"));
+        
+        valueBinding.setRef("requestScope.TestRequestBean");
         assertEquals("request", 
             valueBinding.getScope("requestScope.TestRequestBean"));
+        
+        valueBinding.setRef("requestScope.TestRequestBean.inner.two");
         assertEquals("request", 
             valueBinding.getScope("requestScope.TestRequestBean.inner.two"));
 
+        valueBinding.setRef("TestNoneBean");
         assertNull(valueBinding.getScope("TestNoneBean"));
+        
+        valueBinding.setRef("TestNoneBean.one");
         assertNull(valueBinding.getScope("TestNoneBean.one"));
+        valueBinding.setRef("TestNoneBean.inner.two");
         assertNull(valueBinding.getScope("TestNoneBean.inner.two"));
 
     }   
@@ -626,8 +687,9 @@ public class TestValueBindingImpl extends ServletFacesTestCase
     public void testGetScopeNegative() {
         ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
         String property = null;
-
+   
         property = "[]";
+        valueBinding.setRef(property);
         assertNull(valueBinding.getScope(property));
         property = "][";
         assertNull(valueBinding.getScope(property));
@@ -758,7 +820,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
             valueBinding.setRef("");
 	    valueBinding.getValue(getFacesContext());
 	}
-	catch (IllegalArgumentException e) {           
+	catch (FacesException e) {           
 	    exceptionThrown = true;
 	}
 	assertTrue(exceptionThrown);
@@ -767,8 +829,9 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	try {
             valueBinding.setRef("!");
 	    valueBinding.getValue(getFacesContext());
-	}
-	catch (PropertyNotFoundException e) {            
+	} catch (PropertyNotFoundException e) {            
+	    exceptionThrown = true;
+	} catch (EvaluationException ee) {            
 	    exceptionThrown = true;
 	}
 	assertTrue(exceptionThrown);
@@ -780,6 +843,8 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	}
 	catch (PropertyNotFoundException e) {            
 	    exceptionThrown = true;
+	} catch (EvaluationException ee) {            
+	    exceptionThrown = true;
 	}
 	assertTrue(exceptionThrown);
 
@@ -789,6 +854,8 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	    valueBinding.getValue(getFacesContext());
 	}
 	catch (PropertyNotFoundException e) {            
+	    exceptionThrown = true;
+	} catch (EvaluationException ee) {            
 	    exceptionThrown = true;
 	}
 	assertTrue(exceptionThrown);
@@ -800,6 +867,8 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	}
 	catch (PropertyNotFoundException e) {            
 	    exceptionThrown = true;
+	} catch (EvaluationException ee) {            
+	    exceptionThrown = true;
 	}
 	assertTrue(exceptionThrown);
 
@@ -810,6 +879,8 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	}
 	catch (PropertyNotFoundException e) {            
 	    exceptionThrown = true;
+	} catch (EvaluationException ee) {            
+	    exceptionThrown = true;
 	}
 	assertTrue(exceptionThrown);
         
@@ -819,7 +890,9 @@ public class TestValueBindingImpl extends ServletFacesTestCase
             valueBinding.getValue(getFacesContext());
         } catch (PropertyNotFoundException e) {
             exceptionThrown = true;
-        }
+	} catch (EvaluationException ee) {            
+	    exceptionThrown = true;
+	}
         assertTrue(exceptionThrown);
         
         exceptionThrown = false;
@@ -828,7 +901,9 @@ public class TestValueBindingImpl extends ServletFacesTestCase
             valueBinding.getValue(getFacesContext());
         } catch (PropertyNotFoundException e) {
             exceptionThrown = true;
-        }
+	} catch (EvaluationException ee) {            
+	    exceptionThrown = true;
+	}
         assertTrue(exceptionThrown);
         
         exceptionThrown = false;
@@ -837,7 +912,9 @@ public class TestValueBindingImpl extends ServletFacesTestCase
             valueBinding.getValue(getFacesContext());
         } catch (PropertyNotFoundException e) {
             exceptionThrown = true;
-        }
+	} catch (EvaluationException ee) {            
+	    exceptionThrown = true;
+	}
         assertTrue(exceptionThrown);
 
     }
@@ -845,7 +922,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
     public void testStateHolderSmall() throws Exception {
 	StateHolderSaver saver = null;
 	ValueBinding binding = 
-	    getFacesContext().getApplication().getValueBinding("TestBean.indexProperties[0]");
+	    getFacesContext().getApplication().createValueBinding("#{TestBean.indexProperties[0]}");
 	
 	assertEquals("ValueBinding not expected value", "Justyna", 
 		     (String) binding.getValue(getFacesContext()));
@@ -865,7 +942,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	root.getChildren().add(form = new UIForm());
 	form.getChildren().add(input = new UIInput());
 	input.setValueBinding("buckaroo", 
-			      getFacesContext().getApplication().getValueBinding("TestBean.indexProperties[0]"));
+			      getFacesContext().getApplication().createValueBinding("#{TestBean.indexProperties[0]}"));
 	state = root.processSaveState(getFacesContext());
 	
 	// synthesize the tree structure

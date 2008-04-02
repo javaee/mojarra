@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.6 2003/10/27 04:14:13 craigmcc Exp $
+ * $Id: ActionListenerImpl.java,v 1.7 2003/12/17 15:13:21 rkitain Exp $
  */
 
 /*
@@ -13,11 +13,12 @@ import java.lang.reflect.InvocationTargetException;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.el.EvaluationException;
+import javax.faces.el.MethodNotFoundException;
 import javax.faces.el.MethodBinding;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
@@ -27,6 +28,9 @@ import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
 import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * This action listener implementation processes action events during the 
@@ -39,7 +43,8 @@ import com.sun.faces.util.Util;
  */
 public class ActionListenerImpl implements ActionListener {
 
-
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(ActionListenerImpl.class);
     //
     // Constructors and Initializers
     //
@@ -54,47 +59,30 @@ public class ActionListenerImpl implements ActionListener {
     // General Methods
     //
 
-    public PhaseId getPhaseId() {
-        return PhaseId.INVOKE_APPLICATION;
-    }
-
     public void processAction(ActionEvent event) {
-
+        if (log.isDebugEnabled()) {
+            log.debug("processAction(" + event.getComponent().getId() + ")");
+        }
         UIComponent source = event.getComponent();
         ActionSource actionSource = (ActionSource)source;
         FacesContext context = FacesContext.getCurrentInstance();
 
-        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
-            FactoryFinder.APPLICATION_FACTORY);
-        Application application = aFactory.getApplication();
+        Application application = context.getApplication();
 
         String outcome = null;
-
-        outcome = actionSource.getAction();
-
-        // If the action string is not set, determine the outcome
-        // through the action reference.  The action reference is used
-        // to retrieve an Action instance.  The invoke() method on the
-        // Action instance returns the outcome.  If an action could not
-        // be determined, throw an exception.
- 
-        String actionRef = null;
         MethodBinding binding = null;
-        Object action = null;
-        if (null == outcome) {
-            actionRef = actionSource.getActionRef();
-            if (actionRef != null) {
-                binding = application.getMethodBinding(actionRef, null);
-                if (binding != null) {
-                    try {
-                        outcome = (String) binding.invoke(context, null);
-                    } catch (InvocationTargetException e) {
-                        throw new FacesException(e.getTargetException());
-                    }
-                }
-            }
-        }
-            
+
+	binding = actionSource.getAction();
+	if (binding != null) {
+	    try {
+		outcome = (String) binding.invoke(context, null);
+	    } catch (MethodNotFoundException e) {
+		throw new FacesException(e);
+	    }
+	    catch (EvaluationException e) {
+		throw new FacesException(e);
+	    }
+	}
 
         // Retrieve the NavigationHandler instance..
 
@@ -102,7 +90,10 @@ public class ActionListenerImpl implements ActionListener {
 
         // Invoke nav handling..
 
-        navHandler.handleNavigation(context, actionRef, outcome); 
+        navHandler.handleNavigation(context, 
+				    (null != binding) ? 
+				    binding.getExpressionString() : null, 
+				    outcome); 
 
         // Trigger a switch to Render Response if needed
         context.renderResponse();

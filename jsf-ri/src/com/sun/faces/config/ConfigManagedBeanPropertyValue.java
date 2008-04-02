@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBeanPropertyValue.java,v 1.5 2003/08/19 14:50:51 rlubke Exp $
+ * $Id: ConfigManagedBeanPropertyValue.java,v 1.6 2003/12/17 15:13:30 rkitain Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import org.apache.commons.beanutils.ConvertUtils;
 public class ConfigManagedBeanPropertyValue implements Cloneable {
     public static final int VALUE_CLASS = 0;
     public static final int VALUE = 1;
-    public static final int VALUE_REF = 2;
+    public static final int VALUE_BINDING = 2;
     public static final int NULL_VALUE = 3;
 
     private int valueCategory = -1;
@@ -35,6 +35,9 @@ public class ConfigManagedBeanPropertyValue implements Cloneable {
     }
     public void setValue(String value) {
         this.value = value;
+	if (null != value && Util.isVBExpression(value)) {
+	    this.valueCategory = VALUE_BINDING;
+	}
     }
 
     public Class getType() {

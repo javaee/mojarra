@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.23 2003/11/10 01:08:54 jvisvanathan Exp $
+ * $Id: ImageRenderer.java,v 1.24 2003/12/17 15:13:55 rkitain Exp $
  */
 
 /*
@@ -20,23 +20,22 @@ import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
+import com.sun.faces.util.Util;
+
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- *  <B>ImageRenderer</B> is a class ...
+ *  <B>ImageRenderer</B> is a class that handles the rendering of the graphic
+ *  ImageTag
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.23 2003/11/10 01:08:54 jvisvanathan Exp $
+ * @version $Id: ImageRenderer.java,v 1.24 2003/12/17 15:13:55 rkitain Exp $
  * 
- * @see	Blah
- * @see	Bloo
  *
  */
 
@@ -106,7 +105,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
         }
        
         writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
         
 	writer.startElement("img", component);
 	writer.writeAttribute("id", component.getClientId(context), "clientId");

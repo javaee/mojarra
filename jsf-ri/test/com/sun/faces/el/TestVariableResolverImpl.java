@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.10 2003/10/02 06:50:14 jvisvanathan Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.11 2003/12/17 15:15:19 rkitain Exp $
  */
 
 /*
@@ -11,9 +11,9 @@
 
 package com.sun.faces.el;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.config.ConfigManagedBean;
@@ -38,7 +38,7 @@ import javax.faces.component.UIViewRoot;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.10 2003/10/02 06:50:14 jvisvanathan Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.11 2003/12/17 15:15:19 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

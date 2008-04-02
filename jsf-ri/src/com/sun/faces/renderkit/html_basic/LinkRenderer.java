@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.4 2003/10/29 04:20:14 eburns Exp $
+ * $Id: LinkRenderer.java,v 1.5 2003/12/17 15:13:55 rkitain Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -37,7 +37,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LinkRenderer.java,v 1.4 2003/10/29 04:20:14 eburns Exp $
+ * @version $Id: LinkRenderer.java,v 1.5 2003/12/17 15:13:55 rkitain Exp $
  */
 
 public class LinkRenderer extends HtmlBasicRenderer {

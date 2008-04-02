@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWrapper.java,v 1.4 2003/06/13 16:55:43 eburns Exp $
+ * $Id: FileOutputResponseWrapper.java,v 1.5 2003/12/17 15:14:57 rkitain Exp $
  */
 
 /*
@@ -11,9 +11,9 @@
 
 package com.sun.faces;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +31,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWrapper.java,v 1.4 2003/06/13 16:55:43 eburns Exp $
+ * @version $Id: FileOutputResponseWrapper.java,v 1.5 2003/12/17 15:14:57 rkitain Exp $
  * 
  *
  */

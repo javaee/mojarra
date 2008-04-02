@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.8 2003/04/04 22:47:25 eburns Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.9 2003/12/17 15:13:34 rkitain Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.mozilla.util.ParameterCheck;
+
 
 import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
@@ -68,10 +68,10 @@ public class FacesContextFactoryImpl extends FacesContextFactory
         throws FacesException {
 
         try {
-            ParameterCheck.nonNull(sc);
-            ParameterCheck.nonNull(request);
-            ParameterCheck.nonNull(response);
-            ParameterCheck.nonNull(lifecycle);
+            Util.parameterNonNull(sc);
+            Util.parameterNonNull(request);
+            Util.parameterNonNull(response);
+            Util.parameterNonNull(lifecycle);
         } catch (Exception e ) {
             throw new NullPointerException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }    

@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.15 2003/08/22 16:49:28 eburns Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.16 2003/12/17 15:13:43 rkitain Exp $
  */
 
 /*
@@ -13,7 +13,8 @@ package com.sun.faces.lifecycle;
 
 import com.sun.faces.util.Util;
 
-import org.mozilla.util.Assert;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
@@ -29,7 +30,7 @@ import java.util.HashMap;
  *  in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.15 2003/08/22 16:49:28 eburns Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.16 2003/12/17 15:13:43 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.LifecycleFactory
  *
@@ -43,8 +44,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory
 static final int FIRST_PHASE = PhaseId.RESTORE_VIEW.getOrdinal();
 static final int LAST_PHASE = PhaseId.RENDER_RESPONSE.getOrdinal();
 
-
-
+// Log instance for this class
+protected static Log log = LogFactory.getLog(LifecycleFactoryImpl.class);
 
 //
 // Class Variables
@@ -69,11 +70,14 @@ public LifecycleFactoryImpl()
 {
     super();
     lifecycleMap = new HashMap();
-
+    
     // We must have an implementation under this key.
     lifecycleMap.put(LifecycleFactory.DEFAULT_LIFECYCLE, 
 		     new LifecycleWrapper(new LifecycleImpl(),
 					  false));
+    if (log.isDebugEnabled()) {
+        log.debug("Created Default Lifecycle");
+    }
     lock = new Object();
 }
 
@@ -107,6 +111,7 @@ boolean alreadyCreated(String lifecycleId)
 Lifecycle verifyRegisterArgs(String lifecycleId, 
 			     int phaseId, Phase phase)
 {
+    String message = null;
     LifecycleWrapper wrapper = null;
     Lifecycle result = null;
     Object [] params = { lifecycleId };
@@ -115,19 +120,34 @@ Lifecycle verifyRegisterArgs(String lifecycleId,
     }
 
     if (null == (wrapper = (LifecycleWrapper) lifecycleMap.get(lifecycleId))) {
-	throw new IllegalArgumentException(Util.getExceptionMessage(Util.LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID, params));
+        message = Util.getExceptionMessage(Util.LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID, 
+                params);
+        if (log.isErrorEnabled()) {
+            log.error("Error: " + message);
+        }
+	throw new IllegalArgumentException(message);
     }
     result = wrapper.instance;
-    Assert.assert_it(null != result);
+    Util.doAssert(null != result);
     
     if (alreadyCreated(lifecycleId)) {
-	throw new IllegalStateException(Util.getExceptionMessage(Util.LIFECYCLE_ID_ALREADY_ADDED_ID, params));
+        message = Util.getExceptionMessage(Util.LIFECYCLE_ID_ALREADY_ADDED_ID,
+                params);
+        if (log.isErrorEnabled()) {
+            log.error("Error: " + message);
+        }
+	throw new IllegalStateException(message);
     }
     
     if (!((FIRST_PHASE <= phaseId) &&
 	  (phaseId <= LAST_PHASE))) {
 	params = new Object [] { Integer.toString(phaseId) };
-	throw new IllegalArgumentException(Util.getExceptionMessage(Util.PHASE_ID_OUT_OF_BOUNDS_ERROR_MESSAGE_ID, params));
+        message = Util.getExceptionMessage(Util.PHASE_ID_OUT_OF_BOUNDS_ERROR_MESSAGE_ID,
+                params);
+        if (log.isErrorEnabled()) {
+            log.error("Error: " + message);
+        }
+	throw new IllegalArgumentException(message);
     }
     return result;
 }
@@ -143,10 +163,17 @@ public void addLifecycle(String lifecycleId, Lifecycle lifecycle)
     }
     if (null != lifecycleMap.get(lifecycleId)) {
 	Object params[] = { lifecycleId };
-	throw new IllegalArgumentException(Util.getExceptionMessage(Util.LIFECYCLE_ID_ALREADY_ADDED_ID, params));
+        String message = 
+            Util.getExceptionMessage(Util.LIFECYCLE_ID_ALREADY_ADDED_ID, params);
+        if (log.isErrorEnabled()) {
+            log.error("addLifecycle: " + message);
+        }
+	throw new IllegalArgumentException(message);
     }
-
     lifecycleMap.put(lifecycleId, new LifecycleWrapper(lifecycle, false));
+    if (log.isDebugEnabled()) {
+        log.debug("addedLifecycle: " + lifecycleId + " " + lifecycle);
+    }
 }
 
 public Lifecycle getLifecycle(String lifecycleId) throws FacesException
@@ -155,7 +182,7 @@ public Lifecycle getLifecycle(String lifecycleId) throws FacesException
     LifecycleWrapper wrapper = null;
 
     if (null == lifecycleId) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
     }
     
     try {
@@ -165,10 +192,17 @@ public Lifecycle getLifecycle(String lifecycleId) throws FacesException
     }
     catch (Throwable e) {
 	Object [] params = { lifecycleId };
-	throw new FacesException(Util.getExceptionMessage(Util.CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID, params),
-				 e);
+        String message = 
+        Util.getExceptionMessage(Util.CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID,
+                params);
+        if (log.isErrorEnabled()) {
+            log.error("getLifecycle: " + message);
+        }
+	throw new FacesException(message);
     }
-
+    if (log.isDebugEnabled()) {
+        log.debug("getLifecycle: " + lifecycleId + " " + result);
+    }
     return result;
 }
 

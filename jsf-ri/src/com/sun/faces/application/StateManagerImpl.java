@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.9 2003/10/21 03:56:28 eburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.10 2003/12/17 15:13:23 rkitain Exp $ 
  */ 
 
 
@@ -29,15 +29,20 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.9 2003/10/21 03:56:28 eburns Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.10 2003/12/17 15:13:23 rkitain Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
  */ 
 public class StateManagerImpl extends StateManager  { 
+    
+    private static final Log log = LogFactory.getLog(StateManagerImpl.class);
     
     public SerializedView saveSerializedView(FacesContext context) {
 	SerializedView result = null;
@@ -54,10 +59,24 @@ public class StateManagerImpl extends StateManager  {
             removeTransientChildrenAndFacets(context, viewRoot, new HashSet());
            
             Map sessionMap = Util.getSessionMap(context);
-            sessionMap.put(viewRoot.getViewId(), viewRoot); 
+	    synchronized (this) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Saving view in session for viewId " + 
+                            viewRoot.getViewId());
+                }
+		sessionMap.put(viewRoot.getViewId(), viewRoot); 
+	    }
         } else {
+            if (log.isDebugEnabled()) {
+                log.debug("Begin creating serialized view for " + 
+                        viewRoot.getViewId());
+            }
 	    result = new SerializedView(getTreeStructureToSave(context),
 				    getComponentStateToSave(context));
+            if (log.isDebugEnabled()) {
+                log.debug("End creating serialized view " + 
+                        viewRoot.getViewId());
+            }
 	}
         return result;
     }
@@ -118,7 +137,7 @@ public class StateManagerImpl extends StateManager  {
   
     protected Object getComponentStateToSave(FacesContext context){        
         UIViewRoot viewRoot =  context.getViewRoot();
-	return viewRoot.processSaveState(context);       
+        return viewRoot.processSaveState(context);   
     }
     
     
@@ -136,14 +155,31 @@ public class StateManagerImpl extends StateManager  {
     public UIViewRoot restoreView(FacesContext context, String viewId) {
         UIViewRoot viewRoot = null;
         if (isSavingStateInClient(context)) {
+            if (log.isDebugEnabled()) {
+                log.debug("Begin restoring view from response " + viewId);
+            }
             viewRoot = restoreTreeStructure(context, viewId);
             if (viewRoot != null) {
                  restoreComponentState(context, viewRoot);
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("Possibly a new request. Tree structure could not be restored for " 
+                         + viewId);
+                }
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("End restoring view from response " + viewId);
             }
         } else {
-            // restore tree from session.
-            Map sessionMap = Util.getSessionMap(context);
-            viewRoot = (UIViewRoot) sessionMap.get(viewId);
+	    // restore tree from session.
+	    Map sessionMap = Util.getSessionMap(context);
+	    synchronized (this) {
+		viewRoot = (UIViewRoot) sessionMap.get(viewId);
+		sessionMap.remove(viewId);
+                if (log.isDebugEnabled()) {
+                    log.debug("Restoring view from session for viewId " + viewId);
+                }
+	    }
         }
         return viewRoot;
     }

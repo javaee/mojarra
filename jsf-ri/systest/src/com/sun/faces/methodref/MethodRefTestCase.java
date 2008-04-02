@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRefTestCase.java,v 1.3 2003/10/31 21:54:02 eburns Exp $
+ * $Id: MethodRefTestCase.java,v 1.4 2003/12/17 15:14:30 rkitain Exp $
  */
 
 /*
@@ -82,7 +82,7 @@ public class MethodRefTestCase extends AbstractTestCase {
     // ------------------------------------------------- Individual Test Methods
 
 
-    public void testActionRefAndActionListener() throws Exception {
+    public void testActionAndActionListener() throws Exception {
 	HtmlForm form;
 	HtmlSubmitInput submit;
 	HtmlAnchor link;
@@ -131,7 +131,7 @@ public class MethodRefTestCase extends AbstractTestCase {
 	
     }
 
-    public void testValidateRef() throws Exception {
+    public void testValidatorReference() throws Exception {
 	HtmlForm form;
 	HtmlSubmitInput submit;
 	HtmlAnchor link;
@@ -145,14 +145,14 @@ public class MethodRefTestCase extends AbstractTestCase {
                                 "validate");
 
 	// press the button with no value, see that no value appears in
-	// the "validateStatus" textField.
+	// the "toValidate" textField.
 	page = (HtmlPage) submit.click();
 	form = getFormById(page, "form");
 	input = (HtmlTextInput) 
 	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-				"validateStatus");
-	assertEquals("Input does not have expected value",
-		     0, input.asText().length());
+				"toValidate");
+	int fieldLen = input.asText().length();
+	assertTrue("Input does not have expected value", 0 == fieldLen);
 	
 	// fill in an incorrect value, see that still no value appears
 	// in the text field.
@@ -167,9 +167,9 @@ public class MethodRefTestCase extends AbstractTestCase {
 	form = getFormById(page, "form");
 	input = (HtmlTextInput) 
 	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-				"validateStatus");
-	assertEquals("Input does not have expected value",
-		     0, input.asText().length());
+				"toValidate");
+	fieldLen = input.asText().length();
+	assertTrue("Input does not have expected value", 8 == fieldLen);
 
 	// fill in the correct value, see that finally we have a value
 	input = (HtmlTextInput) 
@@ -183,12 +183,12 @@ public class MethodRefTestCase extends AbstractTestCase {
 	form = getFormById(page, "form");
 	input = (HtmlTextInput) 
 	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-				"validateStatus");
+				"toValidate");
 	assertEquals("Input does not have expected value",
 		     "batman", input.asText());
     }
 
-    public void testValueChangeListenerRef() throws Exception {
+    public void testValueChangeListenerByReference() throws Exception {
 	HtmlForm form;
 	HtmlSubmitInput submit;
 	HtmlAnchor link;
@@ -210,8 +210,8 @@ public class MethodRefTestCase extends AbstractTestCase {
 	form = getFormById(page, "form");
 	input = (HtmlTextInput) 
 	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-				"changeStatus");
+				"toChange");
 	assertEquals("Input does not have expected value",
-		     "batman", input.asText());
+		     "batman", input.getOnBlurAttribute());
     }
 }

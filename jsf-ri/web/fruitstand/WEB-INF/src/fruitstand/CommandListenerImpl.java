@@ -4,16 +4,16 @@
  */
 
 /*
- * $Id: CommandListenerImpl.java,v 1.10 2003/02/20 22:50:45 ofung Exp $
+ * $Id: CommandListenerImpl.java,v 1.11 2003/12/17 15:15:49 rkitain Exp $
  */
 
 // CommandListenerImpl.java
 
 package fruitstand;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import javax.faces.CommandListener;
 import javax.faces.CommandEvent;
@@ -45,7 +45,7 @@ import java.io.OptionalDataException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandListenerImpl.java,v 1.10 2003/02/20 22:50:45 ofung Exp $
+ * @version $Id: CommandListenerImpl.java,v 1.11 2003/12/17 15:15:49 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,7 +115,7 @@ private String getAbsPathForUserName(UserBean user) {
 
 
 private void serializeBean(UserBean user) {
-    ParameterCheck.nonNull(user);
+    Util.parameterNonNull(user);
 
     String absFileName = getAbsPathForUserName(user);
     FileOutputStream fos = null;
@@ -196,10 +196,10 @@ public void doCommand(CommandEvent e, NavigationHandler nh)  throws CommandFaile
     UserBean user = (UserBean) ot.get(req, "UserBean");
     servletContext = (fe.getFacesContext()).getServletContext();
 
-    Assert.assert_it(null != sourceId);
-    Assert.assert_it(null != ot);
-    Assert.assert_it(null != req);
-    Assert.assert_it(null != user);
+    Util.doAssert(null != sourceId);
+    Util.doAssert(null != ot);
+    Util.doAssert(null != req);
+    Util.doAssert(null != user);
 
     if (cmdName.equalsIgnoreCase("Create Account")) {
 	// serialize the user bean

@@ -143,7 +143,7 @@ import java.util.Map;
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.3 $ $Date: 2003/08/14 21:37:09 $
+ * @version $Revision: 1.4 $ $Date: 2003/12/17 15:14:33 $
  */
 
 public class SystestClient extends Task {
@@ -189,6 +189,22 @@ public class SystestClient extends Task {
 
 
     // ------------------------------------------------------------- Properties
+
+
+    /**
+     * <p>Flag indicating whether we should throw an exception when a test
+     * fails.</p>
+     */
+    protected boolean failonerror = true;
+
+    public boolean getFailonerror() {
+        return (this.failonerror);
+    }
+
+    public void setFailonerror(boolean failonerror) {
+        this.failonerror = failonerror;
+    }
+
 
 
     /**
@@ -447,12 +463,18 @@ public class SystestClient extends Task {
         } catch (IOException e) {
             System.out.println("FAIL:  readGolden(" + golden + ")");
             e.printStackTrace(System.out);
+            if (failonerror) {
+                throw new BuildException("Failure reading golden file", e);
+            }
         }
         try {
             readIgnore();
         } catch (IOException e) {
             System.out.println("FAIL:  readIgnore(" + ignore + ")");
             e.printStackTrace(System.out);
+            if (failonerror) {
+                throw new BuildException("Failure reading golden file", e);
+            }
         }
         if ((protocol == null) || (protocol.length() == 0)) {
             executeHttp();
@@ -656,6 +678,13 @@ public class SystestClient extends Task {
             System.out.println("FAIL " + summary + " " + result);
             if (throwable != null)
                 throwable.printStackTrace(System.out);
+            if (failonerror) {
+                if (throwable != null) {
+                    throw new BuildException("System test failed", throwable);
+                } else {
+                    throw new BuildException("System test failed");
+                }
+            }
         }
 
     }
@@ -896,6 +925,13 @@ public class SystestClient extends Task {
             System.out.println("FAIL " + summary + " " + result);
             if (throwable != null)
                 throwable.printStackTrace(System.out);
+            if (failonerror) {
+                if (throwable != null) {
+                    throw new BuildException("System test failed", throwable);
+                } else {
+                    throw new BuildException("System test failed");
+                }
+            }
         }
 
     }

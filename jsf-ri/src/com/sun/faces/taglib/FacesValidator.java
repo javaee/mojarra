@@ -1,5 +1,5 @@
 /*
- * $Id: FacesValidator.java,v 1.6 2003/10/07 20:59:43 jvisvanathan Exp $
+ * $Id: FacesValidator.java,v 1.7 2003/12/17 15:14:08 rkitain Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  * <p>Base class for all faces TLVs</p>

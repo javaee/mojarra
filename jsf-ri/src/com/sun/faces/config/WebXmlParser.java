@@ -1,5 +1,5 @@
 /*
- * $Id: WebXmlParser.java,v 1.2 2003/11/05 04:41:26 eburns Exp $
+ * $Id: WebXmlParser.java,v 1.3 2003/12/17 15:13:31 rkitain Exp $
  */
 
 /*
@@ -99,6 +99,14 @@ public class WebXmlParser extends Object {
         } catch (MalformedURLException mue) {
             ; 
         }               
+
+        // No web.xml found. Don't try and parse.
+        if (url == null) {
+            if (log.isErrorEnabled()) {
+                log.error("Missing web.xml file. Cannot parse.");
+            }            
+            return servletMappings;
+        }
         
         InputSource in = new InputSource(escapeSpaces(url.toExternalForm()));
         InputStream inStream = null;        
@@ -123,19 +131,7 @@ public class WebXmlParser extends Object {
                 }
             }
             digester = null;
-        }
-        
-        
-        // If there are no mappings, throw an Exception
-        if (servletMappings.isEmpty()) {
-            String message = "Unable to find any entries for javax.faces" +
-            ".webapp.FacesServlet in this application's " + 
-            "deployment descriptor";
-            if (log.isErrorEnabled()) {
-                log.error(message);
-            }
-            throw new FacesException(message);
-        }
+        }                       
         
         return servletMappings;
     }
@@ -231,7 +227,8 @@ public class WebXmlParser extends Object {
             // massage the url-patterns that we put in the map
             // to reduce the number of String manipulation calls
             // later.
-            if (servletName.equals(mappingBean.getServletName())) {
+            if (servletName != null &&
+                servletName.equals(mappingBean.getServletName())) {
                 String urlPattern = mappingBean.getUrlPattern();
            
                 if (urlPattern.charAt(0) == '*') {

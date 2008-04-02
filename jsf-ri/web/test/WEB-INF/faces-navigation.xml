@@ -22,7 +22,7 @@
       invokes the logout Action. 
     </description> 
     <display-name>Generic Logout Button</display-name> 
-    <from-action-ref>userBean.logout</from-action-ref> 
+    <from-action>#{userBean.logout}</from-action> 
     <to-view-id>/logout.jsp</to-view-id> 
   </navigation-case> 
 <!-- Handle a generic error outcome from any Action --> 
@@ -32,7 +32,7 @@
       by any application Action. 
     </description> 
     <display-name>Generic Error Outcome</display-name> 
-    <from-outcome>loginRequired</from-outcome> 
+    <from-action>#{newCustomer.loginRequired}</from-action> 
     <to-view-id>/must-login-first.jsp</to-view-id> 
   </navigation-case> 
 </navigation-rule> 
@@ -47,7 +47,7 @@
       Handle case where login succeeded.
     </description>
     <display-name>Successful Login</display-name>
-    <from-action-ref>userBean.login</from-action-ref>
+    <from-action>#{userBean.login}</from-action>
     <from-outcome>success</from-outcome>
     <to-view-id>/home.jsp</to-view-id>
   </navigation-case>
@@ -56,7 +56,7 @@
       User registration for a new user succeeded.
     </description>
     <display-name>Successful New User Registration</display-name>
-    <from-action-ref>userBean.register</from-action-ref>
+    <from-action>#{userBean.register}</from-action>
     <from-outcome>success</from-outcome>
     <to-view-id>/welcome.jsp</to-view-id>
   </navigation-case>
@@ -66,7 +66,7 @@
       duplicate username.
     </description>
     <display-name>Failed New User Registration</display-name>
-    <from-action-ref>userBean.register</from-action-ref>
+    <from-action>#{userBean.register}</from-action>
     <from-outcome>duplicateUserName</from-outcome>
     <to-view-id>/try-another-name.jsp</to-view-id>
   </navigation-case>
@@ -83,13 +83,13 @@
   <from-view-id> * </from-view-id>
   <navigation-case>
     <display-name>Search Form Success</display-name>
-    <from-action-ref>searchForm.go</from-action-ref>
+    <from-action>#{searchForm.go}</from-action>
     <from-outcome>success</from-outcome>
     <to-view-id>/search-results.jsp</to-view-id>
   </navigation-case>
   <navigation-case>
     <display-name>Search Form Failure</display-name>
-    <from-action-ref>searchForm.go</from-action-ref>
+    <from-action>#{searchForm.go}</from-action>
     <to-view-id>/search-problem.jsp</to-view-id>
   </navigation-case>
 </navigation-rule>
@@ -101,15 +101,86 @@
   <from-view-id> /movies/* </from-view-id>
   <navigation-case>
     <display-name>Search Form Success</display-name>
-    <from-action-ref>searchForm.go</from-action-ref>
+    <from-action>#{searchForm.go}</from-action>
     <from-outcome>success</from-outcome>
     <to-view-id>/movie-search-results.jsp</to-view-id>
   </navigation-case>
   <navigation-case>
     <display-name>Search Form Failure</display-name>
-    <from-action-ref>searchForm.go</from-action-ref>
+    <from-action>#{searchForm.go}</from-action>
     <to-view-id>/search-problem.jsp</to-view-id>
   </navigation-case>
 </navigation-rule>
+
+  <managed-bean>
+    <!-- Basic information about this bean -->
+    <description>
+      Auto-creates the form handler for new customers into request scope
+      if it is not already present.
+    </description>
+    <display-name>New Customer Form Handler</display-name>
+    <managed-bean-name>newCustomer</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.config.NewCustomerFormHandler
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <!-- Managed property initializations -->
+    <managed-property>
+      <property-name>minimumAge</property-name>
+      <value>#{initParam.minimumCustomerAge}</value>
+    </managed-property>
+    <managed-property>
+      <property-name>maximumAge</property-name>
+      <value>65</value>
+    </managed-property>
+    <managed-property>
+      <property-name>nationality</property-name>
+      <null-value/>
+    </managed-property>
+    <managed-property>
+      <property-name>allowableValues</property-name>
+      <!-- Assume the type is java.util.List -->
+      <list-entries>
+        <value-class>java.lang.Integer</value-class>
+        <value>10</value>
+        <value>20</value>
+        <value>60</value>
+        <null-value/>
+      </list-entries>
+    </managed-property>
+    <managed-property>
+      <property-name>firstNames</property-name>
+      <!-- Assume the type is java.util.List or java.lang.String[] -->
+      <list-entries>
+        <value>Thomas</value>
+        <value>#{someOtherBean.someName}</value>
+        <null-value/>
+      </list-entries>
+    </managed-property>
+    <managed-property>
+      <description>
+        Map property with a description.
+      </description>
+      <display-name>Claim Amounts</display-name>
+      <property-name>claimAmounts</property-name>
+      <map-entries>
+        <key-class>java.lang.String</key-class> <!-- Default so redundant -->
+        <value-class>java.lang.Double</value-class>
+        <map-entry>
+          <key>fire</key>
+          <value>1000.00</value>
+        </map-entry>
+        <map-entry>
+          <key>water</key>
+          <value>#{claimConfiguration.waterDamageAmount}</value>
+        </map-entry>
+        <map-entry>
+          <key>earthquake</key>
+          <null-value/>
+        </map-entry>
+      </map-entries>
+    </managed-property>
+  </managed-bean>
+
 
 </faces-config>

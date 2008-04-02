@@ -1,5 +1,5 @@
 /*
- * $Id: FacesArraySuffix.java,v 1.1 2003/08/13 18:10:44 rlubke Exp $
+ * $Id: FacesArraySuffix.java,v 1.2 2003/12/17 15:13:40 rkitain Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ public class FacesArraySuffix extends ArraySuffix {
         FacesExpressionInfo facesExprInfo = (FacesExpressionInfo) exprInfo;        
         PropertyResolver propertyResolver = facesExprInfo.getPropertyResolver();        
         Object rValue = facesExprInfo.getRValue();
-
+        
         if (pValue == null) {
             if (log.isWarnEnabled()) {
                 log.warn(
@@ -99,8 +99,10 @@ public class FacesArraySuffix extends ArraySuffix {
         // deal with the "get" and "put" cases separately
         //
                 
-        // this is the "put" case
-        if (rValue != null) {
+        if (facesExprInfo.getOperationType() == 
+	    FacesExpressionInfo.OPERATION_TYPE_SET &&
+	    facesExprInfo.isLastSegment()) {
+            // this is the "put" case
             if (isIndexCase) {
                 propertyResolver.setValue(pValue, index, rValue);
             } else {

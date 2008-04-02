@@ -37,6 +37,8 @@
                    
                     <h:input_text id="username1" styleClass="inputClass" value="JavaServerFaces" />
 
+                    <h:input_text id="username2" styleClass="inputClass" value="JavaServerFaces" disabled="true" />
+
                     <h:output_text id="text2" styleClass="outputClass" value="Password:"/>
 
                     <h:input_secret styleClass="secretClass" id="password1" />
@@ -125,7 +127,7 @@
 
       <TR>
         <TD>
-            <h:command_link id="hrefLink"><f:verbatim><img src="duke.gif"></f:verbatim></h:command_link>
+            <h:command_link id="hrefLink"><f:verbatim escape="false"><img src="duke.gif"></f:verbatim></h:command_link>
         </TD>
       </TR>
 
@@ -184,7 +186,7 @@
 
       <TR>
         <TD>
-            <h:output_link value="test.html" id="output_hrefLink"><f:verbatim><img src="duke.gif"></f:verbatim></h:output_link>
+            <h:output_link value="test.html" id="output_hrefLink"><f:verbatim escape="false"><img src="duke.gif"></f:verbatim></h:output_link>
         </TD>
       </TR>
 
@@ -288,6 +290,20 @@
 	</TD>
 
       </TR>
+
+      <TR>
+
+        <TD>Float: 
+        </TD>
+
+	<TD><h:input_text value="3.1415">
+                <f:converter converterId="Float"/>
+            </h:input_text>
+	</TD>
+
+      </TR>
+
+
 
       <TR>
 
@@ -533,6 +549,89 @@
 <h:input_hidden value="48%" >
     <f:convert_number type="number"/>
 </h:input_hidden>
+
+<tr><td>
+
+<f:verbatim escape="true">1. You should see the <i>angle brackets</i> on this
+text</f:verbatim>
+
+</td>
+</tr>
+
+<tr><td>
+
+<f:verbatim>2. You should see the <i>angle brackets</i> on this
+text</f:verbatim>
+
+</td>
+</tr>
+
+<tr><td>
+
+<f:verbatim escape="false">3. You should not see the <i>angle
+brackets</i> on this text</f:verbatim>
+
+</td>
+</tr>
+
+<tr><td>
+
+<f:verbatim escape="#{SimpleBean.trueValue}">4. You should see the <i>angle
+brackets</i> on this text</f:verbatim>
+
+</td>
+</tr>
+
+<tr><td>
+
+<f:verbatim escape="#{SimpleBean.falseValue}">5. You should not see the
+<i>angle brackets</i> on this text</f:verbatim>
+
+</td>
+</tr>
+
+<tr><td>
+
+<h:output_text escape="true" value="6. You should see the <i>angle
+brackets</i> on this text"></h:output_text>
+
+</td>
+</tr>
+
+<tr><td>
+
+<h:output_text id="value7" value="7. You should see the <i>angle brackets</i> on
+this text"></h:output_text>
+
+</td>
+</tr>
+
+<tr><td>
+
+<h:output_text escape="false" value="8. You should not see the <i>angle
+brackets</i> on this text"></h:output_text>
+
+</td>
+</tr>
+
+<tr><td>
+
+<h:output_text escape="#{SimpleBean.trueValue}" value="9. You should see
+the <i>angle brackets</i> on this text"></h:output_text>
+
+</td>
+</tr>
+
+<tr><td>
+
+<h:output_text escape="#{SimpleBean.falseValue}" value="10. You should not
+see the <i>angle brackets</i> on this text"></h:output_text>
+
+</td>
+</tr>
+
+
+
 
   <TABLE>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.11 2003/10/30 22:15:33 jvisvanathan Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.12 2003/12/17 15:13:42 rkitain Exp $
  */
 
 /*
@@ -11,8 +11,8 @@
 
 package com.sun.faces.lifecycle;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.11 2003/10/30 22:15:33 jvisvanathan Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.12 2003/12/17 15:13:42 rkitain Exp $
  * 
  */
 
@@ -67,11 +67,14 @@ public PhaseId getId() {
     return PhaseId.INVOKE_APPLICATION;
 }
 
-public void execute(FacesContext facesContext) throws FacesException
-{
-    UIViewRoot root = facesContext.getViewRoot();
-    Assert.assert_it(null != root);
+public void execute(FacesContext facesContext) throws FacesException {
     
+    if (log.isDebugEnabled()) {
+        log.debug("Entering InvokeApplicationsPhase");
+    }
+    
+    UIViewRoot root = facesContext.getViewRoot();
+    Util.doAssert(null != root);
     
     try {
 	root.processApplication(facesContext);
@@ -84,6 +87,10 @@ public void execute(FacesContext facesContext) throws FacesException
 	}
 	throw new FacesException(exceptionMessage, re);
     }
+    
+     if (log.isDebugEnabled()) {
+         log.debug("Exiting InvokeApplicationsPhase");
+     }
 }
 
 //

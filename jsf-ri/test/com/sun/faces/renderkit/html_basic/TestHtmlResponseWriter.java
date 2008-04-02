@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.4 2003/10/02 00:40:18 jvisvanathan Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.5 2003/12/17 15:15:37 rkitain Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import org.apache.cactus.ServletTestCase;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  *
@@ -38,7 +38,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.4 2003/10/02 00:40:18 jvisvanathan Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.5 2003/12/17 15:15:37 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

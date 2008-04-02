@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.12 2003/08/22 21:02:59 rkitain Exp $
+ * $Id: HiddenRenderer.java,v 1.13 2003/12/17 15:13:53 rkitain Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  * <B>HiddenRenderer</B> is a class that renders the current value of 
@@ -82,7 +82,7 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
         UIComponent component, String currentValue) throws IOException {
 
 	ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
 
 	writer.startElement("input", component);
 	writer.writeAttribute("type", "hidden", "type");

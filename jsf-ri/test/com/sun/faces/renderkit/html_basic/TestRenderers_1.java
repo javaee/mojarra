@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.53 2003/11/10 01:08:58 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.54 2003/12/17 15:15:38 rkitain Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.53 2003/11/10 01:08:58 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.54 2003/12/17 15:15:38 rkitain Exp $
  * 
  *
  */
@@ -153,42 +153,34 @@ public class TestRenderers_1 extends JspFacesTestCase
     //
     // General Methods
     //
-    public void testRenderers() {
+    public void testRenderers() throws Exception {
 //        com.sun.faces.util.DebugUtil.waitForDebugger();
         
         Map sessionMap = getFacesContext().getExternalContext().getSessionMap();
        
-        try {
-            // create a dummy root for the tree.
-            UIViewRoot root = new UIViewRoot();
-            root.setId("root");
-            root.setViewId("/root");
-            ViewHandlerImpl viewHandler = new ViewHandlerImpl();
-            List mappings = new ArrayList();
-            mappings.add("/faces");
-            viewHandler.setFacesMapping(mappings);
-            getFacesContext().getApplication().setViewHandler(viewHandler);
-            getFacesContext().setViewRoot(root);
-	    // Call this twice to test the multiple forms in a page logic.
-            getFacesContext().getResponseWriter().startDocument();
-            verifyFormRenderer(root, 0);
-            verifyFormRenderer(root, 1);
-            verifyRadioRenderer(root);
-            verifyButtonRenderer(root);
-            verifyLinkRenderer(root);
-            getFacesContext().getResponseWriter().endDocument();
+        // create a dummy root for the tree.
+        UIViewRoot root = new UIViewRoot();
+        root.setId("root");
+        root.setViewId("/root");
+        ViewHandlerImpl viewHandler = new ViewHandlerImpl();
+        List mappings = new ArrayList();
+        mappings.add("/faces");
+        viewHandler.setFacesMapping(mappings);
+        getFacesContext().getApplication().setViewHandler(viewHandler);
+        getFacesContext().setViewRoot(root);
+        // Call this twice to test the multiple forms in a page logic.
+        getFacesContext().getResponseWriter().startDocument();
+        verifyFormRenderer(root, 0);
+        verifyFormRenderer(root, 1);
+        verifyRadioRenderer(root);
+        verifyButtonRenderer(root);
+        verifyLinkRenderer(root);
+        getFacesContext().getResponseWriter().endDocument();
 
-            assertTrue(verifyExpectedOutput());
-            sessionMap.remove("Messages");
-	    String stringToCheck = "id="+"\""+"formRenderer0"+"\"";
-	    assertTrue(verifyExpectedStringInOutput(stringToCheck));
-        }
-        catch (Throwable e) {
-            e.printStackTrace();
-            assertTrue(false);
-            return;
-        }
-
+        assertTrue(verifyExpectedOutput());
+        sessionMap.remove("Messages");
+        String stringToCheck = "id="+"\""+"formRenderer0"+"\"";
+        assertTrue(verifyExpectedStringInOutput(stringToCheck));
 
     }
 

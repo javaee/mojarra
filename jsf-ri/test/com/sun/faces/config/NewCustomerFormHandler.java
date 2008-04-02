@@ -9,6 +9,11 @@ public class NewCustomerFormHandler {
     public NewCustomerFormHandler() {
     }
 
+    public String loginRequired() {
+	return "loginRequired";
+    }
+
+
     private String minimumAge;
 
     public String getMinimumAge() {

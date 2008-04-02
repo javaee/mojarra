@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.73 2003/11/13 05:20:39 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.74 2003/12/17 15:15:39 rkitain Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.73 2003/11/13 05:20:39 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.74 2003/12/17 15:15:39 rkitain Exp $
  * 
  *
  */
@@ -428,7 +428,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         img.getAttributes().put("usemap", "usemap");
 	root.getChildren().add(img);
 	TestBean testBean = (TestBean) 
-	    (Util.getValueBinding("TestBean")).getValue(getFacesContext());
+	    (Util.getValueBinding("#{TestBean}")).getValue(getFacesContext());
 	assertTrue(null != testBean); // set in FacesTestCaseService
 	testBean.setImagePath("/foo/modelReferenceImage.gif");
 	img.setValueBinding("value", Util.getValueBinding("#{TestBean.imagePath}"));
@@ -508,6 +508,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         message = new UIMessage();
         message.setId("myMessage_1");
         message.setFor("myMessage_1");
+        message.getAttributes().put("warnClass" , "warnClass");
+        message.getAttributes().put("errorClass" , "errorClass");
+        message.getAttributes().put("infoClass" , "infoClass");
+        message.getAttributes().put("fatalClass" , "fatalClass");
         message.setShowDetail(true);
         message.setShowSummary(true);
         root.getChildren().add(message);
@@ -535,7 +539,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         //Span should have class attribute for styleClass
         //Summary and detail should be in body of span separated by space
-        assertTrue(result.indexOf("<span class=\"styleClass\">	global message summary_1 global message detail_1</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"warnClass\">	global message summary_1 global message detail_1</span>") != -1);
 
         try {
             writer.close();
@@ -547,6 +551,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         message = new UIMessage();
         message.setId("myMessage_2");
         message.setFor("myMessage_2");
+        message.getAttributes().put("warnClass" , "warnClass");
+        message.getAttributes().put("errorClass" , "errorClass");
+        message.getAttributes().put("infoClass" , "infoClass");
+        message.getAttributes().put("fatalClass" , "fatalClass");
         message.setShowDetail(true);
         message.setShowSummary(true);
         root.getChildren().add(message);
@@ -571,10 +579,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer.encodeEnd(getFacesContext(), message);
 
         result = writer.toString();
-
         //Span should have style attribute
         //Summary and detail should be in body of span separated by space
-        assertTrue(result.indexOf("<span style=\"style\">	global message summary_2 global message detail_2</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"errorClass\" style=\"style\">	global message summary_2 global message detail_2</span>") != -1);
 
         try {
             writer.close();
@@ -586,6 +593,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         message = new UIMessage();
         message.setId("myMessage_3");
         message.setFor("myMessage_3");
+        message.getAttributes().put("warnClass" , "warnClass");
+        message.getAttributes().put("errorClass" , "errorClass");
+        message.getAttributes().put("infoClass" , "infoClass");
+        message.getAttributes().put("fatalClass" , "fatalClass");
         message.setShowDetail(true);
         message.setShowSummary(true);
         root.getChildren().add(message);
@@ -615,7 +626,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         //Span should have class attribute for styleClass and style attribute
         //Summary and detail should be in body of span separated by space
-        assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\">	global message summary_3 global message detail_3</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"fatalClass\" style=\"style\">	global message summary_3 global message detail_3</span>") != -1);
 
         try {
             writer.close();
@@ -688,6 +699,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 	message.getAttributes().put("tooltip", new Boolean(true));
         message.setShowDetail(true);
         message.setShowSummary(true);
+        message.getAttributes().put("warnClass" , "warnClass");
+        message.getAttributes().put("errorClass" , "errorClass");
+        message.getAttributes().put("infoClass" , "infoClass");
+        message.getAttributes().put("fatalClass" , "fatalClass");
 
         //Set layout to table
 	message.getAttributes().put("layout", "table");
@@ -709,7 +724,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         //Summary should go in the title attribute and only the 
         //  detail displayed in the body of the span
         //Should be wrapped in a table
-        assertTrue(result.indexOf("<table><tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5\">	global message detail_5</span></td></tr></table>") != -1);
+        assertTrue(result.indexOf("<table><tr><td><span class=\"fatalClass\" style=\"style\" title=\"global message summary_5\">	global message detail_5</span></td></tr></table>") != -1);
 
         try {
             writer.close();
@@ -902,6 +917,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages.setFor("myMessage_1");
         messages.setShowDetail(true);
         messages.setShowSummary(true);
+        messages.getAttributes().put("warnClass" , "warnClass");
+        messages.getAttributes().put("errorClass" , "errorClass");
+        messages.getAttributes().put("infoClass" , "infoClass");
+        messages.getAttributes().put("fatalClass" , "fatalClass");
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -934,8 +953,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         //Span should have class attribute for styleClass
         //Summary and detail should be in body of span separated by space
         //Verify that both messages are included
-        assertTrue(result.indexOf("<span class=\"styleClass\">	global message summary_1.0 global message detail_1.0</span>") != -1);
-        assertTrue(result.indexOf("<span class=\"styleClass\">	global message summary_1.1 global message detail_1.1</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"warnClass\">	global message summary_1.0 global message detail_1.0</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"warnClass\">	global message summary_1.1 global message detail_1.1</span>") != -1);
 
         try {
             writer.close();
@@ -947,6 +966,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages = new UIMessages();
         messages.setId("myMessage_2");
         messages.setFor("myMessage_2");
+        messages.getAttributes().put("warnClass" , "warnClass");
+        messages.getAttributes().put("errorClass" , "errorClass");
+        messages.getAttributes().put("infoClass" , "infoClass");
+        messages.getAttributes().put("fatalClass" , "fatalClass");
         messages.setShowDetail(true);
         messages.setShowSummary(true);
         root.getChildren().add(messages);
@@ -981,9 +1004,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         //Span should have style attribute
         //Summary and detail should be in body of span separated by space
         //Verify that three messages are included
-        assertTrue(result.indexOf("<span style=\"style\">	global message summary_2.0 global message detail_2.0</span>") != -1);
-        assertTrue(result.indexOf("<span style=\"style\">	global message summary_2.1 global message detail_2.1</span>") != -1);
-        assertTrue(result.indexOf("<span style=\"style\">	global message summary_2.2 global message detail_2.2</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"errorClass\" style=\"style\">	global message summary_2.0 global message detail_2.0</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"errorClass\" style=\"style\">	global message summary_2.1 global message detail_2.1</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"errorClass\" style=\"style\">	global message summary_2.2 global message detail_2.2</span>") != -1);
 
         try {
             writer.close();
@@ -995,6 +1018,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages = new UIMessages();
         messages.setId("myMessage_3");
         messages.setFor("myMessage_3");
+         messages.getAttributes().put("warnClass" , "warnClass");
+        messages.getAttributes().put("errorClass" , "errorClass");
+        messages.getAttributes().put("infoClass" , "infoClass");
+        messages.getAttributes().put("fatalClass" , "fatalClass");
         messages.setShowDetail(true);
         messages.setShowSummary(true);
         root.getChildren().add(messages);
@@ -1028,8 +1055,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         //Span should have class attribute for styleClass and style attribute
         //Summary and detail should be in body of span separated by space
         //Verify that both messages are included
-        assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\">	global message summary_3.0 global message detail_3.0</span>") != -1);
-        assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\">	global message summary_3.1 global message detail_3.1</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"fatalClass\" style=\"style\">	global message summary_3.0 global message detail_3.0</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"fatalClass\" style=\"style\">	global message summary_3.1 global message detail_3.1</span>") != -1);
 
         try {
             writer.close();
@@ -1041,6 +1068,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages = new UIMessages();
         messages.setId("myMessage_4");
         messages.setFor("myMessage_4");
+         messages.getAttributes().put("warnClass" , "warnClass");
+        messages.getAttributes().put("errorClass" , "errorClass");
+        messages.getAttributes().put("infoClass" , "infoClass");
+        messages.getAttributes().put("fatalClass" , "fatalClass");
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -1081,9 +1112,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         //Summary should go in the title attribute and only the 
         //  detail displayed in the body of the span
         //Verify that three messages are included
-       assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\" title=\"global message summary_4.0\">	global message detail_4.0</span>") != -1);
-       assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\" title=\"global message summary_4.1\">	global message detail_4.1</span>") != -1);
-       assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\" title=\"global message summary_4.2\">	global message detail_4.2</span>") != -1);
+       assertTrue(result.indexOf("<span class=\"fatalClass\" style=\"style\" title=\"global message summary_4.0\">	global message detail_4.0</span>") != -1);
+       assertTrue(result.indexOf("<span class=\"fatalClass\" style=\"style\" title=\"global message summary_4.1\">	global message detail_4.1</span>") != -1);
+       assertTrue(result.indexOf("<span class=\"fatalClass\" style=\"style\" title=\"global message summary_4.2\">	global message detail_4.2</span>") != -1);
 
         try {
             writer.close();

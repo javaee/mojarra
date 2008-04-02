@@ -1,5 +1,5 @@
 /*
- * $Id: TestViewTag.java,v 1.3 2003/11/10 22:18:39 eburns Exp $
+ * $Id: TestViewTag.java,v 1.4 2003/12/17 15:15:45 rkitain Exp $
  */
 
 /*
@@ -14,8 +14,8 @@ package com.sun.faces.taglib.jsf_core;
 import org.apache.cactus.WebRequest;
 import org.apache.cactus.JspTestCase;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -53,7 +53,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewTag.java,v 1.3 2003/11/10 22:18:39 eburns Exp $
+ * @version $Id: TestViewTag.java,v 1.4 2003/12/17 15:15:45 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

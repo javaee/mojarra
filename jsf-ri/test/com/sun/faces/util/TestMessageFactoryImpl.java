@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageFactoryImpl.java,v 1.2 2003/10/30 20:30:41 eburns Exp $
+ * $Id: TestMessageFactoryImpl.java,v 1.3 2003/12/17 15:15:46 rkitain Exp $
  */
 
 /*
@@ -13,8 +13,8 @@ package com.sun.faces.util;
 
 import com.sun.faces.ServletFacesTestCase;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.application.FacesMessage;
@@ -30,7 +30,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageFactoryImpl.java,v 1.2 2003/10/30 20:30:41 eburns Exp $
+ * @version $Id: TestMessageFactoryImpl.java,v 1.3 2003/12/17 15:15:46 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +84,7 @@ public class TestMessageFactoryImpl extends ServletFacesTestCase
         FacesMessage msg = null;
         
         FacesContext facesContext = getFacesContext();
-        Assert.assert_it(facesContext != null );
+        Util.doAssert(facesContext != null );
 
         System.out.println("Testing get methods");
         try {

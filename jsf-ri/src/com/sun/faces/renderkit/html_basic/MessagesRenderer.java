@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.6 2003/11/13 05:20:37 eburns Exp $
+ * $Id: MessagesRenderer.java,v 1.7 2003/12/17 15:13:56 rkitain Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIMessages;
@@ -71,12 +71,11 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             return;
         }
         writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
 
-	String clientId = null;
-
+	String clientId = ((UIMessages) component).getFor();
 	// if no clientId was included
-	if (null == (clientId = (String)component.getAttributes().get("for"))){
+	if (clientId == null){
 	    // and the author explicitly only wants global messages
 	    if (((UIMessages)component).isGlobalOnly()) {
 		// make it so only global messages get displayed.
@@ -86,7 +85,7 @@ public class MessagesRenderer extends HtmlBasicRenderer {
 
 	//"for" attribute optional for Messages
 	messageIter = getMessageIter(context, clientId, component);
-	Assert.assert_it(messageIter != null);
+	Util.doAssert(messageIter != null);
 
         String layout = (String) component.getAttributes().get("layout");
 	boolean wroteTable = false;
@@ -121,22 +120,22 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             if (curMessage.getSeverity() == FacesMessage.SEVERITY_INFO) {
                 severityStyle = (String) component.getAttributes().get("infoStyle");
                 severityStyleClass = (String)
-                    component.getAttributes().get("infoStyleClass");
+                    component.getAttributes().get("infoClass");
             }
             else if (curMessage.getSeverity() == FacesMessage.SEVERITY_WARN) {
                 severityStyle = (String) component.getAttributes().get("warnStyle");
                 severityStyleClass = (String)
-                    component.getAttributes().get("warnStyleClass");
+                    component.getAttributes().get("warnClass");
             }
             else if (curMessage.getSeverity() == FacesMessage.SEVERITY_ERROR) {
                 severityStyle = (String) component.getAttributes().get("errorStyle");
                 severityStyleClass = (String)
-                    component.getAttributes().get("errorStyleClass");
+                    component.getAttributes().get("errorClass");
             }
             else if (curMessage.getSeverity() == FacesMessage.SEVERITY_FATAL) {
                 severityStyle = (String) component.getAttributes().get("fatalStyle");
                 severityStyleClass = (String)
-                    component.getAttributes().get("fatalStyleClass");
+                    component.getAttributes().get("fatalClass");
             }
 
 	    String 
@@ -199,11 +198,11 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                      writer.startElement("span", component);
                 }
                 writer.writeAttribute("title", summary, "title");
-                writer.closeStartTag(component);
+                writer.flush();
 	        writer.writeText("\t", null);
                 wroteTooltip = true;
             } else if (wroteSpan) {
-                writer.closeStartTag(component);
+                writer.flush();
             }
 
             if (!wroteTooltip && showSummary) {

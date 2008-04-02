@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.20 2003/10/19 05:26:34 craigmcc Exp $
+ * $Id: GridRenderer.java,v 1.21 2003/12/17 15:13:53 rkitain Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  *
@@ -28,7 +28,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.20 2003/10/19 05:26:34 craigmcc Exp $
+ * @version $Id: GridRenderer.java,v 1.21 2003/12/17 15:13:53 rkitain Exp $
  *  
  */
 
@@ -114,7 +114,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
 
         String footerClass = (String) component.getAttributes().get("footerClass");
         String headerClass = (String) component.getAttributes().get("headerClass");

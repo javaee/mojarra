@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.30 2003/11/09 05:11:02 eburns Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.31 2003/12/17 15:13:44 rkitain Exp $
  */
 
 /*
@@ -11,7 +11,7 @@ package com.sun.faces.lifecycle;
 
 import com.sun.faces.context.FacesContextImpl;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageFactory;
@@ -75,8 +75,11 @@ public PhaseId getId() {
 
 public void execute(FacesContext facesContext) 
 {
+    if (log.isDebugEnabled()) {
+        log.debug("Entering UpdateModelValuesPhase");
+    }
     UIComponent component = facesContext.getViewRoot();
-    Assert.assert_it(null != component);
+    Util.doAssert(null != component);
     String exceptionMessage = null;
     
     try {
@@ -100,11 +103,14 @@ public void execute(FacesContext facesContext)
         }  
         params[2] = exceptionMessage;
         facesContext.addMessage(component.getClientId(facesContext), 
-				MessageFactory.getMessage(facesContext,
-							  Util.MODEL_UPDATE_ERROR_MESSAGE_ID,params));
+	    MessageFactory.getMessage(facesContext,
+	    Util.MODEL_UPDATE_ERROR_MESSAGE_ID,params));
         if (log.isErrorEnabled()) {
 	    log.error(exceptionMessage);
 	}
+        if (log.isDebugEnabled()) {
+            log.debug("Exiting UpdateModelValuesPhase");
+        }
     }
 }
 

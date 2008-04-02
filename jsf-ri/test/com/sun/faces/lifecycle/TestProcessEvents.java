@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.11 2003/10/27 04:14:16 craigmcc Exp $
+ * $Id: TestProcessEvents.java,v 1.12 2003/12/17 15:15:26 rkitain Exp $
  */
 
 /*
@@ -13,8 +13,8 @@ package com.sun.faces.lifecycle;
 
 import org.apache.cactus.WebRequest;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -45,7 +45,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.11 2003/10/27 04:14:16 craigmcc Exp $
+ * @version $Id: TestProcessEvents.java,v 1.12 2003/12/17 15:15:26 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -214,6 +214,10 @@ public void testValueChangeRecursion()
 
 // tests one component - one action listener
 
+public void beginSignleAction(WebRequest theRequest) {
+    theRequest.addParameter("button1", "button1");
+}
+
 public void testSingleAction()
 {
     // for keeping track of events processed limit..
@@ -221,6 +225,7 @@ public void testSingleAction()
     eventsProcessed = new HashMap();
 
     UICommand button = new UICommand();
+    button.setId("button1");
     getFacesContext().getViewRoot().getChildren().add(button);
 
     // clear the property
@@ -230,6 +235,7 @@ public void testSingleAction()
 
     Action1 action1 = new Action1();
     button.addActionListener(action1);
+    button.setImmediate(true);
 
     // add action event (containing the component) to the queue
 
@@ -301,19 +307,11 @@ private boolean limitReached(UIComponent source, HashMap eventsProcessed) {
 **********************/
 
 public class ValueChange1 implements ValueChangeListener {
-    public PhaseId getPhaseId() {
-        return PhaseId.PROCESS_VALIDATIONS;
-    }
-
     public void processValueChange(ValueChangeEvent event) {
         System.setProperty(HANDLED_VALUEEVENT1, HANDLED_VALUEEVENT1);
     }
 }
 public class ValueChange2 implements ValueChangeListener {
-    public PhaseId getPhaseId() {
-        return PhaseId.PROCESS_VALIDATIONS;
-    }
-
     public void processValueChange(ValueChangeEvent event) {
         System.setProperty(HANDLED_VALUEEVENT2, HANDLED_VALUEEVENT2);
     }
@@ -326,10 +324,6 @@ public class ValueChange2 implements ValueChangeListener {
 // event recursion case - fires same event it received..
 
 public class ValueChangeRecursion implements ValueChangeListener {
-    public PhaseId getPhaseId() {
-        return PhaseId.PROCESS_VALIDATIONS;
-    }
-
     public void processValueChange(ValueChangeEvent event) {
         getFacesContext().addFacesEvent(new ValueChangeEvent(
             event.getComponent(), "foo", "bar"));
@@ -338,9 +332,6 @@ public class ValueChangeRecursion implements ValueChangeListener {
 ***************/
 
 public class Action1 implements ActionListener {
-    public PhaseId getPhaseId() {
-        return PhaseId.ANY_PHASE;
-    }
 
     public void processAction(ActionEvent event) {
         System.setProperty(HANDLED_ACTIONEVENT1, HANDLED_ACTIONEVENT1);
@@ -354,10 +345,6 @@ public class Action1 implements ActionListener {
 // event recursion case - fires same event it received..
 
 public class ActionRecursion implements ActionListener {
-    public PhaseId getPhaseId() {
-        return PhaseId.ANY_PHASE;
-    }
-
     public void processAction(ActionEvent event) {
         getFacesContext().addFacesEvent(new ActionEvent(
         event.getComponent()));
@@ -367,7 +354,7 @@ public class ActionRecursion implements ActionListener {
 *****************/
 
 public static class UICommandSub extends UICommand {
-    public List[] getListeners() { 
+    public List getListeners() { 
 	return listeners;
     }
 } 

@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.8 2003/10/07 20:16:03 horwat Exp $
+ * $Id: ActionListenerTag.java,v 1.9 2003/12/17 15:14:12 rkitain Exp $
  */
 
 /*
@@ -57,8 +57,6 @@ public class ActionListenerTag extends TagSupport {
      */
     private String type = null;
     private String type_ = null;
-
-
     /**
      * <p>Set the fully qualified class name of the
      * {@link ActionListener} instance to be created.
@@ -85,10 +83,7 @@ public class ActionListenerTag extends TagSupport {
      * @exception JspException if a JSP error occurs
      */
     public int doStartTag() throws JspException {
-       	// evaluate any expressions that we were passed
-        evaluateExpressions();
-
-
+       
         // Locate our parent UIComponentTag
         UIComponentTag tag =
             UIComponentTag.getParentUIComponentTag(pageContext);
@@ -102,10 +97,13 @@ public class ActionListenerTag extends TagSupport {
             return (SKIP_BODY);
         }
 
+        // evaluate any VB expression that we were passed
+        type = (String)Util.evaluateVBExpression(type_);
+       
         // Create and register an instance with the appropriate component
         ActionListener handler = createActionListener();
-
-        UIComponent component = tag.getComponent();
+        
+        UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
@@ -150,13 +148,6 @@ public class ActionListenerTag extends TagSupport {
             throw new JspException(e);
         }
 
-    }
-
-    /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
-        if (type_ != null) {
-            type = Util.evaluateElExpression(type_, pageContext);
-        }
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: ElBean.java,v 1.1 2003/03/24 19:45:36 eburns Exp $
+ * $Id: ElBean.java,v 1.2 2003/12/17 15:15:17 rkitain Exp $
  */
 
 /*
@@ -177,10 +177,16 @@ public class ElBean {
     private String stringProperty = "This is a String";
     public String getStringProperty() {
         return (this.stringProperty);
-    }
+    } 
     public void setStringProperty(String stringProperty) {
         this.stringProperty = stringProperty;
     }
+
+    private String nullString = null;
+    public String getNullStringProperty() {
+        return ("String length is:"+ nullString.length());
+    }
+    
 
 
 }

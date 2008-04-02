@@ -13,7 +13,7 @@
      fromViewId                view id from the view currently
                                being processed (required)
 
-     fromActionRef             Action reference of the action that
+     fromAction             Action reference of the action that
                                was invoked (optional)
 
      fromOutcome               Logical outcome from the
@@ -33,17 +33,17 @@
   <!-- Positive tests that should match specific rules -->
 
   <test fromViewId="/login.jsp"
-     fromActionRef="userBean.login"
+     fromAction="#{userBean.login}"
        fromOutcome="success"
           toViewId="/home.jsp"/>
 
   <test fromViewId="/login.jsp"
-     fromActionRef="userBean.register"
+     fromAction="#{userBean.register}"
        fromOutcome="success"
           toViewId="/welcome.jsp"/>
 
   <test fromViewId="/login.jsp"
-     fromActionRef="userBean.register"
+     fromAction="#{userBean.register}"
        fromOutcome="duplicateUserName"
           toViewId="/try-another-name.jsp"/>
 
@@ -52,12 +52,12 @@
 
   <!-- Matches the generic logout rule #1 -->
   <test fromViewId="/login.jsp"
-     fromActionRef="userBean.logout"
+     fromAction="#{userBean.logout}"
           toViewId="/logout.jsp"/>
 
   <!-- Matches the generic logout rule #2 -->
   <test fromViewId="/login.jsp"
-     fromActionRef="userBean.logout"
+     fromAction="#{userBean.logout}"
        fromOutcome="whatever"
           toViewId="/logout.jsp"/>
 
@@ -68,18 +68,18 @@
 
   <!-- Matches generic error outcome rule #2 -->
   <test fromViewId="/login.jsp"
-     fromActionRef="foo.bar"
+     fromAction="#{foo.bar}"
        fromOutcome="loginRequired"
           toViewId="/must-login-first.jsp"/>
 
   <!-- Matches generic search results #1 -->
   <test fromViewId="/login.jsp"
-     fromActionRef="searchForm.go"
+     fromAction="#{searchForm.go}"
           toViewId="/search-problem.jsp"/>
 
   <!-- Matches generic search results #2 -->
   <test fromViewId="/login.jsp"
-     fromActionRef="searchForm.go"
+     fromAction="#{searchForm.go}"
        fromOutcome="success"
           toViewId="/search-results.jsp"/>
 
@@ -87,26 +87,26 @@
   <!-- Negative tests that should not match any rules -->
 
 
-  <!-- Mismatched fromActionRef -->
+  <!-- Mismatched fromAction -->
   <test fromViewId="/login.jsp"
-     fromActionRef="foo.bar"
+     fromAction="#{foo.bar}"
        fromOutcome="success"
           toViewId="/login.jsp"/>
 
   <!-- Mismatched fromOutcome -->
   <test fromViewId="/login.jsp"
-     fromActionRef="userBean.login"
+     fromAction="#{userBean.login}"
        fromOutcome="foobar"
           toViewId="/login.jsp"/>
 
-  <!-- Missing fromActionRef -->
+  <!-- Missing fromAction -->
   <test fromViewId="/login.jsp"
        fromOutcome="success"
           toViewId="/login.jsp"/>
 
   <!-- Missing fromOutcome -->
   <test fromViewId="/login.jsp"
-     fromActionRef="userBean.login"
+     fromAction="#{userBean.login}"
           toViewId="/login.jsp"/>
 
 
@@ -118,12 +118,12 @@
 
   <!-- Matches the generic logout rule #1 -->
   <test fromViewId="/other.jsp"
-     fromActionRef="userBean.logout"
+     fromAction="#{userBean.logout}"
           toViewId="/logout.jsp"/>
 
   <!-- Matches the generic logout rule #2 -->
   <test fromViewId="/other.jsp"
-     fromActionRef="userBean.logout"
+     fromAction="#{userBean.logout}"
        fromOutcome="whatever"
           toViewId="/logout.jsp"/>
 
@@ -134,18 +134,18 @@
 
   <!-- Matches generic error outcome rule #2 -->
   <test fromViewId="/other.jsp"
-     fromActionRef="foo.bar"
+     fromAction="#{foo.bar}"
        fromOutcome="loginRequired"
           toViewId="/must-login-first.jsp"/>
 
   <!-- Matches generic search results #1 -->
   <test fromViewId="/other.jsp"
-     fromActionRef="searchForm.go"
+     fromAction="#{searchForm.go}"
           toViewId="/search-problem.jsp"/>
 
   <!-- Matches generic search results #2 -->
   <test fromViewId="/other.jsp"
-     fromActionRef="searchForm.go"
+     fromAction="#{searchForm.go}"
        fromOutcome="success"
           toViewId="/search-results.jsp"/>
 
@@ -153,26 +153,26 @@
   <!-- Negative tests that should not match any rules -->
 
 
-  <!-- Mismatched fromActionRef -->
+  <!-- Mismatched fromAction -->
   <test fromViewId="/other.jsp"
-     fromActionRef="foo.bar"
+     fromAction="#{foo.bar}"
        fromOutcome="success"
           toViewId="/other.jsp"/>
 
   <!-- Mismatched fromOutcome -->
   <test fromViewId="/other.jsp"
-     fromActionRef="userBean.login"
+     fromAction="#{userBean.login}"
        fromOutcome="foobar"
           toViewId="/other.jsp"/>
 
-  <!-- Missing fromActionRef -->
+  <!-- Missing fromAction -->
   <test fromViewId="/other.jsp"
        fromOutcome="success"
           toViewId="/other.jsp"/>
 
   <!-- Missing fromOutcome -->
   <test fromViewId="/other.jsp"
-     fromActionRef="userBean.login"
+     fromAction="#{userBean.login}"
           toViewId="/other.jsp"/>
 
 
@@ -184,12 +184,12 @@
 
   <!-- Matches the generic logout rule #1 -->
   <test fromViewId="/movies/index.jsp"
-     fromActionRef="userBean.logout"
+     fromAction="#{userBean.logout}"
           toViewId="/logout.jsp"/>
 
   <!-- Matches the generic logout rule #2 -->
   <test fromViewId="/movies/index.jsp"
-     fromActionRef="userBean.logout"
+     fromAction="#{userBean.logout}"
        fromOutcome="whatever"
           toViewId="/logout.jsp"/>
 
@@ -200,18 +200,18 @@
 
   <!-- Matches generic error outcome rule #2 -->
   <test fromViewId="/movies/index.jsp"
-     fromActionRef="foo.bar"
+     fromAction="#{foo.bar}"
        fromOutcome="loginRequired"
           toViewId="/must-login-first.jsp"/>
 
   <!-- Matches special search results #1 -->
   <test fromViewId="/movies/index.jsp"
-     fromActionRef="searchForm.go"
+     fromAction="#{searchForm.go}"
           toViewId="/search-problem.jsp"/>
 
   <!-- Matches special search results #2 -->
   <test fromViewId="/movies/index.jsp"
-     fromActionRef="searchForm.go"
+     fromAction="#{searchForm.go}"
        fromOutcome="success"
           toViewId="/movie-search-results.jsp"/>
 
@@ -219,26 +219,26 @@
   <!-- Negative tests that should not match any rules -->
 
 
-  <!-- Mismatched fromActionRef -->
+  <!-- Mismatched fromAction -->
   <test fromViewId="/movies/index.jsp"
-     fromActionRef="foo.bar"
+     fromAction="#{foo.bar}"
        fromOutcome="success"
           toViewId="/movies/index.jsp"/>
 
   <!-- Mismatched fromOutcome -->
   <test fromViewId="/movies/index.jsp"
-     fromActionRef="userBean.login"
+     fromAction="#{userBean.login}"
        fromOutcome="foobar"
           toViewId="/movies/index.jsp"/>
 
-  <!-- Missing fromActionRef -->
+  <!-- Missing fromAction -->
   <test fromViewId="/movies/index.jsp"
        fromOutcome="success"
           toViewId="/movies/index.jsp"/>
 
   <!-- Missing fromOutcome -->
   <test fromViewId="/movies/index.jsp"
-     fromActionRef="userBean.login"
+     fromAction="#{userBean.login}"
           toViewId="/movies/index.jsp"/>
 
 

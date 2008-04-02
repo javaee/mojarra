@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.22 2003/11/10 05:07:38 craigmcc Exp $
+ * $Id: ValueBindingImpl.java,v 1.23 2003/12/17 15:13:37 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package com.sun.faces.el;
 import java.util.Map;
 import java.util.Arrays;
 
+import javax.faces.el.EvaluationException;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
@@ -23,8 +24,8 @@ import javax.faces.application.Application;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.mozilla.util.ParameterCheck;
-import org.mozilla.util.Assert;
+
+import com.sun.faces.util.Util;
 
 import com.sun.faces.el.ext.FacesExpressionInfo;
 import com.sun.faces.el.impl.ElException;
@@ -85,7 +86,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
     }
 
     public ValueBindingImpl(Application application) { 
-	ParameterCheck.nonNull(application);
+	Util.parameterNonNull(application);
 	this.application = application;
 	
 	if (null == applicationMap) {
@@ -93,7 +94,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
 	    applicationMap = 
 		FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
 	}
-	Assert.assert_it(null != applicationMap);
+	Util.doAssert(null != applicationMap);
     }
 
 //
@@ -106,8 +107,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
  
     public void setRef(String newRef) {
 	reset();
-	ParameterCheck.nonNull(newRef);
-	ParameterCheck.notEmpty(newRef);
+	Util.parameterNonEmpty(newRef);
 	ref = newRef;
     }
 
@@ -200,7 +200,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
 
     /**
 
-    * <p>PRECONDITION: ref is a valid valueReference.</p>
+    * <p>PRECONDITION: ref is a valid valueBinding.</p>
 
     */
 
@@ -215,7 +215,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
 //
 
     public Object getValue(FacesContext context)
-        throws PropertyNotFoundException {
+        throws EvaluationException, PropertyNotFoundException {
         if (context == null) {
             throw new NullPointerException(
                 Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID)
@@ -234,42 +234,54 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
     }
 
     protected Object getValue(FacesContext context, String toEvaluate)
-        throws PropertyNotFoundException {
+        throws EvaluationException, PropertyNotFoundException {
 	Object result = null;
 
 	try {
-        FacesExpressionInfo info = new FacesExpressionInfo();
-        info.setExpressionString(toEvaluate);
-        info.setExpectedType(Object.class);
-        info.setFacesContext(context); 
-        info.setFacesVariableResolver(context.getApplication().getVariableResolver());
-        info.setPropertyResolver(context.getApplication().getPropertyResolver());
+            FacesExpressionInfo info = new FacesExpressionInfo();
+            info.setOperationType(FacesExpressionInfo.OPERATION_TYPE_GET);
+            info.setExpressionString(toEvaluate);
+            info.setExpectedType(Object.class);
+            info.setFacesContext(context); 
+            info.setFacesVariableResolver(context.getApplication().getVariableResolver());
+            info.setPropertyResolver(context.getApplication().getPropertyResolver());
 	    result = Util.getExpressionEvaluator(RIConstants.FACES_RE_PARSER).evaluate(info);
-    } catch (Throwable e) {        
-        if (log.isDebugEnabled()) {
-            log.debug("Evaluation threw exception", e);
-        }
+            if (log.isDebugEnabled()) {
+                log.debug("getValue Result:" + result);
+            }
+        } catch (Throwable e) {        
 	    Object [] params = { toEvaluate };        
-        if (e instanceof ElException) {
-            Throwable t = ((ElException) e).getCause();
-            if (t != null) {
-                e = t;
-            }
-        } else if (e instanceof PropertyNotFoundException) {
-            Throwable t = ((PropertyNotFoundException) e).getCause();
-            if (t != null) {
-                e = t;
-            }
+            if (e instanceof ElException) {
+                Throwable t = ((ElException) e).getCause();
+                if (t != null) {
+                    e = t;
+                }
+                if (log.isDebugEnabled()) {
+                    log.debug("getValue Evaluation threw exception:", e);
+                }
+	        throw new EvaluationException(e);
+            } else if (e instanceof PropertyNotFoundException) {
+                Throwable t = ((PropertyNotFoundException) e).getCause();
+                if (t != null) {
+                    e = t;
+                }
+                if (log.isDebugEnabled()) {
+                    log.debug("getValue Evaluation threw exception:", e);
+                }
+	        throw new PropertyNotFoundException(Util.getExceptionMessage(
+		    Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("getValue Evaluation threw exception:", e);
+                }
+	        throw new EvaluationException(e);
+	    }
         }
-        System.err.println("VBI EXCEPTION: " + e.getMessage());
-        e.printStackTrace(System.err);
-	    throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
-	}
 	return result;
     }
 
     public void setValue(FacesContext context, Object value)
-        throws PropertyNotFoundException {
+        throws EvaluationException, PropertyNotFoundException {
         if (context == null) {
             throw new NullPointerException(
                 Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID)
@@ -282,6 +294,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
         // PENDING(edburns): check for readOnly-ness        
         try {
             FacesExpressionInfo info = new FacesExpressionInfo();
+            info.setOperationType(FacesExpressionInfo.OPERATION_TYPE_SET);
             info.setExpressionString(ref);
             info.setExpectedType(Object.class);
             info.setFacesContext(context);
@@ -302,6 +315,9 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
                 if (t != null) {
                     e = t;
                 }
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("setValue Evaluation threw exception:", e);
             }
             throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
         }
@@ -456,8 +472,16 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
 	    }
 	}
 
+        if (log.isDebugEnabled()) {
+            log.debug("isReadonly result:" + result);
+        }
 	return result;
     }
+
+    public String getExpressionString() {
+	return ref;
+    }
+
 
     /**
      * <p>get the scope of the expression. Return <code>null</code> 
@@ -468,24 +492,28 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
      *
      * @return the scope of the expression
      */
-    public String getScope(String valueRef) {
+    public String getScope(String valueBinding) {
 
-        if (valueRef == null) {
+        // PENDING (visvan) this method shouldn't accept any argument. 
+        // This method should make use of "ref" which has already gone through
+        // the verification process. 
+        valueBinding = ref;
+        if (valueBinding == null) {
             return null;
         }
 
-        int segmentIndex = getFirstSegmentIndex(valueRef);
+        int segmentIndex = getFirstSegmentIndex(valueBinding);
 
         //examine first segment and see if it is a scope
-        String identifier = valueRef;
+        String identifier = valueBinding;
         String expression = null;
 
         if (segmentIndex > 0 ) {
             //get first segment designated by a "." or "["
-            identifier = valueRef.substring(0, segmentIndex);
+            identifier = valueBinding.substring(0, segmentIndex);
 
             //get second segment designated by a "." or "["
-            expression = valueRef.substring(segmentIndex + 1);
+            expression = valueBinding.substring(segmentIndex + 1);
             segmentIndex = getFirstSegmentIndex(expression);
 
             if (segmentIndex > 0) {
@@ -551,11 +579,11 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
      *
      * @return index of the first occurrence of . or [
      */
-    private int getFirstSegmentIndex(String valueRef) {
-        int segmentIndex = valueRef.indexOf(".");
-        int bracketIndex = valueRef.indexOf("[");
+    private int getFirstSegmentIndex(String valueBinding) {
+        int segmentIndex = valueBinding.indexOf(".");
+        int bracketIndex = valueBinding.indexOf("[");
 
-        //there is no "." in the valueRef so take the bracket value
+        //there is no "." in the valueBinding so take the bracket value
         if (segmentIndex < 0) {
             segmentIndex = bracketIndex;
         } else {
@@ -588,16 +616,17 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
 
     public Object saveState(FacesContext context) {
 	Object result = ref;
-	application = null;
-	applicationMap = null;
-	reset();
 	return result;
     }
 
     public void restoreState(FacesContext context, Object state) {
 	ref = state.toString();
-	application = context.getApplication();
-	applicationMap = context.getExternalContext().getApplicationMap();
+	if (null == application) {
+	    application = context.getApplication();
+	}
+	if (null == applicationMap) {
+	    applicationMap = context.getExternalContext().getApplicationMap();
+	}
     }
 
     private boolean isTransient = false;

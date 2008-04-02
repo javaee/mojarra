@@ -1,5 +1,5 @@
 /*
- * $Id: ElTagParserImpl.java,v 1.8 2003/11/12 19:04:34 horwat Exp $
+ * $Id: ElTagParserImpl.java,v 1.9 2003/12/17 15:14:13 rkitain Exp $
  */
 
 /*
@@ -36,9 +36,8 @@ public class ElTagParserImpl implements TagParser {
     //*********************************************************************
     // Constants
 
-    final String JSF_COMPONENTREF_QN = "componentRef";
     final String JSF_VALUEREF_QN = "valueRef";
-    final String JSF_ACTIONREF_QN = "actionRef";
+    final String JSF_ACTION_QN = "action";
     final String JSF_ID_QN = "id";
 
     //*********************************************************************
@@ -121,9 +120,7 @@ public class ElTagParserImpl implements TagParser {
                     buildErrorMessage(qn, qname, value);
                 }
             }
-            else if (qname.equals(JSF_COMPONENTREF_QN) ||
-                     qname.equals(JSF_VALUEREF_QN) ||
-                     qname.equals(JSF_ACTIONREF_QN)) {
+            else if (qname.equals(JSF_VALUEREF_QN)) {
                 ExpressionEvaluator evaluator = 
                     Util.getExpressionEvaluator(RIConstants.FACES_RE_PARSER);
                 ExpressionInfo exprInfo = new ExpressionInfo();
@@ -139,6 +136,26 @@ public class ElTagParserImpl implements TagParser {
                 } catch (ElException ex) {
                     failed = true;
                     buildErrorMessage(qn, qname, value);
+                }
+            } 
+	    else if (qname.equals(JSF_ACTION_QN)) {
+		if (Util.isVBExpression(value)) {
+		    ExpressionEvaluator evaluator = 
+			Util.getExpressionEvaluator(RIConstants.FACES_RE_PARSER);
+		    ExpressionInfo exprInfo = new ExpressionInfo();
+		    try {
+			value = Util.stripBracketsIfNecessary(value);
+		    } catch (ReferenceSyntaxException rse) {
+			failed = true;
+			buildErrorMessage(qn, qname, value);
+		    }
+		    exprInfo.setExpressionString(value);
+		    try {
+			evaluator.parseExpression(exprInfo);
+		    } catch (ElException ex) {
+			failed = true;
+			buildErrorMessage(qn, qname, value);
+		    }
                 }
             }
         }

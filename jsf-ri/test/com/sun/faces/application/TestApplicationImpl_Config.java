@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.25 2003/10/31 22:30:15 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.26 2003/12/17 15:15:05 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import javax.faces.convert.*;
 import javax.faces.validator.Validator;
 import javax.faces.validator.LengthValidator;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestComponent;
 import com.sun.faces.TestConverter;
@@ -56,7 +56,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.25 2003/10/31 22:30:15 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.26 2003/12/17 15:15:05 rkitain Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -97,6 +97,10 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
         application = (ApplicationImpl) aFactory.getApplication();
     }
 	
+    //****
+    //**** NOTE: We should add a test for finding a faces-config.xml file under 
+    //****       WEB-INF/classes/META-INF.
+    //****
 
     //
     // Test Config related methods
@@ -244,12 +248,45 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(newTestConverter != testConverter);
 
 	// built-in components
+
+	// by-id
 	assertTrue(null != (conv = application.createConverter("DateTime")));
 	assertTrue(conv instanceof DateTimeConverter);
 
 	assertTrue(null != (conv = application.createConverter("Number")));
 	assertTrue(conv instanceof NumberConverter);
 
+	assertTrue(null != (conv = application.createConverter("Boolean")));
+	assertTrue(conv instanceof BooleanConverter);
+	
+	assertTrue(null != (conv = application.createConverter("Byte")));
+	assertTrue(conv instanceof ByteConverter);
+	
+	assertTrue(null != (conv = application.createConverter("Character")));
+	assertTrue(conv instanceof CharacterConverter);
+	
+	assertTrue(null != (conv = application.createConverter("Double")));
+	assertTrue(conv instanceof DoubleConverter);
+	
+	assertTrue(null != (conv = application.createConverter("Float")));
+	assertTrue(conv instanceof FloatConverter);
+	
+	assertTrue(null != (conv = application.createConverter("Integer")));
+	assertTrue(conv instanceof IntegerConverter);
+	
+	assertTrue(null != (conv = application.createConverter("Long")));
+	assertTrue(conv instanceof LongConverter);
+	
+	assertTrue(null != (conv = application.createConverter("Short")));
+	assertTrue(conv instanceof ShortConverter);
+
+	assertTrue(null != (conv = application.createConverter("BigInteger")));
+	assertTrue(conv instanceof BigIntegerConverter);
+
+	assertTrue(null != (conv = application.createConverter("BigDecimal")));
+	assertTrue(conv instanceof BigDecimalConverter);
+
+	// by-class
 	assertTrue(null != (conv = application.createConverter(java.lang.Boolean.class)));
 	assertTrue(conv instanceof BooleanConverter);
 	
@@ -273,6 +310,12 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	
 	assertTrue(null != (conv = application.createConverter(java.lang.Short.class)));
 	assertTrue(conv instanceof ShortConverter);
+
+	assertTrue(null != (conv = application.createConverter(java.math.BigInteger.class)));
+	assertTrue(conv instanceof BigIntegerConverter);
+
+	assertTrue(null != (conv = application.createConverter(java.math.BigDecimal.class)));
+	assertTrue(conv instanceof BigDecimalConverter);
 	
     }
 	
@@ -389,23 +432,23 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	
 	assertTrue(null != (actionListener = 
 			    application.getActionListener()));
-	assertTrue(actionListener instanceof ActionListenerTestImpl);
+	assertTrue(actionListener instanceof com.sun.faces.TestActionListener);
 
 	assertTrue(null != (navHandler = 
 			    application.getNavigationHandler()));
-	assertTrue(navHandler instanceof NavigationHandlerTestImpl);
+	assertTrue(navHandler instanceof com.sun.faces.TestNavigationHandler);
 
 	assertTrue(null != (propResolver = 
 			    application.getPropertyResolver()));
-	assertTrue(propResolver instanceof PropertyResolverTestImpl);
+	assertTrue(propResolver instanceof com.sun.faces.TestPropertyResolver);
 
 	assertTrue(null != (varResolver = 
 			    application.getVariableResolver()));
-	assertTrue(varResolver instanceof VariableResolverTestImpl);
+	assertTrue(varResolver instanceof com.sun.faces.TestVariableResolver);
 
 	assertTrue(null != (viewHandler = 
 			    application.getViewHandler()));
-	assertTrue(viewHandler instanceof ViewHandlerTestImpl);
+	assertTrue(viewHandler instanceof javax.faces.application.ViewHandler);
     }
 
     public void testLocaleConfigPositive() {
@@ -418,10 +461,8 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 
 	assertNotNull("Can't get default locale from Application",
 		      locale = application.getDefaultLocale());
-	assertEquals("Default locale language not as expected",
-		     "ps", locale.getLanguage());
-	assertEquals("Default locale country not as expected",
-		     "PS", locale.getCountry());
+	assertEquals("en", locale.getLanguage());
+	assertEquals("US", locale.getCountry());
 
 	Iterator iter;
 
@@ -430,8 +471,8 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 
 	String [][] expected = {
 	    {"ps","PS"},
-	    {"tg","AF"},
-	    {"tk","IQ"},
+	    {"fr","FR"},
+	    {"de","DE"},
 	    {"en","US"}
 	};
 	int i = 0;
@@ -465,8 +506,8 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 
 	String [][] expected = {
 	    {"ps","PS"},
-	    {"tg","AF"},
-	    {"tk","IQ"},
+	    {"fr","FR"},
+	    {"de","DE"},
 	    {"en","US"}
 	};
 	int i = 0;

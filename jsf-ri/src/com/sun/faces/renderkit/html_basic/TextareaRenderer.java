@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.1 2003/10/06 19:07:01 horwat Exp $
+ * $Id: TextareaRenderer.java,v 1.2 2003/12/17 15:13:57 rkitain Exp $
  */
 
 /*
@@ -20,24 +20,22 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
+import com.sun.faces.util.Util;
+
+
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /**
  *
- *  <B>TextareaRenderer</B> is a class ...
+ *  <B>TextareaRenderer</B> is a class that handles the rendering of the input
+ *  TextAreaTag
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextareaRenderer.java,v 1.1 2003/10/06 19:07:01 horwat Exp $
+ * @version $Id: TextareaRenderer.java,v 1.2 2003/12/17 15:13:57 rkitain Exp $
  * 
- * @see	Blah
- * @see	Bloo
- *
  */
 
 public class TextareaRenderer extends HtmlBasicInputRenderer {
@@ -96,7 +94,7 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
             String currentValue) throws IOException {
                 
         ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );	
+        Util.doAssert(writer != null );	
 
 	writer.startElement("textarea", component);
 	writer.writeAttribute("name", component.getClientId(context), "clientId");

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesComplexValue.java,v 1.1 2003/08/13 18:10:45 rlubke Exp $
+ * $Id: FacesComplexValue.java,v 1.2 2003/12/17 15:13:40 rkitain Exp $
  */
 
 /*
@@ -63,9 +63,12 @@ public class FacesComplexValue extends ComplexValue {
         for (int i = 0, size = suffixes.size(); i < size; i++) {
             ValueSuffix suffix = (ValueSuffix) suffixes.get(i);
             if ((size - 1) == i) {                
-                // use the rValue to evaluate, this prevents pre-maturely setting the value
+                // use the rValue to evaluate, this prevents
+                // pre-maturely setting the value
+		facesExprInfo.setLastSegment(true);
                 facesExprInfo.setRValue(rValue);
                 ret = suffix.evaluate(ret, exprInfo);
+		facesExprInfo.setLastSegment(false);
             } else {                
                 ret = suffix.evaluate(ret, exprInfo);
             }

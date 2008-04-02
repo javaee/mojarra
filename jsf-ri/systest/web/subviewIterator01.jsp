@@ -8,7 +8,7 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
-<f:subview>
+<f:subview id="subviewInner">
   <br>
   <c:forEach var="i" begin="0" end="3" varStatus="status">
     Array[<c:out value="${i}"/>]: 

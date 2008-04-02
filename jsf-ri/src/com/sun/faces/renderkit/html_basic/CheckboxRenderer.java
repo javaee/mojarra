@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.57 2003/11/09 05:11:03 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.58 2003/12/17 15:13:50 rkitain Exp $
  *
  */
 
@@ -31,21 +31,19 @@ import javax.faces.convert.ConverterException;
 import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.beanutils.ConvertUtils;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
+
 
 /**
  *
- *  <B>CheckboxRenderer</B> is a class ...
+ *  <B>CheckboxRenderer</B> is a class that handles the rendering of CheckBoxTag
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.57 2003/11/09 05:11:03 eburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.58 2003/12/17 15:13:50 rkitain Exp $
  * 
- * @see	Blah
- * @see	Bloo
  *
  */
 
@@ -105,7 +103,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         } 
 
         String clientId = component.getClientId(context);
-        Assert.assert_it(clientId != null );
+        Util.doAssert(clientId != null );
 
         Object curValue = ((UIInput)component).getValue();
         if (curValue == null) {
@@ -179,7 +177,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
             String currentValue) throws IOException {
  
 	ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
+        Util.doAssert(writer != null );
 	String styleClass = null;
 
 	writer.startElement("input", component);

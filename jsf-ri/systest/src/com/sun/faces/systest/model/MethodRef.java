@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRef.java,v 1.3 2003/10/31 21:54:03 eburns Exp $
+ * $Id: MethodRef.java,v 1.4 2003/12/17 15:14:34 rkitain Exp $
  */
 
 /*
@@ -78,6 +78,8 @@ public class MethodRef extends Object {
 
 
     public void valueChange(ValueChangeEvent vce) {
+	vce.getComponent().getAttributes().put("onblur", 
+					       vce.getNewValue().toString());
 	setChangeOutcome(vce.getNewValue().toString());
     }
     

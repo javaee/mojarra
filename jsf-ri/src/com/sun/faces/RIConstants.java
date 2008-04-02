@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.49 2003/11/12 19:04:36 horwat Exp $
+ * $Id: RIConstants.java,v 1.50 2003/12/17 15:13:18 rkitain Exp $
  */
 
 /*
@@ -122,7 +122,8 @@ public class RIConstants {
     /*
      * <p>TLV Resource Bundle Location </p>
      */
-    public static final String TLV_RESOURCE_LOCATION = "com.sun.faces.resources.Resources";
+    public static final String TLV_RESOURCE_LOCATION = 
+	FACES_PREFIX + "resources.Resources";
 
 
 }

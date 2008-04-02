@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.13 2003/10/06 19:27:58 rkitain Exp $
+ * $Id: RenderKitImpl.java,v 1.14 2003/12/17 15:13:48 rkitain Exp $
  */
 
 /*
@@ -16,10 +16,10 @@ import com.sun.faces.util.Util;
 
 import org.xml.sax.InputSource;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
+
 
 import org.xml.sax.Attributes;
 
@@ -28,7 +28,7 @@ import java.io.Writer;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.Set;
@@ -48,7 +48,7 @@ import javax.faces.render.ResponseStateManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.13 2003/10/06 19:27:58 rkitain Exp $
+ * @version $Id: RenderKitImpl.java,v 1.14 2003/12/17 15:13:48 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -83,7 +83,7 @@ public class RenderKitImpl extends RenderKit {
 
     */
 
-    private Hashtable renderersByRendererType;
+    private HashMap renderersByRendererType;
     private ResponseStateManager responseStateManager = null;
 //
 // Constructors and Initializers    
@@ -91,7 +91,7 @@ public class RenderKitImpl extends RenderKit {
 
     public RenderKitImpl() {
         super();
-        renderersByRendererType = new Hashtable();
+        renderersByRendererType = new HashMap();
     }
 
 
@@ -112,7 +112,9 @@ public class RenderKitImpl extends RenderKit {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-	renderersByRendererType.put(rendererType, renderer);
+        synchronized(renderersByRendererType) {
+	    renderersByRendererType.put(rendererType, renderer);
+        }
     }
 
     public Renderer getRenderer(String rendererType) {
@@ -121,14 +123,17 @@ public class RenderKitImpl extends RenderKit {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        Assert.assert_it(renderersByRendererType != null);
+        Util.doAssert(renderersByRendererType != null);
 
-        Renderer renderer = (Renderer)renderersByRendererType.get(rendererType);
+        Renderer renderer = null;
+        synchronized(renderersByRendererType) {
+            renderer = (Renderer)renderersByRendererType.get(rendererType);
+        }
 
         return renderer;
     }
 
-    public ResponseStateManager getResponseStateManager() {
+    public synchronized ResponseStateManager getResponseStateManager() {
         if (responseStateManager == null) {
             responseStateManager = new ResponseStateManagerImpl();
         }

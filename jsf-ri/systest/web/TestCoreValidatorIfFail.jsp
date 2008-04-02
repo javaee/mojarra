@@ -22,7 +22,7 @@ This page should FAIL.
 <f:view>
 
   <c:if test="${one == 'one'}">
-    <h:output_text  value="NO ID" key="no_id"/>
+    <h:output_text  value="NO ID"/>
   </c:if>
 
 </f:view>

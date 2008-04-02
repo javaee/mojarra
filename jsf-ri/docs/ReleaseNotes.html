@@ -3,32 +3,36 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="GENERATOR" content="Mozilla/4.79C-CCK-MCD  [en] (X11; U; SunOS 5.8 sun4u) [Netscape]">
+   <title>
+      JavaServer Faces 1.0 Beta Release Notes
+   </title>
+   <link rel="stylesheet" type="text/css" href="style/default.css"/>
 </head>
 <body bgcolor="#FFFFFF">
 
 <center>
 <h1>
-JavaServer<sup><font size=-1>TM</font></sup> Faces (JSF) 1.0 EA4<br>
+JavaServer<sup><font size=-1>TM</font></sup> Faces (JSF) 1.0 Beta<br>
 Release Notes</h1></center>
 
 <hr>
 <br><a NAME="14145"></a>
 For an updated, online version of these release notes, see 
  <a href="http://java.sun.com/j2ee/javaserverfaces/docs/ReleaseNotes.html">
- Release Notes</a><p>Revised:05/19/2003
+ Release Notes</a><p>Revised:20031205
 <p><a NAME="13552"></a>The purpose of this release is to introduce you
 to the JavaServer Faces framework and to provide you with an opportunity
 to give us feedback on the work we've done so far.
-<p>This Early Access release of JavaServer Faces technology provides
- an early alpha
-version of the JSF technology which is currently being developed under
-the Java Community Process(SM) ("JCP(SM)") as <a href="http://jcp.org/jsr/detail/127.jsp">JSR127</a>. The
-expert group is actively working on the specification, and you should
-expect to see continued evolution between this release and the final
-draft of the specification.  Therefore, applications built on this 
-release of JavaServer Faces technology are not guaranteed to work 
-without modification on future releases.
 
+<p>This Beta release of JavaServer Faces technology provides an beta
+version of the JSF technology which is currently being developed under
+the Java Community Process(SM) ("JCP(SM)") as <a
+href="http://jcp.org/jsr/detail/127.jsp">JSR127</a>. The expert group is
+actively working on the specification, and you should expect to see
+continued evolution between this release and the final draft of the
+specification.  Therefore, applications built on this release of
+JavaServer Faces technology are not guaranteed to work without
+modification on future releases.
 
 <h1>
 &nbsp;Contents</h1>
@@ -50,10 +54,8 @@ without modification on future releases.
 <a href="README">README</a></li>
 
 <li>
-<a href="#issues">Known Issues</a></li>
+<a href="#issues">Known Issues and Bugs</a></li>
 
-<li>
-<a href="#known_bugs">Known Bugs</a></li>
 </ul>
 <a NAME="operating_systems"></a>
 <h1>
@@ -102,7 +104,7 @@ supported.
 <tr>
 <td>Java Web Services Developer Pack</td>
 
-<td>version 1.1 or 1.2</td>
+<td>version 1.3</td>
 </tr>
 
 <tr>
@@ -153,248 +155,77 @@ Faces</a>, a tutorial to help you get started.</li>
 What's New in This Release</h1>
 <a NAME="14607"></a>
 <p>
-   The three major new features for this release are:  Application 
-   Configuration Resources, Navigation Handling, and Object Management
-   <p>
-   <h5>
-   Application Configuration Resources </h5>
-   JavaServer Faces, v 1.0 EA4 defines a portable configuration resource
-   format (as an XML document) for configuring resources required at
-   application startup time.  The configurable resources include:
-   custom components, renderers, converters, and validators; render kits;
-   navigation rules; and model beans.  In previous releases, these resources had
-   to be configured programmatically.
-   This new feature eliminates the need
-   for:  an ApplicationHandler to define navigation; and a ServletContextListener
-   to register converters, validators, renderers, render kits, and messages.
-  <p> 
-  <h5> Navigation Handling   </h5>
-   
-   This new feature is closely tied to the Application Configuration 
-   Resources feature described above.  In previous releases, navigation
-   rules were defined programmatically in the ApplicationHandler.  For this
-   release, navigation rules are defined in the portable configuration
-   resource, described in the previous section.
-    <p>
-   <h5>Object Management </h5>
-   
-   This new feature is also tied to the Application Configuration Resources
-   feature. In previous releases, JavaServer Faces technology enabled 
-   you to create model objects that encapsulated data and business logic
-   separately from UI component objects.  This release fully specifies how
-   these objects are created and managed.  This release also provides a
-   Managed Bean Creation facility, which creates new model objects and stores 
-   them in scope.  This facility is also configured using the Application
-   Configuration Resource.  
-   
+Please see the <a href="README">README</a>.   
    <h1>
-<a <a NAME="issues"></a>Known Issues With This Release</h1>
+<a <a NAME="issues">Known</a> Issues With This Release</h1>
 
 <ul>
+
+<li>the algorithm for scanning jars for faces-config.xml files will miss
+  occurrences that reside outside of WEB-INF/lib, or on a custom
+  ClassLoader.  Workaround: make sure any faces-config files you want to
+  be found reside inside of jars that reside in WEB-INF/lib.</li>
+
+<li>UIData children that do not use VB expressions fail to maintain their
+  values.  In other words, if you have a literal value in a child of a
+  UIData component, that value will be lost on postback.  Workaround:
+  always use a VB expression with the value attribute for UIData
+  children.</li>
+
+<li>We don't have a consistent, robust, and documentable logging story.
+  We will for 1.0.</li>
+
 <li>
-A JavaServer Faces tag nested within a 
-JavaServer(TM) Pages Standard Tag Library (JSTL) iterator tag
- is required to have a unique 
-id. However in the current implementation dynamic id's are not 
-supported. When a JavaServer Faces tag has a non-unique id it 
-will NOT be rendered 
-and you will not see any output.
-The JSR-127 EG is currently working on a solution to this issue.
-<p>
-The following example illustrates the problem.  Only a JavaServer 
-Faces tag with a unique id will be rendered. Once 
-that id is non-unique no more output will be generated.
-<blockquote>
+
+<p>UIComponent.broadcast() fails to throw IllegalStateException if
+passed invalid Parameter.</p>
+
 <pre>
+  From the javadocs of UIComponent.broadcast():
 
-&lt;%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %&gt;
-&lt;%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %&gt;
-&lt;%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %&gt;
+  <quote> java.lang.IllegalStateException - if PhaseId.ANY_PHASE is
+  passed for the phase identifier </quote>
 
-&lt;%
-    // Place a simple string in session scope
-    String simpleString = new String("I am a simple String");
-    pageContext.setAttribute("SimpleString", simpleString, 
-	PageContext.SESSION_SCOPE);
-%&gt;
-
-&lt;html&gt;
-&lt;head&gt;
-
-  &lt;title&gt;Unique id requirement example&lt;/title&gt;
-
-&lt;/head&gt;
-&lt;body&gt;
-&lt;h3&gt;Unique id requirement example&lt;/h3&gt;
-&lt;f:use_faces&gt;
-  &lt;h:form id="basicForm"&gt;
-
-    &lt;c:forEach begin="0" end="3" varStatus="status"&gt;
-      JSF Index: &lt;c:out value="${status.index}"/&gt;
-      Value: &lt;h:output_text id="must_be_unique" 
-	valueRef="SimpleString"/&gt; &lt;br&gt;
-    &lt;/c:forEach&gt;
-
-  &lt;/h:form&gt;
-&lt;/f:use_faces&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  No exception is currently thrown by the RI.
 </pre>
-</blockquote>
+
+<li>UIInput.validate() does not store zero-length String into previous
+property.</li>
+
+<li><p>Incorrect type conversion for UISelectMany</p>
+
+<p>This class doesn't properly deal with conversion for primitives.
+  Workaround: use wrapper classes instead of primitives for model objects.</p>
 </li>
 
-<li>
-In JavaServer Faces technology there is no notion of a <tt>PageContext</tt>. 
-The <tt>PageContext</tt> is specific 
-to a JavaServer Pages (JSP) implementation and 
-JavaServer Faces technology is designed to work with both JSP and 
-non-JSP containers.
-<p>
-If your JavaServer Faces application needs access to attributes in 
-a <tt>PageContext</tt>, one workaround is using JSTL to store
- those attributes in one of the scopes 
-that is available to the JavaServer Faces implementation. 
-These scopes are: Request, Session, or 
-Application.
-<p>
-Here is an example that illustrates the workaround:
-<p>
-<blockquote>
+<li> <p>&lt;h:message&gt; ignores locale set in &lt;f:view&gt;</p>
+
 <pre>
-&lt;%@ page import="java.util.ArrayList" %&gt;
+    My system locale is French and if I do this...
+    &lt;f:view locale='en'&gt;
 
-&lt;%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %&gt;
-&lt;%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %&gt;
-&lt;%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %&gt;
+        &lt;h:output_text value='#{msgs.namePrompt}'/&gt;
+        &lt;h:input_text id='name' value='#{user.name}'/&gt;
 
-&lt;%
-    // Construct a preconfigured customer list in session scope
-    ArrayList list = new ArrayList();
-    list.add(new String("apple"));
-    list.add(new String("pear"));
-    list.add(new String("orange"));
-    list.add(new String("banana"));
-    list.add(new String("strawberry"));
-    pageContext.setAttribute("ListBean", list,
-                             PageContext.SESSION_SCOPE);
+        &lt;h:message for='name'/&gt;
 
-%&gt;
+    &lt;/f:view&gt;
 
-&lt;html&gt;
-&lt;head&gt;
-  &lt;title&gt;PageContext workaround example&lt;/title&gt;
-&lt;/head&gt;
-
-&lt;body&gt;
-
-&lt;h3&gt;PageContext workaround example&lt;/h3&gt;
-
-
-&lt;f:use_faces&gt;
-  &lt;h:form id="basicForm"&gt;
-
-    &lt;c:forEach items="${ListBean}" varStatus="status"&gt;
-      &lt;c:if test="${status.last}"&gt;
-        &lt;!-- saving PageContext "status.count" value in request scope --&gt;
-        &lt;c:set var="count" value="${status.count}" scope="request" /&gt;
-      &lt;/c:if&gt;
-    &lt;/c:forEach&gt;
-
-     &lt;!-- You could also use "requestScope.count" to explicitly define 
-the scope  --&gt;
-    &lt;p>There are &lt;h:output_text valueRef="count"/&gt; items in the list.&lt;/p&gt;
-
-  &lt;/h:form&gt;
-&lt;/f:use_faces&gt;
-
-
-&lt;/body&gt;
-&lt;/html&gt;
+    &lt;h:output_text&gt; retrieves its output from my English resource bundle
+    (as it should), but &lt;h:message&gt; stubbornly produces its error message
+    in French (as it should not).
 </pre>
-</blockquote>
 </li>
 
+<p>When using the non-JSP use-case, it's possible to use a VB expression
+  for id attribute of UIComponent, but it should not be possible.
+  Workaround: don't use VB expressions for the id attribute of
+  UIComponent.</p>
 
-<li>
-The current implementation does not support adding custom render kits 
-from the Application Configuration Resources file.  The workaround for
-this is to use a <tt>ServletContextListener</tt>, obtain a reference to
-the <tt>RenderKitFactory</tt>, and manually add the render kit to the
-factory.</li>
-<li>
-When using <tt>graphic_image</tt>, make sure to start your "url" attribute
-with a "/" to cause the proper context path to be prepended to your image.
-</li>
-
-<li>
-When saving tree in session, we don't support multiple concurrent&nbsp;
-requests to a JavaServer Faces application from one client.</li>
-
-<li>
-SaveState in page option cannot be used if your web app has event handlers
-and validators because they are not serializable currently.</li>
-
-<li>
-Additionally, in the areas of functionality released in the EA, there are
-already significant changes in progress in the specification. Therefore,
-only experimental code should be developed against this release since it
-will not be compatabile with subsequent releases.
-</li>
+<p>The converterId attribute for &lt;f:converter&gt; is not VB enabled, and it
+  should be.</p>
 </ul>
-<p><a NAME="known_bugs"></a>
-<h1>
-Known Bugs</h1>
-<a NAME="14607"></a>
-<table BORDER=3 >
-<caption><a NAME="18558"></a>TABLE 2 Known Bugs for This Release</caption>
 
-<tr>
-<th>Bug ID</th>
-
-<th>Description
-<p>&nbsp;</th>
-</tr>
-
-<tr>
-<td>4866763
-</td>
-<td>Must make sure that all pluggable classes, such as Application, are
-actually pluggable.
-</td>
-</tr>
-
-
-<tr>
-<td>4823134
-</td>
-<td>JSF tags don't offer all attributes available in equivalent HTML 4 tags
-</td>
-</tr>
-
-<tr>
-<td>4823150</td>
-<td>
-SelectItems should be localizable</td>
-</tr>
-
-<tr>
-<td>4823152</td>
-<td>
-Investigate using a stylesheet renderer</td>
-</tr>
-
-<tr>
-<td>4823154</td>
-
-<td>Investigate actionReference attribute for command_button</td>
-</tr>
-
-<tr>
-<td>4823158</td>
-<td>
-Command not invoked in rare cases with IE 5.5</td>
-</tr>
-</table>
 
 <p>
 <hr>

@@ -1,5 +1,5 @@
 /*
- * $Id: VerbatimTag.java,v 1.3 2003/09/24 23:17:37 horwat Exp $
+ * $Id: VerbatimTag.java,v 1.4 2003/12/17 15:14:15 rkitain Exp $
  */
 
 /*
@@ -14,6 +14,8 @@ import javax.servlet.jsp.JspException;
 import javax.faces.webapp.UIComponentBodyTag;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 /**
  * <p>Tag implementation that creates a {@link UIOutput} instance
@@ -27,10 +29,10 @@ public class VerbatimTag extends UIComponentBodyTag {
     // ------------------------------------------------------------- Attributes
 
 
-    private boolean escape = false;
+    private String escape = null;
 
 
-    public void setEscape(boolean escape) {
+    public void setEscape(String escape) {
 
         this.escape = escape;
 
@@ -42,9 +44,18 @@ public class VerbatimTag extends UIComponentBodyTag {
     public String getRendererType() { return "Text"; }
     public String getComponentType() { return "Output"; }
 
-    protected void overrideProperties(UIComponent component) {
-	super.overrideProperties(component);
-	component.getAttributes().put("escape", escape ? Boolean.TRUE : Boolean.FALSE);
+    protected void setProperties(UIComponent component) {
+	super.setProperties(component);
+	if (null != escape) {
+	    if (isValueReference(escape)) {
+		ValueBinding vb = FacesContext.getCurrentInstance().getApplication().createValueBinding(escape);
+		component.setValueBinding("escape", vb);
+	    }
+	    else {
+		boolean _escape = new Boolean(escape).booleanValue();
+		component.getAttributes().put("escape", _escape ? Boolean.TRUE : Boolean.FALSE);
+	    }
+	}
     }    
 
     /**
@@ -55,7 +66,7 @@ public class VerbatimTag extends UIComponentBodyTag {
         if (getBodyContent() != null) {
             String value = getBodyContent().getString().trim();
             if (value != null) {
-		UIOutput output = (UIOutput) getComponent();
+		UIOutput output = (UIOutput) getComponentInstance();
 		output.setValue(value);
             }
         }

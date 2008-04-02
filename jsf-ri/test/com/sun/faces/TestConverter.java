@@ -5,7 +5,7 @@
 
 package com.sun.faces;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import javax.faces.convert.NumberConverter;
 

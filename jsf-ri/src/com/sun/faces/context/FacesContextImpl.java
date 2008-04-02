@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.60 2003/10/31 01:12:12 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.61 2003/12/17 15:13:35 rkitain Exp $
  */
 
 /*
@@ -31,12 +31,14 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
 import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletRequest;
 
 import org.apache.commons.collections.CursorableLinkedList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 public class FacesContextImpl extends FacesContext
 {
@@ -126,7 +128,7 @@ public class FacesContextImpl extends FacesContext
         ApplicationFactory aFactory = 
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = aFactory.getApplication();
-	Assert.assert_it(null != application);
+	Util.doAssert(null != application);
 	return application;
     }
 
@@ -204,6 +206,21 @@ public class FacesContextImpl extends FacesContext
 	}
 	return (list.iterator());
     }    
+
+    public RenderKit getRenderKit() {
+        assertNotReleased();
+        UIViewRoot vr = getViewRoot();
+        if (vr == null) {
+            return (null);
+        }
+        String renderKitId = vr.getRenderKitId();
+        if (renderKitId == null) {
+            return (null);
+        }
+        RenderKitFactory rkFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        return (rkFactory.getRenderKit(renderKitId));
+    }
 
     public ResponseStream getResponseStream() {
         assertNotReleased();

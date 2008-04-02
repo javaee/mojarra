@@ -1,5 +1,5 @@
 /*
- * $Id: TextModel.java,v 1.3 2003/02/20 22:50:46 ofung Exp $
+ * $Id: TextModel.java,v 1.4 2003/12/17 15:15:49 rkitain Exp $
  */
 
 /*
@@ -11,9 +11,9 @@ package fruitstand;
 
 // TextModel.java
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 /**
  *
@@ -21,7 +21,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextModel.java,v 1.3 2003/02/20 22:50:46 ofung Exp $
+ * @version $Id: TextModel.java,v 1.4 2003/12/17 15:15:49 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,7 +54,7 @@ public class TextModel extends Object
 public TextModel()
 {
     super();
-    // ParameterCheck.nonNull();
+    // Util.parameterNonNull();
     this.init();
 }
 

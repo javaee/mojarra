@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleFactoryImpl.java,v 1.7 2003/04/03 18:39:05 rkitain Exp $
+ * $Id: TestLifecycleFactoryImpl.java,v 1.8 2003/12/17 15:15:25 rkitain Exp $
  */
 
 /*
@@ -15,8 +15,8 @@ import com.sun.faces.ServletFacesTestCase;
 
 import org.apache.cactus.ServletTestCase;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
@@ -29,7 +29,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleFactoryImpl.java,v 1.7 2003/04/03 18:39:05 rkitain Exp $
+ * @version $Id: TestLifecycleFactoryImpl.java,v 1.8 2003/12/17 15:15:25 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

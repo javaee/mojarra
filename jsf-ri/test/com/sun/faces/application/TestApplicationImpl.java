@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.13 2003/11/07 18:45:30 eburns Exp $
+ * $Id: TestApplicationImpl.java,v 1.14 2003/12/17 15:15:04 rkitain Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.13 2003/11/07 18:45:30 eburns Exp $ 
+ * @version $Id: TestApplicationImpl.java,v 1.14 2003/12/17 15:15:04 rkitain Exp $ 
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -144,18 +144,6 @@ public class TestApplicationImpl extends JspFacesTestCase {
         }
         assertTrue(thrown);
 
-        // 2. Verify NullPointer exception which occurs when attempting
-        //    to set an ActionListener with the wrong PhaseId
-        //
-        ActionListener actionListener = new InvalidActionListener();
-        thrown = false;
-        try {
-            application.setActionListener(actionListener);
-        } catch (IllegalArgumentException e) {
-            thrown = true;
-        }
-        assertTrue(thrown);
-
         // 3. Verify NullPointer exception which occurs when attempting
         //    to set a null NavigationHandler
         //
@@ -183,7 +171,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         //
         thrown = false;
         try {
-            application.getValueBinding(null);
+            application.createValueBinding(null);
         } catch (NullPointerException e) {
             thrown = true;
         }
@@ -202,7 +190,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
        
         thrown = false;
         try {
-            application.getValueBinding("improper expression");
+            application.createValueBinding("improperexpression");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -210,7 +198,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         
         thrown = false;
         try {
-            application.getValueBinding("improper\texpression");
+            application.createValueBinding("improper expression");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -218,7 +206,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         
         thrown = false;
         try {
-            application.getValueBinding("improper\rexpression");
+            application.createValueBinding("improper\texpression");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -226,7 +214,15 @@ public class TestApplicationImpl extends JspFacesTestCase {
         
         thrown = false;
         try {
-            application.getValueBinding("improper\nexpression");
+            application.createValueBinding("improper\rexpression");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+        
+        thrown = false;
+        try {
+            application.createValueBinding("improper\nexpression");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -234,7 +230,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
         thrown = false;
         try {
-            application.getValueBinding("#improperexpression");
+            application.createValueBinding("#improperexpression");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -242,7 +238,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
         thrown = false;
         try {
-            application.getValueBinding("#{improperexpression");
+            application.createValueBinding("#{improperexpression");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -250,7 +246,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
         thrown = false;
         try {
-            application.getValueBinding("improperexpression}");
+            application.createValueBinding("improperexpression}");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -258,7 +254,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
         thrown = false;
         try {
-            application.getValueBinding("{improperexpression}");
+            application.createValueBinding("{improperexpression}");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -266,7 +262,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
         thrown = false;
         try {
-            application.getValueBinding("improperexpression}#");
+            application.createValueBinding("improperexpression}#");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -275,21 +271,21 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
         thrown = false;
         try {
-            application.getValueBinding("proper[\"a key\"]");
+            application.createValueBinding("#{proper[\"a key\"]}");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
         assertTrue(!thrown); 
         
         try {
-            application.getValueBinding("proper[\"a { } key\"]");
+            application.createValueBinding("#{proper[\"a { } key\"]}");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
         assertTrue(!thrown);
         
         try {
-            application.getValueBinding("bean.a{indentifer");
+            application.createValueBinding("bean.a{indentifer");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -297,7 +293,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         
         thrown = false;
         try {
-            application.getValueBinding("bean['invalid'");            
+            application.createValueBinding("bean['invalid'");            
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -305,7 +301,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         
         thrown = false;
         try {
-            application.getValueBinding("bean[[\"invalid\"]].foo");
+            application.createValueBinding("bean[[\"invalid\"]].foo");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -313,14 +309,14 @@ public class TestApplicationImpl extends JspFacesTestCase {
         
         thrown = false;
         try {
-            application.getValueBinding("bean[\"[a\"]");
+            application.createValueBinding("#{bean[\"[a\"]}");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
         assertTrue(!thrown);
         
         try {
-            application.getValueBinding("bean[\".a\"]");
+            application.createValueBinding("#{bean[\".a\"]}");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
@@ -330,20 +326,12 @@ public class TestApplicationImpl extends JspFacesTestCase {
             
 
     public class InvalidActionListener implements ActionListener {
-        public PhaseId getPhaseId() {
-	    return PhaseId.ANY_PHASE;
-        }
-
         public void processAction(ActionEvent event) {
 	    System.setProperty(HANDLED_ACTIONEVENT1, HANDLED_ACTIONEVENT1);
         }
     }
 
     public class ValidActionListener implements ActionListener {
-        public PhaseId getPhaseId() {
-	    return PhaseId.INVOKE_APPLICATION;
-        }
-
         public void processAction(ActionEvent event) {
 	    System.setProperty(HANDLED_ACTIONEVENT2, HANDLED_ACTIONEVENT2);
         }
@@ -374,7 +362,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
 	getFacesContext().getExternalContext().getSessionMap().put("TAIBean",
 								   this);
 	assertTrue(null != (valueBinding = 
-		    application.getValueBinding("sessionScope.TAIBean")));
+		    application.createValueBinding("#{sessionScope.TAIBean}")));
 
 	try {
 	    result = application.createComponent(valueBinding, getFacesContext(),

@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl_Model.java,v 1.3 2003/04/18 16:21:01 rkitain Exp $
+ * $Id: TestValueBindingImpl_Model.java,v 1.4 2003/12/17 15:15:19 rkitain Exp $
  */
 
 /*
@@ -11,9 +11,9 @@
 
 package com.sun.faces.el;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
+
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
@@ -36,7 +36,7 @@ import com.sun.faces.application.ApplicationImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl_Model.java,v 1.3 2003/04/18 16:21:01 rkitain Exp $
+ * @version $Id: TestValueBindingImpl_Model.java,v 1.4 2003/12/17 15:15:19 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,6 +129,50 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase
 	assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
     }    
 
+    public void testSetNull() {
+	FacesContext facesContext = getFacesContext();
+	System.out.println("Testing setValue() with model bean in session with null rValues");
+	TestBean testBean = new TestBean();
+	InnerBean inner = new InnerBean();
+	Inner2Bean innerInner = new Inner2Bean();
+	
+	getFacesContext().getExternalContext().getSessionMap().put("TestBean", 
+								   testBean);
+    
+	// Test one level of nesting
+	valueBinding.setRef("TestBean.one");
+	valueBinding.setValue(getFacesContext(), null);
+	assertTrue(testBean.getOne() == null);
+	
+        System.setProperty(TestBean.PROP, TestBean.FALSE);
+	valueBinding.setRef("sessionScope.TestBean.inner");
+	valueBinding.setValue(getFacesContext(), inner);
+	assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
+        
+	valueBinding.setRef("sessionScope.TestBean.inner");
+	valueBinding.setValue(getFacesContext(), null);
+	assertTrue(testBean.getInner() == null);
+
+	// Test two levels of nesting
+	valueBinding.setRef("sessionScope.TestBean.inner.two");
+	valueBinding.setValue(getFacesContext(), null);
+	assertTrue(testBean.getInner().getTwo() == null);
+	
+	System.setProperty(TestBean.PROP, TestBean.FALSE);
+	valueBinding.setRef("sessionScope.TestBean.inner.inner2");
+	valueBinding.setValue(getFacesContext(), innerInner);
+	assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
+
+        valueBinding.setRef("sessionScope.TestBean.inner.inner2");
+	valueBinding.setValue(getFacesContext(), null);
+	assertTrue(testBean.getInner().getInner2() == null);
+        
+	// Test three levels of nesting
+	valueBinding.setRef("sessionScope.TestBean.inner.inner2.three");
+	valueBinding.setValue(getFacesContext(), null);
+	assertTrue(testBean.getInner().getInner2().getThree() == null);
+    }
+    
     public void testSetWithNoCurlyBraces() {
 	FacesContext facesContext = getFacesContext();
 	System.out.println("Testing setValue() with model bean in request ");

@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.16 2003/09/25 21:02:58 jvisvanathan Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.17 2003/12/17 15:13:44 rkitain Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 package com.sun.faces.lifecycle;
 
-import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.event.PhaseId;
@@ -69,8 +69,11 @@ public PhaseId getId() {
 
 public void execute(FacesContext facesContext) throws FacesException
 {
+    if (log.isDebugEnabled()) {
+        log.debug("Entering ProcessValidationsPhase");
+    }
     UIComponent component = facesContext.getViewRoot();
-    Assert.assert_it(null != component);
+    Util.doAssert(null != component);
     
     try {
 	component.processValidators(facesContext);
@@ -82,6 +85,9 @@ public void execute(FacesContext facesContext) throws FacesException
             }
             throw new FacesException(exceptionMessage, re);
         }
+    }
+    if (log.isDebugEnabled()) {
+        log.debug("Exiting ProcessValidationsPhase");
     }
 }
 

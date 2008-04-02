@@ -44,6 +44,8 @@
                     
                     
 
+                    
+
                 <table title="Grid with hardcoded data" border="1" cellspacing="3" cellpadding="3" summary="Grid with hardcoded data">
 <tbody><tr>
 <td>Logon&amp;nbsp;Form</td>
@@ -51,13 +53,14 @@
 </tr>
 <tr>
 <td><input type="text" name="basicForm:username1" value="JavaServerFaces" class="inputClass" /></td>
+<td><input type="text" name="basicForm:username2" value="JavaServerFaces" class="inputClass" disabled="disabled" /></td>
+</tr>
+<tr>
 <td><span class="outputClass">Password:</span></td>
-</tr>
-<tr>
 <td><input type="password" name="basicForm:password1" value="" class="secretClass" /></td>
-<td><input type="submit" name="basicForm:submit1" value="Login" class="commandClass" /></td>
 </tr>
 <tr>
+<td><input type="submit" name="basicForm:submit1" value="Login" class="commandClass" /></td>
 <td><input type="reset" name="basicForm:reset1" value="Reset" /></td>
 </tr>
 </tbody></table>
@@ -317,12 +320,26 @@
 
       <TR>
 
+        <TD>Float: 
+        </TD>
+
+	<TD>
+                
+            <input type="text" name="basicForm:_id30" value="3.1415" />
+	</TD>
+
+      </TR>
+
+
+
+      <TR>
+
         <TD>Date: 
         </TD>
 
 	<TD>
                 
-            <input type="text" name="basicForm:_id30" value="Wed, Jul 10, 1996" class="inputClass" />
+            <input type="text" name="basicForm:_id31" value="Wed, Jul 10, 1996" class="inputClass" />
 	</TD>
 
       </TR>
@@ -510,7 +527,7 @@
 						
 						
 						
-					<select name="basicForm:_id41" multiple size="10">	<option value="0">zero</option>
+					<select name="basicForm:_id42" multiple size="10">	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
@@ -571,7 +588,90 @@
 
 
     
-<input type="hidden" name="basicForm:_id64" value="48%" />
+<input type="hidden" name="basicForm:_id65" value="48%" />
+
+<tr><td>
+
+1. You should see the &lt;i&gt;angle brackets&lt;/i&gt; on this
+text
+
+</td>
+</tr>
+
+<tr><td>
+
+2. You should see the &lt;i&gt;angle brackets&lt;/i&gt; on this
+text
+
+</td>
+</tr>
+
+<tr><td>
+
+3. You should not see the <i>angle
+brackets</i> on this text
+
+</td>
+</tr>
+
+<tr><td>
+
+4. You should see the &lt;i&gt;angle
+brackets&lt;/i&gt; on this text
+
+</td>
+</tr>
+
+<tr><td>
+
+5. You should not see the
+<i>angle brackets</i> on this text
+
+</td>
+</tr>
+
+<tr><td>
+
+6. You should see the &lt;i&gt;angle
+brackets&lt;/i&gt; on this text
+
+</td>
+</tr>
+
+<tr><td>
+
+7. You should see the &lt;i&gt;angle brackets&lt;/i&gt; on
+this text
+
+</td>
+</tr>
+
+<tr><td>
+
+8. You should not see the <i>angle
+brackets</i> on this text
+
+</td>
+</tr>
+
+<tr><td>
+
+9. You should see
+the &lt;i&gt;angle brackets&lt;/i&gt; on this text
+
+</td>
+</tr>
+
+<tr><td>
+
+10. You should not
+see the <i>angle brackets</i> on this text
+
+</td>
+</tr>
+
+
+
 
   <TABLE>
 

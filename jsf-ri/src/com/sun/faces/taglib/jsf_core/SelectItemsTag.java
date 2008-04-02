@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsTag.java,v 1.1 2003/10/30 22:15:42 jvisvanathan Exp $
+ * $Id: SelectItemsTag.java,v 1.2 2003/12/17 15:14:14 rkitain Exp $
  */
 
 /*
@@ -65,8 +65,8 @@ public class SelectItemsTag extends BaseComponentTag
     //
     // Methods from BaseComponentTag
     //
-    protected void overrideProperties(UIComponent component) {
-	super.overrideProperties(component);
+    protected void setProperties(UIComponent component) {
+	super.setProperties(component);
     }
 
 } // end of class SelectItemsTag
