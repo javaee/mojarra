@@ -20,7 +20,7 @@
                                  size="30" 
                                  alt="input_datetime pattern"
                                title="input_datetime pattern">
-                   <f:convert_datetime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
+                   <f:convertDateTime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
               </h:input_text>
 
              </td>

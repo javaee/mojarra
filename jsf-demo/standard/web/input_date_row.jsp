@@ -23,7 +23,7 @@
                                  alt="input_date medium readonly"
                                  accesskey="D" 
                                title="input_date medium readonly">
-                   <f:convert_datetime type="date" dateStyle="medium"/>
+                   <f:convertDateTime type="date" dateStyle="medium"/>
                </h:input_text>
 
 
@@ -47,7 +47,7 @@
                                  value="#{model.date2}"
                                  alt="input_date medium"
                                   title="input_date medium">
-                   <f:convert_datetime type="date" dateStyle="medium"/>
+                   <f:convertDateTime type="date" dateStyle="medium"/>
                </h:input_text>
 
 
@@ -79,7 +79,7 @@
                                  size="10"
                                  alt="input_date short"
                                   title="input_date short">
-                   <f:convert_datetime type="date" dateStyle="short"/>
+                   <f:convertDateTime type="date" dateStyle="short"/>
                </h:input_text>
 
 
@@ -112,7 +112,7 @@
                                  alt="input_date long"
                                  accesskey="d"
                                title="input_date long">
-                   <f:convert_datetime type="date" dateStyle="long"/>
+                   <f:convertDateTime type="date" dateStyle="long"/>
                </h:input_text>
 
 

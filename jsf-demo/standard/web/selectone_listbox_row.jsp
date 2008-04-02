@@ -21,16 +21,16 @@
                      title="Select Quantity"
                      tabindex="20" >
 
-                <f:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
-                <f:selectitem  itemValue="1" itemLabel="1" />
-                <f:selectitem  itemValue="2" itemLabel="2" />
-                <f:selectitem  itemValue="3" itemLabel="3" />
-                <f:selectitem  itemValue="4" itemLabel="4" />
-                <f:selectitem  itemValue="5" itemLabel="5" />
-                <f:selectitem  itemValue="6" itemLabel="6" />
-                <f:selectitem  itemValue="7" itemLabel="7" />
-                <f:selectitem  itemValue="8" itemLabel="8" />
-                <f:selectitem  itemValue="9" itemLabel="9" />
+                <f:selectItem  disabled="true" itemValue="0" itemLabel="0"/>
+                <f:selectItem  itemValue="1" itemLabel="1" />
+                <f:selectItem  itemValue="2" itemLabel="2" />
+                <f:selectItem  itemValue="3" itemLabel="3" />
+                <f:selectItem  itemValue="4" itemLabel="4" />
+                <f:selectItem  itemValue="5" itemLabel="5" />
+                <f:selectItem  itemValue="6" itemLabel="6" />
+                <f:selectItem  itemValue="7" itemLabel="7" />
+                <f:selectItem  itemValue="8" itemLabel="8" />
+                <f:selectItem  itemValue="9" itemLabel="9" />
 
               </h:selectone_listbox>
 
@@ -51,7 +51,7 @@
                 <h:selectone_listbox id="Listbox"
                              value="#{LoginBean.currentOption}">
 
-                <f:selectitems id="listboxOptions"
+                <f:selectItems id="listboxOptions"
                                    value="#{LoginBean.options}"/>
 
               </h:selectone_listbox>
@@ -73,7 +73,7 @@
                 <h:selectone_listbox id="longListbox" 
                              value="#{LoginBean.currentLongOption}">
                     
-                <f:selectitems id="listboxLongOptions"
+                <f:selectItems id="listboxLongOptions"
                                    value="#{LoginBean.longList}"/>
 
               </h:selectone_listbox>

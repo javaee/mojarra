@@ -16,7 +16,7 @@
              <td>
 
                <h:output_text id="outputTime1" value="#{LoginBean.date}">
-                   <f:convert_datetime type="time" timeStyle="medium"/>
+                   <f:convertDateTime type="time" timeStyle="medium"/>
                </h:output_text>
 
 
@@ -37,7 +37,7 @@
              <td>
 
                <h:output_text id="outputTime2" value="#{LoginBean.date}">
-                   <f:convert_datetime type="time" timeStyle="long"/>
+                   <f:convertDateTime type="time" timeStyle="long"/>
                </h:output_text>
 
              </td>

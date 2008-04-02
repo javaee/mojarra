@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIData.jsp,v 1.10 2004/01/12 06:52:59 craigmcc Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.11 2004/01/17 23:27:24 craigmcc Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -89,7 +89,7 @@
                      required="true"
                          size="6"
                         value="#{customer.accountId}">
-        <f:valuechange_listener
+        <f:valueChangeListener
                          type="standard.LogValueChangedListener"/>
       </h:input_text>
       <h:messages    for="accountId"/>
@@ -103,7 +103,7 @@
                      required="true"
                          size="50"
                         value="#{customer.name}">
-        <f:valuechange_listener
+        <f:valueChangeListener
                          type="standard.LogValueChangedListener"/>
       </h:input_text>
       <h:messages    for="name"/>
@@ -117,10 +117,10 @@
                      required="true"
                          size="6"
                         value="#{customer.symbol}">
-        <f:validate_length
+        <f:validateLength
                       maximum="6"
                       minimum="2"/>
-        <f:valuechange_listener
+        <f:valueChangeListener
                          type="standard.LogValueChangedListener"/>
       </h:input_text>
       <h:messages    for="symbol"/>

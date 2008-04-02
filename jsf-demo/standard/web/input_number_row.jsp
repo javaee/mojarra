@@ -22,7 +22,7 @@
                                  alt="input_number number readonly"
                                  accesskey="N"
                                title="input_number number readonly">
-                   <f:convert_number type="number"/>
+                   <f:convertNumber type="number"/>
                </h:input_text>
                            
 
@@ -51,7 +51,7 @@
                                  value="$1,234,789.60" 
                                  alt="input_number currency"
                                   title="input_number currency">
-                   <f:convert_number type="currency"/>
+                   <f:convertNumber type="currency"/>
                </h:input_text>
              </td>
 
@@ -81,7 +81,7 @@
                                  size="10"
                                  alt="input_number percent"
                                   title="input_number percent">
-                   <f:convert_number type="percent"/>
+                   <f:convertNumber type="percent"/>
               </h:input_text>
 
              </td>
@@ -113,7 +113,7 @@
                                  alt="input_number PATTERN "
                                  accesskey="d"
                                title="input_number PATTERN">
-                   <f:convert_number pattern="####"/>
+                   <f:convertNumber pattern="####"/>
                </h:input_text>
              </td>
 
@@ -143,7 +143,7 @@
                                  alt="input_number integer with valueRef"
                                  accesskey="d"
                                title="input_number integer with valueRef">
-                   <f:convert_number integerOnly="true"/>
+                   <f:convertNumber integerOnly="true"/>
                </h:input_text>
                                
              </td>

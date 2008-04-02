@@ -16,7 +16,7 @@
              <td>
 
                <h:output_text id="outputDate3" value="#{LoginBean.date}">
-                   <f:convert_datetime dateStyle="short" type="date"/>
+                   <f:convertDateTime dateStyle="short" type="date"/>
                </h:output_text>
 
 
@@ -45,7 +45,7 @@
              <td>
 
                <h:output_text id="outputDate1" value="#{LoginBean.date}">
-                   <f:convert_datetime dateStyle="medium" type="date"/>
+                   <f:convertDateTime dateStyle="medium" type="date"/>
                </h:output_text>
 
 
@@ -66,7 +66,7 @@
              <td>
 
                <h:output_text id="outputDate4" value="#{LoginBean.date}">
-                  <f:convert_datetime type="date" dateStyle="long"/>
+                  <f:convertDateTime type="date" dateStyle="long"/>
                </h:output_text>
 
 
@@ -94,7 +94,7 @@
              <td>
 
                <h:output_text id="outputDate2" value="#{LoginBean.date}">
-                   <f:convert_datetime type="date" dateStyle="full"/>
+                   <f:convertDateTime type="date" dateStyle="full"/>
                </h:output_text>
 
 

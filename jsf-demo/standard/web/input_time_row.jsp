@@ -22,7 +22,7 @@
                                  alt="input_time medium readonly"
                                  accesskey="D" 
                                title="input_time medium readonly">
-                   <f:convert_datetime type="time" timeStyle="medium"/>
+                   <f:convertDateTime type="time" timeStyle="medium"/>
                </h:input_text>
 
 
@@ -46,7 +46,7 @@
                                  value="9:57:00 AM PST"
                                  alt="input_time long"
                                title="input_time long">
-                   <f:convert_datetime type="time" timeStyle="long"/>
+                   <f:convertDateTime type="time" timeStyle="long"/>
                </h:input_text>
 
              </td>

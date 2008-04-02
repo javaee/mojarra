@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: DataModel.jsp,v 1.7 2004/01/10 01:21:05 horwat Exp $ --%>
+<%-- $Id: DataModel.jsp,v 1.8 2004/01/17 23:27:24 craigmcc Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -30,7 +30,7 @@
 
       <h:selectone_menu        id="accountId"
                           binding="#{DataModelBean.accountId}">
-           <f:selectitems   value="#{DataModelBean.accountIds}"/>
+           <f:selectItems   value="#{DataModelBean.accountIds}"/>
       </h:selectone_menu>
 
       <h:command_button action="#{DataModelBean.select}"

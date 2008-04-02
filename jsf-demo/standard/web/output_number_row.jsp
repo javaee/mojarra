@@ -39,7 +39,7 @@
              <td>
 
                <h:output_text id="outputNumber2" value="#{LoginBean.floater}">
-                   <f:convert_number type="currency"/>
+                   <f:convertNumber type="currency"/>
                </h:output_text>
              </td>
 
@@ -65,7 +65,7 @@
              <td>
 
                <h:output_text id="outputNumber3" value="#{LoginBean.floater}">
-                   <f:convert_number type="percent"/>
+                   <f:convertNumber type="percent"/>
                </h:output_text>
 
              </td>
@@ -92,7 +92,7 @@
              <td>
 
                <h:output_text id="outputNumber4" value="#{LoginBean.floater}">
-                   <f:convert_number pattern="####"/>
+                   <f:convertNumber pattern="####"/>
                </h:output_text>
              </td>
 

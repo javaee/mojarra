@@ -17,7 +17,7 @@
 
 	       <h:command_link id="commandLink1" action="success">
                  <f:verbatim>Submit Form</f:verbatim>
-                 <f:action_listener type="standard.DefaultListener"/>
+                 <f:actionListener type="standard.DefaultListener"/>
                </h:command_link>
 
              </td>
@@ -37,7 +37,7 @@
 
 	      <h:command_link id="valueRefLink" action="success">
                  <h:output_text value="#{model.label}"/>
-                 <f:action_listener type="standard.DefaultListener"/>
+                 <f:actionListener type="standard.DefaultListener"/>
               </h:command_link>
 
              </td>
@@ -58,7 +58,7 @@
 	      <h:command_link id="resBundleLableLink" action="success">
                  <h:output_text 
                   value="#{standardBundle.standardRenderKitSubmitLabel}"/>
-                 <f:action_listener type="standard.DefaultListener"/>
+                 <f:actionListener type="standard.DefaultListener"/>
                </h:command_link>
 
              </td>
@@ -78,7 +78,7 @@
 
 	      <h:command_link id="imageLink" action="success">
                  <h:graphic_image url="duke.gif"/>
-                 <f:action_listener type="standard.DefaultListener"/>
+                 <f:actionListener type="standard.DefaultListener"/>
                </h:command_link>
 
 
@@ -100,7 +100,7 @@
 	      <h:command_link id="imageResourceBundleLink" action="success">
                  <h:graphic_image  
                   url="#{standardBundle.imageurl}" />
-                 <f:action_listener type="standard.DefaultListener"/>
+                 <f:actionListener type="standard.DefaultListener"/>
                </h:command_link>
 
 

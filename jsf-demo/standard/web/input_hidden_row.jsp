@@ -7,7 +7,7 @@
               <td><b><h:output_text id="dateconvertLabel"
                          value="Date [MMM DD, YYYY Format]: " /></b></td>
               <td><h:input_hidden id="datetextHidden" value="#{LoginBean.date}">
-                      <f:convert_datetime type="date"/>
+                      <f:convertDateTime type="date"/>
                   </h:input_hidden></td>
               <td><h:messages id="dateErr"
                       for="datetextHidden"/> </td>
@@ -17,7 +17,7 @@
                          value="Time [HH:MI:SS (AM/PM) Format]: " /></b></td>
               <td><h:input_hidden id="timetextHidden" 
                       value="#{LoginBean.time}">
-                      <f:convert_datetime type="time" /> 
+                      <f:convertDateTime type="time" /> 
                   </h:input_hidden></td>
               <td><h:messages id="timeErr"
                       for="timetextHidden"/> </td>
@@ -27,7 +27,7 @@
                          value="Date/Time [MMM DD, YYYY HH:MI:SS (AM/PM) Format]: " /></b></td>
               <td><h:input_hidden id="datetimetextHidden" 
                       value="#{LoginBean.dateTime}">
-                      <f:convert_datetime type="both"/>
+                      <f:convertDateTime type="both"/>
                   </h:input_hidden></td>
               <td><h:messages id="datetimeErr"
                       for="datetimetextHidden"/> </td>
@@ -43,7 +43,7 @@
                 <td>
                     <h:input_hidden id="currencyinputHidden"
                         value="#{LoginBean.double}">                        
-                        <f:convert_number type="currency"/>
+                        <f:convertNumber type="currency"/>
                     </h:input_hidden>
                 </td>
             </tr>
@@ -52,7 +52,7 @@
                            value="Percent Format:"/></b></td>
                 <td>
                     <h:input_hidden id="percentinputHidden" value="54%">
-                        <f:convert_number type="percent"/>
+                        <f:convertNumber type="percent"/>
                     </h:input_hidden>
                 </td>
             </tr>
@@ -62,7 +62,7 @@
                 <td>
                     <h:input_hidden id="patterninputHidden"
                         value="1999.65">
-                        <f:convert_number pattern="####"/>
+                        <f:convertNumber pattern="####"/>
                     </h:input_hidden>
                 </td>
             </tr>

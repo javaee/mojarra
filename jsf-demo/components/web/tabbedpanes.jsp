@@ -81,7 +81,7 @@ Powered by Faces components:
     <h:panel_group>
       <h:output_text value="This is the first pane with the date set to: "/>
       <h:output_text value="#{sessionScope.date}">
-          <f:convert_datetime dateStyle="medium"/>
+          <f:convertDateTime dateStyle="medium"/>
       </h:output_text>
     </h:panel_group>
 
@@ -100,17 +100,17 @@ Powered by Faces components:
       <h:command_button value="button"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
       <h:selectboolean_checkbox checked="true" alt="checkbox"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
       <h:selectone_radio layout="PAGE_DIRECTION" border="1" value="nextMonth">
-        <f:selectitem itemValue="nextDay" itemLabel="Next Day"/>
-        <f:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
-        <f:selectitem itemValue="nextMonth" itemLabel="Next Month" />
+        <f:selectItem itemValue="nextDay" itemLabel="Next Day"/>
+        <f:selectItem itemValue="nextWeek" itemLabel="Next Week"  />
+        <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
       </h:selectone_radio>
       <h:selectone_listbox id="appleQuantity" title="Select Quantity"
         tabindex="20" value="4" >
-        <f:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
-        <f:selectitem  itemValue="1" itemLabel="One" />
-        <f:selectitem  itemValue="2" itemLabel="Two" />
-        <f:selectitem  itemValue="3" itemLabel="Three" />
-        <f:selectitem  itemValue="4" itemLabel="Four" />
+        <f:selectItem  disabled="true" itemValue="0" itemLabel="0"/>
+        <f:selectItem  itemValue="1" itemLabel="One" />
+        <f:selectItem  itemValue="2" itemLabel="Two" />
+        <f:selectItem  itemValue="3" itemLabel="Three" />
+        <f:selectItem  itemValue="4" itemLabel="Four" />
       </h:selectone_listbox>
     </h:panel_group>
 

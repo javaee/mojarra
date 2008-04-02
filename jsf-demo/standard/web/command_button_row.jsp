@@ -16,7 +16,7 @@
 
                <h:command_button id="commandButton1" action="success"
                    value="command_button with hard coded label">
-                 <f:action_listener type="standard.DefaultListener"/>
+                 <f:actionListener type="standard.DefaultListener"/>
                </h:command_button>
 
               </td>
@@ -36,7 +36,7 @@
 
                <h:command_button id="commandButton6" action="success"
                    value="#{model.label}">
-                 <f:action_listener type="standard.DefaultListener"/>
+                 <f:actionListener type="standard.DefaultListener"/>
                </h:command_button>
 
               </td>
@@ -58,7 +58,7 @@
                       value="click to submit form"
                       action="success"
                       image="#{standardBundle.imageurl}">
-                 <f:action_listener type="standard.DefaultListener"/>
+                 <f:actionListener type="standard.DefaultListener"/>
                </h:command_button>
 
               </td>
@@ -77,7 +77,7 @@
              <td>
                  <h:command_button id="resetButton"  value="Click to reset form"                    action="success"
                      type="reset" value="#{standardBundle.resetButton}">
-                 <f:action_listener type="standard.DefaultListener"/>
+                 <f:actionListener type="standard.DefaultListener"/>
                </h:command_button>
 
               </td>
@@ -98,7 +98,7 @@
                      title="button is disabled" type="button" 
                      disabled = "true" action="success"
                      value="This is a disabled push button">
-                 <f:action_listener type="standard.DefaultListener"/>
+                 <f:actionListener type="standard.DefaultListener"/>
                </h:command_button>
 
               </td>
@@ -118,7 +118,7 @@
              <td>
                   <h:command_button id="button5" action="success"
                       title="click to submit form" image="duke.gif">
-                 <f:action_listener type="standard.DefaultListener"/>
+                 <f:actionListener type="standard.DefaultListener"/>
                </h:command_button>
               </td>
 

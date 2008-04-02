@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: repeater.jsp,v 1.4 2004/01/10 01:21:03 horwat Exp $ --%>
+<%-- $Id: repeater.jsp,v 1.5 2004/01/17 23:27:21 craigmcc Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
@@ -75,7 +75,7 @@
                      required="true"
                          size="6"
                         value="#{customer.symbol}">
-        <f:validate_length
+        <f:validateLength
                       maximum="6"
                       minimum="2"/>
       </h:input_text>
@@ -88,7 +88,7 @@
       </f:facet>
       <h:output_text       id="totalSales"
                         value="#{customer.totalSales}">
-        <f:convert_number
+        <f:convertNumber
                          type="currency"/>
       </h:output_text>
     </h:column>

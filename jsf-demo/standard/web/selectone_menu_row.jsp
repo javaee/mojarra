@@ -6,17 +6,17 @@
 				<tr>
 					<td>Single-select menu:</td>
 					<td><h:selectone_menu id="HockeyHeroes">
-						<f:selectitem itemValue="10" itemLabel="Guy Lafleur" />
-						<f:selectitem itemValue="99" itemLabel="Wayne Gretzky" />
-						<f:selectitem itemValue="4" itemLabel="Bobby Orr"  />
-						<f:selectitem itemValue="2" itemLabel="Brad Park" />
-						<f:selectitem itemValue="9" itemLabel="Gordie Howe" />
+						<f:selectItem itemValue="10" itemLabel="Guy Lafleur" />
+						<f:selectItem itemValue="99" itemLabel="Wayne Gretzky" />
+						<f:selectItem itemValue="4" itemLabel="Bobby Orr"  />
+						<f:selectItem itemValue="2" itemLabel="Brad Park" />
+						<f:selectItem itemValue="9" itemLabel="Gordie Howe" />
 					</h:selectone_menu></td>
 				</tr>
 				<tr>
 					<td>Single-select menu - modelType String:</td>
 					<td><h:selectone_menu id="oneMenumodel">
-						<f:selectitems id="oneMenumodelItems"
+						<f:selectItems id="oneMenumodelItems"
 							value="#{LoginBean.options}" />
 					</h:selectone_menu></td>
 				</tr>
@@ -25,7 +25,7 @@
 					<td>Single-select menumodel - modelType Boolean:</td>
 					<td><h:selectone_menu id="oneLongMenumodel"  
                                              value="#{LoginBean.currentBooleanOption}">
-						<f:selectitems id="oneLongMenumodelItems"
+						<f:selectItems id="oneLongMenumodelItems"
 							value="#{LoginBean.booleanList}" />
 					</h:selectone_menu></td>
 				</tr>
