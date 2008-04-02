@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.7 2003/10/23 19:30:34 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.8 2003/10/23 22:00:03 rlubke Exp $
  */
 
 /*
@@ -218,7 +218,7 @@ public class PropertyResolverImpl extends PropertyResolver {
             if (index >= 0 && index <= Array.getLength(base) - 1) {
                 return baseClass.getComponentType();
             } else {                
-                new IndexOutOfBoundsException("" + index);
+                throw new IndexOutOfBoundsException("" + index);
             }            
         } else if (base instanceof List) {
             result = ((List) base).get(index).getClass();
