@@ -1,3 +1,11 @@
+/*
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ * $Id: ToolsUtil.java,v 1.2 2004/11/24 16:57:52 rlubke Exp $
+ */
+
+
 package com.sun.faces.util;
 
 import java.util.ResourceBundle;
@@ -5,8 +13,7 @@ import java.util.Locale;
 import java.text.MessageFormat;
 
 /**
- * Created by IntelliJ IDEA. User: rlubke Date: Nov 18, 2004 Time: 10:03:29 AM
- * To change this template use File | Settings | File Templates.
+ * Various static utility methods. 
  */
 public class ToolsUtil {
 
