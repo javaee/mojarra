@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.34 2002/09/17 20:07:58 jvisvanathan Exp $
+ * $Id: SecretRenderer.java,v 1.35 2002/09/23 20:33:33 rkitain Exp $
  */
 
 /*
@@ -21,6 +21,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -33,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.34 2002/09/17 20:07:58 jvisvanathan Exp $
+ * @version $Id: SecretRenderer.java,v 1.35 2002/09/23 20:33:33 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,6 +87,22 @@ public class SecretRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UIInput.TYPE));
     }
 
+    public Object getConvertedValue(FacesContext context, UIComponent component,
+        String newValue) throws IOException {
+        Converter converter = getConverter(component);
+        if (converter != null) {
+            try {
+                Object converted =
+                    converter.getAsObject(context, component, newValue);
+                return(converted);
+            } catch (ConverterException e) {
+                throw new IOException(e.getMessage());
+            }
+        } else {
+            return newValue;
+        }
+    }
+
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
         if (context == null || component == null) {
@@ -99,8 +117,9 @@ public class SecretRenderer extends HtmlBasicRenderer {
         }
     }
 
-   protected void getEndTextToRender(FacesContext context, UIComponent component,
-            String currentValue, StringBuffer buffer ) {
+    protected void getEndTextToRender(FacesContext context, 
+        UIComponent component, String currentValue, StringBuffer buffer ) {
+
         String inputClass = null;
         
         String redisplay = (String)component.getAttribute("redisplay");
@@ -127,6 +146,21 @@ public class SecretRenderer extends HtmlBasicRenderer {
 	}
 	
         buffer.append(">");         
+    }
+
+    protected String getFormattedValue(FacesContext context,
+        UIComponent component, Object currentValue ) {
+
+        Converter converter = getConverter(component);
+        if (converter != null) {
+            try {
+                return converter.getAsString(context, component, currentValue);
+            } catch (ConverterException e) {
+                return currentValue.toString();
+            }
+        } else {
+            return currentValue.toString();
+        }
     }
 
 } // end of class SecretRenderer

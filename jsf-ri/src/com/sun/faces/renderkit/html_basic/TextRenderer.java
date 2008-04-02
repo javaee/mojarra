@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.36 2002/09/17 20:07:58 jvisvanathan Exp $
+ * $Id: TextRenderer.java,v 1.37 2002/09/23 20:33:33 rkitain Exp $
  */
 
 /*
@@ -24,6 +24,8 @@ import javax.faces.component.UISelectOne;
 import javax.faces.component.UISelectMany;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -42,7 +44,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.36 2002/09/17 20:07:58 jvisvanathan Exp $
+ * @version $Id: TextRenderer.java,v 1.37 2002/09/23 20:33:33 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,27 +90,46 @@ public class TextRenderer extends HtmlBasicRenderer {
     //
     public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
         return (componentType.equals(UIInput.TYPE) ||
             componentType.equals(UIOutput.TYPE));
     }
 
+    public Object getConvertedValue(FacesContext context, UIComponent component,
+            String newValue) throws IOException {
+        Converter converter = getConverter(component);
+        if (converter != null) {
+            try {
+                Object converted = 
+                    converter.getAsObject(context, component, newValue);
+                return(converted);
+            } catch (ConverterException e) {
+                throw new IOException(e.getMessage());
+            }
+        } else {
+            return newValue;
+        }
+    }
+         
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
-   protected void getEndTextToRender(FacesContext context, UIComponent component,
-            String currentValue, StringBuffer buffer ) {
+    protected void getEndTextToRender(FacesContext context, 
+        UIComponent component, String currentValue, StringBuffer buffer ) {
         
 	String styleClass = null;
         if ((null != (styleClass = (String) 
@@ -124,7 +145,7 @@ public class TextRenderer extends HtmlBasicRenderer {
             buffer.append("\"");
 
             // render default text specified
-            if ( currentValue != null ) {
+            if (currentValue != null) {
                 buffer.append(" value=\"");
                 buffer.append(currentValue);
                 buffer.append("\"");
@@ -144,14 +165,30 @@ public class TextRenderer extends HtmlBasicRenderer {
                     return;
                 }
             }
-            buffer.append(currentValue);
+            if (currentValue != null) {
+                buffer.append(currentValue);
+            }
         }
 	if (null != styleClass) {
 	    buffer.append("</span>");
 	}
-
     }
     
+    protected String getFormattedValue(FacesContext context, 
+        UIComponent component, Object currentValue ) {
+
+        Converter converter = getConverter(component);
+        if (converter != null) {
+            try {
+                return converter.getAsString(context, component, currentValue);
+            } catch (ConverterException e) {
+                return currentValue.toString();
+            }
+        } else {
+            return currentValue.toString();
+        }
+    }
+
     // The testcase for this class is TestRenderers_2.java 
 
 } // end of class TextRenderer

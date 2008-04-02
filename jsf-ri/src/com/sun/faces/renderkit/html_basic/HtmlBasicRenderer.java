@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.11 2002/09/17 20:07:57 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.12 2002/09/23 20:33:33 rkitain Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import javax.faces.FactoryFinder;
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
@@ -29,6 +30,9 @@ import javax.faces.context.Message;
 import javax.faces.context.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterFactory;
+import javax.faces.convert.ConverterException;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -261,8 +265,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         try {
             convertedValue = getConvertedValue(context, component, newValue);   
         } catch (IOException ioe) {
-            addConversionErrorMessage(context, component, ioe.getMessage());
             component.setValue(newValue);
+            addConversionErrorMessage(context, component, ioe.getMessage());
             return false;
         }    
         component.setValue(convertedValue);
@@ -339,5 +343,25 @@ public abstract class HtmlBasicRenderer extends Renderer {
             Object currentValue ) {
         return currentValue.toString();
     }            
+
+    /**
+     * This method gets a converter instance.  This method may not
+     * apply to all renderers.
+     */
+    protected Converter getConverter(UIComponent component) {
+        Object converter = component.getAttribute("converter");
+        if (converter == null) {
+            return (null);
+        } else if (converter instanceof Converter) {
+            return ((Converter) converter);
+        }
+        ConverterFactory cfactory = (ConverterFactory)
+            FactoryFinder.getFactory(FactoryFinder.CONVERTER_FACTORY);
+        try {
+            return (cfactory.getConverter((String) converter));
+        } catch (Exception e) {
+            return (null);
+        }
+    }
 
 } // end of class HtmlBasicRenderer
