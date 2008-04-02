@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.13 2002/10/07 20:39:50 jvisvanathan Exp $
+ * $Id: LifecycleImpl.java,v 1.14 2002/10/08 00:26:30 jvisvanathan Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.13 2002/10/07 20:39:50 jvisvanathan Exp $
+ * @version $Id: LifecycleImpl.java,v 1.14 2002/10/08 00:26:30 jvisvanathan Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -109,62 +109,6 @@ protected void initPhases()
 	    RIConstants.INVOKE_APPLICATION_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new JspRenderResponsePhase(this, 
 	    RIConstants.RENDER_RESPONSE_PHASE)));
-}
-
-/**
-
-* PRECONDITION: all arguments are valid.
-
-*/
-
-protected void registerBefore(int phaseId, Phase phase)
-{
-    Assert.assert_it(null != phaseWrappers);
-
-    Phase genericPhase = null;
-    PhaseWrapper wrapper = null;
-   
-    Iterator it = phaseWrappers.iterator();
-    while ( it.hasNext() ) {
-        wrapper = (PhaseWrapper) it.next();
-        Assert.assert_it(wrapper != null);
-        genericPhase = wrapper.instance;
-        Assert.assert_it(genericPhase != null);
-        if ( (((GenericPhaseImpl)genericPhase).getId()) == phaseId) {
-            break;
-        }
-    }    
-    
-    Assert.assert_it(wrapper != null);
-    wrapper.registerBefore(phase);
-}
-
-/**
-
-* PRECONDITION: all arguments are valid.
-
-*/
-
-protected void registerAfter(int phaseId, Phase phase)
-{
-    Assert.assert_it(null != phaseWrappers);
-
-    Phase genericPhase = null;
-    PhaseWrapper wrapper = null;
-  
-    Iterator it = phaseWrappers.iterator();
-    while ( it.hasNext() ) {
-        wrapper = (PhaseWrapper) it.next();
-        Assert.assert_it(wrapper != null);
-        genericPhase = wrapper.instance;
-        Assert.assert_it(genericPhase != null);
-        if ( (((GenericPhaseImpl)genericPhase).getId()) == phaseId) {
-            break;
-        }
-    }    
-    
-    Assert.assert_it(wrapper != null);
-    wrapper.registerAfter(phase);
 }
 
 protected int executeRender(FacesContext context) throws FacesException
@@ -246,16 +190,7 @@ public void execute(FacesContext context) throws FacesException
 	wrapper = (PhaseWrapper)phaseIter.next();
 	curPhase = wrapper.instance;
 
-	// Execute the before phases for the current phase, if any
-	if (Phase.GOTO_EXIT == (rc = wrapper.executeBefore(context))) {
-	    return;
-	}
-	else if (rc == Phase.GOTO_RENDER) {
-	    executeRender(context);
-	    return;
-	}
-
-	// Execute the current phase
+        // Execute the current phase
 	if (Phase.GOTO_EXIT == (rc = curPhase.execute(context))) {
 	    return;
 	}
@@ -263,16 +198,7 @@ public void execute(FacesContext context) throws FacesException
 	    executeRender(context);
 	    return;
 	}
-
-	// Execute the after phases for the current phase, if any
-	if (Phase.GOTO_EXIT == (rc = wrapper.executeAfter(context))) {
-	    return;
-	}
-	else if (rc == Phase.GOTO_RENDER) {
-	    executeRender(context);
-	    return;
-	}
-	curPhaseId++;
+        curPhaseId++;
     }
 }
 
@@ -294,8 +220,6 @@ static class PhaseWrapper extends Object
 {
 
 protected Phase instance = null;
-protected ArrayList beforeList = null;
-protected ArrayList afterList = null;
 
 PhaseWrapper(Phase newInstance)
 {
@@ -325,58 +249,6 @@ private int executePhaseIterator(Iterator phaseIter,
 	}
     }
     return rc;
-}
-
-int executeBefore(FacesContext context) throws FacesException
-{
-    if (null == beforeList) {
-	return Phase.GOTO_NEXT;
-    }
-    Iterator phaseIter = beforeList.iterator();
-    int rc = 0;
-    Assert.assert_it(null != phaseIter);
-    rc = executePhaseIterator(phaseIter, context);
-    return rc;
-}
-
-int executeAfter(FacesContext context) throws FacesException
-{
-    if (null == afterList) {
-	return Phase.GOTO_NEXT;
-    }
-    Iterator phaseIter = afterList.iterator();
-    int rc = 0;
-    Assert.assert_it(null != phaseIter);
-    rc = executePhaseIterator(phaseIter, context);
-    return rc;
-}
-
-/**
-
-* PRECONDITION: phase is valid.
-
-*/
-
-void registerBefore(Phase phase)
-{
-    if (null == beforeList) {
-	beforeList = new ArrayList();
-    }
-    beforeList.add(phase);
-}
-
-/**
-
-* PRECONDITION: phase is valid.
-
-*/
-
-void registerAfter(Phase phase)
-{
-    if (null == afterList) {
-	afterList = new ArrayList();
-    }
-    afterList.add(phase);
 }
 
 } // end of class PhaseWrapper

@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.11 2002/10/07 22:58:01 jvisvanathan Exp $
+ * $Id: TestLifecycleImpl.java,v 1.12 2002/10/08 00:26:31 jvisvanathan Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.11 2002/10/07 22:58:01 jvisvanathan Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.12 2002/10/08 00:26:31 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -126,76 +126,6 @@ public void testApplicationHandler()
     }
     assertTrue(!exceptionThrown);
     assertTrue(result == app);
-}
-
-public void beginExtraPhases(WebRequest theRequest)
-{
-    initWebRequest(theRequest);
-    theRequest.addParameter("/basicForm/shipType", "nextWeek");
-    theRequest.addParameter("/basicForm/appleQuantity", "4");
-}
-
-public void testExtraPhases()
-{
-    LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
-    Lifecycle life = null;
-    boolean exceptionThrown = false;
-    final String beforeRender = "beforeRender";
-    final String afterCreateRequest = "afterCreateRequest";
-    System.setProperty(beforeRender, EMPTY);
-    System.setProperty(afterCreateRequest, EMPTY);
-
-    assertTrue(factory != null);
-
-    // try to register before create
-    try {
-	factory.registerBefore(LifecycleFactory.DEFAULT_LIFECYCLE,
-			       RIConstants.RENDER_RESPONSE_PHASE, 
-	       new GenericPhaseImpl(null, 
-				    RIConstants.RENDER_RESPONSE_PHASE) {
-		   public int execute(FacesContext facesContext) 
-		       throws FacesException
-		   {
-		       // PENDING(edburns): verify the facesContext's
-		       // phase is the expected phase.
-		       System.setProperty(beforeRender, beforeRender);
-		       return Phase.GOTO_NEXT;
-		   }
-		   
-	       });
-	factory.registerAfter(LifecycleFactory.DEFAULT_LIFECYCLE,
-			      RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE, 
-	       new GenericPhaseImpl(null, 
-				    RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE) {
-		   public int execute(FacesContext facesContext) 
-		       throws FacesException
-		   {
-		       // PENDING(edburns): verify the facesContext's
-		       // phase is the expected phase.
-		       System.setProperty(afterCreateRequest, 
-					  afterCreateRequest);
-		       return Phase.GOTO_NEXT;
-		   }
-		   
-	       });
-	
-    }
-    catch (IllegalStateException e) {
-	exceptionThrown = true;
-    }
-    catch (UnsupportedOperationException e) {
-	exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
-    
-    // Make sure the default instance exists
-    life = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-    assertTrue(null != life);
-
-    life.execute(getFacesContext());
-
-    assertTrue(EMPTY == System.getProperty(beforeRender));
-    assertTrue(EMPTY == System.getProperty(afterCreateRequest));
 }
 
 } // end of class TestLifecycleImpl
