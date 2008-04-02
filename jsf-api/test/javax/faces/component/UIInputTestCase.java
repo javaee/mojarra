@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.35 2005/03/07 21:50:28 rogerk Exp $
+ * $Id: UIInputTestCase.java,v 1.36 2005/03/22 20:38:52 edburns Exp $
  */
 
 /*
@@ -333,6 +333,12 @@ public class UIInputTestCase extends UIOutputTestCase {
         assertNull(input.getLocalValue());
         assertTrue(input.isValid());
         checkMessages(0);
+	input.resetValue();
+	assertNull(input.getLocalValue());
+	assertEquals("new command", input.getValue());
+	assertNull(input.getSubmittedValue());
+        assertTrue(input.isValid());
+	assertTrue(!input.isLocalValueSet());
 
         // Skip update on an invalid value
         input.setValid(false);

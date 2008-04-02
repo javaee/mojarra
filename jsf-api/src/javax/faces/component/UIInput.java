@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.77 2005/03/10 21:39:14 jayashri Exp $
+ * $Id: UIInput.java,v 1.78 2005/03/22 20:38:51 edburns Exp $
  */
 
 /*
@@ -176,6 +176,32 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         super.setValue(value);
         // Mark the local value as set.
         setLocalValueSet(true);
+    }
+
+    /**
+     * <p>Convenience method to reset this component's value to the
+     * un-initialized state.  This method does the following:</p>
+     *
+     * <p>Call {@link #setValue} passing <code>null</code>.</p>
+     *
+     * <p>Call {@link #setSubmittedValue} passing <code>null</code>.</p>
+     *
+     * <p>Call {@link #setLocalValueSet} passing <code>false</code>.</p>
+     *
+     * <p>Call {@link #setValid} passing <code>true</code>.</p>
+     *
+     * <p>Upon return from this call if the instance had a
+     * <code>ValueBinding</code> associated with it for the "value"
+     * property, this binding is evaluated when {@link
+     * UIOutput#getValue} is called.  Otherwise, <code>null</code> is
+     * returned from <code>getValue()</code>.</p>
+     */
+
+    public void resetValue() {
+	this.setValue(null);
+	this.setSubmittedValue(null);
+	this.setLocalValueSet(false);
+	this.setValid(true);
     }
 
     /**
