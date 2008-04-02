@@ -2640,15 +2640,6 @@
       &events-attrs;
 
       <attribute>
-        <description>form name</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>formName</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <tag-attribute>required</tag-attribute>
-      </attribute>
-
-      <attribute>
         <description>language code</description>
         <display-name></display-name>
         <icon></icon>
