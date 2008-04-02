@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.32 2006/05/22 20:01:26 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.33 2006/05/22 22:43:04 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
@@ -56,14 +55,14 @@ import com.sun.faces.util.Base64;
 import com.sun.faces.util.Util;
 
 
-/** 
+/**
  * <p>A <code>ResonseStateManager</code> implementation
- * for the default HTML render kit. 
+ * for the default HTML render kit.
  */
 public class ResponseStateManagerImpl extends ResponseStateManager {
 
     // Log instance for this class
-    private static final Logger logger =
+    private static final Logger LOGGER =
           Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
     private static final String FACES_VIEW_STATE =
           "com.sun.faces.FACES_VIEW_STATE";
@@ -84,38 +83,36 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     }
 
+    
+    /**
+     * @see {@link ResponseStateManager#getComponentStateToRestore(javax.faces.context.FacesContext)}       
+     */
     @Override
     @SuppressWarnings("Deprecation")
     public Object getComponentStateToRestore(FacesContext context) {
 
-        // requestMap is a local variable so we don't need to synchronize
-        Map<String, Object> requestMap =
-              context.getExternalContext().getRequestMap();
-        Object state = requestMap.get(FACES_VIEW_STATE);
-        // null out the temporary attribute, since we don't need it anymore.
-        requestMap.remove(FACES_VIEW_STATE);
-        return state;
+        // requestMap is a local variable so we don't need to synchronize        
+        return context.getExternalContext().getRequestMap()
+              .remove(FACES_VIEW_STATE);
 
     }
 
 
-    @Override
+    /**
+     * @see {@link ResponseStateManager#isPostback(javax.faces.context.FacesContext)}     
+     */
+    @Override   
     public boolean isPostback(FacesContext context) {
 
         return context.getExternalContext().getRequestParameterMap().
               containsKey(ResponseStateManager.VIEW_STATE_PARAM);
 
-    }
+    }   
 
 
-    @Override
-    public Object getState(FacesContext context, String viewId) {
-
-        return (super.getState(context, viewId));
-
-    }
-
-
+    /**
+     * @see {@link ResponseStateManager#getTreeStructureToRestore(javax.faces.context.FacesContext, String)}      
+     */
     @Override
     @SuppressWarnings("Deprecation")
     public Object getTreeStructureToRestore(FacesContext context,
@@ -123,21 +120,17 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
         StateManager stateManager = Util.getStateManager(context);
 
-        Map<String, String> requestParamMap = context.getExternalContext()
-              .getRequestParameterMap();
-
-        String viewString = requestParamMap.get(
-              ResponseStateManager.VIEW_STATE_PARAM);
-        Object structure = null;
+        String viewString = getStateParam(context);
+        Object structure;
         if (viewString == null) {
             return null;
         }
 
         if (stateManager.isSavingStateInClient(context)) {
-            Object state = null;
-            ByteArrayInputStream bis = null;
+            Object state;
+            ByteArrayInputStream bis;
             GZIPInputStream gis = null;
-            ObjectInputStream ois = null;
+            ObjectInputStream ois;
             boolean compress = isCompressStateSet(context);
 
             try {
@@ -145,8 +138,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                       (Base64.decode(viewString.getBytes())));
                 bis = new ByteArrayInputStream(bytes);
                 if (isCompressStateSet(context)) {
-                    if (logger.isLoggable(Level.FINE)) {
-                        logger.fine("Deflating state before restoring..");
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine("Deflating state before restoring..");
                     }
                     gis = new GZIPInputStream(bis);
                     ois = new ApplicationObjectInputStream(gis);
@@ -155,25 +148,25 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                 }
                 structure = ois.readObject();
                 state = ois.readObject();
-                Map<String, Object> requestMap =
-                      context.getExternalContext().getRequestMap();
-                // store the state object temporarily in request scope
-                // until it is processed by getComponentStateToRestore
-                // which resets it.
-                requestMap.put(FACES_VIEW_STATE, state);
+               
                 bis.close();
                 if (compress) {
-                    gis.close();
+                    if (gis != null) {
+                        gis.close();
+                    }
                 }
                 ois.close();
+                
+                storeStateInRequest(context, state);
+                
             } catch (java.io.OptionalDataException ode) {
-                logger.log(Level.SEVERE, ode.getMessage(), ode);
+                LOGGER.log(Level.SEVERE, ode.getMessage(), ode);
                 throw new FacesException(ode);
             } catch (java.lang.ClassNotFoundException cnfe) {
-                logger.log(Level.SEVERE, cnfe.getMessage(), cnfe);
+                LOGGER.log(Level.SEVERE, cnfe.getMessage(), cnfe);
                 throw new FacesException(cnfe);
             } catch (java.io.IOException iox) {
-                logger.log(Level.SEVERE, iox.getMessage(), iox);
+                LOGGER.log(Level.SEVERE, iox.getMessage(), iox);
                 throw new FacesException(iox);
             }
         } else {
@@ -182,8 +175,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         return structure;
 
     }
+    
 
-
+    /**
+     * @see {@link ResponseStateManager#writeState(javax.faces.context.FacesContext, javax.faces.application.StateManager.SerializedView)}       
+     */
     @Override
     @SuppressWarnings("Deprecation")
     public void writeState(FacesContext context, SerializedView view)
@@ -204,13 +200,13 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
         if (stateManager.isSavingStateInClient(context)) {
             GZIPOutputStream zos = null;
-            ObjectOutputStream oos = null;
+            ObjectOutputStream oos;
             boolean compress = isCompressStateSet(context);
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             if (compress) {
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("Compressing state before saving..");
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Compressing state before saving..");
                 }
                 zos = new GZIPOutputStream(bos);
                 oos = new ObjectOutputStream(zos);
@@ -234,26 +230,73 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         }
         writer.endElement("input");
 
-        // write this out regardless of state saving mode
-        // Only write it out if there is a default render kit Identifier specified,
-        // and this render kit identifier is not the default.
-        String result = context.getApplication().getDefaultRenderKitId();
-        if (result != null && !result
-              .equals(RenderKitFactory.HTML_BASIC_RENDER_KIT)) {
+        writeRenderKitIdField(context, writer);
+
+    }
+
+
+    /**
+     * <p>Store the state for this request into a temporary attribute
+     * within the same request.</p>
+     * @param context the <code>FacesContext</code> of the current request
+     * @param state the view state
+     */
+     private void storeStateInRequest(FacesContext context, Object state) {
+
+        // store the state object temporarily in request scope
+        // until it is processed by getComponentStateToRestore
+        // which resets it.
+        context.getExternalContext().getRequestMap()
+              .put(FACES_VIEW_STATE, state);
+       
+    }
+    
+
+    /**
+     * <p>Write a hidden field if the default render kit ID is not
+     * RenderKitFactory.HTML_BASIC_RENDER_KIT.</p>
+     *
+     * @param context the <code>FacesContext</code> for the current request
+     * @param writer  the target writer
+     *
+     * @throws IOException if an error occurs
+     */
+    private void writeRenderKitIdField(FacesContext context,
+                                       ResponseWriter writer)
+          throws IOException {
+        String result = context.getApplication().getDefaultRenderKitId();        
+        if (!RenderKitFactory.HTML_BASIC_RENDER_KIT.equals(result)) {
             writer.startElement("input", context.getViewRoot());
             writer.writeAttribute("type", "hidden", "type");
             writer.writeAttribute("name",
                                   ResponseStateManager.RENDER_KIT_ID_PARAM,
                                   "name");
             writer.writeAttribute("value",
-                                  RenderKitFactory.HTML_BASIC_RENDER_KIT,
+                                  result,
                                   "value");
             writer.endElement("input");
         }
+    }
 
+    /**
+     * <p>Get our view state from this request</p>
+     * @param context the <code>FacesContext</code> for the current request
+     * @return the view state from this request
+     */
+    private String getStateParam(FacesContext context) {       
+
+        return context.getExternalContext().getRequestParameterMap().get(
+              ResponseStateManager.VIEW_STATE_PARAM);       
     }
 
 
+    /**
+     * <p>Determines if client state should or should not be
+     * compressed.</p>
+     * @param context the <code>FacesContext</code> for the current request
+     * @return <code>true</code> if the state should be compressed before 
+     *  writing to the response, otherwise <code>false</code>
+     */
     private boolean isCompressStateSet(FacesContext context) {
 
         if (null != compressState) {
