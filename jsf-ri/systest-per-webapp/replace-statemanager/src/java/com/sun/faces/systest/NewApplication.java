@@ -1,5 +1,5 @@
 /*
- * $Id: NewApplication.java,v 1.1 2005/03/18 22:12:50 edburns Exp $
+ * $Id: NewApplication.java,v 1.2 2005/07/19 22:16:54 rlubke Exp $
  */
 
 /*
@@ -14,6 +14,8 @@ package com.sun.faces.systest;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -131,6 +133,10 @@ public class NewApplication extends Application {
 
     public void setStateManager(StateManager manager) {
 	oldApp.setStateManager(manager);
+    }
+
+    public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
+        return oldApp.getResourceBundle(ctx, name);
     }
 
 
