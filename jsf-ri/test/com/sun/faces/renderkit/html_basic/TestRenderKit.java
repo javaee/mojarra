@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.17 2003/02/20 22:50:05 ofung Exp $
+ * $Id: TestRenderKit.java,v 1.18 2003/06/13 16:59:52 eburns Exp $
  */
 
 /*
@@ -29,6 +29,7 @@ import org.apache.cactus.ServletTestCase;
 
 import com.sun.faces.CompareFiles;
 import com.sun.faces.FileOutputResponseWrapper;
+import com.sun.faces.FileOutputResponseWriter;
 
 import java.io.PrintStream;
 import java.io.FileOutputStream;
@@ -41,7 +42,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.17 2003/02/20 22:50:05 ofung Exp $
+ * @version $Id: TestRenderKit.java,v 1.18 2003/06/13 16:59:52 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,10 +55,10 @@ public class TestRenderKit extends ServletTestCase {
 //
 
 public static final String OUTPUT_FILENAME = 
-    FileOutputResponseWrapper.FACES_RESPONSE_ROOT + "TestRenderKit_out";
+    FileOutputResponseWriter.FACES_RESPONSE_ROOT + "TestRenderKit_out";
 
 public static final String CORRECT_OUTPUT_FILENAME = 
-    FileOutputResponseWrapper.FACES_RESPONSE_ROOT + "TestRenderKit_correct";
+    FileOutputResponseWriter.FACES_RESPONSE_ROOT + "TestRenderKit_correct";
 
 
 

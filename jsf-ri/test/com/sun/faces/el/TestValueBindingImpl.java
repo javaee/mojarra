@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.9 2003/05/15 17:36:24 craigmcc Exp $
+ * $Id: TestValueBindingImpl.java,v 1.10 2003/06/13 16:59:51 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import java.util.Map;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.9 2003/05/15 17:36:24 craigmcc Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.10 2003/06/13 16:59:51 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -162,10 +162,10 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	}
 	assertTrue(1 == elements);
 	
-	valueBinding.setRef("initParam.saveStateInClient");
+	valueBinding.setRef("initParam.testInitParam");
 	result = valueBinding.getValue(getFacesContext());
 	assertTrue(null != result);
-	assertTrue(result.equals("false") || result.equals("true"));
+	assertTrue(result.equals("testInitParam"));
 	
         // PENDING(craigmcc) - Comment out this test because on my platform
         // the getRequestCookies() call returns null

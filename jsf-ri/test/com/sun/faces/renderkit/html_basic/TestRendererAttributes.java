@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererAttributes.java,v 1.9 2003/05/13 22:55:25 eburns Exp $
+ * $Id: TestRendererAttributes.java,v 1.10 2003/06/13 16:59:52 eburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import java.util.Iterator;
 
 import com.sun.faces.CompareFiles;
 import com.sun.faces.FileOutputResponseWrapper;
+import com.sun.faces.FileOutputResponseWriter;
 
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.ServletFacesTestCase;
@@ -39,7 +40,7 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererAttributes.java,v 1.9 2003/05/13 22:55:25 eburns Exp $
+ * @version $Id: TestRendererAttributes.java,v 1.10 2003/06/13 16:59:52 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -53,10 +54,10 @@ import junit.framework.TestCase;
 //
 
 public static final String OUTPUT_FILENAME = 
-    FileOutputResponseWrapper.FACES_RESPONSE_ROOT + "TestRendererAttributes_out";
+    FileOutputResponseWriter.FACES_RESPONSE_ROOT + "TestRendererAttributes_out";
 
 public static final String CORRECT_OUTPUT_FILENAME = 
-    FileOutputResponseWrapper.FACES_RESPONSE_ROOT + "TestRendererAttributes_correct";
+    FileOutputResponseWriter.FACES_RESPONSE_ROOT + "TestRendererAttributes_correct";
 
 //
 // Class Variables
