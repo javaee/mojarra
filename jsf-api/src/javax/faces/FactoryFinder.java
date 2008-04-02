@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.23 2004/02/26 20:30:22 eburns Exp $
+ * $Id: FactoryFinder.java,v 1.24 2004/04/06 15:37:14 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.lang.reflect.Constructor;
  * factory is used.</li>
  *
  * <li>If the JavaServer Faces configuration files named by the
- * <code>javax.faces.application.CONFIG_FILES</code>
+ * <code>javax.faces.CONFIG_FILES</code>
  * <code>ServletContext</code> init parameter contain any
  * <code>factory</code> entries of the given factory class name, those
  * factories are used, with the last one taking precedence.</li>
