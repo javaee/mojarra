@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.7 2002/09/20 02:43:36 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.8 2002/09/20 02:48:37 craigmcc Exp $
  */
 
 /*
@@ -253,9 +253,14 @@ public class StringRangeValidator extends ValidatorBase {
      * @return <code>true</code> if all validations performed by this
      *  method passed successfully, or <code>false</code> if one or more
      *  validations performed by this method failed
+     *
+     * @exception NullPointerException if any parameter is <code>null</code>
      */
     public boolean validate(FacesContext context, UIComponent component) {
 
+        if ((context == null) || (component == null)) {
+            throw new NullPointerException();
+        }
         boolean result = true;
         Object value = component.getValue();
         if (value != null) {

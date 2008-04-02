@@ -1,5 +1,5 @@
 /*
- * $Id: RequiredValidator.java,v 1.5 2002/08/29 05:39:13 craigmcc Exp $
+ * $Id: RequiredValidator.java,v 1.6 2002/09/20 02:48:37 craigmcc Exp $
  */
 
 /*
@@ -56,9 +56,14 @@ public class RequiredValidator extends ValidatorBase {
      * @return <code>true</code> if all validations performed by this
      *  method passed successfully, or <code>false</code> if one or more
      *  validations performed by this method failed
+     *
+     * @exception NullPointerException if any parameter is <code>null</code>
      */
     public boolean validate(FacesContext context, UIComponent component) {
 
+        if ((context == null) || (component == null)) {
+            throw new NullPointerException();
+        }
         boolean result = true;
         Object value = component.getValue();
         if (value == null) {
