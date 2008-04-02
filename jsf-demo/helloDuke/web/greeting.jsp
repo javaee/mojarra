@@ -34,7 +34,7 @@
     <h:form id="helloForm" >
         <h:graphicImage id="waveImg" url="/wave.med.gif" />
   	<h:inputText id="username"
-			valueRef="UserNameBean.userName"/>
+			value="#{UserNameBean.userName}"/>
   	<h:commandButton id="submit" action="success" value="Submit" 
 		          type="submit" />
     </h:form>

@@ -31,7 +31,7 @@
     <h:form id="responseform">
     <h:graphicImage id="waveImg" url="/wave.med.gif" />
     <h2>Hi, <h:outputText id="userLabel"
-			   valueRef="UserNameBean.userName" /> </h2>
+			   value="#{UserNameBean.userName}" /> </h2>
 	 <h:commandButton id="back" value="Back" action="success" 
                            />
          <p>
