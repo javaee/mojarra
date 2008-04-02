@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.16 2003/08/23 19:56:14 jvisvanathan Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.17 2003/08/27 18:52:04 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.16 2003/08/23 19:56:14 jvisvanathan Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.17 2003/08/27 18:52:04 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -86,7 +86,7 @@ public static final String TEST_URI = "/components.jsp";
 public void beginCallback(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("basicForm.userName", "jerry");
+    theRequest.addParameter("basicForm" + UIComponent.SEPARATOR_CHAR + "userName", "jerry");
 }
 
 public void testCallback()

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.38 2003/08/25 15:37:47 rkitain Exp $
+ * $Id: TestRenderers_1.java,v 1.39 2003/08/27 18:52:08 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.38 2003/08/25 15:37:47 rkitain Exp $
+ * @version $Id: TestRenderers_1.java,v 1.39 2003/08/27 18:52:08 eburns Exp $
  * 
  *
  */
@@ -125,7 +125,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
        // theRequest.addParameter("name", "FormRenderer");
         //theRequest.addParameter("action", "form");
-        theRequest.addParameter("radio_renderer", "Two");
+        theRequest.addParameter("radioRenderer", "Two");
         theRequest.addParameter("name", "ButtonRenderer");
         theRequest.addParameter("name", "button");
     } 
@@ -400,7 +400,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing RadioRenderer");
         UISelectOne uiSelectOne = new UISelectOneBase();
 	UISelectItems uiSelectItems = new UISelectItemsBase();
-        uiSelectOne.setId("radio_renderer");
+        uiSelectOne.setId("radioRenderer");
         root.getChildren().add(uiSelectOne);
 
         SelectItem item1 = new SelectItem("One", "One",null);

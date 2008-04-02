@@ -50,6 +50,7 @@
 
     <path id="classpath">
         <pathelement location="${htmlunit.jar}"/>
+        <pathelement location="${jsf-api.jar}"/>
         <pathelement location="${commons-httpclient.jar}"/>
         <pathelement location="${js.jar}"/>
         <pathelement location="${commons-logging.jar}"/>

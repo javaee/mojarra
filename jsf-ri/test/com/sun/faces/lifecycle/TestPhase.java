@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.7 2003/08/23 19:56:14 jvisvanathan Exp $
+ * $Id: TestPhase.java,v 1.8 2003/08/27 18:52:05 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.7 2003/08/23 19:56:14 jvisvanathan Exp $
+ * @version $Id: TestPhase.java,v 1.8 2003/08/27 18:52:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -91,7 +91,7 @@ public static final String TEST_URI = "/components.jsp";
 public void beginExecute(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("basicForm.userName", "jerry");
+    theRequest.addParameter("basicForm" + UIComponent.SEPARATOR_CHAR + "userName", "jerry");
 }
 
 public void testExecute()

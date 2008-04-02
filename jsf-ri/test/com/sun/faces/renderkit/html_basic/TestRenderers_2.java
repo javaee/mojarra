@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.55 2003/08/27 16:27:12 rlubke Exp $
+ * $Id: TestRenderers_2.java,v 1.56 2003/08/27 18:52:09 eburns Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.55 2003/08/27 16:27:12 rlubke Exp $
+ * @version $Id: TestRenderers_2.java,v 1.56 2003/08/27 18:52:09 eburns Exp $
  * 
  *
  */
@@ -92,7 +92,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public String [] getLinesToIgnore() {
         String[] lines =  {
-	    "<img id=\"my_graphic_image\" src=\"/test/nonModelReferenceImage.gif;jsessionid=41647E428768CD64158970BF4CD4E59D\"><img id=\"id0\" src=\"/test/foo/modelReferenceImage.gif;jsessionid=41647E428768CD64158970BF4CD4E59D\">My name is Bobby Orr"
+	    "<img id=\"myGraphicImage\" src=\"/test/nonModelReferenceImage.gif;jsessionid=41647E428768CD64158970BF4CD4E59D\"><img id=\"id0\" src=\"/test/foo/modelReferenceImage.gif;jsessionid=41647E428768CD64158970BF4CD4E59D\">My name is Bobby Orr"
 };
         return lines;
     }   
@@ -135,29 +135,29 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void beginRenderers(WebRequest theRequest) {
         // for CheckboxRenderer
-        theRequest.addParameter("my_checkbox_on", "on");
-        theRequest.addParameter("my_checkbox_yes", "yes");
-        theRequest.addParameter("my_checkbox_true", "true");
+        theRequest.addParameter("myCheckboxOn", "on");
+        theRequest.addParameter("myCheckboxYes", "yes");
+        theRequest.addParameter("myCheckboxTrue", "true");
   
         // for HyperlinkRenderer
         theRequest.addParameter("action", "command");
-        theRequest.addParameter("my_command", "HyperlinkRenderer");
+        theRequest.addParameter("myCommand", "HyperlinkRenderer");
         // for Listbox
-        theRequest.addParameter("my_listbox", "100");
+        theRequest.addParameter("myListbox", "100");
         // for TextEntry_Secret
-        theRequest.addParameter("my_secret", "secret");
+        theRequest.addParameter("mySecret", "secret");
         // for Text
-        theRequest.addParameter("my_input_text", "text");
+        theRequest.addParameter("myInputText", "text");
 
-        theRequest.addParameter("my_output_text", "text");
+        theRequest.addParameter("myOutputText", "text");
 
-        theRequest.addParameter("my_textarea", "TextAreaRenderer");
+        theRequest.addParameter("myTextarea", "TextAreaRenderer");
 
-        theRequest.addParameter("my_graphic_image", "graphicimage");
+        theRequest.addParameter("myGraphicImage", "graphicimage");
 
-        theRequest.addParameter("my_output_errors", "outputerrors");
+        theRequest.addParameter("myOutputErrors", "outputerrors");
 
-        theRequest.addParameter("my_output_message", "outputmessage");
+        theRequest.addParameter("myOutputMessage", "outputmessage");
     } 
 
     public void testRenderers() {
@@ -196,7 +196,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("Testing CheckboxRenderer");
         UISelectBoolean selectBoolean = new UISelectBooleanBase();
         selectBoolean.setValue(null);
-        selectBoolean.setId("my_checkbox");
+        selectBoolean.setId("myCheckbox");
         root.getChildren().add(selectBoolean);
              
         CheckboxRenderer checkboxRenderer = new CheckboxRenderer();
@@ -216,7 +216,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
 
         System.out.println("    Testing decode method - parameter (on)");
-        selectBoolean.setId("my_checkbox_on");
+        selectBoolean.setId("myCheckboxOn");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean); 
         val = (Boolean)selectBoolean.getValue();
@@ -226,7 +226,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
 
         System.out.println("    Testing decode method - parameter (yes)");
-        selectBoolean.setId("my_checkbox_yes");
+        selectBoolean.setId("myCheckboxYes");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
         val = (Boolean)selectBoolean.getValue();
@@ -235,7 +235,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
 
         System.out.println("    Testing decode method - parameter (true)");
-        selectBoolean.setId("my_checkbox_true");
+        selectBoolean.setId("myCheckboxTrue");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
         val = (Boolean)selectBoolean.getValue();
@@ -244,7 +244,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
         
         System.out.println("    Testing decode method - parameter (true)");
-        selectBoolean.setId("my_checkbox_true");
+        selectBoolean.setId("myCheckboxTrue");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
         val = (Boolean)selectBoolean.getValue();
@@ -253,7 +253,7 @@ public class TestRenderers_2 extends JspFacesTestCase
          
         // test decode method with checkbox disabled.
         System.out.println("    Testing decode method - parameter (yes)");
-        selectBoolean.setId("mycheckbox_disabled");
+        selectBoolean.setId("mycheckboxDisabled");
         selectBoolean.setAttribute("disabled", "true");
         selectBoolean.setValue(Boolean.TRUE);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
@@ -264,7 +264,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         
         // test encode method
         System.out.println("    Testing encode method - rendering checked");
-        selectBoolean.setId("my_checkbox");
+        selectBoolean.setId("myCheckbox");
         selectBoolean.setSelected(true);
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
@@ -285,7 +285,7 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testHyperlinkRenderer(UIComponent root) throws IOException {
         System.out.println("Testing HyperlinkRenderer");
         UICommand command = new UICommandBase();
-        command.setId("my_command");
+        command.setId("myCommand");
         command.setRendererType("Hyperlink");
         root.getChildren().add(command);
 
@@ -312,7 +312,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         UISelectOne selectOne = new UISelectOneBase();
 	UISelectItems uiSelectItems = new UISelectItemsBase();
         selectOne.setValue(null);
-        selectOne.setId("my_listbox");
+        selectOne.setId("myListbox");
         SelectItem item1 = new SelectItem(new Long(100), "Long1", null);
         SelectItem item2 = new SelectItem(new Long(101), "Long2", null);
         SelectItem item3 = new SelectItem(new Long(102), "Long3", null);
@@ -335,7 +335,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         // test encode method
         System.out.println("    Testing encode method... ");
-        //selectOne.setId("my_listbox");
+        //selectOne.setId("myListbox");
         listboxRenderer.encodeBegin(getFacesContext(), selectOne);
         listboxRenderer.encodeEnd(getFacesContext(), selectOne);
         getFacesContext().getResponseWriter().writeText("\n", null);
@@ -345,7 +345,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("Testing SecretRenderer");
         UIInput textEntry = new UIInputBase();
         textEntry.setValue(null);
-        textEntry.setId("my_secret");
+        textEntry.setId("mySecret");
         root.getChildren().add(textEntry);
 
         SecretRenderer secretRenderer = new SecretRenderer();
@@ -368,7 +368,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("Testing InputTextRenderer");
         UIInput text = new UIInputBase();
         text.setValue(null);
-        text.setId("my_input_text");
+        text.setId("myInputText");
         root.getChildren().add(text);
 
         TextRenderer textRenderer = new TextRenderer();
@@ -390,7 +390,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("Testing OutputTextRenderer");
         UIOutput text = new UIOutputBase();
         text.setValue(null);
-        text.setId("my_output_text");
+        text.setId("myOutputText");
         root.getChildren().add(text);
 
         TextRenderer textRenderer = new TextRenderer();
@@ -411,7 +411,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("Testing GraphicImageRenderer");
         UIGraphic img = new UIGraphicBase();
         img.setURL("/nonModelReferenceImage.gif");
-        img.setId("my_graphic_image");
+        img.setId("myGraphicImage");
         root.getChildren().add(img);
 
         ImageRenderer imageRenderer = new ImageRenderer();
@@ -444,7 +444,7 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testOutputErrorsRenderer(UIComponent root) throws IOException {
         System.out.println("Testing OutputErrorsRenderer");
         UIOutput output = new UIOutputBase();
-        output.setId("my_output_errors");
+        output.setId("myOutputErrors");
         root.getChildren().add(output);
         
         ResponseWriter originalWriter = getFacesContext().getResponseWriter();
@@ -512,14 +512,14 @@ public class TestRenderers_2 extends JspFacesTestCase
         htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
         getFacesContext().setResponseWriter(htmlWriter);
         UIInput input = new UIInputBase();
-        input.setId("error_input");
+        input.setId("errorInput");
         root.getChildren().add(input);
         root.getChildren().remove(output);
         input.getChildren().add(output);
         getFacesContext().addMessage(input, 
             new MessageImpl(1, "error message summary_1", "error message detail_1"));
                 
-        output.setAttribute("for", "error_input");
+        output.setAttribute("for", "errorInput");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
         
@@ -540,7 +540,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         input.getChildren().remove(output);
         root.getChildren().add(output);
         UIInput input1 = new UIInputBase();         
-        input1.setId("error_input1");        
+        input1.setId("errorInput1");        
         UIInput anon1 = new UIInputBase();
         anon1.setId("anon1");        
         output.getChildren().add(anon1);
@@ -552,7 +552,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().addMessage(input1,
             new MessageImpl(1, "error message summary_2", "error message detail_2"));
                 
-        output.setAttribute("for", "error_input1");
+        output.setAttribute("for", "errorInput1");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
 
@@ -574,7 +574,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
         getFacesContext().setResponseWriter(htmlWriter);
         UIInput input2 = new UIInputBase();
-        input2.setId("error_input2");   
+        input2.setId("errorInput2");   
         UIInput anon3 = new UIInputBase();
         anon3.setId("anon3");
         UIInput anon4 = new UIInputBase();   
@@ -595,7 +595,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().addMessage(input2,
                 new MessageImpl(1, "error message summary_3", "error message detail_3"));
 
-        output.setAttribute("for", "error_input2");
+        output.setAttribute("for", "errorInput2");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
 
@@ -624,7 +624,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         UIForm form = new UIFormBase();
         form.setId("form");
         UIInput input3 = new UIInputBase();
-        input3.setId("error_input3");
+        input3.setId("errorInput3");
         anon1 = new UIInputBase();
         anon1.setId("anon1");        
         output.getChildren().add(anon1);
@@ -633,7 +633,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().addMessage(input3,
             new MessageImpl(1, "error message summary_4", "error message detail_4"));
         
-        output.setAttribute("for", "error_input3");
+        output.setAttribute("for", "errorInput3");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
 
@@ -661,7 +661,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         UIForm form2 = new UIFormBase();
         form2.setId("form2");
         UIInput input4 = new UIInputBase();
-        input4.setId("error_input4");
+        input4.setId("errorInput4");
         UIOutput anonout1 = new UIOutputBase();
         anonout1.setId("anonout1");
         getFacesContext().getViewRoot().getChildren().add(form1);
@@ -671,7 +671,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().addMessage(input4,
             new MessageImpl(1, "error message summary_5", "error message detail_5"));
         
-        output.setAttribute("for", "error_input4");
+        output.setAttribute("for", "errorInput4");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
 
@@ -698,7 +698,7 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testOutputMessageRenderer(UIComponent root) throws IOException {
         System.out.println("Testing OutputMessageRenderer");
         UIOutput output = new UIOutputBase();
-        output.setId("my_output_message");
+        output.setId("myOutputMessage");
         output.setValue("My name is {0} {1}");
         UIParameter param1, param2 = null;
         param1 = new UIParameterBase();
@@ -725,7 +725,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("Testing TextAreaRenderer");
         UIInput textEntry = new UIInputBase();
         textEntry.setValue(null);
-        textEntry.setId("my_textarea");
+        textEntry.setId("myTextarea");
         root.getChildren().add(textEntry);
 
         TextAreaRenderer textAreaRenderer = new TextAreaRenderer();
@@ -744,4 +744,4 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().getResponseWriter().writeText("\n", null);
     }       
     
-} // end of class TestRenderers2_
+} // end of class TestRenderers_2

@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.20 2003/08/26 16:08:10 rkitain Exp $
+ * $Id: TestRenderers_3.java,v 1.21 2003/08/27 18:52:09 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -54,7 +54,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.20 2003/08/26 16:08:10 rkitain Exp $
+ * @version $Id: TestRenderers_3.java,v 1.21 2003/08/27 18:52:09 eburns Exp $
  * 
  *
  */
@@ -122,13 +122,13 @@ public class TestRenderers_3 extends JspFacesTestCase {
     }
 
     public void beginRenderers(WebRequest theRequest) {
-        theRequest.addParameter("my_menu", "Blue");
-        theRequest.addParameter("my_listbox", "Blue");
-        theRequest.addParameter("my_checkboxlist", "Blue");
-        theRequest.addParameter("my_onemenu", "Blue");
+        theRequest.addParameter("myMenu", "Blue");
+        theRequest.addParameter("myListbox", "Blue");
+        theRequest.addParameter("myCheckboxlist", "Blue");
+        theRequest.addParameter("myOnemenu", "Blue");
         // parameters to test hidden renderer
-        theRequest.addParameter("my_number_hidden", NUMBER_STR);
-        theRequest.addParameter("my_input_date_hidden", DATE_STR);
+        theRequest.addParameter("myNumberHidden", NUMBER_STR);
+        theRequest.addParameter("myInputDateHidden", DATE_STR);
 
     }
 
@@ -163,7 +163,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         UISelectMany selectMany = new UISelectManyBase();
         UISelectItems uiSelectItems = new UISelectItemsBase();
         selectMany.setValue(null);
-        selectMany.setId("my_listbox");
+        selectMany.setId("myListbox");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
@@ -201,7 +201,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         UISelectMany selectMany = new UISelectManyBase();
         UISelectItems uiSelectItems = new UISelectItemsBase();
         selectMany.setValue(null);
-        selectMany.setId("my_checkboxlist");
+        selectMany.setId("myCheckboxlist");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
@@ -242,7 +242,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         UISelectMany selectMany = new UISelectManyBase();
         UISelectItems uiSelectItems = new UISelectItemsBase();
         selectMany.setValue(null);
-        selectMany.setId("my_menu");
+        selectMany.setId("myMenu");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
@@ -279,7 +279,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         UISelectOne selectOne = new UISelectOneBase();
         UISelectItems uiSelectItems = new UISelectItemsBase();
         selectOne.setValue(null);
-        selectOne.setId("my_onemenu");
+        selectOne.setId("myOnemenu");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
@@ -313,7 +313,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         System.out.println("Testing Input_DateRenderer");
         UIInput input1 = new UIInputBase();
         input1.setValue(null);
-        input1.setId("my_input_date_hidden");
+        input1.setId("myInputDateHidden");
         Converter converter = application.createConverter("DateTime");
         input1.setConverter(converter);
 	input1.setAttribute("dateStyle", "medium");
@@ -341,7 +341,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         // test hidden renderer with converter set to number
         UIInput input2 = new UIInputBase();
         input2.setValue(null);
-        input2.setId("my_number_hidden");
+        input2.setId("myNumberHidden");
         converter = application.createConverter("Number");
 	((NumberConverter)converter).setType("percent");
         input2.setConverter(converter);

@@ -46,7 +46,7 @@
                      summary="Grid with hardcoded data"
                      title="Grid with hardcoded data" >
 
-                     <h:panel_group id="form_header2">
+                     <h:panel_group id="formHeader2">
                         <h:output_text id="A2" value="Logon&nbsp;"/>
                         <h:output_text id="B2" value="Form"/>
                      </h:panel_group>
@@ -388,7 +388,7 @@
 
              <td>
 
-               <h:input_text id="input_date1" 
+               <h:input_text id="inputDate1" 
                                  value="Jan 12, 1952" 
                                  readonly="true"
                                  size="10" maxlength="20"
@@ -407,7 +407,7 @@
 
              <td>
 
-               <h:input_text id="input_date2" 
+               <h:input_text id="inputDate2" 
                                  value="Jan 12, 1952" 
                                  alt="input_date medium"
                                   title="input_date medium">
@@ -422,7 +422,7 @@
 
              <td>
 
-               <h:input_text id="input_date3" 
+               <h:input_text id="inputDate3" 
                                  value="01/12/1952" 
                                  alt="input_date short"
                                   title="input_date short">
@@ -438,7 +438,7 @@
 
              <td>
 
-               <h:input_text id="input_date4"  
+               <h:input_text id="inputDate4"  
                                  value="January 12, 1952" 
                                  size="20" maxlength="40"
                                  alt="input_date long"

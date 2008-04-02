@@ -1,5 +1,5 @@
 /*
- * $Id: TestGuessNumber.java,v 1.2 2003/08/26 00:05:33 rlubke Exp $
+ * $Id: TestGuessNumber.java,v 1.3 2003/08/27 18:52:41 eburns Exp $
  */
 
 /*
@@ -18,6 +18,8 @@ import com.sun.faces.demotest.HtmlUnitTestCase;
 
 import java.util.Iterator;
 import java.util.List;
+
+import javax.faces.component.UIComponent;
 
 public class TestGuessNumber extends HtmlUnitTestCase {
 
@@ -39,7 +41,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             for (Iterator iter = greetingPage.getAllHtmlChildElements(); iter.hasNext();) {
                 HtmlElement element = (HtmlElement) iter.next();
                 if (element.getTagName().equalsIgnoreCase("img")) {
-                    assertTrue(element.getAttributeValue("id").equals("helloForm.wave_img"));                    
+                    assertTrue(element.getAttributeValue("id").equals("helloForm" + UIComponent.SEPARATOR_CHAR + "waveImg"));                    
                     assertTrue(stripJsessionInfo(element.getAttributeValue("src")).equals("/jsf-guessNumber/wave.med.gif"));
                 }
             }    
@@ -53,13 +55,13 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             assertTrue(form.getIdAttribute().equals("helloForm"));
             assertTrue(stripJsessionInfo(form.getActionAttribute()).equals("/jsf-guessNumber/faces/greeting.jsp"));
             
-            HtmlTextInput input = (HtmlTextInput) form.getInputByName("helloForm.userNo");
+            HtmlTextInput input = (HtmlTextInput) form.getInputByName("helloForm" + UIComponent.SEPARATOR_CHAR + "userNo");
             assertTrue(input != null);
             
             input.setValueAttribute(Integer.toString(i));
             
             // "click" the submit button to send our guess
-            HtmlPage resultPage = (HtmlPage) form.submit("helloForm.submit");
+            HtmlPage resultPage = (HtmlPage) form.submit("helloForm" + UIComponent.SEPARATOR_CHAR + "submit");
             assertTrue(resultPage != null); 
             
             assertTrue(resultPage.getTitleText().equals("Guess The Number"));
@@ -78,7 +80,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
                         break;
                     }
                 } else if (element.getTagName().equalsIgnoreCase("img")) {
-                    assertTrue(element.getAttributeValue("id").equals("responseForm.wave_img"));
+                    assertTrue(element.getAttributeValue("id").equals("responseForm" + UIComponent.SEPARATOR_CHAR + "waveImg"));
                     assertTrue(stripJsessionInfo(element.getAttributeValue("src")).equals("/jsf-guessNumber/wave.med.gif"));
                 }
             } 
@@ -94,7 +96,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             assertTrue(back.getIdAttribute().equals("responseForm"));
             assertTrue(stripJsessionInfo(back.getActionAttribute()).equals("/jsf-guessNumber/faces/response.jsp"));
 
-            greetingPage = (HtmlPage) back.submit("responseForm.back");
+            greetingPage = (HtmlPage) back.submit("responseForm" + UIComponent.SEPARATOR_CHAR + "back");
             assertTrue(greetingPage != null);            
         }
         // ensure that there was only one correct guess through the progession 
@@ -111,7 +113,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         HtmlForm guessForm = (HtmlForm) ((List) greetingPage.getAllForms()).get(0);
         assertTrue(guessForm != null);              
         
-        HtmlPage resultPage = (HtmlPage) guessForm.submit("helloForm.submit");
+        HtmlPage resultPage = (HtmlPage) guessForm.submit("helloForm" + UIComponent.SEPARATOR_CHAR + "submit");
         assertTrue(resultPage != null);
         
         for (Iterator iter = resultPage.getAllHtmlChildElements(); iter.hasNext(); ) {
@@ -135,12 +137,12 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         HtmlForm guessForm = (HtmlForm) ((List) greetingPage.getAllForms()).get(0);
         assertTrue(guessForm != null);
         
-        HtmlTextInput input = (HtmlTextInput) guessForm.getInputByName("helloForm.userNo");
+        HtmlTextInput input = (HtmlTextInput) guessForm.getInputByName("helloForm" + UIComponent.SEPARATOR_CHAR + "userNo");
         assertTrue(input != null);
 
         input.setValueAttribute(Integer.toString(-1));
         
-        HtmlPage failed = (HtmlPage) guessForm.submit("helloForm.submit");
+        HtmlPage failed = (HtmlPage) guessForm.submit("helloForm" + UIComponent.SEPARATOR_CHAR + "submit");
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
         for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();) {
@@ -154,12 +156,12 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         guessForm = (HtmlForm) ((List) failed.getAllForms()).get(0);
         assertTrue(guessForm != null);
         
-        input = (HtmlTextInput) guessForm.getInputByName("helloForm.userNo");
+        input = (HtmlTextInput) guessForm.getInputByName("helloForm" + UIComponent.SEPARATOR_CHAR + "userNo");
         assertTrue(input != null);
 
         input.setValueAttribute(Integer.toString(11));
         
-        failed = (HtmlPage) guessForm.submit("helloForm.submit");
+        failed = (HtmlPage) guessForm.submit("helloForm" + UIComponent.SEPARATOR_CHAR + "submit");
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
         for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();) {

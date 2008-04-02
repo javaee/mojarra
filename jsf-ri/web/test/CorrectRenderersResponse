@@ -6,9 +6,9 @@
 </form>
 <table border="0">
 	<tr>
-<td><input type="radio" name="radio_renderer" value="One"> One</td>
-<td><input type="radio" checked name="radio_renderer" value="Two"> Two</td>
-<td><input type="radio" name="radio_renderer" value="Three"> Three</td>
+<td><input type="radio" name="radioRenderer" value="One"> One</td>
+<td><input type="radio" checked name="radioRenderer" value="Two"> Two</td>
+<td><input type="radio" name="radioRenderer" value="Three"> Three</td>
 	</tr>
 </table>
 <input type="image" src="duke.gif" name="imageButton">

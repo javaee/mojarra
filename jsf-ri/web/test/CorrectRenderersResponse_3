@@ -1,21 +1,21 @@
-<select name="my_menu" multiple size="1">	<option value="Red">Red</option>
+<select name="myMenu" multiple size="1">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </select>
-<select name="my_listbox" multiple size="4">	<option value="Red">Red</option>
+<select name="myListbox" multiple size="4">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </select>
 
-<label for="id0">Red<input name="my_checkboxlist" id="id0" value="Red" type="checkbox"></label>
-<label for="id0">Blue<input name="my_checkboxlist" id="id0" value="Blue" type="checkbox"  checked></label>
-<label for="id0">Green<input name="my_checkboxlist" id="id0" value="Green" type="checkbox"></label>
-<label for="id0">Yellow<input name="my_checkboxlist" id="id0" value="Yellow" type="checkbox"></label>
-<select name="my_onemenu" size="1">	<option value="Red">Red</option>
+<label for="id0">Red<input name="myCheckboxlist" id="id0" value="Red" type="checkbox"></label>
+<label for="id0">Blue<input name="myCheckboxlist" id="id0" value="Blue" type="checkbox"  checked></label>
+<label for="id0">Green<input name="myCheckboxlist" id="id0" value="Green" type="checkbox"></label>
+<label for="id0">Yellow<input name="myCheckboxlist" id="id0" value="Yellow" type="checkbox"></label>
+<select name="myOnemenu" size="1">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </select>
-<input type="hidden" name="my_input_date_hidden" value="Jan 12, 1952"><input type="hidden" name="my_number_hidden" value="47%">
+<input type="hidden" name="myInputDateHidden" value="Jan 12, 1952"><input type="hidden" name="myNumberHidden" value="47%">
