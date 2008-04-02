@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.30 2006/08/25 09:50:15 tony_robertson Exp $
+ * $Id: FactoryFinder.java,v 1.31 2007/01/29 07:18:01 rlubke Exp $
  */
 
 /*
@@ -179,14 +179,15 @@ public final class FactoryFinder {
      *
      * </ol>
      */
-    private static Map<ClassLoader,Map<String,Object>> applicationMaps = new HashMap<ClassLoader,Map<String,Object>>();
+    private static final Map<ClassLoader,Map<String,Object>> applicationMaps =
+         new HashMap<ClassLoader,Map<String,Object>>();
 
 
     /**
      * <p>The set of JavaServer Faces factory classes for which the factory
      * discovery mechanism is supported.</p>
      */
-    private static String factoryNames[] = {
+    private static String[] factoryNames = {
         APPLICATION_FACTORY,
         FACES_CONTEXT_FACTORY,
         LIFECYCLE_FACTORY,

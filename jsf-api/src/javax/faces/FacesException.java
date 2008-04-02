@@ -1,5 +1,5 @@
 /*
- * $Id: FacesException.java,v 1.14 2005/08/22 22:07:49 ofung Exp $
+ * $Id: FacesException.java,v 1.15 2007/01/29 07:18:02 rlubke Exp $
  */
 
 /*
@@ -73,7 +73,7 @@ public class FacesException extends RuntimeException {
      */
     public FacesException(Throwable cause) {
 
-        super(cause == null ? (String) null : cause.toString());
+        super(cause == null ? null : cause.toString());
         this.cause = cause;
 
     }
