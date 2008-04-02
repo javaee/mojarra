@@ -93,6 +93,7 @@
         <attribute name="context-path"/>
         <attribute name="demo-name"/>
         <attribute name="demo-war"/>
+        <attribute name="tests"/> 
         <sequential>
             <undeploy.artifact artifact="@{demo-war}"
                                appName="@{demo-name}"/>
@@ -103,7 +104,7 @@
                        test-results-dir="${test.results.dir}">
                 <tests>
                     <fileset dir="test/tests">
-                        <include name="**/@{demo-name}/**Test*.java"/>
+                        <include name="**/@{tests}/**Test*.java"/>
                     </fileset>
                 </tests>
             </jsf.junit>
@@ -135,20 +136,25 @@
         <mkdir dir="${test.results.dir}"/>
 
         <run-tests demo-war="${components.war}" 
-                   demo-name="components"
+                   demo-name="jsf-components"
+                   tests="components"
                    context-path="${components.context.path}"/>
         
          <run-tests demo-war="${guessNumber.war}" 
-                   demo-name="guessNumber"
+                   demo-name="jsf-guessNumber"
+                   tests="guessNumber"
                    context-path="${guessNumber.context.path}"/>
         
+        <!-- Need to reevaluate how to do this since
+             the single test is against both WARs
          <run-tests demo-war="${mapping-prefix.war}" 
                    demo-name="mapping-prefix"
                    context-path="${mapping-prefix.context.path}"/>
         
          <run-tests demo-war="${mapping-extension.war}" 
                    demo-name="mapping-extension"
-                   context-path="${mapping-extension.context.path}"/>       
+                   context-path="${mapping-extension.context.path}"/>
+        -->
 
         <copy todir="${build}/classes">
             <fileset dir="${basedir}/carstore/src/java">
@@ -157,7 +163,8 @@
         </copy>
         
         <run-tests demo-war="${cardemo.war}" 
-                   demo-name="cardemo"
+                   demo-name="jsf-cardemo"
+                   tests="cardemo"
                    context-path="${cardemo.context.path}"/> 
     </target>   
 
