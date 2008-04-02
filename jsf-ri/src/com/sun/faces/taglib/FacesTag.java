@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.42 2003/08/19 19:31:25 rlubke Exp $
+ * $Id: FacesTag.java,v 1.43 2003/08/21 22:33:43 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.42 2003/08/19 19:31:25 rlubke Exp $
+ * @version $Id: FacesTag.java,v 1.43 2003/08/21 22:33:43 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,7 +125,11 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     protected String shape = null;
     protected String size = null;
     protected String src = null;
-    protected String style = null;
+    protected String style = null; 
+    
+    // PENDING (rlubke) The styleClass attribute should be handled once
+    //         finallized
+    
     protected String tabindex = null;
     protected String target = null;
     protected String title = null;
@@ -985,6 +989,9 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     {
         style = newStyle;
     }
+    
+    // PENDING (rlubke) The styleClass attribute should be handled once
+    //                  finalizied
 
     // Position in tabbing order - For "A" (Hyperlink)/
     // BUTTON/INPUT/SELECT/TEXTAREA HTML elements.
@@ -1328,6 +1335,10 @@ protected void overrideProperties(UIComponent component)
     if (null != getStyle()) {
 	component.setAttribute("style", getStyle());
     }
+    
+    // PENDING (rlubke) The styleClass attribute should be handled once
+    //         finalized
+    
     if (null != getDateStyle()) {
 	component.setAttribute("dateStyle", getDateStyle());
     }
