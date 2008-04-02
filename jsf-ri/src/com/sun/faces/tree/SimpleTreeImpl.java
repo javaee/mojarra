@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleTreeImpl.java,v 1.7 2003/02/20 22:49:38 ofung Exp $
+ * $Id: SimpleTreeImpl.java,v 1.8 2003/04/17 20:13:57 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SimpleTreeImpl.java,v 1.7 2003/02/20 22:49:38 ofung Exp $
+ * @version $Id: SimpleTreeImpl.java,v 1.8 2003/04/17 20:13:57 eburns Exp $
  * 
  * @see	javax.faces.tree.Tree
  *
@@ -123,7 +123,6 @@ public String getRenderKitId()
 
 public void setRenderKitId(String newRenderKitId)
 {
-    ParameterCheck.nonNull(newRenderKitId);
     renderKitId = newRenderKitId;
 }
 
