@@ -329,6 +329,11 @@
         <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
+        <name>actionListenerRef</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      <attribute>
         <name>immediate</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
@@ -499,6 +504,11 @@
       </attribute>
       <attribute>
         <name>actionRef</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      <attribute>
+        <name>actionListenerRef</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
       </attribute>
@@ -678,6 +688,16 @@
       </attribute>
     <attribute>
       <name>valueRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>validateRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListenerRef</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
@@ -866,6 +886,16 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+      <name>validateRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListenerRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>converter</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
@@ -1045,6 +1075,16 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+      <name>validateRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListenerRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>converter</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
@@ -1189,6 +1229,16 @@
     </attribute>
     <attribute>
       <name>value</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>validateRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListenerRef</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
@@ -1829,6 +1879,16 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+      <name>validateRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListenerRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
       <name>rendered</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
@@ -2003,6 +2063,16 @@
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
       </attribute>
+    <attribute>
+      <name>validateRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListenerRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
       <attribute>
       <name>rendered</name>
       <required>false</required>
@@ -2180,6 +2250,16 @@
       </attribute>
     <attribute>
       <name>valueRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>validateRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListenerRef</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
@@ -2578,6 +2658,16 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+      <name>validateRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListenerRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
       <name>dir</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
@@ -2761,6 +2851,16 @@
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+      <name>validateRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListenerRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>converter</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
@@ -2890,6 +2990,16 @@
     </attribute>
     <attribute>
       <name>value</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>validateRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListenerRef</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
@@ -3054,6 +3164,16 @@
       </attribute>
       <attribute>
       <name>rendered</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>validateRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListenerRef</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>

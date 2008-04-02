@@ -28,7 +28,6 @@
   <!-- Initial application element with partial values -->
   <application>
     <action-listener>com.sun.faces.application.ActionListenerImpl</action-listener>
-    <message-bundle>com.sun.faces.ImplMessages</message-bundle>
     <variable-resolver>com.sun.faces.el.VariableResolverImpl</variable-resolver>
   </application>
 

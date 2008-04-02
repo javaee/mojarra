@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.34 2003/10/24 17:34:21 eburns Exp $
+ $Id: build-tests.xml,v 1.35 2003/10/31 18:42:22 eburns Exp $
 -->
 
 
@@ -86,7 +86,8 @@
                 test.phases,
                 test.subview,
                 test.jsp,
-                test.path
+                test.path,
+                test.methodRef
                "/>
 
     <target name="test.duplicateIds"
@@ -229,6 +230,42 @@
 
     </target>
 
+  <target name="test.methodRef"
+   description="Test Method References">
+
+    <junit printsummary="yes" fork="yes"
+          haltonfailure="yes" haltonerror="yes">
+
+      <!-- uncomment the below line to enable attaching a debugger -->
+      <jvmarg line="${debug.jvm.args}"/>
+
+      <classpath refid="html.classpath"/>
+      <formatter  type="plain"      usefile="false"/>
+      <sysproperty key="host"         value="${host}"/>
+      <sysproperty key="port"         value="${port}"/>
+      <sysproperty key="context.path" value="${context.path}"/>
+
+      <!-- Uncomment the following for wire-level debugging -->
+      <!-- NOTE:  this requires a hacked htmlunit-1.2.3.jar -->
+<!--
+      <sysproperty key="org.apache.commons.logging.Log"
+                 value="org.apache.commons.logging.impl.SimpleLog"/>
+      <sysproperty key="org.apache.commons.logging.simplelog.log.httpclient.wire"
+                 value="debug"/>
+-->
+<!--
+      <sysproperty key="org.apache.commons.logging.simplelog.showdatetime"
+                 value="true"/>
+-->
+
+      <batchtest>
+        <fileset    dir="${basedir}/build/WEB-INF/classes"
+               includes="com/sun/faces/methodref/*TestCase.class"/>
+      </batchtest>
+
+    </junit>
+
+  </target>
 
   <target name="test.managed"
    description="Test managed bean creation facility">
