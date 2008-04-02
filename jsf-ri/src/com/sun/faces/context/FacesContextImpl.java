@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.61 2003/12/17 15:13:35 rkitain Exp $
+ * $Id: FacesContextImpl.java,v 1.62 2003/12/17 23:26:02 eburns Exp $
  */
 
 /*
@@ -219,7 +219,7 @@ public class FacesContextImpl extends FacesContext
         }
         RenderKitFactory rkFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        return (rkFactory.getRenderKit(renderKitId));
+        return (rkFactory.getRenderKit(this, renderKitId));
     }
 
     public ResponseStream getResponseStream() {

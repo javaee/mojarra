@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.49 2003/12/17 15:10:38 rkitain Exp $
+ * $Id: UIInput.java,v 1.50 2003/12/17 23:25:51 eburns Exp $
  */
 
 /*
@@ -582,11 +582,8 @@ public class UIInput extends UIOutput {
      */
     public ValueChangeListener[] getValueChangeListeners() {
 
-        FacesListener fl[] = getFacesListeners(ValueChangeListener.class);
-        ValueChangeListener vcl[] = new ValueChangeListener[fl.length];
-        for (int i = 0; i < fl.length; i++) {
-            vcl[i] = (ValueChangeListener) fl[i];
-        }
+        ValueChangeListener vcl[] = (ValueChangeListener [])
+	    getFacesListeners(ValueChangeListener.class);
         return (vcl);
 
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.85 2003/12/17 15:10:37 rkitain Exp $
+ * $Id: UIComponentBase.java,v 1.86 2003/12/17 23:25:50 eburns Exp $
  */
 
 /*
@@ -1132,14 +1132,16 @@ public abstract class UIComponentBase extends UIComponent {
 
         List results = new ArrayList();
 	Iterator items = listeners.iterator();
-            while (items.hasNext()) {
-                FacesListener item = (FacesListener) items.next();
-                if (clazz.isAssignableFrom(item.getClass())) {
-                    results.add(item);
-                }
-            }
+	while (items.hasNext()) {
+	    FacesListener item = (FacesListener) items.next();
+	    if (clazz.isAssignableFrom(item.getClass())) {
+		results.add(item);
+	    }
+	}
+	
         return ((FacesListener[]) results.toArray
-                (new FacesListener[results.size()]));
+                ((Object []) java.lang.reflect.Array.newInstance(clazz, 
+								 results.size())));
 
     }
 
@@ -1433,7 +1435,7 @@ public abstract class UIComponentBase extends UIComponent {
             RenderKitFactory rkFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
             RenderKit renderKit = rkFactory.getRenderKit
-                (context.getViewRoot().getRenderKitId());
+                (context, context.getViewRoot().getRenderKitId());
             return (renderKit.getRenderer(rendererType));
         } else {
             return (null);

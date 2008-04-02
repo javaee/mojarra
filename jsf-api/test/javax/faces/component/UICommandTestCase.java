@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.20 2003/12/17 15:11:11 rkitain Exp $
+ * $Id: UICommandTestCase.java,v 1.21 2003/12/17 23:25:56 eburns Exp $
  */
 
 /*
@@ -88,7 +88,8 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit =
-            renderKitFactory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
+            renderKitFactory.getRenderKit(facesContext, 
+					  RenderKitFactory.DEFAULT_RENDER_KIT);
         renderKit.addRenderer("Button", new ButtonRenderer());
         UIViewRoot root = new UIViewRoot();
         root.getChildren().add(component);
@@ -345,6 +346,24 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 	assertNull(test.getValueBinding("value"));
 	assertNull(test.getValue());
 
+    }
+
+    public void testGetActionListeners() throws Exception {
+	UICommand command = (UICommand) component;
+	UIViewRoot root = new UIViewRoot();
+	root.getChildren().add(command);
+	
+	TestActionListener 
+	    ta1 = new TestActionListener("ta1"),
+	    ta2 = new TestActionListener("ta2");
+
+	command.addActionListener(ta1);
+	command.addActionListener(ta2);
+	ActionListener [] listeners = (ActionListener [])
+	    command.getActionListeners();
+	assertEquals(3, listeners.length);
+	TestActionListener [] taListeners = (TestActionListener [])
+	    command.getFacesListeners(TestActionListener.class);
     }
 
 

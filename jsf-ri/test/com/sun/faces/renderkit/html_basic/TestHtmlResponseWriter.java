@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.5 2003/12/17 15:15:37 rkitain Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.6 2003/12/17 23:26:09 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.5 2003/12/17 15:15:37 rkitain Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.6 2003/12/17 23:26:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -83,7 +83,8 @@ import com.sun.faces.util.Util;
 	super.setUp();
         RenderKitFactory renderKitFactory = (RenderKitFactory)
 	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-	renderKit = renderKitFactory.getRenderKit("DEFAULT");
+	renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+						  "DEFAULT");
 	sw = new StringWriter();
         writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
     }

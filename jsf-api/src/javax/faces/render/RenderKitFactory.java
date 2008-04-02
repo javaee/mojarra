@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.14 2003/09/29 23:39:53 craigmcc Exp $
+ * $Id: RenderKitFactory.java,v 1.15 2003/12/17 23:25:53 eburns Exp $
  */
 
 /*
@@ -60,40 +60,26 @@ public abstract class RenderKitFactory {
 
 
     /**
-     * <p>Return the {@link RenderKit} instance most recently registered for
-     * the specified render kit identifier, if any; otherwise, return
-     * <code>null</code>.  The set of available render kit identifiers is
-     * available via the <code>getRenderKitIds()</code> method.</p>
+     * <p>Return a {@link RenderKit} instance for the specified render
+     * kit identifier, possibly customized based on dynamic
+     * characteristics of the specified {@link FacesContext}, if
+     * non-<code>null</code>.  If there is no registered {@link
+     * RenderKit} for the specified identifier, return
+     * <code>null</code>.  The set of available render kit identifiers
+     * is available via the <code>getRenderKitIds()</code> method.</p>
      *
+     * @param context FacesContext for the request currently being
+     * processed, or <code>null</code> if none is available.
      * @param renderKitId Render kit identifier of the requested
      *  {@link RenderKit} instance
-     *
-     * @exception NullPointerException if <code>renderKitId</code>
-     *  is <code>null</code>
-     */
-    public abstract RenderKit getRenderKit(String renderKitId);
-
-
-    /**
-     * <p>Return a {@link RenderKit} instance for the
-     * specified render kit identifier, possibly customized based on
-     * dynamic characteristics of the specified {@link FacesContext}.
-     * If there is no registered {@link RenderKit} for the specified
-     * identifier, return <code>null</code>.  The set of available render
-     * kit identifiers is available via the <code>getRenderKitIds()</code>
-     * method.</p>
-     *
-     * @param renderKitId Render kit identifier of the requested
-     *  {@link RenderKit} instance
-     * @param context FacesContext for the request currently being processed
      *
      * @exception IllegalArgumentException if no {@link RenderKit} instance
      *  can be returned for the specified identifier
-     * @exception NullPointerException if <code>renderKitId</code>
-     *  or <code>context</code> is <code>null</code>
+     * @exception NullPointerException if <code>renderKitId</code> is
+     * <code>null</code>
      */
-    public abstract RenderKit getRenderKit(String renderKitId,
-                                           FacesContext context);
+    public abstract RenderKit getRenderKit(FacesContext context, 
+					   String renderKitId);
 
 
     /**

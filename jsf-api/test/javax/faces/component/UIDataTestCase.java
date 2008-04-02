@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.22 2003/12/17 15:11:12 rkitain Exp $
+ * $Id: UIDataTestCase.java,v 1.23 2003/12/17 23:25:57 eburns Exp $
  */
 
 /*
@@ -821,7 +821,8 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit =
-            renderKitFactory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
+            renderKitFactory.getRenderKit(facesContext,
+					  RenderKitFactory.DEFAULT_RENDER_KIT);
         renderKit.addRenderer("Button", new ButtonRenderer());
         renderKit.addRenderer("Table", new TableRenderer());
         renderKit.addRenderer("Text", new TextRenderer());

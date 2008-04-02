@@ -176,12 +176,11 @@ public class MapComponent extends UIComponentBase
     }
 
     public ActionListener[] getActionListeners() {
-        FacesListener fl[] = getFacesListeners(ActionListener.class);
-        ActionListener al[] = new ActionListener[fl.length];
-        for (int i = 0; i < fl.length; i++) {
-            al[i] = (ActionListener) fl[i];
-        }
+
+        ActionListener al[] = (ActionListener [])
+	    getFacesListeners(ActionListener.class);
         return (al);
+
     }
 
     public void removeActionListener(ActionListener listener) {

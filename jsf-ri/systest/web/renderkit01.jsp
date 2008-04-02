@@ -47,7 +47,7 @@
     //
     while (renderKitIds.hasNext()) {
         String renderKitId = (String)renderKitIds.next();
-	RenderKit rKit = renderKitFactory.getRenderKit(renderKitId);
+	RenderKit rKit = renderKitFactory.getRenderKit(null, renderKitId);
 	if (rKit == null) {
 	    out.println("/renderkit01.jsp FAILED - renderkit not found");
 	    return;

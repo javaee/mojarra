@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.13 2003/12/17 15:13:47 rkitain Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.14 2003/12/17 23:26:03 eburns Exp $
  */
 
 /*
@@ -64,17 +64,17 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         }
     }
 
-    public RenderKit getRenderKit(String renderKitId) {
+    public RenderKit getRenderKit(FacesContext context, String renderKitId) {
 
         if (renderKitId == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
-        RenderKit renderKit = null;
-        this.renderKitId = renderKitId;
-
+        //PENDING (rogerk) do something with FacesContext ...
+        //
         // If an instance already exists, return it.
         //
+	RenderKit renderKit = null;
+
         synchronized(renderKits) {
             if (renderKits.containsKey(renderKitId)) {
 		renderKit = (RenderKit) renderKits.get(renderKitId);
@@ -82,16 +82,6 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         }
 
         return renderKit;
-    }
-
-    public RenderKit getRenderKit(String renderKitId, FacesContext context) {
-
-        if (renderKitId == null || context == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        //PENDING (rogerk) do something with FacesContext ...
-        //
-        return getRenderKit(renderKitId);
     }
 
     public Iterator getRenderKitIds() {

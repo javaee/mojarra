@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.31 2003/12/17 15:11:07 rkitain Exp $
+ * $Id: UIComponentTag.java,v 1.32 2003/12/17 23:25:54 eburns Exp $
  */
 
 /*
@@ -867,7 +867,7 @@ public abstract class UIComponentTag implements Tag {
 		FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	    RenderKit renderKit = 
 		renderFactory.getRenderKit
-                (context.getViewRoot().getRenderKitId());
+                (context, context.getViewRoot().getRenderKitId());
 	    ServletRequest request = (ServletRequest)
 		context.getExternalContext().getRequest();
 	    ServletResponse response = (ServletResponse)

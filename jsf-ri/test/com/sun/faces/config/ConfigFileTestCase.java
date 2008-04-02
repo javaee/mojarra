@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.48 2003/12/17 15:15:09 rkitain Exp $
+ * $Id: ConfigFileTestCase.java,v 1.49 2003/12/17 23:26:06 eburns Exp $
  */
 
 /*
@@ -425,7 +425,8 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
         Iterator iter = renderKitFactory.getRenderKitIds();
 	assertTrue(iter.hasNext());
-	RenderKit renderKit = renderKitFactory.getRenderKit("DEFAULT");
+	RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+							    "DEFAULT");
 	assertTrue(renderKit != null);
 	for (int i=0; i<defaultRenderers.length; i++) {
 	    assertTrue(null != (renderKit.getRenderer(defaultRenderers[i])));

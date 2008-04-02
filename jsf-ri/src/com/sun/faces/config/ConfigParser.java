@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.47 2003/12/17 15:13:31 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.48 2003/12/17 23:26:01 eburns Exp $
  */
 
 /*
@@ -1089,7 +1089,7 @@ final class RenderKitRule extends Rule {
 	// create the renderkit.. Otherwise, if the renderkit exists,
 	// the renderers will be added to it.
 	//
-	RenderKit renderKit = renderKitFactory.getRenderKit(renderKitId);
+	RenderKit renderKit = renderKitFactory.getRenderKit(null, renderKitId);
 	if (renderKit == null) {
             String renderKitClass = cr.getRenderKitClass();
             try {

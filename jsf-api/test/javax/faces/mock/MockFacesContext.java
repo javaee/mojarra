@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.16 2003/12/17 15:11:25 rkitain Exp $
+ * $Id: MockFacesContext.java,v 1.17 2003/12/17 23:25:59 eburns Exp $
  */
 
 /*
@@ -132,7 +132,7 @@ public class MockFacesContext extends FacesContext {
         }
         RenderKitFactory rkFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        return (rkFactory.getRenderKit(renderKitId));
+        return (rkFactory.getRenderKit(this, renderKitId));
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.8 2003/12/17 15:15:34 rkitain Exp $
+ * $Id: TestRenderKitFactory.java,v 1.9 2003/12/17 23:26:08 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.8 2003/12/17 15:15:34 rkitain Exp $
+ * @version $Id: TestRenderKitFactory.java,v 1.9 2003/12/17 23:26:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -79,8 +79,10 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
         // 1. Verify "getRenderKit" returns the same RenderKit instance
         //    if called multiple times with the same identifier.
         //  
-        RenderKit renderKit1 = renderKitFactory.getRenderKit("DEFAULT");
-        RenderKit renderKit2 = renderKitFactory.getRenderKit("DEFAULT");
+        RenderKit renderKit1 = renderKitFactory.getRenderKit(getFacesContext(),
+							     "DEFAULT");
+        RenderKit renderKit2 = renderKitFactory.getRenderKit(getFacesContext(),
+							     "DEFAULT");
         assertTrue(renderKit1 == renderKit2);
 
         // 2. Verify "addRenderKit" adds instances.. /
@@ -91,14 +93,16 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
 	// Verify renderkit instance replaced with last identifier..
 	//
 	renderKitFactory.addRenderKit("BarBar", renderKit2);
-	RenderKit rkit = renderKitFactory.getRenderKit("BarBar");
+	RenderKit rkit = renderKitFactory.getRenderKit(getFacesContext(),
+						       "BarBar");
 	assertTrue(rkit != null);
 	assertTrue(rkit == renderKit2);
 
         // 3. Verify "getRenderKit" returns null if
         //    RenderKit not found for renderkitid...
         //
-        RenderKit renderKit4 = renderKitFactory.getRenderKit("Gamma");
+        RenderKit renderKit4 = renderKitFactory.getRenderKit(getFacesContext(),
+							     "Gamma");
 	assertTrue(renderKit4 == null);
     }
 
@@ -126,7 +130,8 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
         renderKitFactory = new RenderKitFactoryImpl();
         RenderKit rKit = null;
 
-        rKit = renderKitFactory.getRenderKit("DEFAULT");
+        rKit = renderKitFactory.getRenderKit(getFacesContext(),
+					     "DEFAULT");
 
 	// Verify NPE for "addRenderKit"
 	//
@@ -151,7 +156,7 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
 	//
         exceptionThrown = false;
         try {
-            rKit = renderKitFactory.getRenderKit(null);
+            rKit = renderKitFactory.getRenderKit(null, null);
         } catch(NullPointerException e2) {
             exceptionThrown = true;
         }
@@ -159,14 +164,7 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
 
         exceptionThrown = false;
         try {
-            rKit = renderKitFactory.getRenderKit(null, getFacesContext());
-        } catch(NullPointerException e3) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        exceptionThrown = false;
-        try {
-            rKit = renderKitFactory.getRenderKit("foo", null);
+            rKit = renderKitFactory.getRenderKit(getFacesContext(), null);
         } catch(NullPointerException e4) {
             exceptionThrown = true;
         }

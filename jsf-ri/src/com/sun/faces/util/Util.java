@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.116 2003/12/17 15:14:22 rkitain Exp $
+ * $Id: Util.java,v 1.117 2003/12/17 23:26:04 eburns Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.116 2003/12/17 15:14:22 rkitain Exp $ 
+ * @version $Id: Util.java,v 1.117 2003/12/17 23:26:04 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -477,7 +477,8 @@ private Util()
 	Util.doAssert(null != applicationFactory);
 
 	defaultRenderKit = 
-	    renderKitFactory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
+	    renderKitFactory.getRenderKit(null,
+					  RenderKitFactory.DEFAULT_RENDER_KIT);
 	if (defaultRenderKit == null) {
 	    // create default renderkit if doesn't exist
 	    //
@@ -1031,7 +1032,7 @@ private Util()
 	}
 	Util.doAssert(null != renderKitId);
 
-	renderKit = renderKitFactory.getRenderKit(renderKitId);
+	renderKit = renderKitFactory.getRenderKit(context, renderKitId);
 	Util.doAssert(null != renderKit);
 
 	result = renderKit.getResponseStateManager();

@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKitFactory.java,v 1.2 2003/09/02 03:13:01 eburns Exp $
+ * $Id: MockRenderKitFactory.java,v 1.3 2003/12/17 23:26:00 eburns Exp $
  */
 
 /*
@@ -44,22 +44,8 @@ public class MockRenderKitFactory extends RenderKitFactory {
     }
 
 
-    public RenderKit getRenderKit(String renderKitId) {
+    public RenderKit getRenderKit(FacesContext context, String renderKitId) {
         if (renderKitId == null) {
-            throw new NullPointerException();
-        }
-        synchronized (renderKits) {
-            RenderKit renderKit = (RenderKit) renderKits.get(renderKitId);
-            if (renderKit == null) {
-                throw new IllegalArgumentException(renderKitId);
-            }
-            return (renderKit);
-        }
-    }
-
-
-    public RenderKit getRenderKit(String renderKitId, FacesContext context) {
-        if ((renderKitId == null) || (context == null)) {
             throw new NullPointerException();
         }
         synchronized (renderKits) {

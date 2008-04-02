@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.16 2003/12/17 15:15:46 rkitain Exp $
+ * $Id: TestUtil.java,v 1.17 2003/12/17 23:26:10 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.16 2003/12/17 15:15:46 rkitain Exp $
+ * @version $Id: TestUtil.java,v 1.17 2003/12/17 23:26:10 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -82,7 +82,9 @@ public class TestUtil extends ServletFacesTestCase
 	try {
             RenderKitFactory renderKitFactory = (RenderKitFactory)
 	        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-	    RenderKit renderKit = renderKitFactory.getRenderKit("DEFAULT");
+	    RenderKit renderKit = 
+		renderKitFactory.getRenderKit(getFacesContext(),
+					      "DEFAULT");
 	    StringWriter sw = new StringWriter();
 	    ResponseWriter writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
@@ -113,7 +115,9 @@ public class TestUtil extends ServletFacesTestCase
 	try {
             RenderKitFactory renderKitFactory = (RenderKitFactory)
 	        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-	    RenderKit renderKit = renderKitFactory.getRenderKit("DEFAULT");
+	    RenderKit renderKit = 
+		renderKitFactory.getRenderKit(getFacesContext(),
+					      "DEFAULT");
 	    StringWriter sw = new StringWriter();
 	    ResponseWriter writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
@@ -162,7 +166,9 @@ public class TestUtil extends ServletFacesTestCase
 	try {
             RenderKitFactory renderKitFactory = (RenderKitFactory)
 	        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-	    RenderKit renderKit = renderKitFactory.getRenderKit("DEFAULT");
+	    RenderKit renderKit = 
+		renderKitFactory.getRenderKit(getFacesContext(),
+					      "DEFAULT");
 	    StringWriter sw = new StringWriter();
 	    ResponseWriter writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);

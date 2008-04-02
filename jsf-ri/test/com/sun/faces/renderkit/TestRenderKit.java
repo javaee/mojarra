@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.8 2003/12/17 15:15:34 rkitain Exp $
+ * $Id: TestRenderKit.java,v 1.9 2003/12/17 23:26:07 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.ByteArrayOutputStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.8 2003/12/17 15:15:34 rkitain Exp $
+ * @version $Id: TestRenderKit.java,v 1.9 2003/12/17 23:26:07 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -96,7 +96,8 @@ public static final String CORRECT_OUTPUT_FILENAME =
     public void testGetRenderer() {
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        renderKit = renderKitFactory.getRenderKit("DEFAULT");
+        renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+						  "DEFAULT");
 
         // 1. Verify "getRenderer()" returns a Renderer instance
         //  
@@ -126,7 +127,8 @@ public static final String CORRECT_OUTPUT_FILENAME =
 
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        renderKit = renderKitFactory.getRenderKit("DEFAULT");
+        renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+						  "DEFAULT");
 	// Test to see if addRenderer replaces the renderer if given
 	// the same rendererType.
 	//
@@ -158,7 +160,8 @@ public static final String CORRECT_OUTPUT_FILENAME =
     public void testCreateResponseStream() throws Exception {
         RenderKitFactory renderKitFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        renderKit = renderKitFactory.getRenderKit("DEFAULT");
+        renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+						  "DEFAULT");
         
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ResponseStream stream = renderKit.createResponseStream(out);

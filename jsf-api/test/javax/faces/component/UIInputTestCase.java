@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.23 2003/12/17 15:11:13 rkitain Exp $
+ * $Id: UIInputTestCase.java,v 1.24 2003/12/17 23:25:57 eburns Exp $
  */
 
 /*
@@ -445,6 +445,24 @@ public class UIInputTestCase extends UIOutputTestCase {
         root.processValidators(facesContext);
         assertEquals("/l1/l2/l3", TestInputValueChangeListener.trace());
 
+    }
+
+    public void testGetValueChangeListeners() throws Exception {
+	UIInput command = (UIInput) component;
+	UIViewRoot root = new UIViewRoot();
+	root.getChildren().add(command);
+	
+	TestValueChangeListener 
+	    ta1 = new TestValueChangeListener("ta1"),
+	    ta2 = new TestValueChangeListener("ta2");
+
+	command.addValueChangeListener(ta1);
+	command.addValueChangeListener(ta2);
+	ValueChangeListener [] listeners = (ValueChangeListener [])
+	    command.getValueChangeListeners();
+	assertEquals(2, listeners.length);
+	TestValueChangeListener [] taListeners = (TestValueChangeListener [])
+	    command.getFacesListeners(TestValueChangeListener.class);
     }
 
 
