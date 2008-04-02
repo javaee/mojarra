@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.4 2003/10/07 20:57:39 rlubke Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.5 2003/10/07 23:05:49 rkitain Exp $
  */
 
 /*
@@ -55,6 +55,8 @@ import org.xml.sax.Attributes;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
+import javax.faces.component.UIForm;
+import javax.faces.model.SelectItem;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -67,7 +69,7 @@ import java.util.Hashtable;
  * Copy of com.sun.faces.tree.BuildComponentFromTagImpl in order to remove
  * demo dependancy on RI.
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.4 2003/10/07 20:57:39 rlubke Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.5 2003/10/07 23:05:49 rkitain Exp $
  * 
  */
 
@@ -134,19 +136,19 @@ public class BuildComponentFromTagImpl extends Object
     {
         classMap = new Hashtable(30);
         // PENDING(edburns): read this from a persistent store
-        classMap.put("Form", "javax.faces.component.base.UIFormBase");
-        classMap.put("Command_Button", "javax.faces.component.base.UICommandBase");
-        classMap.put("Command_Hyperlink", "javax.faces.component.base.UICommandBase");
-        classMap.put("SelectBoolean_Checkbox", "javax.faces.component.base.UISelectBooleanBase");
-        classMap.put("RadioGroup", "javax.faces.component.base.UISelectOneBase");
+        classMap.put("Form", "javax.faces.component.UIForm");
+        classMap.put("Command_Button", "javax.faces.component.UICommand");
+        classMap.put("Command_Hyperlink", "javax.faces.component.UICommand");
+        classMap.put("SelectBoolean_Checkbox", "javax.faces.component.UISelectBoolean");
+        classMap.put("RadioGroup", "javax.faces.component.UISelectOne");
         classMap.put("SelectOne_Radio", PARENT_SELECTONE);
-        classMap.put("SelectOne_Listbox", "javax.faces.component.base.UISelectOneBase");
+        classMap.put("SelectOne_Listbox", "javax.faces.component.UISelectOne");
         classMap.put("SelectOne_Option", PARENT_SELECTONE);
-        classMap.put("Output_Text", "javax.faces.component.base.UIOutputBase");
-        classMap.put("TextEntry_Input", "javax.faces.component.base.UIInputBase");
-        classMap.put("TextEntry_Secret", "javax.faces.component.base.UIInputBase");
-        classMap.put("TextEntry_TextArea", "javax.faces.component.base.UIInputBase");
-        classMap.put("Errors", "javax.faces.component.base.UIOutputBase");
+        classMap.put("Output_Text", "javax.faces.component.UIOutput");
+        classMap.put("TextEntry_Input", "javax.faces.component.UIInput");
+        classMap.put("TextEntry_Secret", "javax.faces.component.UIInput");
+        classMap.put("TextEntry_TextArea", "javax.faces.component.UIInput");
+        classMap.put("Errors", "javax.faces.component.UIOutput");
     }
 
     protected boolean isSupportedTag(String shortTagName)

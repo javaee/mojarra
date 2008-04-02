@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.1 2003/09/08 19:31:20 horwat Exp $
+ * $Id: XmlXulRuleSet.java,v 1.2 2003/10/07 23:05:49 rkitain Exp $
  */
 
 /*
@@ -93,28 +93,28 @@ public class XmlXulRuleSet extends RuleSetBase {
 
         digester.addCallMethod("*/page-url", "setPageUrl", 0);
 
-        digester.addObjectCreate("*/window", "javax.faces.component.base.UIFormBase");
+        digester.addObjectCreate("*/window", "javax.faces.component.UIForm");
 
-        digester.addObjectCreate("*/label", "javax.faces.component.base.UIOutputBase");
+        digester.addObjectCreate("*/label", "javax.faces.component.UIOutput");
 
-        digester.addObjectCreate("*/textbox", "javax.faces.component.base.UIInputBase");
+        digester.addObjectCreate("*/textbox", "javax.faces.component.UIInput");
 
-        digester.addObjectCreate("*/checkbox", "javax.faces.component.base.UISelectBooleanBase");
+        digester.addObjectCreate("*/checkbox", "javax.faces.component.UISelectBoolean");
 
-        digester.addObjectCreate("*/radiogroup", "javax.faces.component.base.UISelectOneBase");
+        digester.addObjectCreate("*/radiogroup", "javax.faces.component.UISelectOne");
 
-        digester.addObjectCreate("*/menupopup", "javax.faces.component.base.UISelectOneBase");
+        digester.addObjectCreate("*/menupopup", "javax.faces.component.UISelectOne");
 
-        digester.addObjectCreate("*/link", "javax.faces.component.base.UICommandBase");
+        digester.addObjectCreate("*/link", "javax.faces.component.UICommand");
 
         /* 
          * Button no longer needs an ActionRule that creates a default
          * ActionListener because the API's UICommandBase now installs
          * a default ActionListener
          */
-        digester.addObjectCreate("*/button", "javax.faces.component.base.UICommandBase");
+        digester.addObjectCreate("*/button", "javax.faces.component.UICommand");
 
-        digester.addObjectCreate("*/image", "javax.faces.component.base.UIGraphicBase");
+        digester.addObjectCreate("*/image", "javax.faces.component.UIGraphic");
 
         digester.addFactoryCreate("*/uicomponent", new UIComponentFactory());
 

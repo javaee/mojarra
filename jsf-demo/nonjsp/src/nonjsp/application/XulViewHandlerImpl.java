@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.6 2003/10/07 20:57:39 rlubke Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.7 2003/10/07 23:05:49 rkitain Exp $ 
  */ 
 
 
@@ -60,6 +60,10 @@ import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UINamingContainer;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext; 
+import javax.faces.context.ResponseWriter; 
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
@@ -77,7 +81,7 @@ import java.util.Map;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.6 2003/10/07 20:57:39 rlubke Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.7 2003/10/07 23:05:49 rkitain Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -255,6 +259,14 @@ public class XulViewHandlerImpl implements ViewHandler {
         return null;
     }
 
+    public String getViewIdPath(FacesContext context, String viewId) {
+        if (viewId.charAt(0) != '/') {            
+            throw new IllegalArgumentException(
+		"Illegal view ID "+viewId+". the ID must begin with '/'");
+        }
+        return viewId; 
+    }
+
 
     // Create the header components for this page
     private void createHeader(FacesContext context) throws IOException {
@@ -343,11 +355,5 @@ public class XulViewHandlerImpl implements ViewHandler {
     }
 
     public void writeState(FacesContext context) throws IOException {
-    }
-
-
-    public String getViewIdPath(FacesContext context, String viewId) {
-        // PENDING implementation
-        return "";
     }
 } 
