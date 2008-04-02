@@ -24,12 +24,7 @@
 
   <body>
 
-
-
-
-<ul class="errors"><li>	{0}: Validation Error: Value is required. </li></ul> 
-
-
+<ul class="errors"><li>	{0}: Validation Error: Value is required. </li></ul>
 
 
 

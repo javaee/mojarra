@@ -1,5 +1,5 @@
 /*
- * $Id: DynamicComponent.java,v 1.7 2004/02/26 20:33:39 eburns Exp $
+ * $Id: DynamicComponent.java,v 1.8 2005/04/26 16:41:39 jayashri Exp $
  */
 
 /*
@@ -121,7 +121,6 @@ public class DynamicComponent extends UIComponentBase {
 
 
     private void process(FacesContext context) {
-
         Map map = context.getExternalContext().getRequestParameterMap();
         String mode = (String) map.get("mode");
         String id = (String) map.get("id");

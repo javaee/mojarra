@@ -13,39 +13,11 @@
 <title>subview02</title>
 </head>
 <body>
-Begin test &lt;c:import&gt; with subview tag in importing page
-
-foo02<!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
+Begin test &lt;c:import&gt; with subview tag in importing pagefoo02subview02bar02End test &lt;c:import&gt; with subview tag in importing page
 
 
 
 
-
-
-
-
-
-
-subview02
-
-bar02<!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
-
-
-
-
-
-
-
-
-
-
-End test &lt;c:import&gt; with subview tag in importing page
 </body>
 </html>
 

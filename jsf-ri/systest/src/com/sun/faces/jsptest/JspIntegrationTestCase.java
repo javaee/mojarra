@@ -1,5 +1,5 @@
 /*
- * $Id: JspIntegrationTestCase.java,v 1.9 2005/03/15 20:37:39 edburns Exp $
+ * $Id: JspIntegrationTestCase.java,v 1.10 2005/04/26 16:41:39 jayashri Exp $
  */
 
 /*
@@ -79,15 +79,15 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         // Check with children that have explicit ids
         checkJspDynamic00();
         checkJspDynamic01("",
-                          "[A] { } [Z]");
-        checkJspDynamic01("?mode=create&id=C1&value=[1]&com.sun.faces.VIEW=_id1",
-                          "[A] { [1] } [Z]");
-        checkJspDynamic01("?mode=create&id=C2&value=[2]&com.sun.faces.VIEW=_id2",
-                          "[A] { [1] [2] } [Z]");
-        checkJspDynamic01("?mode=create&id=C3&value=[3]&com.sun.faces.VIEW=_id3",
-                          "[A] { [1] [2] [3] } [Z]");
-        checkJspDynamic01("?mode=delete&id=C2&com.sun.faces.VIEW=_id4",
-                          "[A] { [1] [3] } [Z]");
+                          "[A]{ } [Z]");
+        checkJspDynamic01("?mode=create&id=C1&value=[1]&com.sun.faces.VIEW=_id0",
+                          "[A]{ [1] } [Z]");
+        checkJspDynamic01("?mode=create&id=C2&value=[2]&com.sun.faces.VIEW=_id1",
+                          "[A]{ [1] [2] } [Z]");
+        checkJspDynamic01("?mode=create&id=C3&value=[3]&com.sun.faces.VIEW=_id2",
+                          "[A]{ [1] [2] [3] } [Z]");
+        checkJspDynamic01("?mode=delete&id=C2&com.sun.faces.VIEW=_id3",
+                          "[A]{ [1] [3] } [Z]");
 
         checkJspDynamic00();
         client = new WebClient();
@@ -109,7 +109,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         checkJspDynamic00();
         client = new WebClient();
         checkJspDynamic01("",
-                          "[A] { } [Z]");
+                          "[A]{ } [Z]");
     }
 
 
@@ -254,6 +254,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         assertEquals("Correct page title",
                      "jsp-dynamic-01", page.getTitleText());
 	String bodyText = getBodyText(page);
+        System.out.println("bodyText " + bodyText);
         assertTrue("Correct body element",
                      -1 != bodyText.indexOf(result));
 
@@ -289,7 +290,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         assertEquals("Correct page title",
                      "jsp-include-02", page.getTitleText());
         assertEquals("Correct body element",
-                     "[A] [B] [C] [D] [E]", getBodyText(page));
+                     "[A][B][C][D][E]", getBodyText(page));
 
     }
 
@@ -299,7 +300,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         assertEquals("Correct page title",
                      "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2c][2x] [3]", getBodyText(page));
+                     "[1][2c][2x][3]", getBodyText(page));
 
     }
 
@@ -312,7 +313,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         assertEquals("Correct page title",
                      "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2a][2z] [3]", getBodyText(page));
+                     "[1][2a][2z][3]", getBodyText(page));
 
     }
 
@@ -324,7 +325,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         assertEquals("Correct page title",
                      "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2b][2y] [3]", getBodyText(page));
+                     "[1][2b][2y][3]", getBodyText(page));
 
     }
 
@@ -336,7 +337,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         assertEquals("Correct page title",
                      "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2c][2x] [3]", getBodyText(page));
+                     "[1][2c][2x][3]", getBodyText(page));
 
     }
 
@@ -346,7 +347,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         assertEquals("Correct page title",
                      "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2c][2x] [3]", getBodyText(page));
+                     "[1][2c][2x][3]", getBodyText(page));
 
     }
 
@@ -359,7 +360,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         assertEquals("Correct page title",
                      "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2a][2z] [3]", getBodyText(page));
+                     "[1][2a][2z][3]", getBodyText(page));
 
     }
 
@@ -371,7 +372,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         assertEquals("Correct page title",
                      "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2b][2y] [3]", getBodyText(page));
+                     "[1][2b][2y][3]", getBodyText(page));
 
     }
 
@@ -383,7 +384,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         assertEquals("Correct page title",
                      "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2c][2x] [3]", getBodyText(page));
+                     "[1][2c][2x][3]", getBodyText(page));
 
     }
 

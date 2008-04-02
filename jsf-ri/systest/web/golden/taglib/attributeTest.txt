@@ -11,14 +11,10 @@
 
 
     <p>
-    
-      
     <span style="color: red">This Should Be Red</span>
     </p>
 
     <p>
-    
-       
     New String Value
     </p>
 

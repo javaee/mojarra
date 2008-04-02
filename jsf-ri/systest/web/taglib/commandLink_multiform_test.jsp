@@ -7,19 +7,19 @@
 <html>
   <body>
      <f:view>
-     <h:form >
-       <h:commandLink action="redirect">
+     <h:form id="form01">
+       <h:commandLink id ="Link1" action="redirect">
           <h:outputText value="Link1"/>
        </h:commandLink>
-       <h:commandLink action="redirect">
+       <h:commandLink id ="Link2" action="redirect">
           <h:outputText value="Link2"/>
        </h:commandLink>
     </h:form> 
-    <h:form>
-       <h:commandLink action="redirect">
+    <h:form id="form02">
+       <h:commandLink id ="Link3" action="redirect">
           <h:outputText value="Link3"/>
        </h:commandLink>
-       <h:commandLink action="forward">
+       <h:commandLink id ="Link4" action="forward">
           <h:outputText value="Link4"/>
        </h:commandLink>
    </h:form>

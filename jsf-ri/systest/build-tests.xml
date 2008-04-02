@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.70 2005/04/21 18:55:40 edburns Exp $
+ $Id: build-tests.xml,v 1.71 2005/04/26 16:41:38 jayashri Exp $
 -->
 
 <!--
@@ -70,8 +70,6 @@
 
 
 <!-- ======================== Test Execution ============================== -->
-
-
   <target name="test"
    description="Execute all tests against installed application"
        depends="test.init,
@@ -101,12 +99,12 @@
                 test.verbatim,
                 test.phases,
                 test.subview,
-                test.jsp,
-                test.path,
                 test.methodRef,
+                test.jsp,  
+                test.path,
                 test.valueBindingGet
-               "/>
-
+               "/> 
+        
     <target name="test.init">
         <mkdir dir="${test.results.dir}"/>
     </target>
@@ -121,12 +119,10 @@
         <tester host="${host}" port="${port}" protocol="${protocol}"
             request="${context.path}/faces/duplicateIds02.jsp"
              status="200" failonerror="${failonerror}"/>
-<!-- PENDING: return to running
         
         <tester host="${host}" port="${port}" protocol="${protocol}"
             request="${context.path}/faces/duplicateIds03.jsp"
-             status="200" failonerror="${failonerror}"/>
--->
+             status="500" failonerror="${failonerror}"/>
 
         <tester host="${host}" port="${port}" protocol="${protocol}"
             request="${context.path}/faces/duplicateIds05.jsp"
@@ -232,24 +228,22 @@
       <sysproperty key="org.apache.commons.logging.simplelog.showdatetime"
                  value="true"/>
 -->
-
+      <!-- PENDING (visvan) Fix tests in excludes -->
       <batchtest todir="${test.results.dir}">
         <fileset    dir="${basedir}/build/WEB-INF/classes"
                includes="com/sun/faces/jsptest/*TestCase.class"
-               excludes="com/sun/faces/jsptest/CommandLinkMultiFormTestCase.class,com/sun/faces/jsptest/ConverterTestCase.class,com/sun/faces/jsptest/FormInputTestCase.class,com/sun/faces/jsptest/JspIntegrationTestCase.class,com/sun/faces/jsptest/ListenerTestCase.class,com/sun/faces/jsptest/SelectComponentValueTestCase.class,com/sun/faces/jsptest/ValidatorTestCase.class,com/sun/faces/jsptest/ValueChangeListenerTestCase.class,com/sun/faces/jsptest/ViewRootPhaseListenerTestCase.class,com/sun/faces/jsptest/ViewTagTestCase.class"/>
-
-<!-- PENDING: remove excludes.  Start out with
-     ViewRootPhaseListenerTestCase and ListenerTestCase. -->
-
+               excludes="com/sun/faces/jsptest/ViewRootPhaseListenerTestCase.class,
+               com/sun/faces/jsptest/JspIntegrationTestCase.class"/>               
       </batchtest> 
 
     </junit>
 
   </target>
     
+  
     <target name="test.path"
         description="Test Path Handling">
-
+   <!-- PENDING (visvan) Fix PathTestCase 
     <junit printsummary="yes" fork="yes"
           haltonfailure="yes" haltonerror="yes">
 
@@ -262,27 +256,12 @@
             <sysproperty key="port" value="${port}"/>
             <sysproperty key="context.path" value="${context.path}"/>
 
-            <!-- Uncomment the following for wire-level debugging -->
-            <!-- NOTE:  this requires a hacked htmlunit-1.2.3.jar -->
-            <!--
-            <sysproperty key="org.apache.commons.logging.Log"
-            value="org.apache.commons.logging.impl.SimpleLog"/>
-            <sysproperty key="org.apache.commons.logging.simplelog.log.httpclient.wire"
-            value="debug"/>
-            -->
-            <!--
-            <sysproperty key="org.apache.commons.logging.simplelog.showdatetime"
-            value="true"/>
-            -->
-
             <batchtest todir="${test.results.dir}">
                 <fileset dir="${basedir}/build/WEB-INF/classes"
-                    includes="com/sun/faces/pathtest/*TestCase.class,com/sun/faces/systest/NavigationTestCase.class"
-                    excludes="com/sun/faces/pathtest/PathTestCase.class,com/sun/faces/systest/NavigationTestCase.class"/>
-<!-- PENDING: remove excludes.  For some reason, PathTestCase hangs. -->
+                    includes="com/sun/faces/pathtest/*TestCase.class" />
             </batchtest>
 
-        </junit>
+        </junit> -->
 
     </target>
 
@@ -317,10 +296,7 @@
 
       <batchtest todir="${test.results.dir}">
         <fileset    dir="${basedir}/build/WEB-INF/classes"
-               includes="com/sun/faces/methodref/*TestCase.class"
-               excludes="com/sun/faces/methodref/MethodRefTestCase.class" />
-<!-- PENDING: remove excludes -->
-
+               includes="com/sun/faces/methodref/*TestCase.class"/>
       </batchtest>
 
     </junit>
@@ -379,16 +355,11 @@
          request="${context.path}/faces/config01.jsp"
       outContent="/config01.jsp PASSED" failonerror="${failonerror}"/>
 
-<!-- PENDING: return to running
-
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/faces/factoryFinder.jsp"
-        golden="${golden.path}/factoryFinder.txt" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+        golden="${golden.path}/factoryFinder.txt" 
         recordGolden="${local.golden.path}/factoryFinder.txt"
         failonerror="${failonerror}"/>
--->
-
-
   </target>
 
   <target name="test.listener"
@@ -416,13 +387,11 @@
          request="${context.path}/faces/managed03.jsp"
       status="500" failonerror="${failonerror}"/>
 
-<!-- PENDING: return to running
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/faces/managed04.jsp"
         golden="${golden.path}/managed04.txt"
-        recordGolden="${local.golden.path}/managed04.txt" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+        recordGolden="${local.golden.path}/managed04.txt" 
         failonerror="${failonerror}"/> 
--->
 
    <tester host="${host}" port="${port}" protocol="${protocol}"
             request="${context.path}/faces/managed07.jsp"
@@ -555,11 +524,10 @@
   <target name="test.converter02"
    description="Test passing Converter instances to component tag">
    
-<!-- PENDING: return to running
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/faces/converter02.jsp"
+        recordGolden="${local.golden.path}/standard/converter02.txt"
         golden="${golden.path}/standard/converter02.txt" failonerror="${failonerror}"/>
--->
   </target>
   
   <target name="test.converter03"
@@ -631,27 +599,26 @@
 
   <target name="test.standard"
           description="Test the Standard RenderKit">
-
-<!-- PENDING: return to running
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/standard/messages01.jsp"
+          recordGolden="${local.golden.path}/standard/messages01.txt"
           golden="${golden.path}/standard/messages01.txt" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/standard/messages02.jsp"
           golden="${golden.path}/standard/messages02.txt" failonerror="${failonerror}"
-          recordGolden="/home/rogerk/messages02.txt"/>
+          recordGolden="${local.golden.path}/standard/messages02.txt"/>
           
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/standard/component01.jsp"
+         recordGolden="${local.golden.path}/standard/component01.txt"
          golden="${golden.path}/standard/component01.txt" failonerror="${failonerror}"/>
--->
   </target>
 
   <target name="test.html.taglib"
           description="Test the HTML JSP Tags">
       <echo message="Testing commandButton..."/>
-<!-- PENDING: return to running
+
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/commandButton_test.jsp"
               golden="${golden.path}/taglib/commandButton_test.txt" failonerror="${failonerror}" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
@@ -660,16 +627,16 @@
       <echo message="Testing commandLink..."/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/commandLink_test.jsp"
-              golden="${golden.path}/taglib/commandLink_test.txt" failonerror="${failonerror}" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              golden="${golden.path}/taglib/commandLink_test.txt" failonerror="${failonerror}" 
               recordGolden="${local.golden.path}/taglib/commandLink_test.txt" />
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/commandLink_multiform_test.jsp"
-              golden="${golden.path}/taglib/commandLink_multiform_test.txt" failonerror="${failonerror}" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              golden="${golden.path}/taglib/commandLink_multiform_test.txt" failonerror="${failonerror}" 
               recordGolden="${local.golden.path}/taglib/commandLink_multiform_test.txt" />
       <tester host="${host}" port="${port}" protocol="${protocol}" 
-              request="${context.path}/faces/taglib/attributeTest.jsp" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/faces/taglib/attributeTest.jsp" 
+              recordGolden="${local.golden.path}/taglib/attributeTest.txt"
               golden="${golden.path}/taglib/attributeTest.txt" failonerror="${failonerror}" />
--->
 
   </target>
 
@@ -689,17 +656,20 @@
 
   <target name="test.renderkit"
    description="Test renderkit processing">
-<!-- PENDING: return to running
+
    <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/renderkit01.jsp"
       outContent="/renderkit01.jsp PASSED" failonerror="${failonerror}"/>
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/renderkit02.jsp"
-	golden="${golden.path}/renderkit02A.txt" failonerror="${failonerror}"/>
+	golden="${golden.path}/renderkit02A.txt" 
+        recordGolden="${local.golden.path}/renderkit02A.txt"
+        failonerror="${failonerror}"/>
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/renderkit03.jsp"
+        recordGolden="${local.golden.path}/renderkit03A.txt"
 	golden="${golden.path}/renderkit03A.txt" failonerror="${failonerror}"/>
--->
+
   </target>
 
   <target name="test.phases"
@@ -710,32 +680,37 @@
   </target>
   <target name="test.subview"
           description="Test subview tag">
-<!-- PENDING: return to running
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview01.jsp"
+          recordGolden="${local.golden.path}/subview01.txt"
           golden="${golden.path}/subview01.txt" failonerror="${failonerror}"/>
           
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview02.jsp"
+         recordGolden="${local.golden.path}/subview02.txt"
          golden="${golden.path}/subview02.txt" failonerror="${failonerror}"/>
          
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview03.jsp"
+         recordGolden="${local.golden.path}/subview03.txt"
          golden="${golden.path}/subview03.txt" failonerror="${failonerror}"/>
          
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview04.jsp"
+         recordGolden="${local.golden.path}/subview04.txt"
          golden="${golden.path}/subview04.txt" failonerror="${failonerror}"/>
          
      <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview05.jsp"
+         recordGolden="${local.golden.path}/subview05.txt"
          golden="${golden.path}/subview05.txt" failonerror="${failonerror}"/>
          
      <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview06.jsp"
+         recordGolden="${local.golden.path}/subview06.txt"
          golden="${golden.path}/subview06.txt" failonerror="${failonerror}"/>
--->
+
   </target>
 
 </project>

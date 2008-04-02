@@ -13,40 +13,11 @@
 <title>subview04</title>
 </head>
 <body>
-[A]
-
-Begin test &lt;c:include&gt; with subview tag in including page
-bar01<!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
+[A]Begin test &lt;c:include&gt; with subview tag in including pagebar01subview04bar02End test &lt;c:include&gt; with subview tag in including page
 
 
 
 
-
-
-
-
-
-
-subview04
-
-bar02<!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
-
-
-
-
-
-
-
-
-
-
-End test &lt;c:include&gt; with subview tag in including page
 </body>
 </html>
 

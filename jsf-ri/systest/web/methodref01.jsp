@@ -24,6 +24,7 @@
         </h:commandLink>
         <h:commandButton id="button3" value="button3"
                            actionListener="#{methodRef.button3Pressed}"/>
+                            <h:message for="buttonStatus"/>
         <hr>
 	<p>the only valid value is batman</p>
         <h:inputText id="toValidate" 
@@ -36,6 +37,7 @@
         <h:inputText id="toChange" 
                       valueChangeListener="#{methodRef.valueChange}"/>
         <h:commandButton id="changeValue" value="changeValue"/>
+        <h:message for="toChange"/>
       </h:form>
     </f:view>
 

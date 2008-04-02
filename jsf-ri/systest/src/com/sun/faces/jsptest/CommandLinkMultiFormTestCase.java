@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkMultiFormTestCase.java,v 1.1 2004/06/08 13:49:18 rogerk Exp $
+ * $Id: CommandLinkMultiFormTestCase.java,v 1.2 2005/04/26 16:41:39 jayashri Exp $
  */
 
 /*
@@ -95,22 +95,22 @@ public class CommandLinkMultiFormTestCase extends AbstractTestCase {
         form2 = (HtmlForm)forms.get(1);
         
         // links within the first form
-        hidden1 = (HtmlHiddenInput)form1.getInputByName("_id0:_idcl");
+        hidden1 = (HtmlHiddenInput)form1.getInputByName("form01:_idcl");
         assertNotNull(hidden1);
-        hidden1.setValueAttribute("_id0:_id1");
+        hidden1.setValueAttribute("form01:Link1");
         page1 = (HtmlPage)form1.submit();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
-        hidden1.setValueAttribute("_id0:_id3");
+        hidden1.setValueAttribute("form01:Link2");
         page1 = (HtmlPage)form1.submit();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
 
         // links within second form
-        hidden2 = (HtmlHiddenInput)form2.getInputByName("_id5:_idcl");
+        hidden2 = (HtmlHiddenInput)form2.getInputByName("form02:_idcl");
         assertNotNull(hidden2);
-        hidden2.setValueAttribute("_id5:_id6");
+        hidden2.setValueAttribute("form02:Link3");
         page1 = (HtmlPage)form1.submit();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
-        hidden2.setValueAttribute("_id5:_id8");
+        hidden2.setValueAttribute("form02:Link4");
         page1 = (HtmlPage)form1.submit();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
     }

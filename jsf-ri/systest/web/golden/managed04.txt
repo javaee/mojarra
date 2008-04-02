@@ -9,29 +9,17 @@
   <body>
     <h1>Verify property ordering</h1>
 
-
-
-  <form id="_id0" method="post" action="/jsf-systest/faces/managed04.jsp;jsessionid=F37CC431CBD7C1A35266BB011B26538D" enctype="application/x-www-form-urlencoded">
-
- 
-     one two three four 
-    five
-    six
-    seven
-    eight
-   
-   <input type="hidden" name="com.sun.faces.VIEW" value="H4sIAAAAAAAAAFvzloG1hIE1PjPF2LwAACygL3INAAAA" />
- <input type="hidden" name="_id0" value="_id0" />
+<form id="_id1" method="post" action="/jsf-systest/faces/managed04.jsp;jsessionid=73B0DD6DE0A8A9CBCE9B5CFAAE6D7B44" enctype="application/x-www-form-urlencoded">
+ one two three fourfivesixseveneight <input type="hidden" name="com.sun.faces.VIEW" value="_id17" />
+ <input type="hidden" name="_id1" value="_id1" />
 <script type="text/javascript">
 <!--
-function clearFormHiddenParams__id0(curFormName) {
+function clearFormHiddenParams__id1(curFormName) {
   var curForm = document.forms[curFormName];
 }
 //-->
 </script>
 </form>
-
-
 
     <hr>
   </body>

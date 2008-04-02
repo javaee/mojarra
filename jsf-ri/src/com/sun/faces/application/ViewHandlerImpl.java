@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.50 2005/04/21 18:55:34 edburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.51 2005/04/26 16:41:38 jayashri Exp $ 
  */ 
 
 
@@ -34,6 +34,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +48,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.50 2005/04/21 18:55:34 edburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.51 2005/04/26 16:41:38 jayashri Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -175,6 +176,14 @@ public class ViewHandlerImpl extends ViewHandler {
 	ExternalContext extContext = context.getExternalContext();
         ServletResponse response = (ServletResponse) extContext.getResponse();
 
+        // NOTE: With tree pre-creation, components can be dynamically added 
+        // to the tree by registering a beforeRender phaseListener. So, any 
+        // component added during encodeAll, will not be persisted as a result.
+        // With this change, we can avoid buffering and the marker replacement
+        // complexity since the actual state is written out during 
+        // ViewHandler.writeState(). saveSerializedView() must be called before
+        // encodeAll because writeState() needs the actual state which gets
+        // created during saveSerializedView
 	Object view = 
 	    Util.getStateManager(context).saveSerializedView(context);
 	extContext.getRequestMap().put(RIConstants.SAVED_STATE, view);
@@ -610,25 +619,23 @@ public class ViewHandlerImpl extends ViewHandler {
         }
         StateManager stateManager = Util.getStateManager(context);
         
-        if (stateManager.isSavingStateInClient(context)) {
-            SerializedView viewState = (SerializedView)
-            context.getExternalContext().getRequestMap().get(RIConstants.SAVED_STATE);
-            assert(null != viewState);
+        SerializedView viewState = (SerializedView)
+        context.getExternalContext().getRequestMap().get(RIConstants.SAVED_STATE);
+        assert(null != viewState);
 
-	    if (logger.isLoggable(Level.FINE)) {
-		logger.fine("Begin writing state to response for viewId " +
-			    context.getViewRoot().getViewId());
-	    }
-            
-	    // write out the state
-	    stateManager.writeState(context, viewState);
-            
-	    if (logger.isLoggable(Level.FINE)) {
-		logger.fine("End writing state to response for viewId " +
-			    context.getViewRoot().getViewId());
-	    }
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Begin writing state to response for viewId " +
+                        context.getViewRoot().getViewId());
         }
-        
+
+        // write out the state
+        stateManager.writeState(context, viewState);
+
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("End writing state to response for viewId " +
+                        context.getViewRoot().getViewId());
+        }
+ 
     }
 
 
@@ -862,6 +869,6 @@ public class ViewHandlerImpl extends ViewHandler {
         }
         return convertedViewId;
     }
-
-
+    
+    
 }

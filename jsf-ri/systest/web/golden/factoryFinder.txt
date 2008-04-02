@@ -9,25 +9,17 @@
   <body>
     <h1>Print out the names of the current Factories</h1>
 
-
-
-  <form id="_id0" method="post" action="/jsf-systest/faces/factoryFinder.jsp;jsessionid=A843CA16ADF67DD43245358177581F89" enctype="application/x-www-form-urlencoded">
-
-
-      ApplicationFactoryWrapper FacesContextFactoryWrapper LifecycleFactoryWrapper RenderKitFactoryWrapper 
-
-   <input type="hidden" name="com.sun.faces.VIEW" value="H4sIAAAAAAAAAFvzloG1hIElPjPFqAAAR+9SHQwAAAA=" />
- <input type="hidden" name="_id0" value="_id0" />
+<form id="_id1" method="post" action="/jsf-systest/faces/factoryFinder.jsp;jsessionid=2D23305B0FFD9889FC5711BD142A213B" enctype="application/x-www-form-urlencoded">
+ApplicationFactoryWrapper FacesContextFactoryWrapper LifecycleFactoryWrapper RenderKitFactoryWrapper  <input type="hidden" name="com.sun.faces.VIEW" value="_id2" />
+ <input type="hidden" name="_id1" value="_id1" />
 <script type="text/javascript">
 <!--
-function clearFormHiddenParams__id0(curFormName) {
+function clearFormHiddenParams__id1(curFormName) {
   var curForm = document.forms[curFormName];
 }
 //-->
 </script>
 </form>
-
-
 
     <hr>
   </body>

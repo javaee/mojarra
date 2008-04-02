@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.1 2005/04/21 18:55:31 edburns Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.2 2005/04/26 16:41:37 jayashri Exp $
  */
 
 /*
@@ -837,7 +837,10 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 		verbatim = createVerbatimComponent();
 		verbatim.setValue(bodyContentString);
 		bodyContent.clearBody();
-	    }  
+	    }  else {
+                // clear body if bodyContent is just comments.
+                bodyContent.clearBody();    
+            }
 	}
 	return verbatim;
     }

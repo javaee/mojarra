@@ -24,16 +24,7 @@
 -->
 </STYLE>
 
-
-       
-         
-
-         
-
-         
-
-         
-       <table>
+<table>
 <tbody>
 <tr>
 <td><ul dir="LTR" style="left: 48px; top: 100px; position: absolute"><li style="color: yellow"><span title="Information Summary">	Informational Detail</span></li><li><span title="Warning Summary">	Warning Detail</span></li><li style="color: red"><span title="Error Summary">	Error Detail</span></li><li style="color: blue"><span title="Fatal Summary">	Fatal Detail</span></li></ul></td>
@@ -49,6 +40,5 @@
 </tr>
 </tbody>
 </table>
-
 
 </html>

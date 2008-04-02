@@ -14,40 +14,27 @@
 </head>
 <body>
 Begin test &lt;c:import&gt; with iterator tag in imported page
-
 <br>
-This component has no ID This component has no ID This component has no ID This component has no ID <!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
-
-
-
-
-
-
 
   <br>
   
     Array[0]: 
-    <br>
+    This component has no ID <br>
   
     Array[1]: 
-    <br>
+    This component has no ID <br>
   
     Array[2]: 
-    <br>
+    This component has no ID <br>
   
     Array[3]: 
-    <br>
+    This component has no ID <br>
   
 
+Text from subview06.jspEnd test &lt;c:import&gt; with iterator tag in imported page
 
 
 
-
-Text from subview06.jsp
-End test &lt;c:import&gt; with iterator tag in imported page
 </body>
 </html>
 

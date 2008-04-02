@@ -8,7 +8,6 @@
 
 <%-- Confirm duplicate ID's are found --%>
 
-<% try { %>
 <f:view>
     <h:outputText id="output1"/>
     <h:outputText />
@@ -18,10 +17,4 @@
        </f:facet>
     </h:outputText>
 </f:view>
-<% 
-  } catch (JspException je) {
-       if (!(je.getRootCause() instanceof IllegalStateException)) {
-           throw je;
-       }
-  }
-%>
+

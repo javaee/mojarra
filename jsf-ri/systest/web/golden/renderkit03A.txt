@@ -3,8 +3,8 @@
     
     
 
-         
-          This IS TEXT FROM THE CUSTOM RENDERER 
-       
+       This IS TEXT FROM THE CUSTOM RENDERER
 
 </HTML>
+/renderkit03.jsp PASSED
+

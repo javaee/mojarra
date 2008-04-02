@@ -15,37 +15,24 @@
 <body>
 Begin test jsp:include with subview and iterator tag in included page
 <br>
-This component has no ID This component has no ID This component has no ID This component has no ID <!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
-
-
-
-
-
-
 
   <br>
   
     Array[0]: 
-    <br>
+    This component has no ID <br>
   
     Array[1]: 
-    <br>
+    This component has no ID <br>
   
     Array[2]: 
-    <br>
+    This component has no ID <br>
   
     Array[3]: 
-    <br>
+    This component has no ID <br>
   
 
+Text from subview05.jspEnd test jsp:include with subview and iterator tag in included page
 
-
-
-Text from subview05.jsp
-End test jsp:include with subview and iterator tag in included page
 </body>
 </html>
 

@@ -4,6 +4,4 @@
 
 
 
-
-    <span id="id1">$123.45</span>
-
+<span id="id1">$123.45</span>
