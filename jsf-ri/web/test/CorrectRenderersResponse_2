@@ -2,7 +2,7 @@
 <input type="checkbox"  name="/my_checkbox">
 <input type="checkbox"  name="/my_checkbox">
 <a href=""></A>
-<select name="/my_listbox" size="4" 	<option value="Red">Red</option>
+<select name="/my_listbox" size="4" >	<option value="Red">Red</option>
 	<option value="Blue" selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
@@ -13,5 +13,5 @@
 <input type="text" name="/my_number" id="my_number" value="47%"><input type="text" name="/my_number2" id="my_number2" value="1999.877">
 99%
 999.000
-<img src=";jsessionid=614035E9A2D45743F4E803A0B536E386">
+<img src="/test/nonModelReferenceImage.gif;jsessionid=5CF5CA12513CC57431DCFE26CCE7095D"><img src="/test/foo/modelReferenceImage.gif;jsessionid=5CF5CA12513CC57431DCFE26CCE7095D">
 <font color="RED">	component message summary<BR>	Severity: 1<BR>	component message detail	global message summary<BR>	Severity: 1<BR>	global message detail</font>My name is Bobby Orr

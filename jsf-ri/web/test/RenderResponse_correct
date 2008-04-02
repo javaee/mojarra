@@ -19,7 +19,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 
-<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=6868D3527EC685F250B42181B624DDED">
+<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=72ACD5F4497810A18D442A6D06ED1813">
 
   <TABLE BORDER="1">
 
@@ -189,7 +189,7 @@
                 
                 
 
-              <span class="selectoneClass"><select name="/basicForm/appleQuantity" accesskey="N" size="10" tabindex="20" title="Select Quantity" 	<option value="0" disabled >0</option>
+              <span class="selectoneClass"><select name="/basicForm/appleQuantity" accesskey="N" size="10" tabindex="20" title="Select Quantity" >	<option value="0" disabled >0</option>
 	<option value="1" title="One" >1</option>
 	<option value="2" title="Two" >2</option>
 	<option value="3" title="Three" >3</option>
@@ -394,7 +394,7 @@
 						
 						
 						
-					<span class="selectmanyClass"><select name="/basicForm/ManyApples" multiple  size="1" 	<option value="0">zero</option>
+					<span class="selectmanyClass"><select name="/basicForm/ManyApples" multiple  size="1" >	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
@@ -421,7 +421,7 @@
 						
 						
 						
-					<select name="/basicForm/ManyApples2" multiple  size="10" 	<option value="0">zero</option>
+					<select name="/basicForm/ManyApples2" multiple  size="10" >	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
