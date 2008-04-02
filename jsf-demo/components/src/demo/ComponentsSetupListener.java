@@ -1,5 +1,5 @@
 /*
- * $Id: ComponentsSetupListener.java,v 1.3 2003/02/14 22:41:48 eburns Exp $
+ * $Id: ComponentsSetupListener.java,v 1.1 2003/02/14 22:54:23 eburns Exp $
  */
 /*
  *
@@ -41,7 +41,7 @@
  * 
  */
 
-package components.renderkit;
+package demo;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
@@ -55,6 +55,8 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import components.renderkit.MenuBarRenderer;
 import components.renderkit.MenuTreeRenderer;
+
+import components.renderkit.*;
 
 
 public class ComponentsSetupListener implements ServletContextListener
