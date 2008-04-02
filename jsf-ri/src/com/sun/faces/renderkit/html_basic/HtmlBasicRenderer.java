@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.42 2003/07/18 00:56:45 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.43 2003/07/18 01:18:03 rlubke Exp $
  */
 
 /*
@@ -296,11 +296,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        if (!(component instanceof UIInput)) {
-            // do nothing in output case
-            return;
         }
 
         UIInput uiInput = null;
