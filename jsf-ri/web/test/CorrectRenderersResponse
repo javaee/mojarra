@@ -31,13 +31,13 @@
 <a id="labelLink2" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A">model label</a>
 <a id="labelLink3" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A">RES-BUNDLE PASSED</a>
 <a id="labelLink4" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" rel="rel" rev="rev" shape="shape" coords="coords" hreflang="hreflang"></a>
-<a id="linkImage" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A"><img src="duke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" alt="" /></a>
-<a id="linkImage2" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A"><img src="resduke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" alt="" /></a>
-<a id="paramLink" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A?parameter1=param_value1&parameter2=param_value2"><img src="resduke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" alt="" /></a>
+<a id="linkImage" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A"><img src="duke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" /></a>
+<a id="linkImage2" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A"><img src="resduke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" /></a>
+<a id="paramLink" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A?parameter1=param_value1&parameter2=param_value2"><img src="resduke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" /></a>
 <a id="_id0:labelLink1" href="#" onclick="document.forms['_id0']['_id0:labelLink1'].value='_id0:labelLink1'; document.forms['_id0'].submit()">PASSED</a>
 <a id="_id0:labelLink2" href="#" onclick="document.forms['_id0']['_id0:labelLink2'].value='_id0:labelLink2'; document.forms['_id0'].submit()">model label</a>
 <a id="_id0:labelLink3" href="#" onclick="document.forms['_id0']['_id0:labelLink3'].value='_id0:labelLink3'; document.forms['_id0'].submit()">RES-BUNDLE PASSED</a>
 <a id="_id0:labelLink4" href="#" rel="rel" rev="rev" shape="shape" coords="coords" hreflang="hreflang" onclick="document.forms['_id0']['_id0:labelLink4'].value='_id0:labelLink4'; document.forms['_id0'].submit()"></a>
-<a id="_id0:linkImage" href="#" onclick="document.forms['_id0']['_id0:linkImage'].value='_id0:linkImage'; document.forms['_id0'].submit()"><img src="duke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" alt="" /></a>
-<a id="_id0:linkImage2" href="#" onclick="document.forms['_id0']['_id0:linkImage2'].value='_id0:linkImage2'; document.forms['_id0'].submit()"><img src="resduke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" alt="" /></a>
+<a id="_id0:linkImage" href="#" onclick="document.forms['_id0']['_id0:linkImage'].value='_id0:linkImage'; document.forms['_id0'].submit()"><img src="duke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" /></a>
+<a id="_id0:linkImage2" href="#" onclick="document.forms['_id0']['_id0:linkImage2'].value='_id0:linkImage2'; document.forms['_id0'].submit()"><img src="resduke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" /></a>
 <a id="_id0:paramLink" href="#" onclick="document.forms['_id0']['_id0:paramLink'].value='_id0:paramLink';document.forms['_id0']['parameter1'].value='param_value1';document.forms['_id0']['parameter2'].value='param_value2'; document.forms['_id0'].submit()"></a>
