@@ -224,7 +224,8 @@
 <!--        <antcall target="run.mapping-extension.tests"/>   
             <antcall target="run.mapping-prefix.tests"/>    -->
         <antcall target="run.cardemo.tests"/>    
-        <antcall target="run.guessNumber.tests"/>    
+<!-- HTMLUnit 1.2.3 doesn't understand xhtml.  Patch submitted: https://sourceforge.net/tracker/index.php?func=detail&aid=1088709&group_id=47038&atid=448268
+        <antcall target="run.guessNumber.tests"/>    -->
         <antcall target="run.components.tests"/>    
     </target>
 
