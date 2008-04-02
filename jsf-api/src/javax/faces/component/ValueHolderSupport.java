@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderSupport.java,v 1.8 2003/10/06 18:34:21 eburns Exp $
+ * $Id: ValueHolderSupport.java,v 1.9 2003/10/09 19:18:13 craigmcc Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import java.util.List;
 import javax.faces.application.Application;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
 
 
@@ -32,12 +31,12 @@ import javax.faces.el.ValueBinding;
  *
  *     private ValueHolderSupport support = new ValueHolderSupport();
  *
- *     public Converter getConverter() {
- *       return (support.getConverter());
+ *     public Object getValue() {
+ *       return (support.getValue());
  *     }
  *
- *     public void setConverter(Converter converter) {
- *       support.setConverter(converter);
+ *     public void setValue(Object value) {
+ *       support.setValue(value);
  *     }
  *
  *     ... and so on ...
@@ -83,28 +82,17 @@ public class ValueHolderSupport
     // ------------------------------------------------------ Instance Variables
 
 
-    private UIComponent component = null;
-    private Converter converter = null;
+    /**
+     * <p>The {@link UIComponent} this object is associated with.</p>
+     */
+    protected UIComponent component = null;
+
     private Object value = null;
     private String valueRef = null;
 
 
     // -------------------------------------------------------------- Properties
 
-
-
-    public Converter getConverter() {
-
-        return (this.converter);
-
-    }
-
-
-    public void setConverter(Converter converter) {
-
-        this.converter = converter;
-
-    }
 
 
     public Object getValue() {
@@ -204,8 +192,7 @@ public class ValueHolderSupport
         // NOTE:  The associated component is not stored as part of the state,
         // because it will be a different object instance on restoration
 
-        Object values[] = new Object[3];
-        values[0] = UIComponentBase.saveAttachedState(context, converter);
+        Object values[] = new Object[2];
         int rowCount = 0;
         Repeater repeater = RepeaterSupport.findParentRepeater(component);
         if (repeater != null && repeater.getRowIndex() > 0) {
@@ -215,12 +202,11 @@ public class ValueHolderSupport
                 repeater.setRowIndex(i+1);
                 currentValues[i] = repeater.getChildValue(component);
             }
-            values[1] = currentValues;
-
+            values[0] = currentValues;
         } else {
-            values[1] = value;
+            values[0] = value;
         }
-        values[2] = valueRef;
+        values[1] = valueRef;
         return (values);
 
     }
@@ -241,6 +227,7 @@ public class ValueHolderSupport
     }
 
     public void setComponent(UIComponent yourComponent) {
+
         component = yourComponent;
 	
         // Restore component reference from parameter
@@ -251,20 +238,9 @@ public class ValueHolderSupport
         // Restore other state information from saved state
         Object values[] = (Object[]) stateToRestore;
 
-	try {
-	    converter = (Converter) 
-		UIComponentBase.restoreAttachedState(FacesContext.getCurrentInstance(),
-						     values[0]);
-	}
-	catch (IllegalStateException ioe) {
-	    String message = "restoreAttachedState failed";
-	    FacesContext.getCurrentInstance().getExternalContext().log(message);
-	    throw new FacesException(message, ioe);
-	}
-
         Repeater repeater = RepeaterSupport.findParentRepeater(component);
         if (repeater != null && repeater.getRowIndex() > 0) {
-            Object[] currentValues = (Object[])values[1];
+            Object[] currentValues = (Object[])values[0];
             if ( currentValues != null ) {
                 for (int i = 0; i < currentValues.length; ++i ) {
                     repeater.setRowIndex(i+1);
@@ -272,13 +248,12 @@ public class ValueHolderSupport
                 }
             }
         } else {
-            value = values[1];
+            value = values[0];
         }
-        valueRef = (String) values[2];
+        valueRef = (String) values[1];
 	stateToRestore = null;
+
     }
-
-
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.4 2003/09/30 17:05:01 craigmcc Exp $
+ * $Id: ValueHolder.java,v 1.5 2003/10/09 19:18:12 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.component;
 
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
 
 
@@ -20,7 +19,9 @@ import javax.faces.el.ValueBinding;
  * <p><strong>ValueHolder</strong> is an interface that may be implemented
  * by any concrete {@link UIComponent} that wishes to support a local
  * value, as well as access data in the model tier via a <em>value
- * reference expression</em>.</p>
+ * reference expression</em>.  If the component wishes to support conversion
+ * between String and the model tier data's native data type, it should
+ * implement {@link ConvertableValueHolder} instead.</p>
  */
 
 public interface ValueHolder {
@@ -28,22 +29,6 @@ public interface ValueHolder {
 
     // -------------------------------------------------------------- Properties
 
-
-
-    /**
-     * <p>Return the {@link Converter} (if any)
-     * that is registered for this {@link UIComponent}.</p>
-     */
-    public Converter getConverter();
-
-
-    /**
-     * <p>Set the {@link Converter} (if any)
-     * that is registered for this {@link UIComponent}.</p>
-     *
-     * @param converter New {@link Converter} (or <code>null</code>)
-     */
-    public void setConverter(Converter converter);
 
 
     /**

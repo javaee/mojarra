@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.12 2003/09/30 22:04:46 eburns Exp $
+ * $Id: UICommandTestCase.java,v 1.13 2003/10/09 19:18:23 craigmcc Exp $
  */
 
 /*
@@ -371,14 +371,13 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test page with converter, value, and valueRef
+	// test page with value and valueRef
 	testParent.getChildren().clear();
 	preSave = new UICommandSub();
 	preSave.setId("valueHolder");
 	preSave.setRendererType(null); // necessary: we have no renderkit
         preSave.setValue("valueString");
 	preSave.setValueRef("valueRefString");
-	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
         preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);

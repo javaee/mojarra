@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItems.java,v 1.16 2003/10/06 18:34:21 eburns Exp $
+ * $Id: UISelectItems.java,v 1.17 2003/10/09 19:18:12 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.component;
 
 import java.io.IOException;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
 
@@ -73,20 +72,6 @@ public class UISelectItems extends UIComponentBase implements ValueHolder {
 
 
     // -------------------------------------------------- ValueHolder Properties
-
-
-    public Converter getConverter() {
-
-        return (support.getConverter());
-
-    }
-
-
-    public void setConverter(Converter converter) {
-
-        support.setConverter(converter);
-
-    }
 
 
     public Object getValue() {

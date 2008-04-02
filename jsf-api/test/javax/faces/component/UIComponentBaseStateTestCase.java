@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseStateTestCase.java,v 1.1 2003/09/25 07:46:07 craigmcc Exp $
+ * $Id: UIComponentBaseStateTestCase.java,v 1.2 2003/10/09 19:18:24 craigmcc Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.LongConverter;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.mock.MockExternalContext;
@@ -165,7 +164,6 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	UIOutput output = (UIOutput) form.getChildren().get(2);
 	output.setId("output");
 	output.setValueRef("valueRef");
-	output.setConverter(new LongConverter());
 	
 	UICommand command = (UICommand) form.getChildren().get(3);
 	command.setId("command");

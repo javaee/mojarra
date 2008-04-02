@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterTestCase.java,v 1.8 2003/09/30 22:04:48 eburns Exp $
+ * $Id: UIParameterTestCase.java,v 1.9 2003/10/09 19:18:29 craigmcc Exp $
  */
 
 /*
@@ -162,13 +162,12 @@ public class UIParameterTestCase extends ValueHolderTestCaseBase {
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test component with valueRef and converter
+	// test component with valueRef
 	testParent.getChildren().clear();
 	preSave = new UIParameter();
 	preSave.setId("parameter");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
-	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
         preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);

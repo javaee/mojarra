@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.45 2003/10/06 18:34:18 eburns Exp $
+ * $Id: UICommand.java,v 1.46 2003/10/09 19:18:07 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.component;
 
 import javax.faces.application.Action;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
@@ -141,20 +140,6 @@ public class UICommand extends UIComponentBase
 
 
     // -------------------------------------------------- ValueHolder Properties
-
-
-    public Converter getConverter() {
-
-        return (support.getConverter());
-
-    }
-
-
-    public void setConverter(Converter converter) {
-
-        support.setConverter(converter);
-
-    }
 
 
     public Object getValue() {

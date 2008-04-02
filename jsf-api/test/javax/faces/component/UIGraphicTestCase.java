@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.9 2003/09/30 22:04:47 eburns Exp $
+ * $Id: UIGraphicTestCase.java,v 1.10 2003/10/09 19:18:27 craigmcc Exp $
  */
 
 /*
@@ -164,13 +164,12 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test component with valueRef and converter
+	// test component with valueRef
 	testParent.getChildren().clear();
 	preSave = new UIGraphic();
 	preSave.setId("graphic");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
-	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
         preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);

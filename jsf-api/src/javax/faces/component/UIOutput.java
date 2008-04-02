@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.33 2003/10/06 18:34:20 eburns Exp $
+ * $Id: UIOutput.java,v 1.34 2003/10/09 19:18:10 craigmcc Exp $
  */
 
 /*
@@ -50,7 +50,8 @@ import javax.faces.convert.Converter;
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIOutput extends UIComponentBase implements ValueHolder {
+public class UIOutput extends UIComponentBase
+    implements ConvertableValueHolder {
 
 
     // ------------------------------------------------------------ Constructors
@@ -72,14 +73,16 @@ public class UIOutput extends UIComponentBase implements ValueHolder {
 
 
     /**
-     * <p>The {@link ValueHolderSupport} instance to which we delegate
-     * our {@link ValueHolder} implementation processing.</p>
+     * <p>The {@link ConvertableValueHolderSupport} instance to which we
+     * delegate our {@link ConvertableValueHolder} implementation processing.
+     * </p>
      */
-    private ValueHolderSupport support = new ValueHolderSupport(this);
+    private ConvertableValueHolderSupport support =
+        new ConvertableValueHolderSupport(this);
 
 
 
-    // -------------------------------------------------- ValueHolder Properties
+    // --------------------------------------- ConvertableValueHolder Properties
 
 
     public Converter getConverter() {
@@ -92,6 +95,20 @@ public class UIOutput extends UIComponentBase implements ValueHolder {
     public void setConverter(Converter converter) {
 
         support.setConverter(converter);
+
+    }
+
+
+    public boolean isValid() {
+
+        return (support.isValid());
+
+    }
+
+
+    public void setValid(boolean valid) {
+
+        support.setValid(valid);
 
     }
 
@@ -155,8 +172,10 @@ public class UIOutput extends UIComponentBase implements ValueHolder {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        support = (ValueHolderSupport) restoreAttachedState(context, values[1]);
+        support = (ConvertableValueHolderSupport)
+            restoreAttachedState(context, values[1]);
 	support.setComponent(this);
+
     }
 
 

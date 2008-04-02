@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemsTestCase.java,v 1.2 2003/09/30 22:04:48 eburns Exp $
+ * $Id: UISelectItemsTestCase.java,v 1.3 2003/10/09 19:18:29 craigmcc Exp $
  */
 
 /*
@@ -137,13 +137,12 @@ public class UISelectItemsTestCase extends ValueHolderTestCaseBase {
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test component with valueRef and converter
+	// test component with valueRef
 	testParent.getChildren().clear();
 	preSave = new UISelectItems();
 	preSave.setId("selectItems");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
-	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
         preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);

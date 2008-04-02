@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.2 2003/09/30 22:04:49 eburns Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.3 2003/10/09 19:18:30 craigmcc Exp $
  */
 
 /*
@@ -13,11 +13,6 @@ package javax.faces.component;
 import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
-import javax.faces.convert.LongConverter;
-import javax.faces.convert.NumberConverter;
-import javax.faces.convert.ShortConverter;
 import javax.faces.TestUtil;
 import junit.framework.TestCase;
 import junit.framework.Test;
@@ -78,20 +73,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         super.testAttributesTransparency();
         ValueHolder valueHolder = (ValueHolder) component;
 
-        assertEquals(valueHolder.getConverter(),
-                     (String) component.getAttributes().get("converter"));
-        valueHolder.setConverter(new LongConverter());
-        assertNotNull((Converter) component.getAttributes().get("converter"));
-        assertTrue
-            (component.getAttributes().get("converter") instanceof LongConverter);
-        valueHolder.setConverter(null);
-        assertNull(component.getAttributes().get("converter"));
-        component.getAttributes().put("converter", new ShortConverter());
-        assertNotNull(valueHolder.getConverter());
-        assertTrue(valueHolder.getConverter() instanceof ShortConverter);
-        component.getAttributes().put("converter", null);
-        assertNull(valueHolder.getConverter());
-
         assertEquals(valueHolder.getValue(),
                      (String) component.getAttributes().get("value"));
         valueHolder.setValue("foo");
@@ -122,7 +103,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 
         // Validate initial conditions
         ValueHolder valueHolder = (ValueHolder) component;
-        assertNull(valueHolder.getConverter());
         assertNull(valueHolder.getValue());
         assertNull(valueHolder.getValueRef());
 
@@ -178,7 +158,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         ValueHolder valueHolder = (ValueHolder) component;
 
         // Validate properties
-        assertNull("no converter", valueHolder.getConverter());
         assertNull("no value", valueHolder.getValue());
         assertNull("no valueRef", valueHolder.getValueRef());
 
@@ -199,13 +178,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 
         super.testPropertiesValid();
         ValueHolder valueHolder = (ValueHolder) component;
-
-        // converter
-        valueHolder.setConverter(new LongConverter());
-        assertTrue("expected converter",
-                   valueHolder.getConverter() instanceof LongConverter);
-        valueHolder.setConverter(null);
-        assertNull("erased converter", valueHolder.getConverter());
 
         // value
         valueHolder.setValue("foo.bar");
@@ -262,28 +234,11 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test component with valueRef and converter
-	testParent.getChildren().clear();
-	preSave = new UIOutput();
-	preSave.setId("valueHolder");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setValueRef("valueRefString");
-	preSave.setConverter(new StateSavingConverter("testCase State"));
-	testParent.getChildren().add(preSave);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIOutput();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
     }
 
 
-    // Special save/restore test for components implementing ValueHolderBase
-    public void testValueHolderBase() throws Exception {
+    // Special save/restore test for components implementing ValueHolder
+    public void testValueHolder() throws Exception {
 
         UIComponent testParent = new TestComponent("root");
         ValueHolder
@@ -293,7 +248,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 
         // Create and populate test component
         preSave = createValueHolder();
-        preSave.setConverter(createNumberConverter());
         preSave.setValue("foo");
         preSave.setValueRef("bar.baz");
 
@@ -308,25 +262,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 
         // Validate the results
         checkValueHolders(preSave, postSave);
-        checkNumberConverters((NumberConverter) preSave.getConverter(),
-                              (NumberConverter) postSave.getConverter());
-
-    }
-
-
-    protected NumberConverter createNumberConverter() {
-
-        NumberConverter nc = new NumberConverter();
-        nc.setCurrencyCode("USD");
-        nc.setCurrencySymbol("$");
-        nc.setGroupingUsed(false);
-        nc.setIntegerOnly(true);
-        nc.setMaxFractionDigits(2);
-        nc.setMaxIntegerDigits(10);
-        nc.setMinFractionDigits(2);
-        nc.setMinIntegerDigits(5);
-        nc.setType("currency");
-        return (nc);
 
     }
 
@@ -339,26 +274,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         UIComponent component = new UIOutput();
         component.setRendererType(null);
         return ((ValueHolder) component);
-
-    }
-
-
-    protected void checkNumberConverters(NumberConverter nc1,
-                               NumberConverter nc2) {
-
-        assertNotNull(nc1);
-        assertNotNull(nc2);
-        assertEquals(nc1.getCurrencyCode(), nc2.getCurrencyCode());
-        assertEquals(nc1.getCurrencySymbol(), nc2.getCurrencySymbol());
-        assertEquals(nc1.isGroupingUsed(), nc2.isGroupingUsed());
-        assertEquals(nc1.isIntegerOnly(), nc2.isIntegerOnly());
-        assertEquals(nc1.getMaxFractionDigits(), nc2.getMaxFractionDigits());
-        assertEquals(nc1.getMaxIntegerDigits(), nc2.getMaxIntegerDigits());
-        assertEquals(nc1.getMinFractionDigits(), nc2.getMinFractionDigits());
-        assertEquals(nc1.getMinIntegerDigits(), nc2.getMinIntegerDigits());
-        assertEquals(nc1.getParseLocale(), nc2.getParseLocale());
-        assertEquals(nc1.getPattern(), nc2.getPattern());
-        assertEquals(nc1.getType(), nc2.getType());
 
     }
 
@@ -391,73 +306,9 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 					  valueHolder2.getValue())) {
 		return false;
 	    }
-            // Are they the same class?
-            Converter conv1 = valueHolder1.getConverter();
-            Converter conv2 = valueHolder2.getConverter();
-            if ((conv1 != null) && (conv2 == null)) {
-                return false;
-            } else if ((conv1 == null) && (conv2 != null)) {
-                return false;
-            } else if ((conv1 != null) && (conv2 != null) &&
-                       !conv1.equals(conv2)) {
-                return false;
-            }
 	}
 	return true;
     }
 
-public static class StateSavingConverter extends Object
-    implements Converter, StateHolder {
-
-	protected String state = null;
-
-	public StateSavingConverter(String newState) {
-	    state = newState;
-	}
-
-	public StateSavingConverter() {
-	}
-	
-	public Object getAsObject(FacesContext context, UIComponent component,
-				  String value) throws ConverterException {
-	    return this.getClass().getName();
-	}
-
-	public String getAsString(FacesContext context, UIComponent component,
-				  Object value) throws ConverterException {
-	    return this.getClass().getName();
-	}
-
-	public Object saveState(FacesContext context) {
-	    return state;
-	}
-
-	public void restoreState(FacesContext context, Object newState) throws IOException {
-	    state = (String) newState;
-	}
-
-	public boolean isTransient() { return false; }
-
-	public void setTransient(boolean newTransientValue) {}
-    
-        public void setComponent(UIComponent yourComponent) {
-	    // we don't keep a back reference to our component, but if we
-	    // did, here is where we'd restore it.
-	}
-
-	public boolean equals(Object otherObj) {
-	    if (!(otherObj instanceof StateSavingConverter)) {
-		return false;
-	    }
-	    StateSavingConverter other = (StateSavingConverter) otherObj;
-	    // if not both null, or not the same string
-	    if (!((null == this.state && null == other.state) ||
-		(this.state.equals(other.state)))) {
-		return false;
-	    }	 
-	    return true;
-	}
-	    
-    }
 
 }

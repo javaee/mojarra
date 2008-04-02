@@ -280,7 +280,6 @@ exist.  This is necessary to generate required classes for jsf-api.jar.
                 test.FactoryFinder2,
                 test.UIComponent,
                 test.UIComponentBase,
-                test.UIComponentBaseState,
                 test.UIColumn,
                 test.UICommand,
                 test.UIData,
@@ -300,6 +299,10 @@ exist.  This is necessary to generate required classes for jsf-api.jar.
                 test.PhaseId,
                 test.UIComponentTag">
   </target>
+
+<!-- non-running tests
+                test.UIComponentBaseState,
+-->
 
   <target name="test.FactoryFinder" depends="build.test">
     <echo message="Running FactoryFinder tests ..."/>

@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.10 2003/09/30 22:04:47 eburns Exp $
+ * $Id: UIDataTestCase.java,v 1.11 2003/10/09 19:18:27 craigmcc Exp $
  */
 
 /*
@@ -203,13 +203,12 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test component with valueRef and converter
+	// test component with valueRef
 	testParent.getChildren().clear();
 	preSave = new UIData();
 	preSave.setId("data");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
-	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
         preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
@@ -309,17 +308,6 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 		(valueHolder1.getValue().equals(valueHolder2.getValue())))) {
 		return false;
 	    }
-            // Are they the same class?
-            Converter conv1 = valueHolder1.getConverter();
-            Converter conv2 = valueHolder2.getConverter();
-            if ((conv1 != null) && (conv2 == null)) {
-                return false;
-            } else if ((conv1 == null) && (conv2 != null)) {
-                return false;
-            } else if ((conv1 != null) && (conv2 != null) &&
-                       !conv1.equals(conv2)) {
-                return false;
-            }
 	}
 	return true;
     }
@@ -366,52 +354,5 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	return true;
     }
 
-
-public static class StateSavingConverter extends Object implements Converter, StateHolder {
-	protected String state = null;
-
-	public StateSavingConverter(String newState) {
-	    state = newState;
-	}
-
-	public StateSavingConverter() {
-	}
-	
-	public Object getAsObject(FacesContext context, UIComponent component,
-				  String value) throws ConverterException {
-	    return this.getClass().getName();
-	}
-
-	public String getAsString(FacesContext context, UIComponent component,
-				  Object value) throws ConverterException {
-	    return this.getClass().getName();
-	}
-
-	public Object saveState(FacesContext context) {
-	    return state;
-	}
-
-	public void restoreState(FacesContext context, Object newState) throws IOException {
-	    state = (String) newState;
-	}
-
-	public boolean isTransient() { return false; }
-
-	public void setTransient(boolean newTransientValue) {}
-
-	public boolean equals(Object otherObj) {
-	    if (!(otherObj instanceof StateSavingConverter)) {
-		return false;
-	    }
-	    StateSavingConverter other = (StateSavingConverter) otherObj;
-	    // if not both null, or not the same string
-	    if (!((null == this.state && null == other.state) ||
-		(this.state.equals(other.state)))) {
-		return false;
-	    }	 
-	    return true;
-	}
-	    
-    }
 
 }

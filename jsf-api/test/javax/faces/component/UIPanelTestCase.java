@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelTestCase.java,v 1.9 2003/09/30 22:04:48 eburns Exp $
+ * $Id: UIPanelTestCase.java,v 1.10 2003/10/09 19:18:28 craigmcc Exp $
  */
 
 /*
@@ -137,13 +137,12 @@ public class UIPanelTestCase extends ValueHolderTestCaseBase {
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test component with valueRef and converter
+	// test component with valueRef
 	testParent.getChildren().clear();
 	preSave = new UIPanel();
 	preSave.setId("panel");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
-	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
         preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);

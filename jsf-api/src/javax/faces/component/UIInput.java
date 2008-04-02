@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.33 2003/10/06 18:34:20 eburns Exp $
+ * $Id: UIInput.java,v 1.34 2003/10/09 19:18:09 craigmcc Exp $
  */
 
 /*
@@ -280,52 +280,6 @@ public class UIInput extends UIOutput {
 
 
     /**
-     * <p>The valid state of this {@link UIInput} component.</p>
-     */
-    private boolean valid = true;
-
-
-    /**
-     * <p>Return the valid state of this {@link UIInput} component.</p>
-     */
-    public boolean isValid() {
-
-        Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null) {
-            if (repeater.getRowIndex() > 0) {
-                return (repeater.isChildValid(this));
-            } else {
-                return (this.valid);
-            }
-        } else {
-            return (this.valid);
-        }
-
-    }
-
-
-    /**
-     * <p>Set the valid state of this {@link UIInput} component.</p>
-     *
-     * @param valid The new valid state
-     */
-    public void setValid(boolean valid) {
-
-        Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null) {
-            if (repeater.getRowIndex() > 0) {
-                repeater.setChildValid(this, valid);
-            } else {
-                this.valid = valid;
-            }
-        } else {
-            this.valid = valid;
-        }
-
-    }
-
-
-    /**
      * <p>Perform the following algorithm to validate the local value of
      * this {@link UIInput}.</p>
      * <ul>
@@ -526,7 +480,7 @@ public class UIInput extends UIOutput {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[5];
+        Object values[] = new Object[4];
         values[0] = super.saveState(context);
         values[1] = required ? Boolean.TRUE : Boolean.FALSE;
        
@@ -535,20 +489,16 @@ public class UIInput extends UIOutput {
         if (repeater != null && repeater.getRowIndex() > 0) {
             rowCount = repeater.getRowCount();
             Object[] previousValues = new Object[rowCount];
-            Object[] validValues = new Object[rowCount];
             for (int i = 0; i < rowCount; ++i ) {
                 repeater.setRowIndex(i+1);
                 previousValues[i] = repeater.getChildPrevious(this);
-                validValues[i] = new Boolean(repeater.isChildValid(this));
             }
             values[2] = previousValues;
-            values[3] = validValues;
         } else {
             values[2] = previous;
-            values[3] = valid ? Boolean.TRUE : Boolean.FALSE;
         }
         
-        values[4] = saveAttachedState(context, validators);
+        values[3] = saveAttachedState(context, validators);
         return (values);
 
     }
@@ -570,22 +520,15 @@ public class UIInput extends UIOutput {
                     repeater.setChildPrevious(this, previousValues[i]);
                 }
             }
-            Object[] validValues = (Object[])values[3];
-            for (int i = 0; i < validValues.length; ++i ) {
-                repeater.setRowIndex(i+1);
-                repeater.setChildValid(this,
-                        (((Boolean)validValues[i]).booleanValue()));
-            }
         } else {
             previous = values[2];
-            valid = ((Boolean) values[3]).booleanValue();
         }
 
 	List restoredValidators = null;
 	Iterator iter = null;
 
 	if (null != (restoredValidators = (List) 
-		     restoreAttachedState(context, values[4]))) {
+		     restoreAttachedState(context, values[3]))) {
 	    // if there were some validators registered prior to this
 	    // method being invoked, merge them with the list to be
 	    // restored.

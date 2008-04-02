@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.23 2003/10/06 18:34:20 eburns Exp $
+ * $Id: UIGraphic.java,v 1.24 2003/10/09 19:18:09 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.component;
 
 import java.io.IOException;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 
 
 /**
@@ -81,20 +80,6 @@ public class UIGraphic extends UIComponentBase implements ValueHolder {
 
 
     // -------------------------------------------------- ValueHolder Properties
-
-
-    public Converter getConverter() {
-
-        return (support.getConverter());
-
-    }
-
-
-    public void setConverter(Converter converter) {
-
-        support.setConverter(converter);
-
-    }
 
 
     public Object getValue() {

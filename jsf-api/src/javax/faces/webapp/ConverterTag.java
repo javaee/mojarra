@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.2 2003/09/12 16:25:23 craigmcc Exp $
+ * $Id: ConverterTag.java,v 1.3 2003/10/09 19:18:19 craigmcc Exp $
  */
 
 /*
@@ -10,9 +10,8 @@
 package javax.faces.webapp;
 
 
+import javax.faces.component.ConvertableValueHolder;
 import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
-import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
@@ -27,11 +26,11 @@ import javax.faces.FactoryFinder;
 /**
  * <p><strong>ConverterTag</strong> is a base class for all JSP custom actions
  * that create and register a <code>Converter</code> instance on the
- * {@link ValueHolder} associated with our most immediate surrounding instance
- * of a tag whose implementation class is a subclass of {@link UIComponentTag}.
- * To avoid creating duplicate instances when a page is redisplayed,
- * creation and registration of a {@link Converter} occurs
- * <strong>only</strong> if the corresponding {@link UIComponent} was
+ * {@link ConvertableValueHolder} associated with our most immediate
+ * surrounding instance of a tag whose implementation class is a subclass
+ * of {@link UIComponentTag}.  To avoid creating duplicate instances when
+ * a page is redisplayed, creation and registration of a {@link Converter}
+ * occurs <strong>only</strong> if the corresponding {@link UIComponent} was
  * created (by the owning {@link UIComponentTag}) during the execution of the
  * current page.</p>
  *
@@ -103,7 +102,7 @@ public class ConverterTag extends TagSupport {
 
         // Create and register an instance with the appropriate component
         Converter converter = createConverter();
-        ((ValueHolder) tag.getComponent()).setConverter(converter);
+        ((ConvertableValueHolder) tag.getComponent()).setConverter(converter);
         return (SKIP_BODY);
 
     }

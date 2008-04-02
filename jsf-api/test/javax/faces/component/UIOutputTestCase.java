@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputTestCase.java,v 1.9 2003/09/30 22:04:48 eburns Exp $
+ * $Id: UIOutputTestCase.java,v 1.10 2003/10/09 19:18:28 craigmcc Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UIOutput}.</p>
  */
 
-public class UIOutputTestCase extends ValueHolderTestCaseBase {
+public class UIOutputTestCase extends ConvertableValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors

@@ -40,7 +40,6 @@ package javax.faces.component;
 
 
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
@@ -138,20 +137,6 @@ public class UIData extends UIComponentBase
 
 
     // -------------------------------------------------------------- Properties
-
-
-    public Converter getConverter() {
-
-        return (support.getConverter());
-
-    }
-
-
-    public void setConverter(Converter converter) {
-
-        support.setConverter(converter);
-
-    }
 
 
     /**
