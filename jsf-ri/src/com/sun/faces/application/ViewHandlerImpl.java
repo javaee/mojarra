@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.48 2005/03/17 16:10:44 edburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.49 2005/04/05 20:25:14 jayashri Exp $ 
  */ 
 
 
@@ -15,8 +15,6 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
@@ -32,20 +30,23 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.48 2005/03/17 16:10:44 edburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.49 2005/04/05 20:25:14 jayashri Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
 
-    //
-    // Private/Protected Constants
-    //
-    private static final Log log = LogFactory.getLog(ViewHandlerImpl.class);
-
+    // Log instance for this class
+    private static Logger logger;
+    static {
+        logger = Util.getLogger(Util.FACES_LOGGER);
+    }
+    
     /**
      * <p>The <code>request</code> scoped attribute to store the
      * {@link javax.faces.webapp.FacesServlet} path of the original
@@ -66,8 +67,8 @@ public class ViewHandlerImpl extends ViewHandler {
 
 
     public ViewHandlerImpl() {
-        if (log.isDebugEnabled()) {
-            log.debug("Created ViewHandler instance ");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE,"Created ViewHandler instance ");
         }
     }
 
@@ -84,14 +85,15 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(message);
         }
 	
-	ApplicationAssociate associate = ApplicationAssociate.getInstance(context.getExternalContext());
+	ApplicationAssociate associate = 
+                ApplicationAssociate.getInstance(context.getExternalContext());
 	
         if (null != associate) {
             associate.responseRendered();
         }
         String requestURI = viewToRender.getViewId();
-        if (log.isDebugEnabled()) {
-            log.debug("About to render view " + requestURI);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "About to render view " + requestURI);
         }
 
         String mapping = getFacesMapping(context);
@@ -99,14 +101,14 @@ public class ViewHandlerImpl extends ViewHandler {
         // If we have a valid mapping (meaning we were invoked via the
         // FacesServlet) and we're extension mapped, do the replacement.
         if (mapping != null && !isPrefixMapped(mapping)) {
-            if (log.isDebugEnabled()) {
-                log.debug(
-                    "Found URL pattern mapping to FacesServlet " + mapping);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine( "Found URL pattern mapping to FacesServlet " 
+                        + mapping);
             }
             newViewId = convertViewId(context, requestURI);
         } else {
-            if (log.isDebugEnabled()) {
-                log.debug("Found no URL patterns mapping to FacesServlet ");
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Found no URL patterns mapping to FacesServlet ");
             }
         }
 
@@ -124,12 +126,12 @@ public class ViewHandlerImpl extends ViewHandler {
                 context.getExternalContext().getRequest(),
                        Config.FMT_LOCALE, context.getViewRoot().getLocale());
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Before dispacthMessage to newViewId " + newViewId);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Before dispacthMessage to newViewId " + newViewId);
         }
         context.getExternalContext().dispatch(newViewId);
-        if (log.isTraceEnabled()) {
-            log.trace("After dispacthMessage to newViewId " + newViewId);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("After dispacthMessage to newViewId " + newViewId);
         }
 
     }
@@ -147,11 +149,6 @@ public class ViewHandlerImpl extends ViewHandler {
 
         // set the request character encoding. NOTE! This MUST be done
         // before any request praameter is accessed.
-
-        /*
-        HttpServletRequest request =
-            (HttpServletRequest) extContext.getRequest();
-        */
         Map headerMap = extContext.getRequestHeaderMap();
         String
             contentType = null,
@@ -181,17 +178,17 @@ public class ViewHandlerImpl extends ViewHandler {
         }
         if (null != charEnc) {
             try {
-                if (log.isTraceEnabled()) {
-                    log.trace(
-                        "set character encoding on request to " + charEnc);
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("set character encoding on request to " 
+                            + charEnc);
                 }
                 Object request = extContext.getRequest();
                 if (request instanceof ServletRequest) {
                     ((ServletRequest) request).setCharacterEncoding(charEnc);
                 }
             } catch (java.io.UnsupportedEncodingException uee) {
-                if (log.isErrorEnabled()) {
-                    log.error(uee.getMessage(), uee);
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE,uee.getMessage(), uee);
                 }
                 throw new FacesException(uee);
             }
@@ -209,13 +206,12 @@ public class ViewHandlerImpl extends ViewHandler {
 	    context.getApplication().getViewHandler();
 	String renderKitId =
 	    outerViewHandler.calculateRenderKitId(context);
-	viewRoot = Util.getStateManager(context).restoreView(context,
-							     viewId,
-							     renderKitId);
+	viewRoot = Util.getStateManager(context).restoreView(context, viewId,
+	        renderKitId);
 
-	if (log.isTraceEnabled()) {
-	    log.trace("Restored View Tree");
-	    log.trace(com.sun.faces.util.DebugUtil.printTree(viewRoot));
+	if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Restored View Tree");
+	    logger.fine(com.sun.faces.util.DebugUtil.printTree(viewRoot));
 	}
     
         return viewRoot;
@@ -247,8 +243,8 @@ public class ViewHandlerImpl extends ViewHandler {
             // send them off to the root of the web application
             try {
                 context.responseComplete();
-                if (log.isDebugEnabled()) {
-                    log.debug("Response Complete for" + viewId);
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE, "Response Complete for" + viewId);
                 }
                 extContext.redirect(extContext.getRequestContextPath());
 		return result;
@@ -267,8 +263,8 @@ public class ViewHandlerImpl extends ViewHandler {
             locale = context.getViewRoot().getLocale();
             renderKitId = context.getViewRoot().getRenderKitId();
         }
-        if (log.isDebugEnabled()) {
-            log.debug("Created new view for " + viewId);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Created new view for " + viewId);
         }
         // PENDING(): not sure if we should set the RenderKitId here.
         // The UIViewRoot ctor sets the renderKitId to the default
@@ -279,14 +275,14 @@ public class ViewHandlerImpl extends ViewHandler {
             locale =
                 context.getApplication().getViewHandler().calculateLocale(
                     context);
-            if (log.isDebugEnabled()) {
-                log.debug("Locale for this view as determined by calculateLocale "
-                          + locale.toString());
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Locale for this view as determined by calculateLocale "
+                        + locale.toString());
             }
         } else {
-            if (log.isDebugEnabled()) {
-                log.debug(
-                    "Using locale from previous view " + locale.toString());
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Using locale from previous view " 
+                        + locale.toString());
             }
         }
 
@@ -294,14 +290,15 @@ public class ViewHandlerImpl extends ViewHandler {
             renderKitId =
                 context.getApplication().getViewHandler().calculateRenderKitId(
                     context);
-            if (log.isDebugEnabled()) {
-                log.debug("RenderKitId for this view as determined by calculateRenderKitId "
+           if (logger.isLoggable(Level.FINE)) {
+               logger.fine( 
+               "RenderKitId for this view as determined by calculateRenderKitId "
                           + renderKitId);
             }
         } else {
-            if (log.isDebugEnabled()) {
-                log.debug(
-                    "Using renderKitId from previous view " + renderKitId);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Using renderKitId from previous view " 
+                        + renderKitId);
             }
         }
 
@@ -423,14 +420,14 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(message);
         }
         
-	if (log.isTraceEnabled()) {
-	    log.trace("Begin writing state to response for viewId" +
+	if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Begin writing state to response for viewId " +
                       context.getViewRoot().getViewId());
 	}
 	context.getResponseWriter().writeText(
 				    RIConstants.SAVESTATE_FIELD_MARKER, null);
-	if (log.isTraceEnabled()) {
-	    log.trace("End writing state to response for viewId" +
+	if (logger.isLoggable(Level.FINE)) {
+            logger.fine("End writing state to response for viewId " +
                       context.getViewRoot().getViewId());
 	}
         
@@ -447,11 +444,12 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         if (viewId.charAt(0) != '/') {
-            String message = Util.getExceptionMessageString(Util.ILLEGAL_VIEW_ID_ID,
-                                                      new Object[]{viewId});
-            if (log.isErrorEnabled()) {
-                log.error(message + " " + viewId);
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, "jsf.illegal_view_id_error", viewId);
             }
+            String message = 
+                    Util.getExceptionMessageString(Util.ILLEGAL_VIEW_ID_ID, 
+                    new Object[]{viewId});
             throw new IllegalArgumentException(message);
         }
         
@@ -551,21 +549,20 @@ public class ViewHandlerImpl extends ViewHandler {
 
             mapping = getMappingForRequest(servletPath, pathInfo);
             if (mapping == null) {
-                String message = Util.getExceptionMessageString(
-                    Util.FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED_ID,
-                    new Object[]{servletPath});
-                if (log.isWarnEnabled()) {
-                    log.warn(message);
-                }            
-                //throw new FacesException(message);
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.log(Level.WARNING,
+                        "jsf.faces_servlet_mapping_cannot_be_determined_error",
+                        new Object[]{servletPath});
+                }
             }
         }
 
         if (mapping != null) {
             extContext.getRequestMap().put(INVOCATION_PATH, mapping);
         }
-        if (log.isDebugEnabled()) {
-            log.debug("URL pattern of the FacesServlet executing the current request "
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, 
+                "URL pattern of the FacesServlet executing the current request "
                       + mapping);
         }
         return mapping;
@@ -585,9 +582,9 @@ public class ViewHandlerImpl extends ViewHandler {
         if (servletPath == null) {
             return null;
         }
-        if (log.isTraceEnabled()) {
-            log.trace("servletPath " + servletPath);
-            log.trace("pathInfo " + pathInfo);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "servletPath " + servletPath);
+            logger.log(Level.FINE, "pathInfo " + pathInfo);
         }
 
         // If the path returned by HttpServletRequest.getServletPath()
@@ -642,8 +639,8 @@ public class ViewHandlerImpl extends ViewHandler {
                 if (contextDefaultSuffix == null) {
                     contextDefaultSuffix = ViewHandler.DEFAULT_SUFFIX;
                 }
-                if (log.isDebugEnabled()) {
-                    log.debug("contextDefaultSuffix " + contextDefaultSuffix);
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("contextDefaultSuffix " + contextDefaultSuffix);
                 }
             }
         }
@@ -661,8 +658,8 @@ public class ViewHandlerImpl extends ViewHandler {
                 buffer.append(contextDefaultSuffix);
             }
             convertedViewId = buffer.toString();
-            if (log.isDebugEnabled()) {
-                log.debug("viewId after appending the context suffix " +
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine( "viewId after appending the context suffix " +
                           convertedViewId);
             }
 

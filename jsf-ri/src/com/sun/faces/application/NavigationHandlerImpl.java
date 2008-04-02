@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.35 2004/10/12 14:39:49 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.36 2005/04/05 20:25:13 jayashri Exp $
  */
 
 /*
@@ -11,8 +11,6 @@ package com.sun.faces.application;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.config.ConfigureListener;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -27,6 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -40,8 +40,11 @@ public class NavigationHandlerImpl extends NavigationHandler {
     // Protected Constants
     //
 
-    private static final Log log = LogFactory.getLog(
-        NavigationHandlerImpl.class);
+    // Log instance for this class
+    private static Logger logger;
+    static {
+        logger = Util.getLogger(Util.FACES_LOGGER);
+    }
 
     //
     // Class Variables
@@ -63,17 +66,17 @@ public class NavigationHandlerImpl extends NavigationHandler {
      */
     public NavigationHandlerImpl() {
         super();
-        if (log.isDebugEnabled()) {
-            log.debug("Created NavigationHandler instance ");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Created NavigationHandler instance ");
         }
 	// if the user is using the decorator pattern, this would cause
 	// our ApplicationAssociate to be created, if it isn't already
 	// created.
-        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
-            FactoryFinder.APPLICATION_FACTORY);
+        ApplicationFactory aFactory = (ApplicationFactory) 
+                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         aFactory.getApplication();
-	associate = 
-	    ApplicationAssociate.getInstance(ConfigureListener.getExternalContextDuringInitialize());
+	associate = ApplicationAssociate.getInstance(
+                ConfigureListener.getExternalContextDuringInitialize());
 
     }
 
@@ -96,10 +99,11 @@ public class NavigationHandlerImpl extends NavigationHandler {
             throw new NullPointerException(message);
         }
         if (outcome == null) {
-            if (log.isDebugEnabled()) {
-                log.debug("No navigation rule found for outcome " + outcome +
-                          "and viewId " + context.getViewRoot().getViewId() +
-                          " Explicitly remain on the current view ");
+           if (logger.isLoggable(Level.FINE)) {
+               logger.fine("No navigation rule found for outcome " 
+                       + outcome + "and viewId " + 
+                       context.getViewRoot().getViewId() +
+                       " Explicitly remain on the current view ");
             }
             return; // Explicitly remain on the current view
         }
@@ -114,31 +118,30 @@ public class NavigationHandlerImpl extends NavigationHandler {
                 String newPath =
                     viewHandler.getActionURL(context, caseStruct.viewId);
                 try {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Redirecting to path " + newPath
+                    if (logger.isLoggable(Level.FINE)) {
+                        logger.fine("Redirecting to path " + newPath
                                   + " for outcome " + outcome +
                                   "and viewId " + caseStruct.viewId);
                     }
                     extContext.redirect(newPath);
                 } catch (java.io.IOException ioe) {
-                    String message = "Redirect to " + newPath + " failed.";
-                    if (log.isErrorEnabled()) {
-                        log.error(message);
+                    if (logger.isLoggable(Level.SEVERE)) {
+                        logger.log(Level.SEVERE,"jsf.redirect_failed_error",
+                                newPath);
                     }
-                    throw new FacesException(message, ioe);
+                    throw new FacesException(ioe.getMessage(), ioe);
                 }
                 context.responseComplete();
-                if (log.isDebugEnabled()) {
-                    log.debug("Response complete for " + caseStruct.viewId);
-                }
+               if (logger.isLoggable(Level.FINE)) {
+                   logger.fine("Response complete for " + caseStruct.viewId);
+               }
             } else {
                 UIViewRoot newRoot = viewHandler.createView(context,
                                                             caseStruct.viewId);
                 context.setViewRoot(newRoot);
-                if (log.isDebugEnabled()) {
-                    log.debug(
-                        "Set new view in FacesContext for " +
-                        caseStruct.viewId);
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Set new view in FacesContext for " +
+                            caseStruct.viewId);
                 }
             }
         }
@@ -251,16 +254,17 @@ public class NavigationHandlerImpl extends NavigationHandler {
         while (iter.hasNext()) {
             String fromViewId = (String) iter.next();
 
-// See if the entire wildcard string (without the trailing "*" is
-// contained in the incoming viewId.  Ex: /foobar is contained with /foobarbaz
-// If so, then we have found our largest pattern match..
-// If not, then continue on to the next case;
+            // See if the entire wildcard string (without the trailing "*" is
+            // contained in the incoming viewId.  
+            // Ex: /foobar is contained with /foobarbaz
+            // If so, then we have found our largest pattern match..
+            // If not, then continue on to the next case;
 
             if (viewId.indexOf(fromViewId, 0) == -1) {
                 continue;
             }
 
-// Append the trailing "*" so we can do our map lookup;
+            // Append the trailing "*" so we can do our map lookup;
 
             String wcFromViewId = fromViewId + "*";
             List caseList = (List) caseListMap.get(wcFromViewId);
@@ -269,12 +273,12 @@ public class NavigationHandlerImpl extends NavigationHandler {
                 return null;
             }
 
-// If we've found a match, then we need to evaluate
-// from-action/outcome in the following order:
-// 1) elements specifying both from-action and from-outcome
-// 2) elements specifying only from-outcome
-// 3) elements specifying only from-action
-// 4) elements where both from-action and from-outcome are null
+            // If we've found a match, then we need to evaluate
+            // from-action/outcome in the following order:
+            // 1) elements specifying both from-action and from-outcome
+            // 2) elements specifying only from-outcome
+            // 3) elements specifying only from-action
+            // 4) elements where both from-action and from-outcome are null
 
             result = determineViewFromActionOutcome(caseList, fromAction,
                                                     outcome);

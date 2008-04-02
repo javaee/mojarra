@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.58 2005/03/09 00:35:44 jayashri Exp $
+ * $Id: ApplicationImpl.java,v 1.59 2005/04/05 20:25:13 jayashri Exp $
  */
 
 /*
@@ -39,8 +39,8 @@ import com.sun.faces.el.ValueBindingFactory;
 import com.sun.faces.el.VariableResolverImpl;
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 /**
@@ -53,7 +53,10 @@ import org.apache.commons.logging.LogFactory;
 public class ApplicationImpl extends Application {
 
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(ApplicationImpl.class);
+    private static Logger logger;
+    static {
+        logger = Util.getLogger(Util.FACES_LOGGER);
+    }
 
     // Relationship Instance Variables
 
@@ -101,8 +104,8 @@ public class ApplicationImpl extends Application {
         valueBindingFactory = new ValueBindingFactory();
         methodBindingFactory = new MethodBindingFactory();
 
-        if (log.isDebugEnabled()) {
-            log.debug("Created Application instance ");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Created Application instance ");
         }
     }
 
@@ -127,16 +130,17 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             if (associate.isResponseRendered()) {
                 // at least one response has been rendered.
-                if (log.isErrorEnabled()) {
-                    log.error(
-                        "Response for this request has been rendered already ");
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE,
+                        "jsf.illegal_attempt_setting_viewhandler_error");
                 }
                 throw new IllegalStateException(Util.getExceptionMessageString(
                     Util.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID));
             }
             viewHandler = handler;
-            if (log.isDebugEnabled()) {
-                log.debug("set ViewHandler Instance to " + viewHandler);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE,"set ViewHandler Instance to " 
+                        + viewHandler);
             }
         }
     }
@@ -157,16 +161,17 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             if (associate.isResponseRendered()) {
                 // at least one response has been rendered.
-                if (log.isErrorEnabled()) {
-                    log.error(
-                        "Response for this request has been rendered already ");
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE,
+                        "jsf.illegal_attempt_setting_statemanager_error");
                 }
                 throw new IllegalStateException(Util.getExceptionMessageString(
                     Util.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID));
             }
             stateManager = manager;
-            if (log.isDebugEnabled()) {
-                log.debug("set StateManager Instance to " + stateManager);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE, "set StateManager Instance to " 
+                        + stateManager);
             }
         }
     }
@@ -182,8 +187,8 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             this.actionListener = listener;
         }
-        if (log.isDebugEnabled()) {
-            log.debug("set ActionListener Instance to " + actionListener);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("set ActionListener Instance to " + actionListener);
         }
     }
 
@@ -219,8 +224,8 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             this.navigationHandler = handler;
         }
-        if (log.isDebugEnabled()) {
-            log.debug("set NavigationHandler Instance to " + navigationHandler);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("set NavigationHandler Instance to "+ navigationHandler);
         }
     }
 
@@ -245,8 +250,8 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             this.propertyResolver = resolver;
         }
-        if (log.isDebugEnabled()) {
-            log.debug("set PropertyResolver Instance to " + propertyResolver);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("set PropertyResolver Instance to " + propertyResolver);
         }
     }
 
@@ -284,8 +289,8 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             this.variableResolver = resolver;
         }
-        if (log.isDebugEnabled()) {
-            log.debug("set VariableResolver Instance to " + variableResolver);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("set VariableResolver Instance to " + variableResolver);
         }
     }
 
@@ -301,8 +306,8 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             componentMap.put(componentType, componentClass);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("added component of type " + componentType +
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("added component of type " + componentType +
                       " class " + componentClass);
         }
     }
@@ -319,16 +324,16 @@ public class ApplicationImpl extends Application {
         UIComponent returnVal = (UIComponent) newThing(componentType,
                                                        componentMap);
         if (returnVal == null) {
-            if (log.isErrorEnabled()) {
-                log.error(
-                    "Could not instantiate component of type " + componentType);
-            }
             Object[] params = {componentType};
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, 
+                        "jsf.cannot_instantiate_component_error", params);
+            }
             throw new FacesException(Util.getExceptionMessageString(
                 Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Created component " + componentType);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Created component " + componentType);
         }
         return returnVal;
     }
@@ -385,8 +390,8 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             converterIdMap.put(converterId, converterClass);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("added converter of type " + converterId +
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("added converter of type " + converterId +
                       " and class " + converterClass);
         }
     }
@@ -403,8 +408,8 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             converterTypeMap.put(targetClass, converterClass);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("added converter of class type " + converterClass);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("added converter of class type " + converterClass);
         }
     }
 
@@ -418,16 +423,16 @@ public class ApplicationImpl extends Application {
         }
         Converter returnVal = (Converter) newThing(converterId, converterIdMap);
         if (returnVal == null) {
-            if (log.isErrorEnabled()) {
-                log.error("Couldn't instantiate converter of the type " +
-                          converterId);
-            }
             Object[] params = {converterId};
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, 
+                        "jsf.cannot_instantiate_converter_error", converterId);
+            }
             throw new FacesException(Util.getExceptionMessageString(
                 Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("created converter of type " + converterId);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("created converter of type " + converterId);
         }
         return returnVal;
     }
@@ -442,11 +447,12 @@ public class ApplicationImpl extends Application {
         }
         Converter result = createConverterBasedOnClass(targetClass);
         if (result == null) {
-            if (log.isErrorEnabled()) {
-                log.error("Couldn't instantiate converter of the type " +
-                          targetClass.getName());
-            }
             Object[] params = {targetClass.getName()};
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, 
+                        "jsf.cannot_instantiate_converter_error", 
+                        targetClass.getName());
+            }
             throw new FacesException(Util.getExceptionMessageString(
                 Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         } 
@@ -458,9 +464,9 @@ public class ApplicationImpl extends Application {
         Converter returnVal = (Converter) newThing(targetClass,
                                                    converterTypeMap);
         if (returnVal != null) {
-            if (log.isTraceEnabled()) {
-                log.trace("Created converter of type " +
-                          returnVal.getClass().getName());
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Created converter of type " + 
+                        returnVal.getClass().getName());
             }
             return returnVal;
         } 
@@ -472,8 +478,8 @@ public class ApplicationImpl extends Application {
             for (int i = 0; i < interfaces.length; i++) {
                 returnVal = createConverterBasedOnClass(interfaces[i]);
                 if (returnVal != null) {
-                    if (log.isTraceEnabled()) {
-                        log.trace("Created converter of type " +
+                   if (logger.isLoggable(Level.FINE)) {
+                       logger.fine("Created converter of type " +
                                   returnVal.getClass().getName());
                     }
                     return returnVal;
@@ -486,8 +492,8 @@ public class ApplicationImpl extends Application {
         if (superclass != null) {
             returnVal = (Converter) createConverterBasedOnClass(superclass);
             if (returnVal != null) {
-                if (log.isTraceEnabled()) {
-                    log.trace("Created converter of type " +
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Created converter of type " +
                               returnVal.getClass().getName());
                 }
                 return returnVal;
@@ -541,8 +547,8 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             supportedLocales = new ArrayList(newLocales);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("set Supported Locales");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "set Supported Locales");
         }
     }
 
@@ -567,8 +573,8 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             defaultLocale = locale;
         }
-        if (log.isTraceEnabled()) {
-            log.trace("set defaultLocale " + defaultLocale);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, ("set defaultLocale " + defaultLocale));
         }
 
     }
@@ -598,8 +604,8 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             validatorMap.put(validatorId, validatorClass);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("added validator of type " + validatorId +
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("added validator of type " + validatorId +
                       " class " + validatorClass);
         }
     }
@@ -614,16 +620,16 @@ public class ApplicationImpl extends Application {
         }
         Validator returnVal = (Validator) newThing(validatorId, validatorMap);
         if (returnVal == null) {
-            if (log.isErrorEnabled()) {
-                log.error("Couldn't instantiate Validator of the type " +
-                          validatorId);
-            }
             Object[] params = {validatorId};
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, 
+                        "jsf.cannot_instantiate_validator_error", params);
+            }
             throw new FacesException(Util.getExceptionMessageString(
                 Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("created validator of type " + validatorId);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("created validator of type " + validatorId);
         }
         return returnVal;
     }
@@ -642,8 +648,8 @@ public class ApplicationImpl extends Application {
         synchronized (this) {
             this.messageBundle = messageBundle;
         }
-        if (log.isTraceEnabled()) {
-            log.trace("set messageBundle " + messageBundle);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "set messageBundle " + messageBundle);
         }
     }
 
@@ -702,6 +708,9 @@ public class ApplicationImpl extends Application {
             result = clazz.newInstance();
         } catch (Throwable t) {
             Object[] params = {clazz.getName()};
+             if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, t.getMessage(), t);
+            }
             throw new FacesException(Util.getExceptionMessageString(
                 Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
         }

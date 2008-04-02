@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.8 2005/02/03 22:51:57 jayashri Exp $
+ * $Id: ApplicationAssociate.java,v 1.9 2005/04/05 20:25:13 jayashri Exp $
  */
 
 /*
@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -26,8 +28,6 @@ import com.sun.faces.config.ConfigureListener;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -42,8 +42,12 @@ import org.apache.commons.logging.LogFactory;
 
 public class ApplicationAssociate extends Object {
 
-    protected static Log log = LogFactory.getLog(ApplicationImpl.class);
-
+    // Log instance for this class
+    private static Logger logger;
+    static {
+        logger = Util.getLogger(Util.FACES_LOGGER);
+    }
+    
     //
     // This map stores "managed bean name" | "managed bean factory"
     // mappings.
@@ -209,9 +213,9 @@ public class ApplicationAssociate extends Object {
                                                    ManagedBeanFactory factory) {
         managedBeanFactoriesMap.put(managedBeanName, factory);
 	factory.setManagedBeanFactoryMap(managedBeanFactoriesMap);
-        if (log.isTraceEnabled()) {
-            log.trace("Added managedBeanFactory " + factory + " for" +
-                      managedBeanName);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Added managedBeanFactory " + factory + 
+                    " for" + managedBeanName);
         }
     }
 
@@ -236,8 +240,8 @@ public class ApplicationAssociate extends Object {
         ManagedBeanFactory managedBean = (ManagedBeanFactory)
             managedBeanFactoriesMap.get(managedBeanName);
         if (managedBean == null) {
-            if (log.isDebugEnabled()) {
-                log.debug("Couldn't find a factory for " + managedBeanName);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Couldn't find a factory for " + managedBeanName);
             }
             return null;
         }
@@ -256,14 +260,15 @@ public class ApplicationAssociate extends Object {
             synchronized (this) {
                 try {
                     bean = managedBean.newInstance(context);
-                    if (log.isDebugEnabled()) {
-                        log.debug("Created bean " + managedBeanName + " successfully ");
+                    if (logger.isLoggable(Level.FINE)) {
+                        logger.fine("Created bean " + managedBeanName 
+                                + " successfully ");
                     }
                 } catch (Exception ex) {
-                    Object[] params = {ex.getMessage()};
-                    if (log.isErrorEnabled()) {
-                        log.error("Managedbean " + managedBeanName +
-                                  " could not be created " + ex.getMessage(), ex);
+                    Object[] params = {managedBeanName};
+                    if (logger.isLoggable(Level.SEVERE)) {
+                        logger.log(Level.SEVERE, 
+                                "jsf.managed_bean_creation_error", params);
                     }
                     throw new FacesException(ex);
                 }
@@ -280,14 +285,15 @@ public class ApplicationAssociate extends Object {
             scopeIsRequest = scope.equalsIgnoreCase(RIConstants.REQUEST);
             try {
                 bean = managedBean.newInstance(context);
-                if (log.isDebugEnabled()) {
-                    log.debug("Created bean " + managedBeanName + " successfully ");
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE, "Created bean " + managedBeanName + 
+                              " successfully ");
                 }
             } catch (Exception ex) {
-                Object[] params = {ex.getMessage()};
-                if (log.isErrorEnabled()) {
-                    log.error("Managedbean " + managedBeanName +
-                              " could not be created " + ex.getMessage(), ex);
+                Object[] params = {managedBeanName};
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE, 
+                            "jsf.managed_bean_creation_error", params);
                 }
                 throw new FacesException(ex);
             }

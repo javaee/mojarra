@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.10 2004/02/26 20:32:28 eburns Exp $
+ * $Id: ActionListenerImpl.java,v 1.11 2005/04/05 20:25:13 jayashri Exp $
  */
 
 /*
@@ -8,9 +8,6 @@
  */
 
 package com.sun.faces.application;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -24,6 +21,12 @@ import javax.faces.el.MethodNotFoundException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
+
 /**
  * This action listener implementation processes action events during the
  * <em>Apply Request Values</em> or <em>Invoke Application</em>
@@ -36,8 +39,10 @@ import javax.faces.event.ActionListener;
 public class ActionListenerImpl implements ActionListener {
 
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(ActionListenerImpl.class);
-
+    private static Logger logger;
+    static {
+        logger = Util.getLogger(Util.FACES_LOGGER);
+    }
 
     //
     // Constructors and Initializers
@@ -54,8 +59,8 @@ public class ActionListenerImpl implements ActionListener {
     //
 
     public void processAction(ActionEvent event) {
-        if (log.isDebugEnabled()) {
-            log.debug("processAction(" + event.getComponent().getId() + ")");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("processAction(" + event.getComponent().getId() + ")");
         }
         UIComponent source = event.getComponent();
         ActionSource actionSource = (ActionSource) source;
@@ -71,12 +76,18 @@ public class ActionListenerImpl implements ActionListener {
 	    try {
 		outcome = (String) binding.invoke(context, null);
 	    } catch (MethodNotFoundException e) {
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE, e.getMessage(), e);
+                }
 		throw new FacesException
-                    (binding.getExpressionString() + ": " + e, e);
+                    (binding.getExpressionString() + ": " + e.getMessage(), e);
 	    }
 	    catch (EvaluationException e) {
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE, e.getMessage(), e);
+                }
 		throw new FacesException
-                    (binding.getExpressionString() + ": " + e, e);
+                    (binding.getExpressionString() + ": " + e.getMessage(), e);
 	    }
 	}
 

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.152 2005/02/28 18:48:21 jayashri Exp $
+ * $Id: Util.java,v 1.153 2005/04/05 20:25:14 jayashri Exp $
  */
 
 /*
@@ -13,8 +13,6 @@ package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitImpl;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -54,13 +52,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <B>Util</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.152 2005/02/28 18:48:21 jayashri Exp $
+ * @version $Id: Util.java,v 1.153 2005/04/05 20:25:14 jayashri Exp $
  */
 
 public class Util extends Object {
@@ -68,9 +68,17 @@ public class Util extends Object {
     //
     // Private/Protected Constants
     //
+    public static final String FACES_LOGGER = "javax.enterprise.resource.jsf.";
+    
+    public static final String FACES_LOG_STRINGS = 
+            "com.sun.faces.LogStrings";
+    
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(Util.class);
-
+    private static Logger logger;
+    static {
+        logger = getLogger(FACES_LOGGER);
+    }
+    
     // README - make sure to add the message identifier constant
     // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
     // parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
@@ -426,6 +434,10 @@ public class Util extends Object {
             loader = fallbackClass.getClass().getClassLoader();
         }
         return loader;
+    }
+    
+    public static Logger getLogger( String loggerName ) {
+        return Logger.getLogger(loggerName, FACES_LOG_STRINGS );
     }
 
 
@@ -1169,11 +1181,11 @@ public class Util extends Object {
                 }
             } catch (Exception e) {
                 Object[] params = new Object[1];
-                params[0] = className;
+                params[0] = className;                
                 String msg = Util.getExceptionMessageString(
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
-                if (log.isErrorEnabled()) {
-                    log.error(msg + ":" + className + ":exception:", e);
+                if ( logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE, msg, e);
                 }
             }
         }

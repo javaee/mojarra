@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationFactoryImpl.java,v 1.7 2004/05/10 19:55:59 jvisvanathan Exp $
+ * $Id: ApplicationFactoryImpl.java,v 1.8 2005/04/05 20:25:13 jayashri Exp $
  */
 
 /*
@@ -10,8 +10,8 @@
 package com.sun.faces.application;
 
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -30,26 +30,28 @@ import javax.faces.application.ApplicationFactory;
  */
 public class ApplicationFactoryImpl extends ApplicationFactory {
 
-// Log instance for this class
-    protected static Log log = LogFactory.getLog(ApplicationFactoryImpl.class);
+   // Log instance for this class
+    private static Logger logger;
+    static {
+        logger = Util.getLogger(Util.FACES_LOGGER);
+    }
+    //
+    // Protected Constants
+    //
 
-//
-// Protected Constants
-//
+    //
+    // Class Variables
+    //
 
-//
-// Class Variables
-//
-
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
     private Application application;
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers
-//
+    //
+    // Constructors and Initializers
+    //
 
 
     /*
@@ -58,8 +60,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
     public ApplicationFactoryImpl() {
         super();
         application = null;
-        if (log.isDebugEnabled()) {
-            log.debug("Created ApplicationFactory ");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Created ApplicationFactory ");
         }
     }
 
@@ -72,8 +74,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
 
         if (application == null) {
             application = new ApplicationImpl();
-            if (log.isDebugEnabled()) {
-                log.debug("Created Application instance " + application);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Created Application instance " + application);
             }
         }
         return application;
@@ -95,8 +97,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
         }
 
         this.application = application;
-        if (log.isDebugEnabled()) {
-            log.debug("set Application Instance to " + application);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("set Application Instance to " + application);
         }
     }
 }
