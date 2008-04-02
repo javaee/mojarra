@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayGuard.java,v 1.5 2005/06/23 15:31:33 rlubke Exp $
+ * $Id: ByteArrayGuard.java,v 1.6 2005/07/03 07:30:53 jhook Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package com.sun.faces.renderkit;
 
+import java.io.IOException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -70,6 +71,9 @@ public class ByteArrayGuard {
         this.keyLength = keyLength;
         this.macLength = macLength;
         this.ivLength = ivLength;
+        
+        // generate random password in memory
+        this.password = getRandomString(DEFAULT_PASSWORD_LENGTH);
     }
     
     /**
@@ -81,7 +85,7 @@ public class ByteArrayGuard {
      * @param plaindata The plain text that needs to be encrypted
      * @return The encrypted contents
      */
-    public byte[] encrypt(FacesContext context, byte[] plaindata) {
+    public byte[] encrypt(FacesContext context, byte[] plaindata) throws IOException {
         try {
             // generate a key that can be used for encryption from the 
             // supplied password
@@ -125,7 +129,7 @@ public class ByteArrayGuard {
      * vector) that needs to be decrypted
      * @return A byte array containing the decrypted contents
      */
-    public byte[] decrypt(FacesContext context, byte[] securedata) {
+    public byte[] decrypt(FacesContext context, byte[] securedata) throws IOException {
         try {
             // Extract MAC
             byte[] macBytes = new byte[macLength];
@@ -150,11 +154,7 @@ public class ByteArrayGuard {
                 byte[] plaindata = cipher.doFinal(encdata);
                 return plaindata;
             } else {
-                if (logger.isLoggable(Level.WARNING)) {
-                    // PENDING (visvan) localize
-                    logger.warning("ERROR: MAC did not verify!");
-                }
-                return null;
+                throw new IOException("Could not Decrypt Secure View State, passwords did not match.");
             }
         } catch (Exception e) {
             if (logger.isLoggable(Level.SEVERE)) {
@@ -164,33 +164,54 @@ public class ByteArrayGuard {
         }
     }
     
-    /** This method provides a password to be used for encryption/decryption of 
+    /**
+     * This method provides a password to be used for encryption/decryption of 
      * client-side state.
+     * <p>
+     * We have two password options.  The first is the 'application' scoped password
+     * that is used by all requests.  In the case of an application restart, where
+     * session state is persisted, we MUST use the legacy password from the session
+     * instead of our application password.
+     * </p>
+     * <p>
+     * Theoretically after a restart, you could have multiple passwords being used
+     * at once: the application's and legacy sessions'.
+     * </p>
+     * Use cases:
+     * <ol>
+     *  <li>Stateless to Stateful - both will use the same 'application' password,
+     *      so no problems</li>
+     *  <li>Stateful to Stateless - invalidating the session will cause the application
+     *      password to be used.  Unless the server restarted, decrypting will still work.
+     *      </li>
+     *  <li>Stateless Restart - FIXME, application loses its password, and a new one will
+     *      be generated for all succeeding requests.  I suggest adding an init-param to
+     *      web.xml to define the application password, if null, generate one.</li>
+     *  <li>Stateful Restart - you will continue to use the key stored in your session</li>
+     * </ol>
      */
     private String getPasswordToSecureState(FacesContext context) {
-        Map sessionMap = context.getExternalContext().getSessionMap();
-        if ( sessionMap == null ) {
-            // Setting it to an arbitrary value. As long as the same value is used
-            // by both serializer and deserializer, the encryption will work. 
-            // However, the encryption will be useless since this arbitrary 
-            // value can be guessed by an attacker.
-            // PENDING (visvan) localize
-            if (logger.isLoggable(Level.WARNING)) {
-                 logger.warning("Key to retrieve password from session could not "+
-                         "be found. Using default value. This will enable " +
-                         "the encryption and decryption to work, but the " +
-                         "client-side state saving method is NO longer secure.");
-             }
-             password = "easy-to-guess-password";
-        } else {
-            password = (String) sessionMap.get(SESSION_KEY_FOR_PASSWORD);
-            if (password == null) {                
-                password = (String) 
-                ByteArrayGuard.getRandomString(DEFAULT_PASSWORD_LENGTH);
-                sessionMap.put(SESSION_KEY_FOR_PASSWORD, password); 
+        // default is to use application scoped password
+        String statePwd = this.password;
+        
+        // check if there is a session available
+        Object sessionObj = context.getExternalContext().getSession(false);
+        
+        // if there is a session....
+        if ( sessionObj != null ) {
+            Map sessionMap = context.getExternalContext().getSessionMap();
+            
+            // try to get a legacy password from the session to use
+            statePwd = (String) sessionMap.get(SESSION_KEY_FOR_PASSWORD);
+            
+            // if no legacy password, use our application password
+            // and store it for session persistence
+            if (statePwd == null) {
+                statePwd = this.password;
+                sessionMap.put(SESSION_KEY_FOR_PASSWORD, statePwd); 
             }
-        }                   
-        return password;
+        }
+        return statePwd;
     }
     
     /**
@@ -333,9 +354,9 @@ public class ByteArrayGuard {
         buf.append(hexChars[low]);
     }
     
-    private int keyLength;
-    private int macLength;
-    private int ivLength;
-    private String password = null;
+    private final int keyLength;
+    private final int macLength;
+    private final int ivLength;
+    private final String password;
     private static SecureRandom prng = null;
 }
