@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.35 2002/09/11 20:02:20 edburns Exp $
+ * $Id: ButtonRenderer.java,v 1.36 2002/09/17 00:05:32 rkitain Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.35 2002/09/11 20:02:20 edburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.36 2002/09/17 00:05:32 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -69,6 +69,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // Instance Variables
     //
+    private boolean renderInputTypeButton = false;
 
     // Attribute Instance Variables
 
@@ -102,6 +103,46 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 	    label = "&nbsp;&nbsp;&nbsp;" + label + "&nbsp;&nbsp;&nbsp;";
 	}
 	return label;
+    }
+
+    /**
+
+    * @return the image src if this component is configured to display
+    * an image label, null otherwise.
+
+    */
+
+    protected String getImageSrc(FacesContext context,
+                                 UIComponent component) {
+        String result = null;
+        try {
+            result = getKeyAndLookupInBundle(context, component, "imageKey");
+        }
+        catch (MissingResourceException e) {
+            // Do nothing since the absence of a resource is not an
+            // error.
+        }
+        if (null == result) {
+            result = (String) component.getAttribute("image");
+        }
+        return result;
+    }
+
+    protected String getLabel(FacesContext context,
+                              UIComponent component) throws IOException {
+        String result = null;
+
+        try {
+            result = getKeyAndLookupInBundle(context, component, "key");
+        }
+        catch (MissingResourceException e) {
+            // Do nothing since the absence of a resource is not an
+            // error.
+        }
+        if (null == result) {
+            result = (String) component.getAttribute("label");
+        }
+        return result;
     }
 
     
@@ -180,26 +221,63 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 	    component.setAttribute("type", type);
         }
 
-        // Render the beginning of this button
         ResponseWriter writer = context.getResponseWriter();
-        // PENDING (visvan) we need to change the '/' chars to
-        // something else in the rendered name and id attributes. As
-        // per HTML 4.0, "/" cannot be used as part of id.
-        writer.write("<button id=\"");
-        writer.write(component.getCompoundId());
-        writer.write("\" name=\"");
-        writer.write(component.getCompoundId());
-        writer.write("\" type=\"");
-        writer.write(type.toLowerCase());
-        writer.write("\" value=\"");
-        writer.write(type.toLowerCase());
-        writer.write("\"");
-        // PENDING (visvan) how to pad label now that its not rendered here ??
-        // render HTML 4.0 attributes if any.
+
+        // If any one of "label"/"image"/"key"/"imageKey" is set,
+        // the intent is to render the "input type=" style button.
+        // Otherwise, render the "<button>" style.
+     
+        String imageSrc = getImageSrc(context, component);
+        String label = getLabel(context, component);            
+        if (imageSrc != null || label != null) {
+            renderInputTypeButton = true;
+            writer.write("<input type=");
+            if (null != imageSrc) {
+                writer.write("\"image\" src=\"");
+                writer.write(imageSrc);
+                writer.write("\"");
+                writer.write(" name=\"");
+                writer.write(component.getCompoundId());
+                writer.write("\"");
+                writer.write(" value=\"");
+                writer.write(imageSrc);
+                writer.write("\"");
+            } else {
+                writer.write("\"");
+                writer.write(type.toLowerCase());
+                writer.write("\"");
+                writer.write(" name=\"");
+                writer.write(component.getCompoundId());
+                writer.write("\"");
+                writer.write(" value=\"");
+                writer.write(padLabel(label));
+                writer.write("\"");
+            }
+        } else {
+            renderInputTypeButton = false;
+
+            // Render the beginning of this button
+            // PENDING (visvan) we need to change the '/' chars to
+            // something else in the rendered name and id attributes. As
+            // per HTML 4.0, "/" cannot be used as part of id.
+            writer.write("<button id=\"");
+            writer.write(component.getCompoundId());
+            writer.write("\" name=\"");
+            writer.write(component.getCompoundId());
+            writer.write("\" type=\"");
+            writer.write(type.toLowerCase());
+            writer.write("\" value=\"");
+            writer.write(type.toLowerCase());
+            writer.write("\"");
+            // PENDING (visvan) how to pad label now that its not 
+            // rendered here ??
+            // render HTML 4.0 attributes if any.
+        }
+
         writer.write(Util.renderPassthruAttributes(context, component));
-	writer.write(Util.renderBooleanPassthruAttributes(context, component));
-	if (null != (commandClass = (String) 
-		     component.getAttribute("commandClass"))) {
+        writer.write(Util.renderBooleanPassthruAttributes(context, component));
+        if (null != (commandClass = (String) 
+            component.getAttribute("commandClass"))) {
 	    writer.write(" class=\"" + commandClass + "\" ");
 	}
         writer.write(">");
@@ -222,7 +300,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
        
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
-        writer.write("</button>\n");
+        if (!renderInputTypeButton) {
+            writer.write("</button>\n");
+        }
     }
 
 } // end of class ButtonRenderer
