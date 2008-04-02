@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.22 2006/12/12 18:06:47 jdlee Exp $
+ * $Id: ActionListenerImpl.java,v 1.23 2007/02/05 02:27:51 rlubke Exp $
  */
 
 /*
@@ -43,6 +43,7 @@ import javax.faces.event.ActionListener;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.text.MessageFormat;
 
 import com.sun.faces.util.Util;
 
@@ -62,12 +63,6 @@ public class ActionListenerImpl implements ActionListener {
     private static final Logger LOGGER = 
           Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
 
-    // ------------------------------------------------------------ Constructors
-
-
-    public ActionListenerImpl() {
-    }
-
 
     // --------------------------------------------- Methods From ActionListener
 
@@ -77,7 +72,8 @@ public class ActionListenerImpl implements ActionListener {
     public void processAction(ActionEvent event) {
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("processAction(" + event.getComponent().getId() + ")");
+            LOGGER.fine(MessageFormat.format("processAction({0})",
+                                             event.getComponent().getId()));
         }
         UIComponent source = event.getComponent();
         ActionSource actionSource = (ActionSource) source;
@@ -85,9 +81,9 @@ public class ActionListenerImpl implements ActionListener {
 
         Application application = context.getApplication();
 
-        Object invokeResult = null;
+        Object invokeResult;
         String outcome = null;
-        MethodBinding binding = null;
+        MethodBinding binding;
 
         binding = actionSource.getAction();
         if (binding != null) {
