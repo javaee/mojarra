@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterFactory.java,v 1.6 2003/02/20 22:46:25 ofung Exp $
+ * $Id: ConverterFactory.java,v 1.7 2003/02/24 18:16:04 craigmcc Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ public abstract class ConverterFactory {
      * <p>Create (if needed) and return a {@link Converter} instance that
      * may be used to perform Object-to-String and String-to-Object conversions
      * for objects of the specified class.  A search of the registered
-     * {@link Converters} is performed in the following order:</p>
+     * {@link Converter}s is performed in the following order:</p>
      * <ul>
      * <li>An exact match on the original class.</li>
      * <li>An exact match on one of the interfaces directly implemented
