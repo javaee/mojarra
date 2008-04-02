@@ -105,7 +105,7 @@ Powered by Faces components:
         <h:selectitem itemValue="nextMonth" itemLabel="Next Month" />
       </h:selectone_radio>
       <h:selectone_listbox id="appleQuantity" title="Select Quantity"
-        accesskey="N" tabindex="20" value="4" >
+        tabindex="20" value="4" >
         <h:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
         <h:selectitem  itemValue="1" itemLabel="1" title="One" />
         <h:selectitem  itemValue="2" itemLabel="2" title="Two" />
