@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.57 2003/10/22 19:37:21 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.58 2003/10/27 19:09:56 craigmcc Exp $
  */
 
 /*
@@ -29,7 +29,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.RepeaterEvent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.servlet.ServletRequest;
 
@@ -258,25 +257,12 @@ public class FacesContextImpl extends FacesContext
         }
         facesEvents.add(event);
         if (log.isDebugEnabled()) {
-            if (event instanceof RepeaterEvent) {
-                FacesEvent actual = ((RepeaterEvent) event).getFacesEvent();
-                String id = actual.getComponent().getId();
-                if (id == null) {
-                    id = "<<NONE>>";
-                }
-                log.debug
-                    ("Adding RepeaterEvent[sourceId=" + id +
-                     ",type=" + actual.getClass().getName() +
-                     ",rowIndex=" + ((RepeaterEvent) event).getRowIndex() +
-                     "]");
-            } else {
-                String id = event.getComponent().getId();
-                if (id == null) {
-                    id = "<<NONE>>";
-                }
-                log.debug("Adding FacesEvent[sourceId=" + id +
-                          ",type=" + event.getClass().getName());
+            String id = event.getComponent().getId();
+            if (id == null) {
+                id = "<<NONE>>";
             }
+            log.debug("Adding FacesEvent[sourceId=" + id +
+                      ",type=" + event.getClass().getName());
         }
 
     }
