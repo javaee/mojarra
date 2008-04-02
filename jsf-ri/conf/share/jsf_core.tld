@@ -14,19 +14,18 @@
 
   <!-- ============== Tag Library Description Elements ============= -->
 
-  <tlibversion>1.0</tlibversion>
-  <jspversion>1.2</jspversion>
-  <shortname>JavaServerFaces Framework Tag Library</shortname>
-  <uri>http://java.sun.com/jsf/core/</uri>
-
-  <info>All JSF implementations must provide a tag library containing
-  core actions that are independent of a particular RenderKit.</info>
+  <tlib-version>1.0</tlib-version>
+  <jsp-version>1.2</jsp-version>
+  <short-name>JavaServerFaces Framework Tag Library</short-name>
+  <uri>http://java.sun.com/jsf/core</uri>
+  <description>All JSF implementations must provide a tag library containing
+  core actions that are independent of a particular RenderKit.</description>
 
 
    <tag>
       <name>attribute</name>
-      <tagclass>javax.faces.webapp.AttributeTag</tagclass>
-      <bodycontent>JSP</bodycontent>
+      <tag-class>javax.faces.webapp.AttributeTag</tag-class>
+      <body-content>JSP</body-content>
       <attribute>
 	<name>name</name>
 	<required>true</required>
@@ -41,8 +40,8 @@
 
  <tag>
    <name>eventhandler</name>
-   <tagclass>javax.faces.webapp.EventHandlerTag</tagclass>
-   <bodycontent>JSP</bodycontent>
+   <tag-class>javax.faces.webapp.EventHandlerTag</tag-class>
+   <body-content>JSP</body-content>
 
    <attribute>
      <name>type</name>
@@ -53,8 +52,8 @@
 
   <tag>
       <name>parameter</name>
-      <tagclass>com.sun.faces.taglib.jsf_core.ParameterTag</tagclass>
-      <bodycontent>JSP</bodycontent>
+      <tag-class>com.sun.faces.taglib.jsf_core.ParameterTag</tag-class>
+      <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
       <required>true</required>
@@ -79,14 +78,14 @@
 
   <tag>
     <name>use_faces</name>
-    <tagclass>com.sun.faces.taglib.jsf_core.UseFacesTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>com.sun.faces.taglib.jsf_core.UseFacesTag</tag-class>
+    <body-content>JSP</body-content>
   </tag>
 
   <tag>
     <name>validate_doublerange</name>
-    <tagclass>com.sun.faces.taglib.jsf_core.ValidateDoubleRangeTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>com.sun.faces.taglib.jsf_core.ValidateDoubleRangeTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
       <name>maximum</name>
       <required>false</required>
@@ -101,8 +100,8 @@
 
   <tag>
     <name>validate_length</name>
-    <tagclass>com.sun.faces.taglib.jsf_core.ValidateLengthTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>com.sun.faces.taglib.jsf_core.ValidateLengthTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
       <name>maximum</name>
       <required>false</required>
@@ -117,8 +116,8 @@
 
   <tag>
     <name>validate_longrange</name>
-    <tagclass>com.sun.faces.taglib.jsf_core.ValidateLongRangeTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>com.sun.faces.taglib.jsf_core.ValidateLongRangeTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
       <name>maximum</name>
       <required>false</required>
@@ -133,14 +132,14 @@
 
   <tag>
     <name>validate_required</name>
-    <tagclass>com.sun.faces.taglib.jsf_core.ValidateRequiredTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>com.sun.faces.taglib.jsf_core.ValidateRequiredTag</tag-class>
+    <body-content>JSP</body-content>
   </tag>
 
   <tag>
     <name>validate_stringrange</name>
-    <tagclass>com.sun.faces.taglib.jsf_core.ValidateStringRangeTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>com.sun.faces.taglib.jsf_core.ValidateStringRangeTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
       <name>maximum</name>
       <required>false</required>
@@ -155,8 +154,8 @@
 
   <tag>
     <name>validator</name>
-    <tagclass>javax.faces.webapp.ValidatorTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>javax.faces.webapp.ValidatorTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
       <name>type</name>
       <required>true</required>

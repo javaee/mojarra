@@ -8,7 +8,7 @@
 
     <%@ taglib uri='WEB-INF/html_basic.tld' prefix='h' %>
 
-    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
 
     <H3> JSF Basic Components Test Page </H3>

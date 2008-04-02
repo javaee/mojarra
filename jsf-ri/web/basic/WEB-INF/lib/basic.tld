@@ -14,17 +14,17 @@
 
   <!-- ============== Tag Library Description Elements ============= -->
 
-  <tlibversion>0.03</tlibversion>
-  <jspversion>1.2</jspversion>
-  <shortname>JavaServerFaces Framework Tag Library</shortname>
+  <tlib-version>0.03</tlib-version>
+  <jsp-version>1.2</jsp-version>
+  <short-name>JavaServerFaces Framework Tag Library</short-name>
   <uri>basictaglibrary_1.1</uri>
-  <info>Custom tags for the basic webapp
-  </info>
+  <description>Custom tags for the basic webapp
+  </description>
 
   <tag>
     <name>textentry_input_valuechange</name>
-    <tagclass>basic.TextEntry_Input_ValueChangeTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>basic.TextEntry_Input_ValueChangeTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
       <required>true</required>

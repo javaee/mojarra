@@ -12,8 +12,8 @@
    <title>StoreFront</title>
 </head>
     <%@ page extends="com.sun.faces.Page" %>
-    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html_basic" prefix="faces" %>
 <body>
    <faces:NavigationMap id="StoreNavMap" scope="session" >
 
