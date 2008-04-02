@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.4 2003/09/08 21:59:23 craigmcc Exp $
+ * $Id: ActionListenerImpl.java,v 1.5 2003/09/13 12:58:46 eburns Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ import javax.faces.application.Action;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
-import javax.faces.component.UICommand;
+import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyNotFoundException;
@@ -58,7 +58,7 @@ public class ActionListenerImpl implements ActionListener {
     public void processAction(ActionEvent event) {
 
         UIComponent source = event.getComponent();
-        UICommand command = (UICommand)source;
+        ActionSource actionSource = (ActionSource)source;
         FacesContext context = FacesContext.getCurrentInstance();
 
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
@@ -67,18 +67,19 @@ public class ActionListenerImpl implements ActionListener {
 
         String outcome = null;
 
-        outcome = command.getAction();
+        outcome = actionSource.getAction();
 
-        // If the action string is not set, determine the outcome through the action reference.  
-        // The action reference is used to retrieve an Action instance.  The invoke() method on 
-        // the Action instance returns the outcome.  If an action could not be determined,
-        // throw an exception.
+        // If the action string is not set, determine the outcome
+        // through the action reference.  The action reference is used
+        // to retrieve an Action instance.  The invoke() method on the
+        // Action instance returns the outcome.  If an action could not
+        // be determined, throw an exception.
  
         String actionRef = null;
         ValueBinding binding = null;
         Object action = null;
         if (null == outcome) {
-            actionRef = command.getActionRef();
+            actionRef = actionSource.getActionRef();
             if (actionRef != null) {
                 binding = application.getValueBinding(actionRef);
                 if (binding != null) {

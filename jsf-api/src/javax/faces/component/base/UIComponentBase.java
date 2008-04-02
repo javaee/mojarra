@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.11 2003/09/11 15:26:05 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.12 2003/09/13 12:57:44 eburns Exp $
  */
 
 /*
@@ -961,6 +961,7 @@ public abstract class UIComponentBase implements UIComponent {
         if (rendererType != null) {
             getRenderer(context).decode(context, this);
         } else if (this instanceof UIInput) {
+	    // PENDING(craigmcc): shouldn't this be in UIInputBase
             ((UIInput) this).setValid(true);
         }
 
@@ -1132,12 +1133,14 @@ public abstract class UIComponentBase implements UIComponent {
 
 	// Validate this component itself
 	if (this instanceof UIInput) {
+	    // PENDING(craigmcc): shouldn't this be in UIInputBase
 	    ((UIInput) this).validate(context);
 	}
 
 	// Advance to Render Response if this component is not valid
         if ((this instanceof UIInput) &&
             !((UIInput) this).isValid()) {
+	    // PENDING(craigmcc): shouldn't this be in UIInputBase
             context.renderResponse();
         }
 
@@ -1159,6 +1162,7 @@ public abstract class UIComponentBase implements UIComponent {
 
         // Process this component itself
         if (this instanceof UIInput) {
+	    // PENDING(craigmcc): shouldn't this be in UIInputBase
             ((UIInput) this).updateModel(context);
             if (!((UIInput) this).isValid()) {
                 context.renderResponse();
@@ -1258,6 +1262,8 @@ public abstract class UIComponentBase implements UIComponent {
         values[6] =
             context.getApplication().getViewHandler().getStateManager().
             getAttachedObjectState(context, this, null, listeners);
+	// PENDING(edburns): don't save the transient flag.  Asssert
+	// that it is false here.
         values[7] = transientFlag ? Boolean.TRUE : Boolean.FALSE;
         return (values);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.57 2003/09/04 19:52:16 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.58 2003/09/13 12:58:49 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.57 2003/09/04 19:52:16 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.58 2003/09/13 12:58:49 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -163,6 +163,9 @@ public class FormRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
+	
+	context.getApplication().getViewHandler().writeState(context);
+
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null);

@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.46 2003/09/05 14:34:45 rkitain Exp $
+ * $Id: FormTag.java,v 1.47 2003/09/13 12:58:50 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import javax.servlet.jsp.JspException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
-import javax.faces.application.StateManager;
 
 import com.sun.faces.taglib.FacesTag;
 import com.sun.faces.RIConstants;
@@ -126,24 +125,5 @@ public class FormTag extends FacesTag
             component.setAttribute("acceptcharset", acceptcharset); 
         }        
     }
-    
-    //
-    // Methods from TagSupport
-    //
-     public int doEndTag() throws JspException {
-	// Look up the FacesContext instance for this request
-	FacesContext facesContext = FacesContext.getCurrentInstance();
-	StateManager stateManager = Util.getStateManager(facesContext);
-	try {
-	    stateManager.writeStateMarker(facesContext);
-	} catch (IOException iox) {
-            Object [] params = { "session", iox.getMessage() };
-            throw new JspException(
-            Util.getExceptionMessage(Util.SAVING_STATE_ERROR_MESSAGE_ID, params), 
-            iox);
-        }  
-	return super.doEndTag();
-    }
-
 
 } // end of class FormTag

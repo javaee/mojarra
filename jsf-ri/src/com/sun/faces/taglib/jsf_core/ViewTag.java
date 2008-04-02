@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.3 2003/09/04 21:15:07 jvisvanathan Exp $
+ * $Id: ViewTag.java,v 1.4 2003/09/13 12:58:51 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.3 2003/09/04 21:15:07 jvisvanathan Exp $
+ * @version $Id: ViewTag.java,v 1.4 2003/09/13 12:58:51 eburns Exp $
  * 
  *
  */
@@ -104,7 +104,25 @@ public class ViewTag extends UIComponentBodyTag
 	String content = null;
         Object treeStructure = null;
         Object treeState = null;
+	FacesContext context = FacesContext.getCurrentInstance();
+	ResponseWriter responseWriter = context.getResponseWriter();
+	StateManager stateManager = Util.getStateManager(context);
+	SerializedView view = null;
+	int 
+	    beginIndex = 0,
+	    markerIndex = 0,
+	    markerLen = RIConstants.SAVESTATE_FIELD_MARKER.length(),
+	    contentLen = 0;
         
+	// get a writer that sends to the client
+	responseWriter = responseWriter.cloneWithWriter(getPreviousOut());
+	
+	if (context == null) { 
+	    throw new JspException(Util.getExceptionMessage(
+				    Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+	}
+	context.setResponseWriter(responseWriter);
+
         try {
             if (null == (bodyContent = getBodyContent())) {
 		Object params [] = { this.getClass().getName() };
@@ -112,35 +130,30 @@ public class ViewTag extends UIComponentBodyTag
                         Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, params));
             }    
 	    content = bodyContent.getString();
-            // long beginTime = System.currentTimeMillis();
-            // replace the marker in the buffered response, with response tree's
-            // state info. To do this we we first serialize the tree and encode
-            // it using Apache's utility and write it to the page using an
-            // hidden field.
 	    
-	    // Look up the FacesContext instance for this request
-	    FacesContext facesContext = FacesContext.getCurrentInstance();
-	    if (facesContext == null) { 
-		throw new JspException(Util.getExceptionMessage(
-                        Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+	    if (null == (view = stateManager.getSerializedView(context))) {
+		getPreviousOut().write(content);
 	    }
-	    
-	    StateManager stateManager = Util.getStateManager(facesContext);
-	    Assert.assert_it(stateManager != null);
-            
-            SerializedView view = stateManager.getSerializedView(facesContext);
-            // If the state is going to be saved on the server, then view will
-            // be null. 
-            if ( view != null) {
-                Object result = stateManager.saveView(context, content, view);
-                Assert.assert_it(result != null);
-                content = result.toString();
-            }
-            
-            // for the saveStateInSession case, bodyContent is not altered.
-            // write the buffered response along with the state information
-            // to output.
-            getPreviousOut().write(content);
+	    else {
+		contentLen = content.length();
+		do {
+		    // if we have no more markers
+		    if (-1 == (markerIndex = 
+			       content.indexOf(RIConstants.SAVESTATE_FIELD_MARKER,
+					       beginIndex))) {
+			// write out the rest of the content
+			responseWriter.write(content.substring(beginIndex));
+		    }
+		    else {
+			// we have more markers, write out the current chunk
+			responseWriter.write(content.substring(beginIndex,
+							       markerIndex));
+			stateManager.writeState(context, view);
+			beginIndex = markerIndex + markerLen;
+		    }
+		}
+		while (-1 != markerIndex && beginIndex < contentLen);
+	    }
         } catch (IOException iox) {
             Object [] params = { "session", iox.getMessage() };
             throw new JspException(Util.getExceptionMessage(

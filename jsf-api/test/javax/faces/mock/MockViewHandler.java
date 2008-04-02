@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.9 2003/09/04 03:56:44 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.10 2003/09/13 12:57:46 eburns Exp $
  */
 
 /*
@@ -36,6 +36,8 @@ public class MockViewHandler extends Object implements ViewHandler {
 	return result;
     }
 
+    public void writeState(FacesContext context) {}
+
     public StateManager getStateManager() {
 	if (null == stateManager) {
 	    stateManager = new StateManager() {
@@ -46,14 +48,15 @@ public class MockViewHandler extends Object implements ViewHandler {
 			return null;
 		    }
 		    public UIViewRoot getView(FacesContext context, String viewId) throws IOException { return null; }
-		    public void writeStateMarker(FacesContext context) throws IOException {}
 		    public SerializedView getSerializedView(FacesContext context) {
 			return null;
 		    }
-		    public Object saveView(FacesContext context, Object content, 
-			SerializedView state) {
+
+		    public Object writeState(FacesContext context, 
+					     SerializedView state) throws IOException {
                         return null;
                     }
+
 		    protected UIViewRoot restoreTreeStructure(FacesContext context, 
 							   String viewId) {
 			return null;

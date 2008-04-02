@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.8 2003/08/25 15:06:27 eburns Exp $
+ * $Id: ViewHandler.java,v 1.9 2003/09/13 12:57:43 eburns Exp $
  */
 
 /*
@@ -111,6 +111,9 @@ public interface ViewHandler {
      * <p>PENDING(edburns): do we formalize that the renderkitId should
      * be set into the ViewRoot here?</p>
      *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     *
      */
 
     public UIViewRoot createView(FacesContext context, String viewId);
@@ -120,6 +123,22 @@ public interface ViewHandler {
      * <code>ViewHandler</code>.
      */
     public StateManager getStateManager();
+
+    /**
+     * <p>Must be called once for each call to {@link
+     * javax.faces.component.UIForm#encodeEnd}.  May write out the
+     * actual state by immediately calling {@link
+     * StateManager#writeState}, or may write a state marker specific to
+     * the <code>ViewHandler</code> to be replaced later (when the
+     * <code>ViewHandler</code> is ready).  A ViewHandler that writes "a
+     * state marker" might not even write a state marker, but just note
+     * an index into the content.</p>
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+
+    public void writeState(FacesContext context) throws IOException;
 
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.13 2003/09/04 16:07:35 eburns Exp $
+ * $Id: StateManager.java,v 1.14 2003/09/13 12:57:43 eburns Exp $
  */
 
 /*
@@ -65,13 +65,10 @@ import java.util.Iterator;
  *
  * 	<ul>
  *
- *	  <li>{@link #writeStateMarker}
- *	  </li>
- *
  *	  <li>{@link #getSerializedView}
  *	  </li>
  *
- *	  <li>{@link #saveView}
+ *	  <li>{@link #writeState}
  *	  </li>
  *
  *	</ul>
@@ -96,7 +93,7 @@ public abstract class StateManager {
      * <p>If this parameter is not specified, the default value is the
      * value of the constant {@link #STATE_SAVING_METHOD_CLIENT}. </p>
      *
-     * @see #saveView
+     * @see #writeState
      *
      */
 
@@ -210,26 +207,6 @@ public abstract class StateManager {
 
     /**
      *
-     * <p>This method may be called during the <em>Render Response
-     * Phase</em> phase of the request processing lifecycle to cause a
-     * marker to be written to the output so that the state of multiple
-     * forms in a single page can be saved.</p>
-     *
-     * <p>In JSP applications, this method must be called during the
-     * <code>doEndTag()</code> method of the tag handler for {@link
-     * javax.faces.component.UIForm} <strong>before</strong> the {@link
-     * UIComponent#encodeEnd} method for the form
-     * component is called.  The implementation of this method may call
-     * {@link javax.faces.render.ResponseStateManager#writeStateMarker}
-     * to actually cause the marker to be written to the {@link
-     * javax.faces.context.ResponseWriter} for this request.</p>
-     *
-     */
-
-     public abstract void writeStateMarker(FacesContext context) throws IOException;
-
-    /**
-     *
      * <p>This method causes the state that has been obtained from
      * {@link StateManager#getSerializedView} to be actually saved in an
      * implementation dependent manner.</p>
@@ -251,16 +228,21 @@ public abstract class StateManager {
      * can be retrieved using only the <code>viewId</code>.  This is
      * necessary for the {@link #getView} method to work.</p>
      *
+     * <p>This method assumes the caller has positioned the {@link
+     * javax.faces.context.ResponseWriter} at the correct place for the
+     * saved state to be written.</p>
+     *
      * <p>In JSP applications, this method must be called from the
      * <code>doAfterBody()</code> method of the tag handler for the
-     * {@link UIViewRoot} component.  The type of the returned
-     * <code>Object</code> depends on the rendering technology used.  In
-     * JSP applications, this type is <code>String</code>.</p>
+     * {@link UIViewRoot} component.  The <code>doAfterBody()</code>
+     * method is responsible for causing the between, but not including,
+     * each state marker to be written to the
+     * <code>ResponseWriter</code>, calling this method at the right
+     * time so that the state can be written out appropriately.</p>
      *
-     * @param context the {@link FacesContext} for this view.
-     * This is used to obtain the {@link
-     * javax.faces.context.ResponseWriter} to which to write the
-     * response, and the <code>viewId</code> of this view.
+     * @param context the {@link FacesContext} for this view.  This is
+     * used to obtain the <code>ResponseWriter</code> to which to write
+     * the response, and the <code>viewId</code> of this view.
      *
      * @param content the rendered content of this view.  
      *
@@ -269,8 +251,8 @@ public abstract class StateManager {
      * @return Object response to be sent to client.
      *
      */
-    public abstract Object saveView(FacesContext context, Object content, 
-				    SerializedView state);
+    public abstract void writeState(FacesContext context,
+				    SerializedView state) throws IOException;
 
     // ---------------------- Methods used in restoring the view
 
@@ -345,6 +327,34 @@ public abstract class StateManager {
      */
     
     protected abstract void restoreComponentState(FacesContext context, UIViewRoot root) throws IOException;
+
+    private Boolean savingStateInClient = null;
+
+    /**
+     * @return <code>true</code> if and only if the value of the
+     * <code>ServletContext</code> init parameter named by the value of
+     * the constant {@link #STATE_SAVING_METHOD_PARAM_NAME} is equal to
+     * the value of the constant {@link #STATE_SAVING_METHOD_CLIENT}.
+     * <code>false</code> otherwise.
+     *
+     * @exception NullPointerException if <code>context</code> is
+     * <code>null</code>.
+     */
+
+    public boolean isSavingStateInClient(FacesContext context) {
+	if (null != savingStateInClient) {
+	    return savingStateInClient.booleanValue();
+	}
+	savingStateInClient = Boolean.FALSE;
+
+        String saveStateParam = context.getExternalContext().
+            getInitParameter(STATE_SAVING_METHOD_PARAM_NAME);
+        if (saveStateParam != null && 
+           saveStateParam.equalsIgnoreCase(STATE_SAVING_METHOD_CLIENT)){
+	    savingStateInClient = Boolean.TRUE;
+        }
+	return savingStateInClient.booleanValue();
+    }
 
     /**
      *

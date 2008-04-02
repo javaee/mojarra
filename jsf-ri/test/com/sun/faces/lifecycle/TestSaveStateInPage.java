@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.16 2003/09/04 21:15:12 jvisvanathan Exp $
+ * $Id: TestSaveStateInPage.java,v 1.17 2003/09/13 12:58:53 eburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.base.UIComponentBase;
 import com.sun.faces.util.TreeStructure;
 import com.sun.faces.application.ViewHandlerImpl;
+import com.sun.faces.application.StateManagerImpl;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
@@ -41,7 +42,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.16 2003/09/04 21:15:12 jvisvanathan Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.17 2003/09/13 12:58:53 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -172,15 +173,17 @@ public void testSaveStateInClient()
     getFacesContext().setViewRoot(root);
 
     ViewHandlerImpl viewHandler = new ViewHandlerImpl(); 
+    StateManagerImpl stateManager = 
+	(StateManagerImpl) viewHandler.getStateManager();
     TreeStructure structRoot = 
         new TreeStructure(((UIComponent)getFacesContext().getViewRoot()));
-   viewHandler.buildTreeStructureToSave(((UIComponent)root),
-       structRoot, true);
+    stateManager.buildTreeStructureToSave(((UIComponent)root),
+					  structRoot, true);
    
    // make sure restored tree structure is correct
    UIViewRootBase viewRoot = (UIViewRootBase)structRoot.createComponent();
    assertTrue(null != viewRoot);
-   viewHandler.restoreComponentTreeStructure(structRoot, ((UIComponent)viewRoot), true);
+   stateManager.restoreComponentTreeStructure(structRoot, ((UIComponent)viewRoot), true);
    
    UIComponent component = (UIComponent)viewRoot.getChildren().get(0);
    assertTrue(component instanceof UIFormBase);

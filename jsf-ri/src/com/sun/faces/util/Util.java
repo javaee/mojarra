@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.88 2003/09/12 19:48:44 rkitain Exp $
+ * $Id: Util.java,v 1.89 2003/09/13 12:58:52 eburns Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.88 2003/09/12 19:48:44 rkitain Exp $
+ * @version $Id: Util.java,v 1.89 2003/09/13 12:58:52 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -879,17 +879,6 @@ private Util()
 
 	result = renderKit.getResponseStateManager();
         return result;
-    }
-
-    public static boolean isSaveStateInPage(FacesContext context) {
-        // by default, state will be saved in session.
-        String saveStateParam = context.getExternalContext().
-            getInitParameter(StateManager.STATE_SAVING_METHOD_PARAM_NAME);
-        if ( saveStateParam != null && 
-        saveStateParam.equalsIgnoreCase(StateManager.STATE_SAVING_METHOD_CLIENT)){
-	    return true;
-        }
-        return false;
     }
 
     public static boolean componentIsDisabledOnReadonly(UIComponent component) {

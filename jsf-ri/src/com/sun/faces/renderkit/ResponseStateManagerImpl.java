@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.3 2003/09/05 18:56:57 eburns Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.4 2003/09/13 12:58:48 eburns Exp $
  */
 
 /*
@@ -11,6 +11,7 @@
 package com.sun.faces.renderkit;
 
 import javax.faces.render.ResponseStateManager;
+import javax.faces.application.StateManager.SerializedView;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import java.io.StringReader;
@@ -139,49 +140,23 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         return structure;
     }
     
-    public Object writeState(Object content, Writer out, Object structure, 
-        Object state) {
+    public void writeState(FacesContext context, SerializedView view) throws IOException {
         ByteArrayOutputStream bos = null;
-        FacesContext context = FacesContext.getCurrentInstance();
         String hiddenField = null; 
         
-        Assert.assert_it(content != null);
-        String response = content.toString();
-        Assert.assert_it(structure != null);
-        Assert.assert_it(state != null);
         Assert.assert_it(context.getLocale() != null);
  
-        try {
-            bos = new ByteArrayOutputStream();
-            ObjectOutput output = new ObjectOutputStream(bos);
-            output.writeObject(structure);
-            output.writeObject(state);
-            output.writeObject(context.getLocale());
-            
-            hiddenField = " <input type=\"hidden\" name=\"" 
+	bos = new ByteArrayOutputStream();
+	ObjectOutput output = new ObjectOutputStream(bos);
+	output.writeObject(view.getStructure());
+	output.writeObject(view.getState());
+	output.writeObject(context.getLocale());
+	
+	hiddenField = " <input type=\"hidden\" name=\"" 
 	    + RIConstants.FACES_VIEW +  "\"" + " value=\"" +
 	    (new String(Base64.encode(bos.toByteArray()), "ISO-8859-1")) + 
             "\">\n ";
-        } catch (Exception se ) {
-            Object [] params = { se.getMessage() };
-            throw new FacesException(Util.getExceptionMessage(
-                    Util.SAVING_STATE_ERROR_MESSAGE_ID, params)); 
-        }
-        
-        response = replaceMarkers(response, 
-                RIConstants.SAVESTATE_FIELD_MARKER, hiddenField);
-        return response;
-    }
-    
-    public void writeStateMarker(FacesContext context) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null);
-        // if we are saving state in page, insert a marker into buffer so that 
-        // UseFaces tag can replace it state information.
-        boolean isSaveStateInPage = Util.isSaveStateInPage(context);
-        if ( isSaveStateInPage){
-	    writer.writeText(RIConstants.SAVESTATE_FIELD_MARKER,null);
-        }
+	context.getResponseWriter().write(hiddenField);
     }
     
     protected String replaceMarkers(String response, String marker, 
