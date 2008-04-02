@@ -27,7 +27,9 @@
   <property name="src.dir"          value="${basedir}/src"/>
   <property name="dist.dir"         value="${basedir}/dist"/>
   <property name="jsf-api.dir"      value="${basedir}/../jsf-api"/>
-  <property name="jsf-ri.dir"         value="${basedir}/../jsf-ri"/>
+  <property name="standard-html-renderkit"      
+                                    value="${jsf-api.dir}/doc/standard-html-renderkit.xml"/>
+  <property name="jsf-ri.dir"       value="${basedir}/../jsf-ri"/>
 
   <!-- The locations of necessary jar files -->
   <property name="junit.jar" 
