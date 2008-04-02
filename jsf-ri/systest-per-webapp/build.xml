@@ -63,7 +63,8 @@
                    replace-lifecycle,
                    string-converter,
                    replace-variableresolver,
-                   converter-property-editor"/>
+                   converter-property-editor,
+                   late-bindings"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:

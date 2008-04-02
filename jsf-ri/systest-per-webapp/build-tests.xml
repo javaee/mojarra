@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.32 2006/10/03 23:32:10 rlubke Exp $
+ $Id: build-tests.xml,v 1.33 2007/03/01 18:13:52 rlubke Exp $
 -->
 
 <!--
@@ -54,7 +54,8 @@
                    replace-lifecycle,
                    string-converter,
                    replace-variableresolver,
-                   converter-property-editor"/>
+                   converter-property-editor,
+                   late-bindings"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
@@ -84,6 +85,8 @@
               value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
     <property name="converter-property-editor" 
               value="com/sun/faces/systest/ConverterPropertyEditorTestCase.class"/>
+    <property name="late-bindings"
+              value="com/sun/faces/systest/LateBindingTestCase.class"/>
     
     
     <!--
