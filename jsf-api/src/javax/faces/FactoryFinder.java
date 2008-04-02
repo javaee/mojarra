@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.31 2007/01/29 07:18:01 rlubke Exp $
+ * $Id: FactoryFinder.java,v 1.32 2007/01/29 17:59:16 rlubke Exp $
  */
 
 /*
@@ -52,35 +52,35 @@ import java.lang.reflect.Constructor;
  * APIs.  For a given factory class name, a corresponding implementation
  * class is searched for based on the following algorithm.  Items are
  * listed in order of decreasing search precedence:</p> <ul>
- *
+ * <p/>
  * <li>If the JavaServer Faces configuration file bundled into the
  * <code>WEB-INF</code> directory of the webapp contains a
  * <code>factory</code> entry of the given factory class name, that
  * factory is used.</li>
- *
+ * <p/>
  * <li>If the JavaServer Faces configuration files named by the
  * <code>javax.faces.CONFIG_FILES</code>
  * <code>ServletContext</code> init parameter contain any
  * <code>factory</code> entries of the given factory class name, those
  * factories are used, with the last one taking precedence.</li>
- *
+ * <p/>
  * <li>If there are any JavaServer Faces configuration files bundled
  * into the <code>META-INF</code> directory of any jars on the
  * <code>ServletContext</code>'s resource paths, the
  * <code>factory</code> entries of the given factory class name in those
  * files are used, with the last one taking precedence.</li>
- *
+ * <p/>
  * <li>If a <code>META-INF/services/{factory-class-name}</code> resource
  * is visible to the web application class loader for the calling
  * application (typically as a result of being present in the manifest
  * of a JAR file), its first line is read and assumed to be the name of
- * the factory implementation class to use.</li> 
- *
+ * the factory implementation class to use.</li>
+ * <p/>
  * <li>If none of the above steps yield a match, the JavaServer Faces
  * implementation specific class is used.</li>
- *
- *</ul>
- *
+ * <p/>
+ * </ul>
+ * <p/>
  * <p>If any of the factories found on any of the steps above happen to
  * have a one-argument constructor, with argument the type being the
  * abstract factory class, that constructor is invoked, and the previous
@@ -95,11 +95,11 @@ import java.lang.reflect.Constructor;
  * constructor, passing the implementation of
  * <code>FacesContextFactory</code> provided by the JavaServer Faces
  * implementation.</p>
- *
+ * <p/>
  * <p>If a Factory implementation does not provide a proper one-argument
  * constructor, it must provide a zero-arguments constructor in order to
  * be successfully instantiated.</p>
- *
+ * <p/>
  * <p>Once the name of the factory implementation class is located, the
  * web application class loader for the calling application is requested
  * to load this class, and a corresponding instance of the class will be
@@ -107,11 +107,9 @@ import java.lang.reflect.Constructor;
  * receive its own instance of each factory class, whether the JavaServer
  * Faces implementation is included within the web application or is made
  * visible through the container's facilities for shared libraries.</p>
- *
  */
 
 public final class FactoryFinder {
-
 
     // ----------------------------------------------------------- Constructors
 
@@ -122,7 +120,6 @@ public final class FactoryFinder {
     FactoryFinder() {
     }
 
-
     // ----------------------------------------------------- Manifest Constants
 
 
@@ -131,7 +128,7 @@ public final class FactoryFinder {
      * {@link javax.faces.application.ApplicationFactory} class name.</p>
      */
     public final static String APPLICATION_FACTORY =
-        "javax.faces.application.ApplicationFactory";
+         "javax.faces.application.ApplicationFactory";
 
 
     /**
@@ -139,7 +136,7 @@ public final class FactoryFinder {
      * {@link javax.faces.context.FacesContextFactory} class name.</p>
      */
     public final static String FACES_CONTEXT_FACTORY =
-        "javax.faces.context.FacesContextFactory";
+         "javax.faces.context.FacesContextFactory";
 
 
     /**
@@ -147,7 +144,7 @@ public final class FactoryFinder {
      * {@link javax.faces.lifecycle.LifecycleFactory} class name.</p>
      */
     public final static String LIFECYCLE_FACTORY =
-        "javax.faces.lifecycle.LifecycleFactory";
+         "javax.faces.lifecycle.LifecycleFactory";
 
 
     /**
@@ -155,32 +152,31 @@ public final class FactoryFinder {
      * {@link javax.faces.render.RenderKitFactory} class name.</p>
      */
     public final static String RENDER_KIT_FACTORY =
-        "javax.faces.render.RenderKitFactory";
-
+         "javax.faces.render.RenderKitFactory";
 
     // ------------------------------------------------------- Static Variables
 
     /**
      * <p>Keys are web application class loaders.  Values are factory
      * maps for each web application.</p>
-     *
+     * <p/>
      * <p>For the nested map, the keys are the factoryName, which must
      * be one of the <code>*_FACTORY</code> constants above.  Values are
      * one of: </p>
-     *
-     * <ol> 
-     *
+     * <p/>
+     * <ol>
+     * <p/>
      * <li><p>the actual factory class, if {@link getFactory} has been
      * called before on this factoryName</p></li>
-     *
+     * <p/>
      * <li><p>An <code>ArrayList</code> of <code>Strings</code>
      * representing the configured implementations of for the
      * factoryName.</p></li>
-     *
+     * <p/>
      * </ol>
      */
-    private static final Map<ClassLoader,Map<String,Object>> applicationMaps =
-         new HashMap<ClassLoader,Map<String,Object>>();
+    private static final Map<ClassLoader, Map<String, Object>> applicationMaps =
+         new HashMap<ClassLoader, Map<String, Object>>();
 
 
     /**
@@ -188,21 +184,20 @@ public final class FactoryFinder {
      * discovery mechanism is supported.</p>
      */
     private static String[] factoryNames = {
-        APPLICATION_FACTORY,
-        FACES_CONTEXT_FACTORY,
-        LIFECYCLE_FACTORY,
-        RENDER_KIT_FACTORY
+         APPLICATION_FACTORY,
+         FACES_CONTEXT_FACTORY,
+         LIFECYCLE_FACTORY,
+         RENDER_KIT_FACTORY
     };
 
     /**
      * <p>Map of Class instances for the our factoryNames.</p>
      */
 
-    private static Map<String,Class> factoryClasses = null;
+    private static Map<String, Class> factoryClasses = null;
 
     private static final Logger LOGGER =
-        Logger.getLogger("javax.faces", "javax.faces.LogStrings");
-
+         Logger.getLogger("javax.faces", "javax.faces.LogStrings");
 
     // --------------------------------------------------------- Public Methods
 
@@ -214,49 +209,47 @@ public final class FactoryFinder {
      * class description.</p>
      *
      * @param factoryName Fully qualified name of the JavaServer Faces factory
-     *  for which an implementation instance is requested
-     *
-     * @throws FacesException if the web application class loader
-     *  cannot be identified
-     * @throws FacesException if an instance of the configured factory
-     *  implementation class cannot be loaded
-     * @throws FacesException if an instance of the configured factory
-     *  implementation class cannot be instantiated
+     *                    for which an implementation instance is requested
+     * @throws FacesException           if the web application class loader
+     *                                  cannot be identified
+     * @throws FacesException           if an instance of the configured factory
+     *                                  implementation class cannot be loaded
+     * @throws FacesException           if an instance of the configured factory
+     *                                  implementation class cannot be instantiated
      * @throws IllegalArgumentException if <code>factoryName</code> does not
-     *  identify a standard JavaServer Faces factory name
-     * @throws IllegalStateException if there is no configured factory
-     *  implementation class for the specified factory name
-     * @throws NullPointerException if <code>factoryname</code>
-     *  is null
+     *                                  identify a standard JavaServer Faces factory name
+     * @throws IllegalStateException    if there is no configured factory
+     *                                  implementation class for the specified factory name
+     * @throws NullPointerException     if <code>factoryname</code>
+     *                                  is null
      */
     public static Object getFactory(String factoryName)
-        throws FacesException {
+         throws FacesException {
 
-	validateFactoryName(factoryName);
-
+        validateFactoryName(factoryName);
 
         // Identify the web application class loader
         ClassLoader classLoader = getClassLoader();
 
         synchronized (applicationMaps) {
-	    Map<String,Object> appMap = getApplicationMap();
-	    // assert(null != appMap);
-	    
-            Object 
-		factory = null,
-		factoryOrList = appMap.get(factoryName);
-	    
-	    // If this factory has been retrieved before
+            Map<String, Object> appMap = getApplicationMap();
+            // assert(null != appMap);
+
+            Object
+                 factory = null,
+                 factoryOrList = appMap.get(factoryName);
+
+            // If this factory has been retrieved before
             if (factoryOrList != null && (!(factoryOrList instanceof List))) {
-		// just return it.
+                // just return it.
                 return (factoryOrList);
             }
-	    // else, this factory has not been retrieved before; let's
-	    // find it.
-	    
+            // else, this factory has not been retrieved before; let's
+            // find it.
+
             factory = getImplementationInstance(classLoader, factoryName,
-						(List) factoryOrList);
-	    
+                 (List) factoryOrList);
+
             if (null == factory) {
                 ResourceBundle rb = LOGGER.getResourceBundle();
                 String message = rb.getString("severe.no_factory");
@@ -268,7 +261,7 @@ public final class FactoryFinder {
             appMap.put(factoryName, factory);
             return (factory);
         }
-	
+
     }
 
     /**
@@ -276,52 +269,49 @@ public final class FactoryFinder {
      * <code>factoryName/implName</code> mapping in such a way that
      * {@link #getFactory} will find this mapping when searching for a
      * match.</p>
-     *
+     * <p/>
      * <p>This method has no effect if <code>getFactory()</code> has
      * already been called looking for a factory for this
      * <code>factoryName</code>.</p>
-     *
+     * <p/>
      * <p>This method can be used by implementations to store a factory
      * mapping while parsing the Faces configuration file</p>
      *
      * @throws IllegalArgumentException if <code>factoryName</code> does not
-     *  identify a standard JavaServer Faces factory name
-     * @throws NullPointerException if <code>factoryname</code>
-     *  is null
-     *
+     *                                  identify a standard JavaServer Faces factory name
+     * @throws NullPointerException     if <code>factoryname</code>
+     *                                  is null
      */
 
-    public static void setFactory(String factoryName, 
-				  String implName) {
-	validateFactoryName(factoryName);
-	Object previouslySetFactories = null;
-	Map<String,Object> appMap = null;
-	synchronized (applicationMaps) {
-	    appMap = getApplicationMap();
-	    // assert(null != appMap);
+    public static void setFactory(String factoryName,
+                                  String implName) {
+        validateFactoryName(factoryName);
+        Object previouslySetFactories = null;
+        Map<String, Object> appMap = null;
+        synchronized (applicationMaps) {
+            appMap = getApplicationMap();
+            // assert(null != appMap);
 
-	    // Has set or get been called on this factoryName before?
-	    if (null != (previouslySetFactories = appMap.get(factoryName))) {
-		// Yes.  Has get been called on this factoryName before?
-		// If previouslySetFactories is not a List, get has been
-		// called.
-		if (!(previouslySetFactories instanceof List)) {
-		    // take no action.
-		    return;
-		}
-		// get has not been called, previouslySetFactories is a
-		// List
-	    }
-	    else {
-		// No.  Create a List for this FactoryName.
-		previouslySetFactories = new ArrayList<String>();
-		appMap.put(factoryName, previouslySetFactories);
-	    }
-	    // Put this at the beginning of the list.
-	    (TypedCollections.dynamicallyCastList((List)previouslySetFactories, String.class)).add(0, implName);
-	}
+            // Has set or get been called on this factoryName before?
+            if (null != (previouslySetFactories = appMap.get(factoryName))) {
+                // Yes.  Has get been called on this factoryName before?
+                // If previouslySetFactories is not a List, get has been
+                // called.
+                if (!(previouslySetFactories instanceof List)) {
+                    // take no action.
+                    return;
+                }
+                // get has not been called, previouslySetFactories is a
+                // List
+            } else {
+                // No.  Create a List for this FactoryName.
+                previouslySetFactories = new ArrayList<String>();
+                appMap.put(factoryName, previouslySetFactories);
+            }
+            // Put this at the beginning of the list.
+            (TypedCollections.dynamicallyCastList((List) previouslySetFactories, String.class)).add(0, implName);
+        }
     }
-
 
 
     /**
@@ -332,7 +322,7 @@ public final class FactoryFinder {
      * than being included inside the web application.</p>
      *
      * @throws FacesException if the web application class loader
-     *  cannot be identified
+     *                        cannot be identified
      */
     public static void releaseFactories() throws FacesException {
 
@@ -351,8 +341,6 @@ public final class FactoryFinder {
 
     }
 
-
-
     // -------------------------------------------------------- Private Methods
 
 
@@ -361,7 +349,7 @@ public final class FactoryFinder {
      * calling web application.</p>
      *
      * @throws FacesException if the web application class loader
-     *  cannot be identified
+     *                        cannot be identified
      */
     private static ClassLoader getClassLoader() throws FacesException {
 
@@ -380,17 +368,17 @@ public final class FactoryFinder {
     /**
      * <p>Load and return an instance of the specified implementation
      * class using the following algorithm.</p>
-     *
+     * <p/>
      * <ol>
-     *
-     *  <li><p>If the argument <code>implementations</code> list has
-     *  more than one element, or exactly one element, interpret the
-     *  last element in the list to be the fully qualified class name of
-     *  a class implementing <code>factoryName</code>.  Instantiate that
-     *  class and save it for return.  If the
-     *  <code>implementations</code> list has only one element, skip
-     *  this step.</p></li>
-     *
+     * <p/>
+     * <li><p>If the argument <code>implementations</code> list has
+     * more than one element, or exactly one element, interpret the
+     * last element in the list to be the fully qualified class name of
+     * a class implementing <code>factoryName</code>.  Instantiate that
+     * class and save it for return.  If the
+     * <code>implementations</code> list has only one element, skip
+     * this step.</p></li>
+     * <p/>
      * <li><p>Look for a resource called
      * <code>/META-INF/services/&lt;factoryName&gt;</code>.  If found,
      * interpret it as a properties file, and read out the first entry.
@@ -403,7 +391,7 @@ public final class FactoryFinder {
      * arg constructor, just instantiate the zero arg constructor.  Save
      * the newly instantiated factory for return, replacing the
      * instantiated factory from the previous step.</p></li>
-     *
+     * <p/>
      * <li><p>Treat each remaining element in the
      * <code>implementations</code> list as a fully qualified class name
      * of a class implementing <code>factoryName</code>.  If the current
@@ -413,57 +401,56 @@ public final class FactoryFinder {
      * there is no one arg constructor, just instantiate the zero arg
      * constructor, replacing the instantiated factory from the previous
      * step or iteration.</p></li>
-     *
-     * 	<li><p>Return the saved factory</p></li>
-     *
+     * <p/>
+     * <li><p>Return the saved factory</p></li>
+     * <p/>
      * </ol>
      *
-     * @param classLoader Class loader for the web application that will
-     *  be loading the implementation class
+     * @param classLoader     Class loader for the web application that will
+     *                        be loading the implementation class
      * @param implementations A List of implementations for a given
-     * factory class.
-     *
+     *                        factory class.
      * @throws FacesException if the specified implementation class
-     *  cannot be loaded
+     *                        cannot be loaded
      * @throws FacesException if an instance of the specified implementation
-     *  class cannot be instantiated
+     *                        class cannot be instantiated
      */
     private static Object getImplementationInstance(ClassLoader classLoader,
-						    String factoryName,
+                                                    String factoryName,
                                                     List implementations)
-        throws FacesException {
-	Object result = null;
-	String curImplClass = null;
-	int len = 0, i = 0;
+         throws FacesException {
+        Object result = null;
+        String curImplClass = null;
+        int len = 0, i = 0;
 
-	// step 1.
-	if (null != implementations &&
-	    (1 < (len = implementations.size()) || 1 == len)) {
-	    curImplClass = (String) implementations.remove(len - 1);
-	    // since this is the hard coded implementation default,
-	    // there is no preceding implementation, so don't bother
-	    // with a non-zero-arg ctor.
-	    result = getImplGivenPreviousImpl(classLoader, factoryName, 
-					      curImplClass, null);
-	}
+        // step 1.
+        if (null != implementations &&
+             (1 < (len = implementations.size()) || 1 == len)) {
+            curImplClass = (String) implementations.remove(len - 1);
+            // since this is the hard coded implementation default,
+            // there is no preceding implementation, so don't bother
+            // with a non-zero-arg ctor.
+            result = getImplGivenPreviousImpl(classLoader, factoryName,
+                 curImplClass, null);
+        }
 
-	// step 2.
-	if (null != (curImplClass = getImplNameFromServices(classLoader,
-							    factoryName))) {
-	    result = getImplGivenPreviousImpl(classLoader, factoryName,
-					      curImplClass, result);
-	}
-	
-	// step 3.
-	if (null != implementations) {
-	    for (len = (implementations.size() - 1); 0 <= len; len--) {
-		curImplClass = (String) implementations.remove(len);
-		result = getImplGivenPreviousImpl(classLoader, factoryName,
-						  curImplClass, result);
-	    }
-	}
-	
-	return result;
+        // step 2.
+        if (null != (curImplClass = getImplNameFromServices(classLoader,
+             factoryName))) {
+            result = getImplGivenPreviousImpl(classLoader, factoryName,
+                 curImplClass, result);
+        }
+
+        // step 3.
+        if (null != implementations) {
+            for (len = (implementations.size() - 1); 0 <= len; len--) {
+                curImplClass = (String) implementations.remove(len);
+                result = getImplGivenPreviousImpl(classLoader, factoryName,
+                     curImplClass, result);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -472,7 +459,7 @@ public final class FactoryFinder {
      */
 
     private static String getImplNameFromServices(ClassLoader classLoader,
-						  String factoryName) {
+                                                  String factoryName) {
 
         // Check for a services definition
         String result = null;
@@ -487,8 +474,8 @@ public final class FactoryFinder {
                 // different from the way that the services entry was created
                 try {
                     reader =
-                        new BufferedReader(new InputStreamReader(stream,
-                                                                 "UTF-8"));
+                         new BufferedReader(new InputStreamReader(stream,
+                              "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     reader = new BufferedReader(new InputStreamReader(stream));
                 }
@@ -518,125 +505,118 @@ public final class FactoryFinder {
                 stream = null;
             }
         }
-	return result;
+        return result;
     }
 
     /**
      * <p>Implement the decorator pattern for the factory
      * implementation.</p>
-     * 
+     * <p/>
      * <p>If <code>previousImpl</code> is non-<code>null</code> and the
      * class named by the argument <code>implName</code> has a one arg
      * contstructor of type <code>factoryName</code>, instantiate it,
      * passing previousImpl to the constructor.</p>
-     *
+     * <p/>
      * <p>Otherwise, we just instantiate and return
      * <code>implName</code>.</p>
      *
-     * @param classLoader the ClassLoader from which to load the class
-     *
-     * @param factoryName the fully qualified class name of the factory.
-     *
-     * @param implName the fully qualified class name of a class that
-     * implements the factory.
-     * 
+     * @param classLoader  the ClassLoader from which to load the class
+     * @param factoryName  the fully qualified class name of the factory.
+     * @param implName     the fully qualified class name of a class that
+     *                     implements the factory.
      * @param previousImpl if non-<code>null</code>, the factory
-     * instance to be passed to the constructor of the new factory.
-     *
+     *                     instance to be passed to the constructor of the new factory.
      */
 
     private static Object getImplGivenPreviousImpl(ClassLoader classLoader,
-						   String factoryName, 
-						   String implName,
-						   Object previousImpl) {
-	Class clazz = null, factoryClass = null;
-	Class [] getCtorArg = null;
-	Object [] newInstanceArgs = new Object[1];
-	Constructor ctor = null;
-	Object result = null;
+                                                   String factoryName,
+                                                   String implName,
+                                                   Object previousImpl) {
+        Class clazz = null, factoryClass = null;
+        Class[] getCtorArg = null;
+        Object[] newInstanceArgs = new Object[1];
+        Constructor ctor = null;
+        Object result = null;
 
-	// if we have a previousImpl and the appropriate one arg ctor.
-	if ((null != previousImpl) && 
-	    (null != (factoryClass = getFactoryClass(classLoader, 
-						     factoryName)))) {
-	    try {
-		clazz = Class.forName(implName, false, classLoader);
-		getCtorArg = new Class[1];
-		getCtorArg[0] = factoryClass;
-		ctor = clazz.getConstructor(getCtorArg);
-		newInstanceArgs[0] = previousImpl;
-		result = ctor.newInstance(newInstanceArgs);
-	    } 
-	    catch (NoSuchMethodException nsme) {
-		// fall through to "zero-arg-ctor" case
-		factoryClass = null;
-		}
-	    catch (Exception e) {
-		throw new FacesException(implName, e);
-	    }
-	}
-	if (null == previousImpl || null == factoryClass) {
-	    // we have either no previousImpl or no appropriate one arg
-	    // ctor.
-	    try {
-		clazz = Class.forName(implName, false, classLoader);
-		// since this is the hard coded implementation default,
-		// there is no preceding implementation, so don't bother
-		// with a non-zero-arg ctor.
-		result = clazz.newInstance();
-	    } catch (Exception e) {
-		throw new FacesException(implName, e);
-	    }
-	}
-	return result;
+        // if we have a previousImpl and the appropriate one arg ctor.
+        if ((null != previousImpl) &&
+             (null != (factoryClass = getFactoryClass(classLoader,
+                  factoryName)))) {
+            try {
+                clazz = Class.forName(implName, false, classLoader);
+                getCtorArg = new Class[1];
+                getCtorArg[0] = factoryClass;
+                ctor = clazz.getConstructor(getCtorArg);
+                newInstanceArgs[0] = previousImpl;
+                result = ctor.newInstance(newInstanceArgs);
+            }
+            catch (NoSuchMethodException nsme) {
+                // fall through to "zero-arg-ctor" case
+                factoryClass = null;
+            }
+            catch (Exception e) {
+                throw new FacesException(implName, e);
+            }
+        }
+        if (null == previousImpl || null == factoryClass) {
+            // we have either no previousImpl or no appropriate one arg
+            // ctor.
+            try {
+                clazz = Class.forName(implName, false, classLoader);
+                // since this is the hard coded implementation default,
+                // there is no preceding implementation, so don't bother
+                // with a non-zero-arg ctor.
+                result = clazz.newInstance();
+            } catch (Exception e) {
+                throw new FacesException(implName, e);
+            }
+        }
+        return result;
     }
 
     /**
-     *
      * @return the <code>java.lang.Class</code> for the argument
-     * factory.
-     *
+     *         factory.
      */
 
     private static Class getFactoryClass(ClassLoader classLoader,
-					 String factoryClassName) {
-	if (null == factoryClasses) {
-	    factoryClasses = new HashMap<String,Class>(factoryNames.length);
-	    factoryClasses.put(APPLICATION_FACTORY,
-			       javax.faces.application.ApplicationFactory.class);
-	    factoryClasses.put(FACES_CONTEXT_FACTORY,
-			       javax.faces.context.FacesContextFactory.class);
-	    factoryClasses.put(LIFECYCLE_FACTORY,
-			       javax.faces.lifecycle.LifecycleFactory.class);
-	    factoryClasses.put(RENDER_KIT_FACTORY,
-			       javax.faces.render.RenderKitFactory.class);
-	}
-	return factoryClasses.get(factoryClassName);
+                                         String factoryClassName) {
+        if (null == factoryClasses) {
+            factoryClasses = new HashMap<String, Class>(factoryNames.length);
+            factoryClasses.put(APPLICATION_FACTORY,
+                 javax.faces.application.ApplicationFactory.class);
+            factoryClasses.put(FACES_CONTEXT_FACTORY,
+                 javax.faces.context.FacesContextFactory.class);
+            factoryClasses.put(LIFECYCLE_FACTORY,
+                 javax.faces.lifecycle.LifecycleFactory.class);
+            factoryClasses.put(RENDER_KIT_FACTORY,
+                 javax.faces.render.RenderKitFactory.class);
+        }
+        return factoryClasses.get(factoryClassName);
     }
 
     /**
      * <p>This method must only be called from within a synchronized
      * block for the {@link #applicationMaps} ivar.</p>
-     *
-     */ 
+     */
 
-    private static Map<String,Object> getApplicationMap() {
+    private static Map<String, Object> getApplicationMap() {
         // Identify the web application class loader
         ClassLoader classLoader = getClassLoader();
-	Map<String,Object> result = null;
-	
-	// Return any previously instantiated factory instance (of the
-	// specified name) for this web application
-	result = applicationMaps.get(classLoader);
-	if (result == null) {
-	    result = new HashMap<String,Object>();
-	    applicationMaps.put(classLoader, result);
-	}
-	return result;
+        Map<String, Object> result = null;
+
+        // Return any previously instantiated factory instance (of the
+        // specified name) for this web application
+        result = applicationMaps.get(classLoader);
+        if (result == null) {
+            result = new HashMap<String, Object>();
+            applicationMaps.put(classLoader, result);
+        }
+        return result;
     }
 
     private static void validateFactoryName(String factoryName) {
-	// Validate the requested factory name
+        // Validate the requested factory name
         if (factoryName == null) {
             throw new NullPointerException();
         }
@@ -651,7 +631,6 @@ public final class FactoryFinder {
             throw new IllegalArgumentException(factoryName);
         }
     }
-	
 
 
 }
