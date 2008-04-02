@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.12 2003/09/04 03:52:46 eburns Exp $
+ * $Id: StateManager.java,v 1.13 2003/09/04 16:07:35 eburns Exp $
  */
 
 /*
@@ -400,7 +400,7 @@ public abstract class StateManager {
      * <p>Store the state of the attachedObjects as an opaque Object array,
      * interpreted only by our corresponding {@link
      * #restoreAttachedObjectState} method.  Each element in the Object array
-     * is either null, or is itself an array of {@link StateHolderSaver}
+     * is either null, or is itself an array of <code>StateHolderSaver</code>
      * instances.</p>
      *
      * <p>For each element in the argument attachedObjects array:</p>
@@ -408,11 +408,11 @@ public abstract class StateManager {
      * <p>If the current element is null, assign the corresponding
      * element in the Object array to null.</p>
      *
-     * <p>If the current element is non-null, create an inner {@link
-     * StateHolderSaver} array and iterate over the elements in the
-     * <code>List</code> contained in the current element in the
+     * <p>If the current element is non-null, create an inner
+     * <code>StateHolderSaver</code> array and iterate over the elements
+     * in the <code>List</code> contained in the current element in the
      * argument attachedObjects array.  For each element, save the
-     * attached object using the {@link StateHolderSaver} helper
+     * attached object using the <code>StateHolderSaver</code> helper
      * class</p>.
      *
      * <p>Save the inner <code>StateHolderSaver</code> array to the
@@ -521,10 +521,11 @@ public abstract class StateManager {
      * store the restored attachedObjects.  For each element in the Object
      * array:</p>
      *
-     * <p>If the current element is non-null, it must be of type {@link
-     * StateHolderSaver} array.  Create an ArrayList to store the contents
-     * of the inner {@link StateHolderSaver} array.  For each element in
-     * the inner <code>StateHolderSaver</code> array:</p>
+     * <p>If the current element is non-null, it must be of type
+     * <code>StateHolderSaver</code> array.  Create an ArrayList to
+     * store the contents of the inner <code>StateHolderSaver</code> array.
+     * For each element in the inner <code>StateHolderSaver</code>
+     * array:</p>
      *
      * <ul>
      *
