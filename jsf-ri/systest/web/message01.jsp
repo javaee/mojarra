@@ -52,6 +52,14 @@
     return;
   }
 
+  // Test for replacing a Standard Validator Message
+  facesContext.setLocale(new Locale("en", "US"));
+  Message msg = mr.getMessage(facesContext, "javax.faces.validator.DoubleRangeValidator.LIMIT");
+  if (!msg.getSummary().equals("Validation Error:This summary replaces the RI summary")) {
+      out.println("/message01.jsp FAILED - Missing replacement message");
+      return;
+  }
+
   // Check message identifiers that should be present (en_US)
   facesContext.setLocale(new Locale("en", "US"));
   for (int i = 0; i < list.length; i++) {

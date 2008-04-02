@@ -61,6 +61,16 @@
 
   <!-- Message Resources Custom Bundle #1 - Single Element -->
   <message-resources>
+    <message-resources-id>javax.faces.context.FACES_API_MESSAGES</message-resources-id>
+    <message-resources-class>com.sun.faces.context.MessageResourcesImpl</message-resources-class>
+    <message>
+      <message-id>javax.faces.validator.DoubleRangeValidator.LIMIT</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error:This summary replaces the RI summary</summary>
+    </message>
+  </message-resources>
+
+  <message-resources>
     <message-resources-id>Custom1</message-resources-id>
     <message>
       <message-id>Custom1A</message-id>
