@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.1 2002/06/03 19:34:26 craigmcc Exp $
+ * $Id: FacesEvent.java,v 1.2 2002/09/20 02:30:17 craigmcc Exp $
  */
 
 /*
@@ -40,7 +40,10 @@ public class FacesEvent extends EventObject {
     /**
      * <p>Construct a new event object from the specified source component.</p>
      *
-     * @param component Source {@link UIComponent} for this event (if any)
+     * @param component Source {@link UIComponent} for this event
+     *
+     * @exception IllegalArgumentException if <code>component</code> is
+     *  <code>null</code>
      */
     public FacesEvent(UIComponent source) {
 
@@ -53,7 +56,7 @@ public class FacesEvent extends EventObject {
 
 
     /**
-     * <p>Return the source {@link UIComponent} that sent this event (if any).
+     * <p>Return the source {@link UIComponent} that sent this event.
      */
     public UIComponent getComponent() {
 

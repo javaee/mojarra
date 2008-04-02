@@ -1,5 +1,5 @@
 /*
- * $Id: FormEvent.java,v 1.5 2002/08/15 05:42:34 craigmcc Exp $
+ * $Id: FormEvent.java,v 1.6 2002/09/20 02:30:17 craigmcc Exp $
  */
 
 /*
@@ -34,10 +34,12 @@ public class FormEvent extends CommandEvent {
      * @param component Source {@link UIComponent} for this event
      * @param formName Form name of the form this event signifies
      * @param commandName Command name of the submit button that caused this
-     *  form to be submitted (if any)
+     *  form to be submitted
      *
-     * @exception NullPointerException if any of the parameters
-     *  are <code>null</code>
+     * @exception IllegalArgumentException if <code>component</code> is
+     *  <code>null</code>
+     * @exception NullPointerException if <code>commandName</code>
+     *  or <code>formName</code> is <code>null</code>
      */
     public FormEvent(UIComponent source, String formName, String commandName) {
 
