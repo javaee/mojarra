@@ -37,7 +37,14 @@
 
       <h:outputText value="#{valueChangeListenerBean.textBResult}" />
 
-      <h:commandButton value="submit" /> <h:messages />
+      <h:commandButton value="submit" /> <p>
+
+      <h:messages dir="LTR" lang="en"/>
+
+      <hr />
+
+      <h:message for="textB" dir="RTL" lang="de"/>
+
 
     </h:panelGrid>
 

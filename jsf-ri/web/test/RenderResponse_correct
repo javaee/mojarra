@@ -50,7 +50,7 @@
 <tbody>
 <tr>
 <td><span id="basicForm:formHeader2"><span id="basicForm:A2">Logon&nbsp;</span><span id="basicForm:B2">Form</span></span></td>
-<td><span id="basicForm:text1">Username:</span></td>
+<td><span id="basicForm:text1" dir="LTR" lang="en">Username:</span></td>
 </tr>
 <tr>
 <td><input id="basicForm:username1" type="text" name="basicForm:username1" value="JavaServerFaces" class="inputClass" /></td>
@@ -843,7 +843,7 @@ see the <i>angle brackets</i> on this text
 
 
    
-<span id="basicForm:userMsg">Param 0: my param</span>
+<span id="basicForm:userMsg" dir="LTR" lang="en">Param 0: my param</span>
 
 
 <input type="hidden" name="basicForm" value="basicForm" /><input type="hidden" name="value" /><input type="hidden" name="basicForm:_idcl" /><input type="hidden" name="name" /></form>

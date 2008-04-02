@@ -609,6 +609,7 @@
     &uimessage-props;
     &core-props;
     &message-message-props;
+    &i18n-props;
 
     <component-extension>
       <base-component-type>javax.faces.Message</base-component-type>
@@ -626,6 +627,7 @@
     &uimessages-props;
     &core-props;
     &messages-messages-props;
+    &i18n-props;
 
     <component-extension>
       <base-component-type>javax.faces.Messages</base-component-type>
@@ -637,11 +639,13 @@
   <component>
 
     <description>
-      <p>Represents a component that looks up a localized message
-      in a resource bundle, optionally uses it as a <code>MessageFormat</code>
-      pattern string and substitutes in parameter
-      values from nested <em>UIParameter</em> components, and renders
-      the result.</p>
+      <p>Represents a component that looks up a localized message in a
+      resource bundle, optionally uses it as a
+      <code>MessageFormat</code> pattern string and substitutes in
+      parameter values from nested <em>UIParameter</em> components, and
+      renders the result.  If the "dir" or "lang" attributes are
+      present, render a <code>span</code> element and pass them through
+      as attributes on the span.</p>
     </description>
     <display-name>Output Format</display-name>
     <component-type>javax.faces.HtmlOutputFormat</component-type>
@@ -650,6 +654,7 @@
     &uioutput-props;
     &core-props;
     &output-format-props;
+    &i18n-props;
 
     <component-extension>
       <base-component-type>javax.faces.Output</base-component-type>
@@ -710,9 +715,9 @@
   <component>
 
     <description>
-      <p>Renders the component value as text, optionally
-      wrapping in a <code>span</code> element if CSS styles
-      or style classes are specified.</p>
+      <p>Renders the component value as text, optionally wrapping in a
+      <code>span</code> element if I18N attributes, CSS styles or style
+      classes are specified.</p>
     </description>
     <display-name>Output Text</display-name>
     <component-type>javax.faces.HtmlOutputText</component-type>
@@ -721,6 +726,7 @@
     &uioutput-props;
     &core-props;
     &output-text-props;
+    &i18n-props;
 
     <component-extension>
       <base-component-type>javax.faces.Output</base-component-type>
@@ -1555,7 +1561,8 @@
         attribute as the value of the "style" attribute.  If we have no
         "style" attribute, but do have a severity style, use the
         severity style as the value of the "style" attribute.  The same
-        precedence rules apply for the style class.</p>
+        precedence rules apply for the style class.  Obtain the value of
+        the <code>dir</code> and <code>lang</code> attributes.</p>
 
       </ul>
 
@@ -1563,14 +1570,15 @@
 
       <ul>
 
-      <p>For the message renderer, we only render
-      one row, for the first message.  For the messages renderer, we
-      render as many rows as we have messages.  If either of the "style"
-      or "styleClass" attributes has a non-null value (as determined
+      <p>For the message renderer, we only render one row, for the first
+      message.  For the messages renderer, we render as many rows as we
+      have messages.  If any of the "dir", "lang", "style" or
+      "styleClass" attributes has a non-null value (as determined
       above), render a "span" element, outputting the value of the
       "style" attribute as the the value of the "style" attribute, and
       outputting the value of the "styleClass" attribute as the value of
-      the "class" attribute on the "span" element.  If the
+      the "class" attribute on the "span" element.  Output the "dir" and
+      "lang" attributes as well, if they are present.  If the
       <code>UIMessage</code> has a "tooltip" attribute with the value of
       "true", and the <code>UIMessage</code> has "showSummary" and
       "showDetail" properties with the value "true", if we haven't
@@ -1589,6 +1597,7 @@
 
       &core-attrs;
       &message-message-attrs;
+      &i18n-attrs;
 
     </renderer>
 
@@ -1614,24 +1623,29 @@
 
       &core-attrs;
       &messages-messages-attrs;
+      &i18n-attrs;
 
     </renderer>
 
     <renderer>
 
-      <description><p>Render parameterized text.  Obtain the <code>style</code>
-      and <code>styleClass</code> attributees from this component.  If either
-      are present, render a "span" element.  Output the <code>styleClass</code>
-      attribute (if present) as the value of the <code>class</code> attribute.
-      Output the <code>style</code> attribute as the value of the
-      <code>style</code> attribute.  Accrue a list of the values of all
-      child <code>UIParameter</code> components of this component.  If there
+      <description><p>Render parameterized text.  Obtain the
+      <code>style</code>, <code>styleClass</code>, <code>dir</code>, and
+      <code>lang</code> attributees from this component.  If any are
+      present, render a "span" element.  Output the
+      <code>styleClass</code> attribute (if present) as the value of the
+      <code>class</code> attribute.  Output the <code>style</code>
+      attribute as the value of the <code>style</code> attribute.
+      Output the <code>dir</code> and <code>lang</code> attributes as
+      pass through attributes.  Accrue a list of the values of all child
+      <code>UIParameter</code> components of this component.  If there
       are one or more accumulated parameter values, convert the list of
       parameter values to an <code>Object</code> array, call
-      <code>MessageFormat.format()</code>, passing the <code>value</code>
-      of this component as the first argument, and the array of parameter
-      values as the second argument, and render the result.  Otherwise,
-      render the <code>value</code> of this component unmodified.</p>
+      <code>MessageFormat.format()</code>, passing the
+      <code>value</code> of this component as the first argument, and
+      the array of parameter values as the second argument, and render
+      the result.  Otherwise, render the <code>value</code> of this
+      component unmodified.</p>
       </description>
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.Format</renderer-type>
@@ -1639,6 +1653,7 @@
 
       &core-attrs;
       &output-format-attrs;
+      &i18n-attrs;
 
     </renderer>
 
@@ -1695,16 +1710,16 @@
 
     <renderer>
 
-      <description>If the "styleClass" or "style" attributes are
-      present, render a "span" element.  If the "styleClass" attribute
-      is present, render its value as the value of the "class"
-      attribute.  If the "style" attribute is present, pass it thru.  If
-      the "escape" attribute is not present, or it is present and its
-      value is "true" all angle brackets should be converted to the
-      ampersand xx semicolon syntax when rendering the value of the
-      "value" attribute as the value of the component.  If the "escape"
-      attribute is present and is "false" the value of the component
-      should be rendered as text without escaping.
+      <description>If the "styleClass", "style", "dir" or "lang"
+      attributes are present, render a "span" element.  If the
+      "styleClass" attribute is present, render its value as the value
+      of the "class" attribute.  If the "style" attribute is present,
+      pass it thru.  If the "escape" attribute is not present, or it is
+      present and its value is "true" all angle brackets should be
+      converted to the ampersand xx semicolon syntax when rendering the
+      value of the "value" attribute as the value of the component.  If
+      the "escape" attribute is present and is "false" the value of the
+      component should be rendered as text without escaping.
       </description>
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.Text</renderer-type>
@@ -1712,6 +1727,7 @@
 
       &core-attrs;
       &output-text-attrs;
+      &i18n-attrs;
 
     </renderer>
 

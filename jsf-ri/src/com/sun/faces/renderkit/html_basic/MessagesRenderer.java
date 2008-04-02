@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.17 2004/10/12 14:39:52 rlubke Exp $
+ * $Id: MessagesRenderer.java,v 1.18 2004/10/27 16:58:59 edburns Exp $
  */
 
 /*
@@ -187,7 +187,8 @@ public class MessagesRenderer extends HtmlBasicRenderer {
 
             boolean wroteSpan = false;
 
-            if (styleClass != null || style != null) {
+            if (styleClass != null || style != null || 
+		Util.hasPassThruAttributes(component)) {
                 writer.startElement("span", component);
                 if (!wroteTable) {
                     writeIdAttributeIfNecessary(context, writer, component);
@@ -196,9 +197,8 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                 if (null != styleClass) {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
-                if (style != null) {
-                    writer.writeAttribute("style", style, "style");
-                }
+                // style is rendered as a passthru attribute
+                Util.renderPassThruAttributes(writer, component);
             }
 
             Object tooltip = component.getAttributes().get("tooltip");

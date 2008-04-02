@@ -33,7 +33,7 @@
                      </h:panelGroup>
 
                    
-                    <h:outputText id="text1" value="Username:"/>
+                    <h:outputText id="text1" value="Username:" dir="LTR" lang="en"/>
                    
                     <h:inputText id="username1" styleClass="inputClass" value="JavaServerFaces" />
 
@@ -772,7 +772,7 @@ see the <i>angle brackets</i> on this text"></h:outputText>
 
 <h:outputText title="output text with title" value="should be spanned" />
 
-<h:outputFormat id="userMsg" value="Param 0: {0}" >
+<h:outputFormat id="userMsg" value="Param 0: {0}" dir="LTR" lang="en">
    <f:param value="my param"/>
 </h:outputFormat>
 

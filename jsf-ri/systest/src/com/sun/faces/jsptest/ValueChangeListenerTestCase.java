@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTestCase.java,v 1.1 2004/06/02 13:57:45 eburns Exp $
+ * $Id: ValueChangeListenerTestCase.java,v 1.2 2004/10/27 16:58:59 edburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
@@ -113,6 +114,29 @@ public class ValueChangeListenerTestCase extends AbstractTestCase {
 
 	assertTrue(-1 != 
 	   page.asText().indexOf("Validation Error"));
+
+	// make sure dir and lang are passed through as expected for
+	// message and messages
+	list = getAllElementsOfGivenClass(page, null, 
+					  HtmlSpan.class); 
+
+	boolean 
+	    hasMessageContent = false, // do we have the h:message
+				       // content we're looking for
+	    hasMessagesContent = false; // do we have the h:messages
+					// content we're looking for.
+	HtmlSpan span = null;
+
+	for (int i = 0; i < list.size(); i++) {
+	    span = (HtmlSpan) list.get(i);
+	    if (-1 != span.asXml().indexOf("dir=\"LTR\" lang=\"en\"")) {
+		hasMessagesContent = true;
+	    }
+	    if (-1 != span.asXml().indexOf("dir=\"RTL\" lang=\"de\"")) {
+		hasMessageContent = true;
+	    }
+	}
+	assertTrue(hasMessagesContent && hasMessageContent);
 	
     }
 }
