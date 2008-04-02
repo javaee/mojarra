@@ -40,29 +40,30 @@
 # build.properties.  On win32, make sure to preserve the \\ syntax
 # for escaping backslashes.  
 
+# Following settings assume JWSDP 1.2 environment.
 tomcat.home=<path to tomcat or jwsdp installation>
-commons-logging.jar=${tomcat.home}/jwsdp-shared/lib/commons-logging.jar
+commons-logging.jar=${tomcat.home}/server/lib/commons-logging.jar
 commons-digester.jar=${tomcat.home}/server/lib/commons-digester.jar
 commons-beanutils.jar=${tomcat.home}/server/lib/commons-beanutils.jar
 commons-collections.jar=${tomcat.home}/common/lib/commons-collections.jar
 xerces.jar=${tomcat.home}/jaxp-1.2.2/lib/endorsed/xercesImpl.jar
-jstl.jar=${tomcat.home}/jstl-1.0.3/standard/lib/jstl.jar
-standard.jar=${tomcat.home}/jstl-1.0.3/standard/lib/standard.jar
+jstl.jar=${tomcat.home}/jstl/lib/jstl.jar
+standard.jar=${tomcat.home}/jstl/lib/standard.jar
 
-# Set the following only if you are building with JWSDP1.2.x
-# or TOMCAT 5.x 
-#servlet.jar=${tomcat.home}/common/lib/servlet-api.jar  
-#jsp.jar=${tomcat.home}/common/lib/jsp-api.jar
+# Comment the following properties when building under JWSDP 1.1
+# or Tomcat 4.1.x
+jsp.jar=${tomcat.home}/common/lib/jsp-api.jar
+servlet.jar=${tomcat.home}/common/lib/servlet-api.jar  
 
-# Set the following only if you are using JWSDP1.2.x
-#jsf-api.jar=${tomcat.home}/jsf-${version}/jsf-api.jar
-#jsf-ri.jar=${tomcat.home}/jsf-${version}/jsf-ri.jar
+jsf-api.jar=${tomcat.home}/jsf/lib/jsf-api.jar
+jsf-ri.jar=${tomcat.home}/jsf/lib/jsf-ri.jar
 
 username=<your management tool username>
 password=<your management tool password>
 
-# By default, all the dependent libraries are bundled with every sample app.
-# To bundle only the libraries that are not in the JWSDP1.2,
-# comment build.standalone property and uncomment build.wspack property
-build.standalone=true
-#build.wspack=true
+# By default, the dependent libraries are not included with 
+# every sample app, since they come bundled with JWSDP 1.2.
+# To bundle the dependent libraries with every sample app,
+# uncomment build.standalone property and comment build.wspack property.
+#build.standalone=true
+build.wspack=true
