@@ -132,6 +132,15 @@
                  excludes="cactus-1.7.1.jar"/>
         <fileset dir="${jsf.build.home}/lib" includes="cactus-*.jar"/>
     </path>
+
+    <path id="compile.classpath">
+        <pathelement location="${servlet.jar}"/>
+        <pathelement location="${jsp.jar}"/>
+        <pathelement location="${jstl.jar}"/>
+        <pathelement location="${annotation.jar}"/>
+        <pathelement location="${glassfish.jar}"/>
+        <pathelement location="${tomcat6.jar}"/>        
+    </path>
     
     <path id="sun.commons.classpath">
         <fileset dir="${jsf.build.home}/common/lib"

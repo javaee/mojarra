@@ -32,7 +32,8 @@ package com.sun.faces.spi;
  * perform resource injection.</p>  
  * 
  * <p>The implementation of this interface *must* be thread-safe and must
- * have a no-arg constructor.</p>
+ * provider either a no-arg constructor, or a constructor accepting
+ * a <code>ServletContext</code> instance.</p>
  */
 public interface InjectionProvider {
 

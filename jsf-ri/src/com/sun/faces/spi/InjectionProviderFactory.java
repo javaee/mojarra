@@ -25,16 +25,23 @@
 
 package com.sun.faces.spi;
 
-import javax.faces.context.ExternalContext;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.sun.faces.RIConstants;
-import com.sun.faces.vendor.WebContainerInjectionProvider;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.Util;
+import com.sun.faces.vendor.WebContainerInjectionProvider;
+
+import javax.faces.context.ExternalContext;
+import javax.servlet.ServletContext;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <p>A factory for creating <code>InjectionProvider</code>
@@ -51,6 +58,9 @@ public class InjectionProviderFactory {
     private static final InjectionProvider GENERIC_WEB_PROVIDER =
          new WebContainerInjectionProvider();
 
+    private static final String INJECTION_SERVICE =
+         "META-INF/services/com.sun.faces.spi.injectionprovider";
+
     /**
       * <p>The system property that will be checked for alternate
       * <code>InjectionProvider</code> implementations.</p>
@@ -60,6 +70,7 @@ public class InjectionProviderFactory {
 
     private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
             + Util.APPLICATION_LOGGER);
+    private static final String[] EMPTY_ARRAY = new String[] {};
 
 
     /**
@@ -74,7 +85,8 @@ public class InjectionProviderFactory {
         String providerClass = findProviderClass(extContext);
                 
         
-        InjectionProvider provider = getProviderInstance(providerClass);
+        InjectionProvider provider =
+             getProviderInstance(providerClass, extContext);
 
         if (!NoopInjectionProvider.class.equals(provider.getClass())
             && !WebContainerInjectionProvider.class.equals(provider.getClass())) {
@@ -99,13 +111,27 @@ public class InjectionProviderFactory {
     }
     
 
-    private static InjectionProvider getProviderInstance(String className) {
+    private static InjectionProvider getProviderInstance(String className,
+                                                         ExternalContext extContext) {
         InjectionProvider provider = NOOP_PROVIDER;
         if (className != null) {
             try {
                 Class<?> clazz = Util.loadClass(className, InjectionProviderFactory.class);
                 if (implementsInjectionProvider(clazz)) {
-                    return (InjectionProvider) clazz.newInstance();
+                    try {
+                        Constructor ctor = clazz.getConstructor(ServletContext.class);
+                        return (InjectionProvider)
+                             ctor.newInstance((ServletContext) extContext.getContext());
+                    } catch (NoSuchMethodException nsme) {
+                        return (InjectionProvider) clazz.newInstance();
+                    } catch (InvocationTargetException ite) {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE,
+                                 "jsf.spi.injection.provider_cannot_instantiate",
+                                 new Object[]{className});
+                            LOGGER.log(Level.SEVERE, "", ite);
+                        }
+                    }
                 } else {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE,
@@ -147,8 +173,7 @@ public class InjectionProviderFactory {
                     && Util.loadClass("javax.annotation.PreDestroy", null) != null) {
                     provider = GENERIC_WEB_PROVIDER;                
                 }
-            } catch (Exception e) {
-                // LOG MESSAGE
+            } catch (Exception e) {                
                 provider = NOOP_PROVIDER;
             }
         }
@@ -166,11 +191,38 @@ public class InjectionProviderFactory {
     private static boolean implementsInjectionProvider(Class<?> clazz) {
         return InjectionProvider.class.isAssignableFrom(clazz);
     }
+
+
+    /**
+     * <p>Determine if the specified class extends the
+     * <code>DiscoverableInjectionProvider</code> interfaces.</p>
+     * @param clazz the class in question
+     * @return <code>true</code> if <code>clazz</code> implements
+     *  the <code>InjectionProvider</code> interface
+     */
+    private static boolean extendsDiscoverableInjectionProvider(Class<?> clazz) {
+        return DiscoverableInjectionProvider.class.isAssignableFrom(clazz);
+    }
     
     /**
+     * <p>Attempt to find an <code>InjectionProvider</code> based on the following
+     * algorithm:</p>
+     * <ul>
+     * <li>Check for an explicit configuration within the web.xml using
+     *     the key <code>com.sun.faces.injectionProvider</code>.  If found,
+     *     return the value.</li>
+     * <li>Check for a system property keyed by <code>com.sun.faces.InjectionProvider</code>.
+     *     If found, return the value.</li>
+     * <li>Check for entries within <code>META-INF/services/com.sun.faces.injectionprovider</code>.
+     *     If entries are found and the entries extend <code>DiscoverableInjectionProvider</code>,
+     *     invoke <code>isInjectionFeatureAvailable(String)</code> passing in the configured
+     *     delegate.  If <code>isInjectionFeatureAvailable(String)</code> returns <code>true</code>
+     *     return the service entry.</li>
+     * <li>If no <code>InjectionProviders are found, return <code>null</code></li>
      * Tries to find a provider class in a web context parameter.  If not
      * present it tries to find it as a System property.  If still not found
      * returns null.
+     * <ul>
      *
      * @param extContext The ExternalContext for this request
      * @return The provider class name specified in the container configuration, 
@@ -185,8 +237,118 @@ public class InjectionProviderFactory {
         if (provider != null) {
             return provider;
         } else {
-            return System.getProperty(INJECTION_PROVIDER_PROPERTY);
+            provider = System.getProperty(INJECTION_PROVIDER_PROPERTY);
         }
+
+        if (provider != null) {
+            return provider;
+        } else {
+            String[] serviceEntries = getServiceEntries();
+            if (serviceEntries.length > 0) {
+                for (int i = 0; i < serviceEntries.length; i++) {
+                    provider = getProviderFromEntry(serviceEntries[i]);
+                    if (provider == null) {
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+            } else {
+                return provider;
+            }
+        }
+
+        return provider;
+    }
+
+
+    private static String getProviderFromEntry(String entry) {
+        if (entry == null) {
+            return null;
+        }
+
+        String[] parts = Util.split(entry, ":");
+        if (parts.length != 2) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           "jsf.spi.serializtion.invalid_service_entry",
+                           new Object[] { entry });
+            }
+            return null;
+        }
+
+        try {
+            Class<?> clazz = Util.loadClass(parts[0], null);
+            if (extendsDiscoverableInjectionProvider(clazz)) {
+                if (DiscoverableInjectionProvider.isInjectionFeatureAvailable(parts[1])) {
+                    return parts[0];
+                }
+            } else {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                               "jsf.spi.serialization.provider.entry_not_discoverable",
+                               new Object[] { parts[0] });
+                }
+                return null;
+            }
+        } catch (ClassNotFoundException cnfe) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           "jsf.spi.serialization.provider_not_found",
+                           new Object[] { parts[0] });
+            }
+            return null;
+        }
+
+        return null;
+    }
+
+
+    private static String[] getServiceEntries() {
+
+        String[] results = EMPTY_ARRAY;
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            return results;
+        }
+
+        InputStream input = null;
+        BufferedReader reader = null;
+        try {
+            input = loader.getResourceAsStream(INJECTION_SERVICE);
+            if (input != null) {
+                try {
+                    reader = new BufferedReader(new InputStreamReader(input, "UTF-8"));
+                } catch (Exception e) {
+                    reader = new BufferedReader(new InputStreamReader(input));
+                }
+                List list = new ArrayList(4);
+                for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                    list.add(line.trim());
+                }
+                results = (String[]) list.toArray(new String[list.size()]);
+            }
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           "jsf.spi.serialization.provider.cannot_read_service",
+                           e);
+            }
+            results = EMPTY_ARRAY;
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (Exception e) {}
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (Exception e) {}
+            }
+        }
+
+        return results;
     }
 
     /**

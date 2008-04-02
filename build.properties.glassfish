@@ -29,7 +29,7 @@
 # This build.properties allows for the building of 
 # javaserverfaces-sources against Glassfish.
 #
-# $Id: build.properties.glassfish,v 1.9 2006/03/09 01:17:33 rlubke Exp $
+# $Id: build.properties.glassfish,v 1.10 2007/01/08 23:23:35 rlubke Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
@@ -63,9 +63,12 @@ http.proxy.port=
 container.name=glassfish
 
 # --------------------------------------------------
-#    Path to the web container installation
+#    Path to the web container installation.
+#    This is only necessary if running the unit tests
+#    Override the default value if testing against
+#    a different version is desirable.
 # --------------------------------------------------
-container.home=<SET TO CONTAINER HOME>
+container.home=${jsf.build.home}/dependencies/glassfish
 container.host=localhost
 container.port=8080
 
@@ -73,11 +76,16 @@ container.port=8080
 #    Glassfish specific properties needed by
 #    ${jsf.build.home}/common/ant/glassfish/container.xml
 #
+#    These are used specifically for testing.  Override
+#    the defaults if desired.
+#
 #    glassfish.admin.user - administrative user
 #    glassfish.password.file - file containing the 
 #     ${admin.user}'s password.  This is a simple
 #     file consisting of:
 #        AS_ADMIN_PASSWORD=<password>
+#     The default password file will have the password
+#     of 'adminadmin'.
 #    glassfish.admin.host - host of the 
 #     Glassfish administrative server (usually
 #     the same as ${container.host} above.
@@ -87,7 +95,7 @@ container.port=8080
 #    glassfish.domain - the default Glassfish domain.
 # --------------------------------------------------
 glassfish.admin.user=admin
-glassfish.password.file=<SET TO ASADMIN PASSWORD FILE>
+glassfish.password.file=${container.home}/password.txt
 glassfish.admin.host=${container.host}
 glassfish.admin.port=4848
 glassfish.domain=domain1

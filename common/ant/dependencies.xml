@@ -42,6 +42,11 @@
     <property name="htmlunit.version" value="1.8"/>
     <property name="cactus.version" value="13-1.7.1"/>
     <property name="taglibdoc.version" value="1.3"/>
+    <property name="servlet.api.version" value="2.5"/>
+    <property name="jsp.api.version" value="2.1"/>
+    <property name="jstl.api.version" value="1.2"/>
+    <property name="annotation.api.version" value="1.0"/>
+
     <property name="maven.repository.importer.version" value="1.2"/>
 
     <property name="junit.home"
@@ -54,11 +59,27 @@
               value="${dependency.base.dir}/taglibrarydoc-${taglibdoc.version}"/>
     <property name="maven.repository.importer.home"
               value="${dependency.base.dir}/maven-repository-importer-${maven.repository.importer.version}"/>
+    <property name="servlet.home"
+              value="${dependency.base.dir}/servlet-${servlet.api.version}"/>
+    <property name="jsp.home"
+              value="${dependency.base.dir}/jsp-${jsp.api.version}"/>
+    <property name="jstl.home"
+              value="${dependency.base.dir}/jstl-${jstl.api.version}"/>
+    <property name="annotation.home"
+              value="${dependency.base.dir}/annotation-${annotation.api.version}"/>
 
     <property name="tlddoc.jar"
               value="${taglibdoc.home}/tlddoc-${taglibdoc.version}.jar"/>
     <property name="maven.repository.importer.jar"
               value="${maven.repository.importer.home}/maven-repository-importer-${maven.repository.importer.version}.jar"/>
+    <property name="servlet.jar"
+              value="${servlet.home}/servlet-api-${servlet.api.version}.jar"/>
+    <property name="jsp.jar"
+              value="${jsp.home}/jsp-api-${jsp.api.version}.jar"/>
+    <property name="jstl.jar"
+              value="${jstl.home}/jstl-${jstl.api.version}.jar"/>
+    <property name="annotation.jar"
+              value="${annotation.home}/jsr250-api-${annotation.api.version}.jar"/>
 
     <target name="update" description="Download project dependencies">
         <!-- setup the proxy if necessary -->
@@ -155,6 +176,171 @@
             </then>
         </if>
 
+        <!-- SERVLET API -->
+        <if>
+            <not>
+                <available file="${servlet.jar}"
+                           property="ignored"/>
+            </not>
+            <then>
+                <mkdir
+                      dir="${servlet.home}"/>
+                <get src="http://maven1.glassfishwiki.org/javax.servlet/jars/servlet-api-${servlet.api.version}.jar"
+                     dest="${servlet.home}/servlet-api-${servlet.api.version}.jar"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
+
+        <!-- JSP API -->
+        <if>
+            <not>
+                <available file="${jsp.jar}"
+                           property="ignored"/>
+            </not>
+            <then>
+                <mkdir
+                      dir="${jsp.home}"/>
+                <get src="http://maven1.glassfishwiki.org/javax.servlet.jsp/jars/jsp-api-${jsp.api.version}.jar"
+                     dest="${jsp.home}/jsp-api-${jsp.api.version}.jar"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
+
+
+        <!-- JSTL API -->
+        <if>
+            <not>
+                <available file="${jstl.jar}"
+                           property="ignored"/>
+            </not>
+            <then>
+                <mkdir
+                      dir="${jstl.home}"/>
+                <get src="http://maven1.glassfishwiki.org/jstl/jars/jstl-${jstl.api.version}.jar"
+                     dest="${jstl.home}/jstl-${jstl.api.version}.jar"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
+
+        <!-- ANNOTATION API -->
+        <if>
+            <not>
+                <available file="${annotation.jar}"
+                           property="ignored"/>
+            </not>
+            <then>
+                <mkdir
+                      dir="${annotation.home}"/>
+                <get src="http://maven1.glassfishwiki.org/javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
+                     dest="${annotation.home}/jsr250-api-${annotation.api.version}.jar"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
+        <antcall target="update.containers"/>
+    </target>
+
+
+    <property name="glassfish.home"
+              value="${dependency.base.dir}/glassfish"/>
+    <property name="tomcat6.home"
+              value="${dependency.base.dir}/apache-tomcat-6.0.2"/>
+    <property name="glassfish.jar"
+              value="${glassfish.home}/lib/appserv-rt.jar"/>
+    <property name="tomcat6.jar"
+              value="${tomcat6.home}/lib/catalina.jar"/>
+    <target name="update.containers"
+            description="Downloads containers necessary for building implementation specific additions"
+            depends="detect.os">
+        <if>
+            <not>
+                <available file="${glassfish.home}" property="ignored" />
+            </not>
+            <then>
+                <if>
+                    <not>
+                        <available file="${dependency.base.dir}/glassfish-installer-v1_ur1-p01-b02.jar"
+                                property="ignored"/>
+                    </not>
+                    <then>
+                        <get src="http://java.net/download/javaee5/fcs_branch/promoted/${dl.os}/glassfish-installer-v1_ur1-p01-b02.jar"
+                            dest="${dependency.base.dir}/glassfish-installer-v1_ur1-p01-b02.jar"
+                            usetimestamp="true"/>
+                    </then>
+                </if>
+                <echo file="${dependency.base.dir}/install.bat">
+<![CDATA[
+echo a > input
+java -Xmx256m -jar ${dependency.base.dir}/glassfish-installer-v1_ur1-p01-b02.jar -console < ./input
+]]>
+                </echo>
+                <chmod file="${dependency.base.dir}/install.bat" perm="700"/>
+                <exec executable="${dependency.base.dir}/install.bat" dir="${dependency.base.dir}" />
+                <delete file="${dependency.base.dir}/install.bat"/>
+                <delete file="${dependency.base.dir}/input"/>
+                <ant antfile="${glassfish.home}/setup.xml" dir="${glassfish.home}" target="setup"/>
+                <echo file="${dependency.base.dir}/glassfish/password.txt">AS_ADMIN_PASSWORD=adminadmin</echo>
+                <!-- 
+                Download and install the Eclipse JDT compiler to help speed up unit tests.  See Jan Luehe's
+                blog for more information:  http://blogs.sun.com/jluehe/entry/how_to_enable_eclipse_s.
+                -->
+                <get src="http://blogs.sun.com/roller/resources/jluehe/jasper-compiler-jdt.jar"
+                    dest="${glassfish.home}/lib/jasper-compiler-jdt.jar"
+                    usetimestamp="true"/>
+                <get src="http://blogs.sun.com/roller/resources/jluehe/jasper-compiler-jdt-ext.jar"
+                    dest="${glassfish.home}/lib/jasper-compiler-jdt-ext.jar"
+                    usetimestamp="true"/>
+            </then>
+        </if>
+
+        <if>
+            <not>
+                <available file="${dependency.base.dir}/apache-tomcat-6.0.2.zip"
+                           property="ignored"/>
+            </not>
+            <then>
+                <get src="http://www.ip97.com/apache.org/tomcat/tomcat-6/v6.0.2/bin/apache-tomcat-6.0.2.zip"
+                     dest="${dependency.base.dir}/apache-tomcat-6.0.2.zip"
+                     usetimestamp="true"/>
+                <unzip
+                      src="${dependency.base.dir}/apache-tomcat-6.0.2.zip"
+                      dest="${dependency.base.dir}"/>
+            </then>
+        </if>
+    </target>
+
+    <target name="detect.os">
+        <condition property="dl.os" value="SunOS">
+            <and>
+                <os name="SunOS"/>
+                <os arch="sparc"/>
+            </and>
+        </condition>
+        <condition property="dl.os" value="SunOS_X86">
+            <and>
+                <os name="SunOS"/>
+                <os arch="x86"/>
+            </and>
+        </condition>
+        <condition property="dl.os" value="WINNT">
+            <os name="Windows XP"/>
+        </condition>
+        <condition property="dl.os" value="Darwin">
+            <os name="Mac OS X"/>
+        </condition>
+        <condition property="isLinux" value="Linux">
+            <and>
+            <os family="unix"/>
+                <not>
+                <os name="SunOS"/>
+                <os name="Max OS X"/>
+            </not>
+            </and>
+
+        </condition>
     </target>
 
 </project>

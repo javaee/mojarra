@@ -24,14 +24,7 @@
  
  Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 -->
-<project name="Test Classpath" basedir=".">
- 
-    
-    <path id="compile.classpath">
-        <pathelement location="${container.home}/lib/javaee.jar"/>
-        <pathelement location="${container.home}/lib/appserv-rt.jar"/>
-        <pathelement location="${container.home}/lib/appserv-jstl.jar"/>        
-    </path>
+<project name="Test Classpath" basedir=".">        
 
     <!-- JARs that may be packaged in WEB-INF/lib
   in order for the implementation to run 

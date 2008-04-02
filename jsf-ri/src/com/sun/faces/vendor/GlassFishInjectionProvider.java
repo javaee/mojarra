@@ -25,15 +25,19 @@
 
 package com.sun.faces.vendor;
 
-import com.sun.faces.spi.InjectionProvider;
+import com.sun.enterprise.ComponentInvocation;
+import com.sun.enterprise.InjectionException;
+import com.sun.enterprise.InjectionManager;
+import com.sun.enterprise.InvocationManager;
+import com.sun.enterprise.Switch;
+import com.sun.enterprise.deployment.InjectionInfo;
+import com.sun.enterprise.deployment.JndiNameEnvironment;
+import com.sun.faces.spi.DiscoverableInjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.Util;
-import com.sun.enterprise.*;
-import com.sun.enterprise.deployment.JndiNameEnvironment;
-import com.sun.enterprise.deployment.InjectionInfo;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +46,7 @@ import java.util.logging.Logger;
  * <p>This <code>InjectionProvider</code> is specific to the
  * GlassFish/SJSAS 9.x PE/EE application servers.</p>
  */
-public class GlassFishInjectionProvider implements InjectionProvider {
+public class GlassFishInjectionProvider extends DiscoverableInjectionProvider {
 
     private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER
                                                   + Util.APPLICATION_LOGGER);
@@ -164,7 +168,7 @@ public class GlassFishInjectionProvider implements InjectionProvider {
 
         // Process each class in the inheritance hierarchy, starting with
         // the most derived class and ignoring java.lang.Object.
-        while ((nextClass != Object.class) && (nextClass != null)) {
+        while ((!Object.class.equals(nextClass)) && (nextClass != null)) {
 
             InjectionInfo injInfo =
                  envDescriptor.getInjectionInfoByClass(nextClass.getName());
