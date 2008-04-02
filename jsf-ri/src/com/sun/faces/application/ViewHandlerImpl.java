@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.94 2006/12/13 16:41:35 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.95 2007/01/09 05:33:50 rlubke Exp $
  */
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.94 2006/12/13 16:41:35 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.95 2007/01/09 05:33:50 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -867,12 +867,15 @@ public class ViewHandlerImpl extends ViewHandler {
                                     statePos += slen;
                                 }
                                 
-                            }                            
-                        }
-                        
-                        // push us past the last '~' at the end of the marker
-                        pos += (len + STATE_MARKER_LEN);
-                        tildeIdx = getNextDelimiterIndex(pos);
+                            }
+                             // push us past the last '~' at the end of the marker
+                            pos += (len + STATE_MARKER_LEN);
+                            tildeIdx = getNextDelimiterIndex(pos);
+                        } else {
+                            pos = tildeIdx;
+                            tildeIdx = getNextDelimiterIndex(tildeIdx + 1);
+
+                        }                        
                     }
                 } else {
                     // we've written all of the state field markers.

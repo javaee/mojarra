@@ -94,7 +94,7 @@ function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length
 
 	<TD>
 
-	      <a id="basicForm:linkWithValue2" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.forms['basicForm'],'basicForm:linkWithValue2,basicForm:linkWithValue2','');}return false" class="hyperlinkClass">link textwith some text</a>   
+	      <a id="basicForm:linkWithValue2" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.forms['basicForm'],'basicForm:linkWithValue2,basicForm:linkWithValue2','');}return false" class="hyperlinkClass">link textwith some ~ text</a>   
 	</TD>
 
       </TR>

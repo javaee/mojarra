@@ -108,7 +108,7 @@
 
 	      <h:commandLink id="linkWithValue2" styleClass="hyperlinkClass"
                   value="link text">
-                  <h:outputText value="with some text" />
+                  <h:outputText value="with some ~ text" />
               </h:commandLink>   
 	</TD>
 
