@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.43 2003/06/23 16:03:07 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.44 2003/06/24 19:14:49 craigmcc Exp $
  */
 
 /*
@@ -49,18 +49,6 @@ public abstract class FacesContext {
      * web application.</p>
      */
     public abstract Application getApplication();
-
-
-    /**
-     * <p>Set the {@link Application} instance associated with this
-     * web application.  This method should <strong>only</strong> be
-     * called by the JavaServer Faces implementation, at the beginning
-     * of the request processing lifecycle for the request represented
-     * by this {@link FacesContext} instance.</p>
-     *
-     * @param application The new {@link Application} instance
-     */
-    public abstract void setApplication(Application application);
 
 
     /**
