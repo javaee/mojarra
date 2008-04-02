@@ -291,6 +291,12 @@
         <uptodate property="skip.deploy"
             targetfile="${build}/cardemo.last-testrun"
             srcfile="${cardemo.war}"/>    
+
+        <copy todir="${build}/classes">
+          <fileset dir="${basedir}/carstore/src/java">
+            <include name="**/*.properties" />
+          </fileset>
+        </copy>
         
         <antcall target="test.invoker">
             <param name="context.path" value="${cardemo.context.path}"/>
