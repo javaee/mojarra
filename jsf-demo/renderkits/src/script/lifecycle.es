@@ -30,8 +30,8 @@
         idx = 0;
         posX = 25;
         posY = 120;
-        deltaX = 1;
-        deltaY = 1;
+        deltaX = 2;
+        deltaY = 2;
         setGraphicInfo();
         toX = 160;
         toY = 120;
@@ -49,14 +49,13 @@
         idx = 0;
         posX = 25;
         posY = 120;
-        deltaX = 1;
-        deltaY = 1;
+        deltaX = 2;
+        deltaY = 2;
         setGraphicInfo();
         toX = 780;
         toY = 120;
         clearInterval(timer);
         timer = setInterval("moveControlPoints()", delay);
-        clearErrorPaths(); 
     }
 
     /**
@@ -69,14 +68,13 @@
         idx = 0;
         posX = 25;
         posY = 120;
-        deltaX = 1;
-        deltaY = 1;
+        deltaX = 2;
+        deltaY = 2;
         setGraphicInfo();
         toX = 660;
         toY = 120;
         clearInterval(timer);
         timer = setInterval("moveControlPoints()", delay);
-        clearErrorPaths(); 
         convalError = "true";
     }
 
@@ -96,7 +94,7 @@
             rect.setAttribute("height", "10");
         }
 
-        if (posX == 660 && posY == 125 && convalError == "true") {
+        if (posX == 660 && posY == 120 && convalError == "true") {
             showConValError();
             var msg1 = window.document.getElementById("form:msg1");
             msg1.firstChild.nodeValue = "Process Validations Phase:";
@@ -187,16 +185,28 @@
     function moveControlPoints() {
         if (posX < toX) {
             posX = posX + deltaX;
+            if (posX >= toX) {
+                posX = toX;
+            }
             vertical = "false";
         } else if (posX > toX) {
             posX = posX - deltaX;
+            if (posX <= toX) {
+                posX = toX;
+            }
             vertical = "false";
         }
         if (posY < toY) {
             posY = posY + deltaY;
+            if (posY >= toY) {
+                posY = toY;
+            }
             vertical = "true";
         } else if (posY > toY) {
             posY = posY - deltaY;
+            if (posY <= toY) {
+                posY = toY;
+            }
             vertical = "true";
         }
         setGraphicInfo();

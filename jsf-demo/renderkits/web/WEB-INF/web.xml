@@ -45,9 +45,9 @@
 
 <web-app>
 
-    <display-name>JavaServer Faces Guess Number Sample Application</display-name>
+    <display-name>JavaServer Faces Multiple RenderKit Sample  Application</display-name>
     <description>
-        JavaServer Faces Guess Number Sample Application
+        JavaServer Faces Multiple RenderKit Sample Application
     </description>
 
     <context-param>
@@ -91,14 +91,6 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/render/*</url-pattern>
     </servlet-mapping>
-  <servlet>
-    <servlet-name>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-name>
-    <servlet-class>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-name>
-    <url-pattern>/JSON-RPC</url-pattern>
-  </servlet-mapping>
 
     <security-constraint>
 	 <!-- This security constraint illustrates how JSP pages 
