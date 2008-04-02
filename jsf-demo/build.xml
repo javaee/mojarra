@@ -171,6 +171,8 @@
     <ant inheritAll="false" dir="${basedir}/components"/>
     <copy todir="cardemo/web/WEB-INF/lib" 
           file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
+    <copy todir="imageMapRender/web/WEB-INF/lib" 
+          file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
     <ant inheritAll="false" dir="${basedir}/cardemo"/>
     <ant inheritAll="false" dir="${basedir}/imageMap"/>
     <ant inheritAll="false" dir="${basedir}/imageMapRender"/>
