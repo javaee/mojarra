@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTag.java,v 1.14 2004/02/26 20:31:20 eburns Exp $
+ * $Id: FacetTag.java,v 1.15 2004/04/05 15:25:22 eburns Exp $
  */
 
 /*
@@ -85,17 +85,5 @@ public class FacetTag extends TagSupport {
         return (EVAL_BODY_INCLUDE);
 
     }
-
-
-    /**
-     * <p>Return <code>EVAL_PAGE</code> to cause the remainder of the
-     * current page to be evaluated.</p>
-     */
-    public int doEndTag() throws JspException {
-
-        return (EVAL_PAGE);
-
-    }
-
 
 }
