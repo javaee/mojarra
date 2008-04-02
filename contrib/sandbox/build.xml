@@ -34,7 +34,7 @@
     <!-- ************ Per user local properties ******************************* -->
 
     <property file="${user.home}/build.properties"/>
-    <property file="../build.properties"/>
+    <property file="../../build.properties"/>
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
 
@@ -134,7 +134,7 @@
         <zip destfile="${dist.dir}/jsf-ri-sandbox-src-${sb.impl.version}.zip">
             <zipfileset dir="${basedir}"
                         includes="build.xml"
-                        prefix="jsf-ri-sandox-src-${sb.impl.version}"/>
+                        prefix="jsf-ri-sandbox-src-${sb.impl.version}"/>
             <zipfileset dir="${source.dir}"
                         excludes="**/CVS/**"
                         prefix="jsf-ri-sandbox-src-${sb.impl.version}/src"/>

@@ -1,5 +1,5 @@
 /*
- * $Id: AccessibleColumnTag.java,v 1.3 2006/12/09 20:41:24 rlubke Exp $
+ * $Id: AccessibleColumnTag.java,v 1.1 2006/12/13 20:35:46 jdlee Exp $
  */
 
 /*

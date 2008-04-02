@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.1 2006/12/09 20:41:24 rlubke Exp $
+ * $Id: Util.java,v 1.1 2006/12/13 20:35:47 jdlee Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.1 2006/12/09 20:41:24 rlubke Exp $
+ * @version $Id: Util.java,v 1.1 2006/12/13 20:35:47 jdlee Exp $
  */
 
 public class Util {      
