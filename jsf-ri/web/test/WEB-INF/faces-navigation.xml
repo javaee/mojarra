@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+
+<!-- =========== NAVIGATION TEST CONFIGURATION FILE ================================== -->
+
+<faces-config>
+
+
+  <!-- Application Wide Navigation Rule -->
+
+  <!-- Note that <from-tree-id> is absent which as the same meaning as "*" -->
+       
+  <navigation-rule>
+    <navigation-case>
+      <from-action-ref>UserBean.newUser</from-action-ref>
+      <to-tree-id>/newUser.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <!-- Application wide logout action mapping -->
+
+  <navigation-rule>
+    <from-tree-id> * </from-tree-id>
+    <navigation-case>
+      <from-action-ref>UserBean.Logout</from-action-ref>
+      <to-tree-id>/logout.jsp</to-tree-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>loginRequired</from-outcome>
+      <to-tree-id>/must-login-first.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <!-- Application wide search action mapping -->
+
+  <navigation-rule>
+    <from-tree-id> * </from-tree-id>
+    <navigation-case>
+      <from-action-ref>SearchForm.go</from-action-ref>
+      <to-tree-id>/search-results.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <!-- Application wide failure -->
+
+  <navigation-rule>
+    <from-tree-id> * </from-tree-id>
+    <navigation-case>
+      <from-outcome>failure</from-outcome>
+      <to-tree-id>/failure-login.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <!-- ******************************** -->
+  <!-- Page Specific Navigation Rule(s) -->
+  <!-- ******************************** -->
+
+  <navigation-rule>
+    <from-tree-id> /login.jsp </from-tree-id>
+    <navigation-case>
+      <from-action-ref>UserBean.login</from-action-ref>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/home.jsp</to-tree-id>
+    </navigation-case>
+    <navigation-case>
+      <from-action-ref>UserBean.register</from-action-ref>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/get-user-info.jsp</to-tree-id>
+    </navigation-case>
+    <navigation-case>
+      <from-action-ref>UserBean.register</from-action-ref>
+      <from-outcome>duplicate</from-outcome>
+      <to-tree-id>/try-another-name.jsp</to-tree-id>
+    </navigation-case>
+    <navigation-case>
+      <from-action-ref>UserBean</from-action-ref>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/get-user-info.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <!-- Note that this rule specifies the same <from-tree-id> -->
+  <!-- element value as the one above.  The end result, is    -->
+  <!-- that this case will be combined with the ones above.  -->
+  
+  <navigation-rule>
+    <from-tree-id> /login.jsp </from-tree-id>
+    <navigation-case>
+      <from-action-ref>UserBean.login</from-action-ref>
+      <from-outcome>failure</from-outcome>
+      <to-tree-id>/login-failure.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <!-- ***************** -->
+  <!-- Wild card Pattern -->
+  <!-- ***************** -->
+
+  <!-- An example of wanting a search form to behave slightly -->
+  <!-- different when invoked in the "movies" site            --> 
+
+  <navigation-rule>
+    <from-tree-id>/movies/*</from-tree-id>
+    <!-- Special search form handling -->
+    <navigation-case>
+      <from-action-ref>SearchForm.go</from-action-ref>
+      <to-tree-id>/movies/movie-search-results.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-tree-id>/foobar*</from-tree-id>
+    <!-- Special search form handling -->
+    <navigation-case>
+      <from-action-ref>SearchForm.go</from-action-ref>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/bar.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-tree-id>/foo*</from-tree-id>
+    <!-- Special search form handling -->
+    <navigation-case>
+      <from-action-ref>SearchForm.go</from-action-ref>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/beta.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+</faces-config>
