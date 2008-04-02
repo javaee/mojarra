@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.84 2005/04/15 21:19:38 rogerk Exp $
+ * $Id: FormRenderer.java,v 1.85 2005/04/21 18:55:36 edburns Exp $
  */
 
 /*
@@ -159,15 +159,6 @@ public class FormRenderer extends HtmlBasicRenderer {
             context.getApplication().getViewHandler().
             getActionURL(context, viewId);
         return (context.getExternalContext().encodeActionURL(actionURL));
-    }
-
-
-    public void encodeChildren(FacesContext context, UIComponent component) {
-        if (context == null || component == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
     }
 
 

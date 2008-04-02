@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.46 2005/04/04 17:23:34 edburns Exp $
+ * $Id: UIForm.java,v 1.47 2005/04/21 18:55:29 edburns Exp $
  */
 
 /*
@@ -91,7 +91,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
 
     /**
-     * <p>If <strong>this<strong> <code>UIForm</code> instance (as
+     * <p>If <strong>this</strong> <code>UIForm</code> instance (as
      * opposed to other forms in the page) is experiencing a submit
      * during this request processing lifecycle, this method must be
      * called, with <code>true</code> as the argument, during the {@link
@@ -221,7 +221,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
     
     /**
      * <p>Override the {@link UIComponent#getContainerClientId} to allow
-     * users to disable this form from prepending its <code>id</code> to
+     * users to disable this form from prepending its <code>clientId</code> to
      * its descendent's <code>clientIds</code> depending on the value of
      * this form's {@link #isPrependId} property.</p>
      */

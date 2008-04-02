@@ -1,5 +1,5 @@
 /*
- * $Id: VerbatimTag.java,v 1.10 2004/10/08 14:27:26 rlubke Exp $
+ * $Id: VerbatimTag.java,v 1.11 2005/04/21 18:55:38 edburns Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import javax.faces.webapp.UIComponentBodyTag;
+import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 
 /**
@@ -21,7 +21,7 @@ import javax.servlet.jsp.JspException;
  * and allows the user to write raw markup.</p>
  */
 
-public class VerbatimTag extends UIComponentBodyTag {
+public class VerbatimTag extends UIComponentTag {
 
 
     // ------------------------------------------------------------- Attributes
@@ -81,6 +81,7 @@ public class VerbatimTag extends UIComponentBodyTag {
             if (value != null) {
                 UIOutput output = (UIOutput) getComponentInstance();
                 output.setValue(value);
+		getBodyContent().clearBody();
             }
         }
         return (getDoAfterBodyValue());

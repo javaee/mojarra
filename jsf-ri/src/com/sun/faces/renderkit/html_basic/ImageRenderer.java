@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.36 2004/12/16 17:56:37 edburns Exp $
+ * $Id: ImageRenderer.java,v 1.37 2005/04/21 18:55:36 edburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.io.IOException;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.36 2004/12/16 17:56:37 edburns Exp $
+ * @version $Id: ImageRenderer.java,v 1.37 2005/04/21 18:55:36 edburns Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -73,14 +73,6 @@ public class ImageRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-    }
-
-
-    public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(
                 Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));

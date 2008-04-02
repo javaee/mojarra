@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.128 2005/04/04 17:23:34 edburns Exp $
+ * $Id: UIComponent.java,v 1.129 2005/04/21 18:55:29 edburns Exp $
  */
 
 /*
@@ -278,7 +278,10 @@ public abstract class UIComponent implements StateHolder {
      * in {@link UIComponentBase#getRendersChildren} tries to find the
      * renderer for this component.  If it does, it calls {@link
      * Renderer#getRendersChildren} and returns the result.  If it
-     * doesn't, it returns false.</p>
+     * doesn't, it returns false.  As of version 1.2 of the JavaServer
+     * Faces Specification, component authors are encouraged to return
+     * <code>true</code> from this method and rely on {@link
+     * UIComponentBase#encodeChildren}.</p>
      */
     public abstract boolean getRendersChildren();
 
@@ -548,6 +551,21 @@ public abstract class UIComponent implements StateHolder {
      */
     public abstract void encodeEnd(FacesContext context) throws IOException;
 
+    /**
+     * <p>If this component returns <code>true</code> from {@link
+     * #isRendered}, render this component and all its children that
+     * return <code>true</code> from <code>isRendered()</code>,
+     * regardless of the value of the {@link #getRendersChildren} flag.
+     * </p>
+     *
+     * @since 1.2
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public abstract void encodeAll(FacesContext context) throws IOException;
+
 
     // -------------------------------------------------- Event Listener Methods
 
@@ -736,9 +754,10 @@ public abstract class UIComponent implements StateHolder {
      * <li>consult the <code>transient</code> property of this
      * component.  If true, just return <code>null</code>.</li>
      *
-     * <li>Call the <code>processSaveState()</code> method of all
-     * facets and children of this {@link UIComponent} in the order
-     * determined by a call to <code>getFacetsAndChildren()</code>.</li>
+     * <li>Call the <code>processSaveState()</code> method of all facets
+     * and children of this {@link UIComponent} in the order determined
+     * by a call to <code>getFacetsAndChildren()</code>, skipping
+     * children and facets that are transient.</li>
      *
      * <li>Call the <code>saveState()</code> method of this component.</li>
      *

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.51 2005/03/15 15:50:32 rogerk Exp $
+ * $Id: MessageRenderer.java,v 1.52 2005/04/21 18:55:36 edburns Exp $
  */
 
 /*
@@ -69,7 +69,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
     }
 
 
-    public void encodeChildren(FacesContext context, UIComponent component) {
+    public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
                 Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));

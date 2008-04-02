@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.27 2005/03/12 19:06:16 edburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.28 2005/04/21 18:55:35 edburns Exp $
  */
 
 /*
@@ -38,13 +38,15 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.27 2005/03/12 19:06:16 edburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.28 2005/04/21 18:55:35 edburns Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -55,14 +57,16 @@ public class ExternalContextImpl extends ExternalContext {
     private ApplicationMap applicationMap = null;
     private SessionMap sessionMap = null;
     private RequestMap requestMap = null;
-    private RequestParameterMap requestParameterMap = null;
-    private RequestParameterValuesMap requestParameterValuesMap = null;
-    private RequestHeaderMap requestHeaderMap = null;
-    private RequestHeaderValuesMap requestHeaderValuesMap = null;
-    private RequestCookieMap cookieMap = null;
-    private InitParameterMap initParameterMap = null;
+    private Map requestParameterMap = null;
+    private Map requestParameterValuesMap = null;
+    private Map requestHeaderMap = null;
+    private Map requestHeaderValuesMap = null;
+    private Map cookieMap = null;
+    private Map initParameterMap = null;
 
-
+    static Class theUnmodifiableMapClass =
+        Collections.unmodifiableMap(new HashMap()).getClass();
+    
     public ExternalContextImpl(ServletContext sc, ServletRequest request,
                                ServletResponse response) {
 
@@ -160,8 +164,8 @@ public class ExternalContextImpl extends ExternalContext {
 
     public Map getRequestHeaderMap() {
         if (null == requestHeaderMap) {
-            requestHeaderMap =
-                new RequestHeaderMap((HttpServletRequest) request);
+            requestHeaderMap = 
+            Collections.unmodifiableMap(new RequestHeaderMap((HttpServletRequest) request));
         }
         return requestHeaderMap;
     }
@@ -169,8 +173,8 @@ public class ExternalContextImpl extends ExternalContext {
 
     public Map getRequestHeaderValuesMap() {
         if (null == requestHeaderValuesMap) {
-            requestHeaderValuesMap =
-                new RequestHeaderValuesMap((HttpServletRequest) request);
+            requestHeaderValuesMap = 
+                Collections.unmodifiableMap(new RequestHeaderValuesMap((HttpServletRequest) request));
         }
         return requestHeaderValuesMap;
     }
@@ -178,7 +182,8 @@ public class ExternalContextImpl extends ExternalContext {
 
     public Map getRequestCookieMap() {
         if (null == cookieMap) {
-            cookieMap = new RequestCookieMap((HttpServletRequest) request);
+            cookieMap =
+            Collections.unmodifiableMap(new RequestCookieMap((HttpServletRequest) request));
         }
         return cookieMap;
     }
@@ -186,7 +191,8 @@ public class ExternalContextImpl extends ExternalContext {
 
     public Map getInitParameterMap() {
         if (null == initParameterMap) {
-            initParameterMap = new InitParameterMap(servletContext);
+            initParameterMap = 
+            Collections.unmodifiableMap(new InitParameterMap(servletContext));
         }
         return initParameterMap;
     }
@@ -194,7 +200,8 @@ public class ExternalContextImpl extends ExternalContext {
 
     public Map getRequestParameterMap() {
         if (null == requestParameterMap) {
-            requestParameterMap = new RequestParameterMap(request);
+            requestParameterMap = 
+                Collections.unmodifiableMap(new RequestParameterMap(request));
         }
         return requestParameterMap;
     }
@@ -202,7 +209,8 @@ public class ExternalContextImpl extends ExternalContext {
 
     public Map getRequestParameterValuesMap() {
         if (null == requestParameterValuesMap) {
-            requestParameterValuesMap = new RequestParameterValuesMap(request);
+            requestParameterValuesMap = 
+            Collections.unmodifiableMap(new RequestParameterValuesMap(request));
         }
         return requestParameterValuesMap;
     }
@@ -696,8 +704,10 @@ class RequestParameterMap extends BaseContextMap {
 
 
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof RequestParameterMap))
+        if (obj == null || 
+            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
             return false;
+        }
         return super.equals(obj);
     }
 } // END RequestParameterMap
@@ -736,8 +746,10 @@ class RequestParameterValuesMap extends BaseContextMap {
 
 
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof RequestParameterValuesMap))
+        if (obj == null || 
+            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
             return false;
+        }
         return super.equals(obj);
     }
 } // END RequestParameterValuesMap
@@ -775,8 +787,10 @@ class RequestHeaderMap extends BaseContextMap {
 
 
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof RequestHeaderMap))
+        if (obj == null ||
+            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
             return false;
+        }
         return super.equals(obj);
     }
 } // END RequestHeaderMap
@@ -814,8 +828,10 @@ class RequestHeaderValuesMap extends BaseContextMap {
 
 
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof RequestHeaderValuesMap))
+        if (obj == null || 
+            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
             return false;
+        }
         return super.equals(obj);
     }
 
@@ -927,8 +943,10 @@ class RequestCookieMap extends BaseContextMap {
 
 
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof RequestCookieMap))
+        if (obj == null || 
+            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
             return false;
+        }
         return super.equals(obj);
     }
 } // END RequestCookiesMap
@@ -970,8 +988,10 @@ class InitParameterMap extends BaseContextMap {
 
 
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof InitParameterMap))
+        if (obj == null || 
+            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
             return false;
+        }
         return super.equals(obj);
     }
 } // END InitParameterMap

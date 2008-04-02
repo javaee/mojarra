@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.20 2005/04/06 02:44:44 edburns Exp $
+ * $Id: ResponseStateManager.java,v 1.21 2005/04/21 18:55:30 edburns Exp $
  */
 
 /*
@@ -32,6 +32,14 @@ import java.io.Writer;
 
 public abstract class ResponseStateManager {
 
+    /**
+     * <p>The name of the request parameter used by the default
+     * implementation of {@link
+     * javax.faces.application.ViewHandler#calculateRenderKitId} to
+     * derive a RenderKit ID.</p>
+     */
+    public static final String RENDER_KIT_ID_PARAM =
+            "javax.faces.RenderKitId";
 
     /*       
      * <p>Take the argument <code>state</code> and write it into the
@@ -49,6 +57,20 @@ public abstract class ResponseStateManager {
      * client.  We recommend that the state be unreadable by the client,
      * and also be tamper evident.  The reference implementation follows
      * these recommendations.  </p>
+     *
+     * <p>Write out the render kit identifier associated with this 
+     * <code>ResponseStateManager</code> implementation with the name
+     * as the value of the <code>String</code> constant 
+     * <code>ResponseStateManager.RENDER_KIT_ID_PARAM</code>.  The  
+     * render kit identifier must not be written if:</p>
+     * <ul>
+     * <li>it is the default render kit identifier as returned by 
+     * {@link Application#getDefaultRenderKitId()} or</li>
+     * <li>the render kit identfier is the value of 
+     * <code>RenderKitFactory.HTML_BASIC_RENDER_KIT</code> and 
+     * {@link Application.getDefaultRenderKitId()} returns <code>null</code>.
+     * </li>
+     * </ul> 
      *
      * <p>For backwards compatability with existing
      * <code>ResponseStateManager</code> implementations, the default
@@ -93,7 +115,7 @@ public abstract class ResponseStateManager {
      * suitable for inclusion as an HTTP request paramater.</p>
      *
      * <p>If the state saving method for this application is {@link
-     * javax.faces.application.StateManager#STATE_SAVING_METHOD_SERVER},
+     * javax.faces.application.StateManager#STATE_SAVING_METHOD_CLIENT},
      * the implementation may encrypt the state to be saved to the
      * client.  We recommend that the state be unreadable by the client,
      * and also be tamper evident.  The reference implementation follows

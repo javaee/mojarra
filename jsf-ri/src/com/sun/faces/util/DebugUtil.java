@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.26 2005/03/17 16:10:44 edburns Exp $
+ * $Id: DebugUtil.java,v 1.27 2005/04/21 18:55:39 edburns Exp $
  */
 
 /*
@@ -154,7 +154,7 @@ public class DebugUtil extends Object {
             }
             indentPrintln(out, " }");
         } else {
-            if (root instanceof ValueHolder) {
+            if (null != root && (root instanceof ValueHolder)) {
                 value = ((ValueHolder)root).getValue();
             }
             indentPrintln(out, "value= " + value);

@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.55 2005/03/18 20:10:16 jayashri Exp $
+ * $Id: MenuRenderer.java,v 1.56 2005/04/21 18:55:36 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -394,16 +394,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
-
-
-    public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-    }
-
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {

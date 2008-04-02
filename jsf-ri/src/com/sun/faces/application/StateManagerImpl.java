@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.28 2005/04/05 20:25:13 jayashri Exp $ 
+ * $Id: StateManagerImpl.java,v 1.29 2005/04/21 18:55:34 edburns Exp $ 
  */ 
 
 
@@ -36,7 +36,7 @@ import java.util.logging.Level;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.28 2005/04/05 20:25:13 jayashri Exp $
+ * @version $Id: StateManagerImpl.java,v 1.29 2005/04/21 18:55:34 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -70,9 +70,9 @@ public class StateManagerImpl extends StateManager {
             return result;
 	}
 	
-	// honor the transient property and remove children from the tree
-	// that are marked transient.
-	removeTransientChildrenAndFacets(context, viewRoot, new HashSet());	
+	// honor the requirement to check for id uniqueness
+	checkIdUniqueness(context, viewRoot, new HashSet());
+
 	
  	if (logger.isLoggable(Level.FINE)) {
             logger.fine("Begin creating serialized view for " 
@@ -118,7 +118,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    protected void removeTransientChildrenAndFacets(FacesContext context,
+    protected void checkIdUniqueness(FacesContext context,
         UIComponent component, Set componentIds) throws IllegalStateException{
         UIComponent kid;
         // deal with children that are marked transient.
@@ -137,11 +137,7 @@ public class StateManagerImpl extends StateManager {
                         new Object[]{id}));
 	    }
 
-            if (kid.isTransient()) {
-                kids.remove();
-            } else {
-                removeTransientChildrenAndFacets(context, kid, componentIds);
-            }
+	    checkIdUniqueness(context, kid, componentIds);
         }
         // deal with facets that are marked transient.
         kids = component.getFacets().values().iterator();
@@ -158,19 +154,14 @@ public class StateManagerImpl extends StateManager {
                         new Object[]{id}));
 	    }
 
-            if (kid.isTransient()) {
-                kids.remove();
-            } else {
-                removeTransientChildrenAndFacets(context, kid, componentIds);
-            }
+	    checkIdUniqueness(context, kid, componentIds);
 
         }
     }
 
 
     protected Object getComponentStateToSave(FacesContext context) {
-        UIViewRoot viewRoot = context.getViewRoot();
-        return viewRoot.processSaveState(context);
+	return context.getViewRoot().processSaveState(context);
     }
 
 

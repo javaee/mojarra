@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.104 2005/04/04 17:23:34 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.105 2005/04/21 18:55:29 edburns Exp $
  */
 
 /*
@@ -51,9 +51,13 @@ import java.util.logging.Level;
  * <p>By default, this class defines <code>getRendersChildren()</code>
  * to find the renderer for this component and call its
  * <code>getRendersChildren()</code> method.  The default implementation
- * on the <code>Renderer</code> returns <code>false</code>.  Subclasses
- * that wish to manage the rendering of their children should override
- * this method to return <code>true</code> instead.</p>
+ * on the <code>Renderer</code> returns <code>false</code>.  As of
+ * version 1.2 of the JavaServer Faces Specification, component authors
+ * are encouraged to return <code>true</code> from this method and rely
+ * on the implementation of {@link #encodeChildren} in this class and in
+ * the Renderer ({@link Renderer#encodeChildren}).  Subclasses that wish
+ * to manage the rendering of their children should override this method
+ * to return <code>true</code> instead.</p>
  */
 
 public abstract class UIComponentBase extends UIComponent {
@@ -167,6 +171,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     /**
+     * {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}
      */ 
     public ValueBinding getValueBinding(String name) {
@@ -184,6 +189,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     /**
+     * {@inheritDoc}
      * @exception IllegalArgumentException {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}
      */ 
@@ -738,6 +744,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     /**
+     * @exception IOException {@inheritDoc}   
      * @exception NullPointerException {@inheritDoc}   
      */ 
     public void encodeEnd(FacesContext context) throws IOException {
@@ -753,6 +760,31 @@ public abstract class UIComponentBase extends UIComponent {
             getRenderer(context).encodeEnd(context, this);
         }
 
+    }
+
+    /**
+     * @exception IOException {@inheritDoc}   
+     * @exception NullPointerException {@inheritDoc}   
+     */
+    
+    public void encodeAll(FacesContext context) throws IOException {
+	if (!isRendered()) {
+	    return;
+	}
+
+	encodeBegin(context);
+	if (getRendersChildren()) {
+	    encodeChildren(context);
+	}
+	else {
+	    Iterator kids = getChildren().iterator();
+	    while (kids.hasNext()) {
+		UIComponent kid = (UIComponent) kids.next();
+		kid.encodeAll(context);
+	    }
+	}
+	
+	encodeEnd(context);
     }
 
     // -------------------------------------------------- Event Listener Methods
@@ -990,14 +1022,17 @@ public abstract class UIComponentBase extends UIComponent {
         stateStruct[MY_STATE] = saveState(context);
         
         // Process all the children of this component
-        int i = 0, len = getChildren().size() + getFacets().keySet().size();
-
+        int i = 0, len = getNonTransientChildLength() +
+                getNonTransientFacetLength();
+        
         childState = new Object[len];
         stateStruct[CHILD_STATE] = childState;
         Iterator kids = getChildren().iterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
-            childState[i++] = kid.processSaveState(context);
+            if (!kid.isTransient()) {
+                childState[i++] = kid.processSaveState(context);
+            }
         }
         
         Iterator myFacets = getFacets().keySet().iterator();
@@ -1015,9 +1050,6 @@ public abstract class UIComponentBase extends UIComponent {
                 facetSaveState[0][1] = facetState;
                 childState[i] = facetSaveState;
             }
-            else {
-                childState[i] = null;
-            }
             i++;
         }
         return stateStruct;
@@ -1025,8 +1057,39 @@ public abstract class UIComponentBase extends UIComponent {
     
 
     /**
-     * @exception NullPointerException {@inheritDoc}     
-     */ 
+     * @return the number of non-transient children in our child list.
+     */
+    
+    private int getNonTransientChildLength() {
+        int i, result = 0;
+        Iterator kids = getChildren().iterator();
+        UIComponent kid = null;
+        while (kids.hasNext()) {
+            kid = (UIComponent) kids.next();
+            i = kid.isTransient() ? result : result++;
+        }
+        return result;
+    }
+    
+    /**
+     * @return the number of non-transient facet children in our facet
+     * children list.
+     */
+    
+    private int getNonTransientFacetLength() {
+        int i, result = 0;
+        Iterator kids = getFacets().keySet().iterator();
+        UIComponent kid = null;
+        while (kids.hasNext()) {
+            kid = (UIComponent) getFacets().get(kids.next().toString());
+            i = kid.isTransient() ? result : result++;
+        }
+        return result;
+    }
+    
+    /**
+     * @exception NullPointerException {@inheritDoc}
+     */
     public void processRestoreState(FacesContext context,
                                     Object state) {
         if (context == null) {
@@ -1142,9 +1205,8 @@ public abstract class UIComponentBase extends UIComponent {
 	values[5] = renderedSet ? Boolean.TRUE : Boolean.FALSE;
         values[6] = rendererType;
         values[7] = saveAttachedState(context, listeners);
-        // Don't save the transient flag.  Asssert that it is false
-        // here.
-                    
+        assert(!transientFlag);
+        
         return (values);
     }
 

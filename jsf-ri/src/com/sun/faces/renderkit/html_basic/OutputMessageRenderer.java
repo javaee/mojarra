@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.18 2005/03/10 21:39:15 jayashri Exp $
+ * $Id: OutputMessageRenderer.java,v 1.19 2005/04/21 18:55:37 edburns Exp $
  */
 
 /*
@@ -76,14 +76,6 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-    }
-
-
-    public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(
                 Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));

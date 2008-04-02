@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.19 2004/12/20 21:25:13 rogerk Exp $
+ * $Id: ValidatorTag.java,v 1.20 2005/04/21 18:55:31 edburns Exp $
  */
 
 /*
@@ -53,6 +53,11 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <p>This tag creates no output to the page currently being created.  It
  * is used solely for the side effect of {@link Validator} creation.</p>
+ *
+ * @deprecated This has been partially replaced by {@link
+ * ValidatorELTag}.  The remainder of the functionality, namely, the
+ * binding facility and the implementation of the {@link
+ * #createValidator} method, is now an implementation detail.
  */
 
 public class ValidatorTag extends TagSupport {
@@ -117,8 +122,8 @@ public class ValidatorTag extends TagSupport {
         
         
         // Locate our parent UIComponentTag
-        UIComponentTag tag =
-            UIComponentTag.getParentUIComponentTag(pageContext);
+        UIComponentClassicTagBase tag =
+            UIComponentTag.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) { 
        	    //PENDING i18n
             throw new JspException("Not nested in a UIComponentTag Error for tag with handler class:"+
@@ -143,10 +148,26 @@ public class ValidatorTag extends TagSupport {
 
         validator = createValidator();
         
-        if (validator != null) {
-            // Register an instance with the appropriate component
-            ((EditableValueHolder)component).addValidator(validator);
+        if (validator == null) {
+            String validateError = null;
+            if (binding != null) {
+                validateError = binding;
+            }
+            if (validatorId != null) {
+                if (validateError != null) {
+                    validateError += " or " + validatorId;
+                } else {
+                    validateError = validatorId;
+                }
+            }
+                
+            // PENDING i18n
+            throw new JspException("Can't create class of type:"+
+                "javax.faces.validator.Validator from:"+validateError);
         }
+
+        // Register an instance with the appropriate component
+        ((EditableValueHolder)component).addValidator(validator);
         
         return (SKIP_BODY);
 
@@ -214,10 +235,6 @@ public class ValidatorTag extends TagSupport {
                 throw new JspException(e);
             }
         }
-
-        // PENDING - Should log an error if neither "binding" or "validatorId"
-        // was set.
-
         return validator;
     }
 

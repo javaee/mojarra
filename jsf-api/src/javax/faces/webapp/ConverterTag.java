@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.13 2004/12/20 21:25:13 rogerk Exp $
+ * $Id: ConverterTag.java,v 1.14 2005/04/21 18:55:30 edburns Exp $
  */
 
 /*
@@ -56,6 +56,11 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <p>This tag creates no output to the page currently being created.  It
  * is used solely for the side effect of {@link Converter} creation.</p>
+ *
+ * @deprecated This has been partially replaced by {@link
+ * ConverterELTag}.  The remainder of the functionality, namely, the
+ * binding facility and the implementation of the {@link
+ * #createConverter} method, is now an implementation detail.
  */
 
 public class ConverterTag extends TagSupport {
@@ -118,8 +123,8 @@ public class ConverterTag extends TagSupport {
         Converter converter = null;
         
         // Locate our parent UIComponentTag
-        UIComponentTag tag =
-            UIComponentTag.getParentUIComponentTag(pageContext);
+        UIComponentClassicTagBase tag =
+            UIComponentTag.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) { // PENDING - i18n
             throw new JspException("Not nested in a UIComponentTag Error for tag with handler class:"+
                     this.getClass().getName());
@@ -144,7 +149,22 @@ public class ConverterTag extends TagSupport {
         converter = createConverter();
         
         if (converter == null) {
-	    return (SKIP_BODY);
+            String converterError = null;
+            if (binding != null) {
+                converterError = binding;
+            }
+            if (converterId != null) {
+                if (converterError != null) {
+                    converterError += " or " + converterId;
+                } else {
+                    converterError = converterId;
+                }
+            }
+            
+            Object params [] = {"javax.faces.convert.Converter",converterError};
+            // PENDING i18n
+            throw new JspException("Can't create class of type:"+
+                    "javax.faces.convert.Converter for:"+converterError);
         }
 
         ValueHolder vh = (ValueHolder)component;
@@ -234,10 +254,6 @@ public class ConverterTag extends TagSupport {
                 throw new JspException(e);
             }
         }
-
-        // PENDING - should log an error if neither "binding" or "converterId"
-        // was set.
-
         return converter;
     }
 }

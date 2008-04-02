@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.70 2004/12/16 17:56:37 edburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.71 2005/04/21 18:55:35 edburns Exp $
  *
  */
 
@@ -140,16 +140,6 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
             throw new NullPointerException(
                 Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-    }
-
-
-    public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
     }
 
 

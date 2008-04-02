@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.8 2004/02/26 20:33:17 eburns Exp $
+ * $Id: LoadBundleTag.java,v 1.9 2005/04/21 18:55:38 edburns Exp $
  */
 
 /*
@@ -87,7 +87,8 @@ public class LoadBundleTag extends TagSupport {
         basename = (String) Util.evaluateVBExpression(basename_);
 
         if (null == basename || null == var) { // PENDING - i18n
-            throw new JspException("null basename or var");
+            throw new JspException("The 'basename' or 'var' attributes" +
+                " evaluated to null.");
         }
 
         Map toStore = null;
@@ -103,7 +104,7 @@ public class LoadBundleTag extends TagSupport {
 
         toStore =
             new Map() {
-// this is an immutable Map
+                // this is an immutable Map
 
                 // Do not need to implement for immutable Map
                 public void clear() {

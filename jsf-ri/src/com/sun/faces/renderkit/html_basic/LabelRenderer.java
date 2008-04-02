@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.35 2005/02/23 21:57:44 edburns Exp $
+ * $Id: LabelRenderer.java,v 1.36 2005/04/21 18:55:36 edburns Exp $
  */
 
 /*
@@ -152,14 +152,6 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
 	    }
         }
         writer.flush();
-    }
-
-
-    public void encodeChildren(FacesContext context, UIComponent component) {
-        if (context == null || component == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
     }
 
 

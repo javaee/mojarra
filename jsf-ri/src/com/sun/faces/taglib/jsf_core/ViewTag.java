@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.32 2005/03/15 20:37:38 edburns Exp $
+ * $Id: ViewTag.java,v 1.33 2005/04/21 18:55:39 edburns Exp $
  */
 
 /*
@@ -14,16 +14,16 @@ import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.MethodBinding;
 import javax.faces.event.PhaseEvent;
-import javax.faces.webapp.UIComponentBodyTag;
+import javax.faces.webapp.UIComponentTag;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
@@ -34,17 +34,19 @@ import javax.servlet.jsp.tagext.BodyTag;
 
 import java.io.IOException;
 import java.util.Locale;
+import com.sun.faces.application.ViewHandlerResponseWrapper;
+
 
 /**
- * All JSF component tags must be nested within UseFacesTag.  This tag
- * corresponds to the root of the UIComponent tree.  It does not have
- * any renderers or attributes. It exists mainly to save the state of
- * the response tree once all tags have been rendered.
+ * All JSF component tags must be nested within a f:view tag.  This tag
+ * corresponds to the root of the UIComponent tree.  It does not have a
+ * Renderer. It exists mainly to provide a guarantee that all faces
+ * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.32 2005/03/15 20:37:38 edburns Exp $
+ * @version $Id: ViewTag.java,v 1.33 2005/04/21 18:55:39 edburns Exp $
  */
 
-public class ViewTag extends UIComponentBodyTag {
+public class ViewTag extends UIComponentTag {
 
     //
     // Protected Constants
@@ -104,16 +106,45 @@ public class ViewTag extends UIComponentBodyTag {
     // General Methods
     //
     
-    //
-    // Methods from FacesBodyTag
-    //
-
     protected int getDoStartValue() throws JspException {
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 
+    /**
+     * <p>Override parent <code>doStartTag()</code> to do the following:</p>
+     *
+     * <ul>
+     *
+     * <li><p>Get the {@link ViewHandlerResponseWrapper} from the
+     * request, which was placed there by {@link
+     * ViewHandler#renderView}, and call {@link
+     * ViewHandlerResponseWrapper#flushContentToWrappedResponse}.  This
+     * causes any content that appears before the view to be written out
+     * to the response.  This is necessary to allow proper ordering to
+     * happen.</p></li>
+     *
+     * </ul>
+     *
+     */
 
     public int doStartTag() throws JspException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        assert (facesContext != null);
+
+
+	// flush out any content above the view tag
+	Object response = facesContext.getExternalContext().getResponse();
+	if (response instanceof ViewHandlerResponseWrapper) {
+	    try {
+		pageContext.getOut().flush();
+		((ViewHandlerResponseWrapper)response).flushContentToWrappedResponse();
+	    }
+	    catch (IOException e) {
+		throw new JspException("Can't write content above <f:view> tag"
+				       + " " + e.getMessage());
+	    }
+	}
+
         int rc = 0;
         try {
             rc = super.doStartTag();
@@ -131,104 +162,56 @@ public class ViewTag extends UIComponentBodyTag {
             throw new JspException(t);
         }
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        assert (facesContext != null);
-
         // this must happen after our overriderProperties executes.
         pageContext.getResponse().setLocale(facesContext.getViewRoot().getLocale());
-    
-        ResponseWriter writer = facesContext.getResponseWriter();
-        assert (writer != null);
-
-        try {
-            writer.startDocument();
-        } catch (IOException e) {
-            throw new JspException(e);
-        }
-        return rc;
+	return rc;
     }
 
+    /**
+     * <p>Examine the body content of this tag.  If it is
+     * non-<code>null</code>, non-zero length, and not an HTML comment,
+     * call {@link createVerbatimComponent}.</p>
+     *
+     * <p>Set the value of the verbatim component to be
+     * <code>content</code>.</p>
+     *
+     * <p>Add this child to the end of the child list for
+     * <code>UIViewRoot</code>.</p>
+     */
 
     public int doAfterBody() throws JspException {
+	int result = EVAL_PAGE;
         BodyContent bodyContent = null;
-        String content = null;
-        FacesContext context = FacesContext.getCurrentInstance();
-        ResponseWriter responseWriter = context.getResponseWriter();
-        StateManager stateManager = Util.getStateManager(context);
-        Object view = null;
-        int
-            beginIndex = 0,
-            markerIndex = 0,
-            markerLen = RIConstants.SAVESTATE_FIELD_MARKER.length(),
-            contentLen = 0;
+	UIViewRoot root = FacesContext.getCurrentInstance().getViewRoot();
+	UIOutput verbatim = null;
+	String content, trimContent;
+	int contentLen;
 
-        // get a writer that sends to the client
-        responseWriter = responseWriter.cloneWithWriter(getPreviousOut());
+        if (null == (bodyContent = getBodyContent()) ||
+	    null == (content = bodyContent.getString()) ||	    
+	    0 == (contentLen = (trimContent = content.trim()).length()) ||
+	    (trimContent.startsWith("<!--") && trimContent.endsWith("-->"))) {
+	    return result;
+        }
+	
+	bodyContent.clearBody();
 
-        if (context == null) {
-            throw new JspException(Util.getExceptionMessageString(
-                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
-        }
-        context.setResponseWriter(responseWriter);
-
-        
-        if (null == (bodyContent = getBodyContent())) {
-            Object params [] = {this.getClass().getName()};
-            throw new JspException(Util.getExceptionMessageString(
-                Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, params));
-        }
-        content = bodyContent.getString();
-
-        try {
-            view = stateManager.saveView(context);
-        } catch (IllegalStateException ise) {
-            throw new JspException(ise);
-        } catch (Exception ie) {
-            // catch any exception thrown while saving the view in session.
-            Object[] params = {"session", ie.getMessage()};
-            throw new JspException(Util.getExceptionMessageString(
-                Util.SAVING_STATE_ERROR_MESSAGE_ID, params), ie);    
-        }
-        try {
-	    contentLen = content.length();
-	    do {
-		// if we have no more markers
-		if (-1 == (markerIndex =
-			   content.indexOf(RIConstants.SAVESTATE_FIELD_MARKER,
-					   beginIndex))) {
-		    // write out the rest of the content
-		    responseWriter.write(content.substring(beginIndex));
-		} else {
-		    // we have more markers, write out the current chunk
-		    responseWriter.write(content.substring(beginIndex,
-							   markerIndex));
-		    stateManager.writeState(context, view);
-		    beginIndex = markerIndex + markerLen;
-		}
-	    } while (-1 != markerIndex && beginIndex < contentLen);
-        } catch (IOException iox) {
-            // catch any thrown while saving state in response.
-            Object[] params = {"client", iox.getMessage()};
-            throw new JspException(Util.getExceptionMessageString(
-                Util.SAVING_STATE_ERROR_MESSAGE_ID, params), iox);
-        }
-        return EVAL_PAGE;
+	verbatim = createVerbatimComponent();
+	verbatim.setValue(content);
+	
+	root.getChildren().add(verbatim);
+	
+	return result;
     }
 
+    /**
+     * <p>Exercise a contract with the {@link ViewHandler} to get the
+     * character encoding from the response and set it into the
+     * session.</p>
+     */
 
     public int doEndTag() throws JspException {
         int rc = super.doEndTag();
-        // PENDING(): remove these getCurrentInstance calls, since we
-        // have a facesContext ivar.
-        FacesContext context = FacesContext.getCurrentInstance();
-        ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
-        try {
-            writer.endDocument();
-        } catch (IOException e) {
-            throw new JspException(e);
-        }
-
         // store the response character encoding
         HttpSession session = null;
 
@@ -243,7 +226,8 @@ public class ViewTag extends UIComponentBodyTag {
     /**
      * This should never get called for PageTag.
      */
-    public String getComponentType() {        
+    public String getComponentType() {
+        assert (false);
         throw new IllegalStateException();
     }
 

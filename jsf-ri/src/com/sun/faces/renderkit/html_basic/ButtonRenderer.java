@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.83 2005/04/15 21:19:38 rogerk Exp $
+ * $Id: ButtonRenderer.java,v 1.84 2005/04/21 18:55:35 edburns Exp $
  */
 
 /*
@@ -207,16 +207,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             log.trace("End encoding component " + component.getId());
         }
     }
-
-
-    public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-    }
-
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {

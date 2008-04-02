@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.25 2004/02/26 20:32:15 eburns Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.26 2005/04/21 18:55:32 edburns Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,6 +24,7 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.event.FacesEvent;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -87,6 +89,55 @@ public class UIComponentTagTestCase extends TagTestCaseBase {
 
         return (new TestSuite(UIComponentTagTestCase.class));
 
+    }
+
+    /**
+     * <p>Since the JSP tag no longer creates the response writer, we
+     * must do it ourselves.</p>
+     */ 
+
+    public void setUp() throws Exception {
+	super.setUp();
+
+        ResponseWriter writer = facesContext.getResponseWriter();
+        if (writer == null) {
+	    RenderKitFactory renderFactory = (RenderKitFactory)
+		FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+	    RenderKit renderKit = 
+		renderFactory.getRenderKit
+                (facesContext, facesContext.getViewRoot().getRenderKitId());
+            writer = 
+		renderKit.createResponseWriter(new Writer() {
+		    public void close() throws IOException {
+			pageContext.getOut().close();
+		    }
+		    public void flush() throws IOException {
+                        // PENDING(craigmcc) - causes problems with includes
+			// pageContext.getOut().flush();
+		    }
+                    public void write(char cbuf) throws IOException {
+			pageContext.getOut().write(cbuf);
+		    }
+		    public void write(char[] cbuf, int off, 
+				      int len) throws IOException {
+			pageContext.getOut().write(cbuf, off, len);
+		    }
+		    public void write(int c) throws IOException {
+			pageContext.getOut().write(c);
+		    }
+		    public void write(String str) throws IOException {
+			pageContext.getOut().write(str);
+		    }
+		    public void write(String str, int off, 
+				      int len) throws IOException {
+			pageContext.getOut().write(str, off, len);
+		    }
+		},
+                                               null,
+            pageContext.getRequest().getCharacterEncoding());
+	    
+            facesContext.setResponseWriter(writer);
+	}
     }
 
     /**
@@ -404,6 +455,13 @@ public class UIComponentTagTestCase extends TagTestCaseBase {
         if (root != null) {
             render(root);
         }
+
+	try {
+	    facesContext.getViewRoot().encodeAll(facesContext);
+	}
+	catch (IOException e) {
+	    throw new JspException(e);
+	}
 
     }
 

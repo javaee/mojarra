@@ -16414,6 +16414,9 @@
         </attribute-extension>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Render an HTML "a" anchor element that acts like a
@@ -16870,6 +16873,7 @@
       <renderer-extension>
         <renders-children>true</renders-children>
         <exclude-attributes>onclick</exclude-attributes>
+        <body-tag>true</body-tag>
       </renderer-extension>
     </renderer>
     <renderer>
@@ -17691,6 +17695,7 @@
       </attribute>
 
       <renderer-extension>
+        <renders-children>true</renders-children>
         <tag-name>form</tag-name>
       </renderer-extension>
     </renderer>
@@ -17990,6 +17995,9 @@
         </attribute-extension>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Renders an HTML "input" element of type
@@ -18019,6 +18027,9 @@
       <renderer-class>
         com.sun.faces.renderkit.html_basic.HiddenRenderer
     </renderer-class>
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Renders an HTML "input" element of "type" "password".</p>
@@ -18476,6 +18487,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Renders an HTML "input"
@@ -18871,6 +18885,9 @@
         </attribute-extension>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Renders an HTML "textarea" element.</p>
@@ -19243,6 +19260,9 @@
         </attribute-extension>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Render a single message for a specific component.</p>
@@ -19467,6 +19487,9 @@
         </attribute-extension>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[
@@ -19667,6 +19690,9 @@
         </attribute-extension>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Render parameterized text.  Obtain the
@@ -19776,6 +19802,9 @@
         </attribute-extension>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description>Renders an HTML "label" element.  Render the current value
@@ -20072,6 +20101,9 @@
         </attribute-extension>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[Render an HTML "a" anchor element.  The value of the
@@ -20461,6 +20493,7 @@
 
       <renderer-extension>
         <renders-children>true</renders-children>
+        <body-tag>true</body-tag>
       </renderer-extension>
     </renderer>
     <renderer>
@@ -20565,6 +20598,9 @@
         </attribute-extension>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[Renders an HTML "table" element, conforming to the
@@ -21420,6 +21456,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Render an HTML checkbox list.</p>
@@ -21837,6 +21876,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Render an HTML option list.</p>
@@ -22310,6 +22352,9 @@
         <attribute-class>int</attribute-class>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Render an HTML option list.</p>
@@ -22687,6 +22732,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Render an HTML option list.</p>
@@ -23074,6 +23122,9 @@
         <attribute-class>int</attribute-class>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Render an HTML option list.</p>
@@ -23451,6 +23502,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<p>Render a set of html "input" elements of type
@@ -23933,6 +23987,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
     </renderer>
   </render-kit>
 </faces-config>

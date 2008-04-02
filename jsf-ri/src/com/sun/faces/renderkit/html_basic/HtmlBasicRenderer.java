@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.89 2005/02/28 18:48:20 jayashri Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.90 2005/04/21 18:55:36 edburns Exp $
  */
 
 /*
@@ -146,6 +146,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
     }
 
+    public boolean getRendersChildren() {
+	return true;
+    }
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
@@ -183,6 +186,58 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
         getEndTextToRender(context, component, currentValue);
     }
+
+
+    /**
+     * <p>Render nested child components by invoking the encode methods
+     * on those components, but only when the <code>rendered</code>
+     * property is <code>true</code>.</p>
+     */
+    protected void encodeRecursive(FacesContext context, UIComponent component)
+        throws IOException {
+
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
+
+        // Render this component and its children recursively
+        component.encodeBegin(context);
+        if (component.getRendersChildren()) {
+            component.encodeChildren(context);
+        } else {
+            Iterator kids = getChildren(component);
+            while (kids.hasNext()) {
+                UIComponent kid = (UIComponent) kids.next();
+                encodeRecursive(context, kid);
+            }
+        }
+        component.encodeEnd(context);
+    }
+
+
+    /**
+     * <p>Return an Iterator over the children of the specified
+     * component, selecting only those that have a
+     * <code>rendered</code> property of <code>true</code>.</p>
+     *
+     * @param component <code>UIComponent</code> for which to extract children
+     */
+    protected Iterator getChildren(UIComponent component) {
+
+        List results = new ArrayList();
+        Iterator kids = component.getChildren().iterator();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if (kid.isRendered()) {
+                results.add(kid);
+            }
+        }
+        return (results.iterator());
+
+    }
+
 
 
     /**
@@ -425,58 +480,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
         return retComp;
     }
 
-
-    /**
-     * <p>Render nested child components by invoking the encode methods
-     * on those components, but only when the <code>rendered</code>
-     * property is <code>true</code>.</p>
-     */
-    protected void encodeRecursive(FacesContext context, UIComponent component)
-        throws IOException {
-
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            return;
-        }
-
-        // Render this component and its children recursively
-        component.encodeBegin(context);
-        if (component.getRendersChildren()) {
-            component.encodeChildren(context);
-        } else {
-            Iterator kids = getChildren(component);
-            while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
-                encodeRecursive(context, kid);
-            }
-        }
-        component.encodeEnd(context);
-    }
-
-
-    /**
-     * <p>Return an Iterator over the children of the specified
-     * component, selecting only those that have a
-     * <code>rendered</code> property of <code>true</code>.</p>
-     *
-     * @param component <code>UIComponent</code> for which to extract children
-     */
-    protected Iterator getChildren(UIComponent component) {
-
-        List results = new ArrayList();
-        Iterator kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            if (kid.isRendered()) {
-                results.add(kid);
-            }
-        }
-        return (results.iterator());
-
-    }
-
-
     /**
      * <p>Return the specified facet from the specified component, but
      * <strong>only</strong> if its <code>rendered</code> property is
@@ -517,7 +520,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             } catch (IOException e) {
                 if (log.isDebugEnabled()) {
                     // PENDING I18N
-                    log.debug("Can't write ID attribute", e);
+                    log.debug("Can't write ID attribute" + e.getMessage());
                 }
             }
         }

@@ -1014,6 +1014,10 @@
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="command-button-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
+
         </renderer>
 
         <renderer>
@@ -1112,6 +1116,7 @@
             <renderer-extension>
                 <renders-children>true</renders-children>
                 <exclude-attributes>onclick</exclude-attributes>
+                <body-tag>true</body-tag>
             </renderer-extension>
 
         </renderer>
@@ -1281,6 +1286,7 @@
             <xi:include href="form-form-attrs.xml" xpointer="xpointer(/root/*)"/>
 
             <renderer-extension>
+                <renders-children>true</renders-children>
                 <tag-name>form</tag-name>
             </renderer-extension>
 
@@ -1309,6 +1315,9 @@
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="graphic-image-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -1343,6 +1352,9 @@
                 <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/input-hidden-renderer-class/text())"/>
             </renderer-class>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -1388,6 +1400,9 @@
             <xi:include href="text-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -1435,6 +1450,9 @@
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="text-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -1472,6 +1490,9 @@
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-textarea-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -1544,6 +1565,9 @@
             <xi:include href="message-message-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -1578,6 +1602,9 @@
             <xi:include href="messages-messages-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -1610,6 +1637,9 @@
             <xi:include href="output-format-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -1632,6 +1662,9 @@
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="output-label-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -1663,6 +1696,7 @@
 
             <renderer-extension>
                 <renders-children>true</renders-children>
+                <body-tag>true</body-tag>
             </renderer-extension>
 
         </renderer>
@@ -1690,6 +1724,9 @@
             <xi:include href="output-text-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -1808,6 +1845,9 @@
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -1870,6 +1910,9 @@
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="selectmany-checkbox-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -2004,6 +2047,9 @@
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="listbox-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -2052,6 +2098,9 @@
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="menu-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -2099,6 +2148,9 @@
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="listbox-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -2147,6 +2199,9 @@
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="menu-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -2210,6 +2265,9 @@
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="selectone-radio-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <renderer-extension>
+                <renders-children>true</renders-children>
+            </renderer-extension>
         </renderer>
 
     </render-kit>

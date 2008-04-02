@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.12 2004/07/29 21:18:05 edburns Exp $
+ * $Id: AttributeTag.java,v 1.13 2005/04/21 18:55:30 edburns Exp $
  */
 
 /*
@@ -24,6 +24,9 @@ import javax.servlet.jsp.tagext.TagSupport;
  * if the component does not already contain an attribute with the
  * same name.  This tag creates no output to the page currently
  * being created.</p>
+ *
+ * @deprecated The Faces implementation must now provide the
+ * implementation for this class.
  */
 
 public class AttributeTag extends TagSupport {
@@ -83,8 +86,8 @@ public class AttributeTag extends TagSupport {
     public int doStartTag() throws JspException {
 
         // Locate our parent UIComponentTag
-        UIComponentTag tag =
-            UIComponentTag.getParentUIComponentTag(pageContext);
+        UIComponentClassicTagBase tag =
+            UIComponentTag.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) { // PENDING - i18n
             throw new JspException("Not nested in a UIComponentTag");
         }
@@ -117,6 +120,12 @@ public class AttributeTag extends TagSupport {
     }
 
 
+    public int doEndTag() throws JspException {
+	this.release();
+	return (EVAL_PAGE);
+    }
+
+    
     /**
      * <p>Release references to any acquired resources.
      */

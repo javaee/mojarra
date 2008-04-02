@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.154 2005/04/11 18:03:57 jayashri Exp $
+ * $Id: Util.java,v 1.155 2005/04/21 18:55:40 edburns Exp $
  */
 
 /*
@@ -54,13 +54,14 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.text.MessageFormat;
 
 /**
  * <B>Util</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.154 2005/04/11 18:03:57 jayashri Exp $
+ * @version $Id: Util.java,v 1.155 2005/04/21 18:55:40 edburns Exp $
  */
 
 public class Util extends Object {
@@ -399,6 +400,11 @@ public class Util extends Object {
         { "width", null }
     };
 
+    //NOTE - "type" was deliberately skipped from the list of passthru
+    //attrs above All renderers that need this attribute should manually
+    //pass it.
+
+
 
 //
 // Instance Variables
@@ -458,6 +464,10 @@ public class Util extends Object {
 
         if (null == result) {
             result = "null MessageFactory";
+        } else {
+            if ( params != null) {
+                result = MessageFormat.format(result, params);
+            }
         }
         return result;
     }
@@ -707,6 +717,7 @@ public class Util extends Object {
                 Util.getValueBinding(bundleName).getValue(context);
             if (locCtx != null) {
                 result = locCtx.getLocale();
+                assert (null != result);
             }
         }
         if (null == result) {

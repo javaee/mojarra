@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.70 2005/03/11 18:14:03 edburns Exp $
+ * $Id: RIConstants.java,v 1.71 2005/04/21 18:55:34 edburns Exp $
  */
 
 /*
@@ -53,6 +53,9 @@ public class RIConstants {
 
     public static final String STATE_MAP = FACES_PREFIX +
         "saveStateMap";
+
+    public static final String SAVED_STATE = FACES_PREFIX + "savedState";
+
 
     /**
      * <p>Parser implementation for processing JSF reference expressions.</p>

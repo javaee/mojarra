@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.2 2005/01/07 20:41:53 edburns Exp $
+ * $Id: AttributeTag.java,v 1.3 2005/04/21 18:55:38 edburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package com.sun.faces.taglib.jsf_core;
 
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
+import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.JspException;
@@ -84,9 +85,9 @@ public class AttributeTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
 
-        // Locate our parent UIComponentTag
-        UIComponentTag tag =
-            UIComponentTag.getParentUIComponentTag(pageContext);
+        // Locate our parent UIComponentTagBase
+        UIComponentClassicTagBase tag =
+            UIComponentClassicTagBase.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) { // PENDING - i18n
             throw new JspException("Not nested in a UIComponentTag");
         }
