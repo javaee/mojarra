@@ -174,7 +174,7 @@ fun way. The application is called Character Combat.
 		<h2>Managed Beans
 </h2>
 		<div align="left">
-			<p>A managed bean is simply a java class with a public, no-args constructor, that conforms to the JavaBeans 1.0 naming conventions for method names, and is identified to the Faces application using the managed bean facility.&nbsp; The managed bean facility is configured in the <code>WEB-INF/faces-config.xml</code> file.&nbsp; You can place any number of <code>&lt;managed-bean&gt;</code> declarations in this file, giving each one a name, class, and scope.&nbsp; In your web application itself you simply reference the bean using your defined bean name in a JSF Expression Language expression. The bean will be created and placed in the appropriate scope the first time you reference it. Managed Beans are very flexible and allow you to customize your bean by specifying properties, including Java Arrays, Maps, Lists, and other Managed Beans.</p>
+			<p>A managed bean is simply a Java class with a public, no-args constructor, that conforms to the JavaBeans 1.0 naming conventions for method names, and is identified to the Faces application using the managed bean facility.&nbsp; The managed bean facility is configured in the <code>WEB-INF/faces-config.xml</code> file.&nbsp; You can place any number of <code>&lt;managed-bean&gt;</code> declarations in this file, giving each one a name, class, and scope.&nbsp; In your web application itself you simply reference the bean using your defined bean name in a JSF Expression Language expression. The bean will be created and placed in the appropriate scope the first time you reference it. Managed Beans are very flexible and allow you to customize your bean by specifying properties, including Java Arrays, Maps, Lists, and other Managed Beans.</p>
 		</div>
 		<p>The Character Combat example has a backing bean called ModelBean. Here is how the ModelBean is defined in the <code>WEB-INF/faces-config.xml</code> file using the managed bean facility:</p>
 		<table border="1" cellspacing="2" cellpadding="0">
@@ -205,7 +205,7 @@ an example of how the bean is used:
 				</td>
 			</tr>
 		</table>
-		<p>Where <code>&lt;h:inputText/&gt;</code> is a text field component nested in a form. When the form is submitted, the value in the text field will be saved as a &quot;customName&quot; property in the ModelBean. The &quot;#{&quot; and &quot;}&quot; designate that a Value Binding expression is used. The Value Binding expression tells the framework that the &quot;customName&quot; is a JavaBean property defined in the Model Data under the key &quot;modelBean&quot;. The framework's Managed Bean facility knows, based on the <code>WEB-INF/faces-config.xml</code> configuration file, the bean name to class mapping and instantiaties the bean if it doesn't already exist.</p>
+		<p>Where <code>&lt;h:inputText/&gt;</code> is a text field component nested in a form. When the form is submitted, the value in the text field will be saved as a &quot;customName&quot; property in the ModelBean. The &quot;#{&quot; and &quot;}&quot; designate that a Value Binding expression is used. The Value Binding expression tells the framework that the &quot;customName&quot; is a JavaBean property defined in the Model Data under the key &quot;modelBean&quot;. The framework's Managed Bean facility knows, based on the <code>WEB-INF/faces-config.xml</code> configuration file, the bean name to class mapping and instantiates the bean if it doesn't already exist.</p>
 		<h2>Object Model
 </h2>
 <p>The Character Combat example creates a ModelBean object. ModelBean
@@ -226,7 +226,7 @@ modifying the model and view to support this feature.
 </p>
 		<h2>JSP Pages
 </h2>
-		<p>The JSP pages provide the UI for the web application. JSF provides <a href="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/tlddocs/index.html" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/tlddocs/index.html">two JSP tag libraries</a> that expose the components to the page author.&nbsp; You can customize these components or create your own.&nbsp; The standard components <a href="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/renderkitdocs/index.html" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/renderkitdocs/index.html">render themselves as basic HTML 4.01</a>, with the absolute minimum of JavaScript.&nbsp; This ensures that there is a high likelyhood that your page will render as expected in all browsers.&nbsp; If you need support for other rendering types, such as WML, or SVG, JSF includes the concept of a RenderKit, which is a software module used by the components to render themselves into a particular client device type.&nbsp;</p>
+		<p>The JSP pages provide the UI for the web application. JSF provides <a href="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/tlddocs/index.html" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/tlddocs/index.html">two JSP tag libraries</a> that expose the components to the page author.&nbsp; You can customize these components or create your own.&nbsp; The standard components <a href="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/renderkitdocs/index.html" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/renderkitdocs/index.html">render themselves as basic HTML 4.01</a>, with the absolute minimum of JavaScript.&nbsp; This ensures that there is a high likely hood that your page will render as expected in all browsers.&nbsp; If you need support for other rendering types, such as WML, or SVG, JSF includes the concept of a RenderKit, which is a software module used by the components to render themselves into a particular client device type.&nbsp;</p>
 		<p>To use the built-in JSF tag libraries that contain the components,
 you
 will need to include the following tag directives in your JSP page:
@@ -245,8 +245,8 @@ will need to include the following tag directives in your JSP page:
 illustrate the above concepts:
 </p>
 		<h3>DataTable</h3>
-		<p>The DataTable UIComponent can handle several different types of DataModel including <code>java.util.List</code> and <code>java.sql.ResultSet</code>, among others. It takes the data and lays it out in a customizable table. The component can also be customized using stylesheets.</p>
-		<p>In the Character Combat demo, a List is used as the underlying DataModel. Here is a code snippet:</p>
+		<p>The DataTable UIComponent can handle several different types of Data Model including <code>java.util.List</code> and <code>java.sql.ResultSet</code>, among others. It takes the data and lays it out in a customizable table. The component can also be customized using stylesheets.</p>
+		<p>In the Character Combat demo, a List is used as the underlying Data Model. Here is a code snippet:</p>
 		<table border="1" cellspacing="2" cellpadding="0">
 			<tr>
 				<td>
@@ -281,7 +281,7 @@ illustrate the above concepts:
 				</td>
 			</tr>
 		</table>
-		<p>As you can see in this example <code>#{modelBean.dataList}</code> evaluates to a list of character entries stored in the &quot;character&quot; variable as defined the the <code>&lt;h:dataTable/&gt;</code> tag. For each character in the list a new row is created and displayed according to the <code>&lt;h:column/&gt;</code> tags.</p>
+		<p>As you can see in this example <code>#{modelBean.dataList}</code> evaluates to a list of character entries stored in the &quot;character&quot; variable as defined in the  <code>&lt;h:dataTable/&gt;</code> tag. For each character in the list a new row is created and displayed according to the <code>&lt;h:column/&gt;</code> tags.</p>
 		<p>The <code>&lt;f:facet/&gt;</code> tag creates a special relationship between the component enclosed in the facet and its parent. This special relationship allows you to define components to be headers or footers. In our example, we use a facet to create header for our columns.</p>
 		<p>Since the <code>&lt;h:dataTable/&gt;</code> is an HTML component, its style can be customized using stylesheets. In our example we show how you can use style attributes for several of the different <code>&lt;h:dataTable/&gt;</code> properties. We import our stylesheet named &quot;stylesheet.css&quot; using the following code snippet in the JSP page header:</p>
 		<table border="1" cellspacing="2" cellpadding="0">
@@ -295,7 +295,7 @@ illustrate the above concepts:
 		<p>Here is how the rendered HTML DataTable will look:</p>
 		<p><img src="dataTable.jpg" alt="" height="119" width="746" border="0"></p>
 		<h3>PanelGrid</h3>
-		<p>For simple table layout you can use the <code>&lt;h:panelGrid/&gt;</code> component. Unlike the DataTable component, PanelGrid does not take any underlying data model.</p>
+		<p>For simple table layout you can use the <code>&lt;h:panelGrid/&gt;</code> component. Unlike the DataTable component, PanelGrid does not take any underlying Data Model.</p>
 		<p>Here is an example of a two column table. A header is defined for the first row. The second row contains an InputText Field in the first column and a list of pull down items for the second column:</p>
 		<table border="1" cellspacing="2" cellpadding="0">
 			<tr>
@@ -391,20 +391,14 @@ important in navigation handling.
 </p>
 		<p>Here is how the set of RadioButtons along with the corresponding CommandButton wizards will be rendered:</p>
 		<h2><img src="firstSelection.jpg" alt="" height="139" width="565" border="0"></h2>
-		<h2><a id="Example Wizard Component" name="Example Wizard Component"></a>Navigation: the Example Wizard Component</h2>
-		
-		Let's take a look at the wizard component that handles navigation in
-the app.&nbsp; There are
-three parts to this component, shown by the black shapes in this
-diagram.
-		<p><img src="wizard.jpg" title="" alt="wizard diagram"
+		<h2><a id="Example Wizard Component" name="Example Wizard Component"></a>Navigation: the Example Wizard Component</h2>Let's take a look at the wizard component that handles navigation in the application.&nbsp; There are three parts to this component, shown by the black shapes in this diagram.<p><img src="wizard.jpg" title="" alt="wizard diagram"
  style="width: 444px; height: 494px;"></p>
 		<p>The user must do two things to use this component:</p>
 		<ol>
 			<li>Include the component in your web application's UI<li>Author the navigation rules accordingly
 		</ol>
-		<p>We'll cover these&nbsp; steps in detail below.&nbsp;The details of the WizardButtons managed bean are beyond the scope of this article, but basically it has methods that enable or disable the next and back buttons based on the user's current position in the wizard pageflow.</p>
-		<h3>Including the buttons in your UI</h3>The component is included in your web application's UI via the <code>&lt;jsp:include&gt;</code> mechanism.&nbsp; For each of the pages in the example app, you will see the following line at the bottom:<br>
+		<p>We'll cover these&nbsp;steps in detail below. The details of the WizardButtons managed bean are beyond the scope of this article, but basically it has methods that enable or disable the next and back buttons based on the user's current position in the wizard pageflow.</p>
+		<h3>Including the buttons in your UI</h3>The component is included in your web application's UI via the <code>&lt;jsp:include&gt;</code> mechanism.&nbsp; For each of the pages in the example application, you will see the following line at the bottom:<br>
 		<br>
 		<table border="1" cellspacing="0" cellpadding="0">
 			<tr>
@@ -441,8 +435,8 @@ diagram.
 		</table>
 		<br>
 		
-		It's important to note that any JSF components that reside in an included page must be the children of a <code>&lt;f:subview&gt;</code> tag, just as in the parent page they must be children of the <code>&lt;f:view&gt;</code> tag.&nbsp;Also, this example doesn't show it, but any template markup text that you want to include in a subview must be wrapped inside of an <code>&lt;f:verbatim&gt;</code> tag.&nbsp; 
-		<p>You can see that this page just has a Panel Grid that lays out two buttons next to each other.&nbsp;The attributes for these buttons are tightly bound to the methods and properties exposed on the WizardButtons bean.&nbsp;These buttons and the bean are designed to work together.&nbsp; The back button has its value and action hard-coded.&nbsp; The next button gets its value from the WizardButtons bean and has its action hard-coded.&nbsp;</p>
+		It's important to note that any JSF components that reside in an included page must be the children of a <code>&lt;f:subview&gt;</code> tag, just as in the parent page they must be children of the <code>&lt;f:view&gt;</code> tag. Also, this example doesn't show it, but any template markup text that you want to include in a subview must be wrapped inside of an <code>&lt;f:verbatim&gt;</code> tag.&nbsp; 
+		<p>You can see that this page just has a Panel Grid that lays out two buttons next to each other. The attributes for these buttons are tightly bound to the methods and properties exposed on the WizardButtons bean.&nbsp;These buttons and the bean are designed to work together.&nbsp; The back button has its value and action hard-coded.&nbsp; The next button gets its value from the WizardButtons bean and has its action hard-coded.&nbsp;</p>
 		<h3>The Navigation Rules</h3>
 		The Navigation Rules are at the heart of the wizard component.&nbsp; These rules must be included in the application's <code>faces-config.xml</code> file.&nbsp; Here is a subset of the rules for the demo application.&nbsp; You can use these rules as a starting point for leveraging the wizard component in your own application.<span style="font-family: monospace;"><br>
 			<br>
