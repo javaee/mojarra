@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.41 2004/10/12 14:39:56 rlubke Exp $
+ * $Id: FacesTestCaseService.java,v 1.42 2005/03/15 20:37:39 edburns Exp $
  */
 
 /*
@@ -27,6 +27,7 @@ import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 import java.io.File;
 import java.io.FileReader;
@@ -49,7 +50,7 @@ import com.sun.faces.RIConstants;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.41 2004/10/12 14:39:56 rlubke Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.42 2005/03/15 20:37:39 edburns Exp $
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
  */
@@ -476,6 +477,32 @@ public class FacesTestCaseService extends Object {
             new ServletContextEvent(sc);
         configListener.contextDestroyed(e);
         configListener.contextInitialized(e);
+    }
+
+    public Object wrapRequestToHideParameters() {
+	Object oldRequest = 
+	    getFacesContext().getExternalContext().getRequest();
+	
+	HttpServletRequest wrapper = 
+	    new HttpServletRequestWrapper((HttpServletRequest)oldRequest) {
+		public java.util.Enumeration getParameterNames() {
+		    return new java.util.Enumeration() {
+			    public boolean hasMoreElements() {
+				return( false );
+			    }
+			    
+			    public Object nextElement() {
+				return new java.util.NoSuchElementException();
+			    }
+			};
+		}
+	    };
+	getFacesContext().getExternalContext().setRequest(wrapper);
+	return oldRequest;
+    }
+
+    public void unwrapRequestToShowParameters(Object oldRequest) {
+	getFacesContext().getExternalContext().setRequest(oldRequest);
     }
 
 

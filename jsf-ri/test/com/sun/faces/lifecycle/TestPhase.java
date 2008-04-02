@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.15 2004/04/07 17:52:53 rkitain Exp $
+ * $Id: TestPhase.java,v 1.16 2005/03/15 20:37:40 edburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.15 2004/04/07 17:52:53 rkitain Exp $
+ * @version $Id: TestPhase.java,v 1.16 2005/03/15 20:37:40 edburns Exp $
  */
 
 public class TestPhase extends ServletFacesTestCase {
@@ -81,12 +81,16 @@ public class TestPhase extends ServletFacesTestCase {
     public void testExecute() {
 
         Phase restoreView = new RestoreViewPhase();
+	Object oldRequest = facesService.wrapRequestToHideParameters();
+	
         try {
             restoreView.execute(getFacesContext());
         } catch (Throwable e) {
             e.printStackTrace();
             assertTrue(false);
         }
+
+	facesService.unwrapRequestToShowParameters(oldRequest);
 
         assertTrue((getFacesContext().getRenderResponse()) &&
                    !(getFacesContext().getResponseComplete()));

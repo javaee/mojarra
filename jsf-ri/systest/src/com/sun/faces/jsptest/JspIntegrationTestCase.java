@@ -1,5 +1,5 @@
 /*
- * $Id: JspIntegrationTestCase.java,v 1.8 2005/03/11 18:14:08 edburns Exp $
+ * $Id: JspIntegrationTestCase.java,v 1.9 2005/03/15 20:37:39 edburns Exp $
  */
 
 /*
@@ -80,13 +80,13 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         checkJspDynamic00();
         checkJspDynamic01("",
                           "[A] { } [Z]");
-        checkJspDynamic01("?mode=create&id=C1&value=[1]&com.sun.faces.VIEW=H4sIAAAAAAAAAFvzloG1hIElPjPFsAAAhLx/NgwAAAA=",
+        checkJspDynamic01("?mode=create&id=C1&value=[1]&com.sun.faces.VIEW=_id1",
                           "[A] { [1] } [Z]");
-        checkJspDynamic01("?mode=create&id=C2&value=[2]&com.sun.faces.VIEW=H4sIAAAAAAAAAFvzloG1hIElPjPFqAAAR+9SHQwAAAA=",
+        checkJspDynamic01("?mode=create&id=C2&value=[2]&com.sun.faces.VIEW=_id2",
                           "[A] { [1] [2] } [Z]");
-        checkJspDynamic01("?mode=create&id=C3&value=[3]&com.sun.faces.VIEW=H4sIAAAAAAAAAFvzloG1hIElPjPFuAAABt5JBAwAAAA=",
+        checkJspDynamic01("?mode=create&id=C3&value=[3]&com.sun.faces.VIEW=_id3",
                           "[A] { [1] [2] [3] } [Z]");
-        checkJspDynamic01("?mode=delete&id=C2&com.sun.faces.VIEW=H4sIAAAAAAAAAFvzloG1hIElPjPFpAAAwUgISwwAAAA=",
+        checkJspDynamic01("?mode=delete&id=C2&com.sun.faces.VIEW=_id4",
                           "[A] { [1] [3] } [Z]");
 
         checkJspDynamic00();
@@ -150,32 +150,38 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         // Check each individual case multiple times
         checkJspInclude00();
+        checkJspInclude03();
         checkJspInclude03a();
         checkJspInclude03a();
         checkJspInclude03a();
         checkJspInclude00();
+        checkJspInclude03();
         checkJspInclude03b();
         checkJspInclude03b();
         checkJspInclude03b();
         checkJspInclude00();
+        checkJspInclude03();
         checkJspInclude03c();
         checkJspInclude03c();
         checkJspInclude03c();
 
         // Check cases in ascending order
         checkJspInclude00();
+        checkJspInclude03();
         checkJspInclude03a();
         checkJspInclude03b();
         checkJspInclude03c();
 
         // Check cases in descending order
         checkJspInclude00();
+        checkJspInclude03();
         checkJspInclude03c();
         checkJspInclude03b();
         checkJspInclude03a();
 
         // Check cases in random order
         checkJspInclude00();
+        checkJspInclude03();
         checkJspInclude03b();
         checkJspInclude03a();
         checkJspInclude03c();
@@ -188,32 +194,38 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         // Check each individual case multiple times
         checkJspInclude00();
+        checkJspInclude04();
         checkJspInclude04a();
         checkJspInclude04a();
         checkJspInclude04a();
         checkJspInclude00();
+        checkJspInclude04();
         checkJspInclude04b();
         checkJspInclude04b();
         checkJspInclude04b();
         checkJspInclude00();
+        checkJspInclude04();
         checkJspInclude04c();
         checkJspInclude04c();
         checkJspInclude04c();
 
         // Check cases in ascending order
         checkJspInclude00();
+        checkJspInclude04();
         checkJspInclude04a();
         checkJspInclude04b();
         checkJspInclude04c();
 
         // Check cases in descending order
         checkJspInclude00();
+        checkJspInclude04();
         checkJspInclude04c();
         checkJspInclude04b();
         checkJspInclude04a();
 
         // Check cases in random order
         checkJspInclude00();
+        checkJspInclude04();
         checkJspInclude04b();
         checkJspInclude04a();
         checkJspInclude04c();
@@ -281,11 +293,22 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
     }
 
+    private void checkJspInclude03() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp");
+        assertEquals("Correct page title",
+                     "jsp-include-03", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2c][2x] [3]", getBodyText(page));
+
+    }
+
+
 
     // Check selective imports with simple components (explicit ids)
     private void checkJspInclude03a() throws Exception {
 
-        HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=a");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=a&com.sun.faces.VIEW=_id1");
         assertEquals("Correct page title",
                      "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
@@ -297,7 +320,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
     // Check selective imports with simple components (explicit ids)
     private void checkJspInclude03b() throws Exception {
 
-        HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=b");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=b&com.sun.faces.VIEW=_id1");
         assertEquals("Correct page title",
                      "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
@@ -309,7 +332,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
     // Check selective imports with simple components (explicit ids)
     private void checkJspInclude03c() throws Exception {
 
-        HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=c");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=c&com.sun.faces.VIEW=_id1");
         assertEquals("Correct page title",
                      "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
@@ -317,11 +340,22 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
     }
 
+    private void checkJspInclude04() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp");
+        assertEquals("Correct page title",
+                     "jsp-include-04", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2c][2x] [3]", getBodyText(page));
+
+    }
+
+
 
     // Check selective imports with simple components (naming container)
     private void checkJspInclude04a() throws Exception {
 
-        HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=a");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=a&com.sun.faces.VIEW=_id1");
         assertEquals("Correct page title",
                      "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
@@ -333,7 +367,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
     // Check selective imports with simple components (naming container)
     private void checkJspInclude04b() throws Exception {
 
-        HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=b");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=b&com.sun.faces.VIEW=_id1");
         assertEquals("Correct page title",
                      "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
@@ -345,7 +379,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
     // Check selective imports with simple components (naming container)
     private void checkJspInclude04c() throws Exception {
 
-        HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=c");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=c&com.sun.faces.VIEW=_id1");
         assertEquals("Correct page title",
                      "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",

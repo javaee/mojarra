@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.68 2005/03/15 15:50:33 rogerk Exp $
+ $Id: build-tests.xml,v 1.69 2005/03/15 20:37:38 edburns Exp $
 -->
 
 <!--
@@ -182,11 +182,6 @@
          request="${context.path}/hello.jsp" status="200"
       outContent="/hello.jsp PASSED" failonerror="${failonerror}"/>
 
-    <!-- Simple Faces Response (Indirect) -->
-    <tester host="${host}" port="${port}" protocol="${protocol}"
-         request="${context.path}/facesResponse.jsp?responseViewId=/hello.jsp"
-      outContent="/hello.jsp PASSED" failonerror="${failonerror}"/>
-
     <!-- Simple Faces Response (Direct) -->
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/hello.jsp"
@@ -247,8 +242,10 @@
     <target name="test.path"
         description="Test Path Handling">
 
-        <junit printsummary="yes" fork="no"
-            haltonfailure="yes" haltonerror="yes">
+    <junit printsummary="yes" fork="yes"
+          haltonfailure="yes" haltonerror="yes">
+
+            <jvmarg line="${debug.jvm.args}"/>
 
             <classpath refid="html.classpath"/>
             <formatter type="plain" usefile="false"/>
@@ -683,9 +680,6 @@
    <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/phaseListener01.jsp"
          outContent="/phaseListener01.jsp PASSED" failonerror="${failonerror}"/>
-   <tester host="${host}" port="${port}" protocol="${protocol}"
-         request="${context.path}/faces/phaseListener01.jsp?param=foo"
-         outContent="/phaseListener01.jsp FAILED" failonerror="${failonerror}"/>
   </target>
   <target name="test.subview"
           description="Test subview tag">

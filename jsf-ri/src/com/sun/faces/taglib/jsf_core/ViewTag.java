@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.31 2005/03/11 18:14:06 edburns Exp $
+ * $Id: ViewTag.java,v 1.32 2005/03/15 20:37:38 edburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.application.StateManager;
-import javax.faces.application.StateManager.SerializedView;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -42,7 +41,7 @@ import java.util.Locale;
  * any renderers or attributes. It exists mainly to save the state of
  * the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.31 2005/03/11 18:14:06 edburns Exp $
+ * @version $Id: ViewTag.java,v 1.32 2005/03/15 20:37:38 edburns Exp $
  */
 
 public class ViewTag extends UIComponentBodyTag {
@@ -156,7 +155,7 @@ public class ViewTag extends UIComponentBodyTag {
         FacesContext context = FacesContext.getCurrentInstance();
         ResponseWriter responseWriter = context.getResponseWriter();
         StateManager stateManager = Util.getStateManager(context);
-        SerializedView view = null;
+        Object view = null;
         int
             beginIndex = 0,
             markerIndex = 0,
@@ -181,7 +180,7 @@ public class ViewTag extends UIComponentBodyTag {
         content = bodyContent.getString();
 
         try {
-            view = stateManager.saveSerializedView(context);
+            view = stateManager.saveView(context);
         } catch (IllegalStateException ise) {
             throw new JspException(ise);
         } catch (Exception ie) {

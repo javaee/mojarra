@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.46 2005/03/11 18:14:05 edburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.47 2005/03/15 20:37:37 edburns Exp $ 
  */ 
 
 
@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.46 2005/03/11 18:14:05 edburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.47 2005/03/15 20:37:37 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -204,32 +204,15 @@ public class ViewHandlerImpl extends ViewHandler {
             viewId = convertViewId(context, viewId);
         }
         
-        // maping could be null if a non-faces request triggered
-        // this response.
-        if (extContext.getRequestPathInfo() == null && mapping != null &&
-            isPrefixMapped(mapping)) {
-            // this was probably an initial request
-            // send them off to the root of the web application
-            try {
-                context.responseComplete();
-                if (log.isDebugEnabled()) {
-                    log.debug("Response Complete for" + viewId);
-                }
-                extContext.redirect(extContext.getRequestContextPath());
-            } catch (IOException ioe) {
-                throw new FacesException(ioe);
-            }
-        } else {
-            // this is necessary to allow decorated impls.
-            ViewHandler outerViewHandler =
-                context.getApplication().getViewHandler();
-            String renderKitId =
-                outerViewHandler.calculateRenderKitId(context);
-            viewRoot = Util.getStateManager(context).restoreView(context,
-                                                                 viewId,
-                                                                 renderKitId);
-        }
-
+	// this is necessary to allow decorated impls.
+	ViewHandler outerViewHandler =
+	    context.getApplication().getViewHandler();
+	String renderKitId =
+	    outerViewHandler.calculateRenderKitId(context);
+	viewRoot = Util.getStateManager(context).restoreView(context,
+							     viewId,
+							     renderKitId);
+    
         return viewRoot;
     }
 
@@ -241,6 +224,34 @@ public class ViewHandlerImpl extends ViewHandler {
             message = message +"context " + context;
             throw new NullPointerException(message);
         }
+
+        ExternalContext extContext = context.getExternalContext();
+        String mapping = getFacesMapping(context);
+        UIViewRoot result = new UIViewRoot();
+
+        if (mapping != null && !isPrefixMapped(mapping)) {
+            viewId = convertViewId(context, viewId);
+        }
+        result.setViewId(viewId);
+        
+        // maping could be null if a non-faces request triggered
+        // this response.
+        if (extContext.getRequestPathInfo() == null && mapping != null &&
+            isPrefixMapped(mapping) && viewId.equals(mapping)) {
+            // this was probably an initial request
+            // send them off to the root of the web application
+            try {
+                context.responseComplete();
+                if (log.isDebugEnabled()) {
+                    log.debug("Response Complete for" + viewId);
+                }
+                extContext.redirect(extContext.getRequestContextPath());
+		return result;
+            } catch (IOException ioe) {
+                throw new FacesException(ioe);
+            }
+        }
+
         Locale locale = null;
         String renderKitId = null;
 
@@ -251,8 +262,6 @@ public class ViewHandlerImpl extends ViewHandler {
             locale = context.getViewRoot().getLocale();
             renderKitId = context.getViewRoot().getRenderKitId();
         }
-        UIViewRoot result = new UIViewRoot();
-        result.setViewId(viewId);
         if (log.isDebugEnabled()) {
             log.debug("Created new view for " + viewId);
         }

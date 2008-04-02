@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.17 2004/10/12 14:39:51 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.18 2005/03/15 20:37:37 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.17 2004/10/12 14:39:51 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.18 2005/03/15 20:37:37 edburns Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -152,11 +152,18 @@ public class RestoreViewPhase extends Phase {
                 Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
 
-
-        // try to restore the view
-        if (null == (viewRoot = (Util.getViewHandler(facesContext)).
-            restoreView(facesContext, viewId))) {
-
+	if (isPostback(facesContext)) {
+	    // try to restore the view
+	    if (null == (viewRoot = (Util.getViewHandler(facesContext)).
+			 restoreView(facesContext, viewId))) {
+		throw new FacesException(Util.getExceptionMessageString(
+                Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
+	    }
+            if (log.isDebugEnabled()) {
+                log.debug("Postback: Restored view for " + viewId);
+            }
+	}
+	else {
             if (log.isDebugEnabled()) {
                 log.debug("New request: creating a view for " + viewId);
             }
@@ -164,11 +171,7 @@ public class RestoreViewPhase extends Phase {
             viewRoot = (Util.getViewHandler(facesContext)).
                 createView(facesContext, viewId);
             facesContext.renderResponse();
-        } else {
-            if (log.isDebugEnabled()) {
-                log.debug("Postback: Restored view for " + viewId);
-            }
-        }
+        } 
         assert (null != viewRoot);
 
         facesContext.setViewRoot(viewRoot);
@@ -177,6 +180,43 @@ public class RestoreViewPhase extends Phase {
         if (log.isDebugEnabled()) {
             log.debug("Exiting RestoreViewPhase");
         }
+    }
+
+    /**
+     *
+     * @return true if the request method is POST or PUT, or the method
+     * is GET but there are query parameters, or the request is not an
+     * instance of HttpServletRequest.
+     */
+
+    private boolean isPostback(FacesContext context) {
+        HttpServletRequest request = null;
+        String method = null;
+	boolean result = false;
+	Object requestObj = context.getExternalContext().getRequest();
+	
+	if (!(requestObj instanceof HttpServletRequest)) {
+	    return true;
+	}
+
+        request = (HttpServletRequest) requestObj;
+        method = request.getMethod();
+
+        // Is this a GET request with query parameters?
+        if ("GET".equals(method)) {
+            Iterator names = context.getExternalContext().
+                getRequestParameterNames();
+            if (names.hasNext()) {
+                result = true;
+            }
+        }
+	
+        // Is this a POST or PUT request?
+        if ("POST".equals(method) || "PUT".equals(method)) {
+            result = true;
+        }
+
+	return result;
     }
 
 

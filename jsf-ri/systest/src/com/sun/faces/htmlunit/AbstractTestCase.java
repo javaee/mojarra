@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestCase.java,v 1.10 2005/02/08 19:23:48 rlubke Exp $
+ * $Id: AbstractTestCase.java,v 1.11 2005/03/15 20:37:39 edburns Exp $
  */
 
 /*
@@ -153,7 +153,8 @@ public abstract class AbstractTestCase extends TestCase {
             client.addRequestHeader("Cookie", "JSESSIONID=" + sessionId);
         }
         */
-        HtmlPage page = (HtmlPage) client.getPage(getURL(path));
+	Object obj = client.getPage(getURL(path));
+        HtmlPage page = (HtmlPage) obj;
         if (sessionId == null) {
             parseSession(page);
         }

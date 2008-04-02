@@ -2,7 +2,7 @@
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- * $Id: StateManagerWrapper.java,v 1.4 2004/11/05 22:37:11 rlubke Exp $
+ * $Id: StateManagerWrapper.java,v 1.5 2005/03/15 20:37:36 edburns Exp $
  */
 
 package javax.faces.application;
@@ -53,6 +53,19 @@ public abstract class StateManagerWrapper extends StateManager {
 
     /**
      * <p>The default behavior of this method is to
+     * call {@link StateManager#saveView(javax.faces.context.FacesContext)}
+     * on the wrapped {@link StateManager} object.</p>
+     *
+     * @see StateManager#saveView(javax.faces.context.FacesContext)
+     * @since 1.2
+     */
+    public Object saveView(FacesContext context) {
+        return getWrapped().saveView(context);
+    }
+
+
+    /**
+     * <p>The default behavior of this method is to
      * call {@link StateManager#getTreeStructureToSave(javax.faces.context.FacesContext)}
      * on the wrapped {@link StateManager} object.</p>
      *
@@ -79,6 +92,26 @@ public abstract class StateManagerWrapper extends StateManager {
         return getWrapped().getComponentStateToSave(context);
 
     }
+
+    /**
+     * <p>The default behavior of this method is to call {@link
+     * StateManager#writeState(javax.faces.context.FacesContext,
+     * java.lang.Object)} on the wrapped {@link StateManager}
+     * object.</p>
+     *
+     * @see StateManager#writeState(javax.faces.context.FacesContext,
+     * java.lang.Object)
+     * @since 1.2
+     */
+    public void writeState(FacesContext context,
+                           Object state)
+    throws IOException {
+
+        getWrapped().writeState(context, state);
+
+    }
+
+
 
 
     /**

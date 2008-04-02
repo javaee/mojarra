@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.35 2005/03/11 18:14:03 edburns Exp $
+ * $Id: StateManager.java,v 1.36 2005/03/15 20:37:36 edburns Exp $
  */
 
 /*
@@ -24,11 +24,12 @@ import java.io.IOException;
  * <p><strong>StateManager</strong> directs the process of saving and
  * restoring the view between requests.  The {@link StateManager}
  * instance for an application is retrieved from the {@link Application}
- * instance, and therefore cannot know any details of the markup language
- * created by the {@link RenderKit} being used to render a view.
- * Therefore, the {@link StateManager} utilizes a helper object
- * ({@link ResponseStateManager}), that is provided by the {@link RenderKit}
- * implementation and is therefore aware of the markup language details.</p>
+ * instance, and thus cannot know any details of the markup language
+ * created by the {@link RenderKit} being used to render a view.  The
+ * {@link StateManager} utilizes a helper object ({@link
+ * ResponseStateManager}), that is provided by the {@link RenderKit}
+ * implementation and is therefore aware of the markup language
+ * details.</p>
  */
 
 public abstract class StateManager {
@@ -87,13 +88,59 @@ public abstract class StateManager {
      * non-null <code>id</code>s, all components that are descendants of the
      * same nearest {@link NamingContainer} must have unique identifiers.</p>
      *
+     * @deprecated this has been replaced by {@link #saveView}.  The
+     * default implementation returns <code>null</code>.
+     *
      * @param context {@link FacesContext} for the current request
      *
      * @exception IllegalStateException if more than one component or
      * facet within the same {@link NamingContainer} in this view has
      * the same non-<code>null</code> component id
      */
-    public abstract SerializedView saveSerializedView(FacesContext context);
+    public SerializedView saveSerializedView(FacesContext context) {
+	return null;
+    }
+
+    /**
+     * <p>Return an opaque <code>Object</code> containing sufficient
+     * information for this same instance to restore the state of the
+     * current {@link UIViewRoot} on a subsequent request.  The returned
+     * object must implement <code>java.io.Serializable</code>. If there
+     * is no state information to be saved, return <code>null</code>
+     * instead.</p>
+     *
+     * <p>Components may opt out of being included in the serialized view
+     * by setting their <code>transient</code> property to <code>true</code>.
+     * This must cause the component itself, as well as all of that component's
+     * children and facets, to be omitted from the saved  tree structure
+     * and component state information.</p>
+     *
+     * <p>This method must also enforce the rule that, for components with
+     * non-null <code>id</code>s, all components that are descendants of the
+     * same nearest {@link NamingContainer} must have unique identifiers.</p>
+     *
+     * <p>For backwards compatability with existing
+     * <code>StateManager</code> implementations, the default
+     * implementation of this method calls {@link #saveSerializedView}
+     * and creates and returns a two element <code>Object</code> array
+     * with element zero containing the <code>structure</code> property
+     * and element one containing the <code>state</code> property of the
+     * <code>SerializedView</code>.</p>
+     *
+     * @since 1.2
+     *
+     * @param context {@link FacesContext} for the current request
+     *
+     * @exception IllegalStateException if more than one component or
+     * facet within the same {@link NamingContainer} in this view has
+     * the same non-<code>null</code> component id
+     */
+    public Object saveView(FacesContext context) {
+	SerializedView view = saveSerializedView(context);
+	Object stateArray[] = { view.getStructure(),
+				view.getState() };
+	return stateArray;
+    }
 
 
     /**
@@ -109,9 +156,15 @@ public abstract class StateManager {
      * children and facets, to be omitted from the saved  tree structure
      * information.</p>
      *
+     * @deprecated the distinction between tree structure and component
+     * state is now an implementation detail.  The default
+     * implementation returns <code>null</code>.
+     *
      * @param context {@link FacesContext} for the current request
      */
-    protected abstract Object getTreeStructureToSave(FacesContext context);
+    protected Object getTreeStructureToSave(FacesContext context) {
+	return null;
+    }
 
 
     /**
@@ -128,12 +181,60 @@ public abstract class StateManager {
      * children and facets, to be omitted from the saved component state
      * information.</p>
      *
+     * @deprecated the distinction between tree structure and component
+     * state is now an implementation detail.  The default
+     * implementation returns <code>null</code>.
+     *
      * @param context {@link FacesContext} for the current request
      */
-    protected abstract Object getComponentStateToSave(FacesContext context);
-
+    protected Object getComponentStateToSave(FacesContext context) {
+	return null;
+    }
 
     /**
+     * <p>Save the state represented in the specified state
+     * <code>Object</code> instance, in an implementation dependent
+     * manner.</p>
+     *
+     * <p>This method will typically simply delegate the actual
+     * writing to the <code>writeState()</code> method of the
+     * {@link ResponseStateManager} instance provided by the
+     * {@link RenderKit} being used to render this view.  This
+     * method assumes that the caller has positioned the
+     * {@link ResponseWriter} at the correct position for the
+     * saved state to be written.</p>
+     *
+     * <p>For backwards compatability with existing
+     * <code>StateManager</code> implementations, the default
+     * implementation of this method checks if the argument is an
+     * instance of <code>Object []</code> of length greater than or
+     * equal to two.  If so, it creates a <code>SerializedView</code>
+     * instance with the tree structure coming from element zero and
+     * the component state coming from element one and calls through to
+     * {@link
+     * #writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView}.
+     * If not, does nothing.</p>
+     *
+     * @since 1.2
+     *
+     * @param context {@link FacesContext} for the current request
+     * @param state the Serializable state to be written,
+     *   as returned by {@link #saveSerializedView}
+     */
+    public void writeState(FacesContext context, Object state) throws IOException {
+	if (null != state && state.getClass().isArray() && 
+	    state.getClass().getComponentType().equals(Object.class)) {
+	    Object stateArray [] = (Object []) state;
+	    if (2 == stateArray.length) {
+		SerializedView view = new SerializedView(stateArray[0], 
+							 stateArray[1]);
+		writeState(context, view);
+	    }
+	}
+    }
+
+    /**
+     *
      * <p>Save the state represented in the specified
      * <code>SerializedView</code> isntance, in an implementation
      * dependent manner.</p>
@@ -153,11 +254,16 @@ public abstract class StateManager {
      * {@link ResponseWriter} at the correct position for the
      * saved state to be written.</p>
      *
+     * @deprecated This method has been replaced by {@link
+     * #writeState(javax.faces.context.FacesContext,java.lang.Object)}.
+     * The default implementation of this method does nothing.
+     *
      * @param context {@link FacesContext} for the current request
      * @param state the serialized state to be written
      */
-    public abstract void writeState(FacesContext context,
-				    SerializedView state) throws IOException;
+    public void writeState(FacesContext context,
+			   SerializedView state) throws IOException {
+    }
 
 
     // ------------------------------------------------- State Restoring Methods
@@ -207,11 +313,18 @@ public abstract class StateManager {
      * @param renderKitId the renderKitId used to render this response.
      * Must not be <code>null</code>.
      *
+     * @deprecated the distinction between tree structure and component
+     * state is now an implementation detail.  The default
+     * implementation returns <code>null</code>.
+     *
      * @exception IllegalArgumentException if <code>renderKitId</code>
      * is <code>null</code>.
      */
-    protected abstract UIViewRoot restoreTreeStructure
-	(FacesContext context, String viewId, String renderKitId);
+    protected UIViewRoot restoreTreeStructure(FacesContext context, 
+					      String viewId, 
+					      String renderKitId) {
+	return null;
+    }
 
 
     /**
@@ -226,11 +339,17 @@ public abstract class StateManager {
      * @param renderKitId the renderKitId used to render this response.
      * Must not be <code>null</code>.
      *
+     * @deprecated the distinction between tree structure and component
+     * state is now an implementation detail.  The default
+     * implementation does nothing.
+     *
      * @exception IllegalArgumentException if <code>renderKitId</code>
      * is <code>null</code>.
      */
-    protected abstract void restoreComponentState
-	(FacesContext context, UIViewRoot viewRoot, String renderKitId);
+    protected void restoreComponentState(FacesContext context, 
+					 UIViewRoot viewRoot, 
+					 String renderKitId) {
+    }
 
 
 
@@ -272,6 +391,13 @@ public abstract class StateManager {
      * <p>Convenience struct for encapsulating tree structure and
      * component state.  This is necessary to allow the API to be
      * flexible enough to work in JSP and non-JSP environments.</p>
+     *
+     * @deprecated This class was not marked <code>Serializable</code>
+     * in the 1.0 version of the spec.  It was also not a static inner
+     * class, so it can't be made to be <code>Serializable</code>.
+     * Therefore, it is being deprecated in version 1.2 of the spec.
+     * The replacement is to use an implementation dependent
+     * <code>Object</code>.
      *
      */
 

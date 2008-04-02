@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.19 2005/03/11 18:14:24 edburns Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.20 2005/03/15 20:37:40 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.19 2005/03/11 18:14:24 edburns Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.20 2005/03/15 20:37:40 edburns Exp $
  */
 
 public class TestRestoreViewPhase extends ServletFacesTestCase {
@@ -75,50 +75,17 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 // General Methods
 //
 
-    public void beginReconstituteRequestInitial(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    }
-
-
     public void beginReconstituteRequestSubmit(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
 	theRequest.addParameter("com.sun.faces.VIEW",
-				"H4sIAAAAAAAAAFvzloG1hIElPjPFsAAAhLx/NgwAAAA=");
+				"_id1");
     }
 
 
     public void beginRegisterListeners(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
 	theRequest.addParameter("com.sun.faces.VIEW",
-				"H4sIAAAAAAAAAFvzloG1hIElPjPFsAAAhLx/NgwAAAA=");
-    }
-
-
-    public void testReconstituteRequestInitial() {
-        Phase restoreView = new RestoreViewPhase();
-
-        try {
-            restoreView.execute(getFacesContext());
-        } catch (Throwable e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-        assertTrue((getFacesContext().getRenderResponse()) &&
-                   !(getFacesContext().getResponseComplete()));
-
-        assertTrue(null != getFacesContext().getViewRoot());
-        assertTrue(RenderKitFactory.HTML_BASIC_RENDER_KIT ==
-                   getFacesContext().getViewRoot().getRenderKitId());
-
-        assertTrue(null != getFacesContext().getViewRoot().getLocale());
-
-        UIViewRoot root = null;
-
-        assertTrue(
-            getFacesContext().getViewRoot().getViewId().equals(TEST_URI));
-        root = getFacesContext().getViewRoot();
-        assertTrue((root.getChildren().isEmpty()) == true);
-        getFacesContext().setViewRoot(null);
+				"_id1");
     }
 
     public void testReconstituteRequestSubmit() {

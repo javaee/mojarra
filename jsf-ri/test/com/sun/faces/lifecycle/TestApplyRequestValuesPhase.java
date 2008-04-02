@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.27 2004/07/27 19:36:42 jayashri Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.28 2005/03/15 20:37:40 edburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import org.apache.cactus.WebRequest;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UICommand;
@@ -25,7 +26,7 @@ import javax.faces.component.UICommand;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.27 2004/07/27 19:36:42 jayashri Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.28 2005/03/15 20:37:40 edburns Exp $
  */
 
 public class TestApplyRequestValuesPhase extends ServletFacesTestCase {
@@ -91,12 +92,10 @@ public class TestApplyRequestValuesPhase extends ServletFacesTestCase {
 
         // 1. Set the root of the view ...
         //
-        try {
-            restoreView.execute(getFacesContext());
-        } catch (Throwable e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
+	root = getFacesContext().getApplication().getViewHandler().createView(getFacesContext(), TEST_URI);
+	getFacesContext().setViewRoot((UIViewRoot) root);
+	getFacesContext().renderResponse();
+
         assertTrue((getFacesContext().getRenderResponse()) &&
                    !(getFacesContext().getResponseComplete()));
         assertTrue(null != getFacesContext().getViewRoot());

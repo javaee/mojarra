@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.27 2004/11/12 18:00:28 jayashri Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.28 2005/03/15 20:37:40 edburns Exp $
  */
 
 /*
@@ -16,12 +16,15 @@ import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
 
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * <B>TestLifecycleImpl_initial</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.27 2004/11/12 18:00:28 jayashri Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.28 2005/03/15 20:37:40 edburns Exp $
  */
 
 public class TestLifecycleImpl_initial extends JspFacesTestCase {
@@ -99,8 +102,11 @@ public class TestLifecycleImpl_initial extends JspFacesTestCase {
         boolean result = false;
         LifecycleImpl life = new LifecycleImpl();
 
+	Object oldRequest = facesService.wrapRequestToHideParameters();
+
         try {
             life.execute(getFacesContext());
+	    facesService.unwrapRequestToShowParameters(oldRequest);
             life.render(getFacesContext());
         } catch (FacesException e) {
             System.err.println("Root Cause: " + e.getCause());

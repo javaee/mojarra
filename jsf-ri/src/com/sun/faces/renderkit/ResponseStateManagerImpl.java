@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.13 2004/07/21 21:06:15 jayashri Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.14 2005/03/15 20:37:38 edburns Exp $
  */
 
 /*
@@ -12,10 +12,12 @@ package com.sun.faces.renderkit;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Base64;
+import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.application.StateManager.SerializedView;
+import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 
@@ -89,111 +91,111 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         Map requestMap = context.getExternalContext().getRequestMap();
         Object state = requestMap.get(FACES_VIEW_STATE);
         // null out the temporary attribute, since we don't need it anymore.
-        requestMap.put(FACES_VIEW_STATE, null);
+        requestMap.remove(FACES_VIEW_STATE);
         return state;
     }
 
-
     public Object getTreeStructureToRestore(FacesContext context,
                                             String treeId) {
-        Object structure = null;
-        Object state = null;
-        ByteArrayInputStream bis = null;
-        GZIPInputStream gis = null;
-        ObjectInputStream ois = null;
-        boolean compress = isCompressStateSet(context);
+	StateManager stateManager = Util.getStateManager(context);
         
-        Map requestParamMap = context.getExternalContext()
-            .getRequestParameterMap();
-
-        String viewString = (String) requestParamMap.get(
-            RIConstants.FACES_VIEW);
-        if (viewString == null) {
-            return null;
-        }
-        byte[] bytes = Base64.decode(viewString.getBytes());
-        try {
-            bis = new ByteArrayInputStream(bytes);
-            if (isCompressStateSet(context)) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Deflating state before restoring..");
-                }
-                gis = new GZIPInputStream(bis);
-                ois = new ObjectInputStream(gis);
-            } else {
-                ois = new ObjectInputStream(bis);
-            }
-            structure = ois.readObject();
-            state = ois.readObject();
-            Map requestMap = context.getExternalContext().getRequestMap();
-            // store the state object temporarily in request scope until it is
-            // processed by getComponentStateToRestore which resets it.
-            requestMap.put(FACES_VIEW_STATE, state);
-            bis.close();
-            if ( compress) {
-                gis.close();
-            }
-            ois.close();
-        } catch (java.io.OptionalDataException ode) {
-            log.error(ode.getMessage(), ode);
-        } catch (java.lang.ClassNotFoundException cnfe) {
+	Map requestParamMap = context.getExternalContext()
+	    .getRequestParameterMap();
+	
+	String viewString = (String) requestParamMap.get(
+							 RIConstants.FACES_VIEW);
+	Object structure = null;
+	if (viewString == null) {
+	    return null;
+	}
+	
+	if (stateManager.isSavingStateInClient(context)) {
+	    Object state = null;
+	    ByteArrayInputStream bis = null;
+	    GZIPInputStream gis = null;
+	    ObjectInputStream ois = null;
+	    boolean compress = isCompressStateSet(context);
+	    
+	    byte[] bytes = Base64.decode(viewString.getBytes());
+	    try {
+		bis = new ByteArrayInputStream(bytes);
+		if (isCompressStateSet(context)) {
+		    if (log.isDebugEnabled()) {
+			log.debug("Deflating state before restoring..");
+		    }
+		    gis = new GZIPInputStream(bis);
+		    ois = new ObjectInputStream(gis);
+		} else {
+		    ois = new ObjectInputStream(bis);
+		}
+		structure = ois.readObject();
+		state = ois.readObject();
+		Map requestMap = context.getExternalContext().getRequestMap();
+		// store the state object temporarily in request scope
+		// until it is processed by getComponentStateToRestore
+		// which resets it.
+		requestMap.put(FACES_VIEW_STATE, state);
+		bis.close();
+		if ( compress) {
+		    gis.close();
+		}
+		ois.close();
+	    } catch (java.io.OptionalDataException ode) {
+		log.error(ode.getMessage(), ode);
+	    } catch (java.lang.ClassNotFoundException cnfe) {
             log.error(cnfe.getMessage(), cnfe);
-        } catch (java.io.IOException iox) {
-            log.error(iox.getMessage(), iox);
-        }
-        return structure;
+	    } catch (java.io.IOException iox) {
+		log.error(iox.getMessage(), iox);
+	    }
+	}
+	else {
+	    structure = viewString;
+	}
+	return structure;
     }
-
 
     public void writeState(FacesContext context, SerializedView view)
         throws IOException {
-        
         String hiddenField = null;
-        GZIPOutputStream zos = null;
-        ObjectOutputStream oos = null;
-        boolean compress = isCompressStateSet(context);
-        
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        if (compress) {
-            if (log.isDebugEnabled()) {
-                log.debug("Compressing state before saving..");
-            }
-            zos = new GZIPOutputStream(bos);
-            oos = new ObjectOutputStream(zos);
-        } else {
-            oos = new ObjectOutputStream(bos);    
-        }
-        oos.writeObject(view.getStructure());
-        oos.writeObject(view.getState());
-        oos.close();
-        if (compress) {
-            zos.close();
-        }
-        bos.close();
-
-        hiddenField = " <input type=\"hidden\" name=\""
-            + RIConstants.FACES_VIEW + "\"" + " value=\"" +
-            (new String(Base64.encode(bos.toByteArray()), "ISO-8859-1")) +
-            "\" />\n ";
+	StateManager stateManager = Util.getStateManager(context);
+	
+	if (stateManager.isSavingStateInClient(context)) {
+	    GZIPOutputStream zos = null;
+	    ObjectOutputStream oos = null;
+	    boolean compress = isCompressStateSet(context);
+	    
+	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	    if (compress) {
+		if (log.isDebugEnabled()) {
+		    log.debug("Compressing state before saving..");
+		}
+		zos = new GZIPOutputStream(bos);
+		oos = new ObjectOutputStream(zos);
+	    } else {
+		oos = new ObjectOutputStream(bos);    
+	    }
+	    oos.writeObject(view.getStructure());
+	    oos.writeObject(view.getState());
+	    oos.close();
+	    if (compress) {
+		zos.close();
+	    }
+	    bos.close();
+	    
+	    hiddenField = " <input type=\"hidden\" name=\""
+		+ RIConstants.FACES_VIEW + "\"" + " value=\"" +
+		(new String(Base64.encode(bos.toByteArray()), "ISO-8859-1")) +
+		"\" />\n ";
+	}
+	else {
+	    hiddenField = " <input type=\"hidden\" name=\""
+		+ RIConstants.FACES_VIEW + "\"" + " value=\"" +
+		view.getStructure() +
+		"\" />\n ";
+	    
+	}
         context.getResponseWriter().write(hiddenField);
-    }
-
-
-    protected String replaceMarkers(String response, String marker,
-                                    String hiddenField) {
-
-        int markerIdx = response.indexOf(marker);
-        while (markerIdx != -1) {
-            String replacedContent = response.substring(0, markerIdx);
-            int markerEnd = markerIdx + marker.length();
-            String endPortion = response.substring(markerEnd,
-                                                   response.length());
-            replacedContent = replacedContent.concat(hiddenField);
-            replacedContent = replacedContent.concat(endPortion);
-            response = replacedContent;
-            markerIdx = response.indexOf(marker);
-        }
-        return response;
+	
     }
     
     public boolean isCompressStateSet(FacesContext context) {

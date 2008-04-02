@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.32 2004/02/26 20:34:30 eburns Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.33 2005/03/15 20:37:40 edburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import org.apache.cactus.WebRequest;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
@@ -28,7 +29,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.32 2004/02/26 20:34:30 eburns Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.33 2005/03/15 20:37:40 edburns Exp $
  */
 
 public class TestProcessValidationsPhase extends ServletFacesTestCase {
@@ -88,16 +89,13 @@ public class TestProcessValidationsPhase extends ServletFacesTestCase {
         userName = null;
         String value = null;
         Phase
-            restoreView = new RestoreViewPhase(),
             applyValues = new ApplyRequestValuesPhase(),
             processValidations = new ProcessValidationsPhase();
 
-        try {
-            restoreView.execute(getFacesContext());
-        } catch (Throwable e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
+	root = getFacesContext().getApplication().getViewHandler().createView(getFacesContext(), TEST_URI);
+	getFacesContext().setViewRoot((UIViewRoot) root);
+	getFacesContext().renderResponse();
+
         assertTrue((getFacesContext().getRenderResponse()) &&
                    !(getFacesContext().getResponseComplete()));
         assertTrue(null != getFacesContext().getViewRoot());

@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.25 2005/03/11 18:14:04 edburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.26 2005/03/15 20:37:37 edburns Exp $ 
  */ 
 
 
@@ -36,7 +36,7 @@ import java.util.Set;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.25 2005/03/11 18:14:04 edburns Exp $
+ * @version $Id: StateManagerImpl.java,v 1.26 2005/03/15 20:37:37 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -75,54 +75,54 @@ public class StateManagerImpl extends StateManager {
         SerializedView result = null;
 	Object treeStructure = null;
 	Object componentState = null;
-        
-        // irrespective of method to save the tree, if the root is transient
-        // no state information needs to  be persisted.
-        UIViewRoot viewRoot = context.getViewRoot();
-        if (viewRoot.isTransient()) {
+	// irrespective of method to save the tree, if the root is transient
+	// no state information needs to  be persisted.
+	UIViewRoot viewRoot = context.getViewRoot();
+	if (viewRoot.isTransient()) {
             return result;
-        }
-
-        // honor the transient property and remove children from the tree
-        // that are marked transient.
-        removeTransientChildrenAndFacets(context, viewRoot, new HashSet());
-
-
-	if (log.isDebugEnabled()) {
-	    log.debug("Begin creating serialized view for " +
-		      viewRoot.getViewId());
 	}
+	
+	// honor the transient property and remove children from the tree
+	// that are marked transient.
+	removeTransientChildrenAndFacets(context, viewRoot, new HashSet());
+	
+	
+ 	if (log.isDebugEnabled()) {
+ 	    log.debug("Begin creating serialized view for " +
+ 		      viewRoot.getViewId());
+ 	}
 	result = new SerializedView(treeStructure = 
 				    getTreeStructureToSave(context),
 				    componentState =
 				    getComponentStateToSave(context));
-	if (log.isDebugEnabled()) {
-	    log.debug("End creating serialized view " +
-		      viewRoot.getViewId());
-	}
-	if (!isSavingStateInClient(context)) {
-	    String id = null;
-
-	    synchronized (this) {
-		id = createUniqueRequestId();
-		LRUMap lruMap = null;
-		Map sessionMap = Util.getSessionMap(context);
+ 	if (log.isDebugEnabled()) {
+ 	    log.debug("End creating serialized view " +
+ 		      viewRoot.getViewId());
+ 	}
+ 	if (!isSavingStateInClient(context)) {
+ 	    String id = null;
+	    
+ 	    synchronized (this) {
+ 		id = createUniqueRequestId();
+ 		LRUMap lruMap = null;
+ 		Map sessionMap = Util.getSessionMap(context);
 		Object stateArray[] = { treeStructure, componentState };
-		
-		if (null == (lruMap = (LRUMap) 
-			     sessionMap.get(RIConstants.STATE_MAP))) {
+ 		
+ 		if (null == (lruMap = (LRUMap) 
+ 			     sessionMap.get(RIConstants.STATE_MAP))) {
 		    lruMap = new LRUMap(15); // PENDING(edburns):
-					  // configurable
+		    // configurable
 		    
-		    sessionMap.put(RIConstants.STATE_MAP, lruMap);
-		}
+ 		    sessionMap.put(RIConstants.STATE_MAP, lruMap);
+ 		}
 		result = new SerializedView(id, null);
-		lruMap.put(id, stateArray);
-	    }
-	}
-
+ 		lruMap.put(id, stateArray);
+ 	    }
+ 	}
+	
         return result;
     }
+
 
     char requestIdSerial = 0;
 
@@ -293,13 +293,11 @@ public class StateManagerImpl extends StateManager {
         return ((UIViewRoot) viewRoot);
     }
 
-
     public void writeState(FacesContext context, SerializedView state)
         throws IOException {
 	Util.getResponseStateManager(context,
             context.getViewRoot().getRenderKitId()).writeState(context, state);
     }
-
 
     /**
      * Builds a hierarchy of TreeStrucure objects simulating the component
