@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.41 2003/10/13 17:07:36 eburns Exp $
+ * $Id: ConfigParser.java,v 1.42 2003/10/13 21:50:46 eburns Exp $
  */
 
 /*
@@ -459,6 +459,7 @@ public class ConfigParser {
         digester.addCallMethod(prefix + "/managed-bean-class", "setManagedBeanClass", 0);
         digester.addCallMethod(prefix + "/managed-bean-scope", "setManagedBeanScope", 0);
         digester.addCallMethod(prefix + "/managed-bean-create", "setManagedBeanCreate", 0);
+	configureRulesManagedBeanListAndMap(digester, prefix);
         configureRulesManagedBeanProperty(digester, prefix + "/managed-property");
 
         // This custom rule will:
@@ -468,6 +469,81 @@ public class ConfigParser {
         ManagedBeansRule mbRule = new ManagedBeansRule();
         digester.addRule(prefix, mbRule);
 
+    }
+
+    // Configure the rules for a <managed-bean><map-entries> and
+    // <managed-bean><list-entries> element.
+    protected void configureRulesManagedBeanListAndMap(Digester digester, 
+						      String base) {
+        // these rules set the value category of the individual property
+        // value the category can be one of: value, value-ref,
+        // value-class, null-value
+        
+	ConfigManagedBeanPropertyValueRule cpvRule = 
+	    new ConfigManagedBeanPropertyValueRule();
+        ConfigManagedBeanPropertyValueRefRule cpvrRule = 
+	    new ConfigManagedBeanPropertyValueRefRule();
+        ConfigManagedBeanPropertyValueTypeRule cpvtRule = 
+	    new ConfigManagedBeanPropertyValueTypeRule();
+        ConfigManagedBeanPropertyValueNullRule cpvnRule = 
+	    new ConfigManagedBeanPropertyValueNullRule();
+	
+        // these rules set the value category of the individual property
+        // map entries the category can be one of: value, value-ref,
+        // null-value.  Note that we don't have a rule for value-class,
+        // this is because the value-class/key class thing is handled by
+        // method calls directly on the ConfigManagedBeanProperty
+        // instance.
+	
+        ConfigManagedPropertyMapValueRule cpmvRule = 
+	    new ConfigManagedPropertyMapValueRule();
+        ConfigManagedPropertyMapRefRule cpmrRule = 
+	    new ConfigManagedPropertyMapRefRule();
+        ConfigManagedPropertyMapNullRule cpmnRule = 
+	    new ConfigManagedPropertyMapNullRule();
+	
+	String prefix = base + "/map-entries";
+	
+	// we use the ConfigManagedBeanProperty bean here as a
+	// convenience, even though what we are configuring is a bean
+	// itself, not a property of a bean.
+	digester.addObjectCreate(prefix, 
+			     "com.sun.faces.config.ConfigManagedBeanProperty");
+        digester.addSetNext(prefix, "setListOrMap", "com.sun.faces.config.ConfigManagedBeanProperty");
+
+	//
+	// for map-entries
+	//
+
+        digester.addCallMethod(prefix + "/key-class", "setMapKeyClass", 0);
+        digester.addCallMethod(prefix + "/value-class", "setMapValueClass", 0);
+	
+        configureRulesManagedPropertyMap(digester, prefix + "/map-entry");
+        digester.addRule(prefix+"/map-entry/value", cpmvRule);
+        digester.addRule(prefix+"/map-entry/value-ref", cpmrRule);
+        digester.addRule(prefix+"/map-entry/null-value", cpmnRule);
+
+	//
+	// for list-entries
+	//
+ 	
+	prefix = base + "/list-entries";
+	// we use the ConfigManagedBeanProperty bean here as a
+	// convenience, even though what we are configuring is a bean
+	// itself, not a property of a bean.
+	digester.addObjectCreate(prefix, 
+			     "com.sun.faces.config.ConfigManagedBeanProperty");
+        digester.addSetNext(prefix, "setListOrMap", "com.sun.faces.config.ConfigManagedBeanProperty");
+
+        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/value");
+        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/value-ref");
+        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/value-class");
+        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/null-value");
+        digester.addRule(prefix+"/value-class", cpvtRule);
+        digester.addRule(prefix+"/value", cpvRule);
+        digester.addRule(prefix+"/value-ref", cpvrRule);
+        digester.addRule(prefix+"/null-value", cpvnRule);
+	
     }
 
     // Configure the rules for a <managed-bean><managed-property> element

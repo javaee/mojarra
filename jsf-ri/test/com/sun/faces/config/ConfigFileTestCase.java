@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.41 2003/10/13 17:07:38 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.42 2003/10/13 21:50:48 eburns Exp $
  */
 
 /*
@@ -260,7 +260,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	}
     }
 
-    public void testMapPositive() throws Exception {
+    public void testMapAndListPropertyPositive() throws Exception {
         ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);
@@ -308,6 +308,111 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	assertEquals("firstNames[2] not as expected", "Thomas", strings[2]);
 	assertNull("firstNames[3] not as expected", strings[3]);
 	assertNull("firstNames[4] not as expected", strings[4]);
+
+    }
+
+    public void testMapAndListPositive() throws Exception {
+        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
+        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
+										   FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
+        parseConfig(cp, "/WEB-INF/config-lists-and-maps.xml",
+		    config.getServletContext());
+	
+	ValueBinding valueBinding = 
+	    application.getValueBinding("simpleList");
+	assertNotNull(valueBinding);
+	
+	List list = (List) valueBinding.getValue(getFacesContext());
+	assertNotNull(list);
+
+	assertEquals("simpleList size not as expected", 4, list.size());
+	assertEquals("simpleList.get(0) not as expected", 
+		     new Integer(10), list.get(0));
+	assertEquals("simpleList.get(1) not as expected", 
+		     new Integer(20), list.get(1));
+	assertEquals("simpleList.get(2) not as expected", 
+		     new Integer(60), list.get(2));
+	assertNull("simpleList.get(3) not as expected", list.get(3));
+
+	valueBinding = application.getValueBinding("objectList");
+	assertNotNull(valueBinding);
+	
+	list = (List) valueBinding.getValue(getFacesContext());
+	assertNotNull(list);
+
+	assertEquals("simpleList size not as expected", 4, list.size());
+	assertTrue("simpleList.get(0) not as expected", 
+		   list.get(0) instanceof SimpleBean);
+	assertTrue("simpleList.get(1) not as expected", 
+		   list.get(1) instanceof SimpleBean);
+	assertTrue("simpleList.get(2) not as expected", 
+		   list.get(2) instanceof SimpleBean);
+	assertNull("simpleList.get(3) not as expected", list.get(3));
+	
+
+	valueBinding = application.getValueBinding("floatMap");
+	assertNotNull(valueBinding);
+	
+	Map 
+	    nestedMap = null,
+	    map = (Map) valueBinding.getValue(getFacesContext());
+	assertNotNull(map);
+
+	Iterator keys = map.keySet().iterator();
+	Float 
+	    key1 = new Float(3.1415),
+	    key2 = new Float(3.14),
+	    key3 = new Float(6.02),
+	    key4 = new Float(0.00001);
+	Object 	    
+	    curKey = null,
+	    value = null;
+
+	while (keys.hasNext()) {
+	    assertTrue((curKey = keys.next()) instanceof Float);
+	    if (null != (value = map.get(curKey))) {
+		assertTrue(value instanceof SimpleBean);
+	    }
+	}
+
+	assertTrue("map.get(key1) not a SimpleBean",
+		   map.get(key1) instanceof SimpleBean);
+	assertTrue("map.get(key2) not a SimpleBean",
+		   map.get(key2) instanceof SimpleBean);
+	assertTrue("map.get(key3) not a SimpleBean",
+		   map.get(key3) instanceof SimpleBean);
+	assertNull("map.get(key4) not null",map.get(key4));
+
+	valueBinding = application.getValueBinding("crazyMap");
+	assertNotNull(valueBinding);
+	
+	map = (Map) valueBinding.getValue(getFacesContext());
+	assertNotNull(map);
+
+	keys = map.keySet().iterator();
+	while (keys.hasNext()) {
+	    assertTrue((curKey = keys.next()) instanceof String);
+	    if (null != (value = map.get(curKey))) {
+		assertTrue(value instanceof Map);
+		nestedMap = (Map) value;
+		assertTrue("nestedMap.get(key1) not a SimpleBean",
+			   nestedMap.get(key1) instanceof SimpleBean);
+		assertTrue("nestedMap.get(key2) not a SimpleBean",
+			   nestedMap.get(key2) instanceof SimpleBean);
+		assertTrue("nestedMap.get(key3) not a SimpleBean",
+			   nestedMap.get(key3) instanceof SimpleBean);
+		assertNull("nestedMap.get(key4) not null",
+			   nestedMap.get(key4));
+	    }
+	}
+	assertTrue("map.get(one) not a Map",
+		   map.get("one") instanceof Map);
+	assertTrue("map.get(two) not a Map",
+		   map.get("two") instanceof Map);
+	assertNull("map.get(three) not null", map.get("three"));
+
+
 
     }
 

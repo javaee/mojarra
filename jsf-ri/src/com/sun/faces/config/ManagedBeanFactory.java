@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.9 2003/10/13 17:07:36 eburns Exp $
+ * $Id: ManagedBeanFactory.java,v 1.10 2003/10/13 21:50:47 eburns Exp $
  */
 
 /*
@@ -114,6 +114,29 @@ public class ManagedBeanFactory extends Object {
         ConfigManagedBeanProperty cmp = null;
         ConfigManagedBeanPropertyValue cmpv = null;
         Object value;
+
+	if (null != (cmp = managedBean.getListOrMap())) {
+	    // if a managed bean is a List or a Map, it may not have
+	    // properties.
+	    if (0 != props.size()) {
+		Object[] obj = new Object[1];
+		obj[0] = managedBean.getManagedBeanClass();
+		throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
+	    }
+
+	    if (cmp.hasValuesArray()) {
+		try {
+		    copyListEntriesFromConfigToList(cmp, (List) bean);
+		}
+		catch (ClassNotFoundException cnfe) {
+		    Object[] obj = new Object[1];
+		    obj[0] = managedBean.getManagedBeanClass();
+		    throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), cnfe);
+		}
+	    } else if (cmp.hasMapEntries()) {
+		copyMapEntriesFromConfigToMap(cmp, (Map) bean);
+	    }
+	}
         
         while (iter.hasNext()) {
             value = null;
@@ -256,8 +279,6 @@ public class ManagedBeanFactory extends Object {
 	List
 	    valuesForBean = null,
 	    valuesFromConfig = null;
-	String valueClass = null;
-	int start = 0;
 	Class 
 	    valueType = java.lang.String.class,
 	    propertyType = null;
@@ -326,38 +347,8 @@ public class ManagedBeanFactory extends Object {
 	// at this point valuesForBean contains the existing values from
 	// the bean, or no values if the bean had no values.  In any
 	// case, we can proceed to add values from the config file.
+	valueType = copyListEntriesFromConfigToList(cmp, valuesForBean);
 	
-	valuesFromConfig = cmp.getValues();
-	cmpv = (ConfigManagedBeanPropertyValue)valuesFromConfig.get(0);
-	
-	// pull out the value-class
-	if (cmpv.getValueCategory() == 
-	    ConfigManagedBeanPropertyValue.VALUE_CLASS) {
-	    valueClass = (String) cmpv.getValue();
-	    start = 1;
-	    valueType = getValueClassConsideringPrimitives(valueClass);
-	}
-	
-	// go through the values from the config and copy them to the
-	// valuesForBean.
-	for (int i = start, size = valuesFromConfig.size(); 
-	     i < size; i++) {
-	    cmpv = (ConfigManagedBeanPropertyValue)valuesFromConfig.get(i);
-	    if (cmpv.getValueCategory() == 
-		ConfigManagedBeanPropertyValue.VALUE_REF) {
-		value = getValueRef((String)cmpv.getValue());
-	    } else if (cmpv.getValueCategory() == 
-		       ConfigManagedBeanPropertyValue.NULL_VALUE) {
-		value = null;
-	    }
-	    else {
-		value = cmpv.getValue();
-	    }
-	    // convert the value if necessary
-	    value = getConvertedValueConsideringPrimitives(value, valueType);
-
-	    valuesForBean.add(value);
-	}
 	// at this point valuesForBean has the values to be set into the
 	// bean. 
 
@@ -392,6 +383,47 @@ public class ManagedBeanFactory extends Object {
 	}
 
 	return result;
+    }
+
+    protected Class copyListEntriesFromConfigToList(ConfigManagedBeanProperty cmp,
+						    List valuesForBean) throws ClassNotFoundException {
+	List valuesFromConfig = cmp.getValues();
+	String valueClass = null;
+	Class valueType = java.lang.String.class;
+	Object value = null;
+	ConfigManagedBeanPropertyValue cmpv = 
+	    (ConfigManagedBeanPropertyValue)valuesFromConfig.get(0);
+	int start = 0;
+	
+	// pull out the value-class
+	if (cmpv.getValueCategory() == 
+	    ConfigManagedBeanPropertyValue.VALUE_CLASS) {
+	    valueClass = (String) cmpv.getValue();
+	    start = 1;
+	    valueType = getValueClassConsideringPrimitives(valueClass);
+	}
+	
+	// go through the values from the config and copy them to the
+	// valuesForBean.
+	for (int i = start, size = valuesFromConfig.size(); 
+	     i < size; i++) {
+	    cmpv = (ConfigManagedBeanPropertyValue)valuesFromConfig.get(i);
+	    if (cmpv.getValueCategory() == 
+		ConfigManagedBeanPropertyValue.VALUE_REF) {
+		value = getValueRef((String)cmpv.getValue());
+	    } else if (cmpv.getValueCategory() == 
+		       ConfigManagedBeanPropertyValue.NULL_VALUE) {
+		value = null;
+	    }
+	    else {
+		value = cmpv.getValue();
+	    }
+	    // convert the value if necessary
+	    value = getConvertedValueConsideringPrimitives(value, valueType);
+	    
+	    valuesForBean.add(value);
+	}
+	return valueType;
     }
 
     /**
@@ -458,7 +490,17 @@ public class ManagedBeanFactory extends Object {
 	// bean, or no entries if the bean had no entries.  In any case,
 	// we can proceed to add values from the config file.
 	
-	valuesFromConfig = cmp.getMapEntries();
+	copyMapEntriesFromConfigToMap(cmp, result);
+	
+	return result;
+    }
+    
+    void copyMapEntriesFromConfigToMap(ConfigManagedBeanProperty cmp, 
+				       Map result) {
+	Object value = null;
+	List valuesFromConfig = cmp.getMapEntries();
+	ConfigManagedPropertyMap cmpm = null;
+
 	for (int i = 0, len = valuesFromConfig.size(); i < len; i++) {
 	    cmpm = (ConfigManagedPropertyMap) valuesFromConfig.get(i);
 	    if (cmpm.getValueCategory() == ConfigManagedPropertyMap.VALUE_REF){
@@ -473,8 +515,6 @@ public class ManagedBeanFactory extends Object {
 	    }
 	    result.put(cmpm.getKey(), value);
 	}
-
-	return result;
     }
 
     private Class getValueClassConsideringPrimitives(String valueClass) throws ClassNotFoundException {
@@ -505,7 +545,7 @@ public class ManagedBeanFactory extends Object {
     }
 
     private Object getConvertedValueConsideringPrimitives(Object value,
-							  Class valueType) throws Exception {
+							  Class valueType) throws FacesException {
 	if (null != value && null != valueType) {
 	    if (valueType == Boolean.TYPE || 
 		valueType == java.lang.Boolean.class) {
@@ -533,7 +573,7 @@ public class ManagedBeanFactory extends Object {
 		value = new Long(value.toString());
 	    } else if (valueType == String.class) {
 	    }
-	    else {
+	    else if (!valueType.isAssignableFrom(value.getClass())) {
 		Object[] obj = new Object[1];
 		obj[0] = value.toString();
 		throw new FacesException(Util.getExceptionMessage(

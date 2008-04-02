@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config>
+
+  <managed-bean>
+    <managed-bean-name>SimpleBean</managed-bean-name>
+    <managed-bean-class>com.sun.faces.config.SimpleBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>simpleProperty</property-name>
+      <value>Bobby Orr</value>
+    </managed-property>
+  </managed-bean>
+
+  <!-- bean that is a List of Integers -->
+  <managed-bean>
+    <managed-bean-name>simpleList</managed-bean-name>
+    <managed-bean-class>java.util.ArrayList</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <list-entries>
+      <value-class>java.lang.Integer</value-class>
+      <value>10</value>
+      <value>20</value>
+      <value>60</value>
+      <null-value/>
+    </list-entries>
+  </managed-bean>
+
+  <!-- bean that is a List of SimpleBeans -->
+  <managed-bean>
+    <managed-bean-name>objectList</managed-bean-name>
+    <managed-bean-class>java.util.ArrayList</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <list-entries>
+      <value-class>com.sun.faces.config.SimpleBean</value-class>
+      <value-ref>SimpleBean</value-ref>
+      <value-ref>SimpleBean</value-ref>
+      <value-ref>SimpleBean</value-ref>
+      <null-value/>
+    </list-entries>
+  </managed-bean>
+
+  <!-- bean that is a Map of Maps of Float/SimpleBean pairs -->
+  <managed-bean>
+    <managed-bean-name>crazyMap</managed-bean-name>
+    <managed-bean-class>java.util.HashMap</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <map-entries>
+      <key-class>java.lang.String</key-class>
+      <value-class>java.util.Map</value-class>
+      <map-entry>
+        <key>one</key>
+        <value-ref>floatMap</value-ref>
+      </map-entry>
+      <map-entry>
+        <key>two</key>
+        <value-ref>floatMap</value-ref>
+      </map-entry>
+      <map-entry>
+        <key>three</key>
+        <null-value/>
+      </map-entry>
+    </map-entries>
+  </managed-bean>
+
+
+  <!-- bean that is a Map of SimpleBeans -->
+  <managed-bean>
+    <managed-bean-name>floatMap</managed-bean-name>
+    <managed-bean-class>java.util.HashMap</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <map-entries>
+      <key-class>java.lang.Float</key-class>
+      <value-class>com.sun.faces.config.SimpleBean</value-class>
+      <map-entry>
+        <key>3.1415</key>
+        <value-ref>SimpleBean</value-ref>
+      </map-entry>
+      <map-entry>
+        <key>3.14</key>
+        <value-ref>SimpleBean</value-ref>
+      </map-entry>
+      <map-entry>
+        <key>6.02</key>
+        <value-ref>SimpleBean</value-ref>
+      </map-entry>
+      <map-entry>
+        <key>0.00001</key>
+        <null-value/>
+      </map-entry>
+    </map-entries>
+  </managed-bean>
+
+
+</faces-config>

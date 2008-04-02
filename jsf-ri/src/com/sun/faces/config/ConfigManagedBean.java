@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBean.java,v 1.8 2003/09/15 16:29:20 rkitain Exp $
+ * $Id: ConfigManagedBean.java,v 1.9 2003/10/13 21:50:46 eburns Exp $
  */
 
 /*
@@ -46,6 +46,7 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
     private String managedBeanScope;
     private String managedBeanCreate;
 
+    private ConfigManagedBeanProperty listOrMap;
     private HashMap properties = null;
 
     public String getManagedBeanId() {
@@ -74,6 +75,13 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
     }
     public void setManagedBeanCreate(String managedBeanCreate) {
         this.managedBeanCreate = managedBeanCreate;
+    }
+
+    public void setListOrMap(ConfigManagedBeanProperty newListOrMap) throws FacesException {
+	listOrMap = newListOrMap;
+    }
+    public ConfigManagedBeanProperty getListOrMap() {
+	return listOrMap;
     }
     
     public void addProperty(ConfigManagedBeanProperty property) throws FacesException {
