@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.5 2002/08/01 22:59:57 rkitain Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.6 2002/09/20 20:47:17 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.HashMap;
  *  in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.5 2002/08/01 22:59:57 rkitain Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.6 2002/09/20 20:47:17 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.LifecycleFactory
  *
@@ -140,6 +140,10 @@ public void addLifecycle(String lifecycleId, Lifecycle lifecycle)
 {
     if (lifecycleId == null || lifecycle == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+    }
+    if (null != lifecycleMap.get(lifecycleId)) {
+	Object params[] = { lifecycleId };
+	throw new IllegalArgumentException(Util.getExceptionMessage(Util.LIFECYCLE_ID_ALREADY_ADDED_ID, params));
     }
 
     lifecycleMap.put(lifecycleId, new LifecycleWrapper(lifecycle, false));

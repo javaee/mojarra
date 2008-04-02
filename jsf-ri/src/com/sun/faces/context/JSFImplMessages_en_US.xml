@@ -20,6 +20,7 @@
   <message messageId="com.sun.faces.TYPECONVERSION_ERROR" severity="4" summary="Conversion Error." >
       <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
   </message>
+
   <message messageId="com.sun.faces.MODELUPDATE_ERROR" severity="4" summary="Model Update failure." >
       <detail>Error updating value {0} for model {1} : Exception: [2].</detail>
   </message>
@@ -80,15 +81,21 @@
       <detail>Component Type: '{0}' is not supported for this renderer.</detail>
   </message>
 
-  <message messageId="com.sun.faces.MISSING_RESOURCE_ERROR" severity="3" summary="Missing Resource." >
+   <message messageId="com.sun.faces.MISSING_RESOURCE_ERROR" severity="3" summary="Missing Resource." >
       <detail>Can't get ResourceBundle.</detail>
   </message>
 
   <message messageId="com.sun.faces.MISSING_CLASS_ERROR" severity="1" summary="Missing Class." >
       <detail>Can't load class '{0}'.</detail>
   </message>
+
   <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" severity="3" summary="Component Not Found.">
       <detail>Can't find component for identifier: '{0}'.</detail>
   </message>
+
+  <message messageId="com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED" severity="3" summary="LifecycleId already added.">
+      <detail>Lifecylce id '{0}' has already been added.</detail>
+  </message>
+
 </messages>
 

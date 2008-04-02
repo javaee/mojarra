@@ -90,5 +90,10 @@
   <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" severity="3" summary="Component Not Found.">
       <detail>Component fuer Bezeichner: '{0}' is nicht gefunden.</detail>
   </message>
+
+  <message messageId="com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED" severity="3" summary="LifecycleId already added.">
+      <detail>Lifecylce id '{0}' ist schon addiert.</detail>
+  </message>
+
 </messages>
 

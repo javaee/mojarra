@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleFactoryImpl.java,v 1.2 2002/06/26 18:43:24 eburns Exp $
+ * $Id: TestLifecycleFactoryImpl.java,v 1.3 2002/09/20 20:47:19 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleFactoryImpl.java,v 1.2 2002/06/26 18:43:24 eburns Exp $
+ * @version $Id: TestLifecycleFactoryImpl.java,v 1.3 2002/09/20 20:47:19 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -190,6 +190,21 @@ public void testIllegalArgumentException()
     }
     catch (UnsupportedOperationException e) {
 	exceptionThrown = true;
+    }
+    assertTrue(exceptionThrown);
+
+    exceptionThrown = false;
+    // Try to get an IllegalArgumentException
+    try {
+	LifecycleImpl lifecycle = new LifecycleImpl();
+	factory.addLifecycle("bogusId", lifecycle);
+	factory.addLifecycle("bogusId", lifecycle);
+    }
+    catch (IllegalArgumentException e) {
+	exceptionThrown = true;
+    }
+    catch (UnsupportedOperationException e) {
+	assertTrue(false);
     }
     assertTrue(exceptionThrown);
 }

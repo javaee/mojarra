@@ -92,5 +92,10 @@
   <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" severity="3" summary="Component Not Found.">
       <detail>Can't find component for identifier: '{0}'.</detail>
   </message>
+
+  <message messageId="com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED" severity="3" summary="LifecycleId already added.">
+      <detail>Lifecylce id '{0}' has already been added.</detail>
+  </message>
+
 </messages>
 
