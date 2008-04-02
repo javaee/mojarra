@@ -147,10 +147,10 @@ necessary to generate required classes.
       <!-- <jvmarg line="${debug.jvm.args}"/> -->
       <classpath refid="compile.classpath" />
       <classpath refid="run.classpath" />
-      <arg line="-f ${standard-html-renderkit}"/>
-      <arg line="-e ${standard-html-renderkit-impl}"/>
-      <arg line="-d ${build.generate}"/>
-      <arg line="-c ${basedir}/COPYRIGHT"/>
+      <arg value="-f"/> <arg path="${standard-html-renderkit}"/>
+      <arg value="-e"/> <arg path="${standard-html-renderkit-impl}"/>
+      <arg value="-d"/> <arg path="${build.generate}"/>
+      <arg value="-c"/> <arg path="${basedir}/COPYRIGHT"/>
     </java>
 
     <java fork="yes" 
@@ -158,10 +158,10 @@ necessary to generate required classes.
       <!-- <jvmarg line="${debug.jvm.args}"/> -->
       <classpath refid="compile.classpath" />
       <classpath refid="run.classpath" />
-      <arg line="-f ${standard-html-renderkit}"/>
-      <arg line="-e ${standard-html-renderkit-impl}"/>
-      <arg line="-d ${build.generate}"/>
-      <arg line="-c ${basedir}/COPYRIGHT"/>
+      <arg value="-f"/> <arg path="${standard-html-renderkit}"/>
+      <arg value="-e"/> <arg path="${standard-html-renderkit-impl}"/>
+      <arg value="-d"/> <arg path="${build.generate}"/>
+      <arg value="-c"/> <arg path="${basedir}/COPYRIGHT"/>
     </java>
 
 
