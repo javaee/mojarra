@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+
+<faces-config>
+
+  <navigation-rule>
+    <from-tree-id>/greeting.jsp</from-tree-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/response.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-tree-id>/response.jsp</from-tree-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/greeting.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+</faces-config>

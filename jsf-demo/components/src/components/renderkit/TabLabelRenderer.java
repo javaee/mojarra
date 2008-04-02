@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.6 2003/04/08 00:40:55 jvisvanathan Exp $
+ * $Id: TabLabelRenderer.java,v 1.7 2003/05/05 15:26:13 rkitain Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ import org.apache.commons.beanutils.ConversionException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.6 2003/04/08 00:40:55 jvisvanathan Exp $
+ * @version $Id: TabLabelRenderer.java,v 1.7 2003/05/05 15:26:13 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -199,7 +199,6 @@ public class TabLabelRenderer extends BaseRenderer {
 	if (context == null || component == null) {
 	    throw new NullPointerException("Null Faces context or component parameter"); 
         }
-System.out.println("TABLABELRENDERER:DECODE:");
 
         // Was our command the one that caused this submission?
         // we don' have to worry about getting the value from request parameter
@@ -244,7 +243,6 @@ System.out.println("TABLABELRENDERER:DECODE:");
         
         // set the "tab" component's "id" in the event...
 
-System.out.println("TABLABELRENDERER:EVENT QUEUED:"+tabComponent.getClientId(context));
         context.addFacesEvent
             (new PaneSelectedEvent(component, tabComponent.getClientId(
                 context)));
