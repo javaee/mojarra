@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactory.java,v 1.11 2003/02/20 22:46:21 ofung Exp $
+ * $Id: FacesContextFactory.java,v 1.12 2003/03/19 23:40:04 eburns Exp $
  */
 
 /*
@@ -11,9 +11,6 @@ package javax.faces.context;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletResponse;
 
 
 /**
@@ -43,11 +40,12 @@ public abstract class FacesContextFactory {
      * and response objects, utilizing the specified {@link Lifecycle}
      * instance, for this web application.</p>
      *
-     * @param context The <code>ServletContext</code> that is associated
-     *  with this web application
-     * @param request The <code>ServletRequest</code> that is to be
-     *  processed
-     * @param response The <code>ServletResponse</code> that is to be
+     * @param context In servlet environments, the
+     * <code>ServletContext</code> that is associated with this web
+     * application
+     * @param request In servlet environments, the
+     * <code>ServletRequest</code> that is to be processed
+     * @param response In servlet environments, the <code>ServletResponse</code> that is to be
      *  created
      * @param lifecycle The {@link Lifecycle} instance being used
      *  to process this request
@@ -58,8 +56,8 @@ public abstract class FacesContextFactory {
      *  are <code>null</code>
      */
     public abstract FacesContext getFacesContext
-        (ServletContext context, ServletRequest request,
-         ServletResponse response, Lifecycle lifecycle)
+        (Object context, Object request,
+         Object response, Lifecycle lifecycle)
         throws FacesException;
 
 
