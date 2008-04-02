@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.6 2003/09/30 13:52:31 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.7 2003/10/07 01:45:17 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
@@ -36,6 +37,8 @@ public class GenerateConcreteClasses extends GenerateBase {
     // Attribute Instance Variables
     
     // Relationship Instance Variables
+
+    protected Map defaultPrimitiveValues = null;
     
     //
     // Constructors and Initializers    
@@ -43,6 +46,16 @@ public class GenerateConcreteClasses extends GenerateBase {
     
     public GenerateConcreteClasses() {
 	super();
+
+	defaultPrimitiveValues = new HashMap(7);
+	defaultPrimitiveValues.put("char", "Character.MIN_VALUE");
+	defaultPrimitiveValues.put("double", "Double.MIN_VALUE");
+	defaultPrimitiveValues.put("float", "Float.MIN_VALUE");
+	defaultPrimitiveValues.put("short", "Short.MIN_VALUE");
+	defaultPrimitiveValues.put("byte", "Byte.MIN_VALUE");
+	defaultPrimitiveValues.put("long", "Long.MIN_VALUE");
+	defaultPrimitiveValues.put("int", "Integer.MIN_VALUE");
+	defaultPrimitiveValues.put("boolean", "false");
     }
 
     //
@@ -222,13 +235,23 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    getOrIs = null,
 	    is = "is",
 	    get = "get";
-	
+
+	// attributes
 	while (iter.hasNext()) {
 	    attrName = ((String) iter.next()).trim();
 	    ivar = generateIvar(attrName);
 	    attrClass = ((String) attrs.get(attrName)).trim();
-	    result.append("  protected " + attrClass + " " + ivar + ";\n");
+	    // ivar declaration
+	    result.append("  protected " + attrClass + " " + ivar);
+	    // if it's a primitive
+	    if (defaultPrimitiveValues.containsKey(attrClass)) {
+		// assign the default value
+		result.append(" = " + 
+			      (String) defaultPrimitiveValues.get(attrClass));
+	    }
+	    result.append(";\n");
 
+	    // setter
 	    result.append("  public void set" + 
 			  Character.toUpperCase(attrName.charAt(0)) +
 			  attrName.substring(1) + "(" + 
@@ -242,6 +265,7 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    else {
 		getOrIs = get;
 	    }
+	    // getter
 	    result.append("  public " + attrClass + " " + getOrIs + 
 			  Character.toUpperCase(attrName.charAt(0)) +
 			  attrName.substring(1) + "() {\n");
