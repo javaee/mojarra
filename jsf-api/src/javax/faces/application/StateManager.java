@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.17 2003/09/15 23:18:49 jvisvanathan Exp $
+ * $Id: StateManager.java,v 1.18 2003/09/16 16:48:02 eburns Exp $
  */
 
 /*
@@ -243,8 +243,6 @@ public abstract class StateManager {
      * @param context the {@link FacesContext} for this view.  This is
      * used to obtain the <code>ResponseWriter</code> to which to write
      * the response, and the <code>viewId</code> of this view.
-     *
-     * @param content the rendered content of this view.  
      *
      * @param state the state of the rendered view, obtained from
      * {@link #saveSerializedView}.
