@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.58 2003/08/28 08:25:54 rkitain Exp $
+ * $Id: ButtonRenderer.java,v 1.59 2003/08/29 17:46:41 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.58 2003/08/28 08:25:54 rkitain Exp $
+ * @version $Id: ButtonRenderer.java,v 1.59 2003/08/29 17:46:41 eburns Exp $
  *
  */
 
@@ -87,6 +87,13 @@ public class ButtonRenderer extends BaseCommandRenderer {
 	    throw new NullPointerException(Util.getExceptionMessage(
 				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+
+        // If the component is disabled, do not change the value of the
+        // component, since its state cannot be changed.
+        if (Util.componentIsDisabledOnReadonly(component)) {
+            return;
+        } 
+
 
         // Was our command the one that caused this submission?
         // we don' have to worry about getting the value from request parameter

@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.53 2003/08/22 21:02:57 rkitain Exp $
+ * $Id: CheckboxRenderer.java,v 1.54 2003/08/29 17:46:41 eburns Exp $
  *
  */
 
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.53 2003/08/22 21:02:57 rkitain Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.54 2003/08/29 17:46:41 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,6 +97,14 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+        // If the checkbox disabled, nothing would be sent in the
+        // request even if the checkbox is checked. So do not change the
+        // value of the checkbox, if it is disabled since its state
+        // cannot be changed.
+        if (Util.componentIsDisabledOnReadonly(component)) {
+            return;
+        } 
+
         String clientId = component.getClientId(context);
         Assert.assert_it(clientId != null );
 
@@ -124,14 +132,6 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         UIInput uiInput = (UIInput) component;
         Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
         String newValue = (String)requestParameterMap.get(clientId);
-        // If the checkbox disabled, nothing would be sent in the request even  
-        // if the checkbox is checked. So do not change the value of the 
-        // checkbox, if it is disabled since its state cannot be changed.
-        Object disabled = component.getAttribute("disabled");
-        if (newValue == null && (disabled != null && (disabled.equals("true") ||
-                disabled.equals(Boolean.TRUE)))) {
-            return;
-        } 
         try {
             convertedValue = getConvertedValue(context, component, newValue);
         } catch (ConverterException ce) {

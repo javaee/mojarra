@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.54 2003/08/25 22:36:15 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.55 2003/08/29 17:46:42 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.54 2003/08/25 22:36:15 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.55 2003/08/29 17:46:42 eburns Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -83,6 +83,12 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 	UICommand command = (UICommand) component;
+
+        // If the component is disabled, do not change the value of the
+        // component, since its state cannot be changed.
+        if (Util.componentIsDisabledOnReadonly(component)) {
+            return;
+        } 
 
         // Was our command the one that caused this submission?  we don'
         // have to worry about getting the value from request parameter

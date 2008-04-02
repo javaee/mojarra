@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.22 2003/08/25 15:36:41 rkitain Exp $
+ * $Id: MenuRenderer.java,v 1.23 2003/08/29 17:46:42 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -84,6 +84,12 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+
+        // If the component is disabled, do not change the value of the
+        // component, since its state cannot be changed.
+        if (Util.componentIsDisabledOnReadonly(component)) {
+            return;
+        } 
 
         setPreviousValue(component, ((UIInput)component).currentValue(context));
 

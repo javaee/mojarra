@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.52 2003/08/27 22:52:57 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.53 2003/08/29 17:46:42 eburns Exp $
  */
 
 /*
@@ -209,6 +209,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
             // instances or subclasses of UIInput.
             return;
         }    
+
+        // If the component is disabled, do not change the value of the
+        // component, since its state cannot be changed.
+        if (Util.componentIsDisabledOnReadonly(component)) {
+            return;
+        } 
         
         String clientId = component.getClientId(context);
         Assert.assert_it(clientId != null );

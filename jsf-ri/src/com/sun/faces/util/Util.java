@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.81 2003/08/28 15:52:34 rlubke Exp $
+ * $Id: Util.java,v 1.82 2003/08/29 17:46:44 eburns Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.81 2003/08/28 15:52:34 rlubke Exp $
+ * @version $Id: Util.java,v 1.82 2003/08/29 17:46:44 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -906,6 +906,30 @@ private Util()
 	    return true;
         }
         return false;
+    }
+
+    public static boolean componentIsDisabledOnReadonly(UIComponent component) {
+	Object disabledOrReadonly = null;
+	boolean result = false;
+	if (null != (disabledOrReadonly = component.getAttribute("disabled"))){
+	    if (disabledOrReadonly instanceof String) {
+		result = ((String)disabledOrReadonly).equalsIgnoreCase("true");
+	    }
+	    else {
+		result = disabledOrReadonly.equals(Boolean.TRUE);
+	    }
+	}
+	if ((result == false) &&
+	    null != (disabledOrReadonly = component.getAttribute("readonly"))){
+	    if (disabledOrReadonly instanceof String) {
+		result = ((String)disabledOrReadonly).equalsIgnoreCase("true");
+	    }
+	    else {
+		result = disabledOrReadonly.equals(Boolean.TRUE);
+	    }
+	}
+	    
+	return result;
     }
     
     public static String parseStringFromReader(StringReader reader) 
