@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.83 2006/11/17 17:37:06 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.84 2006/11/17 23:19:16 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -500,8 +500,15 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
         requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, 
                 component);
-        Object newValue = context.getApplication().getExpressionFactory().
-              coerceToType(itemValue, type);
+        Object newValue = null;
+        try {
+            newValue = context.getApplication().getExpressionFactory().
+                 coerceToType(itemValue, type);
+        } catch (Exception e) {
+            // this should catch an ELException, but there is a bug
+            // in ExpressionFactory.coerceToType() in GF
+            newValue = null;
+        }
 
         isSelected = isSelected(newValue, valuesArray);
 
@@ -684,21 +691,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                         return true;
                     }
                 } else if (value.equals(itemValue)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-
-    }
-
-
-    boolean isSelected(String itemValue, Object[] values) {
-
-        if (null != values) {
-            int len = values.length;
-            for (int i = 0; i < len; i++) {
-                if (values[i].equals(itemValue)) {
                     return true;
                 }
             }

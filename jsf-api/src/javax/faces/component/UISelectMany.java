@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.58 2006/03/02 18:42:26 rogerk Exp $
+ * $Id: UISelectMany.java,v 1.59 2006/11/17 23:19:15 rlubke Exp $
  */
 
 /*
@@ -495,8 +495,16 @@ public class UISelectMany extends UIInput {
             } else {
                 //Coerce the item value type before comparing values.
                 Class type = value.getClass();
-                Object newValue = getFacesContext().getApplication().
+                Object newValue = null;
+                try {
+                newValue = getFacesContext().getApplication().
                     getExpressionFactory().coerceToType(item.getValue(), type);
+                } catch (Exception e) {
+                    // this should catch an ELException, but there is a bug
+                    // in ExpressionFactory.coerceToType() in GF
+                    newValue = null;
+                }
+                
                 if (value.equals(newValue)) {
                     return (true);
                 }
