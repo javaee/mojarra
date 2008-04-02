@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.7 2003/05/13 22:47:32 eburns Exp $
+ * $Id: ValidatorTag.java,v 1.8 2003/05/20 23:06:56 jvisvanathan Exp $
  */
 
 /*
@@ -15,6 +15,11 @@ import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
+
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Application;
+import javax.faces.FactoryFinder;
+
 
 
 /**
@@ -49,23 +54,20 @@ public class ValidatorTag extends TagSupport {
 
     // ------------------------------------------------------------- Attributes
 
-
     /**
-     * <p>The fully qualified class name of the {@link Validator}
-     * instance to be created.</p>
+     * <p>The identifier of the {@link Validator} instance to be created.</p>
      */
-    private String type = null;
-
-
+    private String id = null;
+    
     /**
-     * <p>Set the fully qualified class name of the
-     * {@link Validator} instance to be created.
+     * <p>Set the identifer of the {@link Validator} instance to be created.
      *
-     * @param type The new class name
+     * @param id The new identifier of the validator instance to be
+     *                    created.
      */
-    public void setType(String type) {
+    public void setId(String id) {
 
-        this.type = type;
+        this.id = id;
 
     }
 
@@ -112,7 +114,7 @@ public class ValidatorTag extends TagSupport {
      */
     public void release() {
 
-        this.type = null;
+        this.id = null;
 
     }
 
@@ -130,17 +132,13 @@ public class ValidatorTag extends TagSupport {
         throws JspException {
 
         try {
-            ClassLoader classLoader =
-                Thread.currentThread().getContextClassLoader();
-            if (classLoader == null) {
-                classLoader = this.getClass().getClassLoader();
-            }
-            Class clazz = classLoader.loadClass(type);
-            return ((Validator) clazz.newInstance());
+            ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.
+                getFactory(FactoryFinder.APPLICATION_FACTORY);
+	    Application application = aFactory.getApplication();
+            return (application.getValidator(id));
         } catch (Exception e) {
             throw new JspException(e);
         }
-
     }
 
 
