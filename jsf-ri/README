@@ -311,6 +311,41 @@ Known Issues With This Release
 * "disabledClass" property specified on SelectOneRadio tag is not applied
   to the individual select item  (options). 
 
+* If you're using component bindings pointing to beans stored in session
+  scope with values initialized from the JSP page, you may run into some
+  difficulties in the "edit-compile-debug" cycle.
+
+  Consider this JSP fragment:
+
+  <h:commandButton binding="#{backingBean.button1}" value="press me" />
+
+  Let's say that "backingBean" is stored in session scope.  The first
+  time the browser views this page, backingBean gets instantiated, and
+  initialized with the value "press me".  Now, let's say the web-app is
+  being authored in place, on the web container.  In other words, any
+  changes made to the JSP are seen "live" on the server.  If you change
+  the JSP to alter the value of the button to be different, say like
+  this:
+
+  <h:commandButton binding="#{backingBean.button1}" value="click me" />
+
+  and save the page, then re-load the page in the browser, you'll see
+  that the button still shows up with the old label, "press me".  This
+  is because the spec is designed to only initialize the backing bean
+  with a value the first time the page is loaded, and the bean is still
+  sitting in the session with the old value.  There are several
+  workarounds to this problem.
+
+  1. use "request" or "none" scope for your backing bean
+
+  2. use java code to push the value into the bean, rather than JSP
+
+  3. ask the user to re-start their browser after modifying the JSP
+     page.
+
+  4. find a way to invalidate the session when the JSP page has changed.
+
+
 Legal Notice
 ============
 

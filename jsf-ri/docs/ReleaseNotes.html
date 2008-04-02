@@ -673,6 +673,65 @@ This is a non-standard feature, so don't count on it.</p> </p></li>
           <li><p><code>disabledClass</code> property specified on 
           <code>SelectOneRadio</code> tag is not applied to the individual
           <code>selectItem</code> (options).</p></li>
+
+	  <li>
+
+          <p>If you're using component bindings pointing to beans stored
+          in session scope with values initialized from the JSP page,
+          you may run into some difficulties in the "edit-compile-debug"
+          cycle.</p>
+
+          <p>Consider this JSP fragment:</p>
+
+          <p><code>  
+
+            &lt;h:commandButton binding="#{backingBean.button1}" value="press me" /&gt;
+
+          </code></p>
+
+          <p>Let's say that "backingBean" is stored in session scope.
+          The first time the browser views this page, backingBean gets
+          instantiated, and initialized with the value "press me".  Now,
+          let's say the web-app is being authored in place, on the web
+          container.  In other words, any changes made to the JSP are
+          seen "live" on the server.  If you change the JSP to alter the
+          value of the button to be different, say like this: </p>
+
+          <p><code>  
+
+            &lt;h:commandButton binding="#{backingBean.button1}" value="click me" /&gt;
+
+          </code></p>
+
+          <p>and save the page, then re-load the page in the browser,
+          you'll see that the button still shows up with the old label,
+          "press me".  This is because the spec is designed to only
+          initialize the backing bean with a value the first time the
+          page is loaded, and the bean is still sitting in the session
+          with the old value.  There are several workarounds to this
+          problem.</p>
+
+          <ol>
+
+	  <li><p>  use "request" or "none" scope for your backing bean
+	  </p></li>
+
+	  <li><p> use java code to push the value into the bean,
+          rather than JSP
+	  </p></li>
+
+           <li><p>ask the user to re-start their browser after modifying
+          the JSP page.
+	  </p></li>
+
+	  <li><p> find a way to invalidate the session when the JSP page
+          has changed.
+	  </p></li>
+
+          </ol>
+
+	  </li>
+
   
 	</ul>
 
