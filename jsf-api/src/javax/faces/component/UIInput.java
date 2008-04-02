@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.20 2003/06/20 23:58:54 craigmcc Exp $
+ * $Id: UIInput.java,v 1.21 2003/06/21 00:44:25 craigmcc Exp $
  */
 
 /*
@@ -17,7 +17,6 @@ import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
@@ -116,8 +115,8 @@ public class UIInput extends UIOutput {
      *     <code>false</code>, take no further action.</li>
      * <li>If the <code>valueRef</code> property of this component
      *     is <code>null</code>, take no further action.</li>
-     * <li>Retrieve the {@link Application} instance for this web application
-     *     from {@link ApplicationFactory}.</li>
+     * <li>Retrieve the {@link Application} instance for this web application.
+     *     </ul>
      * <li>Ask it for a {@link ValueBinding} for the <code>valueRef</code>
      *     expression.</li>
      * <li>Use the <code>setValue()</code> method of the
@@ -158,9 +157,7 @@ public class UIInput extends UIOutput {
             return;
         }
         try {
-            ApplicationFactory factory = (ApplicationFactory)
-                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-            Application application = factory.getApplication();
+	    Application application = context.getApplication();
             ValueBinding binding = application.getValueBinding(valueRef);
             binding.setValue(context, getValue());
             setValue(null);

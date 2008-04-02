@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.40 2003/05/02 05:04:54 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.41 2003/06/21 00:44:27 craigmcc Exp $
  */
 
 /*
@@ -8,23 +8,6 @@
  */
 
 package javax.faces.webapp;
-
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.HashMap;
-import javax.faces.FactoryFinder;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.component.NamingContainer;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.tree.Tree;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.Tag;
 
 
 /**

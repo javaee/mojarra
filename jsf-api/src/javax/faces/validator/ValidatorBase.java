@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.12 2003/06/20 23:58:57 craigmcc Exp $
+ * $Id: ValidatorBase.java,v 1.13 2003/06/21 00:44:26 craigmcc Exp $
  */
 
 /*
@@ -20,7 +20,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
 import javax.faces.context.MessageResources;
 import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
 
 
 /**
@@ -89,9 +88,8 @@ abstract class ValidatorBase implements Validator {
     protected synchronized MessageResources getMessageResources() {
 
         if (resources == null) {
-            ApplicationFactory factory = (ApplicationFactory)
-                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-	    Application app = factory.getApplication();
+	    Application app =
+		FacesContext.getCurrentInstance().getApplication();
 	    try {
 		resources = app.getMessageResources
                     (MessageResources.FACES_API_MESSAGES);

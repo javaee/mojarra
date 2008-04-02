@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.25 2003/04/29 18:51:31 eburns Exp $
+ * $Id: UIOutput.java,v 1.26 2003/06/21 00:44:25 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.component;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
@@ -129,7 +128,7 @@ public class UIOutput extends UIComponentBase {
      * <li>If the <code>valueRef</code> property has been set,
      *     <ul>
      *     <li>Retrieve the {@link Application} instance for this web
-     *         application from {@link ApplicationFactory}.</li>
+     *         application.</li>
      *     <li>Ask it for a {@link ValueBinding} for the <code>valueRef</code>
      *         expression.</li>
      *     <li>Use the <code>getValue()</code> method of the
@@ -158,9 +157,7 @@ public class UIOutput extends UIComponentBase {
         }
         String valueRef = getValueRef();
         if (valueRef != null) {
-            ApplicationFactory factory = (ApplicationFactory)
-                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-            Application application = factory.getApplication();
+            Application application = context.getApplication();
             ValueBinding binding = application.getValueBinding(valueRef);
             return (binding.getValue(context));
         }

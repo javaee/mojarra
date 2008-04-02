@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.3 2003/05/13 22:47:32 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.4 2003/06/21 00:44:27 craigmcc Exp $
  */
 
 /*
@@ -21,7 +21,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.tree.Tree;
 import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
@@ -450,9 +449,8 @@ public abstract class UIComponentTag implements Tag {
 	    else {
 		// Create a new component instance
 		try {
-		    ApplicationFactory factory = (ApplicationFactory)
-			FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-		    Application app = factory.getApplication();
+		    Application app =
+			FacesContext.getCurrentInstance().getApplication();
 		    component = app.getComponent(getComponentType());
 		}
 		catch (FacesException e) {
