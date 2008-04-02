@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.1 2002/09/23 20:34:55 rkitain Exp $
+ * $Id: TestConverters.java,v 1.2 2003/02/04 16:19:19 edburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.1 2002/09/23 20:34:55 rkitain Exp $
+ * @version $Id: TestConverters.java,v 1.2 2003/02/04 16:19:19 edburns Exp $
  * 
  *
  */
@@ -127,7 +127,7 @@ public class TestConverters extends JspFacesTestCase
         root.addChild(text);
 
         ConverterFactoryImpl converterFactory = new ConverterFactoryImpl();
-        Converter converter = converterFactory.getConverter("date");
+        Converter converter = converterFactory.getConverter("Date");
 
         // date
         String stringToConvert = "Jan 1, 1967";
@@ -139,7 +139,7 @@ public class TestConverters extends JspFacesTestCase
         assertTrue(str.equals(stringToConvert));
 
         // time
-        converter = converterFactory.getConverter("time");
+        converter = converterFactory.getConverter("Time");
         text = new UIInput();
         text.setComponentId("my_input_time");
         stringToConvert = "10:10:10 AM";
@@ -150,7 +150,7 @@ public class TestConverters extends JspFacesTestCase
         assertTrue(str.equals(stringToConvert));
 
         // datetime
-        converter = converterFactory.getConverter("datetime");
+        converter = converterFactory.getConverter("DateTime");
         text = new UIInput();
         text.setComponentId("my_input_datetime");
         stringToConvert = "Jan 1, 1967 10:10:10 AM";
@@ -168,7 +168,7 @@ public class TestConverters extends JspFacesTestCase
         root.addChild(text);
 
         ConverterFactoryImpl converterFactory = new ConverterFactoryImpl();
-        Converter converter = converterFactory.getConverter("number");
+        Converter converter = converterFactory.getConverter("Number");
 
         String stringToConvert = "99.9";
         Object obj = converter.getAsObject(getFacesContext(), text,
@@ -186,7 +186,7 @@ public class TestConverters extends JspFacesTestCase
         root.addChild(text);
 
         ConverterFactoryImpl converterFactory = new ConverterFactoryImpl();
-        Converter converter = converterFactory.getConverter("boolean");
+        Converter converter = converterFactory.getConverter("Boolean");
 
         String stringToConvert = "true";
         Object obj = converter.getAsObject(getFacesContext(), text,

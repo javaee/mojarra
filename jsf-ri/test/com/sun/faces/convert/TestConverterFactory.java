@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverterFactory.java,v 1.1 2002/09/23 20:34:55 rkitain Exp $
+ * $Id: TestConverterFactory.java,v 1.2 2003/02/04 16:19:19 edburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.apache.cactus.ServletTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverterFactory.java,v 1.1 2002/09/23 20:34:55 rkitain Exp $
+ * @version $Id: TestConverterFactory.java,v 1.2 2003/02/04 16:19:19 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -75,8 +75,8 @@ public class TestConverterFactory extends ServletTestCase {
         // 1. Verify "getConverter" returns the same Converter instance
         //    if called multiple times with the same identifier.
         //  
-        Converter converter1 = converterFactory.getConverter("date");
-        Converter converter2 = converterFactory.getConverter("date");
+        Converter converter1 = converterFactory.getConverter("Date");
+        Converter converter2 = converterFactory.getConverter("Date");
         assertTrue(converter1 == converter2);
 
         // 2. Verify "addConverter" adds instances.. /
@@ -91,6 +91,17 @@ public class TestConverterFactory extends ServletTestCase {
             i++;
         }
         assertTrue(i == 3);
+        
+    }
+
+    public void testSpecCompliance() {
+        converterFactory = new ConverterFactoryImpl();
+
+        assertTrue(null != converterFactory.getConverter("Date"));
+        assertTrue(null != converterFactory.getConverter("DateFormat"));
+        assertTrue(null != converterFactory.getConverter("DateTime"));
+        assertTrue(null != converterFactory.getConverter("Number"));
+        assertTrue(null != converterFactory.getConverter("NumberFormat"));
         
     }
 

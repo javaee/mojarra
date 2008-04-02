@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterFactoryImpl.java,v 1.1 2002/09/23 20:31:22 rkitain Exp $
+ * $Id: ConverterFactoryImpl.java,v 1.2 2003/02/04 16:19:19 edburns Exp $
  */
 
 /*
@@ -107,6 +107,11 @@ public class ConverterFactoryImpl extends ConverterFactory {
 
         Converter converter = null;
         this.converterId = converterId;
+
+	// PENDING(): instead of doing this lazily, do it all at once at
+	// startup time.  The current implementation causes the XML file
+	// to be parsed for each new call to getConverter.  That seems
+	// ineffecient.
 
         // If an instance already exists, return it.
         //

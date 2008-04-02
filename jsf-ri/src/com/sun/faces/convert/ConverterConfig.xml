@@ -5,24 +5,32 @@
 <!-- Converter Id - Converter Class Name Mappings -->
 
     <converter>
-        <converter-id>date</converter-id>
+        <converter-id>Date</converter-id>
         <class>com.sun.faces.convert.DateConverter</class>
     </converter>
     <converter>
-        <converter-id>time</converter-id>
-        <class>com.sun.faces.convert.TimeConverter</class>
+        <converter-id>DateFormat</converter-id>
+        <class>com.sun.faces.convert.DateConverter</class>
     </converter>
     <converter>
-        <converter-id>datetime</converter-id>
+        <converter-id>DateTime</converter-id>
         <class>com.sun.faces.convert.DateTimeConverter</class>
     </converter>
     <converter>
-        <converter-id>boolean</converter-id>
-        <class>com.sun.faces.convert.BooleanConverter</class>
+        <converter-id>Number</converter-id>
+        <class>com.sun.faces.convert.NumberConverter</class>
     </converter>
     <converter>
-        <converter-id>number</converter-id>
+        <converter-id>NumberFormat</converter-id>
         <class>com.sun.faces.convert.NumberConverter</class>
+    </converter>
+    <converter>
+        <converter-id>Time</converter-id>
+        <class>com.sun.faces.convert.TimeConverter</class>
+    </converter>
+    <converter>
+        <converter-id>Boolean</converter-id>
+        <class>com.sun.faces.convert.BooleanConverter</class>
     </converter>
 
 </converter-config>
