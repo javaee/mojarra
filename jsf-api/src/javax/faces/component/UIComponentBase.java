@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.62 2003/09/29 22:20:56 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.63 2003/09/29 22:50:37 jvisvanathan Exp $
  */
 
 /*
@@ -1426,7 +1426,13 @@ public abstract class UIComponentBase extends UIComponent {
     public Object saveState(FacesContext context) {
 
         Object values[] = new Object[7];
-        values[0] = attributes;
+        // copy over "attributes" to a temporary map, so that
+        // any references maintained due to "attributes" being an inner class
+        // is not saved.
+        if ( attributes != null ) {
+            HashMap attributesCopy = new HashMap(attributes);
+            values[0] = attributesCopy;
+        }
         values[1] = clientId;
         values[2] = componentRef;
         values[3] = id;
@@ -1446,7 +1452,18 @@ public abstract class UIComponentBase extends UIComponent {
         throws IOException {
 
         Object values[] = (Object[]) state;
-        attributes = (HashMap) values[0];
+        // we need to get the map that knows how to handle attribute/property 
+        // transparency before we restore its values.
+        attributes = getAttributes();
+        if ( values[0] != null ) {
+            HashMap attributesCopy = (HashMap)values[0];
+            Iterator it = attributesCopy.keySet().iterator();
+            while ( it.hasNext()) {
+                Object key = it.next();
+                Object value = attributesCopy.get(key);
+                attributes.put(key, value);
+            }
+        }
         clientId = (String) values[1];
         componentRef = (String) values[2];
         id = (String) values[3];
