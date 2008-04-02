@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.16 2003/01/21 23:23:15 rkitain Exp $
+ * $Id: LifecycleImpl.java,v 1.17 2003/02/04 19:57:31 rogerk Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.16 2003/01/21 23:23:15 rkitain Exp $
+ * @version $Id: LifecycleImpl.java,v 1.17 2003/02/04 19:57:31 rogerk Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -115,7 +115,7 @@ protected void initPhases()
             RIConstants.UPDATE_MODEL_VALUES_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new InvokeApplicationPhase(this, 
 	    RIConstants.INVOKE_APPLICATION_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new JspRenderResponsePhase(this, 
+    phaseWrappers.add(new PhaseWrapper(new RenderResponsePhase(this, 
 	    RIConstants.RENDER_RESPONSE_PHASE)));
 }
 

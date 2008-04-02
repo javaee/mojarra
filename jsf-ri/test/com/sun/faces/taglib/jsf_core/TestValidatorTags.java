@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.4 2003/01/21 23:23:30 rkitain Exp $
+ * $Id: TestValidatorTags.java,v 1.5 2003/02/04 19:57:32 rogerk Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
 import com.sun.faces.lifecycle.LifecycleImpl;
-import com.sun.faces.lifecycle.JspRenderResponsePhase;
+import com.sun.faces.lifecycle.RenderResponsePhase;
 import com.sun.faces.lifecycle.ProcessValidationsPhase;
 import com.sun.faces.lifecycle.ApplyRequestValuesPhase;
 
@@ -41,7 +41,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.4 2003/01/21 23:23:30 rkitain Exp $
+ * @version $Id: TestValidatorTags.java,v 1.5 2003/02/04 19:57:32 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -140,7 +140,7 @@ public void testValidators()
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase 
-	renderResponse = new JspRenderResponsePhase(lifecycle, 
+	renderResponse = new RenderResponsePhase(lifecycle, 
 				       RIConstants.RENDER_RESPONSE_PHASE),
 	processValidations = new ProcessValidationsPhase(lifecycle,
 					  RIConstants.PROCESS_VALIDATIONS_PHASE),

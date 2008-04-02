@@ -1,5 +1,5 @@
 /*
- * $Id: JspRenderResponsePhase.java,v 1.9 2002/07/23 05:17:01 eburns Exp $
+ * $Id: RenderResponsePhase.java,v 1.1 2003/02/04 19:57:32 rogerk Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// JspRenderResponsePhase.java
+// RenderResponsePhase.java
 
 package com.sun.faces.lifecycle;
 
@@ -37,14 +37,14 @@ import com.sun.faces.RIConstants;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: JspRenderResponsePhase.java,v 1.9 2002/07/23 05:17:01 eburns Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.1 2003/02/04 19:57:32 rogerk Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
  *
  */
 
-public class JspRenderResponsePhase extends GenericPhaseImpl
+public class RenderResponsePhase extends GenericPhaseImpl
 {
 //
 // Protected Constants
@@ -66,7 +66,7 @@ public class JspRenderResponsePhase extends GenericPhaseImpl
 // Constructors and Genericializers    
 //
 
-public JspRenderResponsePhase(Lifecycle newDriver, int newId)
+public RenderResponsePhase(Lifecycle newDriver, int newId)
 {
     super(newDriver, newId);
 }
@@ -102,4 +102,4 @@ public int execute(FacesContext facesContext) throws FacesException
 // The testcase for this class is TestRenderResponsePhase.java
 
 
-} // end of class JspRenderResponsePhase
+} // end of class RenderResponsePhase

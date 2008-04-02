@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.43 2003/01/21 23:23:25 rkitain Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.44 2003/02/04 19:57:32 rogerk Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.43 2003/01/21 23:23:25 rkitain Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.44 2003/02/04 19:57:32 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -135,7 +135,7 @@ public void testHtmlBasicRenderKit()
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase 
-	renderResponse = new JspRenderResponsePhase(lifecycle, 
+	renderResponse = new RenderResponsePhase(lifecycle, 
 				       RIConstants.RENDER_RESPONSE_PHASE);
     root = new UIComponentBase() {
 	    public String getComponentType() { return "Root"; }
