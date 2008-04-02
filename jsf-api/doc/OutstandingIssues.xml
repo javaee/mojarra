@@ -113,25 +113,22 @@
 
 
 <issue>
-  <id>NamedChild-4</id>
-  <originator>Adam</originator>
-  <summary>Reintroduce "Named Child" Concept for UIComponents</summary>
+  <id>NamedChild-4</id> <originator>Adam</originator> <summary>moved to
+  <a
+  href="http://tokyo.betaversion.org:8080/issues/id/JSFA1">JSFA1</a>
+  in scarab.</summary>
   <description>
-    <p>Introduce a concept similar to what JSP 2.0 has introduced with
-    <code>&lt;jsp:attribute&gt;</code> and the JspFragment class, in
-    order to facilitate building complex UI components.</p>
+moved to
+  <a
+  href="http://tokyo.betaversion.org:8080/issues/id/JSFA1">JSFA1</a>
+  in scarab.
   </description>
   <resolution>
-    <p><em>04 Sep 2002</em> - Adam to present writeup to EG.</p>
-    <p><em>11 Sep 2002</em> - Adam submitted a proposal on this.</p>
-    <p><em>24 Oct 2002</em> - Craig submitted analysis and recommendation
-       to the EG mailing list.</p>
-    <p><em>24 December 2002</em> - Committed to spec and api and ri.</p>
   </resolution>
-  <status>CLOSED</status>
-  <status-date>7 January 2003</status-date>
-  <priority>1</priority>
-  <effort>Medium</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
@@ -266,19 +263,9 @@
 <issue>
   <id>ComponentNamespace-10</id>
   <originator>Jeff</originator>
-  <summary>Component Identifier Namespace</summary>
+  <summary>JSFA2 in Scarab</summary>
   <description>
-    <p>We currently use a hierarchical namespace for components, both
-    in the tree itself and in the rendered page.  Among other things,
-    this causes a problem with rendering <code>id</code> attributes on
-    the output HTML elements, because '/' is not a valid IDREF character.
-    Should we go to a flat namespace for components (at least in the
-    rendered output, and perhaps in addition to hierarchical names)?</p>
-
-    <p>We will also need a way for components to predict what the rendered
-    <code>id</code> attribute for a component was (if it has been rendered)
-    or will be (if it has not been rendered yet) in order to generate
-    corresponding JavaScript.</p>
+<a href="http://tokyo.betaversion.org:8080/issues/id/JSFA2">JSFA2</a> in Scarab.
   </description>
   <resolution>
     <p><em>02 Oct 2002</em> - Consolidate [ComponentIdentifiers-27]
@@ -768,24 +755,16 @@
 <issue>
   <id>VisibleProperty-28</id>
   <originator>Jeff</originator>
-  <summary>Define a "visible" property on UIComponent</summary>
+  <summary>JSFA6 in Scarab</summary>
   <description>
-    <p>It's legal for a component to be removed from the response tree at
-    many stages of the request processing lifecycle.  However, in the current
-    JSP scenario, the component will get recreated again when its tag is
-    executed.  Other frameworks deal with this by adding a "visible" property
-    on the component, where a <code>false</code> setting disables rendering.
-    </p>
+<a href="http://tokyo.betaversion.org:8080/issues/id/JSFA6">JSFA6</a> in Scarab.
   </description>
   <resolution>
-    <p><em>11 Sep 2002</em> - Jeff submitted an analysis and proposal message
-    titled "Adding a 'visible' property to UIComponent".</p>
-    <p><em>20 December 2002</em> - Committed changes to api after significant EG discussion.</p>
   </resolution>
-  <status>CLOSED</status>
-  <status-date>7 January 2003</status-date>
-  <priority>2</priority>
-  <effort>Small</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
@@ -1138,25 +1117,16 @@
 <issue>
   <id>TraversalOrder-43</id>
   <originator>Adam</originator>
-  <summary>Specify component tree traversal order</summary>
+  <summary>Moved to JSFA5 in Scarab</summary>
   <description>
-    <p>For each phase, we need to answer the following questions:</p>
-    <ul>
-    <li>What order should components be traversed?</li>
-    <li>In particular, are parents traversed before or after their
-        children?</li>
-    <li>Would a parent need to execute code both before <strong>and</strong>
-        after its children?</li>
-    <li>Do parents ever need to control the traversal of their children
-        (e.g. skip child traversal, run traversal multiple times?)</li>
-    </ul>
+<a href="http://tokyo.betaversion.org:8080/issues/id/JSFA5">JSFA5</a> in Scarab.
   </description>
   <resolution>
   </resolution>
-  <status>CLOSED</status>
-  <status-date>7 January 2003</status-date>
-  <priority>2</priority>
-  <effort>Small</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
@@ -1492,26 +1462,16 @@
 <issue>
   <id>RendererDelegation-57</id>
   <originator>Adam</originator>
-  <summary>Should UIComponent delegate more methods to Renderer?</summary>
+  <summary>Moved to JSFA4</summary>
   <description>
-    <p>Currently, UIComponent delegates decode(), encodeBegin(),
-    encodeChildren(), and encodeEnd() methods to a Renderer if the
-    rendererType property is set.  It may make sense to delegate some
-    additional methods as well, including</p>
-    <ul>
-    <li>getRendersChildren() - if a Renderer wants to override the value
-        normally returned by a component for this property.</li>
-    <li>updateModel() - if a Renderer wants to add a "readonly" attribute
-        to a UIInput component.</li>
-    </ul>
+<a href="http://tokyo.betaversion.org:8080/issues/id/JSFA4">JSFA4</a> in Scarab.
   </description>
   <resolution>
-    <p><em>20 December 2002</em> - Marking closed after significant discussion.  May reopen later</p>
   </resolution>
-  <status>CLOSED</status>
-  <status-date>7 January 2003</status-date>
-  <priority>1</priority>
-  <effort>Medium</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
