@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestCase.java,v 1.7 2004/02/26 20:33:31 eburns Exp $
+ * $Id: AbstractTestCase.java,v 1.8 2004/03/30 03:51:11 eburns Exp $
  */
 
 /*
@@ -23,6 +23,9 @@ import org.apache.commons.httpclient.HttpState;
 
 import java.net.URL;
 import java.util.Iterator;
+
+import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -286,6 +289,32 @@ public abstract class AbstractTestCase extends TestCase {
         }
         return (null);
 
+    }
+
+    /**
+     * Depth first search from root to find all children that are
+     * instances of HtmlInput.  Add them to the list.
+     */
+    protected List getAllElementsOfGivenClass(HtmlElement root, List list,
+                                              Class matchClass) {
+        Iterator iter = null;
+        if (null == root) {
+            return list;
+        }
+        if (null == list) {
+            list = new ArrayList();
+        }
+        iter = root.getAllHtmlChildElements();
+        while (iter.hasNext()) {
+            getAllElementsOfGivenClass((HtmlElement) iter.next(), list,
+                                       matchClass);
+        }
+        if (matchClass.isInstance(root)) {
+            if (!list.contains(root)) {
+                list.add(root);
+            }
+        }
+        return list;
     }
 
 

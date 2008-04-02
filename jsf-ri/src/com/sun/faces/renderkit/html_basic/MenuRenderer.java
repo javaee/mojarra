@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.46 2004/03/25 23:18:49 jvisvanathan Exp $
+ * $Id: MenuRenderer.java,v 1.47 2004/03/30 03:51:10 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -17,6 +17,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -128,6 +129,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 }
             }
         } else {
+	    // this is a UISelectOne
             Map requestParameterMap = context.getExternalContext().
                 getRequestParameterMap();
             if (requestParameterMap.containsKey(clientId)) {
@@ -139,6 +141,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 }
 
             }
+	    else {
+		// there is no value, but this is different from a null
+		// value.
+		setSubmittedValue(component, RIConstants.NO_VALUE);
+	    }
         }
         return;
     }
@@ -164,6 +171,9 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                         String newValue)
         throws ConverterException {
         Object convertedValue = null;
+	if (newValue == RIConstants.NO_VALUE) {
+	    return null;
+	}
         if (newValue == null) {
             if (log.isTraceEnabled()) {
                 log.trace("No conversion necessary for SelectOne Component  "

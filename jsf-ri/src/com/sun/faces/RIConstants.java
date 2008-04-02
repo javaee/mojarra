@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.58 2004/02/26 20:32:27 eburns Exp $
+ * $Id: RIConstants.java,v 1.59 2004/03/30 03:51:09 eburns Exp $
  */
 
 /*
@@ -109,6 +109,8 @@ public class RIConstants {
      */
     public static final String TLV_RESOURCE_LOCATION =
         FACES_PREFIX + "resources.Resources";
+
+    public static final Object NO_VALUE = new String();
 
 
 }

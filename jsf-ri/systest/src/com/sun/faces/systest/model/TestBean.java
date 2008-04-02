@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.5 2004/02/26 20:33:47 eburns Exp $
+ * $Id: TestBean.java,v 1.6 2004/03/30 03:51:14 eburns Exp $
  */
 
 /*
@@ -10,6 +10,10 @@
 package com.sun.faces.systest.model;
 
 import javax.faces.component.UIInput;
+import javax.faces.model.SelectItem;
+
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * <p>Test JavaBean for managed object creation facility.</p>
@@ -133,4 +137,40 @@ public class TestBean {
     public void setUserName(UIInput userName) {
         this.userName = userName;
     }
+
+    public List selectList = null;
+
+    public List getSelectList() {
+	if (null == selectList) {
+	    selectList = new ArrayList();
+	    selectList.add(new SelectItem("one", "one", "one"));
+	    selectList.add(new SelectItem("two", "two", "two"));
+	    selectList.add(new SelectItem("three", "three", "three"));
+	}
+	return selectList;
+    }
+
+    public void setSelectList(List newSelectList) {
+	selectList = newSelectList;
+    } 
+
+    protected String selection = null;
+
+    public String getSelection() {
+	return selection;
+    }
+
+    public void setSelection(String newSelection) {
+	selection = newSelection;
+    }
+
+    protected String [] multiSelection;
+    public String [] getMultiSelection() {
+	return multiSelection;
+    }
+
+    public void setMultiSelection(String [] newMultiSelection) {
+	multiSelection = newMultiSelection;
+    }
+	
 }

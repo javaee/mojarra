@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.20 2004/02/26 20:32:48 eburns Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.21 2004/03/30 03:51:10 eburns Exp $
  */
 
 /*
@@ -82,8 +82,8 @@ public class ProcessValidationsPhase extends Phase {
                 if (log.isErrorEnabled()) {
                     log.error(exceptionMessage, re);
                 }
-                throw new FacesException(exceptionMessage, re);
             }
+	    throw new FacesException(exceptionMessage, re);
         }
         if (log.isDebugEnabled()) {
             log.debug("Exiting ProcessValidationsPhase");
