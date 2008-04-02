@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.50 2003/09/22 17:27:45 eburns Exp $
+ * $Id: FacesContext.java,v 1.51 2003/09/25 23:21:43 craigmcc Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
-import javax.faces.event.FacesEvent;
 import javax.faces.application.Message;
 
 
@@ -41,7 +40,7 @@ import javax.faces.application.Message;
 public abstract class FacesContext {
 
 
-    // ------------------------------------------------------------- Properties
+    // -------------------------------------------------------------- Properties
 
 
     /**
@@ -64,27 +63,6 @@ public abstract class FacesContext {
      */
     public abstract Iterator getComponentsWithMessages();
 
-
-    /**
-     * <p>Return an <code>Iterator</code> over the {@link FacesEvent}s that
-     * have been queued, in the order that they were queued.  The
-     * <code>Iterator</code> returned by this method must support the
-     * following functionality:</p>
-     * <ul>
-     * <li>The <code>remove()</code> operation may be utilized by the
-     *     JSF implementation to remove the current event when it has
-     *     been completely handled.</li>
-     * <li>Event handlers may add new events to the list while it is
-     *     being iterated over, by calling <code>addFacesEvent()</code>.</li>
-     * </ul>
-     *
-     * <p>If no events have been queued, an empty <code>Iterator</code>
-     * must be returned.
-     *
-     * @exception IllegalStateException if this method is called more than
-     *  once without a call to <code>release()</code> in between.
-     */
-    public abstract Iterator getFacesEvents();
 
     /**
      * <p>Return the <code>Locale</code> to be used in localizing the
@@ -248,23 +226,7 @@ public abstract class FacesContext {
     public abstract void setViewRoot(UIViewRoot root);
 
 
-    // --------------------------------------------------------- Public Methods
-
-
-    /**
-     * <p>Append a {@link FacesEvent} to the set of events that should be
-     * processed at the end of the current phase of the request processing
-     * lifecycle.</p>
-     *
-     * @param event The event to be queued
-     *
-     * @exception NullPointerException if <code>event</code>
-     *  is <code>null</code>
-     *
-     * @exception IllegalStateException if this method is called more than
-     *  once without a call to <code>release()</code> in between.
-     */
-    public abstract void addFacesEvent(FacesEvent event);
+    // ---------------------------------------------------------- Public Methods
 
 
     /**
@@ -336,7 +298,7 @@ public abstract class FacesContext {
     public abstract ExternalContext getExternalContext();
 
 
-    // --------------------------------------------------------- Static Methods
+    // ---------------------------------------------------------- Static Methods
 
 
     /**

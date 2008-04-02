@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.11 2003/09/25 07:46:12 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.12 2003/09/25 23:21:50 craigmcc Exp $
  */
 
 /*
@@ -146,6 +146,10 @@ public class UISelectManyTestCase extends UIInputTestCase {
 
     // Test validation of value against the valid list
     public void testValidation() throws Exception {
+
+        // Put our component under test in a tree under a UIViewRoot
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(component);
 
         // Add valid options to the component under test
         UISelectMany selectMany = (UISelectMany) component;

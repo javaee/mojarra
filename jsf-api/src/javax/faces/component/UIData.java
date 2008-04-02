@@ -495,6 +495,49 @@ public class UIData extends UIComponentBase
     // ----------------------------------------------------- UIComponent Methods
 
 
+    /**
+     * <p>Override the default {@link UIComponentBase#queueEvent} processing
+     * to wrap any queued events in a {@link RepeaterEvent} so that the current
+     * row index can be restored.
+     *
+     *
+     * @param event {@link FacesEvent} to be queued
+     *
+     * @exception IllegalStateException if this component is not a
+     *  descendant of a {@link UIViewRoot}
+     * @exception NullPointerException if <code>event</code>
+     *  is <code>null</code>
+     */
+    public void queueEvent(FacesEvent event) {
+
+        super.queueEvent(new RepeaterEvent(this, event, getRowIndex()));
+
+    }
+
+
+    /**
+     * <p>Override the default {@link UIComponentBase#broadcast} processing
+     * to unwrap any {@link RepeaterEvent} and reset the current row index,
+     * and optionally expose the data object for the current row as a
+     * request attribute under the key specified by the <code>var</code>
+     * property (if any), before the event is actually broadcast.  The default
+     * processing will be performed on non-{@link RepeaterEvent} events sent
+     * from this component.</p>
+     *
+     * @param event The {@link FacesEvent} to be broadcast
+     * @param phaseId The {@link PhaseId} of the current phase of the
+     *  request processing lifecycle
+     *
+     * @exception AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
+     * @exception IllegalArgumentException if the implementation class
+     *  of this {@link FacesEvent} is not supported by this component
+     * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
+     *  for the phase identifier
+     * @exception NullPointerException if <code>event</code> or
+     *  <code>phaseId</code> is <code>null</code>
+     */
     public boolean broadcast(FacesEvent event, PhaseId phaseId)
 	throws AbortProcessingException {
 
@@ -505,20 +548,20 @@ public class UIData extends UIComponentBase
 	// Set up the correct context and fire our wrapped event
 	RepeaterEvent revent = (RepeaterEvent) event;
 	Map requestMap =
-	    FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+	    FacesContext.getCurrentInstance().getExternalContext().
+            getRequestMap();
 	String var = getVar();
 	Object old = null;
 	if (var != null) {
 	    old = requestMap.get(var);
 	}
 	setRowIndex(revent.getRowIndex());
-	Object row = getRowData();
 	if (var != null) {
-	    requestMap.put(var, row);
+	    requestMap.put(var, getRowData());
 	}
 	FacesEvent rowEvent = revent.getFacesEvent();
-	boolean returnValue = rowEvent.getComponent().broadcast
-	    (rowEvent, phaseId);
+	boolean returnValue =
+            rowEvent.getComponent().broadcast(rowEvent, phaseId);
 	if (var != null) {
 	    if (old != null) {
 		requestMap.put(var, old);

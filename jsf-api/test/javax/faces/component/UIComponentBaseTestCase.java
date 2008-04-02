@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.10 2003/09/25 07:46:07 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.11 2003/09/25 23:21:49 craigmcc Exp $
  */
 
 /*
@@ -153,6 +153,10 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     // Test lifecycle management methods
     public void testLifecycleManagement() {
 
+        // Put our component under test in a tree under a UIViewRoot
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(component);
+
         // Establish a view with multiple facets and children
         UIComponent facet1 = new TestComponent("f1");
         UIComponent facet2 = new TestComponent("f2");
@@ -175,15 +179,15 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         checkChildCount(child2, 2);
 
         // Enqueue a single FacesEvent for each component
-        facesContext.addFacesEvent(new TestEvent(component));
-        facesContext.addFacesEvent(new TestEvent(facet1));
-        facesContext.addFacesEvent(new TestEvent(facet2));
-        facesContext.addFacesEvent(new TestEvent(facet3));
-        facesContext.addFacesEvent(new TestEvent(child1));
-        facesContext.addFacesEvent(new TestEvent(child2));
-        facesContext.addFacesEvent(new TestEvent(child3));
-        facesContext.addFacesEvent(new TestEvent(child2a));
-        facesContext.addFacesEvent(new TestEvent(child2b));
+        component.queueEvent(new TestEvent(component));
+        component.queueEvent(new TestEvent(facet1));
+        component.queueEvent(new TestEvent(facet2));
+        component.queueEvent(new TestEvent(facet3));
+        component.queueEvent(new TestEvent(child1));
+        component.queueEvent(new TestEvent(child2));
+        component.queueEvent(new TestEvent(child3));
+        component.queueEvent(new TestEvent(child2a));
+        component.queueEvent(new TestEvent(child2b));
 
         // Test processDecodes()
         TestComponent.trace(null);

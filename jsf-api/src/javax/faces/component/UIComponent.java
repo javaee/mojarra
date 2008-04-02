@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.100 2003/09/25 07:56:13 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.101 2003/09/25 23:21:32 craigmcc Exp $
  */
 
 /*
@@ -354,24 +354,16 @@ public abstract class UIComponent implements StateHolder {
      *     in the order that they were registered.</li>
      * </ul>
      *
-     * <p>Before broadcasting, check to see if <code>event</code> is a
-     * {@link RepeaterEvent}.  If it is, take the following additional steps
-     * before notifying interested listeners:</p>
-     * <ul>
-     * <li>Locate the parent {@link Repeater} component, and call its
-     *     <code>setRowIndex()</code> method, using the <code>rowIndex</code>
-     *     property value from the {@link RepeaterEvent}.</li>
-     * <li>Use the return value from <code>getFacesEvent()</code> as the
-     *     event to be broadcast, rather than the <code>event</code> itself.
-     *     </ul>
-     * <li>After broadcasting is complete, restore the previous
-     *     <code>rowIndex</code> value on the parent {@link Repeater}.</li>
-     * </ul>
-     *
      * <p>After all interested listeners have been notified, return
      * <code>false</code> if this event does not have any listeners
      * interested in this event in future phases of the request processing
-     * lifecycle.  Otherwise, return <code>true</code>.</p>
+     * lifecycle.  Otherwise, return <code>true</code>.  Note that listeners
+     * registered for <code>PhaseId.ANY_PHASE</code> are not counted as
+     * being interested in this event in a future phase (because they have
+     * already been notified about it.  However, if there are other
+     * listeners registered for a specific future phase, the
+     * <code>ANY_PHASE</code> listener will be notified of the event
+     * more than once.</p>
      *
      * @param event The {@link FacesEvent} to be broadcast
      * @param phaseId The {@link PhaseId} of the current phase of the
@@ -420,8 +412,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * <p>During decoding, events may be enqueued for later processing
      * (by event listeners who have registered an interest),  by calling
-     * <code>addFacesEvent()</code> on the associated {@link FacesContext}.
-     * </p>
+     * <code>queueEvent()</code>.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
@@ -530,6 +521,22 @@ public abstract class UIComponent implements StateHolder {
      *  is <code>null</code>
      */
     protected abstract void removeFacesListener(FacesListener listener);
+
+
+    /**
+     * <p>Queue an event for broadcast at the end of the current request
+     * processing lifecycle phase.  The default implementation in
+     * {@link UIComponentBase} must delegate this call to the
+     * <code>queueEvent()</code> method of the parent {@link UIComponent}.</p>
+     *
+     * @param event {@link FacesEvent} to be queued
+     *
+     * @exception IllegalStateException if this component is not a
+     *  descendant of a {@link UIViewRoot}
+     * @exception NullPointerException if <code>event</code>
+     *  is <code>null</code>
+     */
+    public abstract void queueEvent(FacesEvent event);
 
 
     // ------------------------------------------------ Lifecycle Phase Handlers

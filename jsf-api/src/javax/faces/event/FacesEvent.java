@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.6 2003/07/27 00:48:27 craigmcc Exp $
+ * $Id: FacesEvent.java,v 1.7 2003/09/25 23:21:45 craigmcc Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.util.EventObject;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 
@@ -59,6 +60,20 @@ public abstract class FacesEvent extends EventObject {
 
 
     // ------------------------------------------------- Event Broadcast Methods
+
+
+    /**
+     * <p>Convenience method to queue this event for broadcast at the end
+     * of the current request processing lifecycle phase.</p>
+     *
+     * @exception IllegalStateException if the source component for this
+     *  event is not a descendant of a {@link UIViewRoot}
+     */
+    public void queue() {
+
+        getComponent().queueEvent(this);
+
+    }
 
 
     /**

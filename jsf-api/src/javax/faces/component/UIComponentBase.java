@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.60 2003/09/25 07:50:02 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.61 2003/09/25 23:21:33 craigmcc Exp $
  */
 
 /*
@@ -968,6 +968,11 @@ public abstract class UIComponentBase extends UIComponent {
 
         // Determine whether there are any registered listeners for later phases
         // that are interested in this event
+        // PENDING(craigmcc) - Currently, we do not consider listeners
+        // registered for ANY_PHASE as being interested in this event
+        // in a future phase.  The implicit effect is that an event will
+        // be delivered to an ANY_PHASE listener exactly once, and it will
+        // have happened already by the time we get here
         for (int i = phaseId.getOrdinal() + 1; i < listeners.length; i++) {
             if ((listeners[i] != null) && (listeners[i].size() > 0)) {
                 int n = listeners[i].size();
@@ -1165,6 +1170,21 @@ public abstract class UIComponentBase extends UIComponent {
         int ordinal = listener.getPhaseId().getOrdinal();
         if (listeners[ordinal] != null) {
             listeners[ordinal].remove(listener);
+        }
+
+    }
+
+
+    public void queueEvent(FacesEvent event) {
+
+        if (event == null) {
+            throw new NullPointerException();
+        }
+        UIComponent parent = getParent();
+        if (parent == null) {
+            throw new IllegalStateException();
+        } else {
+            parent.queueEvent(event);
         }
 
     }

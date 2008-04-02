@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.9 2003/09/25 07:46:13 craigmcc Exp $
+ * $Id: UISelectOneTestCase.java,v 1.10 2003/09/25 23:21:50 craigmcc Exp $
  */
 
 /*
@@ -96,6 +96,10 @@ public class UISelectOneTestCase extends UIInputTestCase {
 
     // Test validation of value against the valid list
     public void testValidation() throws Exception {
+
+        // Put our component under test in a tree under a UIViewRoot
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(component);
 
         // Add valid options to the component under test
         UISelectOne selectOne = (UISelectOne) component;

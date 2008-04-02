@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.1 2003/09/25 07:46:13 craigmcc Exp $
+ * $Id: UIViewRootTestCase.java,v 1.2 2003/09/25 23:21:51 craigmcc Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import javax.faces.validator.Validator;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.event.PhaseId;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -36,11 +37,7 @@ import javax.faces.TestUtil;
 public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
 
-    // ----------------------------------------------------- Instance Variables
-
-    protected FacesContext context = null;
-
-    // ---------------------------------------------------------- Constructors
+    // ------------------------------------------------------------ Constructors
 
 
     /**
@@ -53,7 +50,8 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     }
 
 
-    // -------------------------------------------------- Overall Test Methods
+    // ---------------------------------------------------- Overall Test Methods
+
 
     /**
      * Return the tests included in this test suite.
@@ -74,7 +72,21 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     }
 
 
-    // ------------------------------------------------ Individual Test Methods
+    // ------------------------------------------------- Individual Test Methods
+
+
+    // Test event queuing and broadcasting
+    public void testEventQueuing() {
+
+        // Check for correct ifecycle management processing of event broadcast
+        checkEventQueueing(PhaseId.APPLY_REQUEST_VALUES);
+        checkEventQueueing(PhaseId.PROCESS_VALIDATIONS);
+        checkEventQueueing(PhaseId.UPDATE_MODEL_VALUES);
+        checkEventQueueing(PhaseId.INVOKE_APPLICATION);
+        checkEventQueueing(PhaseId.ANY_PHASE);
+
+    }
+
 
     public void testStateHolder() {
         UIComponent testParent = new TestComponentNamingContainer("root");
@@ -130,7 +142,63 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     }
 
+
     // -------------------------------------------------------- Support Methods
+
+
+    private void checkEventQueueing(PhaseId phaseId) {
+
+        // NOTE:  Current semantics for ANY_PHASE listeners is that
+        // the event should be delivered exactly once, so the existence
+        // of such a listener does not cause the event to remain queued.
+        // Therefore, the expected string is the same as for any
+        // phase-specific listener, and it should get matched after
+        // Apply Request Values processing since that is first phase
+        // for which events are fired
+
+        // Register an event listener for the specified phase id
+        UIViewRoot root = new UIViewRoot();
+        TestListener listener = new TestListener("t", phaseId);
+        root.addFacesListener(listener);
+
+        // Queue some events to be processed
+        root.queueEvent(new TestEvent(root, "1"));
+        root.queueEvent(new TestEvent(root, "2"));
+        String expected = "/t/1/t/2";
+
+        // Fire off the relevant lifecycle methods and check expected results
+        TestListener.trace(null);
+        assertEquals("", TestListener.trace());
+        root.processDecodes(facesContext);
+        if (PhaseId.APPLY_REQUEST_VALUES.equals(phaseId) ||
+            PhaseId.ANY_PHASE.equals(phaseId)) {
+            assertEquals(expected, TestListener.trace());
+        } else {
+            assertEquals("", TestListener.trace());
+        }
+        root.processValidators(facesContext);
+        if (PhaseId.PROCESS_VALIDATIONS.equals(phaseId) ||
+            PhaseId.APPLY_REQUEST_VALUES.equals(phaseId) ||
+            PhaseId.APPLY_REQUEST_VALUES.equals(phaseId) ||
+            PhaseId.ANY_PHASE.equals(phaseId)) {
+            assertEquals(expected, TestListener.trace());
+        } else {
+            assertEquals("", TestListener.trace());
+        }
+        root.processUpdates(facesContext);
+        if (PhaseId.UPDATE_MODEL_VALUES.equals(phaseId) ||
+            PhaseId.PROCESS_VALIDATIONS.equals(phaseId) ||
+            PhaseId.APPLY_REQUEST_VALUES.equals(phaseId) ||
+            PhaseId.ANY_PHASE.equals(phaseId)) {
+            assertEquals(expected, TestListener.trace());
+        } else {
+            assertEquals("", TestListener.trace());
+        }
+        root.processApplication(facesContext);
+        assertEquals(expected, TestListener.trace());
+
+    }
+
 
     boolean propertiesAreEqual(FacesContext context,
 			       UIComponent comp1,
@@ -152,5 +220,6 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	}
 	return true;
     }
+
 
 }

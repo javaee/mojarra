@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.3 2003/09/25 07:56:14 craigmcc Exp $
+ * $Id: UIViewRoot.java,v 1.4 2003/09/25 23:21:34 craigmcc Exp $
  */
 
 /*
@@ -11,7 +11,12 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import javax.faces.context.FacesContext;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
@@ -112,6 +117,149 @@ public class UIViewRoot extends UIComponentBase implements NamingContainer {
         this.viewId = viewId;
 
     }
+
+
+    // ------------------------------------------------ Event Management Methods
+
+
+    /**
+     * <p>The list of events that have been queued for later broadcast.  This
+     * instance is lazily instantiated.  This list is <strong>NOT</strong>
+     * part of the state that is saved and restored for this component.</p>
+     */
+    private transient List eventsList = null;
+
+
+    /**
+     * <p>Override the default {@link UIComponentBase#queueEvent} behavior to
+     * accumulate the queued events for later broadcaster.</p>
+     *
+     * @param event {@link FacesEvent} to be queued
+     *
+     * @exception IllegalStateException if this component is not a
+     *  descendant of a {@link UIViewRoot}
+     * @exception NullPointerException if <code>event</code>
+     *  is <code>null</code>
+     */
+    public void queueEvent(FacesEvent event) {
+
+        if (event == null) {
+            throw new NullPointerException();
+        }
+        // We are a UIViewRoot, so no need to check for the ISE
+        if (eventsList == null) {
+            eventsList = new ArrayList(5);
+        }
+        eventsList.add(event);
+
+    }
+
+
+    /**
+     * <p>Broadcast any events that have been queued.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     * @param phaseId {@link PhaseId} of the current phase
+     */
+    private void broadcastEvents(FacesContext context, PhaseId phaseId) {
+
+        if (eventsList == null) {
+            return;
+        }
+
+        // PENDING(craigmcc) - confirm that we can modify the underlying
+        // list (removes and appends) for an ArrayList.
+        Iterator events = eventsList.iterator();
+        while (events.hasNext()) {
+            FacesEvent event = (FacesEvent) events.next();
+            UIComponent source = event.getComponent();
+            if (!source.broadcast(event, phaseId)) {
+                events.remove(); // Removes event from underlying List
+            }
+        }
+
+        if (eventsList.size() < 1) {
+            eventsList = null;
+        }
+
+    }
+
+
+    // ------------------------------------------------ Lifecycle Phase Handlers
+
+
+    /**
+     * <p>Override the default {@link UIComponentBase#processDecodes} behavior
+     * to broadcast any queued events after the default processing has been
+     * completed.</p>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void processDecodes(FacesContext context) {
+
+        super.processDecodes(context);
+        broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+
+    }
+
+
+    /**
+     * <p>Override the default {@link UIComponentBase#processValidators}
+     * behavior to broadcast any queued events after the default processing
+     * has been completed.</p>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void processValidators(FacesContext context) {
+
+        super.processValidators(context);
+        broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
+
+    }
+
+
+    /**
+     * <p>Override the default {@link UIComponentBase} behavior to broadcast
+     * any queued events after the default processing has been completed.</p>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void processUpdates(FacesContext context) {
+
+        super.processUpdates(context);
+        broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
+
+    }
+
+
+    /**
+     * <p>Broadcast any events that have been queued for the <em>Invoke
+     * Application</em> phase of the request processing lifecycle.</p>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void processApplication(FacesContext context) {
+
+        // NOTE - no tree walk is performed; this is a UIViewRoot-only operation
+        broadcastEvents(context, PhaseId.INVOKE_APPLICATION);
+
+    }
+
+
+
+
 
 
     // ------------------------------------------------- NamingContainer Methods

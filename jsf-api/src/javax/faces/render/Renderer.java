@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.21 2003/09/23 20:35:52 eburns Exp $
+ * $Id: Renderer.java,v 1.22 2003/09/25 23:21:46 craigmcc Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ public abstract class Renderer {
      *
      * <p>During decoding, events may be enqueued for later processing
      * (by event listeners that have registered an interest), by calling
-     * <code>addFacesEvent()</code> on the associated {@link FacesContext}.
+     * <code>queueEvent()</code> on the associated {@link UIComponent}.
      * </p>
      *
      * @param context {@link FacesContext} for the request we are processing

@@ -1,5 +1,5 @@
 /*
- * $Id: TestListener.java,v 1.1 2003/09/25 07:46:05 craigmcc Exp $
+ * $Id: TestListener.java,v 1.2 2003/09/25 23:21:49 craigmcc Exp $
  */
 
 /*
@@ -41,7 +41,12 @@ public class TestListener implements FacesListener {
     }
 
     public void processTest(TestEvent event) {
-        trace(getId());
+        if (getId() != null) {
+            trace(getId());
+        }
+        if (event.getId() != null) {
+            trace(event.getId());
+        }
     }
 
 

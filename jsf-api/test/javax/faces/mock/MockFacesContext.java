@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.12 2003/08/22 14:03:29 eburns Exp $
+ * $Id: MockFacesContext.java,v 1.13 2003/09/25 23:21:58 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
-import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.Lifecycle;
 
 
@@ -77,13 +76,6 @@ public class MockFacesContext extends FacesContext {
     }
     public void setExternalContext(ExternalContext externalContext) {
         this.externalContext = externalContext;
-    }
-
-
-    // facesEvents()
-    private List facesEvents = new ArrayList();
-    public Iterator getFacesEvents() {
-        return (facesEvents.iterator());
     }
 
 
@@ -170,11 +162,6 @@ public class MockFacesContext extends FacesContext {
     // ---------------------------------------------------------- Public Methods
 
 
-    public void addFacesEvent(FacesEvent event) {
-        facesEvents.add(event);
-    }
-
-
     public void addMessage(UIComponent component, Message message){ 
         List list = (List) messages.get(component);
         if (list == null) {
@@ -188,7 +175,6 @@ public class MockFacesContext extends FacesContext {
     public void release() {
         application = null;
         externalContext = null;
-        facesEvents.clear();
         locale = null;
         messages.clear();
         renderResponse = false;

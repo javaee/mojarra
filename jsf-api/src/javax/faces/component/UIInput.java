@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.30 2003/09/25 07:50:03 craigmcc Exp $
+ * $Id: UIInput.java,v 1.31 2003/09/25 23:21:34 craigmcc Exp $
  */
 
 /*
@@ -399,8 +399,7 @@ public class UIInput extends UIOutput {
 	if (isValid()) {
 	    Object value = getValue();
             if (compareValues(previous, value)) {
-                context.addFacesEvent
-                    (new ValueChangedEvent(this, previous, value));
+                queueEvent(new ValueChangedEvent(this, previous, value));
             }
         }
 
