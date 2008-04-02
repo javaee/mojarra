@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.97 2007/03/13 02:39:04 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.98 2007/03/13 17:36:17 jdlee Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -806,7 +806,7 @@ public class ConfigureListener implements ServletContextListener {
        for (String value : config.getRenderKitFactories()) { 
             if (value != null) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer(MessageFormat.format("setRenderKitFactory({0}{)", value));
+                    LOGGER.finer(MessageFormat.format("setRenderKitFactory({0})", value));
                 }
                 FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
                                          value);
