@@ -1,5 +1,5 @@
 /*
- * $Id: DataModel.java,v 1.10 2004/01/20 03:22:22 eburns Exp $
+ * $Id: DataModel.java,v 1.11 2004/01/22 20:08:46 craigmcc Exp $
  */
 
 /*
@@ -65,11 +65,13 @@ import javax.faces.component.UIData;
  * <p>A concrete {@link DataModel} instance is attached to a particular
  * collection of underlying data by calling the <code>setWrappedData()</code>
  * method.  It can be detached from that underlying data collection by
- * passing a <code>null</code> parameter to this method.  In addition,
- * concrete {@link DataModel} implementations should provide a convenience
- * constructor that takes a wrapped object of the appropriate type (and passes
- * it on via a call to <code>setWrappedData()</code), in addition
- * to a zero-arguments constructor.</p>
+ * passing a <code>null</code> parameter to this method.</p>
+ *
+ * <p>Concrete {@link DataModel} implementations must provide a public
+ * zero-arguments constructor that calls <code>setWrappedData(null)</code>.
+ * A convenience constructor that takes a wrapped object of the appropriate
+ * type (and passes it on via a call to <code>setWrappedData()</code>,
+ * should also be provided.</p>
  *
  * <p>Event listeners may be registered to receive notifications
  * of when a new row index is selected.</p>
