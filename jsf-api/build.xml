@@ -204,6 +204,7 @@
         <taskdef name="generateRenderkitDocs"
                  classname="com.sun.faces.ant.RenderkitDocGenTask">
             <classpath>
+                <path refid="sun.commons.classpath"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
         </taskdef>        
@@ -212,6 +213,7 @@
               facesConfig="${standard.renderkit.xml}"
               fork="true">
             <classpath>
+                <path refid="sun.commons.classpath"/>
                 <path refid="compile.classpath"/>
                 <pathelement location="${jsf-api.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
