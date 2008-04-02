@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.42 2007/01/30 01:25:45 rlubke Exp $
+ * $Id: TestConverters.java,v 1.43 2007/01/30 02:04:20 rlubke Exp $
  */
 
 /*
@@ -50,6 +50,7 @@ import javax.faces.convert.DateTimeConverter;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -60,7 +61,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.42 2007/01/30 01:25:45 rlubke Exp $
+ * @version $Id: TestConverters.java,v 1.43 2007/01/30 02:04:20 rlubke Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -638,7 +639,7 @@ public class TestConverters extends JspFacesTestCase {
         number.updateModel(getFacesContext());
         assertNotNull(bean.getNumbers());
         try {
-            DecimalFormat df = new DecimalFormat("'$'##.##");
+            DecimalFormat df = new DecimalFormat("'$'##.##", new DecimalFormatSymbols(Locale.US));
             expected = df.parse("$49.99");
         } catch (ParseException e) {
             assertTrue(e.getMessage(), false);
