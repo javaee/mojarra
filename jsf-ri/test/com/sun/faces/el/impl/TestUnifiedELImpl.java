@@ -159,13 +159,13 @@ public class TestUnifiedELImpl extends ServletFacesTestCase
         evaluateTest("${3 != 3}", Boolean.FALSE);
 
         // PENDING (visvan) check with Kinman/Jacob
-        /* relationals between booleans */
+        /* relationals between booleans 
         evaluateTestFailure("${false < true}");
         evaluateTestFailure("${false > true}");
         evaluateTest("${true >= true}", Boolean.TRUE);
         evaluateTest("${true <= true}", Boolean.TRUE);
         evaluateTest("${true == true}", Boolean.TRUE);
-        evaluateTest("${true != true}", Boolean.FALSE);
+        evaluateTest("${true != true}", Boolean.FALSE); */
 
         /* looking up objects in scopes */
         evaluateTest("${requestScope.val1b}", "request-scoped1");
