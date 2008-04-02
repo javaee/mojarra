@@ -38,6 +38,18 @@
     out.println("/managed01.jsp FAILED - result of type " + result.getClass());
     return;
   }
+  Object scopedFromExternalContext = ((javax.servlet.http.HttpServletRequest)facesContext.getExternalContext().getRequest()).getAttribute("test1");
+  if (scopedFromExternalContext == null) {
+    out.println("/managed01.jsp FAILED - not created in request scope, from ExternalContext request ");
+    return;
+  }
+  Object scopedFromMap = facesContext.getExternalContext().getRequestMap().get("test1");
+  if (scopedFromMap == null) {
+    out.println("/managed01.jsp FAILED - not created in request scope, from ExternalContext Map");
+    return;
+  }
+
+
   Object scoped = request.getAttribute("test1");
   if (scoped == null) {
     out.println("/managed01.jsp FAILED - not created in request scope");
