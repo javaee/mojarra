@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config>
+
+  <!-- Custom Components -->
+
+  <component>
+    <component-class>components.components.UIArea</component-class>
+    <component-type>Area</component-type>
+  </component>
+
+  <component>
+    <component-class>components.components.GraphComponent</component-class>
+    <component-type>Graph</component-type>
+  </component>
+
+  <component>
+    <component-class>components.components.UIMap</component-class>
+    <component-type>Map</component-type>
+  </component>
+
+  <component>
+    <component-class>components.components.PaneComponent</component-class>
+    <component-type>Pane</component-type>
+  </component>
+
+  <!-- Custom Renderers -->
+
+  <render-kit>
+    <render-kit-id>DEFAULT</render-kit-id>
+    <render-kit-class>com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit</render-kit-class>
+    <renderer>
+      <renderer-type>MenuBar</renderer-type>
+      <renderer-class>components.renderkit.MenuBarRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <renderer-type>MenuTree</renderer-type>
+      <renderer-class>components.renderkit.MenuTreeRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <renderer-type>ResultSet</renderer-type>
+      <renderer-class>components.renderkit.ResultSetRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <renderer-type>StyleSheet</renderer-type>
+      <renderer-class>components.renderkit.StyleSheetRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <renderer-type>Area</renderer-type>
+      <renderer-class>components.renderkit.AreaRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <renderer-type>TabLabel</renderer-type>
+      <renderer-class>components.renderkit.TabLabelRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <renderer-type>Tab</renderer-type>
+      <renderer-class>components.renderkit.TabRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <renderer-type>Tabbed</renderer-type>
+      <renderer-class>components.renderkit.TabbedRenderer</renderer-class>
+    </renderer>
+  </render-kit>
+
+</faces-config>
