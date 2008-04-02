@@ -82,7 +82,7 @@
             value="${tomcat.home}/jstl/lib/standard.jar"/>
   <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
   <property name="jsf-portlet.jar" value="${jsf-portlet.dir}/portlet-lib/build/lib/jsf-portlet.jar"/>
-  <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_0.dtd"/>
+  <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_1.dtd"/>
   <property name="tlddoc.jar" value="${tomcat.home}/../tlddoc-1_0/tlddoc.jar"/>
 
 <!-- ************ Compiler Defaults *************************************** -->

@@ -77,7 +77,7 @@
   <property name="commons-digester.jar" 
             value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
   <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
-  <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_0.dtd"/>
+  <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_1.dtd"/>
   <property name="jsf-impl.jar"  value="${jsf-ri.home}/build/lib/jsf-impl.jar"/>
 
 

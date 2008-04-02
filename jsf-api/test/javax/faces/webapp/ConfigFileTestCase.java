@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.6 2004/02/26 20:32:13 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.7 2004/04/08 22:54:08 eburns Exp $
  */
 
 /*
@@ -285,7 +285,7 @@ public class ConfigFileTestCase extends TestCase {
 
         Digester digester = new Digester();
         digester.register(CONFIG_DTD_PUBLIC_ID,
-                          relativeURL("doc/web-facesconfig_1_0.dtd").toString());
+                          relativeURL("doc/web-facesconfig_1_1.dtd").toString());
         digester.setValidating(true);
         return (digester);
 

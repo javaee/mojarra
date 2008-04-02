@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.11 2004/04/07 17:22:11 eburns Exp $
+ * $Id: ConfigureListener.java,v 1.12 2004/04/08 22:54:44 eburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
@@ -975,7 +975,7 @@ public class ConfigureListener implements ServletContextListener {
 
         // Configure preregistered entities
         URL url = this.getClass().getResource
-            ("/com/sun/faces/web-facesconfig_1_0.dtd");
+            ("/com/sun/faces/web-facesconfig_1_1.dtd");
         digester.register
             ("-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN",
              url.toString());

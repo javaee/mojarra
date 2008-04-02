@@ -202,7 +202,7 @@ necessary to generate required classes.
       <arg         value="--dir"/>
       <arg         value="${build.generate}"/>
       <arg         value="--dtd"/>
-      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd"/>
+      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
       <arg         value="--copyright"/>
       <arg         value="${basedir}/COPYRIGHT"/>
 
@@ -244,7 +244,7 @@ necessary to generate required classes.
       <arg         value="--dir"/>
       <arg         value="${build.generate}"/>
       <arg         value="--dtd"/>
-      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd"/>
+      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
       <arg         value="--copyright"/>
       <arg         value="${basedir}/COPYRIGHT"/>
       <arg         value="--tagdef"/>
@@ -370,7 +370,7 @@ necessary to generate required classes.
 
     <dtd 
       publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
-      location="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd" />
+      location="${jsf-api.dir}/doc/web-facesconfig_1_1.dtd" />
 
   </xmlcatalog>
 
@@ -402,7 +402,7 @@ necessary to generate required classes.
       <arg         value="--dir"/>
       <arg         value="${build.generate.facesdoc}"/>
       <arg         value="--dtd"/>
-      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd"/>
+      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
       <arg         value="--copyright"/>
       <arg         value="${basedir}/COPYRIGHT"/>
 

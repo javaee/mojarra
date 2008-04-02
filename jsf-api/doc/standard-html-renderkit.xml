@@ -7,7 +7,7 @@
 
 <!DOCTYPE faces-config PUBLIC
   "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
-  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd" [ 
+  "http://java.sun.com/dtd/web-facesconfig_1_1.dtd" [ 
 
   <!ENTITY actionsource-props       SYSTEM "actionsource-props.xml">
   <!ENTITY valueholder-props        SYSTEM "valueholder-props.xml">
@@ -1239,6 +1239,12 @@
       <component-family>javax.faces.Data</component-family>
       <renderer-type>javax.faces.Table</renderer-type>
       <renderer-class>&data-table-renderer-class;</renderer-class>
+      <facet>
+	<facet-name>header</facet-name>
+      </facet>
+      <facet>
+	<facet-name>footer</facet-name>
+      </facet>
 
       &core-attrs;
       &events-attrs;
@@ -1694,6 +1700,12 @@
       <component-family>javax.faces.Panel</component-family>
       <renderer-type>javax.faces.Grid</renderer-type>
       <renderer-class>&panel-grid-renderer-class;</renderer-class>
+      <facet>
+	<facet-name>header</facet-name>
+      </facet>
+      <facet>
+	<facet-name>footer</facet-name>
+      </facet>
 
       &core-attrs;
       &events-attrs;
