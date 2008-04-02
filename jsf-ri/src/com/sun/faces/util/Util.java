@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.72 2003/08/13 03:04:54 eburns Exp $
+ * $Id: Util.java,v 1.73 2003/08/13 18:18:25 rlubke Exp $
  */
 
 /*
@@ -12,12 +12,13 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.el.impl.ExpressionEvaluator;
+import com.sun.faces.el.impl.ExpressionEvaluatorImpl;
 import com.sun.faces.application.MessageResourcesImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -53,7 +54,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.72 2003/08/13 03:04:54 eburns Exp $
+ * @version $Id: Util.java,v 1.73 2003/08/13 18:18:25 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -62,9 +63,21 @@ import org.mozilla.util.ParameterCheck;
 
 public class Util extends Object
 {
-//
-// Protected Constants
-//
+    //
+    // Private/Protected Constants
+    //
+    
+    /**
+     * The parser implementation for handling JSP EL expressions.
+     */ 
+    private static final ExpressionEvaluator JSP_EXPRESSION_EVALUATOR =
+        new ExpressionEvaluatorImpl(RIConstants.JSP_EL_PARSER);
+    
+    /**
+     * The parser implementation for handling Faces RE expressions.
+     */ 
+    private static final ExpressionEvaluator FACES_EXPRESSION_EVALUATOR =
+        new ExpressionEvaluatorImpl(RIConstants.FACES_RE_PARSER);
 
     // README - make sure to add the message identifier constant
     // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
@@ -228,6 +241,9 @@ public class Util extends Object
 
    public static final String ENCODING_ERROR_MESSAGE_ID =
          "com.sun.faces.ENCODING_ERROR";
+    
+    public static final String ILLEGAL_IDENTIFIER_LVALUE_MODE =
+        "com.sun.faces.ILLEGAL_IDENTIFIER_LVALUE_MODE";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
@@ -546,7 +562,7 @@ private Util()
     }
 			 
     /**
-     * <p>Return an Iterator over {@link SelectItemWrppaer} instances representing the
+     * <p>Return an Iterator over {@link SelectItemWrapper} instances representing the
      * available options for this component, assembled from the set of
      * {@link UISelectItem} and/or {@link UISelectItems} components that are
      * direct children of this component.  If there are no such children, a
@@ -798,6 +814,22 @@ private Util()
         return null;
         
     }
+    
+    /**
+     * <p>Return an {@link ExpressionEvaluator} instance using the specified parser.</p>
+     * @param parser the parser to be used for this expressionEvaluator
+     * @return an ExpressionEvaluator using the specified parser
+     */
+    public static ExpressionEvaluator getExpressionEvaluator(String parser) {       
+        Assert.assert_it(parser != null);
+        if (parser.equals(RIConstants.FACES_RE_PARSER)) 
+            return FACES_EXPRESSION_EVALUATOR;
+        else if (parser.equals(RIConstants.JSP_EL_PARSER))
+            return JSP_EXPRESSION_EVALUATOR;
+        else 
+            return null;                      
+    }
+
 
 //
 // General Methods

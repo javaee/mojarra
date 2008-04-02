@@ -771,6 +771,15 @@
       <summary xml:lang="es">Unrecognized Character Encoding.</summary>
       <summary xml:lang="fr">Unrecognized Character Encoding.</summary>
     </message>
+      
+    <message>
+      <message-id>com.sun.faces.ILLEGAL_IDENTIFIER_LVALUE_MODE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Illegal use of implicit object identifier in lValue mode: ''{0}''</summary>
+      <summary xml:lang="de">Ungültiger Gebrauch des impliziten Gegenstandbezeichners im lValue Modus: ''{0}''</summary>
+      <summary xml:lang="es">Uso ilegal del identificador implícito del objeto en modo del lValue: ''{0}''</summary>
+      <summary xml:lang="fr">Utilisation illégale de marque implicite d''objet en mode de lValue: ''{0}''</summary>
+    </message>
   </message-resources>
 
   <!-- Standard Validators -->

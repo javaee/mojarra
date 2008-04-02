@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.37 2003/06/17 20:42:20 eburns Exp $
+ * $Id: RIConstants.java,v 1.38 2003/08/13 18:18:22 rlubke Exp $
  */
 
 /*
@@ -76,9 +76,26 @@ public class RIConstants {
 
     public final static String FORM_NUMBER_ATTR = FACES_PREFIX +
 	"FormNumber";
+    
+    /**
+     * <p>Parser implementation for processing JSF reference expressions.</p>
+     */
+    public static final String FACES_RE_PARSER = 
+        FACES_PREFIX + "el.ext.parser.FacesREParser";
+    
+    /**
+     * <p>ExpressionEvaluator implementation for processing JSP/JSTL-based
+     * EL expressions.</p>
+     */
+    public static final String JSP_EL_EVALUATOR = 
+        FACES_PREFIX + "el.impl.ExpressionEvaluatorImpl";
 
-    public static final String ELEVALUATOR = "org.apache.taglibs.standard.jstl_el.jstl.ELEvaluator";
-
+    /**
+     * <p>Parser implementation for processing JSP/JSTL-based EL expressions.</p>
+     */
+    public static final String JSP_EL_PARSER = 
+        FACES_PREFIX + "el.impl.parser.ELParserImpl";
+    
     /**
      * <p>String identifer for <em>bundle attribute.</em>.</p>
      */

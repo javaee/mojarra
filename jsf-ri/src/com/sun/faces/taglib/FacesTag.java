@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.39 2003/08/13 02:08:05 eburns Exp $
+ * $Id: FacesTag.java,v 1.40 2003/08/13 18:18:24 rlubke Exp $
  */
 
 /*
@@ -11,28 +11,18 @@
 
 package com.sun.faces.taglib;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
-import javax.servlet.ServletRequest;
-
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.component.UIInput;
-import javax.faces.component.UIGraphic;
-import javax.faces.context.FacesContext;
-import javax.faces.render.RenderKit;
-import javax.faces.render.Renderer;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
-
+import com.sun.faces.el.impl.ElException;
+import com.sun.faces.el.impl.ExpressionInfo;
+import com.sun.faces.el.impl.JspVariableResolver;
+import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIOutput;
+import javax.servlet.jsp.JspException;
 
 /**
  *
@@ -40,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.39 2003/08/13 02:08:05 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.40 2003/08/13 18:18:24 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -1158,6 +1148,42 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 //
 // General Methods
 //
+    
+    /**
+     * <p>Determine if the provided string meets the minimum requirements
+     * for being considered an JSP/JSTL EL expression.</p>
+     * @param candidate the String to check for 'EL-isity'
+     * @return true if the candidate meets the requirements, otherwise false
+     */
+    private static boolean isELExpression(String candidate) {
+        if (candidate.startsWith("${") &&
+            candidate.charAt(candidate.length() - 1) == '}') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * <p>Evaluate the ID attribute as an EL expression if
+     * the value is surrounded by the standard EL delimiters.</p>
+     * @throws JspException if an error occurs during evaluation.
+     */
+    private void evaluateId() throws JspException {
+        // PENDING (horwat/rlubke) Change attribute once JSP ID issue is resolved
+        if (id != null && isELExpression(id)) {
+            String expression = id;
+            ExpressionInfo exprInfo = new ExpressionInfo();
+            exprInfo.setExpressionString(expression);
+            exprInfo.setExpectedType(String.class);
+            exprInfo.setVariableResolver(new JspVariableResolver(pageContext));
+            try {
+                id = (String)
+                    Util.getExpressionEvaluator(RIConstants.JSP_EL_PARSER).evaluate(exprInfo);
+            } catch (ElException ele) {
+                throw new JspException(ele.getMessage(), ele);
+            }
+        }
+    }
 
 /**
 
@@ -1343,6 +1369,8 @@ protected String getDebugString() {
 public int doStartTag() throws JspException {
     int rc = 0;
     try {
+        // PENDING (horwat,rlubke) reevaluate once JSP 'id' issue is sorted out
+        // evaluateId();
 	rc = super.doStartTag();
     }
     catch (JspException e) {
