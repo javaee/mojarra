@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: verbatim_test.jsp,v 1.3 2003/11/10 00:08:27 eburns Exp $ --%>
+<%-- $Id: verbatim_test.jsp,v 1.4 2003/11/10 02:40:32 eburns Exp $ --%>
 <html>
   <head>
     <title>Test of the Verbatim Tag</title>
@@ -56,10 +56,6 @@
 
 
     <hr>
-<!-- Created: Thu Sep 04 14:10:57 Eastern Daylight Time 2003 -->
-<!-- hhmts start -->
-Last modified: Sun Nov 09 18:09:51 Eastern Standard Time 2003
-<!-- hhmts end -->
   </body>
 
 </f:view>

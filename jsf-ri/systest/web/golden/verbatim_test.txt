@@ -46,10 +46,6 @@
 
 
     <hr>
-<!-- Created: Thu Sep 04 14:10:57 Eastern Daylight Time 2003 -->
-<!-- hhmts start -->
-Last modified: Thu Sep 04 18:47:53 Eastern Daylight Time 2003
-<!-- hhmts end -->
   </body>
 
 

@@ -6,7 +6,6 @@
 <head>
     
     
-    
     <title>command_link_test.jsp</title>
 </head>
 <body>
