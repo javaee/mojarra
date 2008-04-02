@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.18 2004/01/27 20:30:10 craigmcc Exp $
+ * $Id: UISelectOneTestCase.java,v 1.19 2004/02/03 21:31:07 craigmcc Exp $
  */
 
 /*
@@ -11,10 +11,13 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
+import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -123,6 +126,50 @@ public class UISelectOneTestCase extends UIInputTestCase {
     }
 
 
+    private String legalValues[] =
+    { "A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3" };
+
+
+    private String illegalValues[] =
+    { "D1", "D2", "Group A", "Group B", "Group C" };
+
+    // Test validation against a nested list of available options
+    public void testValidateNested() throws Exception {
+
+        // Set up UISelectOne with nested UISelectItems
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(component);
+        UISelectOne selectOne = (UISelectOne) component;
+        UISelectItems selectItems = new UISelectItems();
+        selectItems.setValue(setupOptions());
+        selectOne.getChildren().add(selectItems);
+        selectOne.setRequired(true);
+        checkMessages(0);
+
+        // Verify that all legal values will validate
+        for (int i = 0; i < legalValues.length; i++) {
+            selectOne.setValid(true);
+            selectOne.setSubmittedValue(legalValues[i]);
+            selectOne.validate(facesContext);
+            assertTrue("Value '" + legalValues[i] + "' found",
+                       selectOne.isValid());
+            checkMessages(0);
+        }
+
+        // Verify that illegal values will not validate
+        for (int i = 0; i < illegalValues.length; i++) {
+            selectOne.setValid(true);
+            selectOne.setSubmittedValue(illegalValues[i]);
+            selectOne.validate(facesContext);
+            assertTrue("Value '" + illegalValues[i] + "' not found",
+                       !selectOne.isValid());
+            checkMessages(i + 1);
+        }
+
+
+    }
+
+
     // Test validation of a required field
     public void testValidateRequired() throws Exception {
 
@@ -200,6 +247,29 @@ public class UISelectOneTestCase extends UIInputTestCase {
         si.setItemLabel("foo label");
         input.getChildren().add(si);
 
+    }
+
+
+    // Create an options list with nested groups
+    protected List setupOptions() {
+        SelectItemGroup group, subgroup;
+        subgroup = new SelectItemGroup("Group C");
+        subgroup.setSelectItems(new SelectItem[]
+            { new SelectItem("C1"),
+              new SelectItem("C2"),
+              new SelectItem("C3") });
+        List options = new ArrayList();
+        options.add(new SelectItem("A1"));
+        group = new SelectItemGroup("Group B");
+        group.setSelectItems(new SelectItem[]
+            { new SelectItem("B1"),
+              subgroup,
+              new SelectItem("B2"),
+              new SelectItem("B3") });
+        options.add(group);
+        options.add(new SelectItem("A2"));
+        options.add(new SelectItem("A3"));
+        return (options);
     }
 
 

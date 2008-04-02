@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.46 2004/01/29 03:45:50 eburns Exp $
+ * $Id: UISelectMany.java,v 1.47 2004/02/03 21:31:05 craigmcc Exp $
  */
 
 /*
@@ -13,10 +13,12 @@ package javax.faces.component;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 
 
 /**
@@ -359,16 +361,10 @@ public class UISelectMany extends UIInput {
         int length = isList ? ((List) value).size() : Array.getLength(value);
         boolean found = true;
         for (int i = 0; i < length; i++) {
-            found = false;
             Iterator items = new SelectItemsIterator(this);
-            Object indexValue = isList ? ((List) value).get(i) : Array.get(value, i);
-            while (items.hasNext()) {
-                SelectItem item = (SelectItem) items.next();
-                if (indexValue.equals(item.getValue())) {
-                    found = true;
-                    break;
-                }
-            }
+            Object indexValue = isList ?
+                ((List) value).get(i) : Array.get(value, i);
+            found = matchValue(indexValue, items);
             if (!found) {
                 break;
             }
@@ -381,6 +377,67 @@ public class UISelectMany extends UIInput {
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
             context.addMessage(getClientId(context), message);
             setValid(false);
+        }
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * <p>Return <code>true</code> if the specified value matches one of the
+     * available options, performing a recursive search if if a
+     * {@link SelectItemGroup} instance is detected.</p>
+     *
+     * @param value {@link UIComponent} value to be tested
+     * @param items Iterator over the {@link SelectItem}s to be checked
+     */
+    private boolean matchValue(Object value, Iterator items) {
+
+        while (items.hasNext()) {
+            SelectItem item = (SelectItem) items.next();
+            if (item instanceof SelectItemGroup) {
+                SelectItem subitems[] =
+                    ((SelectItemGroup) item).getSelectItems();
+                if ((subitems != null) && (subitems.length > 0)) {
+                    if (matchValue(value, new ArrayIterator(subitems))) {
+                        return (true);
+                    }
+                }
+            } else if ((value == null) && (item.getValue() == null)) {
+                return (true);
+            } else if (value.equals(item.getValue())) {
+                return (true);
+            }
+        }
+        return (false);
+
+    }
+
+
+    class ArrayIterator implements Iterator {
+
+        public ArrayIterator(Object items[]) {
+            this.items = items;
+        }
+
+        private Object items[];
+        private int index = 0;
+
+        public boolean hasNext() {
+            return (index < items.length);
+        }
+
+        public Object next() {
+            try {
+                return (items[index++]);
+            } catch (IndexOutOfBoundsException e) {
+                throw new NoSuchElementException();
+            }
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
         }
     }
 
