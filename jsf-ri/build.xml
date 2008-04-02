@@ -764,10 +764,6 @@ must exist.  This is necessary for the MessageFactory class.
            depends="init.test,run.junit.test,run.cactus.test.appserver,
                test.config,run.systest.appserver,run.systest-per-webapp.appserver"
            description="Run all unit and system tests"/>
-
-    <target name="init.test">
-        <mkdir dir="${test.results.dir}"/>
-    </target>
     
     <target name="run.systest.appserver" description="Run system tests" depends="init.test">
       <ant dir="${basedir}/systest" inheritall="false" target="test.appserver"/>
@@ -777,11 +773,6 @@ must exist.  This is necessary for the MessageFactory class.
     <target name="run.systest-per-webapp.appserver" description="Run per-webapp system tests" depends="init.test,compile.test">
       <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="test.appserver"/>
     </target>
-
-    <target name="run.junit.test" depends="init.test,compile.test"
-     description="Run unit tests not requiring cactus">
-        <ant antfile="build-tests.xml" target="run.test"/>
-    </target> 
 
     <target name="run.cactus.test.appserver" depends="init.test,compile.test,jars"
      description="Run unit tests requiring cactus">
