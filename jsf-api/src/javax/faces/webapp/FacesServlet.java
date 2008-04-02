@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.19 2004/01/21 09:57:44 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.20 2004/01/21 23:45:14 craigmcc Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ public final class FacesServlet implements Servlet {
      * <code>/WEB-INF/faces-config.xml</code> which is loaded automatically
      * if it exists) containing JavaServer Faces configuration information.</p>
      */
-    private static final String CONFIG_FILES_ATTR =
+    public static final String CONFIG_FILES_ATTR =
 	"javax.faces.CONFIG_FILES";
 
 
