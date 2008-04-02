@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.10 2003/09/30 17:37:40 rlubke Exp $
+ * $Id: DateTimeConverter.java,v 1.11 2003/09/30 19:15:32 rlubke Exp $
  */
 
 /*
@@ -281,6 +281,8 @@ public class DateTimeConverter implements Converter, StateHolder {
         } catch (ParseException e) {
             // PENDING(craigmcc) - i18n
             throw new ConverterException("Error parsing '" + value + "'");
+        } catch (Exception e) {
+            throw new ConverterException(e);
         }
 
 
