@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseStateTestCase.java,v 1.9 2003/09/20 00:48:17 craigmcc Exp $
+ * $Id: UIComponentBaseStateTestCase.java,v 1.10 2003/09/24 22:41:13 eburns Exp $
  */
 
 /*
@@ -154,8 +154,8 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	// TestValueChangedListener ctor.  This exercises the logic that
 	// allows attached objects to maintain pointers to the
 	// components to which they are attached.
-	input.addValueChangedListener(new TestValueChangedListenerWithBackReference("ANY2",
-										    PhaseId.ANY_PHASE, input));
+	input.addValueChangedListener(new TestValueChangedListener("ANY2",
+								   PhaseId.ANY_PHASE));
 	
 	((UIPanelBase)input.getFacets().get("header")).setId("header");
 	((UIPanelBase)input.getFacets().get("footer")).setId("footer");

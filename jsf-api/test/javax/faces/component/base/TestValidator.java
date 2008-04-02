@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidator.java,v 1.5 2003/09/22 19:03:45 eburns Exp $
+ * $Id: TestValidator.java,v 1.6 2003/09/24 22:41:12 eburns Exp $
  */
 
 /*
@@ -70,12 +70,5 @@ public class TestValidator implements Validator, StateHolder {
     }
 
     public void setTransient(boolean newT) {}
-
-    public void setComponent(UIComponent yourComponent) {
-	// we don't keep a back reference to our component, but if we
-	// did, here is where we'd restore it.
-    }
-
-
 
 }

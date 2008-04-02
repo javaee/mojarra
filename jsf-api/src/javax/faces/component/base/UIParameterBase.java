@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterBase.java,v 1.10 2003/09/19 00:57:10 craigmcc Exp $
+ * $Id: UIParameterBase.java,v 1.11 2003/09/24 22:41:04 eburns Exp $
  */
 
 /*
@@ -166,6 +166,7 @@ public class UIParameterBase extends UIComponentBase implements UIParameter {
             List theSupport = supportList[0];
             if ((theSupport != null) && (theSupport.size() > 0)) {
                 support = (ValueHolderSupport) theSupport.get(0);
+		support.setComponent(this);
             }
 	}
         name = (String) values[2];

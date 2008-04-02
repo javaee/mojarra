@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.4 2003/09/22 19:03:37 eburns Exp $
+ * $Id: NumberConverter.java,v 1.5 2003/09/24 22:41:07 eburns Exp $
  */
 
 /*
@@ -717,11 +717,5 @@ public class NumberConverter implements Converter, StateHolder {
     public void setTransient(boolean transientFlag) {
         this.transientFlag = transientFlag;
     }
-
-    public void setComponent(UIComponent yourComponent) {
-	// we don't keep a back reference to our component, but if we
-	// did, here is where we'd restore it.
-    }
-
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangedListener.java,v 1.7 2003/09/22 19:03:45 eburns Exp $
+ * $Id: TestValueChangedListener.java,v 1.8 2003/09/24 22:41:12 eburns Exp $
  */
 
 /*
@@ -129,12 +129,5 @@ public class TestValueChangedListener implements ValueChangedListener, StateHold
     }
 
     public void setTransient(boolean newT) {}
-
-    public void setComponent(UIComponent yourComponent) {
-	// we don't keep a back reference to our component, but if we
-	// did, here is where we'd restore it.
-    }
-
-
 
 }

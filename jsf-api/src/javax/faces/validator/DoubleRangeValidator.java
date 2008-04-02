@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.22 2003/09/22 19:03:39 eburns Exp $
+ * $Id: DoubleRangeValidator.java,v 1.23 2003/09/24 22:41:08 eburns Exp $
  */
 
 /*
@@ -311,11 +311,5 @@ public class DoubleRangeValidator implements Validator, StateHolder {
         this.transientValue = transientValue;
 
     }
-
-    public void setComponent(UIComponent yourComponent) {
-	// we don't keep a back reference to our component, but if we
-	// did, here is where we'd restore it.
-    }
-
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.20 2003/09/22 19:03:40 eburns Exp $
+ * $Id: StringRangeValidator.java,v 1.21 2003/09/24 22:41:09 eburns Exp $
  */
 
 /*
@@ -313,11 +313,6 @@ public class StringRangeValidator implements Validator, StateHolder {
 
         this.transientValue = transientValue;
 
-    }
-
-    public void setComponent(UIComponent yourComponent) {
-	// we don't keep a back reference to our component, but if we
-	// did, here is where we'd restore it.
     }
 
 }

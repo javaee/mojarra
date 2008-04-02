@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.17 2003/09/22 19:03:40 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.18 2003/09/24 22:41:08 eburns Exp $
  */
 
 /*
@@ -310,11 +310,6 @@ public class LongRangeValidator implements Validator, StateHolder {
 
         this.transientValue = transientValue;
 
-    }
-
-    public void setComponent(UIComponent yourComponent) {
-	// we don't keep a back reference to our component, but if we
-	// did, here is where we'd restore it.
     }
 
 }

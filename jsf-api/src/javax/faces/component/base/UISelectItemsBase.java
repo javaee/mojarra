@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemsBase.java,v 1.9 2003/09/19 00:57:10 craigmcc Exp $
+ * $Id: UISelectItemsBase.java,v 1.10 2003/09/24 22:41:05 eburns Exp $
  */
 
 /*
@@ -145,6 +145,7 @@ public class UISelectItemsBase extends UIComponentBase implements UISelectItems 
             List theSupport = supportList[0];
             if ((theSupport != null) && (theSupport.size() > 0)) {
                 support = (ValueHolderSupport) theSupport.get(0);
+		support.setComponent(this);
             }
 	}
 

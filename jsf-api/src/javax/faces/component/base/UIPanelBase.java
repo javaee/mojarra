@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelBase.java,v 1.10 2003/09/19 00:57:09 craigmcc Exp $
+ * $Id: UIPanelBase.java,v 1.11 2003/09/24 22:41:04 eburns Exp $
  */
 
 /*
@@ -152,6 +152,7 @@ public class UIPanelBase extends UIComponentBase implements UIPanel {
             List theSupport = supportList[0];
             if ((theSupport != null) && (theSupport.size() > 0)) {
                 support = (ValueHolderSupport) theSupport.get(0);
+		support.setComponent(this);
             }
 	}
 

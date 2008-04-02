@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.7 2003/09/23 21:33:46 jvisvanathan Exp $
+ * $Id: UIDataTestCase.java,v 1.8 2003/09/24 22:41:11 eburns Exp $
  */
 
 /*
@@ -400,11 +400,6 @@ public static class StateSavingConverter extends Object implements Converter, St
 	public boolean isTransient() { return false; }
 
 	public void setTransient(boolean newTransientValue) {}
-
-        public void setComponent(UIComponent yourComponent) {
-	    // we don't keep a back reference to our component, but if we
-	    // did, here is where we'd restore it.
-	}
 
 	public boolean equals(Object otherObj) {
 	    if (!(otherObj instanceof StateSavingConverter)) {
