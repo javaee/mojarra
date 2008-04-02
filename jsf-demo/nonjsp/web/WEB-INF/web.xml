@@ -44,10 +44,10 @@
 
 
 <web-app>
+    <display-name>JavaServer Faces Non-JSP Sample Application</display-name>
     <description>
         JavaServer Faces Non-JSP Sample Application
     </description>
-    <display-name>JavaServer Faces Non-JSP Sample Application</display-name>
 
     <context-param>
         <param-name>saveStateInClient</param-name>
