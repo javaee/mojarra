@@ -1,7 +1,7 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20030924B
+jsf-api cvs tag for this implementation: JSF_API_2003030G
 jsf-api-spec for this implementation: JSF_20030930.pdf
 
 Installation Notes
@@ -585,6 +585,14 @@ SECTION: RI Changes: 150 commit messages
 
 Known Issues With This Release
 ==============================
+
+* cardemo checkboxes do not properly set themselves when choosing a
+  package.
+
+* cardemo dynamic pricing is broken, the prices always go up!
+
+* Some renderer (and therefore tag) attributes have the incorrect type
+  with respect to the HTML 4.01 spec.
 
 Legal Notice
 ============
