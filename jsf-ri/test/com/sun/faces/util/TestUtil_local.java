@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_local.java,v 1.10 2006/03/29 23:05:03 rlubke Exp $
+ * $Id: TestUtil_local.java,v 1.11 2007/01/26 04:02:36 rlubke Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_local.java,v 1.10 2006/03/29 23:05:03 rlubke Exp $
+ * @version $Id: TestUtil_local.java,v 1.11 2007/01/26 04:02:36 rlubke Exp $
  */
 
 public class TestUtil_local extends TestCase {
@@ -80,23 +80,6 @@ public class TestUtil_local extends TestCase {
 //
 // General Methods
 //
-
-
-    public void testReplaceOccurrences() {
-        assertTrue(((String) Util.replaceOccurrences(" ", " ", "%20")).
-                   equals("%20"));
-        assertTrue(((String) Util.replaceOccurrences("        ", " ", "%20")).
-                   equals("%20%20%20%20%20%20%20%20"));
-        assertTrue(((String) Util.replaceOccurrences(" hello", " ", "%20")).
-                   equals("%20hello"));
-        assertTrue(((String) Util.replaceOccurrences(" hello ", " ", "%20")).
-                   equals("%20hello%20"));
-        assertTrue(((String) Util.replaceOccurrences("hello ", " ", "%20")).
-                   equals("hello%20"));
-        assertTrue(((String) Util.replaceOccurrences("hello hello", " ", "%20")).
-                   equals("hello%20hello"));
-
-    }
 
 
     public void testGetLocaleFromString() {

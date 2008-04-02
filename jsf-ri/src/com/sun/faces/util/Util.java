@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.204 2007/01/23 01:04:21 rlubke Exp $
+ * $Id: Util.java,v 1.205 2007/01/26 04:02:36 rlubke Exp $
  */
 
 /*
@@ -36,7 +36,6 @@ import javax.el.ELResolver;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.validator.Validator;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -65,7 +64,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -79,7 +77,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.204 2007/01/23 01:04:21 rlubke Exp $
+ * @version $Id: Util.java,v 1.205 2007/01/26 04:02:36 rlubke Exp $
  */
 
 public class Util {
@@ -373,35 +371,6 @@ public class Util {
     }
 
 
-    /**
-     * @return src with all occurrences of "from" replaced with "to".
-     */
-
-    public static String replaceOccurrences(String src,
-                                            String from,
-                                            String to) {
-        // a little optimization: don't bother with strings that don't
-        // have any occurrences to replace.
-        if (-1 == src.indexOf(from)) {
-            return src;
-        }
-        StringBuffer result = new StringBuffer(src.length());
-        StringTokenizer toker = new StringTokenizer(src, from, true);
-        String curToken = null;
-        while (toker.hasMoreTokens()) {
-            // if the current token is a delimiter, replace it with "to"
-            if ((curToken = toker.nextToken()).equals(from)) {
-                result.append(to);
-            } else {
-                // it's not a delimiter, just output it.
-                result.append(curToken);
-            }
-        }
-
-
-        return result.toString();
-    }
-
     public static Object evaluateValueExpression(ValueExpression expression,
                                                  ELContext elContext) {
            if (expression.isLiteralText()) {
@@ -543,43 +512,23 @@ public class Util {
 
 
     public static boolean componentIsDisabled(UIComponent component) {
-        Object disabled = null;
-        boolean result = false;
-        if (null !=
-            (disabled = component.getAttributes().get("disabled"))) {
-            if (disabled instanceof String) {
-                result = ((String) disabled).equalsIgnoreCase("true");
-            } else {
-                result = disabled.equals(Boolean.TRUE);
-            }
-        }
 
-        return result;
+        return (Boolean.valueOf(String.valueOf(component.getAttributes().get("disabled"))));
+
     }
 
 
     public static boolean componentIsDisabledOrReadonly(UIComponent component) {
-        Object disabledOrReadonly = null;
-        boolean result = false;
-        if (null !=
-            (disabledOrReadonly = component.getAttributes().get("disabled"))) {
-            if (disabledOrReadonly instanceof String) {
-                result = Boolean.valueOf((String) disabledOrReadonly);
-            } else {
-                result = disabledOrReadonly.equals(Boolean.TRUE);
-            }
-        }
-        if ((!result) &&
-            null !=
-            (disabledOrReadonly = component.getAttributes().get("readonly"))) {
-            if (disabledOrReadonly instanceof String) {
-                result = Boolean.valueOf((String) disabledOrReadonly);
-            } else {
-                result = disabledOrReadonly.equals(Boolean.TRUE);
-            }
-        }
 
-        return result;
+        boolean disabledOrReadonly =
+             Boolean.valueOf(String.valueOf(component.getAttributes().get("disabled")));
+        if (disabledOrReadonly) {
+            return true;
+        }
+        disabledOrReadonly =
+            Boolean.valueOf(String.valueOf(component.getAttributes().get("disabled")));
+        return disabledOrReadonly;
+
     }
 
 
