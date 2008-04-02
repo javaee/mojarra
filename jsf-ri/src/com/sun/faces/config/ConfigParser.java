@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.36 2003/09/12 19:48:43 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.37 2003/09/26 14:26:49 rkitain Exp $
  */
 
 /*
@@ -35,6 +35,9 @@ import javax.faces.application.Application;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
+import javax.faces.event.PhaseListener;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -298,6 +301,7 @@ public class ConfigParser {
         configureRulesManagedBean(digester);
         configureRulesNavigationCase(digester);
         configureRulesRenderKit(digester);
+	configureRulesLifecycle(digester);
 
     }
 
@@ -609,6 +613,19 @@ public class ConfigParser {
                                "setRendererClass", 0);
     }
 
+    // Configure the rules for a <lifecycle> element
+    protected void configureRulesLifecycle(Digester digester) {
+
+	String prefix = "faces-config/lifecycle";
+
+        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigLifecycle");
+        digester.addCallMethod(prefix+"/phase-listener", "setPhaseListener", 0);
+	//
+        // This custom rule will add a phase listener to the Lifecycle instance;
+        //
+        LifecycleRule lRule = new LifecycleRule();
+        digester.addRule(prefix, lRule);
+    }
 
     private boolean validateTheXml(ServletContext sc) {
         String validateXml = sc.getInitParameter(RIConstants.VALIDATE_XML);
@@ -880,53 +897,30 @@ final class ApplicationRule extends Rule {
         Application application = aFactory.getApplication();
 	Assert.assert_it(null != application);
 	
-	Object returnObject = createInstance(ca.getActionListener());
+	Object returnObject = Util.createInstance(ca.getActionListener());
 	if (returnObject != null) {
 	    application.setActionListener((ActionListener)returnObject);
 	}
 
-	returnObject = createInstance(ca.getNavigationHandler());
+	returnObject = Util.createInstance(ca.getNavigationHandler());
 	if (returnObject != null) {
 	    application.setNavigationHandler((NavigationHandler)returnObject);
 	}
 
-	returnObject = createInstance(ca.getPropertyResolver());
+	returnObject = Util.createInstance(ca.getPropertyResolver());
 	if (returnObject != null) {
 	    application.setPropertyResolver((PropertyResolver)returnObject);
 	}
 
-	returnObject = createInstance(ca.getVariableResolver());
+	returnObject = Util.createInstance(ca.getVariableResolver());
 	if (returnObject != null) {
 	    application.setVariableResolver((VariableResolver)returnObject);
 	}
 
-	returnObject = createInstance(ca.getViewHandler());
+	returnObject = Util.createInstance(ca.getViewHandler());
 	if (returnObject != null) {
 	    application.setViewHandler((ViewHandler)returnObject);
 	}
-    }
-
-    protected Object createInstance(String className) {
-	Class clazz = null;
-	Object returnObject = null;
-	if (className != null) {
-            try {
-	        clazz = Util.loadClass(className, this);
-	        if (clazz != null) {
-	            returnObject = clazz.newInstance();
-	        }
-	    } catch (Exception e) {
-	        Object[] params = new Object[1];
-	        params[0] = className;
-	        String msg = Util.getExceptionMessage(
-		    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
-	        if (log.isErrorEnabled()) {
-	            log.error(msg + ":" + className + ":exception:"+
-		        e.getMessage());
-                }
-	    }
-        }
-	return returnObject;
     }
 }
 
@@ -964,29 +958,6 @@ final class FactoryRule extends Rule {
 				     implName);
 	}
 	
-    }
-
-    protected Object createInstance(String className) {
-	Class clazz = null;
-	Object returnObject = null;
-	if (className != null) {
-            try {
-	        clazz = Util.loadClass(className, this);
-	        if (clazz != null) {
-	            returnObject = clazz.newInstance();
-	        }
-	    } catch (Exception e) {
-	        Object[] params = new Object[1];
-	        params[0] = className;
-	        String msg = Util.getExceptionMessage(
-		    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
-	        if (log.isErrorEnabled()) {
-	            log.error(msg + ":" + className + ":exception:"+
-		        e.getMessage());
-                }
-	    }
-        }
-	return returnObject;
     }
 }
 
@@ -1179,5 +1150,29 @@ final class MessageResourceRule extends Rule {
             }
         }
         return new Locale(language, country, variant);
+    }
+}
+
+/**
+ * This rule sets the Lifecycle's Phase Listener instance;
+ */
+final class LifecycleRule extends Rule {
+
+    protected static Log log = LogFactory.getLog(ConfigParser.class);
+
+    public LifecycleRule() {
+        super();
+    }
+    public void end(String namespace, String name) throws Exception {
+        ConfigLifecycle cl = (ConfigLifecycle)digester.peek();
+        LifecycleFactory lFactory =
+            (LifecycleFactory)FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        Lifecycle lifecycle = lFactory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+	Assert.assert_it(null != lifecycle);
+	
+	Object returnObject = Util.createInstance(cl.getPhaseListener());
+	if (returnObject != null) {
+	    lifecycle.addPhaseListener((PhaseListener)returnObject);
+	}
     }
 }

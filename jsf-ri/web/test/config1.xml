@@ -37,5 +37,9 @@
      </renderer>
    </render-kit> 
 
+   <lifecycle>
+     <phase-listener>com.sun.faces.config.SimplePhaseListener</phase-listener>
+   </lifecycle>
+
 
 </faces-config>

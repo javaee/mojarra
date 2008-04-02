@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.92 2003/09/24 23:17:38 horwat Exp $
+ * $Id: Util.java,v 1.93 2003/09/26 14:26:51 rkitain Exp $
  */
 
 /*
@@ -52,6 +52,8 @@ import javax.faces.application.StateManager;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
@@ -61,7 +63,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.92 2003/09/24 23:17:38 horwat Exp $
+ * @version $Id: Util.java,v 1.93 2003/09/26 14:26:51 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -73,6 +75,8 @@ public class Util extends Object
     //
     // Private/Protected Constants
     //
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(Util.class);
     
     /**
      * The parser implementation for handling JSP EL expressions.
@@ -902,6 +906,29 @@ private Util()
 	}
 	    
 	return result;
+    }
+
+    public static Object createInstance(String className) {
+	Class clazz = null;
+	Object returnObject = null;
+	if (className != null) {
+            try {
+	        clazz = Util.loadClass(className, returnObject);
+	        if (clazz != null) {
+	            returnObject = clazz.newInstance();
+	        }
+	    } catch (Exception e) {
+	        Object[] params = new Object[1];
+	        params[0] = className;
+	        String msg = Util.getExceptionMessage(
+		    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
+	        if (log.isErrorEnabled()) {
+	            log.error(msg + ":" + className + ":exception:"+
+		        e.getMessage());
+                }
+	    }
+        }
+	return returnObject;
     }
     
     //

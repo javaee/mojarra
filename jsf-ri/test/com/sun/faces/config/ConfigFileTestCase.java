@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.34 2003/09/03 18:53:41 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.35 2003/09/26 14:26:52 rkitain Exp $
  */
 
 /*
@@ -29,16 +29,18 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Message;
+import javax.faces.application.MessageResources;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.base.UIViewRootBase;
-import javax.faces.application.MessageResources;
-import javax.faces.application.Message;
 import javax.faces.convert.Converter;
-import javax.faces.validator.Validator;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+import javax.faces.validator.Validator;
 
 import org.apache.cactus.ServletTestCase;
 import org.apache.cactus.WebRequest;
@@ -361,5 +363,28 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             assertTrue(re.getMessage().indexOf("infoo") != -1);
         }
         assertTrue(exceptionThrown);
+    }
+
+    public void testLifecyclePhaseListener() throws Exception {
+        final String HANDLED_BEFORE_AFTER = "Handled Before After";
+        ConfigParser cp = new ConfigParser(config.getServletContext());
+        LifecycleFactory lFactory = (LifecycleFactory)FactoryFinder.getFactory(
+            FactoryFinder.LIFECYCLE_FACTORY);
+        Lifecycle lifecycle = lFactory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+        parseConfig(cp, "config1.xml", config.getServletContext());
+
+        UIViewRoot page = new UIViewRootBase();
+        page.setViewId("/login.jsp");
+	getFacesContext().setViewRoot(page);
+        try {
+            System.setProperty(HANDLED_BEFORE_AFTER, "");
+            lifecycle.execute(getFacesContext());
+        } catch (Exception e) {
+            assertTrue(e.getMessage(), false);
+        }
+
+        String handledBeforeAfter = System.getProperty(HANDLED_BEFORE_AFTER);
+        assertTrue(handledBeforeAfter != null);
+        assertTrue(handledBeforeAfter.equals(HANDLED_BEFORE_AFTER));
     }
 }
