@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.5 2004/02/26 20:30:30 eburns Exp $
+ * $Id: SelectItemsIterator.java,v 1.6 2004/07/12 14:26:04 rlubke Exp $
  */
 
 /*
@@ -14,7 +14,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import javax.faces.context.FacesContext;
+import java.util.Map;
+import java.util.ArrayList;
+
 import javax.faces.model.SelectItem;
 
 
@@ -119,6 +121,26 @@ final class SelectItemsIterator implements Iterator {
                 return (next());
             } else if (value instanceof List) {
                 items = ((List) value).iterator();
+                return (next());
+            } else if (value instanceof Map) {
+                List list = new ArrayList();
+                for (Iterator keys = ((Map) value).keySet().iterator();
+                    keys.hasNext(); ) {
+
+                    Object key = keys.next();
+                    if (key == null) {
+                        continue;
+                    }
+                    Object val = ((Map) value).get(key);
+                    if (val == null) {
+                        continue;
+                    }
+                    list.add(new SelectItem(val.toString(), key.toString(),
+                        null));
+
+                }
+
+                items = list.iterator();
                 return (next());
             } else {
                 throw new IllegalArgumentException();

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.26 2004/04/07 17:39:26 rkitain Exp $
+ * $Id: UISelectManyTestCase.java,v 1.27 2004/07/12 14:26:05 rlubke Exp $
  */
 
 /*
@@ -10,18 +10,17 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectMany;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
-import junit.framework.TestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -131,7 +130,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
 
         selectMany.setSelectedValues(values);
         assertEquals(values, selectMany.getSelectedValues());
-        assertEquals(values, (Object[]) selectMany.getValue());
+        assertEquals(values, selectMany.getValue());
         selectMany.setSelectedValues(null);
         assertNull(selectMany.getSelectedValues());
         assertNull(selectMany.getValue());
@@ -139,7 +138,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
         // Test transparency between "value" and "selectedValues" properties
         selectMany.setValue(values);
         assertEquals(values, selectMany.getSelectedValues());
-        assertEquals(values, (Object[]) selectMany.getValue());
+        assertEquals(values, selectMany.getValue());
         selectMany.setValue(null);
         assertNull(selectMany.getSelectedValues());
         assertNull(selectMany.getValue());
@@ -178,6 +177,39 @@ public class UISelectManyTestCase extends UIInputTestCase {
         selectMany.getChildren().add(new UISelectItemSub("foo", null, null));
         selectMany.getChildren().add(new UISelectItemSub("bar", null, null));
         selectMany.getChildren().add(new UISelectItemSub("baz", null, null));
+
+        // Validate two values that are on the list
+        selectMany.setValid(true);
+        selectMany.setSubmittedValue(new Object[] { "foo", "baz" });
+        selectMany.validate(facesContext);
+        assertTrue(selectMany.isValid());
+
+        // Validate one value on the list and one not on the list
+        selectMany.setValid(true);
+        selectMany.setSubmittedValue(new Object[] { "bar", "bop"});
+        selectMany.setRendererType(null); // We don't have any renderers
+        selectMany.validate(facesContext);
+        assertTrue(!selectMany.isValid());
+
+    }
+
+
+    // Test validation of component with UISelectItems pointing to map
+    public void testValidation2() throws Exception {
+
+         // Put our component under test in a tree under a UIViewRoot
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.getChildren().add(component);
+
+        // Add valid options to the component under test
+        Map map = new HashMap();
+        map.put("key_foo", "foo");
+        map.put("key_bar", "bar");
+        map.put("key_baz", "baz");
+        UISelectItems items = new UISelectItems();
+        items.setValue(map);
+        UISelectMany selectMany = (UISelectMany) component;
+        selectMany.getChildren().add(items);
 
         // Validate two values that are on the list
         selectMany.setValid(true);

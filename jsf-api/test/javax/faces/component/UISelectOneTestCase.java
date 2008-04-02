@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.22 2004/04/07 17:39:27 rkitain Exp $
+ * $Id: UISelectOneTestCase.java,v 1.23 2004/07/12 14:26:05 rlubke Exp $
  */
 
 /*
@@ -10,17 +10,16 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectOne;
-import javax.faces.model.SelectItem;
-import javax.faces.model.SelectItemGroup;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -120,6 +119,37 @@ public class UISelectOneTestCase extends UIInputTestCase {
         // Validate a value that is not on the list
         selectOne.setValid(true);
         selectOne.setSubmittedValue("bop");
+        selectOne.validate(facesContext);
+        assertTrue(!selectOne.isValid());
+
+    }
+
+    // Test validation of component with UISelectItems pointing to map
+    public void testValidation2() throws Exception {
+
+         // Put our component under test in a tree under a UIViewRoot
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.getChildren().add(component);
+
+        // Add valid options to the component under test
+        Map map = new HashMap();
+        map.put("key_foo", "foo");
+        map.put("key_bar", "bar");
+        map.put("key_baz", "baz");
+        UISelectItems items = new UISelectItems();
+        items.setValue(map);
+        UISelectOne selectOne = (UISelectOne) component;
+        selectOne.getChildren().add(items);
+
+        selectOne.setValid(true);
+        selectOne.setSubmittedValue("foo");
+        selectOne.validate(facesContext);
+        assertTrue(selectOne.isValid());
+
+        // Validate one value on the list and one not on the list
+        selectOne.setValid(true);
+        selectOne.setSubmittedValue("car");
+        selectOne.setRendererType(null); // We don't have any renderers
         selectOne.validate(facesContext);
         assertTrue(!selectOne.isValid());
 
