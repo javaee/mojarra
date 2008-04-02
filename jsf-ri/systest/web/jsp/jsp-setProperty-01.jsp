@@ -14,18 +14,23 @@
 </head>
 <body>
 <h:form>
-Value is <h:outputText value="#{test3.setPropertyTarget}" />. <p />
-<h:commandButton id="literalButton" value="submit with literal value">
-  <f:setPropertyActionListener target="#{test3.setPropertyTarget}" value="literal value" />
+
+Integer Property is: <h:outputText value="#{test3.intProperty}" />. </p>
+String Property is: <h:outputText value="#{test3.stringProperty}" />. </p>
+
+<h:commandButton id="expressionButton1" value="Convert from String To Integer">
+  <f:setPropertyActionListener target="#{test3.intProperty}" value="100" />
 </h:commandButton>
-<p />
-<h:commandButton id="expressionButton1" value="submit with expression value">
-  <f:setPropertyActionListener target="#{test3.setPropertyTarget}" value="#{test3.stringProperty}" />
+<h:commandButton id="expressionButton2" value="Convert from Integer to String">
+  <f:setPropertyActionListener target="#{test3.stringProperty}" value="#{test3.intProperty}" />
+</h:commandButton>   
+<h:commandButton id="expressionButton3" value="String to String">
+  <f:setPropertyActionListener target="#{test3.stringProperty}" value="String" />
 </h:commandButton>
-<p />
-<h:commandButton id="expressionButton2" value="increment counter">
-  <f:setPropertyActionListener target="#{test3.setPropertyTarget}" value="#{test3.counter}" />
+<h:commandButton id="expressionButton4" value="FacesContext to String">
+  <f:setPropertyActionListener target="#{test3.stringProperty}" value="#{facesContext}" />
 </h:commandButton>
+
 </h:form>
 </body>
 </html>

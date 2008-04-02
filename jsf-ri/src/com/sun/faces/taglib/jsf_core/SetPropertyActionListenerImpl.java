@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyActionListenerImpl.java,v 1.6 2006/09/01 01:23:08 tony_robertson Exp $
+ * $Id: SetPropertyActionListenerImpl.java,v 1.7 2006/09/15 01:45:58 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -31,50 +31,88 @@ package com.sun.faces.taglib.jsf_core;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ValueExpression;
+import javax.el.ExpressionFactory;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
-public class SetPropertyActionListenerImpl extends Object implements ActionListener, StateHolder {
-    
-    private ValueExpression targetExpression = null;
-    
-    private ValueExpression valueExpression = null;
-    
-    public SetPropertyActionListenerImpl() {}
-    
-    public SetPropertyActionListenerImpl(ValueExpression target, ValueExpression value) {
-        this.targetExpression = target;
-        this.valueExpression = value;
+public class SetPropertyActionListenerImpl
+      implements ActionListener, StateHolder {
+
+
+    private ValueExpression target;
+    private ValueExpression source;
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public SetPropertyActionListenerImpl() {
     }
-    
+
+
+    public SetPropertyActionListenerImpl(ValueExpression target,
+                                         ValueExpression source) {
+
+        this.target = target;
+        this.source = source;
+
+    }
+
+    // --------------------------------------------- Methods From ActionListener
+
+
     public void processAction(ActionEvent e) throws AbortProcessingException {
-        ELContext elc = FacesContext.getCurrentInstance().getELContext();
-        
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELContext elContext = facesContext.getELContext();        
+               
         try {
-            targetExpression.setValue(elc, valueExpression.getValue(elc));
+            Object value = source.getValue(elContext);
+            if (value != null) {
+                ExpressionFactory factory =
+                  facesContext.getApplication().getExpressionFactory();
+                value = factory.coerceToType(value, target.getType(elContext));
+            }
+            target.setValue(elContext, value);
         } catch (ELException ele) {
-            // PENDING logging
+            throw new AbortProcessingException(ele);
         }
+               
     }
-    
-    public void setTransient(boolean newTransientValue) {}
-    
-    public boolean isTransient() { return false; }
-    
+
+    // ------------------------------------------------ Methods From StateHolder
+
+    private Object[] state;
     public Object saveState(FacesContext context) {
-        Object [] state = new Object[2];
-        state[0] = targetExpression;
-        state[1] = valueExpression;
+        
+        if (state == null) {
+             state = new Object[2];
+        }
+       
+        state[0] = target;
+        state[1] = source;
         return state;
+
     }
-    
+
+
     public void restoreState(FacesContext context, Object state) {
-        Object [] stateArray = (Object []) state;
-        targetExpression = (ValueExpression) stateArray[0];
-        valueExpression = (ValueExpression) stateArray[1];
+
+        this.state = (Object[]) state;
+        target = (ValueExpression) this.state[0];
+        source = (ValueExpression) this.state[1];
+
     }
-    
+
+
+    public boolean isTransient() {
+        return false;
+    }
+
+
+    public void setTransient(boolean newTransientValue) {
+    }    
+
 }
