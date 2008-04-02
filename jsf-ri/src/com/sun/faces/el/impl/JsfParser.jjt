@@ -1,0 +1,323 @@
+/*
+	Author:	Jacob Hookom
+	Email:	jacob at hookom.net
+*/
+
+/* == Option Declaration == */
+options
+{
+	STATIC=false;
+	NODE_PREFIX="Ast";
+	VISITOR_EXCEPTION="javax.faces.el.EvaluationException";
+	VISITOR=true;
+	MULTI=true;
+	NODE_DEFAULT_VOID=true;
+	JAVA_UNICODE_ESCAPE=false;
+  	UNICODE_INPUT=true;
+	BUILD_NODE_FILES=true;
+}
+
+/* == Parser Declaration == */
+PARSER_BEGIN( JsfParser )
+package com.sun.faces.el.impl;
+import java.io.StringReader;
+import java.util.Map;
+import java.util.HashMap;
+public class JsfParser
+{
+    protected static Map cache = new HashMap();
+    public static Node parse(String ref) throws ParseException
+    {
+        if (ref == null)
+        {
+            throw new ParseException(ELSupport.msg("el.error.parser.ref.null"));
+        }
+
+        Node node = (Node) cache.get(ref);
+        if (node == null)
+        {
+            node = (new JsfParser(new StringReader(ref))).execute();
+            if (node instanceof AstComplex && node.jjtGetNumChildren() == 1)
+            {
+                node = node.jjtGetChild(0);
+            }
+            cache.put(ref, node);
+        }
+        return node;
+    }
+}
+PARSER_END( JsfParser )
+
+/* == Operations == */
+AbstractNode execute() #Complex : {}
+{
+	(elExpr() | textExpr())* <EOF> { return jjtThis; }
+}
+
+void elExpr() : {}
+{
+	<START_EXPRESSION> expr() <END_EXPRESSION>
+}
+
+void textExpr() #Text : { Token t; }
+{
+	t=<NON_EXPRESSION_TEXT> { jjtThis.setImage(t.image); }
+}
+
+/* == parent jump point == LOOKAHEAD(orExpr() <QUESTIONMARK>) */
+void expr() : {}
+{
+	chooseExpr()
+}
+
+/* == choose expression == */
+void chooseExpr() : {} 
+{
+	orExpr() (<QUESTIONMARK> orExpr() <COLON> chooseExpr() #Choose(3))*
+}
+
+/* == or expression == */
+void orExpr() : {}
+{
+	andExpr() ((<OR0>|<OR1>) andExpr() #Or(2))*
+}
+
+/* == and expression == */
+void andExpr() : {}
+{
+	equalityExpr() ((<AND0>|<AND1>) equalityExpr() #And(2))*
+}
+
+/* == equality expression == */
+void equalityExpr() : {}
+{
+	compareExpr()
+	(
+		((<EQ0>|<EQ1>) compareExpr() #Equal(2))
+	|
+		((<NE0>|<NE1>) compareExpr() #NotEqual(2))
+	)*
+}
+
+/* == compare expression == */
+void compareExpr() : {}
+{
+	binaryExpr()
+	(
+		((<LT0>|<LT1>) binaryExpr() #LessThan(2))
+	|
+		((<GT0>|<GT1>) binaryExpr() #GreaterThan(2))
+	|
+		((<LE0>|<LE1>) binaryExpr() #LessThanEqual(2))
+	|
+		((<GE0>|<GE1>) binaryExpr() #GreaterThanEqual(2))
+	)*
+}
+
+/* == binary expression == */
+void binaryExpr() : {}
+{
+	multExpr()
+	(
+		(<PLUS> multExpr() #Plus(2))
+	|
+		(<MINUS> multExpr() #Minus(2))
+	)*
+}
+
+/* == multiplicative expression == */
+void multExpr() : {}
+{
+	unaryExpr()
+	(
+		(<MULT> unaryExpr() #Mult(2))
+	|
+		(<DIV> unaryExpr() #Div(2))
+	|
+		((<MOD0>|<MOD1>) unaryExpr() #Mod(2))
+	)*
+}
+
+/* == unary expression == */
+void unaryExpr() : {}
+{
+		<MINUS> unaryExpr() #Negative 
+	|
+		(<NOT0>|<NOT1>) unaryExpr() #Not 
+	|
+		<EMPTY> unaryExpr() #Empty
+	|	
+		valueExpr()
+}
+
+/* == value expression == */
+void valueExpr() : {}
+{
+	(valuePrefixExpr() (valueSuffixExpr())*) #Value(>1)
+}
+
+/* == value prefix expression == */
+void valuePrefixExpr() : {}
+{
+	<LPAREN> expr() <RPAREN>
+	| trueExpr()
+	| falseExpr()
+	| nullExpr()
+	| variableExpr()
+	| stringExpr()
+	| floatExpr()
+	| numberExpr()
+}
+
+/* == value suffix expression == */
+void valueSuffixExpr() : {}
+{
+	(propertyExpr() | propertyEvalExpr())
+}
+
+/* == variable expression == */
+void variableExpr() #Variable : { Token t; }
+{
+	t=<IDENTIFIER> { jjtThis.setImage(t.image); }
+	
+}
+
+/* == property expression == */
+void propertyExpr() #Property : { Token t; }
+{
+	<DOT> t=<IDENTIFIER> { jjtThis.setImage(t.image); }
+}
+
+void propertyEvalExpr() #PropertyEval : {}
+{
+	<LBRACK> expr() <RBRACK>
+}
+
+/* == string expression == */
+void stringExpr() #String : { Token t; }
+{
+	t=<STRING_LITERAL> { jjtThis.setImage(t.image); }
+}
+
+/* == number expression == */
+void numberExpr() #Number : { Token t; }
+{
+	t=<INTEGER_LITERAL>	{ jjtThis.setImage(t.image); }
+}
+
+void floatExpr() #Float : { Token t; }
+{
+	t=<FLOATING_POINT_LITERAL> { jjtThis.setImage(t.image); }
+}
+
+/* == constants == */
+void trueExpr() #True : {} { <TRUE> }
+void falseExpr() #False : {} { <FALSE> }
+void nullExpr() #Null : {} { <NULL> }
+
+/* ==================================================================================== */
+<DEFAULT> TOKEN:
+{
+  < NON_EXPRESSION_TEXT:
+    (~["#"])+ | ("#" (~["{", "#"])+) | "#"
+  >
+|
+  < START_EXPRESSION: "#{" > : IN_EXPRESSION
+}
+
+<IN_EXPRESSION> SKIP : { " " | "\t" | "\n" | "\r" }
+
+<IN_EXPRESSION> TOKEN :
+{
+	< INTEGER_LITERAL: ["0"-"9"] (["0"-"9"])* >
+|	< FLOATING_POINT_LITERAL: (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? 
+		| "." (["0"-"9"])+ (<EXPONENT>)?
+		| (["0"-"9"])+ <EXPONENT>
+	>
+|	< #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+|	< STRING_LITERAL: ("\"" ((~["\"","\\"])
+		| ("\\" ( ["\\","\""] )))* "\"")
+		| ("\'" ((~["\'","\\"])
+		| ("\\" ( ["\\","\'"] )))* "\'")
+	>
+|	< BADLY_ESCAPED_STRING_LITERAL: ("\"" (~["\"","\\"])* ("\\" ( ~["\\","\""] )))
+		| ("\'" (~["\'","\\"])* ("\\" ( ~["\\","\'"] )))
+	>
+|	< TRUE : "true" >
+|	< FALSE : "false" >
+|	< NULL : "null" >
+|	< END_EXPRESSION : "}" > : DEFAULT
+|	< DOT : "." >
+|	< LPAREN : "(" >
+|	< RPAREN : ")" >
+|	< LBRACK : "[" >
+|	< RBRACK : "]" >
+|	< COLON : ":" >
+|	< COMMA : "," >
+|	< GT0 : ">" >
+|	< GT1 : "gt" >
+|	< LT0 : "<" >
+|	< LT1 : "lt" >
+|	< GE0 : ">=" >
+|	< GE1 : "ge" >
+|	< LE0 : "<=" >
+|	< LE1 : "le" >
+|	< EQ0 : "==" >
+|	< EQ1 : "eq" >
+|	< NE0 : "!=" >
+|	< NE1 : "ne" >
+|	< NOT0 : "!" >
+|	< NOT1 : "not" >
+|	< AND0 : "&&" >
+|	< AND1 : "and" >
+|	< OR0 : "||" >
+|	< OR1 : "or" >
+|	< EMPTY : "empty" >
+|	< INSTANCEOF : "instanceof" >
+|	< MULT : "*" >
+|	< PLUS : "+" >
+|	< MINUS : "-" >
+|	< QUESTIONMARK : "?" >
+|	< DIV : "/" >
+|	< MOD0 : "%" >
+|	< MOD1 : "mod" >
+|	< IDENTIFIER: (<LETTER>|<IMPL_OBJ_START>) (<LETTER>|<DIGIT>)* >
+|	< #IMPL_OBJ_START: "#" >
+|	< #LETTER:
+		[
+		"\u0024",
+		"\u0041"-"\u005a",
+		"\u005f",
+		"\u0061"-"\u007a",
+		"\u00c0"-"\u00d6",
+		"\u00d8"-"\u00f6",
+		"\u00f8"-"\u00ff",
+		"\u0100"-"\u1fff",
+		"\u3040"-"\u318f",
+		"\u3300"-"\u337f",
+		"\u3400"-"\u3d2d",
+		"\u4e00"-"\u9fff",
+		"\uf900"-"\ufaff"
+		]
+	>
+|	< #DIGIT:
+		[
+		"\u0030"-"\u0039",
+		"\u0660"-"\u0669",
+		"\u06f0"-"\u06f9",
+		"\u0966"-"\u096f",
+		"\u09e6"-"\u09ef",
+		"\u0a66"-"\u0a6f",
+		"\u0ae6"-"\u0aef",
+		"\u0b66"-"\u0b6f",
+		"\u0be7"-"\u0bef",
+		"\u0c66"-"\u0c6f",
+		"\u0ce6"-"\u0cef",
+		"\u0d66"-"\u0d6f",
+		"\u0e50"-"\u0e59",
+		"\u0ed0"-"\u0ed9",
+		"\u1040"-"\u1049"
+		]
+	>
+|	< ILLEGAL_CHARACTER: (~[]) >
+}

@@ -1,5 +1,5 @@
 /*
- * $Id: TestMethodRef.java,v 1.5 2004/02/26 20:34:24 eburns Exp $
+ * $Id: TestMethodRef.java,v 1.6 2004/11/09 04:19:28 jhook Exp $
  */
 
 /*
@@ -8,84 +8,125 @@
  */
 
 // TestMethodRef.java
-
 package com.sun.faces.el;
 
 import com.sun.faces.ServletFacesTestCase;
 
+import javax.faces.el.MethodBinding;
 import javax.faces.el.MethodNotFoundException;
+import javax.faces.el.ReferenceSyntaxException;
 
 /**
- * <B>TestMethodRef</B> is a class ...
- * <p/>
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: TestMethodRef.java,v 1.5 2004/02/26 20:34:24 eburns Exp $
+ * <B>TestMethodRef </B> is a class ... <p/><B>Lifetime And Scope </B>
+ * <P>
+ * 
+ * @version $Id: TestMethodRef.java,v 1.6 2004/11/09 04:19:28 jhook Exp $
  */
 
-public class TestMethodRef extends ServletFacesTestCase {
+public class TestMethodRef extends ServletFacesTestCase
+{
 
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
+    //
+    // Class Variables
+    //
 
-//
-// Class Variables
-//
+    //
+    // Instance Variables
+    //
 
-//
-// Instance Variables
-//
+    protected MethodBindingFactory factory = new MethodBindingFactory();
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers
+    //
 
-    public TestMethodRef() {
+    public TestMethodRef()
+    {
         super("TestMethodRef");
     }
 
-
-    public TestMethodRef(String name) {
+    public TestMethodRef(String name)
+    {
         super(name);
     }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
+    protected MethodBinding create(String ref, Class[] params) throws Exception
+    {
+        return this.factory.createMethodBinding(ref, params);
+    }
+    
+    public void testNullReference() throws Exception
+    {
+        try
+        {
+            this.factory.createMethodBinding(null, null);
+            fail();
+        }
+        catch (NullPointerException npe) {}
+        catch (Exception e) { fail("Should have thrown an NPE"); };
+    }
+    
+    public void testInvalidMethod() throws Exception
+    {
+        try
+        {
+            this.factory.createMethodBinding("#{foo > 1}", null);
+            fail();
+        }
+        catch (ReferenceSyntaxException rse) {}
+        catch (Exception e) { fail("Should have thrown a ReferenceSyntaxException"); }
+    }
+    
+    public void testLiteralReference() throws Exception
+    {
+        try
+        {
+            this.factory.createMethodBinding("some.method", null);
+            fail();
+        }
+        catch (ReferenceSyntaxException rse) {}
+        catch (Exception e) { fail("Should have thrown a ReferenceSyntaxException"); }
+    }
 
-
-    public void testInvalidTrailing() throws Exception {
-
-        MethodBindingImpl mb =
-            new MethodBindingImpl(getFacesContext().getApplication(),
-                                  "NewCustomerFormHandler.redLectroidsMmmm",
-                                  new Class[0]);
+    public void testInvalidTrailing() throws Exception
+    {
+        MethodBinding mb = this.create(
+                "#{NewCustomerFormHandler.redLectroidsMmmm}", new Class[0]);
 
         boolean exceptionThrown = false;
-        try {
+        try
+        {
             mb.invoke(getFacesContext(), new Object[0]);
-        } catch (MethodNotFoundException e) {
+        }
+        catch (MethodNotFoundException e)
+        {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
 
-        mb = new MethodBindingImpl(getFacesContext().getApplication(),
-                                   "nonexistentBean.redLectroidsMmmm",
-                                   new Class[0]);
+        mb = this.create("#{nonexistentBean.redLectroidsMmmm}", new Class[0]);
         exceptionThrown = false;
-        try {
+        try
+        {
             mb.invoke(getFacesContext(), new Object[0]);
-        } catch (MethodNotFoundException e) {
+        }
+        catch (MethodNotFoundException e)
+        {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.21 2004/07/20 21:54:50 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.22 2004/11/09 04:19:27 jhook Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.faces.event.ActionListener;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.21 2004/07/20 21:54:50 rlubke Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.22 2004/11/09 04:19:27 jhook Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -219,7 +219,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
         thrown = false;
         try {
@@ -227,7 +227,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
         thrown = false;
         try {
@@ -235,7 +235,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
         thrown = false;
         try {
@@ -243,7 +243,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
         thrown = false;
         try {
@@ -251,7 +251,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
         thrown = false;
         try {
@@ -259,7 +259,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
         thrown = false;
         try {
@@ -275,7 +275,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
         thrown = false;
         try {
@@ -283,7 +283,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
         thrown = false;
         try {
@@ -291,7 +291,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
 
         thrown = false;
@@ -300,21 +300,21 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(!thrown);
+        assertFalse(thrown);
 
         try {
             application.createValueBinding("#{proper[\"a { } key\"]}");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(!thrown);
+        assertFalse(thrown);
 
         try {
             application.createValueBinding("bean.a{indentifer");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
         thrown = false;
         try {
@@ -322,7 +322,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
         thrown = false;
         try {
@@ -330,7 +330,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertFalse(thrown);
 
         thrown = false;
         try {
@@ -338,14 +338,14 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(!thrown);
+        assertFalse(thrown);
 
         try {
             application.createValueBinding("#{bean[\".a\"]}");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(!thrown);
+        assertFalse(thrown);
     }
 
 

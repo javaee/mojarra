@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.53 2004/10/12 14:39:49 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.54 2004/11/09 04:21:05 jhook Exp $
  */
 
 /*
@@ -9,14 +9,10 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.el.MethodBindingImpl;
-import com.sun.faces.el.MixedELValueBinding;
+import com.sun.faces.el.MethodBindingFactory;
 import com.sun.faces.el.PropertyResolverImpl;
-import com.sun.faces.el.ValueBindingImpl;
+import com.sun.faces.el.ValueBindingFactory;
 import com.sun.faces.el.VariableResolverImpl;
-import com.sun.faces.el.impl.ElException;
-import com.sun.faces.el.impl.ExpressionEvaluator;
-import com.sun.faces.el.impl.ExpressionInfo;
 import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -82,6 +78,9 @@ public class ApplicationImpl extends Application {
     private Map converterTypeMap = null;
     private Map validatorMap = null;
     private String messageBundle = null;
+    // EL Operations delegated to factories
+    private ValueBindingFactory valueBindingFactory = null;
+    private MethodBindingFactory methodBindingFactory = null;
 
 //
 // Constructors and Initializers
@@ -98,6 +97,8 @@ public class ApplicationImpl extends Application {
         converterIdMap = new HashMap();
         converterTypeMap = new HashMap();
         validatorMap = new HashMap();
+        valueBindingFactory = new ValueBindingFactory();
+        methodBindingFactory = new MethodBindingFactory();
 
         if (log.isDebugEnabled()) {
             log.debug("Created Application instance ");
@@ -251,49 +252,14 @@ public class ApplicationImpl extends Application {
 
     public MethodBinding createMethodBinding(String ref, Class params[]) {
 
-        if (ref == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" ref " + ref;
-            throw new NullPointerException(message);
-
-        } else {
-            return (new MethodBindingImpl(this, ref, params));
-        }
+        return this.methodBindingFactory.createMethodBinding(ref, params);
 
     }
 
 
     public ValueBinding createValueBinding(String ref)
         throws ReferenceSyntaxException {
-        ValueBinding valueBinding = null;
-        if (ref == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" ref " + ref;
-            throw new NullPointerException(message);
-        } else {
-            if (!Util.isVBExpression(ref)) {
-                if (log.isErrorEnabled()) {
-                    log.error(" Expression " + ref +
-                              " does not follow the JSF EL syntax ");
-                }
-                throw new ReferenceSyntaxException(ref);
-            }
-
-            // is this a Mixed expression?
-            if (Util.isMixedVBExpression(ref)) {
-                valueBinding = new MixedELValueBinding();
-            } else {
-                // PENDING: Need to impelement the performance enhancement
-                // suggested by Hans in the EG on 17 November 2003.
-                ref = Util.stripBracketsIfNecessary(ref);
-                checkSyntax(ref);
-                valueBinding = new ValueBindingImpl(this);
-            }
-            ((ValueBindingImpl) valueBinding).setRef(ref);
-        }
-        return valueBinding;
+        return this.valueBindingFactory.createValueBinding(ref);
     }
 
 
@@ -729,25 +695,6 @@ public class ApplicationImpl extends Application {
                 Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
         }
         return result;
-    }
-    private void checkSyntax(String ref) throws ReferenceSyntaxException {
-        try {
-            ExpressionInfo exprInfo = new ExpressionInfo();
-            exprInfo.setExpressionString(ref);
-            ExpressionEvaluator evaluator =
-                Util.getExpressionEvaluator();
-            // this will be cached so it won't have to be parsed again when
-            // evaluated.
-            evaluator.parseExpression(exprInfo);
-            if (log.isTraceEnabled()) {
-                log.trace("Expression " + ref + " passed syntax check");
-            }
-        } catch (ElException elex) {
-            if (log.isErrorEnabled()) {
-                log.trace("Expression " + ref + " failed syntax check");
-            }
-            throw new ReferenceSyntaxException(ref, elex);
-        }
     }
 
 

@@ -1,7 +1,6 @@
 /*
- * $Id: MethodBindingImpl.java,v 1.6 2004/04/06 15:58:17 eburns Exp $
+ * $Id: MethodBindingImpl.java,v 1.7 2004/11/09 04:23:09 jhook Exp $
  */
-
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
@@ -9,14 +8,10 @@
 
 package com.sun.faces.el;
 
+import java.io.Serializable;
+import java.lang.reflect.Array;
 
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import javax.faces.application.Application;
 import javax.faces.component.StateHolder;
-import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
@@ -24,189 +19,197 @@ import javax.faces.el.MethodNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
+import com.sun.faces.el.impl.JsfParser;
+import com.sun.faces.el.impl.ELSupport;
+import com.sun.faces.el.impl.MethodInvokeVisitor;
+import com.sun.faces.el.impl.MethodReturnTypeVisitor;
+import com.sun.faces.el.impl.Node;
+import com.sun.faces.el.impl.ParseException;
 
 /**
- * <p>Implementation of {@link MethodBinding}.</p>
+ * @author Jacob Hookom
  */
+public class MethodBindingImpl extends MethodBinding implements StateHolder,
+        Serializable
+{
+    protected String ref;
 
-public class MethodBindingImpl extends MethodBinding implements StateHolder {
+    protected transient Node node;
 
+    protected boolean tranzient;
 
-    private static final Log log = LogFactory.getLog(MethodBindingImpl.class);
+    protected Class[] paramTypes;
 
-    // ------------------------------------------------------------ Constructors
-
-    public MethodBindingImpl() {
+    public MethodBindingImpl()
+    {
     }
 
+    public MethodBindingImpl(String ref, Class[] paramTypes)
+    {
+        this.ref = ref;
+        this.paramTypes = paramTypes;
+    }
 
-    public MethodBindingImpl(Application application, String ref,
-                             Class args[]) {
+    /**
+     *  
+     */
+    public MethodBindingImpl(String ref, Node node, Class[] paramTypes)
+    {
+        this.ref = ref;
+        this.node = node;
+        this.paramTypes = paramTypes;
+    }
 
-        if ((application == null) || (ref == null)) {
-            throw new NullPointerException();
-        }
-        if (!(ref.startsWith("#{") && ref.endsWith("}"))) {
-            if (log.isErrorEnabled()) {
-                log.error(" Expression " + ref +
-                          " does not follow the syntax #{...}");
+    protected Node getNode() throws ReferenceSyntaxException
+    {
+        if (this.node == null)
+        {
+            try
+            {
+                this.node = JsfParser.parse(this.ref);
             }
-            throw new ReferenceSyntaxException(ref);
-        }
-        rawRef = ref;
-        ref = Util.stripBracketsIfNecessary(ref);
-
-        this.args = args;
-        String vbRef = null;
-
-        if (ref.endsWith("]")) {
-            int left = ref.lastIndexOf("[");
-            if (left < 0) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Expression syntax error: Missing '[' in " + ref);
-                }
-                throw new ReferenceSyntaxException(ref);
+            catch (ParseException pe)
+            {
+                throw new ReferenceSyntaxException(ELSupport.msg(
+                        "el.error.factory.method", ref, pe.getMessage()));
             }
-            // createValueBinding expects the expression in the VBL syntax,
-            // which is of the form #{....}". So make ref conform to that.
-            vbRef = "#{" + (ref.substring(0, left)) + "}";
-            this.vb = application.createValueBinding(vbRef);
-            this.name = ref.substring(left + 1);
-            this.name = this.name.substring(0, this.name.length() - 1);
-        } else {
-            int period = ref.lastIndexOf(".");
-            if (period < 0) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Expression syntax error: Missing '.' in " + ref);
-                }
-                throw new ReferenceSyntaxException(ref);
-            }
-            // createValueBinding expects the expression in the VBL syntax,
-            // which is of the form #{....}". So make ref conform to that.
-            vbRef = "#{" + (ref.substring(0, period)) + "}";
-            this.vb = application.createValueBinding(vbRef);
-            this.name = ref.substring(period + 1);
         }
-        if (this.name.length() < 1) {
-            if (log.isDebugEnabled()) {
-                log.debug(
-                    "Expression syntax error: Missing name after period in:" +
-                    ref);
-            }
-            throw new ReferenceSyntaxException(ref);
+        return this.node;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.faces.el.MethodBinding#invoke(javax.faces.context.FacesContext,
+     *      java.lang.Object[])
+     */
+    public Object invoke(FacesContext context, Object[] params)
+            throws EvaluationException, MethodNotFoundException
+    {
+        MethodInvokeVisitor visitor = new MethodInvokeVisitor(context,
+                this.paramTypes, params);
+        try
+        {
+            return this.getNode().jjtAccept(visitor, null);
         }
-
-    }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    private Class args[];
-    private String name;
-    private String rawRef;
-    private ValueBinding vb;
-
-
-    // --------------------------------------------------- MethodBinding Methods
-
-
-    public Object invoke(FacesContext context, Object params[])
-        throws EvaluationException, MethodNotFoundException {
-
-        if (context == null) {
-            throw new NullPointerException();
+        catch (MethodNotFoundException mnfe)
+        {
+            rethrow("el.error.method.invoke", mnfe);
         }
-        Object base = vb.getValue(context);
-        Method method = method(base);
-        try {
-            return (method.invoke(base, params));
-        } catch (IllegalAccessException e) {
-            throw new EvaluationException(e);
-        } catch (InvocationTargetException ite) {
-            throw new EvaluationException(ite.getTargetException());
+        catch (EvaluationException ee)
+        {
+            rethrow("el.error.method.invoke", ee);
         }
-
+        return null;
     }
 
+    protected void rethrow(String key, EvaluationException ee)
+            throws EvaluationException
+    {
+        throw new EvaluationException(ELSupport.msg(key, this.ref, ee
+                .getMessage()), (ee.getCause() != null) ? ee.getCause() : ee);
+    }
 
-    public Class getType(FacesContext context) {
+    protected void rethrow(String key, MethodNotFoundException mnfe)
+            throws MethodNotFoundException
+    {
+        throw new MethodNotFoundException(ELSupport.msg(key, this.ref, mnfe
+                .getMessage()), (mnfe.getCause() != null) ? mnfe.getCause()
+                : mnfe);
+    }
 
-        Object base = vb.getValue(context);
-        Method method = method(base);
-        Class returnType = method.getReturnType();
-        if (log.isDebugEnabled()) {
-            log.debug("Method return type:" + returnType.getName());
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.faces.el.MethodBinding#getType(javax.faces.context.FacesContext)
+     */
+    public Class getType(FacesContext context) throws MethodNotFoundException
+    {
+        MethodReturnTypeVisitor visitor = new MethodReturnTypeVisitor(context,
+                this.paramTypes);
+        try
+        {
+            return (Class) this.getNode().jjtAccept(visitor, null);
         }
-        if ("void".equals(returnType.getName())) {
-            return (Void.class);
-        } else {
-            return (returnType);
+        catch (MethodNotFoundException mnfe)
+        {
+            rethrow("el.error.method.type", mnfe);
         }
-
-    }
-
-
-    public String getExpressionString() {
-        return rawRef;
-    }
-
-
-    // ----------------------------------------------------- StateHolder Methods
-
-    public Object saveState(FacesContext context) {
-        Object values[] = new Object[4];
-        values[0] = name;
-        values[1] = UIComponentBase.saveAttachedState(context, vb);
-        values[2] = args;
-        values[3] = rawRef;
-        return (values);
-    }
-
-
-    public void restoreState(FacesContext context, Object state) {
-        Object values[] = (Object[]) state;
-        name = (String) values[0];
-        vb = (ValueBinding) UIComponentBase.restoreAttachedState(context,
-                                                                 values[1]);
-        args = (Class[]) values[2];
-        rawRef = (String) values[3];
-    }
-
-
-    private boolean transientFlag = false;
-
-
-    public boolean isTransient() {
-        return (this.transientFlag);
-    }
-
-
-    public void setTransient(boolean transientFlag) {
-        this.transientFlag = transientFlag;
-    }
-
-
-
-    // --------------------------------------------------------- Private Methods
-
-
-    private Method method(Object base) {
-        if (null == base) {
-            throw new MethodNotFoundException(name);
+        catch (EvaluationException ee)
+        {
+            rethrow("el.error.method.type", ee);
         }
-
-        Class clazz = base.getClass();
-        try {
-            return (clazz.getMethod(name, args));
-        } catch (NoSuchMethodException e) {
-            throw new MethodNotFoundException(name + ": " + e.getMessage());
-        }
-
+        return null;
     }
 
+    public boolean isTransient()
+    {
+        return this.tranzient;
+    }
 
+    public void restoreState(FacesContext context, Object obj)
+    {
+        Object[] values = (Object[]) obj;
+        this.ref = (String) values[0];
+        this.paramTypes = (Class[]) values[1];
+    }
+
+    public Object saveState(FacesContext context)
+    {
+        Object[] values = new Object[]
+        {
+                this.ref, this.paramTypes
+        };
+        return values;
+    }
+
+    public void setTransient(boolean tranzient)
+    {
+        this.tranzient = tranzient;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.faces.el.MethodBinding#getExpressionString()
+     */
+    public String getExpressionString()
+    {
+        return this.ref;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof MethodBinding)
+        {
+            MethodBinding omb = (MethodBinding) obj;
+            return this.getExpressionString().equals(omb.getExpressionString());
+        }
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode()
+    {
+        return this.getExpressionString().hashCode();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+        return "MethodBinding[" + this.getExpressionString() + "]";
+    }
 }

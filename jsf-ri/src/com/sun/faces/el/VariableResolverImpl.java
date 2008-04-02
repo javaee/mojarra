@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.20 2004/07/17 01:37:13 jayashri Exp $
+ * $Id: VariableResolverImpl.java,v 1.21 2004/11/09 04:23:11 jhook Exp $
  */
 
 /*
@@ -9,27 +9,29 @@
 
 package com.sun.faces.el;
 
-import com.sun.faces.RIConstants;
+import java.util.Arrays;
 
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.el.impl.ELConstants;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.faces.FactoryFinder;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.VariableResolver;
 
-
 /**
- * <p>Concrete implementation of <code>VariableResolver</code>.</p>
+ * <p>
+ * Concrete implementation of <code>VariableResolver</code>.
+ * </p>
  */
 
-public class VariableResolverImpl extends VariableResolver {
-
-    private static final Log log = LogFactory.getLog(
-        VariableResolverImpl.class);
+public class VariableResolverImpl extends VariableResolver implements ELConstants
+{
+    private static final Log log = LogFactory
+            .getLog(VariableResolverImpl.class);
 
     //
     // Relationship Instance Variables
@@ -37,56 +39,78 @@ public class VariableResolverImpl extends VariableResolver {
 
     // Specified by javax.faces.el.VariableResolver.resolveVariable()
     public Object resolveVariable(FacesContext context, String name)
-        throws EvaluationException {
+            throws EvaluationException
+    {
 
-        ExternalContext ec = context.getExternalContext();
+        ExternalContext extCtx = context.getExternalContext();
 
-        if (RIConstants.APPLICATION_SCOPE.equals(name)) {
-            return (ec.getApplicationMap());
-        } else if (RIConstants.COOKIE_IMPLICIT_OBJ.equals(name)) {
-            return (ec.getRequestCookieMap());
-        } else if (RIConstants.FACES_CONTEXT_IMPLICIT_OBJ.equals(name)){
-            return (context);
-        } else if (RIConstants.HEADER_IMPLICIT_OBJ.equals(name)) {
-            return (ec.getRequestHeaderMap());
-        } else if (RIConstants.HEADER_VALUES_IMPLICIT_OBJ.equals(name)){
-            return (ec.getRequestHeaderValuesMap());
-        } else if (RIConstants.INIT_PARAM_IMPLICIT_OBJ.equals(name)) {
-            return (ec.getInitParameterMap());
-        } else if (RIConstants.PARAM_IMPLICIT_OBJ.equals(name)) {
-            return (ec.getRequestParameterMap());
-        } else if (RIConstants.PARAM_VALUES_IMPLICIT_OBJ.equals(name)) {
-            return (ec.getRequestParameterValuesMap());
-        } else if (RIConstants.REQUEST_SCOPE.equals(name)) {
-            return (ec.getRequestMap());
-        } else if (RIConstants.SESSION_SCOPE.equals(name)) {
-            return (ec.getSessionMap());
-        } else if (RIConstants.VIEW_IMPLICIT_OBJ.equals(name)) {
-            return (context.getViewRoot());
-        } else {
-            // do the scoped lookup thing
-            Object value = null;
+        int index = Arrays.binarySearch(IMPLICIT_OBJECTS, name);
 
-            if (null == (value = ec.getRequestMap().get(name))) {
-                if (null == (value = ec.getSessionMap().get(name))) {
-                    if (null == (value = ec.getApplicationMap().get(name))) {
-// if it's a managed bean try and create it
-			ApplicationAssociate associate = 
-			    ApplicationAssociate.getInstance(context.getExternalContext());
-			
-                        if (null != associate) {
-                            value =
-                            associate.createAndMaybeStoreManagedBeans(context, 
-								      name);
+        if (index < 0)
+        {
+            Object value = extCtx.getRequestParameterMap().get(name);
+            if (value == null)
+            {
+                value = extCtx.getRequestMap().get(name);
+                if (value == null)
+                {
+                    value = extCtx.getSessionMap().get(name);
+                    if (value == null)
+                    {
+                        value = extCtx.getApplicationMap().get(name);
+                        if (value == null)
+                        {
+                            // if it's a managed bean try and create it
+                            ApplicationAssociate associate = ApplicationAssociate
+                                    .getInstance(context.getExternalContext());
+
+                            if (null != associate)
+                            {
+                                value = associate
+                                        .createAndMaybeStoreManagedBeans(
+                                                context, name);
+                            }
                         }
                     }
                 }
             }
-            if (log.isDebugEnabled()) {
-                log.debug("resolveVariable: Resolved variable:" + value);
-            }
-            return (value);
+            return value;
         }
-
+        else
+        {
+            switch (index)
+            {
+                case APPLICATION:
+                    return extCtx.getContext();
+                case APPLICATION_SCOPE:
+                    return extCtx.getApplicationMap();
+                case COOKIE:
+                    return extCtx.getRequestCookieMap();
+                case FACES_CONTEXT:
+                    return context;
+                case HEADER:
+                    return extCtx.getRequestHeaderMap();
+                case HEADER_VALUES:
+                    return extCtx.getRequestHeaderValuesMap();
+                case INIT_PARAM:
+                    return extCtx.getInitParameterMap();
+                case PARAM:
+                    return extCtx.getRequestParameterMap();
+                case PARAM_VALUES:
+                    return extCtx.getRequestParameterValuesMap();
+                case REQUEST:
+                    return extCtx.getRequest();
+                case REQUEST_SCOPE:
+                    return extCtx.getRequestMap();
+                case SESSION:
+                    return extCtx.getSession(true);
+                case SESSION_SCOPE:
+                    return extCtx.getSessionMap();
+                case VIEW:
+                    return context.getViewRoot();
+                default:
+                    return null;
+            }
+        }
     }
 }

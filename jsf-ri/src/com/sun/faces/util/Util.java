@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.145 2004/10/29 19:48:39 edburns Exp $
+ * $Id: Util.java,v 1.146 2004/11/09 04:21:20 jhook Exp $
  */
 
 /*
@@ -12,8 +12,6 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.el.impl.ExpressionEvaluator;
-import com.sun.faces.el.impl.ExpressionEvaluatorImpl;
 import com.sun.faces.renderkit.RenderKitImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,7 +57,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.145 2004/10/29 19:48:39 edburns Exp $
+ * @version $Id: Util.java,v 1.146 2004/11/09 04:21:20 jhook Exp $
  */
 
 public class Util extends Object {
@@ -69,12 +67,6 @@ public class Util extends Object {
     //
     // Log instance for this class
     protected static Log log = LogFactory.getLog(Util.class);
-
-    /**
-     * The parser implementation for handling Faces RE expressions.
-     */
-    private static final ExpressionEvaluator FACES_EXPRESSION_EVALUATOR =
-        new ExpressionEvaluatorImpl(RIConstants.FACES_RE_PARSER);
 
     // README - make sure to add the message identifier constant
     // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
@@ -1009,17 +1001,6 @@ public class Util extends Object {
             return (null);
         }
     }
-
-
-    /**
-     * <p>Return the single {@link ExpressionEvaluator} instance.</p>
-     *
-     * @return an ExpressionEvaluator
-     */
-    public static ExpressionEvaluator getExpressionEvaluator() {
-        return FACES_EXPRESSION_EVALUATOR;
-    }
-
 
     /*
      * Determine whether String is a value binding expression or not.

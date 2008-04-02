@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.18 2004/07/17 01:37:15 jayashri Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.19 2004/11/09 04:19:29 jhook Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.util.Util;
-import org.apache.cactus.WebRequest;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
@@ -32,7 +31,7 @@ import javax.faces.el.VariableResolver;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.18 2004/07/17 01:37:15 jayashri Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.19 2004/11/09 04:19:29 jhook Exp $
  */
 
 public class TestVariableResolverImpl extends ServletFacesTestCase {

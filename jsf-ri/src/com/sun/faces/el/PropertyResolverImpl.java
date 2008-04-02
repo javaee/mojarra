@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.14 2004/02/26 20:32:40 eburns Exp $
+ * $Id: PropertyResolverImpl.java,v 1.15 2004/11/09 04:23:10 jhook Exp $
  */
 
 /*
@@ -9,417 +9,394 @@
 
 package com.sun.faces.el;
 
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.el.impl.BeanInfoManager;
-import com.sun.faces.el.impl.BeanInfoProperty;
-import com.sun.faces.el.impl.Coercions;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.sun.faces.el.impl.ELSupport;
 
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * <p>Concrete implementation of <code>PropertyResolver</code>.</p>
+ * <p>
+ * Concrete implementation of <code>PropertyResolver</code>.
+ * </p>
  */
 
-public class PropertyResolverImpl extends PropertyResolver {
-
-
+public class PropertyResolverImpl extends PropertyResolver
+{
     // ------------------------------------------------------- Static Variables
 
-    private static final Log log = LogFactory.getLog(PropertyResolver.class);
+    protected static final Object[] EMPTY_ARRAY = new Object[0];
 
-    /**
-     * <p>Parameters passed to the property getter method of a JavaBean.</p>
-     */
-    private static final Object readParams[] = new Object[0];
+    // ------------------------------------------------------- Static Methods
 
-    // Zero-argument array
-    private static final Object[] sNoArgs = new Object[0];
-
-    // ----------------------------------------------- PropertyResolver Methods
-
-
-    // Specified by javax.faces.el.PropertyResolver.getValue(Object,String)
-    public Object getValue(Object base, Object property) {
-
-        if ((base == null) || (property == null)) {
-            return null;
+    public static Object coerceToType(Object obj, Class type)
+            throws EvaluationException
+    {
+        try
+        {
+            return ELSupport.coerceToType(obj, type);
         }
-        if (base instanceof Map) {
-            return (((Map) base).get(property));
-        } else {
-            String name = null;
-            BeanInfoProperty bip = null;
-            try {
-                name = Coercions.coerceToString(property);
-                bip =
-                    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
-            } catch (Throwable t) {
-                // PENDING (hans) Align with std message handling
-                String message = "Error finding property '" +
-                    name + "' from bean of type " +
-                    base.getClass().getName() + ": " + t;
-                if (log.isDebugEnabled()) {
-                    log.debug(message, t);
-                }
-                throw new PropertyNotFoundException(message, t);
-            }
-            if (bip != null && bip.getReadMethod() != null) {
-                try {
-                    return bip.getReadMethod().invoke(base, sNoArgs);
-                } catch (InvocationTargetException exc) {
-                    // PENDING (hans) Align with std message handling
-                    Throwable t = exc.getTargetException();
-                    String message = "Error getting property '" +
-                        name + "' from bean of type " +
-                        base.getClass().getName() + ": " + t;
-                    if (log.isDebugEnabled()) {
-                        log.debug(message, t);
-                    }
-                    throw new EvaluationException(message, t);
-                } catch (IllegalAccessException t) {
-                    // PENDING (hans) Align with std message handling
-                    String message = "Error getting property '" +
-                        name + "' from bean of type " +
-                        base.getClass().getName() + ": " + t;
-                    if (log.isDebugEnabled()) {
-                        log.debug(message, t);
-                    }
-                    throw new EvaluationException(message, t);
-                }
-            } else {
-                // No readable property with this name
-                String message = "Error getting property '" +
-                    name + "' from bean of type " + base.getClass().getName();
-                if (log.isDebugEnabled()) {
-                    log.debug(message);
-                }
-                throw new PropertyNotFoundException(message);
-            }
-        }
-
-    }
-
-
-    // Specified by javax.faces.el.PropertyResolver.getValue(Object,int)
-    public Object getValue(Object base, int index) {
-
-        if (base == null) {
-            return null;
-        }
-
-        Object result = null;
-        try {
-            if (base.getClass().isArray()) {
-                result = (Array.get(base, index));
-            } else if (base instanceof List) {
-                result = (((List) base).get(index));
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("getValue:Property not found at index:" + index);
-                }
-                throw new EvaluationException("Bean of type " +
-                                              base.getClass().getName() +
-                                              " doesn't have indexed properties");
-            }
-        } catch (IndexOutOfBoundsException e) {
-            // Ignore according to spec
-        } catch (Throwable t) {
-            if (log.isDebugEnabled()) {
-                log.debug("getValue:Property not found at index:" + index);
-            }
-            throw new EvaluationException("Error getting index " + index, t);
-        }
-        return result;
-    }
-
-
-    // Specified by javax.faces.el.PropertyResolver.setValue(Object,String,Object)
-    public void setValue(Object base, Object property, Object value) {
-
-        if ((base == null) || (property == null)) {
-            String className = base == null ?
-                "null" : base.getClass().getName();
-            throw new PropertyNotFoundException("Error setting property '" +
-                                                property + "' in bean of type " + className);
-        }
-
-        if (base instanceof Map) {
-            ((Map) base).put(property, value);
-        } else {
-            String name = null;
-            BeanInfoProperty bip = null;
-            try {
-                name = Coercions.coerceToString(property);
-                bip =
-                    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
-            } catch (Throwable t) {
-                // PENDING (hans) Align with std message handling
-                String message = "Error finding property '" +
-                    name + "' in bean of type " +
-                    base.getClass().getName() + ": " + t;
-                if (log.isDebugEnabled()) {
-                    log.debug(message, t);
-                }
-                throw new PropertyNotFoundException(message, t);
-            }
-            if (bip != null && bip.getWriteMethod() != null) {
-                try {
-                    bip.getWriteMethod().invoke(base, new Object[]{value});
-                } catch (InvocationTargetException exc) {
-                    // PENDING (hans) Align with std message handling
-                    Throwable t = exc.getTargetException();
-                    String message = "Error setting property '" +
-                        name + "' in bean of type " +
-                        base.getClass().getName() + ": " + t;
-                    if (log.isDebugEnabled()) {
-                        log.debug(message, t);
-                    }
-                    throw new EvaluationException(message, t);
-                } catch (IllegalAccessException t) {
-                    // PENDING (hans) Align with std message handling
-                    String message = "Error setting property '" +
-                        name + "' in bean of type " +
-                        base.getClass().getName() + ": " + t;
-                    if (log.isDebugEnabled()) {
-                        log.debug(message, t);
-                    }
-                    throw new EvaluationException(message, t);
-                }
-            } else {
-                // No write property with this name
-                String message = "Error setting property '" +
-                    name + "' in bean of type " + base.getClass().getName();
-                if (log.isDebugEnabled()) {
-                    log.debug(message);
-                }
-                throw new PropertyNotFoundException(message);
-            }
-        }
-
-    }
-
-
-    // Specified by javax.faces.el.PropertyResolver.setValue(Object,int,Object)
-    public void setValue(Object base, int index, Object value) {
-
-        if (base == null) {
-            throw new PropertyNotFoundException("Error setting index '" +
-                                                index + "' in bean of type null");
-        }
-
-        try {
-            if (base.getClass().isArray()) {
-                Array.set(base, index, value);
-            } else if (base instanceof List) {
-                ((List) base).set(index, value);
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("setValue:Error setting index:" + index);
-                }
-                throw new EvaluationException("Bean of type " +
-                                              base.getClass().getName() +
-                                              " doesn't have indexed properties");
-            }
-        } catch (IndexOutOfBoundsException e) {
-            throw new PropertyNotFoundException("Error setting index " +
-                                                index, e);
-        } catch (Throwable t) {
-            if (log.isDebugEnabled()) {
-                log.debug("setValue:Error setting index:" + index);
-            }
-            throw new EvaluationException("Error setting index " + index, t);
-        }
-
-    }
-
-
-    // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,String)
-    public boolean isReadOnly(Object base, Object property) {
-        boolean result = false;
-
-        if ((base == null) || (property == null)) {
-            String className = base == null ?
-                "null" : base.getClass().getName();
-            throw new PropertyNotFoundException("Error testing property '" +
-                                                property + "' in bean of type " + className);
-        }
-
-        if (base instanceof Map) {
-            // this marker is set in ExternalContextImpl when the Map is
-            // created.
-            // PENDING (hans) Isn't there a better way to handle this?
-            result = RIConstants.IMMUTABLE_MARKER ==
-                ((Map) base).get(RIConstants.IMMUTABLE_MARKER);
-        } else {
-            String name = null;
-            BeanInfoProperty bip = null;
-            try {
-                name = Coercions.coerceToString(property);
-                bip =
-                    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
-            } catch (Throwable t) {
-                // PENDING (hans) Align with std message handling
-                String message = "Error finding property '" +
-                    name + "' in bean of type " +
-                    base.getClass().getName() + ": " + t;
-                if (log.isDebugEnabled()) {
-                    log.debug(message, t);
-                }
-                throw new PropertyNotFoundException(message, t);
-            }
-            if (bip != null && bip.getWriteMethod() == null) {
-                result = true;
-            } else if (bip == null) {
-                // PENDING (hans) Align with std message handling
-                String message = "Error finding property '" +
-                    name + "' in bean of type " +
-                    base.getClass().getName();
-                if (log.isDebugEnabled()) {
-                    log.debug(message);
-                }
-                throw new PropertyNotFoundException(message);
-            }
-        }
-        return result;
-    }
-
-
-    // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,int)
-    public boolean isReadOnly(Object base, int index) {
-        boolean result = false;
-
-        if (base == null) {
-            throw new PropertyNotFoundException("Error setting index '" +
-                                                index + "' in bean of type null");
-        }
-
-        try {
-            // Try to read the index, to trigger exceptions if any
-            if (base.getClass().isArray()) {
-                Array.get(base, index);
-                result = false; // No way to know for sure
-            } else if (base instanceof List) {
-                ((List) base).get(index);
-                result = false; // No way to know for sure
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("getValue:Property not found at index:" + index);
-                }
-                throw new EvaluationException("Bean of type " +
-                                              base.getClass().getName() +
-                                              " doesn't have indexed properties");
-            }
-        } catch (IndexOutOfBoundsException e) {
-            throw new PropertyNotFoundException("Error setting index " +
-                                                index, e);
-        } catch (Throwable t) {
-            if (log.isDebugEnabled()) {
-                log.debug("setValue:Error setting index:" + index);
-            }
-            throw new EvaluationException("Error setting index " + index, t);
-        }
-        return result;
-    }
-
-
-    // Specified by javax.faces.el.PropertyResolver.getType(Object,String)
-    public Class getType(Object base, Object property) {
-
-        if ((base == null) || (property == null)) {
-            String className = base == null ?
-                "null" : base.getClass().getName();
-            throw new PropertyNotFoundException("Error testing property '" +
-                                                property + "' in bean of type " + className);
-        }
-
-        if (base instanceof Map) {
-            Object value = ((Map) base).get(property);
-            if (value != null) {
-                return (value.getClass());
-            } else {
-                return (null);
-            }
-        } else {
-            String name = null;
-            BeanInfoProperty bip = null;
-            try {
-                name = Coercions.coerceToString(property);
-                bip =
-                    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
-            } catch (Throwable t) {
-                // PENDING (hans) Align with std message handling
-                String message = "Error finding property '" +
-                    name + "' in bean of type " +
-                    base.getClass().getName() + ": " + t;
-                if (log.isDebugEnabled()) {
-                    log.debug(message, t);
-                }
-                throw new PropertyNotFoundException(message, t);
-            }
-            if (bip != null) {
-                return bip.getPropertyDescriptor().getPropertyType();
-            } else {
-                // PENDING (hans) Align with std message handling
-                String message = "Error finding property '" +
-                    name + "' in bean of type " +
-                    base.getClass().getName();
-                if (log.isDebugEnabled()) {
-                    log.debug(message);
-                }
-                throw new PropertyNotFoundException(message);
-            }
+        catch (IllegalArgumentException iae)
+        {
+            throw new EvaluationException(iae.getMessage(), iae);
         }
     }
 
+    public static PropertyDescriptor getPropertyDescriptor(Class baseType,
+            String name) throws EvaluationException, PropertyNotFoundException
+    {
+        try
+        {
+            PropertyDescriptor desc = null;
+            BeanInfo beanInfo = Introspector.getBeanInfo(baseType);
+            PropertyDescriptor[] pda = beanInfo.getPropertyDescriptors();
+            int i = 0;
+            while (i < pda.length && desc == null)
+            {
+                if (pda[i].getName().equals(name))
+                {
+                    desc = pda[i];
+                }
+                i++;
+            }
+            if (desc == null)
+                    throw new PropertyNotFoundException(ELSupport.msg(
+                            "el.error.property.notfound", baseType, name));
+            return desc;
+        }
+        catch (IntrospectionException ie)
+        {
+            throw new EvaluationException(ELSupport.msg("el.error.property",
+                    baseType), ie);
+        }
+    }
+
+    protected static void assertInput(Object base, Object property)
+            throws PropertyNotFoundException
+    {
+        if (base == null || property == null)
+        {
+            throw new PropertyNotFoundException(ELSupport.msg(
+                    "el.error.property.input.both", base, property));
+        }
+    }
+
+    protected static void assertInput(Object base)
+    {
+        if (base == null)
+        {
+            throw new PropertyNotFoundException(ELSupport.msg(
+                    "el.error.property.input", base));
+        }
+    }
+
+    protected static void assertInput(Object base, int index)
+            throws PropertyNotFoundException
+    {
+        if (base == null)
+        {
+            throw new PropertyNotFoundException(ELSupport.msg(
+                    "el.error.property.array.outofbounds", base, "" + index));
+        }
+        if (index < 0)
+        {
+            throw new PropertyNotFoundException(ELSupport.msg(
+                    "el.error.property.array.outofbounds", base, "" + index));
+        }
+    }
 
     // Specified by javax.faces.el.PropertyResolver.getType(Object,int)
-    public Class getType(Object base, int index) {
-        Class result = null;
+    public Class getType(Object base, int index)
+    {
+        // validates base != null and index >= 0
+        assertInput(base, index);
 
-        if (base == null) {
-            throw new PropertyNotFoundException("Error setting index '" +
-                                                index + "' in bean of type null");
-        }
-
-        try {
-            // Try to read the index, to trigger exceptions if any
-            if (base.getClass().isArray()) {
+        Class type = base.getClass();
+        try
+        {
+            if (type.isArray())
+            {
                 Array.get(base, index);
-                result = base.getClass().getComponentType();
-            } else if (base instanceof List) {
-                Object o = ((List) base).get(index);
-                if (o != null) {
-                    result = o.getClass();
-                }
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("getValue:Property not found at index:" + index);
-                }
-                throw new EvaluationException("Bean of type " +
-                                              base.getClass().getName() +
-                                              " doesn't have indexed properties");
+                return type.getComponentType();
             }
-        } catch (IndexOutOfBoundsException e) {
-            throw new PropertyNotFoundException("Error getting index " +
-                                                index, e);
-        } catch (Throwable t) {
-            if (log.isDebugEnabled()) {
-                log.debug("getType:Error getting index:" + index);
+            else if (base instanceof List)
+            {
+                Object value = ((List) base).get(index);
+                return (value != null) ? value.getClass() : null;
             }
-            throw new EvaluationException("Error getting index " + index, t);
+            else
+            {
+                throw new EvaluationException(ELSupport.msg(
+                        "el.error.property.array.type", base));
+            }
         }
-        return result;
+        catch (ArrayIndexOutOfBoundsException aioobe)
+        {
+            throw new PropertyNotFoundException(ELSupport.msg(
+                    "el.error.property.array.outofbounds.size", base,
+                    "" + index, "" + Array.getLength(base)));
+        }
+        catch (IndexOutOfBoundsException ioobe)
+        {
+            throw new PropertyNotFoundException(ELSupport.msg(
+                    "el.error.property.array.outofbounds.size", base,
+                    "" + index, "" + ((List) base).size()));
+        }
     }
 
+    // Specified by javax.faces.el.PropertyResolver.getType(Object,String)
+    public Class getType(Object base, Object property)
+    {
+        // validates base and property
+        assertInput(base, property);
+
+        if (base instanceof Map)
+        {
+            Object value = ((Map) base).get(property);
+            return (value != null) ? value.getClass() : null;
+        }
+        else if (base instanceof List || base.getClass().isArray())
+        {
+            int index = ELSupport.coerceToNumber(property, Integer.class).intValue();
+            return this.getType(base, index);
+        }
+        else
+        {
+            PropertyDescriptor desc = getPropertyDescriptor(base.getClass(),
+                    property.toString());
+            return desc.getPropertyType();
+        }
+    }
+
+    // Specified by javax.faces.el.PropertyResolver.getValue(Object,int)
+    public Object getValue(Object base, int index)
+    {
+        // validates base and index
+        if (base == null) return null;
+
+        Class type = base.getClass();
+        if (base.getClass().isArray())
+        {
+            try
+            {
+                return Array.get(base, index);
+            }
+            catch (ArrayIndexOutOfBoundsException aioobe)
+            {
+                return null;
+            }
+        }
+        else if (base instanceof List)
+        {
+            try
+            {
+                return ((List) base).get(index);
+            }
+            catch (IndexOutOfBoundsException ioobe)
+            {
+                return null;
+            }
+        }
+        else
+        {
+            throw new EvaluationException(ELSupport.msg(
+                    "el.error.property.array.type", base));
+        }
+    }
+
+    // Specified by javax.faces.el.PropertyResolver.getValue(Object,String)
+    public Object getValue(Object base, Object property)
+    {
+        // validate input for null
+        if (base == null || property == null) return null;
+
+        if (base instanceof Map)
+        {
+            return ((Map) base).get(property);
+        }
+        else if (base instanceof List || base.getClass().isArray())
+        {
+            int index = ELSupport.coerceToNumber(property, Integer.class).intValue();
+            return this.getValue(base, index);
+        }
+        else
+        {
+            PropertyDescriptor desc = getPropertyDescriptor(base.getClass(),
+                    property.toString());
+
+            try
+            {
+                Method method = desc.getReadMethod();
+                if (method == null)
+                        throw new PropertyNotFoundException(ELSupport.msg(
+                                "el.error.property.noread", base, property));
+                return method.invoke(base, EMPTY_ARRAY);
+            }
+            catch (IllegalAccessException iae)
+            {
+                throw new EvaluationException(ELSupport.msg(
+                        "el.error.property.get.access", base, property), iae);
+            }
+            catch (InvocationTargetException ite)
+            {
+                throw new EvaluationException(ELSupport.msg(
+                        "el.error.property.get.invoke", base, property), ite.getCause());
+            }
+        }
+    }
+
+    // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,int)
+    public boolean isReadOnly(Object base, int index)
+    {
+        // validate input
+        assertInput(base, index);
+
+        Class type = base.getClass();
+        if (base instanceof List || base.getClass().isArray())
+        {
+            return false;
+        }
+        else
+        {
+            throw new EvaluationException(ELSupport.msg(
+                    "el.error.property.array.type", base));
+        }
+    }
+
+    // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,String)
+    public boolean isReadOnly(Object base, Object property)
+    {
+        // validate the input
+        assertInput(base, property);
+
+        if (base instanceof Map)
+        {
+            Object value = ((Map) base).get(property);
+            try
+            {
+                ((Map) base).put(property, value);
+                return false;
+            }
+            catch (Exception e)
+            {
+                return true;
+            }
+        }
+        else if (base instanceof List || base.getClass().isArray())
+        {
+            int index = ELSupport.coerceToNumber(property, Integer.class).intValue();
+            return this.isReadOnly(base, index);
+        }
+        else
+        {
+            PropertyDescriptor desc = getPropertyDescriptor(base.getClass(),
+                    property.toString());
+
+            Method method = desc.getWriteMethod();
+            return (method == null);
+        }
+    }
+
+    // Specified by javax.faces.el.PropertyResolver.setValue(Object,int,Object)
+    public void setValue(Object base, int index, Object value)
+    {
+        // validate input
+        assertInput(base, index);
+
+        Class type = base.getClass();
+        if (type.isArray())
+        {
+            try
+            {
+                Array.set(base, index, coerceToType(value, type
+                        .getComponentType()));
+            }
+            catch (ArrayIndexOutOfBoundsException aioobe)
+            {
+                throw new PropertyNotFoundException(ELSupport.msg(
+                        "el.error.property.array.outofbounds.size", base, ""
+                                + index, "" + Array.getLength(base)));
+            }
+        }
+        else if (base instanceof List)
+        {
+            try
+            {
+                ((List) base).set(index, value);
+            }
+            catch (IndexOutOfBoundsException ioobe)
+            {
+                throw new PropertyNotFoundException(ELSupport.msg(
+                        "el.error.property.array.outofbounds.size", base, ""
+                                + index, "" + ((List) base).size()));
+            }
+        }
+        else
+        {
+            throw new EvaluationException(ELSupport.msg(
+                    "el.error.property.array.type", base));
+        }
+    }
+
+    // Specified by
+    // javax.faces.el.PropertyResolver.setValue(Object,String,Object)
+    public void setValue(Object base, Object property, Object value)
+    {
+        // validate input
+        assertInput(base, property);
+
+        if (base instanceof Map)
+        {
+            ((Map) base).put(property, value);
+        }
+        else if (base instanceof List || base.getClass().isArray())
+        {
+            int index = ELSupport.coerceToNumber(property, Integer.class).intValue();
+            this.setValue(base, index, value);
+        }
+        else
+        {
+            PropertyDescriptor desc = getPropertyDescriptor(base.getClass(),
+                    property.toString());
+
+            try
+            {
+                Method method = desc.getWriteMethod();
+                if (method != null)
+                {
+                    Object obj = coerceToType(value, desc.getPropertyType());
+                    method.invoke(base, new Object[]
+                    { obj });
+                }
+                else
+                {
+                    throw new PropertyNotFoundException(ELSupport.msg(
+                            "el.error.property.readOnly", base, property
+                                    .toString()));
+                }
+            }
+            catch (IllegalAccessException iae)
+            {
+                throw new EvaluationException(ELSupport.msg(
+                        "el.error.property.set.access", base, property
+                                .toString()), iae);
+            }
+            catch (InvocationTargetException ite)
+            {
+                throw new EvaluationException(ELSupport.msg(
+                        "el.error.property.set.invoke", base, property
+                                .toString()), ite.getCause());
+            }
+        }
+    }
 }

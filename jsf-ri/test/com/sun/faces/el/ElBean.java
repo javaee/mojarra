@@ -1,5 +1,5 @@
 /*
- * $Id: ElBean.java,v 1.5 2004/02/26 20:34:23 eburns Exp $
+ * $Id: ElBean.java,v 1.6 2004/11/09 04:19:28 jhook Exp $
  */
 
 /*
@@ -53,6 +53,18 @@ public class ElBean {
 
     public void setByteProperty(byte byteProperty) {
         this.byteProperty = byteProperty;
+    }
+    
+    private char characterProperty = 'c';
+    
+    public char getCharacterProperty()
+    {
+        return this.characterProperty;
+    }
+    
+    public void setCharacterProperty(char c)
+    {
+        this.characterProperty = c;
     }
 
 
