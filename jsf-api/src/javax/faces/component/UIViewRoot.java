@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.35 2005/05/05 20:51:05 edburns Exp $
+ * $Id: UIViewRoot.java,v 1.36 2005/07/22 13:51:39 edburns Exp $
  */
 
 /*
@@ -501,8 +501,7 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Override the default {@link UIComponentBase#encodeBegin}
-     * behavior.  Reset the mechanism used in {@link #createUniqueId}
-     * before falling through to the standard superclass processing.  If
+     * behavior.  If
      * {@link #getBeforePhaseListener} returns non-<code>null</code>,
      * invoke it, passing a {@link PhaseEvent} for the {@link
      * PhaseId#RENDER_RESPONSE} phase.  If the internal list populated
@@ -510,12 +509,12 @@ public class UIViewRoot extends UIComponentBase {
      * in that list must have their {@link PhaseListener#beforePhase}
      * method called, passing the <code>PhaseEvent</code>.  Any errors
      * that occur during invocation of any of the the beforePhase
-     * listeners must be logged and swallowed.</p>
+     * listeners must be logged and swallowed.  After listeners are invoked
+     * call superclass processing.</p>
      *
-     */
+    */
 
     public void encodeBegin(FacesContext context) throws IOException {
-	lastId = 0;
 
 	skipPhase = false;
 	// avoid creating the PhaseEvent if possible by doing redundant
@@ -879,14 +878,15 @@ public class UIViewRoot extends UIComponentBase {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[7];
+        Object values[] = new Object[8];
         values[0] = super.saveState(context);
         values[1] = renderKitId;
         values[2] = viewId;
         values[3] = locale;
-        values[4] = saveAttachedState(context, beforePhase);
-        values[5] = saveAttachedState(context, afterPhase);
-        values[6] = saveAttachedState(context, phaseListeners);
+        values[4] = new Integer(lastId);
+        values[5] = saveAttachedState(context, beforePhase);
+        values[6] = saveAttachedState(context, afterPhase);
+        values[7] = saveAttachedState(context, phaseListeners);
         return (values);
 
     }
@@ -899,9 +899,10 @@ public class UIViewRoot extends UIComponentBase {
         renderKitId = (String) values[1];
         viewId = (String) values[2];
         locale = (Locale)values[3];
-	beforePhase = (MethodExpression) restoreAttachedState(context, values[4]);
-	afterPhase = (MethodExpression) restoreAttachedState(context, values[5]);
-	phaseListeners = (List) restoreAttachedState(context, values[6]);
+        lastId = ((Integer)values[4]).intValue();
+	beforePhase = (MethodExpression) restoreAttachedState(context, values[5]);
+	afterPhase = (MethodExpression) restoreAttachedState(context, values[6]);
+	phaseListeners = (List) restoreAttachedState(context, values[7]);
 
     }
 
