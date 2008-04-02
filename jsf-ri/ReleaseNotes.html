@@ -8,11 +8,14 @@
 
 <center>
 <h1>
-JavaServer<sup><font size=-1>TM</font></sup> Faces (JSF) 1.0 EA1<br>
+JavaServer<sup><font size=-1>TM</font></sup> Faces (JSF) 1.0 EA3<br>
 Release Notes</h1></center>
 
 <hr>
-<br><a NAME="14145"></a>Revised:08/20/2002
+<br><a NAME="14145"></a>
+For an updated, online version of these release notes, see 
+ <a href="http://java.sun.com/j2ee/javaserverfaces/docs/ReleaseNotes.html">
+ Release Notes</a><p>Revised:02/24/2003
 <p><a NAME="13552"></a>The purpose of this release is to introduce you
 to the JavaServer Faces framework and to provide you with an opportunity
 to give us feedback on the work we've done so far.
@@ -39,7 +42,7 @@ This should be kept in mind when experimenting with this JSF technology.
 <a href="#release_includes">What This Release Includes</a></li>
 
 <li>
-<a href="#current_limitations">Current Limitations</a></li>
+<a href="#release_new">What's New in This Release</a></li>
 
 <li>
 <a href="#issues">Known Issues</a></li>
@@ -65,7 +68,7 @@ Windows 2000</li>
 Windows XP</li>
 
 <li>
-Linux (Red Hat 7.2)</li>
+GNU/Linux (Red Hat 7.2)</li>
 </ul>
 <a NAME="required_software"></a>
 <h1>
@@ -94,7 +97,7 @@ supported.
 <tr>
 <td>Java Web Services Developer Pack</td>
 
-<td>version 1.0_01</td>
+<td>version 1.0_01 or later</td>
 </tr>
 
 <tr>
@@ -121,59 +124,40 @@ html_basic.tld: A JSP custom tag library for building JSF applications
 that render to an HTML client.</li>
 
 <li>
+jsf_core.tld: A JSP custom tag library for representing core actions independent
+of a particular RenderKit.</li>
+
+<li>
 An API and reference implementation that provide tag handling, object management,
-rendering, and event processing.</li>
+rendering, validation, data conversion, and event processing.</li>
+
+<li>
+A set of demos in the examples directory.  Please note that these demos
+are provided as a proof-of-concept rather than a best-practices guide
+for writing JavaServer Faces applications.
 
 <li>
 <a href="http://java.sun.com/j2ee/javaserverfaces/docs/tutorial.html">JavaServer
 Faces</a>, a tutorial to help you get started.</li>
 </ul>
-<a NAME="current_limitations"></a>
+
+<p><a NAME="release_new"></a>
 <h1>
-Current Limitations</h1>
-This release is limited to the following pieces of JSF functionality:
-<ul>
-<li>
-UI Components (Form, Command, SelectBoolean, SelectOne, TextEntry, Output)</li>
+What's New in This Release</h1>
+<a NAME="14607"></a>
+<p>
+Please see the README located in your download for information on new features.
 
-<li>
-JSP Tag Library for building JSF applications</li>
-
-<li>
-i18N</li>
-
-<li>
-Application Lifecycle Events</li>
-
-<li>
-Validation</li>
-
-<li>
-Page Navigation (this will likely change in a subsequent release)</li>
-
-<li>
-Rendering Model (and concrete RenderKit for standard HTML rendering)</li>
-</ul>
-The following pieces of functionality will be part of the JSF specification
-but are *not* included in this release:
-<ul>
-<li>
-Some UI Components (Graphic, Panel, DataGrid, DataHierarchy)</li>
-
-<li>
-A Standard RenderKit</li>
-
-<li>
-Object Management</li>
-
-<li>
-Event Model</li>
-</ul>
 
 <h1>
 <a NAME="issues"></a>Known Issues With This Release</h1>
 
 <ul>
+<li>
+Be aware of bug
+<http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12492>.
+  JSP with lots of custom tags crashes tomcat VM
+</li>
 <li>
 Due to a bug in JSTL 1.0, you must have the jstl.jar and standard.jar in
 your WEB-INF/lib directory of each webapp.&nbsp; It is not sufficient to
@@ -198,14 +182,12 @@ AttributeDescriptor support happens all the time, even though it's only
 used at design time.</li>
 
 <li>
-HyperLink tags don't work as expected in sample "Basic" application.&nbsp;
-This is because once the response tree is set to target, we need to jump
-to render response phase which we are unable to do at this time.</li>
-</ul>
 Additionally, in the areas of functionality released in the EA, there are
 already significant changes in progress in the specification. Therefore,
 only experimental code should be developed against this release since it
 will not be compatibile with subsequent releases.
+</li>
+</ul>
 <p><a NAME="known_bugs"></a>
 <h1>
 Known Bugs</h1>
@@ -221,52 +203,40 @@ Known Bugs</h1>
 </tr>
 
 <tr>
-<td><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12492">http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12492</a>
+<td>4823134
 </td>
-<td>JSP with lots of custom tags crashes tomcat VM
+<td>JSF tags don't offer all attributes available in equivalent HTML 4 tags
 </td>
 </tr>
 
 <tr>
-<td>4619153...</td>
-
-<td>ModelAccessor should be an interface in the API...&nbsp;</td>
+<td>4823150</td>
+<td>
+SelectItems should be localizable</td>
 </tr>
 
 <tr>
-<td>4619266...</td>
-
-<td>SelectOne_OptionList Tag Hander should render all options...&nbsp;</td>
+<td>4823152</td>
+<td>
+Investigate using a stylesheet renderer</td>
 </tr>
 
 <tr>
-<td>4614601</td>
+<td>4823154</td>
 
-<td>&lt;faces:Form> tag doesn't support method attribute</td>
+<td>Investigate actionReference attribute for command_button</td>
 </tr>
 
 <tr>
-<td>4658872</td>
-
-<td>A Faces Command Button with the "image" attribute doesn't work</td>
-</tr>
-
-<tr>
-<td>4658880</td>
-
-<td>Validation error messages cannot be placed where relevant</td>
-</tr>
-
-<tr>
-<td>4658869</td>
-
-<td>Images don't have models</td>
+<td>4823158</td>
+<td>
+Command not invoked in rare cases with IE 5.5</td>
 </tr>
 </table>
 
 <p>
 <hr>
-<p>Copyright &copy; 2002 Sun Microsystems, Inc., 4150 Network Circle, Santa
+<p>Copyright &copy; 2002, 2003 Sun Microsystems, Inc., 4150 Network Circle, Santa
 <br>Clara, California 95054, U.S.A. All rights reserved.
 <p>Sun Microsystems, Inc. has intellectual property rights relating to
 <br>technology embodied in this product. In particular, and without
@@ -289,7 +259,7 @@ to
 <br>Standard License Terms and Conditions.
 <p>
 <hr WIDTH="100%">
-<p>Copyright &copy; 2002 Sun Microsystems, Inc., 4150 Network Circle,
+<p>Copyright &copy; 2002, 2003 Sun Microsystems, Inc., 4150 Network Circle,
 <br>Santa Clara, California 95054, Etats-Unis. Tous droits r&eacute;serv&eacute;s.
 <p>Sun Microsystems, Inc. a les droits de propri&eacute;t&eacute; intellectuels
 relatants
