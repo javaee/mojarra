@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.6 2002/12/18 20:55:00 eburns Exp $
+ * $Id: LabelRenderer.java,v 1.7 2002/12/19 00:05:38 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.6 2002/12/18 20:55:00 eburns Exp $
+ * @version $Id: LabelRenderer.java,v 1.7 2002/12/19 00:05:38 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -98,6 +98,11 @@ public class LabelRenderer extends HtmlBasicRenderer {
 	String forValue = null;
 	String outputClass = null;
 
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 

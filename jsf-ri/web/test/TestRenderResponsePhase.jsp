@@ -116,7 +116,7 @@
 	<TD>
 
             <h:command_button id="imageOnlyButton" type="submit"
-                commandName="login" image="duke.gif"> 
+                commandName="login" image="duke.gif" rendered="true"> 
              </h:command_button>
 	</TD>
 
@@ -154,6 +154,9 @@
 	<TD>
 
 	      <h:output_text id="userLabel" value="Output Text" />
+              <h:output_text id="testvisible1" value="This should not be visible"
+                               rendered="false" />
+              <h:graphic_image id="testvisible2" url="/duke.gif" rendered="false"  />
 
 	</TD>
 
@@ -163,7 +166,7 @@
 
 	<TD>
 
-            <h:selectboolean_checkbox id="validUser" 
+            <h:selectboolean_checkbox id="validUser" rendered="true"
                    selectbooleanClass="selectbooleanClass"/>
 	</TD>
 

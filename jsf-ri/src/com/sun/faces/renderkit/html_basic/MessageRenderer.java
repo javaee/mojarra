@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.12 2002/09/11 20:02:26 edburns Exp $
+ * $Id: MessageRenderer.java,v 1.13 2002/12/19 00:05:38 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.12 2002/09/11 20:02:26 edburns Exp $
+ * @version $Id: MessageRenderer.java,v 1.13 2002/12/19 00:05:38 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,6 +125,11 @@ public class MessageRenderer extends HtmlBasicRenderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
         Object currentObj = component.currentValue(context);
         if ( currentObj != null) {
             if (currentObj instanceof String) {

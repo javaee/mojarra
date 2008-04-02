@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.2 2002/09/11 20:02:25 edburns Exp $
+ * $Id: ListRenderer.java,v 1.3 2002/12/19 00:05:38 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.2 2002/09/11 20:02:25 edburns Exp $
+ * @version $Id: ListRenderer.java,v 1.3 2002/12/19 00:05:38 jvisvanathan Exp $
  *  
  */
 
@@ -100,7 +100,11 @@ public class ListRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
         String panelClass = (String) component.getAttribute("panelClass");
         
         // Render the beginning of this panel
@@ -123,7 +127,11 @@ public class ListRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
         // Set up variables we will need
         // PENDING (visvan) is it possible to use hardcoded column headings
         // without using stylesheets ?
@@ -237,7 +245,11 @@ public class ListRenderer extends HtmlBasicRenderer {
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
-
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
         // Render the ending of this panel
         ResponseWriter writer = context.getResponseWriter();
         writer.write("</table>\n");

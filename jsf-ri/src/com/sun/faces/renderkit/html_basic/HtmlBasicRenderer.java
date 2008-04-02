@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.15 2002/12/18 20:54:59 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.16 2002/12/19 00:05:37 jvisvanathan Exp $
  */
 
 /*
@@ -313,6 +313,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+        
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }    
           
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );

@@ -148,13 +148,15 @@
              </tr>
 
               <tr>
-             <td> <h:selectboolean_checkbox id="validUser"
+             <td> <h:selectboolean_checkbox id="validUser" rendered="true"
                        modelReference="LoginBean.validUser"/> 
                   <h:output_text id="checkLabel" 
                                      key="validUserLabel"
                                                 bundle="basicBundle"/>
 
                   </td>
+                  <td> <h:output_text id="testvisible" value="This should not be visible"
+                               rendered="false" /> </td>
              </tr>
 
 

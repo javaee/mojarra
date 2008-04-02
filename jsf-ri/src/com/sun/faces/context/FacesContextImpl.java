@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.26 2002/11/25 19:56:33 jvisvanathan Exp $
+ * $Id: FacesContextImpl.java,v 1.27 2002/12/19 00:05:35 jvisvanathan Exp $
  */
 
 /*
@@ -176,6 +176,11 @@ public class FacesContextImpl extends FacesContext
 
     public void setLocale(Locale locale) {
         this.locale = locale;
+        // update the JSTL configuration parameter with the new locale instance,
+        // so that the new LocalizationContext that gets created when the setBundle
+        // tag is processed is based on the modified locale.
+        javax.servlet.jsp.jstl.core.Config.set(getServletRequest(),
+                javax.servlet.jsp.jstl.core.Config.FMT_LOCALE, locale);
     }
 
     public int getMaximumSeverity() {

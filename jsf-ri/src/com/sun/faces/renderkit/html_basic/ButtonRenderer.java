@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.39 2002/12/18 20:54:58 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.40 2002/12/19 00:05:36 jvisvanathan Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.39 2002/12/18 20:54:58 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.40 2002/12/19 00:05:36 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -227,6 +227,11 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
         }
         
         // Which button type (SUBMIT, RESET, or BUTTON) should we generate?

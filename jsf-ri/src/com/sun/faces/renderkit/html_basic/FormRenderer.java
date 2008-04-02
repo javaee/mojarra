@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.37 2002/11/25 19:56:35 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.38 2002/12/19 00:05:37 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.37 2002/11/25 19:56:35 jvisvanathan Exp $
+ * @version $Id: FormRenderer.java,v 1.38 2002/12/19 00:05:37 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,6 +108,11 @@ public class FormRenderer extends HtmlBasicRenderer {
                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
         // since method and action are rendered here they are not added
@@ -158,7 +163,13 @@ public class FormRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component) 
              throws IOException{
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
         }
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();

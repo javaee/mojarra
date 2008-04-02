@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.31 2002/09/11 20:02:24 edburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.32 2002/12/19 00:05:38 jvisvanathan Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.31 2002/09/11 20:02:24 edburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.32 2002/12/19 00:05:38 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,6 +129,11 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
         ResponseWriter writer = context.getResponseWriter();
 	String commandClass = null;
         Assert.assert_it( writer != null );

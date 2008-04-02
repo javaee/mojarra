@@ -254,6 +254,7 @@
             <classpath>
               <pathelement location="${jstl.jar}"/>
               <pathelement location="${jstl_el.jar}"/>
+              <pathelement location="${servlet.jar}"/>
               <pathelement location="${java.home}/../lib/tools.jar"/>
               <fileset dir="${tomcat.home.40}">
                   <include name="bin/bootstrap.jar"/>

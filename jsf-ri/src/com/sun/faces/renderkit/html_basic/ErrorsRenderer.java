@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.4 2002/12/18 20:54:59 eburns Exp $
+ * $Id: ErrorsRenderer.java,v 1.5 2002/12/19 00:05:37 jvisvanathan Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsRenderer.java,v 1.4 2002/12/18 20:54:59 eburns Exp $
+ * @version $Id: ErrorsRenderer.java,v 1.5 2002/12/19 00:05:37 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -114,9 +114,15 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = null;
         
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
        
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         

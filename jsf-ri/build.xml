@@ -104,9 +104,7 @@
   <taskdef  name="reload"   classname="org.apache.catalina.ant.ReloadTask"/>
   <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask"/>
   <property name="context.path" value="/basic"/>
-  <property name="password" value="tomcat"/>
   <property name="url"      value="http://localhost:8080/manager"/>
-  <property name="username" value="tomcat"/>
 
 
     <!-- Directory where core struts library configurations files are stored -->
