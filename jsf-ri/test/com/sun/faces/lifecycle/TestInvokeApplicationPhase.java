@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.9 2003/01/21 23:23:24 rkitain Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.10 2003/02/11 01:03:02 horwat Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import javax.faces.event.FormEvent;
 import javax.faces.event.CommandEvent;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.lifecycle.LifecycleImpl;
-import com.sun.faces.tree.XmlTreeImpl;
+import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.RIConstants;
 import java.io.IOException;
 
@@ -41,7 +41,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.9 2003/01/21 23:23:24 rkitain Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.10 2003/02/11 01:03:02 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -95,8 +95,8 @@ public void testInvokeNormal()
     System.setProperty(DID_FORM, EMPTY);
     final UIInput root = new UIInput();
     Lifecycle life = new LifecycleImpl();
-    Tree tree = new XmlTreeImpl(getFacesContext(),
-				root, "default.xul", "");
+    Tree tree = new SimpleTreeImpl(getFacesContext(),
+				root, "default.xul");
     ApplicationHandler appHandler = new ApplicationHandler() {
         public boolean processEvent(FacesContext context, FacesEvent event){
 		System.setProperty(DID_FORM, DID_FORM);
@@ -124,8 +124,8 @@ public void testInvokeNoOp()
 {
     UIInput root = new UIInput();
     Lifecycle life = new LifecycleImpl();
-    Tree tree = new XmlTreeImpl(getFacesContext(),
-				root, "default.xul", "");
+    Tree tree = new SimpleTreeImpl(getFacesContext(),
+				root, "default.xul");
     Phase invokeApplicationPhase = new InvokeApplicationPhase(life, 
 				      RIConstants.INVOKE_APPLICATION_PHASE);
     int rc = Phase.GOTO_NEXT;

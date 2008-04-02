@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.23 2003/02/07 00:18:11 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.24 2003/02/11 01:05:35 horwat Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.faces.event.CommandEvent;
 import javax.faces.event.FacesEvent;
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
-import com.sun.faces.tree.XmlTreeImpl;
+import com.sun.faces.tree.SimpleTreeImpl;
 
 import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.ButtonRenderer;
@@ -43,7 +43,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.23 2003/02/07 00:18:11 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.24 2003/02/11 01:05:35 horwat Exp $
  * 
  *
  */
@@ -89,9 +89,9 @@ public class TestRenderers_1 extends JspFacesTestCase
     public void setUp() {
         super.setUp();
         
-	XmlTreeImpl xmlTree = 
-	    new XmlTreeImpl(getFacesContext(),
-			    new UICommand(), "treeId", "");
+	SimpleTreeImpl xmlTree = 
+	    new SimpleTreeImpl(getFacesContext(),
+			    new UICommand(), "treeId");
 	getFacesContext().setTree(xmlTree);
         assertTrue(getFacesContext().getResponseWriter() != null);
      }     

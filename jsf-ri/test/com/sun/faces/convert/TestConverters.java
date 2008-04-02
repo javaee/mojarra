@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.2 2003/02/04 16:19:19 edburns Exp $
+ * $Id: TestConverters.java,v 1.3 2003/02/11 01:03:01 horwat Exp $
  */
 
 /*
@@ -12,7 +12,6 @@
 package com.sun.faces.convert;
 
 import com.sun.faces.convert.ConverterFactoryImpl;
-import com.sun.faces.tree.XmlTreeImpl;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -51,7 +50,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.2 2003/02/04 16:19:19 edburns Exp $
+ * @version $Id: TestConverters.java,v 1.3 2003/02/11 01:03:01 horwat Exp $
  * 
  *
  */

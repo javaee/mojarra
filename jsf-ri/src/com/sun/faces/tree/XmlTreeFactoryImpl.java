@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeFactoryImpl.java,v 1.7 2002/10/07 20:39:52 jvisvanathan Exp $
+ * $Id: XmlTreeFactoryImpl.java,v 1.8 2003/02/11 01:02:56 horwat Exp $
  */
 
 /*
@@ -17,9 +17,10 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.tree.TreeFactory;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
-import javax.faces.component.UIComponentBase;
-import javax.servlet.ServletContext;
+import javax.faces.component.UINamingContainer;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -33,13 +34,17 @@ import org.apache.commons.digester.RuleSetBase;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.impl.SimpleLog;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+
 /**
  *
  *  <B>XmlTreeFactoryImpl</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeFactoryImpl.java,v 1.7 2002/10/07 20:39:52 jvisvanathan Exp $
+ * @version $Id: XmlTreeFactoryImpl.java,v 1.8 2003/02/11 01:02:56 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -51,6 +56,9 @@ public class XmlTreeFactoryImpl extends TreeFactory
 //
 // Protected Constants
 //
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(XmlTreeFactoryImpl.class);
+
 
 //
 // Class Variables
@@ -153,12 +161,15 @@ protected Iterator getTreeIdsFromSuffix(FacesContext facesContext,
 public Tree getTree(FacesContext facesContext,
 		    String treeId) throws FacesException
 {
+    if (log.isTraceEnabled()) {
+        log.trace("treeId: " + treeId);
+    }
     Tree result = null;
     InputStream treeInput = null;
-    UIComponentBase root = null;
+    UINamingContainer root = null;
     RuleSetBase ruleSet = null;
 
-    root = new UIComponentBase() {
+    root = new UINamingContainer() {
 	public String getComponentType() { return "Root"; }
     };
     root.setComponentId("root");
@@ -167,7 +178,7 @@ public Tree getTree(FacesContext facesContext,
 	// PENDING(edburns): need name for default tree
         // PENDING(rogerk) : what to specify for page url
         // (last parameter)????
-	result = new XmlTreeImpl(facesContext, root, "default", "");
+	result = new SimpleTreeImpl(facesContext, root, "default");
 	return result;
     }
 
@@ -217,28 +228,32 @@ public Tree getTree(FacesContext facesContext,
 	}
     }
 
-    // push the xml wraper object (which contains the page (jsp) url
-    // and tree) onto the stack so we have access to it after parsing 
-    // is complete.
-    //
-    XmlTreeConfig xmlTreeConfig = new XmlTreeConfig(root);
-    digester.push(xmlTreeConfig);
-    
+    digester.push(root);
     try {
-	xmlTreeConfig = (XmlTreeConfig)digester.parse(treeInput);
+	root = (UINamingContainer)digester.parse(treeInput);
     } catch (Throwable e) {
 	throw new FacesException("Can't parse stream for " + treeId, e);
     }
 
-    root = xmlTreeConfig.getRoot();
-    String pageUrl = xmlTreeConfig.getPageUrl();
 
-    result = new XmlTreeImpl(facesContext, root, treeId, pageUrl);
+    //Print tree for debugging 
+    if (log.isDebugEnabled()) {
+        printTree(root);
+    }
+
+    result = new SimpleTreeImpl(facesContext, root, treeId);
 
     return result;
 }
 
-// The testcase for this class is TestXmlTreeFactoryImpl.java 
+    private void printTree(UIComponent uic) {
+        Iterator kids = uic.getChildren();
+        while (kids.hasNext()) {
+            printTree((UIComponent) kids.next());
+        }
+        log.debug("tree: " + uic.getComponentId());
+    }
 
+// The testcase for this class is TestXmlTreeFactoryImpl.java 
 
 } // end of class XmlTreeFactoryImpl

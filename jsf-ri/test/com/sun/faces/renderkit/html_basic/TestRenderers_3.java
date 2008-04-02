@@ -1,5 +1,5 @@
 /**
- * $Id: TestRenderers_3.java,v 1.10 2003/02/04 16:19:19 edburns Exp $
+ * $Id: TestRenderers_3.java,v 1.11 2003/02/11 01:05:35 horwat Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -30,7 +30,7 @@ import com.sun.faces.renderkit.html_basic.HiddenRenderer;
 import org.apache.cactus.WebRequest;
 
 import com.sun.faces.JspFacesTestCase;
-import com.sun.faces.tree.XmlTreeImpl;
+import com.sun.faces.tree.SimpleTreeImpl;
 
 /**
  *
@@ -38,7 +38,7 @@ import com.sun.faces.tree.XmlTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.10 2003/02/04 16:19:19 edburns Exp $
+ * @version $Id: TestRenderers_3.java,v 1.11 2003/02/11 01:05:35 horwat Exp $
  * 
  *
  */
@@ -91,12 +91,11 @@ public class TestRenderers_3 extends JspFacesTestCase {
     public void setUp() {
         super.setUp();
 
-        XmlTreeImpl xmlTree =
-            new XmlTreeImpl(
+        SimpleTreeImpl xmlTree =
+            new SimpleTreeImpl(
                 getFacesContext(),
                 new UICommand(),
-                "treeId",
-                "");
+                "treeId");
         getFacesContext().setTree(xmlTree);
         assertTrue(null != getFacesContext().getResponseWriter());
     }

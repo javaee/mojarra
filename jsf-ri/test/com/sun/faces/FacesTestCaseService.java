@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.8 2002/09/20 00:59:49 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.9 2003/02/11 01:02:59 horwat Exp $
  */
 
 /*
@@ -21,7 +21,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.component.UICommand;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
-import com.sun.faces.tree.XmlTreeImpl;
 import javax.servlet.jsp.PageContext;
 
 import com.sun.faces.util.Util;
@@ -45,7 +44,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.8 2002/09/20 00:59:49 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.9 2003/02/11 01:02:59 horwat Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl

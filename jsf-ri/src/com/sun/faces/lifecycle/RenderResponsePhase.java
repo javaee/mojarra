@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.1 2003/02/04 19:57:32 rogerk Exp $
+ * $Id: RenderResponsePhase.java,v 1.2 2003/02/11 01:02:45 horwat Exp $
  */
 
 /*
@@ -12,7 +12,6 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.lifecycle.ViewHandlerImpl; 
-import com.sun.faces.tree.XmlTreeImpl;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
@@ -37,7 +36,7 @@ import com.sun.faces.RIConstants;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.1 2003/02/04 19:57:32 rogerk Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.2 2003/02/11 01:02:45 horwat Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE

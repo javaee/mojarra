@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.15 2003/01/21 23:23:25 rkitain Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.16 2003/02/11 01:03:02 horwat Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.faces.tree.Tree;
 import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
-import com.sun.faces.tree.XmlTreeImpl;
+import com.sun.faces.tree.SimpleTreeImpl;
 
 import java.io.IOException;
 
@@ -42,7 +42,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.15 2003/01/21 23:23:25 rkitain Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.16 2003/02/11 01:03:02 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -123,8 +123,8 @@ public void testUpdateNormal()
     userName2.testSetValid(true);
     form.addChild(userName2);
 
-    tree = new XmlTreeImpl(getFacesContext(), form, 
-			   "updateModel.xul", "");
+    tree = new SimpleTreeImpl(getFacesContext(), form, 
+			   "updateModel.xul");
     getFacesContext().setTree(tree);
     rc = updateModelValues.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);    
@@ -168,8 +168,8 @@ public void testUpdateFailed()
     userName2.testSetValid(true);
     form.addChild(userName2);
 
-    tree = new XmlTreeImpl(getFacesContext(), form,
-                           "updateModel.xul", "");
+    tree = new SimpleTreeImpl(getFacesContext(), form,
+                           "updateModel.xul");
     getFacesContext().setTree(tree);
 
     // This stage will go to render, since there was at least one error

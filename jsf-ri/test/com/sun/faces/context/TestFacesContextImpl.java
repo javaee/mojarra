@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.18 2003/01/22 20:06:02 rkitain Exp $
+ * $Id: TestFacesContextImpl.java,v 1.19 2003/02/11 01:03:00 horwat Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
 import com.sun.faces.context.FacesContextImpl;
-import com.sun.faces.tree.XmlTreeImpl;
+import com.sun.faces.tree.SimpleTreeImpl;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIForm;
@@ -54,7 +54,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.18 2003/01/22 20:06:02 rkitain Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.19 2003/02/11 01:03:00 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,8 +134,8 @@ public void testAccessors()
     System.out.println("Testing getLocale: " + result);
     assertTrue(result);
 
-    getFacesContext().setTree( new XmlTreeImpl(getFacesContext(),
-                new UIForm(),"treeId", ""));
+    getFacesContext().setTree( new SimpleTreeImpl(getFacesContext(),
+                new UIForm(),"treeId"));
     Tree tree = getFacesContext().getTree();
     result = null != tree;
     System.out.println("Testing getTree: " + result);

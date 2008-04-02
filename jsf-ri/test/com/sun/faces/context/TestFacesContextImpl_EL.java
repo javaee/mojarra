@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl_EL.java,v 1.2 2002/10/16 22:22:53 eburns Exp $
+ * $Id: TestFacesContextImpl_EL.java,v 1.3 2003/02/11 01:03:00 horwat Exp $
  */
 
 /*
@@ -25,7 +25,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
 import com.sun.faces.context.FacesContextImpl;
-import com.sun.faces.tree.XmlTreeImpl;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIForm;
@@ -59,7 +58,7 @@ import org.apache.cactus.WebRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl_EL.java,v 1.2 2002/10/16 22:22:53 eburns Exp $
+ * @version $Id: TestFacesContextImpl_EL.java,v 1.3 2003/02/11 01:03:00 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo

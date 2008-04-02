@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.4 2002/06/18 04:56:33 rkitain Exp $
+ * $Id: XmlXulRuleSet.java,v 1.5 2003/02/11 01:02:56 horwat Exp $
  */
 
 /*
@@ -14,7 +14,9 @@ package com.sun.faces.tree;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
+import javax.faces.event.ActionListener;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UICommand;
 import javax.faces.component.UISelectOne;
 
 import org.apache.commons.digester.AbstractObjectCreationFactory;
@@ -34,11 +36,17 @@ import javax.servlet.ServletContext;
 
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * <p>The set of Digester rules required to parse a Faces Xul (Xml)
  * configuration file. 
  */
 public class XmlXulRuleSet extends RuleSetBase {
+
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(XmlXulRuleSet.class);
 
     private BuildComponentFromTag buildComponent = null;
 
@@ -67,7 +75,7 @@ public class XmlXulRuleSet extends RuleSetBase {
         digester.addObjectCreate("*/label", "javax.faces.component.UIOutput");
         digester.addSetNext("*/label", "addChild", "javax.faces.component.UIComponent");
 
-        digester.addObjectCreate("*/textbox", "javax.faces.component.UITextEntry");
+        digester.addObjectCreate("*/textbox", "javax.faces.component.UIInput");
         digester.addSetNext("*/textbox", "addChild", "javax.faces.component.UIComponent");
 
         digester.addObjectCreate("*/checkbox", "javax.faces.component.UISelectBoolean");
@@ -85,6 +93,9 @@ public class XmlXulRuleSet extends RuleSetBase {
         digester.addObjectCreate("*/button", "javax.faces.component.UICommand");
         digester.addSetNext("*/button", "addChild", "javax.faces.component.UIComponent");
 
+        digester.addObjectCreate("*/image", "javax.faces.component.UIGraphic");
+        digester.addSetNext("*/image", "addChild", "javax.faces.component.UIComponent");
+
         digester.addFactoryCreate("*/uicomponent", new UIComponentFactory());
         digester.addSetNext("*/uicomponent", "addChild", "javax.faces.component.UIComponent");
 
@@ -98,11 +109,15 @@ public class XmlXulRuleSet extends RuleSetBase {
         digester.addRule("*/menupopup", cRule);
         digester.addRule("*/link", cRule);
         digester.addRule("*/button", cRule);
+        digester.addRule("*/image", cRule);
 
         ComponentNestedRule cnRule = new ComponentNestedRule();
         cnRule.setBuildComponent(buildComponent);
         digester.addRule("*/radio", cnRule);
         digester.addRule("*/menuitem", cnRule);
+
+        ActionRule aRule = new ActionRule();
+        digester.addRule("*/button", aRule);
     }
 
 }
@@ -143,6 +158,9 @@ final class UIComponentFactory extends AbstractObjectCreationFactory {
 
 final class ComponentRule extends Rule {
 
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(ComponentRule.class);
+
     private BuildComponentFromTag bc;
 
     public ComponentRule() {
@@ -157,11 +175,17 @@ final class ComponentRule extends Rule {
      */
     public void begin(Attributes attributes) throws Exception {
         UIComponent uic = (UIComponent)digester.peek();
+        if (log.isTraceEnabled()) {
+            log.trace("component: " + uic.getComponentId());
+        }
         AttributesImpl attrs = new AttributesImpl(attributes);
         for (int i=0; i<attrs.getLength(); i++) {
             String qName = attributes.getQName(i);
             attrs.setLocalName(i, qName);
             attrs.setValue(i, attributes.getValue(qName));
+            if (log.isTraceEnabled()) {
+                log.trace("ComponentRule: qName: " + qName + " value: " + attributes.getValue(qName));
+            }
         }
         bc.applyAttributesToComponentInstance(uic, attrs);
     }
@@ -205,3 +229,75 @@ final class ComponentNestedRule extends Rule {
         this.bc = bc;
     }
 }
+
+final class ActionRule extends Rule {
+
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(ActionRule.class);
+
+    public final static String LISTENER = "listener";
+
+    public ActionRule() {
+	super();
+    }
+
+    /**
+     * This method is invoked when the beginning of the matched
+     * Xml element is encountered ;
+     *
+     * @param attributes The element's attribute list
+     */
+    public void begin(Attributes attributes) throws Exception {
+        UIComponent uic = (UIComponent)digester.peek();
+        if (log.isTraceEnabled()) {
+            log.trace("component: " + uic.getComponentId());
+        }
+	AttributesImpl attrs = new AttributesImpl(attributes);
+
+	for (int i=0; i<attrs.getLength(); i++) {
+            String qName = attributes.getQName(i);
+            if (qName.equals(LISTENER)) {
+                log.trace("createActionListener");
+                ActionListener handler =
+                    createActionListener(attributes.getValue(qName));
+                    if (log.isTraceEnabled()) {
+                        log.trace("componentType: " + uic.getComponentType());
+                    }
+	        if (uic.getComponentType().equals(UICommand.TYPE)) {
+                    if (log.isTraceEnabled()) {
+                        log.trace("addingActionListener: " + handler);
+                    }
+                    ((UICommand)uic).addActionListener(handler);
+	        }
+            }
+	}
+    }
+
+    /**
+     * <p>Create and return a new {@link ActionListener} to be registered
+     * on our surrounding {@link UIComponent}.</p>
+     *
+     * @exception FacesException if a new instance cannot be created
+     */
+    protected ActionListener createActionListener(String className)
+        throws FacesException {
+
+        try {
+            ClassLoader classLoader =
+            Thread.currentThread().getContextClassLoader();
+            if (classLoader == null) {
+                classLoader = this.getClass().getClassLoader();
+            }
+            Class clazz = classLoader.loadClass(className);
+            if (log.isTraceEnabled()) {
+                log.trace("CreateActionListener: Class.toString(): " + clazz.toString());
+            }
+
+            return ((ActionListener) clazz.newInstance());
+        } catch (Exception e) {
+            throw new FacesException("Can't create ActionListener: " + e);
+        }
+    }
+
+}
+

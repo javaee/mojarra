@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.38 2003/02/11 00:25:49 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.39 2003/02/11 01:05:35 horwat Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.renderkit.html_basic.CheckboxRenderer;
 import com.sun.faces.renderkit.html_basic.NumberRenderer;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
-import com.sun.faces.tree.XmlTreeImpl;
+import com.sun.faces.tree.SimpleTreeImpl;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -53,7 +53,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.38 2003/02/11 00:25:49 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.39 2003/02/11 01:05:35 horwat Exp $
  * 
  *
  */
@@ -114,9 +114,9 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void setUp() {
 	super.setUp();
 
-        XmlTreeImpl xmlTree = 
-	    new XmlTreeImpl(getFacesContext(), 
-			    new UICommand(), "treeId", "");
+        SimpleTreeImpl xmlTree = 
+	    new SimpleTreeImpl(getFacesContext(), 
+			    new UICommand(), "treeId");
         getFacesContext().setTree(xmlTree);
 	assertTrue(null != getFacesContext().getResponseWriter());
     }     
