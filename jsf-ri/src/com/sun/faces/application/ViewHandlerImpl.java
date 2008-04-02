@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.19 2003/10/17 13:55:42 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.20 2003/10/17 20:33:10 jvisvanathan Exp $ 
  */ 
 
 
@@ -39,7 +39,7 @@ import java.util.Enumeration;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.19 2003/10/17 13:55:42 rlubke Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.20 2003/10/17 20:33:10 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -176,9 +176,8 @@ public class ViewHandlerImpl extends Object
         } else {
             viewRoot = getStateManager().restoreView(context, viewId);
         }        
-
         if ( viewRoot == null) {
-            viewRoot = new UIViewRoot();
+            viewRoot = createView(context,viewId);
             context.renderResponse();
         }
         viewRoot.setViewId(viewId);
@@ -190,14 +189,23 @@ public class ViewHandlerImpl extends Object
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
-
+        Locale locale = null;
+        // use the locale from the previous view if is was one which will be
+        // the case if this is called from NavigationHandler. There wouldn't be 
+        // one for the initial case.
+        if (context.getViewRoot() != null ) {
+            locale = context.getViewRoot().getLocale();
+        }
 	UIViewRoot result = new UIViewRoot();
 	result.setViewId(viewId);
 	// PENDING(): not sure if we should set the RenderKitId here.
 	// The UIViewRootBase ctor sets the renderKitId to the default
 	// one.
-        // calculate the locale for this view.
-        Locale locale = calculateLocale(context);
+        // if there was no locale from the previous view, calculate the locale 
+        // for this view.
+        if (locale == null) {
+            locale = calculateLocale(context);
+        }
         result.setLocale(locale);
 	return result;
     }
