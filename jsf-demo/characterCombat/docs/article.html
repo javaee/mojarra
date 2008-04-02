@@ -1,0 +1,468 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+</head>
+<body>
+<h1>JavaServer Faces OverView
+</h1>
+<p>JavaServer Faces (JSF) makes it easy to build powerful and dynamic
+web
+applications. There are many user interface frameworks available but
+what makes JSF stand out from all the rest is that it is a standard. As
+a standard, many tool venders can rely on well defined and consistent
+behavior to build around. JSF was designed to be toolable from the very
+beginning. Users can also rely on consistent and specific behavior from
+one JSF implementation to the next.
+</p>
+<p>Two of the biggest issues that JSF addresses include managing UI
+component state across requests and handling navigation in response to
+UI events. These are very common issues that web application developers
+need to address in their designs.
+</p>
+<p>There are many features available in JSF. Some of the main feature
+highlights include:
+</p>
+<ul>
+  <li>
+    <p> managed bean facility </p>
+  </li>
+  <li>
+    <p> rich and extensible component library </p>
+  </li>
+  <li>
+    <p> pluggable renderkits </p>
+  </li>
+  <li>
+    <p> managed bean facility </p>
+  </li>
+  <li>
+    <p> navigation handling </p>
+  </li>
+  <li>
+    <p> conversion model </p>
+  </li>
+</ul>
+<p>This article will give an overview and examples of some of these JSF
+features.
+</p>
+<p>A JSF application is essentially a servlet or JSP application
+running on
+a J2EE compliant container. On a side note, JSF does not require a JSP
+container so you could use the framework independantly of one. With
+JSP,
+you can use the built-in JSF Core and HTML component libraries via the
+JSF custom component tags. The JSF components represent web controls
+like text fields, forms, buttons, tables, checkboxes, and so forth.
+</p>
+<p>When you create a JSP page with JSF components, a component tree is
+built on the server side. This component tree is used by the framework
+to handle your application request and create a rendered response. When
+you generate an event like clicking on a command button, the JSF
+lifecycle handles that event and generates an appropriate response.
+</p>
+<p>The FacesServlet is the entry point into the JSF framework. It
+handles
+the request processing lifecycle and acts as a front controller. JSF
+also has the notion of a context where important information request
+information is stored. That object is called the FacesContext. It is
+modified at each stage of the JSF Lifecycle and is valid per-request.
+</p>
+<p>jmh: NOTE: Add more text going over what JSF is</p>
+<p>jmh: NOTE: Include information on the JSF EL</p>
+<p>Simple JSF Application
+</p>
+<p>This article includes a simple JSF application that illustrates some
+of
+the important JSF concepts. In order to understand the application, you
+should already be familiar with basic J2EE web technologies including
+JSPs, Servlets, and Tag Libraries.
+</p>
+<p>The basic high-level idea behind the sample application is to engage
+the
+user in a quick fantasy game. Have you ever wondered what would happen
+if you took one Lord of the Rings character and pitted them against
+another? The sample application answers that question in a simple and
+fun way. The application is called Character Combat.
+</p>
+<p>Character Combat consists of the following:
+</p>
+<ul>
+  <li>
+    <p> - JSP pages with JSF components representing the view </p>
+  </li>
+  <li>
+    <p> - Backing bean to hold the model data </p>
+  </li>
+  <li>
+    <p> - Application configuration files specifying: </p>
+  </li>
+  <ul>
+    <li>
+      <p> - JSF controller servlet </p>
+    </li>
+    <li>
+      <p> - managed beans </p>
+    </li>
+    <li>
+      <p> - navigation handling </p>
+    </li>
+  </ul>
+</ul>
+<p>jmh: NOTE: insert example work flow diagram here</p>
+<p>Managed Beans
+</p>
+<p>Using the managed bean creation facility helps simplify your web
+applications. With managed beans, you can specify the configuration of
+your managed bean in the faces-config.xml file. Then in your web
+application itself you simply reference the bean using your defined
+bean
+name. The bean will be created and placed in the appropriate scope the
+first time you reference it. Managed beans are very flexible and allow
+you to customize your bean by specifying properties and default value
+and scope the bean will be stored in.
+</p>
+<p>The Character Combat example has a backing bean called ModelBean.
+Here
+is how the ModelBean is defined in the WEB-INF/faces-config.xml file
+using the managed bean facility:
+</p>
+<pre><code>
+  &lt;managed-bean&gt;
+    &lt;managed-bean-name&gt;modelBean&lt;/managed-bean-name&gt;
+    &lt;managed-bean-class&gt;characterCombat.ModelBean&lt;/managed-bean-class&gt;
+    &lt;managed-bean-scope&gt;session&lt;/managed-bean-scope&gt;
+  &lt;/managed-bean&gt;
+</code></pre>
+<p>That bean is then referenced in the web application's JSP pages.
+Here is
+an example of how the bean is used:
+</p>
+<pre><code>
+  &lt;h:inputText value="#{modelBean.customName}" /&gt;
+</code></pre>
+<p>Where &lt;h:inputText/&gt; is a text field component nested in a
+form. When the form is submitted, the value in the text field will be
+saved as a "customName" property in the ModelBean.
+</p>
+Object Model
+<p>The Character Combat example creates a ModelBean object. ModelBean
+includes a set of accessor methods just like any other JavaBeans
+component. It also pre-populates a default list of characters as well
+as
+stores the user customized character.
+</p>
+<p>The ModelBean is created using the Managed Bean Creation Facility
+and
+referenced by name in the JSF components defined in the view. The
+ModelBean illustrates how a bean can be used to store the value of the
+component. You can also create a bean that has a binding and can
+therefore manage the component directly.
+</p>
+<p>In the example only the addition of new characters is supported. It
+would be a good and easy exercise to add the deletion functionality by
+modifying the model and view to support this feature.
+</p>
+JSP Pages
+<p>jmh: NOTE: would be nice to graphically display the component tree
+for some of the component examples</p>
+<p>The JSP pages provide the view for the web application. JSF lets you
+customize that view through various built-in components. You are not
+tied to just the provided components and can create your own customized
+components.
+</p>
+<p>To use the built-in JSF tag libraries that contain the components,
+you
+will need to include the following tag directives in your JSP page:
+</p>
+<pre><code>
+&lt;%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %&gt;
+&lt;%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %&gt;
+</code></pre>
+<p>Note that your JSF page will need to have all of the JSF tags
+enclosed in between the &lt;f:view&gt;...&lt;/f:view&gt; tags so that
+the component tree is properly created.
+</p>
+<p>An HTML renderkit is also provided. You are also not tied to this
+renderkit and can create a customized one. For instance, you can create
+a WML renderkit for small devices and seemless integrate that into the
+JSF framework.
+</p>
+<p>Each HTML component can be customized using stylesheets. You can
+specify
+a generic styleClass or set specific style attribute values.
+</p>
+<p>Here are some examples from the Character Combat application that
+illustrate the above concepts:
+</p>
+<p> DataTable
+</p>
+<p> The DataTable UIComponent can handle several different types of
+DataModel including Lists and ResultSets. It takes the data and lays it
+out in a customizable table. The component can also be customized using
+stylesheets.
+</p>
+<p> In the Character Combat demo a List is used and the underlying
+DataModel. Here is a code snippet:
+</p>
+<pre><code>
+  &lt;h:dataTable columnClasses="list-column-center,
+                              list-column-center,
+                              list-column-center,
+                              list-column-center"
+		          headerClass="list-header"
+		          styleClass="list-background"
+		          value="#{modelBean.dataList}"
+		          var="character" &gt;
+
+    &lt;f:facet name="header"&gt;
+	   &lt;h:outputText value="List of Available Characters"/&gt;
+    &lt;/f:facet&gt;
+
+    &lt;h:column&gt;
+	   &lt;f:facet name="header"&gt;
+	     &lt;h:outputText value="Name"/&gt;
+	   &lt;/f:facet&gt;
+      &lt;h:outputText value="#{character.name}"/&gt;
+    &lt;/h:column&gt;
+
+    &lt;h:column&gt;
+	   &lt;f:facet name="header"&gt;
+	     &lt;h:outputText value="Species"/&gt;
+	   &lt;/f:facet&gt;
+	   &lt;h:outputText value="#{character.species.type}"/&gt;
+    &lt;/h:column&gt;
+...
+  &lt;/h:dataTable&gt;
+</code></pre>
+<p> As you can see in this example #{modelBean.dataList} evaluates to a
+list of character entries stored in the "character" variable as defined
+the the &lt;h:dataTable/&gt; tag. For each character in the list a new
+row is created and displayed according to the &lt;h:column/&gt; tags.
+</p>
+<p> The &lt;f:facet/&gt; tag creates a special relationship between the
+component enclosed in the facet and it's parent. This special
+relationship allows you to define components to be headers or footers.
+In our example, we use a facet to create header for our columns.
+</p>
+<p> Since the &lt;h:dataTable/&gt; is an HTML component, it's style can
+be customized using stylesheets. In our example we show how you can use
+style attributes for several of the different &lt;h:dataTable/&gt;
+properties. We import our stylesheet named "stylesheet.css" using the
+following code snippet in the JSP page header:
+</p>
+<pre><code>
+  &lt;link rel="stylesheet" type="text/css"
+    href='&lt;%= request.getContextPath() + "/stylesheet.css" %&gt;'&gt;
+</code></pre>
+<p> PanelGrid
+</p>
+<p> For simple table layout you can use the &lt;h:panelGrid/&gt;
+component. Unlike the PanelData component, PanelGrid does not take any
+underlying data model.
+</p>
+<p> Here is an example of a two column table containing a set of
+buttons:
+</p>
+<pre><code>
+    &lt;h:panelGrid columns="2"&gt;
+	    &lt;h:commandButton action="#{modelBean.select}" value="Next Page"/&gt;
+	    &lt;h:commandButton action="#{modelBean.addCustomName}" value="Add Name"/&gt;
+    
+</code></pre>
+<p> InputText
+</p>
+<p> The InputText component is one way that you can use to get
+information submitted by the user. In our example we link the text
+field to our model by specifying the value attribute as follows:
+</p>
+<pre><code>
+	&lt;h:inputText value="#{modelBean.customName}" /&gt;
+</code></pre>
+<p> This InputText component is nested in a form. Once that form is
+submitted, the value in the field will be reflected in our model.
+</p>
+<p> OutputText
+</p>
+<p> The OutputText component can display information in various ways.
+You can, for instance, configure it to either escape HTML markup. You
+can also apply various stylesheet styles to the component.
+</p>
+<p> OutputText is used throughout the sample application to display the
+data from the model. In this example we are displaying the character's
+name:
+</p>
+<pre><code> &lt;h:outputText value="#{character.name}"/&gt; </code></pre>
+<p> SelectOneRadio
+</p>
+<p> You can use the SelectOneRadio to display a set of radio
+selections. You can include a set of radio select items as well as
+nested item groups. Here is how SelectOneRadio is used in our exaample:
+</p>
+<pre><code>
+	&lt;h:selectOneRadio
+	  layout="pageDirection"
+	  value="#{modelBean.currentSelection}"&gt;
+	  &lt;f:selectItems
+	    value="#{modelBean.charactersToSelect}" /&gt;
+	
+
+</code></pre>
+<p>The layout attribute tells the &lt;h:selectOneRadio/&gt; component
+to
+layout vertically as opposed to the horizontal default layout. Our
+ModelBean charactersToSelect method returns a List of SelectItems which
+the SelectOneRadio knows how to display. This radio component is nested
+in a form. The selected radio item when the form is submitted will be
+saved as the currentSelection property in the model.
+</p>
+<p> CommandButton
+</p>
+<p> CommandButton is an input component that can create Action Events.
+You can create ActionListeners to look for specific action events as
+the user is navigating through your JSF web application. You can also
+supply an action method binding for an application action to be invoked
+when the component is selected. This latter case is what we use in our
+sample:
+</p>
+<pre><code>
+    &lt;h:commandButton
+	    action="#{modelBean.addFirstSelection}"
+	    value="Submit First Character Selection"/&gt;
+</code></pre>
+<p> We will discuss actions in the next section since they are very
+important in navigation handling.
+</p>
+<p>Actions and Navigation Handling
+</p>
+<p>jmh: NOTE: talk about actions...</p>
+<p>The JSF Framework has a built-in Navigation Handler that handles
+navigation based on a configuration file and action events. The
+component hierarchy for each JSF page is called a view. In the
+application configuration file you can specify the view id, actions,
+and
+outcome.
+</p>
+<p>Here is a configuration example:
+</p>
+<pre><code>
+  &lt;navigation-rule&gt;
+    &lt;from-view-id&gt;/main.jsp&lt;/from-view-id&gt;
+    &lt;navigation-case&gt;
+	   &lt;description&gt;
+	     If the action returns "success", goto
+	     firstSelection.jsp
+	   &lt;/description&gt;
+	   &lt;from-outcome&gt;success&lt;/from-outcome&gt;
+	   &lt;to-view-id&gt;/firstSelection.jsp&lt;/to-view-id&gt;
+	  &lt;/navigation-case&gt;
+  &lt;/navigation-rule&gt;
+</code></pre>
+<p>In this example if the action invoked from the "main.jsp" page
+returns
+the "success" outcome then the Navigation Handler will render the
+"firstSelection.jsp" page.
+</p>
+<p>The action in the "main.jsp" page is associated with a command
+button
+nested in a form. It will be invoked when the form is submitted:
+</p>
+<pre><code> &lt;h:commandButton action="#{modelBean.addFirstSelection}"<br>value="Submit First Character Selection"/&gt;<br><br></code></pre>
+<p>The actual Action Handler implementation is in the ModelBean.java
+file. The "select" method performs some model logic and returns the
+appropriate request expected by the Navigation Handler:
+</p>
+<pre><code>
+    public String addFirstSelection() {
+        firstSelection = currentSelection;
+
+        currentSelection = null;
+        secondSelection = null;
+
+        return "success";
+    }
+
+</code></pre>
+<p>Building the Application
+</p>
+<p>jmh: NOTE: write simple build.xml and build.properties.sample file
+to
+use within SJSAS env</p>
+<p> Deployment Descriptor
+</p>
+<p> In order to use the JavaServer Faces framework you need to define
+your Faces Servlet and a Faces Servlet Mapping in your Deployment
+Descriptor. Here is an example:
+</p>
+<pre><code>
+    &lt;!-- Faces Servlet --&gt;
+    &lt;servlet&gt;
+	   &lt;servlet-name&gt;Faces Servlet&lt;/servlet-name&gt;
+	   &lt;servlet-class&gt;javax.faces.webapp.FacesServlet&lt;/servlet-class&gt;
+	   &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+
+
+    &lt;!-- Faces Servlet Mapping --&gt;
+    &lt;servlet-mapping&gt;
+	   &lt;servlet-name&gt;Faces Servlet&lt;/servlet-name&gt;
+	   &lt;url-pattern&gt;/faces/*&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+</code></pre>
+<p>In this example prefix mapping is used. You can also map to the
+Faces
+Servlet using extension mapping. For instance you can make all "*.jsf"
+files go through the Faces Servlet controller.
+</p>
+<p> Application Configuration
+</p>
+<p> All of your JSF specific configuration information will go in an
+application configuration file like faces-config.xml. Here you can
+define your Managed Beans, Navigation Rules, Converters, Validators,
+and so on.
+</p>
+<p>Here is an example of some configurations:
+</p>
+<pre><code>
+&lt;faces-config&gt;
+
+  &lt;managed-bean&gt;
+    &lt;managed-bean-name&gt;modelBean&lt;/managed-bean-name&gt;
+    &lt;managed-bean-class&gt;characterCombat.ModelBean&lt;/managed-bean-class&gt;
+    &lt;managed-bean-scope&gt;session&lt;/managed-bean-scope&gt;
+  &lt;/managed-bean&gt;
+
+&lt;/faces-config&gt;
+</code></pre>
+<p>Running the Application
+</p>
+<p>The latest Java Server Faces 1.0 Framework is integrated in the Sun
+Java Systems Application Server 8.0 PE. In SJSAS 8.0 PE you do not need
+to take any extra configuration steps to setup a JSF web application
+other than specifying the Faces Servlet and Mapping in your web
+application's deployment descriptor. SJSAS 8.0 PE is free and available
+here </p>
+<p>jmh: INSERT LINK </p>
+.
+<p></p>
+<p>In order to run the sample application discussed in this article,
+simply
+deploy the supplied war file in the application server. The application
+will be available by the context name "jsf-characterCombat".
+</p>
+<p>Summary
+</p>
+<p>This article has introduced you to some of the features available in
+the
+JSF framework. The sample application demonstrated the use of
+stylesheets, components, navigation and action handlers.
+</p>
+<p>JSF can help you create complex and robust web applications easily.
+It
+is a standard Java web application framework several years in the
+making. As a standard it is well positioned to be adopted by users and
+tool vendors. JSF is a tool that can help you build a great web
+application.
+</p>
+</body>
+</html>
