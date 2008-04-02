@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResources.java,v 1.6 2003/05/19 21:00:18 eburns Exp $
+ * $Id: MessageResources.java,v 1.7 2003/07/16 22:58:42 craigmcc Exp $
  */
 
 /*
@@ -23,6 +23,15 @@ import javax.faces.application.Message;
  * {@link javax.faces.application.Application}, for a specified message
  * resources identifier.  Because this instance is shared across multiple
  * requests, it must be implemented in a thread-safe manner.</p>
+ *
+ * <p>The various <code>getMessage()</code> methods create a localized
+ * message by consulting the <code>locale</code> property of the
+ * {@link FacesContext} instance that is passed as a parameter, and using
+ * that to construct (if necessary) and return a {@link Message} instance
+ * whose <code>detail</code> and <code>summary</code> properties have been
+ * localized for the specified locale.  If no localized text for the specified
+ * locale is available, fallback text in a default language may be returned
+ * instead.</p>
  */
 
 public abstract class MessageResources {
