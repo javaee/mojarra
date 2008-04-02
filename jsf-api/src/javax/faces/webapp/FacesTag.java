@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.36 2003/03/14 02:37:41 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.37 2003/04/29 03:41:38 eburns Exp $
  */
 
 /*
@@ -436,11 +436,14 @@ public abstract class FacesTag implements Tag {
 
             // Add it as a facet or a child
             String facetName = getFacetName();
-            if (facetName != null) {
-                parentComponent.addFacet(facetName, component);
-            } else {
-                parentComponent.addChild(component);
-            }
+	    // protect from adding us to ourself
+	    if (parentComponent != component) {
+		if (facetName != null) {
+		    parentComponent.addFacet(facetName, component);
+		} else {
+		    parentComponent.addChild(component);
+		}
+	    }
 
             // Return the newly created component
             return (component);
@@ -459,11 +462,13 @@ public abstract class FacesTag implements Tag {
 
             // Case 2B -- Look up child by position
             if (parentTag != null) {
-                component =
-                    parentComponent.getChild(parentTag.getChildIndex());
+		component =
+		    parentComponent.getChild(parentTag.getChildIndex());
                 parentTag.incrementChildIndex();
             } else {
-                component = parentComponent.getChild(0);
+		// The only case where parentTag == null is the root
+		// tag, therefore, the component is the rootComponent.
+                component = context.getTree().getRoot();
             }
             // PENDING - what if it's not there?
 
