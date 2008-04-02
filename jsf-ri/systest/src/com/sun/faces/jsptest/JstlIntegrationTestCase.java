@@ -1,5 +1,5 @@
 /*
- * $Id: JstlIntegrationTestCase.java,v 1.2 2003/09/05 18:57:06 eburns Exp $
+ * $Id: JstlIntegrationTestCase.java,v 1.3 2003/09/12 16:30:21 craigmcc Exp $
  */
 
 /*
@@ -231,6 +231,34 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     }
 
 
+    // Test importing JSPs with literal text
+    public void testJstlImport01() throws Exception {
+
+        checkJstlImport00();
+        checkJstlImport01();
+        checkJstlImport01();
+
+        checkJstlImport00();
+        checkJstlImport01();
+        checkJstlImport01();
+
+    }
+
+
+    // Test importing JSPs with simple components
+    public void testJstlImport02() throws Exception {
+
+        checkJstlImport00();
+        checkJstlImport02();
+        checkJstlImport02();
+
+        checkJstlImport00();
+        checkJstlImport02();
+        checkJstlImport02();
+
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -382,6 +410,40 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
                      "jstl-if-04", page.getTitleText());
         assertEquals("Correct body element",
                      "[1] [7]", getBodyText(page));
+
+    }
+
+
+    // Check the reset page to force a new component tree
+    private void checkJstlImport00() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-import-00.jsp");
+        assertEquals("Correct page title",
+                     "jstl-import-00", page.getTitleText());
+
+    }
+
+
+    // Check imports with literal text
+    private void checkJstlImport01() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-import-01.jsp");
+        assertEquals("Correct page title",
+                     "jstl-import-01", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[A] [B] [C] [D] [E]", getBodyText(page));
+
+    }
+
+
+    // Check imports with simple components
+    private void checkJstlImport02() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-import-02.jsp");
+        assertEquals("Correct page title",
+                     "jstl-import-02", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[A] [B] [C] [D] [E]", getBodyText(page));
 
     }
 

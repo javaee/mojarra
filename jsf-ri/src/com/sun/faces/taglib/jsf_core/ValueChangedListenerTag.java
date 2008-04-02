@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangedListenerTag.java,v 1.5 2003/05/03 04:08:45 eburns Exp $
+ * $Id: ValueChangedListenerTag.java,v 1.6 2003/09/12 16:30:20 craigmcc Exp $
  */
 
 /*
@@ -90,17 +90,14 @@ public class ValueChangedListenerTag extends TagSupport {
     public int doStartTag() throws JspException {
 
         // Locate our parent UIComponentTag
-        Tag tag = getParent();
-        while ((tag != null) && !(tag instanceof UIComponentTag)) {
-            tag = tag.getParent();
-        }
+        UIComponentTag tag =
+            UIComponentTag.getParentUIComponentTag(pageContext);
         if (tag == null) { 
             throw new JspException(Util.getExceptionMessage(Util.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID));
         }
-        UIComponentTag facesTag = (UIComponentTag) tag;
 
         // Nothing to do unless this tag created a component
-        if (!facesTag.getCreated()) {
+        if (!tag.getCreated()) {
             return (SKIP_BODY);
         }
 
@@ -110,7 +107,7 @@ public class ValueChangedListenerTag extends TagSupport {
         //UIComponent/UIComponentBase).
 
         ValueChangedListener handler = createValueChangedListener();
-        UIComponent component = facesTag.getComponent();
+        UIComponent component = tag.getComponent();
         if (component == null) {
             throw new JspException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
