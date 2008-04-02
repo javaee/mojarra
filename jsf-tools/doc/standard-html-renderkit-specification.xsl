@@ -13,6 +13,10 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 </head>
 
+<!-- Note that you need to modify the standard-html-renderkit.xml file
+to make it so that render-kit is the root XML element in order for this
+XSL file to work.  -->
+
 <body>
 
   <table border="1">
