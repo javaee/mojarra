@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.16 2005/03/15 20:37:37 edburns Exp $
+ * $Id: ResponseStateManager.java,v 1.17 2005/03/15 21:09:30 edburns Exp $
  */
 
 /*
@@ -72,9 +72,7 @@ public abstract class ResponseStateManager {
 	if (state instanceof SerializedView) {
 	    view = (SerializedView) state;
 	}
-	else {
-	    view = new SerializedView(state, null);
-	}
+	// PENDING(edburns): handle else case
 	writeState(context, view);
     }
 
