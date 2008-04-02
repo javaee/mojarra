@@ -47,7 +47,7 @@
 <td>Username:</td>
 </tr>
 <tr>
-<td><span class="inputClass"><input type="text" name="basicForm:username1" value="JavaServerFaces" /></span></td>
+<td><input type="text" name="basicForm:username1" value="JavaServerFaces" class="inputClass" /></td>
 <td><span class="outputClass">Password:</span></td>
 </tr>
 <tr>
@@ -311,7 +311,7 @@
 
 	<TD>
                 
-            <span class="inputClass"><input type="text" name="basicForm:_id31" value="Wed, Jul 10, 1996" /></span>
+            <input type="text" name="basicForm:_id31" value="Wed, Jul 10, 1996" class="inputClass" />
 	</TD>
 
       </TR>
@@ -346,7 +346,7 @@
           <td>
             
                
-            <span class="inputClass"><input type="text" name="basicForm:testPattern" value="9999.98765" accesskey="D" maxlength="20" size="3" tabindex="2" /></span>
+            <input type="text" name="basicForm:testPattern" value="9999.98765" class="inputClass" accesskey="D" maxlength="20" size="3" tabindex="2" />
               </td>
 
       </tr>
