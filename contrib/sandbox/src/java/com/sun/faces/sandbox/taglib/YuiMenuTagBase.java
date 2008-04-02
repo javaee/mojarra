@@ -11,11 +11,21 @@ import com.sun.faces.sandbox.component.YuiMenuBase;
 import com.sun.faces.sandbox.util.Util;
 
 /**
+ * <b><code>YuiMenuTagBase</code></b> is the base <code>UIComponentTag</code> for
+ * all YUI menu components.
  * @author Jason Lee
  *
  */
 public abstract class YuiMenuTagBase extends UIComponentTag {
+    /**
+     * <code>value</code> is an expression which evaulates to the Menu items.
+     * @see com.sun.faces.sandbox.model.Menu
+     */
     protected String value;
+    /**
+     * Either a string literal or expression which represents the width of the rendered
+     * menu.
+     */
     protected String width;
     
     @Override

@@ -11,8 +11,11 @@ import com.sun.faces.sandbox.component.YuiMenuBase;
 import com.sun.faces.sandbox.model.Menu;
 
 /**
+ * This <code>Renderer</code> will render an application-style menu bar. For an 
+ * example of this component, see the Yahoo! UI example <a target="_blank"
+ * href="http://developer.yahoo.com/yui/examples/menu/topnavfrommarkup.html">page</a>.
  * @author Jason Lee
- *
+ * 
  */
 public class YuiMenuBarRenderer extends YuiMenuRenderer {
     // TODO:  this will likely have XHTML issues

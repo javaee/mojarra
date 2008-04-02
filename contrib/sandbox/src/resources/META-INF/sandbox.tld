@@ -1070,7 +1070,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
         <name>menu</name>
         <tag-class>com.sun.faces.sandbox.taglib.YuiMenuTag</tag-class>
         <body-content>JSP</body-content>
-        <description>Display a JavaScript Menu</description>
+        <description><![CDATA[
+            <p>Renders a JavaScript menu with flyouts.  For an example of this component, 
+            see the Yahoo! UI example <a target="_blank"
+	        href="http://developer.yahoo.com/yui/examples/menu/example07.html">page</a>.</p>
+            ]]>
+        </description>
         <attribute>
             <name>id</name>
             <required>false</required>
@@ -1085,7 +1090,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>true</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
-                <![CDATA[The current value of this component.]]>
+                <![CDATA[
+                <p>The <code>value</code> attribute is used to specify the menu
+                options.  The value should be an expression that evaluates to a
+                <code>com.sun.faces.sandbox.model.Menu</code> object.
+                </p>]]>
             </description>
         </attribute>
         <attribute>
@@ -1093,7 +1102,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
-                <![CDATA[The display width for the menu]]>
+                <![CDATA[The display width for the menu.]]>
             </description>
         </attribute>
     </tag>
@@ -1108,7 +1117,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
         <name>menuBar</name>
         <tag-class>com.sun.faces.sandbox.taglib.YuiMenuBarTag</tag-class>
         <body-content>JSP</body-content>
-        <description>Display a JavaScript Menu</description>
+        <description><![CDATA[
+            <p>Renders a JavaScript an application-style menu bar.</p>
+            
+            <p>For an example of this component, see the Yahoo! UI example <a target="_blank"
+	        href="http://developer.yahoo.com/yui/examples/menu/topnavfrommarkup.html">page</a>.</p>
+            ]]>
+        </description>
         <attribute>
             <name>id</name>
             <required>false</required>
@@ -1123,7 +1138,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>true</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
-                <![CDATA[The current value of this component.]]>
+                <![CDATA[
+                <p>The <code>value</code> attribute is used to specify the menu
+                options.  The value should be an expression that evaluates to a
+                <code>com.sun.faces.sandbox.model.Menu</code> object.
+                </p>]]>
             </description>
         </attribute>
         <attribute>
@@ -1131,7 +1150,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
-                <![CDATA[The display width for the menu]]>
+                <![CDATA[The display width for the menu.]]>
             </description>
         </attribute>
     </tag>
@@ -1146,7 +1165,24 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
         <name>contextMenu</name>
         <tag-class>com.sun.faces.sandbox.taglib.YuiContextMenuTag</tag-class>
         <body-content>JSP</body-content>
-        <description>Display a JavaScript context menu</description>
+        <description><![CDATA[
+            <p>Renders a JavaScript context menu associate with the component's
+            parent.  For example:</p>
+
+            <ul>            
+            <p>&lt;h:outputText id="text" value="This should have a context menu!"&gt;<br />
+            <span style="padding-left: 2em;">&lt;risb:contextMenu value="#{testBean.menu}" width="225px"/&gt;</span><br/>
+            &lt;/h:outputText&gt;</p>
+            </ul>
+            
+            <p>will render a <code>span</code> with the text "This should have a context menu!".  When
+            the user right clicks on the <code>span</code>, the context menu defined
+            in <code>TestBean.getMenu()</code> will be displayed.</p>
+            
+            <p>For an example of this component, see the Yahoo! UI example <a target="_blank"
+	        href="http://developer.yahoo.com/yui/examples/menu/contextmenu.html">page</a>.</p>
+            ]]>
+        </description>
         <attribute>
             <name>id</name>
             <required>false</required>
@@ -1161,15 +1197,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>true</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
-                <![CDATA[The current value of this component.]]>
-            </description>
-        </attribute>
-        <attribute>
-            <name>trigger</name>
-            <required>false</required>
-            <rtexprvalue>false</rtexprvalue>
-            <description>
-                <![CDATA[The trigger DOM element for the context menu.]]>
+                <![CDATA[
+                <p>The <code>value</code> attribute is used to specify the menu
+                options.  The value should be an expression that evaluates to a
+                <code>com.sun.faces.sandbox.model.Menu</code> object.
+                </p>]]>
             </description>
         </attribute>
         <attribute>

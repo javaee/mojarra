@@ -4,6 +4,8 @@
 package com.sun.faces.sandbox.util;
 
 /**
+ * This class is a holder for <code>public static final String</code>s for various
+ * YUI-related file names and paths.
  * @author Jason Lee
  *
  */
