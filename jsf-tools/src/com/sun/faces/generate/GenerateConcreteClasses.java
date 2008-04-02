@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.5 2003/11/07 22:31:34 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.6 2003/11/09 22:32:25 eburns Exp $
  */
 
 /*
@@ -330,10 +330,8 @@ public class GenerateConcreteClasses extends GenerateBase {
 	curAttr = 1;
 	numAttrs= attrs.keySet().size() + 1; // + 1 for super.state,
 					     // saved in values[0]
-	result.append("  public Object saveState(FacesContext context) {\n");
-	result.append("    Object [] values = new Object[" + numAttrs + 
-		      "];\n");
-	result.append("    values[0] = super.saveState(context);\n");
+	StringBuffer fillOutTheArray = new StringBuffer();
+	fillOutTheArray.append("    values[0] = super.saveState(context);\n");
 	// generate the state saving for each attribute
 	iter = attrs.keySet().iterator();
 	while (iter.hasNext()) {
@@ -344,23 +342,23 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    if (isPrimitive(attrClass)) {
 		// wrap it
 		if (attrClass.equals("boolean")) {
-		    result.append("    values[" + curAttr + "] = " + ivar+ 
+		    fillOutTheArray.append("    values[" + curAttr + "] = " + ivar+ 
 				  " ? Boolean.TRUE : Boolean.FALSE;\n");
 		}
 		else {
-		    result.append("    values[" + curAttr + "] = new " +
+		    fillOutTheArray.append("    values[" + curAttr + "] = new " +
 				  (String) wrappersForNumbers.get(attrClass) +
 				  "(" + ivar + ");\n");
 		}
 		// save the "ivarSet" ivar.
 		curAttr++;
-		result.append("    values[" + curAttr + "] = " + ivar + 
+		fillOutTheArray.append("    values[" + curAttr + "] = " + ivar + 
 			      "Set ? Boolean.TRUE : Boolean.FALSE;\n");
 	    }
 	    else if (attrClass.equals("String") || 
 		     attrClass.equals("java.lang.String")) {
 		// if it's a string
-		result.append("    values[" + curAttr + "] = " + 
+		fillOutTheArray.append("    values[" + curAttr + "] = " + 
 			      ivar + ";\n");
 	    }
 	    else {
@@ -368,6 +366,9 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    }
 	    curAttr++;
 	}
+	result.append("  public Object saveState(FacesContext context) {\n");
+	result.append("    Object [] values = new Object[" + curAttr + "];\n");
+	result.append(fillOutTheArray);
 	result.append("    return (values);\n");
 	result.append("  }\n");
 
