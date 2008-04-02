@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.46 2004/04/27 17:25:03 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.47 2004/04/27 23:04:54 jvisvanathan Exp $
  */
 
 /*
@@ -907,15 +907,10 @@ public class ApplicationImpl extends Application {
                 log.trace("Expression " + ref + " passed syntax check");
             }
         } catch (ElException elex) {
-            // t will not be null if an error occurred.
-            Throwable t = elex.getCause();
-            if (t != null) {
-                throw new ReferenceSyntaxException(t.getMessage(), t);
-            }
             if (log.isErrorEnabled()) {
-                log.error(elex.getMessage(), elex);
+                log.trace("Expression " + ref + " failed syntax check");
             }
-            throw new ReferenceSyntaxException(elex.getMessage(), elex);
+            throw new ReferenceSyntaxException(ref, elex);
         }
     }
 
