@@ -7,25 +7,25 @@
 <html>
   <body>
      <form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=51f9a8a1563a3db07cf720bb8bc5e" enctype="application/x-www-form-urlencoded">
-<a id="form01:Link1" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:_idcl'].value='form01:Link1';document.forms['form01']['param1'].value='value1';document.forms['form01']['param2'].value='value2'; document.forms['form01'].submit(); return false;">Link1</a><input type="hidden" name="form01:_idcl" /><input type="hidden" name="param1" /><input type="hidden" name="param2" /><script type="text/javascript" language="Javascript"><!--
+<a id="form01:Link1" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:j_idcl'].value='form01:Link1';document.forms['form01']['param1'].value='value1';document.forms['form01']['param2'].value='value2'; document.forms['form01'].submit(); return false;">Link1</a><input type="hidden" name="form01:j_idcl" /><input type="hidden" name="param1" /><input type="hidden" name="param2" /><script type="text/javascript" language="Javascript"><!--
 
 function clearFormHiddenParams_form01(curFormName) {
   var curForm = document.forms[curFormName];
- curForm.elements['form01:_idcl'].value = null;
+ curForm.elements['form01:j_idcl'].value = null;
  curForm.elements['param1'].value = null;
  curForm.elements['param2'].value = null;
 }
 //-->
-</script><a id="form01:Link2" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:_idcl'].value='form01:Link2';document.forms['form01']['param1'].value='value1';document.forms['form01']['param2'].value='value2'; document.forms['form01'].submit(); return false;">Link2</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id125:_id126" /><input type="hidden" name="form01" value="form01" /></form><form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=51f9a8a1563a3db07cf720bb8bc5e" enctype="application/x-www-form-urlencoded">
-<a id="form02:Link3" href="#" onclick="clearFormHiddenParams_form02('form02');document.forms['form02']['form02:_idcl'].value='form02:Link3';document.forms['form02']['param3'].value='value3';document.forms['form02']['param4'].value='value4'; document.forms['form02'].submit(); return false;">Link3</a><input type="hidden" name="form02:_idcl" /><input type="hidden" name="param3" /><input type="hidden" name="param4" /><script type="text/javascript" language="Javascript"><!--
+</script><a id="form01:Link2" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:j_idcl'].value='form01:Link2';document.forms['form01']['param1'].value='value1';document.forms['form01']['param2'].value='value2'; document.forms['form01'].submit(); return false;">Link2</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id125:j_id126" /><input type="hidden" name="form01" value="form01" /></form><form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=51f9a8a1563a3db07cf720bb8bc5e" enctype="application/x-www-form-urlencoded">
+<a id="form02:Link3" href="#" onclick="clearFormHiddenParams_form02('form02');document.forms['form02']['form02:j_idcl'].value='form02:Link3';document.forms['form02']['param3'].value='value3';document.forms['form02']['param4'].value='value4'; document.forms['form02'].submit(); return false;">Link3</a><input type="hidden" name="form02:j_idcl" /><input type="hidden" name="param3" /><input type="hidden" name="param4" /><script type="text/javascript" language="Javascript"><!--
 
 function clearFormHiddenParams_form02(curFormName) {
   var curForm = document.forms[curFormName];
- curForm.elements['form02:_idcl'].value = null;
+ curForm.elements['form02:j_idcl'].value = null;
  curForm.elements['param3'].value = null;
  curForm.elements['param4'].value = null;
 }
 //-->
-</script><a id="form02:Link4" href="#" onclick="clearFormHiddenParams_form02('form02');document.forms['form02']['form02:_idcl'].value='form02:Link4'; document.forms['form02'].submit(); return false;">Link4</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id125:_id126" /><input type="hidden" name="form02" value="form02" /></form>
+</script><a id="form02:Link4" href="#" onclick="clearFormHiddenParams_form02('form02');document.forms['form02']['form02:j_idcl'].value='form02:Link4'; document.forms['form02'].submit(); return false;">Link4</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id125:j_id126" /><input type="hidden" name="form02" value="form02" /></form>
   </body>
 </html>

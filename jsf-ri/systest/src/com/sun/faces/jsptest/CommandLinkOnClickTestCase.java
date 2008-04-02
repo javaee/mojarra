@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkOnClickTestCase.java,v 1.2 2005/08/22 22:10:32 ofung Exp $
+ * $Id: CommandLinkOnClickTestCase.java,v 1.3 2006/03/14 16:33:24 edburns Exp $
  */
 
 /*
@@ -105,7 +105,7 @@ public class CommandLinkOnClickTestCase extends AbstractTestCase {
         assertNotNull("form exists", form);
         HtmlHiddenInput hidden = null;
         try {
-            hidden = (HtmlHiddenInput)form.getInputByName("form:_idcl");
+            hidden = (HtmlHiddenInput)form.getInputByName("form:j_idcl");
         } catch (ElementNotFoundException e) {
             assertTrue(false);
         }
@@ -115,7 +115,7 @@ public class CommandLinkOnClickTestCase extends AbstractTestCase {
         // click the link..
         HtmlAnchor submit = (HtmlAnchor)
             page.getFirstAnchorByText("submit");
-            assertTrue(submit.getOnClickAttribute().equals("var a=function(){setValue('form');};var b=function(){clearFormHiddenParams_form('form');document.forms['form']['form:_idcl'].value='form:submit'; document.forms['form'].submit(); return false;};return (a()==false) ? false : b();")); 
+            assertTrue(submit.getOnClickAttribute().equals("var a=function(){setValue('form');};var b=function(){clearFormHiddenParams_form('form');document.forms['form']['form:j_idcl'].value='form:submit'; document.forms['form'].submit(); return false;};return (a()==false) ? false : b();")); 
         try {
             page = (HtmlPage) submit.click();
 	} catch (Exception e) {
@@ -130,7 +130,7 @@ public class CommandLinkOnClickTestCase extends AbstractTestCase {
         // The value of this field was changed by the internal Faces javascript function
         // created by CommandLinkRenderer..
         try {
-            hidden = (HtmlHiddenInput)form.getInputByName("form:_idcl");
+            hidden = (HtmlHiddenInput)form.getInputByName("form:j_idcl");
         } catch (ElementNotFoundException e) {
             assertTrue(false);
         }
@@ -147,7 +147,7 @@ public class CommandLinkOnClickTestCase extends AbstractTestCase {
         assertNotNull("form exists", form);
         HtmlHiddenInput hidden = null;
         try {
-            hidden = (HtmlHiddenInput)form.getInputByName("form:_idcl");
+            hidden = (HtmlHiddenInput)form.getInputByName("form:j_idcl");
         } catch (ElementNotFoundException e) {
             assertTrue(false);
         }
@@ -157,7 +157,7 @@ public class CommandLinkOnClickTestCase extends AbstractTestCase {
         // click the link..
         HtmlAnchor submit = (HtmlAnchor)
             page.getFirstAnchorByText("submit");
-            assertTrue(submit.getOnClickAttribute().equals("var a=function(){setValue('form'); return false;};var b=function(){clearFormHiddenParams_form('form');document.forms['form']['form:_idcl'].value='form:submit'; document.forms['form'].submit(); return false;};return (a()==false) ? false : b();"));
+            assertTrue(submit.getOnClickAttribute().equals("var a=function(){setValue('form'); return false;};var b=function(){clearFormHiddenParams_form('form');document.forms['form']['form:j_idcl'].value='form:submit'; document.forms['form'].submit(); return false;};return (a()==false) ? false : b();"));
         try {
             page = (HtmlPage) submit.click();
         } catch (Exception e) {
@@ -169,7 +169,7 @@ public class CommandLinkOnClickTestCase extends AbstractTestCase {
                                                                                                             
         // The value of this field remains unchanged from the initial value. 
         try {
-            hidden = (HtmlHiddenInput)form.getInputByName("form:_idcl");
+            hidden = (HtmlHiddenInput)form.getInputByName("form:j_idcl");
         } catch (ElementNotFoundException e) {
             assertTrue(false);
         }

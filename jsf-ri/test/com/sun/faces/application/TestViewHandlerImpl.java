@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.30 2006/01/11 15:28:16 rlubke Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.31 2006/03/14 16:33:30 edburns Exp $ 
  */ 
 
 
@@ -74,7 +74,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.30 2006/01/11 15:28:16 rlubke Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.31 2006/03/14 16:33:30 edburns Exp $
  */
 
 
@@ -160,7 +160,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 
     public void beginTransient(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
-	theRequest.addParameter("javax.faces.ViewState", "_id1:_id2");
+	theRequest.addParameter("javax.faces.ViewState", "j_id1:j_id2");
     }
 
     public void beginCalculateLocaleLang(WebRequest theRequest) {

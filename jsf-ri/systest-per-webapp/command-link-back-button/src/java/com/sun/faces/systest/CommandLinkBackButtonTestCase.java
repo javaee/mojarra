@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkBackButtonTestCase.java,v 1.3 2006/03/07 08:31:23 srinivas635 Exp $
+ * $Id: CommandLinkBackButtonTestCase.java,v 1.4 2006/03/14 16:33:29 edburns Exp $
  */
 
 /*
@@ -123,7 +123,7 @@ public class CommandLinkBackButtonTestCase extends AbstractTestCase {
 	// page = (HtmlPage) link.click();
 	// therefore, we have to hack around it.
 	list = page.getForms();
-	HtmlHiddenInput hidden = (HtmlHiddenInput) ((HtmlForm)list.get(0)).getInputByName("form:_idcl");
+	HtmlHiddenInput hidden = (HtmlHiddenInput) ((HtmlForm)list.get(0)).getInputByName("form:j_idcl");
         assertTrue( hidden != null);
 	hidden.setValueAttribute("form:link");
 	page = (HtmlPage) ((HtmlForm)list.get(0)).submit();

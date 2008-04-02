@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.41 2005/12/05 16:42:47 edburns Exp $
+ * $Id: UIViewRoot.java,v 1.42 2006/03/14 16:33:21 edburns Exp $
  */
 
 /*
@@ -144,7 +144,7 @@ public class UIViewRoot extends UIComponentBase {
      * <p>The prefix that will be used for identifiers generated
      * by the <code>createUniqueId()</code> method.
      */
-    static public final String UNIQUE_ID_PREFIX = "_id";
+    static public final String UNIQUE_ID_PREFIX = "j_id";
     
     private static Lifecycle lifecycle;
     

@@ -1,5 +1,5 @@
 /*
- * $Id: UIFormTestCase.java,v 1.12 2005/08/22 22:08:19 ofung Exp $
+ * $Id: UIFormTestCase.java,v 1.13 2006/03/14 16:33:22 edburns Exp $
  */
 
 /*
@@ -141,7 +141,7 @@ public class UIFormTestCase extends UIComponentBaseTestCase {
 	facesContext.setViewRoot(root);
 
 	assertEquals("Case 1: no user specified id anywhere, isPrependId==true .",
-		     "_id0:_id1", input.getClientId(facesContext));
+		     "j_id0:j_id1", input.getClientId(facesContext));
 
 
 	// Case 2: user specified id on form only, isPrependId==true
@@ -157,7 +157,7 @@ public class UIFormTestCase extends UIComponentBaseTestCase {
 	facesContext.setViewRoot(root);
 
 	assertEquals("Case 2: user specified id on form only, isPrependId==true .",
-		     "form:_id0", input.getClientId(facesContext));
+		     "form:j_id0", input.getClientId(facesContext));
 
 	// Case 3: user specified id on input only, isPrependId==true
 	root = new UIViewRoot();
@@ -172,7 +172,7 @@ public class UIFormTestCase extends UIComponentBaseTestCase {
 	facesContext.setViewRoot(root);
 
 	assertEquals("Case 3: user specified id on input only, isPrependId==true .",
-		     "_id0:input", input.getClientId(facesContext));
+		     "j_id0:input", input.getClientId(facesContext));
 
 	// Case 4: user specified id everywhere, isPrependId==true
 	root = new UIViewRoot();
@@ -202,7 +202,7 @@ public class UIFormTestCase extends UIComponentBaseTestCase {
 	facesContext.setViewRoot(root);
 
 	assertEquals("Case 5: no user specified id anywhere, isPrependId==false .",
-		     "_id0", input.getClientId(facesContext));
+		     "j_id0", input.getClientId(facesContext));
 
 
 	// Case 6: user specified id on form only, isPrependId==false
@@ -219,7 +219,7 @@ public class UIFormTestCase extends UIComponentBaseTestCase {
 	facesContext.setViewRoot(root);
 
 	assertEquals("Case 6: user specified id on form only, isPrependId==false .",
-		     "_id0", input.getClientId(facesContext));
+		     "j_id0", input.getClientId(facesContext));
 
 	// Case 7: user specified id on input only, isPrependId==false
 	root = new UIViewRoot();
@@ -257,13 +257,13 @@ public class UIFormTestCase extends UIComponentBaseTestCase {
 	// Case 9: UIForm only, no user specified id, isPrependId==true
 	form = new UIForm();
 	assertEquals("Case 9: UIForm only, no user specified id, isPrepend==true",
-		     "_id0", form.getClientId(facesContext));
+		     "j_id0", form.getClientId(facesContext));
 
 	// Case 10: UIForm only, no user specified id, isPrependId==false
 	form = new UIForm();
 	form.setPrependId(false);
 	assertEquals("Case 10: UIForm only, no user specified id, isPrependId==false",
-		     "_id1", form.getClientId(facesContext));
+		     "j_id1", form.getClientId(facesContext));
     
     
     // Case 11: UIForm has a parent NamingContainer, isPrependId==true"

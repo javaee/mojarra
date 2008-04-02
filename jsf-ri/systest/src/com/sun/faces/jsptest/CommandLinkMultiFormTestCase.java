@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkMultiFormTestCase.java,v 1.4 2006/03/07 08:29:25 srinivas635 Exp $
+ * $Id: CommandLinkMultiFormTestCase.java,v 1.5 2006/03/14 16:33:23 edburns Exp $
  */
 
 /*
@@ -115,7 +115,7 @@ public class CommandLinkMultiFormTestCase extends AbstractTestCase {
         form2 = (HtmlForm)forms.get(1);
         
         // links within the first form
-        hidden1 = (HtmlHiddenInput)form1.getInputByName("form01:_idcl");
+        hidden1 = (HtmlHiddenInput)form1.getInputByName("form01:j_idcl");
         assertNotNull(hidden1);
         hidden1.setValueAttribute("form01:Link1");
         page1 = (HtmlPage)form1.submit();
@@ -125,7 +125,7 @@ public class CommandLinkMultiFormTestCase extends AbstractTestCase {
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
 
         // links within second form
-        hidden2 = (HtmlHiddenInput)form2.getInputByName("form02:_idcl");
+        hidden2 = (HtmlHiddenInput)form2.getInputByName("form02:j_idcl");
         assertNotNull(hidden2);
         hidden2.setValueAttribute("form02:Link3");
         page1 = (HtmlPage)form1.submit();

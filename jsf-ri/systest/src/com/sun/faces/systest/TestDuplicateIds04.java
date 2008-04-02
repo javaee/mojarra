@@ -1,5 +1,5 @@
 /*
- * $Id: TestDuplicateIds04.java,v 1.4 2005/08/22 22:10:39 ofung Exp $
+ * $Id: TestDuplicateIds04.java,v 1.5 2006/03/14 16:33:25 edburns Exp $
  */
 
 /*
@@ -119,7 +119,7 @@ public class TestDuplicateIds04 extends AbstractTestCase {
 	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
 	client.setThrowExceptionOnFailingStatusCode(false);
 	page = (HtmlPage) button.click();
-	assertTrue(-1 != page.asText().indexOf("_id0:_id2"));
+	assertTrue(-1 != page.asText().indexOf("j_id0:j_id2"));
 	assertTrue(-1 != page.asText().indexOf("Duplicate"));
 	client.setThrowExceptionOnFailingStatusCode(true);
     }

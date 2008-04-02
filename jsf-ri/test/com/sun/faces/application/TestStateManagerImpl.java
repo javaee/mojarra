@@ -1,6 +1,6 @@
 
 /*
- * $Id: TestStateManagerImpl.java,v 1.15 2006/01/19 21:28:23 rlubke Exp $
+ * $Id: TestStateManagerImpl.java,v 1.16 2006/03/14 16:33:30 edburns Exp $
  */
 
 /*
@@ -244,7 +244,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
     }
     
     public void beginMultiWindowSaveServer(WebRequest theRequest) {
-        theRequest.addParameter("javax.faces.ViewState", "_id1:_id2");
+        theRequest.addParameter("javax.faces.ViewState", "j_id1:j_id2");
     }
 
     public void testMultiWindowSaveServer() throws Exception {
@@ -301,7 +301,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         // See that the Logical View and Actual View maps are correctly created
         Map sessionMap = Util.getSessionMap(getFacesContext());
         assertTrue(sessionMap.containsKey(RIConstants.LOGICAL_VIEW_MAP));
-        assertTrue(((Map)sessionMap.get(RIConstants.LOGICAL_VIEW_MAP)).containsKey("_id1"));
+        assertTrue(((Map)sessionMap.get(RIConstants.LOGICAL_VIEW_MAP)).containsKey("j_id1"));
         
         newRoot = wrapper.restoreView(getFacesContext(), "test", "HTML_BASIC");
         assertNotNull(newRoot);
@@ -309,7 +309,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
                      newRoot.getAttributes().get("checkThisValue"));
         assertNotNull(getFacesContext().getExternalContext().getRequestMap().get(RIConstants.LOGICAL_VIEW_MAP));
         assertEquals(getFacesContext().getExternalContext().getRequestMap().get(RIConstants.LOGICAL_VIEW_MAP), 
-                     "_id1");
+                     "j_id1");
         
         
     }

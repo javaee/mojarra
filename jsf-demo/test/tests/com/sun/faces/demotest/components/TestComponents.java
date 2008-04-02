@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponents.java,v 1.20 2006/03/07 08:23:24 srinivas635 Exp $
+ * $Id: TestComponents.java,v 1.21 2006/03/14 16:33:23 edburns Exp $
  */
 
 /*
@@ -126,11 +126,11 @@ public class TestComponents extends HtmlUnitTestCase {
         HtmlPage page = accessAppAndGetPage("tabbedpanes.faces");
         assertNotNull(page);
         //tab 1
-        page = executeTabbedPane(page, "_id_id18:_id_id28");
+        page = executeTabbedPane(page, "j_id_id18:j_id_id28");
         //tab 2
-        page = executeTabbedPane(page, "_id_id18:_id_id46");
+        page = executeTabbedPane(page, "j_id_id18:j_id_id46");
         //tab3
-        page = executeTabbedPane(page, "_id_id18:_id_id28");
+        page = executeTabbedPane(page, "j_id_id18:j_id_id28");
     }
 
 
@@ -146,7 +146,7 @@ public class TestComponents extends HtmlUnitTestCase {
         anchor = page.getFirstAnchorByText("File " + treeNum);
         assertNotNull(anchor);
         // simulate the link being clicked
-        hidden = (HtmlHiddenInput) form.getInputByName("_id_id14:menu" +
+        hidden = (HtmlHiddenInput) form.getInputByName("j_id_id14:menu" +
                                                        treeNum);
         assertNotNull(hidden);
         hidden.setValueAttribute("/File");
@@ -165,7 +165,7 @@ public class TestComponents extends HtmlUnitTestCase {
         anchor = page.getFirstAnchorByText("File " + treeNum);
         assertNotNull(anchor);
         // simulate the link being clicked
-        hidden = (HtmlHiddenInput) form.getInputByName("_id_id14:menu" +
+        hidden = (HtmlHiddenInput) form.getInputByName("j_id_id14:menu" +
                                                        treeNum);
         assertNotNull(hidden);
         hidden.setValueAttribute("/File");
@@ -192,7 +192,7 @@ public class TestComponents extends HtmlUnitTestCase {
         anchor = page.getFirstAnchorByText("Edit " + treeNum);
         assertNotNull(anchor);
         // simulate link being clicked
-        hidden = (HtmlHiddenInput) form.getInputByName("_id_id14:menu" +
+        hidden = (HtmlHiddenInput) form.getInputByName("j_id_id14:menu" +
                                                        treeNum);
         assertNotNull(hidden);
         hidden.setValueAttribute("/Edit");
@@ -234,12 +234,12 @@ public class TestComponents extends HtmlUnitTestCase {
         // simulate the link being clicked
 
         hidden1 = (HtmlHiddenInput) form
-              .getInputByName("_id_id19:_id_id64_curPage");
+              .getInputByName("j_id_id19:j_id_id64_curPage");
         assertNotNull(hidden1);
         hidden1.setValueAttribute(currentListNum);
 
         hidden2 =
-              (HtmlHiddenInput) form.getInputByName("_id_id19:_id_id64_action");
+              (HtmlHiddenInput) form.getInputByName("j_id_id19:j_id_id64_action");
         assertNotNull(hidden2);
         hidden2.setValueAttribute(newListNum);
         page = (HtmlPage) form.submit();

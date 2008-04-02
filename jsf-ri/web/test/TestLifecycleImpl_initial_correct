@@ -14,5 +14,5 @@
 <input id="helloForm:userNo" type="text" name="helloForm:userNo" value="NUMBER" />
   	 <BR>
 
-	 <input id="helloForm:submit" type="submit" name="helloForm:submit" value="Submit" /><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id1:_id2" /><input type="hidden" name="helloForm" value="helloForm" /></form>
+	 <input id="helloForm:submit" type="submit" name="helloForm:submit" value="Submit" /><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" /><input type="hidden" name="helloForm" value="helloForm" /></form>
 </HTML>  
