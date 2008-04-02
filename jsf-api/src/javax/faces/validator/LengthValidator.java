@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.41 2004/05/13 20:14:36 eburns Exp $
+ * $Id: LengthValidator.java,v 1.42 2004/06/11 14:56:15 rogerk Exp $
  */
 
 /*
@@ -201,7 +201,7 @@ public class LengthValidator implements Validator, StateHolder {
             if (maximumSet &&
                 (converted.length() > maximum)) {
                 throw new ValidatorException(MessageFactory.getMessage
-                                   (context, component,
+                                   (context,
                                     MAXIMUM_MESSAGE_ID,
                                     new Object[] {
                                     integerToString(component, 
@@ -210,7 +210,7 @@ public class LengthValidator implements Validator, StateHolder {
             if (minimumSet &&
                 (converted.length() < minimum)) {
                 throw new ValidatorException(MessageFactory.getMessage
-                                   (context, component,
+                                   (context,
                                     MINIMUM_MESSAGE_ID,
                                     new Object[] {
                                     integerToString(component,

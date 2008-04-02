@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.41 2004/05/13 20:14:35 eburns Exp $
+ * $Id: DoubleRangeValidator.java,v 1.42 2004/06/11 14:56:15 rogerk Exp $
  */
 
 /*
@@ -218,7 +218,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                     (converted > maximum)) {
 		    if (minimumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context, component,
+					   (context,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
 						stringValue(component, new Double(minimum)),
@@ -227,7 +227,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 		    }
 		    else {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context, component,
+					   (context,
 					    MAXIMUM_MESSAGE_ID,
 					    new Object[] {
 				            stringValue(component, new Double(maximum)) }));
@@ -237,7 +237,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                     (converted < minimum)) {
 		    if (maximumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context, component,
+					   (context,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
 				            stringValue(component, new Double(minimum)),
@@ -246,7 +246,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 		    }
 		    else {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context, component,
+					   (context,
 					    MINIMUM_MESSAGE_ID,
 					    new Object[] {
 					    stringValue(component, new Double(minimum)) }));
@@ -254,7 +254,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                 }
             } catch (NumberFormatException e) {
                 throw new ValidatorException(MessageFactory.getMessage
-                                   (context, component, TYPE_MESSAGE_ID));
+                                   (context, TYPE_MESSAGE_ID));
             }
         }
 
