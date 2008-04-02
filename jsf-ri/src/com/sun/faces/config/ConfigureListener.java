@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.44 2005/07/25 21:07:56 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.45 2005/08/03 02:24:26 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.el.CompositeELResolver;
+import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -121,6 +122,15 @@ public class ConfigureListener implements ServletContextListener {
      */
     protected static final String WEB_INF_RESOURCE =
             "/WEB-INF/faces-config.xml";
+    
+    /**
+     * <p>The optional context intialization parameter that determines
+     * what class type of <code>javax.el.ExpressionFactory</code> should
+     * be instantiated for use with JSF, if one is not provided by a
+     * JSP 2.1 compliant container</p>
+     */
+    protected static final String EXPRESSION_FACTORY =
+        RIConstants.FACES_PREFIX + "expressionFactory";
 
     /**
      * <p>The context initialization parameter that determines whether
@@ -1361,14 +1371,13 @@ public class ConfigureListener implements ServletContextListener {
             throw new FacesException(mue);
         }
     }
-
-    public void registerELResolverAndListenerWithJsp(ServletContext context) {
-        JspFactory jspFactory = JspFactory.getDefaultFactory();
+    
+    private static boolean isJspTwoOne(JspFactory jspFactory) {
         if (jspFactory == null) {
-            return;
+            return false;
         }
         if (jspFactory.getDefaultFactory() == null) {
-            return;
+            return false;
         }
         try {
             jspFactory.getClass().getMethod("getJspApplicationContext", new Class[] {
@@ -1378,42 +1387,76 @@ public class ConfigureListener implements ServletContextListener {
                 logger.warning(Util.getExceptionMessageString(Util.INCORRECT_JSP_VERSION_ID,
                 new Object [] { "getJspApplicationContext" }));
             }
-            return;
+            return false;
         }
-                        
-        if (jspFactory.getJspApplicationContext(context) == null) {
-            return;
-        }
-        ApplicationAssociate appAssociate =  
-         ApplicationAssociate.getInstance(getExternalContextDuringInitialize());
+        return true;
+    }
+
+    public void registerELResolverAndListenerWithJsp(ServletContext context) {
         
-        // register an empty resolver for now. It will be populated after the 
-        // first request is serviced.
-        CompositeELResolver compositeELResolverForJsp = 
-            new FacesCompositeELResolver();    
-        appAssociate.setFacesELResolverForJsp(compositeELResolverForJsp);
-                
-        // get JspApplicationContext.
-        JspApplicationContext jspAppContext = JspFactory.getDefaultFactory()
-                .getJspApplicationContext(context);
-
-        // cache the ExpressionFactory instance in ApplicationAssociate
-        appAssociate.setExpressionFactory(jspAppContext.getExpressionFactory());
-
-        // register compositeELResolver with JSP
-        try {
-            jspAppContext.addELResolver(compositeELResolverForJsp);
-        }
-        catch (IllegalStateException e) {
-            if (!Util.isUnitTestModeEnabled()) {
-                throw e;
+        // make sure we have an associate and JspFactory
+        JspFactory jspFactory = JspFactory.getDefaultFactory();
+        ApplicationAssociate appAssociate =  
+            ApplicationAssociate.getInstance(getExternalContextDuringInitialize());
+        
+        // check if JSP 2.1
+        if (!isJspTwoOne(jspFactory)) {
+            
+            // not JSP 2.1
+            
+            // first try to load a factory defined in web.xml
+            String elFactType = context.getInitParameter(EXPRESSION_FACTORY);
+            if (elFactType == null || "".equals(elFactType.trim())) {
+                // else use EL-RI
+                elFactType = "com.sun.el.ExpressionFactoryImpl";
             }
-        }
-
-        // register JSF ELContextListenerImpl with Jsp
-        ELContextListenerImpl elContextListener = new ELContextListenerImpl();
-        jspAppContext.addELContextListener(elContextListener);
-
+            
+            try {
+                ExpressionFactory factory = (ExpressionFactory) Class.forName(
+                        elFactType).newInstance();
+                appAssociate.setExpressionFactory(factory);
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Error Instantiating ExpressionFactory", e);
+            }
+            
+            return;
+        
+        } else {
+            
+            // Is JSP 2.1
+            
+            // JSP 2.1 specific check
+            if (jspFactory.getJspApplicationContext(context) == null) {
+                return;
+            }
+            
+            // register an empty resolver for now. It will be populated after the 
+            // first request is serviced.
+            CompositeELResolver compositeELResolverForJsp = 
+                new FacesCompositeELResolver();    
+            appAssociate.setFacesELResolverForJsp(compositeELResolverForJsp);
+                    
+            // get JspApplicationContext.
+            JspApplicationContext jspAppContext = JspFactory.getDefaultFactory()
+                    .getJspApplicationContext(context);
+    
+            // cache the ExpressionFactory instance in ApplicationAssociate
+            appAssociate.setExpressionFactory(jspAppContext.getExpressionFactory());
+    
+            // register compositeELResolver with JSP
+            try {
+                jspAppContext.addELResolver(compositeELResolverForJsp);
+            }
+            catch (IllegalStateException e) {
+                if (!Util.isUnitTestModeEnabled()) {
+                    throw e;
+                }
+            }
+    
+            // register JSF ELContextListenerImpl with Jsp
+            ELContextListenerImpl elContextListener = new ELContextListenerImpl();
+            jspAppContext.addELContextListener(elContextListener);
+         }
     }
 
     /**
