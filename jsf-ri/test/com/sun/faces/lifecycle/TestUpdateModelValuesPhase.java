@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.40 2005/10/19 19:51:35 edburns Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.41 2006/03/29 22:39:45 rlubke Exp $
  */
 
 /*
@@ -45,105 +45,34 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.40 2005/10/19 19:51:35 edburns Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.41 2006/03/29 22:39:45 rlubke Exp $
  */
 
 public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
 
-//
-// Protected Constants
-//
 
-//
-// Class Variables
-//
+    // ------------------------------------------------------------ Constructors
 
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestUpdateModelValuesPhase() {
+
         super("TestUpdateModelValuesPhase");
+
     }
 
 
     public TestUpdateModelValuesPhase(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
-
-    public void testUpdateNormal() {
-//DebugUtil.waitForDebugger();
-        UIForm form = null;
-        TestUIInput userName = null;
-        TestUIInput userName1 = null;
-        TestUIInput userName2 = null;
-        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean)
-            (getFacesContext().getExternalContext().getSessionMap()).get(
-                "TestBean");
-        String value = null;
-        Phase updateModelValues = new UpdateModelValuesPhase();
-        form = new UIForm();
-        form.setId("form");
-        form.setSubmitted(true);
-        userName = new TestUIInput();
-        userName.setId("userName");
-        userName.setValue("one");
-        userName.setValueExpression("value",
-                                 Util.getValueExpression("#{TestBean.one}"));
-        userName.testSetValid(true);
-        form.getChildren().add(userName);
-        userName1 = new TestUIInput();
-        userName1.setId("userName1");
-        userName1.setValue("one");
-        userName1.setValueExpression("value",
-                                  Util.getValueExpression("#{TestBean.one}"));
-        userName1.testSetValid(true);
-        form.getChildren().add(userName1);
-        userName2 = new TestUIInput();
-        userName2.setId("userName2");
-        userName2.setValue("one");
-        userName2.setValueExpression("value",
-                                  Util.getValueExpression("#{TestBean.one}"));
-        userName2.testSetValid(true);
-        form.getChildren().add(userName2);
-
-        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        viewRoot.getChildren().add(form);
-        viewRoot.setViewId("updateModel.xul");
-        getFacesContext().setViewRoot(viewRoot);
-
-        try {
-            updateModelValues.execute(getFacesContext());
-        } catch (Throwable e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-        assertTrue(!(getFacesContext().getRenderResponse()) &&
-                   !(getFacesContext().getResponseComplete()));
-        assertTrue(null == userName.getLocalValue());
-
-        assertTrue(testBean.getOne().equals("one"));
-        assertTrue(false == (getFacesContext().getMessages().hasNext()));
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void testUpdateFailed() {
+
         UIForm form = null;
         TestUIInput userName = null;
         TestUIInput userName1 = null;
@@ -213,13 +142,78 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
             msg = (javax.faces.application.FacesMessage)iter.next();
         }    
         assertTrue(msg.getSummary().equals(expectedMsg.getSummary()));
+
+    }
+
+
+    public void testUpdateNormal() {
+
+//DebugUtil.waitForDebugger();
+        UIForm form = null;
+        TestUIInput userName = null;
+        TestUIInput userName1 = null;
+        TestUIInput userName2 = null;
+        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean)
+            (getFacesContext().getExternalContext().getSessionMap()).get(
+                "TestBean");
+        String value = null;
+        Phase updateModelValues = new UpdateModelValuesPhase();
+        form = new UIForm();
+        form.setId("form");
+        form.setSubmitted(true);
+        userName = new TestUIInput();
+        userName.setId("userName");
+        userName.setValue("one");
+        userName.setValueExpression("value",
+                                 Util.getValueExpression("#{TestBean.one}"));
+        userName.testSetValid(true);
+        form.getChildren().add(userName);
+        userName1 = new TestUIInput();
+        userName1.setId("userName1");
+        userName1.setValue("one");
+        userName1.setValueExpression("value",
+                                  Util.getValueExpression("#{TestBean.one}"));
+        userName1.testSetValid(true);
+        form.getChildren().add(userName1);
+        userName2 = new TestUIInput();
+        userName2.setId("userName2");
+        userName2.setValue("one");
+        userName2.setValueExpression("value",
+                                  Util.getValueExpression("#{TestBean.one}"));
+        userName2.testSetValid(true);
+        form.getChildren().add(userName2);
+
+        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        viewRoot.getChildren().add(form);
+        viewRoot.setViewId("updateModel.xul");
+        getFacesContext().setViewRoot(viewRoot);
+
+        try {
+            updateModelValues.execute(getFacesContext());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+        assertTrue(!(getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
+        assertTrue(null == userName.getLocalValue());
+
+        assertTrue(testBean.getOne().equals("one"));
+        assertTrue(false == (getFacesContext().getMessages().hasNext()));
+
     }
 
 
     public static class TestUIInput extends UIInput {
 
+
+    // ---------------------------------------------------------- Public Methods
+
+
         public void testSetValid(boolean validState) {
+
             this.setValid(validState);
+
         }
 
     }

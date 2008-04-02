@@ -32,65 +32,19 @@ import java.util.List;
 public class NewCustomerFormHandler {
 
 
-    public NewCustomerFormHandler() {
-    }
-
-
-    public String loginRequired() {
-        return "loginRequired";
-    }
-
-
-    private String minimumAge;
-
-
-    public String getMinimumAge() {
-        return minimumAge;
-    }
-
-
-    public void setMinimumAge(String minimumAge) {
-        this.minimumAge = minimumAge;
-    }
-
-
-    private String maximumAge;
-
-
-    public String getMaximumAge() {
-        return maximumAge;
-    }
-
-
-    public void setMaximumAge(String maximumAge) {
-        this.maximumAge = maximumAge;
-    }
-
-
-    private String nationality;
-
-
-    public String getNationality() {
-        return nationality;
-    }
-
-
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
+    private HashMap claimAmounts;
 
 
     private List allowableValues;
 
 
-    public List getAllowableValues() {
-        return allowableValues;
-    }
+    private String maximumAge;
 
 
-    public void setAllowableValues(List allowableValues) {
-        this.allowableValues = allowableValues;
-    }
+    private String minimumAge;
+
+
+    private String nationality;
 
 
     private String[] firstNames = {
@@ -99,27 +53,104 @@ public class NewCustomerFormHandler {
     };
 
 
-    public String[] getFirstNames() {
-        return firstNames;
+    // ------------------------------------------------------------ Constructors
+
+
+    public NewCustomerFormHandler() {
     }
 
 
-    public void setFirstNames(String[] newNames) {
-        firstNames = newNames;
+    // ---------------------------------------------------------- Public Methods
+
+
+    public List getAllowableValues() {
+
+        return allowableValues;
+
     }
 
 
-    private HashMap claimAmounts;
+    public void setAllowableValues(List allowableValues) {
+
+        this.allowableValues = allowableValues;
+
+    }
 
 
     public HashMap getClaimAmounts() {
+
         return claimAmounts;
+
     }
 
 
     public void setClaimAmounts(HashMap claimAmounts) {
+
         this.claimAmounts = claimAmounts;
+
     }
 
+
+    public String[] getFirstNames() {
+
+        return firstNames;
+
+    }
+
+
+    public void setFirstNames(String[] newNames) {
+
+        firstNames = newNames;
+
+    }
+
+
+    public String getMaximumAge() {
+
+        return maximumAge;
+
+    }
+
+
+    public void setMaximumAge(String maximumAge) {
+
+        this.maximumAge = maximumAge;
+
+    }
+
+
+    public String getMinimumAge() {
+
+        return minimumAge;
+
+    }
+
+
+    public void setMinimumAge(String minimumAge) {
+
+        this.minimumAge = minimumAge;
+
+    }
+
+
+    public String getNationality() {
+
+        return nationality;
+
+    }
+
+
+    public void setNationality(String nationality) {
+
+        this.nationality = nationality;
+
+    }
+
+
+    public String loginRequired() {
+
+        return "loginRequired";
+
+    }
 
 }

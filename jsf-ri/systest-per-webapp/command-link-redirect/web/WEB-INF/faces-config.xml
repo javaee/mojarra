@@ -27,112 +27,111 @@
 
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
-    version="1.2">
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
 
-  <navigation-rule>
-    <from-view-id>/one.jsp</from-view-id>
-    <navigation-case>
-      <from-outcome>two</from-outcome>
-      <to-view-id>/two.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>three</from-outcome>
-      <to-view-id>/three.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>four</from-outcome>
-      <to-view-id>/three.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>five</from-outcome>
-      <to-view-id>/five.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-  </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/one.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>two</from-outcome>
+            <to-view-id>/two.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>three</from-outcome>
+            <to-view-id>/three.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>four</from-outcome>
+            <to-view-id>/three.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>five</from-outcome>
+            <to-view-id>/five.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
 
-  <navigation-rule>
-    <from-view-id>/two.jsp</from-view-id>
-    <navigation-case>
-      <from-outcome>one</from-outcome>
-      <to-view-id>/one.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>three</from-outcome>
-      <to-view-id>/three.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
+    <navigation-rule>
+        <from-view-id>/two.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>one</from-outcome>
+            <to-view-id>/one.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>three</from-outcome>
+            <to-view-id>/three.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
 
-  </navigation-rule>
+    </navigation-rule>
 
-  <navigation-rule>
-    <from-view-id>/three.jsp</from-view-id>
-    <navigation-case>
-      <from-outcome>one</from-outcome>
-      <to-view-id>/one.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>two</from-outcome>
-      <to-view-id>/two.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
+    <navigation-rule>
+        <from-view-id>/three.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>one</from-outcome>
+            <to-view-id>/one.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>two</from-outcome>
+            <to-view-id>/two.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
 
-  </navigation-rule>
+    </navigation-rule>
 
-  <navigation-rule>
-    <from-view-id>/four.jsp</from-view-id>
-    <navigation-case>
-      <from-outcome>two</from-outcome>
-      <to-view-id>/two.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>three</from-outcome>
-      <to-view-id>/three.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>one</from-outcome>
-      <to-view-id>/one.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>five</from-outcome>
-      <to-view-id>/five.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-  </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/four.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>two</from-outcome>
+            <to-view-id>/two.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>three</from-outcome>
+            <to-view-id>/three.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>one</from-outcome>
+            <to-view-id>/one.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>five</from-outcome>
+            <to-view-id>/five.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
 
-  <navigation-rule>
-    <from-view-id>/five.jsp</from-view-id>
-    <navigation-case>
-      <from-outcome>two</from-outcome>
-      <to-view-id>/two.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>three</from-outcome>
-      <to-view-id>/three.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>one</from-outcome>
-      <to-view-id>/one.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>four</from-outcome>
-      <to-view-id>/four.jsp</to-view-id>
-      <redirect />
-    </navigation-case>
-  </navigation-rule>
-
+    <navigation-rule>
+        <from-view-id>/five.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>two</from-outcome>
+            <to-view-id>/two.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>three</from-outcome>
+            <to-view-id>/three.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>one</from-outcome>
+            <to-view-id>/one.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>four</from-outcome>
+            <to-view-id>/four.jsp</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
 
 
 </faces-config>

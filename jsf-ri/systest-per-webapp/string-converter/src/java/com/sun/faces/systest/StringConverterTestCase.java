@@ -1,5 +1,5 @@
 /*
- * $Id: StringConverterTestCase.java,v 1.1 2006/03/15 01:39:54 edburns Exp $
+ * $Id: StringConverterTestCase.java,v 1.2 2006/03/29 22:39:27 rlubke Exp $
  */
 
 /*
@@ -57,13 +57,7 @@ import javax.faces.component.NamingContainer;
  * to do the bulk of the requests works.</p>
  */
 
-public class StringConverterTestCase extends AbstractTestCase {
-
-
-    // ------------------------------------------------------------ Constructors
-
-
-    /**
+public class StringConverterTestCase extends AbstractTestCase {    /**
      * Construct a new instance of this test case.
      *
      * @param name Name of the test case
@@ -71,12 +65,6 @@ public class StringConverterTestCase extends AbstractTestCase {
     public StringConverterTestCase(String name) {
         super(name);
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
 
 
     /**

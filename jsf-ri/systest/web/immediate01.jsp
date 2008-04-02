@@ -1,38 +1,41 @@
 <!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 <%@ page contentType="text/html" language="java" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
 <f:view>
-<html>
-<head>
-<title>immediate01</title>
-</head>
-<body>
+    <html>
+    <head>
+        <title>immediate01</title>
+    </head>
 
-<h:form>
+    <body>
 
-<p>PENDING: write an HTMLUNIT testcase for this.</p>
+    <h:form>
 
-Output: <h:outputText value="#{immediateBean.stringProperty}"/> Input: 
-<h:inputText value="#{immediateBean.stringProperty}"/> <br />
-<h:commandLink action="null">Submit</h:commandLink> <p />
-<h:commandLink action="null" immediate="true">Cancel</h:commandLink> <p />
+        <p>PENDING: write an HTMLUNIT testcase for this.</p>
 
-<h:commandButton value="Submit" action="null" /><p />
-<h:commandButton value="Cancel" action="null" immediate="true" /><p />
+        Output: <h:outputText value="#{immediateBean.stringProperty}"/> Input:
+        <h:inputText value="#{immediateBean.stringProperty}"/> <br/>
+        <h:commandLink action="null">Submit</h:commandLink> <p/>
+        <h:commandLink action="null" immediate="true">Cancel</h:commandLink>
+        <p/>
 
-<hr />
+        <h:commandButton value="Submit" action="null"/><p/>
+        <h:commandButton value="Cancel" action="null" immediate="true"/><p/>
 
-<h:commandButton value="Clear Bean Property">
-  <f:setPropertyActionListener target="#{immediateBean.stringProperty}" value="" />
-</h:commandButton>
+        <hr/>
 
-</h:form>
+        <h:commandButton value="Clear Bean Property">
+            <f:setPropertyActionListener
+                  target="#{immediateBean.stringProperty}" value=""/>
+        </h:commandButton>
 
-</body>
-</html>
+    </h:form>
+
+    </body>
+    </html>
 </f:view>

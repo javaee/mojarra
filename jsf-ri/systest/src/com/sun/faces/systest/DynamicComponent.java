@@ -1,5 +1,5 @@
 /*
- * $Id: DynamicComponent.java,v 1.9 2005/08/22 22:10:37 ofung Exp $
+ * $Id: DynamicComponent.java,v 1.10 2006/03/29 22:38:49 rlubke Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ import java.util.Map;
  * <li><code>?mode=delete&id=foo</code> - Remove any child with a
  * component identifier of <code>foo</code>.</li>
  * </ul>
- *
+ * <p/>
  * <p>In accordance with our current restrictions, this component sets
  * <code>rendersChildren</code> to <code>true</code>, and recursively
  * renders its children in <code>encodeChildren</code>.  This component
@@ -72,15 +72,49 @@ public class DynamicComponent extends UIComponentBase {
 
 
     public DynamicComponent() {
+
         this("dynamic");
+
     }
 
 
     public DynamicComponent(String componentId) {
+
         super();
         setId(componentId);
+
     }
 
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void encodeBegin(FacesContext context) throws IOException {
+
+        process(context);
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("{ ");
+
+    }
+
+
+    public void encodeChildren(FacesContext context) throws IOException {
+
+        ResponseWriter writer = context.getResponseWriter();
+        Iterator kids = getChildren().iterator();
+        while (kids.hasNext()) {
+            encodeRecursive(context, (UIComponent) kids.next());
+            writer.write(" ");
+        }
+
+    }
+
+
+    public void encodeEnd(FacesContext context) throws IOException {
+
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write(" }\n");
+
+    }
 
     // ----------------------------------------------------- UIComponent Methods
 
@@ -92,38 +126,16 @@ public class DynamicComponent extends UIComponentBase {
 
 
     public boolean getRendersChildren() {
+
         return (true);
+
     }
-
-
-    public void encodeBegin(FacesContext context) throws IOException {
-        process(context);
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("{ ");
-    }
-
-
-    public void encodeChildren(FacesContext context) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        Iterator kids = getChildren().iterator();
-        while (kids.hasNext()) {
-            encodeRecursive(context, (UIComponent) kids.next());
-            writer.write(" ");
-        }
-    }
-
-
-    public void encodeEnd(FacesContext context) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write(" }\n");
-    }
-
 
     // --------------------------------------------------------- Private Methods
 
 
     private void encodeRecursive(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         component.encodeBegin(context);
         if (component.getRendersChildren()) {
@@ -141,6 +153,7 @@ public class DynamicComponent extends UIComponentBase {
 
 
     private void process(FacesContext context) {
+
         Map map = context.getExternalContext().getRequestParameterMap();
         String mode = (String) map.get("mode");
         String id = (String) map.get("id");
@@ -165,6 +178,5 @@ public class DynamicComponent extends UIComponentBase {
         }
 
     }
-
 
 }

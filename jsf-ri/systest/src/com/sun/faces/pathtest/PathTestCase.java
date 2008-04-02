@@ -1,5 +1,5 @@
 /*
- * $Id: PathTestCase.java,v 1.7 2005/08/22 22:10:36 ofung Exp $
+ * $Id: PathTestCase.java,v 1.8 2006/03/29 22:38:48 rlubke Exp $
  */
 
 /*
@@ -29,7 +29,6 @@
 
 package com.sun.faces.pathtest;
 
-import com.gargoylesoftware.htmlunit.TextPage;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.AbstractTestCase;
@@ -39,58 +38,39 @@ import junit.framework.TestSuite;
 
 public class PathTestCase extends AbstractTestCase {
 
-    //
-    // Protected Constants
-    //
+    // ------------------------------------------------------------ Constructors
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
 
     public PathTestCase(String name) {
+
         super(name);
+
     }
 
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
-    /**
-     * Return the tests included in this test suite.
-     */
+    /** Return the tests included in this test suite. */
     public static Test suite() {
+
         return (new TestSuite(PathTestCase.class));
+
     }
 
 
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    /** Set up instance variables required by this test case. */
+    public void setUp() throws Exception {
+
+        super.setUp();
+
+    }
+
+
+    /** Tear down instance variables required by this test case. */
     public void tearDown() {
+
         super.tearDown();
+
     }
 
 
@@ -103,30 +83,34 @@ public class PathTestCase extends AbstractTestCase {
      * prefix path, context root redirection occurs.
      */
     public void testVerifyPathBehavior() throws Exception {
+
         final String welcomePage = "WELCOMEPAGE";
         HtmlPage page = getPage("/faces");
         WebResponse response = page.getWebResponse();
         assertTrue(welcomePage.equals(response.getContentAsString().trim()));
-        
+
         // Ok, now get a page
         HtmlPage textPage = getHtmlPage("/faces/hello.jsp");
         response = textPage.getWebResponse();
         assertTrue("/hello.jsp PASSED".equals(
-            response.getContentAsString().trim()));
+              response.getContentAsString().trim()));
 
         page = getPage("/faces");
         response = page.getWebResponse();
         assertTrue("WELCOMEPAGE".equals(response.getContentAsString().trim()));
+
     }
+
+    // ------------------------------------------------------- Protected Methods
 
 
     protected HtmlPage getHtmlPage(String path) throws Exception {
+
         HtmlPage page = (HtmlPage) client.getPage(getURL(path));
 
         return (page);
 
     }
-
 
 } // end of class PathTestCase
 

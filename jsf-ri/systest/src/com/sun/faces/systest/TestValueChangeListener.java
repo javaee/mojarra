@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangeListener.java,v 1.2 2005/08/22 22:10:39 ofung Exp $
+ * $Id: TestValueChangeListener.java,v 1.3 2006/03/29 22:38:51 rlubke Exp $
  */
 
 /*
@@ -30,21 +30,26 @@
 package com.sun.faces.systest;
 
 
-import javax.faces.component.UIComponent;
-import javax.faces.event.ValueChangeListener;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.component.StateHolder;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 
 public class TestValueChangeListener implements ValueChangeListener {
-    
-    public TestValueChangeListener() {}
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public TestValueChangeListener() {
+    }
+
+    // ---------------------------------------- Methods From ValueChangeListener
 
     public void processValueChange(ValueChangeEvent vce)
-    throws AbortProcessingException {
-       vce.getComponent().getAttributes().put("onblur",
+          throws AbortProcessingException {
+
+        vce.getComponent().getAttributes().put("onblur",
                                                vce.getNewValue().toString());
-    } 
-    
-    
+
+    }
+
 }

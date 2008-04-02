@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayGuard.java,v 1.9 2006/01/06 15:42:15 rlubke Exp $
+ * $Id: ByteArrayGuard.java,v 1.10 2006/03/29 22:38:35 rlubke Exp $
  */
 
 /*
@@ -53,35 +53,34 @@ import com.sun.faces.util.Util;
  * This utility class provides services to encrypt or decrypt a byte array.
  * The algorithm used to encrypt byte array is 3DES with CBC
  * The algorithm used to create the message authentication code (MAC) is SHA1
- * 
+ * <p/>
  * Original author Inderjeet Singh, J2EE Blue Prints Team. Modified to suit JSF
- * needs. 
+ * needs.
  */
 public final class ByteArrayGuard {
 
 
-     // Log instance for this class
+    // Log instance for this class
     private static final Logger logger =
-            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
-    private static final int DEFAULT_IV_LENGTH = 8;        
+          Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+    private static final int DEFAULT_IV_LENGTH = 8;
     private static final int DEFAULT_KEY_LENGTH = 24;
-    private static final int DEFAULT_MAC_LENGTH = 20;    
-    
+    private static final int DEFAULT_MAC_LENGTH = 20;
+
     private static ByteArrayGuard byteArrayGuard;
-    
-    private final Object decLock = new Object();      
-    private final Object encLock = new Object();    
-    private final int ivLength;    
+
+    private final Object decLock = new Object();
+    private final Object encLock = new Object();
+    private final int ivLength;
     private final int keyLength;
     private final int macLength;
-    
+
     private Cipher decryptCipher = null;
     private Cipher encryptCipher = null;
-    private SecretKeyFactory keygen = null;   
-    private SecureRandom prng = null;    
-    private byte[] PASSWORD_KEY = null;    
+    private SecretKeyFactory keygen = null;
+    private SecureRandom prng = null;
+    private byte[] PASSWORD_KEY = null;
     private byte[] iVector = null;
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -89,9 +88,10 @@ public final class ByteArrayGuard {
     /**
      * Constructs a new <code>ByteArrayGuard</code> using the specified
      * <code>keyLength</code>, <code>macLength</code>, <code>ivLength</code>.
+     *
      * @param keyLength the length of the key used for encryption
-     * @param macLength the length of the message authentication used 
-     * @param ivLength length of the initialization vector used by the block cipher      
+     * @param macLength the length of the message authentication used
+     * @param ivLength  length of the initialization vector used by the block cipher
      */
     private ByteArrayGuard(int keyLength, int macLength, int ivLength) {
 
@@ -105,7 +105,7 @@ public final class ByteArrayGuard {
                 iContext = new InitialContext();
                 String password = (String) iContext
                       .lookup(RIConstants.CLIENT_STATE_ENC_PASSWORD_ENTRY_NAME);
-                if (password != null) {                   
+                if (password != null) {
                     if (logger.isLoggable(Level.FINE)) {
                         logger.log(Level.FINE,
                                    "Client state saving encryption enabled.");
@@ -113,13 +113,13 @@ public final class ByteArrayGuard {
                     PASSWORD_KEY = convertPasswordToKey(password.getBytes());
                     try {
                         prng = SecureRandom.getInstance("SHA1PRNG");
-                        keygen = SecretKeyFactory.getInstance("DESede");                       
+                        keygen = SecretKeyFactory.getInstance("DESede");
                         encryptCipher =
                               getBlockCipherForEncryption(PASSWORD_KEY);
-                        iVector = encryptCipher.getIV();                      
+                        iVector = encryptCipher.getIV();
                         decryptCipher =
                               getBlockCipherForDecryption(PASSWORD_KEY,
-                                                          iVector);                        
+                                                          iVector);
                     } catch (Exception e) {
                         if (logger.isLoggable(Level.SEVERE)) {
                             logger.log(Level.SEVERE,
@@ -128,11 +128,11 @@ public final class ByteArrayGuard {
                                        e);
                         }
                         PASSWORD_KEY = null;
-                        keygen = null;                       
+                        keygen = null;
                         encryptCipher = null;
                         decryptCipher = null;
                         iVector = null;
-                        prng = null;                        
+                        prng = null;
                     }
                 }
             } catch (Exception ne) {
@@ -146,13 +146,13 @@ public final class ByteArrayGuard {
                 if (iContext != null) {
                     try {
                         iContext.close();
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                    }
                 }
-            }           
+            }
         }
 
     }
-
 
     // ---------------------------------------------------------- Public Methods
 
@@ -161,8 +161,8 @@ public final class ByteArrayGuard {
 
         if (byteArrayGuard == null) {
             byteArrayGuard = new ByteArrayGuard(DEFAULT_KEY_LENGTH,
-                             DEFAULT_MAC_LENGTH,
-                             DEFAULT_IV_LENGTH);
+                                                DEFAULT_MAC_LENGTH,
+                                                DEFAULT_IV_LENGTH);
         }
         return byteArrayGuard;
 
@@ -174,13 +174,15 @@ public final class ByteArrayGuard {
      * generates an inputstream from it. The file must be encrypted by the
      * above method for encryption. The method also verifies the MAC. It
      * uses the IV present in the file for decryption.
-     * @param securedata The encrypted data (including mac and initialization 
-     * vector) that needs to be decrypted
+     *
+     * @param securedata The encrypted data (including mac and initialization
+     *                   vector) that needs to be decrypted
+     *
      * @return A byte array containing the decrypted contents
      */
     public byte[] decrypt(byte[] securedata) {
 
-        if (PASSWORD_KEY != null) {           
+        if (PASSWORD_KEY != null) {
             try {
                 // Extract MAC
                 byte[] macBytes = new byte[macLength];
@@ -204,9 +206,9 @@ public final class ByteArrayGuard {
                 byte[] macBytesCalculated = mac.doFinal();
                 if (Arrays.equals(macBytes, macBytesCalculated)) {
                     // decrypt data only if the MAC was valid  
-                   synchronized(decLock) {
+                    synchronized (decLock) {
                         return decryptCipher.doFinal(encdata);
-                   }                 
+                    }
                 } else {
                     throw new IOException(
                           "Could not Decrypt Secure View State, passwords did not match.");
@@ -229,19 +231,21 @@ public final class ByteArrayGuard {
      * stores the MAC and the IV in the output. The 20-byte MAC is stored
      * first, followed by the 8-byte IV, followed by the encrypted
      * contents of the file.
+     *
      * @param plaindata The plain text that needs to be encrypted
+     *
      * @return The encrypted contents
      */
     public byte[] encrypt(byte[] plaindata) {
 
-        if (PASSWORD_KEY != null) {          
-            try {               
+        if (PASSWORD_KEY != null) {
+            try {
                 // encrypt the plaintext
-               
+
                 byte[] encdata;
-                synchronized(encLock) {
+                synchronized (encLock) {
                     encdata = encryptCipher.doFinal(plaindata);
-                } 
+                }
                 Mac mac = getMac(PASSWORD_KEY);
                 mac.update(encdata);
                 // generate MAC
@@ -265,15 +269,16 @@ public final class ByteArrayGuard {
 
     }
 
-
     // --------------------------------------------------------- Private Methods
 
 
     /**
      * This method concatenates two byte arrays.
-     * @return a byte array of array1||array2
+     *
      * @param array1 first byte array to be concatenated
      * @param array2 second byte array to be concatenated
+     *
+     * @return a byte array of array1||array2
      */
     private static byte[] concatBytes(byte[] array1, byte[] array2) {
 
@@ -281,7 +286,7 @@ public final class ByteArrayGuard {
         try {
             System.arraycopy(array1, 0, cBytes, 0, array1.length);
             System.arraycopy(array2, 0, cBytes, array1.length, array2.length);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new FacesException(e);
         }
         return cBytes;
@@ -293,11 +298,11 @@ public final class ByteArrayGuard {
      * This method converts the specified password into a key in a
      * deterministic manner. The key is then usable for creating ciphers
      * and MACs.
-     * 
+     *
      * @param password plain text password
-     * 
+     *
      * @return a byte array containing a key based on the specified
-     * password. The length of the returned byte array is KEY_LENGTH.
+     *         password. The length of the returned byte array is KEY_LENGTH.
      */
     private byte[] convertPasswordToKey(byte[] password) {
 
@@ -318,17 +323,19 @@ public final class ByteArrayGuard {
     }
 
 
-    /** 
+    /**
      * Obtain a <code>Cipher</code> for decrypting data.
+     *
      * @param rawKey must be 24 bytes in length.
-     * @param iv initialization vector 
+     * @param iv     initialization vector
+     *
      * @return a 3DES block cipher to be used for decryption based on the
-     * specified key
+     *         specified key
      */
-    private Cipher getBlockCipherForDecryption(byte[] rawKey, 
+    private Cipher getBlockCipherForDecryption(byte[] rawKey,
                                                byte[] iv) {
 
-        try {           
+        try {
             DESedeKeySpec keyspec = new DESedeKeySpec(rawKey);
             Key key = keygen.generateSecret(keyspec);
             Cipher cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
@@ -342,15 +349,17 @@ public final class ByteArrayGuard {
     }
 
 
-    /** 
+    /**
      * Obtain a <code>Cipher</code> for encrypting data.
-     * @param rawKey must be 24 bytes in length. 
+     *
+     * @param rawKey must be 24 bytes in length.
+     *
      * @return a 3DES block cipher to be used for encryption based on the
-     * specified key
+     *         specified key
      */
     private Cipher getBlockCipherForEncryption(byte[] rawKey) {
 
-        try {           
+        try {
             DESedeKeySpec keyspec = new DESedeKeySpec(rawKey);
             Key key = keygen.generateSecret(keyspec);
             Cipher cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
@@ -370,7 +379,8 @@ public final class ByteArrayGuard {
 
         try {
             Mac lMac = Mac.getInstance("HmacSHA1");
-            SecretKeySpec key = new SecretKeySpec(rawKey, 0, macLength, "HmacSHA1");
+            SecretKeySpec key =
+                  new SecretKeySpec(rawKey, 0, macLength, "HmacSHA1");
             lMac.init(key);
             return lMac;
         } catch (Exception e) {

@@ -1,5 +1,5 @@
 /*
- * $Id: FormInputTestCase.java,v 1.7 2005/08/22 22:10:33 ofung Exp $
+ * $Id: FormInputTestCase.java,v 1.8 2006/03/29 22:38:46 rlubke Exp $
  */
 
 /*
@@ -30,27 +30,48 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import javax.faces.component.NamingContainer;
+
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import javax.faces.component.NamingContainer;
 
-
-/**
- * <p>Test Case for Form Input.</p>
- */
+/** <p>Test Case for Form Input.</p> */
 
 public class FormInputTestCase extends AbstractTestCase {
 
+    // ---------- form-input-02.jsp values ----------
+
+    private String formInput02_name = "formInput02_form";
+
+    private String formInput02_names[] =
+          {
+                "booleanProperty",
+                "byteProperty",
+                "doubleProperty",
+                "floatProperty",
+                "intProperty",
+                "longProperty",
+                "shortProperty",
+                "stringProperty"
+          };
+
+    private String formInput02_pristine[] =
+          {
+                "true", "12", "123.45", "12.34",
+                "123", "12345", "1234", "This is a String property"
+          };
+
+    private String formInput02_updated[] =
+          {
+                "false", "21", "543.21", "43.21",
+                "321", "54321", "4321", "This was a String property"
+          };
 
     // ------------------------------------------------------------ Constructors
 
@@ -61,67 +82,38 @@ public class FormInputTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public FormInputTestCase(String name) {
+
         super(name);
+
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
+    // ---------------------------------------------------------- Public Methods
 
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
+    /** Return the tests included in this test suite. */
     public static Test suite() {
+
         return (new TestSuite(FormInputTestCase.class));
+
     }
 
 
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    /** Set up instance variables required by this test case. */
+    public void setUp() throws Exception {
+
+        super.setUp();
+
+    }
+
+
+    /** Tear down instance variables required by this test case. */
     public void tearDown() {
+
         super.tearDown();
+
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------- form-input-02.jsp values ----------
-
-    private String formInput02_name = "formInput02_form";
-
-    private String formInput02_names[] =
-        {
-            "booleanProperty", "byteProperty", "doubleProperty", "floatProperty",
-            "intProperty", "longProperty", "shortProperty", "stringProperty"
-        };
-
-    private String formInput02_pristine[] =
-        {
-            "true", "12", "123.45", "12.34",
-            "123", "12345", "1234", "This is a String property"
-        };
-
-    private String formInput02_updated[] =
-        {
-            "false", "21", "543.21", "43.21",
-            "321", "54321", "4321", "This was a String property"
-        };
 
     // ------------------------------------------------- Individual Test Methods
-
 
     // ---------- form-input-02.jsp tests ----------
 
@@ -146,9 +138,9 @@ public class FormInputTestCase extends AbstractTestCase {
         HtmlForm form = getFormById(page, formInput02_name);
         assertNotNull("form exists", form);
         HtmlSubmitInput submit = (HtmlSubmitInput)
-            form.getInputByName(formInput02_name +
-                                NamingContainer.SEPARATOR_CHAR +
-                                "submit");
+              form.getInputByName(formInput02_name +
+                                  NamingContainer.SEPARATOR_CHAR +
+                                  "submit");
         page = (HtmlPage) submit.click();
         checkFormInput02(page, formInput02_pristine);
 
@@ -165,22 +157,21 @@ public class FormInputTestCase extends AbstractTestCase {
         assertNotNull("form exists", form);
         for (int i = 0; i < formInput02_names.length; i++) {
             HtmlTextInput input = (HtmlTextInput)
-                form.getInputByName(formInput02_name +
-                                    NamingContainer.SEPARATOR_CHAR +
-                                    formInput02_names[i]);
+                  form.getInputByName(formInput02_name +
+                                      NamingContainer.SEPARATOR_CHAR +
+                                      formInput02_names[i]);
             assertNotNull("field '" + formInput02_names[i] + "' exists", input);
             input.setValueAttribute(formInput02_updated[i]);
         }
         HtmlSubmitInput submit = (HtmlSubmitInput)
-            form.getInputByName(formInput02_name +
-                                NamingContainer.SEPARATOR_CHAR +
-                                "submit");
+              form.getInputByName(formInput02_name +
+                                  NamingContainer.SEPARATOR_CHAR +
+                                  "submit");
         page = (HtmlPage) submit.click();
         checkFormInput02(page, formInput02_updated);
         checkFormInput01();
 
     }
-
 
     // --------------------------------------------------------- Private Methods
 
@@ -215,16 +206,15 @@ public class FormInputTestCase extends AbstractTestCase {
     // Check the values of the input fields against the specified list
     private void checkFormInput02(HtmlPage page, String expected[]) {
 
-
         assertEquals("Correct page title",
                      "form-input-02", page.getTitleText());
         HtmlForm form = getFormById(page, formInput02_name);
         assertNotNull("form exists", form);
         for (int i = 0; i < expected.length; i++) {
             HtmlTextInput input = (HtmlTextInput)
-                form.getInputByName(formInput02_name +
-                                    NamingContainer.SEPARATOR_CHAR +
-                                    formInput02_names[i]);
+                  form.getInputByName(formInput02_name +
+                                      NamingContainer.SEPARATOR_CHAR +
+                                      formInput02_names[i]);
             assertNotNull("field '" + formInput02_names[i] + "' exists", input);
             assertEquals("field '" + formInput02_names[i] + "' value",
                          expected[i], input.getValueAttribute());
@@ -239,6 +229,5 @@ public class FormInputTestCase extends AbstractTestCase {
         return (getPage("/faces/jsp/form-input-02.jsp"));
 
     }
-
 
 }

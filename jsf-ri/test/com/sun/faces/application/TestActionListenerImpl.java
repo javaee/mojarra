@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.24 2005/10/19 19:51:28 edburns Exp $
+ * $Id: TestActionListenerImpl.java,v 1.25 2006/03/29 22:39:34 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.faces.event.ActionEvent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.24 2005/10/19 19:51:28 edburns Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.25 2006/03/29 22:39:34 rlubke Exp $
  */
 
 /**
@@ -58,47 +58,63 @@ import javax.faces.event.ActionEvent;
  */
 public class TestActionListenerImpl extends ServletFacesTestCase {
 
-//
-// Protected Constants
-//
 
-//
-// Class Variables
-//
+    // ------------------------------------------------------------ Constructors
 
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestActionListenerImpl() {
+
         super("TestActionListenerImpl");
+
     }
 
 
     public TestActionListenerImpl(String name) {
+
         super(name);
+
     }
-//
-// Class methods
-//
 
-//
-// Methods from TestCase
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void testIllegalArgException() {
+
+        boolean exceptionThrown = false;
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(context, null);
+        page.setViewId("/login.jsp");
+        context.setViewRoot(page);
+        UserBean user = new UserBean();
+        context.getExternalContext().getApplicationMap().put("UserBean", user);
+
+        assertTrue(
+            user ==
+            context.getExternalContext().getApplicationMap().get("UserBean"));
+
+        UICommand command = new UICommand();
+        MethodBinding binding =
+            context.getApplication().createMethodBinding("#{UserBean.noMeth}",
+                                                         null);
+        command.setAction(binding);
+        ActionEvent actionEvent = new ActionEvent(command);
+
+        ActionListenerImpl actionListener = new ActionListenerImpl();
+        try {
+            actionListener.processAction(actionEvent);
+        } catch (FacesException e) {
+            assertTrue(e.getCause() instanceof MethodNotFoundException);
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+    }
+
 
     public void testProcessAction() {
+
         loadFromInitParam("/WEB-INF/faces-navigation.xml");
         FacesContext context = getFacesContext();
 
@@ -145,45 +161,20 @@ public class TestActionListenerImpl extends ServletFacesTestCase {
         // expected outcome should be view id corresponding to "page/outcome" search..
 
         assertTrue(newViewId.equals("/home.jsp"));
-    }
 
-
-    public void testIllegalArgException() {
-        boolean exceptionThrown = false;
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(context, null);
-        page.setViewId("/login.jsp");
-        context.setViewRoot(page);
-        UserBean user = new UserBean();
-        context.getExternalContext().getApplicationMap().put("UserBean", user);
-
-        assertTrue(
-            user ==
-            context.getExternalContext().getApplicationMap().get("UserBean"));
-
-        UICommand command = new UICommand();
-        MethodBinding binding =
-            context.getApplication().createMethodBinding("#{UserBean.noMeth}",
-                                                         null);
-        command.setAction(binding);
-        ActionEvent actionEvent = new ActionEvent(command);
-
-        ActionListenerImpl actionListener = new ActionListenerImpl();
-        try {
-            actionListener.processAction(actionEvent);
-        } catch (FacesException e) {
-            assertTrue(e.getCause() instanceof MethodNotFoundException);
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
     }
 
 
     public static class UserBean extends Object {
 
+
+    // ---------------------------------------------------------- Public Methods
+
+
         public String login() {
+
             return ("success");
+
         }
 
     }

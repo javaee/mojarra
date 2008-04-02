@@ -1,5 +1,5 @@
 /*
- * $Id: DummyVariableResolverImpl.java,v 1.2 2005/08/22 22:10:11 ofung Exp $
+ * $Id: DummyVariableResolverImpl.java,v 1.3 2006/03/29 22:38:32 rlubke Exp $
  */
 
 /*
@@ -34,18 +34,24 @@ import javax.faces.el.EvaluationException;
 import javax.faces.el.VariableResolver;
 
 /**
- * Default VariableResolver implementation that gets the ELContext from the 
+ * Default VariableResolver implementation that gets the ELContext from the
  * argument FacesContext and calls setPropertyResolved(false) on it. This is
  * provided to ensure that the legacy variable resolvers continue to work with
  * unfied EL API
  */
 
-public class DummyVariableResolverImpl extends VariableResolver{
-   
+public class DummyVariableResolverImpl extends VariableResolver {
+
+    // ---------------------------------------------------------- Public Methods
+
+
     // Specified by javax.faces.el.VariableResolver.resolveVariable()
     public Object resolveVariable(FacesContext context, String name)
-            throws EvaluationException {
+          throws EvaluationException {
+
         context.getELContext().setPropertyResolved(false);
         return null;
+
     }
+
 }

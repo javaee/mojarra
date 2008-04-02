@@ -4,7 +4,7 @@ package com.sun.faces.config;
  * TestJSFVersionTracker_local.java
  *
  * Created on February 18, 2006, 6:50 AM
- * $Id: TestJSFVersionTracker_local.java,v 1.1 2006/02/24 18:05:07 edburns Exp $
+ * $Id: TestJSFVersionTracker_local.java,v 1.2 2006/03/29 22:39:40 rlubke Exp $
  */
 
 /*
@@ -41,18 +41,30 @@ import com.sun.faces.config.JSFVersionTracker.Version;
  * @author edburns
  */
 public class TestJSFVersionTracker_local extends TestCase {
-    
+
+
+    // ------------------------------------------------------------ Constructors
+
+
     /** Creates a new instance of TestJSFVersionTracker_local */
     
     public TestJSFVersionTracker_local() {
+
         super("TestJSFVersionTracker_local.java");
+
     }
 
 
     public TestJSFVersionTracker_local(String name) {
+
         super(name);
+
     }
-    
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
     public void testPopWithNulls() throws Exception {
         
         JSFVersionTracker tracker = new JSFVersionTracker();
@@ -118,6 +130,5 @@ public class TestJSFVersionTracker_local extends TestCase {
         assertNull(version);
 
     }
-    
-    
+
 }

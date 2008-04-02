@@ -1,6 +1,6 @@
 <!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
@@ -10,11 +10,11 @@
 
 <f:view>
     <h:outputText id="output1"/>
-    <h:outputText />
+    <h:outputText/>
     <h:outputText>
-       <f:facet name="facet1">
-           <h:outputText id="output1"/>
-       </f:facet>
+        <f:facet name="facet1">
+            <h:outputText id="output1"/>
+        </f:facet>
     </h:outputText>
 </f:view>
 

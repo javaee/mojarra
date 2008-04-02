@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.5 2005/08/22 22:10:24 ofung Exp $
+ * $Id: AttributeTag.java,v 1.6 2006/03/29 22:38:40 rlubke Exp $
  */
 
 /*
@@ -34,8 +34,8 @@ import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.webapp.UIComponentELTag;
 import javax.faces.webapp.UIComponentClassicTagBase;
+import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -46,19 +46,21 @@ import javax.servlet.jsp.tagext.TagSupport;
  * if the component does not already contain an attribute with the
  * same name.  This tag creates no output to the page currently
  * being created.</p>
- *
  */
 
 public class AttributeTag extends TagSupport {
 
-
     // ------------------------------------------------------------- Attributes
 
 
-    /**
-     * <p>The name of the attribute to be created, if not already present.
-     */
+    /** <p>The name of the attribute to be created, if not already present. */
     private ValueExpression name = null;
+
+
+    /** <p>The value to be associated with this attribute, if it is created.</p> */
+    private ValueExpression value = null;
+
+    // ---------------------------------------------------------- Public Methods
 
 
     /**
@@ -74,13 +76,6 @@ public class AttributeTag extends TagSupport {
 
 
     /**
-     * <p>The value to be associated with this attribute, if it is created.</p>
-     */
-    private ValueExpression value = null;
-
-
-
-    /**
      * <p>Set the attribute value.</p>
      *
      * @param value The new attribute value
@@ -92,6 +87,13 @@ public class AttributeTag extends TagSupport {
     }
 
 
+    public int doEndTag() throws JspException {
+
+        this.release();
+        return (EVAL_PAGE);
+
+    }
+
     // -------------------------------------------------------- Methods from Tag
 
 
@@ -102,13 +104,13 @@ public class AttributeTag extends TagSupport {
      * {@link UIComponent} does not already have a value for the
      * specified attribute name.</p>
      *
-     * @exception JspException if a JSP error occurs
+     * @throws JspException if a JSP error occurs
      */
     public int doStartTag() throws JspException {
 
         // Locate our parent UIComponentTagBase
         UIComponentClassicTagBase tag =
-            UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
+              UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) { // PENDING - i18n
             throw new JspException("Not nested in a UIComponentTag");
         }
@@ -124,39 +126,31 @@ public class AttributeTag extends TagSupport {
 
         String nameVal = null;
         Object valueVal = null;
-	boolean isLiteral = false;
+        boolean isLiteral = false;
 
         if (name != null) {
             nameVal = (String) name.getValue(elContext);
         }
 
         if (value != null) {
-	    if (isLiteral = value.isLiteralText()) {
-		valueVal = value.getValue(elContext);
-	    }
+            if (isLiteral = value.isLiteralText()) {
+                valueVal = value.getValue(elContext);
+            }
         }
-	
+
         if (component.getAttributes().get(nameVal) == null) {
-	    if (isLiteral) {
-		component.getAttributes().put(nameVal, valueVal);
-	    }
-	    else {
-		component.setValueExpression(nameVal, value);
-	    }
+            if (isLiteral) {
+                component.getAttributes().put(nameVal, valueVal);
+            } else {
+                component.setValueExpression(nameVal, value);
+            }
         }
         return (SKIP_BODY);
 
     }
 
-    public int doEndTag() throws JspException {
-	this.release();
-	return (EVAL_PAGE);
-    }
 
-
-    /**
-     * <p>Release references to any acquired resources.
-     */
+    /** <p>Release references to any acquired resources. */
     public void release() {
 
         this.name = null;

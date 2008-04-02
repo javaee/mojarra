@@ -1,5 +1,5 @@
 /*
- * $Id: ReplaceStateManagerTestCase.java,v 1.2 2005/08/22 22:11:03 ofung Exp $
+ * $Id: ReplaceStateManagerTestCase.java,v 1.3 2006/03/29 22:39:25 rlubke Exp $
  */
 
 /*
@@ -30,25 +30,14 @@
 package com.sun.faces.systest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import java.util.List;
+
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
-
-import javax.faces.component.NamingContainer;
 
 
 /**
@@ -59,7 +48,6 @@ import javax.faces.component.NamingContainer;
 
 public class ReplaceStateManagerTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -69,72 +57,72 @@ public class ReplaceStateManagerTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public ReplaceStateManagerTestCase(String name) {
+
         super(name);
+
     }
 
+    // ---------------------------------------------------------- Public Methods
+
+
+    /** Return the tests included in this test suite. */
+    public static Test suite() {
+
+        return (new TestSuite(ReplaceStateManagerTestCase.class));
+
+    }
 
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
 
-    /**
-     * Set up instance variables required by this test case.
-     */
+    /** Set up instance variables required by this test case. */
     public void setUp() throws Exception {
+
         super.setUp();
+
     }
 
 
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(ReplaceStateManagerTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    /** Tear down instance variables required by this test case. */
     public void tearDown() {
-        super.tearDown();
-    }
 
+        super.tearDown();
+
+    }
 
     // ------------------------------------------------------ Instance Variables
 
-
-
     // ------------------------------------------------- Individual Test Methods
 
-    /**
-     *
-     * <p>Verify that the bean is successfully resolved</p>
-     */
+    /** <p>Verify that the bean is successfully resolved</p> */
 
     public void testReplaceStateManager() throws Exception {
-	HtmlPage page = getPage("/faces/test.jsp");
-	assertTrue(-1 != page.asText().indexOf("New String Value"));
-	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewStateManager"));
-	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewViewHandler"));
-	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewApplication"));
-	
-	List list;
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
-	((HtmlTextInput)list.get(0)).setValueAttribute("text from client");
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlSubmitInput.class); 
-	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-	page = (HtmlPage) button.click();
-	
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
-	assertEquals("text from client", 
-		     ((HtmlTextInput)list.get(0)).asText());
-	
+
+        HtmlPage page = getPage("/faces/test.jsp");
+        assertTrue(-1 != page.asText().indexOf("New String Value"));
+        assertTrue(-1 != page.asText()
+              .indexOf("com.sun.faces.systest.NewStateManager"));
+        assertTrue(-1 != page.asText()
+              .indexOf("com.sun.faces.systest.NewViewHandler"));
+        assertTrue(-1 != page.asText()
+              .indexOf("com.sun.faces.systest.NewApplication"));
+
+        List list;
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlTextInput.class);
+        ((HtmlTextInput) list.get(0)).setValueAttribute("text from client");
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlTextInput.class);
+        assertEquals("text from client",
+                     ((HtmlTextInput) list.get(0)).asText());
+
     }
 
 }

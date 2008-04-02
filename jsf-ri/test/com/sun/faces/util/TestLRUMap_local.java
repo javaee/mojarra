@@ -1,5 +1,5 @@
 /*
- * $Id: TestLRUMap_local.java,v 1.1 2005/12/15 23:40:30 rlubke Exp $
+ * $Id: TestLRUMap_local.java,v 1.2 2006/03/29 22:39:48 rlubke Exp $
  */
 
 /*
@@ -40,17 +40,26 @@ import junit.framework.TestCase;
  */
 public class TestLRUMap_local extends TestCase {
 
+
     // ------------------------------------------------------------ Constructors
 
+
     public TestLRUMap_local() {
+
         super("TestLRUMap_local");
+
     }
+
 
     public TestLRUMap_local(String name) {
+
         super(name);
+
     }
 
-    // ------------------------------------------------------------ Test Methods
+
+    // ---------------------------------------------------------- Public Methods
+    
 
     /**
      * Ensure that LRUMap works as advertised.
@@ -85,11 +94,15 @@ public class TestLRUMap_local extends TestCase {
         for (String s: map.keySet()) {            
             assertEquals(control[--count], s);
         }
+
     }
-    
+
+
     // --------------------------------------------------------- Private Methods
-    
+
+
     private static void display(String[] expected, LRUMap<String,String> actual) {
+
         System.out.println("Expected order:");
         List<String> revControl = Arrays.asList(expected);
         Collections.reverse(revControl);
@@ -102,5 +115,7 @@ public class TestLRUMap_local extends TestCase {
             System.out.print(s + ' ');
         }
         System.out.println();
+
     }
+
 }

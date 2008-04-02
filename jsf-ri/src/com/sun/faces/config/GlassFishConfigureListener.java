@@ -1,5 +1,5 @@
 /*
- * $Id: GlassFishConfigureListener.java,v 1.2 2006/03/22 22:41:13 rlubke Exp $
+ * $Id: GlassFishConfigureListener.java,v 1.3 2006/03/29 22:38:31 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -38,24 +38,32 @@ import javax.servlet.ServletContextEvent;
  */
 public class GlassFishConfigureListener extends ConfigureListener {
 
+    // ---------------------------------------------------------- Public Methods
+
+
     /*      
      * Disable web.xml scanning. 
      */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+
         scanWebXml(false);
-        super.contextInitialized(sce); 
+        super.contextInitialized(sce);
+
     }
+
+    // ------------------------------------------------------- Protected Methods
+
 
     /*
      * Because of EE 5 requirements, we force XML validation.
      */
-    @Override 
+    @Override
     protected boolean isFeatureEnabled(Object obj, String paramName) {
-        if (VALIDATE_XML.equals(paramName)) {
-            return true;
-        } else {
-            return super.isFeatureEnabled(obj, paramName);
-        }
+
+        return VALIDATE_XML.equals(paramName) || super
+              .isFeatureEnabled(obj, paramName);
+
     }
+
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.30 2005/10/19 19:51:34 edburns Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.31 2006/03/29 22:39:45 rlubke Exp $
  */
 
 /*
@@ -44,81 +44,69 @@ import javax.servlet.http.HttpServletRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.30 2005/10/19 19:51:34 edburns Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.31 2006/03/29 22:39:45 rlubke Exp $
  */
 
 public class TestLifecycleImpl_initial extends JspFacesTestCase {
 
-//
-// Protected Constants
-//
-
     public static final String TEST_URI = "/greeting.jsp";
-
-
-    public String getExpectedOutputFilename() {
-        return "TestLifecycleImpl_initial_correct";
-    }
-
-
     public static final String ignore[] = {
     };
 
 
-    public String[] getLinesToIgnore() {
-        return ignore;
-    }
+    // ------------------------------------------------------------ Constructors
 
-
-    public boolean sendResponseToFile() {
-        return true;
-    }
-
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestLifecycleImpl_initial() {
+
         super("TestLifecycleImpl_initial");
+
     }
 
 
     public TestLifecycleImpl_initial(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------- Methods From FacesTestCase
 
 
-    protected void initWebRequest(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+    public boolean sendResponseToFile() {
+
+        return true;
+
     }
+
+
+    public String getExpectedOutputFilename() {
+
+        return "TestLifecycleImpl_initial_correct";
+
+    }
+
+
+    public String[] getLinesToIgnore() {
+
+        return ignore;
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
 
 
     public void beginExecuteInitial(WebRequest theRequest) {
+
         initWebRequest(theRequest);
+
     }
 
 
     public void testExecuteInitial() {
+
         boolean result = false;
         LifecycleImpl life = new LifecycleImpl();
 
@@ -143,5 +131,14 @@ public class TestLifecycleImpl_initial extends JspFacesTestCase {
 
     }
 
+
+    // ------------------------------------------------------- Protected Methods
+
+
+    protected void initWebRequest(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+
+    }
 
 } // end of class TestLifecycleImpl_initial

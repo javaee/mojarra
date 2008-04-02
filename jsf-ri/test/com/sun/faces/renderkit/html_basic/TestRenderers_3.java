@@ -24,7 +24,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.38 2005/10/19 19:51:38 edburns Exp $
+ * $Id: TestRenderers_3.java,v 1.39 2006/03/29 22:39:47 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -68,65 +68,71 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.38 2005/10/19 19:51:38 edburns Exp $
+ * @version $Id: TestRenderers_3.java,v 1.39 2006/03/29 22:39:47 rlubke Exp $
  */
 
 public class TestRenderers_3 extends JspFacesTestCase {
-    
-    //
-    // Instance Variables
-    //
-    private Application application;
-    
-    //
-    // Protected Constants
-    //
-    public static String DATE_STR = "Jan 12, 1952";
-    
+
+
+    public static String DATE_STR = "Jan 12, 1952";    
     public static String NUMBER_STR = "47%";
-    
-    
-    public boolean sendWriterToFile() {
-        return true;
-    }
-    
-    
-    public String getExpectedOutputFilename() {
-        return "CorrectRenderersResponse_3";
-    }
-    
-    //
-    // Class Variables
-    //
-    
-    //
-    // Instance Variables
-    //
+       
+    private Application application;
     private FacesContextFactory facesContextFactory = null;
-    
-    // Attribute Instance Variables
-    // Relationship Instance Variables
-    //
-    // Constructors and Initializers
-    //
-    
+
+
+    // ------------------------------------------------------------ Constructors
+
+
     public TestRenderers_3() {
+
         super("TestRenderers_3");
+
     }
     
     
     public TestRenderers_3(String name) {
+
         super(name);
+
+    }
+
+
+    // ---------------------------------------------- Methods From FacesTestCase
+    
+    
+    public String getExpectedOutputFilename() {
+
+        return "CorrectRenderersResponse_3";
+
     }
     
-    //
-    // Class methods
-    //
     
-    //
-    // Methods from TestCase
-    //
+    public boolean sendWriterToFile() {
+
+        return true;
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void beginRenderers(WebRequest theRequest) {
+
+        theRequest.addParameter("myMenu", "Blue");
+        theRequest.addParameter("myListbox", "Blue");
+        theRequest.addParameter("myCheckboxlist", "Blue");
+        theRequest.addParameter("myOnemenu", "Blue");
+        // parameters to test hidden renderer
+        theRequest.addParameter("myNumberHidden", NUMBER_STR);
+        theRequest.addParameter("myInputDateHidden", DATE_STR);
+        
+    }
+
+   
     public void setUp() {
+
         super.setUp();
         ApplicationFactory aFactory =
                 (ApplicationFactory) FactoryFinder.getFactory(
@@ -140,252 +146,12 @@ public class TestRenderers_3 extends JspFacesTestCase {
                 Util.getStateManager(getFacesContext()).saveSerializedView(getFacesContext());
         getFacesContext().getExternalContext().getRequestMap().put(RIConstants.SAVED_STATE, view);
         assertTrue(null != getFacesContext().getResponseWriter());
-    }
-    
-    
-    public void beginRenderers(WebRequest theRequest) {
-        theRequest.addParameter("myMenu", "Blue");
-        theRequest.addParameter("myListbox", "Blue");
-        theRequest.addParameter("myCheckboxlist", "Blue");
-        theRequest.addParameter("myOnemenu", "Blue");
-        // parameters to test hidden renderer
-        theRequest.addParameter("myNumberHidden", NUMBER_STR);
-        theRequest.addParameter("myInputDateHidden", DATE_STR);
-        
-    }
-    
-    
-    public void testRenderers() {
-        
-        try {
-            // create a dummy root for the tree.
-            UIViewRoot root = getFacesContext().getViewRoot();
-            root.setId("root");
-            
-            testSelectManyMenuRenderer(root);
-            testSelectManyListboxRenderer(root);
-            testSelectManyCheckboxListRenderer(root);
-            testSelectOneMenuRenderer(root);
-            testHiddenRenderer(root);
-            assertTrue(verifyExpectedOutput());
-        } catch (Throwable t) {
-            t.printStackTrace();
-            assertTrue(false);
-            return;
-        }
-    }
-    
-    
-    public void testSelectManyListboxRenderer(UIComponent root)
-    throws IOException {
-        System.out.println("Testing SelectManyListboxRenderer");
-        UISelectMany selectMany = new UISelectMany();
-        UISelectItems uiSelectItems = new UISelectItems();
-        selectMany.setValue(null);
-        selectMany.setId("myListbox");
-        SelectItem item1 = new SelectItem("Red", "Red", null);
-        SelectItem item2 = new SelectItem("Blue", "Blue", null);
-        
-        SelectItem item3 = new SelectItem("Green", "Green", null);
-        SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
-        SelectItem[] itemsArray = {item3, item4};
-        SelectItemGroup itemGroup = new SelectItemGroup("group", null, true,
-                itemsArray);
-        SelectItem[] selectItems = {item1, item2, itemGroup};
-        Object selectedValues[] = null;
-        uiSelectItems.setValue(selectItems);
-        uiSelectItems.setId("manyListitems");
-        selectMany.getChildren().add(uiSelectItems);
-        root.getChildren().add(selectMany);
-        
-        ListboxRenderer selectManyListboxRenderer =
-                new ListboxRenderer();
-        
-        // test decode method
-        System.out.println("    Testing decode method... ");
-        selectManyListboxRenderer.decode(getFacesContext(), selectMany);
-        selectedValues = (Object[]) selectMany.getSubmittedValue();
-        assertTrue(null != selectedValues);
-        assertTrue(1 == selectedValues.length);
-        assertTrue(((String) selectedValues[0]).equals("Blue"));
-        
-        // test convert method
-        Object[] convertedValues =
-                (Object[]) selectManyListboxRenderer.getConvertedValue(
-                getFacesContext(),
-                selectMany,
-                selectMany.getSubmittedValue());
-        assertTrue(null != convertedValues);
-        assertTrue(1 == convertedValues.length);
-        assertTrue(((String) convertedValues[0]).equals("Blue"));
-        
-        // test encode method
-        
-        System.out.println("    Testing encode method... ");
-        selectManyListboxRenderer.encodeBegin(getFacesContext(), selectMany);
-        selectManyListboxRenderer.encodeEnd(getFacesContext(), selectMany);
-        getFacesContext().getResponseWriter().writeText("\n", null);
-        getFacesContext().getResponseWriter().flush();
-        
-    }
-    
-    
-    public void testSelectManyCheckboxListRenderer(UIComponent root)
-    throws IOException {
-        System.out.println("Testing SelectManyCheckboxListRenderer");
-        UISelectMany selectMany = new UISelectMany();
-        selectMany.getAttributes().put("enabledClass", "enabledClass");
-        selectMany.getAttributes().put("disabledClass", "disabledClass");
-        selectMany.getAttributes().put("styleClass", "styleClass");
-        selectMany.getAttributes().put("tabindex", new Integer(5));
-        selectMany.getAttributes().put("title", "title");
-        
-        UISelectItems uiSelectItems = new UISelectItems();
-        selectMany.setValue(null);
-        selectMany.setId("myCheckboxlist");
-        SelectItem item1 = new SelectItem("Red", "Red", null);
-        item1.setDisabled(true);
-        SelectItem item2 = new SelectItem("Blue", "Blue", null);
-        
-        SelectItem item3 = new SelectItem("Green", "Green", null);
-        SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
-        SelectItem[] itemsArray = {item3, item4};
-        SelectItemGroup itemGroup = new SelectItemGroup("group", null, true,
-                itemsArray);
-        SelectItem[] selectItems = {item1, item2, itemGroup};
-        Object selectedValues[] = null;
-        uiSelectItems.setValue(selectItems);
-        selectMany.getChildren().add(uiSelectItems);
-        root.getChildren().add(selectMany);
-        
-        SelectManyCheckboxListRenderer selectManyCheckboxListRenderer =
-                new SelectManyCheckboxListRenderer();
-        
-        // test decode method
-        
-        System.out.println("    Testing decode method... ");
-        selectManyCheckboxListRenderer.decode(getFacesContext(), selectMany);
-        selectedValues = (Object[]) selectMany.getSubmittedValue();
-        assertTrue(null != selectedValues);
-        assertTrue(1 == selectedValues.length);
-        assertTrue(((String) selectedValues[0]).equals("Blue"));
-        
-        // test convert method
-        Object[] convertedValues =
-                (Object[]) selectManyCheckboxListRenderer.getConvertedValue(
-                getFacesContext(),
-                selectMany,
-                selectMany.getSubmittedValue());
-        assertTrue(null != convertedValues);
-        assertTrue(1 == convertedValues.length);
-        assertTrue(((String) convertedValues[0]).equals("Blue"));
-        
-        
-        // test encode method
-        System.out.println("    Testing encode method... ");
-        selectManyCheckboxListRenderer.encodeBegin(getFacesContext(),
-                selectMany);
-        selectManyCheckboxListRenderer.encodeEnd(getFacesContext(),
-                selectMany);
-        getFacesContext().getResponseWriter().writeText("\n", null);
-        getFacesContext().getResponseWriter().flush();
-        
-    }
-    
-    
-    public void testSelectManyMenuRenderer(UIComponent root)
-    throws IOException {
-        System.out.println("Testing SelectManyMenuRenderer");
-        UISelectMany selectMany = new UISelectMany();
-        UISelectItems uiSelectItems = new UISelectItems();
-        selectMany.setValue(null);
-        selectMany.setId("myMenu");
-        SelectItem item1 = new SelectItem("Red", "Red", null);
-        SelectItem item2 = new SelectItem("Blue", "Blue", null);
-        SelectItem item3 = new SelectItem("Green", "Green", null);
-        SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
-        SelectItem[] selectItems = {item1, item2, item3, item4};
-        Object selectedValues[] = null;
-        uiSelectItems.setValue(selectItems);
-        uiSelectItems.setId("manyMenuitems");
-        selectMany.getChildren().add(uiSelectItems);
-        root.getChildren().add(selectMany);
-        
-        MenuRenderer selectManyMenuRenderer =
-                new MenuRenderer();
-        
-        // test decode method
-        System.out.println("    Testing decode method... ");
-        selectManyMenuRenderer.decode(getFacesContext(), selectMany);
-        selectedValues = (Object[]) selectMany.getSubmittedValue();
-        assertTrue(null != selectedValues);
-        assertTrue(1 == selectedValues.length);
-        assertTrue(((String) selectedValues[0]).equals("Blue"));
-        
-        // test convert method
-        Object[] convertedValues =
-                (Object[]) selectManyMenuRenderer.getConvertedValue(
-                getFacesContext(),
-                selectMany,
-                selectMany.getSubmittedValue());
-        assertTrue(null != convertedValues);
-        assertTrue(1 == convertedValues.length);
-        assertTrue(((String) convertedValues[0]).equals("Blue"));
-        
-        // test encode method
-        System.out.println("    Testing encode method... ");
-        selectManyMenuRenderer.encodeBegin(getFacesContext(), selectMany);
-        selectManyMenuRenderer.encodeEnd(getFacesContext(), selectMany);
-        getFacesContext().getResponseWriter().writeText("\n", null);
-        getFacesContext().getResponseWriter().flush();
-        
-    }
-    
-    
-    public void testSelectOneMenuRenderer(UIComponent root)
-    throws IOException {
-        System.out.println("Testing SelectOneMenuRenderer");
-        UISelectOne selectOne = new UISelectOne();
-        UISelectItems uiSelectItems = new UISelectItems();
-        selectOne.setValue(null);
-        selectOne.setId("myOnemenu");
-        SelectItem item1 = new SelectItem("Red", "Red", null);
-        SelectItem item2 = new SelectItem("Blue", "Blue", null);
-        SelectItem item3 = new SelectItem("Green", "Green", null);
-        SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
-        SelectItem[] selectItems = {item1, item2, item3, item4};
-        String selectedValue = null;
-        uiSelectItems.setValue(selectItems);
-        uiSelectItems.setId("manySelectOneitems");
-        selectOne.getChildren().add(uiSelectItems);
-        root.getChildren().add(selectOne);
-        
-        MenuRenderer selectOneMenuRenderer =
-                new MenuRenderer();
-        
-        // test decode method
-        System.out.println("    Testing decode method... ");
-        selectOneMenuRenderer.decode(getFacesContext(), selectOne);
-        assertTrue("Blue".equals(selectOne.getSubmittedValue()));
-        
-        // test convert method
-        Object value = selectOneMenuRenderer.getConvertedValue(
-                getFacesContext(),
-                selectOne,
-                selectOne.getSubmittedValue());
-        assertTrue("Blue".equals(value));
-        
-        // test encode method
-        System.out.println("    Testing encode method... ");
-        selectOneMenuRenderer.encodeBegin(getFacesContext(), selectOne);
-        selectOneMenuRenderer.encodeEnd(getFacesContext(), selectOne);
-        getFacesContext().getResponseWriter().writeText("\n", null);
-        getFacesContext().getResponseWriter().flush();
-        
+
     }
     
     
     public void testHiddenRenderer(UIComponent root) throws IOException {
+
         System.out.println("Testing Input_DateRenderer");
         UIInput input1 = new UIInput();
         input1.setValue(null);
@@ -450,4 +216,240 @@ public class TestRenderers_3 extends JspFacesTestCase {
         getFacesContext().getResponseWriter().flush();
         
     }
+    
+    
+    public void testRenderers() {
+        
+        try {
+            // create a dummy root for the tree.
+            UIViewRoot root = getFacesContext().getViewRoot();
+            root.setId("root");
+            
+            testSelectManyMenuRenderer(root);
+            testSelectManyListboxRenderer(root);
+            testSelectManyCheckboxListRenderer(root);
+            testSelectOneMenuRenderer(root);
+            testHiddenRenderer(root);
+            assertTrue(verifyExpectedOutput());
+        } catch (Throwable t) {
+            t.printStackTrace();
+            assertTrue(false);
+            return;
+        }
+
+    }
+    
+    
+    public void testSelectManyCheckboxListRenderer(UIComponent root)
+    throws IOException {
+
+        System.out.println("Testing SelectManyCheckboxListRenderer");
+        UISelectMany selectMany = new UISelectMany();
+        selectMany.getAttributes().put("enabledClass", "enabledClass");
+        selectMany.getAttributes().put("disabledClass", "disabledClass");
+        selectMany.getAttributes().put("styleClass", "styleClass");
+        selectMany.getAttributes().put("tabindex", new Integer(5));
+        selectMany.getAttributes().put("title", "title");
+        
+        UISelectItems uiSelectItems = new UISelectItems();
+        selectMany.setValue(null);
+        selectMany.setId("myCheckboxlist");
+        SelectItem item1 = new SelectItem("Red", "Red", null);
+        item1.setDisabled(true);
+        SelectItem item2 = new SelectItem("Blue", "Blue", null);
+        
+        SelectItem item3 = new SelectItem("Green", "Green", null);
+        SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
+        SelectItem[] itemsArray = {item3, item4};
+        SelectItemGroup itemGroup = new SelectItemGroup("group", null, true,
+                itemsArray);
+        SelectItem[] selectItems = {item1, item2, itemGroup};
+        Object selectedValues[] = null;
+        uiSelectItems.setValue(selectItems);
+        selectMany.getChildren().add(uiSelectItems);
+        root.getChildren().add(selectMany);
+        
+        SelectManyCheckboxListRenderer selectManyCheckboxListRenderer =
+                new SelectManyCheckboxListRenderer();
+        
+        // test decode method
+        
+        System.out.println("    Testing decode method... ");
+        selectManyCheckboxListRenderer.decode(getFacesContext(), selectMany);
+        selectedValues = (Object[]) selectMany.getSubmittedValue();
+        assertTrue(null != selectedValues);
+        assertTrue(1 == selectedValues.length);
+        assertTrue(((String) selectedValues[0]).equals("Blue"));
+        
+        // test convert method
+        Object[] convertedValues =
+                (Object[]) selectManyCheckboxListRenderer.getConvertedValue(
+                getFacesContext(),
+                selectMany,
+                selectMany.getSubmittedValue());
+        assertTrue(null != convertedValues);
+        assertTrue(1 == convertedValues.length);
+        assertTrue(((String) convertedValues[0]).equals("Blue"));
+        
+        
+        // test encode method
+        System.out.println("    Testing encode method... ");
+        selectManyCheckboxListRenderer.encodeBegin(getFacesContext(),
+                selectMany);
+        selectManyCheckboxListRenderer.encodeEnd(getFacesContext(),
+                selectMany);
+        getFacesContext().getResponseWriter().writeText("\n", null);
+        getFacesContext().getResponseWriter().flush();
+        
+    }
+    
+    
+    public void testSelectManyListboxRenderer(UIComponent root)
+    throws IOException {
+
+        System.out.println("Testing SelectManyListboxRenderer");
+        UISelectMany selectMany = new UISelectMany();
+        UISelectItems uiSelectItems = new UISelectItems();
+        selectMany.setValue(null);
+        selectMany.setId("myListbox");
+        SelectItem item1 = new SelectItem("Red", "Red", null);
+        SelectItem item2 = new SelectItem("Blue", "Blue", null);
+        
+        SelectItem item3 = new SelectItem("Green", "Green", null);
+        SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
+        SelectItem[] itemsArray = {item3, item4};
+        SelectItemGroup itemGroup = new SelectItemGroup("group", null, true,
+                itemsArray);
+        SelectItem[] selectItems = {item1, item2, itemGroup};
+        Object selectedValues[] = null;
+        uiSelectItems.setValue(selectItems);
+        uiSelectItems.setId("manyListitems");
+        selectMany.getChildren().add(uiSelectItems);
+        root.getChildren().add(selectMany);
+        
+        ListboxRenderer selectManyListboxRenderer =
+                new ListboxRenderer();
+        
+        // test decode method
+        System.out.println("    Testing decode method... ");
+        selectManyListboxRenderer.decode(getFacesContext(), selectMany);
+        selectedValues = (Object[]) selectMany.getSubmittedValue();
+        assertTrue(null != selectedValues);
+        assertTrue(1 == selectedValues.length);
+        assertTrue(((String) selectedValues[0]).equals("Blue"));
+        
+        // test convert method
+        Object[] convertedValues =
+                (Object[]) selectManyListboxRenderer.getConvertedValue(
+                getFacesContext(),
+                selectMany,
+                selectMany.getSubmittedValue());
+        assertTrue(null != convertedValues);
+        assertTrue(1 == convertedValues.length);
+        assertTrue(((String) convertedValues[0]).equals("Blue"));
+        
+        // test encode method
+        
+        System.out.println("    Testing encode method... ");
+        selectManyListboxRenderer.encodeBegin(getFacesContext(), selectMany);
+        selectManyListboxRenderer.encodeEnd(getFacesContext(), selectMany);
+        getFacesContext().getResponseWriter().writeText("\n", null);
+        getFacesContext().getResponseWriter().flush();
+        
+    }
+    
+    
+    public void testSelectManyMenuRenderer(UIComponent root)
+    throws IOException {
+
+        System.out.println("Testing SelectManyMenuRenderer");
+        UISelectMany selectMany = new UISelectMany();
+        UISelectItems uiSelectItems = new UISelectItems();
+        selectMany.setValue(null);
+        selectMany.setId("myMenu");
+        SelectItem item1 = new SelectItem("Red", "Red", null);
+        SelectItem item2 = new SelectItem("Blue", "Blue", null);
+        SelectItem item3 = new SelectItem("Green", "Green", null);
+        SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
+        SelectItem[] selectItems = {item1, item2, item3, item4};
+        Object selectedValues[] = null;
+        uiSelectItems.setValue(selectItems);
+        uiSelectItems.setId("manyMenuitems");
+        selectMany.getChildren().add(uiSelectItems);
+        root.getChildren().add(selectMany);
+        
+        MenuRenderer selectManyMenuRenderer =
+                new MenuRenderer();
+        
+        // test decode method
+        System.out.println("    Testing decode method... ");
+        selectManyMenuRenderer.decode(getFacesContext(), selectMany);
+        selectedValues = (Object[]) selectMany.getSubmittedValue();
+        assertTrue(null != selectedValues);
+        assertTrue(1 == selectedValues.length);
+        assertTrue(((String) selectedValues[0]).equals("Blue"));
+        
+        // test convert method
+        Object[] convertedValues =
+                (Object[]) selectManyMenuRenderer.getConvertedValue(
+                getFacesContext(),
+                selectMany,
+                selectMany.getSubmittedValue());
+        assertTrue(null != convertedValues);
+        assertTrue(1 == convertedValues.length);
+        assertTrue(((String) convertedValues[0]).equals("Blue"));
+        
+        // test encode method
+        System.out.println("    Testing encode method... ");
+        selectManyMenuRenderer.encodeBegin(getFacesContext(), selectMany);
+        selectManyMenuRenderer.encodeEnd(getFacesContext(), selectMany);
+        getFacesContext().getResponseWriter().writeText("\n", null);
+        getFacesContext().getResponseWriter().flush();
+        
+    }
+    
+    
+    public void testSelectOneMenuRenderer(UIComponent root)
+    throws IOException {
+
+        System.out.println("Testing SelectOneMenuRenderer");
+        UISelectOne selectOne = new UISelectOne();
+        UISelectItems uiSelectItems = new UISelectItems();
+        selectOne.setValue(null);
+        selectOne.setId("myOnemenu");
+        SelectItem item1 = new SelectItem("Red", "Red", null);
+        SelectItem item2 = new SelectItem("Blue", "Blue", null);
+        SelectItem item3 = new SelectItem("Green", "Green", null);
+        SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
+        SelectItem[] selectItems = {item1, item2, item3, item4};
+        String selectedValue = null;
+        uiSelectItems.setValue(selectItems);
+        uiSelectItems.setId("manySelectOneitems");
+        selectOne.getChildren().add(uiSelectItems);
+        root.getChildren().add(selectOne);
+        
+        MenuRenderer selectOneMenuRenderer =
+                new MenuRenderer();
+        
+        // test decode method
+        System.out.println("    Testing decode method... ");
+        selectOneMenuRenderer.decode(getFacesContext(), selectOne);
+        assertTrue("Blue".equals(selectOne.getSubmittedValue()));
+        
+        // test convert method
+        Object value = selectOneMenuRenderer.getConvertedValue(
+                getFacesContext(),
+                selectOne,
+                selectOne.getSubmittedValue());
+        assertTrue("Blue".equals(value));
+        
+        // test encode method
+        System.out.println("    Testing encode method... ");
+        selectOneMenuRenderer.encodeBegin(getFacesContext(), selectOne);
+        selectOneMenuRenderer.encodeEnd(getFacesContext(), selectOne);
+        getFacesContext().getResponseWriter().writeText("\n", null);
+        getFacesContext().getResponseWriter().flush();
+        
+    }
+
 } // end of class TestRenderers_3

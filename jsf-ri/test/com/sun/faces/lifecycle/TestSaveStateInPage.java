@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.31 2005/10/19 19:51:35 edburns Exp $
+ * $Id: TestSaveStateInPage.java,v 1.32 2006/03/29 22:39:45 rlubke Exp $
  */
 
 /*
@@ -53,96 +53,70 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.31 2005/10/19 19:51:35 edburns Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.32 2006/03/29 22:39:45 rlubke Exp $
  */
 
 public class TestSaveStateInPage extends JspFacesTestCase {
 
-//
-// Protected Constants
-//
-
     public static final String TEST_URI = "/greeting.jsp";
-
-
-    public String getExpectedOutputFilename() {
-        return "SaveState_correct";
-    }
-
-
     public static final String ignore[] = {
         "<form id=\"helloForm\" method=\"post\" action=\"/test/faces/greeting.jsp;jsessionid=09AF72F7E5EA209865AFFAB72D0F7B33\">"
     };
 
 
-    public String[] getLinesToIgnore() {
-        return ignore;
-    }
+    // ------------------------------------------------------------ Constructors
 
-
-    public boolean sendResponseToFile() {
-        return true;
-    }
-
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestSaveStateInPage() {
+
         super("TestRenderResponsePhase");
+
     }
 
 
     public TestSaveStateInPage(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------- Methods From FacesTestCase
+
+
+    public boolean sendResponseToFile() {
+
+        return true;
+
+    }
+
+
+    public String getExpectedOutputFilename() {
+
+        return "SaveState_correct";
+
+    }
+
+
+    public String[] getLinesToIgnore() {
+
+        return ignore;
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
 
 
     public void beginSaveStateInPage(WebRequest theRequest) {
+
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    }
 
-
-    public void testSaveStateInPage() {
-
-        boolean result = false;
-        UIComponentBase root = null;
-        String value = null;
-        Phase renderResponse = new RenderResponsePhase();
-        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        page.setId("root");
-        page.setViewId(TEST_URI);
-        getFacesContext().setViewRoot(page);
-
-        renderResponse.execute(getFacesContext());
-        assertTrue(!(getFacesContext().getRenderResponse()) &&
-                   !(getFacesContext().getResponseComplete()));
-
-        assertTrue(verifyExpectedOutput());
     }
 
 
     public void testSaveStateInClient() {
+
         // PENDING (visvan) add test case to make sure no state is saved when
         // root is marked transient.
         // precreate tree and set it in session and make sure the tree is
@@ -232,7 +206,27 @@ public class TestSaveStateInPage extends JspFacesTestCase {
         Map facetList = panel1.getFacets();
         assertTrue(!(facetList.containsKey("userName3")));
         assertTrue(facetList.containsKey("userName4"));
+
     }
 
+
+    public void testSaveStateInPage() {
+
+        boolean result = false;
+        UIComponentBase root = null;
+        String value = null;
+        Phase renderResponse = new RenderResponsePhase();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        page.setId("root");
+        page.setViewId(TEST_URI);
+        getFacesContext().setViewRoot(page);
+
+        renderResponse.execute(getFacesContext());
+        assertTrue(!(getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
+
+        assertTrue(verifyExpectedOutput());
+
+    }
 
 } // end of class TestRenderResponsePhase

@@ -1,6 +1,7 @@
+<%@ page import="javax.servlet.jsp.PageContext"%>
 <!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <html>
@@ -9,10 +10,13 @@
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 </head>
+
 <body>
 
 <%
-  pageContext.setAttribute("hello", new String("hello"), PageContext.REQUEST_SCOPE);
+    pageContext.setAttribute("hello",
+                             new String("hello"),
+                             PageContext.REQUEST_SCOPE);
 %>
 
 <h1>TLV commandButton, no lable or key</h1>
@@ -22,10 +26,10 @@ This page should FAIL.
 
 <f:view>
 
-  <p>This must have either a label or key attribute.</p>
-  <h:commandButton>
-    <h:outputText value="#{hello}"/>
-  </h:commandButton>
+    <p>This must have either a label or key attribute.</p>
+    <h:commandButton>
+        <h:outputText value="#{hello}"/>
+    </h:commandButton>
 
 </f:view>
 

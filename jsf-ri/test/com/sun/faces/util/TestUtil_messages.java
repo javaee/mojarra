@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.49 2006/03/09 17:06:25 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.50 2006/03/29 22:39:49 rlubke Exp $
  */
 
 /*
@@ -43,21 +43,10 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.49 2006/03/09 17:06:25 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.50 2006/03/29 22:39:49 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
-
-//
-// Protected Constants
-//
-
-// Class Variables
-//
-
-//
-// Instance Variables
-//
 
 
 // README - Add message info to this array as {message key, "number of params"}
@@ -163,41 +152,35 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {ToolsUtil.MANAGED_BEAN_PROPERTY_CONFIG_ERROR_ID, "2"},
     };
 
-// Attribute Instance Variables
 
-// Relationship Instance Variables
+    // ------------------------------------------------------------ Constructors
 
-//
-// Constructors and Initializers    
-//
 
     public TestUtil_messages() {
+
         super("TestUtil_messages.java");
+
     }
 
 
     public TestUtil_messages(String name) {
+
         super(name);
+
     }
 
-    //
-    // Methods from TestCase
+
+    // ---------------------------------------------------------- Public Methods
+
     
     public void setUp() {
+
         super.setUp();
         UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.setViewId("viewId");
         getFacesContext().setViewRoot(viewRoot);
 
     }
-    
-//
-// Class methods
-//
-
-//
-// General Methods
-//
 
 
     public void testVerifyMessages() {
@@ -225,42 +208,34 @@ public class TestUtil_messages extends ServletFacesTestCase {
         locale = new Locale("es", "");
         getFacesContext().getViewRoot().setLocale(locale);
         verifyParamsInMessages(messageInfo);
+
     }
 
 
     public void testVerifyToolsMessages() {
+
         System.out.println("Verifying ToolsUtil messages");
         verifyParamsInToolsMessages(toolsMessageInfo);
+
     }
 
-    private void verifyParamsInToolsMessages(String[][] messageInfo) {
-        int numParams = 0;
 
-        for (int i = 0; i < messageInfo.length; i++) {
-            System.out.println("Testing message: " + messageInfo[i][0]);
-            try {
-                numParams = Integer.parseInt(messageInfo[i][1]);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid param number specifier!");
-                assertTrue(false);
-            }
-            if (numParams == 0) {
-                String message = ToolsUtil.getMessage(messageInfo[i][0]);
-                assertTrue(message != null);
-            } else if (numParams > 0) {
-                Object[] params = generateParams(numParams);
-                String message = ToolsUtil.getMessage(messageInfo[i][0],
-                                                      params);
-                assertTrue(message != null);
-                for (int j = 0; j < params.length; j++) {
-                    assertTrue(message.indexOf((String) params[j]) != -1);
-                }
-            }
+    // --------------------------------------------------------- Private Methods
+
+
+    private Object[] generateParams(int numParams) {
+
+        Object[] params = new String[numParams];
+        for (int i = 0; i < numParams; i++) {
+            params[i] = "param_" + i;
         }
+        return params;
+
     }
 
 
     private void verifyParamsInMessages(String[][] messageInfo) {
+
         int numParams = 0;
 
         for (int i = 0; i < messageInfo.length; i++) {
@@ -284,15 +259,36 @@ public class TestUtil_messages extends ServletFacesTestCase {
                 }
             }
         }
+
     }
 
 
-    private Object[] generateParams(int numParams) {
-        Object[] params = new String[numParams];
-        for (int i = 0; i < numParams; i++) {
-            params[i] = "param_" + i;
+    private void verifyParamsInToolsMessages(String[][] messageInfo) {
+
+        int numParams = 0;
+
+        for (int i = 0; i < messageInfo.length; i++) {
+            System.out.println("Testing message: " + messageInfo[i][0]);
+            try {
+                numParams = Integer.parseInt(messageInfo[i][1]);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid param number specifier!");
+                assertTrue(false);
+            }
+            if (numParams == 0) {
+                String message = ToolsUtil.getMessage(messageInfo[i][0]);
+                assertTrue(message != null);
+            } else if (numParams > 0) {
+                Object[] params = generateParams(numParams);
+                String message = ToolsUtil.getMessage(messageInfo[i][0],
+                                                      params);
+                assertTrue(message != null);
+                for (int j = 0; j < params.length; j++) {
+                    assertTrue(message.indexOf((String) params[j]) != -1);
+                }
+            }
         }
-        return params;
+
     }
 
 } // end of class TestUtil_messages

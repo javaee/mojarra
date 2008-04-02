@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.15 2006/02/03 21:39:10 edburns Exp $
+ * $Id: ActionListenerImpl.java,v 1.16 2006/03/29 22:38:29 rlubke Exp $
  */
 
 /*
@@ -41,8 +41,8 @@ import javax.faces.el.MethodNotFoundException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.sun.faces.util.Util;
 
@@ -57,25 +57,22 @@ import com.sun.faces.util.Util;
  */
 public class ActionListenerImpl implements ActionListener {
 
-    // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.APPLICATION_LOGGER);
 
-    //
-    // Constructors and Initializers
-    //
+    // Log instance for this class
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
+                                                  + Util.APPLICATION_LOGGER);
+
+    // ------------------------------------------------------------ Constructors
+
+
     public ActionListenerImpl() {
     }
 
-    //
-    // Class Methods
-    //
+    // --------------------------------------------- Methods From ActionListener
 
-    //
-    // General Methods
-    //
 
     public void processAction(ActionEvent event) {
+
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("processAction(" + event.getComponent().getId() + ")");
         }
@@ -89,28 +86,30 @@ public class ActionListenerImpl implements ActionListener {
         String outcome = null;
         MethodBinding binding = null;
 
-	binding = actionSource.getAction();
-	if (binding != null) {
-	    try {
-		if (null != (invokeResult = binding.invoke(context, null))) {
+        binding = actionSource.getAction();
+        if (binding != null) {
+            try {
+                if (null != (invokeResult = binding.invoke(context, null))) {
                     outcome = invokeResult.toString();
                 }
                 // else, default to null, as assigned above.
-	    } catch (MethodNotFoundException e) {
+            } catch (MethodNotFoundException e) {
                 if (logger.isLoggable(Level.SEVERE)) {
                     logger.log(Level.SEVERE, e.getMessage(), e);
                 }
-		throw new FacesException
-                    (binding.getExpressionString() + ": " + e.getMessage(), e);
-	    }
-	    catch (EvaluationException e) {
+                throw new FacesException
+                      (binding.getExpressionString() + ": " + e.getMessage(),
+                       e);
+            }
+            catch (EvaluationException e) {
                 if (logger.isLoggable(Level.SEVERE)) {
                     logger.log(Level.SEVERE, e.getMessage(), e);
                 }
-		throw new FacesException
-                    (binding.getExpressionString() + ": " + e.getMessage(), e);
-	    }
-	}
+                throw new FacesException
+                      (binding.getExpressionString() + ": " + e.getMessage(),
+                       e);
+            }
+        }
 
         // Retrieve the NavigationHandler instance..
 
@@ -127,4 +126,5 @@ public class ActionListenerImpl implements ActionListener {
         context.renderResponse();
 
     }
+
 }

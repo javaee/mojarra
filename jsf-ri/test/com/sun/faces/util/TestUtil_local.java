@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_local.java,v 1.8 2005/08/22 22:11:27 ofung Exp $
+ * $Id: TestUtil_local.java,v 1.9 2006/03/29 22:39:49 rlubke Exp $
  */
 
 /*
@@ -40,49 +40,47 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_local.java,v 1.8 2005/08/22 22:11:27 ofung Exp $
+ * @version $Id: TestUtil_local.java,v 1.9 2006/03/29 22:39:49 rlubke Exp $
  */
 
 public class TestUtil_local extends TestCase {
 
-//
-// Protected Constants
-//
 
-// Class Variables
-//
+    // ------------------------------------------------------------ Constructors
 
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestUtil_local() {
+
         super("TestUtil_local.java");
+
     }
 
 
     public TestUtil_local(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void testGetLocaleFromString() {
+
+        Locale result = null;
+
+        // positive tests
+        assertNotNull(result = Util.getLocaleFromString("ps"));
+        assertNotNull(result = Util.getLocaleFromString("tg_AF"));
+        assertNotNull(result = Util.getLocaleFromString("tk_IQ-Traditional"));
+        assertNotNull(result = Util.getLocaleFromString("tk-IQ_Traditional"));
+
+    }
 
 
     public void testReplaceOccurrences() {
+
         assertTrue(((String) Util.replaceOccurrences(" ", " ", "%20")).
                    equals("%20"));
         assertTrue(((String) Util.replaceOccurrences("        ", " ", "%20")).
@@ -95,18 +93,6 @@ public class TestUtil_local extends TestCase {
                    equals("hello%20"));
         assertTrue(((String) Util.replaceOccurrences("hello hello", " ", "%20")).
                    equals("hello%20hello"));
-
-    }
-
-
-    public void testGetLocaleFromString() {
-        Locale result = null;
-
-        // positive tests
-        assertNotNull(result = Util.getLocaleFromString("ps"));
-        assertNotNull(result = Util.getLocaleFromString("tg_AF"));
-        assertNotNull(result = Util.getLocaleFromString("tk_IQ-Traditional"));
-        assertNotNull(result = Util.getLocaleFromString("tk-IQ_Traditional"));
 
     }
 

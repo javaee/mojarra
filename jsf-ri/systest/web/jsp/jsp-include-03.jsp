@@ -1,6 +1,6 @@
 <!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <%@ page contentType="text/html" language="java" %>
@@ -9,24 +9,25 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
 <f:view>
-<html>
-<head>
-<title>jsp-include-03</title>
-</head>
-<body>
-<h:outputText value="[1]"/>
-<c:choose>
-  <c:when test="${param.choose == 'a'}">
-    <jsp:include page="jstl-import-03a.jsp"/>
-  </c:when>
-  <c:when test="${param.choose == 'b'}">
-    <jsp:include page="jstl-import-03b.jsp"/>
-  </c:when>
-  <c:otherwise>
-    <jsp:include page="jstl-import-03c.jsp"/>
-  </c:otherwise>
-</c:choose>
-<h:outputText value="[3]"/>
-</body>
-</html>
+    <html>
+    <head>
+        <title>jsp-include-03</title>
+    </head>
+
+    <body>
+    <h:outputText value="[1]"/>
+    <c:choose>
+        <c:when test="${param.choose == 'a'}">
+            <jsp:include page="jstl-import-03a.jsp"/>
+        </c:when>
+        <c:when test="${param.choose == 'b'}">
+            <jsp:include page="jstl-import-03b.jsp"/>
+        </c:when>
+        <c:otherwise>
+            <jsp:include page="jstl-import-03c.jsp"/>
+        </c:otherwise>
+    </c:choose>
+    <h:outputText value="[3]"/>
+    </body>
+    </html>
 </f:view>

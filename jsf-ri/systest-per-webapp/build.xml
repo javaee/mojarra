@@ -39,7 +39,7 @@
     <!-- User local        -->
     <property file="../../build.properties"/>
     <!-- Project local     -->
-    <import file="${jsf.build.home}/common/ant/common.xml"/>   
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <!-- Construct compile classpath -->
     <path id="test.compile.classpath">
@@ -47,7 +47,7 @@
         <pathelement location="${jsf-impl.jar}"/>
         <pathelement location="${jsf.test.jar}"/>
         <path refid="compile.classpath"/>
-        <pathelement location="${basedir}/build/classes"/>       
+        <pathelement location="${basedir}/build/classes"/>
         <path refid="htmlunit.compile.classpath"/>
     </path>
 
@@ -82,9 +82,9 @@
 
 
     <target name="prepare" depends="init"
-            description="Prepare build directory">       
+            description="Prepare build directory">
 
-    </target>    
+    </target>
 
     <macrodef name="deploy.app">
         <attribute name="base-app-dir"/>
@@ -141,7 +141,7 @@
     </target>
 
     <target name="install" depends="compile.base.sources">
-        
+
         <for list="${applications}" param="app" trim="true">
             <sequential>
                 <undeploy.app appname="@{app}"/>
@@ -152,29 +152,28 @@
 
     </target>
 
-   
 
     <target name="remove">
-        
+
         <for list="${applications}" param="app" trim="true">
             <sequential>
-                <undeploy.app appname="@{app}"/>              
+                <undeploy.app appname="@{app}"/>
             </sequential>
         </for>
-        
+
     </target>
 
     <target name="clean"
             description="Clean build and distribution directories">
-        
+
         <delete dir="${basedir}/build"/>
         <for list="${applications}" param="app" trim="true">
             <sequential>
-               <delete dir="${basedir}/@{app}/build"/>
+                <delete dir="${basedir}/@{app}/build"/>
             </sequential>
         </for>
-               
-    </target>    
+
+    </target>
 
 
     <!-- ********** Test Execution Targets ************************************ -->
@@ -185,6 +184,6 @@
 
         <ant antfile="build-tests.xml" target="test"/>
 
-    </target>    
-        
+    </target>
+
 </project>

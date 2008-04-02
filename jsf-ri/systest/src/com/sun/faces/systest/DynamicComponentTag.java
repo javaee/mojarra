@@ -1,5 +1,5 @@
 /*
- * $Id: DynamicComponentTag.java,v 1.6 2005/08/22 22:10:37 ofung Exp $
+ * $Id: DynamicComponentTag.java,v 1.7 2006/03/29 22:38:49 rlubke Exp $
  */
 
 /*
@@ -34,40 +34,42 @@ import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
 
 
-/**
- * <p><code>UIComponentTag</code> for <code>ChildrenComponent</code>.</p>
- */
+/** <p><code>UIComponentTag</code> for <code>ChildrenComponent</code>.</p> */
 
 public class DynamicComponentTag extends UIComponentTag {
 
+    // -------------------------------------------------------- Methods From Tag
 
-    // -------------------------------------------------------------- Attributes
 
+    public void release() {
+
+        super.release();
+
+    }
 
     // ---------------------------------------------------------- Public Methods
 
 
     public String getComponentType() {
+
         return ("DynamicComponent");
+
     }
 
 
     public String getRendererType() {
+
         return (null);
+
     }
-
-
-    public void release() {
-        super.release();
-    }
-
 
     // ------------------------------------------------------- Protected Methods
 
 
     protected void setProperties(UIComponent component) {
-        super.setProperties(component);
-    }
 
+        super.setProperties(component);
+
+    }
 
 }

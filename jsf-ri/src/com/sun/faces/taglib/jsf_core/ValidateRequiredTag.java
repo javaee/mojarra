@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateRequiredTag.java,v 1.14 2005/08/22 22:10:27 ofung Exp $
+ * $Id: ValidateRequiredTag.java,v 1.15 2006/03/29 22:38:42 rlubke Exp $
  */
 
 /*
@@ -31,10 +31,10 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import javax.servlet.jsp.JspException;
-import javax.el.ValueExpression;
-import javax.el.ExpressionFactory;
 
 
 /**
@@ -42,46 +42,42 @@ import javax.el.ExpressionFactory;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ValidateRequiredTag.java,v 1.14 2005/08/22 22:10:27 ofung Exp $
+ * @version $Id: ValidateRequiredTag.java,v 1.15 2006/03/29 22:38:42 rlubke Exp $
  */
 
 public class ValidateRequiredTag extends ValidatorTag {
 
+
     private static final long serialVersionUID = -4925861676709072353L;
     private static ValueExpression VALIDATOR_ID_EXPR = null;
 
-//
-// Constructors and Initializers    
-//
+    // ------------------------------------------------------------ Constructors
+
 
     public ValidateRequiredTag() {
+
         super();
         if (VALIDATOR_ID_EXPR == null) {
             FacesContext context = FacesContext.getCurrentInstance();
             ExpressionFactory factory = context.getApplication().
-                    getExpressionFactory();
+                  getExpressionFactory();
             VALIDATOR_ID_EXPR =
-                factory.createValueExpression(context.getELContext(), 
-                    "javax.faces.Required", String.class);
+                  factory.createValueExpression(context.getELContext(),
+                                                "javax.faces.Required",
+                                                String.class);
         }
+
     }
 
-//
-// Class methods
-//
+    // ---------------------------------------------------------- Public Methods
 
-//
-// General Methods
-//
 
     public int doStartTag() throws JspException {
+
         super.setValidatorId(VALIDATOR_ID_EXPR);
         return super.doStartTag();
+
     }
 
-
-// 
-// Methods from ValidatorTag
-// 
 
 } // end of class ValidateRequiredTag

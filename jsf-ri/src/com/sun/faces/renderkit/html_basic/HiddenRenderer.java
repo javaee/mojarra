@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.25 2006/01/11 15:28:08 rlubke Exp $
+ * $Id: HiddenRenderer.java,v 1.26 2006/03/29 22:38:36 rlubke Exp $
  */
 
 /*
@@ -31,13 +31,13 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.MessageUtils;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
+
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>HiddenRenderer</B> is a class that renders the current value of
@@ -45,55 +45,35 @@ import java.io.IOException;
  */
 public class HiddenRenderer extends HtmlBasicInputRenderer {
 
-    //
-    // Protected Constants
-    //
+    // ------------------------------------------------------------ Constructors
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
 
     public HiddenRenderer() {
+
         super();
+
     }
 
-    //
-    // Class methods
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null || component == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+
     }
+
+    // ------------------------------------------------------- Protected Methods
 
 
     protected void getEndTextToRender(FacesContext context,
-                                      UIComponent component, String currentValue)
-        throws IOException {
+                                      UIComponent component,
+                                      String currentValue)
+          throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
@@ -109,8 +89,9 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("value", currentValue, "value");
         }
         writer.endElement("input");
+
     }
-    
+
     // The testcase for this class is TestRenderers_3.java 
 
 } // end of class HiddenRenderer

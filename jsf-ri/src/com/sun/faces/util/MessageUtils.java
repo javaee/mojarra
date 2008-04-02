@@ -31,11 +31,10 @@ import java.text.MessageFormat;
 
 /**
  * <p>This class contains all message constants and utility methods
- * for creating <code>FacesMessage</code> instances or localized 
- * <code>String</code>s for said constants.</p> 
+ * for creating <code>FacesMessage</code> instances or localized
+ * <code>String</code>s for said constants.</p>
  */
 public class MessageUtils {
-
 
     // IMPORTANT - ensure that any new message constant is properly
     // tested in test/com/sun/faces/util/TestUtil_messages (see comments
@@ -109,10 +108,10 @@ public class MessageUtils {
           "com.sun.faces.EVAL_ATTR_UNEXPECTED_TYPE";
     public static final String FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID =
           "com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR";
+    public static final String FACES_CONTEXT_NOT_FOUND_ID =
+          "com.sun.faces.FACES_CONTEXT_NOT_FOUND";
     public static final String FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED_ID =
           "com.sun.faces.FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED";
-    public static final String FACES_CONTEXT_NOT_FOUND_ID=
-          "com.sun.faces.FACES_CONTEXT_NOT_FOUND";
     public static final String FILE_NOT_FOUND_ERROR_MESSAGE_ID =
           "com.sun.faces.FILE_NOT_FOUND";
     public static final String ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID =
@@ -220,24 +219,24 @@ public class MessageUtils {
     public static final String VALUE_NOT_SELECT_ITEM_ID =
           "com.sun.faces.OPTION_NOT_SELECT_ITEM";
 
-
     // ------------------------------------------------------------ Constructors
 
 
-    private MessageUtils() {}
-
+    private MessageUtils() {
+    }
 
     // ---------------------------------------------------------- Public Methods
-    
+
 
     /**
      * <p>Creates a new <code>FacesMessage</code> instance using the
      * specified #messageId.</p>
-     * 
+     *
      * @param messageId the message ID
-     * @param params an array of substitution parameters
+     * @param params    an array of substitution parameters
+     *
      * @return a new <code>FacesMessage</code> based on the provided
-     *  <code>messageId</code>
+     *         <code>messageId</code>
      */
     public static synchronized FacesMessage getExceptionMessage(
           String messageId,
@@ -245,17 +244,18 @@ public class MessageUtils {
 
         return MessageFactory.getMessage(messageId, params);
 
-    }    
+    }
 
 
     /**
-     * <p>Returns the localized message for the specified 
+     * <p>Returns the localized message for the specified
      * #messageId.</p>
-     * 
+     *
      * @param messageId the message ID
-     * @param params an array of substitution parameters
-     * @return the localized message for the specified 
-     *  <code>messageId</code>
+     * @param params    an array of substitution parameters
+     *
+     * @return the localized message for the specified
+     *         <code>messageId</code>
      */
     public static synchronized String getExceptionMessageString(
           String messageId,

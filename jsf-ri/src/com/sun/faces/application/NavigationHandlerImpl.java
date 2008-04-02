@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.44 2006/01/11 15:28:02 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.45 2006/03/29 22:38:30 rlubke Exp $
  */
 
 /*
@@ -29,12 +29,6 @@
 
 package com.sun.faces.application;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
@@ -44,47 +38,40 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.sun.faces.config.ConfigureListener;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
  * default navigation handling. Refer to section 7.4.2 of the specification for
  * more details.
- * PENDING: Make independent of ApplicationAssociate. 
+ * PENDING: Make independent of ApplicationAssociate.
  */
 
 public class NavigationHandlerImpl extends NavigationHandler {
-
-    //
-    // Protected Constants
-    //
 
     // Log instance for this class
     private static Logger logger = Util.getLogger(Util.FACES_LOGGER
                                                   + Util.APPLICATION_LOGGER);
 
-    //
-    // Class Variables
-    //
-
-    // Instance Variables
-
-    /**
-     * <code>Map</code> containing configured navigation cases.
-     */
+    /** <code>Map</code> containing configured navigation cases. */
     private Map<String, List<ConfigNavigationCase>> caseListMap;
 
-    /**
-     * <code>Set</code> containing wildcard navigation cases.
-     */
+    /** <code>Set</code> containing wildcard navigation cases. */
     private Set<String> wildCardSet;
 
-    /**
-     * Flag indicating navigation cases properly consumed and available.
-     */
+    /** Flag indicating navigation cases properly consumed and available. */
     private boolean navigationConfigured;
+
+    // ------------------------------------------------------------ Constructors
+
 
     /**
      * This constructor uses the current <code>Application</code>
@@ -92,6 +79,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * navigational decisions.
      */
     public NavigationHandlerImpl() {
+
         super();
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created NavigationHandler instance ");
@@ -110,7 +98,10 @@ public class NavigationHandlerImpl extends NavigationHandler {
             navigationConfigured = (wildCardSet != null &&
                                     caseListMap != null);
         }
+
     }
+
+    // ---------------------------------------------------------- Public Methods
 
 
     /**
@@ -124,18 +115,19 @@ public class NavigationHandlerImpl extends NavigationHandler {
      */
     public void handleNavigation(FacesContext context, String fromAction,
                                  String outcome) {
+
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " context " + context;
             throw new NullPointerException(message);
         }
         if (outcome == null) {
-           if (logger.isLoggable(Level.FINE)) {
-               logger.fine("No navigation rule found for outcome "
-                           + outcome + "and viewId " +
-                           context.getViewRoot().getViewId() +
-                           " Explicitly remain on the current view ");
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("No navigation rule found for outcome "
+                            + outcome + "and viewId " +
+                            context.getViewRoot().getViewId() +
+                            " Explicitly remain on the current view ");
             }
             return; // Explicitly remain on the current view
         }
@@ -148,7 +140,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             if (caseStruct.navCase.hasRedirect()) {
                 // perform a 302 redirect.
                 String newPath =
-                    viewHandler.getActionURL(context, caseStruct.viewId);
+                      viewHandler.getActionURL(context, caseStruct.viewId);
                 try {
                     if (logger.isLoggable(Level.FINE)) {
                         logger.fine("Redirecting to path " + newPath
@@ -158,15 +150,15 @@ public class NavigationHandlerImpl extends NavigationHandler {
                     extContext.redirect(newPath);
                 } catch (java.io.IOException ioe) {
                     if (logger.isLoggable(Level.SEVERE)) {
-                        logger.log(Level.SEVERE,"jsf.redirect_failed_error",
+                        logger.log(Level.SEVERE, "jsf.redirect_failed_error",
                                    newPath);
                     }
                     throw new FacesException(ioe.getMessage(), ioe);
                 }
                 context.responseComplete();
-               if (logger.isLoggable(Level.FINE)) {
-                   logger.fine("Response complete for " + caseStruct.viewId);
-               }
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Response complete for " + caseStruct.viewId);
+                }
             } else {
                 UIViewRoot newRoot = viewHandler.createView(context,
                                                             caseStruct.viewId);
@@ -177,45 +169,105 @@ public class NavigationHandlerImpl extends NavigationHandler {
                 }
             }
         }
+
+    }
+
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * This method will attempt to find the <code>view</code> identifier based on action reference
+     * and outcome.  Refer to section 7.4.2 of the specification for more details.
+     *
+     * @param caseList   The list of navigation cases.
+     * @param fromAction The action reference string.
+     * @param outcome    The outcome string.
+     *
+     * @return The <code>view</code> identifier.
+     */
+
+
+    private CaseStruct determineViewFromActionOutcome(
+          List<ConfigNavigationCase> caseList,
+          String fromAction,
+          String outcome) {
+
+        CaseStruct result = new CaseStruct();
+        for (ConfigNavigationCase cnc : caseList) {
+            String cncFromAction = cnc.getFromAction();
+            String fromOutcome = cnc.getFromOutcome();
+            String toViewId = cnc.getToViewId();
+            if ((cncFromAction != null) && (fromOutcome != null)) {
+                if ((cncFromAction.equals(fromAction)) &&
+                    (fromOutcome.equals(outcome))) {
+                    result.viewId = toViewId;
+                    result.navCase = cnc;
+                    return result;
+                }
+            }
+
+            if ((cncFromAction == null) && (fromOutcome != null)) {
+                if (fromOutcome.equals(outcome)) {
+                    result.viewId = toViewId;
+                    result.navCase = cnc;
+                    return result;
+                }
+            }
+
+            if ((cncFromAction != null) && (fromOutcome == null)) {
+                if (cncFromAction.equals(fromAction)) {
+                    result.viewId = toViewId;
+                    result.navCase = cnc;
+                    return result;
+                }
+            }
+
+            if ((cncFromAction == null) && (fromOutcome == null)) {
+                result.viewId = toViewId;
+                result.navCase = cnc;
+                return result;
+            }
+        }
+
+        return null;
+
     }
 
 
     /**
-     * This method uses helper methods to determine the new <code>view</code> identifier.
+     * This method will extract the cases for which a <code>from-view-id</code> is
+     * an asterisk "*".
      * Refer to section 7.4.2 of the specification for more details.
      *
-     * @param context    The Faces Context
-     * @param fromAction The action reference string
-     * @param outcome    The outcome string
+     * @param fromAction The action reference string.
+     * @param outcome    The outcome string.
+     *
      * @return The <code>view</code> identifier.
      */
-    private CaseStruct getViewId(FacesContext context, String fromAction,
-                                 String outcome) {
-        String viewId = context.getViewRoot().getViewId();
-        CaseStruct caseStruct;
 
-        caseStruct = findExactMatch(viewId, fromAction, outcome);
+    private CaseStruct findDefaultMatch(String fromAction,
+                                        String outcome) {
 
-        if (caseStruct == null) {
-            caseStruct = findWildCardMatch(viewId, fromAction, outcome);
+        // if the user has elected to replace the Application instance
+        // entirely
+        if (!navigationConfigured) {
+            return null;
         }
 
-        if (caseStruct == null) {
-            caseStruct = findDefaultMatch(fromAction, outcome);
+        List<ConfigNavigationCase> caseList = caseListMap.get("*");
+
+        if (caseList == null) {
+            return null;
         }
 
-         if (caseStruct == null && logger.isLoggable(Level.WARNING)) {
-            if (fromAction == null) {
-                logger.log(Level.WARNING,
-                           "jsf.navigation.no_matching_outcome",
-                           new Object[] {viewId, outcome});
-            } else {
-                logger.log(Level.WARNING,
-                           "jsf.navigation.no_matching_outcome_action",
-                           new Object[] {viewId, outcome, fromAction});
-            }
-        }
-        return caseStruct;
+        // We need to evaluate from-action/outcome in the follow
+        // order:  1)elements specifying both from-action and from-outcome
+        // 2) elements specifying only from-outcome
+        // 3) elements specifying only from-action
+        // 4) elements where both from-action and from-outcome are null
+
+        return determineViewFromActionOutcome(caseList, fromAction, outcome);
+
     }
 
 
@@ -228,6 +280,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @param viewId     The current <code>view</code> identifier.
      * @param fromAction The action reference string.
      * @param outcome    The outcome string.
+     *
      * @return The <code>view</code> identifier.
      */
 
@@ -256,6 +309,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
 
         return determineViewFromActionOutcome(caseList, fromAction, outcome);
+
     }
 
 
@@ -267,12 +321,14 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @param viewId     The current <code>view</code> identifier.
      * @param fromAction The action reference string.
      * @param outcome    The outcome string.
+     *
      * @return The <code>view</code> identifier.
      */
 
     private CaseStruct findWildCardMatch(String viewId,
                                          String fromAction,
                                          String outcome) {
+
         CaseStruct result = null;
 
         // if the user has elected to replace the Application instance
@@ -315,102 +371,58 @@ public class NavigationHandlerImpl extends NavigationHandler {
             }
         }
         return result;
+
     }
 
 
     /**
-     * This method will extract the cases for which a <code>from-view-id</code> is
-     * an asterisk "*".
+     * This method uses helper methods to determine the new <code>view</code> identifier.
      * Refer to section 7.4.2 of the specification for more details.
      *
-     * @param fromAction The action reference string.
-     * @param outcome    The outcome string.
-     * @return The <code>view</code> identifier.
-     */
-
-    private CaseStruct findDefaultMatch(String fromAction,
-                                        String outcome) {
-        // if the user has elected to replace the Application instance
-        // entirely
-        if (!navigationConfigured) {
-            return null;
-        }
-
-        List<ConfigNavigationCase> caseList = caseListMap.get("*");
-
-        if (caseList == null) {
-            return null;
-        }
-
-        // We need to evaluate from-action/outcome in the follow
-        // order:  1)elements specifying both from-action and from-outcome
-        // 2) elements specifying only from-outcome
-        // 3) elements specifying only from-action
-        // 4) elements where both from-action and from-outcome are null
-
-        return determineViewFromActionOutcome(caseList, fromAction, outcome);
-    }
-
-
-    /**
-     * This method will attempt to find the <code>view</code> identifier based on action reference
-     * and outcome.  Refer to section 7.4.2 of the specification for more details.
+     * @param context    The Faces Context
+     * @param fromAction The action reference string
+     * @param outcome    The outcome string
      *
-     * @param caseList   The list of navigation cases.
-     * @param fromAction The action reference string.
-     * @param outcome    The outcome string.
      * @return The <code>view</code> identifier.
      */
+    private CaseStruct getViewId(FacesContext context, String fromAction,
+                                 String outcome) {
 
+        String viewId = context.getViewRoot().getViewId();
+        CaseStruct caseStruct;
 
-    private CaseStruct determineViewFromActionOutcome(List<ConfigNavigationCase> caseList,
-                                                      String fromAction,
-                                                      String outcome) {
+        caseStruct = findExactMatch(viewId, fromAction, outcome);
 
-        CaseStruct result = new CaseStruct();
-        for (ConfigNavigationCase cnc : caseList) {
-            String cncFromAction = cnc.getFromAction();
-            String fromOutcome = cnc.getFromOutcome();
-            String toViewId = cnc.getToViewId();
-            if ((cncFromAction != null) && (fromOutcome != null)) {
-                if ((cncFromAction.equals(fromAction)) &&
-                    (fromOutcome.equals(outcome))) {
-                    result.viewId = toViewId;
-                    result.navCase = cnc;
-                    return result;
-                }
-            }
-
-             if ((cncFromAction == null) && (fromOutcome != null)) {
-                if (fromOutcome.equals(outcome)) {
-                    result.viewId = toViewId;
-                    result.navCase = cnc;
-                    return result;
-                }
-            }
-
-            if ((cncFromAction != null) && (fromOutcome == null)) {
-                if (cncFromAction.equals(fromAction)) {
-                    result.viewId = toViewId;
-                    result.navCase = cnc;
-                    return result;
-                }
-            }
-
-            if ((cncFromAction == null) && (fromOutcome == null)) {
-                result.viewId = toViewId;
-                result.navCase = cnc;
-                return result;
-            }
+        if (caseStruct == null) {
+            caseStruct = findWildCardMatch(viewId, fromAction, outcome);
         }
 
-        return null;
+        if (caseStruct == null) {
+            caseStruct = findDefaultMatch(fromAction, outcome);
+        }
+
+        if (caseStruct == null && logger.isLoggable(Level.WARNING)) {
+            if (fromAction == null) {
+                logger.log(Level.WARNING,
+                           "jsf.navigation.no_matching_outcome",
+                           new Object[]{viewId, outcome});
+            } else {
+                logger.log(Level.WARNING,
+                           "jsf.navigation.no_matching_outcome_action",
+                           new Object[]{viewId, outcome, fromAction});
+            }
+        }
+        return caseStruct;
+
     }
 
 
     private static class CaseStruct {
-        String viewId;
+
+
         ConfigNavigationCase navCase;
+        String viewId;
+
     }
 
 }

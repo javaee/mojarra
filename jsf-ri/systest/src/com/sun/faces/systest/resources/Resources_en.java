@@ -33,18 +33,24 @@ import java.util.ListResourceBundle;
 
 public class Resources_en extends ListResourceBundle {
 
+    // ------------------------------------------------------------ Constructors
+
+
     public Resources_en() {
     }
 
+    // ------------------------------------------------------- Protected Methods
 
-    /**
-     * See class description.
-     */
+
+    /** See class description. */
     protected Object[][] getContents() {
+
         return new Object[][]{
-            {"button_key", "RES-BUNDLE KEY"},
-            {"image_key", "resbundle_image.gif"},
-            {"hyperlink_key", "RES-BUNDLE LINK"}
+              {"button_key", "RES-BUNDLE KEY"},
+              {"image_key", "resbundle_image.gif"},
+              {"hyperlink_key", "RES-BUNDLE LINK"}
         };
+
     }
+
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: MaxMinValidatorTag.java,v 1.7 2005/08/22 22:10:25 ofung Exp $
+ * $Id: MaxMinValidatorTag.java,v 1.8 2006/03/29 22:38:41 rlubke Exp $
  */
 
 /*
@@ -36,53 +36,16 @@ package com.sun.faces.taglib.jsf_core;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MaxMinValidatorTag.java,v 1.7 2005/08/22 22:10:25 ofung Exp $
+ * @version $Id: MaxMinValidatorTag.java,v 1.8 2006/03/29 22:38:41 rlubke Exp $
  */
 
 public abstract class MaxMinValidatorTag extends ValidatorTag {
 
-//
-// Protected Constants
-//
-
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-    /**
-     * <p>Flag indicating whether a maximum limit has been set.</p>
-     */
+    /** <p>Flag indicating whether a maximum limit has been set.</p> */
     protected boolean maximumSet = false;
 
-    /**
-     * <p>Flag indicating whether a minimum limit has been set.</p>
-     */
+    /** <p>Flag indicating whether a minimum limit has been set.</p> */
     protected boolean minimumSet = false;
-
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
-
-//
-// Class methods
-//
-
-//
-// General Methods
-//
-
-// 
-// Methods from ValidatorTag
-// 
 
 
 } // end of class MaxMinValidatorTag

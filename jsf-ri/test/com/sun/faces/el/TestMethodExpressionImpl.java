@@ -1,5 +1,5 @@
 /*
- * $Id: TestMethodExpressionImpl.java,v 1.5 2005/10/19 19:51:32 edburns Exp $
+ * $Id: TestMethodExpressionImpl.java,v 1.6 2006/03/29 22:39:42 rlubke Exp $
  */
 
 /*
@@ -41,68 +41,38 @@ import javax.faces.el.PropertyNotFoundException;
  * <B>TestMethodRef </B> is a class ... <p/><B>Lifetime And Scope </B>
  * <P>
  * 
- * @version $Id: TestMethodExpressionImpl.java,v 1.5 2005/10/19 19:51:32 edburns Exp $
+ * @version $Id: TestMethodExpressionImpl.java,v 1.6 2006/03/29 22:39:42 rlubke Exp $
  */
 
 public class TestMethodExpressionImpl extends ServletFacesTestCase
 {
 
-    //
-    // Protected Constants
-    //
 
-    //
-    // Class Variables
-    //
+    // ------------------------------------------------------------ Constructors
 
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers
-    //
 
     public TestMethodExpressionImpl()
     {
+
         super("TestMethodExpression");
+
     }
+
 
     public TestMethodExpressionImpl(String name)
     {
+
         super(name);
+
     }
 
-    //
-    // Class methods
-    //
 
-    //
-    // General Methods
-    //
-    protected MethodExpression create(String ref, Class[] params) throws Exception
-    {
-        return (getFacesContext().getApplication().getExpressionFactory().
-            createMethodExpression(getFacesContext().getELContext(),ref, null, params));
-    }
-    
-    public void testNullReference() throws Exception
-    {
-        try
-        {
-            create(null, null);
-            fail();
-        }
-        catch (NullPointerException npe) {}
-        catch (Exception e) { fail("Should have thrown an NPE"); };
-    }
-    
+    // ---------------------------------------------------------- Public Methods
+
+
     public void testInvalidMethod() throws Exception
     {
+
         try
         {
             create("${foo > 1}", null);
@@ -112,23 +82,13 @@ public class TestMethodExpressionImpl extends ServletFacesTestCase
             fail("Should have thrown a NullPointerException"); 
         }
         catch (NullPointerException npe) { }
+
     }
-    
-    public void testLiteralReference() throws Exception
-    {
-        boolean exceptionThrown = false;
-        try
-        {
-            create("some.method", null);
-        }
-        catch (NullPointerException ee) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-    }
+
 
     public void testInvalidTrailing() throws Exception
     {
+
         MethodExpression mb = this.create(
                 "#{NewCustomerFormHandler.redLectroidsMmmm}", new Class[0]);
 
@@ -158,6 +118,49 @@ public class TestMethodExpressionImpl extends ServletFacesTestCase
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
+
+    }
+
+
+    public void testLiteralReference() throws Exception
+    {
+
+        boolean exceptionThrown = false;
+        try
+        {
+            create("some.method", null);
+        }
+        catch (NullPointerException ee) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+    }
+
+
+    public void testNullReference() throws Exception
+    {
+
+        try
+        {
+            create(null, null);
+            fail();
+        }
+        catch (NullPointerException npe) {}
+        catch (Exception e) { fail("Should have thrown an NPE"); };
+
+    }
+
+
+    // ------------------------------------------------------- Protected Methods
+
+
+    protected MethodExpression create(String ref, Class[] params) throws Exception
+    {
+
+        return (getFacesContext().getApplication().getExpressionFactory().
+            createMethodExpression(getFacesContext().getELContext(),ref, null, params));
+
     }
 
 } // end of class TestMethodRef

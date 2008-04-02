@@ -1,6 +1,6 @@
 
 /*
- * $Id: TestStateManagerImpl.java,v 1.16 2006/03/14 16:33:30 edburns Exp $
+ * $Id: TestStateManagerImpl.java,v 1.17 2006/03/29 22:39:37 rlubke Exp $
  */
 
 /*
@@ -54,21 +54,64 @@ import org.apache.cactus.WebRequest;
 public class TestStateManagerImpl extends ServletFacesTestCase {
 
 
-    //
-    // Constructors/Initializers
-    //
+    // ------------------------------------------------------------ Constructors
+
+
     public TestStateManagerImpl() {
+
         super("TestStateManagerImpl");
+
     }
 
 
     public TestStateManagerImpl(String name) {
+
         super(name);
+
     }
-    
-    //
-    // Test Methods
-    //
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public static void resetStateManagerRequestIdSerialNumber(FacesContext context) {
+
+	//((StateManagerImpl) Util.getStateManager(context)).requestIdSerial = 0;
+        StateManagerImpl stateManager = 
+              ((StateManagerImpl) Util.getStateManager(context));
+        TestingUtil.setPrivateField("reqeustIdSerial",
+                                    Integer.TYPE,
+                                    stateManager,
+                                    0);
+
+    }
+
+
+    public void beginMultiWindowSaveServer(WebRequest theRequest) {
+
+        theRequest.addParameter("javax.faces.ViewState", "j_id1:j_id2");
+
+    }
+
+
+    public void testDuplicateIdDetectionClient() throws Exception {
+
+        StateManagerImpl wrapper =
+            new StateManagerImpl() {
+
+
+                public boolean isSavingStateInClient(FacesContext context) {
+
+                    return true;
+
+                }
+
+            };
+        getFacesContext().getApplication().setStateManager(wrapper);
+        testDuplicateIdDetectionServer();
+
+    }
+
     
     // Verify saveSerializedView() throws IllegalStateException
     // if duplicate component id's are detected on non-transient 
@@ -217,42 +260,22 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
+
     }
 
-
-    public void testDuplicateIdDetectionClient() throws Exception {
-        StateManagerImpl wrapper =
-            new StateManagerImpl() {
-                public boolean isSavingStateInClient(FacesContext context) {
-                    return true;
-                }
-            };
-        getFacesContext().getApplication().setStateManager(wrapper);
-        testDuplicateIdDetectionServer();
-    }
-
-    public static void resetStateManagerRequestIdSerialNumber(FacesContext context) {
-	//((StateManagerImpl) Util.getStateManager(context)).requestIdSerial = 0;
-        StateManagerImpl stateManager = 
-              ((StateManagerImpl) Util.getStateManager(context));
-        TestingUtil.setPrivateField("reqeustIdSerial",
-                                    Integer.TYPE,
-                                    stateManager,
-                                    0);
-        
-	
-    }
-    
-    public void beginMultiWindowSaveServer(WebRequest theRequest) {
-        theRequest.addParameter("javax.faces.ViewState", "j_id1:j_id2");
-    }
 
     public void testMultiWindowSaveServer() throws Exception {
+
         StateManagerImpl wrapper =
             new StateManagerImpl() {
+
+
                 public boolean isSavingStateInClient(FacesContext context) {
+
                     return false;
+
                 }
+
             };
         getFacesContext().getApplication().setStateManager(wrapper);
         
@@ -310,8 +333,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         assertNotNull(getFacesContext().getExternalContext().getRequestMap().get(RIConstants.LOGICAL_VIEW_MAP));
         assertEquals(getFacesContext().getExternalContext().getRequestMap().get(RIConstants.LOGICAL_VIEW_MAP), 
                      "j_id1");
-        
-        
+
     }
     
 }

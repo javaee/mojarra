@@ -1,5 +1,5 @@
 /*
- * $Id: NamingTag.java,v 1.5 2005/08/22 22:10:37 ofung Exp $
+ * $Id: NamingTag.java,v 1.6 2006/03/29 22:38:50 rlubke Exp $
  */
 
 /*
@@ -40,24 +40,20 @@ import javax.faces.webapp.UIComponentTag;
 
 public class NamingTag extends UIComponentTag {
 
-
-    // -------------------------------------------------------------- Attributes
-
-
     // ---------------------------------------------------------- Public Methods
 
 
     public String getComponentType() {
+
         return ("NamingContainer");
+
     }
 
 
     public String getRendererType() {
+
         return (null);
+
     }
-
-
-    // ------------------------------------------------------- Protected Methods
-
 
 }

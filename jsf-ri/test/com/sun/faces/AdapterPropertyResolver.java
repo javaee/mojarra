@@ -1,5 +1,5 @@
 /*
- * $Id: AdapterPropertyResolver.java,v 1.7 2005/08/22 22:11:04 ofung Exp $
+ * $Id: AdapterPropertyResolver.java,v 1.8 2006/03/29 22:39:32 rlubke Exp $
  */
 
 /*
@@ -37,64 +37,91 @@ import javax.faces.el.PropertyResolver;
 
 public class AdapterPropertyResolver extends PropertyResolver {
 
-    public AdapterPropertyResolver(PropertyResolver root) {
-        this.root = root;
-    }
-
-
-    public PropertyResolver getRoot() {
-        return root;
-    }
-
 
     private PropertyResolver root;
 
 
-    public Object getValue(Object base, Object name)
-        throws EvaluationException, PropertyNotFoundException {
-        return root.getValue(base, name);
+    // ------------------------------------------------------------ Constructors
+
+
+    public AdapterPropertyResolver(PropertyResolver root) {
+
+        this.root = root;
+
     }
 
 
-    public Object getValue(Object base, int index)
-        throws EvaluationException, PropertyNotFoundException {
-        return root.getValue(base, index);
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
-    public void setValue(Object base, Object name, Object value)
-        throws EvaluationException, PropertyNotFoundException {
-        root.setValue(base, name, value);
-    }
+    public PropertyResolver getRoot() {
 
+        return root;
 
-    public void setValue(Object base, int index, Object value)
-        throws EvaluationException, PropertyNotFoundException {
-        root.setValue(base, index, value);
-    }
-
-
-    public boolean isReadOnly(Object base, Object name)
-        throws PropertyNotFoundException {
-        return root.isReadOnly(base, name);
-    }
-
-
-    public boolean isReadOnly(Object base, int index)
-        throws PropertyNotFoundException {
-        return root.isReadOnly(base, index);
-    }
-
-
-    public Class getType(Object base, Object name)
-        throws PropertyNotFoundException {
-        return root.getType(base, name);
     }
 
 
     public Class getType(Object base, int index)
         throws PropertyNotFoundException {
+
         return root.getType(base, index);
+
+    }
+
+
+    public Class getType(Object base, Object name)
+        throws PropertyNotFoundException {
+
+        return root.getType(base, name);
+
+    }
+
+
+    public Object getValue(Object base, int index)
+        throws EvaluationException, PropertyNotFoundException {
+
+        return root.getValue(base, index);
+
+    }
+
+
+    public Object getValue(Object base, Object name)
+        throws EvaluationException, PropertyNotFoundException {
+
+        return root.getValue(base, name);
+
+    }
+
+
+    public boolean isReadOnly(Object base, int index)
+        throws PropertyNotFoundException {
+
+        return root.isReadOnly(base, index);
+
+    }
+
+
+    public boolean isReadOnly(Object base, Object name)
+        throws PropertyNotFoundException {
+
+        return root.isReadOnly(base, name);
+
+    }
+
+
+    public void setValue(Object base, int index, Object value)
+        throws EvaluationException, PropertyNotFoundException {
+
+        root.setValue(base, index, value);
+
+    }
+
+
+    public void setValue(Object base, Object name, Object value)
+        throws EvaluationException, PropertyNotFoundException {
+
+        root.setValue(base, name, value);
+
     }
 
 }

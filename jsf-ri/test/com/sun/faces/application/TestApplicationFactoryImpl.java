@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationFactoryImpl.java,v 1.9 2005/10/19 19:51:28 edburns Exp $
+ * $Id: TestApplicationFactoryImpl.java,v 1.10 2006/03/29 22:39:34 rlubke Exp $
  */
 
 /*
@@ -41,49 +41,55 @@ import javax.faces.application.Application;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationFactoryImpl.java,v 1.9 2005/10/19 19:51:28 edburns Exp $
+ * @version $Id: TestApplicationFactoryImpl.java,v 1.10 2006/03/29 22:39:34 rlubke Exp $
  */
 
 public class TestApplicationFactoryImpl extends JspFacesTestCase {
 
-//
-// Protected Constants
-//
 
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
     private ApplicationFactoryImpl applicationFactory = null;
 
-// Attribute Instance Variables
 
-// Relationship Instance Variables
+    // ------------------------------------------------------------ Constructors
 
-//
-// Constructors and Initializers    
-//
 
     public TestApplicationFactoryImpl() {
+
         super("TestApplicationFactoryImpl");
+
     }
 
 
     public TestApplicationFactoryImpl(String name) {
-        super(name);
-    }
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+        super(name);
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void testExceptions() {
+
+        applicationFactory = new ApplicationFactoryImpl();
+
+        // 1. Verify NullPointer exception which occurs when attempting
+        //    to add a null Application
+        //
+        boolean thrown = false;
+        try {
+            applicationFactory.setApplication(null);
+        } catch (NullPointerException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+    }
+
 
     public void testFactory() {
+
         applicationFactory = new ApplicationFactoryImpl();
 	com.sun.faces.config.StoreServletContext storeSC = 
 	    new com.sun.faces.config.StoreServletContext();
@@ -106,10 +112,12 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
         applicationFactory.setApplication(application3);
         Application application4 = applicationFactory.getApplication();
         assertTrue(application3 == application4);
+
     }
 
 
     public void testSpecCompliance() {
+
         applicationFactory = new ApplicationFactoryImpl();
 	com.sun.faces.config.StoreServletContext storeSC = 
 	    new com.sun.faces.config.StoreServletContext();
@@ -117,23 +125,7 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
 	ApplicationAssociate.clearInstance(storeSC.getServletContextWrapper());
 
         assertTrue(null != applicationFactory.getApplication());
+
     }
-
-
-    public void testExceptions() {
-        applicationFactory = new ApplicationFactoryImpl();
-
-        // 1. Verify NullPointer exception which occurs when attempting
-        //    to add a null Application
-        //
-        boolean thrown = false;
-        try {
-            applicationFactory.setApplication(null);
-        } catch (NullPointerException e) {
-            thrown = true;
-        }
-        assertTrue(thrown);
-    }
-
 
 } // end of class TestApplicationFactoryImpl

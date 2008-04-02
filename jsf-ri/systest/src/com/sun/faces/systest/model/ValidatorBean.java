@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBean.java,v 1.2 2005/08/22 22:10:43 ofung Exp $
+ * $Id: ValidatorBean.java,v 1.3 2006/03/29 22:38:53 rlubke Exp $
  */
 
 /*
@@ -29,61 +29,98 @@
 
 package com.sun.faces.systest.model;
 
-import com.sun.faces.systest.TestValidator01;
-
-import javax.faces.event.AbortProcessingException;
 import javax.faces.validator.Validator;
+
+import com.sun.faces.systest.TestValidator01;
 
 
 public class ValidatorBean extends Object {
 
+
+    private Validator doubleValidator = null;
+
+    private Validator lengthValidator = null;
+
+    private Validator longRangeValidator = null;
+
+    private Validator validator = null;
+
+    // ------------------------------------------------------------ Constructors
+
+
     public ValidatorBean() {
     }
 
-    private Validator validator = null;
-    public Validator getValidator() {
-        if (validator == null) {
-            return new TestValidator01();
-        }
-        return validator;
-    }
-    public void setValidator(Validator validator) {
-        this.validator = validator;
-    }
+    // ---------------------------------------------------------- Public Methods
 
-    private Validator doubleValidator = null;
+
     public Validator getDoubleValidator() {
+
         if (doubleValidator == null) {
             return new javax.faces.validator.DoubleRangeValidator();
         }
         return doubleValidator;
-    }
-    public void setDoubleValidator(Validator doubleValidator) {
-        this.doubleValidator = doubleValidator;
+
     }
 
-    private Validator lengthValidator = null;
+
+    public void setDoubleValidator(Validator doubleValidator) {
+
+        this.doubleValidator = doubleValidator;
+
+    }
+
+
     public Validator getLengthValidator() {
+
 //        if (lengthValidator == null) {
 //System.out.println("RETURN VAL INSTANCE..");
 //            return new javax.faces.validator.LengthValidator();
 //        }
         return lengthValidator;
-    }
-    public void setLengthValidator(Validator lengthValidator) {
-        this.lengthValidator = lengthValidator;
-System.out.println("SET VAL INSTANCE..");
+
     }
 
-    private Validator longRangeValidator = null;
+
     public Validator getLongRangeValidator() {
+
         if (longRangeValidator == null) {
             return new javax.faces.validator.LongRangeValidator();
         }
         return longRangeValidator;
+
     }
+
+
     public void setLongRangeValidator(Validator longRangeValidator) {
+
         this.longRangeValidator = longRangeValidator;
+
+    }
+
+
+    public Validator getValidator() {
+
+        if (validator == null) {
+            return new TestValidator01();
+        }
+        return validator;
+
+    }
+
+
+    public void setValidator(Validator validator) {
+
+        this.validator = validator;
+
+    }
+
+
+    public void setLengthValidator(Validator lengthValidator) {
+
+        this.lengthValidator = lengthValidator;
+        System.out.println("SET VAL INSTANCE..");
+
     }
 
 }

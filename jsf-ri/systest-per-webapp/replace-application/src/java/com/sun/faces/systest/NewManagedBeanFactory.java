@@ -1,5 +1,5 @@
 /*
- * $Id: NewManagedBeanFactory.java,v 1.1 2005/08/24 16:13:35 edburns Exp $
+ * $Id: NewManagedBeanFactory.java,v 1.2 2006/03/29 22:39:21 rlubke Exp $
  */
 
 /*
@@ -32,24 +32,32 @@ package com.sun.faces.systest;
 import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.spi.ManagedBeanFactoryWrapper;
 
-/**
- *
- * @author edburns
- */
+/** @author edburns */
 public class NewManagedBeanFactory extends ManagedBeanFactoryWrapper {
-    
-    private ManagedBeanFactory parent = null;
-    
+
+
     public static ManagedBeanFactory mostRecentMBF = null;
-    
+
+    private ManagedBeanFactory parent = null;
+
+    // ------------------------------------------------------------ Constructors
+
+
     /** Creates a new instance of NewManagedBeanFactory */
     public NewManagedBeanFactory(ManagedBeanFactory old) {
+
         this.parent = old;
         mostRecentMBF = this;
+
     }
-    
+
+    // ---------------------------------------------------------- Public Methods
+
+
     public ManagedBeanFactory getWrapped() {
+
         return parent;
+
     }
-    
+
 }

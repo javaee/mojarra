@@ -3,26 +3,31 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: commandButton_test.jsp,v 1.7 2004/05/13 01:06:22 jvisvanathan Exp $ --%>
+<%-- $Id: commandButton_test.jsp,v 1.8 2006/03/29 22:39:13 rlubke Exp $ --%>
 <html>
 <head>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <title>commandButton_test.jsp</title>
 </head>
+
 <body>
-    
-    <f:loadBundle basename="com.sun.faces.systest.resources.Resources" 
-        var="messageBundle"/>
-    <f:view locale="en_US">
-      <h:form id="form01">
+
+<f:loadBundle basename="com.sun.faces.systest.resources.Resources"
+              var="messageBundle"/>
+<f:view locale="en_US">
+    <h:form id="form01">
         <h:commandButton id="button01" type="submit" value="My Label"/>
-        <h:commandButton id="button02" type="reset" value="#{test1.stringProperty}"/>
-        <h:commandButton id="button03" type="submit" value="#{messageBundle.button_key}"/>
-        <h:commandButton id="button04" type="reset" image="duke.gif" value="FAIL"/>
-        <h:commandButton id="button05" type="submit" image="#{messageBundle.image_key}"/>
-      </h:form>
-    </f:view>
+        <h:commandButton id="button02" type="reset"
+                         value="#{test1.stringProperty}"/>
+        <h:commandButton id="button03" type="submit"
+                         value="#{messageBundle.button_key}"/>
+        <h:commandButton id="button04" type="reset" image="duke.gif"
+                         value="FAIL"/>
+        <h:commandButton id="button05" type="submit"
+                         image="#{messageBundle.image_key}"/>
+    </h:form>
+</f:view>
 </body>
 </html>
 

@@ -84,13 +84,19 @@ package com.sun.faces.el.impl.beans;
  * <p>A publicly-accessible implementation of a public interface
  *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: ofung $
+ * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: rlubke $
  */
 
 public class PublicBean2a
     implements PublicInterface2 {
 
+
+    // ------------------------------------------- Methods From PublicInterface2
+
     public Object getValue() {
+
         return "got the value";
+
     }
+
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.15 2005/10/19 19:51:38 edburns Exp $
+ * $Id: TestRendererConversions.java,v 1.16 2006/03/29 22:39:47 rlubke Exp $
  */
 
 /*
@@ -45,64 +45,74 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.15 2005/10/19 19:51:38 edburns Exp $
+ * @version $Id: TestRendererConversions.java,v 1.16 2006/03/29 22:39:47 rlubke Exp $
  */
 
 public class TestRendererConversions extends ServletFacesTestCase {
 
-//
-// Protected Constants
-//
     public static final String TEST_URI = "/components.jsp";
 
-//
-// Class Variables
-//
 
-//
-// Instance Variables
-//
+    // ------------------------------------------------------------ Constructors
 
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestRendererConversions() {
+
         super("TestRendererConversions");
+
     }
 
 
     public TestRendererConversions(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void beginBadConversion(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+
+    }
+
 
     public void beginEmptyStrings(WebRequest theRequest) {
+
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
         theRequest.addParameter("number", "");
         theRequest.addParameter("date", "");
         theRequest.addParameter("text", "");
         theRequest.addParameter("hidden", "");
         theRequest.addParameter("secret", "");
+
+    }
+
+
+    public void beginNulls(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+
     }
 
 
     public void setUp() {
+
         super.setUp();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
         getFacesContext().setViewRoot(page);
+
+    }
+
+
+    public void testBadConversion() {
+
+        UIComponent root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+
     }
 
 
@@ -111,6 +121,7 @@ public class TestRendererConversions extends ServletFacesTestCase {
      */
 
     public void testEmptyStrings() {
+
         UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         UIInput
             text = new UIInput(),
@@ -142,27 +153,14 @@ public class TestRendererConversions extends ServletFacesTestCase {
         assertTrue(text.isValid());
         assertTrue(hidden.isValid());
         assertTrue(secret.isValid());
-    }
 
-
-    public void beginNulls(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
     }
 
 
     public void testNulls() {
+
         testEmptyStrings();
+
     }
-
-
-    public void beginBadConversion(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    }
-
-
-    public void testBadConversion() {
-        UIComponent root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-    }
-
 
 } // end of class TestRendererConversions

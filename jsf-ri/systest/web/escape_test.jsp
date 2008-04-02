@@ -3,50 +3,50 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: escape_test.jsp,v 1.7 2004/05/13 01:06:03 jvisvanathan Exp $ --%>
+<%-- $Id: escape_test.jsp,v 1.8 2006/03/29 22:38:58 rlubke Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 
-<%@ page import="javax.faces.context.FacesContext"%>
+<%@ page import="javax.faces.context.FacesContext" %>
 <%
-  String textToEscape = "This text <b>has angle brackets</b>.";
-  FacesContext.getCurrentInstance().getExternalContext().
-   getRequestMap().put("textToEscape", textToEscape);  
+    String textToEscape = "This text <b>has angle brackets</b>.";
+    FacesContext.getCurrentInstance().getExternalContext().
+          getRequestMap().put("textToEscape", textToEscape);
 %>
 
 <f:view>
 
-  <html>
+    <html>
 
     <head>
-      <title>Test of outputText Escaping</title>
+        <title>Test of outputText Escaping</title>
     </head>
 
     <body>
 
-      <h1>Test of outputText Escaping</h1>
+    <h1>Test of outputText Escaping</h1>
 
-      <p>
+    <p>
         [DEFAULT]
         <h:outputText value="#{textToEscape}"/>
         The angle brackets MUST be escaped.
-      </p>
+    </p>
 
-      <p>
+    <p>
         [FALSE]
         <h:outputText value="#{textToEscape}" escape="false"/>
         The angle brackets MUST NOT be escaped.
-      </p>
+    </p>
 
-      <p>
+    <p>
         [TRUE]
         <h:outputText value="#{textToEscape}" escape="true"/>
         The angle brackets MUST be escaped.
-      </p>
+    </p>
 
     </body>
 
-  </html>
+    </html>
 
 </f:view>

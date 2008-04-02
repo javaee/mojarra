@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.28 2006/03/14 16:33:31 edburns Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.29 2006/03/29 22:39:45 rlubke Exp $
  */
 
 /*
@@ -53,62 +53,61 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.28 2006/03/14 16:33:31 edburns Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.29 2006/03/29 22:39:45 rlubke Exp $
  */
 
 public class TestRestoreViewPhase extends ServletFacesTestCase {
 
-//
-// Protected Constants
-//
 
     public static final String TEST_URI = "/components.jsp";
 
-//
-// Class Variables
-//
 
-//
-// Instance Variables
-//
+    // ------------------------------------------------------------ Constructors
 
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestRestoreViewPhase() {
+
         super("TestRestoreViewPhase");
+
     }
 
 
     public TestRestoreViewPhase(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------------------- Public Methods
+
 
     public void beginReconstituteRequestSubmit(WebRequest theRequest) {
+
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
 	theRequest.addParameter("javax.faces.ViewState",
 				"j_id1:j_id2");
+
     }
 
 
     public void beginRegisterListeners(WebRequest theRequest) {
+
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
 	theRequest.addParameter("javax.faces.ViewState",
 				"j_id1:j_id2");
+
     }
+
+
+    public void beginRestoreViewExpired(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.addParameter("javax.faces.ViewState",
+                                "j_id1:j_id2");
+
+    }
+
 
     public void testReconstituteRequestSubmit() {
 
@@ -163,7 +162,9 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         assertTrue(basicForm.getId().equals(root.findComponent("basicForm").getId()));
 	assertTrue(userName.getId().equals(basicForm.findComponent("userName").getId()));
         //getFacesContext().setViewRoot(null);
+
     }
+
 
     /**
      * This method will test the <code>registerActionListeners</code> method.
@@ -247,15 +248,12 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
                    !(context.getResponseComplete()));
 
         //context.setViewRoot(null);
+
     }
 
-    public void beginRestoreViewExpired(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-        theRequest.addParameter("javax.faces.ViewState",
-                                "j_id1:j_id2");
-    }
 
     public void testRestoreViewExpired() {
+
         // precreate tree and set it in session and make sure the tree is
         // restored from session.
                                                                                                                         
@@ -297,9 +295,8 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
             assertTrue(e.getMessage().equals(expected));
         }
         assertTrue(exceptionThrown);
+
     }
-
-
 
 } // end of class TestRestoreViewPhase
 

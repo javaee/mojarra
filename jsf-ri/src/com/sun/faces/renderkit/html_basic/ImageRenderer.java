@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.42 2006/01/11 15:28:09 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.43 2006/03/29 22:38:37 rlubke Exp $
  */
 
 /*
@@ -31,94 +31,72 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.RIConstants;
-import com.sun.faces.renderkit.RenderKitUtils;
-
-import java.util.logging.Level;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
+import java.util.logging.Level;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.42 2006/01/11 15:28:09 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.43 2006/03/29 22:38:37 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
 
-    //
-    // Protected Constants
-    //
-   
-    //
-    // Class Variables
-    //
+    // ------------------------------------------------------------ Constructors
 
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
 
     public ImageRenderer() {
+
         super();
+
     }
 
-    //
-    // Class methods
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null || component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+
     }
 
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         ResponseWriter writer = null;
         String styleClass = null;
 
         if (context == null || component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin encoding component " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
@@ -129,36 +107,45 @@ public class ImageRenderer extends HtmlBasicRenderer {
         writer.startElement("img", component);
         writeIdAttributeIfNecessary(context, writer, component);
         writer.writeURIAttribute("src", src(context, component), "value");
-	// if we're writing XHTML and we have a null alt attribute
-	if (null != context.getExternalContext().getRequestMap().get(RIConstants.CONTENT_TYPE_IS_XHTML) && 
-	    null == component.getAttributes().get("alt")) {
-	    // write out an empty alt
-	    writer.writeAttribute("alt", "", "alt");
-	}
+        // if we're writing XHTML and we have a null alt attribute
+        if (null != context.getExternalContext().getRequestMap()
+              .get(RIConstants.CONTENT_TYPE_IS_XHTML) &&
+                                                      null == component
+                                                            .getAttributes()
+                                                            .get("alt")) {
+            // write out an empty alt
+            writer.writeAttribute("alt", "", "alt");
+        }
 
-        RenderKitUtils.renderPassThruAttributes(context, writer, component); 
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
         if (null != (styleClass = (String)
-            component.getAttributes().get("styleClass"))) {
+              component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         writer.endElement("img");
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "End encoding component " + component.getId());
         }
+
     }
+
+    // --------------------------------------------------------- Private Methods
 
 
     private String src(FacesContext context, UIComponent component) {
+
         String value = (String) ((UIGraphic) component).getValue();
         if (value == null) {
             return "";
         }
         value = context.getApplication().getViewHandler().
-            getResourceURL(context, value);
+              getResourceURL(context, value);
         return (context.getExternalContext().encodeResourceURL(value));
+
     }
-    
+
     // The testcase for this class is TestRenderers_2.java 
 
 } // end of class ImageRenderer

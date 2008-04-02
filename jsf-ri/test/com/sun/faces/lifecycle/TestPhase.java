@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.18 2005/10/19 19:51:34 edburns Exp $
+ * $Id: TestPhase.java,v 1.19 2006/03/29 22:39:45 rlubke Exp $
  */
 
 /*
@@ -47,54 +47,40 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.18 2005/10/19 19:51:34 edburns Exp $
+ * @version $Id: TestPhase.java,v 1.19 2006/03/29 22:39:45 rlubke Exp $
  */
 
 public class TestPhase extends ServletFacesTestCase {
 
-//
-// Protected Constants
-//
-
     public static final String TEST_URI = "/components.jsp";
 
-//
-// Class Variables
-//
 
-//
-// Instance Variables
-//
+    // ------------------------------------------------------------ Constructors
 
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestPhase() {
+
         super("TestPhase");
+
     }
 
 
     public TestPhase(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------------------- Public Methods
+
 
     public void beginExecute(WebRequest theRequest) {
+
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
         theRequest.addParameter(
             "basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
+
     }
 
 
@@ -142,6 +128,7 @@ public class TestPhase extends ServletFacesTestCase {
         }
         assertTrue((getFacesContext().getRenderResponse()) &&
                    !(getFacesContext().getResponseComplete()));
+
     }
 
 } // end of class TestPhase

@@ -27,36 +27,36 @@
 
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
-    version="1.2">
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
 
-  <managed-bean>
-    <managed-bean-name>bean</managed-bean-name>
-    <managed-bean-class>com.sun.faces.systest.model.BackingBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
+    <managed-bean>
+        <managed-bean-name>bean</managed-bean-name>
+        <managed-bean-class>com.sun.faces.systest.model.BackingBean
+        </managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 
-  <navigation-rule>
-    <from-view-id>/test.jsp</from-view-id>
-    <navigation-case>
-      <from-outcome>linkPressed</from-outcome>
-      <to-view-id>/linkPressed.jsp</to-view-id>
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>buttonPressed</from-outcome>
-      <to-view-id>/buttonPressed.jsp</to-view-id>
-    </navigation-case>
-  </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/test.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>linkPressed</from-outcome>
+            <to-view-id>/linkPressed.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>buttonPressed</from-outcome>
+            <to-view-id>/buttonPressed.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
-  <navigation-rule>
-    <from-view-id>*</from-view-id>
-    <navigation-case>
-      <from-outcome>back</from-outcome>
-      <to-view-id>/test.jsp</to-view-id>
-    </navigation-case>
-  </navigation-rule>
-
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>back</from-outcome>
+            <to-view-id>/test.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
 
 </faces-config>

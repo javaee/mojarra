@@ -1,5 +1,5 @@
 /*
- * $Id: TestHASDeprStateManagerImpl.java,v 1.3 2005/10/19 19:51:29 edburns Exp $
+ * $Id: TestHASDeprStateManagerImpl.java,v 1.4 2006/03/29 22:39:35 rlubke Exp $
  */
 
 /*
@@ -64,39 +64,68 @@ import java.util.ArrayList;
  */
 public class TestHASDeprStateManagerImpl extends ServletFacesTestCase {
 
+
     public static final String TEST_URI = "/greeting.jsp";
-                                                                                                                      
-    public String getExpectedOutputFilename() {
-        return "TestViewHandlerImpl_correct";
-    }
                                                                                                                       
                                                                                                                       
     public static final String ignore[] = {
     };
-                                                                                                                      
-    public String[] getLinesToIgnore() {
-        return ignore;
-    }
+    
+    private Application application = null;
 
-    public boolean sendResponseToFile() {
-        return true;
-    }
 
-    //
-    // Constructors/Initializers
-    //
+    // ------------------------------------------------------------ Constructors
+
+
     public TestHASDeprStateManagerImpl() {
+
         super("TestHASDeprStateManagerImpl");
+
     }
 
 
     public TestHASDeprStateManagerImpl(String name) {
+
         super(name);
+
     }
-    
-    private Application application = null;
-    
+
+
+    // ---------------------------------------------- Methods From FacesTestCase
+
+    public boolean sendResponseToFile() {
+
+        return true;
+
+    }
+
+
+    public String getExpectedOutputFilename() {
+
+        return "TestViewHandlerImpl_correct";
+
+    }
+
+
+    public String[] getLinesToIgnore() {
+
+        return ignore;
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void beginRender(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+
+    }
+
+
     public void setUp() {
+
         super.setUp();
         ApplicationFactory aFactory =
             (ApplicationFactory) FactoryFinder.getFactory(
@@ -104,17 +133,12 @@ public class TestHASDeprStateManagerImpl extends ServletFacesTestCase {
         application = (ApplicationImpl) aFactory.getApplication();
         application.setViewHandler(new ViewHandlerImpl());
         application.setStateManager(new DeprStateManagerImpl());
-    }
-    
-    //
-    // Test Methods
-    //
-    
-    public void beginRender(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+
     }
 
+
     public void testRender() {
+
         UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         newView.setViewId(TEST_URI);
         getFacesContext().setViewRoot(newView);
@@ -134,5 +158,7 @@ public class TestHASDeprStateManagerImpl extends ServletFacesTestCase {
                    !(getFacesContext().getResponseComplete()));
                                                                                                                       
         assertTrue(verifyExpectedOutput());
+
     }
+
 }

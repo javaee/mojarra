@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.3 2005/08/22 22:10:28 ofung Exp $
+ * $Id: ValidatorTag.java,v 1.4 2006/03/29 22:38:42 rlubke Exp $
  */
 
 /*
@@ -36,11 +36,15 @@ import javax.faces.validator.Validator;
 import javax.faces.webapp.ValidatorELTag;
 import javax.servlet.jsp.JspException;
 
-/**
- * Basic implementation of <code>ValidatorELTag</code>.
- */
+/** Basic implementation of <code>ValidatorELTag</code>. */
 public class ValidatorTag extends ValidatorELTag {
 
+
+    /**
+     * <p>The {@link javax.el.ValueExpression} that evaluates to an object that
+     * implements {@link javax.faces.convert.Converter}.</p>
+     */
+    private ValueExpression binding = null;
 
     // -------------------------------------------------------------- Attributes
 
@@ -51,25 +55,8 @@ public class ValidatorTag extends ValidatorELTag {
      */
     private ValueExpression validatorId = null;
 
-    /**
-     * <p>Set the identifer of the {@link javax.faces.validator.Validator}
-     * instance to be created.
-     *
-     * @param validatorId The identifier of the converter instance to be
-     * created.
-     */
-    public void setValidatorId(ValueExpression validatorId) {
+    // ---------------------------------------------------------- Public Methods
 
-        this.validatorId = validatorId;
-
-    } // END setValidatorId
-
-
-    /**
-     * <p>The {@link javax.el.ValueExpression} that evaluates to an object that
-     * implements {@link javax.faces.convert.Converter}.</p>
-     */
-    private ValueExpression binding = null;
 
     /**
      * <p>Set the expression that will be used to create a
@@ -85,11 +72,26 @@ public class ValidatorTag extends ValidatorELTag {
     } // END setBinding
 
 
+    /**
+     * <p>Set the identifer of the {@link javax.faces.validator.Validator}
+     * instance to be created.
+     *
+     * @param validatorId The identifier of the converter instance to be
+     *                    created.
+     */
+    public void setValidatorId(ValueExpression validatorId) {
+
+        this.validatorId = validatorId;
+
+    } // END setValidatorId
+
+    // ------------------------------------------------------- Protected Methods
+
     // -------------------------------------------- Methods from ValidatorELTag
 
 
     protected Validator createValidator()
-    throws JspException {
+          throws JspException {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELContext elContext = facesContext.getELContext();
@@ -114,9 +116,9 @@ public class ValidatorTag extends ValidatorELTag {
         if (validatorId != null) {
             try {
                 String validatorIdVal = (String)
-                    validatorId.getValue(elContext);
+                      validatorId.getValue(elContext);
                 validator = facesContext.getApplication()
-                                .createValidator(validatorIdVal);
+                      .createValidator(validatorIdVal);
                 if (validator != null && binding != null) {
                     binding.setValue(elContext, validator);
                 }
@@ -128,6 +130,5 @@ public class ValidatorTag extends ValidatorELTag {
         return validator;
 
     } // END createConverter
-
 
 }

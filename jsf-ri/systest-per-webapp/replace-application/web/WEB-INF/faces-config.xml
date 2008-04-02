@@ -27,83 +27,85 @@
 
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
-    version="1.2">
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
 
-  <application>
-    <view-handler>com.sun.faces.systest.NewViewHandler</view-handler>
-    <state-manager>com.sun.faces.systest.NewStateManager</state-manager>
-  </application>
+    <application>
+        <view-handler>com.sun.faces.systest.NewViewHandler</view-handler>
+        <state-manager>com.sun.faces.systest.NewStateManager</state-manager>
+    </application>
 
-  <factory>
-    <application-factory>com.sun.faces.systest.NewApplicationFactory</application-factory>
-  </factory>
+    <factory>
+        <application-factory>com.sun.faces.systest.NewApplicationFactory
+        </application-factory>
+    </factory>
 
-  <!-- Managed Bean #1, No Property Overrides -->
-  <managed-bean>
-    <managed-bean-name>test1</managed-bean-name>
-    <managed-bean-class>
-      com.sun.faces.systest.model.TestBean
-    </managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
+    <!-- Managed Bean #1, No Property Overrides -->
+    <managed-bean>
+        <managed-bean-name>test1</managed-bean-name>
+        <managed-bean-class>
+            com.sun.faces.systest.model.TestBean
+        </managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 
 
-  <!-- Managed Bean #2, Primitive Property Overrides -->
-  <managed-bean>
-    <managed-bean-name>test2</managed-bean-name>
-    <managed-bean-class>
-      com.sun.faces.systest.model.TestBean
-    </managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-    <managed-property>
-      <property-name>booleanProperty</property-name>
-      <value>false</value>
-    </managed-property>
-    <managed-property>
-      <property-name>byteProperty</property-name>
-      <value>21</value>
-    </managed-property>
-    <managed-property>
-      <property-name>doubleProperty</property-name>
-      <value>321.54</value>
-    </managed-property>
-    <managed-property>
-      <property-name>floatProperty</property-name>
-      <value>21.43</value>
-    </managed-property>
-    <managed-property>
-      <property-name>intProperty</property-name>
-      <value>321</value>
-    </managed-property>
-    <managed-property>
-      <property-name>longProperty</property-name>
-      <value>54321</value>
-    </managed-property>
-    <managed-property>
-      <property-name>shortProperty</property-name>
-      <value>4321</value>
-    </managed-property>
-    <managed-property>
-      <property-name>stringProperty</property-name>
-      <value>New String Value</value>
-    </managed-property>
-  </managed-bean>
+    <!-- Managed Bean #2, Primitive Property Overrides -->
+    <managed-bean>
+        <managed-bean-name>test2</managed-bean-name>
+        <managed-bean-class>
+            com.sun.faces.systest.model.TestBean
+        </managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+        <managed-property>
+            <property-name>booleanProperty</property-name>
+            <value>false</value>
+        </managed-property>
+        <managed-property>
+            <property-name>byteProperty</property-name>
+            <value>21</value>
+        </managed-property>
+        <managed-property>
+            <property-name>doubleProperty</property-name>
+            <value>321.54</value>
+        </managed-property>
+        <managed-property>
+            <property-name>floatProperty</property-name>
+            <value>21.43</value>
+        </managed-property>
+        <managed-property>
+            <property-name>intProperty</property-name>
+            <value>321</value>
+        </managed-property>
+        <managed-property>
+            <property-name>longProperty</property-name>
+            <value>54321</value>
+        </managed-property>
+        <managed-property>
+            <property-name>shortProperty</property-name>
+            <value>4321</value>
+        </managed-property>
+        <managed-property>
+            <property-name>stringProperty</property-name>
+            <value>New String Value</value>
+        </managed-property>
+    </managed-bean>
 
-  <!-- Managed Bean #3, No Property Overrides -->
-  <managed-bean>
-    <managed-bean-name>test3</managed-bean-name>
-    <managed-bean-class>
-      com.sun.faces.systest.model.TestBean
-    </managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-  </managed-bean>
+    <!-- Managed Bean #3, No Property Overrides -->
+    <managed-bean>
+        <managed-bean-name>test3</managed-bean-name>
+        <managed-bean-class>
+            com.sun.faces.systest.model.TestBean
+        </managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
 
-  <managed-bean>
-    <managed-bean-name>replaceApplication</managed-bean-name>
-    <managed-bean-class>com.sun.faces.systest.ReplaceApplicationBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
+    <managed-bean>
+        <managed-bean-name>replaceApplication</managed-bean-name>
+        <managed-bean-class>com.sun.faces.systest.ReplaceApplicationBean
+        </managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 
 </faces-config>

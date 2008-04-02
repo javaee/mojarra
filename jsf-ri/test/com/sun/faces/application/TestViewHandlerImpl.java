@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.31 2006/03/14 16:33:30 edburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.32 2006/03/29 22:39:37 rlubke Exp $ 
  */ 
 
 
@@ -74,132 +74,214 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.31 2006/03/14 16:33:30 edburns Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.32 2006/03/29 22:39:37 rlubke Exp $
  */
 
 
 public class TestViewHandlerImpl extends JspFacesTestCase {
 
-//
-// Protected Constants 
-//
-
 
     public static final String TEST_URI = "/greeting.jsp";
-
-
-    public String getExpectedOutputFilename() {
-        return "TestViewHandlerImpl_correct";
-    }
-
-
     public static final String ignore[] = {
-    }; 
-
-    public String[] getLinesToIgnore() {
-        return ignore;
-    }
+    };
 
 
-    public boolean sendResponseToFile() {
-        return true;
-    }
-
-
-// 
-// Class Variables 
-// 
-
-
-// 
-// Instance Variables 
-// 
-
-
-// Attribute Instance Variables 
-
-
-// Relationship Instance Variables 
-
-
-// 
-// Constructors and Initializers 
-// 
+    // ------------------------------------------------------------ Constructors
 
 
     public TestViewHandlerImpl() {
+
         super("TestViewHandlerImpl");
+
     }
 
 
     public TestViewHandlerImpl(String name) {
+
         super(name);
+
     }
 
 
-    // 
-    // Class methods 
-    // 
+    // ---------------------------------------------- Methods From FacesTestCase
 
 
-    // 
-    // General Methods 
-    // 
+    public boolean sendResponseToFile() {
 
+        return true;
 
-
-    public void beginRender(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
     }
 
 
-    public void beginRender2(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
-                          null, null);
+    public String getExpectedOutputFilename() {
+
+        return "TestViewHandlerImpl_correct";
+
     }
 
-    public void beginTransient(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
-	theRequest.addParameter("javax.faces.ViewState", "j_id1:j_id2");
+
+    public String[] getLinesToIgnore() {
+
+        return ignore;
+
     }
 
-    public void beginCalculateLocaleLang(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
-                          null, null);
-        theRequest.addHeader("Accept-Language", "es-ES,tg-AF,tk-IQ,en-US");
-    }
+
+    // ---------------------------------------------------------- Public Methods
 
 
     public void beginCalculateLocaleExact(WebRequest theRequest) {
+
         theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
                           null, null);
         theRequest.addHeader("Accept-Language", "tg-AF,tk-IQ,ps-PS,en-US");
-    }
 
-
-    public void beginCalculateLocaleLowerCase(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
-                          null, null);
-        theRequest.addHeader("Accept-Language", "tg-af,tk-iq,ps-ps");
-    }
-
-
-    public void beginCalculateLocaleNoMatch(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
-                          null, null);
-        theRequest.addHeader("Accept-Language", "es-ES,tg-AF,tk-IQ");
     }
 
 
     public void beginCalculateLocaleFindDefault(WebRequest theRequest) {
+
         theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
                           null, null);
         theRequest.addHeader("Accept-Language", "en,fr");
+
     }
 
-    public void beginRestoreViewNegative(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", null, null);
+
+    public void beginCalculateLocaleLang(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+                          null, null);
+        theRequest.addHeader("Accept-Language", "es-ES,tg-AF,tk-IQ,en-US");
+
     }
+
+
+    public void beginCalculateLocaleLowerCase(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+                          null, null);
+        theRequest.addHeader("Accept-Language", "tg-af,tk-iq,ps-ps");
+
+    }
+
+
+    public void beginCalculateLocaleNoMatch(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+                          null, null);
+        theRequest.addHeader("Accept-Language", "es-ES,tg-AF,tk-IQ");
+
+    }
+
+
+    public void beginRender(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+
+    }
+
+
+    public void beginRender2(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+                          null, null);
+
+    }
+
+
+    public void beginRestoreViewNegative(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", "/test", "/faces", null, null);
+
+    }
+
+
+    public void beginTransient(WebRequest theRequest) {
+
+        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+	theRequest.addParameter("javax.faces.ViewState", "j_id1:j_id2");
+
+    }
+
+
+    public void testCalculateLocaleExact() {
+
+        System.out.println("Testing calculateLocale - Exact Match case ");
+        ViewHandler handler = new ViewHandlerImpl();
+        Locale locale = handler.calculateLocale(getFacesContext());
+        assertTrue(locale.equals(new Locale("ps", "PS")));
+
+    }
+
+
+    public void testCalculateLocaleFindDefault() {
+
+        System.out.println("Testing calculateLocale - find default");
+        ViewHandler handler = new ViewHandlerImpl();
+        Locale locale = handler.calculateLocale(getFacesContext());
+        assertEquals(Locale.ENGLISH.toString(), locale.toString());
+
+    }
+
+
+   /* public void testRender2() {
+        // Change the viewID to end with .jsf and make sure that
+        // the implementation changes .jsf to .jsp and properly dispatches
+        // the message.
+        UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        newView.setViewId(TEST_URI);
+        getFacesContext().setViewRoot(newView);
+
+        newView.setViewId("/faces/greeting.jsf");
+        getFacesContext().setViewRoot(newView);
+        try {
+            ViewHandler viewHandler =
+                Util.getViewHandler(getFacesContext());
+            viewHandler.renderView(getFacesContext(),
+                                   getFacesContext().getViewRoot());
+        } catch (IOException ioe) {
+            System.out.println("ViewHandler IOException: " + ioe);
+        } catch (FacesException fe) {
+            System.out.println("ViewHandler FacesException: " + fe);
+        }
+
+        assertTrue(!(getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
+
+        assertTrue(verifyExpectedOutput());
+    } */
+
+
+    public void testCalculateLocaleLang() {
+
+        System.out.println("Testing calculateLocale - Language Match case");
+        ViewHandler handler = new ViewHandlerImpl();
+        Locale locale = handler.calculateLocale(getFacesContext());
+        assertTrue(locale.equals(Locale.ENGLISH));
+
+    }
+
+
+    public void testCalculateLocaleLowerCase() {
+
+        System.out.println("Testing calculateLocale - case sensitivity");
+        ViewHandler handler = new ViewHandlerImpl();
+        Locale locale = handler.calculateLocale(getFacesContext());
+        assertTrue(locale.equals(new Locale("ps", "PS")));
+
+    }
+
+
+    public void testCalculateLocaleNoMatch() {
+
+        System.out.println("Testing calculateLocale - No Match case");
+        ViewHandler handler = new ViewHandlerImpl();
+        Locale locale = handler.calculateLocale(getFacesContext());
+        assertTrue(locale.equals(Locale.US));
+
+    }
+
 
     public void testGetActionURL() {
 
@@ -272,6 +354,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 
 
     public void testGetActionURLExceptions() throws Exception {
+
         boolean exceptionThrown = false;
         ViewHandler handler =
             Util.getViewHandler(getFacesContext());
@@ -297,6 +380,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
+
     }
 
 
@@ -324,6 +408,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 
 
     public void testRender() {
+
         UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         newView.setViewId(TEST_URI);
         getFacesContext().setViewRoot(newView);
@@ -343,74 +428,17 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
                    !(getFacesContext().getResponseComplete()));
 
         assertTrue(verifyExpectedOutput());
+
     }
 
 
-   /* public void testRender2() {
-        // Change the viewID to end with .jsf and make sure that
-        // the implementation changes .jsf to .jsp and properly dispatches
-        // the message.
-        UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        newView.setViewId(TEST_URI);
-        getFacesContext().setViewRoot(newView);
+    public void testRestoreViewNegative() throws Exception {
 
-        newView.setViewId("/faces/greeting.jsf");
-        getFacesContext().setViewRoot(newView);
-        try {
-            ViewHandler viewHandler =
-                Util.getViewHandler(getFacesContext());
-            viewHandler.renderView(getFacesContext(),
-                                   getFacesContext().getViewRoot());
-        } catch (IOException ioe) {
-            System.out.println("ViewHandler IOException: " + ioe);
-        } catch (FacesException fe) {
-            System.out.println("ViewHandler FacesException: " + fe);
-        }
+	// make sure the returned view is null if the viewId is the same
+	// as the servlet mapping.
+	assertNull(Util.getViewHandler(getFacesContext()).restoreView(getFacesContext(), 
+							   "/faces"));
 
-        assertTrue(!(getFacesContext().getRenderResponse()) &&
-                   !(getFacesContext().getResponseComplete()));
-
-        assertTrue(verifyExpectedOutput());
-    } */
-
-
-    public void testCalculateLocaleLang() {
-        System.out.println("Testing calculateLocale - Language Match case");
-        ViewHandler handler = new ViewHandlerImpl();
-        Locale locale = handler.calculateLocale(getFacesContext());
-        assertTrue(locale.equals(Locale.ENGLISH));
-    }
-
-
-    public void testCalculateLocaleExact() {
-        System.out.println("Testing calculateLocale - Exact Match case ");
-        ViewHandler handler = new ViewHandlerImpl();
-        Locale locale = handler.calculateLocale(getFacesContext());
-        assertTrue(locale.equals(new Locale("ps", "PS")));
-    }
-
-
-    public void testCalculateLocaleNoMatch() {
-        System.out.println("Testing calculateLocale - No Match case");
-        ViewHandler handler = new ViewHandlerImpl();
-        Locale locale = handler.calculateLocale(getFacesContext());
-        assertTrue(locale.equals(Locale.US));
-    }
-
-
-    public void testCalculateLocaleFindDefault() {
-        System.out.println("Testing calculateLocale - find default");
-        ViewHandler handler = new ViewHandlerImpl();
-        Locale locale = handler.calculateLocale(getFacesContext());
-        assertEquals(Locale.ENGLISH.toString(), locale.toString());
-    }
-
-
-    public void testCalculateLocaleLowerCase() {
-        System.out.println("Testing calculateLocale - case sensitivity");
-        ViewHandler handler = new ViewHandlerImpl();
-        Locale locale = handler.calculateLocale(getFacesContext());
-        assertTrue(locale.equals(new Locale("ps", "PS")));
     }
 
 
@@ -499,46 +527,61 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         Map facetList = panel1.getFacets();
         assertTrue(!(facetList.containsKey("userName3")));
         assertTrue(facetList.containsKey("userName4"));
-    }
 
-    public void testRestoreViewNegative() throws Exception {
-
-	// make sure the returned view is null if the viewId is the same
-	// as the servlet mapping.
-	assertNull(Util.getViewHandler(getFacesContext()).restoreView(getFacesContext(), 
-							   "/faces"));
     }
 
 
     private class TestRequest extends HttpServletRequestWrapper {
 
-        String servletPath;
+
         String pathInfo;
+
+        String servletPath;
+
+
+    // ------------------------------------------------------------ Constructors
 
 
         public TestRequest(HttpServletRequest request) {
+
             super(request);
+
+        }
+
+
+    // ----------------------------------------- Methods From HttpServletRequest
+
+
+        public String getPathInfo() {
+
+            return pathInfo;
+
         }
 
 
         public String getServletPath() {
+
             return servletPath;
+
+        }
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+        public void setPathInfo(String pathInfo) {
+
+            this.pathInfo = pathInfo;
+
         }
 
 
         public void setServletPath(String servletPath) {
+
             this.servletPath = servletPath;
+
         }
 
-
-        public String getPathInfo() {
-            return pathInfo;
-        }
-
-
-        public void setPathInfo(String pathInfo) {
-            this.pathInfo = pathInfo;
-        }
     }
 
 } // end of class TestViewHandlerImpl

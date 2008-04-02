@@ -84,10 +84,15 @@ package com.sun.faces.el.impl.beans;
  * <p>A publicly-accessible interface
  *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: ofung $
+ * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: rlubke $
  */
 
 public interface PublicInterface2 {
 
+
+    // ---------------------------------------------------------- Public Methods
+
+
     public Object getValue();
+
 }

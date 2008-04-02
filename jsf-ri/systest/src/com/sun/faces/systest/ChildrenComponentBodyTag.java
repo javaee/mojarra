@@ -1,5 +1,5 @@
 /*
- * $Id: ChildrenComponentBodyTag.java,v 1.7 2005/08/22 22:10:37 ofung Exp $
+ * $Id: ChildrenComponentBodyTag.java,v 1.8 2006/03/29 22:38:48 rlubke Exp $
  */
 
 /*
@@ -35,28 +35,14 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyContent;
 
 
-/**
- * <p><code>UIComponentBodyTag</code> for <code>ChildrenComponent</code>.</p>
- */
+/** <p><code>UIComponentBodyTag</code> for <code>ChildrenComponent</code>.</p> */
 
 public class ChildrenComponentBodyTag extends UIComponentBodyTag {
 
+
     private boolean firstPass = true;
 
-    // -------------------------------------------------------------- Attributes
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public String getComponentType() {
-        return ("ChildrenComponent");
-    }
-
-
-    public String getRendererType() {
-        return (null);
-    }
+    // ----------------------------------------------- Methods From IterationTag
 
 
     /**
@@ -67,20 +53,34 @@ public class ChildrenComponentBodyTag extends UIComponentBodyTag {
      * @throws javax.servlet.jsp.JspException if an error is encountered
      */
     public int doAfterBody() throws JspException {
+
         if (firstPass) {
             System.out.println("Evaluating body again...");
             BodyContent cont = getBodyContent();
             cont.clearBody();
             firstPass = false;
             return EVAL_BODY_AGAIN;
-        }
-        else {
+        } else {
             return super.doAfterBody();
         }
+
+    }
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    // -------------------------------------------------------------- Attributes
+    public String getComponentType() {
+
+        return ("ChildrenComponent");
+
     }
 
 
-    // ------------------------------------------------------- Protected Methods
+    public String getRendererType() {
 
+        return (null);
+
+    }
 
 }

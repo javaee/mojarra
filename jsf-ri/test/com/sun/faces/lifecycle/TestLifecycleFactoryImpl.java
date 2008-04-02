@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleFactoryImpl.java,v 1.13 2005/10/19 19:51:34 edburns Exp $
+ * $Id: TestLifecycleFactoryImpl.java,v 1.14 2006/03/29 22:39:44 rlubke Exp $
  */
 
 /*
@@ -44,49 +44,34 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleFactoryImpl.java,v 1.13 2005/10/19 19:51:34 edburns Exp $
+ * @version $Id: TestLifecycleFactoryImpl.java,v 1.14 2006/03/29 22:39:44 rlubke Exp $
  */
 
 public class TestLifecycleFactoryImpl extends ServletFacesTestCase {
 
-//
-// Protected Constants
-//
 
-//
-// Class Variables
-//
+    // ------------------------------------------------------------ Constructors
 
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestLifecycleFactoryImpl() {
+
         super("TestLifecycleFactoryImpl");
+
     }
 
 
     public TestLifecycleFactoryImpl(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------------------- Public Methods
+
 
     public void testDefault() {
+
         LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
         Lifecycle life = null, life2 = null;
 
@@ -100,10 +85,12 @@ public class TestLifecycleFactoryImpl extends ServletFacesTestCase {
         // instance.
         life2 = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
         assertTrue(life == life2);
+
     }
 
 
     public void testIdIterator() {
+
         LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
 
         String
@@ -128,10 +115,12 @@ public class TestLifecycleFactoryImpl extends ServletFacesTestCase {
         }
 
         assertTrue(4 == i);
+
     }
 
 
     public void testIllegalArgumentException() {
+
         LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
         Lifecycle life = null;
         assertTrue(factory != null);
@@ -148,7 +137,7 @@ public class TestLifecycleFactoryImpl extends ServletFacesTestCase {
             assertTrue(false);
         }
         assertTrue(exceptionThrown);
-    }
 
+    }
 
 } // end of class TestLifecycleFactoryImpl

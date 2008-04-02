@@ -28,65 +28,108 @@ package com.sun.faces.config;
 
 public class SimpleBean {
 
+
+    Integer intProp = null;
+
+    private NonManagedBean nonManagedBean = null;
+    private String footerClass = "column-footer";
+
+    private String headerClass = "column-header";
+
     private String simpleProperty;
+
+
+    // ------------------------------------------------------------ Constructors
 
 
     public SimpleBean() {
     }
 
 
+    // ---------------------------------------------------------- Public Methods
+
+
+    public String getFooterClass() {
+
+        return footerClass;
+
+    }
+
+
+    public void setFooterClass(String footerClass) {
+
+        this.footerClass = footerClass;
+
+    }
+
+
+    public String getHeaderClass() {
+
+        return headerClass;
+
+    }
+
+
+    public void setHeaderClass(String headerClass) {
+
+        this.headerClass = headerClass;
+
+    }
+
+
+    public NonManagedBean getNonManagedBean() {
+
+        return nonManagedBean;
+
+    }
+
+
+    public void setNonManagedBean(NonManagedBean nmb) {
+
+        nonManagedBean = nmb;
+
+    }
+
+
     public String getSimpleProperty() {
+
         return simpleProperty;
+
     }
 
 
     public void setSimpleProperty(String simpleProperty) {
+
         this.simpleProperty = simpleProperty;
-    }
 
-
-    Integer intProp = null;
-
-
-    public void setIntProperty(Integer newVal) {
-        intProp = newVal;
-    }
-
-
-    public Integer getIntProperty() {
-        return intProp;
-    }
-
-
-    public boolean getTrueValue() {
-        return true;
     }
 
 
     public boolean getFalseValue() {
+
         return false;
+
     }
 
-    private NonManagedBean nonManagedBean = null;
-    public NonManagedBean getNonManagedBean() {
-        return nonManagedBean;
-    }
-    public void setNonManagedBean(NonManagedBean nmb) {
-        nonManagedBean = nmb;
+
+    public Integer getIntProperty() {
+
+        return intProp;
+
     }
 
-    private String headerClass = "column-header";
-    public String getHeaderClass() {
-        return headerClass;
+
+    public boolean getTrueValue() {
+
+        return true;
+
     }
-    public void setHeaderClass(String headerClass) {
-        this.headerClass = headerClass;
+
+
+    public void setIntProperty(Integer newVal) {
+
+        intProp = newVal;
+
     }
-    private String footerClass = "column-footer";
-    public String getFooterClass() {
-        return footerClass;
-    }
-    public void setFooterClass(String footerClass) {
-        this.footerClass = footerClass;
-    }
+
 }

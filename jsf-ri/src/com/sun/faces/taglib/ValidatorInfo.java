@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorInfo.java,v 1.5 2005/08/22 22:10:23 ofung Exp $
+ * $Id: ValidatorInfo.java,v 1.6 2006/03/29 22:38:39 rlubke Exp $
  */
 
 /*
@@ -37,88 +37,121 @@ import org.xml.sax.Attributes;
  */
 public class ValidatorInfo {
 
+
+    private Attributes attributes;
+    private FacesValidator validator;
+    private String localName;
+
     //*********************************************************************
     // Validation and configuration state (protected)
     private String nameSpace;
-    private String localName;
-    private String qName;
-    private Attributes attributes;
-    private FacesValidator validator;
     private String prefix;
+    private String qName;
     private String uri;
 
-
-    public void setNameSpace(String nameSpace) {
-        this.nameSpace = nameSpace;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
-    public String getNameSpace() {
-        return nameSpace;
-    }
+    public Attributes getAttributes() {
 
+        return attributes;
 
-    public void setLocalName(String localName) {
-        this.localName = localName;
-    }
-
-
-    public String getLocalName() {
-        return localName;
-    }
-
-
-    public void setQName(String qName) {
-        this.qName = qName;
-    }
-
-
-    public String getQName() {
-        return qName;
     }
 
 
     public void setAttributes(Attributes attributes) {
+
         this.attributes = attributes;
+
     }
 
 
-    public Attributes getAttributes() {
-        return attributes;
+    public String getLocalName() {
+
+        return localName;
+
     }
 
 
-    public void setValidator(FacesValidator validator) {
-        this.validator = validator;
+    public void setLocalName(String localName) {
+
+        this.localName = localName;
+
     }
 
 
-    public FacesValidator getValidator() {
-        return validator;
+    public String getNameSpace() {
+
+        return nameSpace;
+
     }
 
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
+    public void setNameSpace(String nameSpace) {
+
+        this.nameSpace = nameSpace;
+
     }
 
 
     public String getPrefix() {
+
         return prefix;
+
     }
 
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setPrefix(String prefix) {
+
+        this.prefix = prefix;
+
+    }
+
+
+    public String getQName() {
+
+        return qName;
+
+    }
+
+
+    public void setQName(String qName) {
+
+        this.qName = qName;
+
     }
 
 
     public String getUri() {
+
         return uri;
+
+    }
+
+
+    public void setUri(String uri) {
+
+        this.uri = uri;
+
+    }
+
+
+    public FacesValidator getValidator() {
+
+        return validator;
+
+    }
+
+
+    public void setValidator(FacesValidator validator) {
+
+        this.validator = validator;
+
     }
 
 
     public String toString() {
+
         StringBuffer mesg = new StringBuffer();
 
         mesg.append("\nValidatorInfo NameSpace: ");
@@ -143,5 +176,7 @@ public class ValidatorInfo {
         mesg.append(uri);
 
         return mesg.toString();
+
     }
+
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestELResolver.java,v 1.2 2005/08/22 22:11:06 ofung Exp $
+ * $Id: TestELResolver.java,v 1.3 2006/03/29 22:39:33 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -50,38 +50,61 @@ import com.sun.faces.util.Util;
 
 public class TestELResolver extends ELResolver {
 
+
+    // ------------------------------------------------------------ Constructors
+
+
     public TestELResolver() {
     }
 
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public Class getCommonPropertyType(ELContext context, Object base) {
+
+        if (base != null) {
+            return null;
+        }
+        return String.class;
+
+    }
+
+
+    public Iterator getFeatureDescriptors(ELContext context, Object base) {
+
+        return null;
+
+    }
+
+
+    public Class getType(ELContext context, Object base, Object property) 
+        throws ELException {
+
+        return Object.class;
+
+    }
+
+
     public Object getValue(ELContext context,Object base, Object property) 
             throws ELException {
+
         return null;
+
     }
+
+
+    public boolean isReadOnly(ELContext context, Object base, Object property) 
+        throws ELException{
+          
+        return false;
+
+    }
+
 
     public void  setValue(ELContext context, Object base, Object property,
         Object val) throws ELException {
        
     }
 
-    public boolean isReadOnly(ELContext context, Object base, Object property) 
-        throws ELException{
-          
-        return false;	
-    }
-
-    public Class getType(ELContext context, Object base, Object property) 
-        throws ELException {
-        return Object.class;
-    } 
-
-    public Iterator getFeatureDescriptors(ELContext context, Object base) {
-        return null;
-    }
-
-    public Class getCommonPropertyType(ELContext context, Object base) {
-        if (base != null) {
-            return null;
-        }
-        return String.class;
-    }
 }

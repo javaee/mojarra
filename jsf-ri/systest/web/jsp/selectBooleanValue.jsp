@@ -1,18 +1,18 @@
 <!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <head>
+<head>
     <title>selectBoolean test</title>
-    <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
-  </head>
+    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+</head>
 
-  <body>
-    <h1>selectBoolean test</h1>
+<body>
+<h1>selectBoolean test</h1>
 
 <h2>How this testcase works.</h2>
 
@@ -21,57 +21,58 @@
 <p>The system test for this page does the following</p>
 
 
-	<ol>
+<ol>
 
-	  <li><p>presses the button with the id "replace" twice.</p>
+    <li><p>presses the button with the id "replace" twice.</p>
 
-          <p>The first time pressed, it replaces the default
-          PropertyResolver with one that logs calls to setValue in the
-          "valueChanged" property of bean named test3.  The second time
-          pressed, you'll actually see that the setValue was called.</p>
+        <p>The first time pressed, it replaces the default
+            PropertyResolver with one that logs calls to setValue in the
+            "valueChanged" property of bean named test3. The second time
+            pressed, you'll actually see that the setValue was called.</p>
 
-          </li>
+    </li>
 
-	  <li><p>When the page loads from the second button press, it
-	  looks for the string "setValue() called" and verifies it is
-	  not in the page. </p></li>
+    <li><p>When the page loads from the second button press, it
+        looks for the string "setValue() called" and verifies it is
+        not in the page. </p></li>
 
-	  <li><p>presses the button with the id "restore".
-	  </p></li>
+    <li><p>presses the button with the id "restore".
+    </p></li>
 
-	</ol>
+</ol>
 
 
 <f:view>
 
-  <h:form>
+    <h:form>
 
-    <h:commandButton id="replace" value="submit and replace PropertyResolver with Logging PropertyResolver" 
-                     actionListener="#{test3.replacePropertyResolver}" />
+        <h:commandButton id="replace"
+                         value="submit and replace PropertyResolver with Logging PropertyResolver"
+                         actionListener="#{test3.replacePropertyResolver}"/>
 
-    <h:panelGrid columns="2">
+        <h:panelGrid columns="2">
 
-      <h:selectBooleanCheckbox value="#{test3.booleanProperty2}" />
+            <h:selectBooleanCheckbox value="#{test3.booleanProperty2}"/>
 
-      <h:outputText value="checkbox" />
+            <h:outputText value="checkbox"/>
 
-      <h:outputText value="valueChanged:" />
+            <h:outputText value="valueChanged:"/>
 
-      <h:outputText value="#{test3.valueChangeMessage}" />
+            <h:outputText value="#{test3.valueChangeMessage}"/>
 
-      <h:messages />
+            <h:messages/>
 
-    </h:panelGrid>
+        </h:panelGrid>
 
-    <h:commandButton id="restore" 
-                     value="submit and restore original PropertyResolver" 
-                     actionListener="#{test3.restorePropertyResolver}" />
+        <h:commandButton id="restore"
+                         value="submit and restore original PropertyResolver"
+                         actionListener="#{test3.restorePropertyResolver}"/>
 
 
-  </h:form>
+    </h:form>
 
 </f:view>
 
-    <hr>
-  </body>
+<hr>
+</body>
 </html>

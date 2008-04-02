@@ -1,7 +1,6 @@
-
 /*
- * $Id: SpecialConverter.java,v 1.1 2006/01/18 15:52:54 rlubke Exp $
- */
+* $Id: SpecialConverter.java,v 1.2 2006/03/29 22:38:53 rlubke Exp $
+*/
 
 /*
  * The contents of this file are subject to the terms
@@ -30,30 +29,41 @@
 
 package com.sun.faces.systest.model;
 
-import javax.faces.context.*;
-import javax.faces.component.*;
-import javax.faces.convert.*;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+
 public class SpecialConverter implements Converter {
-        public Object getAsObject(FacesContext context,
-                                  UIComponent component,
-                                  String value)
-        throws ConverterException {            
-            if (value == null) {
-               throw new ConverterException();
-            } else {
-                return new SpecialBean(value);
-            }
+
+
+    // -------------------------------------------------- Methods From Converter
+    public Object getAsObject(FacesContext context,
+                              UIComponent component,
+                              String value)
+          throws ConverterException {
+
+        if (value == null) {
+            throw new ConverterException();
+        } else {
+            return new SpecialBean(value);
         }
 
-        public String getAsString(FacesContext context,
-                                  UIComponent component,
-                                  Object value)
-        throws ConverterException {           
-            if (!(value instanceof SpecialBean)) {
-                throw new ConverterException();
-            } else {
-                return ((SpecialBean) value).getString();
-            }
-        }
     }
+
+
+    public String getAsString(FacesContext context,
+                              UIComponent component,
+                              Object value)
+          throws ConverterException {
+
+        if (!(value instanceof SpecialBean)) {
+            throw new ConverterException();
+        } else {
+            return ((SpecialBean) value).getString();
+        }
+
+    }
+
+}
 

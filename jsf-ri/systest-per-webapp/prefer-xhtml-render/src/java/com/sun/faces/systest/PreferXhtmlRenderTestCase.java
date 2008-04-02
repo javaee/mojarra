@@ -1,5 +1,5 @@
 /*
- * $Id: PreferXhtmlRenderTestCase.java,v 1.1 2006/03/22 20:15:15 rogerk Exp $
+ * $Id: PreferXhtmlRenderTestCase.java,v 1.2 2006/03/29 22:39:21 rlubke Exp $
  */
 
 /*
@@ -43,12 +43,7 @@ import junit.framework.TestSuite;
  * to do the bulk of the requests works.</p>
  */
 
-public class PreferXhtmlRenderTestCase extends AbstractTestCase {
-
-
-    // ------------------------------------------------------------ Constructors
-
-
+public class PreferXhtmlRenderTestCase extends AbstractTestCase {    
     /**
      * Construct a new instance of this test case.
      *
@@ -56,13 +51,7 @@ public class PreferXhtmlRenderTestCase extends AbstractTestCase {
      */
     public PreferXhtmlRenderTestCase(String name) {
         super(name);
-    }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
+    }    
 
 
     /**

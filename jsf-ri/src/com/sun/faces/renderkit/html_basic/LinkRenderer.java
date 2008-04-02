@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.14 2006/01/11 15:28:09 rlubke Exp $
+ * $Id: LinkRenderer.java,v 1.15 2006/03/29 22:38:37 rlubke Exp $
  */
 
 /*
@@ -31,14 +31,14 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import java.io.IOException;
-import java.util.logging.Level;
-
+import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
-import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+
+import java.io.IOException;
+import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
 
@@ -52,33 +52,36 @@ public abstract class LinkRenderer extends HtmlBasicRenderer {
 
     // ------------------------------------------------------- Protected Methods
 
+
+    protected abstract void renderAsActive(FacesContext context,
+                                           UIComponent component)
+          throws IOException;
+
     protected void renderAsDisabled(FacesContext context, UIComponent component)
-    throws IOException {
+          throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
-                      
+
         writer.startElement("span", component);
-        String writtenId = writeIdAttributeIfNecessary(context, writer, component);
+        String writtenId =
+              writeIdAttributeIfNecessary(context, writer, component);
         if (null != writtenId) {
             writer.writeAttribute("name", writtenId, "name");
-        }               
+        }
 
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);        
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);
 
         writeCommonLinkAttributes(writer, component);
         writeValue(component, writer);
         writer.flush();
-    }
 
-    protected abstract void renderAsActive(FacesContext context,
-                                           UIComponent component)
-    throws IOException;
+    }
 
 
     protected void writeCommonLinkAttributes(ResponseWriter writer,
                                              UIComponent component)
-        throws IOException {
+          throws IOException {
 
         // render type attribute that is common to only link renderers
         String type = (String) component.getAttributes().get("type");
@@ -89,15 +92,16 @@ public abstract class LinkRenderer extends HtmlBasicRenderer {
 
         // handle styleClass
         String styleClass = (String)
-            component.getAttributes().get("styleClass");
+              component.getAttributes().get("styleClass");
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
 
     }
 
+
     protected void writeValue(UIComponent component, ResponseWriter writer)
-    throws IOException {
+          throws IOException {
 
         String label = null;
         if (component instanceof UICommand) {

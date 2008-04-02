@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.23 2006/01/11 15:28:10 rlubke Exp $
+ * $Id: OutputMessageRenderer.java,v 1.24 2006/03/29 22:38:38 rlubke Exp $
  */
 
 /*
@@ -31,11 +31,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
-import java.util.logging.Level;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.component.ValueHolder;
@@ -46,74 +41,55 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 
-/**
- * <B>OutputMessageRenderer</B> is a class that renderes UIOutput
- */
+/** <B>OutputMessageRenderer</B> is a class that renderes UIOutput */
 
 public class OutputMessageRenderer extends HtmlBasicRenderer {
 
-    //
-    // Protected Constants
-    //
+    // ------------------------------------------------------------ Constructors
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
 
     public OutputMessageRenderer() {
+
         super();
+
     }
 
-    //
-    // Class methods
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null || component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+
     }
 
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null || component == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin encoding component " + component.getId());
         }
-        
+
         String
-            currentValue = null,
-            style = (String) component.getAttributes().get("style"),
-            styleClass = (String) component.getAttributes().get("styleClass");
+              currentValue = null,
+              style = (String) component.getAttributes().get("style"),
+              styleClass = (String) component.getAttributes().get("styleClass");
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
@@ -122,8 +98,8 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " + component.getId() +
-                          " since rendered attribute is set to false");
+                logger.fine("End encoding component " + component.getId() +
+                            " since rendered attribute is set to false");
             }
             return;
         }
@@ -161,8 +137,8 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         String message = null;
         if (parameterList.size() > 0) {
             message = MessageFormat.format
-                (currentValue, parameterList.toArray
-                               (new Object[parameterList.size()]));
+                  (currentValue, parameterList.toArray
+                        (new Object[parameterList.size()]));
         } else {
             message = currentValue;
         }
@@ -179,7 +155,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
                 writer.writeAttribute("class", styleClass, "styleClass");
             }
             // style is rendered as a passthru attribute
-            RenderKitUtils.renderPassThruAttributes(context, writer, component);            
+            RenderKitUtils.renderPassThruAttributes(context, writer, component);
         }
         Boolean escape = Boolean.TRUE;
         Object val = component.getAttributes().get("escape");
@@ -201,10 +177,12 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         if (wroteSpan) {
             writer.endElement("span");
         }
-        
+
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "End encoding component " + component.getId());
         }
+
     }
 
 } // end of class OutputMessageRenderer

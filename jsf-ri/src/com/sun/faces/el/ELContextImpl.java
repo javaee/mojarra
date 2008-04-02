@@ -1,5 +1,5 @@
 /*
- * $Id: ELContextImpl.java,v 1.5 2005/08/22 22:10:12 ofung Exp $
+ * $Id: ELContextImpl.java,v 1.6 2006/03/29 22:38:32 rlubke Exp $
  */
 
 /*
@@ -38,39 +38,60 @@ import javax.el.VariableMapper;
  * ELContext's constructor is protected to control creation of ELContext
  * objects through their appropriate factory methods.  This version of
  * ELContext forces construction through FacesContextImpl.
- *
  */
 public class ELContextImpl extends ELContext {
-    
-    private FunctionMapper functionMapper;
-    private VariableMapper variableMapper;
+
+
     private ELResolver resolver;
 
-    /**
-     * Constructs a new ELContext associated with the given ELResolver.
-     */
+    private FunctionMapper functionMapper;
+    private VariableMapper variableMapper;
+
+    // ------------------------------------------------------------ Constructors
+
+
+    /** Constructs a new ELContext associated with the given ELResolver. */
     public ELContextImpl(ELResolver resolver) {
+
         this.resolver = resolver;
+
     }
 
-    public void setFunctionMapper(FunctionMapper fnMapper) {
-        functionMapper = fnMapper;
-    }
+    // ---------------------------------------------------------- Public Methods
+
 
     public FunctionMapper getFunctionMapper() {
+
         return functionMapper;
+
     }
 
-    public void setVariableMapper(VariableMapper varMapper) {
-        variableMapper = varMapper;
+
+    public void setFunctionMapper(FunctionMapper fnMapper) {
+
+        functionMapper = fnMapper;
+
     }
+
 
     public VariableMapper getVariableMapper() {
+
         return variableMapper;
+
     }
 
+
+    public void setVariableMapper(VariableMapper varMapper) {
+
+        variableMapper = varMapper;
+
+    }
+
+
     public ELResolver getELResolver() {
+
         return resolver;
+
     }
 
 }

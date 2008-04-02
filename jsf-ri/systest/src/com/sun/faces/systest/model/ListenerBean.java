@@ -1,5 +1,5 @@
 /*
- * $Id: ListenerBean.java,v 1.2 2005/08/22 22:10:42 ofung Exp $
+ * $Id: ListenerBean.java,v 1.3 2006/03/29 22:38:52 rlubke Exp $
  */
 
 /*
@@ -29,31 +29,52 @@
 
 package com.sun.faces.systest.model;
 
-import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 
 
 public class ListenerBean extends Object {
 
+
+    private ActionListener actionListener = null;
+
+    private ValueChangeListener valueChangeListener = null;
+
+    // ------------------------------------------------------------ Constructors
+
+
     public ListenerBean() {
     }
 
-    private ActionListener actionListener = null;
+    // ---------------------------------------------------------- Public Methods
+
+
     public ActionListener getActionListener() {
+
         return actionListener;
-    }
-    public void setActionListener(ActionListener actionListener) {
-        this.actionListener = actionListener;
+
     }
 
-    private ValueChangeListener valueChangeListener = null;
+
+    public void setActionListener(ActionListener actionListener) {
+
+        this.actionListener = actionListener;
+
+    }
+
+
     public ValueChangeListener getValueChangeListener() {
+
         return valueChangeListener;
+
     }
-    public void setValueChangeListener(ValueChangeListener valueChangeListener) {
+
+
+    public void setValueChangeListener(
+          ValueChangeListener valueChangeListener) {
+
         this.valueChangeListener = valueChangeListener;
+
     }
+
 }

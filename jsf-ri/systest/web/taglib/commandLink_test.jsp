@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: commandLink_test.jsp,v 1.7 2004/05/13 01:06:23 jvisvanathan Exp $ --%>
+<%-- $Id: commandLink_test.jsp,v 1.8 2006/03/29 22:39:13 rlubke Exp $ --%>
 
 <html>
 <head>
@@ -11,21 +11,27 @@
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <title>commandLink_test.jsp</title>
 </head>
+
 <body>
-    <f:loadBundle basename="com.sun.faces.systest.resources.Resources" 
-         var="messageResources"/>
-    <f:view>
-      <h:form id="form01">
-        <h:commandLink id="hyperlink01"><f:verbatim>My Link</f:verbatim></h:commandLink>
-        <h:commandLink id="hyperlink02"><h:outputText value="#{test1.stringProperty}"/></h:commandLink>
-        <h:commandLink id="hyperlink03"><h:outputText value="#{messageResources.hyperlink_key}"/></h:commandLink>
-        <h:commandLink id="hyperlink04"><f:verbatim escape="false"><img src="duke.gif" /></f:verbatim></h:commandLink>
-        <h:commandLink id="hyperlink05"><h:graphicImage value="#{messageResources.image_key}"/></h:commandLink>
+<f:loadBundle basename="com.sun.faces.systest.resources.Resources"
+              var="messageResources"/>
+<f:view>
+    <h:form id="form01">
+        <h:commandLink id="hyperlink01"><f:verbatim>My Link</f:verbatim>
+        </h:commandLink>
+        <h:commandLink id="hyperlink02"><h:outputText
+              value="#{test1.stringProperty}"/></h:commandLink>
+        <h:commandLink id="hyperlink03"><h:outputText
+              value="#{messageResources.hyperlink_key}"/></h:commandLink>
+        <h:commandLink id="hyperlink04"><f:verbatim escape="false"><img
+              src="duke.gif"/></f:verbatim></h:commandLink>
+        <h:commandLink id="hyperlink05"><h:graphicImage
+              value="#{messageResources.image_key}"/></h:commandLink>
         <h:commandLink id="hyperlink06"><f:verbatim>Paramter Link</f:verbatim>
             <f:param name="param1" value="value1"/>
         </h:commandLink>
-      </h:form>
-    </f:view>
+    </h:form>
+</f:view>
 </body>
 </html>
 

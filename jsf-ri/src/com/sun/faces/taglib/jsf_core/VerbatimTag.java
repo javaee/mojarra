@@ -1,5 +1,5 @@
 /*
- * $Id: VerbatimTag.java,v 1.14 2005/08/22 22:10:28 ofung Exp $
+ * $Id: VerbatimTag.java,v 1.15 2006/03/29 22:38:42 rlubke Exp $
  */
 
 /*
@@ -42,44 +42,72 @@ import javax.servlet.jsp.JspException;
 
 public class VerbatimTag extends UIComponentELTag {
 
-
     // ------------------------------------------------------------- Attributes
 
 
     private ValueExpression escape = null;
 
 
-    public void setEscape(ValueExpression escape) {
-        this.escape = escape;
+    /** Holds value of property rendered. */
+    private ValueExpression rendered;
+
+    // ----------------------------------------------- Methods From IterationTag
+
+
+    /**
+     * <p>Set the local value of this component to reflect the nested
+     * body content of this JSP tag.</p>
+     */
+    public int doAfterBody() throws JspException {
+
+        if (getBodyContent() != null) {
+            String value = getBodyContent().getString();
+            if (value != null) {
+                UIOutput output = (UIOutput) getComponentInstance();
+                output.setValue(value);
+                getBodyContent().clearBody();
+            }
+        }
+        return (getDoAfterBodyValue());
+
     }
 
-    
-    /**
-     * Holds value of property rendered.
-     */
-    private ValueExpression rendered;
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void setEscape(ValueExpression escape) {
+
+        this.escape = escape;
+
+    }
+
 
     /**
      * Setter for property rendered.
+     *
      * @param rendered New value of property rendered.
      */
     public void setRendered(ValueExpression rendered) {
 
         this.rendered = rendered;
-    }
-    
 
-    // --------------------------------------------------------- Public Methods
-
-
-    public String getRendererType() {
-        return "javax.faces.Text";
     }
 
 
     public String getComponentType() {
+
         return "javax.faces.Output";
+
     }
+
+
+    public String getRendererType() {
+
+        return "javax.faces.Text";
+
+    }
+
+    // ------------------------------------------------------- Protected Methods
 
 
     protected void setProperties(UIComponent component) {
@@ -94,25 +122,6 @@ public class VerbatimTag extends UIComponentELTag {
             component.setValueExpression("rendered", rendered);
         }
         component.setTransient(true);
-
-    }
-
-
-    /**
-     * <p>Set the local value of this component to reflect the nested
-     * body content of this JSP tag.</p>
-     */
-    public int doAfterBody() throws JspException {
-
-        if (getBodyContent() != null) {
-            String value = getBodyContent().getString();
-            if (value != null) {
-                UIOutput output = (UIOutput) getComponentInstance();
-                output.setValue(value);
-		getBodyContent().clearBody();
-            }
-        }
-        return (getDoAfterBodyValue());
 
     }
 

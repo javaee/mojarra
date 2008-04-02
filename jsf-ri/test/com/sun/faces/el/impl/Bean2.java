@@ -84,10 +84,11 @@ package com.sun.faces.el.impl;
  * <p>This is a test bean that holds a single String
  *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
  */
 
 public class Bean2 {
+
 
     //-------------------------------------
     // Properties
@@ -97,14 +98,8 @@ public class Bean2 {
     String mValue;
 
 
-    public String getValue() {
-        return mValue;
-    }
+    // ------------------------------------------------------------ Constructors
 
-
-    public void setValue(String pValue) {
-        mValue = pValue;
-    }
 
     //-------------------------------------
     // Member variables
@@ -115,14 +110,36 @@ public class Bean2 {
      * Constructor
      */
     public Bean2(String pValue) {
+
         mValue = pValue;
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public String getValue() {
+
+        return mValue;
+
+    }
+
+
+    public void setValue(String pValue) {
+
+        mValue = pValue;
+
     }
 
 
     //-------------------------------------
     public String toString() {
+
         return ("Bean2[" + mValue + "]");
+
     }
+
 
     //-------------------------------------
 

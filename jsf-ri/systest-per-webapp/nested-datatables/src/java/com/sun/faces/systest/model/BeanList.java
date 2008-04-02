@@ -1,5 +1,5 @@
 /*
- * $Id: BeanList.java,v 1.3 2005/08/22 22:10:55 ofung Exp $
+ * $Id: BeanList.java,v 1.4 2006/03/29 22:39:19 rlubke Exp $
  */
 
 /*
@@ -30,88 +30,132 @@
 package com.sun.faces.systest.model;
 
 import javax.faces.model.ListDataModel;
-import javax.faces.component.UIData;
-import javax.faces.context.FacesContext;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BeanList extends Object {
 
+
+    protected List inputValues = null;
+
+    protected String innerDataName;
+
+
+    protected String name = "name";
+
+    protected String outerDataName;
+
+    protected int size = 10;
+
     private ListDataModel listDataModel = null;
+
+    // ------------------------------------------------------------ Constructors
+
 
     public BeanList() {
     }
 
-    protected String outerDataName;
-    public String getOuterDataName() {
-	return outerDataName;
-    }
+    // ---------------------------------------------------------- Public Methods
 
-    public void setOuterDataName(String newOuterDataName) {
-	outerDataName = newOuterDataName;
-    }
 
-    protected String innerDataName;
     public String getInnerDataName() {
-	return innerDataName;
+
+        return innerDataName;
+
     }
+
 
     public void setInnerDataName(String newInnerDataName) {
-	innerDataName = newInnerDataName;
+
+        innerDataName = newInnerDataName;
+
     }
 
 
-    protected String name = "name";
-    public String getName() {
-	return name;
-    }
-
-    public void setName(String newName) {
-	if (null == newName) {
-	    return;
-	}
-	name = newName;
-    }
-
-    protected int size = 10;
-    public int getSize() {
-	return size;
-    }
-
-    public void setSize(int newSize) {
-	size = newSize;
-    }
-
-    public ListDataModel getListDataModel() {
-	if (null == listDataModel) {
-	    ArrayList beans = new ArrayList(size);
-	    InputBean curBean = null;
-	    
-	    for (int i = 0; i < size; i++) {
-		curBean = new InputBean(this, size, getName() + " " + i);
-		
-		beans.add(curBean);
-	    }
-	    listDataModel = new ListDataModel(beans);
-
-	}
-	
-	return listDataModel;
-    }
-
-    public void setListDataModel(ListDataModel newListDataModel) {
-	listDataModel = newListDataModel;
-    }
-
-    protected List inputValues = null;
     public List getInputValues() {
-	return inputValues;
+
+        return inputValues;
+
     }
+
 
     public void setInputValues(List newInputValues) {
-	inputValues = newInputValues;
+
+        inputValues = newInputValues;
+
     }
 
+
+    public ListDataModel getListDataModel() {
+
+        if (null == listDataModel) {
+            ArrayList beans = new ArrayList(size);
+            InputBean curBean = null;
+
+            for (int i = 0; i < size; i++) {
+                curBean = new InputBean(this, size, getName() + " " + i);
+
+                beans.add(curBean);
+            }
+            listDataModel = new ListDataModel(beans);
+
+        }
+
+        return listDataModel;
+
+    }
+
+
+    public void setListDataModel(ListDataModel newListDataModel) {
+
+        listDataModel = newListDataModel;
+
+    }
+
+
+    public String getName() {
+
+        return name;
+
+    }
+
+
+    public void setName(String newName) {
+
+        if (null == newName) {
+            return;
+        }
+        name = newName;
+
+    }
+
+
+    public String getOuterDataName() {
+
+        return outerDataName;
+
+    }
+
+
+    public void setOuterDataName(String newOuterDataName) {
+
+        outerDataName = newOuterDataName;
+
+    }
+
+
+    public int getSize() {
+
+        return size;
+
+    }
+
+
+    public void setSize(int newSize) {
+
+        size = newSize;
+
+    }
 
 }

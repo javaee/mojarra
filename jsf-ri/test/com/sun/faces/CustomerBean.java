@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.7 2005/08/22 22:11:05 ofung Exp $
+ * $Id: CustomerBean.java,v 1.8 2006/03/29 22:39:32 rlubke Exp $
  */
 
 /*
@@ -37,74 +37,95 @@ package com.sun.faces;
 public class CustomerBean implements java.io.Serializable {
 
 
+    private String accountId = null;
+    private String name = null;
+    private String symbol = null;
+    private double totalSales = 0.0;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
     public CustomerBean() {
+
         this(null, null, null, 0.0);
+
     }
 
 
     public CustomerBean(String accountId, String name,
                         String symbol, double totalSales) {
+
         System.out.println("Created CustomerBean");
         this.accountId = accountId;
         this.name = name;
         this.symbol = symbol;
         this.totalSales = totalSales;
+
     }
 
 
-    private String accountId = null;
-
-
-    public String getAccountId() {
-        return (this.accountId);
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void setAccountId(String accountId) {
+
         this.accountId = accountId;
-    }
 
-
-    private String name = null;
-
-
-    public String getName() {
-        return (this.name);
     }
 
 
     public void setName(String name) {
+
         this.name = name;
-    }
 
-
-    private String symbol = null;
-
-
-    public String getSymbol() {
-        return (this.symbol);
     }
 
 
     public void setSymbol(String symbol) {
+
         this.symbol = symbol;
-    }
 
-
-    private double totalSales = 0.0;
-
-
-    public double getTotalSales() {
-        return (this.totalSales);
     }
 
 
     public void setTotalSales(double totalSales) {
+
         this.totalSales = totalSales;
+
+    }
+
+
+    public String getAccountId() {
+
+        return (this.accountId);
+
+    }
+
+
+    public String getName() {
+
+        return (this.name);
+
+    }
+
+
+    public String getSymbol() {
+
+        return (this.symbol);
+
+    }
+
+
+    public double getTotalSales() {
+
+        return (this.totalSales);
+
     }
 
 
     public String toString() {
+
         StringBuffer sb = new StringBuffer("CustomerBean[accountId=");
         sb.append(accountId);
         sb.append(",name=");
@@ -115,7 +136,7 @@ public class CustomerBean implements java.io.Serializable {
         sb.append(totalSales);
         sb.append("]");
         return (sb.toString());
-    }
 
+    }
 
 }

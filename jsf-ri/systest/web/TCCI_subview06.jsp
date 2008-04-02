@@ -5,8 +5,8 @@
 
 <f:subview id="innerSubView5">
 
-<p>Subview 6: Inner template text followed by
-<h:outputText id="innerComponent8" value="inner component 8" /></p>
+    <p>Subview 6: Inner template text followed by
+        <h:outputText id="innerComponent8" value="inner component 8"/></p>
 
 
 </f:subview>

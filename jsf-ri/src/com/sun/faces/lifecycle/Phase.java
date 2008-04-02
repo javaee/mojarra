@@ -1,5 +1,5 @@
 /*
- * $Id: Phase.java,v 1.6 2005/08/22 22:10:15 ofung Exp $
+ * $Id: Phase.java,v 1.7 2006/03/29 22:38:34 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import javax.faces.event.PhaseId;
 
 public abstract class Phase {
 
-    // --------------------------------------------------------- Public Methods
+    // ---------------------------------------------------------- Public Methods
 
 
     /**
@@ -54,15 +54,14 @@ public abstract class Phase {
      * the request processing lifecycle should do next.<?p>
      *
      * @param context FacesContext for the current request being processed
+     *
      * @throws FacesException if a processing error occurred while
      *                        executing this phase
      */
     public abstract void execute(FacesContext context) throws FacesException;
 
 
-    /**
-     * <p>Returns the current {@link Lifecycle} <strong>Phase</strong> identifier.
-     */
+    /** <p>Returns the current {@link Lifecycle} <strong>Phase</strong> identifier. */
     public abstract PhaseId getId();
 
 }

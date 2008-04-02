@@ -1,6 +1,7 @@
+<%@ page import="javax.servlet.jsp.PageContext"%>
 <!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <%@ page contentType="text/html" language="java" %>
@@ -11,21 +12,22 @@
 <%
     pageContext.setAttribute("cond", Boolean.TRUE,
                              PageContext.REQUEST_SCOPE);
- 
+
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <f:view>
-<html>
-<head>
-<title>jstl-if-without-id</title>
-</head>
-<body>
-<h:outputText value="[First]"/>
-<c:if test="${requestScope.cond}">
-  <h:outputText value="[Second]"/>
-</c:if>
-<h:outputText value="[Third]"/>
-</body>
-</html>
+    <html>
+    <head>
+        <title>jstl-if-without-id</title>
+    </head>
+
+    <body>
+    <h:outputText value="[First]"/>
+    <c:if test="${requestScope.cond}">
+        <h:outputText value="[Second]"/>
+    </c:if>
+    <h:outputText value="[Third]"/>
+    </body>
+    </html>
 </f:view>

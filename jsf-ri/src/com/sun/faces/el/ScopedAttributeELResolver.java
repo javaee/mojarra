@@ -1,7 +1,7 @@
 package com.sun.faces.el;
 
 /*
- * $Id: ScopedAttributeELResolver.java,v 1.5 2006/01/11 15:28:05 rlubke Exp $
+ * $Id: ScopedAttributeELResolver.java,v 1.6 2006/03/29 22:38:33 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,64 +28,118 @@ package com.sun.faces.el;
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.beans.FeatureDescriptor;
-import java.util.Map.Entry;
-import java.util.Set;
+import javax.el.ELContext;
+import javax.el.ELException;
+import javax.el.ELResolver;
+import javax.el.PropertyNotFoundException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-import javax.el.ELException;
-import javax.el.PropertyNotFoundException;
-import javax.el.ELContext;
-import javax.el.ELResolver;
+import java.beans.FeatureDescriptor;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
 
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 public class ScopedAttributeELResolver extends ELResolver {
+
+    // ------------------------------------------------------------ Constructors
+
 
     public ScopedAttributeELResolver() {
     }
 
-    public Object getValue(ELContext context, Object base, Object property)
-        throws ELException {
+    // ---------------------------------------------------------- Public Methods
+
+
+    public Class getCommonPropertyType(ELContext context, Object base) {
+
         if (base != null) {
             return null;
         }
-        if ( base == null && property == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
-            throw new PropertyNotFoundException(message);
+        return Object.class;
+
+    }
+
+
+    public Iterator getFeatureDescriptors(ELContext context, Object base) {
+
+        String attrName = null;
+        Object attrValue = null;
+        ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>();
+
+        FacesContext facesContext = (FacesContext)
+              context.getContext(FacesContext.class);
+        ExternalContext ec = facesContext.getExternalContext();
+
+        // add attributes in request scope.
+        Set<Entry<String, Object>> attrs = ec.getRequestMap().entrySet();
+        Iterator<Entry<String, Object>> it = attrs.iterator();
+        while (it.hasNext()) {
+            Entry<String, Object> entry = it.next();
+            attrName = entry.getKey();
+            attrValue = entry.getValue();
+            list.add(Util.getFeatureDescriptor(attrName,
+                                               attrName,
+                                               "request scope attribute",
+                                               false,
+                                               false,
+                                               true,
+                                               attrValue.getClass(),
+                                               Boolean.TRUE));
         }
 
-        Object result = null;
-        String attribute = (String) property;
-        FacesContext facesContext = (FacesContext)
-            context.getContext(FacesContext.class);
-        ExternalContext ec = facesContext.getExternalContext();
-        if (null == (result = ec.getRequestMap().get(attribute))) {
-            if (null == (result = ec.getSessionMap().get(attribute))) {
-                result = ec.getApplicationMap().get(attribute);
-            }
+        // add attributes in session scope.
+        attrs = ec.getSessionMap().entrySet();
+        it = attrs.iterator();
+        while (it.hasNext()) {
+            Entry<String, Object> entry = it.next();
+            attrName = entry.getKey();
+            attrValue = entry.getValue();
+            list.add(Util.getFeatureDescriptor(attrName,
+                                               attrName,
+                                               "session scope attribute",
+                                               false,
+                                               false,
+                                               true,
+                                               attrValue.getClass(),
+                                               Boolean.TRUE));
         }
-        if ( result != null) {
-            context.setPropertyResolved(true);
+
+        // add attributes in application scope.
+        attrs = ec.getApplicationMap().entrySet();
+        it = attrs.iterator();
+        while (it.hasNext()) {
+            Entry<String, Object> entry = it.next();
+            attrName = entry.getKey();
+            attrValue = entry.getValue();
+            list.add(Util.getFeatureDescriptor(attrName,
+                                               attrName,
+                                               "application scope attribute",
+                                               false,
+                                               false,
+                                               true,
+                                               attrValue.getClass(),
+                                               Boolean.TRUE));
         }
-        return result;
+
+        return list.iterator();
+
     }
 
 
     public Class getType(ELContext context, Object base, Object property)
-        throws ELException {
+          throws ELException {
+
         if (base != null) {
             return null;
         }
-        if ( base == null && property == null) {
+        if (base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
@@ -95,16 +149,68 @@ public class ScopedAttributeELResolver extends ELResolver {
             return Object.class;
         }
         return null;
+
     }
 
-    public void  setValue(ELContext context, Object base, Object property,
-                          Object val) throws ELException {
+
+    public Object getValue(ELContext context, Object base, Object property)
+          throws ELException {
+
+        if (base != null) {
+            return null;
+        }
+        if (base == null && property == null) {
+            String message = MessageUtils.getExceptionMessageString
+                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " base " + base + " property " + property;
+            throw new PropertyNotFoundException(message);
+        }
+
+        Object result = null;
+        String attribute = (String) property;
+        FacesContext facesContext = (FacesContext)
+              context.getContext(FacesContext.class);
+        ExternalContext ec = facesContext.getExternalContext();
+        if (null == (result = ec.getRequestMap().get(attribute))) {
+            if (null == (result = ec.getSessionMap().get(attribute))) {
+                result = ec.getApplicationMap().get(attribute);
+            }
+        }
+        if (result != null) {
+            context.setPropertyResolved(true);
+        }
+        return result;
+
+    }
+
+
+    public boolean isReadOnly(ELContext context, Object base, Object property)
+          throws ELException {
+
+        if (base != null) {
+            return false;
+        }
+        if (base == null && property == null) {
+            String message = MessageUtils.getExceptionMessageString
+                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " base " + base + " property " + property;
+            throw new PropertyNotFoundException(message);
+        }
+        context.setPropertyResolved(true);
+        return false;
+
+    }
+
+
+    public void setValue(ELContext context, Object base, Object property,
+                         Object val) throws ELException {
+
         if (base != null) {
             return;
         }
-        if ( base == null && property == null) {
+        if (base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
@@ -114,7 +220,7 @@ public class ScopedAttributeELResolver extends ELResolver {
 
         String attribute = (String) property;
         FacesContext facesContext = (FacesContext)
-            context.getContext(FacesContext.class);
+              context.getContext(FacesContext.class);
         ExternalContext ec = facesContext.getExternalContext();
         if ((result = ec.getRequestMap().get(attribute)) != null) {
             ec.getRequestMap().put(attribute, val);
@@ -122,84 +228,12 @@ public class ScopedAttributeELResolver extends ELResolver {
             ec.getSessionMap().put(attribute, val);
         } else if ((result = ec.getApplicationMap().get(attribute)) != null) {
             ec.getApplicationMap().put(attribute, val);
-        }
-        else {
+        } else {
             // if the property doesn't exist in any of the scopes, put it in
             // request scope.
             ec.getRequestMap().put(attribute, val);
         }
 
-    }
-
-    public boolean isReadOnly(ELContext context, Object base, Object property)
-        throws ELException {
-        if (base != null) {
-            return false;
-        }
-        if ( base == null && property == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
-            throw new PropertyNotFoundException(message);
-        }
-        context.setPropertyResolved(true);
-        return false;
-    }
-
-    public Iterator getFeatureDescriptors(ELContext context, Object base) {
-
-       String attrName = null;
-       Object attrValue = null;
-       ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>();
-
-       FacesContext facesContext = (FacesContext)
-           context.getContext(FacesContext.class);
-       ExternalContext ec = facesContext.getExternalContext();
-
-       // add attributes in request scope.
-       Set<Entry<String,Object>> attrs = ec.getRequestMap().entrySet();
-       Iterator<Entry<String,Object>> it = attrs.iterator();
-       while (it.hasNext()) {
-           Entry<String,Object> entry = it.next();
-           attrName = entry.getKey();
-           attrValue = entry.getValue();
-           list.add(Util.getFeatureDescriptor(attrName, attrName,
-                                              "request scope attribute", false, false, true, attrValue.getClass(),
-                                              Boolean.TRUE));
-       }
-
-       // add attributes in session scope.
-       attrs = ec.getSessionMap().entrySet();
-       it = attrs.iterator();
-       while (it.hasNext()) {
-           Entry<String,Object> entry = it.next();
-           attrName = entry.getKey();
-           attrValue = entry.getValue();
-           list.add(Util.getFeatureDescriptor(attrName, attrName,
-                                              "session scope attribute", false, false, true, attrValue.getClass(),
-                                              Boolean.TRUE));
-       }
-
-       // add attributes in application scope.
-       attrs = ec.getApplicationMap().entrySet();
-       it = attrs.iterator();
-       while (it.hasNext()) {
-           Entry<String,Object> entry = it.next();
-           attrName = entry.getKey();
-           attrValue = entry.getValue();
-           list.add(Util.getFeatureDescriptor(attrName, attrName,
-                                              "application scope attribute", false, false, true, attrValue.getClass(),
-                                              Boolean.TRUE));
-       }
-
-       return list.iterator();
-    }
-
-    public Class getCommonPropertyType(ELContext context, Object base) {
-        if (base != null) {
-            return null;
-        }
-        return Object.class;
     }
 
 }

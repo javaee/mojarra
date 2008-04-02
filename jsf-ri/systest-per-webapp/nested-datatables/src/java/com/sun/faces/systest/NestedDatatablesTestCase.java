@@ -1,5 +1,5 @@
 /*
- * $Id: NestedDatatablesTestCase.java,v 1.3 2005/08/22 22:10:54 ofung Exp $
+ * $Id: NestedDatatablesTestCase.java,v 1.4 2006/03/29 22:39:18 rlubke Exp $
  */
 
 /*
@@ -30,33 +30,19 @@
 package com.sun.faces.systest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import java.util.List;
+
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
 
-import javax.faces.component.NamingContainer;
-
-
-/**
- * <p>Make sure that only unique view ids are saved in the session</p>
- */
+/** <p>Make sure that only unique view ids are saved in the session</p> */
 
 public class NestedDatatablesTestCase extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -67,202 +53,206 @@ public class NestedDatatablesTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public NestedDatatablesTestCase(String name) {
+
         super(name);
+
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
+    // ---------------------------------------------------------- Public Methods
 
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
+    /** Return the tests included in this test suite. */
     public static Test suite() {
+
         return (new TestSuite(NestedDatatablesTestCase.class));
+
     }
 
 
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    /** Set up instance variables required by this test case. */
+    public void setUp() throws Exception {
+
+        super.setUp();
+
+    }
+
+
+    /** Tear down instance variables required by this test case. */
     public void tearDown() {
+
         super.tearDown();
+
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
 
     // ------------------------------------------------- Individual Test Methods
 
     public void testInputFieldUpdate() throws Exception {
-	HtmlPage page = getPage("/faces/test.jsp");
-	List list;
-	int i;
-	char c, max;
 
-	HtmlTextInput input = null;
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
-	// 
-	// submit values 1 thru list.size();
-	// 
-	for (i = 0; i < list.size(); i++) {
-	    ((HtmlTextInput)list.get(i)).setValueAttribute("" + i);
-	}
+        HtmlPage page = getPage("/faces/test.jsp");
+        List list;
+        int i;
+        char c, max;
 
-	HtmlSubmitInput button = null;
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlSubmitInput.class); 
-	button = (HtmlSubmitInput) list.get(0);
-	page = (HtmlPage) button.click();
+        HtmlTextInput input = null;
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlTextInput.class);
+        // 
+        // submit values 1 thru list.size();
+        // 
+        for (i = 0; i < list.size(); i++) {
+            ((HtmlTextInput) list.get(i)).setValueAttribute("" + i);
+        }
 
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
-	// verify they are correctly updated
-	for (i = 0; i < list.size(); i++) {
-	    assertEquals("" + i, 
-			 ((HtmlTextInput)list.get(i)).getValueAttribute());
-	}
+        HtmlSubmitInput button = null;
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlSubmitInput.class);
+        button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
 
-	// 
-	// submit values a thru (a + list.size())
-	// 
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlTextInput.class);
+        // verify they are correctly updated
+        for (i = 0; i < list.size(); i++) {
+            assertEquals("" + i,
+                         ((HtmlTextInput) list.get(i)).getValueAttribute());
+        }
 
-	max = (char) ('a' + (char) list.size());
-	i = 0;
+        // 
+        // submit values a thru (a + list.size())
+        // 
 
-	for (c = 'a'; c < max; c++) {
-	    ((HtmlTextInput)list.get(i++)).setValueAttribute("" + c);
-	}
-	
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlSubmitInput.class); 
-	button = (HtmlSubmitInput) list.get(0);
-	page = (HtmlPage) button.click();
+        max = (char) ('a' + (char) list.size());
+        i = 0;
 
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
+        for (c = 'a'; c < max; c++) {
+            ((HtmlTextInput) list.get(i++)).setValueAttribute("" + c);
+        }
 
-	i = 0;
-	// verify they are correctly updated
-	for (c = 'a'; c < max; c++) {
-	    assertEquals("" + c, 
-			 ((HtmlTextInput)list.get(i++)).getValueAttribute());
-	}
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlSubmitInput.class);
+        button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
 
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlTextInput.class);
+
+        i = 0;
+        // verify they are correctly updated
+        for (c = 'a'; c < max; c++) {
+            assertEquals("" + c,
+                         ((HtmlTextInput) list.get(i++)).getValueAttribute());
+        }
 
     }
+
 
     public void testInputFieldUpdate2() throws Exception {
-	HtmlPage page = getPage("/faces/nested.jsp");
-	List list;
-	int i;
-	char c, max;
 
-	HtmlSubmitInput button = null;
-	HtmlTextInput input = null;
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
-	// 
-	// submit values 1 thru list.size();
-	// 
-	for (i = 0; i < list.size(); i++) {
-	    ((HtmlTextInput)list.get(i)).setValueAttribute("" + i);
-	}
+        HtmlPage page = getPage("/faces/nested.jsp");
+        List list;
+        int i;
+        char c, max;
 
-	// find and press the "reload" button
-	page = pressReloadButton(page);
+        HtmlSubmitInput button = null;
+        HtmlTextInput input = null;
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlTextInput.class);
+        // 
+        // submit values 1 thru list.size();
+        // 
+        for (i = 0; i < list.size(); i++) {
+            ((HtmlTextInput) list.get(i)).setValueAttribute("" + i);
+        }
 
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
-	// verify they are correctly updated
-	for (i = 0; i < list.size(); i++) {
-	    assertEquals("" + i, 
-			 ((HtmlTextInput)list.get(i)).getValueAttribute());
-	}
+        // find and press the "reload" button
+        page = pressReloadButton(page);
 
-	// 
-	// submit values a thru (a + list.size())
-	// 
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlTextInput.class);
+        // verify they are correctly updated
+        for (i = 0; i < list.size(); i++) {
+            assertEquals("" + i,
+                         ((HtmlTextInput) list.get(i)).getValueAttribute());
+        }
 
-	max = (char) ('a' + (char) list.size());
-	i = 0;
+        // 
+        // submit values a thru (a + list.size())
+        // 
 
-	for (c = 'a'; c < max; c++) {
-	    ((HtmlTextInput)list.get(i++)).setValueAttribute("" + c);
-	}
-	
-	// find and press the "reload" button
-	page = pressReloadButton(page);
+        max = (char) ('a' + (char) list.size());
+        i = 0;
 
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
-	i = 0;
-	// verify they are correctly updated
-	for (c = 'a'; c < max; c++) {
-	    assertEquals("" + c, 
-			 ((HtmlTextInput)list.get(i++)).getValueAttribute());
-	}
+        for (c = 'a'; c < max; c++) {
+            ((HtmlTextInput) list.get(i++)).setValueAttribute("" + c);
+        }
 
-	// add some ports
-       
-	// press first add port button
-	page = pressAddPortButton(page, 0);
+        // find and press the "reload" button
+        page = pressReloadButton(page);
 
-	// change the port number
-	input = (HtmlTextInput) getNthInputContainingGivenId(page, 
-							     "portNumber", 0);
-	input.setValueAttribute("12");
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlTextInput.class);
+        i = 0;
+        // verify they are correctly updated
+        for (c = 'a'; c < max; c++) {
+            assertEquals("" + c,
+                         ((HtmlTextInput) list.get(i++)).getValueAttribute());
+        }
 
-	page = pressReloadButton(page);
+        // add some ports
 
-	// verify that it is updated correctly.
-	input = (HtmlTextInput) getNthInputContainingGivenId(page, 
-							     "portNumber", 0);
-	assertEquals("12", input.getValueAttribute());
+        // press first add port button
+        page = pressAddPortButton(page, 0);
 
-	// press second add port button
-	page = pressAddPortButton(page, 1);
+        // change the port number
+        input = (HtmlTextInput) getNthInputContainingGivenId(page,
+                                                             "portNumber", 0);
+        input.setValueAttribute("12");
 
-	// verify that the last port input in the page doesn't the value
-	input = (HtmlTextInput) getNthFromLastInputContainingGivenId(page, 
-							     "portNumber", 0);
-	assertTrue(-1 == input.getValueAttribute().indexOf("12"));
+        page = pressReloadButton(page);
+
+        // verify that it is updated correctly.
+        input = (HtmlTextInput) getNthInputContainingGivenId(page,
+                                                             "portNumber", 0);
+        assertEquals("12", input.getValueAttribute());
+
+        // press second add port button
+        page = pressAddPortButton(page, 1);
+
+        // verify that the last port input in the page doesn't the value
+        input = (HtmlTextInput) getNthFromLastInputContainingGivenId(page,
+                                                                     "portNumber",
+                                                                     0);
+        assertTrue(-1 == input.getValueAttribute().indexOf("12"));
 
     }
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private HtmlPage pressAddPortButton(HtmlPage page,
+                                        int whichButton) throws Exception {
+
+        HtmlSubmitInput button = null;
+
+        button = (HtmlSubmitInput) getNthInputContainingGivenId(page,
+                                                                "add-port",
+                                                                whichButton);
+        page = (HtmlPage) button.click();
+        return page;
+
+    }
+
 
     private HtmlPage pressReloadButton(HtmlPage page) throws Exception {
-	HtmlSubmitInput button = null;
-	
-	button = (HtmlSubmitInput)getInputContainingGivenId(page, 
-							    "reload");
-	page = (HtmlPage) button.click();
-	return page;
+
+        HtmlSubmitInput button = null;
+
+        button = (HtmlSubmitInput) getInputContainingGivenId(page,
+                                                             "reload");
+        page = (HtmlPage) button.click();
+        return page;
+
     }
-    
-    private HtmlPage pressAddPortButton(HtmlPage page, 
-					int whichButton) throws Exception {
-	HtmlSubmitInput button = null;
-	
-	button = (HtmlSubmitInput)getNthInputContainingGivenId(page, 
-							       "add-port",
-							       whichButton);
-	page = (HtmlPage) button.click();
-	return page;
-    }
-    
+
 }
 

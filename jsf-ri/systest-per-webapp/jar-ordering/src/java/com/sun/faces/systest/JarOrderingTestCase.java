@@ -1,5 +1,5 @@
 /*
- * $Id: JarOrderingTestCase.java,v 1.1 2005/12/03 20:30:23 edburns Exp $
+ * $Id: JarOrderingTestCase.java,v 1.2 2006/03/29 22:39:18 rlubke Exp $
  */
 
 /*
@@ -55,12 +55,7 @@ import javax.faces.component.NamingContainer;
  * <p>Make sure that only unique view ids are saved in the session</p>
  */
 
-public class JarOrderingTestCase extends AbstractTestCase {
-
-
-    // ------------------------------------------------------------ Constructors
-
-
+public class JarOrderingTestCase extends AbstractTestCase {    
     /**
      * Construct a new instance of this test case.
      *
@@ -69,12 +64,7 @@ public class JarOrderingTestCase extends AbstractTestCase {
     public JarOrderingTestCase(String name) {
         super(name);
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
+   
 
 
     /**
@@ -99,13 +89,7 @@ public class JarOrderingTestCase extends AbstractTestCase {
     public void tearDown() {
         super.tearDown();
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-
-    // ------------------------------------------------- Individual Test Methods
+   
 
     public void testProperOrdering() throws Exception {
 	HtmlPage page = getPage("/faces/test.jsp");

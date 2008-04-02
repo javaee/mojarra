@@ -1,5 +1,5 @@
 /*
- * $Id: FacesInjectionManager.java,v 1.3 2005/08/26 15:27:03 rlubke Exp $
+ * $Id: FacesInjectionManager.java,v 1.4 2006/03/29 22:38:31 rlubke Exp $
  */
 
 /*
@@ -28,45 +28,92 @@
  */
 
 package com.sun.faces.config;
-import com.sun.faces.util.Util;
-import static com.sun.faces.RIConstants.EMPTY_CLASS_ARGS;
-import static com.sun.faces.RIConstants.EMPTY_METH_ARGS;
 
 import java.lang.reflect.Method;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.sun.faces.RIConstants.EMPTY_CLASS_ARGS;
+import static com.sun.faces.RIConstants.EMPTY_METH_ARGS;
+import com.sun.faces.util.Util;
 
 /**
- * InjectionManager provides runtime resource injection(@Resource, @EJB, etc.) 
- * services.  It performs the actual injection into the fields and methods of 
+ * InjectionManager provides runtime resource injection(@Resource, @EJB, etc.)
+ * services.  It performs the actual injection into the fields and methods of
  * Java EE 5 component instances if Sun Java EE RI/GlassFish/SJSAS9.0 is
- * available during runtime. This is a singleton and can be obtained by 
+ * available during runtime. This is a singleton and can be obtained by
  * invoking the static method.
  */
 public class FacesInjectionManager {
-    // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.CONFIG_LOGGER);
-    
-    Method injectMethod = null;
+
+
     Boolean injectionPossible = null;
     static FacesInjectionManager facesInjectionManager = null;
+
+    Method injectMethod = null;
     Object injectionManager = null;
-    
+    // Log instance for this class
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
+                                                  + Util.CONFIG_LOGGER);
+
+    // ---------------------------------------------------------- Public Methods
+
+
     public static FacesInjectionManager getInjectionManager() {
-        if ( facesInjectionManager == null ) {
+
+        if (facesInjectionManager == null) {
             facesInjectionManager = new FacesInjectionManager();
         }
         return facesInjectionManager;
+
     }
-    
+
+
+    /**
+     * Caches the InjectionManager as well as the injectMethod instance if its
+     * available to keep reflection to a minimum.
+     */
+    public void getInjectionMethod() {
+
+        injectionPossible = Boolean.FALSE;
+        try {
+            // look up Switch class.
+            Class switchClass = Class.forName("com.sun.enterprise.Switch");
+            // look up getSwitch method.
+            Method switchMethod = switchClass.getMethod("getSwitch",
+                                                        EMPTY_CLASS_ARGS);
+            // invoke the method and get an instance of Switch
+            Object switchObj = switchMethod.invoke(null, EMPTY_METH_ARGS);
+
+            // look up getInjectionManager method
+            Method injectManagerMethod =
+                  switchClass.getMethod("getInjectionManager",
+                                        EMPTY_CLASS_ARGS);
+            // invoke the method and get an instance of InjectionManager
+            injectionManager = injectManagerMethod.invoke(switchObj,
+                                                          EMPTY_METH_ARGS);
+            // look up injectInstance method.
+            injectMethod = injectionManager.getClass().
+                  getMethod("injectInstance", new Class[]{Object.class});
+            injectionPossible = Boolean.TRUE;
+        } catch (Exception e) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE, "Resource Injection APIs not available ",
+                           e);
+            }
+        }
+
+    }
+
+
     /**
      * Inject the given object instance with the resources from its
      * component environment by delegating to com.sun.enterprise.InjectionManager.
-     * The applicable component naming environment information will be retrieved 
-     * from the current invocation context. 
+     * The applicable component naming environment information will be retrieved
+     * from the current invocation context.
      */
-    public void injectInstance(Object instance){
+    public void injectInstance(Object instance) {
+
         if (injectionPossible == null) {
             getInjectionMethod();
         }
@@ -74,55 +121,22 @@ public class FacesInjectionManager {
             // Resource injection APIs not available.
             return;
         }
-        
+
         assert(injectionManager != null);
         assert(injectMethod != null);
         assert(instance != null);
-      
+
         // inject the instance passed in.
         try {
             // invoke injectInstance method passing in the managed bean instance
-            injectMethod.invoke(injectionManager, new Object[] {instance});   
+            injectMethod.invoke(injectionManager, new Object[]{instance});
         } catch (Exception e) {
             if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE, "Resource Injection failed, ", 
-                        e);
-            }           
+                logger.log(Level.FINE, "Resource Injection failed, ",
+                           e);
+            }
         }
-    }
-    
-    /**
-     * Caches the InjectionManager as well as the injectMethod instance if its
-     * available to keep reflection to a minimum.
-     */
-    public void getInjectionMethod() {
-        injectionPossible = Boolean.FALSE;
-        try {
-            // look up Switch class.
-            Class switchClass = Class.forName("com.sun.enterprise.Switch");
-            // look up getSwitch method.
-            Method switchMethod = switchClass.getMethod("getSwitch", 
-                                                        EMPTY_CLASS_ARGS);
-            // invoke the method and get an instance of Switch
-            Object switchObj = switchMethod.invoke(null, EMPTY_METH_ARGS);
-            
-            // look up getInjectionManager method
-            Method injectManagerMethod = 
-                        switchClass.getMethod("getInjectionManager", 
-                                              EMPTY_CLASS_ARGS);
-            // invoke the method and get an instance of InjectionManager
-            injectionManager = injectManagerMethod.invoke(switchObj, 
-                                                          EMPTY_METH_ARGS);
-            // look up injectInstance method.
-            injectMethod=  injectionManager.getClass().
-                    getMethod("injectInstance", new Class[] {Object.class });  
-            injectionPossible = Boolean.TRUE;
-        } catch (Exception e) {            
-            if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE, "Resource Injection APIs not available ", 
-                        e);
-            }            
-        }
+
     }
 
 }

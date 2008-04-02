@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyActionListenerImpl.java,v 1.2 2005/08/22 22:10:26 ofung Exp $
+ * $Id: SetPropertyActionListenerImpl.java,v 1.3 2006/03/29 22:38:41 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -38,45 +38,71 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
-public class SetPropertyActionListenerImpl extends Object implements ActionListener, StateHolder {
-    
+public class SetPropertyActionListenerImpl extends Object
+      implements ActionListener, StateHolder {
+
+
     private ValueExpression targetExpression = null;
-    
+
     private ValueExpression valueExpression = null;
-    
-    public SetPropertyActionListenerImpl() {}
-    
-    public SetPropertyActionListenerImpl(ValueExpression target, ValueExpression value) {
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public SetPropertyActionListenerImpl() {
+    }
+
+
+    public SetPropertyActionListenerImpl(ValueExpression target,
+                                         ValueExpression value) {
+
         this.targetExpression = target;
         this.valueExpression = value;
+
     }
-    
+
+    // --------------------------------------------- Methods From ActionListener
+
     public void processAction(ActionEvent e) throws AbortProcessingException {
+
         ActionSource host = (ActionSource) e.getComponent();
         ELContext elc = FacesContext.getCurrentInstance().getELContext();
-        
+
         try {
             targetExpression.setValue(elc, valueExpression.getValue(elc));
         } catch (ELException ele) {
             // PENDING logging
         }
+
     }
-    
-    public void setTransient(boolean newTransientValue) {}
-    
-    public boolean isTransient() { return false; }
-    
+
+    // ------------------------------------------------ Methods From StateHolder
+
     public Object saveState(FacesContext context) {
+
         Object [] state = new Object[2];
         state[0] = targetExpression;
         state[1] = valueExpression;
         return state;
+
     }
-    
+
+
     public void restoreState(FacesContext context, Object state) {
+
         Object [] stateArray = (Object []) state;
         targetExpression = (ValueExpression) stateArray[0];
         valueExpression = (ValueExpression) stateArray[1];
+
     }
-    
+
+
+    public boolean isTransient() {
+        return false;
+    }
+
+
+    public void setTransient(boolean newTransientValue) {
+    }
+
 }

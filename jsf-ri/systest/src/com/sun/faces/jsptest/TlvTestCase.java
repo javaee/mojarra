@@ -1,5 +1,5 @@
 /*
- * $Id: TlvTestCase.java,v 1.3 2005/08/22 22:10:34 ofung Exp $
+ * $Id: TlvTestCase.java,v 1.4 2006/03/29 22:38:47 rlubke Exp $
  */
 
 /*
@@ -30,33 +30,18 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import java.util.List;
+
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
 
-import javax.faces.component.NamingContainer;
-
-
-/**
- * <p>Verify that required validation occurrs for Select* components.</p>
- */
+/** <p>Verify that required validation occurrs for Select* components.</p> */
 
 public class TlvTestCase extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -67,58 +52,51 @@ public class TlvTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public TlvTestCase(String name) {
+
         super(name);
+
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // ---------------------------------------------------- Overall Test Methods
+    // ---------------------------------------------------------- Public Methods
 
 
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-
-    /**
-     * Return the tests included in this test suite.
-     */
+    /** Return the tests included in this test suite. */
     public static Test suite() {
+
         return (new TestSuite(TlvTestCase.class));
+
     }
 
 
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    /** Set up instance variables required by this test case. */
+    public void setUp() throws Exception {
+
+        super.setUp();
+
+    }
+
+
+    /** Tear down instance variables required by this test case. */
     public void tearDown() {
-        super.tearDown();
-    }
 
+        super.tearDown();
+
+    }
 
     // ------------------------------------------------------ Instance Variables
-
-
 
     // ------------------------------------------------- Individual Test Methods
 
-    /**
-     *
-     * <p>Verify that the required validator works for SelectOne</p>
-     */
+    /** <p>Verify that the required validator works for SelectOne</p> */
 
     public void testButtonWithBinding() throws Exception {
-	HtmlPage page = getPage("/faces/jsp/tlvTest01.jsp");
-	List list = getAllElementsOfGivenClass(page, null, 
-					       HtmlSubmitInput.class); 
-	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-	assertEquals("button label", button.asText());
-    }
 
+        HtmlPage page = getPage("/faces/jsp/tlvTest01.jsp");
+        List list = getAllElementsOfGivenClass(page, null,
+                                               HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        assertEquals("button label", button.asText());
+
+    }
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLongRangeTag.java,v 1.15 2005/08/22 22:10:27 ofung Exp $
+ * $Id: ValidateLongRangeTag.java,v 1.16 2006/03/29 22:38:42 rlubke Exp $
  */
 
 /*
@@ -32,8 +32,8 @@
 package com.sun.faces.taglib.jsf_core;
 
 import javax.el.ELContext;
-import javax.el.ValueExpression;
 import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.LongRangeValidator;
 import javax.faces.validator.Validator;
@@ -48,9 +48,6 @@ import com.sun.faces.util.Util;
 
 public class ValidateLongRangeTag extends MaxMinValidatorTag {
 
-    private static final long serialVersionUID = 292617728229736800L;
-    private static ValueExpression VALIDATOR_ID_EXPR = null;
-
 // Attribute Instance Variables
     protected ValueExpression maximumExpression = null;
     protected ValueExpression minimumExpression = null;
@@ -58,60 +55,61 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag {
     protected long maximum = 0;
     protected long minimum = 0;
 
+    private static final long serialVersionUID = 292617728229736800L;
+    private static ValueExpression VALIDATOR_ID_EXPR = null;
 
-// Relationship Instance Variables
+    // ------------------------------------------------------------ Constructors
 
-//
-// Constructors and Initializers    
-//
 
     public ValidateLongRangeTag() {
+
         super();
         if (VALIDATOR_ID_EXPR == null) {
             FacesContext context = FacesContext.getCurrentInstance();
             ExpressionFactory factory =
-                FacesContext.getCurrentInstance().getApplication().
-                    getExpressionFactory();
+                  FacesContext.getCurrentInstance().getApplication().
+                        getExpressionFactory();
             VALIDATOR_ID_EXPR =
-                factory.createValueExpression(context.getELContext(),  
-                                              "javax.faces.LongRange",
-                                              String.class);
+                  factory.createValueExpression(context.getELContext(),
+                                                "javax.faces.LongRange",
+                                                String.class);
         }
+
     }
 
-//
-// Class methods
-//
+    // ---------------------------------------------------------- Public Methods
 
-//
-// General Methods
-//
+
+    public int doStartTag() throws JspException {
+
+        super.setValidatorId(VALIDATOR_ID_EXPR);
+        return super.doStartTag();
+
+    }
+
 
     public void setMaximum(ValueExpression newMaximum) {
+
         maximumSet = true;
         maximumExpression = newMaximum;
+
     }
 
 
     public void setMinimum(ValueExpression newMinimum) {
+
         minimumSet = true;
         minimumExpression = newMinimum;
+
     }
 
-    public int doStartTag() throws JspException {
-        super.setValidatorId(VALIDATOR_ID_EXPR);
-        return super.doStartTag();
-    }
+    // ------------------------------------------------------- Protected Methods
 
-
-// 
-// Methods from ValidatorTag
-//
 
     protected Validator createValidator() throws JspException {
 
         LongRangeValidator result = (LongRangeValidator)
-            super.createValidator();
+              super.createValidator();
         assert (null != result);
 
         evaluateExpressions();
@@ -124,9 +122,13 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag {
         }
 
         return result;
+
     }
 
+    // --------------------------------------------------------- Private Methods
+
 /* Evaluates expressions as necessary */
+
     private void evaluateExpressions() {
 
         ELContext context = FacesContext.getCurrentInstance().getELContext();
@@ -134,25 +136,26 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag {
         if (minimumExpression != null) {
             if (!minimumExpression.isLiteralText()) {
                 minimum = ((Number)
-                              Util.evaluateValueExpression(minimumExpression,
-                                  context)).longValue();
+                      Util.evaluateValueExpression(minimumExpression,
+                                                   context)).longValue();
             } else {
                 minimum =
-                Integer.valueOf(minimumExpression.getExpressionString()).
-                    longValue();
+                      Integer.valueOf(minimumExpression.getExpressionString()).
+                            longValue();
             }
         }
         if (maximumExpression != null) {
             if (!maximumExpression.isLiteralText()) {
                 maximum = ((Number)
-                              Util.evaluateValueExpression(maximumExpression,
-                                  context)).longValue();
+                      Util.evaluateValueExpression(maximumExpression,
+                                                   context)).longValue();
             } else {
                 maximum =
-                Integer.valueOf(maximumExpression.getExpressionString()).
-                    longValue();
+                      Integer.valueOf(maximumExpression.getExpressionString()).
+                            longValue();
             }
         }
+
     }
 
 } // end of class ValidateLongRangeTag

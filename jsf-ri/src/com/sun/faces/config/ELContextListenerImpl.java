@@ -1,5 +1,5 @@
 /*
- * $Id: ELContextListenerImpl.java,v 1.2 2005/08/22 22:10:09 ofung Exp $
+ * $Id: ELContextListenerImpl.java,v 1.3 2006/03/29 22:38:31 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,43 +28,48 @@
 
 package com.sun.faces.config;
 
-import javax.faces.context.FacesContext;
 import javax.el.ELContext;
-import javax.el.ELContextListener;
 import javax.el.ELContextEvent;
+import javax.el.ELContextListener;
+import javax.faces.context.FacesContext;
 
 public class ELContextListenerImpl implements ELContextListener {
-    
+
+    // ------------------------------------------------------------ Constructors
+
+
     public ELContextListenerImpl() {
     }
-    
+
+    // ------------------------------------------ Methods From ELContextListener
+
     /**
      * Invoked when a new <code>ELContext</code> has been created.
      *
      * @param ece the notification event.
      */
     public void contextCreated(ELContextEvent ece) {
-        
-        
+
         FacesContext context = FacesContext.getCurrentInstance();
-        if ( context == null) {
+        if (context == null) {
             return;
         }
-        ELContext source = (ELContext)ece.getSource();
+        ELContext source = (ELContext) ece.getSource();
         // Register FacesContext with JSP
         source.putContext(FacesContext.class, context);
-        
+
         // dispatch the event to any JSF applications interested in
         // the event.
-        ELContextListener[] listeners = 
-            context.getApplication().getELContextListeners();
-        if ( listeners == null) {
+        ELContextListener[] listeners =
+              context.getApplication().getELContextListeners();
+        if (listeners == null) {
             return;
         }
         for (int i = 0; i < listeners.length; ++i) {
             ELContextListener elcl = listeners[i];
             elcl.contextCreated(new ELContextEvent(source));
         }
+
     }
-    
+
 }

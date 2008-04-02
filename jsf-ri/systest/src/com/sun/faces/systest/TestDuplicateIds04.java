@@ -1,5 +1,5 @@
 /*
- * $Id: TestDuplicateIds04.java,v 1.5 2006/03/14 16:33:25 edburns Exp $
+ * $Id: TestDuplicateIds04.java,v 1.6 2006/03/29 22:38:50 rlubke Exp $
  */
 
 /*
@@ -30,33 +30,18 @@
 package com.sun.faces.systest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import java.util.List;
+
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
 
-import javax.faces.component.NamingContainer;
-
-
-/**
- * <p>Verify that required validation occurrs for Select* components.</p>
- */
+/** <p>Verify that required validation occurrs for Select* components.</p> */
 
 public class TestDuplicateIds04 extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -67,62 +52,56 @@ public class TestDuplicateIds04 extends AbstractTestCase {
      * @param name Name of the test case
      */
     public TestDuplicateIds04(String name) {
+
         super(name);
+
     }
 
+    // ---------------------------------------------------------- Public Methods
+
+
+    /** Return the tests included in this test suite. */
+    public static Test suite() {
+
+        return (new TestSuite(TestDuplicateIds04.class));
+
+    }
 
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
 
-    /**
-     * Set up instance variables required by this test case.
-     */
+    /** Set up instance variables required by this test case. */
     public void setUp() throws Exception {
+
         super.setUp();
+
     }
 
 
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(TestDuplicateIds04.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    /** Tear down instance variables required by this test case. */
     public void tearDown() {
+
         super.tearDown();
+
     }
 
 
-    // ------------------------------------------------------ Instance Variables
-
-
-
-    // ------------------------------------------------- Individual Test Methods
-
-    /**
-     *
-     * <p>Verify duplicate ids are caught.</p>
-     */
+    /** <p>Verify duplicate ids are caught.</p> */
 
     public void testDuplicateIdsFromBinding() throws Exception {
-	HtmlPage page = getPage("/faces/duplicateIds04.jsp");
-	List list = getAllElementsOfGivenClass(page, null, 
-					       HtmlSubmitInput.class); 
-	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-	client.setThrowExceptionOnFailingStatusCode(false);
-	page = (HtmlPage) button.click();
-	assertTrue(-1 != page.asText().indexOf("j_id0:j_id2"));
-	assertTrue(-1 != page.asText().indexOf("Duplicate"));
-	client.setThrowExceptionOnFailingStatusCode(true);
-    }
 
+        HtmlPage page = getPage("/faces/duplicateIds04.jsp");
+        List list = getAllElementsOfGivenClass(page, null,
+                                               HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        client.setThrowExceptionOnFailingStatusCode(false);
+        page = (HtmlPage) button.click();
+        assertTrue(-1 != page.asText().indexOf("j_id0:j_id2"));
+        assertTrue(-1 != page.asText().indexOf("Duplicate"));
+        client.setThrowExceptionOnFailingStatusCode(true);
+
+    }
 
 }

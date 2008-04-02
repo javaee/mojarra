@@ -1,5 +1,5 @@
 /*
- * $Id: NestedBean.java,v 1.2 2005/08/22 22:10:56 ofung Exp $
+ * $Id: NestedBean.java,v 1.3 2006/03/29 22:39:19 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -31,30 +31,43 @@ package test;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-/**
- *
- * @author edburns
- */
+/** @author edburns */
 public class NestedBean {
-    
+
+
+    private String id;
+
+    // ------------------------------------------------------------ Constructors
+
+
     /** Creates a new instance of NestedBean */
     public NestedBean() {
     }
-    
-    private String id;
-    
+
+    // ---------------------------------------------------------- Public Methods
+
+
     public String getId() {
+
         return id;
+
     }
-    
+
+
     public void setId(String id) {
+
         this.id = id;
+
     }
-    
+
+
     public void executeLink(ActionEvent event) {
-        String whichLink = "You clicked on link: "+id;
+
+        String whichLink = "You clicked on link: " + id;
         System.out.println(whichLink);
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("whichLink", whichLink);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+              .put("whichLink", whichLink);
+
     }
-    
+
 }

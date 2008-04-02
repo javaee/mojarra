@@ -1,5 +1,5 @@
 /*
- * $Id: TestViewTag.java,v 1.14 2005/10/19 19:51:39 edburns Exp $
+ * $Id: TestViewTag.java,v 1.15 2006/03/29 22:39:48 rlubke Exp $
  */
 
 /*
@@ -52,123 +52,52 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewTag.java,v 1.14 2005/10/19 19:51:39 edburns Exp $
+ * @version $Id: TestViewTag.java,v 1.15 2006/03/29 22:39:48 rlubke Exp $
  */
 
 public class TestViewTag extends JspFacesTestCase {
 
-//
-// Protected Constants
-//
 
     public static final String TEST_URI = "/TestViewTag.jsp";
     public static final String TEST_URI2 = "/TestViewTag2.jsp";
 
-//
-// Class Variables
-//
 
-//
-// Instance Variables
-//
+    // ------------------------------------------------------------ Constructors
 
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestViewTag() {
+
         super("TestViewTag");
+
     }
 
 
     public TestViewTag(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------------------- Public Methods
+
 
     public void beginViewTag(WebRequest theRequest) {
+
         theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
-    }
 
-
-    public void testViewTag() {
-        boolean result = false;
-        String value = null;
-        Locale expectedLocale = new Locale("ps", "PS");
-        Phase renderResponse = new RenderResponsePhase();
-        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        page.setId("root");
-        page.setViewId(TEST_URI);
-        page.setLocale(Locale.CANADA_FRENCH);
-        getFacesContext().setViewRoot(page);
-
-        Config.set((ServletRequest)
-            getFacesContext().getExternalContext().getRequest(),
-                   Config.FMT_LOCALE, Locale.CANADA_FRENCH);
-
-        try {
-            renderResponse.execute(getFacesContext());
-        } catch (FacesException fe) {
-            System.out.println(fe.getMessage());
-            if (null != fe.getCause()) {
-                fe.getCause().printStackTrace();
-            } else {
-                fe.printStackTrace();
-            }
-        }
-        assertEquals("locale not as expected", expectedLocale,
-                     page.getLocale());
-        assertEquals("locale not as expected", expectedLocale,
-                     Config.get((ServletRequest)
-            getFacesContext().getExternalContext().
-            getRequest(),
-                                Config.FMT_LOCALE));
     }
 
 
     public void beginViewTagVB(WebRequest theRequest) {
+
         theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI2, null);
-    }
 
-
-    public void testViewTagVB() {
-        boolean result = false;
-        String value = null;
-        Locale expectedLocale = new Locale("ps", "PS", "Traditional");
-        request.setAttribute("locale", expectedLocale);
-        Phase renderResponse = new RenderResponsePhase();
-        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        page.setId("root");
-        page.setViewId(TEST_URI2);
-        getFacesContext().setViewRoot(page);
-
-        try {
-            renderResponse.execute(getFacesContext());
-        } catch (FacesException fe) {
-            System.out.println(fe.getMessage());
-            if (null != fe.getCause()) {
-                fe.getCause().printStackTrace();
-            } else {
-                fe.printStackTrace();
-            }
-        }
-        assertEquals("locale not as expected", expectedLocale,
-                     page.getLocale());
     }
 
 
     public void testGetLocaleFromString() {
+
         ViewTag viewTag = new ViewTag();
         Locale locale = (Locale) 
             TestingUtil.invokePrivateMethod("getLocaleFromString",
@@ -204,6 +133,72 @@ public class TestViewTag extends JspFacesTestCase {
                                             ViewTag.class,
                                             viewTag);
         assertTrue(locale.equals(Locale.getDefault()));
+
+    }
+
+
+    public void testViewTag() {
+
+        boolean result = false;
+        String value = null;
+        Locale expectedLocale = new Locale("ps", "PS");
+        Phase renderResponse = new RenderResponsePhase();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        page.setId("root");
+        page.setViewId(TEST_URI);
+        page.setLocale(Locale.CANADA_FRENCH);
+        getFacesContext().setViewRoot(page);
+
+        Config.set((ServletRequest)
+            getFacesContext().getExternalContext().getRequest(),
+                   Config.FMT_LOCALE, Locale.CANADA_FRENCH);
+
+        try {
+            renderResponse.execute(getFacesContext());
+        } catch (FacesException fe) {
+            System.out.println(fe.getMessage());
+            if (null != fe.getCause()) {
+                fe.getCause().printStackTrace();
+            } else {
+                fe.printStackTrace();
+            }
+        }
+        assertEquals("locale not as expected", expectedLocale,
+                     page.getLocale());
+        assertEquals("locale not as expected", expectedLocale,
+                     Config.get((ServletRequest)
+            getFacesContext().getExternalContext().
+            getRequest(),
+                                Config.FMT_LOCALE));
+
+    }
+
+
+    public void testViewTagVB() {
+
+        boolean result = false;
+        String value = null;
+        Locale expectedLocale = new Locale("ps", "PS", "Traditional");
+        request.setAttribute("locale", expectedLocale);
+        Phase renderResponse = new RenderResponsePhase();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        page.setId("root");
+        page.setViewId(TEST_URI2);
+        getFacesContext().setViewRoot(page);
+
+        try {
+            renderResponse.execute(getFacesContext());
+        } catch (FacesException fe) {
+            System.out.println(fe.getMessage());
+            if (null != fe.getCause()) {
+                fe.getCause().printStackTrace();
+            } else {
+                fe.printStackTrace();
+            }
+        }
+        assertEquals("locale not as expected", expectedLocale,
+                     page.getLocale());
+
     }
 
 } // end of class TestViewTag

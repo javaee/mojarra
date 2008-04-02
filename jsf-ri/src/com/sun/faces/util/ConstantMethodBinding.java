@@ -1,5 +1,5 @@
 /*
- * $Id: ConstantMethodBinding.java,v 1.6 2005/08/22 22:10:28 ofung Exp $
+ * $Id: ConstantMethodBinding.java,v 1.7 2006/03/29 22:38:43 rlubke Exp $
  */
 
 /*
@@ -34,9 +34,15 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
 
 public class ConstantMethodBinding extends MethodBinding
-    implements StateHolder {
+      implements StateHolder {
+
 
     private String outcome = null;
+
+
+    private boolean transientFlag = false;
+
+    // ------------------------------------------------------------ Constructors
 
 
     public ConstantMethodBinding() {
@@ -44,40 +50,55 @@ public class ConstantMethodBinding extends MethodBinding
 
 
     public ConstantMethodBinding(String yourOutcome) {
+
         outcome = yourOutcome;
+
     }
 
+    // ------------------------------------------------ Methods From StateHolder
 
-    public Object invoke(FacesContext context, Object params[]) {
-        return outcome;
-    }
-
-
-    public Class getType(FacesContext context) {
-        return String.class;
-    }
-
-    // ----------------------------------------------------- StateHolder Methods
 
     public Object saveState(FacesContext context) {
+
         return outcome;
+
     }
 
 
     public void restoreState(FacesContext context, Object state) {
+
         outcome = (String) state;
+
     }
 
 
-    private boolean transientFlag = false;
-
-
     public boolean isTransient() {
+
         return (this.transientFlag);
+
     }
 
 
     public void setTransient(boolean transientFlag) {
+
         this.transientFlag = transientFlag;
+
     }
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public Class getType(FacesContext context) {
+
+        return String.class;
+
+    }
+
+
+    public Object invoke(FacesContext context, Object params[]) {
+
+        return outcome;
+
+    }
+
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestCoreTagsVBEnabled.java,v 1.9 2005/10/19 19:51:39 edburns Exp $
+ * $Id: TestCoreTagsVBEnabled.java,v 1.10 2006/03/29 22:39:48 rlubke Exp $
  */
 
 /*
@@ -49,69 +49,59 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestCoreTagsVBEnabled.java,v 1.9 2005/10/19 19:51:39 edburns Exp $
+ * @version $Id: TestCoreTagsVBEnabled.java,v 1.10 2006/03/29 22:39:48 rlubke Exp $
  */
 
 public class TestCoreTagsVBEnabled extends JspFacesTestCase {
 
-//
-// Protected Constants
-//
 
-    public static final String TEST_URI = "/TestCoreTagVBEnabled.jsp";
-    public static final String LONGRANGE_ID = "validatorForm" +
-        NamingContainer.SEPARATOR_CHAR +
-        "longRange";
-    public static final String LONGRANGE_VALUE = "115";
-    public static final String INTRANGE_ID = "validatorForm" +
-        NamingContainer.SEPARATOR_CHAR +
-        "intRange";
-    public static final String INTRANGE_VALUE = "NorthAmerica";
     public static final String DOUBLERANGE_ID = "validatorForm" +
         NamingContainer.SEPARATOR_CHAR +
         "doubleRange";
     public static final String DOUBLERANGE_VALUE = "1500";
+    public static final String INTRANGE_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "intRange";
+    public static final String INTRANGE_VALUE = "NorthAmerica";
+    public static final String LONGRANGE_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "longRange";
+    public static final String LONGRANGE_VALUE = "115";
+    public static final String TEST_URI = "/TestCoreTagVBEnabled.jsp";
 
 
-    public boolean sendResponseToFile() {
-        return false;
-    }
+    // ------------------------------------------------------------ Constructors
 
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestCoreTagsVBEnabled() {
+
         super("TestValidatorTags");
+
     }
 
 
     public TestCoreTagsVBEnabled(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------- Methods From FacesTestCase
+
+
+    public boolean sendResponseToFile() {
+
+        return false;
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
 
 
     public void beginValidators(WebRequest theRequest) {
+
         theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
         theRequest.addParameter(LONGRANGE_ID, LONGRANGE_VALUE);
         theRequest.addParameter(INTRANGE_ID, INTRANGE_VALUE);
@@ -141,10 +131,12 @@ public class TestCoreTagsVBEnabled extends JspFacesTestCase {
             "doubleMin", new Double(1.0));
         (getFacesContext().getExternalContext().getRequestMap()).put(
             "doubleMax", new Double(10.0));
+
     }
 
 
     public void testValidators() {
+
         System.out.println("Test VBEnabled attributes on core Validator tags");
         // Verify the parmeters are as expected
         String paramVal = (String) (getFacesContext().getExternalContext()
@@ -224,7 +216,7 @@ public class TestCoreTagsVBEnabled extends JspFacesTestCase {
 
 
         Util.setUnitTestModeEnabled(false);
-    }
 
+    }
 
 } // end of class TestValidatorTags

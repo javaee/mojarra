@@ -1,5 +1,5 @@
 /*
- * $Id: MockServletContext.java,v 1.8 2006/02/15 22:35:29 rlubke Exp $
+ * $Id: MockServletContext.java,v 1.9 2006/03/29 22:39:46 rlubke Exp $
  */
 
 /*
@@ -50,166 +50,71 @@ import java.util.Set;
 public class MockServletContext implements ServletContext {
 
 
-    // ------------------------------------------------------------ Constructors
-
-
-    // Zero-args constructor for no associated directory
-    public MockServletContext() {
-        ;
-    }
-
-
-    // Constructor with File object for associated directory
-    public MockServletContext(File directory) {
-        setDirectory(directory);
-    }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
+    // The directory that is the base of our application resources
+    private File directory = null;
     private Hashtable attributes = new Hashtable();
     private Hashtable parameters = new Hashtable();
     private String name = "MockServletContext";
 
 
-    // -------------------------------------------------------------- Properties
+    // ------------------------------------------------------------ Constructors
 
 
-    // The directory that is the base of our application resources
-    private File directory = null;
+    // Zero-args constructor for no associated directory
+    public MockServletContext() {
 
+        ;
 
-    public File getDirectory() {
-        return (this.directory);
     }
 
 
-    public void setDirectory(File directory) {
-        if (!directory.exists() || !directory.isDirectory()) {
-            throw new IllegalArgumentException
-                (directory.getAbsolutePath() +
-                 " is not an existing directory");
-        }
-        this.directory = directory;
+    // Constructor with File object for associated directory
+    public MockServletContext(File directory) {
+
+        setDirectory(directory);
+
     }
 
 
-    // ---------------------------------------------------------- Public Methods
+    // --------------------------------------------- Methods From ServletContext
 
+    public String getContextPath() {
 
-    // Add a context innitialization parameter
-    public void addInitParameter(String name, String value) {
-        parameters.put(name, value);
-    }
+       return ('/' + name);
 
-
-    // Set the servlet context name
-    public void setServletContextName(String name) {
-        this.name = name;
-    }
-
-
-    // -------------------------------------------------- ServletContext Methods
-
-
-    public Object getAttribute(String name) {
-        return (attributes.get(name));
-    }
-
-
-    public Enumeration getAttributeNames() {
-        return (attributes.keys());
     }
 
 
     public ServletContext getContext(String uripath) {
+
         throw new UnsupportedOperationException();
-    }
 
-    public String getContextPath() {
-       return ('/' + name);
-    } 
-
-
-    public String getInitParameter(String name) {
-        return ((String) parameters.get(name));
-    }
-
-
-    public Enumeration getInitParameterNames() {
-        return (parameters.keys());
     }
 
 
     public int getMajorVersion() {
+
         return (2);
-    }
 
-
-    public String getMimeType(String path) {
-        throw new UnsupportedOperationException();
     }
 
 
     public int getMinorVersion() {
+
         return (5);
+
     }
 
 
-    public RequestDispatcher getNamedDispatcher(String name) {
+    public String getMimeType(String path) {
+
         throw new UnsupportedOperationException();
-    }
 
-
-    public String getRealPath(String path) {
-        if (!path.startsWith("/") || (directory == null)) {
-            return (null);
-        }
-        File file = new File(directory, path.substring(1));
-        if (!file.exists() || !file.isFile()) {
-            return (null);
-        }
-        return (file.getAbsolutePath());
-    }
-
-
-    public RequestDispatcher getRequestDispatcher(String path) {
-        throw new UnsupportedOperationException();
-    }
-
-
-    public URL getResource(String path) throws MalformedURLException {
-        if (!path.startsWith("/") || (directory == null)) {
-            return (null);
-        }
-        File file = new File(directory, path.substring(1));
-        if (!file.exists() || !file.isFile()) {
-            return (null);
-        }
-        return (file.toURL());
-    }
-
-
-    public InputStream getResourceAsStream(String path) {
-        URL url = null;
-        try {
-            url = getResource(path);
-        } catch (MalformedURLException e) {
-            return (null);
-        }
-        if (url == null) {
-            return (null);
-        }
-        try {
-            return (url.openStream());
-        } catch (IOException e) {
-            return (null);
-        }
     }
 
 
     public Set getResourcePaths(String path) {
+
         throw new UnsupportedOperationException();
         // PENDING(craigmcc) - Flesh out the following implementation
         /*
@@ -224,57 +129,208 @@ public class MockServletContext implements ServletContext {
         // PENDING(craigmcc) recursive descent search
         return (results);
         */
+
+    }
+
+
+    public URL getResource(String path) throws MalformedURLException {
+
+        if (!path.startsWith("/") || (directory == null)) {
+            return (null);
+        }
+        File file = new File(directory, path.substring(1));
+        if (!file.exists() || !file.isFile()) {
+            return (null);
+        }
+        return (file.toURL());
+
+    }
+
+
+    public InputStream getResourceAsStream(String path) {
+
+        URL url = null;
+        try {
+            url = getResource(path);
+        } catch (MalformedURLException e) {
+            return (null);
+        }
+        if (url == null) {
+            return (null);
+        }
+        try {
+            return (url.openStream());
+        } catch (IOException e) {
+            return (null);
+        }
+
+    }
+
+
+    public RequestDispatcher getRequestDispatcher(String path) {
+
+        throw new UnsupportedOperationException();
+
+    }
+
+
+    public RequestDispatcher getNamedDispatcher(String name) {
+
+        throw new UnsupportedOperationException();
+
     }
 
 
     public Servlet getServlet(String name) throws ServletException {
+
         throw new UnsupportedOperationException();
-    }
 
-
-    public String getServletContextName() {
-        return (name);
-    }
-
-
-    public String getServerInfo() {
-        return ("MockServletContext");
     }
 
 
     public Enumeration getServlets() {
+
         throw new UnsupportedOperationException();
+
     }
 
 
     public Enumeration getServletNames() {
+
         throw new UnsupportedOperationException();
+
     }
 
 
     public void log(String message) {
+
         throw new UnsupportedOperationException();
+
     }
 
 
     public void log(Exception exception, String message) {
+
         throw new UnsupportedOperationException();
+
     }
 
 
     public void log(String message, Throwable exception) {
+
         throw new UnsupportedOperationException();
+
     }
 
 
-    public void removeAttribute(String name) {
-        attributes.remove(name);
+    public String getRealPath(String path) {
+
+        if (!path.startsWith("/") || (directory == null)) {
+            return (null);
+        }
+        File file = new File(directory, path.substring(1));
+        if (!file.exists() || !file.isFile()) {
+            return (null);
+        }
+        return (file.getAbsolutePath());
+
+    }
+
+
+    public String getServerInfo() {
+
+        return ("MockServletContext");
+
+    } 
+
+
+    public String getInitParameter(String name) {
+
+        return ((String) parameters.get(name));
+
+    }
+
+
+    public Enumeration getInitParameterNames() {
+
+        return (parameters.keys());
+
+    }
+
+
+    // -------------------------------------------------- ServletContext Methods
+
+
+    public Object getAttribute(String name) {
+
+        return (attributes.get(name));
+
+    }
+
+
+    public Enumeration getAttributeNames() {
+
+        return (attributes.keys());
+
     }
 
 
     public void setAttribute(String name, Object value) {
+
         attributes.put(name, value);
+
     }
 
+
+    public void removeAttribute(String name) {
+
+        attributes.remove(name);
+
+    }
+
+
+    public String getServletContextName() {
+
+        return (name);
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void setDirectory(File directory) {
+
+        if (!directory.exists() || !directory.isDirectory()) {
+            throw new IllegalArgumentException
+                (directory.getAbsolutePath() +
+                 " is not an existing directory");
+        }
+        this.directory = directory;
+
+    }
+
+
+    // Add a context innitialization parameter
+    public void addInitParameter(String name, String value) {
+
+        parameters.put(name, value);
+
+    }
+
+
+    public File getDirectory() {
+
+        return (this.directory);
+
+    }
+
+
+    // Set the servlet context name
+    public void setServletContextName(String name) {
+
+        this.name = name;
+
+    }
 
 }

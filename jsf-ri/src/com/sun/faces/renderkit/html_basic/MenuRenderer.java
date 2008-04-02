@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.70 2006/03/20 21:02:30 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.71 2006/03/29 22:38:38 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -35,13 +35,6 @@
 // MenuRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
@@ -54,12 +47,18 @@ import javax.faces.convert.ConverterException;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
-
-import java.util.logging.Level;
+import com.sun.faces.util.Util;
 
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of
@@ -69,159 +68,30 @@ import java.util.logging.Level;
 
 public class MenuRenderer extends HtmlBasicInputRenderer {
 
-    //
-    // Protected Constants
-    //
+    // ------------------------------------------------------------ Constructors
 
-    //
-    // Class Variables
-    //
-    
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
 
     public MenuRenderer() {
+
         super();
+
     }
 
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
-
-    public void decode(FacesContext context, UIComponent component) {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin decoding component " + component.getId());
-        }
-
-        // If the component is disabled, do not change the value of the
-        // component, since its state cannot be changed.
-        if (Util.componentIsDisabledOrReadonly(component)) {
-            if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("No decoding necessary since the component " +
-                          component.getId() + " is disabled");
-            }
-            return;
-        }
-
-        String clientId = component.getClientId(context);
-        assert (clientId != null);
-        // currently we assume the model type to be of type string or 
-        // convertible to string and localised by the application.
-        if (component instanceof UISelectMany) {
-            Map<String,String[]> requestParameterValuesMap = context.getExternalContext().
-                getRequestParameterValuesMap();
-            if (requestParameterValuesMap.containsKey(clientId)) {
-                String newValues[] = requestParameterValuesMap.
-                    get(clientId);
-                setSubmittedValue(component, newValues);
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("submitted values for UISelectMany component " +
-                              component.getId() + " after decoding " + newValues);
-                }
-            } else {
-                // Use the empty array, not null, to distinguish
-                // between an deselected UISelectMany and a disabled one
-                setSubmittedValue(component, new String[0]);
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("Set empty array for UISelectMany component " +
-                              component.getId() + " after decoding ");
-                }
-            }
-        } else {
-	    // this is a UISelectOne
-            Map<String,String> requestParameterMap = context.getExternalContext().
-                getRequestParameterMap();
-            if (requestParameterMap.containsKey(clientId)) {
-                String newValue = requestParameterMap.get(clientId);
-                setSubmittedValue(component, newValue);
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("submitted value for UISelectOne component " +
-                              component.getId() + " after decoding " + newValue);
-                }
-
-            }
-	    else {
-		// there is no value, but this is different from a null
-		// value.
-		setSubmittedValue(component, RIConstants.NO_VALUE);
-	    }
-        }
-        return;
-    }
-
-
-    public Object getConvertedValue(FacesContext context, UIComponent component,
-                                    Object submittedValue)
-        throws ConverterException {
-        if (component instanceof UISelectMany) {
-            return convertSelectManyValue(context,
-                                          ((UISelectMany) component),
-                                          (String[]) submittedValue);
-        } else {
-            return convertSelectOneValue(context,
-                                         ((UISelectOne) component),
-                                         (String) submittedValue);
-        }
-    }
-
-
-    public Object convertSelectOneValue(FacesContext context,
-                                        UISelectOne uiSelectOne,
-                                        String newValue)
-        throws ConverterException {
-        Object convertedValue = null;
-	if (newValue == RIConstants.NO_VALUE) {
-	    return null;
-	}
-        if (newValue == null) {
-            if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("No conversion necessary for SelectOne Component  "
-                          + uiSelectOne.getId() + " since the new value is null ");
-            }
-            return null;
-        }
-
-        convertedValue =
-            super.getConvertedValue(context, uiSelectOne, newValue);
-        if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("SelectOne Component  " + uiSelectOne.getId() +
-                      " convertedValue " + convertedValue);
-        }
-        return convertedValue;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public Object convertSelectManyValue(FacesContext context,
                                          UISelectMany uiSelectMany,
                                          String[] newValues)
-        throws ConverterException {
+          throws ConverterException {
+
         // if we have no local value, try to get the valueExpression.
-        ValueExpression valueExpression = uiSelectMany.getValueExpression("value");
+        ValueExpression valueExpression =
+              uiSelectMany.getValueExpression("value");
 
         Object result = newValues; // default case, set local value
         Class modelType = null;
-	boolean throwException = false;
+        boolean throwException = false;
 
         // If we have a ValueExpression
         if (null != valueExpression) {
@@ -235,10 +105,10 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 } else if (List.class.isAssignableFrom(modelType)) {
                     result = handleListCase(context, newValues);
                 } else {
-		    throwException = true;
+                    throwException = true;
                 }
             } else {
-		throwException = true;
+                throwException = true;
             }
         } else {
             // No ValueExpression, just use Object array.
@@ -247,41 +117,209 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                      convertedValues.getClass(),
                                      newValues);
         }
-	if (throwException) {
-	    StringBuffer values = new StringBuffer();
-	    if (null != newValues) {
-		for (int i = 0; i < newValues.length; i++) {
-            if (i == 0) {
-                values.append(newValues[i]);
-            } else {
-                values.append(' ').append(newValues[i]);
+        if (throwException) {
+            StringBuffer values = new StringBuffer();
+            if (null != newValues) {
+                for (int i = 0; i < newValues.length; i++) {
+                    if (i == 0) {
+                        values.append(newValues[i]);
+                    } else {
+                        values.append(' ').append(newValues[i]);
+                    }
+                }
             }
-		}
-	    }
-	    Object [] params = {
-		values.toString(),
-		valueExpression.getExpressionString()
-	    };
-	    throw new ConverterException
-		(MessageUtils.getExceptionMessage(MessageUtils.CONVERSION_ERROR_MESSAGE_ID,
-					  params));
-	}
-
+            Object [] params = {
+                  values.toString(),
+                  valueExpression.getExpressionString()
+            };
+            throw new ConverterException
+                  (MessageUtils.getExceptionMessage(MessageUtils.CONVERSION_ERROR_MESSAGE_ID,
+                                                    params));
+        }
 
         // At this point, result is ready to be set as the value
         if (logger.isLoggable(Level.FINE)) {
-             logger.fine("SelectMany Component  " + uiSelectMany.getId() +
-                      " convertedValues " + result);
+            logger.fine("SelectMany Component  " + uiSelectMany.getId() +
+                        " convertedValues " + result);
         }
         return result;
+
     }
+
+
+    public Object convertSelectOneValue(FacesContext context,
+                                        UISelectOne uiSelectOne,
+                                        String newValue)
+          throws ConverterException {
+
+        Object convertedValue = null;
+        if (newValue == RIConstants.NO_VALUE) {
+            return null;
+        }
+        if (newValue == null) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("No conversion necessary for SelectOne Component  "
+                            + uiSelectOne.getId()
+                            + " since the new value is null ");
+            }
+            return null;
+        }
+
+        convertedValue =
+              super.getConvertedValue(context, uiSelectOne, newValue);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("SelectOne Component  " + uiSelectOne.getId() +
+                        " convertedValue " + convertedValue);
+        }
+        return convertedValue;
+
+    }
+
+
+    public void decode(FacesContext context, UIComponent component) {
+
+        if (context == null || component == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,
+                       "Begin decoding component " + component.getId());
+        }
+
+        // If the component is disabled, do not change the value of the
+        // component, since its state cannot be changed.
+        if (Util.componentIsDisabledOrReadonly(component)) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("No decoding necessary since the component " +
+                            component.getId() + " is disabled");
+            }
+            return;
+        }
+
+        String clientId = component.getClientId(context);
+        assert (clientId != null);
+        // currently we assume the model type to be of type string or 
+        // convertible to string and localised by the application.
+        if (component instanceof UISelectMany) {
+            Map<String, String[]> requestParameterValuesMap =
+                  context.getExternalContext().
+                        getRequestParameterValuesMap();
+            if (requestParameterValuesMap.containsKey(clientId)) {
+                String newValues[] = requestParameterValuesMap.
+                      get(clientId);
+                setSubmittedValue(component, newValues);
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("submitted values for UISelectMany component "
+                                +
+                                component.getId()
+                                + " after decoding "
+                                + newValues);
+                }
+            } else {
+                // Use the empty array, not null, to distinguish
+                // between an deselected UISelectMany and a disabled one
+                setSubmittedValue(component, new String[0]);
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Set empty array for UISelectMany component " +
+                                component.getId() + " after decoding ");
+                }
+            }
+        } else {
+            // this is a UISelectOne
+            Map<String, String> requestParameterMap =
+                  context.getExternalContext().
+                        getRequestParameterMap();
+            if (requestParameterMap.containsKey(clientId)) {
+                String newValue = requestParameterMap.get(clientId);
+                setSubmittedValue(component, newValue);
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("submitted value for UISelectOne component "
+                                +
+                                component.getId()
+                                + " after decoding "
+                                + newValue);
+                }
+
+            } else {
+                // there is no value, but this is different from a null
+                // value.
+                setSubmittedValue(component, RIConstants.NO_VALUE);
+            }
+        }
+        return;
+
+    }
+
+
+    public void encodeBegin(FacesContext context, UIComponent component)
+          throws IOException {
+
+        if (context == null || component == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
+    }
+
+
+    public void encodeEnd(FacesContext context, UIComponent component)
+          throws IOException {
+
+        if (context == null || component == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,
+                       "Begin encoding component " + component.getId());
+        }
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
+            }
+            return;
+        }
+
+        renderSelect(context, component);
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,
+                       "End encoding component " + component.getId());
+        }
+
+    }
+
+
+    public Object getConvertedValue(FacesContext context, UIComponent component,
+                                    Object submittedValue)
+          throws ConverterException {
+
+        if (component instanceof UISelectMany) {
+            return convertSelectManyValue(context,
+                                          ((UISelectMany) component),
+                                          (String[]) submittedValue);
+        } else {
+            return convertSelectOneValue(context,
+                                         ((UISelectOne) component),
+                                         (String) submittedValue);
+        }
+
+    }
+
+    // ------------------------------------------------------- Protected Methods
 
 
     protected Object handleArrayCase(FacesContext context,
                                      UISelectMany uiSelectMany,
                                      Class arrayClass,
                                      String[] newValues)
-        throws ConverterException {
+          throws ConverterException {
+
         Object result = null;
         Class elementType = null;
         Converter converter = null;
@@ -314,26 +352,26 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             // Otherwise, look for a by-type converter
             if (null == (converter = Util.getConverterForClass(elementType,
                                                                context))) {
-               // if that fails, and the attached values are of Object type,
-               // we don't need conversion.
+                // if that fails, and the attached values are of Object type,
+                // we don't need conversion.
                 if (elementType.equals(Object.class)) {
                     return newValues;
                 }
-		StringBuffer valueStr = new StringBuffer();
-		for (int i = 0; i < len; i++) {
-            if (i == 0) {
-                valueStr.append(newValues[i]);
-            } else {
-                valueStr.append(' ').append(newValues[i]);
-            }
-		}
-		Object [] params = {
-		    valueStr.toString(),
-		    "null Converter"
-		};
+                StringBuffer valueStr = new StringBuffer();
+                for (int i = 0; i < len; i++) {
+                    if (i == 0) {
+                        valueStr.append(newValues[i]);
+                    } else {
+                        valueStr.append(' ').append(newValues[i]);
+                    }
+                }
+                Object [] params = {
+                      valueStr.toString(),
+                      "null Converter"
+                };
 
-		throw new ConverterException(MessageUtils.getExceptionMessage(
-                  MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
+                throw new ConverterException(MessageUtils.getExceptionMessage(
+                      MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
             }
         }
 
@@ -389,7 +427,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                                              uiSelectMany,
                                                              newValues[i]);
                     logger.fine("String value: " + newValues[i] +
-                              " converts to : " + converted.toString());
+                                " converts to : " + converted.toString());
                 }
                 Array.set(result, i, converter.getAsObject(context,
                                                            uiSelectMany,
@@ -397,158 +435,29 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             }
         }
         return result;
+
     }
 
 
     protected ArrayList<String> handleListCase(FacesContext context,
-                                    String[] newValues) {
+                                               String[] newValues) {
+
         int
-            i = 0,
-            len = newValues.length;
+              i = 0,
+              len = newValues.length;
         ArrayList<String> result = new ArrayList<String>(len);
         for (i = 0; i < len; i++) {
             result.add(newValues[i]);
         }
 
         return result;
-    }
 
-
-    public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-    }
-
-    public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
-
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding component " + component.getId());
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
-            }
-            return;
-        }
-
-        renderSelect(context, component);
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding component " + component.getId());
-        }
-    }
-
-
-    // Render the "select" portion..
-    //
-    void renderSelect(FacesContext context,
-                      UIComponent component) throws IOException {
-
-        ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
-
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Rendering 'select'");
-        }
-        writer.startElement("select", component);
-        writeIdAttributeIfNecessary(context, writer, component);
-        writer.writeAttribute("name", component.getClientId(context),
-                              "clientId");
-        // render styleClass attribute if present.
-        String styleClass = null;
-        if (null !=
-            (styleClass = (String) component.getAttributes().get("styleClass"))) {
-            writer.writeAttribute("class", styleClass, "styleClass");
-        }
-        if (!getMultipleText(component).equals("")) {
-            writer.writeAttribute("multiple", true, "multiple");
-        }
-
-        // Determine how many option(s) we need to render, and update
-        // the component's "size" attribute accordingly;  The "size"
-        // attribute will be rendered as one of the "pass thru" attributes
-        int itemCount = getOptionNumber(context, component);
-        if (logger.isLoggable(Level.FINE)) {
-             logger.fine("Rendering " + itemCount + " options");
-        }
-        // If "size" is *not* set explicitly, we have to default it correctly
-        Integer size = (Integer) component.getAttributes().get("size");
-        if (size == null || size == Integer.MIN_VALUE) {
-            size = itemCount;
-        }
-        writeDefaultSize(writer, size);
-
-        RenderKitUtils.renderPassThruAttributes(context, 
-                                                writer, 
-                                                component);                
-        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
-                                                         component);
-        // Now, render the "options" portion...
-        renderOptions(context, component);
-
-        writer.endElement("select");
-    }
-
-
-    int getOptionNumber(FacesContext context, UIComponent component) {
-        Iterator items = RenderKitUtils.getSelectItems(context, component);
-        int itemCount = 0;
-        while (items.hasNext()) {
-            itemCount++;
-            SelectItem item = (SelectItem) items.next();
-            if (item instanceof SelectItemGroup) {
-                int optionsLength =
-                    ((SelectItemGroup) item).getSelectItems().length;
-                itemCount = itemCount + optionsLength;
-            }
-        }
-        return itemCount;
-    }
-
-
-    void renderOptions(FacesContext context, UIComponent component)
-        throws IOException {
-
-        ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
-
-        Iterator items = RenderKitUtils.getSelectItems(context, component);
-        SelectItem curItem = null;
-        while (items.hasNext()) {
-            curItem = (SelectItem) items.next();
-            if (curItem instanceof SelectItemGroup) {
-                // render OPTGROUP
-                writer.startElement("optgroup", component);
-                writer.writeAttribute("label", curItem.getLabel(), "label");
-                
-                // render options of this group.
-                SelectItem[] itemsArray =
-                    ((SelectItemGroup) curItem).getSelectItems();
-                for (int i = 0; i < itemsArray.length; ++i) {
-                    renderOption(context, component, itemsArray[i]);
-                }
-                writer.endElement("optgroup");
-            } else {
-                renderOption(context, component, curItem);
-            }
-        }
     }
 
 
     protected void renderOption(FacesContext context, UIComponent component,
                                 SelectItem curItem) throws IOException {
+
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
 
@@ -564,7 +473,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Class type = String.class;
         Object valuesArray = null;
         Object itemValue = null;
-        
+
         boolean isSelected;
         if (submittedValues != null) {
             valuesArray = submittedValues;
@@ -572,13 +481,13 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         } else {
             valuesArray = getCurrentSelectedValues(context, component);
             itemValue = curItem.getValue();
-        }        
+        }
         if (valuesArray != null) {
             type = valuesArray.getClass().getComponentType();
-        } 
-        
+        }
+
         Object newValue = context.getApplication().getExpressionFactory().
-            coerceToType(itemValue, type);
+              coerceToType(itemValue, type);
 
         isSelected = isSelected(newValue, valuesArray);
 
@@ -586,27 +495,28 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("selected", true, "selected");
         }
 
-	String labelClass = null;
-	Boolean disabledAttr = (Boolean)component.getAttributes().get("disabled") ;
-	boolean componentDisabled = false ;
-	if (disabledAttr != null) {
+        String labelClass = null;
+        Boolean disabledAttr =
+              (Boolean) component.getAttributes().get("disabled");
+        boolean componentDisabled = false;
+        if (disabledAttr != null) {
             if (disabledAttr.equals(Boolean.TRUE)) {
-	        componentDisabled = true;
-	    }
-	}
-        
+                componentDisabled = true;
+            }
+        }
+
         // if the component is disabled, "disabled" attribute would be rendered 
         // on "select" tag, so don't render "disabled" on every option.
         if ((!componentDisabled) && curItem.isDisabled()) {
             writer.writeAttribute("disabled", true, "disabled");
         }
-        
+
         if (componentDisabled || curItem.isDisabled()) {
             labelClass = (String) component.
-                getAttributes().get("disabledClass");
+                  getAttributes().get("disabledClass");
         } else {
             labelClass = (String) component.
-                getAttributes().get("enabledClass");
+                  getAttributes().get("enabledClass");
         }
         if (labelClass != null) {
             writer.writeAttribute("class", labelClass, "labelClass");
@@ -614,8 +524,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         if (curItem.isEscape()) {
             writer.writeText(curItem.getLabel(), "label");
-        }
-        else {
+        } else {
             writer.write(curItem.getLabel());
         }
         writer.endElement("option");
@@ -624,7 +533,105 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
+    protected void writeDefaultSize(ResponseWriter writer, int itemCount)
+          throws IOException {
+
+        // if size is not specified default to 1.
+        writer.writeAttribute("size", "1", "size");
+
+    }
+
+    // ------------------------------------------------- Package Private Methods
+
+
+    Object getCurrentSelectedValues(FacesContext context,
+                                    UIComponent component) {
+
+        if (component instanceof UISelectMany) {
+            UISelectMany select = (UISelectMany) component;
+            Object value = select.getValue();
+            if (value instanceof List) {
+                return ((List) value).toArray();
+            }
+
+            return value;
+        }
+
+        UISelectOne select = (UISelectOne) component;
+        Object returnObject;
+        if (null != (returnObject = select.getValue())) {
+            return new Object[]{returnObject};
+        }
+        return null;
+
+    }
+
+
+    // To derive a selectOne type component from this, override
+    // these methods.
+    String getMultipleText(UIComponent component) {
+
+        if (component instanceof UISelectMany) {
+            return " multiple ";
+        }
+        return "";
+
+    }
+
+
+    int getOptionNumber(FacesContext context, UIComponent component) {
+
+        Iterator items = RenderKitUtils.getSelectItems(context, component);
+        int itemCount = 0;
+        while (items.hasNext()) {
+            itemCount++;
+            SelectItem item = (SelectItem) items.next();
+            if (item instanceof SelectItemGroup) {
+                int optionsLength =
+                      ((SelectItemGroup) item).getSelectItems().length;
+                itemCount = itemCount + optionsLength;
+            }
+        }
+        return itemCount;
+
+    }
+
+
+    Object[] getSubmittedSelectedValues(FacesContext context,
+                                        UIComponent component) {
+
+        if (component instanceof UISelectMany) {
+            UISelectMany select = (UISelectMany) component;
+            return (Object[]) select.getSubmittedValue();
+        }
+
+        UISelectOne select = (UISelectOne) component;
+        Object returnObject;
+        if (null != (returnObject = select.getSubmittedValue())) {
+            return new Object[]{returnObject};
+        }
+        return null;
+
+    }
+
+
+    boolean isSelected(String itemValue, Object[] values) {
+
+        if (null != values) {
+            int len = values.length;
+            for (int i = 0; i < len; i++) {
+                if (values[i].equals(itemValue)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+
+
     boolean isSelected(Object itemValue, Object valueArray) {
+
         if (null != valueArray) {
             int len = Array.getLength(valueArray);
             for (int i = 0; i < len; i++) {
@@ -639,71 +646,90 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             }
         }
         return false;
+
     }
 
 
-    boolean isSelected(String itemValue, Object[] values) {
-        if (null != values) {
-            int len = values.length;
-            for (int i = 0; i < len; i++) {
-                if (values[i].equals(itemValue)) {
-                    return true;
+    void renderOptions(FacesContext context, UIComponent component)
+          throws IOException {
+
+        ResponseWriter writer = context.getResponseWriter();
+        assert (writer != null);
+
+        Iterator items = RenderKitUtils.getSelectItems(context, component);
+        SelectItem curItem = null;
+        while (items.hasNext()) {
+            curItem = (SelectItem) items.next();
+            if (curItem instanceof SelectItemGroup) {
+                // render OPTGROUP
+                writer.startElement("optgroup", component);
+                writer.writeAttribute("label", curItem.getLabel(), "label");
+
+                // render options of this group.
+                SelectItem[] itemsArray =
+                      ((SelectItemGroup) curItem).getSelectItems();
+                for (int i = 0; i < itemsArray.length; ++i) {
+                    renderOption(context, component, itemsArray[i]);
                 }
+                writer.endElement("optgroup");
+            } else {
+                renderOption(context, component, curItem);
             }
         }
-        return false;
+
     }
 
 
-    protected void writeDefaultSize(ResponseWriter writer, int itemCount)
-        throws IOException {
-        // if size is not specified default to 1.
-        writer.writeAttribute("size", "1", "size");
-    }
+    // Render the "select" portion..
+    //
+    void renderSelect(FacesContext context,
+                      UIComponent component) throws IOException {
 
-    // To derive a selectOne type component from this, override
-    // these methods.
-    String getMultipleText(UIComponent component) {
-        if (component instanceof UISelectMany) {
-            return " multiple ";
+        ResponseWriter writer = context.getResponseWriter();
+        assert (writer != null);
+
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, "Rendering 'select'");
         }
-        return "";
-    }
-
-
-    Object[] getSubmittedSelectedValues(FacesContext context,
-                                        UIComponent component) {
-        if (component instanceof UISelectMany) {
-            UISelectMany select = (UISelectMany) component;
-            return (Object[]) select.getSubmittedValue();
+        writer.startElement("select", component);
+        writeIdAttributeIfNecessary(context, writer, component);
+        writer.writeAttribute("name", component.getClientId(context),
+                              "clientId");
+        // render styleClass attribute if present.
+        String styleClass = null;
+        if (null !=
+            (styleClass = (String) component.getAttributes().get("styleClass")))
+        {
+            writer.writeAttribute("class", styleClass, "styleClass");
         }
-
-        UISelectOne select = (UISelectOne) component;
-        Object returnObject;
-        if (null != (returnObject = select.getSubmittedValue())) {
-            return new Object[]{returnObject};
-        }
-        return null;
-    }
-
-
-    Object getCurrentSelectedValues(FacesContext context,
-                                    UIComponent component) {
-        if (component instanceof UISelectMany) {
-            UISelectMany select = (UISelectMany) component;
-            Object value = select.getValue();
-            if (value instanceof List)
-                return ((List) value).toArray();
-
-            return value;
+        if (!getMultipleText(component).equals("")) {
+            writer.writeAttribute("multiple", true, "multiple");
         }
 
-        UISelectOne select = (UISelectOne) component;
-        Object returnObject;
-        if (null != (returnObject = select.getValue())) {
-            return new Object[]{returnObject};
+        // Determine how many option(s) we need to render, and update
+        // the component's "size" attribute accordingly;  The "size"
+        // attribute will be rendered as one of the "pass thru" attributes
+        int itemCount = getOptionNumber(context, component);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Rendering " + itemCount + " options");
         }
-        return null;
+        // If "size" is *not* set explicitly, we have to default it correctly
+        Integer size = (Integer) component.getAttributes().get("size");
+        if (size == null || size == Integer.MIN_VALUE) {
+            size = itemCount;
+        }
+        writeDefaultSize(writer, size);
+
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
+                                                component);
+        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
+                                                         component);
+        // Now, render the "options" portion...
+        renderOptions(context, component);
+
+        writer.endElement("select");
+
     }
 
 } // end of class MenuRenderer

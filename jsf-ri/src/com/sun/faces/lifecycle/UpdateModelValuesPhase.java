@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.41 2005/08/22 22:10:16 ofung Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.42 2006/03/29 22:38:35 rlubke Exp $
  */
 
 /*
@@ -29,15 +29,15 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.util.MessageFactory;
-import com.sun.faces.util.Util;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.sun.faces.util.Util;
 
 
 /**
@@ -46,51 +46,22 @@ import javax.faces.event.PhaseId;
  */
 public class UpdateModelValuesPhase extends Phase {
 
-    //
-    // Protected Constants
-    //
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.LIFECYCLE_LOGGER);
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
+                                                  + Util.LIFECYCLE_LOGGER);
 
-    // Attribute Instance Variables
+    // ------------------------------------------------------------ Constructors
 
-    // Relationship Instance Variables
-
-
-    //
-    // Constructors and Genericializers    
-    //
 
     public UpdateModelValuesPhase() {
     }
 
-//
-// Class methods
-//
-
-//
-// General Methods
-//
-
-//
-// Methods from Phase
-//
-
-    public PhaseId getId() {
-        return PhaseId.UPDATE_MODEL_VALUES;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void execute(FacesContext facesContext) {
+
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Entering UpdateModelValuesPhase");
         }
@@ -117,11 +88,16 @@ public class UpdateModelValuesPhase extends Phase {
                 logger.fine("Exiting UpdateModelValuesPhase");
             }
         }
+
     }
 
 
+    public PhaseId getId() {
+
+        return PhaseId.UPDATE_MODEL_VALUES;
+
+    }
 
 // The testcase for this class is TestUpdateModelValuesPhase.java
-
 
 } // end of class UpdateModelValuesPhase

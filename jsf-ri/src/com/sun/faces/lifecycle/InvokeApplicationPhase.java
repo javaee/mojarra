@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.19 2005/08/22 22:10:14 ofung Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.20 2006/03/29 22:38:34 rlubke Exp $
  */
 
 /*
@@ -36,8 +36,8 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.sun.faces.util.Util;
 
@@ -45,43 +45,26 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.19 2005/08/22 22:10:14 ofung Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.20 2006/03/29 22:38:34 rlubke Exp $
  */
 
 public class InvokeApplicationPhase extends Phase {
 
-    //
-    // Protected Constants
-    //
-
-    //
-    // Class Variables
-    //
 
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.LIFECYCLE_LOGGER);
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
+                                                  + Util.LIFECYCLE_LOGGER);
 
-    //
-    // Instance Variables
-    //
+    // ------------------------------------------------------------ Constructors
 
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Genericializers    
-    //
 
     public InvokeApplicationPhase() {
+
         super();
+
     }
 
-
-    public PhaseId getId() {
-        return PhaseId.INVOKE_APPLICATION;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void execute(FacesContext facesContext) throws FacesException {
@@ -108,22 +91,16 @@ public class InvokeApplicationPhase extends Phase {
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Exiting InvokeApplicationsPhase");
         }
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    public PhaseId getId() {
 
-//
-// Methods from Phase
-//
+        return PhaseId.INVOKE_APPLICATION;
 
+    }
 
 // The testcase for this class is TestInvokeApplicationPhase.java
-
 
 } // end of class InvokeApplicationPhase

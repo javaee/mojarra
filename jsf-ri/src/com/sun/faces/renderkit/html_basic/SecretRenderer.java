@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.61 2006/01/11 15:28:10 rlubke Exp $
+ * $Id: SecretRenderer.java,v 1.62 2006/03/29 22:38:38 rlubke Exp $
  */
 
 /*
@@ -31,14 +31,14 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>SecretRenderer</B> is a class that renders the current value of
@@ -47,55 +47,36 @@ import java.io.IOException;
 
 public class SecretRenderer extends HtmlBasicInputRenderer {
 
-    //
-    // Protected Constants
-    //
+    // ------------------------------------------------------------ Constructors
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
 
     public SecretRenderer() {
+
         super();
+
     }
 
-    //
-    // Class methods
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null || component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+
     }
+
+    // ------------------------------------------------------- Protected Methods
 
 
     protected void getEndTextToRender(FacesContext context,
-                                      UIComponent component, String currentValue)
-        throws IOException {
+                                      UIComponent component,
+                                      String currentValue)
+          throws IOException {
+
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
 
@@ -113,7 +94,7 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
                               "clientId");
 
         String autoComplete = (String)
-            component.getAttributes().get("autocomplete");
+              component.getAttributes().get("autocomplete");
         if (autoComplete != null) {
             // only output the autocomplete attribute if the value
             // is 'off' since its lack of presence will be interpreted
@@ -134,11 +115,12 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         if (null != (styleClass = (String)
-            component.getAttributes().get("styleClass"))) {
+              component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
 
         writer.endElement("input");
+
     }
 
 } // end of class SecretRenderer

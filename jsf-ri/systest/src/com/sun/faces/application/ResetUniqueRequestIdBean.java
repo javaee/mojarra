@@ -1,5 +1,5 @@
 /*
- * $Id: ResetUniqueRequestIdBean.java,v 1.6 2005/12/15 23:40:29 rlubke Exp $
+ * $Id: ResetUniqueRequestIdBean.java,v 1.7 2006/03/29 22:38:45 rlubke Exp $
  */
 
 /*
@@ -37,26 +37,39 @@ import com.sun.faces.util.LRUMap;
 
 public class ResetUniqueRequestIdBean {
 
-    public ResetUniqueRequestIdBean() {
-    }
 
     protected String reset = "Unique Id Counter Has Been Reset";
 
+    // ------------------------------------------------------------ Constructors
+
+
+    public ResetUniqueRequestIdBean() {
+    }
+
+    // ---------------------------------------------------------- Public Methods
+
+
     public String getReset() {
+
         FacesContext context = FacesContext.getCurrentInstance();
         LRUMap lruMap = new LRUMap(15);
-        context.getExternalContext().getSessionMap().put(RIConstants.LOGICAL_VIEW_MAP, lruMap);
+        context.getExternalContext().getSessionMap()
+              .put(RIConstants.LOGICAL_VIEW_MAP, lruMap);
         StateManagerImpl stateManagerImpl =
-            (StateManagerImpl) context.getApplication().getStateManager();
+              (StateManagerImpl) context.getApplication().getStateManager();
         TestingUtil.setPrivateField("requestIdSerial",
                                     StateManagerImpl.class,
                                     stateManagerImpl,
                                     ((char) -1));
         return reset;
+
     }
 
+
     public void setReset(String newReset) {
+
         reset = newReset;
+
     }
 
 }

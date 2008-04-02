@@ -28,161 +28,168 @@
 <!-- =========== RI CONFIGURATION FILE ===================================== -->
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
-    version="1.2">
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
 
 
-  <!-- Configure Object Factories -->
+    <!-- Configure Object Factories -->
 
-  <factory>
-    <application-factory>
-      com.sun.faces.application.ApplicationFactoryImpl
-    </application-factory>
-    <faces-context-factory>
-      com.sun.faces.context.FacesContextFactoryImpl
-    </faces-context-factory>
-    <lifecycle-factory>
-      com.sun.faces.lifecycle.LifecycleFactoryImpl
-    </lifecycle-factory>
-    <render-kit-factory>
-      com.sun.faces.renderkit.RenderKitFactoryImpl
-    </render-kit-factory>
-  </factory>
-
-
-  <!-- Configure Application Objects -->
-
-  <application>
-    <action-listener>
-      com.sun.faces.application.ActionListenerImpl
-    </action-listener>
-    <navigation-handler>
-      com.sun.faces.application.NavigationHandlerImpl
-    </navigation-handler>
-    <state-manager>
-      com.sun.faces.application.StateManagerImpl
-    </state-manager>
-    <view-handler>
-      com.sun.faces.application.ViewHandlerImpl
-    </view-handler>
-  </application>
+    <factory>
+        <application-factory>
+            com.sun.faces.application.ApplicationFactoryImpl
+        </application-factory>
+        <faces-context-factory>
+            com.sun.faces.context.FacesContextFactoryImpl
+        </faces-context-factory>
+        <lifecycle-factory>
+            com.sun.faces.lifecycle.LifecycleFactoryImpl
+        </lifecycle-factory>
+        <render-kit-factory>
+            com.sun.faces.renderkit.RenderKitFactoryImpl
+        </render-kit-factory>
+    </factory>
 
 
-  <!-- Configure Standard By-Id Converters -->
+    <!-- Configure Application Objects -->
 
-  <converter>
-    <converter-id>javax.faces.BigDecimal</converter-id>
-    <converter-class>javax.faces.convert.BigDecimalConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-id>javax.faces.BigInteger</converter-id>
-    <converter-class>javax.faces.convert.BigIntegerConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-id>javax.faces.Boolean</converter-id>
-    <converter-class>javax.faces.convert.BooleanConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-id>javax.faces.Byte</converter-id>
-    <converter-class>javax.faces.convert.ByteConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-id>javax.faces.Character</converter-id>
-    <converter-class>javax.faces.convert.CharacterConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-id>javax.faces.DateTime</converter-id>
-    <converter-class>javax.faces.convert.DateTimeConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-id>javax.faces.Double</converter-id>
-    <converter-class>javax.faces.convert.DoubleConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-id>javax.faces.Float</converter-id>
-    <converter-class>javax.faces.convert.FloatConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-id>javax.faces.Integer</converter-id>
-    <converter-class>javax.faces.convert.IntegerConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-id>javax.faces.Long</converter-id>
-    <converter-class>javax.faces.convert.LongConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-id>javax.faces.Number</converter-id>
-    <converter-class>javax.faces.convert.NumberConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-id>javax.faces.Short</converter-id>
-    <converter-class>javax.faces.convert.ShortConverter</converter-class>
-  </converter>
+    <application>
+        <action-listener>
+            com.sun.faces.application.ActionListenerImpl
+        </action-listener>
+        <navigation-handler>
+            com.sun.faces.application.NavigationHandlerImpl
+        </navigation-handler>
+        <state-manager>
+            com.sun.faces.application.StateManagerImpl
+        </state-manager>
+        <view-handler>
+            com.sun.faces.application.ViewHandlerImpl
+        </view-handler>
+    </application>
 
-  <!-- Configure Standard By-Class Converters -->
 
-  <converter>
-    <converter-for-class>java.math.BigDecimal</converter-for-class>
-    <converter-class>javax.faces.convert.BigDecimalConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-for-class>java.math.BigInteger</converter-for-class>
-    <converter-class>javax.faces.convert.BigIntegerConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-for-class>java.lang.Boolean</converter-for-class>
-    <converter-class>javax.faces.convert.BooleanConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-for-class>java.lang.Byte</converter-for-class>
-    <converter-class>javax.faces.convert.ByteConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-for-class>java.lang.Character</converter-for-class>
-    <converter-class>javax.faces.convert.CharacterConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-for-class>java.lang.Double</converter-for-class>
-    <converter-class>javax.faces.convert.DoubleConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-for-class>java.lang.Float</converter-for-class>
-    <converter-class>javax.faces.convert.FloatConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-for-class>java.lang.Integer</converter-for-class>
-    <converter-class>javax.faces.convert.IntegerConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-for-class>java.lang.Long</converter-for-class>
-    <converter-class>javax.faces.convert.LongConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-for-class>java.lang.Short</converter-for-class>
-    <converter-class>javax.faces.convert.ShortConverter</converter-class>
-  </converter>
-  <converter>
-    <converter-for-class>java.lang.Enum</converter-for-class>
-    <converter-class>javax.faces.convert.EnumConverter</converter-class>
-  </converter>
+    <!-- Configure Standard By-Id Converters -->
 
-  <!-- Configure Standard Validators -->
+    <converter>
+        <converter-id>javax.faces.BigDecimal</converter-id>
+        <converter-class>javax.faces.convert.BigDecimalConverter
+        </converter-class>
+    </converter>
+    <converter>
+        <converter-id>javax.faces.BigInteger</converter-id>
+        <converter-class>javax.faces.convert.BigIntegerConverter
+        </converter-class>
+    </converter>
+    <converter>
+        <converter-id>javax.faces.Boolean</converter-id>
+        <converter-class>javax.faces.convert.BooleanConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-id>javax.faces.Byte</converter-id>
+        <converter-class>javax.faces.convert.ByteConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-id>javax.faces.Character</converter-id>
+        <converter-class>javax.faces.convert.CharacterConverter
+        </converter-class>
+    </converter>
+    <converter>
+        <converter-id>javax.faces.DateTime</converter-id>
+        <converter-class>javax.faces.convert.DateTimeConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-id>javax.faces.Double</converter-id>
+        <converter-class>javax.faces.convert.DoubleConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-id>javax.faces.Float</converter-id>
+        <converter-class>javax.faces.convert.FloatConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-id>javax.faces.Integer</converter-id>
+        <converter-class>javax.faces.convert.IntegerConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-id>javax.faces.Long</converter-id>
+        <converter-class>javax.faces.convert.LongConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-id>javax.faces.Number</converter-id>
+        <converter-class>javax.faces.convert.NumberConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-id>javax.faces.Short</converter-id>
+        <converter-class>javax.faces.convert.ShortConverter</converter-class>
+    </converter>
 
-  <validator>
-    <validator-id>javax.faces.DoubleRange</validator-id>
-    <validator-class>
-      javax.faces.validator.DoubleRangeValidator
-  </validator-class>
-  </validator>
-  <validator>
-    <validator-id>javax.faces.Length</validator-id>
-    <validator-class>javax.faces.validator.LengthValidator</validator-class>
-  </validator>
-  <validator>
-    <validator-id>javax.faces.LongRange</validator-id>
-    <validator-class>javax.faces.validator.LongRangeValidator</validator-class>
-  </validator>
+    <!-- Configure Standard By-Class Converters -->
+
+    <converter>
+        <converter-for-class>java.math.BigDecimal</converter-for-class>
+        <converter-class>javax.faces.convert.BigDecimalConverter
+        </converter-class>
+    </converter>
+    <converter>
+        <converter-for-class>java.math.BigInteger</converter-for-class>
+        <converter-class>javax.faces.convert.BigIntegerConverter
+        </converter-class>
+    </converter>
+    <converter>
+        <converter-for-class>java.lang.Boolean</converter-for-class>
+        <converter-class>javax.faces.convert.BooleanConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-for-class>java.lang.Byte</converter-for-class>
+        <converter-class>javax.faces.convert.ByteConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-for-class>java.lang.Character</converter-for-class>
+        <converter-class>javax.faces.convert.CharacterConverter
+        </converter-class>
+    </converter>
+    <converter>
+        <converter-for-class>java.lang.Double</converter-for-class>
+        <converter-class>javax.faces.convert.DoubleConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-for-class>java.lang.Float</converter-for-class>
+        <converter-class>javax.faces.convert.FloatConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-for-class>java.lang.Integer</converter-for-class>
+        <converter-class>javax.faces.convert.IntegerConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-for-class>java.lang.Long</converter-for-class>
+        <converter-class>javax.faces.convert.LongConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-for-class>java.lang.Short</converter-for-class>
+        <converter-class>javax.faces.convert.ShortConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-for-class>java.lang.Enum</converter-for-class>
+        <converter-class>javax.faces.convert.EnumConverter</converter-class>
+    </converter>
+
+    <!-- Configure Standard Validators -->
+
+    <validator>
+        <validator-id>javax.faces.DoubleRange</validator-id>
+        <validator-class>
+            javax.faces.validator.DoubleRangeValidator
+        </validator-class>
+    </validator>
+    <validator>
+        <validator-id>javax.faces.Length</validator-id>
+        <validator-class>javax.faces.validator.LengthValidator</validator-class>
+    </validator>
+    <validator>
+        <validator-id>javax.faces.LongRange</validator-id>
+        <validator-class>javax.faces.validator.LongRangeValidator
+        </validator-class>
+    </validator>
 
 
 </faces-config>

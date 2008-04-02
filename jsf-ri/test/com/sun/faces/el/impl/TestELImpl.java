@@ -58,30 +58,88 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  */
 public class TestELImpl extends ServletFacesTestCase
 {
+
+
+    // ------------------------------------------------------------ Constructors
+
+
     /**
      *  
      */
     public TestELImpl()
     {
+
         super();
+
     }
+
 
     /**
      * @param name
      */
     public TestELImpl(String name)
     {
+
         super(name);
+
     }
 
-    protected Object evaluate(String ref) throws Exception
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void evaluateTest(String ref, Object expectedValue) throws Exception
     {
-        ValueBinding vb = this.getFacesContext().getApplication().createValueBinding(ref);
-        return vb.getValue(this.getFacesContext());
+
+        Object returnedValue = this.evaluate(ref);
+        if (returnedValue != null)
+        {
+            Class expectedType = expectedValue.getClass();
+            Class returnedType = returnedValue.getClass();
+            String msg = "'" + ref + "' expected [" + expectedValue
+                    + "] of type " + expectedType.getName()
+                    + ", but returned [" + returnedValue + "] of type "
+                    + returnedType.getName();
+            assertTrue(msg, expectedType.isAssignableFrom(returnedType));
+            assertEquals(msg, expectedValue, returnedValue);
+        }
+        else
+        {
+            String msg = "'" + ref + "' expected value [" + expectedValue
+                    + "], but returned [" + returnedValue + "]";
+            assertEquals(msg, expectedValue, returnedValue);
+        }
+
     }
+
+
+    public void evaluateTestFailure(String ref) throws Exception
+    {
+
+        try
+        {
+            this.evaluate(ref);
+            fail("'" + ref + "' should have thrown an exception");
+        }
+        catch (Exception e)
+        {
+            // do nothing
+        }
+
+    }
+
+
+    public ExternalContext getExternalContext()
+    {
+
+        return getFacesContext().getExternalContext();
+
+    }
+
 
     public void testELEvaluation() throws Exception
     {
+
         /* setup our test date */
         Bean1 b = this.createBean1();
         getExternalContext().getRequestMap().put("bean1a", b);
@@ -618,10 +676,16 @@ public class TestELImpl extends ServletFacesTestCase
         evaluateTest("#{ -\"3\" }", new Long(-3));
         evaluateTest("#{ -\"3.0\" }", new Double(-3));
         evaluateTest("#{ -\"3e2\" }", new Double(-300));
+
     }
+
+
+    // ------------------------------------------------------- Protected Methods
+
 
     protected Bean1 createBean1()
     {
+
         Bean1 b1 = new Bean1();
         b1.setBoolean1(true);
         b1.setByte1((byte) 12);
@@ -661,45 +725,16 @@ public class TestELImpl extends ServletFacesTestCase
         b2.setBean2(b3);
 
         return b1;
+
     }
 
-    public ExternalContext getExternalContext()
+
+    protected Object evaluate(String ref) throws Exception
     {
-        return getFacesContext().getExternalContext();
+
+        ValueBinding vb = this.getFacesContext().getApplication().createValueBinding(ref);
+        return vb.getValue(this.getFacesContext());
+
     }
 
-    public void evaluateTestFailure(String ref) throws Exception
-    {
-        try
-        {
-            this.evaluate(ref);
-            fail("'" + ref + "' should have thrown an exception");
-        }
-        catch (Exception e)
-        {
-            // do nothing
-        }
-    }
-
-    public void evaluateTest(String ref, Object expectedValue) throws Exception
-    {
-        Object returnedValue = this.evaluate(ref);
-        if (returnedValue != null)
-        {
-            Class expectedType = expectedValue.getClass();
-            Class returnedType = returnedValue.getClass();
-            String msg = "'" + ref + "' expected [" + expectedValue
-                    + "] of type " + expectedType.getName()
-                    + ", but returned [" + returnedValue + "] of type "
-                    + returnedType.getName();
-            assertTrue(msg, expectedType.isAssignableFrom(returnedType));
-            assertEquals(msg, expectedValue, returnedValue);
-        }
-        else
-        {
-            String msg = "'" + ref + "' expected value [" + expectedValue
-                    + "], but returned [" + returnedValue + "]";
-            assertEquals(msg, expectedValue, returnedValue);
-        }
-    }
 }

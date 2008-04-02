@@ -1,5 +1,5 @@
 /*
- * $Id: FacetComponentTag.java,v 1.7 2005/08/22 22:10:37 ofung Exp $
+ * $Id: FacetComponentTag.java,v 1.8 2006/03/29 22:38:50 rlubke Exp $
  */
 
 /*
@@ -34,52 +34,56 @@ import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
 
 
-/**
- * <p><code>UIComponentTag</code> for <code>FacetComponent</code>.</p>
- */
+/** <p><code>UIComponentTag</code> for <code>FacetComponent</code>.</p> */
 
 public class FacetComponentTag extends UIComponentTag {
 
 
-    // -------------------------------------------------------------- Attributes
-
-
     private String value = null;
 
+    // -------------------------------------------------------- Methods From Tag
 
-    public void setValue(String value) {
-        this.value = value;
+
+    public void release() {
+
+        super.release();
+        value = null;
+
     }
-
 
     // ---------------------------------------------------------- Public Methods
 
 
+    public void setValue(String value) {
+
+        this.value = value;
+
+    }
+
+
     public String getComponentType() {
+
         return ("FacetComponent");
+
     }
 
 
     public String getRendererType() {
+
         return (null);
+
     }
-
-
-    public void release() {
-        super.release();
-        value = null;
-    }
-
 
     // ------------------------------------------------------- Protected Methods
 
 
     protected void setProperties(UIComponent component) {
+
         super.setProperties(component);
         if (value != null) {
             ((FacetComponent) component).setValue(value);
         }
-    }
 
+    }
 
 }

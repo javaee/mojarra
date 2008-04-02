@@ -1,5 +1,5 @@
 /*
- * $Id: TestLoadBundleTag.java,v 1.12 2005/10/19 19:51:39 edburns Exp $
+ * $Id: TestLoadBundleTag.java,v 1.13 2006/03/29 22:39:48 rlubke Exp $
  */
 
 /*
@@ -43,48 +43,34 @@ import java.util.Map;
 
 
 /**
- * @version $Id: TestLoadBundleTag.java,v 1.12 2005/10/19 19:51:39 edburns Exp $
+ * @version $Id: TestLoadBundleTag.java,v 1.13 2006/03/29 22:39:48 rlubke Exp $
  */
 
 public class TestLoadBundleTag extends ServletFacesTestCase {
 
-//
-// Protected Constants
-//
 
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
+    // ------------------------------------------------------------ Constructors
+    
 
     public TestLoadBundleTag() {
+
         super("TestLoadBundleTag.java");
+
     }
 
 
     public TestLoadBundleTag(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------------------- Public Methods
+
 
     public void testLoadBundle() throws Exception {
+
         getFacesContext().setViewRoot(Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null));
         LoadBundleTag tag = new LoadBundleTag();
         ExpressionFactory factory =
@@ -116,6 +102,7 @@ public class TestLoadBundleTag extends ServletFacesTestCase {
 
     //test out full Map contract implementation of LoadBundleTag
     public void testLoadBundleMap() throws Exception {
+
         boolean gotException = false;
         Object key = "buckaroo";
         Object value = "banzai";

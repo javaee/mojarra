@@ -3,26 +3,29 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
 <f:view>
-<html>
-<head>
-<title>input01</title>
-</head>
-<body>
+    <html>
+    <head>
+        <title>input01</title>
+    </head>
 
-<h:form id="form">
+    <body>
 
-  <table border="1">
+    <h:form id="form">
 
-    <tr><td>Message: <h:message for="form:input" /></td></tr>
+        <table border="1">
 
-    <tr><td>Clear this value and press reload: <h:inputText id="input" value="#{test3.intProperty}" /></td></tr>
+            <tr><td>Message: <h:message for="form:input"/></td></tr>
 
-  </table>
+            <tr><td>Clear this value and press reload: <h:inputText id="input"
+                                                                    value="#{test3.intProperty}"/></td>
+            </tr>
 
-  <p><h:commandButton value="reload" /></p>
+        </table>
 
-</h:form>
+        <p><h:commandButton value="reload"/></p>
 
-</body>
-</html>
+    </h:form>
+
+    </body>
+    </html>
 </f:view>

@@ -23,9 +23,8 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.45 2006/01/11 15:28:10 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.46 2006/03/29 22:38:38 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -37,10 +36,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -51,6 +46,10 @@ import javax.faces.model.SelectItemGroup;
 import java.io.IOException;
 import java.util.Iterator;
 
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+
 /**
  * <B>SelectManyCheckboxListRenderer</B> is a class that renders the
  * current value of <code>UISelectMany<code> component as a list of checkboxes.
@@ -58,50 +57,26 @@ import java.util.Iterator;
 
 public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
-    //
-    // Protected Constants
-    //
+    // ------------------------------------------------------------ Constructors
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
 
     public SelectManyCheckboxListRenderer() {
+
         super();
+
     }
 
-    //
-    // Class methods
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null || component == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        
+
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
@@ -121,7 +96,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             alignVertical = alignStr.equalsIgnoreCase("pageDirection");
         }
         if (null != (borderObj = component.getAttributes().get("border"))) {
-            border = (Integer) borderObj;           
+            border = (Integer) borderObj;
         }
 
         renderBeginText(component, border, alignVertical, context, true);
@@ -157,7 +132,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                 context, false);
                 // render options of this group.
                 SelectItem[] itemsArray =
-                    ((SelectItemGroup) curItem).getSelectItems();
+                      ((SelectItemGroup) curItem).getSelectItems();
                 for (int i = 0; i < itemsArray.length; ++i) {
                     renderOption(context, component, itemsArray[i],
                                  alignVertical, i);
@@ -174,26 +149,88 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         }
 
         renderEndText(component, alignVertical, context, true);
+
+    }
+
+    // ------------------------------------------------------- Protected Methods
+
+
+    protected void renderBeginText(UIComponent component, int border,
+                                   boolean alignVertical, FacesContext context,
+                                   boolean outerTable)
+          throws IOException {
+
+        ResponseWriter writer = context.getResponseWriter();
+        assert (writer != null);
+
+        writer.startElement("table", component);
+        if (border != Integer.MIN_VALUE) {
+            writer.writeAttribute("border", border, "border");
+        }
+
+        // render style and styleclass attribute on the outer table instead of 
+        // rendering it as pass through attribute on every option in the list.
+        if (outerTable) {
+            // render "id" only for outerTable.
+            if (shouldWriteIdAttribute(component)) {
+                writeIdAttributeIfNecessary(context, writer, component);
+            }
+            String styleClass = (String) component.getAttributes().get(
+                  "styleClass");
+            String style = (String) component.getAttributes().get("style");
+            if (styleClass != null) {
+                writer.writeAttribute("class", styleClass, "class");
+            }
+            if (style != null) {
+                writer.writeAttribute("style", style, "style");
+            }
+        }
+        writer.writeText("\n", null);
+
+        if (!alignVertical) {
+            writer.writeText("\t", null);
+            writer.startElement("tr", component);
+            writer.writeText("\n", null);
+        }
+
+    }
+
+
+    protected void renderEndText(UIComponent component, boolean alignVertical,
+                                 FacesContext context, boolean outerTable)
+          throws IOException {
+
+        ResponseWriter writer = context.getResponseWriter();
+        assert (writer != null);
+
+        if (!alignVertical) {
+            writer.writeText("\t", null);
+            writer.endElement("tr");
+            writer.writeText("\n", null);
+        }
+        writer.endElement("table");
+
     }
 
 
     protected void renderOption(FacesContext context, UIComponent component,
-                                SelectItem curItem, boolean alignVertical, int itemNumber)
-        throws IOException {
+                                SelectItem curItem, boolean alignVertical,
+                                int itemNumber)
+          throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
-                
+
         // disable the check box if the attribute is set.
         String labelClass = null;
         boolean componentDisabled = Util.componentIsDisabled(component);
 
         if (componentDisabled || curItem.isDisabled()) {
             labelClass = (String) component.
-                getAttributes().get("disabledClass");
+                  getAttributes().get("disabledClass");
         } else {
             labelClass = (String) component.
-                getAttributes().get("enabledClass");
+                  getAttributes().get("enabledClass");
         }
         if (alignVertical) {
             writer.writeText("\t", null);
@@ -206,8 +243,9 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         writer.startElement("input", component);
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
-        String idString = component.getClientId(context) + NamingContainer.SEPARATOR_CHAR +
-                          Integer.toString(itemNumber); 
+        String idString =
+              component.getClientId(context) + NamingContainer.SEPARATOR_CHAR +
+              Integer.toString(itemNumber);
         writer.writeAttribute("id", idString, "id");
         String valueString = getFormattedValue(context, component,
                                                curItem.getValue());
@@ -217,7 +255,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         Object submittedValues[] = getSubmittedSelectedValues(context,
                                                               component);
         boolean isSelected;
-        
+
         Class type = String.class;
         Object valuesArray = null;
         Object itemValue = null;
@@ -230,10 +268,10 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         }
         if (valuesArray != null) {
             type = valuesArray.getClass().getComponentType();
-        } 
+        }
 
         Object newValue = context.getApplication().getExpressionFactory().
-            coerceToType(itemValue, type);
+              coerceToType(itemValue, type);
 
         isSelected = isSelected(newValue, valuesArray);
 
@@ -252,10 +290,11 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         // Apply HTML 4.x attributes specified on UISelectMany component to all 
         // items in the list except styleClass and style which are rendered as
         // attributes of outer most table.
-        RenderKitUtils.renderPassThruAttributes(context, 
-                                                writer, 
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
-                                                new String[] { "border", "style" });
+                                                new String[]{"border",
+                                                             "style"});
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         writer.endElement("input");
@@ -279,66 +318,16 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             writer.endElement("tr");
             writer.writeText("\n", null);
         }
+
     }
+
+    // ------------------------------------------------- Package Private Methods
 
 
     String getSelectedTextString() {
+
         return "checked";
-    }
 
-
-    protected void renderBeginText(UIComponent component, int border,
-                                   boolean alignVertical, FacesContext context, boolean outerTable)
-        throws IOException {
-
-        ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
-        
-        writer.startElement("table", component);
-        if (border != Integer.MIN_VALUE) {
-            writer.writeAttribute("border", border, "border");
-        }
-
-        // render style and styleclass attribute on the outer table instead of 
-        // rendering it as pass through attribute on every option in the list.
-        if (outerTable) {
-            // render "id" only for outerTable.
-            if (shouldWriteIdAttribute(component)) {
-                writeIdAttributeIfNecessary(context, writer, component);
-            }
-            String styleClass = (String) component.getAttributes().get(
-                "styleClass");
-            String style= (String) component.getAttributes().get("style");
-            if (styleClass != null) {
-                writer.writeAttribute("class", styleClass, "class");
-            }
-            if (style!= null) {
-                writer.writeAttribute("style", style, "style");
-            }
-        }
-        writer.writeText("\n", null);
-
-        if (!alignVertical) {
-            writer.writeText("\t", null);
-            writer.startElement("tr", component);
-            writer.writeText("\n", null);
-        }
-    }
-
-
-    protected void renderEndText(UIComponent component, boolean alignVertical,
-                                 FacesContext context, boolean outerTable)
-        throws IOException {
-
-        ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
-
-        if (!alignVertical) {
-            writer.writeText("\t", null);
-            writer.endElement("tr");
-            writer.writeText("\n", null);
-        }
-        writer.endElement("table");
     }
 
 } // end of class SelectManyCheckboxListRenderer

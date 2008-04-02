@@ -1,5 +1,5 @@
 /*
- * $Id: MultiThreadTestRunner.java,v 1.2 2005/08/22 22:11:26 ofung Exp $
+ * $Id: MultiThreadTestRunner.java,v 1.3 2006/03/29 22:39:48 rlubke Exp $
  */
 
 /*
@@ -43,48 +43,41 @@ import java.io.PrintStream;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MultiThreadTestRunner.java,v 1.2 2005/08/22 22:11:26 ofung Exp $
+ * @version $Id: MultiThreadTestRunner.java,v 1.3 2006/03/29 22:39:48 rlubke Exp $
  */
 
 public class MultiThreadTestRunner extends Object {
 
-//
-// Protected Constants
-//
 
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-    private Thread [] threads;
     private Object [] outcomes;
+    private Thread [] threads;
 
-//
-// Constructors and Initializers    
-//
+
+    // ------------------------------------------------------------ Constructors
+
 
     public MultiThreadTestRunner(Thread [] yourThreads,
 				 Object [] yourOutcomes) {
+
 	threads = yourThreads;
 	outcomes = yourOutcomes;
 
 	if (null == threads || null == outcomes) {
 	    throw new IllegalArgumentException();
 	}
+
     }
+
+
+    // ---------------------------------------------------------- Public Methods
+
 
     /**
      * @return true iff one of the threads has failed.
      */
 
     public boolean runThreadsAndOutputResults(PrintStream out) throws Exception {
+
 	int i;
 
 	if (outcomes.length != threads.length) {
@@ -133,6 +126,7 @@ public class MultiThreadTestRunner extends Object {
 	}
 	
 	return foundFailedThread;
+
     }
 
 } // end of class MultiThreadTestRunner

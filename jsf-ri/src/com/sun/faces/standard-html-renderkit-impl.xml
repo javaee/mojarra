@@ -61,7 +61,7 @@
         com.sun.faces.renderkit.html_basic.LabelRenderer
     </output-label-renderer-class>
     <output-link-renderer-class>
-       com.sun.faces.renderkit.html_basic.OutputLinkRenderer
+        com.sun.faces.renderkit.html_basic.OutputLinkRenderer
     </output-link-renderer-class>
     <output-format-renderer-class>
         com.sun.faces.renderkit.html_basic.OutputMessageRenderer

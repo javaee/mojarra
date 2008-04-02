@@ -25,27 +25,44 @@
 
 package com.sun.faces.systest.lifecycle;
 
-import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 
 public class ApplicationFactoryWrapper extends ApplicationFactory {
-    
+
+
     private ApplicationFactory oldFactory = null;
-    
+
+    // ------------------------------------------------------------ Constructors
+
+
     public ApplicationFactoryWrapper(ApplicationFactory yourOldFactory) {
-	oldFactory = yourOldFactory;
-    }
-    
-    public Application getApplication() {
-	return oldFactory.getApplication();
-    }
-    
-    public void setApplication(Application application) {
-	oldFactory.setApplication(application);
+
+        oldFactory = yourOldFactory;
+
     }
 
+    // ---------------------------------------------------------- Public Methods
+
+
+    public Application getApplication() {
+
+        return oldFactory.getApplication();
+
+    }
+
+
+    public void setApplication(Application application) {
+
+        oldFactory.setApplication(application);
+
+    }
+
+
     public String toString() {
-	return "ApplicationFactoryWrapper";
+
+        return "ApplicationFactoryWrapper";
+
     }
 
 }

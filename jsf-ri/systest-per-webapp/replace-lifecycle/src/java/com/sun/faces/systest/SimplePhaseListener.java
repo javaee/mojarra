@@ -32,25 +32,40 @@ import javax.faces.event.PhaseListener;
 
 public class SimplePhaseListener implements PhaseListener {
 
+    // ------------------------------------------------------------ Constructors
+
+
     public SimplePhaseListener() {
     }
 
+    // ---------------------------------------------- Methods From PhaseListener
+
 
     public void afterPhase(PhaseEvent event) {
-	event.getFacesContext().getExternalContext().getRequestMap().put("afterPhase",
-									 "afterPhase");
+
+        event.getFacesContext().getExternalContext().getRequestMap()
+              .put("afterPhase",
+                   "afterPhase");
+
     }
 
 
     public void beforePhase(PhaseEvent event) {
-	event.getFacesContext().getExternalContext().getRequestMap().put("beforePhase",
-									 "beforePhase");
-	event.getFacesContext().getExternalContext().getRequestMap().put("lifecycleImpl",
-									 event.getSource());
+
+        event.getFacesContext().getExternalContext().getRequestMap()
+              .put("beforePhase",
+                   "beforePhase");
+        event.getFacesContext().getExternalContext().getRequestMap()
+              .put("lifecycleImpl",
+                   event.getSource());
+
     }
 
 
     public PhaseId getPhaseId() {
+
         return PhaseId.RENDER_RESPONSE;
+
     }
+
 }

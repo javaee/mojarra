@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverChainWrapper.java,v 1.6 2006/03/14 16:57:31 rlubke Exp $
+ * $Id: PropertyResolverChainWrapper.java,v 1.7 2006/03/29 22:38:33 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,74 +28,71 @@
 
 package com.sun.faces.el;
 
-import java.util.Iterator;
-import java.util.List;
-import java.beans.FeatureDescriptor;
-
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ELResolver;
+import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyResolver;
-import javax.faces.context.FacesContext;
+
+import java.beans.FeatureDescriptor;
+import java.util.Iterator;
+import java.util.List;
 
 public class PropertyResolverChainWrapper extends ELResolver {
 
+
     private PropertyResolver legacyPR = null;
-    
+
+    // ------------------------------------------------------------ Constructors
+
+
     public PropertyResolverChainWrapper(PropertyResolver propertyResolver) {
+
         this.legacyPR = propertyResolver;
+
     }
 
-    @Override
-    public Object getValue(ELContext context, Object base, Object property) 
-        throws ELException {
-        if (base == null || property == null) {
-            return null;
-        }        
-        Object result = null;
+    // ---------------------------------------------------------- Public Methods
 
-        FacesContext facesContext = (FacesContext) 
-            context.getContext(FacesContext.class);
-        if (base instanceof List || base.getClass().isArray()) {
-            Object indexObj = facesContext.getApplication().getExpressionFactory().
-                    coerceToType(property, Integer.class);
-            int index = ((Integer)indexObj).intValue();
-            try {
-                result = legacyPR.getValue(base, index);
-                context.setPropertyResolved(result != null);
-            } catch (EvaluationException ex) {
-                context.setPropertyResolved(false);
-                throw new ELException(ex);
-            }
-        } else {
-            try {
-                result = legacyPR.getValue(base, property);
-                context.setPropertyResolved(result != null);
-            } catch (EvaluationException ex) {
-                context.setPropertyResolved(false);
-                throw new ELException(ex);
-            }    
+
+    @Override
+    public Class getCommonPropertyType(ELContext context, Object base) {
+
+        if (base == null) {
+            return Object.class;
         }
-        
-        return result;
+        return null;
+
     }
 
+
     @Override
-    public Class getType(ELContext context, Object base, Object property) 
-        throws ELException {
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context,
+                                                             Object base) {
+
+        return null;
+
+    }
+
+
+    @Override
+    public Class getType(ELContext context, Object base, Object property)
+          throws ELException {
+
         if (base == null || property == null) {
             return null;
         }
-        
+
         Class result = null;
-        
+
         if (base instanceof List || base.getClass().isArray()) {
-            FacesContext facesContext = (FacesContext) 
-                context.getContext(FacesContext.class);
-            Object indexObj = facesContext.getApplication().getExpressionFactory().
-                    coerceToType(property, Integer.class);
-            int index = ((Integer)indexObj).intValue();
+            FacesContext facesContext = (FacesContext)
+                  context.getContext(FacesContext.class);
+            Object indexObj =
+                  facesContext.getApplication().getExpressionFactory().
+                        coerceToType(property, Integer.class);
+            int index = ((Integer) indexObj).intValue();
             try {
                 result = legacyPR.getType(base, index);
                 context.setPropertyResolved(result != null);
@@ -110,27 +107,105 @@ public class PropertyResolverChainWrapper extends ELResolver {
             } catch (EvaluationException ex) {
                 context.setPropertyResolved(false);
                 throw new ELException(ex);
-            }    
+            }
         }
-        
+
         return result;
+
     }
 
+
     @Override
-    public void  setValue(ELContext context, Object base, Object property,
-        Object val) throws ELException {
+    public Object getValue(ELContext context, Object base, Object property)
+          throws ELException {
+
+        if (base == null || property == null) {
+            return null;
+        }
+        Object result = null;
+
+        FacesContext facesContext = (FacesContext)
+              context.getContext(FacesContext.class);
+        if (base instanceof List || base.getClass().isArray()) {
+            Object indexObj =
+                  facesContext.getApplication().getExpressionFactory().
+                        coerceToType(property, Integer.class);
+            int index = ((Integer) indexObj).intValue();
+            try {
+                result = legacyPR.getValue(base, index);
+                context.setPropertyResolved(result != null);
+            } catch (EvaluationException ex) {
+                context.setPropertyResolved(false);
+                throw new ELException(ex);
+            }
+        } else {
+            try {
+                result = legacyPR.getValue(base, property);
+                context.setPropertyResolved(result != null);
+            } catch (EvaluationException ex) {
+                context.setPropertyResolved(false);
+                throw new ELException(ex);
+            }
+        }
+
+        return result;
+
+    }
+
+
+    @Override
+    public boolean isReadOnly(ELContext context, Object base, Object property)
+          throws ELException {
+
+        if (base == null || property == null) {
+            return false;
+        }
+        boolean result = false;
+
+        if (base instanceof List || base.getClass().isArray()) {
+            FacesContext facesContext = (FacesContext)
+                  context.getContext(FacesContext.class);
+            Object indexObj =
+                  facesContext.getApplication().getExpressionFactory().
+                        coerceToType(property, Integer.class);
+            int index = ((Integer) indexObj).intValue();
+            try {
+                result = legacyPR.isReadOnly(base, index);
+            } catch (EvaluationException ex) {
+                context.setPropertyResolved(false);
+                throw new ELException(ex);
+            }
+        } else {
+            try {
+                result = legacyPR.isReadOnly(base, property);
+            } catch (EvaluationException ex) {
+                context.setPropertyResolved(false);
+                throw new ELException(ex);
+            }
+        }
+
+        return result;
+
+    }
+
+
+    @Override
+    public void setValue(ELContext context, Object base, Object property,
+                         Object val) throws ELException {
+
         if (base == null || property == null) {
             return;
-        }       
+        }
 
         context.setPropertyResolved(true);
 
         if (base instanceof List || base.getClass().isArray()) {
-            FacesContext facesContext = (FacesContext) 
-            context.getContext(FacesContext.class);
-            Object indexObj = facesContext.getApplication().getExpressionFactory().
-                    coerceToType(property, Integer.class);
-            int index = ((Integer)indexObj).intValue();            
+            FacesContext facesContext = (FacesContext)
+                  context.getContext(FacesContext.class);
+            Object indexObj =
+                  facesContext.getApplication().getExpressionFactory().
+                        coerceToType(property, Integer.class);
+            int index = ((Integer) indexObj).intValue();
             try {
                 legacyPR.setValue(base, index, val);
             } catch (EvaluationException ex) {
@@ -143,54 +218,9 @@ public class PropertyResolverChainWrapper extends ELResolver {
             } catch (EvaluationException ex) {
                 context.setPropertyResolved(false);
                 throw new ELException(ex);
-            }    
-        }
-    }
-
-    @Override
-    public boolean isReadOnly(ELContext context, Object base, Object property) 
-        throws ELException {
-        if (base == null || property == null) {
-            return false;
-        }      
-        boolean result = false;
-
-        if (base instanceof List || base.getClass().isArray()) {
-            FacesContext facesContext = (FacesContext) 
-            context.getContext(FacesContext.class);
-            Object indexObj = facesContext.getApplication().getExpressionFactory().
-                    coerceToType(property, Integer.class);
-            int index = ((Integer)indexObj).intValue();
-            try {
-                result = legacyPR.isReadOnly(base, index);                
-            } catch (EvaluationException ex) {
-                context.setPropertyResolved(false);
-                throw new ELException(ex);
             }
-        } else {
-            try {
-                result = legacyPR.isReadOnly(base, property);                
-            } catch (EvaluationException ex) {
-                context.setPropertyResolved(false);
-                throw new ELException(ex);
-            }    
         }
-        
-        return result;
-    }
 
-    @Override
-    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, 
-                                                             Object base) {
-        return null;
-    }
-
-    @Override
-    public Class getCommonPropertyType(ELContext context, Object base) {
-        if ( base == null ) {
-            return Object.class;
-        }
-        return null;
     }
 
 }

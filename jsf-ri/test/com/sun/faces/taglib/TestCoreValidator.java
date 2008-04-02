@@ -31,7 +31,14 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class TestCoreValidator extends CoreValidator {
 
+
+    // ---------------------------------------------------------- Public Methods
+
+
     public  DefaultHandler getSAXHandler() {
+
         return super.getSAXHandler();
+
     }
+
 }

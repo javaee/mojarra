@@ -10,7 +10,7 @@
         <f:verbatim>
             Test Verbatim
         </f:verbatim>
-        <h:outputText value="Test Output Text"/>       
+        <h:outputText value="Test Output Text"/>
         <h:commandButton id="submit" value="Groovy Button"/>
     </h:form>
 </f:view>

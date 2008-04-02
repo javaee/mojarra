@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkMultiFormTestCase.java,v 1.5 2006/03/14 16:33:23 edburns Exp $
+ * $Id: CommandLinkMultiFormTestCase.java,v 1.6 2006/03/29 22:38:45 rlubke Exp $
  */
 
 /*
@@ -30,30 +30,21 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
+import java.util.List;
+
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.util.List;
 
-import javax.faces.component.NamingContainer;
-
-
-/**
- * <p>Test Case for JSP Interoperability.</p>
- */
+/** <p>Test Case for JSP Interoperability.</p> */
 
 public class CommandLinkMultiFormTestCase extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -64,44 +55,46 @@ public class CommandLinkMultiFormTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public CommandLinkMultiFormTestCase(String name) {
+
         super(name);
+
     }
 
+    // ---------------------------------------------------------- Public Methods
+
+
+    /** Return the tests included in this test suite. */
+    public static Test suite() {
+
+        return (new TestSuite(CommandLinkMultiFormTestCase.class));
+
+    }
 
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
 
-    /**
-     * Set up instance variables required by this test case.
-     */
+    /** Set up instance variables required by this test case. */
     public void setUp() throws Exception {
+
         super.setUp();
+
     }
 
 
-    /**
-     * Return the tests included in this test suite.
-     */
-    public static Test suite() {
-        return (new TestSuite(CommandLinkMultiFormTestCase.class));
-    }
-
-
-    /**
-     * Tear down instance variables required by this test case.
-     */
+    /** Tear down instance variables required by this test case. */
     public void tearDown() {
-        super.tearDown();
-    }
 
+        super.tearDown();
+
+    }
 
     // ------------------------------------------------- Individual Test Methods
 
 
     public void testMultiForm() throws Exception {
+
         HtmlForm form1, form2;
         HtmlAnchor link1, link2, link3;
         HtmlTextInput input;
@@ -111,27 +104,29 @@ public class CommandLinkMultiFormTestCase extends AbstractTestCase {
         page = getPage("/faces/taglib/commandLink_multiform_test.jsp");
         // press all command links..
         List forms = page.getForms();
-        form1 = (HtmlForm)forms.get(0);
-        form2 = (HtmlForm)forms.get(1);
-        
+        form1 = (HtmlForm) forms.get(0);
+        form2 = (HtmlForm) forms.get(1);
+
         // links within the first form
-        hidden1 = (HtmlHiddenInput)form1.getInputByName("form01:j_idcl");
+        hidden1 = (HtmlHiddenInput) form1.getInputByName("form01:j_idcl");
         assertNotNull(hidden1);
         hidden1.setValueAttribute("form01:Link1");
-        page1 = (HtmlPage)form1.submit();
+        page1 = (HtmlPage) form1.submit();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
         hidden1.setValueAttribute("form01:Link2");
-        page1 = (HtmlPage)form1.submit();
+        page1 = (HtmlPage) form1.submit();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
 
         // links within second form
-        hidden2 = (HtmlHiddenInput)form2.getInputByName("form02:j_idcl");
+        hidden2 = (HtmlHiddenInput) form2.getInputByName("form02:j_idcl");
         assertNotNull(hidden2);
         hidden2.setValueAttribute("form02:Link3");
-        page1 = (HtmlPage)form1.submit();
+        page1 = (HtmlPage) form1.submit();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
         hidden2.setValueAttribute("form02:Link4");
-        page1 = (HtmlPage)form1.submit();
+        page1 = (HtmlPage) form1.submit();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
+
     }
+
 }

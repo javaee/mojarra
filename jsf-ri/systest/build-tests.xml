@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.109 2006/03/22 20:49:59 edburns Exp $
+ $Id: build-tests.xml,v 1.110 2006/03/29 22:38:44 rlubke Exp $
 -->
 
 <!--
@@ -103,7 +103,7 @@
 
 
     <!-- HtmlUnit client classpath -->
-    <path id="html.classpath">  
+    <path id="html.classpath">
         <pathelement location="${basedir}/build/classes"/>
         <path refid="htmlunit.runtime.classpath"/>
     </path>
@@ -153,24 +153,24 @@
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>
     </target>
-    
+
     <target name="test.misc">
         <!-- validates fix for issue IMPL-262 - should be 404 not 500 -->
         <jsf.tester request="${context.path}/faces/thispagedoesnexist.jsp"
-            status="404"/>
+                    status="404"/>
     </target>
 
     <target name="test.duplicateIds"
             description="Test duplicate ID detection">
 
         <jsf.tester request="${context.path}/faces/duplicateIds01.jsp"
-                    status="500"/> 
+                    status="500"/>
 
         <jsf.tester request="${context.path}/faces/duplicateIds02.jsp"
-                status="200"/>
+                    status="200"/>
 
         <jsf.tester request="${context.path}/faces/duplicateIds03.jsp"
-                status="500"/>
+                    status="500"/>
 
         <jsf.tester
               request="${context.path}/faces/duplicateIds05.jsp"
@@ -244,11 +244,11 @@
 
     <target name="test.jsp"
             description="Test JSP Integration">
-        
+
         <jsf.tester
               request="${context.path}/faces/positiveTagFile.jsp"
               status="200"/>
-        
+
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -257,7 +257,7 @@
                          includes="com/sun/faces/jsptest/ViewTagTestCase.class,
                          com/sun/faces/jsptest/CommandLinkNoFormTestCase.class,com/sun/faces/jsptest/PrependIdTestCase.class,com/sun/faces/jsptest/ConverterTestCase.class"/>
             </tests>
-        </jsf.junit>       
+        </jsf.junit>
     </target>
 
 
@@ -271,7 +271,7 @@
                          includes="com/sun/faces/pathtest/*TestCase.class"
                          excludes="com/sun/faces/pathtest/PathTestCase.class"/>
             </tests>
-        </jsf.junit>       
+        </jsf.junit>
     </target>
 
     <target name="test.methodRef"
@@ -283,8 +283,8 @@
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/methodref/*TestCase.class"/>
             </tests>
-        </jsf.junit> 
-       
+        </jsf.junit>
+
         <!-- MethodBinding Test #2 (Superclass Method Calls) -->
         <jsf.tester
               request="${context.path}/faces/methodref02.jsp"
@@ -430,7 +430,7 @@
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/systest/lifecycle/*TestCase.class"/>
             </tests>
-        </jsf.junit>         
+        </jsf.junit>
     </target>
 
 
@@ -465,7 +465,7 @@
 
     <target name="test.navigation"
             description="Test navigation handler rule processing">
-        
+
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -473,8 +473,8 @@
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/systest/NavigationTestCase.class"/>
             </tests>
-        </jsf.junit>         
-        
+        </jsf.junit>
+
 
     </target>
 
@@ -668,11 +668,11 @@
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/component.jsp"
               outContent="/component.jsp PASSED"/>
-        
-        <jsf.tester             
+
+        <jsf.tester
               request="${context.path}/faces/ProcessSaveRestoreStateTest.jsp"
               status="200"/>
-        
+
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -690,7 +690,7 @@
                          includes="com/sun/faces/component/*TestCase.class"/>
             </tests>
         </jsf.junit>
-        
+
     </target>
 
     <target name="test.component01"
@@ -796,7 +796,7 @@
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/systest/RenderKitsTestCase.class"/>
             </tests>
-        </jsf.junit>        
+        </jsf.junit>
     </target>
 
     <target name="test.resourceBundleELResolver"
@@ -905,17 +905,17 @@
               request="${context.path}/faces/interweaving05.jsp"
               recordGolden="${local.golden.path}/interweaving05.txt"
               golden="${golden.path}/interweaving05.txt"/>
-        
+
         <jsf.tester
-              request="${context.path}/faces/interweaving06.jsp"  
+              request="${context.path}/faces/interweaving06.jsp"
               recordGolden="${local.golden.path}/interweaving06.txt"
               golden="${golden.path}/interweaving06.txt"/>
-                  
-         <jsf.tester
-              request="${context.path}/faces/interweaving07.jsp"  
+
+        <jsf.tester
+              request="${context.path}/faces/interweaving07.jsp"
               recordGolden="${local.golden.path}/interweaving07.txt"
-              golden="${golden.path}/interweaving07.txt"/>        
-        
+              golden="${golden.path}/interweaving07.txt"/>
+
         <jsf.tester
               request="${context.path}/faces/include-import-interweaving.jsp"
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"

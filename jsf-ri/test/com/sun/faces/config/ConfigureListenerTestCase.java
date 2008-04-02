@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListenerTestCase.java,v 1.10 2005/08/22 22:11:11 ofung Exp $
+ * $Id: ConfigureListenerTestCase.java,v 1.11 2006/03/29 22:39:39 rlubke Exp $
  */
 
 /*
@@ -116,15 +116,27 @@ import java.util.List;
 public class ConfigureListenerTestCase extends TestCase {
 
 
-    // ------------------------------------------------------ Instance Variables
-
+    // The ConfigureListener to be tested
+    private ConfigureListener listener = null;
 
     // The ServletContext for the ConfigureListener to be tested
     private MockServletContext context = null;
 
 
-    // The ConfigureListener to be tested
-    private ConfigureListener listener = null;
+    // Representative sample only
+    private String rendersChildrenFalse[][] = {
+        
+    };
+
+    private String rendersChildrenTrue[][] = {
+        {"javax.faces.Command", "javax.faces.Link"},
+        {"javax.faces.Data", "javax.faces.Table"},
+        {"javax.faces.Output", "javax.faces.Link"},
+        {"javax.faces.Panel", "javax.faces.Grid"},
+        {"javax.faces.Panel", "javax.faces.Group"},
+        {"javax.faces.Command", "javax.faces.Button"},
+        {"javax.faces.Form", "javax.faces.Form"}
+    };
 
 
     // ------------------------------------------------------------ Constructors
@@ -132,7 +144,20 @@ public class ConfigureListenerTestCase extends TestCase {
 
     // Construct a new instance of this test case.
     public ConfigureListenerTestCase(String name) {
+
         super(name);
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    // Return the tests included in this test case.
+    public static Test suite() {
+
+        return (new TestSuite(ConfigureListenerTestCase.class));
+
     }
 
 
@@ -146,14 +171,6 @@ public class ConfigureListenerTestCase extends TestCase {
             (this.getClass().getClassLoader());
         context = new MockServletContext();
         listener = new ConfigureListener();
-
-    }
-
-
-    // Return the tests included in this test case.
-    public static Test suite() {
-
-        return (new TestSuite(ConfigureListenerTestCase.class));
 
     }
 
@@ -201,22 +218,6 @@ public class ConfigureListenerTestCase extends TestCase {
         listener.contextDestroyed(sce);
 
     }
-
-
-    // Representative sample only
-    private String rendersChildrenFalse[][] = {
-        
-    };
-
-    private String rendersChildrenTrue[][] = {
-        {"javax.faces.Command", "javax.faces.Link"},
-        {"javax.faces.Data", "javax.faces.Table"},
-        {"javax.faces.Output", "javax.faces.Link"},
-        {"javax.faces.Panel", "javax.faces.Grid"},
-        {"javax.faces.Panel", "javax.faces.Group"},
-        {"javax.faces.Command", "javax.faces.Button"},
-        {"javax.faces.Form", "javax.faces.Form"}
-    };
 
 
     // Test some boolean attributes that should have been set explicitly
@@ -387,6 +388,9 @@ public class ConfigureListenerTestCase extends TestCase {
         assertNotNull(listener);
 
     }
+
+
+    // --------------------------------------------------------- Private Methods
 
 
     // --------------------------------------------------------- Support Methods
@@ -786,7 +790,6 @@ public class ConfigureListenerTestCase extends TestCase {
         assertTrue(application.createValidator
                    ("javax.faces.LongRange") instanceof LongRangeValidator);
 
-
     }
 
 
@@ -824,6 +827,5 @@ public class ConfigureListenerTestCase extends TestCase {
         Thread.currentThread().setContextClassLoader(cl);
 
     }
-
 
 }

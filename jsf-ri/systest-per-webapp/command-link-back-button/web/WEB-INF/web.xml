@@ -31,16 +31,16 @@
          version="2.5">
 
     <description>
-       JSF Systests
+        JSF Systests
     </description>
     <display-name>JSF Systests</display-name>
 
     <!-- Validate the Application Configuration Resources -->
     <context-param>
-      <param-name>com.sun.faces.validateXml</param-name>
-      <param-value>true</param-value>
+        <param-name>com.sun.faces.validateXml</param-name>
+        <param-value>true</param-value>
     </context-param>
-    
+
     <context-param>
         <param-name>com.sun.faces.enableHtmlTagLibValidator</param-name>
         <param-value>true</param-value>
@@ -54,7 +54,7 @@
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup> 1 </load-on-startup>
+        <load-on-startup>1</load-on-startup>
     </servlet>
 
     <!-- Faces Servlet Mapping -->

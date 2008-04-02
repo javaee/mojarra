@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.24 2006/01/11 15:28:11 rlubke Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.25 2006/03/29 22:38:35 rlubke Exp $
  */
 
 /*
@@ -29,8 +29,6 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.util.MessageUtils;
-
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -38,50 +36,45 @@ import javax.faces.render.RenderKitFactory;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.sun.faces.util.MessageUtils;
+
 
 public class RenderKitFactoryImpl extends RenderKitFactory {
 
-//
-// Protected Constants
-//
-    protected String renderKitId = null;
+
+    protected HashMap<String, RenderKit> renderKits = null;
     protected String className = null;
-    protected HashMap<String,RenderKit> renderKits = null;
+    protected String renderKitId = null;
 
-//
-// Class Variables
-//
+    // ------------------------------------------------------------ Constructors
 
-// Attribute Instance Variables
 
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers
-//
-    /**
-     * Constructor registers default Render kit.
-     */
+    /** Constructor registers default Render kit. */
     public RenderKitFactoryImpl() {
+
         super();
         renderKits = new HashMap<String, RenderKit>();
         addRenderKit(HTML_BASIC_RENDER_KIT, new RenderKitImpl());
+
     }
+
+    // ---------------------------------------------------------- Public Methods
 
 
     public void addRenderKit(String renderKitId, RenderKit renderKit) {
 
         if (renderKitId == null || renderKit == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " renderKitId " + renderKitId + 
-                " renderKit " + renderKit;
+                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " renderKitId " + renderKitId +
+                      " renderKit " + renderKit;
             throw new NullPointerException(message);
         }
 
         synchronized (renderKits) {
             renderKits.put(renderKitId, renderKit);
         }
+
     }
 
 
@@ -89,7 +82,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
 
         if (renderKitId == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " renderKitId " + renderKitId;
             throw new NullPointerException(message);
         }
@@ -99,11 +92,14 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         //       
 
         return renderKits.get(renderKitId);
+
     }
 
 
     public Iterator<String> getRenderKitIds() {
+
         return (renderKits.keySet().iterator());
+
     }
 
 }

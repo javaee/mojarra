@@ -1,8 +1,8 @@
 /*
 <<<<<<< TestValueExpressionImpl.java
- * $Id: TestValueExpressionImpl.java,v 1.6 2006/01/13 19:08:34 rogerk Exp $
+ * $Id: TestValueExpressionImpl.java,v 1.7 2006/03/29 22:39:42 rlubke Exp $
 =======
- * $Id: TestValueExpressionImpl.java,v 1.6 2006/01/13 19:08:34 rogerk Exp $
+ * $Id: TestValueExpressionImpl.java,v 1.7 2006/03/29 22:39:42 rlubke Exp $
 >>>>>>> 1.32.18.5
  */
 
@@ -65,57 +65,59 @@ import java.util.Map;
 public class TestValueExpressionImpl extends ServletFacesTestCase
 {
 
-    //
-    // Protected Constants
-    //
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
     protected ValueExpression valueExpression;
-    
-    // Attribute Instance Variables
 
-    // Relationship Instance Variables
 
-    //
-    // Constructors and Initializers
-    //
+    // ------------------------------------------------------------ Constructors
+
 
     public TestValueExpressionImpl()
     {
+
         super("TestValueExpressionImpl");
+
     }
+
 
     public TestValueExpressionImpl(String name)
     {
+
         super(name);
+
     }
 
-    //
-    // Class methods
-    //
 
-    //
-    // Methods from TestCase
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // General Methods
-    //
 
-    protected ValueExpression create(String ref) throws Exception
+    public void beginELGet(WebRequest theRequest)
     {
-        return (getFacesContext().getApplication().getExpressionFactory().
-            createValueExpression(getFacesContext().getELContext(),("#{" + ref + "}"), Object.class));
+
+        populateRequest(theRequest);
+
     }
+
+
+    public void beginELSet(WebRequest theRequest)
+    {
+
+        populateRequest(theRequest);
+
+    }
+
+
+    public void beginGetType_multipleCase(WebRequest theRequest)
+    {
+
+        populateRequest(theRequest);
+
+    }
+
 
     public void populateRequest(WebRequest theRequest)
     {
+
         theRequest.addHeader("ELHeader", "ELHeader");
         theRequest.addHeader("multiheader", "1");
         theRequest.addHeader("multiheader", "2");
@@ -123,15 +125,13 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         theRequest.addParameter("multiparam", "one");
         theRequest.addParameter("multiparam", "two");
         theRequest.addCookie("cookie", "monster");
+
     }
 
-    public void beginELGet(WebRequest theRequest)
-    {
-        populateRequest(theRequest);
-    }
 
     public void testELGet() throws Exception
     {
+
         TestBean testBean = new TestBean();
         InnerBean newInner, oldInner = new InnerBean();
         testBean.setInner(oldInner);
@@ -224,13 +224,10 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
 
     }
 
-    public void beginELSet(WebRequest theRequest)
-    {
-        populateRequest(theRequest);
-    }
 
     public void testELSet() throws Exception
     {
+
         TestBean testBean = new TestBean();
         InnerBean newInner, oldInner = new InnerBean();
         testBean.setInner(oldInner);
@@ -368,158 +365,174 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
                 .create("TestBean[\"inner\"].customers[2].nicknames.foo");
         valueExpression.setValue(getFacesContext().getELContext(), "bar");
         assertTrue(((String) inner2.getNicknames().get("foo")).equals("bar"));
-    }
-    
-    public void testNullReference() throws Exception
-    {
-        boolean exceptionThrown = false;
-        // no exception should be thrown as per the EL spec if expression is null.
-        try
-        {
-            getFacesContext().getApplication().getExpressionFactory().
-                createValueExpression(getFacesContext().getELContext(),null, Object.class);
-        }
-        catch (NullPointerException npe) {
-            exceptionThrown = false;
-        }
-        catch (ELException ee) { exceptionThrown= true; };
-        assertTrue(exceptionThrown);
+
     }
 
-    public void testLiterals() throws Exception
+
+   /* public void testStateHolderSmall() throws Exception
     {
+        StateHolderSaver saver = null;
+        ValueExpression binding = getFacesContext().getApplication().getExpressionFactory().
+                createValueExpression("#{TestBean.indexProperties[0]}", Object.class, null);
+
+        assertEquals("ValueExpression not expected value", "Justyna",
+                (String) binding.getValue(getFacesContext().getELContext()));
+        saver = new StateHolderSaver(getFacesContext(), binding);
+        binding = null;
+        binding = (ValueExpression) saver.restore(getFacesContext());
+        assertEquals("ValueExpression not expected value", "Justyna",
+                (String) binding.getValue(getFacesContext().getELContext()));
+    }
+
+    public void testStateHolderMedium() throws Exception
+    {
+        UIViewRoot root = null;
+        UIForm form = null;
+        UIInput input = null;
+        Object state = null;
+        getFacesContext().setViewRoot(
+                root = Util.getViewHandler(getFacesContext()).createView(
+                        getFacesContext(), null));
+        root.getChildren().add(form = new UIForm());
+        form.getChildren().add(input = new UIInput());
+        input.setValueExpression("buckaroo", (getFacesContext().getApplication().getExpressionFactory().
+                createValueExpression("#{TestBean.indexProperties[0]}", Object.class, null)));
+        state = root.processSaveState(getFacesContext());
+
+        // synthesize the tree structure
+        getFacesContext().setViewRoot(
+                root = Util.getViewHandler(getFacesContext()).createView(
+                        getFacesContext(), null));
+        root.getChildren().add(form = new UIForm());
+        form.getChildren().add(input = new UIInput());
+        root.processRestoreState(getFacesContext(), state);
+
+        assertEquals("ValueExpression not expected value", "Justyna",
+                (String) input.getValueExpression("buckaroo").getValue(
+                        getFacesContext().getELContext()));
+
+    } */
+
+    public void testGetExpressionString() throws Exception
+    {
+
+        ApplicationImpl app = (ApplicationImpl) getFacesContext()
+                .getApplication();
+        String ref = null;
         ValueExpression vb = null;
-        Object result = null;
-        ExternalContext extContext = getFacesContext().getExternalContext();
-        
-        vb = getFacesContext().getApplication().getExpressionFactory().
-            createValueExpression(getFacesContext().getELContext(),"test", Object.class);
-        assertEquals("test", vb.getValue(getFacesContext().getELContext()));
-        
-        assertEquals(String.class, vb.getType(getFacesContext().getELContext()));
-        try
-        {
-            vb.setValue(getFacesContext().getELContext(), "other");
-            fail("Literal's setValue(..) should have thrown a EvaluationException");
-        }
-        catch (javax.el.ELException ee) {}
+
+        ref = "#{NewCustomerFormHandler.minimumAge}";
+        vb = app.getExpressionFactory().createValueExpression(getFacesContext().getELContext(),ref, Object.class);
+        assertEquals(ref, vb.getExpressionString());
+
+        ref = "minimum age is #{NewCustomerFormHandler.minimumAge}";
+        vb = app.getExpressionFactory().createValueExpression(getFacesContext().getELContext(),ref, Object.class);
+        assertEquals(ref, vb.getExpressionString());
+
     }
 
-    public void testReadOnly_singleCase() throws Exception
-    {
 
-        // these are mutable Maps
+    public void testGetScopeNegative() throws Exception {
+
+        ValueExpression valueExpression = null;
+        String property = null;
         /*
-         * properties on these maps are mutable, but not the object itself....
-         * see
-         */
-        valueExpression = this.create("applicationScope");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("sessionScope");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("requestScope");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        property = "[]";
+        valueExpression = this.factory.createValueExpression(property);
+        assertNull(Util.getScope(property, null));
+        property = "][";
+        assertNull(Util.getScope(property, null));
+        property = "";
+        assertNull(Util.getScope(property, null));
+        property = null;
+        assertNull(Util.getScope(property, null));
+        property = "foo.sessionScope";
+        assertNull(Util.getScope(property, null));        
+        */
 
-        // these are immutable Maps
-        valueExpression = this.create("param");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("paramValues");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("header");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("headerValues");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("cookie");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("initParam");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
     }
 
-    public void testReadOnly_multipleCase() throws Exception
+
+    public void testGetScopePositive() throws Exception
     {
 
-        // these are mutable Maps
-        valueExpression = this.create("applicationScope.value");
-        valueExpression.setValue(getFacesContext().getELContext(), "value");
-        String value = (String) valueExpression.getValue(getFacesContext().getELContext());
-        assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("sessionScope.value");
-        assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("requestScope.value");
-        assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
+        TestBean testBean = new TestBean();
+        getFacesContext().getExternalContext().getApplicationMap().put(
+                "TestApplicationBean", testBean);
 
-        // these are immutable Maps
-        valueExpression = this.create("param.value");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("paramValues.value");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("header.value");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("headerValues.value");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("cookie.value");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("initParam.value");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext())); 
+        valueExpression = this.create("TestApplicationBean");
+        assertEquals(Scope.APPLICATION, Util.getScope("TestApplicationBean", null));
 
-        // tree
-        // create a dummy root for the tree.
-        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(
-                getFacesContext(), null);
-        page.setId("root");
-        page.setViewId("newTree");
-        getFacesContext().setViewRoot(page);
-        valueExpression = this.create("view.childCount");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("TestApplicationBean.one");
+        assertEquals(Scope.APPLICATION, Util.getScope("TestApplicationBean.one",
+                null));
 
-        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean) getFacesContext().getExternalContext()
-                .getSessionMap().get("TestBean");
-        assertTrue(null != testBean);
-        valueExpression = this.create("TestBean.readOnly");
-        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
-        valueExpression = this.create("TestBean.one");
-        assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("TestApplicationBean.inner.two");
+        assertEquals(Scope.APPLICATION, Util.getScope(
+                "TestApplicationBean.inner.two", null));
 
-        InnerBean inner = new InnerBean();
-        testBean.setInner(inner);
-        valueExpression = this.create("TestBean[\"inner\"].customers[1]");
-        assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("applicationScope.TestApplicationBean");
+        assertEquals(Scope.APPLICATION, Util.getScope(
+                "applicationScope.TestApplicationBean", null));
+        valueExpression = this
+                .create("applicationScope.TestApplicationBean.inner.two");
+        assertEquals(Scope.APPLICATION, Util.getScope(
+                "applicationScope.TestApplicationBean.inner.two", null));
+
+        getFacesContext().getExternalContext().getSessionMap().put(
+                "TestSessionBean", testBean);
+        valueExpression = this.create("TestSessionBean");
+        assertEquals(Scope.SESSION, Util.getScope("TestSessionBean", null));
+
+        valueExpression = this.create("TestSessionBean.one");
+        assertEquals(Scope.SESSION, Util.getScope("TestSessionBean.one", null));
+
+        valueExpression = this.create("TestSessionBean.inner.two");
+        assertEquals(Scope.SESSION, Util
+                .getScope("TestSessionBean.inner.two", null));
+
+        valueExpression = this.create("sessionScope.TestSessionBean");
+        assertEquals(Scope.SESSION, Util.getScope("sessionScope.TestSessionBean",
+                null));
+
+        valueExpression = this.create("sessionScope.TestSessionBean.inner.two");
+        assertEquals(Scope.SESSION, Util.getScope(
+                "sessionScope.TestSessionBean.inner.two", null));
+
+        getFacesContext().getExternalContext().getRequestMap().put(
+                "TestRequestBean", testBean);
+        valueExpression = this.create("TestRequestBean");
+        assertEquals(Scope.REQUEST, Util.getScope("TestRequestBean", null));
+
+        valueExpression = this.create("TestRequestBean.one");
+        assertEquals(Scope.REQUEST, Util.getScope("TestRequestBean.one", null));
+
+        valueExpression = this.create("TestRequestBean.inner.two");
+        assertEquals(Scope.REQUEST, Util
+                .getScope("TestRequestBean.inner.two", null));
+
+        valueExpression = this.create("requestScope.TestRequestBean");
+        assertEquals(Scope.REQUEST, Util.getScope("requestScope.TestRequestBean",
+                null));
+
+        valueExpression = this.create("requestScope.TestRequestBean.inner.two");
+        assertEquals(Scope.REQUEST, Util.getScope(
+                "requestScope.TestRequestBean.inner.two", null));
+
+        valueExpression = this.create("TestNoneBean");
+        assertNull(Util.getScope("TestNoneBean", null));
+
+        valueExpression = this.create("TestNoneBean.one");
+        assertNull(Util.getScope("TestNoneBean.one", null));
+        valueExpression = this.create("TestNoneBean.inner.two");
+        assertNull(Util.getScope("TestNoneBean.inner.two", null));
 
     }
 
-    public void testGetType_singleCase() throws Exception
-    {
-
-        // these are mutable Maps
-        valueExpression = this.create("applicationScope");
-        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
-        valueExpression = this.create("sessionScope");
-        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
-        valueExpression = this.create("requestScope");
-        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
-
-        // these are immutable Maps
-        valueExpression = this.create("param");
-        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
-        valueExpression = this.create("paramValues");
-        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
-        valueExpression = this.create("header");
-        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
-        valueExpression = this.create("headerValues");
-        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
-        valueExpression = this.create("cookie");
-        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
-        valueExpression = this.create("initParam");
-        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
-    }
-
-    public void beginGetType_multipleCase(WebRequest theRequest)
-    {
-        populateRequest(theRequest);
-    }
 
     public void testGetType_multipleCase() throws Exception
     {
+
         String property = "testValueExpressionImpl_property";
         getFacesContext().getExternalContext().getApplicationMap().put(
                 property, property);
@@ -609,239 +622,37 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
                 "java.lang.Object"));
        // assertTrue(valueExpression.getType(getFacesContext().getELContext()).getName().equals(
        //         "[I"));
+
     }
 
-    public void testGetScopePositive() throws Exception
+
+    public void testGetType_singleCase() throws Exception
     {
-        TestBean testBean = new TestBean();
-        getFacesContext().getExternalContext().getApplicationMap().put(
-                "TestApplicationBean", testBean);
 
-        valueExpression = this.create("TestApplicationBean");
-        assertEquals(Scope.APPLICATION, Util.getScope("TestApplicationBean", null));
+        // these are mutable Maps
+        valueExpression = this.create("applicationScope");
+        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
+        valueExpression = this.create("sessionScope");
+        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
+        valueExpression = this.create("requestScope");
+        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
 
-        valueExpression = this.create("TestApplicationBean.one");
-        assertEquals(Scope.APPLICATION, Util.getScope("TestApplicationBean.one",
-                null));
-
-        valueExpression = this.create("TestApplicationBean.inner.two");
-        assertEquals(Scope.APPLICATION, Util.getScope(
-                "TestApplicationBean.inner.two", null));
-
-        valueExpression = this.create("applicationScope.TestApplicationBean");
-        assertEquals(Scope.APPLICATION, Util.getScope(
-                "applicationScope.TestApplicationBean", null));
-        valueExpression = this
-                .create("applicationScope.TestApplicationBean.inner.two");
-        assertEquals(Scope.APPLICATION, Util.getScope(
-                "applicationScope.TestApplicationBean.inner.two", null));
-
-        getFacesContext().getExternalContext().getSessionMap().put(
-                "TestSessionBean", testBean);
-        valueExpression = this.create("TestSessionBean");
-        assertEquals(Scope.SESSION, Util.getScope("TestSessionBean", null));
-
-        valueExpression = this.create("TestSessionBean.one");
-        assertEquals(Scope.SESSION, Util.getScope("TestSessionBean.one", null));
-
-        valueExpression = this.create("TestSessionBean.inner.two");
-        assertEquals(Scope.SESSION, Util
-                .getScope("TestSessionBean.inner.two", null));
-
-        valueExpression = this.create("sessionScope.TestSessionBean");
-        assertEquals(Scope.SESSION, Util.getScope("sessionScope.TestSessionBean",
-                null));
-
-        valueExpression = this.create("sessionScope.TestSessionBean.inner.two");
-        assertEquals(Scope.SESSION, Util.getScope(
-                "sessionScope.TestSessionBean.inner.two", null));
-
-        getFacesContext().getExternalContext().getRequestMap().put(
-                "TestRequestBean", testBean);
-        valueExpression = this.create("TestRequestBean");
-        assertEquals(Scope.REQUEST, Util.getScope("TestRequestBean", null));
-
-        valueExpression = this.create("TestRequestBean.one");
-        assertEquals(Scope.REQUEST, Util.getScope("TestRequestBean.one", null));
-
-        valueExpression = this.create("TestRequestBean.inner.two");
-        assertEquals(Scope.REQUEST, Util
-                .getScope("TestRequestBean.inner.two", null));
-
-        valueExpression = this.create("requestScope.TestRequestBean");
-        assertEquals(Scope.REQUEST, Util.getScope("requestScope.TestRequestBean",
-                null));
-
-        valueExpression = this.create("requestScope.TestRequestBean.inner.two");
-        assertEquals(Scope.REQUEST, Util.getScope(
-                "requestScope.TestRequestBean.inner.two", null));
-
-        valueExpression = this.create("TestNoneBean");
-        assertNull(Util.getScope("TestNoneBean", null));
-
-        valueExpression = this.create("TestNoneBean.one");
-        assertNull(Util.getScope("TestNoneBean.one", null));
-        valueExpression = this.create("TestNoneBean.inner.two");
-        assertNull(Util.getScope("TestNoneBean.inner.two", null));
+        // these are immutable Maps
+        valueExpression = this.create("param");
+        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
+        valueExpression = this.create("paramValues");
+        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
+        valueExpression = this.create("header");
+        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
+        valueExpression = this.create("headerValues");
+        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
+        valueExpression = this.create("cookie");
+        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
+        valueExpression = this.create("initParam");
+        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
 
     }
 
-    public void testGetScopeNegative() throws Exception {
-        ValueExpression valueExpression = null;
-        String property = null;
-        /*
-        property = "[]";
-        valueExpression = this.factory.createValueExpression(property);
-        assertNull(Util.getScope(property, null));
-        property = "][";
-        assertNull(Util.getScope(property, null));
-        property = "";
-        assertNull(Util.getScope(property, null));
-        property = null;
-        assertNull(Util.getScope(property, null));
-        property = "foo.sessionScope";
-        assertNull(Util.getScope(property, null));        
-        */
-
-    }
-
-    // negative test for case when valueRef is merely
-    // one of the reserved scope names.
-    public void testReservedScopeIdentifiers() throws Exception
-    {
-        boolean exceptionThrown = false;
-
-        try
-        {
-            valueExpression = this.create("applicationScope");
-            valueExpression.setValue(getFacesContext().getELContext(), "value");
-        }
-        catch (ELException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueExpression = this.create("sessionScope");
-            valueExpression.setValue(getFacesContext().getELContext(), "value");
-        }
-        catch (ELException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueExpression = this.create("requestScope");
-            valueExpression.setValue(getFacesContext().getELContext(), "value");
-        }
-        catch (ELException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueExpression = this.create("facesContext");
-            valueExpression.setValue(getFacesContext().getELContext(), "value");
-        }
-        catch (ELException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueExpression = this.create("cookie");
-            valueExpression.setValue(getFacesContext().getELContext(), "value");
-        }
-        catch (ELException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueExpression = this.create("header");
-            valueExpression.setValue(getFacesContext().getELContext(), "value");
-        }
-        catch (ELException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueExpression = this.create("headerValues");
-            valueExpression.setValue(getFacesContext().getELContext(), "value");
-        }
-        catch (ELException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueExpression = this.create("initParam");
-            valueExpression.setValue(getFacesContext().getELContext(), "value");
-        }
-        catch (ELException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueExpression = this.create("param");
-            valueExpression.setValue(getFacesContext().getELContext(), "value");
-        }
-        catch (ELException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueExpression = this.create("paramValues");
-            valueExpression.setValue(getFacesContext().getELContext(), "value");
-        }
-        catch (ELException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueExpression = this.create("view");
-            valueExpression.setValue(getFacesContext().getELContext(), "value");
-        }
-        catch (ELException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-    }
 
     public void testInvalidExpression() throws Exception
     {
@@ -984,75 +795,301 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
 
     }
 
-   /* public void testStateHolderSmall() throws Exception
+
+    public void testLiterals() throws Exception
     {
-        StateHolderSaver saver = null;
-        ValueExpression binding = getFacesContext().getApplication().getExpressionFactory().
-                createValueExpression("#{TestBean.indexProperties[0]}", Object.class, null);
 
-        assertEquals("ValueExpression not expected value", "Justyna",
-                (String) binding.getValue(getFacesContext().getELContext()));
-        saver = new StateHolderSaver(getFacesContext(), binding);
-        binding = null;
-        binding = (ValueExpression) saver.restore(getFacesContext());
-        assertEquals("ValueExpression not expected value", "Justyna",
-                (String) binding.getValue(getFacesContext().getELContext()));
-    }
-
-    public void testStateHolderMedium() throws Exception
-    {
-        UIViewRoot root = null;
-        UIForm form = null;
-        UIInput input = null;
-        Object state = null;
-        getFacesContext().setViewRoot(
-                root = Util.getViewHandler(getFacesContext()).createView(
-                        getFacesContext(), null));
-        root.getChildren().add(form = new UIForm());
-        form.getChildren().add(input = new UIInput());
-        input.setValueExpression("buckaroo", (getFacesContext().getApplication().getExpressionFactory().
-                createValueExpression("#{TestBean.indexProperties[0]}", Object.class, null)));
-        state = root.processSaveState(getFacesContext());
-
-        // synthesize the tree structure
-        getFacesContext().setViewRoot(
-                root = Util.getViewHandler(getFacesContext()).createView(
-                        getFacesContext(), null));
-        root.getChildren().add(form = new UIForm());
-        form.getChildren().add(input = new UIInput());
-        root.processRestoreState(getFacesContext(), state);
-
-        assertEquals("ValueExpression not expected value", "Justyna",
-                (String) input.getValueExpression("buckaroo").getValue(
-                        getFacesContext().getELContext()));
-
-    } */
-
-    public void testGetExpressionString() throws Exception
-    {
-        ApplicationImpl app = (ApplicationImpl) getFacesContext()
-                .getApplication();
-        String ref = null;
         ValueExpression vb = null;
+        Object result = null;
+        ExternalContext extContext = getFacesContext().getExternalContext();
+        
+        vb = getFacesContext().getApplication().getExpressionFactory().
+            createValueExpression(getFacesContext().getELContext(),"test", Object.class);
+        assertEquals("test", vb.getValue(getFacesContext().getELContext()));
+        
+        assertEquals(String.class, vb.getType(getFacesContext().getELContext()));
+        try
+        {
+            vb.setValue(getFacesContext().getELContext(), "other");
+            fail("Literal's setValue(..) should have thrown a EvaluationException");
+        }
+        catch (javax.el.ELException ee) {}
 
-        ref = "#{NewCustomerFormHandler.minimumAge}";
-        vb = app.getExpressionFactory().createValueExpression(getFacesContext().getELContext(),ref, Object.class);
-        assertEquals(ref, vb.getExpressionString());
-
-        ref = "minimum age is #{NewCustomerFormHandler.minimumAge}";
-        vb = app.getExpressionFactory().createValueExpression(getFacesContext().getELContext(),ref, Object.class);
-        assertEquals(ref, vb.getExpressionString());
     }
+
+
+    public void testNullReference() throws Exception
+    {
+
+        boolean exceptionThrown = false;
+        // no exception should be thrown as per the EL spec if expression is null.
+        try
+        {
+            getFacesContext().getApplication().getExpressionFactory().
+                createValueExpression(getFacesContext().getELContext(),null, Object.class);
+        }
+        catch (NullPointerException npe) {
+            exceptionThrown = false;
+        }
+        catch (ELException ee) { exceptionThrown= true; };
+        assertTrue(exceptionThrown);
+
+    }
+
+
+    public void testReadOnly_multipleCase() throws Exception
+    {
+
+        // these are mutable Maps
+        valueExpression = this.create("applicationScope.value");
+        valueExpression.setValue(getFacesContext().getELContext(), "value");
+        String value = (String) valueExpression.getValue(getFacesContext().getELContext());
+        assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("sessionScope.value");
+        assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("requestScope.value");
+        assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
+
+        // these are immutable Maps
+        valueExpression = this.create("param.value");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("paramValues.value");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("header.value");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("headerValues.value");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("cookie.value");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("initParam.value");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext())); 
+
+        // tree
+        // create a dummy root for the tree.
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(
+                getFacesContext(), null);
+        page.setId("root");
+        page.setViewId("newTree");
+        getFacesContext().setViewRoot(page);
+        valueExpression = this.create("view.childCount");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+
+        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean) getFacesContext().getExternalContext()
+                .getSessionMap().get("TestBean");
+        assertTrue(null != testBean);
+        valueExpression = this.create("TestBean.readOnly");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("TestBean.one");
+        assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
+
+        InnerBean inner = new InnerBean();
+        testBean.setInner(inner);
+        valueExpression = this.create("TestBean[\"inner\"].customers[1]");
+        assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
+
+    }
+
+
+    public void testReadOnly_singleCase() throws Exception
+    {
+
+        // these are mutable Maps
+        /*
+         * properties on these maps are mutable, but not the object itself....
+         * see
+         */
+        valueExpression = this.create("applicationScope");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("sessionScope");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("requestScope");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+
+        // these are immutable Maps
+        valueExpression = this.create("param");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("paramValues");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("header");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("headerValues");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("cookie");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("initParam");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+
+    }
+
+
+    // negative test for case when valueRef is merely
+    // one of the reserved scope names.
+    public void testReservedScopeIdentifiers() throws Exception
+    {
+
+        boolean exceptionThrown = false;
+
+        try
+        {
+            valueExpression = this.create("applicationScope");
+            valueExpression.setValue(getFacesContext().getELContext(), "value");
+        }
+        catch (ELException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueExpression = this.create("sessionScope");
+            valueExpression.setValue(getFacesContext().getELContext(), "value");
+        }
+        catch (ELException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueExpression = this.create("requestScope");
+            valueExpression.setValue(getFacesContext().getELContext(), "value");
+        }
+        catch (ELException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueExpression = this.create("facesContext");
+            valueExpression.setValue(getFacesContext().getELContext(), "value");
+        }
+        catch (ELException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueExpression = this.create("cookie");
+            valueExpression.setValue(getFacesContext().getELContext(), "value");
+        }
+        catch (ELException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueExpression = this.create("header");
+            valueExpression.setValue(getFacesContext().getELContext(), "value");
+        }
+        catch (ELException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueExpression = this.create("headerValues");
+            valueExpression.setValue(getFacesContext().getELContext(), "value");
+        }
+        catch (ELException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueExpression = this.create("initParam");
+            valueExpression.setValue(getFacesContext().getELContext(), "value");
+        }
+        catch (ELException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueExpression = this.create("param");
+            valueExpression.setValue(getFacesContext().getELContext(), "value");
+        }
+        catch (ELException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueExpression = this.create("paramValues");
+            valueExpression.setValue(getFacesContext().getELContext(), "value");
+        }
+        catch (ELException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueExpression = this.create("view");
+            valueExpression.setValue(getFacesContext().getELContext(), "value");
+        }
+        catch (ELException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+    }
+
+
+    // ------------------------------------------------------- Protected Methods
+
+
+    protected ValueExpression create(String ref) throws Exception
+    {
+
+        return (getFacesContext().getApplication().getExpressionFactory().
+            createValueExpression(getFacesContext().getELContext(),("#{" + ref + "}"), Object.class));
+
+    }
+
 
     class StateHolderSaver extends Object implements Serializable
     {
 
-        protected String className = null;
 
         protected Object savedState = null;
 
+        protected String className = null;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
         public StateHolderSaver(FacesContext context, Object toSave)
         {
+
             className = toSave.getClass().getName();
 
             if (toSave instanceof StateHolder)
@@ -1067,7 +1104,12 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
                     className = null;
                 }
             }
+
         }
+
+
+    // ---------------------------------------------------------- Public Methods
+
 
         /**
          * @return the restored {@link StateHolder}instance.
@@ -1076,6 +1118,7 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         public Object restore(FacesContext context)
                 throws IllegalStateException
         {
+
             Object result = null;
             Class toRestoreClass = null;
             if (className == null)
@@ -1120,18 +1163,26 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
                 ((StateHolder) result).restoreState(context, savedState);
             }
             return result;
+
         }
+
+
+    // --------------------------------------------------------- Private Methods
+
 
         private Class loadClass(String name, Object fallbackClass)
                 throws ClassNotFoundException
         {
+
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             if (loader == null)
             {
                 loader = fallbackClass.getClass().getClassLoader();
             }
             return loader.loadClass(name);
+
         }
+
     }
 
 } // end of class TestValueExpressionImpl

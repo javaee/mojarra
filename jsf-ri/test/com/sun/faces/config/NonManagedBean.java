@@ -27,6 +27,10 @@ package com.sun.faces.config;
 
 public class NonManagedBean {
 
+
+    // ------------------------------------------------------------ Constructors
+
+
     public NonManagedBean() {};
 
 }

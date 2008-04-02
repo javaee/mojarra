@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.80 2005/10/19 19:51:35 edburns Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.81 2006/03/29 22:39:45 rlubke Exp $
  */
 
 /*
@@ -44,78 +44,69 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.80 2005/10/19 19:51:35 edburns Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.81 2006/03/29 22:39:45 rlubke Exp $
  */
 
 public class TestRenderResponsePhase extends JspFacesTestCase {
 
-//
-// Protected Constants
-//
 
     public static final String TEST_URI = "/TestRenderResponsePhase.jsp";
-
-
-    public String getExpectedOutputFilename() {
-        return "RenderResponse_correct";
-    }
-
-
     public static final String ignore[] = {
     };
 
 
-    public String[] getLinesToIgnore() {
-        return ignore;
-    }
+    // ------------------------------------------------------------ Constructors
 
-
-    public boolean sendResponseToFile() {
-        return true;
-    }
-
-
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestRenderResponsePhase() {
+
         super("TestRenderResponsePhase");
+
     }
 
 
     public TestRenderResponsePhase(String name) {
+
         super(name);
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ---------------------------------------------- Methods From FacesTestCase
+
+
+    public boolean sendResponseToFile() {
+
+        return true;
+
+    }
+
+
+    public String getExpectedOutputFilename() {
+
+        return "RenderResponse_correct";
+
+    }
+
+
+    public String[] getLinesToIgnore() {
+
+        return ignore;
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
 
 
     public void beginHtmlBasicRenderKit(WebRequest theRequest) {
+
         theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+
     }
 
 
     public void testHtmlBasicRenderKit() {
-
 
         boolean result = false;
         String value = null;
@@ -140,6 +131,7 @@ public class TestRenderResponsePhase extends JspFacesTestCase {
                    !(getFacesContext().getResponseComplete()));
 
         assertTrue(verifyExpectedOutput());
+
     }
 
 } // end of class TestRenderResponsePhase

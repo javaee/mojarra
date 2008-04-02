@@ -5,12 +5,12 @@
 
 <p>Subview 4: Inner template text followed by
 
-<h:outputText id="innerComponent5" value="inner component 5" />
+    <h:outputText id="innerComponent5" value="inner component 5"/>
 
 </p>
 
 <p>Subview 4: Inner template 2 text followed by
 
-<h:outputText id="innerComponent6" value="inner component 6" />
+    <h:outputText id="innerComponent6" value="inner component 6"/>
 
 </p>

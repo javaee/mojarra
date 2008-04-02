@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerBean.java,v 1.3 2005/08/22 22:10:43 ofung Exp $
+ * $Id: ValueChangeListenerBean.java,v 1.4 2006/03/29 22:38:53 rlubke Exp $
  */
 
 /*
@@ -29,40 +29,69 @@
 
 package com.sun.faces.systest.model;
 
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ValueChangeEvent;
 
 
 public class ValueChangeListenerBean extends Object {
 
+
+    protected String textAResult;
+
+    protected String textBResult;
+
+    // ------------------------------------------------------------ Constructors
+
+
     public ValueChangeListenerBean() {
     }
 
-    protected String textAResult;
+    // ---------------------------------------------------------- Public Methods
+
+
     public String getTextAResult() {
-	return textAResult;
+
+        return textAResult;
+
     }
+
 
     public void setTextAResult(String newTextAResult) {
-	textAResult = newTextAResult;
+
+        textAResult = newTextAResult;
+
     }
 
-    protected String textBResult;
+
     public String getTextBResult() {
-	return textBResult;
+
+        return textBResult;
+
     }
+
 
     public void setTextBResult(String newTextBResult) {
-	textBResult = newTextBResult;
-    }
-    
-    public void textAChanged(ValueChangeEvent event) throws AbortProcessingException {
-	setTextAResult("Received valueChangeEvent for textA: " + 
-		       event.hashCode());
+
+        textBResult = newTextBResult;
+
     }
 
-    public void textBChanged(ValueChangeEvent event) throws AbortProcessingException {
-	setTextBResult("Received valueChangeEvent for textB: " + 
-		       event.hashCode());
+
+    public void textAChanged(ValueChangeEvent event)
+          throws AbortProcessingException {
+
+        setTextAResult("Received valueChangeEvent for textA: " +
+                       event.hashCode());
+
     }
+
+
+    public void textBChanged(ValueChangeEvent event)
+          throws AbortProcessingException {
+
+        setTextBResult("Received valueChangeEvent for textB: " +
+                       event.hashCode());
+
+    }
+
 }

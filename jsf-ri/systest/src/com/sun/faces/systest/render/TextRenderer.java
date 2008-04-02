@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.15 2006/03/15 20:10:33 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.16 2006/03/29 22:38:54 rlubke Exp $
  */
 
 /*
@@ -31,14 +31,6 @@
 
 package com.sun.faces.systest.render;
 
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
-
-import com.sun.faces.util.MessageFactory;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
@@ -52,6 +44,13 @@ import javax.faces.render.Renderer;
 
 import java.io.IOException;
 
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageFactory;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
+
 /**
  * <B>TextRenderer</B> is a class that renders the current value of
  * <code>UIInput<code> or <code>UIOutput<code> component as a input field or
@@ -60,55 +59,34 @@ import java.io.IOException;
 public class TextRenderer extends Renderer {
 
 
-    //
-    // Protected Constants
-    //
     // Log instance for this class
     protected static Log log = LogFactory.getLog(ButtonRenderer.class);
 
-    //
-    // Class Variables
-    //
+    // ------------------------------------------------------------ Constructors
 
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
 
     public TextRenderer() {
+
         super();
+
     }
 
-    //
-    // Class methods
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null || component == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+
     }
 
+
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         String currentValue = null;
         ResponseWriter writer = null;
@@ -116,13 +94,13 @@ public class TextRenderer extends Renderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding component " + component.getId());
-        } 
-        
+        }
+
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
@@ -142,9 +120,14 @@ public class TextRenderer extends Renderer {
             log.trace("Value to be rendered " + currentValue);
         }
         getEndTextToRender(context, component, currentValue);
+
     }
 
-    protected String getCurrentValue(FacesContext context, UIComponent component) {
+    // ------------------------------------------------------- Protected Methods
+
+
+    protected String getCurrentValue(FacesContext context,
+                                     UIComponent component) {
 
         if (component instanceof UIInput) {
             Object submittedValue = ((UIInput) component).getSubmittedValue();
@@ -159,21 +142,24 @@ public class TextRenderer extends Renderer {
             currentValue = getFormattedValue(context, component, currentObj);
         }
         return currentValue;
+
     }
 
+
     protected void getEndTextToRender(FacesContext context,
-                                      UIComponent component, String currentValue)
-        throws IOException {
+                                      UIComponent component,
+                                      String currentValue)
+          throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
         boolean
-            shouldWriteIdAttribute = false,
-            isOutput = false;
+              shouldWriteIdAttribute = false,
+              isOutput = false;
 
         String
-            style = (String) component.getAttributes().get("style"),
-            styleClass = (String) component.getAttributes().get("styleClass");
+              style = (String) component.getAttributes().get("style"),
+              styleClass = (String) component.getAttributes().get("styleClass");
         if (component instanceof UIInput) {
             writer.startElement("input", component);
             writeIdAttributeIfNecessary(context, writer, component);
@@ -205,8 +191,10 @@ public class TextRenderer extends Renderer {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
                 // style is rendered as a passthru attribute
-                RenderKitUtils.renderPassThruAttributes(context, writer, component);
-                RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
+                RenderKitUtils
+                      .renderPassThruAttributes(context, writer, component);
+                RenderKitUtils
+                      .renderXHTMLStyleBooleanAttributes(writer, component);
 
             }
             if (currentValue != null) {
@@ -218,7 +206,7 @@ public class TextRenderer extends Renderer {
                     } else if (val instanceof String) {
                         try {
                             escape =
-                                Boolean.valueOf((String) val).booleanValue();
+                                  Boolean.valueOf((String) val).booleanValue();
                         } catch (Throwable e) {
                         }
                     }
@@ -232,27 +220,18 @@ public class TextRenderer extends Renderer {
             }
         }
         if (isOutput && (null != styleClass || null != style ||
-            RenderKitUtils.hasPassThruAttributes(component) ||
-            shouldWriteIdAttribute)) {
+                         RenderKitUtils.hasPassThruAttributes(component) ||
+                         shouldWriteIdAttribute)) {
             writer.endElement("span");
         }
+
     }
 
-    protected Object getValue(UIComponent component) {
-        if (component instanceof ValueHolder) {
-            Object value = ((ValueHolder) component).getValue();
-            if (log.isDebugEnabled()) {
-                log.debug("component.getValue() returned " + value);
-            }
-            return value;
-        }
 
-        return null;
-    }
-
-    protected String getFormattedValue(FacesContext context, UIComponent component,
+    protected String getFormattedValue(FacesContext context,
+                                       UIComponent component,
                                        Object currentValue)
-        throws ConverterException {
+          throws ConverterException {
 
         String result = null;
         // formatting is supported only for components that support
@@ -306,24 +285,48 @@ public class TextRenderer extends Renderer {
         } else {
             // throw converter exception if no converter can be
             // identified
-	    Object [] params = {
-		currentValue,
-		"null Converter"
-	    };
-	    
+            Object [] params = {
+                  currentValue,
+                  "null Converter"
+            };
+
             throw new ConverterException(MessageFactory.getMessage(
-                context, MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
+                  context, MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
         }
+
     }
+
+
+    protected Object getValue(UIComponent component) {
+
+        if (component instanceof ValueHolder) {
+            Object value = ((ValueHolder) component).getValue();
+            if (log.isDebugEnabled()) {
+                log.debug("component.getValue() returned " + value);
+            }
+            return value;
+        }
+
+        return null;
+
+    }
+
+    // --------------------------------------------------------- Private Methods
+
+
     private boolean shouldWriteIdAttribute(UIComponent component) {
+
         String id;
         return (null != (id = component.getId()) &&
-            !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
+                !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
+
     }
-                                                                                                                   
+
+
     private void writeIdAttributeIfNecessary(FacesContext context,
-                                               ResponseWriter writer,
-                                               UIComponent component) {
+                                             ResponseWriter writer,
+                                             UIComponent component) {
+
         String id;
         if (shouldWriteIdAttribute(component)) {
             try {
@@ -336,8 +339,8 @@ public class TextRenderer extends Renderer {
                 }
             }
         }
-    }
 
+    }
 
     // The testcase for this class is TestRenderers_2.java
 

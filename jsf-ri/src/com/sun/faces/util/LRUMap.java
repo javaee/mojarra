@@ -33,22 +33,25 @@ import java.util.Map;
  * A special implementation of {@link java.util.LinkedHashMap} to provide
  * LRU functionality.
  */
-public class LRUMap<K,V> extends LinkedHashMap<K,V> {
+public class LRUMap<K,V> extends LinkedHashMap<K, V> {
 
     private int maxCapacity;
 
     // ------------------------------------------------------------ Constructors
 
+
     public LRUMap(int maxCapacity) {
         super(maxCapacity, 1.0f, true);
-        this.maxCapacity = maxCapacity;        
+        this.maxCapacity = maxCapacity;
     }
+
+    // ------------------------------------------------------- Protected Methods
 
     // ---------------------------------------------- Methods from LinkedHashMap
 
     protected boolean removeEldestEntry(Map.Entry eldest) {
-        return (size() > maxCapacity);   
+        return (size() > maxCapacity);
     }
-    
+
     // TEST: com.sun.faces.TestLRUMap_local
 }

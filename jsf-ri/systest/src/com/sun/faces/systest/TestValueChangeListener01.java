@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangeListener01.java,v 1.2 2005/08/22 22:10:39 ofung Exp $
+ * $Id: TestValueChangeListener01.java,v 1.3 2006/03/29 22:38:51 rlubke Exp $
  */
 
 /*
@@ -30,25 +30,30 @@
 package com.sun.faces.systest;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeListener;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.component.StateHolder;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 
 public class TestValueChangeListener01 implements ValueChangeListener {
-    
-    public TestValueChangeListener01() {}
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public TestValueChangeListener01() {
+    }
+
+    // ---------------------------------------- Methods From ValueChangeListener
 
     public void processValueChange(ValueChangeEvent vce)
-        throws AbortProcessingException {
+          throws AbortProcessingException {
+
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(vce.getComponent().getClientId(context),
-            new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                vce.getComponent().getId() + " value was changed", null));
-    } 
-    
-    
+                           new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                            vce.getComponent().getId()
+                                            + " value was changed", null));
+
+    }
+
 }

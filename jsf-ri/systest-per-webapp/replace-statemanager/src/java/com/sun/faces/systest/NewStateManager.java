@@ -1,5 +1,5 @@
 /*
- * $Id: NewStateManager.java,v 1.3 2005/08/22 22:11:03 ofung Exp $
+ * $Id: NewStateManager.java,v 1.4 2006/03/29 22:39:24 rlubke Exp $
  */
 
 /*
@@ -28,77 +28,98 @@
  */
 
 
-
 package com.sun.faces.systest;
 
+import javax.faces.FactoryFinder;
 import javax.faces.application.StateManager;
 import javax.faces.application.StateManagerWrapper;
-
-import javax.faces.FactoryFinder;
-import javax.faces.render.RenderKitFactory;
-import javax.faces.render.RenderKit;
-import javax.faces.render.ResponseStateManager;
 import javax.faces.component.UIViewRoot;
-
 import javax.faces.context.FacesContext;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.ResponseStateManager;
 
 import java.io.IOException;
 
 public class NewStateManager extends StateManagerWrapper {
 
+
+    char requestIdSerial = 0;
+
     private StateManager oldStateManager = null;
 
+    // ------------------------------------------------------------ Constructors
+
+
     public NewStateManager(StateManager oldStateManager) {
-	this.oldStateManager = oldStateManager;
+
+        this.oldStateManager = oldStateManager;
+
     }
+
+    // ---------------------------------------------------------- Public Methods
+
 
     public StateManager getWrapped() {
-	return oldStateManager;
-    }
 
-    /**
-     * <p>Just save the view in the session.</p>
-     */
+        return oldStateManager;
 
-    public Object saveView(FacesContext context) {    
-        return oldStateManager.saveView(context);
-    }
-
-    /**
-     * <p>Override superclass processing and call the new version of
-     * <code>writeState()</code> that takes <code>Object</code>.</p>
-     */
-	
-    public void writeState(FacesContext context, Object state) throws IOException {
-	getResponseStateManager(context).writeState(context, state);
     }
 
 
     public UIViewRoot restoreView(FacesContext context, String viewId,
                                   String renderKitId) {
-	
+
         return oldStateManager.restoreView(context, viewId, renderKitId);
+
     }
 
-    private ResponseStateManager getResponseStateManager(FacesContext context){
-        RenderKitFactory renderKitFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit renderKit = renderKitFactory.getRenderKit(context, 
-							    RenderKitFactory.HTML_BASIC_RENDER_KIT);
-	ResponseStateManager responseStateManager = 
-	    renderKit.getResponseStateManager();
-	
-	return responseStateManager;
+
+    /** <p>Just save the view in the session.</p> */
+
+    public Object saveView(FacesContext context) {
+
+        return oldStateManager.saveView(context);
+
     }
 
-    char requestIdSerial = 0;
+
+    /**
+     * <p>Override superclass processing and call the new version of
+     * <code>writeState()</code> that takes <code>Object</code>.</p>
+     */
+
+    public void writeState(FacesContext context, Object state)
+          throws IOException {
+
+        getResponseStateManager(context).writeState(context, state);
+
+    }
+
+    // --------------------------------------------------------- Private Methods
+
 
     private String createUniqueRequestId() {
-	if (requestIdSerial++ == Character.MAX_VALUE) {
-	    requestIdSerial = 0;
-	}
-	return UIViewRoot.UNIQUE_ID_PREFIX + ((int) requestIdSerial);
+
+        if (requestIdSerial++ == Character.MAX_VALUE) {
+            requestIdSerial = 0;
+        }
+        return UIViewRoot.UNIQUE_ID_PREFIX + ((int) requestIdSerial);
+
     }
 
+
+    private ResponseStateManager getResponseStateManager(FacesContext context) {
+
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderKitFactory.getRenderKit(context,
+                                                            RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        ResponseStateManager responseStateManager =
+              renderKit.getResponseStateManager();
+
+        return responseStateManager;
+
+    }
 
 }

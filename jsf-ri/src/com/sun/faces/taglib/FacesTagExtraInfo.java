@@ -39,12 +39,12 @@ import javax.servlet.jsp.tagext.VariableInfo;
  */
 public class FacesTagExtraInfo extends TagExtraInfo {
 
-    //
-    // General Methods
-    //
+    // ---------------------------------------------------------- Public Methods   
 
     public VariableInfo[] getVariableInfo(TagData tagData) {
+
         return null;
+
     }
 
 } // end of class FacesTagExtraInfo

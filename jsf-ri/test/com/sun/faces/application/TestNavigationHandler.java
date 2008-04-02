@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.24 2006/03/15 20:02:45 rlubke Exp $
+ * $Id: TestNavigationHandler.java,v 1.25 2006/03/29 22:39:36 rlubke Exp $
  */
 
 /*
@@ -59,104 +59,41 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.24 2006/03/15 20:02:45 rlubke Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.25 2006/03/29 22:39:36 rlubke Exp $
  */
 
 public class TestNavigationHandler extends ServletFacesTestCase {
 
-//
-// Protected Constants
-//
 
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-    private List testResultList = null;
     protected Digester digester = null;
     private ApplicationImpl application = null;
+    private List testResultList = null;
     private NavigationHandlerTestImpl navHandler = null;
 
-// Attribute Instance Variables
 
-// Relationship Instance Variables
+    // ------------------------------------------------------------ Constructors
 
-//
-// Constructors and Initializers    
-//
 
     public TestNavigationHandler() {
+
         super("TestNavigationHandler");
+
     }
 
 
     public TestNavigationHandler(String name) {
+
         super(name);
-    }
-//
-// Class methods
-//
 
-//
-// Methods from TestCase
-//
-
-    public void setUp() {
-        super.setUp();
-        loadConfigFile();
-    }
-
-//
-// General Methods
-//
-    private void loadConfigFile() {
-        loadFromInitParam("/WEB-INF/faces-navigation.xml");
     }
 
 
-    private void loadTestResultList() {
-        Digester digester = new Digester();
-        digester.setUseContextClassLoader(true);
-        try {
-            digester.setValidating(false);
-        } catch (Throwable t) {
-            System.out.println("Error creating Digester instance...");
-            assertTrue(false);
-        }
-
-        digester.addRule("*/test",
-                         new CallMethodRule("createAndAccrueTestResult", 4));
-        digester.addRule("*/test", new CallParamRule(0, "fromViewId"));
-        digester.addRule("*/test", new CallParamRule(1, "fromAction"));
-        digester.addRule("*/test", new CallParamRule(2, "fromOutcome"));
-        digester.addRule("*/test", new CallParamRule(3, "toViewId"));
-
-        String fileName = "/WEB-INF/navigation-cases.xml";
-        InputStream input = null;
-        try {
-            input = config.getServletContext().getResourceAsStream(fileName);
-        } catch (Throwable t) {
-            System.out.println("Error Opening File:" + fileName);
-            assertTrue(false);
-        }
-        try {
-            digester.push(this);
-            digester.parse(input);
-        } catch (Throwable t) {
-            if (null != t) {
-                t.printStackTrace();
-            }
-            System.out.println("Unable to parse file:" + t.getMessage());
-            assertTrue(false);
-        }
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void createAndAccrueTestResult(String fromViewId, String fromAction,
                                           String fromOutcome, String toViewId) {
+
         if (testResultList == null) {
             testResultList = new ArrayList();
         }
@@ -166,6 +103,15 @@ public class TestNavigationHandler extends ServletFacesTestCase {
         testResult.fromOutcome = fromOutcome;
         testResult.toViewId = toViewId;
         testResultList.add(testResult);
+
+    }
+
+
+    public void setUp() {
+
+        super.setUp();
+        loadConfigFile();
+
     }
 
 
@@ -216,7 +162,9 @@ public class TestNavigationHandler extends ServletFacesTestCase {
                 }
             }
         }
+
     }
+
 
     // This tests that the same <from-view-id> element value existing in a seperate
     // navigation rule, gets combined with the other rules with the same <from-view-id>.
@@ -224,6 +172,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
     // cases with the common <from-view-id>;
  
     public void testSeperateRule() {
+
         int cnt = 0;
         ApplicationFactory aFactory =
             (ApplicationFactory) FactoryFinder.getFactory(
@@ -249,15 +198,69 @@ public class TestNavigationHandler extends ServletFacesTestCase {
             }
         }
         assertTrue(cnt == 6);
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+    
+    private void loadConfigFile() {
+
+        loadFromInitParam("/WEB-INF/faces-navigation.xml");
+
+    }
+
+
+    private void loadTestResultList() {
+
+        Digester digester = new Digester();
+        digester.setUseContextClassLoader(true);
+        try {
+            digester.setValidating(false);
+        } catch (Throwable t) {
+            System.out.println("Error creating Digester instance...");
+            assertTrue(false);
+        }
+
+        digester.addRule("*/test",
+                         new CallMethodRule("createAndAccrueTestResult", 4));
+        digester.addRule("*/test", new CallParamRule(0, "fromViewId"));
+        digester.addRule("*/test", new CallParamRule(1, "fromAction"));
+        digester.addRule("*/test", new CallParamRule(2, "fromOutcome"));
+        digester.addRule("*/test", new CallParamRule(3, "toViewId"));
+
+        String fileName = "/WEB-INF/navigation-cases.xml";
+        InputStream input = null;
+        try {
+            input = config.getServletContext().getResourceAsStream(fileName);
+        } catch (Throwable t) {
+            System.out.println("Error Opening File:" + fileName);
+            assertTrue(false);
+        }
+        try {
+            digester.push(this);
+            digester.parse(input);
+        } catch (Throwable t) {
+            if (null != t) {
+                t.printStackTrace();
+            }
+            System.out.println("Unable to parse file:" + t.getMessage());
+            assertTrue(false);
+        }
+
     }
 
 
     class TestResult extends Object {
 
-        public String fromViewId = null;
+
         public String fromAction = null;
         public String fromOutcome = null;
+
+        public String fromViewId = null;
         public String toViewId = null;
+
     }
 
 } // end of class TestNavigationHandler
