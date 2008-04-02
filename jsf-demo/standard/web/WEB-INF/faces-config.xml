@@ -14,6 +14,11 @@
   </lifecycle>
 -->
 
+  <converter>
+    <converter-for-class>standard.SelectManyRegistered</converter-for-class>
+    <converter-class>standard.SelectManyConverter</converter-class>
+  </converter>
+
   <managed-bean>
     <managed-bean-name>model</managed-bean-name>
     <managed-bean-class>standard.ModelBean</managed-bean-class>

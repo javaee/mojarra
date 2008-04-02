@@ -1,5 +1,5 @@
 /*
- * $Id: SelectManyBean.java,v 1.1 2004/02/06 06:43:44 craigmcc Exp $
+ * $Id: SelectManyBean.java,v 1.2 2004/02/06 18:39:57 craigmcc Exp $
  */
 
 /*
@@ -172,6 +172,32 @@ public class SelectManyBean implements Serializable {
     }
 
 
+    private SelectManyRegistered registeredArray[] =
+        new SelectManyRegistered[]
+        { new SelectManyRegistered("foo"),
+          new SelectManyRegistered("baz"),
+        };
+    public SelectManyRegistered[] getRegisteredArray() {
+        return (this.registeredArray);
+    }
+    public void setRegisteredArray(SelectManyRegistered registeredArray[]) {
+        this.registeredArray = registeredArray;
+    }
+
+
+    private SelectManyUnregistered unregisteredArray[] =
+        new SelectManyUnregistered[]
+        { new SelectManyUnregistered("foo"),
+          new SelectManyUnregistered("baz"),
+        };
+    public SelectManyUnregistered[] getUnregisteredArray() {
+        return (this.unregisteredArray);
+    }
+    public void setUnregisteredArray(SelectManyUnregistered unregisteredArray[]) {
+        this.unregisteredArray = unregisteredArray;
+    }
+
+
     // ----------------------------------------------------------- Options Lists
 
 
@@ -198,6 +224,26 @@ public class SelectManyBean implements Serializable {
         for (int i = 0; i < items.length; i++) {
             items[i] = new SelectItem("String " + i, "Option " + i);
         }
+        return (items);
+    }
+
+
+    public SelectItem[] getRegisteredOptions() {
+        SelectItem items[] = new SelectItem[4];
+        items[0] = new SelectItem(new SelectManyRegistered("foo"));
+        items[1] = new SelectItem(new SelectManyRegistered("bar"));
+        items[2] = new SelectItem(new SelectManyRegistered("baz"));
+        items[3] = new SelectItem(new SelectManyRegistered("bop"));
+        return (items);
+    }
+
+
+    public SelectItem[] getUnregisteredOptions() {
+        SelectItem items[] = new SelectItem[4];
+        items[0] = new SelectItem(new SelectManyUnregistered("foo"));
+        items[1] = new SelectItem(new SelectManyUnregistered("bar"));
+        items[2] = new SelectItem(new SelectManyUnregistered("baz"));
+        items[3] = new SelectItem(new SelectManyUnregistered("bop"));
         return (items);
     }
 

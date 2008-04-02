@@ -85,3 +85,38 @@
   </td>
 </tr>
 
+
+<tr>
+  <td>Multi-select with array of registered object values</td>
+  <td>
+    <h:selectManyListbox
+                       id="registeredArray"
+                    value="#{SelectManyBean.registeredArray}">
+      <f:selectItems
+                    value="#{SelectManyBean.registeredOptions}"/>
+    </h:selectManyListbox>
+  </td>
+  <td>
+    <h:message        for="registeredArray"/>
+  </td>
+</tr>
+
+
+<%-- Fails with conversion errors on form submit
+<tr>
+  <td>Multi-select with array of unregistered object values</td>
+  <td>
+    <h:selectManyListbox
+                       id="unregisteredArray"
+                    value="#{SelectManyBean.unregisteredArray}">
+      <f:selectItems
+                    value="#{SelectManyBean.unregisteredOptions}"/>
+    </h:selectManyListbox>
+  </td>
+  <td>
+    <h:message        for="unregisteredArray"/>
+  </td>
+</tr>
+--%>
+
+
