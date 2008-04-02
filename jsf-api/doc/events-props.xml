@@ -7,92 +7,92 @@
 
 <!-- template
 
-      <attribute>
+      <property>
         <description></description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name></attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 -->
 
-      <attribute>
+      <property>
         <description>Javascript code that is executed when a pointer button was clicked</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>onclick</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+        <property-name>onclick</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 
-      <attribute>
-        <description>Javascript code that is executed when a pointer button was double clicked</description> 
+      <property>
+        <description>Javascript code that is executed when a pointer button was double clicked</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>ondblclick</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+        <property-name>ondblclick</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 
-      <attribute>
+      <property>
         <description>Javascript code that is executed when a pointer button is pressed down on this control.</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>onmousedown</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+        <property-name>onmousedown</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 
-      <attribute>
+      <property>
         <description>Javascript code that is executed when a pointer button is released on this control.</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>onmouseup</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+        <property-name>onmouseup</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 
-      <attribute>
+      <property>
         <description>Javascript code that is executed when a pointer button is move over this control.</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>onmouseover</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+        <property-name>onmouseover</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 
-      <attribute>
+      <property>
         <description>Javascript code that is executed when a pointer button is moved within this control.</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>onmousemove</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+        <property-name>onmousemove</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 
-      <attribute>
+      <property>
         <description>Javascript code that is executed when a pointer button is moved away from this control.</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>onmouseout</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+        <property-name>onmouseout</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 
-      <attribute>
+      <property>
         <description>Javascript code that is executed when a key was pressed and released</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>onkeypress</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+        <property-name>onkeypress</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 
-      <attribute>
+      <property>
         <description>Javascript code that is executed when a key was pressed down</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>onkeydown</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+        <property-name>onkeydown</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 
-      <attribute>
+      <property>
         <description>Javascript code that is executed when a key was released</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>onkeyup</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+        <property-name>onkeyup</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
 

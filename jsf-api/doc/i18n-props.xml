@@ -1,0 +1,52 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- template
+
+      <property>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+-->
+
+      <property>
+        <description>language code</description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name>lang</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+      <property>
+        <description>direction for weak/neutral text</description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name>dir</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+      <!-- non-html renderer specific propertys -->
+
+      <property>
+        <description>the ResourceBundle key for localized text</description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name>key</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+      <property>
+        <description>the name of the ResourceBundle</description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name>bundle</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
