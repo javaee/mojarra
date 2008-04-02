@@ -51,6 +51,8 @@
     <!-- Default value for debugging arguments is no.  Override in
          build.properties -->
     <property name="debug.jvm.args" value=""/>
+    <property name="logger" value="org.apache.commons.logging.impl.SimpleLog" />
+    <property name="level" value="trace" />
     
     <!-- Demo WAR files -->
     <property name="components.war" value="${basedir}/components/build/jsf-components.war"/>
@@ -188,6 +190,8 @@
             <jvmarg line="${debug.jvm.args}"/>
             <jvmarg value="-Dhost=${host}"/>
             <jvmarg value="-Dport=${port}"/> 
+            <jvmarg value="-Dorg.apache.commons.logging.Log=${logger}"/> 
+            <jvmarg value="-Dorg.apache.commons.logging.simplelog.log.com.sun.faces.demotest=${level}"/> 
             <jvmarg value="-Dcontext.path=${context.path}"/>
 
             <!-- Suite of tests -->
@@ -221,15 +225,19 @@
     <!-- base target of sorts to avoid duplication -->     
     <target name="test.invoker">                       
         <!-- remove the application if it already exists -->
+<!--
         <antcall target="safe.remove">
             <param name="context.path" value="${context.path}"/>
         </antcall>
+-->
         
         <!-- install the application -->
+<!--
         <antcall target="install">
             <param name="context.path" value="${context.path}"/>
             <param name="demo.path" value="${demo.path}"/>
         </antcall>  
+-->
         
         <!-- run the tests for the application -->
         <antcall target="run.tests">
@@ -251,8 +259,10 @@
 <!--        <antcall target="run.mapping-extension.tests"/>   
             <antcall target="run.mapping-prefix.tests"/>    -->
         <antcall target="run.cardemo.tests"/>    
+<!--
         <antcall target="run.guessNumber.tests"/>    
         <antcall target="run.components.tests"/>    
+-->
     </target>
 
     <!-- Unit test configuration for mapping tests -->            

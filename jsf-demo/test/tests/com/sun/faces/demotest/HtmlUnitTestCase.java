@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlUnitTestCase.java,v 1.3 2004/01/28 18:08:39 eburns Exp $
+ * $Id: HtmlUnitTestCase.java,v 1.4 2004/01/28 21:45:35 eburns Exp $
  */
 
 /*
@@ -12,12 +12,22 @@ package com.sun.faces.demotest;
 import junit.framework.TestCase;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.Page;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.*;
 
 import java.net.URL;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Iterator;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 public class HtmlUnitTestCase extends TestCase {
+
+    private static final Log log = LogFactory.getLog(HtmlUnitTestCase.class);
+
     // target host
     protected String host;
     
@@ -70,6 +80,9 @@ public class HtmlUnitTestCase extends TestCase {
      * @param path Context-relative part of the path
      */
     protected HtmlPage getPage(String path) throws Exception {
+	if (log.isTraceEnabled()) {
+	    log.trace("Getting URL: " + getURL(path).toString());
+	}
 
         /* Cookies seem to be maintained automatically now
         if (sessionId != null) {
@@ -129,4 +142,31 @@ public class HtmlUnitTestCase extends TestCase {
         //        System.err.println("Beginning session " + sessionId);
 
     }
+
+    /**
+     * Depth first search from root to find all children that are
+     * instances of HtmlInput.  Add them to the list.
+     *
+     */ 
+    protected List getAllHtmlInputElements(HtmlElement root, List list) {
+	Iterator iter = null;
+	if (null == root) {
+	    return list;
+	}
+	if (null == list) {
+	    list = new ArrayList();
+	}
+	iter = root.getAllHtmlChildElements();
+	while (iter.hasNext()) {
+	    getAllHtmlInputElements((HtmlElement) iter.next(), list);
+	}
+	if (root instanceof HtmlInput) {
+	    if (!list.contains(root)) {
+		list.add(root);
+	    }
+	}
+	return list;
+    }
+	
+	
 }
