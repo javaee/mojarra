@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.50 2006/09/14 22:38:39 tony_robertson Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.51 2006/10/24 21:29:09 rlubke Exp $
  */
 
 /*
@@ -154,7 +154,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
                                     + " for outcome " + outcome +
                                     "and viewId " + caseStruct.viewId);
                     }
-                    extContext.redirect(newPath);
+                    // encode the redirect to ensure session state
+                    // is maintained
+                    extContext.redirect(extContext.encodeActionURL(newPath));
                 } catch (java.io.IOException ioe) {
                     if (logger.isLoggable(Level.SEVERE)) {
                         logger.log(Level.SEVERE,"jsf.redirect_failed_error",

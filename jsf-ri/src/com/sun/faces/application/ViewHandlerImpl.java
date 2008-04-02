@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.91 2006/10/23 15:38:16 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.92 2006/10/24 21:29:09 rlubke Exp $
  */
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.91 2006/10/23 15:38:16 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.92 2006/10/24 21:29:09 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -644,29 +644,26 @@ public class ViewHandlerImpl extends ViewHandler {
 
         // If no mapping can be identified, just return a server-relative path
         if (mapping == null) {
-            return extContext.encodeActionURL(contextPath + viewId);
+            return (contextPath + viewId);
         }
 
         // Deal with prefix mapping
         if (Util.isPrefixMapped(mapping)) {
             if (mapping.equals("/*")) {
-                return extContext.encodeActionURL(contextPath + viewId);
+                return (contextPath + viewId);
             } else {
-                return extContext
-                      .encodeActionURL(contextPath + mapping + viewId);
+                return (contextPath + mapping + viewId);
             }
         }
 
         // Deal with extension mapping
         int period = viewId.lastIndexOf(".");
         if (period < 0) {
-            return extContext.encodeActionURL(contextPath + viewId + mapping);
+            return (contextPath + viewId + mapping);
         } else if (!viewId.endsWith(mapping)) {
-            return extContext.encodeActionURL(contextPath
-                                                + viewId.substring(0, period)
-                                                + mapping);
+            return (contextPath + viewId.substring(0, period) + mapping);
         } else {
-            return extContext.encodeActionURL(contextPath + viewId);
+            return (contextPath + viewId);
         }
 
     }
@@ -675,10 +672,9 @@ public class ViewHandlerImpl extends ViewHandler {
     public String getResourceURL(FacesContext context, String path) {
         ExternalContext extContext = context.getExternalContext();
         if (path.startsWith("/")) {
-            return extContext
-                  .encodeResourceURL(extContext.getRequestContextPath() + path);
+            return (extContext.getRequestContextPath() + path);
         } else {
-            return extContext.encodeResourceURL(path);
+            return path;
         }
 
     }

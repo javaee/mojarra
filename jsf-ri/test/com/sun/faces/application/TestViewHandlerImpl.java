@@ -1,6 +1,6 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.35 2006/10/03 21:21:34 rlubke Exp $ 
- */ 
+ * $Id: TestViewHandlerImpl.java,v 1.36 2006/10/24 21:29:08 rlubke Exp $
+ */
 
 
 /*
@@ -8,28 +8,28 @@
  * of the Common Development and Distribution License
  * (the License). You may not use this file except in
  * compliance with the License.
- * 
+ *
  * You can obtain a copy of the License at
  * https://javaserverfaces.dev.java.net/CDDL.html or
- * legal/CDDLv1.0.txt. 
+ * legal/CDDLv1.0.txt.
  * See the License for the specific language governing
  * permission and limitations under the License.
- * 
+ *
  * When distributing Covered Code, include this CDDL
  * Header Notice in each file and include the License file
- * at legal/CDDLv1.0.txt.    
+ * at legal/CDDLv1.0.txt.
  * If applicable, add the following below the CDDL Header,
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
- * 
+ *
  * [Name of File] [ver.__] [Date]
- * 
+ *
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
 
-// TestViewHandlerImpl.java 
+// TestViewHandlerImpl.java
 
 
 package com.sun.faces.application;
@@ -74,14 +74,14 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.35 2006/10/03 21:21:34 rlubke Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.36 2006/10/24 21:29:08 rlubke Exp $
  */
 
 
 public class TestViewHandlerImpl extends JspFacesTestCase {
 
 //
-// Protected Constants 
+// Protected Constants
 //
 
 
@@ -94,7 +94,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 
 
     public static final String ignore[] = {
-    }; 
+    };
 
     public String[] getLinesToIgnore() {
         return ignore;
@@ -106,25 +106,25 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
     }
 
 
-// 
-// Class Variables 
-// 
+//
+// Class Variables
+//
 
 
-// 
-// Instance Variables 
-// 
+//
+// Instance Variables
+//
 
 
-// Attribute Instance Variables 
+// Attribute Instance Variables
 
 
-// Relationship Instance Variables 
+// Relationship Instance Variables
 
 
-// 
-// Constructors and Initializers 
-// 
+//
+// Constructors and Initializers
+//
 
 
     public TestViewHandlerImpl() {
@@ -137,14 +137,14 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
     }
 
 
-    // 
-    // Class methods 
-    // 
+    //
+    // Class methods
+    //
 
 
-    // 
-    // General Methods 
-    // 
+    //
+    // General Methods
+    //
 
 
 
@@ -235,7 +235,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
         String path = handler.getActionURL(facesContext, "/path/test.jsp");
         System.out.println("VIEW ID PATH 2: " + path);
-        assertEquals(contextPath + "/faces/path/test.jsp", path.substring(0, path.indexOf(";j")));
+        assertEquals(contextPath + "/faces/path/test.jsp", path);
 
 
         // if getServletPath() returns a path indicating extension mapping
@@ -246,7 +246,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
         path = handler.getActionURL(facesContext, "/path/test");
         System.out.println("VIEW ID PATH 3: " + path);
-        assertEquals(contextPath + "/path/test.jsf", path.substring(0, path.indexOf(";j")));
+        assertEquals(contextPath + "/path/test.jsf", path);
 
         // if getServletPath() returns a path indicating extension mapping
         // and the viewId passed has an extension, replace the extension with
@@ -256,7 +256,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
         path = handler.getActionURL(facesContext, "/path/t.est.jsp");
         System.out.println("VIEW ID PATH 4: " + path);
-        assertEquals(contextPath + "/path/t.est.jsf", path.substring(0, path.indexOf(";j")));
+        assertEquals(contextPath + "/path/t.est.jsf", path);
 
         // if path info is null, the impl must check to see if
         // there is an exact match on the servlet path, if so, return
@@ -266,7 +266,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
         path = handler.getActionURL(facesContext, "/path/t.est");
         System.out.println("VIEW ID PATH 5: " + path);
-        assertEquals(contextPath + "/faces/path/t.est", path.substring(0, path.indexOf(";j")));
+        assertEquals(contextPath + "/faces/path/t.est", path);
 
     }
 
@@ -313,14 +313,12 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
             new FacesContextImpl(extContext, lifecycle);
 
         // Validate correct calculations
-        String path = Util.getViewHandler(getFacesContext()).
-                     getResourceURL(context, "/index.jsp");
         assertEquals(request.getContextPath() + "/index.jsp",
-                     path.substring(0, path.indexOf(";j")));
-        path = Util.getViewHandler(getFacesContext()).
-                     getResourceURL(context, "index.jsp");
+                     Util.getViewHandler(getFacesContext()).
+                     getResourceURL(context, "/index.jsp"));
         assertEquals("index.jsp",
-                     path.substring(0, path.indexOf(";j")));
+                     Util.getViewHandler(getFacesContext()).
+                     getResourceURL(context, "index.jsp"));
 
     }
 
