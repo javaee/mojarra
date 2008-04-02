@@ -339,7 +339,6 @@
             <test name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
             <test name="com.sun.faces.renderkit.html_basic.TestHtmlResponseWriter"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
--->
 <!-- PENDING: return to running
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
 -->
