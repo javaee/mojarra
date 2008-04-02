@@ -296,6 +296,7 @@ must exist.  This is necessary for the MessageFactory class.
     </exec>
     <!-- build our custom instrumenter -->
     <ant dir="${jsf-tools.dir}" inheritall="false" target="jcov.tools"/>
+    <echo message="Instrumenting ${name} classes" />
     <java classname="com.sun.tdk.jcov.InstrMain2" fork="true">
       <classpath refid="jcov.instr.classpath" />
       <jvmarg line="${debug.jvm.args}"/>

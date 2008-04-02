@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTagParserImpl.java,v 1.10 2004/02/26 20:33:14 eburns Exp $
+ * $Id: CommandTagParserImpl.java,v 1.11 2004/04/17 02:01:36 eburns Exp $
  */
 
 /*
@@ -108,6 +108,7 @@ public class CommandTagParserImpl implements TagParser {
         String qn = validatorInfo.getQName();
         boolean hasValue = false;
         boolean hasImage = false;
+	boolean hasBinding = false;
 
         for (int i = 0; i < attrs.getLength(); i++) {
             if (attrs.getQName(i).equals("value")) {
@@ -116,8 +117,11 @@ public class CommandTagParserImpl implements TagParser {
             if (attrs.getQName(i).equals("image")) {
                 hasImage = true;
             }
+            if (attrs.getQName(i).equals("binding")) {
+                hasBinding = true;
+            }
         }
-        if (failed = !(hasValue || hasImage)) {
+        if (failed = (!hasBinding && !(hasValue || hasImage))) {
             Object[] obj = new Object[1];
             obj[0] = qn;
             ResourceBundle rb = ResourceBundle.getBundle(

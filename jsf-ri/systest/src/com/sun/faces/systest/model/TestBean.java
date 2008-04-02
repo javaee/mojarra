@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.9 2004/04/08 19:04:47 eburns Exp $
+ * $Id: TestBean.java,v 1.10 2004/04/17 02:01:39 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.html.HtmlOutputText;
+import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.event.ValueChangeEvent;
@@ -329,5 +330,18 @@ public class TestBean {
 
 	}
     }
+
+    protected HtmlCommandButton boundButton = new HtmlCommandButton();
+    public HtmlCommandButton getBoundButton() {
+	if (null != boundButton) {
+	    boundButton.setValue("button label");
+	}
+	return boundButton;
+    }
+    
+    public void setBoundButton(HtmlCommandButton newBoundButton) {
+	boundButton = newBoundButton;
+    }
+
 	
 }
