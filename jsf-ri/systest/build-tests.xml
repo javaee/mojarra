@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.94 2005/11/10 20:06:44 edburns Exp $
+ $Id: build-tests.xml,v 1.95 2005/11/22 16:32:32 rlubke Exp $
 -->
 
 <!--
@@ -93,6 +93,7 @@
   <target name="test"
    description="Execute all tests against installed application"
        depends="test.init,
+                test.prefix.security,
                 test.config,
                 test.interweaving,
                 test.listener,
@@ -333,6 +334,13 @@
       outContent="/methodref02.jsp PASSED" failonerror="${failonerror}"/>
 
   </target>
+    
+    <target name="test.prefix.security"
+           description="Ensure a prefix mapped FacesServlet doesn't allow access to WEB-INF">
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+                request="${context.path}/faces/WEB-INF/test.jsp"
+                status="404"/>
+    </target>
 
   <target name="test.valueBindingGet"
    description="Test ValueBinding.getValue() implementation">

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.27 2005/08/22 22:08:11 ofung Exp $
+ * $Id: FacesServlet.java,v 1.28 2005/11/22 16:32:31 rlubke Exp $
  */
 
 /*
@@ -43,6 +43,8 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -61,7 +63,7 @@ public final class FacesServlet implements Servlet {
      * if it exists) containing JavaServer Faces configuration information.</p>
      */
     public static final String CONFIG_FILES_ATTR =
-	"javax.faces.CONFIG_FILES";
+        "javax.faces.CONFIG_FILES";
 
 
     /**
@@ -154,14 +156,14 @@ public final class FacesServlet implements Servlet {
             LifecycleFactory lifecycleFactory = (LifecycleFactory)
                 FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
             String lifecycleId = null;
-            
+
             // First look in the servlet init-param set
             if (null == (lifecycleId = servletConfig.getInitParameter(LIFECYCLE_ID_ATTR))) {
                 // If not found, look in the context-param set 
                 lifecycleId = servletConfig.getServletContext().getInitParameter
-                (LIFECYCLE_ID_ATTR);
+                    (LIFECYCLE_ID_ATTR);
             }
-                
+
             if (lifecycleId == null) {
                 lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
             }
@@ -192,6 +194,15 @@ public final class FacesServlet implements Servlet {
                         ServletResponse response)
         throws IOException, ServletException {
 
+        // If prefix mapped, then ensure requests for /WEB-INF are
+        // not processed.
+        String pathInfo = ((HttpServletRequest) request).getPathInfo();        
+        if (pathInfo != null &&
+            (pathInfo.startsWith("/WEB-INF/") || pathInfo.equals("/WEB-INF"))) {
+            ((HttpServletResponse) response).
+                  sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
         // Acquire the FacesContext instance for this request
         FacesContext context = facesContextFactory.getFacesContext
             (servletConfig.getServletContext(), request, response, lifecycle);
@@ -199,9 +210,9 @@ public final class FacesServlet implements Servlet {
         // Execute the request processing lifecycle for this request
         try {
             lifecycle.execute(context);
-	    lifecycle.render(context);
+            lifecycle.render(context);
         } catch (FacesException e) {
-            Throwable t = ((FacesException) e).getCause();
+            Throwable t = e.getCause();
             if (t == null) {
                 throw new ServletException(e.getMessage(), e);
             } else {
@@ -214,11 +225,11 @@ public final class FacesServlet implements Servlet {
                 }
             }
         }
-	finally {
-	    // Release the FacesContext instance for this request
-	    context.release();
-	}
-        
+        finally {
+            // Release the FacesContext instance for this request
+            context.release();
+        }
+
     }
 
 
