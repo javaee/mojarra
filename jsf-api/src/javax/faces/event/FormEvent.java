@@ -1,5 +1,5 @@
 /*
- * $Id: FormEvent.java,v 1.6 2002/09/20 02:30:17 craigmcc Exp $
+ * $Id: FormEvent.java,v 1.7 2002/09/21 22:24:35 craigmcc Exp $
  */
 
 /*
@@ -16,10 +16,11 @@ import javax.faces.component.UIForm;
 
 
 /**
- * <p><strong>FormEvent</strong> is a subclass of {@link FacesEvent} that
+ * <p><strong>FormEvent</strong> is a subclass of {@link ApplicationEvent} that
  * indicates that a particular {@link UIForm} was submitted by the user.
  * It is queued to the application, for processing during the
- * <em>Invoke Application</em> phase of the request processing lifecycle.</p>
+ * <em>Invoke Application</em> phase of the request processing lifecycle.
+ * </p>
  */
 
 public class FormEvent extends CommandEvent {

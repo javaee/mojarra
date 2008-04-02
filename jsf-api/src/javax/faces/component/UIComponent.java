@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.54 2002/09/21 22:02:26 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.55 2002/09/21 22:24:32 craigmcc Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
-import javax.faces.event.FacesEvent;
+import javax.faces.event.RequestEvent;
 import javax.faces.event.RequestEventHandler;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
@@ -565,7 +565,7 @@ public interface UIComponent extends Serializable {
      * @exception NullPointerException if <code>context</code> or
      *  <code>event</code> is <code>null</code>
      */
-    public boolean processEvent(FacesContext context, FacesEvent event);
+    public boolean processEvent(FacesContext context, RequestEvent event);
 
 
     /**

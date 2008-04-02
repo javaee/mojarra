@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.25 2002/09/21 22:02:26 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.26 2002/09/21 22:24:32 craigmcc Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.event.FacesEvent;
+import javax.faces.event.RequestEvent;
 import javax.faces.event.RequestEventHandler;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
@@ -1165,7 +1165,7 @@ public abstract class UIComponentBase implements UIComponent {
      * @exception NullPointerException if <code>context</code> or
      *  <code>event</code> is <code>null</code>
      */
-    public boolean processEvent(FacesContext context, FacesEvent event) {
+    public boolean processEvent(FacesContext context, RequestEvent event) {
 
         if ((context == null) || (event == null)) {
             throw new NullPointerException();
@@ -1201,7 +1201,7 @@ public abstract class UIComponentBase implements UIComponent {
         boolean result = true;
         Iterator events = context.getRequestEvents(this);
         while (events.hasNext()) {
-            FacesEvent event = (FacesEvent) events.next();
+            RequestEvent event = (RequestEvent) events.next();
             if (!processEvent(context, event)) {
                 result = false;
             }

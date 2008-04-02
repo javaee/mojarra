@@ -1,5 +1,5 @@
 /*
- * $Id: CommandEvent.java,v 1.5 2002/09/20 02:30:17 craigmcc Exp $
+ * $Id: CommandEvent.java,v 1.6 2002/09/21 22:24:34 craigmcc Exp $
  */
 
 /*
@@ -15,13 +15,14 @@ import javax.faces.component.UIComponent;
 
 
 /**
- * <p><strong>CommandEvent</strong> is a subclass of {@link FacesEvent} that
- * indicates that a particular {@link UICommand} was selected by the user.
+ * <p><strong>CommandEvent</strong> is a subclass of {@link ApplicationEvent}
+ * that indicates that a particular {@link UICommand} was selected by the user.
  * It is queued to the application, for processing during the
- * <em>Invoke Application</em> phase of the request processing lifecycle.</p>
+ * <em>Invoke Application</em> phase of the request processing lifecycle.
+ * </p>
  */
 
-public class CommandEvent extends FacesEvent {
+public class CommandEvent extends ApplicationEvent {
 
 
     // ----------------------------------------------------------- Constructors

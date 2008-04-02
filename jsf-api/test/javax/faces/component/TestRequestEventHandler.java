@@ -1,5 +1,5 @@
 /*
- * $Id: TestRequestEventHandler.java,v 1.1 2002/06/24 04:18:16 craigmcc Exp $
+ * $Id: TestRequestEventHandler.java,v 1.2 2002/09/21 22:24:36 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package javax.faces.component;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.FacesEvent;
+import javax.faces.event.RequestEvent;
 import javax.faces.event.RequestEventHandler;
 
 
@@ -23,9 +23,9 @@ import javax.faces.event.RequestEventHandler;
 public class TestRequestEventHandler extends RequestEventHandler {
 
     public boolean processEvent(FacesContext context, UIComponent component,
-                                FacesEvent event) {
+                                RequestEvent event) {
 
-        return (false); // No action taken
+        return (true); // No action taken
 
     }
 
