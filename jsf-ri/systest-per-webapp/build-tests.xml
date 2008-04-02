@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.25 2006/03/29 23:04:23 rlubke Exp $
+ $Id: build-tests.xml,v 1.26 2006/05/03 14:49:22 edburns Exp $
 -->
 
 <!--
@@ -53,7 +53,8 @@
                    nested-datatables,
                    jar-ordering,                  
                    replace-lifecycle,
-                   string-converter"/>
+                   string-converter,
+                   replace-variableresolver"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
@@ -80,6 +81,8 @@
               value="com/sun/faces/systest/ReplaceLifecycleTestCase.class"/>
     <property name="string-converter" 
               value="com/sun/faces/systest/StringConverterTestCase.class"/>
+    <property name="replace-variableresolver" 
+              value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
     
     <!--
         EXCLUDED APPLICATIONS:

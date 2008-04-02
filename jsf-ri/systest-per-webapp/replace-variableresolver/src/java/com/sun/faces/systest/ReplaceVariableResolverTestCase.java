@@ -1,5 +1,5 @@
 /*
- * $Id: ReplaceVariableResolverTestCase.java,v 1.1 2006/04/29 18:48:52 edburns Exp $
+ * $Id: ReplaceVariableResolverTestCase.java,v 1.2 2006/05/03 14:49:23 edburns Exp $
  */
 
 /*
@@ -116,25 +116,8 @@ public class ReplaceVariableResolverTestCase extends AbstractTestCase {
 
     public void testReplaceVariableResolver() throws Exception {
 	HtmlPage page = getPage("/faces/test.jsp");
-	assertTrue(-1 != page.asText().indexOf("New String Value"));
-	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewStateManager"));
-	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewViewHandler"));
-	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewApplication"));
-	
-	List list;
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
-	((HtmlTextInput)list.get(0)).setValueAttribute("text from client");
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlSubmitInput.class); 
-	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-	page = (HtmlPage) button.click();
-	
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
-	assertEquals("text from client", 
-		     ((HtmlTextInput)list.get(0)).asText());
-	
+	assertTrue(-1 != page.asText().indexOf("Invoking the resolver chain: success."));
+	assertTrue(-1 != page.asText().indexOf("Invoking the resolver directly: success."));
     }
 
 }

@@ -62,7 +62,8 @@
                    nested-datatables,
                    jar-ordering,                  
                    replace-lifecycle,
-                   string-converter"/>
+                   string-converter,
+                   replace-variableresolver"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:

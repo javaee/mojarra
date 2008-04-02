@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.6 2006/03/29 23:03:45 rlubke Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.7 2006/05/03 14:49:22 edburns Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -41,6 +41,7 @@ import javax.el.ELContext;
 import javax.el.ELResolver;
 
 import com.sun.faces.util.MessageUtils;
+import java.util.Map;
 
 public class VariableResolverChainWrapper extends ELResolver {
     
@@ -49,6 +50,14 @@ public class VariableResolverChainWrapper extends ELResolver {
     public VariableResolverChainWrapper(VariableResolver variableResolver) {
         this.legacyVR = variableResolver;
     }
+
+    /**
+     * <p>Private request scoped attribute to protect against infinite
+     * loops on expressions that touch a custom legacy VariableResolver
+     * that delegates to its parent VariableResolver.</p>
+     */
+    
+    private static final String REENTRANT_GUARD = "com.sun.faces.LegacyVariableResolver";
 
     @Override
     public Object getValue(ELContext context, Object base, Object property)
@@ -67,14 +76,30 @@ public class VariableResolverChainWrapper extends ELResolver {
         
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
+        Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
         try {
+	    // If we are already in the midst of an expression evaluation
+	    // that touched this resolver...
+            if (null != requestMap.get(REENTRANT_GUARD)) {
+		// take no action and return.
+                context.setPropertyResolved(false);
+                return null;
+            }
+	    // Make sure subsequent calls don't take action.
+            requestMap.put(REENTRANT_GUARD, REENTRANT_GUARD);
+            
             result = legacyVR.resolveVariable(facesContext,
                                               (String)property);
+            
             context.setPropertyResolved(result != null);           
         } catch (EvaluationException ex) {
             context.setPropertyResolved(false);
             throw new ELException(ex);
         }
+	finally {
+	    // Make sure to remove the guard after the call returns
+            requestMap.remove(REENTRANT_GUARD);
+	}
         return result;
     }
 

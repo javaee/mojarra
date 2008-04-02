@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.74 2006/03/29 23:03:42 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.75 2006/05/03 14:49:21 edburns Exp $
  */
 
 /*
@@ -218,7 +218,7 @@ public class ApplicationImpl extends Application {
             return compositeELResolver;
         }
         compositeELResolver = 
-            new FacesCompositeELResolver();    
+            new FacesCompositeELResolver(FacesCompositeELResolver.ELResolverChainType.Faces);    
         compositeELResolver.add(new ImplicitObjectELResolver());
        
         Iterator it = null;

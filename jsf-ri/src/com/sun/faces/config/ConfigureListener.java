@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.70 2006/04/05 17:53:43 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.71 2006/05/03 14:49:21 edburns Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -97,6 +97,7 @@ import com.sun.faces.config.beans.ResourceBundleBean;
 import com.sun.faces.config.beans.ValidatorBean;
 import com.sun.faces.config.rules.FacesConfigRuleSet;
 import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.el.ChainAwareVariableResolver;
 
 import com.sun.faces.el.DummyPropertyResolverImpl;
 import com.sun.faces.el.DummyVariableResolverImpl;
@@ -104,6 +105,7 @@ import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.el.ChainAwareVariableResolver;
 
 import com.sun.org.apache.commons.digester.Digester;
 import org.xml.sax.Attributes;
@@ -928,8 +930,17 @@ public class ConfigureListener implements ServletRequestListener,
                 if (LOGGER.isLoggable(Level.FINER)) {
                     LOGGER.finer("setVariableResolver(" + values[i] + ')');
                 }
-                instance = Util.createInstance
-                        (values[i], VariableResolver.class, prevInChain);
+                // If this is the first custom VariableResolver in the chain,
+                // make sure to pass the ChainAwareVariableResolver to its ctor.
+                if (0 == i) {
+                    instance = Util.createInstance
+                            (values[i], VariableResolver.class, 
+                            new ChainAwareVariableResolver());
+                }
+                else {
+                    instance = Util.createInstance
+                            (values[i], VariableResolver.class, prevInChain);
+                }
                 prevInChain = instance;
             }
             legacyVRChainHead = (VariableResolver) instance; 
@@ -1868,7 +1879,7 @@ public class ConfigureListener implements ServletRequestListener,
             // register an empty resolver for now. It will be populated after the 
             // first request is serviced.
             CompositeELResolver compositeELResolverForJsp = 
-                new FacesCompositeELResolver();   
+                new FacesCompositeELResolver(FacesCompositeELResolver.ELResolverChainType.JSP);   
             if (appAssociate != null) {
                 appAssociate.setFacesELResolverForJsp(compositeELResolverForJsp);
             }

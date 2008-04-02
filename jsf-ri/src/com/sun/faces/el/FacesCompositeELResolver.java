@@ -1,5 +1,5 @@
 /*
- * $Id: FacesCompositeELResolver.java,v 1.4 2006/03/29 23:03:44 rlubke Exp $
+ * $Id: FacesCompositeELResolver.java,v 1.5 2006/05/03 14:49:22 edburns Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,8 +28,9 @@
 
 package com.sun.faces.el;
 
-import java.util.ArrayList;
+import com.sun.faces.RIConstants;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.el.ELResolver;
 import javax.el.ELContext;
@@ -50,21 +51,33 @@ public class FacesCompositeELResolver extends CompositeELResolver {
 
     public Object getValue(ELContext context, Object base, Object property) 
         throws ELException {
+        
+        Object result = null;
                                
         context.setPropertyResolved(false);                      
         if (FacesContext.getCurrentInstance() == null) {
             return null;
-        }                       
-        return super.getValue(context, base, property);
+        }                    
+        setChainType();
+        result = super.getValue(context, base, property);
+        clearChainType();
+        
+        return result;
     }
 
     public Class getType(ELContext context, Object base, Object property) 
         throws ELException {
+        Class result = null;
+        
         context.setPropertyResolved(false);
         if (FacesContext.getCurrentInstance() == null) {
             return null;
         }
-        return super.getType(context, base, property);
+        setChainType();
+        result = super.getType(context, base, property);
+        clearChainType();
+
+        return result;
     }
 
     
@@ -74,26 +87,78 @@ public class FacesCompositeELResolver extends CompositeELResolver {
         if (FacesContext.getCurrentInstance() == null) {
             return;
         }
+        setChainType();
         super.setValue(context, base, property, val);
+        clearChainType();
     }
 
     
     public boolean isReadOnly(ELContext context, Object base, Object property) 
         throws ELException {
+        boolean result = false;
         context.setPropertyResolved(false);
         if (FacesContext.getCurrentInstance() == null) {
             return false;
         }
-        return super.isReadOnly(context, base, property);
+        setChainType();
+        result = super.isReadOnly(context, base, property);
+        clearChainType();
+        return result;
     }
 
     
     public Iterator getFeatureDescriptors(ELContext context, Object base) {
-        return super.getFeatureDescriptors(context, base);
+        Iterator result = null;
+        setChainType();
+        result = super.getFeatureDescriptors(context, base);
+        clearChainType();
+        return result;
     }
     
     public Class getCommonPropertyType(ELContext context, Object base) {
         return null;
+    }
+
+    /**
+     * <p><b>JSP</b> indicates this CompositeELResolver instance is the
+     * JSP chain, specified in section 5.6.1 of the spec.</p>
+     *
+     * <p><b>Faces</b> indicates this CompositeELResolver instance is the
+     * JSF chain, specified in section 5.6.2 of the spec.</p>
+     */
+
+    public enum ELResolverChainType { JSP, Faces
+    }
+
+    private ELResolverChainType chainType;
+
+    /**
+     * <p>Guarantee that this instance knows of what chain it is a
+     * member.</p>
+     */
+
+    public FacesCompositeELResolver(ELResolverChainType chainType) {
+        this.chainType = chainType;
+    }
+
+    /**
+     * <p>Set a request scoped attribute indicating what kind of chain
+     * the current expression is.</p>
+     */
+
+    private void setChainType() {
+        Map<String, Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        requestMap.put(RIConstants.EL_RESOLVER_CHAIN_TYPE_NAME, chainType);
+    }
+
+    /**
+     * <p>Clear the request scoped attribute indicating what kind of
+     * chain the current expression is.</p>
+     */
+    
+    private void clearChainType() {
+        Map<String, Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        requestMap.remove(RIConstants.EL_RESOLVER_CHAIN_TYPE_NAME);
     }
 
 }

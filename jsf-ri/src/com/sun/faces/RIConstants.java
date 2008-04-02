@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.82 2006/04/05 17:53:43 rlubke Exp $
+ * $Id: RIConstants.java,v 1.83 2006/05/03 14:49:21 edburns Exp $
  */
 
 /*
@@ -156,6 +156,8 @@ public class RIConstants {
         throw new IllegalStateException();
         
     }
+
+    public static final String EL_RESOLVER_CHAIN_TYPE_NAME = FACES_PREFIX + "ELResolverChainType";
 
 
 }
