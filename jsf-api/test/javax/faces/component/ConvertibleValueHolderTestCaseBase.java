@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertableValueHolderTestCaseBase.java,v 1.3 2003/10/24 17:45:35 rlubke Exp $
+ * $Id: ConvertibleValueHolderTestCaseBase.java,v 1.1 2003/10/25 00:50:44 craigmcc Exp $
  */
 
 /*
@@ -25,12 +25,12 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link ConvertableValueHolder}.  Any test case for a
- * component class that implements {@link ConvertableValueHolder} should
+ * <p>Unit tests for {@link ConvertibleValueHolder}.  Any test case for a
+ * component class that implements {@link ConvertibleValueHolder} should
  * extend this class.</p>
  */
 
-public abstract class ConvertableValueHolderTestCaseBase
+public abstract class ConvertibleValueHolderTestCaseBase
     extends ValueHolderTestCaseBase {
 
 
@@ -42,7 +42,7 @@ public abstract class ConvertableValueHolderTestCaseBase
      *
      * @param name Name of the test case
      */
-    public ConvertableValueHolderTestCaseBase(String name) {
+    public ConvertibleValueHolderTestCaseBase(String name) {
         super(name);
     }
 
@@ -61,7 +61,7 @@ public abstract class ConvertableValueHolderTestCaseBase
 
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(ConvertableValueHolderTestCaseBase.class));
+        return (new TestSuite(ConvertibleValueHolderTestCaseBase.class));
     }
 
 
@@ -78,7 +78,7 @@ public abstract class ConvertableValueHolderTestCaseBase
     public void testAttributesTransparency() {
 
         super.testAttributesTransparency();
-        ConvertableValueHolder cvh = (ConvertableValueHolder) component;
+        ConvertibleValueHolder cvh = (ConvertibleValueHolder) component;
 
         assertEquals(cvh.getConverter(),
                      (String) component.getAttributes().get("converter"));
@@ -115,11 +115,11 @@ public abstract class ConvertableValueHolderTestCaseBase
     }
 
 
-    // Test a pristine ConvertableValueHolderBase instance
+    // Test a pristine ConvertibleValueHolderBase instance
     public void testPristine() {
 
         super.testPristine();
-        ConvertableValueHolder cvh = (ConvertableValueHolder) component;
+        ConvertibleValueHolder cvh = (ConvertibleValueHolder) component;
 
         // Validate properties
         assertNull("no converter", cvh.getConverter());
@@ -132,7 +132,7 @@ public abstract class ConvertableValueHolderTestCaseBase
     public void testPropertiesInvalid() throws Exception {
 
         super.testPropertiesInvalid();
-        ConvertableValueHolder cvh = (ConvertableValueHolder) component;
+        ConvertibleValueHolder cvh = (ConvertibleValueHolder) component;
 
     }
 
@@ -141,7 +141,7 @@ public abstract class ConvertableValueHolderTestCaseBase
     public void testPropertiesValid() throws Exception {
 
         super.testPropertiesValid();
-        ConvertableValueHolder cvh = (ConvertableValueHolder) component;
+        ConvertibleValueHolder cvh = (ConvertibleValueHolder) component;
 
         // converter
         cvh.setConverter(new LongConverter());
@@ -184,8 +184,8 @@ public abstract class ConvertableValueHolderTestCaseBase
     protected void checkProperties(UIComponent comp1, UIComponent comp2) {
 
         super.checkProperties(comp1, comp2);
-        ConvertableValueHolder cvh1 = (ConvertableValueHolder) comp1;
-        ConvertableValueHolder cvh2 = (ConvertableValueHolder) comp2;
+        ConvertibleValueHolder cvh1 = (ConvertibleValueHolder) comp1;
+        ConvertibleValueHolder cvh2 = (ConvertibleValueHolder) comp2;
         checkNumberConverter((NumberConverter) cvh1.getConverter(),
                              (NumberConverter) cvh2.getConverter());
         assertEquals(cvh1.isValid(), cvh2.isValid());
@@ -197,7 +197,7 @@ public abstract class ConvertableValueHolderTestCaseBase
     protected void populateComponent(UIComponent component) {
 
         super.populateComponent(component);
-        ConvertableValueHolder cvh = (ConvertableValueHolder) component;
+        ConvertibleValueHolder cvh = (ConvertibleValueHolder) component;
         cvh.setConverter(createNumberConverter());
         cvh.setValid(false);
 

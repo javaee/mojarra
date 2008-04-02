@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertableValueHolder.java,v 1.1 2003/10/09 19:18:05 craigmcc Exp $
+ * $Id: ConvertibleValueHolder.java,v 1.1 2003/10/25 00:50:40 craigmcc Exp $
  */
 
 /*
@@ -17,12 +17,12 @@ import javax.faces.el.ValueBinding;
 
 
 /**
- * <p><strong>ConvertableValueHolder</strong> is an extension of
+ * <p><strong>ConvertibleValueHolder</strong> is an extension of
  * {@link ValueHolder} that adds support for conversion between Strings and
  * the native model tier data type.</p>
  */
 
-public interface ConvertableValueHolder extends ValueHolder {
+public interface ConvertibleValueHolder extends ValueHolder {
 
 
     // -------------------------------------------------------------- Properties

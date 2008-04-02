@@ -265,7 +265,7 @@ public class UIData extends UIComponentBase
      * <li>If the descendant is an instance of <code>ValueHolder</code>, save
      *     the state of the <code>value</code> property.</li>
      * <li>If the descendant is also an instance of
-     *     <code>ConvertableValueHolder</code>, save the state of the
+     *     <code>ConvertibleValueHolder</code>, save the state of the
      *     <code>valid</code> property.</li>
      * <li>If the descendant is also an instance of <code>UIInput</code>,
      *     save the state of the <code>previous</code> property.</li>
@@ -279,7 +279,7 @@ public class UIData extends UIComponentBase
      * <li>If the descendant is an instance of <code>ValueHolder</code>,
      *     restore the <code>value</code> property.</li>
      * <li>If the descendant is also an instance of
-     *     <code>ConvertableValueHolder</code>, restore the state of the
+     *     <code>ConvertibleValueHolder</code>, restore the state of the
      *     <code>valid</code> property.</li>
      * <li>If the descendant is also an instance of <code>UIInput</code>,
      *     restore the state of the <code>previous</code> property.</li>
@@ -799,9 +799,9 @@ public class UIData extends UIComponentBase
             }
             // System.err.println("     value=" + state.getValue());
             ((ValueHolder) component).setValue(state.getValue());
-            if (component instanceof ConvertableValueHolder) {
+            if (component instanceof ConvertibleValueHolder) {
                 // System.err.println("     valid=" + state.isValid());
-                ((ConvertableValueHolder) component).setValid(state.isValid());
+                ((ConvertibleValueHolder) component).setValid(state.isValid());
             }
             if (component instanceof UIInput) {
                 // System.err.println("      prev=" + state.getPrevious());
@@ -860,9 +860,9 @@ public class UIData extends UIComponentBase
             // System.err.println("  clientId=" + clientId);
             // System.err.println("     value=" + (((ValueHolder) component).getValue()));
             state.setValue(((ValueHolder) component).getValue());
-            if (component instanceof ConvertableValueHolder) {
-                // System.err.println("     valid=" + (((ConvertableValueHolder) component).isValid()));
-                state.setValid(((ConvertableValueHolder) component).isValid());
+            if (component instanceof ConvertibleValueHolder) {
+                // System.err.println("     valid=" + (((ConvertibleValueHolder) component).isValid()));
+                state.setValid(((ConvertibleValueHolder) component).isValid());
             }
             if (component instanceof UIInput) {
                 // System.err.println("      prev=" + (((UIInput) component).getPrevious()));
