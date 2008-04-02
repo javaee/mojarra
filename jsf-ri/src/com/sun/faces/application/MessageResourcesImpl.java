@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.1 2003/07/25 05:52:13 horwat Exp $
+ * $Id: MessageResourcesImpl.java,v 1.2 2003/09/08 22:03:12 rlubke Exp $
  */
 
 /*
@@ -88,24 +88,28 @@ public class MessageResourcesImpl extends MessageResources
         String[] name = new String[3];
         int i = 2;
         StringBuffer b = new StringBuffer(100);
-        if ( locale.getLanguage().length() > 0 ) {
-            b.append(locale.getLanguage());
+        String lang = locale.getLanguage();
+        String country = locale.getCountry();
+        String variant = locale.getVariant();
+        
+        if (lang.length() > 0) {
+            b.append(lang);
             name[i--] = b.toString();
         }    
       
-        if( locale.getCountry().length() > 0 ) {
+        if(country.length() > 0) {
             b.append('_');
-            b.append(locale.getCountry());
+            b.append(country);
             name[i--] = b.toString();
         }    
 
-        if (locale.getVariant().length() > 0) {
+        if (variant.length() > 0) {
             b.append('_');
-            b.append(locale.getVariant());
+            b.append(variant);
             name[i--] = b.toString();
         }
 
-        for (int j = i+1; j < name.length; j++) {
+        for (int j = (i + 1); j < name.length; j++) {
             // start with variant and iterate
             // until a catalog is found to match locale.
             synchronized( catalogList ) {
@@ -119,42 +123,29 @@ public class MessageResourcesImpl extends MessageResources
         }    
         return cat;
     }
+    
+    public MessageCatalog findCatalogForSpecificLocale(Locale locale) {        
+        MessageCatalog cat = null;
+        synchronized (catalogList) {
+            cat = (MessageCatalog) catalogList.get(locale.toString());            
+        }
+        return cat;
+    }
         
     public void addCatalog(Locale locale, MessageCatalog catalog) {
         ParameterCheck.nonNull(locale);
         ParameterCheck.nonNull(catalog);
 
         if (catalogList == null) {
-	    catalogList = new HashMap();
-	}
-
-	if (findCatalog(locale) != null) {
-	    return;
-	}
-
-        String[] name = new String[3];
-        int i = 2;
-        StringBuffer b = new StringBuffer(100);
-        if ( locale.getLanguage().length() > 0 ) {
-            b.append(locale.getLanguage());
-            name[i--] = b.toString();
-        }    
-      
-        if( locale.getCountry().length() > 0 ) {
-            b.append('_');
-            b.append(locale.getCountry());
-            name[i--] = b.toString();
-        }    
-
-        if (locale.getVariant().length() > 0) {
-            b.append('_');
-            b.append(locale.getVariant());
-            name[i--] = b.toString();
+            catalogList = new HashMap();
         }
 
-        for (int j = i+1; j < name.length; j++) {
-	    catalogList.put(name[j], catalog);
-	}
+        if (findCatalogForSpecificLocale(locale) != null) {
+            return;
+        }
+
+        catalogList.put(locale.toString(), catalog);
+
     }
 
     public String substituteParams(Locale locale, String msgtext, Object params[]) {

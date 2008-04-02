@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.33 2003/09/05 18:56:53 eburns Exp $
+ * $Id: ConfigParser.java,v 1.34 2003/09/08 22:03:13 rlubke Exp $
  */
 
 /*
@@ -1067,7 +1067,7 @@ final class MessageResourceRule extends Rule {
 			// first.
 			//
                         MessageCatalog catalog = 
-			    ((MessageResourcesImpl)messageResources).findCatalog(locale);
+			    ((MessageResourcesImpl)messageResources).findCatalogForSpecificLocale(locale);
 			if (catalog == null) {
 			    catalog = new MessageCatalog(locale);
 			    catalog.addMessage(messageTemplate);
