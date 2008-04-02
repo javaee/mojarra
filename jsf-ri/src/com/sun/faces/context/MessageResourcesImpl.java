@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.12 2003/05/03 06:55:42 rkitain Exp $
+ * $Id: MessageResourcesImpl.java,v 1.13 2003/07/22 19:46:00 rkitain Exp $
  */
 
 /*
@@ -29,8 +29,6 @@ import javax.faces.FacesException;
 import java.text.MessageFormat;
 import java.io.IOException;
 
-import org.apache.commons.digester.Digester;
-import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.impl.SimpleLog;
 
 import org.mozilla.util.Assert;
@@ -51,7 +49,6 @@ public class MessageResourcesImpl extends MessageResources
     //
     private String messageResourceId = null;
     private String resourceFile = null;
-    private Digester digester = null;
     
     // The key is a String and formed from resource + language + country + varient.  
     // The value is a MessageCatalog.
@@ -66,19 +63,15 @@ public class MessageResourcesImpl extends MessageResources
     //
 
     public MessageResourcesImpl() {
-    }
-    
-    public void init(String newMessageResourceId, 
-		     String newResourceFile) throws FacesException {
-	ParameterCheck.nonNull(newMessageResourceId);
-	ParameterCheck.nonNull(newResourceFile);
-
-        messageResourceId = newMessageResourceId;
-	resourceFile = newResourceFile;
-        digester = initConfig();
         catalogList = new HashMap();
     }
 
+    public MessageResourcesImpl(String messageResourceId) {
+	ParameterCheck.nonNull(messageResourceId);
+	this.messageResourceId = messageResourceId;
+        catalogList = new HashMap();
+    }
+    
     //
     // Class methods
     //
@@ -87,19 +80,15 @@ public class MessageResourcesImpl extends MessageResources
     // General Methods
     //
     
-    private MessageCatalog findCatalog(Locale locale) {
+    public MessageCatalog findCatalog(Locale locale) {
        
         MessageCatalog cat = null;
  
         ParameterCheck.nonNull(locale);
-        String[] name = new String[4];
-        int i = 3;
+        String[] name = new String[3];
+        int i = 2;
         StringBuffer b = new StringBuffer(100);
-        b.append(resourceFile);
-        name[i--] = resourceFile;
-
         if ( locale.getLanguage().length() > 0 ) {
-            b.append('_');
             b.append(locale.getLanguage());
             name[i--] = b.toString();
         }    
@@ -117,19 +106,13 @@ public class MessageResourcesImpl extends MessageResources
         }
 
         for (int j = i+1; j < name.length; j++) {
-            // if catalog does not exist it needs to be loaded from XML file.
-            // start with variant appended to resourceFile file name and iterate
+            // start with variant and iterate
             // until a catalog is found to match locale.
             synchronized( catalogList ) {
                 cat = (MessageCatalog)catalogList.get(name[j]);
                 if (cat == null) {
-                    cat = loadMessages(name[j]+".xml", locale);
-                    if ( cat != null ) {
-                        catalogList.put(name[j], cat);
-                        break;
-                    }    
-                } else {
-                    // catalog is already loaded. 
+                    continue;
+                } else {  
                     break;
                 }
             }    
@@ -137,54 +120,44 @@ public class MessageResourcesImpl extends MessageResources
         return cat;
     }
         
-    private Digester initConfig() {
-        Digester digester = new Digester();
-	digester.setUseContextClassLoader(true);
-        digester.setNamespaceAware(true);
-        digester.setValidating(false);
-        
-        // PENDING (visvan) log level should be configurable.
-        SimpleLog sLog = new SimpleLog("MessageLog");
-        sLog.setLevel(SimpleLog.LOG_LEVEL_ERROR);
-        digester.setLogger(sLog);
-        
-        digester.addObjectCreate("messages/message", 
-                "com.sun.faces.context.MessageTemplate");
-        digester.addSetProperties("messages/message");
-        digester.addCallMethod("messages/message/detail", "setDetail", 0);
-        digester.addSetNext("messages/message", "addMessage", 
-                 "com.sun.faces.context.MessageTemplate");
-        return digester;
-    }
-    
-    public MessageCatalog loadMessages(String fileName, Locale locale) {
-        InputStream in;
-        MessageCatalog catalog = null;
-        
-        ParameterCheck.nonNull( fileName );
+    public void addCatalog(Locale locale, MessageCatalog catalog) {
         ParameterCheck.nonNull(locale);
-        
-        in = this.getClass().getClassLoader().getResourceAsStream(
-                fileName);
-        if ( in == null ) {
-            // PENDING (visvan) log error
-            return null;
+        ParameterCheck.nonNull(catalog);
+
+        if (catalogList == null) {
+	    catalogList = new HashMap();
+	}
+
+	if (findCatalog(locale) != null) {
+	    return;
+	}
+
+        String[] name = new String[3];
+        int i = 2;
+        StringBuffer b = new StringBuffer(100);
+        if ( locale.getLanguage().length() > 0 ) {
+            b.append(locale.getLanguage());
+            name[i--] = b.toString();
         }    
-        
-        try {
-            catalog = new MessageCatalog(locale);
-            digester.push( catalog );
-            digester.parse(in);
-            in.close();
-        } catch (Throwable t) {
-            return null;
-           // throw new IllegalStateException(
-           //         "Unable to parse file:"+t.getMessage());
+      
+        if( locale.getCountry().length() > 0 ) {
+            b.append('_');
+            b.append(locale.getCountry());
+            name[i--] = b.toString();
+        }    
+
+        if (locale.getVariant().length() > 0) {
+            b.append('_');
+            b.append(locale.getVariant());
+            name[i--] = b.toString();
         }
-        return catalog;
-    } 
-    
-     public String substituteParams(Locale locale, String msgtext, Object params[]) {
+
+        for (int j = i+1; j < name.length; j++) {
+	    catalogList.put(name[j], catalog);
+	}
+    }
+
+    public String substituteParams(Locale locale, String msgtext, Object params[]) {
         String localizedStr = null;
         
         if (params == null || msgtext == null ) {
@@ -226,9 +199,7 @@ public class MessageResourcesImpl extends MessageResources
 				 Object params[]) {
         MessageCatalog catalog = findCatalog(locale);
         if (catalog == null) {
-            // PENDING (visvan) log error
-            throw new FacesException("No message catalogs for resource " + 
-				     messageResourceId);
+	    return null;
         }
         MessageTemplate template = (MessageTemplate) catalog.get(messageId);
         if (template == null) {
@@ -257,7 +228,13 @@ public class MessageResourcesImpl extends MessageResources
         
         Locale locale = context.getLocale();
         Assert.assert_it(locale != null);
-        return getMessage(locale, messageId, params);
+//        return getMessage(locale, messageId, params);
+        Message message = getMessage(locale, messageId, params);
+        if (message != null) {
+            return message;
+        }
+        locale = Locale.getDefault();
+        return (getMessage(locale, messageId, params));
     }  
     
     public Message getMessage(FacesContext context, String messageId,
