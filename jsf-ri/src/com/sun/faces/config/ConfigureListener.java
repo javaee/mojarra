@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.93 2007/02/01 05:37:20 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.94 2007/02/05 00:00:12 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -78,6 +78,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.text.MessageFormat;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -199,6 +200,7 @@ public class ConfigureListener implements ServletContextListener {
      * <p>The set of <code>ClassLoader</code> instances that have
      * already been configured by this <code>ConfigureListener</code>.</p>
      */
+    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     private static final Set<ClassLoader> LOADERS = new HashSet<ClassLoader>();
 
 
@@ -278,7 +280,14 @@ public class ConfigureListener implements ServletContextListener {
         webConfig = WebConfiguration.getInstance(context);
         logOverriddenContextConfigValues();
         Digester digester = null;
-        boolean initialized = false;
+        boolean initialized;
+
+        // Ensure that we initialize a particular application ony once.
+        // Note that we need to cache this in a local variable so we
+        // can check it from our finally block.
+        if (initialized = initialized()) {
+            return;
+        }
         
         // store the servletContext instance in Thread local Storage.
         // This enables our Application's ApplicationAssociate to locate
@@ -338,16 +347,7 @@ public class ConfigureListener implements ServletContextListener {
                   isFeatureEnabled(BooleanWebContextInitParameter.EnableHtmlTagLibraryValidator));
             
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("contextInitialized("
-                            + context.getServletContextName()
-                            + ")");
-            }
-
-            // Ensure that we initialize a particular application ony once.
-            // Note that we need to cache this in a local variable so we 
-            // can check it from our finally block.
-            if (initialized = initialized()) {
-                return;
+                LOGGER.fine(MessageFormat.format("contextInitialized({0})", context.getServletContextName()));
             }
 
             // Step 1, configure a Digester instance we can use
@@ -359,6 +359,7 @@ public class ConfigureListener implements ServletContextListener {
             
             // Step 3, parse any "/META-INF/faces-config.xml" resources        
             SortedMap<String, URL> sortedJarMap = new TreeMap<String, URL>();
+            //noinspection CollectionWithoutInitialCapacity
             List<URL> unsortedResourceList = new ArrayList<URL>();
                           
             try {
@@ -480,20 +481,18 @@ public class ConfigureListener implements ServletContextListener {
         ServletContext context = sce.getServletContext();
         try {            
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("contextDestroyed("
-                            + context.getServletContextName()
-                            + ')');
+                LOGGER.fine(MessageFormat.format("contextDestroyed({0})", context.getServletContextName()));
             }           
 
             // Release any allocated application resources
             FactoryFinder.releaseFactories();            
+
+        } finally {
             tlsExternalContext.set(new ServletContextAdapter(context));
             ApplicationAssociate
                   .clearInstance(tlsExternalContext.get());
-
             // Release the initialization mark on this web application
             release();
-        } finally {
             tlsExternalContext.set(null);    
             WebConfiguration.clear(context);
         }
@@ -575,7 +574,7 @@ public class ConfigureListener implements ServletContextListener {
         String value = config.getMessageBundle();
         if (value != null) {
             if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.finer("setMessageBundle(" + value + ')');
+                LOGGER.finer(MessageFormat.format("setMessageBundle({0})", value));
             }
             application.setMessageBundle(value);
         }
@@ -583,7 +582,7 @@ public class ConfigureListener implements ServletContextListener {
         value = config.getDefaultRenderKitId();
         if (value != null) {
             if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.finer("setDefaultRenderKitId(" + value + ')');
+                LOGGER.finer(MessageFormat.format("setDefaultRenderKitId({0})", value));
             }
             application.setDefaultRenderKitId(value);
         }
@@ -594,7 +593,7 @@ public class ConfigureListener implements ServletContextListener {
         if ((values != null) && (values.length > 0)) {
             for (int i = 0, len = values.length; i < len; i++) {
                if (LOGGER.isLoggable(Level.FINER)) {
-                   LOGGER.finer("setActionListener(" + values[i] + ')');
+                   LOGGER.finer(MessageFormat.format("setActionListener({0})", values[i]));
                 }
                 Object instance = Util.createInstance
                     (values[i], ActionListener.class,
@@ -609,7 +608,7 @@ public class ConfigureListener implements ServletContextListener {
         if ((values != null) && (values.length > 0)) {
             for (int i = 0, len = values.length; i < len; i++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("setNavigationHandler(" + values[i] + ')');
+                    LOGGER.finer(MessageFormat.format("setNavigationHandler({0})", values[i]));
                 }
                 Object instance = Util.createInstance
                     (values[i], NavigationHandler.class,
@@ -631,7 +630,7 @@ public class ConfigureListener implements ServletContextListener {
             Object prevInChain = new DummyPropertyResolverImpl();            
             for (int i = 0, len = values.length; i < len; i++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("setPropertyResolver(" + values[i] + ')');
+                    LOGGER.finer(MessageFormat.format("setPropertyResolver({0}}", values[i]));
                 }
                 prevInChain = Util.createInstance(values[i],
                                                PropertyResolver.class, 
@@ -648,7 +647,7 @@ public class ConfigureListener implements ServletContextListener {
         if ((values != null) && (values.length > 0)) {
             for (int i = 0, len = values.length; i < len; i++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("setELResolver(" + values[i] + ')');
+                    LOGGER.finer(MessageFormat.format("setELResolver({0})", values[i]));
                 }
                 Object instance = Util.createInstance(values[i]);
                 if (elResolversFromFacesConfig == null) {
@@ -666,7 +665,7 @@ public class ConfigureListener implements ServletContextListener {
         if ((values != null) && (values.length > 0)) {
             for (int i = 0, len = values.length; i < len; i++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("setStateManager(" + values[i] + ')');
+                    LOGGER.finer(MessageFormat.format("setStateManager({0})", values[i]));
                 }
                 Object instance = Util.createInstance
                     (values[i], StateManager.class,
@@ -688,7 +687,7 @@ public class ConfigureListener implements ServletContextListener {
             Object prevInChain = new DummyVariableResolverImpl();
             for (int i = 0, len = values.length; i < len; i++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("setVariableResolver(" + values[i] + ')');
+                    LOGGER.finer(MessageFormat.format("setVariableResolver({0})", values[i]));
                 }
                 // If this is the first custom VariableResolver in the chain,
                 // make sure to pass the ChainAwareVariableResolver to its ctor.
@@ -714,7 +713,7 @@ public class ConfigureListener implements ServletContextListener {
         if ((values != null) && (values.length > 0)) {
             for (int i = 0, len = values.length; i < len; i++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("setViewHandler(" + values[i] + ')');
+                    LOGGER.finer(MessageFormat.format("setViewHandler({0})", values[i]));
                 }
                 Object instance = Util.createInstance
                     (values[i], ViewHandler.class,
@@ -746,9 +745,9 @@ public class ConfigureListener implements ServletContextListener {
 
         for (int i = 0, len = config.length; i < len; i++) {
             if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("addComponent(" +
-                          config[i].getComponentType() + ',' +
-                          config[i].getComponentClass() + ')');
+                LOGGER.finer(MessageFormat.format("addComponent(componentType={0},componentClass={1})",
+                                                  config[i].getComponentType(),
+                                                  config[i].getComponentClass()));
             }
             application.addComponent(config[i].getComponentType(),
                                      config[i].getComponentClass());
@@ -772,9 +771,9 @@ public class ConfigureListener implements ServletContextListener {
         // at a minimum, configure the primitive converters
         for (int i = 0, len = PRIM_CLASSES_TO_CONVERT.length; i < len; i++) {
             if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.finer("addConverterByClass(" +
-                          PRIM_CLASSES_TO_CONVERT[i] + ',' +
-                          CONVERTERS_FOR_PRIMS[i] + ')');
+                LOGGER.finer(MessageFormat.format("addConverterByClass(converterForClass={0},coverterClass={1})",
+                                                  PRIM_CLASSES_TO_CONVERT[i],
+                                                  CONVERTERS_FOR_PRIMS[i]));
             }
             application.addConverter(PRIM_CLASSES_TO_CONVERT[i],
                                      CONVERTERS_FOR_PRIMS[i]);
@@ -787,17 +786,17 @@ public class ConfigureListener implements ServletContextListener {
         for (int i = 0, len = config.length; i < len; i++) {
             if (config[i].getConverterId() != null) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("addConverterById(" +
-                              config[i].getConverterId() + ',' +
-                              config[i].getConverterClass() + ')');
+                    LOGGER.finer(MessageFormat.format("addConverterById(converterId={0},converterClass={1})",
+                                                      config[i].getConverterId(),
+                                                      config[i].getConverterClass()));
                 }
                 application.addConverter(config[i].getConverterId(),
                                          config[i].getConverterClass());
             } else {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("addConverterByClass(" +
-                              config[i].getConverterForClass() + ',' +
-                              config[i].getConverterClass() + ')');
+                    LOGGER.finer(MessageFormat.format("addConverterByClass(converterForClass={0},converterClass={1})",
+                                                      config[i].getConverterForClass(),
+                                                      config[i].getConverterClass()));
                 }                
                 application.addConverter(config[i].getConverterForClass(),
                                          config[i].getConverterClass());
@@ -824,7 +823,7 @@ public class ConfigureListener implements ServletContextListener {
         for (String value : config.getApplicationFactories()) {            
             if (value != null) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("setApplicationFactory(" + value + ')');
+                    LOGGER.finer(MessageFormat.format("setApplicationFactory({0})", value));
                 }
                 FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
                                          value);
@@ -834,7 +833,7 @@ public class ConfigureListener implements ServletContextListener {
         for (String value : config.getFacesContextFactories()) { 
             if (value != null) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("setFacesContextFactory(" + value + ')');
+                    LOGGER.finer(MessageFormat.format("setFacesContextFactory({0})", value));
                 }
                 FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
                                          value);
@@ -844,7 +843,7 @@ public class ConfigureListener implements ServletContextListener {
        for (String value : config.getLifecycleFactories()) { 
             if (value != null) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("setLifecycleFactory(" + value + ')');
+                    LOGGER.finer(MessageFormat.format("setLifecycleFactory({0})", value));
                 }
                 FactoryFinder.setFactory(FactoryFinder.LIFECYCLE_FACTORY,
                                          value);
@@ -854,7 +853,7 @@ public class ConfigureListener implements ServletContextListener {
        for (String value : config.getRenderKitFactories()) { 
             if (value != null) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("setRenderKitFactory(" + value + ')');
+                    LOGGER.finer(MessageFormat.format("setRenderKitFactory({0}{)", value));
                 }
                 FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
                                          value);
@@ -893,13 +892,13 @@ public class ConfigureListener implements ServletContextListener {
             }
             for (int i = 0, len = listeners.length; i < len; i++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("addPhaseListener(" + listeners[i] + ')');
+                    LOGGER.finer(MessageFormat.format("addPhaseListener({0})", listeners[i]));
                 }
                 try {
                     Class clazz = Util.loadClass(listeners[i], this);
                     lifecycle.addPhaseListener((PhaseListener) clazz.newInstance());
                 } catch (Exception e) {
-                    Object [] args = { "phase-listener: " + listeners[i] };
+                    Object [] args = {MessageFormat.format("phase-listener: {0}", listeners[i])};
                     String message =
                         MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
                     LOGGER.log(Level.SEVERE, message);
@@ -930,7 +929,7 @@ public class ConfigureListener implements ServletContextListener {
         value = config.getDefaultLocale();
         if (value != null) {
             if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.finer("setDefaultLocale(" + value + ')');
+                LOGGER.finer(MessageFormat.format("setDefaultLocale({0})", value));
             }
             application.setDefaultLocale
                 (Util.getLocaleFromString(value));
@@ -938,10 +937,10 @@ public class ConfigureListener implements ServletContextListener {
 
         values = config.getSupportedLocales();
         if ((values != null) && (values.length > 0)) {
-            List<Locale> locales = new ArrayList<Locale>();
+            List<Locale> locales = new ArrayList<Locale>(values.length);
             for (int i = 0, len = values.length; i < len; i++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("addSupportedLocale(" + values[i] + ')');
+                    LOGGER.finer(MessageFormat.format("addSupportedLocale({0})", values[i]));
                 }
                 locales.add(Util.getLocaleFromString(values[i]));
             }
@@ -967,9 +966,9 @@ public class ConfigureListener implements ServletContextListener {
 
         for (int i = 0, len = config.length; i < len; i++) {
             if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.finer("addManagedBean(" +
-                          config[i].getManagedBeanName() + ',' +
-                          config[i].getManagedBeanClass() + ')');
+                LOGGER.finer(MessageFormat.format("addManagedBean(managedBeanName={0},managedBeanClass={1})",
+                                                  config[i].getManagedBeanName(),
+                                                  config[i].getManagedBeanClass()));
             }
             ManagedBeanFactory mbf = new ManagedBeanFactoryImpl(config[i]);
             
@@ -1005,17 +1004,17 @@ public class ConfigureListener implements ServletContextListener {
 
         for (int i = 0, len = config.length; i < len; i++) {
             if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.finer("addNavigationRule(" +
-                          config[i].getFromViewId() + ')');
+                LOGGER.finer(MessageFormat.format("addNavigationRule({0})", config[i].getFromViewId()));
             }
             NavigationCaseBean[] ncb = config[i].getNavigationCases();
             for (int j = 0, len2 = ncb.length; j < len2; j++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("addNavigationCase(" +
-                              ncb[j].getFromAction() + ',' +
-                              ncb[j].getFromOutcome() + ',' +
-                              ncb[j].isRedirect() + ',' +
-                              ncb[j].getToViewId() + ')');
+                    LOGGER.finer(
+                         MessageFormat.format("addNavigationCase(fromAction={0},fromOutcome={1},isRedirect={2},toViewId={3})",
+                                              ncb[j].getFromAction(),
+                                              ncb[j].getFromOutcome(),
+                                              ncb[j].isRedirect(),
+                                              ncb[j].getToViewId()));
                 }
                 ConfigNavigationCase cnc = new ConfigNavigationCase();
                 if (config[i].getFromViewId() == null) {
@@ -1035,7 +1034,7 @@ public class ConfigureListener implements ServletContextListener {
                 }
                 cnc.setToViewId(ncb[j].getToViewId());                
                
-                cnc.setKey(cnc.getFromViewId() + fromAction + fromOutcome);
+                cnc.setKey(new StringBuilder(64).append(cnc.getFromViewId()).append(fromAction).append(fromOutcome).toString());
                 if (ncb[j].isRedirect()) {
                     cnc.setRedirect("true");
                 } else {
@@ -1066,10 +1065,11 @@ public class ConfigureListener implements ServletContextListener {
 
         for (int i = 0, len = config.length; i < len; i++) {
             if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.finer("addRenderer(" +
-                          config[i].getComponentFamily() + ',' +
-                          config[i].getRendererType() + ',' +
-                          config[i].getRendererClass() + ')');
+                LOGGER.finer(
+                     MessageFormat.format("addRenderer(family={0},rendererType={2},rendererClass={3})",
+                                          config[i].getComponentFamily(),
+                                          config[i].getRendererType(),
+                                          config[i].getRendererClass()));
             }
             try {
                 Renderer r = (Renderer)
@@ -1080,10 +1080,10 @@ public class ConfigureListener implements ServletContextListener {
                         r);
             }
             catch (Exception e) {
-                Object [] args = { "component-family: " + 
-                        config[i].getComponentFamily() + 
-                        " renderer-type: " + config[i].getRendererType() + 
-                        " renderer-class: " + config[i].getRendererClass() };
+                Object[] args = { MessageFormat.format("family={0},rendererType={2},rendererClass={3}",
+                                          config[i].getComponentFamily(),
+                                          config[i].getRendererType(),
+                                          config[i].getRendererClass()) };
                 String message = 
                         MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
                 LOGGER.log(Level.SEVERE, message);
@@ -1115,9 +1115,9 @@ public class ConfigureListener implements ServletContextListener {
                 (null, config[i].getRenderKitId());
             if (rk == null) {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("createRenderKit(" +
-                              config[i].getRenderKitId() + ',' +
-                              config[i].getRenderKitClass() + ')');
+                    LOGGER.finer(MessageFormat.format("createRenderKit(renderKitId={0},renderKitClass={2})",
+                                                      config[i].getRenderKitId(),
+                                                      config[i].getRenderKitClass()));
                 }
                 if (config[i].getRenderKitClass() == null) {
                     throw new IllegalArgumentException// PENDING - i18n
@@ -1130,9 +1130,9 @@ public class ConfigureListener implements ServletContextListener {
                             config[i].getRenderKitClass(), this).newInstance();
                     rkFactory.addRenderKit(config[i].getRenderKitId(), rk);
                 } catch (Exception e) {
-                    Object [] args = { "render-kit-id: " +
-                            config[i].getRenderKitId() +
-                            " render-kit-class: " + config[i].getRenderKitClass() };
+                    Object [] args = { MessageFormat.format("renderKitId={0},renderKitClass={2}",
+                                                      config[i].getRenderKitId(),
+                                                      config[i].getRenderKitClass()) };
                     String message =
                         MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
                     LOGGER.log(Level.SEVERE, message);
@@ -1141,8 +1141,7 @@ public class ConfigureListener implements ServletContextListener {
                 }
             } else {
                 if (LOGGER.isLoggable(Level.FINER)) {
-                    LOGGER.finer("getRenderKit(" +
-                              config[i].getRenderKitId() + ')');
+                    LOGGER.finer(MessageFormat.format("getRenderKit({0})", config[i].getRenderKitId()));
                 }
             }
             configure(config[i].getRenderers(), rk);
@@ -1170,9 +1169,10 @@ public class ConfigureListener implements ServletContextListener {
         for (int i = 0, len = config.length; i < len; i++) {
             if ((null == (baseName = config[i].getBasename())) ||
                 (null == (var = config[i].getVar()))) {
-                String message = "Application ResourceBundle: null base-name or var." +
-                              "base-name:" + baseName + 
-                              "var:" + config[i].getVar();
+                String message =
+                     MessageFormat.format("Application ResourceBundle: null base-name or var.base-name:{0}, var:{1}",
+                                          baseName,
+                                          config[i].getVar());
                 // PENDING(edburns): I18N all levels above info
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.finer(message);
@@ -1202,9 +1202,9 @@ public class ConfigureListener implements ServletContextListener {
 
         for (int i = 0, len = config.length; i < len; i++) {
             if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.finer("addValidator(" +
-                          config[i].getValidatorId() + ',' +
-                          config[i].getValidatorClass() + ')');
+                LOGGER.finer(MessageFormat.format("addValidator(validatorId={0},validatorClass={2})",
+                                                  config[i].getValidatorId(),
+                                                  config[i].getValidatorClass()));
             }
             application.addValidator(config[i].getValidatorId(),
                                      config[i].getValidatorClass());
@@ -1469,7 +1469,7 @@ public class ConfigureListener implements ServletContextListener {
     protected void parse(Digester digester, URL url, FacesConfigBean fcb) {
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("parse(" + url.toExternalForm() + ')');
+            LOGGER.fine(MessageFormat.format("parse({0})", url.toExternalForm()));
         }
 
         InputStream stream = null;
@@ -1507,10 +1507,7 @@ public class ConfigureListener implements ServletContextListener {
                      cn,
                      e.getMessage());
             } catch (Exception ee) {
-                message = "Can't parse configuration file: " 
-                          + url.toExternalForm() + ": Error at line "
-                          + ln + " column " + cn 
-                          + ": " + e.getMessage();
+                message = MessageFormat.format("Can''t parse configuration file: {0}: Error at line {1} column {2}: {3}", url.toExternalForm(), ln, cn, e.getMessage());
             }
             throw new FacesException(message);
         } finally {
@@ -1996,8 +1993,7 @@ public class ConfigureListener implements ServletContextListener {
                 // default to our previous behavior of processing the faces
                 // configuration.
                 if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.warning("Unable to process deployment descriptor for" +
-                        " context '" + context.getServletContextName() + '\'');
+                    LOGGER.warning(MessageFormat.format("Unable to process deployment descriptor for context ''{0}''", context.getServletContextName()));
                 }
                 facesServletPresent = true;
             }
@@ -2030,6 +2026,7 @@ public class ConfigureListener implements ServletContextListener {
                 "javax.faces.webapp.FacesServlet";
 
             private boolean servletClassFound;
+            @SuppressWarnings({"StringBufferField"})
             private StringBuffer content;
 
             public InputSource resolveEntity(String publicId, String systemId)
@@ -2047,6 +2044,7 @@ public class ConfigureListener implements ServletContextListener {
                 if (!facesServletPresent) {
                     if (SERVLET_CLASS.equals(localName)) {
                         servletClassFound = true;
+                        //noinspection StringBufferWithoutInitialCapacity
                         content = new StringBuffer();
                     } else {
                         servletClassFound = false;
