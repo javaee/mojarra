@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.7 2002/09/20 01:32:43 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.8 2002/09/21 18:43:22 craigmcc Exp $
  */
 
 /*
@@ -17,10 +17,18 @@ import javax.faces.context.FacesContext;
 /**
  * <p><strong>UISelectItem</strong> is a component that may be nested
  * inside a {@link UISelectMany} or {@link UISelectOne} component, and
- * causes the addition of a {@link SelectItem} instance, constructed based
- * on the values of the <code>itemValue</code>, <code>itemLabel</code>, and
- * <code>itemDescription</code> attributes, to the list of available options
- * for the parent component.</p>
+ * causes the addition of a {@link SelectItem} instance to the list of
+ * available options for the parent component.  The contents of the
+ * {@link SelectItem} can be specified in one of the following ways:</p>
+ * <ul>
+ * <li>The <code>value</code> attribute's value is an instance of
+ *     {@link SelectItem}.</li>
+ * <li>The <code>modelReference</code> attribute points at a model data
+ *     item of type {@link SelectItem}.</li>
+ * <li>A new {@link SelectItem} instance is synthesized from the values
+ *     of the <code>itemDescription</code>, <code>itemLabel</code>, and
+ *     <code>itemValue</code> attributes.</li>
+ * </ul>
  *
  * <p>This component has no decode or encode behavior of its own.</p>
  */
@@ -42,7 +50,7 @@ public class UISelectItem extends UIComponentBase {
 
     /**
      * <p>Return the item description for this component (if <code>value</code>
-     * is <code>null</code>).</p>
+     * and <code>modelReference</code> are <code>null</code>).</p>
      */
     public String getItemDescription() {
 
@@ -53,7 +61,7 @@ public class UISelectItem extends UIComponentBase {
 
     /**
      * <p>Set the item description for this component (if <code>value</code>
-     * is <code>null</code>).</p>
+     * and <code>modelReference</code> are <code>null</code>).</p>
      */
     public void setItemDescription(String itemDescription) {
 
@@ -64,7 +72,7 @@ public class UISelectItem extends UIComponentBase {
 
     /**
      * <p>Return the item label for this component (if <code>value</code>
-     * is <code>null</code>).</p>
+     * and <code>modelReference</code> are <code>null</code>).</p>
      */
     public String getItemLabel() {
 
@@ -75,7 +83,7 @@ public class UISelectItem extends UIComponentBase {
 
     /**
      * <p>Set the item label for this component (if <code>value</code>
-     * is <code>null</code>).</p>
+     * and <code>modelReference</code> are <code>null</code>).</p>
      */
     public void setItemLabel(String itemLabel) {
 
@@ -86,7 +94,7 @@ public class UISelectItem extends UIComponentBase {
 
     /**
      * <p>Return the item value for this component (if <code>value</code>
-     * is <code>null</code>).</p>
+     * and <code>modelReference</code> are <code>null</code>).</p>
      */
     public String getItemValue() {
 
@@ -97,7 +105,7 @@ public class UISelectItem extends UIComponentBase {
 
     /**
      * <p>Set the item value for this component (if <code>value</code>
-     * is <code>null</code>).</p>
+     * and <code>modelReference</code> are <code>null</code>).</p>
      */
     public void setItemValue(String itemValue) {
 
