@@ -55,6 +55,8 @@
   
   <property name="jsf-demo.home"    value="${basedir}/jsf-demo"/>
   
+  <property name="javaee.jar"    value="${tomcat.home}/lib/javaee.jar"/>
+  
   <property name="installer.home"    
       value="${tomcat.home}/../installer/"/>
   <property name="javanettasks.home"    
@@ -237,16 +239,17 @@
 
   <target name="glassfish.deploy" description="Replace JSF jars in a glassfish instance">
     <antcall target="clean.jsf.from.glassfish" />
-    <copy todir="${tomcat.home}/lib" 
-          file="${jsf-api.home}/build/lib/jsf-api.jar" />
+    
+    <jar jarfile="${javaee.jar}" update="yes" >
+        <zipfileset src="${jsf-api.home}/build/lib/jsf-api.jar"/>
+    </jar>
     <copy todir="${tomcat.home}/lib" 
           file="${jsf-ri.home}/build/lib/jsf-impl.jar" />
-
   </target>
 
   <target name="clean.jsf.from.glassfish">
     <delete>
-      <fileset dir="${j2ee.home}/lib" includes="jsf-*.jar"/>
+      <fileset dir="${tomcat.home}/lib" includes="jsf-*.jar"/>
    </delete>
   </target>
   
