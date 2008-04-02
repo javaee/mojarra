@@ -1,0 +1,11 @@
+<!--
+ Copyright 2002, 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<messages>
+  <message messageId="cardemo.CreditCardValidator.Invalid_Characters" severity="2" summary="le num&#233;ro de carte de cr&#233;dit est invalide">
+  	<detail>Le num&#233;ro de carte de cr&#233;dit ne permet que des caract&#232;res compris entre {0} et {1}</detail>
+  </message>
+</messages>
+

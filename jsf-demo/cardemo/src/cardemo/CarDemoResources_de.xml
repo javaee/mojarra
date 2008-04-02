@@ -1,0 +1,11 @@
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<messages>
+  <message messageId="cardemo.CreditCardValidator.Invalid_Characters" severity="2" summary="Invalid Credit Card Number(en deutch)">
+  	<detail>Credit Card can only accept characters between {0} and {1}(en deutch)</detail>
+  </message>
+</messages>
+

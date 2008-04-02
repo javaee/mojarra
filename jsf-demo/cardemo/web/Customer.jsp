@@ -1,8 +1,41 @@
 <!doctype html public "-//w3c//dtd html 4.0 transitional//en">
-
-<!--
- Copyright 2002 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ <!--
+  Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+  
+  Redistribution and use in source and binary forms, with or
+  without modification, are permitted provided that the following
+  conditions are met:
+  
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  
+  - Redistribution in binary form must reproduce the above
+    copyright notice, this list of conditions and the following
+    disclaimer in the documentation and/or other materials
+    provided with the distribution.
+  
+  Neither the name of Sun Microsystems, Inc. or the names of
+  contributors may be used to endorse or promote products derived
+  from this software without specific prior written permission.
+  
+  This software is provided "AS IS," without a warranty of any
+  kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+  WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+  EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+  DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+  RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+  ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+  FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+  SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+  CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+  THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+  BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  
+  You acknowledge that this software is not designed, licensed or
+  intended for use in the design, construction, operation or
+  maintenance of any nuclear facility.
+  
 -->
 
 <html>
@@ -31,31 +64,32 @@ align=BOTTOM></td>
 </table>
 
 <p>
-<FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">Please fill in your name and address.</FONT>
+
+<h:output_text 	id="customerTitle" key="customerTitle" bundle="carDemoBundle" /></FONT>
 <FONT FACE="Arial, Helvetica">     
 <table cellpadding="2" cellspacing="2" border="0">
   <tbody>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	
-                                value="Title"
-				key="titleLabel"
-				 /><br>
+      <h:output_text  key="titleLabel" bundle="carDemoBundle" /><br>
+
+
+
       </td>
       <td valign="top">
-      <h:selectone_menu >
-		<h:selectitem  itemValue="mr" itemLabel="Mr." selected="true"/>
-		<h:selectitem  itemValue="mrs" itemLabel="Mrs."/>
-		<h:selectitem  itemValue="ms" itemLabel="Ms."/>
+      <h:selectone_menu id="title">
+		<h:selectitem  itemValue="mr" modelReference="CustomerBean.mr" selected="true"/>
+		<h:selectitem  itemValue="mrs" modelReference="CustomerBean.mrs" />
+		<h:selectitem  itemValue="ms" modelReference="CustomerBean.ms" />
     </h:selectone_menu><br>
       </td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	
-                                value="First Name"
-				key="firstLabel"
-				 /><br>
+      <h:output_text 	key="firstLabel" bundle="carDemoBundle" /><br>
+
+
+
       </td>
       <td valign="top">
       <h:input_text  modelReference="CustomerBean.firstName" > 
@@ -64,10 +98,10 @@ align=BOTTOM></td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	 	
-                                value="Middle Initial"
-    				key="middleLabel"
-				/><br>
+      <h:output_text 	key="middleLabel" bundle="carDemoBundle" /><br>
+
+
+
       </td>
       <td valign="top">
         <h:input_text id="middleInitial" size="1" maxlength="1" 
@@ -80,10 +114,10 @@ align=BOTTOM></td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	 	
-                                value="Last Name"
-    				key="lastLabel"
-				 /><br>
+      <h:output_text 	key="lastLabel" bundle="carDemoBundle" /><br>
+
+
+
       </td>
       <td valign="top">
       <h:input_text  modelReference="CustomerBean.lastName" >
@@ -92,9 +126,9 @@ align=BOTTOM></td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	  	
-                        value="Mailing Address"
-       			key="mailingLabel" /><br>
+      <h:output_text 	 key="mailingLabel" bundle="carDemoBundle"/><br>
+
+
       </td>
       <td valign="top">
       <h:input_text  modelReference="CustomerBean.mailingAddress" /><br>
@@ -102,9 +136,9 @@ align=BOTTOM></td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	 	
-                        value="City"
-    			key="cityLabel" /><br>
+      <h:output_text 	 key="cityLabel" bundle="carDemoBundle" /><br>
+
+
       </td>
       <td valign="top">
       <h:input_text  modelReference="CustomerBean.city" /><br>
@@ -112,9 +146,9 @@ align=BOTTOM></td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	  	
-                                value="State"
-    				key="stateLabel" /><br>
+      <h:output_text 	key="stateLabel" bundle="carDemoBundle" /><br>
+
+
       </td>
       <td valign="top">
       <h:selectone_menu  modelReference="CustomerBean.state" >
@@ -178,9 +212,9 @@ align=BOTTOM></td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	 	
-                                value="Zip"
-       				key="zipLabel" /><br>
+      <h:output_text  key="zipLabel" bundle="carDemoBundle" /><br>
+
+
       </td>
       <td valign="top">
       <h:input_number id="zip"  formatPattern="#####"
@@ -195,9 +229,9 @@ align=BOTTOM></td>
     <tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	
-                                value="Credit Card Number"
-       				key="ccNumberLabel" /> <br>
+      <h:output_text  key="ccNumberLabel" bundle="carDemoBundle" /><br>
+
+
       </td>
       <td valign="top">
       <h:input_text id="ccno" modelReference="CustomerBean.month" size="16"
@@ -212,10 +246,10 @@ align=BOTTOM></td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	 	
-                                value="Expiry Date"
-       				key="monthLabel"
-				 /><br>
+      <h:output_text  key="monthLabel" bundle="carDemoBundle" /><br>
+
+
+
       </td>
       <td valign="top"><h:selectone_menu  modelReference="CustomerBean.month">
         <h:selectitem itemValue="01" itemLabel="01"/>
@@ -247,14 +281,14 @@ align=BOTTOM></td>
 </table>
 </FONT>
     
-<h:command_button  label="Finish"
- 				     key="finishButton"
-				     commandName="finish"/>
+<h:command_button  key="finishButton" bundle="carDemoBundle" commandName="finish"/>
+
+
 
 <hr WIDTH="100%">
 <p>
-<h:graphic_image  url="/duke.gif" /> Thanks
-for stopping by.
+<h:graphic_image id="duke" url="/duke.gif" /><br>
+<h:output_text  key="buyLabel" bundle="carDemoBundle" />
 <br>
 </h:form>
 </f:use_faces>

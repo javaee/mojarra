@@ -1,10 +1,44 @@
 /*
- * $Id: CurrentOptionServer.java,v 1.1 2002/11/02 01:34:59 jball Exp $
+ * $Id: CurrentOptionServer.java,v 1.2 2003/02/05 00:45:23 jenball Exp $
  */
-
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or
+ * without modification, are permitted provided that the following
+ * conditions are met:
+ * 
+ * - Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ * 
+ * - Redistribution in binary form must reproduce the above
+ *   copyright notice, this list of conditions and the following
+ *   disclaimer in the documentation and/or other materials
+ *   provided with the distribution.
+ * 
+ * Neither the name of Sun Microsystems, Inc. or the names of
+ * contributors may be used to endorse or promote products derived
+ * from this software without specific prior written permission.
+ * 
+ * This software is provided "AS IS," without a warranty of any
+ * kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+ * WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+ * EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+ * DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+ * RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+ * ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+ * FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+ * SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+ * CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+ * THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+ * BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+ * 
+ * You acknowledge that this software is not designed, licensed or
+ * intended for use in the design, construction, operation or
+ * maintenance of any nuclear facility.
+ * 
  */
 
 package cardemo;
@@ -17,6 +51,7 @@ import java.util.PropertyResourceBundle;
 import java.util.Properties;
 
 import javax.faces.component.SelectItem;
+import javax.faces.context.FacesContext;
 
 import java.io.*;
 
@@ -32,33 +67,33 @@ public class CurrentOptionServer extends Object {
     protected String engines[] = {
         "V4", "V6", "V8"
     };
-    protected String brakes[] = {
-        "disk", "drum"
-    };
-    protected String suspensions[] = {
-        "regular", "performance"
-    };
-    protected String speakers[] = {
-        "4", "6"
-    };
-    protected String audio[] = {
-        "standard", "premium"
-    };
-    protected String transmissions[] = {
-        "auto", "manual"
-    };
+
+    protected String brakes[] = null;
+    protected String suspensions[] = null;
+    protected String speakers[] = { "4", "6"} ;
+    protected String audio[] = null;
+    protected String transmissions[] = null;
+
+
+
+
+
+
+
+
+
     protected ArrayList engineOption;
     protected Object currentEngineOption = engines[0];
     protected ArrayList brakeOption;
-    protected Object currentBrakeOption = brakes[0];
+    protected Object currentBrakeOption = null;
     protected ArrayList suspensionOption;
-    protected Object currentSuspensionOption = suspensions[0];
+    protected Object currentSuspensionOption = null;
     protected ArrayList speakerOption;
     protected Object currentSpeakerOption = speakers[0];
     protected ArrayList audioOption;
-    protected Object currentAudioOption = audio[0];
+    protected Object currentAudioOption = null;
     protected ArrayList transmissionOption;
-    protected Object currentTransmissionOption = transmissions[0];
+    protected Object currentTransmissionOption = null;
     protected boolean sunRoof = false;
     protected boolean cruiseControl = false;
     protected boolean keylessEntry = false;
@@ -72,8 +107,33 @@ public class CurrentOptionServer extends Object {
     public CurrentOptionServer() {
         super();
         
-        System.out.println("CurrentOptionServer created");
+        loadOptions();
         
+    }
+    
+    public void loadOptions() {
+       ResourceBundle rb = ResourceBundle.getBundle("cardemo/Resources", (FacesContext.getCurrentInstance().getLocale()));
+       brakes = new String[2];
+       brakes[0] = (String)rb.getObject("Disc");
+       brakes[1] = (String)rb.getObject("Drum");
+
+       suspensions = new String[2];
+       suspensions[0] = (String)rb.getObject("Regular");
+       suspensions[1] = (String)rb.getObject("Performance");
+   
+       audio = new String[2];
+       audio[0] = (String)rb.getObject("Standard");
+       audio[1] = (String)rb.getObject("Premium");
+
+       transmissions = new String[2];
+       transmissions[0] = (String)rb.getObject("Auto");
+       transmissions[1] = (String)rb.getObject("Manual");
+
+        currentBrakeOption = brakes[0];
+        currentSuspensionOption = suspensions[0];
+        currentAudioOption = audio[0];
+        currentTransmissionOption = transmissions[0];
+
         engineOption = new ArrayList(engines.length);
         brakeOption = new ArrayList(brakes.length);       
         suspensionOption = new ArrayList(suspensions.length);        
@@ -91,6 +151,7 @@ public class CurrentOptionServer extends Object {
         }        
         for (i = 0; i < suspensions.length; i++) {
             suspensionOption.add(new SelectItem(suspensions[i], suspensions[i], suspensions[i]));
+
         }        
         for (i = 0; i < speakers.length; i++) {
             speakerOption.add(new SelectItem(speakers[i], speakers[i], speakers[i]));
@@ -100,89 +161,87 @@ public class CurrentOptionServer extends Object {
         }        
         for (i = 0; i < transmissions.length; i++) {
             transmissionOption.add(new SelectItem(transmissions[i], transmissions[i], transmissions[i]));
-        }        
-        
+        } 
+	       
     }
-    
-    
+ 
     public void setCarId(int id) {
         
         try {            
-            System.out.println("SetCarId called on id = " + id);            
-            Properties carProps = new Properties();            
-            InputStream in;
-            
+     
+	    ResourceBundle rb;            
+                      
             // reload all properties based on car Id
             switch (id) {
                 
                 case 1:
                     // load car 1 data
-                    String optionsOne = "cardemo/CarOptions1.properties";
-       		    try {
-       		       in = this.getClass().getClassLoader().getResourceAsStream(optionsOne);
-        	    } catch (Throwable t) {
-        	       throw new RuntimeException("Error Opening File:"+optionsOne);
-	            }
-		    carProps.load(in);
-                    setCarImage("/200x168_Jalopy.jpg");
+		   
+                    String optionsOne = "cardemo/CarOptions1";
+       		    rb = ResourceBundle.getBundle(optionsOne, (FacesContext.getCurrentInstance().getLocale()));
+	            setCarImage("/200x168_Jalopy.jpg");
+
+
+
                     break;
                     
                 case 2:
                     // load car 2 data
-                    String optionsTwo = "cardemo/CarOptions2.properties";
-       		    try {
-       		       in = this.getClass().getClassLoader().getResourceAsStream(optionsTwo);
-        	    } catch (Throwable t) {
-        	       throw new RuntimeException("Error Opening File:"+optionsTwo);
-	            }
-		    carProps.load(in);
+                    String optionsTwo = "cardemo/CarOptions2";
+       		    rb = ResourceBundle.getBundle(optionsTwo, (FacesContext.getCurrentInstance().getLocale()));
+
+
+
+
+
                     setCarImage("/200x168_Roadster.jpg");
                     break;
                     
                 case 3:
                     // load car 3 data
-                    String optionsThree = "cardemo/CarOptions3.properties";
-       		    try {
-       		       in = this.getClass().getClassLoader().getResourceAsStream(optionsThree);
-        	    } catch (Throwable t) {
-        	       throw new RuntimeException("Error Opening File:"+optionsThree);
-	            }
-		    carProps.load(in);
+                    String optionsThree = "cardemo/CarOptions3";
+       		    rb = ResourceBundle.getBundle(optionsThree, (FacesContext.getCurrentInstance().getLocale()));
+
+
+
+
+
                     setCarImage("/200x168_Luxury.jpg");
                     break;
                                         
                 case 4:
                     // load car 4 data
-                    String optionsFour = "cardemo/CarOptions4.properties";
-       		    try {
-       		       in = this.getClass().getClassLoader().getResourceAsStream(optionsFour);
-        	    } catch (Throwable t) {
-        	       throw new RuntimeException("Error Opening File:"+optionsFour);
-	            }
-		    carProps.load(in);
+                    String optionsFour = "cardemo/CarOptions4";
+       		    rb = ResourceBundle.getBundle(optionsFour, (FacesContext.getCurrentInstance().getLocale()));
+
+
+
+
+
                     setCarImage("/200x168_SUV.jpg");
                     break;
                                         
 
                    default:
                     // this should never happen
-                    optionsOne = "cardemo/CarOptions1.properties";
-       		    try {
-       		       in = this.getClass().getClassLoader().getResourceAsStream(optionsOne);
-        	    } catch (Throwable t) {
-        	       throw new RuntimeException("Error Opening File:"+optionsOne);
-	            }
-                    carProps.load(in);
+                    optionsOne = "cardemo/CarOptions1";
+       		    rb = ResourceBundle.getBundle(optionsOne, (FacesContext.getCurrentInstance().getLocale()));
+
+
+
+
+
                     break;
             }
             
             // load this bean's properties with properties from currentBundle
-            this.setCarTitle((String)carProps.getProperty("CarTitle"));
-            this.setCarDesc((String)carProps.getProperty("CarDesc"));
-            this.setCarBasePrice((String)carProps.getProperty("CarBasePrice"));
-            this.setCarCurrentPrice((String)carProps.getProperty("CarCurrentPrice"));
-            
-            
+	    
+            this.setCarTitle((String)rb.getObject("CarTitle"));
+            this.setCarDesc((String)rb.getObject("CarDesc"));
+            this.setCarBasePrice((String)rb.getObject("CarBasePrice"));
+            this.setCarCurrentPrice((String)rb.getObject("CarCurrentPrice"));
+            loadOptions();
+	                
         } catch (Exception exc) {
             System.out.println("Exception in CurrentOptionServer: " + exc.toString());
         }

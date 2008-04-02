@@ -206,7 +206,7 @@
       </fileset>
     </copy>
     <copy todir="${build}/WEB-INF/classes/${example}" >
-      <fileset dir="web" >
+      <fileset dir="src/cardemo" >
          <include name="*properties"/>
       </fileset>
       <fileset dir="src/${example}" >

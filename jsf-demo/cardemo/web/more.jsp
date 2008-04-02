@@ -1,8 +1,42 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 
-<!--
- Copyright 2002 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ <!--
+  Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+  
+  Redistribution and use in source and binary forms, with or
+  without modification, are permitted provided that the following
+  conditions are met:
+  
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  
+  - Redistribution in binary form must reproduce the above
+    copyright notice, this list of conditions and the following
+    disclaimer in the documentation and/or other materials
+    provided with the distribution.
+  
+  Neither the name of Sun Microsystems, Inc. or the names of
+  contributors may be used to endorse or promote products derived
+  from this software without specific prior written permission.
+  
+  This software is provided "AS IS," without a warranty of any
+  kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+  WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+  EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+  DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+  RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+  ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+  FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+  SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+  CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+  THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+  BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  
+  You acknowledge that this software is not designed, licensed or
+  intended for use in the design, construction, operation or
+  maintenance of any nuclear facility.
+  
 -->
 
 <HTML>
@@ -14,6 +48,11 @@
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
+
+     <fmt:setBundle
+	    basename="cardemo.Resources"
+	    scope="session" var="carDemoBundle"/>
 
 <BODY BGCOLOR="white">
 
@@ -40,37 +79,36 @@
             <B> <FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text  
                 modelReference="CurrentOptionServer.carTitle" 
-                key="carDetailsLabel" />
+                 />
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
             <h:output_text  
-                modelReference="CurrentOptionServer.carDesc" 
-                key="curCarDescLabel" /> 
+                modelReference="CurrentOptionServer.carDesc" />
             <BR> <BR>
             </FONT><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-            <h:output_text  value="Base Price" 
-                key="basePriceLabel"/>
+            <h:output_text key="basePriceLabel" bundle="carDemoBundle" />
+
             </FONT></B><FONT FACE="Arial, Helvetica"> 
             <h:output_text   
-                modelReference="CurrentOptionServer.carBasePrice"
-                key="currentCarBasePriceLabel"/>
+                modelReference="CurrentOptionServer.carBasePrice" />
+
             <BR> </FONT><B>
             <FONT COLOR="#93B629" FACE="Arial, Helvetica">
-            <h:output_text   key="yourPriceLabel"
-                value="Your Price" />
+            <h:output_text key="yourPriceLabel" bundle="carDemoBundle" />
+
             </FONT></B>
             <FONT FACE="Arial, Helvetica">
             <h:output_text   
-                modelReference="CurrentOptionServer.carCurrentPrice"
-                key="currentCarPriceLabel"/>
+                modelReference="CurrentOptionServer.carCurrentPrice" />
+
             <BR> <BR>
-            <h:command_button  commandName="buy" label="Buy" />
+            <h:command_button commandName="buy" key="buy" bundle="carDemoBundle" />
             <BR> <BR>
             </TD></FONT></TD>
         </TR>
         <TR>
             <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text   value="Options and Packages" />
+            <h:output_text key="OptionsPackages" bundle="carDemoBundle" />
             </FONT></B></TD>
         </TR>
         <TR>
@@ -101,7 +139,7 @@
             <TABLE>
             <TR>
                 <TD><P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text  key="Engine" value="Engine" />
+                <h:output_text key="Engine" bundle="carDemoBundle" />
                 </FONT></B></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
                 <h:selectone_menu  
@@ -112,7 +150,7 @@
                 </FONT></P></BLOCKQUOTE>
                 </TD>
                 <TD><P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                 <h:output_text   value="Brakes"key="Brakes"  />
+                 <h:output_text key="Brakes" bundle="carDemoBundle"  />
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
@@ -127,8 +165,8 @@
             <TR>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text  key="Suspension" 
-                    value="Suspension" />
+                <h:output_text key="Suspension" bundle="carDemoBundle" />
+
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
@@ -141,7 +179,8 @@
                 </TD>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text  key="Speakers" value="Speakers" />
+                <h:output_text key="Speakers" bundle="carDemoBundle" />
+
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
@@ -156,7 +195,7 @@
             <TR>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text  key="Audio" value="Audio" />
+                <h:output_text key="Audio" bundle="carDemoBundle" />
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
@@ -170,8 +209,8 @@
                 </TD>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text  key="Transmission" 
-                    value="Transmission" />
+                <h:output_text key="Transmission" bundle="carDemoBundle" />
+
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
@@ -186,8 +225,8 @@
             <TR>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text  key="OtherOptions" 
-                    value="Other Options" />
+                <h:output_text key="OtherOptions" bundle="carDemoBundle" />
+
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE> </FONT></P> 
@@ -200,67 +239,67 @@
             <TR>
                 <TD> 
                 <h:selectboolean_checkbox id="sunroof" title="Sunroof" 
-                    alt="Sunroof" modelReference="CurrentOptionServer.sunRoof"
-                    key="sunroofLabel" />
+                    alt="Sunroof" modelReference="CurrentOptionServer.sunRoof"/>
+
                 </TD>																		
                 <TD>
-                <h:output_label  for="sunRoof" > Sun Roof</h:output_label> 
+                <h:output_text key="sunroofLabel" bundle="carDemoBundle" /> 
                 </TD> 
                 <TD>
                 <h:selectboolean_checkbox id="cruisecontrol" 
                     title="Cruise Control"  
-                    modelReference="CurrentOptionServer.cruiseControl"
-                    key="cruiseLabel" />
+                    modelReference="CurrentOptionServer.cruiseControl" />
+
                 </TD>
                 <TD>
-                <h:output_label  for="cruiseControl" > Cruise Control</h:output_label> 
+                <h:output_text key="cruiseLabel" bundle="carDemoBundle" /> 
                 </TD>
                 <TD>
                 <h:selectboolean_checkbox id="keylessentry" 
                     title="Keyless Entry"  alt="Keyless Entry"
-                    modelReference="CurrentOptionServer.keylessEntry"
-                    key="keylessLabel" />
+                    modelReference="CurrentOptionServer.keylessEntry" />
+
                 </TD>
                 <TD>
-                <h:output_label  for="keylessEntry" > Keyless Entry</h:output_label> 
+                <h:output_text key="keylessLabel" bundle="carDemoBundle" /> 
                 </TD>
             </TR>
             <TR>
                 <TD> 
-                <h:selectboolean_checkbox id="securitySystem" 
+                <h:selectboolean_checkbox id="securitySystem"
                     title="Security System"  alt="Security System"
-                    modelReference="CurrentOptionServer.securitySystem"
-                    key="securityLabel" />
+                    modelReference="CurrentOptionServer.securitySystem" />
+
                 </TD>
                 <TD>
-                <h:output_label  for="securitySystem" > Security System</h:output_label> 
+                <h:output_text key="securityLabel" bundle="carDemoBundle" />  
                 </TD>
                 <TD>
                 <h:selectboolean_checkbox id="skirack" title="Ski Rack"  
                     alt="Ski Rack" modelReference="CurrentOptionServer.skiRack"
-                    key="skiRackLabel" />
+                     />
                 </TD>
                 <TD>
-                <h:output_label  for="skiRack" >Ski Rack</h:output_label> 
+                <h:output_text key="skiRackLabel" bundle="carDemoBundle" /> 
                 </TD>
                 <TD>
                 <h:selectboolean_checkbox id="towPackage" title="Tow Package"  
                     alt="Tow Package" 
-                    modelReference="CurrentOptionServer.towPackage"
-                    key="towPkgLabel" />
+                    modelReference="CurrentOptionServer.towPackage" />
+
                 </TD>
                 <TD>
-                <h:output_label  for="towPackage" >Tow Package</h:output_label> 
+                <h:output_text key="towPkgLabel" bundle="carDemoBundle" /> 
                 </TD>
             </TR>
             <TR>
                 <TD>
                 <h:selectboolean_checkbox id="gps" title="GPS" alt="GPS"
-                    modelReference="CurrentOptionServer.gps" key="gpsLabel" />
+                    modelReference="CurrentOptionServer.gps"  />
                 </FONT> 
                 </TD>
                 <TD>
-                <h:output_label  for="gps" >GPS</h:output_label> 
+                <h:output_text key="gpsLabel" bundle="carDemoBundle" /> 
                 </TD>
             </TR>
             </TABLE>
@@ -271,8 +310,8 @@
                 </TD>
                 <TD>
                 <P>
-                <h:command_button  label="Buy" key="buy"
-                    commandName="buy"/>
+                <h:command_button id="buy2" key="buy" bundle="carDemoBundle" commandName="buy"/>
+
                 </TD>
             </TR>
             </TABLE>

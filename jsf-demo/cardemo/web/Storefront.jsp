@@ -1,6 +1,40 @@
-<!--
- Copyright 2002 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ <!--
+  Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+  
+  Redistribution and use in source and binary forms, with or
+  without modification, are permitted provided that the following
+  conditions are met:
+  
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  
+  - Redistribution in binary form must reproduce the above
+    copyright notice, this list of conditions and the following
+    disclaimer in the documentation and/or other materials
+    provided with the distribution.
+  
+  Neither the name of Sun Microsystems, Inc. or the names of
+  contributors may be used to endorse or promote products derived
+  from this software without specific prior written permission.
+  
+  This software is provided "AS IS," without a warranty of any
+  kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+  WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+  EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+  DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+  RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+  ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+  FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+  SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+  CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+  THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+  BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  
+  You acknowledge that this software is not designed, licensed or
+  intended for use in the design, construction, operation or
+  maintenance of any nuclear facility.
+  
 -->
 
 <HTML>
@@ -12,17 +46,18 @@
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+    <%@ taglib uri="/WEB-INF/imageMap.tld" prefix="imageMap" %>
 
 <BODY BGCOLOR="white">
 
        <fmt:setBundle
-	    basename="carDemo.Resources"
+	    basename="cardemo.Resources"
 	    scope="session" var="carDemoBundle"/>
-	<jsp:useBean id="CarServer" class="cardemo.CarServer" scope="session" />
-	<jsp:useBean id="CurrentOptionServer" class="cardemo.CurrentOptionServer" scope="session" >
-            <jsp:setProperty name="CurrentOptionServer" property="carImage" 
+
+        <jsp:useBean id="CurrentOptionServer" class="cardemo.CurrentOptionServer" scope="session" >
+            <jsp:setProperty name="CurrentOptionServer" property="carImage"
                 value="current.gif"/>
-	</jsp:useBean>
+        </jsp:useBean>
 
 <f:use_faces>  
 
@@ -42,26 +77,26 @@
             <TD WIDTH="50%" VALIGN="TOP">
             <h:graphic_image  url="/150x126_Jalopy.jpg" />
             <B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text  modelReference="CarServer.car1Title"
-                key="car1title" /> 
+            <h:output_text key="car1Title" bundle="carDemoBundle" /> 
+
             </FONT></B><FONT FACE="Arial, Helvetica"><BR><BR>
-            <h:output_text  modelReference="CarServer.car1Desc"	                key="car1Desc" /> 
+            <h:output_text  key="car1Desc" bundle="carDemoBundle"  /> 
             <BR></FONT>
-            <h:command_button  label="More" key="moreButton"
-                commandName="more1"/>
+            <h:command_button label="More" key="moreButton"
+                 bundle="carDemoBundle" commandName="more1"/>
             </TD>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
             <h:graphic_image  url="/150x126_Roadster.jpg" />
             <B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text  modelReference="CarServer.car2Title" 
-                key="car2Title"/>
+            <h:output_text  key="car2Title" bundle="carDemoBundle" />
+
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
-            <h:output_text  modelReference="CarServer.car2Desc" 
-                key="car2Desc"/>
+            <h:output_text  key="car2Desc" bundle="carDemoBundle" />
+
             <BR>
             <h:command_button  label="More" key="moreButton"
-                commandName="more2"/>
+                 bundle="carDemoBundle" commandName="more2"/>
             </TD>
         </TR>
         <TR>
@@ -72,33 +107,43 @@
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
             <h:graphic_image  url="/150x126_Luxury.jpg" />
             <B> <FONT SIZE="4" COLOR="#330066"FACE="Arial, Helvetica">
-            <h:output_text  modelReference="CarServer.car3Title" 
-                key="car3Title" />
+            <h:output_text  key="car3Title" bundle="carDemoBundle"  />
+
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
-            <h:output_text  modelReference="CarServer.car3Desc" 
-                key="car3Desc" />
+            <h:output_text  key="car3Desc" bundle="carDemoBundle"  />
+
             <BR>
-            <h:command_button  label="More" key="moreButton"
-                commandName="more3"/>
+            <h:command_button label="More" key="moreButton"
+                 bundle="carDemoBundle" commandName="more3"/>
             </TD>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
             <h:graphic_image  url="/150x126_SUV.jpg" />
             <B> <FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text  modelReference="CarServer.car4Title"
-                key="car4Title" />
+            <h:output_text  key="car4Title" bundle="carDemoBundle"  />
+
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
-            <h:output_text  modelReference="CarServer.car4Desc" 
-                key="car4Desc" /> 
+            <h:output_text key="car4Desc" bundle="carDemoBundle"  /> 
+
             <BR>
-            <h:command_button  label="More" key="moreButton"
-                commandName="more4"/>
+            <h:command_button  key="moreButton"
+                 bundle="carDemoBundle" commandName="more4"/>
             </TD>
         </TR>
         </TABLE>
         </TD>
     </TR>
+     <TR> <TD><font color="#FFFFFF"><h:output_text id="chooseLocale" key="chooseLocale" bundle="carDemoBundle" /></font><br>
+          <imageMap:image id="mapImage" url="/world.gif" usemap="#worldMap" />
+                <imageMap:map id="worldMap" currentArea="NAmericas" >
+                    <f:action_listener type="cardemo.ImageMapEventHandler"/> 
+                        <imageMap:area id="NAmericas" modelReference="NA" onmouseover="/cardemo/world_namer.gif" onmouseout="/cardemo/world.gif" />
+                        <imageMap:area id="SAmericas" modelReference="SA" onmouseover="/cardemo/world_samer.gif" onmouseout="/cardemo/world.gif" />
+                        <imageMap:area id="Germany" modelReference="gerA" onmouseover="/cardemo/world_germany.gif" onmouseout="/cardemo/world.gif" />
+                        <imageMap:area id="France" modelReference="fraA" onmouseover="/cardemo/world_france.gif" onmouseout="/cardemo/world.gif" />
+                </imageMap:map>
+     </TD> </TR>
     </TABLE>
     </TD>
 </TR>
