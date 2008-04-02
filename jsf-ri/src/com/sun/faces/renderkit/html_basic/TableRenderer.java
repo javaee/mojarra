@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.11 2004/01/06 19:41:51 eburns Exp $
+ * $Id: TableRenderer.java,v 1.12 2004/01/07 20:21:39 eburns Exp $
  */
 
 /*
@@ -284,7 +284,6 @@ public class TableRenderer extends HtmlBasicRenderer {
             writer.startElement("tr", footer);
             writer.startElement("td", footer);
             writer.writeAttribute("colspan", "" + getColumnCount(data), null);
-	    writer.write("\"");
 	    if (footerClass != null) {
                 writer.writeAttribute("class", footerClass, "footerClass");
 	    }

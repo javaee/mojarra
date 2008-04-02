@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.71 2004/01/06 14:53:20 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.72 2004/01/07 20:21:38 eburns Exp $
  */
 
 /*
@@ -458,8 +458,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
             if (kid instanceof UIParameter) {
                 UIParameter uiParam = (UIParameter) kid;
-                Param param = new Param(uiParam.getName(),
-                    ((String)uiParam.getValue()));
+		Object value = uiParam.getValue();
+		Param param = new Param(uiParam.getName(),
+					(value == null ? null : 
+					 value.toString()));
                 parameterList.add(param);
             }
 	}

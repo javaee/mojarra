@@ -1,5 +1,5 @@
 /*
- * $Id: Command_LinkTag.java,v 1.5 2003/12/17 15:14:09 rkitain Exp $
+ * $Id: Command_LinkTag.java,v 1.6 2004/01/07 20:21:42 eburns Exp $
  */
 
 /*
@@ -128,7 +128,7 @@ public class Command_LinkTag extends BaseComponentBodyTag
 				     Util.getValueBinding(immediate));
 	    }
 	    else {
-		link.setImmediate(Boolean.getBoolean(immediate));
+		link.setImmediate((new Boolean(immediate)).booleanValue());
 	    }
 	}
         // set HTML 4. attributes.
