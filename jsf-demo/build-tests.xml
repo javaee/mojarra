@@ -45,6 +45,7 @@
     <property name="url" value="http://${host}:${port}/manager"/>
     <property name="guessNumber.context.path" value="/jsf-guessNumber"/>
     <property name="components.context.path" value="/jsf-components"/>
+    <property name="cardemo.context.path" value="/jsf-cardemo"/>
     <property name="mapping-extension.context.path" value="/jsf-mappingDemo-extension"/>
     <property name="mapping-prefix.context.path" value="/jsf-mappingDemo-prefix"/>
     <!-- Default value for debugging arguments is no.  Override in
@@ -54,6 +55,7 @@
     <!-- Demo WAR files -->
     <property name="components.war" value="${basedir}/components/build/jsf-components.war"/>
     <property name="guessNumber.war" value="${basedir}/guessNumber/build/jsf-guessNumber.war"/>        
+    <property name="cardemo.war" value="${basedir}/carstore/build/jsf-cardemo.war"/>        
     <property name="mapping-extension.war" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-extension.war"/>        
     <property name="mapping-prefix.war" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-prefix.war"/>        
 
@@ -69,6 +71,12 @@
         <pathelement location="${build}/classes"/>
     </path>
 
+    <path id="run.classpath">
+      <path refid="classpath"/>
+      <!-- Include this to have access to the ResourceBundles for carstore -->
+      <pathelement location="${basedir}/carstore/src" />
+    </path>
+
     <path id="catalina-ant.classpath">
         <pathelement location="${catalina-ant.jar}"/>
     </path>   
@@ -81,7 +89,7 @@
         <uptodate property="skip.build"
             targetfile="${build}/last-build">
             <srcfiles dir="${basedir}">
-                <include name="test/src/**/*.*"/>               
+                <include name="test/**/*.*"/>               
             </srcfiles>
         </uptodate>
     </target>
@@ -175,7 +183,7 @@
 
     <target name="run.tests">
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes">
-            <classpath refid="classpath"/>
+            <classpath refid="run.classpath"/>
             <formatter type="plain" usefile="false"/>
             <jvmarg line="${debug.jvm.args}"/>
             <jvmarg value="-Dhost=${host}"/>
@@ -242,6 +250,7 @@
             description="Runs all of available demo unit tests">
 <!--        <antcall target="run.mapping-extension.tests"/>   
             <antcall target="run.mapping-prefix.tests"/>    -->
+        <antcall target="run.cardemo.tests"/>    
         <antcall target="run.guessNumber.tests"/>    
         <antcall target="run.components.tests"/>    
     </target>
@@ -271,6 +280,20 @@
             <param name="demo.name" value="mappingTest"/>                        
         </antcall> 
         <touch file="${build}/mapping-prefix.last-testrun"/>
+    </target>
+
+    <!-- Unit test configuration for cardemo -->            
+    <target name="run.cardemo.tests" depends="build">
+        <uptodate property="skip.deploy"
+            targetfile="${build}/cardemo.last-testrun"
+            srcfile="${cardemo.war}"/>    
+        
+        <antcall target="test.invoker">
+            <param name="context.path" value="${cardemo.context.path}"/>
+            <param name="demo.path" value="${basedir}/cardemo/build/jsf-cardemo"/>
+            <param name="demo.name" value="cardemo"/>                        
+        </antcall> 
+        <touch file="${build}/cardemo.last-testrun"/>
     </target>
 
     <!-- Unit test configuration for guessNumber -->            
