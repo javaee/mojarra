@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetTag.java,v 1.4 2003/08/25 21:39:41 craigmcc Exp $
+ * $Id: ResultSetTag.java,v 1.5 2003/09/16 00:30:37 jvisvanathan Exp $
  */
 
 /*
@@ -44,12 +44,12 @@ package components.taglib;
 
 
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.UIComponentBodyTag;
+import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 
 
 // PENDING(craigmcc) -- Why a body tag?
-public class ResultSetTag extends UIComponentBodyTag {
+public class ResultSetTag extends UIComponentTag {
 
 
     private String columnClasses = null;

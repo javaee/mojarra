@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.9 2003/09/12 18:00:02 craigmcc Exp $
+ * $Id: ResultSetControls.java,v 1.10 2003/09/16 00:30:35 jvisvanathan Exp $
  */
 
 /*
@@ -64,14 +64,14 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.9 2003/09/12 18:00:02 craigmcc Exp $
+ * @version $Id: ResultSetControls.java,v 1.10 2003/09/16 00:30:35 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-class ResultSetControls extends UIInputBase {
+public class ResultSetControls extends UIInputBase {
 
 //
 // Protected Constants
@@ -119,6 +119,10 @@ class ResultSetControls extends UIInputBase {
 //
 // Constructors and Initializers    
 //
+public ResultSetControls() {
+    
+    super();
+}
 
 public ResultSetControls(UIComponent newPanel, UIComponent newData,
 			     ResultSetRenderer newListRenderer)

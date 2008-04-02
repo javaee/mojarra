@@ -1,5 +1,5 @@
 /*
- * $Id: GraphComponent.java,v 1.6 2003/08/27 23:38:12 eburns Exp $
+ * $Id: GraphComponent.java,v 1.7 2003/09/16 00:30:34 jvisvanathan Exp $
  */
 
 /*
@@ -52,6 +52,7 @@ import java.util.List;
 import java.util.ArrayList;
 import javax.faces.FacesException;
 import javax.faces.component.base.UIOutputBase;
+import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
@@ -83,7 +84,7 @@ public class GraphComponent extends UIOutputBase {
      * <p>Faces Listener implementation which toggles the selected Node
      * in the GraphComponent;</p>
      */
-    public class GraphListener implements FacesListener {
+    public class GraphListener implements FacesListener, StateHolder{
 
         public GraphListener() {
         }
@@ -127,5 +128,21 @@ public class GraphComponent extends UIOutputBase {
         public PhaseId getPhaseId() {
             return PhaseId.ANY_PHASE;
         }  
+        // methods from StateHolder
+        public Object saveState(FacesContext context) {
+            return null;
+        }
+        
+        public void restoreState(FacesContext context, Object state) 
+                throws IOException {
+        }
+        
+        public void setTransient(boolean newTransientValue) {
+        }
+        
+        public boolean isTransient() {
+            return true;
+        }
+        
     }    
 }

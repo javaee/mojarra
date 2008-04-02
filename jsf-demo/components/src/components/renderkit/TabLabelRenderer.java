@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.10 2003/08/27 21:56:04 rlubke Exp $
+ * $Id: TabLabelRenderer.java,v 1.11 2003/09/16 00:30:35 jvisvanathan Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ import org.apache.commons.beanutils.ConversionException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.10 2003/08/27 21:56:04 rlubke Exp $
+ * @version $Id: TabLabelRenderer.java,v 1.11 2003/09/16 00:30:35 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -209,27 +209,6 @@ public class TabLabelRenderer extends BaseRenderer {
             }
         }
 
-        // PENDING (visvan) remove commented out code once the app has been
-        // tested. This renderer does not need to queue a FormEvent.
-        /*
-        // Construct and enqueue a FormEvent for the application
-        String commandName = (String) component.getAttribute("commandName");
-        String formName = null;
-        UIComponent form = findParentForRendererType(component, "Form");
-        if (form != null) {
-            formName = (String) ((UIForm)form).getFormName();
-        }
-        if (formName == null) {
-            // PENDING (visvan) log error
-            //log.error("Button[" + component.getClientId() +
-            //          "] not nested in a form");
-            component.setValid(false);
-            return;
-        }
-        FormEvent formEvent =
-            new FormEvent(component, formName, commandName);
-        context.addApplicationEvent(formEvent); */
-
         // Search for this component's parent "tab" component..
         UIComponent tabComponent = findParentForRendererType(component, "Tab");
         
@@ -310,28 +289,9 @@ public class TabLabelRenderer extends BaseRenderer {
         UIComponent component, String rendererType) {
         Object facetParent = null;
         UIComponent currentComponent = component;
-        // PENDING (visvan) remove commented out code once the app has been
-        // tested.
-        // check if its a facet (facets are not containers)
-        // this also checks if we start off with nested facets
-
-        /*facetParent = currentComponent.getAttribute(
-            UIComponent.FACET_PARENT_ATTR);
-        while (facetParent != null) {
-            currentComponent = (UIComponent) facetParent;
-            facetParent = currentComponent.getAttribute(
-                UIComponent.FACET_PARENT_ATTR);
-            if (currentComponent.getRendererType().equals(rendererType)) {
-                return currentComponent;
-            }
-        } */
+        
         // Search for an ancestor that is the specified renderer type; 
         while (null != (currentComponent = currentComponent.getParent())) {
-          /*  facetParent = currentComponent.getAttribute(
-                UIComponent.FACET_PARENT_ATTR);
-            if (facetParent != null) {
-                currentComponent = (UIComponent) facetParent;
-            } */
             if (currentComponent.getRendererType().equals(rendererType)) {
                 break;
             }

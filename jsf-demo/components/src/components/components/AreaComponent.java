@@ -170,12 +170,14 @@ public class AreaComponent extends UIOutputBase {
      *
      * @param context <code>FacesContext</code> for the current request
      */
+
     public Object saveState(FacesContext context) {
-        Object values[] = new Object[4];
+        Object values[] = new Object[5];
         values[0] = super.saveState(context);
         values[1] = alt;
         values[2] = coords;
         values[3] = shape;
+        values[4] = targetImage;
         return (values);
     }
 
@@ -195,6 +197,7 @@ public class AreaComponent extends UIOutputBase {
         alt = (String) values[1];
         coords = (String) values[2];
         shape = (String) values[3];
+        targetImage = (String) values[4];
     }
 
 

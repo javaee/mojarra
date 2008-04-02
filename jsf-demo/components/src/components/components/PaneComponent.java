@@ -1,5 +1,5 @@
 /*
- * $Id: PaneComponent.java,v 1.6 2003/08/28 20:11:04 eburns Exp $
+ * $Id: PaneComponent.java,v 1.7 2003/09/16 00:30:34 jvisvanathan Exp $
  */
 
 /*
@@ -50,6 +50,7 @@ import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.base.UIComponentBase;
+import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
@@ -101,7 +102,7 @@ public class PaneComponent extends UIComponentBase {
      * <p>Faces Listener implementation which sets the selected tab
      * component;</p>
      */
-    public class PaneSelectedListener implements FacesListener {
+    public class PaneSelectedListener implements FacesListener, StateHolder {
 
         public PaneSelectedListener() {
         }
@@ -142,32 +143,31 @@ public class PaneComponent extends UIComponentBase {
                 ((PaneComponent) tabControl.getChildren().get(0)).setSelected(true);
             }
         }
+        // methods from StateHolder
+        public Object saveState(FacesContext context) {
+            return null;
+        }
+        
+        public void restoreState(FacesContext context, Object state) 
+                throws IOException {
+        }
+        
+        public void setTransient(boolean newTransientValue) {
+        }
+        
+        public boolean isTransient() {
+            return true;
+        }
     }
 
     private UIComponent findParentForRendererType(
         UIComponent component, String rendererType) {
         Object facetParent = null;
         UIComponent currentComponent = component;
-        // PENDING (visvan) remove commented out code once the app has been
-        // tested.
-     /*   facetParent = currentComponent.getAttribute(
-            UIComponent.FACET_PARENT_ATTR);
-        while (facetParent != null) {
-            currentComponent = (UIComponent) facetParent;
-            facetParent = currentComponent.getAttribute(
-                UIComponent.FACET_PARENT_ATTR);
-            if (currentComponent.getRendererType().equals(rendererType)) {
-                return currentComponent;
-            }
-        } */
+        
         // Search for an ancestor that is the specified renderer type;
         // search includes the facets.
         while (null != (currentComponent = currentComponent.getParent())) {
-          /*  facetParent = currentComponent.getAttribute(
-                UIComponent.FACET_PARENT_ATTR);
-            if (facetParent != null) {
-                currentComponent = (UIComponent) facetParent;
-            } */
             if (currentComponent.getRendererType().equals(rendererType)) {
                 break;
             }
