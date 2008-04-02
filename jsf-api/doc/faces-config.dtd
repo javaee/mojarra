@@ -8,7 +8,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: faces-config.dtd,v 1.6 2003/04/29 18:51:23 eburns Exp $
+    $Id: faces-config.dtd,v 1.7 2003/04/30 17:38:57 craigmcc Exp $
 
 -->
 
@@ -250,7 +250,7 @@
     conditions that must match for this case to be executed, and the
     tree id of the component tree that should be selected next.
 -->
-<!ELEMENT navigation-case (from-action-ref?, from-outcome?, to-tree-id)>
+<!ELEMENT navigation-case (description*, display-name*, icon*, from-action-ref?, from-outcome?, to-tree-id)>
 
 
 <!--
@@ -259,7 +259,7 @@
     to make decisions on what component tree should be displayed next,
     based on the component tree id being processed.
 -->
-<!ELEMENT navigation-rule (from-tree-id?, navigation-case*)>
+<!ELEMENT navigation-rule (description*, display-name*, icon*, from-tree-id?, navigation-case*)>
 
 
 <!--

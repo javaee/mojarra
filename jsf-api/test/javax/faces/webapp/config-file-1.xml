@@ -118,6 +118,11 @@
 
   <!-- First navigation rule (global) -->
   <navigation-rule>
+    <description>
+      This is the set of rules that provides default navigation
+      independent of the request tree.
+    </description>
+    <display-name>Default Navigation Rules</display-name>
     <!-- Can also be omitted, since this is the default -->
     <from-tree-id> * </from-tree-id>
     <!-- Logout button on every page -->
