@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.30 2003/11/03 21:44:04 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.31 2003/11/09 05:11:05 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.30 2003/11/03 21:44:04 eburns Exp $
+ * @version $Id: MessageRenderer.java,v 1.31 2003/11/09 05:11:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -110,7 +110,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
-        Object currentObj = ((ValueHolder)component).currentValue(context);
+        Object currentObj = ((ValueHolder)component).getValue();
         if ( currentObj != null) {
             if (currentObj instanceof String) {
                 currentValue = (String)currentObj;
@@ -143,7 +143,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
                 continue;
             }
 
-            parameterList.add(((ValueHolder)kid).currentValue(context));
+            parameterList.add(((ValueHolder)kid).getValue());
         }
 
         String message = null;

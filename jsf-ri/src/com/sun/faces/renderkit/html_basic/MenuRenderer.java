@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.32 2003/11/01 02:52:49 jvisvanathan Exp $
+ * $Id: MenuRenderer.java,v 1.33 2003/11/09 05:11:05 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -33,6 +33,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+import javax.faces.el.ValueBinding;
 import org.mozilla.util.Assert;
 
 import com.sun.faces.util.Util;
@@ -99,7 +100,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             return;
         } 
 
-        setPreviousValue(component, ((UIInput)component).currentValue(context));
+        setPreviousValue(component, ((UIInput)component).getValue());
 
         String clientId = component.getClientId(context);
         Assert.assert_it(clientId != null);
@@ -144,14 +145,18 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     
     public void setSelectManyValue(FacesContext context, UISelectMany uiSelectMany,
             String[] newValues) throws ConverterException {
-        String valueRef = uiSelectMany.getValueRef();
+	// if we have no local value, try to get the valueBinding.
+	ValueBinding valueBinding = (null == uiSelectMany.getLocalValue()) ? 
+	    uiSelectMany.getValueBinding("value") : null;
+
 	Object result = newValues; // default case, set local value
 	Class modelType = null;
 	
-	// If we have a valueRef
-	if (null != valueRef) {
-            modelType = (Util.getValueBinding(valueRef)).getType(context);
-	    // Does the valueRef resolve properly to something with a type?
+	// If we have a ValueBinding
+	if (null != valueBinding) {
+            modelType = valueBinding.getType(context);
+	    // Does the valueBinding resolve properly to something with
+	    // a type?
 	    if (null != modelType) {
 		if (modelType.isArray()) {
 		    try {
@@ -175,14 +180,14 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 		    uiSelectMany.setValid(false);
 		}
 	    } else {
-		// We have a valueRef, but no modelType.  Error.
+		// We have a ValueBinding, but no modelType.  Error.
 		addConversionErrorMessage(context, uiSelectMany,
 					  Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
 		uiSelectMany.setValid(false);
 	    }
 	}
 	else {
-	    // No valueRef, just use Object array.
+	    // No ValueBinding, just use Object array.
 	    Object [] convertedValues = new Object[1];
 	    try {
 		result = handleArrayCase(context, uiSelectMany, 
@@ -501,11 +506,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 				      UIComponent component) {
         if (component instanceof UISelectMany) {
             UISelectMany select = (UISelectMany) component;
-            return (Object []) select.currentValue(context);
+            return (Object []) select.getValue();
         } 
         UISelectOne select = (UISelectOne) component;
 	Object returnObjects[] = new Object[1];
-	if (null != (returnObjects[0] = select.currentValue(context))) {
+	if (null != (returnObjects[0] = select.getValue())) {
             return returnObjects;
         }    
 	return null;

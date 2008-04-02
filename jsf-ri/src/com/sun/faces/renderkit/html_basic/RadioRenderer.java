@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.54 2003/11/01 02:52:50 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.55 2003/11/09 05:11:06 eburns Exp $
  */
 
 /*
@@ -75,7 +75,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         
-        Object curValue = ((UISelectOne)component).currentValue(context);
+        Object curValue = ((UISelectOne)component).getValue();
         if (alignVertical) {
             writer.writeText("\t", null);
             writer.startElement("tr", component);

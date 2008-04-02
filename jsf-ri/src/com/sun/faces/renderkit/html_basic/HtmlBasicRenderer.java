@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.64 2003/10/30 20:30:32 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.65 2003/11/09 05:11:04 eburns Exp $
  */
 
 /*
@@ -119,7 +119,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if ( comp instanceof ValueHolder) {
             valueHolder= (ValueHolder) comp;
             params[0] = valueHolder.getValue();
-            params[1] = valueHolder.getValueRef();
+	    // PENDING(edburns): params[1] should be the VB expression.
+	    params[1] = "expression";
         }
         params[2] = errorMessage; 
         facesContext.addMessage(comp.getClientId(facesContext), 
@@ -223,7 +224,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // previous (current) value with the converted new value;
         // ex: we don't want to compare "48%" with 0.48;
         
-        Object curValue = uiInput.currentValue(context);
+        Object curValue = uiInput.getValue();
         if (curValue instanceof String) {
             try {
                 Object convertedCurrentValue = 
@@ -297,7 +298,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             valueHolder= (ValueHolder) component;
         }
         String currentValue = null;
-        Object currentObj = valueHolder.currentValue(context);
+        Object currentObj = valueHolder.getValue();
         if ( currentObj != null) {
             currentValue = getFormattedValue(context, component, currentObj);
         } 
@@ -327,8 +328,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
     protected String getFormattedValue(FacesContext context, UIComponent component,
             Object currentValue ) throws ConverterException {
          String result = null;
-        // formatting is supported only for components that support value and 
-        // valueRef attributes.
+        // formatting is supported only for components that support
+        // value attributes.
         if ( !(component instanceof ValueHolder) ){
              if ( currentValue != null) {
                  result= currentValue.toString();
@@ -341,7 +342,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
             return ((String)currentValue);
         }
          
-        String valueRef = ((ValueHolder)component).getValueRef();
         Converter converter = null;
 
         // If there is a converter attribute, use it to to ask application
@@ -358,8 +358,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
 
 	if ( converter == null ) {
-            // if there is no valueRef and converter attribute set, 
-            // try to acquire a converter using its class type.
+            // if converter attribute set, try to acquire a converter
+            // using its class type.
         
             Class converterType = currentValue.getClass();
             converter = Util.getConverterForClass(converterType);
@@ -378,8 +378,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	    return result;
         } else {
             // throw converter exception if no converter can be
-            // identified if a valueRef is set and converter could not be
-            // identified
+            // identified 
             throw new ConverterException(Util.getExceptionMessage(
                     Util.CONVERSION_ERROR_MESSAGE_ID));
         }
@@ -399,7 +398,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             if (kid instanceof UIParameter) {
                 UIParameter uiParam = (UIParameter) kid;
                 Param param = new Param(uiParam.getName(),
-                    ((String)uiParam.currentValue(context)));
+                    ((String)uiParam.getValue()));
                 parameterList.add(param);
             }
 	}

@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.12 2003/10/31 21:40:19 eburns Exp $
+ * $Id: BaseComponentTag.java,v 1.13 2003/11/09 05:11:09 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.12 2003/10/31 21:40:19 eburns Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.13 2003/11/09 05:11:09 eburns Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -212,8 +212,6 @@ public abstract class BaseComponentTag extends UIComponentTag
     protected String rules = null;
     protected String rules_ = null;
 
-    protected String valueRef = null;
-    protected String valueRef_ = null;
     protected Converter converter = null;
 
     protected String actionListenerRef = null; 
@@ -245,11 +243,6 @@ public abstract class BaseComponentTag extends UIComponentTag
     // 
     // Accessors
     //
-    public void setValueRef(String newValueRef)
-    {
-	valueRef_ = newValueRef;
-    }
-
     public void setActionListenerRef(String newActionListenerRef) {
 	actionListenerRef_ = newActionListenerRef;
     }
@@ -974,9 +967,6 @@ public abstract class BaseComponentTag extends UIComponentTag
         if (rules_ != null) {
             rules = Util.evaluateElExpression(rules_, pageContext);
         }
-        if (valueRef_ != null) {
-            valueRef = Util.evaluateElExpression(valueRef_, pageContext);
-        }
         if (height_ != null) {
             height = Util.evaluateElExpression(height_, pageContext);
         }
@@ -1019,9 +1009,6 @@ public abstract class BaseComponentTag extends UIComponentTag
 
         if ( component instanceof ValueHolder ) {
             ValueHolder valueHolder = (ValueHolder)component;
-            if (null != valueRef) {
-                valueHolder.setValueRef(valueRef);
-            }
             if (null != value) {
                 valueHolder.setValue(value);
 	    }

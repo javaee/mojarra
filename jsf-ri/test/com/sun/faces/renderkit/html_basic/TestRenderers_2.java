@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.67 2003/11/05 04:39:08 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.68 2003/11/09 05:11:14 eburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.67 2003/11/05 04:39:08 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.68 2003/11/09 05:11:14 eburns Exp $
  * 
  *
  */
@@ -435,7 +435,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 	    (Util.getValueBinding("TestBean")).getValue(getFacesContext());
 	assertTrue(null != testBean); // set in FacesTestCaseService
 	testBean.setImagePath("/foo/modelReferenceImage.gif");
-	img.setValueRef("TestBean.imagePath");
+	img.setValueBinding("value", Util.getValueBinding("#{TestBean.imagePath}"));
 
         imageRenderer.encodeBegin(getFacesContext(), img);
         imageRenderer.encodeEnd(getFacesContext(), img);

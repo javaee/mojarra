@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.21 2003/10/02 00:39:59 jvisvanathan Exp $
+ * $Id: ImageRenderer.java,v 1.22 2003/11/09 05:11:05 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.21 2003/10/02 00:39:59 jvisvanathan Exp $
+ * @version $Id: ImageRenderer.java,v 1.22 2003/11/09 05:11:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -127,7 +127,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
 
     private String src(FacesContext context, UIComponent component) {
 
-        String value = (String)((UIGraphic)component).currentValue(context);
+        String value = (String)((UIGraphic)component).getValue();
         if (value == null) {
             value = "";
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.64 2003/10/30 16:14:16 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.65 2003/11/09 05:11:03 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.64 2003/10/30 16:14:16 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.65 2003/11/09 05:11:03 eburns Exp $
  *
  */
 
@@ -228,7 +228,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     /**
      * <p>Returns a label for the button using the following algorithm:
      * <ul>
-     * <li>Use the value, if not null, from currentValue()</li>
+     * <li>Use the value, if not null, from getValue()</li>
      * <li>If a ResourceBundle is defined (i.e. the <code>key</code> and
      * <code>bundle</code> attributes are available, use the value associated
      * with the specified key</li>
@@ -244,8 +244,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     protected String getLabel(FacesContext context,
                               UIComponent component) throws IOException {
         String result = null;
-        // First call currentValue()
-        Object value = ((UICommand) component).currentValue(context);
+        // First call getValue()
+        Object value = ((UICommand) component).getValue();
         if (value != null) {
               result = value.toString();
         }

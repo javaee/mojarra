@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.29 2003/10/30 20:30:31 eburns Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.30 2003/11/09 05:11:02 eburns Exp $
  */
 
 /*
@@ -95,7 +95,8 @@ public void execute(FacesContext facesContext)
         if ( component instanceof ValueHolder) {
             valueHolder= (ValueHolder) component;
             params[0] = valueHolder.getValue();
-            params[1] = valueHolder.getValueRef();
+	    // PENDING(edburns): params[1] should be the VB expression.
+            params[1] = "expression";
         }  
         params[2] = exceptionMessage;
         facesContext.addMessage(component.getClientId(facesContext), 

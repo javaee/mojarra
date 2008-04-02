@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.12 2003/10/26 04:09:42 craigmcc Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.13 2003/11/09 05:11:04 eburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.context.FacesContext;
 import javax.faces.FactoryFinder;
+import javax.faces.el.ValueBinding;
 
 import com.sun.faces.util.Util;
 
@@ -73,7 +74,9 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             String newValue) throws ConverterException {
         
         ValueHolder valueHolder = (ValueHolder) component;
-        String valueRef = valueHolder.getValueRef();
+	// if we have no local value, try to get the valueBinding.
+	ValueBinding valueBinding = (null == valueHolder.getLocalValue()) ? 
+	    component.getValueBinding("value") : null;
         
         Converter converter = null;
         Object result = null;
@@ -84,9 +87,8 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             converter = ((ConvertibleValueHolder) component).getConverter();
         }
         
-	if (converter == null && valueRef != null) {
-            Class converterType = 
-                    (Util.getValueBinding(valueRef)).getType(context);
+	if (null == converter && null != valueBinding) {
+            Class converterType = valueBinding.getType(context);
             // if converterType is null, assume the modelType is "String".
             if ( converterType == null || converterType == String.class) {
                 return newValue;
@@ -103,11 +105,12 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             } catch (Exception e) {
                 return (null);
             }
-	} else if ( converter == null && valueRef == null ) {
-            // if there is no valueRef and converter attribute set, assume the 
-            // modelType as "String" since we have no way of figuring out the
-            // type. So for the selectOne and selectMany, converter has to be
-            // set if there is no valueRef attribute set on the component.
+	} else if ( converter == null && valueBinding == null ) {
+            // if there is no valueBinding and converter attribute set,
+            // assume the modelType as "String" since we have no way of
+            // figuring out the type. So for the selectOne and
+            // selectMany, converter has to be set if there is no
+            // valueBinding attribute set on the component.
             return newValue;
         }
         

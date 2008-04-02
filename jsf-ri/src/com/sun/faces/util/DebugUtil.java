@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.16 2003/11/01 02:52:52 jvisvanathan Exp $
+ * $Id: DebugUtil.java,v 1.17 2003/11/09 05:11:10 eburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.io.PrintStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.16 2003/11/01 02:52:52 jvisvanathan Exp $
+ * @version $Id: DebugUtil.java,v 1.17 2003/11/09 05:11:10 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -123,14 +123,6 @@ public static void printTree(UIComponent root, PrintStream out)
 */
     indentPrintln(out, "id:"+root.getId());
 
-    if ( root instanceof ValueHolder) {
-        ValueHolder valueHolder = (ValueHolder) root;
-        value = valueHolder.getValue();
-        if (valueHolder.getValueRef() != null) {
-	    indentPrintln(out, "valueReference: "+ valueHolder.getValueRef());
-        }
-    }
-    
     Iterator items = null;
     SelectItem curItem = null;
     int j = 0;

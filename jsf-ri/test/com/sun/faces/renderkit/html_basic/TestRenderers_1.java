@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.51 2003/11/01 02:52:56 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.52 2003/11/09 05:11:13 eburns Exp $
  */
 
 /*
@@ -39,6 +39,7 @@ import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import javax.servlet.jsp.jstl.core.Config;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 import com.sun.faces.application.ViewHandlerImpl;
 
 import com.sun.faces.renderkit.html_basic.FormRenderer;
@@ -52,7 +53,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.51 2003/11/01 02:52:56 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.52 2003/11/09 05:11:13 eburns Exp $
  * 
  *
  */
@@ -194,7 +195,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         output.setValue("PASSED");
         output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
         output.getAttributes().put("key", "failed.key");
-        output.setValueRef("TestBean.modelLabel");
+        output.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
 	uiOutput.getChildren().add(output);
         root.getChildren().add(uiOutput);
         System.out.println("Testing label lookup from local value...");
@@ -211,7 +212,7 @@ public class TestRenderers_1 extends JspFacesTestCase
 	output = new UIOutput();
         output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
         output.getAttributes().put("key", "failed.key");
-        output.setValueRef("TestBean.modelLabel");
+        output.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
 	uiOutput.getChildren().add(output);
         root.getChildren().add(uiOutput);
         System.out.println("Testing label lookup from model...");
@@ -249,7 +250,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiOutput.getAttributes().put("shape", "shape");
         uiOutput.getAttributes().put("coords", "coords");
         uiOutput.getAttributes().put("hreflang", "hreflang");
-        output.setValueRef("NonBean.label");
+        output.setValueBinding("value", Util.getValueBinding("#{NonBean.label}"));
 	uiOutput.getChildren().add(output);
         root.getChildren().add(uiOutput);
         System.out.println("Testing empty label...");
@@ -321,7 +322,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         output.setValue("PASSED");
         output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
         output.getAttributes().put("key", "failed.key");
-        output.setValueRef("TestBean.modelLabel");
+        output.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
 	uiCommand.getChildren().add(output);
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from local value...");
@@ -337,7 +338,7 @@ public class TestRenderers_1 extends JspFacesTestCase
 	output = new UIOutput();
         output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
         output.getAttributes().put("key", "failed.key");
-        output.setValueRef("TestBean.modelLabel");
+        output.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
 	uiCommand.getChildren().add(output);
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from model...");
@@ -373,7 +374,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand.getAttributes().put("shape", "shape");
         uiCommand.getAttributes().put("coords", "coords");
         uiCommand.getAttributes().put("hreflang", "hreflang");
-        output.setValueRef("NonBean.label");
+        output.setValueBinding("value", Util.getValueBinding("#{NonBean.label}"));
 	uiCommand.getChildren().add(output);
         root.getChildren().add(uiCommand);
         System.out.println("Testing empty label...");
@@ -509,7 +510,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand.setValue("PASSED");
         uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
         uiCommand.getAttributes().put("key", "failed.key");
-        uiCommand.setValueRef("TestBean.modelLabel");
+        uiCommand.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from local value...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -523,7 +524,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand.getAttributes().put("type", "reset");
         uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
         uiCommand.getAttributes().put("key", "failed.key");
-        uiCommand.setValueRef("TestBean.modelLabel");
+        uiCommand.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from model...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -547,7 +548,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand = new UICommand();
         uiCommand.setId("labelButton4");
         uiCommand.getAttributes().put("type", "reset");
-        uiCommand.setValueRef("NonBean.label");
+        uiCommand.setValueBinding("value", Util.getValueBinding("#{NonBean.label}"));
         uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
         uiCommand.getAttributes().put("key", "non.key");
         root.getChildren().add(uiCommand);

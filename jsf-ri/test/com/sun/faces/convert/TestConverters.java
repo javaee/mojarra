@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.22 2003/10/21 22:39:45 jvisvanathan Exp $
+ * $Id: TestConverters.java,v 1.23 2003/11/09 05:11:12 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.22 2003/10/21 22:39:45 jvisvanathan Exp $
+ * @version $Id: TestConverters.java,v 1.23 2003/11/09 05:11:12 eburns Exp $
  * 
  *
  */
@@ -293,7 +293,7 @@ public class TestConverters extends JspFacesTestCase
 	UISelectMany booleanv = new UISelectMany();
 	booleanv.setId("bool");
 	booleanv.setRendererType("CheckboxList");
-	booleanv.setValueRef("bean.booleans");
+	booleanv.setValueBinding("value", Util.getValueBinding("#{bean.booleans}"));
 	root.getChildren().add(booleanv);
 	booleanv.decode(getFacesContext());
 	booleanv.updateModel(getFacesContext());
@@ -306,7 +306,7 @@ public class TestConverters extends JspFacesTestCase
 	booleanv = new UISelectMany();
 	booleanv.setId("bool2");
 	booleanv.setRendererType("CheckboxList");
-	booleanv.setValueRef("bean.booleans");
+	booleanv.setValueBinding("value", Util.getValueBinding("#{bean.booleans}"));
 	root.getChildren().add(booleanv);
 	booleanv.decode(getFacesContext());
 	booleanv.updateModel(getFacesContext());
@@ -318,7 +318,7 @@ public class TestConverters extends JspFacesTestCase
 	UISelectMany bytev = new UISelectMany();
 	bytev.setId("byte");
 	bytev.setRendererType("CheckboxList");
-	bytev.setValueRef("bean.bytes");
+	bytev.setValueBinding("value", Util.getValueBinding("#{bean.bytes}"));
 	root.getChildren().add(bytev);
 	bytev.decode(getFacesContext());
 	bytev.updateModel(getFacesContext());
@@ -331,7 +331,7 @@ public class TestConverters extends JspFacesTestCase
 	UISelectMany charv = new UISelectMany();
 	charv.setId("char");
 	charv.setRendererType("CheckboxList");
-	charv.setValueRef("bean.chars");
+	charv.setValueBinding("value", Util.getValueBinding("#{bean.chars}"));
 	root.getChildren().add(charv);
 	charv.decode(getFacesContext());
 	charv.updateModel(getFacesContext());
@@ -344,7 +344,7 @@ public class TestConverters extends JspFacesTestCase
 	UISelectMany shortv = new UISelectMany();
 	shortv.setId("short");
 	shortv.setRendererType("CheckboxList");
-	shortv.setValueRef("bean.shorts");
+	shortv.setValueBinding("value", Util.getValueBinding("#{bean.shorts}"));
 	root.getChildren().add(shortv);
 	shortv.decode(getFacesContext());
 	shortv.updateModel(getFacesContext());
@@ -357,7 +357,7 @@ public class TestConverters extends JspFacesTestCase
 	UISelectMany intv = new UISelectMany();
 	intv.setId("int");
 	intv.setRendererType("CheckboxList");
-	intv.setValueRef("bean.ints");
+	intv.setValueBinding("value", Util.getValueBinding("#{bean.ints}"));
 	root.getChildren().add(intv);
 	intv.decode(getFacesContext());
 	intv.updateModel(getFacesContext());
@@ -370,7 +370,7 @@ public class TestConverters extends JspFacesTestCase
 	UISelectMany floatv = new UISelectMany();
 	floatv.setId("float");
 	floatv.setRendererType("CheckboxList");
-	floatv.setValueRef("bean.floats");
+	floatv.setValueBinding("value", Util.getValueBinding("#{bean.floats}"));
 	root.getChildren().add(floatv);
 	floatv.decode(getFacesContext());
 	floatv.updateModel(getFacesContext());
@@ -383,7 +383,7 @@ public class TestConverters extends JspFacesTestCase
 	UISelectMany longv = new UISelectMany();
 	longv.setId("long");
 	longv.setRendererType("CheckboxList");
-	longv.setValueRef("bean.longs");
+	longv.setValueBinding("value", Util.getValueBinding("#{bean.longs}"));
 	root.getChildren().add(longv);
 	longv.decode(getFacesContext());
 	longv.updateModel(getFacesContext());
@@ -396,7 +396,7 @@ public class TestConverters extends JspFacesTestCase
 	UISelectMany doublev = new UISelectMany();
 	doublev.setId("double");
 	doublev.setRendererType("CheckboxList");
-	doublev.setValueRef("bean.doubles");
+	doublev.setValueBinding("value", Util.getValueBinding("#{bean.doubles}"));
 	root.getChildren().add(doublev);
 	doublev.decode(getFacesContext());
 	doublev.updateModel(getFacesContext());
@@ -409,7 +409,7 @@ public class TestConverters extends JspFacesTestCase
 	UISelectMany str = new UISelectMany();
 	str.setId("str");
 	str.setRendererType("CheckboxList");
-	str.setValueRef("bean.strings");
+	str.setValueBinding("value", Util.getValueBinding("#{bean.strings}"));
 	root.getChildren().add(str);
 	str.decode(getFacesContext());
 	str.updateModel(getFacesContext());
@@ -423,7 +423,7 @@ public class TestConverters extends JspFacesTestCase
 	date.setConverter(dateConv);
 	date.setId("date");
 	date.setRendererType("CheckboxList");
-	date.setValueRef("bean.dates");
+	date.setValueBinding("value", Util.getValueBinding("#{bean.dates}"));
 	root.getChildren().add(date);
 	date.decode(getFacesContext());
 	date.updateModel(getFacesContext());
@@ -447,7 +447,7 @@ public class TestConverters extends JspFacesTestCase
 	number.setConverter(numberConv);
 	number.setId("num");
 	number.setRendererType("CheckboxList");
-	number.setValueRef("bean.numbers");
+	number.setValueBinding("value", Util.getValueBinding("#{bean.numbers}"));
 	root.getChildren().add(number);
 	number.decode(getFacesContext());
 	number.updateModel(getFacesContext());
@@ -465,7 +465,7 @@ public class TestConverters extends JspFacesTestCase
 	UISelectMany stringList = new UISelectMany();
 	stringList.setId("stringList");
 	stringList.setRendererType("CheckboxList");
-	stringList.setValueRef("bean.stringList");
+	stringList.setValueBinding("value", Util.getValueBinding("#{bean.stringList}"));
 	root.getChildren().add(stringList);
 	stringList.decode(getFacesContext());
 	stringList.updateModel(getFacesContext());

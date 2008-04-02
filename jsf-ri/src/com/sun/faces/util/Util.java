@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.113 2003/11/08 00:03:56 horwat Exp $
+ * $Id: Util.java,v 1.114 2003/11/09 05:11:10 eburns Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.113 2003/11/08 00:03:56 horwat Exp $ 
+ * @version $Id: Util.java,v 1.114 2003/11/09 05:11:10 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -583,7 +583,7 @@ private Util()
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (kid instanceof UISelectItem) {
-                Object value = ((UISelectItem)kid).currentValue(context);
+                Object value = ((UISelectItem)kid).getValue();
                 if ( value == null ) {
                     UISelectItem item = (UISelectItem) kid;
                     list.add(new SelectItem(item.getItemValue(),
@@ -596,7 +596,7 @@ private Util()
                         Util.CONVERSION_ERROR_MESSAGE_ID));
                 }
             } else if (kid instanceof UISelectItems && null != context) {
-                Object value = ((UISelectItems)kid).currentValue(context);
+                Object value = ((UISelectItems)kid).getValue();
                 if (value instanceof SelectItem) {
                     list.add(value);
                 } else if (value instanceof SelectItem[]) {

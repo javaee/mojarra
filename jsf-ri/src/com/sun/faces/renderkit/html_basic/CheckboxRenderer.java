@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.56 2003/09/24 23:16:31 horwat Exp $
+ * $Id: CheckboxRenderer.java,v 1.57 2003/11/09 05:11:03 eburns Exp $
  *
  */
 
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.56 2003/09/24 23:16:31 horwat Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.57 2003/11/09 05:11:03 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -107,7 +107,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         String clientId = component.getClientId(context);
         Assert.assert_it(clientId != null );
 
-        Object curValue = ((UIInput)component).currentValue(context);
+        Object curValue = ((UIInput)component).getValue();
         if (curValue == null) {
             setPreviousValue(component, Boolean.FALSE);
         }

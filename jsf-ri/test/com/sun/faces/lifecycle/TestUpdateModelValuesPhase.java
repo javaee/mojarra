@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.29 2003/10/02 00:40:14 jvisvanathan Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.30 2003/11/09 05:11:13 eburns Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.29 2003/10/02 00:40:14 jvisvanathan Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.30 2003/11/09 05:11:13 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,19 +105,19 @@ public void testUpdateNormal()
     userName = new TestUIInput();
     userName.setId("userName");
     userName.setValue("one");
-    userName.setValueRef("TestBean.one");
+    userName.setValueBinding("value", Util.getValueBinding("#{TestBean.one}"));
     userName.testSetValid(true);
     form.getChildren().add(userName);
     userName1 = new TestUIInput();
     userName1.setId("userName1");
     userName1.setValue("one");
-    userName1.setValueRef("TestBean.one");
+    userName1.setValueBinding("value", Util.getValueBinding("#{TestBean.one}"));
     userName1.testSetValid(true);
     form.getChildren().add(userName1);
     userName2 = new TestUIInput();
     userName2.setId("userName2");
     userName2.setValue("one");
-    userName2.setValueRef("TestBean.one");
+    userName2.setValueBinding("value", Util.getValueBinding("#{TestBean.one}"));
     userName2.testSetValid(true);
     form.getChildren().add(userName2);
     
@@ -156,18 +156,18 @@ public void testUpdateFailed()
     userName.setId("userName");
     userName.setValue("one");
     userName.testSetValid(true);
-    userName.setValueRef("TestBean.two");
+    userName.setValueBinding("value", Util.getValueBinding("#{TestBean.two}"));
     form.getChildren().add(userName);
     userName1 = new TestUIInput();
     userName1.setId("userName1");
     userName1.setValue("one");
     userName1.testSetValid(true);
-    userName1.setValueRef("TestBean.one");
+    userName1.setValueBinding("value", Util.getValueBinding("#{TestBean.one}"));
     form.getChildren().add(userName1);
     userName2 = new TestUIInput();
     userName2.setId("userName2");
     userName2.setValue("one");
-    userName2.setValueRef("TestBean.one");
+    userName2.setValueBinding("value", Util.getValueBinding("#{TestBean.one}"));
     userName2.testSetValid(true);
     form.getChildren().add(userName2);
 
