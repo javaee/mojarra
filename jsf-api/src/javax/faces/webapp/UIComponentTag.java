@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.40 2004/01/27 20:29:59 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.41 2004/01/28 18:12:02 jvisvanathan Exp $
  */
 
 /*
@@ -1186,7 +1186,13 @@ public abstract class UIComponentTag implements Tag {
                     String old = (String) olds.next();
                     if (!createdComponents.contains(old)) {
                         UIComponent child = component.findComponent(old);
-                        component.getChildren().remove(child);
+                        // if a component is marked transient, it would have 
+                        // been already removed from the child list, but the
+                        // oldList would still have it. So,unless findComponent
+                        // is successful, we don't have to call remove child.
+                        if ( child != null) {
+                            component.getChildren().remove(child);
+                        }
                     }
                 }
 
