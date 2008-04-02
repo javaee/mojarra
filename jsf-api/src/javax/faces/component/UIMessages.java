@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessages.java,v 1.7 2004/01/06 23:02:41 eburns Exp $
+ * $Id: UIMessages.java,v 1.8 2004/01/19 06:26:53 craigmcc Exp $
  */
 
 /*
@@ -42,7 +42,6 @@ public class UIMessages extends UIComponentBase {
     // ------------------------------------------------------ Instance Variables
 
 
-    private String forVal = null;
     private boolean globalOnly = false;
     private boolean globalOnlySet = false;
     private boolean showDetail = false;
@@ -52,35 +51,6 @@ public class UIMessages extends UIComponentBase {
 
     // -------------------------------------------------------------- Properties
 
-    /**
-     * <p>Return the client identifier of the component for which
-     * this component represents associated message(s) (if any).</p>
-     */
-    public String getFor() {
-
-	if (this.forVal != null) {
-	    return (this.forVal);
-	}
-	ValueBinding vb = getValueBinding("for");
-	if (vb != null) {
-	    return ((String) vb.getValue(getFacesContext()));
-	} else {
-	    return (null);
-	}
-
-    }
-
-    /**
-     * <p>Set the client identifier of the component for which
-     * this component represents associated message(s) (if any).</p>
-     *
-     * @param newFor The new client id
-     */
-    public void setFor(String newFor) {
-
-	forVal = newFor;
-
-    }
 
     /**
      * <p>Return the flag indicating whether only global messages (that
@@ -188,7 +158,7 @@ public class UIMessages extends UIComponentBase {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[8];
+        Object values[] = new Object[7];
         values[0] = super.saveState(context);
         values[1] = this.globalOnly ? Boolean.TRUE : Boolean.FALSE;
         values[2] = this.globalOnlySet ? Boolean.TRUE : Boolean.FALSE;
@@ -196,7 +166,6 @@ public class UIMessages extends UIComponentBase {
         values[4] = this.showDetailSet ? Boolean.TRUE : Boolean.FALSE;
         values[5] = this.showSummary ? Boolean.TRUE : Boolean.FALSE;
         values[6] = this.showSummarySet ? Boolean.TRUE : Boolean.FALSE;
-        values[7] = this.forVal;
 
         return (values);
 
@@ -213,7 +182,6 @@ public class UIMessages extends UIComponentBase {
         showDetailSet = ((Boolean) values[4]).booleanValue();
         showSummary = ((Boolean) values[5]).booleanValue();
         showSummarySet = ((Boolean) values[6]).booleanValue();
-        forVal = (String) values[7];
 
     }
 

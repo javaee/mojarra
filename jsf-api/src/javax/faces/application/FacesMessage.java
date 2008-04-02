@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.6 2004/01/10 22:26:30 eburns Exp $
+ * $Id: FacesMessage.java,v 1.7 2004/01/19 06:26:52 craigmcc Exp $
  */
 
 /*
@@ -228,11 +228,17 @@ public class FacesMessage implements Serializable {
 
 
     /**
-     * <p>Return the localized detail text.</p>
+     * <p>Return the localized detail text.  If no localized detail text has
+     * been defined for this message, return the localized summary text
+     * instead.</p>
      */
     public String getDetail() {
 
-        return (this.detail);
+	if (this.detail == null) {
+	    return (this.summary);
+	} else {
+	    return (this.detail);
+	}
 
     }
 
