@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.92 2006/12/14 23:18:48 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.93 2007/02/01 05:37:20 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -1567,7 +1567,16 @@ public class ConfigureListener implements ServletContextListener {
     }
     
     private static boolean isJspTwoOne() {
-        
+
+        // The following try/catch is a hack to work around
+        // a bug in Tomcat 6 where JspFactory.getDefaultFactory() will
+        // return null unless JspRuntimeContext has been loaded.
+        try {
+            Class.forName("org.apache.jasper.compiler.JspRuntimeContext");
+        } catch (ClassNotFoundException cnfe) {
+            ;
+        }
+
         if (JspFactory.getDefaultFactory() == null) {
             return false;
         }
