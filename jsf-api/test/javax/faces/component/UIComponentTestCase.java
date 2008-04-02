@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.33 2003/07/26 17:55:05 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.34 2003/09/19 22:08:32 craigmcc Exp $
  */
 
 /*
@@ -1028,8 +1028,10 @@ public class UIComponentTestCase extends TestCase {
 
     // Validate that the specified number of children are present
     protected void checkChildCount(UIComponent component, int count) {
-        assertEquals("child count",
+        assertEquals("child count 1", count, component.getChildCount());
+        assertEquals("child count 2",
                      count, component.getChildren().size());
+        assertEquals("child count 3", count, component.getChildCount());
         if (count == 0) {
             assertTrue("children empty", component.getChildren().isEmpty());
         } else {
@@ -1099,6 +1101,8 @@ public class UIComponentTestCase extends TestCase {
                    !facets.containsValue(facet));
         assertNull("facet " + name + " key not found by get",
                    facets.get(name));
+        assertNull("facet " + name + " not returned by getFacet(String)",
+                   component.getFacet(name));
         Iterator keys = facets.keySet().iterator();
         while (keys.hasNext()) {
             String key = (String) keys.next();
@@ -1129,6 +1133,8 @@ public class UIComponentTestCase extends TestCase {
                    facets.containsValue(facet));
         assertEquals("facet " + name + " has correct value",
                      facet, (UIComponent) facets.get(name));
+        assertTrue("facet " + name + " returned by getFacet(String)",
+                   facet == component.getFacet(name));
         boolean found = false;
         Iterator keys = facets.keySet().iterator();
         while (keys.hasNext()) {

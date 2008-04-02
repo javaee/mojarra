@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.94 2003/09/15 20:17:20 eburns Exp $
+ * $Id: UIComponent.java,v 1.95 2003/09/19 22:08:29 craigmcc Exp $
  */
 
 /*
@@ -270,6 +270,13 @@ public interface UIComponent extends StateHolder {
 
 
     /**
+     * <p>Return the number of child {@link UIComponent}s that are associated
+     * with this {@link UIComponent}.</p>
+     */
+    public int getChildCount();
+
+
+    /**
      * <p>Find the {@link UIComponent} named by the specified expression,
      * if any is found.  This is done by locating the closest parent
      * {@link UIComponent} that is a {@link NamingContainer}, and
@@ -323,6 +330,15 @@ public interface UIComponent extends StateHolder {
      * </ul>
      */
     public Map getFacets();
+
+
+    /**
+     * <p>Convenience method to return the named facet, if it exists,
+     * or <code>null</code> otherwise.</p>
+     *
+     * @param name Name of the desired facet
+     */
+    public UIComponent getFacet(String name);
 
 
     /**

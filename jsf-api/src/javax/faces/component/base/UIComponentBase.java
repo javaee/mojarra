@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.17 2003/09/18 00:53:43 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.18 2003/09/19 22:08:31 craigmcc Exp $
  */
 
 /*
@@ -684,6 +684,18 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
+    // Do not allocate the children List to answer this question
+    public int getChildCount() {
+
+        if (children != null) {
+            return (children.size());
+        } else {
+            return (0);
+        }
+
+    }
+
+
     /**
      * <p>Find and return the closest parent {@link UIComponent} (which might
      * in fact be this one) that implements {@link NamingContainer}.  If no
@@ -837,6 +849,18 @@ public abstract class UIComponentBase implements UIComponent {
 
         }
         return (facets);
+
+    }
+
+
+    // Do not allocate the facets Map to answer this question
+    public UIComponent getFacet(String name) {
+
+        if (facets != null) {
+            return ((UIComponent) facets.get(name));
+        } else {
+            return (null);
+        }
 
     }
 
