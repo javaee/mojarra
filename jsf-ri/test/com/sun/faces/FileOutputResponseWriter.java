@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.5 2003/06/13 16:55:43 eburns Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.6 2003/07/24 23:53:31 rkitain Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import java.io.PrintWriter;
 import java.io.FileOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 
 /**
  *
@@ -30,7 +31,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.5 2003/06/13 16:55:43 eburns Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.6 2003/07/24 23:53:31 rkitain Exp $
  * 
  *
  */
@@ -168,7 +169,13 @@ public void endDocument() throws IOException {
     throw new UnsupportedOperationException();
 }
 
-
+//PENDING(rogerk) JSF_API_20030718 - implement
+public ResponseWriter cloneWithWriter(Writer writer) {
+    return null;
+}
+public String getCharacterEncoding() {
+    return null;
+}
 
 
 } // end of class FileOutputResponseWriter

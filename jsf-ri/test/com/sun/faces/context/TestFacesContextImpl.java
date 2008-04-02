@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.26 2003/07/08 15:38:45 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.27 2003/07/24 23:53:31 rkitain Exp $
  */
 
 /*
@@ -34,8 +34,8 @@ import javax.faces.event.FacesEvent;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
 import javax.faces.context.ResponseWriter;
-import javax.faces.webapp.ServletResponseWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 import javax.faces.context.ResponseStream;
 import com.sun.faces.RIConstants;
 import javax.faces.render.RenderKit;
@@ -51,7 +51,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.26 2003/07/08 15:38:45 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.27 2003/07/24 23:53:31 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,13 +124,28 @@ public void testAccessors()
     assertTrue(result);
     System.out.println("Testing responseStream: " + result);
 
-    /*ResponseWriter responseWriter = new ResponseWriter() {
+//PENDING(rogerk) JSF_API_20030718 - implement (ResponseWriter related mods..
+    ResponseWriter responseWriter = new ResponseWriter() {
 	    public void close() {}
 	    public void flush() {}
 	    public void write(char[] cbuf, int off, int len) {}
+            public ResponseWriter cloneWithWriter(Writer writer) {return null;}
+            public void writeText(char text[], int off, int len) {}
+            public void writeText(char text[]) {}
+            public void writeText(char text) {}
+            public void writeText(Object text) {}
+            public void writeComments(Object text) {}
+            public void writeComment(Object text) {}
+            public void writeURIAttribute(String name, Object value) {}
+            public void writeAttribute(String name, Object value) {}
+            public void endElement(String name) {}
+            public void startElement(String name) {}
+            public void endDocument() {}
+            public void startDocument() {}
+            public String getCharacterEncoding() {return null;}
           
-	}; */
-    ResponseWriter responseWriter = null;
+	};
+/*    ResponseWriter responseWriter = null;
     try {
         responseWriter = new 
         ServletResponseWriter(((ServletResponse)getFacesContext().getExternalContext().
@@ -138,6 +153,7 @@ public void testAccessors()
     } catch ( Exception e ) {
         assertTrue(false);
     }    
+*/
     getFacesContext().setResponseWriter(responseWriter);
     result = responseWriter == getFacesContext().getResponseWriter();
     assertTrue(result);
