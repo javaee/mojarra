@@ -66,6 +66,7 @@
 <!-- ************ Per user local properties ******************************* -->
 
   <property file="${user.home}/build.properties"/>   <!-- user local    -->
+  <property file="build.properties"/>
   <property file="../build.properties"/>             <!-- jsf local     -->
   <property name="depth" value=""/>
   <property file="default.properties"/>              <!-- last resort   -->
