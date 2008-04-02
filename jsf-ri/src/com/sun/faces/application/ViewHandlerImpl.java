@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.59 2005/08/26 15:27:00 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.60 2005/09/28 01:26:17 jayashri Exp $ 
  */ 
 
 
@@ -65,7 +65,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.59 2005/08/26 15:27:00 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.60 2005/09/28 01:26:17 jayashri Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -688,8 +688,8 @@ public class ViewHandlerImpl extends ViewHandler {
 
             mapping = getMappingForRequest(servletPath, pathInfo);
             if (mapping == null) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.log(Level.WARNING,
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE,
                         "jsf.faces_servlet_mapping_cannot_be_determined_error",
                         new Object[]{servletPath});
                 }

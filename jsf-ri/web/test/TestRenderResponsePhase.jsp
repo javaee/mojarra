@@ -73,7 +73,7 @@
 	<TD>
 
             <h:commandButton id="imageOnlyButton" type="submit"
-                 image="/duke.gif" rendered="true"> 
+                 image="/duke.gif?title=LOGIN&color=red" rendered="true"> 
              </h:commandButton>
 	</TD>
 
@@ -119,7 +119,7 @@
 	<TD>
 
 	      <h:commandLink id="imageLink" style="someStyle">
-                <h:graphicImage url="duke.gif"/>
+                <h:graphicImage url="duke.gif?title=LOGIN&color=red"/>
               </h:commandLink>
 
 	</TD>
