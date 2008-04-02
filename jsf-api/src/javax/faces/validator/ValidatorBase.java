@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.6 2002/08/29 05:39:14 craigmcc Exp $
+ * $Id: ValidatorBase.java,v 1.7 2002/09/19 23:15:00 craigmcc Exp $
  */
 
 /*
@@ -84,7 +84,15 @@ abstract class ValidatorBase implements Validator {
     }
 
 
-    private MessageResources resources = null;
+    /**
+     * <p>The {@link MessageResources} instance to be used for looking up
+     * {@link Message} instances.  This variable is declared transient to
+     * ensure the serializability of <code>ValidatorBase</code> subclasses,
+     * so users must include logic to reinitialize it after deserialization.
+     * </p>
+     */
+    private transient MessageResources resources = null;
+
 
     /**
      * <p>Return the {@link MessageResources} instance for the message
