@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.19 2003/07/25 05:52:15 horwat Exp $
+ * $Id: ApplicationImpl.java,v 1.20 2003/08/13 18:16:14 rlubke Exp $
  */
 
 /*
@@ -22,7 +22,6 @@ import javax.faces.event.ActionListener;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
-import javax.faces.el.PropertyResolver;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.application.NavigationHandler;
@@ -31,11 +30,13 @@ import javax.faces.validator.Validator;
 import javax.faces.FacesException;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
+import com.sun.faces.el.impl.ElException;
+import com.sun.faces.el.impl.ExpressionEvaluator;
+import com.sun.faces.el.impl.ExpressionInfo;
 import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
@@ -50,16 +51,6 @@ import org.mozilla.util.Assert;
  * required by JavaServer Faces.
  */
 public class ApplicationImpl extends Application {
-
-//
-// Protected Constants
-//
-
-//
-// Class Variables
-//
-
-// Attribute Instance Variables
 
 // Relationship Instance Variables
 
@@ -91,7 +82,7 @@ public class ApplicationImpl extends Application {
     // the MessageRewources instance, and the class name in the map is replaced
     // with the instance.
     //
-    private Map messageResourcesMap = null;
+    private Map messageResourcesMap = null;        
 
 //
 // Constructors and Initializers
@@ -240,18 +231,16 @@ public class ApplicationImpl extends Application {
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        /* FIX_ME: check ref for valid syntax
-        if (!isValidSyntax(ref)) {
-            throw new ReferenceSyntaxException(ref));
-        }
-        */
-        
-        // Get ValueBinding from cache otherwise create new binding
-        ValueBinding valueBinding;
-        if (null == (valueBinding = (ValueBinding) valueBindingMap.get(ref))) {
-
+        // Check the ValueBinding cache for an existing binding
+        ValueBinding valueBinding = (ValueBinding) valueBindingMap.get(ref);       
+      
+        if (valueBinding == null) {  
+            // the binding doesn't exist.  Check the syntax of the reference
+            // expression.  If the expression is valid, this has the side
+            // effect of caching the expression in the ExpressionEvaluator.
+            checkSyntax(ref);
             valueBinding = new ValueBindingImpl (this);
-            ((ValueBindingImpl)valueBinding).setRef(ref);
+            ((ValueBindingImpl) valueBinding).setRef(ref);
             valueBindingMap.put(ref, valueBinding);
         }
         return valueBinding;
@@ -715,7 +704,26 @@ public class ApplicationImpl extends Application {
 
         return bean;
     }
-
+    
+    private void checkSyntax(String ref) throws ReferenceSyntaxException {            
+        try {                       
+            ExpressionInfo exprInfo = new ExpressionInfo();
+            exprInfo.setExpressionString(ref);            
+            ExpressionEvaluator evaluator =
+                Util.getExpressionEvaluator(RIConstants.FACES_RE_PARSER);
+            // this will be cached so it won't have to be parsed again when
+            // evaluated.
+            evaluator.parseExpression(exprInfo);
+        } catch (ElException elex) {
+            // t will not be null if an error occurred.
+            Throwable t = elex.getCause();
+            if (t != null) {
+                throw new ReferenceSyntaxException(t.getMessage(), t);
+            }
+            throw new ReferenceSyntaxException(elex.getMessage(), elex);
+        }
+    }
+   
     // The testcase for this class is com.sun.faces.application.TestApplicationImpl.java 
     // The testcase for this class is com.sun.faces.application.TestApplicationImpl_Config.java 
 
