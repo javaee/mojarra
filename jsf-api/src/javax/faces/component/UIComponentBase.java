@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.31 2003/01/07 19:55:24 jvisvanathan Exp $
+ * $Id: UIComponentBase.java,v 1.32 2003/01/08 18:35:54 eburns Exp $
  */
 
 /*
@@ -1033,7 +1033,7 @@ public abstract class UIComponentBase implements UIComponent {
      * component has no facets or children, an empty <code>Iterator</code>
      * is returned.</p>
      */
-    public Iterator getChildrenAndFacets() {
+    public Iterator getFacetsAndChildren() {
 
         ArrayList childrenAndFacets = new ArrayList();
         if ( facets != null ) {
@@ -1504,7 +1504,7 @@ public abstract class UIComponentBase implements UIComponent {
      * <ul>
      * <li>Call the <code>processDecodes()</code> method of all facets
      *     and children of this component, in the order determined by
-     *     a call to <code>getChildrenAndFacets()</code>.</li>
+     *     a call to <code>getFacetsAndChildren()</code>.</li>
      * <li>Call the <code>decode()</code> method of this component.</li>
      * </ul>
      *
@@ -1526,7 +1526,7 @@ public abstract class UIComponentBase implements UIComponent {
         boolean result = true;
 
         // process all facets and children of this component
-        Iterator kids = getChildrenAndFacets();
+        Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (!kid.processDecodes(context)) {
@@ -1553,7 +1553,7 @@ public abstract class UIComponentBase implements UIComponent {
      * <ul>
      * <li>Call the <code>processEvents()</code> method of all facets
      *     and children of this component, in the order determined
-     *     by a call to <code>getChildrenAndFacets()</code>.</li>
+     *     by a call to <code>getFacetsAndChildren()</code>.</li>
      * <li>For each event queued to this component:
      *     <ul>
      *     <li>Call the <code>processEvent()</code> method of each registered
@@ -1580,7 +1580,7 @@ public abstract class UIComponentBase implements UIComponent {
         boolean result = true;
 
         // Process all facets and children of this component
-        Iterator kids = getChildrenAndFacets();
+        Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (!kid.processEvents(context)) {
@@ -1621,7 +1621,7 @@ public abstract class UIComponentBase implements UIComponent {
      * <ul>
      * <li>Call the <code>processValidators()</code> method of all facets
      *     and children of this component, in the order determined
-     *     by a call to <code>getChildrenAndFacets()</code>.</li>
+     *     by a call to <code>getFacetsAndChildren()</code>.</li>
      * <li>If the <code>valid</code> property of this component is
      *     currently <code>true</code>:
      *     <ul>
@@ -1652,7 +1652,7 @@ public abstract class UIComponentBase implements UIComponent {
         boolean result = true;
 
         // Process all the facets and children of this component
-        Iterator kids = getChildrenAndFacets();
+        Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (!kid.processValidators(context)) {
@@ -1692,7 +1692,7 @@ public abstract class UIComponentBase implements UIComponent {
      * <ul>
      * <li>Call the <code>processUpdates()</code> method of all facets
      *     and children of this component, in the order determined
-     *     by a call to <code>getChildrenAndFacets()</code>.</li>
+     *     by a call to <code>getFacetsAndChildren()</code>.</li>
      * <li>Call the <code>updateModel()</code> method of this component.</li>
      * </ul>
      *
@@ -1713,7 +1713,7 @@ public abstract class UIComponentBase implements UIComponent {
         boolean result = true;
 
         // Process all facets and children of this component
-        Iterator kids = getChildrenAndFacets();
+        Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (!kid.processUpdates(context)) {

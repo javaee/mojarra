@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.60 2003/01/07 19:55:23 jvisvanathan Exp $
+ * $Id: UIComponent.java,v 1.61 2003/01/08 18:35:53 eburns Exp $
  */
 
 /*
@@ -467,7 +467,7 @@ public interface UIComponent extends Serializable {
      * component has no facets or children, an empty <code>Iterator</code>
      * is returned.</p>
      */
-    public Iterator getChildrenAndFacets();
+    public Iterator getFacetsAndChildren();
     
     
     // ------------------------------------------ Request Event Handler Methods

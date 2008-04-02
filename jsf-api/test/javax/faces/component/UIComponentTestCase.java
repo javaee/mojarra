@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.16 2003/01/07 19:55:25 jvisvanathan Exp $
+ * $Id: UIComponentTestCase.java,v 1.17 2003/01/08 18:35:55 eburns Exp $
  */
 
 /*
@@ -773,7 +773,7 @@ public class UIComponentTestCase extends TestCase {
     }
     
     /**
-     * Test <code>getChildrenAndFacets()</code> method. Make sure the 
+     * Test <code>getFacetsAndChildren()</code> method. Make sure the 
      * facets are returned first followed by children in the order 
      * they are stored in the child list.
      */
@@ -793,7 +793,7 @@ public class UIComponentTestCase extends TestCase {
         // make sure the itertaor is empty before any children or facet is
         // added.
         Iterator kidItr = null;
-        kidItr = testComponent.getChildrenAndFacets();
+        kidItr = testComponent.getFacetsAndChildren();
         assertTrue((kidItr.hasNext()) == false);
 
         // Add facets and children one at a time.
@@ -805,7 +805,7 @@ public class UIComponentTestCase extends TestCase {
         testComponent.addChild(child3);
 
         // make sure the facets and children are returned in the correct order.
-        kidItr = testComponent.getChildrenAndFacets();
+        kidItr = testComponent.getFacetsAndChildren();
         child = (UIComponent) kidItr.next();
         assertTrue(child.equals(facet3) || child.equals(facet2) ||
                 child.equals(facet1));
