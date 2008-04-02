@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.15 2005/04/06 02:39:47 edburns Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.16 2005/04/20 23:01:37 jayashri Exp $
  */
 
 /*
@@ -56,6 +56,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     // Instance Variables
     //
     private Boolean compressStateSet = null;
+    private ByteArrayGuard byteArrayGuard = null;
     
     //
     // Ivars used during actual client lifetime
@@ -70,6 +71,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     public ResponseStateManagerImpl() {
         super();
+        byteArrayGuard = new ByteArrayGuard();
     }
 
 
@@ -96,7 +98,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     }
 
     public boolean isPostback(FacesContext context) {
-	boolean result = context.getExternalContext().getRequestParameterMap().containsKey(RIConstants.FACES_VIEW);
+	boolean result = context.getExternalContext().getRequestParameterMap().
+                containsKey(RIConstants.FACES_VIEW);
 	return result;
     }
 
@@ -120,9 +123,10 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	    GZIPInputStream gis = null;
 	    ObjectInputStream ois = null;
 	    boolean compress = isCompressStateSet(context);
-	    
-	    byte[] bytes = Base64.decode(viewString.getBytes());
+	   
 	    try {
+                 byte[] bytes = byteArrayGuard.decrypt(context,
+                    (Base64.decode(viewString.getBytes())));
 		bis = new ByteArrayInputStream(bytes);
 		if (isCompressStateSet(context)) {
 		    if (log.isDebugEnabled()) {
@@ -185,12 +189,14 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	    if (compress) {
 		zos.close();
 	    }
+            byte[] securedata = byteArrayGuard.encrypt(context, 
+                    bos.toByteArray());
 	    bos.close();
 	    
 	    hiddenField = " <input type=\"hidden\" name=\""
 		+ RIConstants.FACES_VIEW + "\"" + " value=\"" +
-		(new String(Base64.encode(bos.toByteArray()), "ISO-8859-1")) +
-		"\" />\n ";
+                    (new String(Base64.encode(securedata), "ISO-8859-1"))
+		+ "\" />\n ";
 	}
 	else {
 	    hiddenField = " <input type=\"hidden\" name=\""
