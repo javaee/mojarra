@@ -178,9 +178,22 @@ jsf-api.jar.
          Build the API code
        ===================================================================
   -->
-  <target name="build" 
-          depends="prepare,generate,detect.tck,copy.template.sources">
 
+  <target name="compile.old" if="old.compiler">
+    <javac destdir="${build.classes}"
+           debug="${debug}"
+           deprecation="${deprecation}"
+           fork="true"
+           executable="${old.compiler}"
+           optimize="${optimize}" >
+      <compilerarg line="${jcov.javac.args}" />
+      <src path="${src.dir}"/>
+      <src path="${build.generate}"/>
+      <classpath refid="compile.classpath" />
+    </javac>
+  </target>
+
+  <target name="compile" unless="old.compiler">
     <javac destdir="${build.classes}"
            debug="${debug}"
            deprecation="${deprecation}"
@@ -190,7 +203,13 @@ jsf-api.jar.
       <src path="${build.generate}"/>
       <classpath refid="compile.classpath" />
     </javac>
+  </target>
 
+  <target name="build" 
+          depends="prepare,generate,detect.tck,copy.template.sources">
+
+    <antcall target="compile.old"/>
+    <antcall target="compile"/>
     <copy todir="${build.classes}">
       <fileset dir="${src.dir}">
         <exclude name="**/*.java" />
