@@ -11,8 +11,13 @@
 </head>
 <body>
 
+<%@ page contentType="text/html"
+%><%@ page import="javax.faces.component.UICommand"
+%>
+
 <%
-  pageContext.setAttribute("ford", new String("harrison"), PageContext.REQUEST_SCOPE);
+  UICommand command = new UICommand();
+  pageContext.setAttribute("ford", command, PageContext.REQUEST_SCOPE);
 %>
 
 <h1>TLV commandButton, valid 'binding' expression</h1>

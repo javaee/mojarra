@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.74 2005/05/10 15:37:36 edburns Exp $
+ $Id: build-tests.xml,v 1.75 2005/05/12 22:08:17 jayashri Exp $
 -->
 
 <!--
@@ -229,13 +229,12 @@
       <sysproperty key="org.apache.commons.logging.simplelog.showdatetime"
                  value="true"/>
 -->
-      <!-- PENDING (visvan) Fix tests in excludes -->
       <batchtest todir="${test.results.dir}">
         <fileset    dir="${basedir}/build/WEB-INF/classes"
-               includes="com/sun/faces/jsptest/*TestCase.class"
-               excludes="com/sun/faces/jsptest/ViewRootPhaseListenerTestCase.class,
-               com/sun/faces/jsptest/JspIntegrationTestCase.class,com/sun/faces/jsptest/ConverterTestCase.class,
-               com/sun/faces/jsptest/ListenerTestCase.class,com/sun/faces/jsptest/ValidatorTestCase.class"/>               
+               includes="com/sun/faces/jsptest/*TestCase.class"                       
+               excludes="com/sun/faces/jsptest/ListenerTestCase.class,
+               com/sun/faces/jsptest/ValidatorTestCase.class,
+               com/sun/faces/jsptest/ConverterTestCase.class"/>          
       </batchtest> 
 
     </junit>
@@ -245,7 +244,7 @@
   
     <target name="test.path"
         description="Test Path Handling">
-   <!-- PENDING (visvan) Fix PathTestCase 
+   
     <junit printsummary="yes" fork="yes"
           haltonfailure="yes" haltonerror="yes">
 
@@ -257,13 +256,14 @@
             <sysproperty key="host" value="${host}"/>
             <sysproperty key="port" value="${port}"/>
             <sysproperty key="context.path" value="${context.path}"/>
-
+             <!-- PENDING (visvan) Fix PathTestCase -->
             <batchtest todir="${test.results.dir}">
                 <fileset dir="${basedir}/build/WEB-INF/classes"
-                    includes="com/sun/faces/pathtest/*TestCase.class,com/sun/faces/systest/NavigationTestCase.class"/>
+                    includes="com/sun/faces/pathtest/*TestCase.class"
+                    excludes="com/sun/faces/pathtest/PathTestCase.class"/>
             </batchtest>
 
-        </junit> -->
+        </junit>
 
     </target>
 
@@ -369,7 +369,7 @@
                                                                                 
     <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/faces/listener.jsp"
-         status="500" failonerror="${failonerror}"/>
+         status="200" failonerror="${failonerror}"/>
   </target>
 
   <target name="test.managed"
@@ -480,11 +480,10 @@
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/TestElValidatorComponentFail.jsp"
       status="500" failonerror="${failonerror}"/>
-<!-- PENDING return to running
+
     <tester host="${host}" port="${port}" protocol="${protocol}"
    	 request="${context.path}/faces/TestElValidatorComponentSucceed.jsp"
       status="200" failonerror="${failonerror}"/>
-      -->
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
     	 request="${context.path}/faces/TestElValidatorIdFail.jsp"
@@ -710,7 +709,7 @@
   </target>
   <target name="test.subview"
           description="Test subview tag">
-    <!--
+
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview01.jsp"
           recordGolden="${local.golden.path}/subview01.txt"
@@ -730,7 +729,7 @@
          request="${context.path}/faces/subview04.jsp"
          recordGolden="${local.golden.path}/subview04.txt"
          golden="${golden.path}/subview04.txt" failonerror="${failonerror}"/>
-         
+      <!-- c:forEach tests
      <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview05.jsp"
          recordGolden="${local.golden.path}/subview05.txt"
@@ -739,8 +738,8 @@
      <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview06.jsp"
          recordGolden="${local.golden.path}/subview06.txt"
-         golden="${golden.path}/subview06.txt" failonerror="${failonerror}"/>
--->
+         golden="${golden.path}/subview06.txt" failonerror="${failonerror}"/> -->
+
   </target>
 
 </project>

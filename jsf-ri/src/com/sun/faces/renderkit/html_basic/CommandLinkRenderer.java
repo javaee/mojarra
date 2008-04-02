@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.28 2005/05/02 12:49:57 edburns Exp $
+ * $Id: CommandLinkRenderer.java,v 1.29 2005/05/12 22:08:15 jayashri Exp $
  */
 
 /*
@@ -166,7 +166,6 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             return;
         }
         String formClientId = uiform.getClientId(context);
-
         //Write Anchor attributes
 
         //make link act as if it's a button using javascript
@@ -320,6 +319,18 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 
 	renderHiddenFieldsAndScriptIfNecessary(context, writer, component, fieldName);
 
+        UIForm uiform = getMyForm(context, command);
+        if ( uiform == null ) {
+            if (log.isErrorEnabled()) {
+                log.error("component " + component.getId() +
+                          " must be enclosed inside a form ");
+            }
+            return;
+        }
+        // DID_RENDER_SCRIPT needs to be reset, otherwise this attribute 
+        // will also be persisted which will cause the script to be not rendered 
+        // during postback.
+        uiform.getAttributes().remove(DID_RENDER_SCRIPT);
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }

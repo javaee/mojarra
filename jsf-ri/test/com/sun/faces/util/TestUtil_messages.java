@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.38 2005/05/06 22:02:11 edburns Exp $
+ * $Id: TestUtil_messages.java,v 1.39 2005/05/12 22:08:20 jayashri Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import com.sun.faces.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.38 2005/05/06 22:02:11 edburns Exp $
+ * @version $Id: TestUtil_messages.java,v 1.39 2005/05/12 22:08:20 jayashri Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -76,7 +76,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.ILLEGAL_CHARACTERS_ERROR_MESSAGE_ID, "0"},
         {Util.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, "1"},
         {Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, "1"},
-        {Util.SAVING_STATE_ERROR_MESSAGE_ID, "2"},
+        {Util.SAVING_STATE_ERROR_MESSAGE_ID, "0"},
         {Util.RENDERER_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
         {Util.MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID, "1"},
         {Util.NULL_CONFIGURATION_ERROR_MESSAGE_ID, "0"},

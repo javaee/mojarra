@@ -5,6 +5,6 @@
 
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
-<%-- <f:view> --%>
+<f:subview id="view1"> 
 <h:outputText value="[B]"/>
-<%-- </f:view> --%>
+</f:subview> 

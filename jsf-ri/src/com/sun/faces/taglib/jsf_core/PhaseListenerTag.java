@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListenerTag.java,v 1.2 2005/05/05 20:51:26 edburns Exp $
+ * $Id: PhaseListenerTag.java,v 1.3 2005/05/12 22:08:15 jayashri Exp $
  */
 
 /*
@@ -15,7 +15,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
-import javax.faces.webapp.UIComponentTag;
+import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.tagext.Tag;
@@ -94,10 +94,10 @@ public class PhaseListenerTag extends TagSupport {
 
 	// find the viewTag
 	Tag parent = this;
-	UIComponentTag tag = null;
+	UIComponentELTag tag = null;
 	while (null != (parent = parent.getParent())) {
-	    if (parent instanceof UIComponentTag) {
-		tag = (UIComponentTag) parent;
+	    if (parent instanceof UIComponentELTag) {
+		tag = (UIComponentELTag) parent;
 	    }
 	}
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ViewRootPhaseListenerTestCase.java,v 1.1 2004/12/08 15:10:26 edburns Exp $
+ * $Id: ViewRootPhaseListenerTestCase.java,v 1.2 2005/05/12 22:08:18 jayashri Exp $
  */
 
 /*
@@ -124,7 +124,7 @@ public class ViewRootPhaseListenerTestCase extends AbstractTestCase {
 
     public void doTestListenerTagListeners(HtmlPage page) throws Exception {
 	
-	assertTrue(-1 != page.asText().indexOf("beforePhaseEvent: ."));
+	assertTrue(-1 != page.asText().indexOf("beforePhaseEvent: beforePhase: RENDER_RESPONSE 6."));
 	assertTrue(-1 != page.asText().indexOf("afterPhaseEvent: ."));
 
 	List list;
