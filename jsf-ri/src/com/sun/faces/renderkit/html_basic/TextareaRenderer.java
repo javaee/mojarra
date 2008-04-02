@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.11 2004/03/31 18:48:40 eburns Exp $
+ * $Id: TextareaRenderer.java,v 1.12 2004/04/20 16:37:24 rkitain Exp $
  */
 
 /*
@@ -87,11 +87,17 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
         ResponseWriter writer = context.getResponseWriter();
         Util.doAssert(writer != null);
 
+	String styleClass = (String)component.getAttributes().get("styleClass");
+
         writer.startElement("textarea", component);
         writeIdAttributeIfNecessary(context, writer, component);
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
+        if (null != styleClass) {
+            writer.writeAttribute("class", styleClass, "styleClass");
+        }
 
+	// style is rendered as a passthru attribute
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 
