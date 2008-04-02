@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.13 2006/08/30 21:53:45 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.14 2006/09/06 20:44:05 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -99,7 +99,7 @@ public class WebConfiguration {
      * the result of FacesContext.getCurrentInstance().getExternalContext()
      * to {@link #getInstance(javax.faces.context.ExternalContext)}.     
      * @return the WebConfiguration for this application or <code>null</code>
-     *  if no WebConfiguration could be located
+     *  if no FacesContext is available.
      */
     public static WebConfiguration getInstance() {
 
@@ -115,14 +115,38 @@ public class WebConfiguration {
 
     /**
      * Return the WebConfiguration instance for this application.
-     * @param extContext the external context for this request
-     * @return the WebConfiguration for this application or <code>null</code>
-     *  if no WebConfiguration could be located
+     * @param extContext the ExternalContext for this request
+     * @return the WebConfiguration for this application
      */
     public static WebConfiguration getInstance(ExternalContext extContext) {
 
-        return (WebConfiguration) extContext.getApplicationMap()
+        WebConfiguration config = (WebConfiguration) extContext.getApplicationMap()
               .get(WEB_CONFIG_KEY);
+        if (config == null) {
+            return getInstance((ServletContext) extContext.getContext());
+        } else {
+            return config;
+        }
+
+    }
+    
+    
+    /**
+     * Return the WebConfiguration instance for this application.
+     * @param servletContext the ServletContext
+     * @return the WebConfiguration for this application or <code>null</code>
+     *  if no WebConfiguration could be located
+     */
+    public static WebConfiguration getInstance(ServletContext servletContext) {
+
+        WebConfiguration webConfig = (WebConfiguration)
+              servletContext.getAttribute(WEB_CONFIG_KEY);
+
+        if (webConfig == null) {
+            webConfig = new WebConfiguration(servletContext);
+            servletContext.setAttribute(WEB_CONFIG_KEY, webConfig);
+        }
+        return webConfig;
 
     }
 
@@ -221,20 +245,6 @@ public class WebConfiguration {
     static void clear(ServletContext servletContext) {
 
         servletContext.removeAttribute(WEB_CONFIG_KEY);
-
-    }
-
-
-    static WebConfiguration getInstance(ServletContext servletContext) {
-
-        WebConfiguration webConfig = (WebConfiguration)
-              servletContext.getAttribute(WEB_CONFIG_KEY);
-
-        if (webConfig == null) {
-            webConfig = new WebConfiguration(servletContext);
-            servletContext.setAttribute(WEB_CONFIG_KEY, webConfig);
-        }
-        return webConfig;
 
     }
 
@@ -488,22 +498,28 @@ public class WebConfiguration {
 
         ManagedBeanFactoryDecorator(
               "com.sun.faces.managedBeanFactoryDecoratorClass",
-              ""),
+              ""
+        ),
         StateSavingMethod(
               "javax.faces.STATE_SAVING_METHOD",
-              "server"),
+              "server"
+        ),
         JspDefaultSuffix(
               "javax.faces.DEFAULT_SUFFIX",
-              ".jsp"),
+              ".jsp"
+        ),
         JavaxFacesConfigFiles(
               "javax.faces.CONFIG_FILES",
-              ""),
+              ""
+        ),
         AlternateLifecycleId(
               "javax.faces.LIFECYCLE_ID",
-              ""),
+              ""
+        ),
         NumberOfViews(
               "com.sun.faces.numberOfViewsInSession",
-              "15"),
+              "15"
+        ),
         NumberOfViewsDeprecated(
               "com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION",
               "15",
@@ -621,23 +637,28 @@ public class WebConfiguration {
 
         DisplayConfiguration(
               "com.sun.faces.displayConfiguration",
-              false), 
+              false
+        ), 
         ValidateFacesConfigFiles(
               "com.sun.faces.validateXml",
-              false),
+              false
+        ),
         VerifyFacesConfigObjects(
               "com.sun.faces.verifyObjects",
-              false),
+              false
+        ),
         ForceLoadFacesConfigFiles(
               "com.sun.faces.forceLoadConfiguration",
-              false),
+              false
+        ),
         DisableArtifactVersioning(
               "com.sun.faces.disableVersionTracking",
-              false),
+              false
+        ),
         EnableHtmlTagLibraryValidator(
               "com.sun.faces.enableHtmlTagLibValidator",
-              false),
-
+              false
+        ),
         PreferXHTMLContentType(
               "com.sun.faces.preferXHTML",
               false
@@ -665,6 +686,10 @@ public class WebConfiguration {
         ExternalizeJavaScript(
             "com.sun.faces.externalizeJavaScript",
             false
+        ),
+        SendPoweredByHeader(
+              "com.sun.faces.sendPoweredByHeader",
+              true
         );
 
         private BooleanWebContextInitParameter alternate;

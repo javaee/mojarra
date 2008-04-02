@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.51 2006/09/05 22:52:31 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.52 2006/09/06 20:44:04 rlubke Exp $
  */
 
 /*
@@ -67,6 +67,8 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
@@ -76,7 +78,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.51 2006/09/05 22:52:31 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.52 2006/09/06 20:44:04 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -143,6 +145,12 @@ public class ExternalContextImpl extends ExternalContext {
             }
         }
         this.response = response;
+        WebConfiguration config = WebConfiguration.getInstance(sc);
+        if (config
+              .getBooleanContextInitParameter(BooleanWebContextInitParameter.SendPoweredByHeader)) {
+            ((HttpServletResponse) response)
+                  .addHeader("X-Powered-By", "JSF/1.2");
+        }
 
         // Store this in request scope so jsf-api can access it.
         this.getRequestMap().put(EXTERNALCONTEXT_IMPL_ATTR_NAME, this);

@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.67 2006/06/15 17:46:31 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.68 2006/09/06 20:44:05 rlubke Exp $
  */
 
 /*
@@ -110,9 +110,9 @@ public class LifecycleImpl extends Lifecycle {
                 break;
             }
 
-            phase((PhaseId) PhaseId.VALUES.get(i), phases[i], context);
+            phase(PhaseId.VALUES.get(i), phases[i], context);
 
-            if (reload((PhaseId) PhaseId.VALUES.get(i), context)) {
+            if (reload(PhaseId.VALUES.get(i), context)) {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Skipping rest of execute() because of a reload");
                 }
