@@ -161,7 +161,7 @@
 	<TD>
 
 	      <h:command_hyperlink id="link" 
-                  target="/faces/Basic_Thanks.jsp"
+                  href="/faces/Basic_Thanks.jsp"
                   commandName="thankyoulink" label="Link to Thank You page"
                                                 key="linkLabel" />
 
@@ -187,7 +187,7 @@
 	<TD>
 
 	      <h:command_hyperlink id="imageLink" 
-                      target="/basic/index.html" image="/basic/duke.gif"/>
+                      href="/basic/index.html" image="/basic/duke.gif"/>
 
 	</TD>
 

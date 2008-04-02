@@ -350,7 +350,7 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
     <attribute>
-      <name>target</name>
+      <name>href</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>

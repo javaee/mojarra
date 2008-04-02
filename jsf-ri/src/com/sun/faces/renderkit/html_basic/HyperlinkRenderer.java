@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.37 2003/02/18 20:18:35 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.38 2003/02/20 21:36:47 horwat Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.37 2003/02/18 20:18:35 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.38 2003/02/20 21:36:47 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -197,21 +197,21 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
 
         writer.write("<a href=\"");
 
-        //PENDING(rogerk) don't call this if "target" (destination) is
+        //PENDING(rogerk) don't call this if "href" (destination) is
         // a non-faces page.  For non-faces pages, we would simply 
-        // include the "target attribute's value.
+        // include the "href attribute's value.
         // ex: <a href="http://java.sun.com".....
-        // For faces pages, we are expecting the "target" attribute to
+        // For faces pages, we are expecting the "href" attribute to
         // begin with "/faces" (ex: /faces/Faces_Basic.xul).
-        //PENDING(rogerk) what if "target" attribute is not set (null)???
+        //PENDING(rogerk) what if "href" attribute is not set (null)???
         //
-        String target = (String)command.getAttribute("target");
+        String href = (String)command.getAttribute("href");
         String commandName = command.getCommandName();
-        if (target != null) {
-            if (target.startsWith(RIConstants.URL_PREFIX)) {
+        if (href != null) {
+            if (href.startsWith(RIConstants.URL_PREFIX)) {
                 writer.write(href(context, command));
             } else {
-                writer.write(target);
+                writer.write(href);
             }
         }
 	else if (null != commandName) {
@@ -292,13 +292,13 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
         StringBuffer sb = new StringBuffer(request.getContextPath());
         sb.append(RIConstants.URL_PREFIX);
         // need to make sure the rendered string contains where we
-        // want to go next (target).
-        //PENDING(rogerk) should "target" be required attribute??
+        // want to go next (href).
+        //PENDING(rogerk) should "href" be required attribute??
         //
-        String target = (String)component.getAttribute("target");
-        if (target != null) {
-            target = target.substring(RIConstants.URL_PREFIX.length());
-            sb.append(target);
+        String href = (String)component.getAttribute("href");
+        if (href != null) {
+            href = href.substring(RIConstants.URL_PREFIX.length());
+            sb.append(href);
         } else {
             sb.append(context.getTree().getTreeId());
         }

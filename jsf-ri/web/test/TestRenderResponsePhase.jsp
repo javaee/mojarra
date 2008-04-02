@@ -126,7 +126,7 @@
 
 	<TD>
 
-	      <h:command_hyperlink id="link" target="hello.html"
+	      <h:command_hyperlink id="link" href="hello.html"
                            commandClass="hyperlinkClass"
 				       label="link text"/>
 
@@ -138,7 +138,7 @@
 
 	<TD>
 
-	      <h:command_hyperlink id="imageLink" target="hello.html"
+	      <h:command_hyperlink id="imageLink" href="hello.html"
 				       image="duke.gif"/>
 
 	</TD>

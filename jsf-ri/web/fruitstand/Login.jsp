@@ -54,7 +54,7 @@
 
 <p> <faces:Command_Button id="Login" label="login" commandListener="handleLogin" /> 
 
-<p><font color="#000000">click&nbsp;</font> <faces:Command_Hyperlink target="createAccount.jsp" text="here"/> to open new account
+<p><font color="#000000">click&nbsp;</font> <faces:Command_Hyperlink href="createAccount.jsp" text="here"/> to open new account
 <hr WIDTH="100%">
 <p><img SRC="duke.gif" height=55 width=49 align=ABSCENTER> Thanks
 for stopping by.

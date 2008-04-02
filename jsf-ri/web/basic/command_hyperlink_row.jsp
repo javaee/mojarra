@@ -12,7 +12,7 @@
              <td>
 
 	       <h:command_hyperlink id="command_hyperlink1" 
-                  target="/faces/Basic_Thanks.jsp"
+                  href="/faces/Basic_Thanks.jsp"
                   commandName="thankyoulink" label="Link to Thank You page"
                                                 key="linkLabel" 
                                                 bundle="basicBundle"/>
@@ -34,7 +34,7 @@
              <td>
 
 	      <h:command_hyperlink id="imageLink" 
-                      target="/basic/index.html" label="link to external page"/>
+                      href="/basic/index.html" label="link to external page"/>
 
 
              </td>

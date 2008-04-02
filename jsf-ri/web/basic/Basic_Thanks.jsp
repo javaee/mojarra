@@ -22,7 +22,7 @@
 
           </TR>
             <td><h:command_hyperlink id="link" 
-                target="/faces/Faces_Basic.jsp" 
+                href="/faces/Faces_Basic.jsp" 
                 commandName="basiclink" 
                 label="Back To Components Page" /></td>
           </TR>
