@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.144 2006/03/14 17:24:27 edburns Exp $
+ * $Id: UIComponent.java,v 1.145 2006/04/24 19:38:43 edburns Exp $
  */
 
 /*
@@ -831,7 +831,7 @@ private void doFind(FacesContext context, String clientId) {
      * 
      * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
      * the actual encoding will be delegated to 
-     * {@link Renderer#encodeBegin(FacesContext, UIComponent)}.</p> 
+     * {@link Renderer#encodeChildren(FacesContext, UIComponent)}.</p> 
      *
      * @param context {@link FacesContext} for the response we are creating
      *
@@ -849,7 +849,7 @@ private void doFind(FacesContext context, String clientId) {
      * 
      * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
      * the actual encoding will be delegated to 
-     * {@link Renderer#encodeBegin(FacesContext, UIComponent)}.</p> 
+     * {@link Renderer#encodeEnd(FacesContext, UIComponent)}.</p> 
      *
      * @param context {@link FacesContext} for the response we are creating
      *
