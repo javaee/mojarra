@@ -11,7 +11,7 @@
 </head>
 <body bgcolor="#ffffff">
 <center>
-<h1>JavaServer<sup><font size="-1">TM</font></sup> Faces (JSF) 1.1_01
+<h1>JavaServer<sup><font size="-1">TM</font></sup> Faces Technology, version 1.1_01
 FCS<br>
 Release Notes</h1>
 </center>
@@ -27,7 +27,7 @@ Release Notes</a>
 reference implementation of the JavaServer Faces framework.
 </p>
 <p>This FCS release of JavaServer Faces technology provides a final
-version of the JSF technology which was developed under
+version of the JavaServer Faces technology which was developed under
 the Java Community Process(SM) ("JCP(SM)") as <a
  href="http://jcp.org/jsr/detail/127.jsp">JSR127</a>. </p>
 <h1>&nbsp;Contents</h1>
@@ -126,14 +126,11 @@ state saving client mode, state can be optionally compressed before it
 is encoded and written as a hidden field. This is turned <span
  style="font-weight: bold;">on</span> by default.&nbsp; You can turn
 off
-this feature by setting the <span style="font-style: italic;">ServletContext&nbsp;
-    </span>Init Parameter "<span style="font-style: italic;">com.sun.faces.COMPRESS_STATE</span>"&nbsp;
-to false in your
-web deployment descriptor (web.xml) file.</li>
+this feature by setting the <code>ServletContext</code> initialization parameter <code>com.sun.faces.COMPRESS_STATE</code>
+to false in your deployment descriptor (web.xml) file.</li>
 </ul>
 <ul>
-  <li>Removed explicit casts and dependencies to ServletContext.&nbsp;
-Important for Portlet environments.</li>
+  <li>Removed explicit casts and dependencies to <code>ServletContext</code>.  This is important for portlet environments.</li>
 </ul>
 <ul>
   <li>Configuration system correctly recognizes application default
@@ -141,47 +138,44 @@ locale.</li>
 </ul>
 <ul>
   <li>Fixed client state saving bug where components were not rendered
-on postback for jsp pages containing verbatim tags.&nbsp; This was due
-to an
-"allignment" problem between state saving and restoration (client mode).</li>
+on postback for JSP pages containing verbatim tags.&nbsp; This was due
+to an alignment problem between state saving and restoration (client mode).</li>
 </ul>
 <ul>
-  <li>Fixed bug where <span style="font-style: italic;">SelectManyCheckboxListRenderer</span>&nbsp;
-was rendering a "border" attribute as part of the HTML "input"
-element.&nbsp; "border" is not a valid HTML attribute of "input"
+  <li>Fixed bug where <code>SelectManyCheckboxListRenderer</code>&nbsp;
+was rendering a <code>border</code> attribute as part of the HTML <code>input</code>
+element.&nbsp; <code>border</code> is not a valid HTML attribute of the <code>input</code>
 element.</li>
 </ul>
 <ul>
-  <li>Fixed bug where <span style="font-style: italic;">OutputMessageRenderer</span>&nbsp;
-was not rendering the "id" attribute as part of the HTML "span" element.</li>
+  <li>Fixed bug where <code>OutputMessageRenderer</code>&nbsp;
+was not rendering the <code>id</code> attribute as part of the HTML <code>span</code> element.</li>
 </ul>
 <ul>
-  <li>Fixed bug where <span style="font-style: italic;">RadioRenderer&nbsp;
-    </span>was rendering a "border" attribute as part of the HTML
-"input" element.&nbsp; "border" is not a valid HTML attribute of
-"input" element.</li>
+  <li>Fixed bug where <code>RadioRenderer</code>was rendering a <code>border</code> attribute as part of the HTML
+<code>input</code> element; <code>border</code> is not a valid HTML attribute of
+the <code>input</code> element.</li>
 </ul>
 <ul>
   <li>Performance Enhancements:</li>
   <ul>
-    <li>Improved the rendering performance of large DataTable(s) by
-replacing String concatenation mechanism with a nested HashMap data
-structure in <span style="font-style: italic;">RenderKitImpl</span>.</li>
+    <li>Improved the rendering performance of large data table(s) by
+replacing the String concatenation mechanism with a nested <code>HashMap</code> data
+structure in <code>RenderKitImpl</code>.</li>
   </ul>
 </ul>
 <ul>
   <ul>
-    <li>&nbsp;Avoid synchronization issues by loading <span
- style="font-style: italic;">UIComponentBase&nbsp; </span>property
+    <li>Avoid synchronization issues by loading <code>UIComponentBase</code> property
 descriptor information in the constructor which guarantees readonly
 access.&nbsp; To further optimize look up, the saved map of descriptors
-is keyed by "name" instead of array of property descriptors.</li>
+is keyed by name instead of the array of property descriptors.</li>
   </ul>
 </ul>
 <ul>
   <ul>
     <li>Improved the performance of checking whether a component's
-rendering should be suppressed in <span style="font-style: italic;">UIComponentTag</span>.</li>
+rendering should be suppressed in <code>UIComponentTag</code>.</li>
   </ul>
 </ul>
 <ul>
@@ -195,36 +189,32 @@ parsing one merged configuration file (merged from <span
 </ul>
 <ul>
   <li>Fixed bug where an exception would be thrown if you had a managed
-bean property referencing a non managed bean.&nbsp; <span
- style="font-style: italic;">ManageBeanFactory</span>&nbsp; threw an
-exception because it didn't know the scope of the referenced non
-managed bean.</li>
+bean property referencing a non-managed bean.&nbsp; <code>ManageBeanFactory</code>&nbsp; threw an
+exception because it didn't know the scope of the referenced non-managed bean.</li>
 </ul>
 <ul>
-  <li>Fixed bug where managed bean Map (and List) properties (that were
-were not created, but retrieved) were being set.</li>
+  <li>Fixed bug where managed bean <code>Map</code> and <code>List</code> properties that were
+were not created, but retrieved were being set.</li>
 </ul>
 <ul>
-  <li>Fixed bug where <span style="font-style: italic;">MenuRenderer</span>&nbsp;
+  <li>Fixed bug where <code>MenuRenderer</code>&nbsp;
 generated non-compliant XHTML.</li>
 </ul>
 <ul>
-  <li>Fixed bug where <span style="font-style: italic;">HtmlSelectManyCheckbox</span>&nbsp;
-and <span style="font-style: italic;">HtmlSelectOneRadio</span>&nbsp;
-handled the "style" attribute incorrectly.</li>
+  <li>Fixed bug where <code>HtmlSelectManyCheckbox</code>&nbsp;
+and <code>HtmlSelectOneRadio</code>&nbsp;
+handled the <code>style</code> attribute incorrectly.</li>
 </ul>
 <ul>
-  <li>Fixed server side state saving to support failover. Instead of
-saving the view in session (since the <span style="font-style: italic;">UIComponent</span>
-instances are not serializable), the <span style="font-style: italic;">SerializedView</span>
-(result of calling <span style="font-style: italic;">getTreeStructureToSave()
-    </span>and <span style="font-style: italic;">getTreeStateToSave()</span>)
-is saved&nbsp; in the session.&nbsp; This can be enabled by using the <span
- style="font-style: italic;">ServletContext&nbsp; </span>Init
-Parameter "com.sun.faces.enableHigh Availability"</li>
+  <li>Fixed server-side state saving to support failover. Instead of
+saving the view in session (since the <code>UIComponent</code>
+instances are not serializable), the <code>SerializedView</code>
+(which is obtained by calling <code>getTreeStructureToSave</code> and <code>getTreeStateToSave</code>)
+is saved&nbsp; in the session.&nbsp; This can be enabled by using the <code>ServletContext</code> initialization
+parameter <code>com.sun.faces.enable.HighAvailability</code></li>
 </ul>
 <ul>
-  <li>Removed component id from error messages.</li>
+  <li>Removed component ID from error messages.</li>
 </ul>
 <ul>
   <li>Fixed bug where command link components across multiple forms was
@@ -234,12 +224,12 @@ not working.</li>
   <li>Removed erroneous "back slash" characters from messages files.</li>
 </ul>
 <ul>
-  <li>Fixed bug where "required=true" was not working for <span
- style="font-style: italic;">UISelectOne</span> component.</li>
+  <li>Fixed bug where setting the <code>required</code> attribute to <code>true</code> 
+was not working for the <code>UISelectOne</code> component.</li>
 </ul>
 <ul>
-  <li>Fixed bug where <span style="font-style: italic;">DateTimeConverter</span>&nbsp;
-was not properly throwing an "IllegalArgumentException". <br>
+  <li>Fixed bug where <code>DateTimeConverter</code>&nbsp;
+was not properly throwing an <code>IllegalArgumentException</code>. <br>
   </li>
 </ul>
 <ul>
@@ -259,7 +249,7 @@ have followed the guidelines recommended by <a
 JavaServer Faces Reference Implementation can be configured to provide
 logging information using the steps below.<br>
 <ol>
-  <li>If you are using Tomcat or JWSDP as your container, you can set
+  <li>If you are using Tomcat or the Java Web Services Developer Pack (Java WSDP) as your container, you can set
 the following property to tell the container what logging
 implementation you are using as well as the location of your logging
 configuration file.&nbsp; Set&nbsp;&nbsp; <span
@@ -344,53 +334,51 @@ com.xyz.foo.level = SEVERE<br>
 com.sun.faces.level = ALL<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <br>
-If you use the ConsoleHandler ( which would direct all the output to
+If you use the <code>ConsoleHandler</code> ( which would direct all the output to
 catalina.out in the case of standalone Tomcat or launcher.server.log in
-the case of JWSDP ) please make sure that the detail level for
-ConsoleHandler can handle the level set for individual packages. For
-example say you have set the level for "com.sun.faces.el" package to
+the case of Java WSDP ) please make sure that the detail level for
+<code>ConsoleHandler</code> can handle the level set for individual packages. For
+example say you have set the level for <code>com.sun.faces.el</code> package to
 "FINEST" as below.<br>
-&nbsp;&nbsp;&nbsp; "<span style="font-style: italic;">com.sun.faces.el.level
-= FINEST</span>"<br>
+&nbsp;&nbsp;&nbsp; <code>com.sun.faces.el.level
+= FINEST</code><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <br>
 You won't see any trace or debug messages unless you also set
-ConsoleHandler.level = FINEST. ConsoleHandler.level caps the detail
+<code>ConsoleHandler.level = FINEST</code>. <code>ConsoleHandler.level</code> caps the detail
 level to the console, no matter what the underlying loggers are set for.<br>
 <br>
 In this release, the Reference Implementation provides logging support
 for the following packages.<br>
-&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">*
-com.sun.faces.application</span><br style="font-style: italic;">
-<span style="font-style: italic;">&nbsp;&nbsp;&nbsp; * com.sun.faces.el</span><br
- style="font-style: italic;">
-<span style="font-style: italic;">&nbsp;&nbsp;&nbsp; *
-com.sun.faces.lifecycle</span><br>
+<ul>
+<li><code>com.sun.faces.application</code>
+<li><code>com.sun.faces.el</code>
+<li><code>com.sun.faces.lifecycle</code>
+</ul>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <br>
 The logging messages are not localized. Localization as well as logging
 for rest of the RI will be done in a future release.<br>
 <h1><a name="issues">Known</a> Issues With This Release</h1>
 <ul>
-  <li>You can add a "title" attribute to <span
- style="font-style: italic;">&lt;h:message*&gt;</span>&nbsp; but it
-won't appear. "title" gets rendered with the value of the "summary"
+  <li>You can add a <code>title</code> attribute to <code>&lt;h:message*&gt;</code> but it
+won't appear. The <code>title</code> gets rendered with the value of the <code>summary</code>
 attribute.&nbsp; Refer to the standard renderer docs for more
-information. "title" will be deprecated from the list of supported
-attributes for <span style="font-style: italic;">&lt;h:message*&gt; </span>in
+information. The <code>title</code> attribute will be deprecated from the list of supported
+attributes for <code>&lt;h:message*&gt; </code>in
 the 1.2 release.</li>
 </ul>
 <ul>
   <li>The standard renderer docs need to be clarified with regards to
-the rendering of the "span" element. The "span" element should be
-rendered if any pass through attributes are present (not just "style"
-and "styleClass").</li>
+the rendering of the <code>span</code> element. The <code>span</code> element should be
+rendered if any pass through attributes are present (not just <code>style</code>
+and <code>styleClass</code>).</li>
 </ul>
 <ul>
-  <li>The standard renderer docs specify "accesskey" as an attribute of
-the "select" family of components, which is not in accordance with the
-HTML specification.&nbsp; "accesskey" will be deprecated from the
-"select" family of components in the next release.</li>
+  <li>The standard renderer docs specify <code>accesskey</code> as an attribute of
+the <code>select</code> family of components, which is not in accordance with the
+HTML specification.&nbsp; The <code>accesskey</code> attribute will be deprecated from the
+<code>select</code> family of components in the next release.</li>
 </ul>
 <ul>
   <li>
@@ -400,13 +388,13 @@ and the form must reside within the same <code>&lt;h:form&gt;</code>. </p>
   </li>
   <li>
     <p>Content is not ordered as expected when mixing template text
-with JSF tags. For example this jsp code: </p>
+with JavaServer Faces technology tags. For example the following JSP page code outputs the string <code>Not the link text.</code> before the
+link. </p>
     <ul>
       <code> &lt;h:commandLink action="foo"&gt; Not the link text.
 &lt;/h:commandLink&gt; </code>
     </ul>
-    <p>outputs the string <code>Not the link text.</code> before the
-link. The workaround for this is to enclose the nested text in an <code>&lt;f:verbatim&gt;</code>
+    <p>The workaround for this is to enclose the nested text in an <code>&lt;f:verbatim&gt;</code>
 tag, like this:</p>
     <ul>
       <code> &lt;h:commandLink action="foo"&gt; &lt;f:verbatim&gt;Not
@@ -414,27 +402,27 @@ the link text.&lt;/f:verbatim&gt; &lt;/h:commandLink&gt; </code>
     </ul>
   </li>
   <li>
-    <p>Do not enclose JavaServer Faces component tags inside of
+    <p>Do not enclose JavaServer Faces technology component tags inside of
 iterating JSP tags, such as JSTL's <code>&lt;c:forEach&gt;</code> tag.
-The primary reason for this restriction is that Faces cannot know how
+The primary reason for this restriction is that JavaServer Faces technology cannot know how
 many times the loop will execute and therefore the number of components
 placed in the tree by this tag is undetermined. This breaks the entire
-id to component matching scheme required by <code>UIComponentTag</code>
+ID-to-component matching scheme required by <code>UIComponentTag</code>
 to match tags to <code>UIComponent</code> instances.</p>
   </li>
   <li>
-    <p>The Map returned by the UIComponent.getAttributes() method
-implements get() so that if you ask for a key that is implemented as a
-property, you get the property value. However, if you call iterator()
-on the Map, you will get an Iterator that iterates over the "real"
+    <p>The <code>Map</code> object returned by the <code>UIComponent.getAttributes</code> method
+implements the <code>get</code> method so that if you ask for a key that is implemented as a
+property, you get the property value. However, if you call the <code>iterator</code> method
+on the <code>Map</code> object, you will get an <code>Iterator</code> object that iterates over the real
 attributes only, not the properties.</p>
   </li>
   <li>
-    <p>the value of <code>javax.faces.component.NamingContainer.SEPARATOR_CHAR</code>
-is '<code>:</code>'. This means that the client id for components will
+    <p>The value of <code>javax.faces.component.NamingContainer.SEPARATOR_CHAR</code>
+is '<code>:</code>'. This means that the client ID for components will
 be something like "<code>form:checkbox1</code>". The use of the '<code>:</code>'
-character in the id causes problems for CSS stylesheets that try to
-apply style to components using their id. The workaround is to use the
+character in the ID causes problems for CSS stylesheets that try to
+apply style to components using their ID. The workaround is to use the
 CSS "<code>class</code>" concept to apply style to a component. </p>
   </li>
   <li>
@@ -448,35 +436,35 @@ the
 application is configured to save state in the server is configurable
 by
 the RI init context parameter
-"<code>com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION</code>" without quotes.
+<code>com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION</code>.
 This is a non-standard feature, so don't count on it.</p>
     <p></p>
   </li>
   <li>
     <p>Don't use the '.' character in <code>ResourceBundle</code> keys
-for use in Faces. This character is a reserved character in the JSF EL.
+for use in JavaServer Faces technology. This character is a reserved character in the JavaServer Faces EL.
     </p>
   </li>
   <li>
-    <p>When deploying on a non-JWSDP container, you must include all
-the dependent jars in your webapp's WEB-INF/lib directory. It's
+    <p>When deploying on a non-Java WSDP container, you must include all
+the dependent JAR files in your webapp's WEB-INF/lib directory. It's
 possible it may work without doing this, but this is not a supported
 configuration. </p>
   </li>
   <li>
-    <p>If you're using a SunOne Application Server 7.x, Tomcat 4 series
+    <p>If you're using a Sun<sup><font size=-2>TM</font></sup> ONE Application Server 7.x, Tomcat 4 series
 container, or any container that strictly conforms to JSP 1.2, Servlet
 2.3, you must use JSTL 1.0 instead of JSTL 1.1. </p>
   </li>
   <li>
-    <p>There is a known issue in S1AS 7.x, Tomcat 4.x, and Tomcat 5.x
+    <p>There is a known issue in Sun ONE Application Server 7.x, Tomcat 4.x, and Tomcat 5.x
 where security constraints are applied to welcome files. The bug number
-for this S1AS 7.x issue is #5004853.</p>
+for this issue is #5004853.</p>
     <p>This bug is problematic for the <code>jsf-cardemo</code>
 application since the security constraint is applied to the <code>index.jsp</code>
 welcome file. Since this container applies the security constraint to
 the welcome file, the container displays an error page when an attempt
-to access the application is made. On older versions of S1AS 7.x that
+to access the application is made. On older versions of the Sun ONE Application Server 7.x, that
 error code is incorrectly reported as 500. This has since been fixed to
 be the correct number 403.</p>
     <p>To get around this problem either: </p>
@@ -487,7 +475,7 @@ be the correct number 403.</p>
 welcome file to exclude the <code> index.jsp</code> page.</li>
     </ul>
     <p></p>
-    <p>The Java Systems Application Server 8.0 and JWSDP 1.3 do not
+    <p>The Sun Java System Application Server 8.0 and Java WSDP 1.3 do not
 have this problem and properly exclude welcome files from the security
 constraints.</p>
   </li>
@@ -499,10 +487,10 @@ constraints.</p>
     <p>Some versions of some web containers, such as <a
  href="http://www.caucho.com/">Resin</a> and <a
  href="http://www.oracle.com/appserver/">Oracle App Server</a>, don't
-follow the Servlet 2.3 Spec rule of calling ServletContextListeners
-listeners defined in tld files in the META-INF directory of a jar.
-Running a faces webapp in such a container requires you to manually
-declare the ServletContextListener. The <code>listener-class</code>
+follow the Servlet 2.3 specification rule of calling <code>ServletContextListener</code> 
+listeners defined in TLD files in the META-INF directory of a jar.
+Running a JavaServer Faces technology Web application in such a container requires you to manually
+declare the <code>ServletContextListener</code> instance. The <code>listener-class</code>
 you need to specify is <code>com.sun.faces.config.ConfigureListener</code>
     </p>
   </li>
@@ -513,12 +501,12 @@ into some difficulties in the "edit-compile-debug" cycle.</p>
     <p>Consider this JSP fragment:</p>
     <p><code> &lt;h:commandButton binding="#{backingBean.button1}"
 value="press me" /&gt; </code></p>
-    <p>Let's say that "backingBean" is stored in session scope. The
-first time the browser views this page, backingBean gets instantiated,
-and initialized with the value "press me". Now, let's say the web-app
-is being authored in place, on the web container. In other words, any
-changes made to the JSP are seen "live" on the server. If you change
-the JSP to alter the value of the button to be different, say like
+    <p>Let's say that <code>backingBean</code> is stored in session scope. The
+first time the browser views this page, <code>backingBean</code> gets instantiated,
+and initialized with the value "press me". Now, let's say the Web application
+is being authored in place, on the Web container. In other words, any
+changes made to the JSP page are seen "live" on the server. If you change
+the JSP page to alter the value of the button to be different, say like
 this: </p>
     <p><code> &lt;h:commandButton binding="#{backingBean.button1}"
 value="click me" /&gt; </code></p>
@@ -528,26 +516,26 @@ is because the spec is designed to only initialize the backing bean
 with a value the first time the page is loaded, and the bean is still
 sitting in the session with the old value. There are several
 workarounds to this problem.</p>
-    <ol>
+    <ul>
       <li>
-        <p> use "request" or "none" scope for your backing bean </p>
+        <p> Use <code>request</code> or <code>none</code> scope for your backing bean </p>
       </li>
       <li>
-        <p> use java code to push the value into the bean, rather than
-JSP </p>
+        <p> Use Java code to push the value into the bean, rather than the
+JSP page</p>
       </li>
       <li>
-        <p>ask the user to re-start their browser after modifying the
+        <p>Ask the user to re-start their browser after modifying the
 JSP page. </p>
       </li>
       <li>
-        <p> find a way to invalidate the session when the JSP page has
+        <p> Find a way to invalidate the session when the JSP page has
 changed. </p>
       </li>
-    </ol>
+    </ul>
   </li>
-  <li>When installing newer versions of JSF sample applications be sure
-to clear your client cache as well as your web container's cached
+  <li>When installing newer versions of JavaServer Faces sample applications be sure
+to clear your client cache as well as your Web container's cached
 files. You may run into consistency problems if you do not clear out
 the cached files.<a name="changes"><br>
     </a></li>
