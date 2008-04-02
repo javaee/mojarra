@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.21 2005/06/09 22:37:46 jayashri Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.22 2005/06/23 15:31:33 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Logger logger = 
+    private static final Logger logger = 
             Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
     private static final String FACES_VIEW_STATE =
         "com.sun.faces.FACES_VIEW_STATE";

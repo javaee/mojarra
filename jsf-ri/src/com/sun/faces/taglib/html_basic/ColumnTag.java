@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.11 2005/06/09 22:37:49 jayashri Exp $
+ * $Id: ColumnTag.java,v 1.12 2005/06/23 15:31:34 rlubke Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.logging.Level;
 public class ColumnTag extends UIComponentTag {
 
     // Log instance for this class
-    protected static Logger logger = 
+    private static final Logger logger = 
             Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
 
     //

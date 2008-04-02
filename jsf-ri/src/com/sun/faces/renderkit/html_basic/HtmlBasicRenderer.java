@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.94 2005/06/09 22:37:47 jayashri Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.95 2005/06/23 15:31:33 rlubke Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
     // Class Variables
     //
     // Log instance for this class
-    protected static Logger logger = 
+    protected static final Logger logger = 
             Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
    
     //

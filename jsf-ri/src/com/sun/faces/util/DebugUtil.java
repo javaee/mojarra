@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.28 2005/06/01 14:03:38 rlubke Exp $
+ * $Id: DebugUtil.java,v 1.29 2005/06/23 15:31:35 rlubke Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.model.SelectItem;
  * <B>Lifetime And Scope</B> <P>
  */
 
-public class DebugUtil extends Object {
+public class DebugUtil {
 
 //
 // Protected Constants
@@ -38,7 +38,7 @@ public class DebugUtil extends Object {
 // Class Variables
 //
 
-    public static boolean keepWaiting = true;
+    private static boolean keepWaiting = true;
 
     private static int curDepth = 0;
 
@@ -68,6 +68,12 @@ public class DebugUtil extends Object {
 //
 // Class methods
 //
+
+    public static void setKeepWaiting(boolean keepWaiting) {
+
+        DebugUtil.keepWaiting = keepWaiting;
+
+    }
 
     /**
      * Usage: <P>

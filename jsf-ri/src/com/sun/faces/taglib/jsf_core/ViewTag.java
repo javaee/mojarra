@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.37 2005/06/09 22:37:49 jayashri Exp $
+ * $Id: ViewTag.java,v 1.38 2005/06/23 15:31:35 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.37 2005/06/09 22:37:49 jayashri Exp $
+ * @version $Id: ViewTag.java,v 1.38 2005/06/23 15:31:35 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -59,7 +59,7 @@ public class ViewTag extends UIComponentELTag {
     // Class Variables
     //
 
-    protected static Logger logger = 
+    private static final Logger logger = 
             Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
 
     //

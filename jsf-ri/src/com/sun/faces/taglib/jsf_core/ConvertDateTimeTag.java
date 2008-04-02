@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.18 2005/06/09 22:37:49 jayashri Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.19 2005/06/23 15:31:35 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import com.sun.faces.util.Util;
  * <p>ConvertDateTimeTag is a ConverterTag implementation for
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.18 2005/06/09 22:37:49 jayashri Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.19 2005/06/23 15:31:35 rlubke Exp $
  */
 
 public class ConvertDateTimeTag extends ConverterTag {
@@ -39,7 +39,7 @@ public class ConvertDateTimeTag extends ConverterTag {
     private static ValueExpression CONVERTER_ID_EXPR = null;
     
     // Log instance for this class
-    protected static Logger logger = 
+    private static final Logger logger = 
             Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
 
     //

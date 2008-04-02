@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationCaseRule.java,v 1.3 2004/02/04 23:46:23 ofung Exp $
+ * $Id: NavigationCaseRule.java,v 1.4 2005/06/23 15:31:37 rlubke Exp $
  */
 
 /*
@@ -48,13 +48,8 @@ public class NavigationCaseRule extends FeatureRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        NavigationRuleBean nrb = null;
-        try {
-            nrb = (NavigationRuleBean) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent NavigationRuleBean on object stack");
-        }
+        assert (digester.peek() instanceof NavigationRuleBean);
+        
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[NavigationCaseRule]{" +
                                        digester.getMatch() +

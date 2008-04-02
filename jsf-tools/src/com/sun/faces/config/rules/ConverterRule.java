@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterRule.java,v 1.4 2005/03/10 21:39:18 jayashri Exp $
+ * $Id: ConverterRule.java,v 1.5 2005/06/23 15:31:36 rlubke Exp $
  */
 
 /*
@@ -47,13 +47,8 @@ public class ConverterRule extends FeatureRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        FacesConfigBean fcb = null;
-        try {
-            fcb = (FacesConfigBean) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent FacesConfigBean on object stack");
-        }
+        assert (digester.peek() instanceof FacesConfigBean);
+        
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[ConverterRule]{" +
                                        digester.getMatch() +

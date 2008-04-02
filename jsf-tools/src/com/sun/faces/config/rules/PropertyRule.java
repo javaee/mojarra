@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyRule.java,v 1.4 2005/03/10 21:39:19 jayashri Exp $
+ * $Id: PropertyRule.java,v 1.5 2005/06/23 15:31:37 rlubke Exp $
  */
 
 /*
@@ -47,13 +47,8 @@ public class PropertyRule extends FeatureRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        PropertyHolder ph = null;
-        try {
-            ph = (PropertyHolder) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent PropertyHolder on object stack");
-        }
+        assert (digester.peek() instanceof PropertyHolder);
+        
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[PropertyRule]{" +
                                        digester.getMatch() +

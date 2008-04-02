@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeRule.java,v 1.4 2005/03/10 21:39:17 jayashri Exp $
+ * $Id: AttributeRule.java,v 1.5 2005/06/23 15:31:36 rlubke Exp $
  */
 
 /*
@@ -47,13 +47,8 @@ public class AttributeRule extends FeatureRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        AttributeHolder ah = null;
-        try {
-            ah = (AttributeHolder) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent AttributeHolder on object stack");
-        }
+        assert (digester.peek() instanceof AttributeHolder);
+       
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[AttributeRule]{" +
                                        digester.getMatch() +

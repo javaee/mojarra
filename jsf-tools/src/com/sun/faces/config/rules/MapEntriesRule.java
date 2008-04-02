@@ -1,5 +1,5 @@
 /*
- * $Id: MapEntriesRule.java,v 1.4 2005/03/10 21:39:18 jayashri Exp $
+ * $Id: MapEntriesRule.java,v 1.5 2005/06/23 15:31:36 rlubke Exp $
  */
 
 /*
@@ -48,13 +48,8 @@ public class MapEntriesRule extends Rule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        MapEntriesHolder meh = null;
-        try {
-            meh = (MapEntriesHolder) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent MapEntriesHolder on object stack");
-        }
+        assert (digester.peek() instanceof MapEntriesHolder);
+        
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[MapEntriesRule]{" +
                                        digester.getMatch() +

@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationRuleRule.java,v 1.4 2005/03/10 21:39:18 jayashri Exp $
+ * $Id: NavigationRuleRule.java,v 1.5 2005/06/23 15:31:37 rlubke Exp $
  */
 
 /*
@@ -48,13 +48,8 @@ public class NavigationRuleRule extends FeatureRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        FacesConfigBean fcb = null;
-        try {
-            fcb = (FacesConfigBean) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent FacesConfigBean on object stack");
-        }
+        assert (digester.peek() instanceof FacesConfigBean);
+       
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[NavigationRuleRule]{" +
                                        digester.getMatch() +

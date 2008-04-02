@@ -1,5 +1,5 @@
 /*
- * $Id: ListEntriesRule.java,v 1.4 2005/03/10 21:39:18 jayashri Exp $
+ * $Id: ListEntriesRule.java,v 1.5 2005/06/23 15:31:36 rlubke Exp $
  */
 
 /*
@@ -47,13 +47,8 @@ public class ListEntriesRule extends Rule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        ListEntriesHolder leh = null;
-        try {
-            leh = (ListEntriesHolder) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent ListEntriesHolder on object stack");
-        }
+        assert (digester.peek() instanceof ListEntriesHolder);
+      
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[ListEntriesRule]{" +
                                        digester.getMatch() +

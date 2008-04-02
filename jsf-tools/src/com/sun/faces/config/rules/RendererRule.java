@@ -1,5 +1,5 @@
 /*
- * $Id: RendererRule.java,v 1.5 2005/03/10 21:39:19 jayashri Exp $
+ * $Id: RendererRule.java,v 1.6 2005/06/23 15:31:37 rlubke Exp $
  */
 
 /*
@@ -47,13 +47,8 @@ public class RendererRule extends FeatureRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        RenderKitBean rkb = null;
-        try {
-            rkb = (RenderKitBean) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent RenderKitBean on object stack");
-        }
+        assert (digester.peek() instanceof RenderKitBean);
+        
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[RendererRule]{" +
                                        digester.getMatch() +

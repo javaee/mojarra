@@ -1,5 +1,5 @@
 /*
- * $Id: DescriptionTextRule.java,v 1.3 2004/02/04 23:46:21 ofung Exp $
+ * $Id: DescriptionTextRule.java,v 1.4 2005/06/23 15:31:36 rlubke Exp $
  */
 
 /*
@@ -65,14 +65,7 @@ public class DescriptionTextRule extends NodeCreateRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        // Ensure that the current top-of-stack object is a DescriptionBean
-        DescriptionBean db = null;
-        try {
-            db = (DescriptionBean) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent DescriptionBean on object stack");
-        }
+        assert (digester.peek() instanceof DescriptionBean);        
 
         // Perform our standard superclass processing
         if (digester.getLogger().isDebugEnabled()) {

@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.22 2005/06/09 22:37:49 jayashri Exp $
+ * $Id: ActionListenerTag.java,v 1.23 2005/06/23 15:31:35 rlubke Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ public class ActionListenerTag extends TagSupport {
     // ------------------------------------------------------------- Attributes
 
     private static final long serialVersionUID = -5222351612904952740L;
-    protected static Logger logger = 
+    private static final Logger logger = 
             Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
     /**
      * <p>The fully qualified class name of the {@link ActionListener}
