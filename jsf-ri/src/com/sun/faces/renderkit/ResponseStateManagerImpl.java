@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.12 2004/06/12 00:15:10 jvisvanathan Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.13 2004/07/21 21:06:15 jayashri Exp $
  */
 
 /*
@@ -200,7 +200,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	if (null != compressStateSet) {
 	    return compressStateSet.booleanValue();
 	}
-	compressStateSet = Boolean.FALSE;
+	compressStateSet = Boolean.TRUE;
 
         String compressStateParam = context.getExternalContext().
             getInitParameter(COMPRESS_STATE_PARAM);
