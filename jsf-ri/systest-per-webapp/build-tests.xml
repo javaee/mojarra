@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.21 2005/12/14 22:27:58 rlubke Exp $
+ $Id: build-tests.xml,v 1.22 2006/03/15 01:39:53 edburns Exp $
 -->
 
 <!--
@@ -51,7 +51,8 @@
                    command-link-back-button,
                    nested-datatables,
                    jar-ordering,                  
-                   replace-lifecycle"/>
+                   replace-lifecycle,
+                   string-converter"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
@@ -74,6 +75,8 @@
               value="com/sun/faces/systest/JarOrderingTestCase.class"/>
     <property name="replace-lifecycle"
               value="com/sun/faces/systest/ReplaceLifecycleTestCase.class"/>
+    <property name="string-converter" 
+              value="com/sun/faces/systest/StringConverterTestCase.class"/>
     
     <!--
         EXCLUDED APPLICATIONS:

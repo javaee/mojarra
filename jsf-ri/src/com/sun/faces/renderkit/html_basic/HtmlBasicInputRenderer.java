@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.31 2006/01/11 15:28:08 rlubke Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.32 2006/03/15 01:39:53 edburns Exp $
  */
 
 /*
@@ -129,8 +129,18 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             Class converterType = valueExpression.getType(context.getELContext());
            // if converterType is null, assume the modelType is "String".
             if (converterType == null ||
-                converterType == String.class ||
                 converterType == Object.class) {
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("No conversion necessary for " + submittedValue
+                              + "and converterType " + converterType +
+                              " while decoding component " + component.getId());
+                }
+                return newValue;
+            }
+            // If the converterType is a String, and we don't have a 
+            // converter-for-class for java.lang.String, assume the type is 
+            // "String".
+            if (converterType == String.class && !hasStringConverter(context)) {
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("No conversion necessary for " + submittedValue
                               + "and converterType " + converterType +
@@ -191,5 +201,16 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             throw new ConverterException(MessageFactory.getMessage(
                 context, MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
         }
+    }
+    
+    private boolean hasStringConverterSet = false;
+    private boolean hasStringConverter = false;
+    private boolean hasStringConverter(FacesContext context) {
+        if (!hasStringConverterSet) {
+            hasStringConverter = (null != 
+                    context.getApplication().createConverter(String.class));
+            hasStringConverterSet = true;
+        }
+        return hasStringConverter;
     }
 } // end of class HtmlBasicInputRenderer

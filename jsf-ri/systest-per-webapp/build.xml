@@ -60,7 +60,8 @@
                    command-link-back-button,
                    nested-datatables,
                    jar-ordering,                  
-                   replace-lifecycle"/>
+                   replace-lifecycle,
+                   string-converter"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
