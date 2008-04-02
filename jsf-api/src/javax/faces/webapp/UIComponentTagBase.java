@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagBase.java,v 1.4 2005/08/22 22:08:11 ofung Exp $
+ * $Id: UIComponentTagBase.java,v 1.5 2005/11/08 04:14:55 edburns Exp $
  */
 
 /*
@@ -146,6 +146,6 @@ public abstract class UIComponentTagBase extends Object implements JspTag {
      * components and returns the size of the list.</p>
      */
 
-    protected abstract int getIndex();
+    protected abstract int getIndexOfNextChildTag();
 
 }

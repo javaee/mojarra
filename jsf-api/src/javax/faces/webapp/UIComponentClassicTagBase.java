@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.10 2005/10/05 18:10:09 edburns Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.11 2005/11/08 04:14:55 edburns Exp $
  */
 
 /*
@@ -450,7 +450,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
         UIComponent component = createComponent(context, componentId);
         UIComponentTagBase parentTag = getParentUIComponentClassicTagBase(pageContext);
-        parent.getChildren().add(parentTag.getIndex(), component);
+        parent.getChildren().add(parentTag.getIndexOfNextChildTag(), component);
         created = true;
         return (component);
 
@@ -661,7 +661,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     // Methods related to the createdComponents and createdFacets lists.
     // 
 
-    protected int getIndex() {
+    protected int getIndexOfNextChildTag() {
 
         if (createdComponents != null) {
             return (createdComponents.size());
