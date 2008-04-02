@@ -18,7 +18,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="Public Review Draft"/>
+  <property name="version"          value="20030224"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -349,7 +349,7 @@
              private="false"
              protected="true"
              windowtitle="${Name} (${version})"
-             doctitle="${Name} (Version ${version})"
+             doctitle="${Name} (${version})"
              bottom="Copyright &#169; 2002-2003 Sun Microsystems, Inc. All Rights Reserved.">
       <classpath refid="compile.classpath"/>
     </javadoc>
