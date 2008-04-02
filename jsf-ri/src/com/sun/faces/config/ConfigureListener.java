@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.62 2006/02/24 18:05:06 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.63 2006/02/24 20:39:44 edburns Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -70,7 +70,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -106,14 +105,13 @@ import org.apache.commons.digester.Digester;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -363,17 +361,37 @@ public class ConfigureListener implements ServletRequestListener,
         }
     
     }
+    
+    private String getServletContextIdentifier(ServletContext context) {
+        Method method = null;
+        boolean hasGetContextPath = true;
+        try {
+            context.getClass().getDeclaredMethod("getContextPath", 
+                    (Class []) null);
+        } catch (SecurityException ex) {
+            hasGetContextPath = false;
+        } catch (NoSuchMethodException ex) {
+            hasGetContextPath = false;
+        }
+        if (hasGetContextPath) {
+            return context.getContextPath();
+        }
+        else {
+            return context.getServletContextName();
+        }
+    }
 
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
         Digester digester = null;
+        boolean initialized = false;
 
         try {
             
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO,
                            "jsf.config.listener.version",
-                           context.getContextPath());
+                           getServletContextIdentifier(context));
             }
 
             // Check to see if the FacesServlet is present in the
@@ -432,8 +450,10 @@ public class ConfigureListener implements ServletRequestListener,
                             + ")");
             }
 
-            // Ensure that we initialize a particular application ony once
-            if (initialized()) {
+            // Ensure that we initialize a particular application ony once.
+            // Note that we need to cache this in a local variable so we 
+            // can check it from our finally block.
+            if (initialized = initialized()) {
                 return;
             }
 
@@ -542,17 +562,19 @@ public class ConfigureListener implements ServletRequestListener,
             // Jsp.
             registerELResolverAndListenerWithJsp(context);
         } finally {
-            JSFVersionTracker tracker = getJSFVersionTracker();
-            if (null != tracker) {
-                tracker.publishInstanceToApplication();
-            }
-            releaseDigester(digester);
+            if (!initialized) {
+		JSFVersionTracker tracker = getJSFVersionTracker();
+		if (null != tracker) {
+		    tracker.publishInstanceToApplication();
+		}
+		releaseDigester(digester);
+	    }
             tlsExternalContext.set(null);
             
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO,
                            "jsf.config.listener.version.complete",
-                           context.getContextPath());
+                           getServletContextIdentifier(context));
             }
             
         }
