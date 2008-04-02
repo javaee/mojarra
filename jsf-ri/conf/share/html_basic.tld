@@ -2361,7 +2361,7 @@
       <tagclass>javax.faces.webapp.ValidatorTag</tagclass>
       <bodycontent>JSP</bodycontent>
     <attribute>
-      <name>className</name>
+      <name>type</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2411,7 +2411,7 @@
 
    <attribute>
   
-     <name>className</name>
+     <name>type</name>
      <required>true</required> 
      <rtexprvalue>false</rtexprvalue>
    </attribute>
