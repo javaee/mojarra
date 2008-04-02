@@ -60,6 +60,7 @@
   <property name="jstl_el.jar" value="${lib.home}/jstl_el.jar"/>
   <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
   <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
+  <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
   <property name="xerces.jar" value="${tomcat.home}/jaxp-1.2.2/lib/endorsed/xercesImpl.jar"/>
   <property name="commons-beanutils.jar"
             value="${tomcat.home}/server/lib/commons-beanutils.jar"/>
@@ -69,7 +70,7 @@
             value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
   <property name="commons-digester.jar" 
             value="{tomcat.home}/server/lib/commons-digester.jar"/>
-  <property name="jsf-api.jar" value="${jsf.api.home}/build/lib/jsf-api.jar"/>
+  <property name="jsf.api.jar" value="${jsf.api.home}/build/lib/jsf-api.jar"/>
   <property name="jsp.jar" value="" />
 
 <!-- ************ Compiler Defaults *************************************** -->
@@ -90,7 +91,7 @@
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-digester.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
-    <pathelement location="${jsf-api.jar}"/>
+    <pathelement location="${jsf.api.jar}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${xerces.jar}"/>
@@ -98,11 +99,23 @@
     <pathelement location="${jstl_el.jar}"/>
   </path>
 
+  <path id="catalina-ant.classpath">
+    <pathelement location="${catalina-ant.jar}"/>
+  </path>
+
   <!-- Custom Tomcat Integration -->
-  <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask"/>
-  <taskdef  name="list"     classname="org.apache.catalina.ant.ListTask"/>
-  <taskdef  name="reload"   classname="org.apache.catalina.ant.ReloadTask"/>
-  <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask"/>
+  <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>
+  <taskdef  name="list"     classname="org.apache.catalina.ant.ListTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>    
+  <taskdef  name="reload"   classname="org.apache.catalina.ant.ReloadTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>
+  <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>
   <property name="context.path" value="/basic"/>
   <property name="url"      value="http://localhost:8080/manager"/>
 
@@ -158,6 +171,7 @@
     <javac  srcdir="${source.home}"
            destdir="${build.home}/classes"
              debug="${compile.debug}"
+             excludes="com/sun/faces/el/impl/jstl/test/*.java"
        deprecation="${compile.deprecation}"
           optimize="${compile.optimize}">
       <classpath refid="compile.classpath"/>
@@ -232,7 +246,7 @@
     <copy file="${jstl_el.jar}" todir="${dist.home}/lib"/>
     <copy file="${jstl.jar}" todir="${dist.home}/lib"/>
     <copy file="${standard.jar}" todir="${dist.home}/lib"/>
-    <copy file="${jsf-api.jar}" todir="${dist.home}/lib"/>
+    <copy file="${jsf.api.jar}" todir="${dist.home}/lib"/>
     <copy file="${build.home}/lib/${name}.jar" todir="${dist.home}/lib"/>
     <copy file="${conf.share.dir}/html_basic.tld" todir="${dist.home}/lib"/>
     <copy file="${conf.share.dir}/jsf_core.tld" todir="${dist.home}/lib"/>
@@ -241,7 +255,7 @@
   <target name="wspack.copyJars" depends="prepare.dist" if="build.wspack">
     <echo> copy the necessary libs </echo>
     <copy file="${jstl_el.jar}" todir="${dist.home}/lib"/>
-    <copy file="${jsf-api.jar}" todir="${dist.home}/lib"/>
+    <copy file="${jsf.api.jar}" todir="${dist.home}/lib"/>
     <copy file="${build.home}/lib/${name}.jar" todir="${dist.home}/lib"/>
     <copy file="${conf.share.dir}/html_basic.tld" todir="${dist.home}/lib"/>
     <copy file="${conf.share.dir}/jsf_core.tld" todir="${dist.home}/lib"/>
@@ -249,7 +263,7 @@
 
   <target name="dist.binary" depends="dist.source, wspack.dist.source" >
     <echo> Build the demos from the jsf-demo repository </echo>
-    <ant dir="${jsf.demo.home}" inheritAll="false" target="build-all"
+    <ant dir="${jsf.demo.home}" target="build-all"
          antfile="${jsf.demo.home}/build.xml" />
     <echo> copy the example war files to the zip area </echo>
     <copy todir="${dist.home}/example" 
@@ -267,9 +281,9 @@
 
   <target name="dist.source" depends="copyJars" if="build.standalone">
     <echo> prepare to copy the demo source </echo>
-    <ant dir="${jsf.demo.home}" inheritAll="false"
+    <ant dir="${jsf.demo.home}" 
          antfile="${jsf.demo.home}/build.xml" target="clean"/>
-    <ant dir="${jsf.demo.home}" inheritAll="false"
+    <ant dir="${jsf.demo.home}"
          antfile="${jsf.demo.home}/build.xml" target="copyJars"/>
     <ant target="copyDemoSource" />
   </target>
@@ -277,7 +291,7 @@
   <target name="wspack.dist.source" depends="wspack.copyJars" if="build.wspack">
 
     <echo> prepare to copy the demo source </echo>
-    <ant dir="${jsf.demo.home}" inheritAll="false"
+    <ant dir="${jsf.demo.home}" 
          antfile="${jsf.demo.home}/build.xml" target="clean"/>
     <ant target="copyDemoSource" />
   </target>
@@ -390,7 +404,7 @@
     <copy  file="${jstl.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${jstl_el.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 
-    <copy file="${jsf-api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy file="${jsf.api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 
     <!-- create a war file for distribution -->
@@ -440,7 +454,7 @@
 
     <copy file="${jstl_el.jar}" todir="${tomcat.home}/jsf-${version}/lib"/>
     <copy file="${build.home}/lib/${name}.jar" todir="${tomcat.home}/jsf-${version}/lib"/>
-    <copy file="${jsf-api.jar}" todir="${tomcat.home}/jsf-${version}/lib"/>
+    <copy file="${jsf.api.jar}" todir="${tomcat.home}/jsf-${version}/lib"/>
 
   </target>
 
@@ -453,6 +467,9 @@
 
   <target name="install" depends="build.basic.war"
    description="Install webapp on Tomcat">
+    <classpath>
+        <pathelement location="${catalina.ant.jar}"/>
+    </classpath>
     <install url="${url}" username="${username}" password="${password}"
             path="${context.path}"
              war="file://${dist.home}/${basic.name}"/>
@@ -460,17 +477,26 @@
 
   <target name="list"
    description="List installed webapps on Tomcat">
+    <classpath>
+        <pathelement location="${catalina.ant.jar}"/>
+    </classpath>
     <list url="${url}" username="${username}" password="${password}"/>
   </target>
 
   <target name="reload" depends="build.basic.war"
    description="Reload this webapp on Tomcat">
+    <classpath>
+        <pathelement location="${catalina.ant.jar}"/>
+    </classpath>
     <reload url="${url}" username="${username}" password="${password}"
             path="${context.path}"/>
   </target>
 
   <target name="remove"
    description="Remove this webapp from Tomcat">
+    <classpath>
+        <pathelement location="${catalina.ant.jar}"/>
+    </classpath>
     <remove url="${url}" username="${username}" password="${password}"
             path="${context.path}"/>
   </target>
