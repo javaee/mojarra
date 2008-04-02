@@ -1,12 +1,18 @@
 <%@ include file="header.inc" %>
 <f:view> 
     <risb:tabView tabStyle="border">
-        <risb:tab label="Label 1">
+        <risb:tab label="Label 1" active="true">
             <h:outputText value="Some text!"/>
         </risb:tab>
-        <risb:tab active="true">
+        <risb:tab>
             <f:facet name="label"><h:outputText value="Label 2"/></f:facet>
             <h:outputText value="Some more text!"/>
+        </risb:tab>
+        <risb:tab>
+            <f:facet name="label"><h:outputText value="Label 3"/></f:facet>
+            <risb:download mimeType="image/png" fileName="sample.png" data="#{testBean.image}" urlVar="foo">
+                <h:graphicImage url="#{foo}" width="250px" />
+            </risb:download>
         </risb:tab>
     </risb:tabView>
 </f:view>
