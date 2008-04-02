@@ -10,6 +10,20 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-facesconfig_1_2.xsd"
     version="1.2">
+    
+  <managed-bean>
+    <managed-bean-name>outer62</managed-bean-name>
+    <managed-bean-class>com.sun.faces.systest.model.Bean62</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>root</property-name>
+      <value>true</value>
+    </managed-property>    
+    <managed-property>
+      <property-name>label</property-name>
+      <value>root</value>
+    </managed-property>    
+  </managed-bean>
 
   <managed-bean>
     <managed-bean-name>outer</managed-bean-name>
