@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTag.java,v 1.3 2003/01/22 05:04:03 craigmcc Exp $
+ * $Id: FacetTag.java,v 1.4 2003/01/23 22:21:30 craigmcc Exp $
  */
 
 /*
@@ -70,6 +70,7 @@ public class FacetTag extends TagSupport {
 
     public int doEndTag() throws JspException {
 
+        children = 0;
         return (EVAL_PAGE);
 
     }
