@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.47 2003/03/12 19:53:43 rkitain Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.48 2003/04/22 21:04:40 rkitain Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.47 2003/03/12 19:53:43 rkitain Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.48 2003/04/22 21:04:40 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -72,10 +72,10 @@ public String getExpectedOutputFilename() {
 }
 
 public static final String ignore[] = {
-    "<form method=\"post\" action=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=E75A204842EAC19A648141B049333B08\" class=\"formClass\"  title=\"basicForm\" accept=\"html,wml\" >",
-    "            <input type=\"image\" src=\"duke.gif;jsessionid=E75A204842EAC19A648141B049333B08\" name=\"pushButton\" disabled >",
-    "            <input type=\"image\" src=\"duke.gif;jsessionid=E75A204842EAC19A648141B049333B08\" name=\"imageOnlyButton\"> ",
-    "            <img id=\"graphicImage\" src=\"/test/duke.gif;jsessionid=E75A204842EAC19A648141B049333B08\" usemap=\"#map1\"  ismap > "
+    "<form method=\"post\" action=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=2933CA6E85C4FDDD0133E9B1D82A022A\" class=\"formClass\"  title=\"basicForm\" accept=\"html,wml\" >",
+    "            <input type=\"image\" src=\"duke.gif;jsessionid=2933CA6E85C4FDDD0133E9B1D82A022A\" name=\"pushButton\" disabled >",
+    "            <input type=\"image\" src=\"duke.gif;jsessionid=2933CA6E85C4FDDD0133E9B1D82A022A\" name=\"imageOnlyButton\"> ",
+    "            <img id=\"graphicImage\" src=\"/test/duke.gif;jsessionid=2933CA6E85C4FDDD0133E9B1D82A022A\" usemap=\"#map1\"  ismap > "
 };
     
 public String [] getLinesToIgnore() {
