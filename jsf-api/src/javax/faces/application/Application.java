@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.40 2005/08/22 22:07:50 ofung Exp $
+ * $Id: Application.java,v 1.41 2005/08/26 22:20:03 edburns Exp $
  */
 
 /*
@@ -279,6 +279,10 @@ public abstract class Application {
      * be wrapped inside an implementation of {@link ELResolver} and
      * exposed to the EL resolution system as if the user had called
      * {@link #addELResolver}.
+     *
+     * @exception IllegalStateException if called after the first
+     * request to the {@link javax.faces.webapp.FacesServlet} has been
+     * serviced.
      */
     public abstract void setPropertyResolver(PropertyResolver resolver);
     
@@ -348,6 +352,10 @@ public abstract class Application {
      * be wrapped inside an implementation of {@link ELResolver} and
      * exposed to the EL resolution system as if the user had called
      * {@link #addELResolver}.
+     *
+     * @exception IllegalStateException if called after the first
+     * request to the {@link javax.faces.webapp.FacesServlet} has been
+     * serviced.
      */
     public abstract void setVariableResolver(VariableResolver resolver);
 
