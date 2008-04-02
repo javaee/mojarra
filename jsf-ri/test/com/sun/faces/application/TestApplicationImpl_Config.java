@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.4 2003/05/01 19:47:47 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.5 2003/05/01 20:39:51 eburns Exp $
  */
 
 /*
@@ -29,6 +29,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.FactoryFinder;
 import javax.faces.component.*;
 import javax.faces.convert.Converter;
+import javax.faces.validator.Validator;
+import javax.faces.validator.RequiredValidator;
 import javax.faces.application.Message;
 import com.sun.faces.convert.*;
 
@@ -50,7 +52,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.4 2003/05/01 19:47:47 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.5 2003/05/01 20:39:51 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -373,6 +375,75 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	while (iter.hasNext()) {
 	    assertTrue(isMember((String) iter.next(), 
 					 standardMessageResourcesIds));
+	}
+    }
+
+    public void testValidatorPositive() {
+	Validator 
+	    newTestValidator = null,
+	    testValidator = new RequiredValidator();
+	Validator val = null;
+	
+	// runtime addition
+	
+	application.addValidator("Billybob",
+				 "javax.faces.validator.RequiredValidator");
+	assertTrue(null != (newTestValidator = (Validator)
+			    application.getValidator("Billybob")));
+	assertTrue(newTestValidator != testValidator);
+
+	// test standard components
+	assertTrue(null != (val = application.getValidator("DoubleRange")));
+	assertTrue(val instanceof Validator);
+	assertTrue(null != (val = application.getValidator("Length")));
+	assertTrue(val instanceof Validator);
+	assertTrue(null != (val = application.getValidator("LongRange")));
+	assertTrue(val instanceof Validator);
+	assertTrue(null != (val = application.getValidator("Required")));
+	assertTrue(val instanceof Validator);
+
+    }
+	
+    public void testValidatorNegative() {
+	boolean exceptionThrown = false;
+	
+	// componentType/componentClass with non-existent class
+	try {
+	    application.addValidator("William",
+				     "BillyBoy");
+	    application.getValidator("William");
+	}
+	catch (FacesException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	// non-existent mapping
+	exceptionThrown = false;
+	try {
+	    application.getValidator("Joebob");
+	}
+	catch (FacesException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+	
+    }
+
+    public void testGetValidatorIds() {
+	Iterator iter = application.getValidatorIds();
+	assertTrue(null != iter);
+	String standardValidatorIds[] = {
+	    "DoubleRange",
+	    "Length",
+	    "LongRange",
+	    "Required",
+	    "StringRange"	
+	};
+	
+	while (iter.hasNext()) {
+	    assertTrue(isMember((String) iter.next(), 
+					 standardValidatorIds));
 	}
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: AppConfig.java,v 1.3 2003/05/01 19:47:44 eburns Exp $
+ * $Id: AppConfig.java,v 1.4 2003/05/01 20:39:49 eburns Exp $
  */
 
 /*
@@ -21,12 +21,14 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.convert.Converter;
 import javax.faces.context.MessageResources;
+import javax.faces.validator.Validator;
 import javax.faces.el.PropertyNotFoundException;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.config.ConfigBase;
 import com.sun.faces.config.ConfigComponent;
 import com.sun.faces.config.ConfigConverter;
 import com.sun.faces.config.ConfigMessageResources;
+import com.sun.faces.config.ConfigValidator;
 import com.sun.faces.util.Util;
 import com.sun.faces.context.MessageResourcesImpl;
 
@@ -35,7 +37,7 @@ import com.sun.faces.context.MessageResourcesImpl;
  *  <p>AppConfig is a helper class to the ApplicationImpl that serves as
  *  a shim between it and the config system.</p>
  *
- * @version $Id: AppConfig.java,v 1.3 2003/05/01 19:47:44 eburns Exp $
+ * @version $Id: AppConfig.java,v 1.4 2003/05/01 20:39:49 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -298,6 +300,40 @@ public AppConfig()
     Iterator getMessageResourcesIds() { 
 	Assert.assert_it(null != yourBase);
 	return yourBase.getMessageResources().keySet().iterator();
+    }
+
+    void addValidator(String validatorId, String validatorClass) {
+	ParameterCheck.nonNull(validatorId);
+	ParameterCheck.nonNull(validatorClass);
+	Assert.assert_it(null != yourBase);
+
+	ConfigValidator configValidator = new ConfigValidator();
+	configValidator.setValidatorId(validatorId);
+	configValidator.setValidatorClass(validatorClass);
+	yourBase.addValidator(configValidator);
+    }
+
+    Validator getValidator(String validatorId) 
+        throws FacesException {
+	ParameterCheck.nonNull(validatorId);
+	Assert.assert_it(null != yourBase);
+
+	Validator result = null;
+	ConfigValidator configValidator = null;
+	if (null == (configValidator = (ConfigValidator)
+		     yourBase.getValidators().get(validatorId))) {
+	    //PENDING(edburns): i18n
+	    throw new FacesException();
+	}
+	result = (Validator) 
+	    this.newThing(configValidator.getValidatorClass());
+	
+	return result;
+    }
+
+    Iterator getValidatorIds() { 
+	Assert.assert_it(null != yourBase);
+	return yourBase.getValidators().keySet().iterator();
     }
     
     

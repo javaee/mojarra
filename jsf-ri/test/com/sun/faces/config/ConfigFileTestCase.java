@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.9 2003/05/01 19:47:48 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.10 2003/05/01 20:39:52 eburns Exp $
  */
 
 /*
@@ -327,7 +327,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     public void testInitParams() {
 	// clear out the attr that was set in the servletcontext attr set.
 	config.getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
-	final String paramVal = "config1.xml,config2.xml";
+	final String paramVal = "config1.xml,config2.xml,/WEB-INF/faces-config.xml";
 
 	// work around a bug in cactus where calling
 	// config.setInitParameter() doesn't cause

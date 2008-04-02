@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.10 2003/05/01 19:47:44 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.11 2003/05/01 20:39:49 eburns Exp $
  */
 
 /*
@@ -294,14 +294,15 @@ public class ApplicationImpl extends Application {
     }
 
     public void addValidator(String validatorId, String validatorClass) {
+	appConfig.addValidator(validatorId, validatorClass);
     }
 
     public Validator getValidator(String validatorId) throws FacesException {
-        return null;
+	return appConfig.getValidator(validatorId);
     }
 
     public Iterator getValidatorIds() {
-        return null;
+	return appConfig.getValidatorIds();
     }
 
     // 
