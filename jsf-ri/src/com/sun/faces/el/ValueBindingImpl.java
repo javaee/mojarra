@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.4 2003/04/01 15:26:54 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.5 2003/04/01 21:59:56 eburns Exp $
  */
 
 /*
@@ -195,6 +195,18 @@ public class ValueBindingImpl extends ValueBinding
 	return result;
     }
 
+    /**
+
+    * <p>PRECONDITION: ref is a valid valueReference.</p>
+
+    */
+
+    boolean hasMultipleSegments() {
+	boolean result = 
+	    (-1 != ref.indexOf(".")) || (-1 != ref.indexOf("["));
+	return result;
+    }
+
 //
 // Methods from ValueBinding
 //
@@ -265,9 +277,9 @@ public class ValueBindingImpl extends ValueBinding
 	    last = getLastSegment(),
 	    first = null;
 	boolean isBracketedExpression = false;
-	int i;
+	int i = ref.lastIndexOf(last);
 	// if our ref has only one segment
-	if (0 == (i = ref.indexOf(last))) {
+	if (!hasMultipleSegments()) {
 	    first = last;
 	    last = RIConstants.IMMUTABLE_MARKER;
 	}
@@ -310,10 +322,70 @@ public class ValueBindingImpl extends ValueBinding
 
 	return result;
     }
+    
+    /**
+
+    * @see isReadOnly
+
+    */
 
     public Class getType(FacesContext context)
         throws PropertyNotFoundException {
-	return null;
+	Class result = null;
+	Object toTest = null;
+	String 
+	    last = getLastSegment(),
+	    first = null;
+	boolean isBracketedExpression = false;
+	int i = ref.lastIndexOf(last);
+	// if our ref has only one segment
+	if (!hasMultipleSegments()) {
+	    first = last;
+	    last = null;
+	}
+	else {
+	    // getLastSegment does different things depending on whether
+	    // the last segment is a bracket expression or a dot
+	    // expression.
+	    if (last.charAt(0) == '[') {
+		first = ref.substring(0, i);
+		isBracketedExpression = true;
+	    }
+	    else {
+		first = ref.substring(0, i-1);
+	    }
+	}
+	// At this point, first is everything but the last segment in
+	// the expression.  Last is the last segment in the expression.
+	// If there is only one segment in the expression, last is
+	// RIConstants.IMMUTABLE_MARKER.
+	
+	if (null != (toTest = getValue(context, first))) {
+	    if (isBracketedExpression) {
+		// Get the contents of the bracketed expression
+		last = last.substring(1, last.length() - 1);
+		last = stripQuotesIfNecessary(last);
+
+		try {
+		    i = Integer.valueOf(last).intValue();
+		    result = propertyResolver.getType(toTest, i);
+		}
+		catch (NumberFormatException e) {
+		    // unable to coerce to number, try the string version.
+		    result = propertyResolver.getType(toTest, last);
+		}
+	    }
+	    else {
+		if (null == last) {
+		    result = toTest.getClass();
+		}
+		else {
+		    result = propertyResolver.getType(toTest, last);
+		}
+	    }
+	}
+
+	return result;
     }
 
 } // end of class ValueBindingImpl

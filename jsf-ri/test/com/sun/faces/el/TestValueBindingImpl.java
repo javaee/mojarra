@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.4 2003/04/01 15:26:57 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.5 2003/04/01 21:59:57 eburns Exp $
  */
 
 /*
@@ -28,6 +28,7 @@ import javax.faces.el.PropertyNotFoundException;
 import javax.faces.component.UINamingContainer;
 
 import java.util.Enumeration;
+import java.util.Map;
 
 /**
  *
@@ -35,7 +36,7 @@ import java.util.Enumeration;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.4 2003/04/01 15:26:57 eburns Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.5 2003/04/01 21:59:57 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -304,6 +305,21 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
     }
 
+    public void testHasMultipleSegments() {
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
+							     new PropertyResolverImpl());
+	valueBinding.setRef("cookie.cookie");
+	assertTrue(valueBinding.hasMultipleSegments());
+	valueBinding.setRef("cookie.monster");
+	assertTrue(valueBinding.hasMultipleSegments());
+	valueBinding.setRef("cookie");
+	assertTrue(!valueBinding.hasMultipleSegments());
+	valueBinding.setRef("cookie[1]");
+	assertTrue(valueBinding.hasMultipleSegments());
+	valueBinding.setRef("cookie[1].hello");
+	assertTrue(valueBinding.hasMultipleSegments());
+    }
+
     public void testStripQuotesIfNecessary() {
 	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
 							     new PropertyResolverImpl());
@@ -390,5 +406,107 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
 
     }
+
+    public void testGetType_singleCase() {
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
+							     new PropertyResolverImpl());
+	
+
+	// these are mutable Maps
+	valueBinding.setRef("applicationScope");
+	assertTrue(Map.class.isAssignableFrom(valueBinding.getType(getFacesContext())));
+	valueBinding.setRef("sessionScope");
+	assertTrue(Map.class.isAssignableFrom(valueBinding.getType(getFacesContext())));
+	valueBinding.setRef("requestScope");
+	assertTrue(Map.class.isAssignableFrom(valueBinding.getType(getFacesContext())));
+	
+	// these are immutable Maps
+	valueBinding.setRef("param");
+	assertTrue(Map.class.isAssignableFrom(valueBinding.getType(getFacesContext())));
+	valueBinding.setRef("paramValues");
+	assertTrue(Map.class.isAssignableFrom(valueBinding.getType(getFacesContext())));
+	valueBinding.setRef("header");
+	assertTrue(Map.class.isAssignableFrom(valueBinding.getType(getFacesContext())));
+	valueBinding.setRef("headerValues");
+	assertTrue(Map.class.isAssignableFrom(valueBinding.getType(getFacesContext())));
+	valueBinding.setRef("cookie");
+	assertTrue(Map.class.isAssignableFrom(valueBinding.getType(getFacesContext())));
+	valueBinding.setRef("initParam");
+	assertTrue(Map.class.isAssignableFrom(valueBinding.getType(getFacesContext())));
+    }
+
+    public void beginGetType_multipleCase(WebRequest theRequest) {
+	populateRequest(theRequest);
+    }
+
+
+    public void testGetType_multipleCase() {
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
+							     new PropertyResolverImpl());
+	String property = "testValueBindingImpl_property";
+	getFacesContext().getExternalContext().getApplicationMap().put(property,
+								       property);
+	
+	getFacesContext().getExternalContext().getSessionMap().put(property,
+								   property);
+	
+	getFacesContext().getExternalContext().getRequestMap().put(property,
+								   property);
+	
+	// these are mutable Maps
+	valueBinding.setRef("applicationScope." + property);
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("java.lang.String"));
+	valueBinding.setRef("sessionScope." + property);
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("java.lang.String"));
+	valueBinding.setRef("requestScope." + property);
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("java.lang.String"));
+	
+	// these are immutable Maps
+	valueBinding.setRef("param." + "ELParam");
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("java.lang.String"));
+	valueBinding.setRef("paramValues.multiparam");
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("[Ljava.lang.String;"));
+
+	valueBinding.setRef("header.ELHeader");
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("java.lang.String"));
+	valueBinding.setRef("headerValues.multiheader");
+	assertTrue(java.util.Enumeration.class.isAssignableFrom(valueBinding.getType(getFacesContext())));
+	valueBinding.setRef("cookie.cookie");
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("javax.servlet.http.Cookie"));
+	valueBinding.setRef("initParam.saveStateInClient");
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("java.lang.String"));
+
+	// tree
+	// create a dummy root for the tree.
+	UINamingContainer root = new UINamingContainer() {
+                public String getComponentType() { return "root"; }
+            };
+	root.setComponentId("root");
+	getFacesContext().setTree(new com.sun.faces.tree.SimpleTreeImpl(getFacesContext(), root, "newTree"));
+	valueBinding.setRef("tree.root");
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("javax.faces.component.UIComponent"));
+	
+	TestBean testBean = (TestBean) getFacesContext().getExternalContext().getSessionMap().get("TestBean");
+	assertTrue(null != testBean);
+	valueBinding.setRef("TestBean.readOnly");
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("java.lang.String"));
+	valueBinding.setRef("TestBean.one");
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("java.lang.String"));
+
+	InnerBean inner = new InnerBean();
+	testBean.setInner(inner);
+	valueBinding.setRef("TestBean[\"inner\"].customers[1]");
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("java.lang.String"));
+
+	valueBinding.setRef("TestBean[\"inner\"]");
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("com.sun.faces.TestBean$InnerBean"));
+
+	int [] intArray = { 1, 2, 3 };
+	getFacesContext().getExternalContext().getRequestMap().put("intArray",
+								   intArray);
+	valueBinding.setRef("requestScope.intArray");
+	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("[I"));
+    }
+   
 	
 } // end of class TestValueBindingImpl

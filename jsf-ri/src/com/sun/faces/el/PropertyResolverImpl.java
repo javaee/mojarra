@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.3 2003/04/01 15:26:53 eburns Exp $
+ * $Id: PropertyResolverImpl.java,v 1.4 2003/04/01 21:59:56 eburns Exp $
  */
 
 /*
@@ -205,16 +205,28 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // Specified by javax.faces.el.PropertyResolver.getType(Object,int)
     public Class getType(Object base, int index) {
+	Class result = null;
 
         if (base == null) {
             throw new NullPointerException();
         }
         if (base instanceof UIComponent) {
-            return (UIComponent.class);
-        } else {
-            throw new PropertyNotFoundException("" + index);
+            result =  (UIComponent.class);
+	}
+	if (base.getClass().isArray()) {
+	    try {
+		result = ((Object [])base)[index].getClass();
+	    }
+	    catch (Throwable e) {
+		throw new PropertyNotFoundException("" + index, e);
+	    }
+        } else if (base instanceof List) {
+            result = ((List)base).get(index).getClass();
+        }   
+	else {
+	    throw new PropertyNotFoundException("" + index);
         }
-
+	return result;
     }
 
     // -------------------------------------------------------- Private Methods
