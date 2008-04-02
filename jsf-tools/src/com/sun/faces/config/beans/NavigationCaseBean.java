@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationCaseBean.java,v 1.3 2004/02/04 23:46:08 ofung Exp $
+ * $Id: NavigationCaseBean.java,v 1.4 2004/05/11 21:09:37 rkitain Exp $
  */
 
 /*
@@ -20,13 +20,13 @@ public class NavigationCaseBean extends FeatureBean {
     // -------------------------------------------------------------- Properties
 
 
-    private String fromAction = "*";
+    private String fromAction = null;
     public String getFromAction() { return fromAction; }
     public void setFromAction(String fromAction)
     { this.fromAction = fromAction; }
 
 
-    private String fromOutcome = "*";
+    private String fromOutcome = null;
     public String getFromOutcome() { return fromOutcome; }
     public void setFromOutcome(String fromOutcome)
     { this.fromOutcome = fromOutcome; }
