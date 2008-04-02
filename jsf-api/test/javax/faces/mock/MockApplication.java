@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.5 2003/07/28 22:22:32 eburns Exp $
+ * $Id: MockApplication.java,v 1.6 2003/08/03 22:54:56 eburns Exp $
  */
 
 /*
@@ -25,6 +25,8 @@ import javax.faces.el.PropertyResolver;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.validator.Validator;
 
 
@@ -39,6 +41,37 @@ public class MockApplication extends Application {
 
     private ActionListener actionListener = null;
     public ActionListener getActionListener() {
+	if (null == actionListener) {
+	    actionListener = new ActionListener() {
+		    public void processAction(ActionEvent e) {
+			throw new UnsupportedOperationException();
+		    }
+		    public PhaseId getPhaseId() {
+			return PhaseId.INVOKE_APPLICATION;
+		    }
+
+		    // see if the other object is the same as our
+		    // anonymous inner class implementation.
+		    public boolean equals(Object otherObj) {
+			if (!(otherObj instanceof ActionListener)) {
+			    return false;
+			}
+			ActionListener other = (ActionListener) otherObj;
+			boolean exceptionThrown = false;
+			if (other.getPhaseId() != this.getPhaseId()) {
+			    return false;
+			}
+			try {
+			    other.processAction(null);
+			}
+			catch (UnsupportedOperationException e) {
+			    exceptionThrown = true;
+			}
+			return exceptionThrown;
+		    }
+		};
+	}
+	
         return (this.actionListener);
     }
     public void setActionListener(ActionListener actionListener) {

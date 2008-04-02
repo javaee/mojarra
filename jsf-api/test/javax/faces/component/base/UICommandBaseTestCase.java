@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.5 2003/07/31 12:22:26 eburns Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.6 2003/08/03 22:54:55 eburns Exp $
  */
 
 /*
@@ -315,6 +315,11 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 	catch (Throwable e) {
 	    assertTrue(false);
 	}
+	assertTrue(null != postSave.getListeners());
+	// make sure the default action listener has been added on restore
+	List [] lister = (List []) preSave.getListeners();
+	assertTrue(lister[PhaseId.INVOKE_APPLICATION.getOrdinal()].get(0) == 
+		   facesContext.getApplication().getActionListener());
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test page with action and actionRef

@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBase.java,v 1.4 2003/07/28 22:18:45 eburns Exp $
+ * $Id: UICommandBase.java,v 1.5 2003/08/03 22:54:55 eburns Exp $
  */
 
 /*
@@ -121,6 +121,8 @@ public class UICommandBase extends UIOutputBase implements UICommand {
 	// restore the listeners
 	listeners = context.getApplication().getViewHandler().getStateManager()
 	    .restoreAttachedObjectState(context, thisState[LISTENERS_INDEX]);
+	// add the default action listener
+	addActionListener(context.getApplication().getActionListener());
 	
 	super.restoreState(context, state[SUPER_INDEX]);
     }
@@ -136,11 +138,18 @@ public class UICommandBase extends UIOutputBase implements UICommand {
 	// save the attributes
 	thisState[ATTRS_INDEX] = action + STATE_SEP + actionRef;
 	// save the listeners
+
+	// remove the default action listener
+	removeActionListener(context.getApplication().getActionListener());
+	
 	thisState[LISTENERS_INDEX] = context.getApplication().
 	    getViewHandler().getStateManager().getAttachedObjectState(context,
 								      this,
 								      null,
 								      listeners);
+	// re-add the default action listener
+	addActionListener(context.getApplication().getActionListener());
+
 	result[THIS_INDEX] = thisState;
 	// save the state of our superclass
 	result[SUPER_INDEX] = superState;
