@@ -222,6 +222,13 @@
             <fileset dir="${source.dir}" includes="**/*.properties"/>
             <fileset dir="${tools.dir}/src" includes="**/*.properties"/>
         </copy>
+        
+        <!-- Massage the version number into LogStrings.properties -->
+        <replace dir="${build.classes.dir}/com/sun/faces/"
+                 token="|version.string|"
+                 value="${impl.version}">
+            <include name="LogStrings*.properties"/>
+        </replace>
 
         <copy todir="${build.classes.dir}/com/sun/faces">
             <fileset dir="${api.dir}/doc">

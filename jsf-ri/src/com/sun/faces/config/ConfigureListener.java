@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.58 2006/01/11 15:28:03 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.59 2006/02/07 20:40:22 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -265,7 +265,7 @@ public class ConfigureListener implements ServletRequestListener,
      * <p>The <code>Log</code> instance for this class.</p>
      */
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
             + Util.CONFIG_LOGGER);
 
 
@@ -320,7 +320,7 @@ public class ConfigureListener implements ServletRequestListener,
                 associate.handlePreDestroy(null, Scope.REQUEST);
             }
             catch (Throwable e) {
-                logger.info(e.getMessage());
+                LOGGER.info(e.getMessage());
             }
         }
     }
@@ -345,7 +345,7 @@ public class ConfigureListener implements ServletRequestListener,
                 associate.handlePreDestroy(null, Scope.SESSION);
             }
             catch (Throwable e) {
-                logger.info(e.getMessage());
+                LOGGER.info(e.getMessage());
             }
         }
     
@@ -355,21 +355,27 @@ public class ConfigureListener implements ServletRequestListener,
         
         ServletContext context = sce.getServletContext();
 
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.log(Level.INFO,
+                       "jsf.config.listener.version",
+                       context.getServletContextName());
+        }
+
         // Check to see if the FacesServlet is present in the
         // web.xml.   If it is, perform faces configuration as normal,
         // otherwise, simply return.
         if (!isFeatureEnabled(context, FORCE_LOAD_CONFIG)) {
             WebXmlProcessor processor = new WebXmlProcessor(context);
             if (!processor.isFacesServletPresent()) {
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("No FacesServlet found in deployment descriptor -" +
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("No FacesServlet found in deployment descriptor -" +
                             " bypassing configuration.");
                 }
                 return;
             }
 
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("FacesServlet found in deployment descriptor -" +
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("FacesServlet found in deployment descriptor -" +
                     " processing configuration.");
             }
         }
@@ -393,8 +399,8 @@ public class ConfigureListener implements ServletRequestListener,
 	    }
 	}
 	catch (Exception e) {
-	    if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Can't query for test environment");
+	    if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Can't query for test environment");
 	    }
 	}
 
@@ -403,8 +409,8 @@ public class ConfigureListener implements ServletRequestListener,
             isFeatureEnabled(context, ENABLE_HTML_TLV));
 
         URL url = null;
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("contextInitialized(" + context.getServletContextName()
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("contextInitialized(" + context.getServletContextName()
                       + ")");
         }
 
@@ -523,8 +529,8 @@ public class ConfigureListener implements ServletRequestListener,
     public void contextDestroyed(ServletContextEvent sce) {
 
         ServletContext context = sce.getServletContext();
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("contextDestroyed(" + context.getServletContextName()
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("contextDestroyed(" + context.getServletContextName()
                       + ')');
         }
         ApplicationAssociate associate = 
@@ -534,7 +540,7 @@ public class ConfigureListener implements ServletRequestListener,
                 associate.handlePreDestroy(null, Scope.APPLICATION);
             }
             catch (Throwable e) {
-                logger.info(e.getMessage());
+                LOGGER.info(e.getMessage());
             }
         }
 
@@ -653,9 +659,9 @@ public class ConfigureListener implements ServletRequestListener,
             associate.handlePreDestroy(beanName, scope);
         } catch (InvocationTargetException ite) {
             Throwable root = ite.getTargetException();
-            logger.info(root.getMessage());
+            LOGGER.info(root.getMessage());
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            LOGGER.info(e.getMessage());
         }
 
     } // END handleAttributeEvent
@@ -728,16 +734,16 @@ public class ConfigureListener implements ServletRequestListener,
 
         value = config.getMessageBundle();
         if (value != null) {
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("setMessageBundle(" + value + ')');
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.finer("setMessageBundle(" + value + ')');
             }
             application.setMessageBundle(value);
         }
 
         value = config.getDefaultRenderKitId();
         if (value != null) {
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("setDefaultRenderKitId(" + value + ')');
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.finer("setDefaultRenderKitId(" + value + ')');
             }
             application.setDefaultRenderKitId(value);
         }
@@ -747,8 +753,8 @@ public class ConfigureListener implements ServletRequestListener,
         values = config.getActionListeners();
         if ((values != null) && (values.length > 0)) {
             for (int i = 0; i < values.length; i++) {
-               if (logger.isLoggable(Level.FINER)) {
-                   logger.finer("setActionListener(" + values[i] + ')');
+               if (LOGGER.isLoggable(Level.FINER)) {
+                   LOGGER.finer("setActionListener(" + values[i] + ')');
                 }
                 instance = Util.createInstance
                     (values[i], ActionListener.class,
@@ -762,8 +768,8 @@ public class ConfigureListener implements ServletRequestListener,
         values = config.getNavigationHandlers();
         if ((values != null) && (values.length > 0)) {
             for (int i = 0; i < values.length; i++) {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("setNavigationHandler(" + values[i] + ')');
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("setNavigationHandler(" + values[i] + ')');
                 }
                 instance = Util.createInstance
                     (values[i], NavigationHandler.class,
@@ -784,8 +790,8 @@ public class ConfigureListener implements ServletRequestListener,
             // further in the chain.
             prevInChain = new DummyPropertyResolverImpl();            
             for (int i = 0; i < values.length; i++) {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("setPropertyResolver(" + values[i] + ')');
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("setPropertyResolver(" + values[i] + ')');
                 }
                 instance = Util.createInstance(values[i],
                                                PropertyResolver.class, 
@@ -800,8 +806,8 @@ public class ConfigureListener implements ServletRequestListener,
         values = config.getELResolvers();
         if ((values != null) && (values.length > 0)) {
             for (int i = 0; i < values.length; i++) {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("setELResolver(" + values[i] + ')');
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("setELResolver(" + values[i] + ')');
                 }
                 instance = Util.createInstance(values[i]);
                 if (elResolversFromFacesConfig == null) {
@@ -816,8 +822,8 @@ public class ConfigureListener implements ServletRequestListener,
         values = config.getStateManagers();
         if ((values != null) && (values.length > 0)) {
             for (int i = 0; i < values.length; i++) {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("setStateManager(" + values[i] + ')');
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("setStateManager(" + values[i] + ')');
                 }
                 instance = Util.createInstance
                     (values[i], StateManager.class,
@@ -838,8 +844,8 @@ public class ConfigureListener implements ServletRequestListener,
             // further in the chain.
             prevInChain = new DummyVariableResolverImpl();
             for (int i = 0; i < values.length; i++) {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("setVariableResolver(" + values[i] + ')');
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("setVariableResolver(" + values[i] + ')');
                 }
                 instance = Util.createInstance
                         (values[i], VariableResolver.class, prevInChain);
@@ -852,8 +858,8 @@ public class ConfigureListener implements ServletRequestListener,
         values = config.getViewHandlers();
         if ((values != null) && (values.length > 0)) {
             for (int i = 0; i < values.length; i++) {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("setViewHandler(" + values[i] + ')');
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("setViewHandler(" + values[i] + ')');
                 }
                 instance = Util.createInstance
                     (values[i], ViewHandler.class,
@@ -882,8 +888,8 @@ public class ConfigureListener implements ServletRequestListener,
         Application application = application();
 
         for (int i = 0; i < config.length; i++) {
-            if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("addComponent(" +
+            if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("addComponent(" +
                           config[i].getComponentType() + ',' +
                           config[i].getComponentClass() + ')');
             }
@@ -906,8 +912,8 @@ public class ConfigureListener implements ServletRequestListener,
 
         // at a minimum, configure the primitive converters
         for (i = 0, len = PRIM_CLASSES_TO_CONVERT.length; i < len; i++) {
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("addConverterByClass(" +
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.finer("addConverterByClass(" +
                           PRIM_CLASSES_TO_CONVERT[i] + ',' +
                           CONVERTERS_FOR_PRIMS[i] + ')');
             }
@@ -921,16 +927,16 @@ public class ConfigureListener implements ServletRequestListener,
 
         for (i = 0, len = config.length; i < len; i++) {
             if (config[i].getConverterId() != null) {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("addConverterById(" +
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("addConverterById(" +
                               config[i].getConverterId() + ',' +
                               config[i].getConverterClass() + ')');
                 }
                 application.addConverter(config[i].getConverterId(),
                                          config[i].getConverterClass());
             } else {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("addConverterByClass(" +
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("addConverterByClass(" +
                               config[i].getConverterForClass() + ',' +
                               config[i].getConverterClass() + ')');
                 }
@@ -962,8 +968,8 @@ public class ConfigureListener implements ServletRequestListener,
 	while (iter.hasNext()) {
 	    value = iter.next();
 	    if (value != null) {
-		if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("setApplicationFactory(" + value + ')');
+		if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("setApplicationFactory(" + value + ')');
 		}
 		FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
 					 value);
@@ -974,8 +980,8 @@ public class ConfigureListener implements ServletRequestListener,
 	while (iter.hasNext()) {
 	    value = iter.next();
 	    if (value != null) {
-		if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("setFacesContextFactory(" + value + ')');
+		if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("setFacesContextFactory(" + value + ')');
 		}
 		FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
 					 value);
@@ -986,8 +992,8 @@ public class ConfigureListener implements ServletRequestListener,
 	while (iter.hasNext()) {
 	    value = iter.next();
 	    if (value != null) {
-		if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("setLifecycleFactory(" + value + ')');
+		if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("setLifecycleFactory(" + value + ')');
 		}
 		FactoryFinder.setFactory(FactoryFinder.LIFECYCLE_FACTORY,
 					 value);
@@ -998,8 +1004,8 @@ public class ConfigureListener implements ServletRequestListener,
 	while (iter.hasNext()) {
 	    value = iter.next();
 	    if (value != null) {
-		if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("setRenderKitFactory(" + value + ')');
+		if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("setRenderKitFactory(" + value + ')');
 		}
 		FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
 					 value);
@@ -1032,8 +1038,8 @@ public class ConfigureListener implements ServletRequestListener,
             Lifecycle lifecycle =
                     factory.getLifecycle(lifecycleId);
             for (int i = 0; i < listeners.length; i++) {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("addPhaseListener(" + listeners[i] + ')');
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("addPhaseListener(" + listeners[i] + ')');
                 }
                 try {
                     Class clazz = Util.loadClass(listeners[i], this);
@@ -1042,7 +1048,7 @@ public class ConfigureListener implements ServletRequestListener,
                     Object [] args = { "phase-listener: " + listeners[i] };
                     String message =
                         MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
-                    logger.log(Level.SEVERE, message);
+                    LOGGER.log(Level.SEVERE, message);
                     throw e;
                 }
             }
@@ -1067,8 +1073,8 @@ public class ConfigureListener implements ServletRequestListener,
 
         value = config.getDefaultLocale();
         if (value != null) {
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("setDefaultLocale(" + value + ')');
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.finer("setDefaultLocale(" + value + ')');
             }
             application.setDefaultLocale
                 (Util.getLocaleFromString(value));
@@ -1078,8 +1084,8 @@ public class ConfigureListener implements ServletRequestListener,
         if ((values != null) && (values.length > 0)) {
             List<Locale> locales = new ArrayList<Locale>();
             for (int i = 0; i < values.length; i++) {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("addSupportedLocale(" + values[i] + ')');
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("addSupportedLocale(" + values[i] + ')');
                 }
                 locales.add(Util.getLocaleFromString(values[i]));
             }
@@ -1110,8 +1116,8 @@ public class ConfigureListener implements ServletRequestListener,
 	}
 
         for (int i = 0; i < config.length; i++) {
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("addManagedBean(" +
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.finer("addManagedBean(" +
                           config[i].getManagedBeanName() + ',' +
                           config[i].getManagedBeanClass() + ')');
             }
@@ -1153,14 +1159,14 @@ public class ConfigureListener implements ServletRequestListener,
 	}
 
         for (int i = 0; i < config.length; i++) {
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("addNavigationRule(" +
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.finer("addNavigationRule(" +
                           config[i].getFromViewId() + ')');
             }
             NavigationCaseBean[] ncb = config[i].getNavigationCases();
             for (int j = 0; j < ncb.length; j++) {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("addNavigationCase(" +
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("addNavigationCase(" +
                               ncb[j].getFromAction() + ',' +
                               ncb[j].getFromOutcome() + ',' +
                               ncb[j].isRedirect() + ',' +
@@ -1215,8 +1221,8 @@ public class ConfigureListener implements ServletRequestListener,
         }
 
         for (int i = 0; i < config.length; i++) {
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("addRenderer(" +
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.finer("addRenderer(" +
                           config[i].getComponentFamily() + ',' +
                           config[i].getRendererType() + ',' +
                           config[i].getRendererClass() + ')');
@@ -1236,7 +1242,7 @@ public class ConfigureListener implements ServletRequestListener,
                         " renderer-class: " + config[i].getRendererClass() };
                 String message = 
                         MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
-                logger.log(Level.SEVERE, message);
+                LOGGER.log(Level.SEVERE, message);
                 throw e;
             }
         }
@@ -1262,8 +1268,8 @@ public class ConfigureListener implements ServletRequestListener,
             RenderKit rk = rkFactory.getRenderKit
                 (null, config[i].getRenderKitId());
             if (rk == null) {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("createRenderKit(" +
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("createRenderKit(" +
                               config[i].getRenderKitId() + ',' +
                               config[i].getRenderKitClass() + ')');
                 }
@@ -1283,13 +1289,13 @@ public class ConfigureListener implements ServletRequestListener,
                             " render-kit-class: " + config[i].getRenderKitClass() };
                     String message =
                         MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
-                    logger.log(Level.SEVERE, message);
+                    LOGGER.log(Level.SEVERE, message);
                     throw e;
                             
                 }
             } else {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("getRenderKit(" +
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("getRenderKit(" +
                               config[i].getRenderKitId() + ')');
                 }
             }
@@ -1321,8 +1327,8 @@ public class ConfigureListener implements ServletRequestListener,
                               "base-name:" + baseName + 
                               "var:" + config[i].getVar();
                 // PENDING(edburns): I18N all levels above info
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.finer(message);
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.finer(message);
                 }
                 throw new IllegalArgumentException(message);
             }
@@ -1346,8 +1352,8 @@ public class ConfigureListener implements ServletRequestListener,
         Application application = application();
 
         for (int i = 0; i < config.length; i++) {
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("addValidator(" +
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.finer("addValidator(" +
                           config[i].getValidatorId() + ',' +
                           config[i].getValidatorClass() + ')');
             }
@@ -1374,7 +1380,7 @@ public class ConfigureListener implements ServletRequestListener,
             Object [] args = { "Digester" };
             String message =
                    MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
-            logger.log(Level.SEVERE, message);
+            LOGGER.log(Level.SEVERE, message);
             throw e;
         }
 
@@ -1420,13 +1426,13 @@ public class ConfigureListener implements ServletRequestListener,
         synchronized (loaders) {
             if (!loaders.contains(cl)) {
                 loaders.add(cl);
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("Initializing this webapp");
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("Initializing this webapp");
                 }
                 return false;
             } else {
-                if (logger.isLoggable(Level.FINER)) {
-                    logger.finer("Listener already completed for this webapp");
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("Listener already completed for this webapp");
                 }
                 return true;
             }
@@ -1448,8 +1454,8 @@ public class ConfigureListener implements ServletRequestListener,
     private void verifyObjects(ServletContext context, FacesConfigBean fcb)
         throws FacesException {
 
-        if (logger.isLoggable(Level.FINER)) {
-            logger.finer("Verifying application objects");
+        if (LOGGER.isLoggable(Level.FINER)) {
+            LOGGER.finer("Verifying application objects");
         }
 
         ApplicationFactory af = (ApplicationFactory)
@@ -1544,13 +1550,13 @@ public class ConfigureListener implements ServletRequestListener,
                     "cannot be created.  See your web application logs " +
                     "for details.";
             }
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning(message);
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning(message);
             }
             throw new FacesException(message);
         } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine(
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine(
                     "Application object verification completed successfully");
             }
         }
@@ -1568,8 +1574,8 @@ public class ConfigureListener implements ServletRequestListener,
      */
     protected void parse(Digester digester, URL url, FacesConfigBean fcb) {
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("parse(" + url.toExternalForm() + ')');
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("parse(" + url.toExternalForm() + ')');
         }
 
         URLConnection conn = null;
@@ -1638,8 +1644,8 @@ public class ConfigureListener implements ServletRequestListener,
             if (!(paramValue.equals("true")) &&
                 !(paramValue.equals("false"))) {
 
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning(MessageUtils.getExceptionMessageString(
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.warning(MessageUtils.getExceptionMessageString(
                         MessageUtils.INVALID_INIT_PARAM_ERROR_MESSAGE_ID,
                         new Object[] { paramValue, paramName }));
                 }
@@ -1675,8 +1681,8 @@ public class ConfigureListener implements ServletRequestListener,
             jspFactory.getClass().getMethod("getJspApplicationContext", new Class[] {
                 ServletContext.class });
         } catch (NoSuchMethodException nsme) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning(MessageUtils.getExceptionMessageString(MessageUtils.INCORRECT_JSP_VERSION_ID,
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning(MessageUtils.getExceptionMessageString(MessageUtils.INCORRECT_JSP_VERSION_ID,
                 new Object [] { "getJspApplicationContext" }));
             }
             return false;
@@ -1708,7 +1714,7 @@ public class ConfigureListener implements ServletRequestListener,
                         elFactType).newInstance();
                 appAssociate.setExpressionFactory(factory);
             } catch (Exception e) {
-                logger.log(Level.SEVERE, "Error Instantiating ExpressionFactory", e);
+                LOGGER.log(Level.SEVERE, "Error Instantiating ExpressionFactory", e);
             }                        
         
         } else {
@@ -2083,8 +2089,8 @@ public class ConfigureListener implements ServletRequestListener,
                 // processing the web.xml, set facesServletFound to true to
                 // default to our previous behavior of processing the faces
                 // configuration.
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning("Unable to process deployment descriptor for" +
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.warning("Unable to process deployment descriptor for" +
                         " context '" + context.getServletContextName() + '\'');
                 }
                 facesServletPresent = true;

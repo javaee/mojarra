@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.124 2006/02/06 21:44:55 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.125 2006/02/07 20:40:20 rlubke Exp $
  */
 
 /*
@@ -676,10 +676,7 @@ public abstract class UIComponentBase extends UIComponent {
      */
     private UIComponent findComponent(UIComponent base, String id) {
 
-        // Is the "base" component itself the match we are looking for?
-        if (id.equals(base.getId())) {
-            return (base);
-        }
+        
 
         // Search through our facets and children
         UIComponent kid = null;
@@ -697,6 +694,12 @@ public abstract class UIComponentBase extends UIComponent {
                 break;
             }
         }
+        
+        // Is the "base" component itself the match we are looking for?
+        if (result == null && id.equals(base.getId())) {
+            return (base);
+        }
+        
         return (result);
 
     }
