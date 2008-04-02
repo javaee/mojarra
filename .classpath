@@ -8,6 +8,8 @@
 	<classpathentry kind="src" path="jsf-ri/systest/src"/>
 	<classpathentry kind="src" path="jsf-api/test"/>
 	<classpathentry kind="src" path="jsf-ri/build/generate"/>
+	<classpathentry kind="src" path="jsf-ri/test"/>
+	<classpathentry excluding="com/sun/faces/config/beans/|com/sun/faces/config/rules/|com/sun/faces/config/|com/sun/faces/util/" kind="src" path="jsf-tools/src"/>
 	<classpathentry kind="lib" path="common/lib/com-sun-commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="common/lib/com-sun-commons-collections.jar"/>
 	<classpathentry kind="lib" path="common/lib/com-sun-commons-digester.jar"/>
@@ -20,27 +22,8 @@
 	<classpathentry kind="lib" path="dependencies/jakarta-cactus-13-1.7.1/lib/httpunit-1.6.jar"/>
 	<classpathentry kind="lib" path="dependencies/jakarta-cactus-13-1.7.1/lib/jasper-compiler-4.1.30.jar"/>
 	<classpathentry kind="lib" path="dependencies/jakarta-cactus-13-1.7.1/lib/jasper-runtime-4.1.30.jar"/>
-	<classpathentry kind="lib" path="dependencies/jakarta-cactus-13-1.7.1/lib/jboss-j2ee-3.2.3.jar"/>
 	<classpathentry kind="lib" path="dependencies/jakarta-cactus-13-1.7.1/lib/junit-3.8.1.jar"/>
 	<classpathentry kind="lib" path="dependencies/jakarta-cactus-13-1.7.1/lib/org.mortbay.jetty-4.2.17.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/commons-beanutils-1.7.0.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/commons-cli-1.0.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/commons-io-1.1.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/commons-jelly-1.0.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/commons-jelly-tags-log-1.0.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/commons-jexl-1.0.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/commons-lang-2.0.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/dom4j-1.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/htmlunit-1.8.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/jaxen-1.1-beta-8.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/js-1.6R2.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/nekohtml-0.9.5.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/saxpath-1.0-FCS.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/xercesImpl-2.6.2.jar"/>
-	<classpathentry kind="lib" path="dependencies/htmlunit-1.8/lib/xmlParserAPIs-2.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/cactus-1.7.1-javaee5.jar"/>
 	<classpathentry kind="lib" path="lib/jsf-extensions-test-time.jar"/>
 	<classpathentry kind="lib" path="contrib/sandbox/dependencies/commons-httpclient-3.0.1.jar"/>
@@ -48,9 +31,25 @@
 	<classpathentry kind="lib" path="contrib/sandbox/dependencies/commons-io-1.2.jar"/>
 	<classpathentry kind="lib" path="dependencies/apache-tomcat-6.0.2/lib/catalina.jar"/>
 	<classpathentry kind="lib" path="dependencies/glassfish/lib/javaee.jar"/>
+	<classpathentry kind="lib" path="dependencies/jars/jsp-api-2.1.jar"/>
+	<classpathentry kind="lib" path="dependencies/jars/jsr250-api-1.0.jar"/>
+	<classpathentry kind="lib" path="dependencies/jars/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="dependencies/jars/junit-3.8.1.jar"/>
+	<classpathentry kind="lib" path="dependencies/jars/maven-repository-importer-1.2.jar"/>
+	<classpathentry kind="lib" path="dependencies/jars/servlet-api-2.5.jar"/>
+	<classpathentry kind="lib" path="dependencies/jars/tlddoc-1.3.jar"/>
+	<classpathentry kind="lib" path="dependencies/htmlunit-1.10/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="dependencies/htmlunit-1.10/lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="dependencies/htmlunit-1.10/lib/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="dependencies/htmlunit-1.10/lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="dependencies/htmlunit-1.10/lib/htmlunit-1.10.jar"/>
+	<classpathentry kind="lib" path="dependencies/htmlunit-1.10/lib/jaxen-1.1-beta-11.jar"/>
+	<classpathentry kind="lib" path="dependencies/htmlunit-1.10/lib/js-1.6R2.jar"/>
+	<classpathentry kind="lib" path="dependencies/htmlunit-1.10/lib/nekohtml-0.9.5.jar"/>
+	<classpathentry kind="lib" path="dependencies/htmlunit-1.10/lib/xercesImpl-2.6.2.jar"/>
+	<classpathentry kind="lib" path="dependencies/htmlunit-1.10/lib/xmlParserAPIs-2.6.2.jar"/>
+	<classpathentry kind="lib" path="dependencies/glassfish/lib/appserv-rt.jar"/>
 	<classpathentry excluding="**/CVS" kind="src" path="jsf-api/build/generate"/>
-	<classpathentry kind="lib" path="C:/java/glassfish/lib/javaee.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant.jar"/>
-	<classpathentry kind="var" path="GLASSFISH_HOME/lib/appserv-rt.jar"/>
 	<classpathentry kind="output" path="trash/build"/>
 </classpath>
