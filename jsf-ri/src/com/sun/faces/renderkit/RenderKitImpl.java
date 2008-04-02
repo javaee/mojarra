@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.42 2006/08/03 01:46:49 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.43 2006/08/03 02:04:21 rlubke Exp $
  */
 
 /*
@@ -56,22 +56,12 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.42 2006/08/03 01:46:49 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.43 2006/08/03 02:04:21 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
 
-//
-// Protected Constants
-//
 
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
     // Log instance for this class
     private static final Logger logger =
             Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
