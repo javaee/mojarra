@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.28 2005/05/19 17:02:52 rlubke Exp $
+ * $Id: ResultSetDataModel.java,v 1.29 2005/05/19 19:14:17 rlubke Exp $
  */
 
 /*
@@ -543,7 +543,7 @@ public class ResultSetDataModel extends DataModel {
 
     // Private implementation of Map.Entry that implements the behavior for
     // a single entry from the Set returned by entrySet() from ResultSetMap
-    private class ResultSetEntry implements Map.Entry {
+    private static class ResultSetEntry implements Map.Entry {
 
         public ResultSetEntry(ResultSetMap map, Object key) {
             this.map = map;

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.109 2005/05/19 17:02:51 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.110 2005/05/19 19:14:17 rlubke Exp $
  */
 
 /*
@@ -1939,12 +1939,7 @@ public abstract class UIComponentBase extends UIComponent {
         public void putAll(Map map) {
             if (map == null) {
                 throw new NullPointerException();
-            }
-            Iterator keys = map.keySet().iterator();
-            while (keys.hasNext()) {
-                Object key = keys.next();
-                put(key, map.get(key));
-            }
+            }            
             for (Iterator i = map.entrySet().iterator(); i.hasNext(); ) {
                 Map.Entry entry = (Map.Entry) i.next();
                 put(entry.getKey(), entry.getValue());
