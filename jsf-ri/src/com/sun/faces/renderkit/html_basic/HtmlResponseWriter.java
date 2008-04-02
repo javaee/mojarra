@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.43 2007/01/26 19:34:24 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.44 2007/02/07 20:00:56 rlubke Exp $
  */
 
 /*
@@ -299,7 +299,9 @@ public class HtmlResponseWriter extends ResponseWriter {
             this;
         writerFromContext = (null == writerFromContext) ? this : writerFromContext;
         
-        if (isScriptOrStyle(name) && !scriptOrStyleSrc) {
+        if (isScriptOrStyle(name)
+             && !scriptOrStyleSrc
+             && writer instanceof FastStringWriter) {
             String result = ((FastStringWriter) writer).getBuffer().toString();
             writer = origWriter;
             
