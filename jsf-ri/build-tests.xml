@@ -270,7 +270,6 @@
             <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
             <test name="com.sun.faces.lifecycle.TestPhase"/>
             <test name="com.sun.faces.convert.TestConverters"/>
-            <test name="com.sun.faces.renderkit.TestFormatPoolImpl"/>
             <test name="com.sun.faces.renderkit.TestRenderKit"/>
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
             <test name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
