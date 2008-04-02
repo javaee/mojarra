@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.10 2003/08/28 15:52:32 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.11 2003/09/11 21:20:11 rkitain Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.faces.render.ResponseStateManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.10 2003/08/28 15:52:32 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.11 2003/09/11 21:20:11 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -110,24 +110,20 @@ public class RenderKitImpl extends RenderKit {
     /**
      * This method adds a <code>Renderer</code> with its associated 
      * <code>rendererType</code> to the internal map.
+     * If a <code>Renderer</code> already exists for this 
+     * <code>rendererType</code>, it will be replaced with the
+     * new <code>renderer</code>.
      *
      * @param rendererType The <code>Renderer</code> type.
      * @param renderer The <code>Renderer</code> instance.
      *
      * @throws NullPointerException if either parameter is null.
-     * @throws IllegalArgumentException if the <code>rendererType</code>
-     *  already exists.
      */
     public void addRenderer(String rendererType, Renderer renderer) {
         if (rendererType == null || renderer == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-	if (null != renderersByRendererType.get(rendererType)) {
-	    Object params [] = { rendererType };
-	    throw new IllegalArgumentException(Util.getExceptionMessage(
-                Util.RENDERER_ALREADY_EXISTS_ERROR_MESSAGE_ID, params));
-	}
 	renderersByRendererType.put(rendererType, renderer);
     }
 
