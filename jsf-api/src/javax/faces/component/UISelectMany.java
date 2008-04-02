@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.32 2003/09/25 07:50:05 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.33 2003/10/19 21:13:03 craigmcc Exp $
  */
 
 /*
@@ -267,7 +267,7 @@ public class UISelectMany extends UIInput {
                 context.getApplication().
                 getMessageResources(MessageResources.FACES_API_MESSAGES).
                 getMessage(context, INVALID_MESSAGE_ID);
-            context.addMessage(this, message);
+            context.addMessage(getClientId(context), message);
             setValid(false);
         }
         super.validate(context);

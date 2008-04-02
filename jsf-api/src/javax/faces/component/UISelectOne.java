@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.30 2003/09/25 07:50:06 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.31 2003/10/19 21:13:04 craigmcc Exp $
  */
 
 /*
@@ -103,7 +103,7 @@ public class UISelectOne extends UIInput {
                 context.getApplication().
                 getMessageResources(MessageResources.FACES_API_MESSAGES).
                 getMessage(context, INVALID_MESSAGE_ID);
-            context.addMessage(this, message);
+            context.addMessage(getClientId(context), message);
             setValid(false);
         }
         super.validate(context);

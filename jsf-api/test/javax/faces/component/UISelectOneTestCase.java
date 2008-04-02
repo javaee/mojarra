@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.11 2003/10/09 22:58:14 craigmcc Exp $
+ * $Id: UISelectOneTestCase.java,v 1.12 2003/10/19 21:13:10 craigmcc Exp $
  */
 
 /*
@@ -110,6 +110,7 @@ public class UISelectOneTestCase extends UIInputTestCase {
         // Validate a value that is on the list
         selectOne.setValid(true);
         selectOne.setValue("bar");
+        selectOne.setRendererType(null); // We don't have any renderers
         selectOne.validate(facesContext);
         assertTrue(selectOne.isValid());
 

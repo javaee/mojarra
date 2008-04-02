@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.13 2003/10/09 22:58:14 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.14 2003/10/19 21:13:09 craigmcc Exp $
  */
 
 /*
@@ -166,6 +166,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
         // Validate one value on the list and one not on the list
         selectMany.setValid(true);
         selectMany.setValue(new Object[] { "bar", "bop"});
+        selectMany.setRendererType(null); // We don't have any renderers
         selectMany.validate(facesContext);
         assertTrue(!selectMany.isValid());
 

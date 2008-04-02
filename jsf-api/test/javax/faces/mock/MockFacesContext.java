@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.13 2003/09/25 23:21:58 craigmcc Exp $
+ * $Id: MockFacesContext.java,v 1.14 2003/10/19 21:13:11 craigmcc Exp $
  */
 
 /*
@@ -33,6 +33,7 @@ public class MockFacesContext extends FacesContext {
 
     // ------------------------------------------------------------ Constructors
 
+
     public MockFacesContext() {
         super();
         setCurrentInstance(this);
@@ -63,8 +64,8 @@ public class MockFacesContext extends FacesContext {
     }
 
 
-    // componentsWithMessages
-    public Iterator getComponentsWithMessages() {
+    // clientIdsWithMessages
+    public Iterator getClientIdsWithMessages() {
         return (messages.keySet().iterator());
     }
 
@@ -99,15 +100,15 @@ public class MockFacesContext extends FacesContext {
     private Map messages = new HashMap();
     public Iterator getMessages() {
         ArrayList results = new ArrayList();
-        Iterator components = messages.keySet().iterator();
-        while (components.hasNext()) {
-            UIComponent component = (UIComponent) components.next();
-            results.addAll((List) messages.get(component));
+        Iterator clientIds = messages.keySet().iterator();
+        while (clientIds.hasNext()) {
+            String clientId = (String) clientIds.next();
+            results.addAll((List) messages.get(clientId));
         }
         return (results.iterator());
     }
-    public Iterator getMessages(UIComponent component) {
-        List list = (List) messages.get(component);
+    public Iterator getMessages(String clientId) {
+        List list = (List) messages.get(clientId);
         if (list == null) {
             list = new ArrayList();
         }
@@ -162,11 +163,11 @@ public class MockFacesContext extends FacesContext {
     // ---------------------------------------------------------- Public Methods
 
 
-    public void addMessage(UIComponent component, Message message){ 
-        List list = (List) messages.get(component);
+    public void addMessage(String clientId, Message message){ 
+        List list = (List) messages.get(clientId);
         if (list == null) {
             list = new ArrayList();
-            messages.put(component, list);
+            messages.put(clientId, list);
         }
         list.add(message);
     }

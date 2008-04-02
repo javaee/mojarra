@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.25 2003/09/30 17:37:46 rlubke Exp $
+ * $Id: DoubleRangeValidator.java,v 1.26 2003/10/19 21:13:06 craigmcc Exp $
  */
 
 /*
@@ -205,7 +205,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                 double converted = doubleValue(value);
                 if (maximumSet &&
                     (converted > maximum)) {
-                    context.addMessage(component,
+                    context.addMessage(component.getClientId(context),
                                        ValidatorMessages.getMessage
                                        (context,
                                         MAXIMUM_MESSAGE_ID,
@@ -215,7 +215,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                 }
                 if (minimumSet &&
                     (converted < minimum)) {
-                    context.addMessage(component,
+                    context.addMessage(component.getClientId(context),
                                        ValidatorMessages.getMessage
                                        (context,
                                         MINIMUM_MESSAGE_ID,
@@ -224,7 +224,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                     component.setValid(false);
                 }
             } catch (NumberFormatException e) {
-                context.addMessage(component,
+                context.addMessage(component.getClientId(context),
                                    ValidatorMessages.getMessage
                                    (context, TYPE_MESSAGE_ID));
                 component.setValid(false);

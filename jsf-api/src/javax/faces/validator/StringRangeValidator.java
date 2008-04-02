@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.23 2003/09/30 17:37:47 rlubke Exp $
+ * $Id: StringRangeValidator.java,v 1.24 2003/10/19 21:13:07 craigmcc Exp $
  */
 
 /*
@@ -207,7 +207,7 @@ public class StringRangeValidator implements Validator, StateHolder {
             String converted = stringValue(value);
             if ((maximum != null) &&
                 (converted.compareTo(maximum) > 0)) {
-                context.addMessage(component,
+                context.addMessage(component.getClientId(context),
                                    ValidatorMessages.getMessage
                                    (context,
                                     MAXIMUM_MESSAGE_ID,
@@ -217,7 +217,7 @@ public class StringRangeValidator implements Validator, StateHolder {
             }
             if ((minimum != null) &&
                 (converted.compareTo(minimum) < 0)) {
-                context.addMessage(component,
+                context.addMessage(component.getClientId(context),
                                    ValidatorMessages.getMessage
                                    (context,
                                     MINIMUM_MESSAGE_ID,

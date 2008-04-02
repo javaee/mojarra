@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.35 2003/10/16 18:43:28 craigmcc Exp $
+ * $Id: UIInput.java,v 1.36 2003/10/19 21:13:03 craigmcc Exp $
  */
 
 /*
@@ -335,7 +335,7 @@ public class UIInput extends UIOutput {
 		context.getApplication().
 		getMessageResources(MessageResources.FACES_API_MESSAGES).
 		getMessage(context, REQUIRED_MESSAGE_ID);
-	    context.addMessage(this, message);
+	    context.addMessage(getClientId(context), message);
 	    setValid(false);
 	}
 
