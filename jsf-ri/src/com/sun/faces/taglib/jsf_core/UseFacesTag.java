@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.10 2003/04/15 19:33:27 eburns Exp $
+ * $Id: UseFacesTag.java,v 1.11 2003/04/29 03:57:35 eburns Exp $
  */
 
 /*
@@ -34,18 +34,18 @@ import javax.faces.webapp.JspResponseWriter;
 import javax.servlet.jsp.JspWriter;
 import javax.faces.webapp.FacesBodyTag;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
 import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
 import javax.servlet.jsp.tagext.BodyTag;
 
 /**
  *
- *  All JSF component tags must be nested within UseFacesTag. This tag
- * does not have any renderers or attributes. It exists mainly to
- * save the state of the response tree once all tags have been rendered.
+ *  All JSF component tags must be nested within UseFacesTag.  This tag
+ *  corresponds to the root of the UIComponent tree.  It does not have
+ *  any renderers or attributes. It exists mainly to save the state of
+ *  the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.10 2003/04/15 19:33:27 eburns Exp $
+ * @version $Id: UseFacesTag.java,v 1.11 2003/04/29 03:57:35 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,8 +97,8 @@ public class UseFacesTag extends FacesBodyTag
     //
     // Methods from FacesBodyTag
     //
-    public int doStartTag() throws JspException {
-	super.doStartTag();
+
+    protected int getDoStartValue() throws JspException {
         return BodyTag.EVAL_BODY_BUFFERED;
     }
     
@@ -187,9 +187,15 @@ public class UseFacesTag extends FacesBodyTag
             throw new JspException(Util.getExceptionMessage(Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
         }  
     }    
+
+    /**
+
+    * @return the root of the <code>UIComponent</code> tree
+
+    */
     
     public UIComponent createComponent() {
-	UIComponent result = new UIOutput();
+	UIComponent result = context.getTree().getRoot();
 	result.setRendered(false);
         return result;
     }    
@@ -201,8 +207,8 @@ public class UseFacesTag extends FacesBodyTag
     public String getRendererType() {
         return null;
     }
-    
-    public int doEndTag() throws JspException {
+
+    protected int getDoEndValue() throws JspException {
         return (EVAL_PAGE);
     }
     
