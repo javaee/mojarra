@@ -1,5 +1,5 @@
 /*
- * $Id: FacesValidator.java,v 1.7 2003/12/17 15:14:08 rkitain Exp $
+ * $Id: FacesValidator.java,v 1.8 2004/01/30 00:32:19 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,10 @@ public abstract class FacesValidator extends TagLibraryValidator {
 
     final String JSF_HTML_URI = "http://java.sun.com/jsf/html";
 
-    final String JSTL_CORE_URI = "http://java.sun.com/jstl/core";
+    final String JSTL_OLD_CORE_URI = "http://java.sun.com/jstl/core";
+    
+    final String JSTL_NEW_CORE_URI = "http://java.sun.com/jsp/jstl/core";
+    
     // Prefix for JSF HTML tags 
     protected String JSF_HTML_PRE = null;
     public String getJSF_HTML_PRE() { return JSF_HTML_PRE; }
@@ -220,8 +223,9 @@ public abstract class FacesValidator extends TagLibraryValidator {
 			JSF_HTML_PRE = prefix;
                         JSF_FORM_QN = JSF_HTML_PRE + JSF_FORM_QN;
                     }
-		    else if (value.equals(JSTL_CORE_URI)) {
-			JSTL_CORE_PRE = prefix;
+		    else if (value.equals(JSTL_OLD_CORE_URI) || 
+                        value.equals(JSTL_NEW_CORE_URI)) {
+                        JSTL_CORE_PRE = prefix;
 			JSTL_IF_QN = JSTL_CORE_PRE + JSTL_IF_QN;
 			JSTL_CHOOSE_QN = JSTL_CORE_PRE + JSTL_CHOOSE_QN;
 			JSTL_FOREACH_QN = JSTL_CORE_PRE + JSTL_FOREACH_QN;

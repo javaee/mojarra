@@ -6,7 +6,7 @@
 <html>
 <title>Validator Test Page</title>
 <head>
-    <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 </head>
