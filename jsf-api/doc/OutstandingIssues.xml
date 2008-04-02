@@ -25,6 +25,10 @@
     is not created automatically.  This was one of the features provided
     in the <em>Object Manager</em> functionality that was present in
     version .03 of the JSF Spec, but has been absent since.</p>
+
+    <p>Per Jeff's comments - might want to pass the component instance,
+    instead of the value, to the <code>setModelValue()</code> method to
+    enable a "model handler".  Jeff - can you expand on this?</p>
   </description>
   <resolution>
     <p><em>04 Sep 2002</em> - Craig to present writeup to EG.</p>
@@ -208,7 +212,7 @@
 
     <p>Futher, we have the opportunity to simplify the APIs somewhat by
     using EL expressions for some common lookup scenarios such as resource
-    bundles (see Adam's mail threads for more  on this).
+    bundles (see Adam's mail threads for more  on this).</p>
   </description>
  <resolution>
     
@@ -361,6 +365,14 @@
     Application</em> without going through validations and model updates.
     These phases are inappropriate in a CommandEvent scenario, because
     a form (and the corresponding input fields) did not get submitted.</p>
+
+    <p>Jeff:  In the past I've done this via JavaScript and Form.submit()
+    for pages that contain other form data and with standard links with
+    parameters for pages that are display only.</p>
+
+    <p>Jeff:  Why is the second Hyperlink renderer a UICommand component,
+    when it doesn't trigger a command event?  Why isn't it under UIOutput
+    instead?</p>
   </description>
   <resolution>
     
@@ -925,6 +937,14 @@
     processing phases after other phases, such as Validation, Update Model
     Values, and Invoke Application.</p>
 
+    <p>Jeff:  Two particular phases that might be useful:</p>
+    <ul>
+    <li>OnLoad -- Walks the component tree after Reconsitute Request Tree
+        but before Apply Request Values.</li>
+    <li>OnUnload -- Walks the component tree after Render Response
+        for cleanup purposes.</li>
+    </ul>
+
     <p>See Also:  [Listeners-3], [StandardComponentEvents-38].</p>
   </description>
   <resolution>
@@ -1367,12 +1387,142 @@
     <p>In addition, it may be appropriate to consider factoring <em>in</em>
     method calls to eliminate the need for components and applications to
     use factories to retrieve MessageResources and Converter instances.</p>
-\  </description>
+  </description>
   <resolution>
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
 </issue>
+
+
+<issue>
+  <id>UsabilityRenames-59</id>
+  <originator>EG</originator>
+  <summary>Should classes and methods be renamed for usability?</summary>
+  <description>
+    <p>A variety of class and method renames have been suggested to improve
+    usability.  This issue is an omnibus to address them.  Included:</p>
+    <ul>
+    <li><strong>UIComponent</strong> - Change "modelReference" to "ref"
+        for XForms consistency (Craig - I think going back to "model" would
+        be better than this unless the semantics match exactly).</li>
+    <li><strong>UISelectMany</strong> - Rename to UISelect (new XForms).</li>
+    <li><strong>UISelectOne</strong> - Rename to UISelect1 (new XForms).</li>
+    </ul>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>20 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>ValidatorMessages-60</id>
+  <originator>Jeff</originator>
+  <summary>We should allow "validation message" attributes to be specified
+           along with the other configuration properties</summary>
+  <description>
+    <p>See Jeff's "comments on the 0902 spec" message dated 09/13/2002.</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>20 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>URLRewriting-61</id>
+  <originator>Jeff</originator>
+  <summary>Should URL rewriting be performed on generated URLs?</summary>
+  <description>
+    <p>Currently, the spec required URL rewriting on generated URLs.  Should
+    this be unconditional, conditional, or not performed?</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>20 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>FileUpload-62</id>
+  <originator>Jeff</originator>
+  <summary>Do we need a file upload component/renderer?</summary>
+  <description>
+    <p>It would be useful to have a component and/or renderer for processing
+    file uploads.</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>20 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>XForms-63</id>
+  <originator>Jeff</originator>
+  <summary>Additional XForms input types to be supported?</summary>
+  <description>
+    <p>Should we support additional XForms input types:  range, trigger,
+    submit?</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>20 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>RenderKitComponents-64</id>
+  <originator>Jeff</originator>
+  <summary>The relationship between renderkits and component types/classes
+           seems confusing and duplicative</summary>
+  <description>
+    <p>Currently, we register components with renderkits by either component
+    type or class.  Do we need both, or only one?  If one, which?</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>20 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>BrowserVersions-65</id>
+  <originator>Jeff</originator>
+  <summary>Reconfirm browser versions supported by standard RenderKit</summary>
+  <description>
+    <p>What browsers are we going to certify the standard RenderKit against?
+    (Currently we just say "HTML/4.01").  Despite what we claim for this,
+    what concessions are we willing to make for back-level browsers?</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>20 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>XHTML-66</id>
+  <originator>Jeff</originator>
+  <summary>Mandatory or optional XHTML/1.0 compatibility?</summary>
+  <description>
+    <p>How much (if any) should we specify for the standard HTML render kit
+    (beyond HTML/4.01) for compatibility with XHTML/1.0?</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>20 Sep 2002</status-date>
+</issue>
+
 
 
 </issues>
