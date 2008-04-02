@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.9 2005/10/05 17:55:22 edburns Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.10 2005/10/05 18:10:09 edburns Exp $
  */
 
 /*
@@ -192,7 +192,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     /**
      * Used to store the previousJspId Map in requestScope
      */
-    protected static final String PREVIOUS_JSP_ID_MAP = 
+    private static final String PREVIOUS_JSP_ID_MAP = 
 	"javax.faces.webapp.PREVIOUS_JSP_ID_MAP";
 
     // ------------------------------------------------------ Instance Variables
