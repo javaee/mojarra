@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBinding.java,v 1.7 2004/01/30 22:35:33 eburns Exp $
+ * $Id: ValueBinding.java,v 1.8 2004/02/02 19:50:40 eburns Exp $
  */
 
 /*
@@ -108,8 +108,7 @@ public abstract class ValueBinding {
     /**
      * <p>Return the (possibly <code>null</code>) expression String,
      * including the delimiters, from which this
-     * <code>ValueBinding</code> was built.  The default implementation
-     * returns <code>null</code>.</p>
+     * <code>ValueBinding</code> was built.</p>
      *
      */
     public String getExpressionString() {
