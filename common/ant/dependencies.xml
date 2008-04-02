@@ -72,10 +72,10 @@
     <property name="jsp.jar"                       value="${dependency.jar.dir}/jsp-api-${jsp.api.version}.jar"/>
     <property name="jstl.jar"                      value="${dependency.jar.dir}/jstl-${jstl.api.version}.jar"/>
     <property name="annotation.jar"                value="${dependency.jar.dir}/jsr250-api-${annotation.api.version}.jar"/>
-    <property name="sun-commons-beanutils.jar"     value="${dependency.jar.dir}/com-sun-commons-beanutils-1.6.1.jar"/>
-    <property name="sun-commons-digester.jar"      value="${dependency.jar.dir}/com-sun-commons-digester-1.5.jar"/>
-    <property name="sun-commons-collections.jar"   value="${dependency.jar.dir}/com-sun-commons-collections-2.1.jar"/>
-    <property name="sun-commons-logging.jar"       value="${dependency.jar.dir}/com-sun-commons-logging-1.0.4.jar"/>
+    <property name="sun-commons-beanutils.jar"     value="${dependency.jar.dir}/com-sun-commons-beanutils.jar"/>
+    <property name="sun-commons-digester.jar"      value="${dependency.jar.dir}/com-sun-commons-digester.jar"/>
+    <property name="sun-commons-collections.jar"   value="${dependency.jar.dir}/com-sun-commons-collections.jar"/>
+    <property name="sun-commons-logging.jar"       value="${dependency.jar.dir}/com-sun-commons-logging.jar"/>
 
     <target name="update" description="Download project dependencies">
         <mkdir dir="${dependency.base.dir}/downloads"/>
@@ -226,9 +226,10 @@
             </not>
             <then>
                 <get src="${download.java.net}/com-sun-commons-collections/jars/com-sun-commons-collections-2.1.jar"
-                     dest="${sun-commons-collections.jar}"
+                     dest="${dependency.base.dir}/jars/com-sun-commons-collections-2.1.jar"
                      usetimestamp="true"/>
-                <unjar src="${sun-commons-collections.jar}" dest="${dependency.jar.dir}"/>
+                <unjar src="${dependency.base.dir}/jars/com-sun-commons-collections-2.1.jar" dest="${dependency.jar.dir}"/>
+                <delete file="${dependency.base.dir}/jars/com-sun-commons-collections-2.1.jar"/>
             </then>
         </if>
 
@@ -238,9 +239,10 @@
             </not>
             <then>
                 <get src="${download.java.net}/com-sun-commons-digester/jars/com-sun-commons-digester-1.5.jar"
-                     dest="${sun-commons-digester.jar}"
+                     dest="${dependency.base.dir}/jars/com-sun-commons-digester-1.5.jar"
                      usetimestamp="true"/>
-                <unjar src="${sun-commons-digester.jar}" dest="${dependency.jar.dir}"/>
+                <unjar src="${dependency.base.dir}/jars/com-sun-commons-digester-1.5.jar" dest="${dependency.jar.dir}"/>
+                <delete file="${dependency.base.dir}/jars/com-sun-commons-digester-1.5.jar"/>
             </then>
         </if>
 
@@ -250,9 +252,10 @@
             </not>
             <then>
                 <get src="${download.java.net}/com-sun-commons-beanutils/jars/com-sun-commons-beanutils-1.6.1.jar"
-                     dest="${sun-commons-beanutils.jar}"
+                     dest="${dependency.base.dir}/jars/com-sun-commons-beanutils-1.6.1.jar"
                      usetimestamp="true"/>
-                <unjar src="${sun-commons-beanutils.jar}" dest="${dependency.jar.dir}"/>
+                <unjar src="${dependency.base.dir}/jars/com-sun-commons-beanutils-1.6.1.jar" dest="${dependency.jar.dir}"/>
+                <delete file="${dependency.base.dir}/jars/com-sun-commons-beanutils-1.6.1.jar"/>
             </then>
         </if>
 
@@ -262,9 +265,10 @@
             </not>
             <then>
                 <get src="${download.java.net}/com-sun-commons-logging/jars/com-sun-commons-logging-1.0.4.jar"
-                     dest="${sun-commons-logging.jar}"
+                     dest="${dependency.base.dir}/jars/com-sun-commons-logging-1.0.4.jar"
                      usetimestamp="true"/>
-                <unjar src="${sun-commons-logging.jar}" dest="${dependency.jar.dir}"/>
+                <unjar src="${dependency.base.dir}/jars/com-sun-commons-logging-1.0.4.jar" dest="${dependency.jar.dir}"/>
+                <delete file="${dependency.base.dir}/jars/com-sun-commons-logging-1.0.4.jar"/>
             </then>
         </if>
 
