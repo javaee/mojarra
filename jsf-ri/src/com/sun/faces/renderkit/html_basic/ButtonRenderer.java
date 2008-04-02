@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.99 2006/07/25 21:06:04 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.100 2006/09/01 17:07:00 rlubke Exp $
  */
 
 /*
@@ -31,11 +31,8 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import javax.faces.FacesException;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
@@ -55,44 +52,12 @@ import com.sun.faces.util.Util;
 
 public class ButtonRenderer extends HtmlBasicRenderer {
 
-    //
-    // Protected Constants
-    //
-    //
-    // Class Variables
-    //
-    private static final String FORM_HAS_COMMAND_LINK_ATTR = 
-         "com.sun.faces.FORM_HAS_COMMAND_LINK_ATTR";
 
-    private static final String NO_COMMAND_LINK_FOUND_VALUE = 
-         "com.sun.faces.NO_COMMAND_LINK_FOUND";
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-    
-    //
-    // Methods From Renderer
-    //
 
     public void decode(FacesContext context, UIComponent component) {
+
         if (context == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
                 MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
@@ -147,12 +112,14 @@ public class ButtonRenderer extends HtmlBasicRenderer {
          if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
                     "End decoding component " + component.getId());
-        }        
+        }
+
     }
 
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
+
         if (context == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
                 MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
@@ -177,7 +144,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         
         // Which button type (SUBMIT, RESET, or BUTTON) should we generate?
         String type = (String) component.getAttributes().get("type");
-        String styleClass = null;
+        String styleClass;
         if (type == null) {
             type = "submit";
             // This is needed in the decode method
@@ -195,7 +162,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         String imageSrc = (String) component.getAttributes().get("image");
         writer.startElement("input", component);
         writeIdAttributeIfNecessary(context, writer, component);
-	String clientId = component.getClientId(context);
+        String clientId = component.getClientId(context);
         if (imageSrc != null) {
             writer.writeAttribute("type", "image", "type");
             writer.writeURIAttribute("src", src(context, imageSrc), "image");
@@ -227,10 +194,13 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             logger.log(Level.FINER, 
                     "End encoding component " + component.getId());
         }
+
     }
+
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
+
         if (context == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
                 MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
@@ -239,137 +209,22 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
                 MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
+
     }
 
-    //
-    // General Methods
-    //
 
-    /**
-     *
-     * <p>Return the script to invoke to clear the hidden fields related
-     * to commandLink components in the same form as the argument button
-     * component.</p>
-     *
-     * <p>Algorithm:</p>
-     *
-     * <p>Find the form in which the argument button component resides
-     * by going up the parent tree until you find the form.  If you hit
-     * the root, return <code>null</code>. </p>
-     *
-     * <p>Get the form's <code>clientId</code>.</p>
-     *
-     * <p>Discover if there are one or more commandLink components in
-     * this form.  If not, return <code>null</code>.  Do this by first
-     * looking in the request scope for the attr
-     * <code>FORM_HAS_COMMAND_LINK_ATTR</code>.  If found, see if the
-     * value is equal to the clientId of the current form.  If so,
-     * continue to the next step.  If not found, or the value is not
-     * equal to the current form's clientId, start traversing the
-     * children of this form until you find a component whose
-     * renderer-type is <code>javax.faces.Link</code> and family is
-     * <code>javax.faces.Command</code>.  If such a component is found
-     * set the <code>FORM_HAS_COMMAND_LINK_ATTR</code> into request
-     * scope (with the value being the form clientId) so subsequent
-     * buttons in this form don't have to perform the search.</p>
-     *
-     * <p>At this point, we know we have one or more commandLink
-     * components in this form, so we need to generate the script.</p>
-     */
+    // --------------------------------------------------------- Private Methods
 
-    private String getClearHiddenFieldScript(FacesContext context, 
-					     UIComponent component) {
-        Map<String,Object> requestMap = 
-            context.getExternalContext().getRequestMap();
-	UIComponent 
-	    myForm = component,
-	    root = context.getViewRoot();
-        String 
-	    formClientId = null,
-	    commandLinkAttrValue = null;
-	String result = null;
-	boolean formHasCommandLink = false;
 
-	//
-	// find the form
-	//
-
-	while (!(myForm instanceof UIForm) && root != myForm) {
-	    myForm = myForm.getParent();
-	}
-
-	if (root == myForm) {
-	    return null;
-	}
-
-	formClientId = myForm.getClientId(context);
-
-	assert(null != formClientId);
-
-	// 
-	// Inspect the form for command link instances
-	//
-	if (null == (commandLinkAttrValue = 
-		     (String) requestMap.get(FORM_HAS_COMMAND_LINK_ATTR))) {
-	    Util.TreeTraversalCallback callback = 
-		new Util.TreeTraversalCallback() {
-		    public boolean takeActionOnNode(FacesContext 
-						    context,
-						    UIComponent 
-						    curNode) throws FacesException {
-			boolean keepGoing = true;
-			String 
-			    rendererType = curNode.getRendererType(),
-			    family = curNode.getFamily();
-			if ("javax.faces.Link".equals(rendererType) &&   
-                 "javax.faces.Command".equals(family)) {
-			    keepGoing = false;
-			    
-			}
-			return keepGoing;
-		    }
-		};
-	    // if the traversal aborted early due to a match being found
-	    if (formHasCommandLink = 
-		(!Util.prefixViewTraversal(context, myForm, callback))) {
-		requestMap.put(FORM_HAS_COMMAND_LINK_ATTR, formClientId);
-	    }
-	    else {
-		requestMap.put(FORM_HAS_COMMAND_LINK_ATTR, 
-			       NO_COMMAND_LINK_FOUND_VALUE);
-	    }
-	}
-	else {
-	    // if there is an entry in the map, but it is not equal to
-	    // the id for this form,
-	    if (!(formHasCommandLink = 
-		  commandLinkAttrValue.equals(formClientId))) {
-		// see if it is the NO_COMMAND_LINK_FOUND_VALUE
-		formHasCommandLink = 
-		    !commandLinkAttrValue.equals(NO_COMMAND_LINK_FOUND_VALUE);
-	    }
-	}
-		
-	if (!formHasCommandLink) {
-	    return null;
-	}
-	
-	result = RenderKitUtils.createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME +
-	    '_' + formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_')) +
-	    "(this.form.id);";
-	
-	return result;
-    }
-
-       
     private String src(FacesContext context, String value) {
+
         if (value == null) {
             return "";
         }
         value = context.getApplication().getViewHandler().
             getResourceURL(context, value);
         return (context.getExternalContext().encodeResourceURL(value));
-    }
 
+    }
 
 } // end of class ButtonRenderer
