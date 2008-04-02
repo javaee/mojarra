@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.50 2003/09/22 19:39:07 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.51 2003/09/22 21:25:49 rlubke Exp $
  */
 
 /*
@@ -9,7 +9,6 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
 import java.util.ArrayList;
@@ -18,8 +17,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
-import javax.faces.FacesException;     
+import java.util.Map;
+     
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -77,8 +76,8 @@ public class FacesContextImpl extends FacesContext
     * that are not associated with a UIComponent instance.
 
     */
-
-    private HashMap messageLists = null;
+    private List globalMessages;
+    private Map componentMessageLists;   
     private ViewHandler viewHandler = null;
 
     
@@ -145,11 +144,11 @@ public class FacesContextImpl extends FacesContext
         assertNotReleased();
 	Iterator result = null;
 
-	if (null == messageLists) {
+	if (null == componentMessageLists) {
 	    result = Collections.EMPTY_LIST.iterator();
 	}
 	else {
-	    result = messageLists.keySet().iterator();
+	    result = componentMessageLists.keySet().iterator();
 	}
 
         return result;
@@ -187,23 +186,21 @@ public class FacesContextImpl extends FacesContext
         int max = 0;
         ArrayList list = new ArrayList();
         
-        if (null == messageLists) {
+        if (null == componentMessageLists && null == globalMessages) {
              return max;
         }
-	// Get an Iterator over the ArrayList instances
-	outerIter = messageLists.values().iterator();
-        while ( outerIter.hasNext()) {
-            list = (ArrayList) outerIter.next();
-	    // Get an Iterator over the elements of the current
-	    // ArrayList
-	    innerIter = list.iterator();
-	    while(innerIter.hasNext()) {
-		Message msg = (Message)innerIter.next();
-		if (msg.getSeverity() > max) {
-		    max = msg.getSeverity();
-		}    
-	    }
-        }
+	    // Get an Iterator over the ArrayList instances
+        List messages = getMergedMessageLists();
+        for (int i = 0, size = getMergedMessageLists().size(); i < size; i++) {            
+            int severity = ((Message) messages.get(i)).getSeverity();
+            if (severity > max) {
+                max = severity;
+            }
+
+            if (severity == Message.SEVERITY_FATAL) {
+                break;
+            }
+        }	   
         return max;
     }    
 
@@ -211,66 +208,60 @@ public class FacesContextImpl extends FacesContext
         assertNotReleased();
         Iterator listsIter = null, result = null;
         ArrayList list = new ArrayList();
-        
-        if (null == messageLists) {
-             return (Collections.EMPTY_LIST.iterator());
+
+        if (null == componentMessageLists && null == globalMessages) {
+            return (Collections.EMPTY_LIST.iterator());
         }
 
-	// Get an Iterator over the ArrayList instances
-	listsIter = messageLists.values().iterator();
-        while ( listsIter.hasNext()) {
-	    list.addAll((ArrayList) listsIter.next());
-	}
-
-	if (list.size() > 0 ) {
-            result = list.iterator();
-	} else {
+        // Get an Iterator over the ArrayList instances
+        List messages = getMergedMessageLists();
+        if (messages.size() > 0) {
+            result = messages.iterator();
+        } else {
             result = Collections.EMPTY_LIST.iterator();
-	}
-        return result;
+        }
+            return result;
     }
 
     public Iterator getMessages(UIComponent component) {
         assertNotReleased();
         // If no messages have been enqueued at all,
         // return an empty List Iterator
-        if (null == messageLists) {
+        if (null == componentMessageLists && null == globalMessages) {
             return (Collections.EMPTY_LIST.iterator());
         }
-
-        // If no messages have been enqueued for the specified
-        // (possibly null) UIComponent, return an empty list iterator
-        List list = (List) messageLists.get(component);
-        if (null == list) {
-            return (Collections.EMPTY_LIST.iterator());
-        }
-
-        // If the specified UIComponent was null, just return the iterator
+        
+        // if the component specified is null, return messages not associated
+        // with a component, i.e. the global messages.
         if (component == null) {
-            return (list.iterator());
-        }
-
-        // If the specified UIComponent is not nested inside a
-        // Repeater, just return the iterator
-        Repeater repeater =
-            RepeaterSupport.findParentRepeater(component);
-        if (repeater == null) {
-            return (list.iterator());
-        }
-        int rowIndex = repeater.getRowIndex();
-
-        // Return only the messages for the relevant rowIndex value
-        List results = new ArrayList();
-        Iterator items = list.iterator();
-        while (items.hasNext()) {
-            RepeaterMessage  item = (RepeaterMessage) items.next();
-            if (rowIndex != item.getRowIndex()) {
-                continue;
+            return globalMessages.iterator();
+        } else {
+            List list = (List) componentMessageLists.get(component);
+            if (list == null) {
+                return (Collections.EMPTY_LIST.iterator());
             }
-            results.add(item.getMessage());
-        }
-        return (results.iterator());
+            
+            // If the specified UIComponent is not nested inside a
+            // Repeater, just return the iterator
+            Repeater repeater =
+                    RepeaterSupport.findParentRepeater(component);
+            if (repeater == null) {
+                return (list.iterator());
+            }
+            int rowIndex = repeater.getRowIndex();
 
+            // Return only the messages for the relevant rowIndex value
+            List results = new ArrayList();
+            Iterator items = list.iterator();
+            while (items.hasNext()) {
+                RepeaterMessage item = (RepeaterMessage) items.next();
+                if (rowIndex != item.getRowIndex()) {
+                    continue;
+                }
+                results.add(item.getMessage());
+            }
+            return (results.iterator());
+        }       
     }    
 
     public ResponseStream getResponseStream() {
@@ -370,24 +361,33 @@ public class FacesContextImpl extends FacesContext
         // If the relevant component is a descendant of a Repeater,
         // wrap the message so we can restore the rowIndex later
         Repeater repeater = null;
-        if (component != null) {
+        if (component != null) {            
             repeater = RepeaterSupport.findParentRepeater(component);
+            
+            if (repeater != null) {
+                message = new RepeaterMessage(message,
+                        repeater.getRowIndex());
+            }
+            
+            if (componentMessageLists == null) {
+                componentMessageLists = new HashMap();
+            }
+            
+            // Add this message to our internal queue
+            List list = (List) componentMessageLists.get(component);
+            if (list == null) {
+                list = new ArrayList();
+                componentMessageLists.put(component, list);
+            }
+            list.add(message);
+        } else {
+            // component was null, add to the global message queue
+            if (globalMessages == null) {
+                globalMessages = new ArrayList();
+            }
+            globalMessages.add(message);
         }
-        if (repeater != null) {
-            message = new RepeaterMessage(message,
-                                          repeater.getRowIndex());
-        }
-
-        // Add this message to our internal queue
-        if (null == messageLists) {
-            messageLists = new HashMap();
-        }
-        List list = (List) messageLists.get(component);
-        if (list == null) {
-            list = new ArrayList();
-            messageLists.put(component, list);
-        }
-        list.add(message);
+              
         if (log.isDebugEnabled()) {
             if (repeater != null) {
                 log.debug("Adding Message[sourceId=" + component.getId() +
@@ -410,7 +410,8 @@ public class FacesContextImpl extends FacesContext
         responseStream = null;
         responseWriter = null;
         facesEvents = null;
-        messageLists = null;
+        componentMessageLists = null;
+        globalMessages = null;
         viewHandler = null;
         renderResponse = false;
         responseComplete = false;
@@ -456,6 +457,20 @@ public class FacesContextImpl extends FacesContext
         if (released) {
             throw new IllegalStateException();                   
         }    
+    }
+    
+    private List getMergedMessageLists() {
+        List mergedList = new ArrayList();
+        if (globalMessages != null) {
+            mergedList.addAll(globalMessages);
+        }
+        if (componentMessageLists != null) {
+            for (Iterator i = componentMessageLists.values().iterator(); i.hasNext(); ) {
+                for (Iterator ii = ((ArrayList) i.next()).iterator(); ii.hasNext(); )
+                mergedList.add(ii.next());
+            }            
+        }        
+        return mergedList;
     }
    
     // The testcase for this class is TestFacesContextImpl.java 
