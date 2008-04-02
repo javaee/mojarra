@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainerBase.java,v 1.5 2003/09/04 03:52:50 eburns Exp $
+ * $Id: UINamingContainer.java,v 1.7 2003/09/25 07:50:04 craigmcc Exp $
  */
 
 /*
@@ -7,13 +7,10 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
 
 
 /**
@@ -21,38 +18,63 @@ import java.io.IOException;
  * components that wish to implement {@link NamingContainer} functionality.</p>
  */
 
-public class UINamingContainerBase extends UIComponentBase
+public class UINamingContainer extends UIComponentBase
     implements NamingContainer {
 
 
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * <p>Create a new {@link UINamingContainer} instance with default property
+     * values.</p>
+     */
+    public UINamingContainer() {
+
+        super();
+        setRendererType(null);
+
+    }
+
+ 
     // ------------------------------------------------------ Instance Variables
 
 
     /**
      * <p>The {@link NamingContainer} implementation that we delegate to
      */
-    protected NamingContainerSupport namespace = new NamingContainerSupport();
+    private NamingContainerSupport namespace = new NamingContainerSupport();
 
 
     // ------------------------------------------------- NamingContainer Methods
 
 
     public void addComponentToNamespace(UIComponent namedComponent) {
+
 	namespace.addComponentToNamespace(namedComponent);
+
     }
 
 
     public UIComponent findComponentInNamespace(String name) {
+
 	return namespace.findComponentInNamespace(name);
+
     }
 
 
     public synchronized String generateClientId() {
+
 	return namespace.generateClientId();
+
     }
 
+
     public void removeComponentFromNamespace(UIComponent namedComponent) {
+
 	namespace.removeComponentFromNamespace(namedComponent);
+
     }
+
 
 }

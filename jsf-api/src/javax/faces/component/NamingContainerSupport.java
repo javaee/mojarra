@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerSupport.java,v 1.7 2003/09/04 03:52:48 eburns Exp $
+ * $Id: NamingContainerSupport.java,v 1.5 2003/09/25 07:49:59 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 import javax.faces.context.FacesContext;
 
@@ -152,6 +152,7 @@ public class NamingContainerSupport implements NamingContainer {
 
     }
 
+
     public boolean equals(Object otherObj) {
 	if (!(otherObj instanceof NamingContainerSupport)) {
 	    return false;
@@ -194,6 +195,7 @@ public class NamingContainerSupport implements NamingContainer {
 	return true;
     }
 
+
     public void removeComponentFromNamespace(UIComponent component) {
 
         // Validate our parameter
@@ -211,5 +213,6 @@ public class NamingContainerSupport implements NamingContainer {
         }
 
     }
+
 
 }

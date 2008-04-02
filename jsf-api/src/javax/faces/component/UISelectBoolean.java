@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.28 2003/07/26 17:54:38 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.29 2003/09/25 07:50:05 craigmcc Exp $
  */
 
 /*
@@ -20,7 +20,22 @@ package javax.faces.component;
  * <code>setRendererType()</code> method.</p>
  */
 
-public interface UISelectBoolean extends UIInput {
+public class UISelectBoolean extends UIInput {
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * <p>Create a new {@link UISelectBoolean} instance with default
+     * property values.</p>
+     */
+    public UISelectBoolean() {
+
+        super();
+        setRendererType("Checkbox");
+
+    }
 
 
     // -------------------------------------------------------------- Properties
@@ -30,7 +45,16 @@ public interface UISelectBoolean extends UIInput {
      * <p>Return the local value of the selected state of this component.
      * This method is a typesafe alias for <code>getValue()</code>.</p>
      */
-    public boolean isSelected();
+    public boolean isSelected() {
+
+        Boolean value = (Boolean) getValue();
+        if (value != null) {
+            return (value.booleanValue());
+        } else {
+            return (false);
+        }
+
+    }
 
 
     /**
@@ -39,7 +63,15 @@ public interface UISelectBoolean extends UIInput {
      *
      * @param selected The new selected state
      */
-    public void setSelected(boolean selected);
+    public void setSelected(boolean selected) {
+
+        if (selected) {
+            setValue(Boolean.TRUE);
+        } else {
+            setValue(Boolean.FALSE);
+        }
+
+    }
 
 
 }

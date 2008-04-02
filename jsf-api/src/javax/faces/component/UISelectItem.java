@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.16 2003/08/30 00:31:32 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.17 2003/09/25 07:50:05 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,11 @@
 package javax.faces.component;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
 
@@ -30,16 +35,52 @@ import javax.faces.model.SelectItem;
  * </ul>
  */
 
-public interface UISelectItem extends UIComponent, ValueHolder {
+public class UISelectItem extends UIComponentBase implements ValueHolder {
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * <p>Create a new {@link UISelectItem} instance with default property
+     * values.</p>
+     */
+    public UISelectItem() {
+
+        super();
+        setRendererType(null);
+
+    }
+
+
+    // ------------------------------------------------------ Instance Variables
+
+
+    /**
+     * <p>The {@link ValueHolderSupport} instance to which we delegate
+     * our {@link ValueHolder} implementation processing.</p>
+     */
+    private ValueHolderSupport support = new ValueHolderSupport(this);
+
 
 
     // -------------------------------------------------------------- Properties
 
 
     /**
+     * <p>The description for this selection item.</p>
+     */
+    private String itemDescription = null;
+
+
+    /**
      * <p>Return the description for this selection item.</p>
      */
-    public String getItemDescription();
+    public String getItemDescription() {
+
+        return (this.itemDescription);
+
+    }
 
 
     /**
@@ -47,13 +88,27 @@ public interface UISelectItem extends UIComponent, ValueHolder {
      *
      * @param itemDescription The new description
      */
-    public void setItemDescription(String itemDescription);
+    public void setItemDescription(String itemDescription) {
+
+        this.itemDescription = itemDescription;
+
+    }
+
+
+    /**
+     * <p>The localized label for this selection item.</p>
+     */
+    private String itemLabel = null;
 
 
     /**
      * <p>Return the localized label for this selection item.</p>
      */
-    public String getItemLabel();
+    public String getItemLabel() {
+
+        return (this.itemLabel);
+
+    }
 
 
     /**
@@ -61,13 +116,27 @@ public interface UISelectItem extends UIComponent, ValueHolder {
      *
      * @param itemLabel The new localized label
      */
-    public void setItemLabel(String itemLabel);
+    public void setItemLabel(String itemLabel) {
+
+        this.itemLabel = itemLabel;
+
+    }
+
+
+    /**
+     * <p>The server value for this selection item.</p>
+     */
+    private String itemValue = null;
 
 
     /**
      * <p>Return the server value for this selection item.</p>
      */
-    public String getItemValue();
+    public String getItemValue() {
+
+        return (this.itemValue);
+
+    }
 
 
     /**
@@ -75,7 +144,110 @@ public interface UISelectItem extends UIComponent, ValueHolder {
      *
      * @param itemValue The new server value
      */
-    public void setItemValue(String itemValue);
+    public void setItemValue(String itemValue) {
+
+        this.itemValue = itemValue;
+
+    }
+
+
+    // -------------------------------------------------- ValueHolder Properties
+
+
+    public Converter getConverter() {
+
+        return (support.getConverter());
+
+    }
+
+
+    public void setConverter(Converter converter) {
+
+        support.setConverter(converter);
+
+    }
+
+
+    public Object getValue() {
+
+        return (support.getValue());
+
+    }
+
+
+    public void setValue(Object value) {
+
+        support.setValue(value);
+
+    }
+
+
+    public String getValueRef() {
+
+        return (support.getValueRef());
+
+    }
+
+
+    public void setValueRef(String valueRef) {
+
+        support.setValueRef(valueRef);
+
+    }
+
+
+    // ----------------------------------------------------- ValueHolder Methods
+
+
+    public Object currentValue(FacesContext context) {
+
+        return (support.currentValue(context));
+
+    }
+
+
+    // ----------------------------------------------------- StateHolder Methods
+
+
+    public Object saveState(FacesContext context) {
+
+        Object values[] = new Object[5];
+        values[0] = super.saveState(context);
+        List[] supportList = new List[1];
+        List theSupport = new ArrayList(1);
+        theSupport.add(support);
+        supportList[0] = theSupport;
+        values[1] =
+            context.getApplication().getViewHandler().getStateManager().
+            getAttachedObjectState(context, this, "support", supportList);
+        values[2] = itemDescription;
+        values[3] = itemLabel;
+        values[4] = itemValue;
+        return (values);
+
+    }
+
+
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        List[] supportList = (List[])
+            context.getApplication().getViewHandler().getStateManager().
+            restoreAttachedObjectState(context, values[1], null, this);
+	if (supportList != null) {
+            List theSupport = supportList[0];
+            if ((theSupport != null) && (theSupport.size() > 0)) {
+                support = (ValueHolderSupport) theSupport.get(0);
+		support.setComponent(this);
+            }
+	}
+        itemDescription = (String) values[2];
+        itemLabel = (String) values[3];
+        itemValue = (String) values[4];
+
+    }
 
 
 }

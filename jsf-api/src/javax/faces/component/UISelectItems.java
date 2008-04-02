@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItems.java,v 1.12 2003/08/30 00:31:32 craigmcc Exp $
+ * $Id: UISelectItems.java,v 1.13 2003/09/25 07:50:05 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,11 @@
 package javax.faces.component;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
 
@@ -40,7 +45,128 @@ import javax.faces.model.SelectItem;
  * </ul>
  */
 
-public interface UISelectItems extends UIComponent, ValueHolder {
+public class UISelectItems extends UIComponentBase implements ValueHolder {
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * <p>Create a new {@link UISelectItems} instance with default property
+     * values.</p>
+     */
+    public UISelectItems() {
+
+        super();
+        setRendererType(null);
+
+    }
+
+
+    // ------------------------------------------------------ Instance Variables
+
+
+    /**
+     * <p>The {@link ValueHolderSupport} instance to which we delegate
+     * our {@link ValueHolder} implementation processing.</p>
+     */
+    private ValueHolderSupport support = new ValueHolderSupport(this);
+
+
+
+    // -------------------------------------------------- ValueHolder Properties
+
+
+    public Converter getConverter() {
+
+        return (support.getConverter());
+
+    }
+
+
+    public void setConverter(Converter converter) {
+
+        support.setConverter(converter);
+
+    }
+
+
+    public Object getValue() {
+
+        return (support.getValue());
+
+    }
+
+
+    public void setValue(Object value) {
+
+        support.setValue(value);
+
+    }
+
+
+    public String getValueRef() {
+
+        return (support.getValueRef());
+
+    }
+
+
+    public void setValueRef(String valueRef) {
+
+        support.setValueRef(valueRef);
+
+    }
+
+
+    // ----------------------------------------------------- ValueHolder Methods
+
+
+    public Object currentValue(FacesContext context) {
+
+        return (support.currentValue(context));
+
+    }
+
+
+    // ----------------------------------------------------- StateHolder Methods
+
+
+    public Object saveState(FacesContext context) {
+
+        Object values[] = new Object[2];
+        values[0] = super.saveState(context);
+        List[] supportList = new List[1];
+        List theSupport = new ArrayList(1);
+        theSupport.add(support);
+        supportList[0] = theSupport;
+        values[1] =
+            context.getApplication().getViewHandler().getStateManager().
+            getAttachedObjectState(context, this, "support", supportList);
+        return (values);
+
+    }
+
+
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        List[] supportList = (List[])
+            context.getApplication().getViewHandler().getStateManager().
+            restoreAttachedObjectState(context, values[1], null, this);
+	if (supportList != null) {
+            List theSupport = supportList[0];
+            if ((theSupport != null) && (theSupport.size() > 0)) {
+                support = (ValueHolderSupport) theSupport.get(0);
+		support.setComponent(this);
+            }
+	}
+
+    }
+
+
 
 
 }

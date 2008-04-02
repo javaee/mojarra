@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.30 2003/09/23 20:35:49 eburns Exp $
+ * $Id: UIForm.java,v 1.31 2003/09/25 07:50:03 craigmcc Exp $
  */
 
 /*
@@ -9,7 +9,10 @@
 
 package javax.faces.component;
 
+
+import java.util.Iterator;
 import javax.faces.context.FacesContext;
+
 
 /**
  * <p><strong>UIForm</strong> is a {@link UIComponent} that represents an
@@ -22,7 +25,41 @@ import javax.faces.context.FacesContext;
  * <code>setRendererType()</code> method.</p>
  */
 
-public interface UIForm extends UIComponent, NamingContainer {
+public class UIForm extends UIComponentBase implements NamingContainer {
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * <p>Create a new {@link UIForm} instance with default property
+     * values.</p>
+     */
+    public UIForm() {
+
+        super();
+        setRendererType("Form");
+
+    }
+
+
+    // ------------------------------------------------------ Instance Variables
+
+
+    /**
+     * <p>The {@link NamingContainer} implementation that we delegate to
+     */
+    private NamingContainerSupport namespace = new NamingContainerSupport();
+
+
+    // -------------------------------------------------------------- Properties
+
+
+    /**
+     * <p>The form submitted flag for this {@link UIForm}.</p>
+     */
+    private boolean submitted = false;
+
 
     /**
      * <p>Returns the current value of the <code>submitted</code>
@@ -30,8 +67,12 @@ public interface UIForm extends UIComponent, NamingContainer {
      * #setSubmitted} for details.</p>
      *
      */
+    public boolean isSubmitted() {
 
-    public boolean isSubmitted();
+        return (this.submitted);
+
+    }
+
 
     /**
      * <p>If this <code>UIForm</code> instance is experiencing a submit
@@ -52,8 +93,15 @@ public interface UIForm extends UIComponent, NamingContainer {
      * <p>The value of a <code>UIForm</code>'s submitted property must
      * not be saved as part of its state.</p>
      */
+    public void setSubmitted(boolean submitted) {
 
-    public void setSubmitted(boolean submitted);
+        this.submitted = submitted;
+
+    }
+
+
+    // ----------------------------------------------------- UIComponent Methods
+
 
     /**
      * <p>Override {@link UIComponent#processDecodes} to ensure that the
@@ -62,30 +110,117 @@ public interface UIForm extends UIComponent, NamingContainer {
      * correctly set.</p>
      *
      */
+    public void processDecodes(FacesContext context) {
 
-    public void processDecodes(FacesContext context);
+        if (context == null) {
+            throw new NullPointerException();
+        }
+	
+        // Process this component itself
+        decode(context);
+
+        // Process all facets and children of this component
+        Iterator kids = getFacetsAndChildren();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            kid.processDecodes(context);
+        }
+	
+    }
+
 
     /**
      * <p>Override {@link UIComponent#processValidators} to ensure that
      * the children of this <code>UIForm</code> instance are only
      * processed if {@link #isSubmitted} returns <code>true</code>.</p>
      */
+    public void processValidators(FacesContext context) {
 
-    public void processValidators(FacesContext context);
+        if (context == null) {
+            throw new NullPointerException();
+        }
+	if (!isSubmitted()) {
+	    return;
+	}
+
+        // Process all the facets and children of this component
+        Iterator kids = getFacetsAndChildren();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            kid.processValidators(context);
+        }
+
+    }
+
 
     /**
      * <p>Override {@link UIComponent#processUpdates} to ensure that the
      * children of this <code>UIForm</code> instance are only processed
      * if {@link #isSubmitted} returns <code>true</code>.</p>
      */
+    public void processUpdates(FacesContext context) {
 
-    public void processUpdates(FacesContext context);
+        if (context == null) {
+            throw new NullPointerException();
+        }
+	if (!isSubmitted()) {
+	    return;
+	}
 
-    /*
+        // Process all facets and children of this component
+        Iterator kids = getFacetsAndChildren();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            kid.processUpdates(context);
+        }
+
+    }
+
+
+    // ------------------------------------------------- NamingContainer Methods
+
+
+    public void addComponentToNamespace(UIComponent namedComponent) {
+
+	namespace.addComponentToNamespace(namedComponent);
+
+    }
+
+
+    public UIComponent findComponentInNamespace(String name) {
+
+	return namespace.findComponentInNamespace(name);
+
+    }
+
+
+    public synchronized String generateClientId() {
+
+	return namespace.generateClientId();
+
+    }
+
+
+    public void removeComponentFromNamespace(UIComponent namedComponent) {
+
+	namespace.removeComponentFromNamespace(namedComponent);
+
+    }
+
+
+    // ----------------------------------------------------- StateHolder Methods
+
+
+    /**
      * <p>Override {@link UIComponent.saveState} to call
      * <code>setSubmitted(false)</code>.</p>
      */
+    public Object saveState(FacesContext context) {
 
-    public Object saveState(FacesContext context);
+	setSubmitted(false);
+	return super.saveState(context);
+
+    }
+
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.29 2003/08/28 21:17:25 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.30 2003/09/25 07:50:06 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,11 @@
 package javax.faces.component;
 
 
+import java.util.Iterator;
+import javax.faces.application.Message;
+import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 
 /**
@@ -28,7 +32,7 @@ import javax.faces.context.FacesContext;
  * <code>setRendererType()</code> method.</p>
  */
 
-public interface UISelectOne extends UIInput {
+public class UISelectOne extends UIInput {
 
 
     // ------------------------------------------------------ Manifest Constants
@@ -42,6 +46,20 @@ public interface UISelectOne extends UIInput {
     public static final String INVALID_MESSAGE_ID =
         "javax.faces.component.UISelectOne.INVALID";
 
+
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * <p>Create a new {@link UISelectOne} instance with default property
+     * values.</p>
+     */
+    public UISelectOne() {
+
+        super();
+        setRendererType("Menu");
+
+    }
 
 
     // ------------------------------------------------------ Validation Methods
@@ -58,7 +76,39 @@ public interface UISelectOne extends UIInput {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void validate(FacesContext context);
+    public void validate(FacesContext context) {
+
+        Object value = getValue();
+
+        // Skip validation if it is not necessary
+        if ((value == null) || !isValid()) {
+            super.validate(context);
+            return;
+        }
+
+        // Ensure that the value matches one of the available options
+        boolean found = false;
+        Iterator items = new SelectItemsIterator(this);
+        while (items.hasNext()) {
+            SelectItem item = (SelectItem) items.next();
+            if (value.equals(item.getValue())) {
+                found = true;
+                break;
+            }
+        }
+
+        // Enqueue an error message if an invalid value was specified
+        if (!found) {
+            Message message =
+                context.getApplication().
+                getMessageResources(MessageResources.FACES_API_MESSAGES).
+                getMessage(context, INVALID_MESSAGE_ID);
+            context.addMessage(this, message);
+            setValid(false);
+        }
+        super.validate(context);
+
+    }
 
 
 }

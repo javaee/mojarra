@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.1 2003/08/28 21:08:53 craigmcc Exp $
+ * $Id: SelectItemsIterator.java,v 1.1 2003/09/25 07:50:00 craigmcc Exp $
  */
 
 /*
@@ -7,16 +7,13 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectItem;
-import javax.faces.component.UISelectItems;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 

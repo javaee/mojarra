@@ -205,21 +205,21 @@
                 test.UIComponentBase,
                 test.UIComponentBaseState,
                 test.UIColumn,
-                test.UICommandBase,
+                test.UICommand,
                 test.UIData,
-                test.UIFormBase,
-                test.UIGraphicBase,
-                test.UIInputBase,
-                test.UINamingContainerBase,
-                test.UIOutputBase,
+                test.UIForm,
+                test.UIGraphic,
+                test.UIInput,
+                test.UINamingContainer,
+                test.UIOutput,
+                test.UIPanel,
+                test.UIParameter,
+                test.UISelectBoolean,
+                test.UISelectItem,
+                test.UISelectItems,
+                test.UISelectMany,
+                test.UISelectOne,
                 test.UIViewRoot,
-                test.UIPanelBase,
-                test.UIParameterBase,
-                test.UISelectBooleanBase,
-                test.UISelectItemBase,
-                test.UISelectItemsBase,
-                test.UISelectManyBase,
-                test.UISelectOneBase,
                 test.ConfigFile,
                 test.PhaseId,
                 test.UIComponentTag">
@@ -258,6 +258,16 @@
     </java>
   </target>
 
+  <target name="test.UICommand" depends="build.test">
+    <echo message="Running UICommand tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.component.UICommandTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
   <target name="test.UIComponent" depends="build.test">
     <echo message="Running UIComponent tests ..."/>
     <java classname="${test.runner}" fork="yes"
@@ -273,7 +283,7 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UIComponentBaseTestCase"/>
+      <arg value="javax.faces.component.UIComponentBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
@@ -283,17 +293,7 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UIComponentBaseStateTestCase"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.UICommandBase" depends="build.test">
-    <echo message="Running UICommandBase tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UICommandBaseTestCase"/>
+      <arg value="javax.faces.component.UIComponentBaseStateTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
@@ -308,52 +308,122 @@
     </java>
   </target>
 
-  <target name="test.UIFormBase" depends="build.test">
-    <echo message="Running UIFormBase tests ..."/>
+  <target name="test.UIForm" depends="build.test">
+    <echo message="Running UIForm tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UIFormBaseTestCase"/>
+      <arg value="javax.faces.component.UIFormTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
 
-  <target name="test.UIGraphicBase" depends="build.test">
-    <echo message="Running UIGraphicBase tests ..."/>
+  <target name="test.UIGraphic" depends="build.test">
+    <echo message="Running UIGraphic tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UIGraphicBaseTestCase"/>
+      <arg value="javax.faces.component.UIGraphicTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
 
-  <target name="test.UIInputBase" depends="build.test">
-    <echo message="Running UIInputBase tests ..."/>
+  <target name="test.UIInput" depends="build.test">
+    <echo message="Running UIInput tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UIInputBaseTestCase"/>
+      <arg value="javax.faces.component.UIInputTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
 
-  <target name="test.UINamingContainerBase" depends="build.test">
-    <echo message="Running UINamingContainerBase tests ..."/>
+  <target name="test.UINamingContainer" depends="build.test">
+    <echo message="Running UINamingContainer tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UINamingContainerBaseTestCase"/>
+      <arg value="javax.faces.component.UINamingContainerTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
 
-  <target name="test.UIOutputBase" depends="build.test">
-    <echo message="Running UIOutputBase tests ..."/>
+  <target name="test.UIOutput" depends="build.test">
+    <echo message="Running UIOutput tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UIOutputBaseTestCase"/>
+      <arg value="javax.faces.component.UIOutputTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UIPanel" depends="build.test">
+    <echo message="Running UIPanel tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.component.UIPanelTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UIParameter" depends="build.test">
+    <echo message="Running UIParameter tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.component.UIParameterTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UISelectBoolean" depends="build.test">
+    <echo message="Running UISelectBoolean tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.component.UISelectBooleanTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UISelectItem" depends="build.test">
+    <echo message="Running UISelectItem tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.component.UISelectItemTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UISelectItems" depends="build.test">
+    <echo message="Running UISelectItems tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.component.UISelectItemsTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UISelectMany" depends="build.test">
+    <echo message="Running UISelectMany tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.component.UISelectManyTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UISelectOne" depends="build.test">
+    <echo message="Running UISelectOne tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.component.UISelectOneTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
@@ -363,77 +433,7 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UIViewRootBaseTestCase"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.UIPanelBase" depends="build.test">
-    <echo message="Running UIPanelBase tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UIPanelBaseTestCase"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.UIParameterBase" depends="build.test">
-    <echo message="Running UIParameterBase tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UIParameterBaseTestCase"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.UISelectBooleanBase" depends="build.test">
-    <echo message="Running UISelectBooleanBase tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UISelectBooleanBaseTestCase"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.UISelectItemBase" depends="build.test">
-    <echo message="Running UISelectItemBase tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UISelectItemBaseTestCase"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.UISelectItemsBase" depends="build.test">
-    <echo message="Running UISelectItemsBase tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UISelectItemsBaseTestCase"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.UISelectManyBase" depends="build.test">
-    <echo message="Running UISelectManyBase tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UISelectManyBaseTestCase"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.UISelectOneBase" depends="build.test">
-    <echo message="Running UISelectOneBase tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.base.UISelectOneBaseTestCase"/>
+      <arg value="javax.faces.component.UIViewRootTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>

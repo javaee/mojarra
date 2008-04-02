@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.26 2003/09/24 22:24:51 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.60 2003/09/25 07:50:02 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.beans.IntrospectionException;
@@ -28,11 +28,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.Repeater;
-import javax.faces.component.RepeaterSupport;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
@@ -57,10 +52,10 @@ import javax.faces.application.StateHolderSaver;
  * instead.</p>
  */
 
-public abstract class UIComponentBase implements UIComponent {
+public abstract class UIComponentBase extends UIComponent {
 
 
-    // ------------------------------------------------------------- Attributes
+    // -------------------------------------------------------------- Attributes
 
 
     /**
@@ -253,7 +248,7 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    // ------------------------------------------------------------- Properties
+    // -------------------------------------------------------------- Properties
 
 
     /**
@@ -466,7 +461,7 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    // ------------------------------------------------ Tree Management Methods
+    // ------------------------------------------------- Tree Management Methods
 
 
     /*
@@ -818,7 +813,7 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    // ----------------------------------------------- Facet Management Methods
+    // ------------------------------------------------ Facet Management Methods
 
 
     /*
@@ -944,7 +939,7 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    // ------------------------------------------- Lifecycle Processing Methods
+    // -------------------------------------------- Lifecycle Processing Methods
 
 
     public boolean broadcast(FacesEvent event, PhaseId phaseId)
@@ -1081,7 +1076,7 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
-    // ------------------------------------------------- Event Listener Methods
+    // -------------------------------------------------- Event Listener Methods
 
 
     /**
@@ -1175,7 +1170,8 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    // ----------------------------------------------- Lifecycle Phase Handlers
+    // ------------------------------------------------ Lifecycle Phase Handlers
+
 
     public void processDecodes(FacesContext context) {
 
@@ -1319,6 +1315,7 @@ public abstract class UIComponentBase implements UIComponent {
 	return stateStruct;
     }
     
+
     public void processRestoreState(FacesContext context,
 				    Object state) {
 	

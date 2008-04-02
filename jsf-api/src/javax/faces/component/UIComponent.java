@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.98 2003/09/23 21:21:25 eburns Exp $
+ * $Id: UIComponent.java,v 1.99 2003/09/25 07:50:01 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.render.Renderer;
 
 
 /**
- * <p><strong>UIComponent</strong> is the base interface for all user interface
+ * <p><strong>UIComponent</strong> is the base class for all user interface
  * components in JavaServer Faces.  The set of {@link UIComponent} instances
  * associated with a particular request and response are organized into a
  * component tree under a {@link UIViewRoot} that represents
@@ -35,15 +35,15 @@ import javax.faces.render.Renderer;
  * behavior that is specified for a {@link UIComponent}, and is the base class
  * for all of the concrete {@link UIComponent} "base" implementations.
  * Component writers are encouraged to subclass
- * {@link javax.faces.component.base.UIComponentBase}, instead of directly
- * implementing this interface, to reduce the impact of any future changes
- * to the method signatures of this interface.</p>
+ * {@link javax.faces.component.UIComponentBase}, instead of directly
+ * implementing this abstract class, to reduce the impact of any future changes
+ * to the method signatures.</p>
  */
 
-public interface UIComponent extends StateHolder {
+public abstract class UIComponent implements StateHolder {
 
 
-    // ----------------------------------------------------- Manifest Constants
+    // ------------------------------------------------------ Manifest Constants
 
 
     /**
@@ -53,7 +53,7 @@ public interface UIComponent extends StateHolder {
     public static final char SEPARATOR_CHAR = ':';
 
 
-    // ------------------------------------------------------------- Attributes
+    // -------------------------------------------------------------- Attributes
 
 
     /**
@@ -90,10 +90,10 @@ public interface UIComponent extends StateHolder {
      *     </ul></li>
      * </ul>
      */
-    public Map getAttributes();
+    public abstract Map getAttributes();
 
 
-    // ------------------------------------------------------------- Properties
+    // -------------------------------------------------------------- Properties
 
 
     /**
@@ -106,14 +106,14 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public String getClientId(FacesContext context);
+    public abstract String getClientId(FacesContext context);
 
 
     /**
      * <p>Return the component reference expression for this {@link UIComponent}
      * (if any).</p>
      */
-    public String getComponentRef();
+    public abstract String getComponentRef();
 
 
     /**
@@ -123,13 +123,13 @@ public interface UIComponent extends StateHolder {
      * @param componentRef The new component reference expression, or
      *  <code>null</code> for no component reference expression
      */
-    public void setComponentRef(String componentRef);
+    public abstract void setComponentRef(String componentRef);
 
 
     /**
      * <p>Return the component identifier of this {@link UIComponent}.</p>
      */
-    public String getId();
+    public abstract String getId();
 
 
     /**
@@ -143,14 +143,14 @@ public interface UIComponent extends StateHolder {
      *  and not unique within the scope of the nearest containing
      *  {@link UIComponent} that is also a {@link NamingContainer}
      */
-    public void setId(String id);
+    public abstract void setId(String id);
 
 
     /**
      * <p>Return the parent {@link UIComponent} of this
      * <code>UIComponent</code>, if any.</p>
      */
-    public UIComponent getParent();
+    public abstract UIComponent getParent();
 
 
     /**
@@ -160,7 +160,7 @@ public interface UIComponent extends StateHolder {
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree
      */
-    public void setParent(UIComponent parent);
+    public abstract void setParent(UIComponent parent);
 
 
     /**
@@ -168,7 +168,7 @@ public interface UIComponent extends StateHolder {
      * should be rendered during the <em>Render Response</em> phase
      * of the request processing lifecycle.</p>
      */
-    public boolean isRendered();
+    public abstract boolean isRendered();
 
 
     /**
@@ -178,14 +178,14 @@ public interface UIComponent extends StateHolder {
      * @param rendered If <code>true</code> render this component;
      *  otherwise, do not render this component
      */
-    public void setRendered(boolean rendered);
+    public abstract void setRendered(boolean rendered);
 
     
     /**
      * <p>Return the {@link Renderer} type for this {@link UIComponent}
      * (if any).</p>
      */
-    public String getRendererType();
+    public abstract String getRendererType();
 
 
     /**
@@ -196,17 +196,17 @@ public interface UIComponent extends StateHolder {
      *  {@link Renderer} to use, or <code>null</code> for components
      *  that render themselves
      */
-    public void setRendererType(String rendererType);
+    public abstract void setRendererType(String rendererType);
 
 
     /**
      * <p>Return a flag indicating whether this component is responsible
      * for rendering its child components.</p>
      */
-    public boolean getRendersChildren();
+    public abstract boolean getRendersChildren();
 
 
-    // ------------------------------------------------ Tree Management Methods
+    // ------------------------------------------------- Tree Management Methods
 
 
     /**
@@ -248,14 +248,14 @@ public interface UIComponent extends StateHolder {
      *     </ul></li>
      * </ul>
      */
-    public List getChildren();
+    public abstract List getChildren();
 
 
     /**
      * <p>Return the number of child {@link UIComponent}s that are associated
      * with this {@link UIComponent}.</p>
      */
-    public int getChildCount();
+    public abstract int getChildCount();
 
 
     /**
@@ -277,10 +277,10 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>expr</code>
      *  is <code>null</code>
      */
-    public UIComponent findComponent(String expr);
+    public abstract UIComponent findComponent(String expr);
 
 
-    // ----------------------------------------------- Facet Management Methods
+    // ------------------------------------------------ Facet Management Methods
 
 
     /**
@@ -311,7 +311,7 @@ public interface UIComponent extends StateHolder {
      *     </ul></li>
      * </ul>
      */
-    public Map getFacets();
+    public abstract Map getFacets();
 
 
     /**
@@ -320,7 +320,7 @@ public interface UIComponent extends StateHolder {
      *
      * @param name Name of the desired facet
      */
-    public UIComponent getFacet(String name);
+    public abstract UIComponent getFacet(String name);
 
 
     /**
@@ -334,10 +334,10 @@ public interface UIComponent extends StateHolder {
      * <p>The returned <code>Iterator</code> must not support the
      * <code>remove()</code> operation.</p>
      */
-    public Iterator getFacetsAndChildren();
+    public abstract Iterator getFacetsAndChildren();
     
     
-    // ------------------------------------------- Lifecycle Processing Methods
+    // -------------------------------------------- Lifecycle Processing Methods
 
 
     /**
@@ -387,7 +387,7 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>event</code> or
      *  <code>phaseId</code> is <code>null</code>
      */
-    public boolean broadcast(FacesEvent event, PhaseId phaseId)
+    public abstract boolean broadcast(FacesEvent event, PhaseId phaseId)
         throws AbortProcessingException;
 
 
@@ -428,7 +428,7 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void decode(FacesContext context);
+    public abstract void decode(FacesContext context);
 
 
     /**
@@ -449,7 +449,7 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encodeBegin(FacesContext context) throws IOException;
+    public abstract void encodeBegin(FacesContext context) throws IOException;
 
 
     /**
@@ -464,7 +464,7 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encodeChildren(FacesContext context) throws IOException;
+    public abstract void encodeChildren(FacesContext context) throws IOException;
 
 
     /**
@@ -479,10 +479,10 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encodeEnd(FacesContext context) throws IOException;
+    public abstract void encodeEnd(FacesContext context) throws IOException;
 
 
-    // ------------------------------------------------- Event Listener Methods
+    // -------------------------------------------------- Event Listener Methods
 
 
     /**
@@ -517,9 +517,7 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerExcepton if <code>listener</code>
      *  is <code>null</code>
      */
-    /* PENDING(craigmcc) - interfaces cannot declare protected methods
-    protected void addFacesListener(FacesListener listener);
-    */
+    protected abstract void addFacesListener(FacesListener listener);
 
 
     /**
@@ -531,12 +529,33 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
-    /* PENDING(craigmcc) - interfaces cannot declare protected methods
-    protected void removeFacesListener(FacesListener listener);
-    */
+    protected abstract void removeFacesListener(FacesListener listener);
 
 
-    // ----------------------------------------------- Lifecycle Phase Handlers
+    // ------------------------------------------------ Lifecycle Phase Handlers
+
+
+    /**
+     * <p>Perform the component tree processing required by the
+     * <em>Restore View</em> phase of the request processing
+     * lifecycle for all facets of this component, all children of this
+     * component, and this component itself, as follows.</p>
+     * <ul>
+     * <li>Call the <code>processRestoreState()</code> method of all
+     * facets and children of this {@link UIComponent} in the order
+     * determined by a call to <code>getFacetsAndChildren()</code>.</li>
+     * <li>Call the <code>restoreState()</code> method of this component.</li>
+     * </ul>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception IOException if an input/output error occurs during processing
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public abstract void processRestoreState(FacesContext context,
+                                             Object state);
+
 
     /**
      * <p>Perform the component tree processing required by the
@@ -558,7 +577,7 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void processDecodes(FacesContext context);
+    public abstract void processDecodes(FacesContext context);
 
 
     /**
@@ -586,7 +605,7 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void processValidators(FacesContext context);
+    public abstract void processValidators(FacesContext context);
 
 
     /**
@@ -613,7 +632,8 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void processUpdates(FacesContext context);
+    public abstract void processUpdates(FacesContext context);
+
 
     /**
      * <p>Perform the component tree processing required by the state
@@ -642,30 +662,7 @@ public interface UIComponent extends StateHolder {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
+    public abstract Object processSaveState(FacesContext context);
 
-    public Object processSaveState(FacesContext context);
-
-    /**
-     * <p>Perform the component tree processing required by the
-     * <em>Restore View</em> phase of the request processing
-     * lifecycle for all facets of this component, all children of this
-     * component, and this component itself, as follows.</p>
-     * <ul>
-
-     * <li>Call the <code>processRestoreState()</code> method of all
-     * facets and children of this {@link UIComponent} in the order
-     * determined by a call to <code>getFacetsAndChildren()</code>.</li>
-
-     * <li>Call the <code>restoreState()</code> method of this component.</li>
-     * </ul>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs during processing
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-
-    public void processRestoreState(FacesContext context, Object state);
 
 }

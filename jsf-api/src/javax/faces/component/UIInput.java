@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.29 2003/08/28 21:08:51 craigmcc Exp $
+ * $Id: UIInput.java,v 1.30 2003/09/25 07:50:03 craigmcc Exp $
  */
 
 /*
@@ -10,13 +10,22 @@
 package javax.faces.component;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.faces.FacesException;
+import javax.faces.application.Application;
+import javax.faces.application.Message;
+import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.event.AbortProcessingException;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangedEvent;
 import javax.faces.event.ValueChangedListener;
+import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 
 
@@ -84,7 +93,7 @@ import javax.faces.validator.Validator;
  * <code>setRendererType()</code> method.</p>
  */
 
-public interface UIInput extends UIOutput {
+public class UIInput extends UIOutput {
 
 
     // ------------------------------------------------------ Manifest Constants
@@ -99,34 +108,89 @@ public interface UIInput extends UIOutput {
         "javax.faces.component.UIInput.REQUIRED";
 
 
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * <p>Create a new {@link UIInput} instance with default property
+     * values.</p>
+     */
+    public UIInput() {
+
+        super();
+        setRendererType("Text");
+
+    }
+
 
     // -------------------------------------------------------------- Properties
 
 
     /**
+     * <p>The previous value of this {@link UIInput} component.</p>
+     */
+    private Object previous = null;
+
+
+    /**
      * <p>Return the previous value of this {@link UIInput} component.
      * This method should only be utilized by the <code>decode()</code>
-     * method of this component, or its corresponding
-     * {@link javax.faces.render.Renderer}.</p>
+     * method of this component, or its corresponding {@link Renderer}.</p>
      */
-    public Object getPrevious();
+    public Object getPrevious() {
+
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null) {
+            if (repeater.getRowIndex() > 0) {
+                return (repeater.getChildPrevious(this));
+            } else {
+                return (this.previous);
+            }
+        } else {
+            return (this.previous);
+        }
+
+    }
 
 
     /**
      * <p>Set the previous value of this {@link UIInput} component.
      * This method should only be utilized by the <code>decode()</code>
-     * method of this component, or its corresponding
-     * {@link javax.faces.render.Renderer}.</p>
+     * method of this component, or its corresponding {@link Renderer}.</p>
      *
      * @param previous The new previous value
      */
-    public void setPrevious(Object previous);
+    public void setPrevious(Object previous) {
+
+        this.previous = previous;
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null) {
+            if (repeater.getRowIndex() > 0) {
+                repeater.setChildPrevious(this, previous);
+            } else {
+                this.previous = previous;
+            }
+        } else {
+            this.previous = previous;
+        }
+
+    }
+
+
+    /**
+     * <p>The "required field" state for this component.</p>
+     */
+    private boolean required = false;
 
 
     /**
      * <p>Return the "required field" state for this component.</p>
      */
-    public boolean isRequired();
+    public boolean isRequired() {
+
+        return (this.required);
+
+    }
 
 
     /**
@@ -134,7 +198,11 @@ public interface UIInput extends UIOutput {
      *
      * @param required The new "required field" state
      */
-    public void setRequired(boolean required);
+    public void setRequired(boolean required) {
+
+        this.required = required;
+
+    }
 
 
     // ----------------------------------------------------- UIComponent Methods
@@ -177,16 +245,64 @@ public interface UIInput extends UIOutput {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void updateModel(FacesContext context);
+    public void updateModel(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (!isValid()) {
+            return;
+        }
+        String valueRef = getValueRef();
+        if (valueRef == null) {
+            return;
+        }
+        try {
+	    Application application = context.getApplication();
+            ValueBinding binding = application.getValueBinding(valueRef);
+            binding.setValue(context, getValue());
+            setValue(null);
+            return;
+        } catch (FacesException e) {
+            setValid(false);
+            throw e;
+        } catch (IllegalArgumentException e) {
+            setValid(false);
+            throw e;
+        } catch (Exception e) {
+            setValid(false);
+            throw new FacesException(e);
+        }
+
+    }
 
 
     // ------------------------------------------------------ Validation Methods
 
 
     /**
+     * <p>The valid state of this {@link UIInput} component.</p>
+     */
+    private boolean valid = true;
+
+
+    /**
      * <p>Return the valid state of this {@link UIInput} component.</p>
      */
-    public boolean isValid();
+    public boolean isValid() {
+
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null) {
+            if (repeater.getRowIndex() > 0) {
+                return (repeater.isChildValid(this));
+            } else {
+                return (this.valid);
+            }
+        } else {
+            return (this.valid);
+        }
+
+    }
 
 
     /**
@@ -194,7 +310,20 @@ public interface UIInput extends UIOutput {
      *
      * @param valid The new valid state
      */
-    public void setValid(boolean valid);
+    public void setValid(boolean valid) {
+
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null) {
+            if (repeater.getRowIndex() > 0) {
+                repeater.setChildValid(this, valid);
+            } else {
+                this.valid = valid;
+            }
+        } else {
+            this.valid = valid;
+        }
+
+    }
 
 
     /**
@@ -237,7 +366,87 @@ public interface UIInput extends UIOutput {
      * @exception NullPointerException if <code>context</code>
      *  is null
      */
-    public void validate(FacesContext context);
+    public void validate(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Save and reset the previous value for this component
+        Object previous = getPrevious();
+        setPrevious(null);
+
+	// If our value is valid, enforce the required property if present
+	if (isValid() && isRequired() && isEmpty()) {
+	    Message message =
+		context.getApplication().
+		getMessageResources(MessageResources.FACES_API_MESSAGES).
+		getMessage(context, REQUIRED_MESSAGE_ID);
+	    context.addMessage(this, message);
+	    setValid(false);
+	}
+
+	// If our value is valid and not empty, call all external validators
+	if (isValid() && !isEmpty() && (this.validators != null)) {
+	    Iterator validators = this.validators.iterator();
+	    while (validators.hasNext()) {
+		Validator validator = (Validator) validators.next();
+		validator.validate(context, this);
+	    }
+	}
+
+	// If our value is valid, emit a ValueChangedEvent if appropriate
+	if (isValid()) {
+	    Object value = getValue();
+            if (compareValues(previous, value)) {
+                context.addFacesEvent
+                    (new ValueChangedEvent(this, previous, value));
+            }
+        }
+
+    }
+
+
+    /**
+     * <p>Return <code>true</code> if the new value is different from the
+     * previous value.</p>
+     *
+     * @param previous old value of this component (if any)
+     * @param value new value of this component (if any)
+     */
+    protected boolean compareValues(Object previous, Object value) {
+
+        if (previous == null) {
+            return (value != null);
+        } else if (value == null) {
+            return (true);
+        } else {
+            return (!(previous.equals(value)));
+        }
+
+    }
+
+
+    private boolean isEmpty() {
+
+	Object value = getValue();
+	if (value == null) {
+	    return (true);
+	} else if ((value instanceof String) &&
+		   (((String) value).length() < 1)) {
+	    return (true);
+	} else {
+	    return (false);
+	}
+
+    }
+    
+
+    /**
+     * <p>The set of {@link Validator}s associated with this
+     * <code>UIComponent</code>.</p>
+     */
+    List validators = null;
 
 
     /**
@@ -249,7 +458,17 @@ public interface UIInput extends UIOutput {
      * @exception NullPointerException if <code>validator</code>
      *  is null
      */
-    public void addValidator(Validator validator);
+    public void addValidator(Validator validator) {
+
+        if (validator == null) {
+            throw new NullPointerException();
+        }
+        if (validators == null) {
+            validators = new ArrayList();
+        }
+        validators.add(validator);
+
+    }
 
 
     /**
@@ -259,7 +478,13 @@ public interface UIInput extends UIOutput {
      *
      * @param validator The {@link Validator} to remove
      */
-    public void removeValidator(Validator validator);
+    public void removeValidator(Validator validator) {
+
+        if (validators != null) {
+            validators.remove(validator);
+        }
+
+    }
 
 
     // ------------------------------------------------ Event Processing Methods
@@ -274,7 +499,11 @@ public interface UIInput extends UIOutput {
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
-    public void addValueChangedListener(ValueChangedListener listener);
+    public void addValueChangedListener(ValueChangedListener listener) {
+
+        addFacesListener(listener);
+
+    }
 
 
     /**
@@ -287,7 +516,89 @@ public interface UIInput extends UIOutput {
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
-    public void removeValueChangedListener(ValueChangedListener listener);
+    public void removeValueChangedListener(ValueChangedListener listener) {
+
+        removeFacesListener(listener);
+
+    }
+
+
+    // ----------------------------------------------------- StateHolder Methods
+
+
+    public Object saveState(FacesContext context) {
+
+        Object values[] = new Object[5];
+        values[0] = super.saveState(context);
+        values[1] = required ? Boolean.TRUE : Boolean.FALSE;
+       
+        int rowCount = 0;
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null && repeater.getRowIndex() > 0) {
+            rowCount = repeater.getRowCount();
+            Object[] previousValues = new Object[rowCount];
+            Object[] validValues = new Object[rowCount];
+            for (int i = 0; i < rowCount; ++i ) {
+                repeater.setRowIndex(i+1);
+                previousValues[i] = repeater.getChildPrevious(this);
+                validValues[i] = new Boolean(repeater.isChildValid(this));
+            }
+            values[2] = previousValues;
+            values[3] = validValues;
+        } else {
+            values[2] = previous;
+            values[3] = valid ? Boolean.TRUE : Boolean.FALSE;
+        }
+        
+        List validatorsList[] = new List[1];
+        validatorsList[0] = validators;
+        values[4] =
+            context.getApplication().getViewHandler().getStateManager().
+            getAttachedObjectState(context, this, null, validatorsList);
+        return (values);
+
+    }
+
+
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        required = ((Boolean) values[1]).booleanValue();
+        
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null && repeater.getRowIndex() > 0) {
+            Object[] previousValues = (Object[])values[2];
+            if ( previousValues != null ) {
+                for (int i = 0; i < previousValues.length; ++i ) {
+                    repeater.setRowIndex(i+1);
+                    repeater.setChildPrevious(this, previousValues[i]);
+                }
+            }
+            Object[] validValues = (Object[])values[3];
+            for (int i = 0; i < validValues.length; ++i ) {
+                repeater.setRowIndex(i+1);
+                repeater.setChildValid(this,
+                        (((Boolean)validValues[i]).booleanValue()));
+            }
+        } else {
+            previous = values[2];
+            valid = ((Boolean) values[3]).booleanValue();
+        }
+        // if there were some validators registered prior to this method being 
+        // invoked, merge them with the list to be restored.
+        List validatorsList[] = new List[1];
+        validatorsList[0] = validators;
+        validatorsList = (List[])
+            context.getApplication().getViewHandler().getStateManager().
+            restoreAttachedObjectState(context, values[4], validatorsList,
+				       this);
+        if (validatorsList != null) {
+            validators = (List) validatorsList[0];
+        }
+
+    }
 
 
 }

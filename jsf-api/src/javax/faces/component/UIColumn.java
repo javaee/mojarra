@@ -39,9 +39,6 @@
 package javax.faces.component;
 
 
-import javax.faces.component.base.UIComponentBase;
-
-
 /**
  * <p><strong>UIColumn</strong> is a {@link UIComponent} that represents
  * a single column of data within a parent {@link UIData} component.</p>
