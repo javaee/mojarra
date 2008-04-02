@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.1 2003/03/15 05:43:45 rkitain Exp $
+ * $Id: TestUtil_messages.java,v 1.2 2003/03/27 14:44:50 eburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.Properties;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.1 2003/03/15 05:43:45 rkitain Exp $
+ * @version $Id: TestUtil_messages.java,v 1.2 2003/03/27 14:44:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -118,19 +118,19 @@ public class TestUtil_messages extends ServletFacesTestCase {
 
         // French Language
         System.out.println("Verifying French Messages...");
-        locale = new Locale("fr");
+        locale = new Locale("fr", "");
         getFacesContext().setLocale(locale);
         verifyParamsInMessages(messageInfo);
 
         // German Language
         System.out.println("Verifying German Messages...");
-        locale = new Locale("de");
+        locale = new Locale("de", "");
         getFacesContext().setLocale(locale);
         verifyParamsInMessages(messageInfo);
 
         // Spanish Language
         System.out.println("Verifying Spanish Messages...");
-        locale = new Locale("es");
+        locale = new Locale("es", "");
         getFacesContext().setLocale(locale);
         verifyParamsInMessages(messageInfo);
     }
