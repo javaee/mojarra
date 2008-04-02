@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.24 2005/03/10 20:21:28 edburns Exp $
+ * $Id: DebugUtil.java,v 1.25 2005/03/10 20:29:46 edburns Exp $
  */
 
 /*
@@ -110,6 +110,7 @@ public class DebugUtil extends Object {
     indentPrintln(out, "===>Type:" + root.getComponentType());
 */
         indentPrintln(out, "id:" + root.getId());
+        indentPrintln(out, "type:" + root.toString());
 
         Iterator items = null;
         SelectItem curItem = null;
@@ -191,6 +192,7 @@ public class DebugUtil extends Object {
     indentPrintln(out, "===>Type:" + root.getComponentType());
 */
         indentPrintln(out, "id:" + root.id);
+        indentPrintln(out, "type:" + root.className);
 
         Iterator items = null;
         SelectItem curItem = null;
@@ -203,6 +205,39 @@ public class DebugUtil extends Object {
                 printTree((TreeStructure) it.next(), out);
             }
         }
+        curDepth--;
+    }
+
+    public static void printTree(Object [] root, PrintStream out) {
+        if (null == root) {
+	    indentPrintln(out, "null");
+            return;
+        }
+        int i = 0;
+        Object value = null;
+    
+/* PENDING
+    indentPrintln(out, "===>Type:" + root.getComponentType());
+*/
+	// drill down to the bottom of the first element in the array
+	boolean foundBottom = false;
+	Object state = null;
+	Object [] myState = root;
+	while (!foundBottom) {
+	    state = myState[0];
+	    foundBottom = !state.getClass().isArray();
+	    if (!foundBottom) {
+		myState = (Object []) state;
+	    }
+	}
+
+        indentPrintln(out, "type:" + myState[8]);
+
+        curDepth++;
+	root = (Object []) root[1];
+	for (i = 0; i < root.length; i++) {
+	    printTree((Object []) root[i], out);
+	}
         curDepth--;
     }
 //
