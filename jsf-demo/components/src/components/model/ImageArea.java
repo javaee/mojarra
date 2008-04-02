@@ -47,6 +47,12 @@ public class ImageArea
 // Constructors and Initializers    
 //
 
+
+public ImageArea()
+{
+}
+
+
 public ImageArea(String shape, String alt, String coords)
 {
  this.shape = shape;
