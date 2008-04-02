@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.36 2002/09/17 00:05:32 rkitain Exp $
+ * $Id: ButtonRenderer.java,v 1.37 2002/10/03 18:10:41 rkitain Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.36 2002/09/17 00:05:32 rkitain Exp $
+ * @version $Id: ButtonRenderer.java,v 1.37 2002/10/03 18:10:41 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -69,7 +69,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // Instance Variables
     //
-    private boolean renderInputTypeButton = false;
 
     // Attribute Instance Variables
 
@@ -223,14 +222,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
         ResponseWriter writer = context.getResponseWriter();
 
-        // If any one of "label"/"image"/"key"/"imageKey" is set,
-        // the intent is to render the "input type=" style button.
-        // Otherwise, render the "<button>" style.
-     
         String imageSrc = getImageSrc(context, component);
         String label = getLabel(context, component);            
         if (imageSrc != null || label != null) {
-            renderInputTypeButton = true;
             writer.write("<input type=");
             if (null != imageSrc) {
                 writer.write("\"image\" src=\"");
@@ -253,26 +247,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
                 writer.write(padLabel(label));
                 writer.write("\"");
             }
-        } else {
-            renderInputTypeButton = false;
-
-            // Render the beginning of this button
-            // PENDING (visvan) we need to change the '/' chars to
-            // something else in the rendered name and id attributes. As
-            // per HTML 4.0, "/" cannot be used as part of id.
-            writer.write("<button id=\"");
-            writer.write(component.getCompoundId());
-            writer.write("\" name=\"");
-            writer.write(component.getCompoundId());
-            writer.write("\" type=\"");
-            writer.write(type.toLowerCase());
-            writer.write("\" value=\"");
-            writer.write(type.toLowerCase());
-            writer.write("\"");
-            // PENDING (visvan) how to pad label now that its not 
-            // rendered here ??
-            // render HTML 4.0 attributes if any.
-        }
+        } 
 
         writer.write(Util.renderPassthruAttributes(context, component));
         writer.write(Util.renderBooleanPassthruAttributes(context, component));
@@ -296,12 +271,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-       
-        ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it( writer != null );
-        if (!renderInputTypeButton) {
-            writer.write("</button>\n");
         }
     }
 
