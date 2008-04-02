@@ -319,6 +319,17 @@
     </navigation-case>
   </navigation-rule>
 
-  
+  <navigation-rule>
+    <from-view-id>/taglib/commandLink_multiform_test.jsp</from-view-id>
+     <navigation-case>
+       <from-outcome>redirect</from-outcome>
+       <to-view-id>/redirect1.jsp</to-view-id>
+       <redirect/>
+     </navigation-case>
+     <navigation-case>
+       <from-outcome>forward</from-outcome>
+       <to-view-id>/redirect1.jsp</to-view-id>
+     </navigation-case>
+  </navigation-rule>
 
 </faces-config>
