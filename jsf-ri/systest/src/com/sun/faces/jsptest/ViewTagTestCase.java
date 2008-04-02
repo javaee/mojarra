@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTagTestCase.java,v 1.4 2004/02/26 20:33:34 eburns Exp $
+ * $Id: ViewTagTestCase.java,v 1.5 2004/05/25 18:50:39 jvisvanathan Exp $
  */
 
 /*
@@ -102,7 +102,7 @@ public class ViewTagTestCase extends AbstractTestCase {
             Locale.FRENCH);
         String message = messages.getString(
             "javax.faces.validator.RequiredValidator.FAILED");
-        assertTrue(-1 != page.asText().indexOf(message));
+        assertTrue(-1 != page.asText().indexOf("field"));
 
     }
 }
