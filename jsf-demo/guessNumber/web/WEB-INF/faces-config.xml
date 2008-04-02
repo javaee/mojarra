@@ -12,17 +12,39 @@
 <faces-config>
 
   <navigation-rule>
+    <description>
+        The decision rule used by the NavigationHandler to
+        determine which view must be displayed after the
+        current view, greeting.jsp is processed.
+    </description>
     <from-view-id>/greeting.jsp</from-view-id>
     <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the response.jsp
+            view must be displayed if the Action referenced by a 
+            UICommand component on the greeting.jsp view returns 
+            the outcome "success".
+        </description>
       <from-outcome>success</from-outcome>
       <to-view-id>/response.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 
   <navigation-rule>
+   <description>
+        The decision rules used by the NavigationHandler to
+        determine which view must be displayed after the
+        current view, response.jsp is processed.
+    </description>
     <from-view-id>/response.jsp</from-view-id>
     <navigation-case>
-      <from-outcome>success</from-outcome>
+        <description>
+            Indicates to the NavigationHandler that the greeting.jsp
+            view must be displayed if the Action referenced by a 
+            UICommand component on the response.jsp view returns 
+            the outcome "success".
+        </description>
+        <from-outcome>success</from-outcome>
       <to-view-id>/greeting.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
