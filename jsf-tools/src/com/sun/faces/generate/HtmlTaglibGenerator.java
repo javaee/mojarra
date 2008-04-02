@@ -303,6 +303,10 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
 		    if (!attribute.isTagAttribute()) {
 		        continue;
 		    }
+		    if (skipThisAttribute(renderer, 
+					  attribute.getAttributeName())) {
+			continue;
+		    }
 		    writer.write("    <attribute>\n");
 		    writer.write("      <name>"+attribute.getAttributeName()+"</name>\n");
 		    if (attribute.isRequired()) {
@@ -1152,6 +1156,22 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
 	} else {
 	    return (identifier);
 	}
+    }
+
+    /**
+     * @return true if this attribute is in the set of attributes to be
+     * excluded by this renderer.
+     *
+     */ 
+    private static boolean skipThisAttribute(RendererBean renderer, String attribute) {
+	String excludeAttributes = null;
+	boolean skip = false;
+
+	if (null != (excludeAttributes = renderer.getExcludeAttributes())) {
+	    skip = (null != attribute && 
+		    -1 != excludeAttributes.indexOf(attribute));
+	}
+	return skip;
     }
 
 

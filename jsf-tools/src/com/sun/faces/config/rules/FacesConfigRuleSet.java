@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigRuleSet.java,v 1.2 2004/01/27 20:13:58 eburns Exp $
+ * $Id: FacesConfigRuleSet.java,v 1.3 2004/01/31 06:59:41 eburns Exp $
  */
 
 /*
@@ -302,6 +302,10 @@ public class FacesConfigRuleSet extends RuleSetBase {
             digester.addCallMethod
                 ("faces-config/render-kit/renderer/renderer-extension/renders-children",
                  "setRendersChildren", 0, new String[] { "java.lang.Boolean" });
+            digester.addCallMethod
+                ("faces-config/render-kit/renderer/renderer-extension/exclude-attributes",
+                 "setExcludeAttributes", 0);
+
 	    digester.addCallMethod
 		("faces-config/render-kit/renderer/renderer-extension/tag-name",
 		 "setTagName", 0);

@@ -1,5 +1,5 @@
 /*
- * $Id: RendererRule.java,v 1.2 2004/01/27 20:14:04 eburns Exp $
+ * $Id: RendererRule.java,v 1.3 2004/01/31 06:59:42 eburns Exp $
  */
 
 /*
@@ -168,6 +168,9 @@ public class RendererRule extends FeatureRule {
         if (top.isRendersChildren()) {
             old.setRendersChildren(true);
         }
+	if (top.getExcludeAttributes() != null) {
+	    old.setExcludeAttributes(top.getExcludeAttributes());
+	}
 	if (top.getTagName() != null) {
 	    old.setTagName(top.getTagName());
 	}

@@ -85,6 +85,7 @@
   <!ENTITY selectone-radio-attrs    SYSTEM "selectone-radio-attrs.xml">
 
   <!ELEMENT base-component-type     (#PCDATA)>
+  <!ELEMENT exclude-attributes      (#PCDATA)>
   <!ELEMENT pass-through            (#PCDATA)>
   <!ELEMENT read-only               (#PCDATA)>
   <!ELEMENT renders-children        (#PCDATA)>
@@ -1120,6 +1121,7 @@
 
       <renderer-extension>
         <renders-children>true</renders-children>
+        <exclude-attributes>onclick</exclude-attributes>
       </renderer-extension>
 
     </renderer>

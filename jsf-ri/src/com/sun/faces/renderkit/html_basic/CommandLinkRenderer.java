@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.12 2004/01/30 01:21:56 horwat Exp $
+ * $Id: CommandLinkRenderer.java,v 1.13 2004/01/31 06:59:37 eburns Exp $
  */
 
 /*
@@ -166,7 +166,8 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	writer.startElement("a", component);
 	writeIdAttributeIfNecessary(context, writer, component);
 	writer.writeAttribute("href", "#", "href");
-        Util.renderPassThruAttributes(writer, component);
+        Util.renderPassThruAttributes(writer, component,
+				      new String [] { "onclick"} );
         Util.renderBooleanPassThruAttributes(writer, component);
 	sb = new StringBuffer();
 	sb.append("document.forms[");

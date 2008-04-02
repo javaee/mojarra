@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.16 2004/01/27 21:04:29 eburns Exp $
+ * $Id: TableRenderer.java,v 1.17 2004/01/31 06:59:37 eburns Exp $
  */
 
 /*
@@ -90,7 +90,8 @@ public class TableRenderer extends HtmlBasicRenderer {
 	if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
 	}
-        Util.renderPassThruAttributes(writer, component);
+        Util.renderPassThruAttributes(writer, component, 
+				      new String[] { "rows" });
 	writer.writeText("\n", null);
 
 	// Render the header facets (if any)

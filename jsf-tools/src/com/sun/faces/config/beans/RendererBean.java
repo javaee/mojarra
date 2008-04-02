@@ -1,5 +1,5 @@
 /*
- * $Id: RendererBean.java,v 1.2 2004/01/27 20:13:44 eburns Exp $
+ * $Id: RendererBean.java,v 1.3 2004/01/31 06:59:40 eburns Exp $
  */
 
 /*
@@ -50,6 +50,15 @@ public class RendererBean extends FeatureBean implements AttributeHolder {
     public boolean isRendersChildren() { return rendersChildren; }
     public void setRendersChildren(boolean rendersChildren)
     { this.rendersChildren = rendersChildren; }
+
+    private String excludeAttributes;
+    public String getExcludeAttributes() {
+	return excludeAttributes;
+    }
+    public void setExcludeAttributes(String newExcludeAttributes) {
+	excludeAttributes = newExcludeAttributes;
+    }
+
 
 
     // Tag name (if it doesn't follow the standard convention)

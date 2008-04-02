@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.128 2004/01/31 06:27:02 craigmcc Exp $
+ * $Id: Util.java,v 1.129 2004/01/31 06:59:39 eburns Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.128 2004/01/31 06:27:02 craigmcc Exp $ 
+ * @version $Id: Util.java,v 1.129 2004/01/31 06:59:39 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -370,6 +370,7 @@ public class Util extends Object
 	"onunload",
         "rel",
         "rev",
+	"rows",
         "rules",
         "shape",
 	"size",
@@ -382,11 +383,9 @@ public class Util extends Object
         "width"
     };
 
-    // NOTE - "rows" cannot be on the above list, <h:dataTable> uses it in a
-    // non-passthru way
-
-    //NOTE - "type" was deliberately skipped from the list of passthru attrs above
-    //All renderers that need this attribute should manually pass it.
+    //NOTE - "type" was deliberately skipped from the list of passthru
+    //attrs above All renderers that need this attribute should manually
+    //pass it.
     
 
 
@@ -705,6 +704,10 @@ private Util()
 	return result;
     }
 
+    public static void renderBooleanPassThruAttributes(ResponseWriter writer,
+        UIComponent component) throws IOException {
+	renderBooleanPassThruAttributes(writer, component, null);
+    }
 
     /**
     * Render any boolean "passthru" attributes.  
@@ -712,14 +715,31 @@ private Util()
     * @see passthruAttributes
     */
     public static void renderBooleanPassThruAttributes(ResponseWriter writer,
-        UIComponent component) throws IOException {
+						       UIComponent component,
+						       String []excludes) throws IOException {
 	Util.doAssert(null != writer);
 	Util.doAssert(null != component);
 
-        int i = 0, len = booleanPassthruAttributes.length;
+        int i = 0, len = booleanPassthruAttributes.length, j, 
+	    jLen = (null != excludes ? excludes.length : 0);
         Object value = null;
         boolean result;
+	boolean skip = false;
         for (i = 0; i < len; i++) {
+	    skip = false;
+	    if (null != excludes) {
+		for (j = 0; j < jLen; j++) {
+		    if (null != excludes[j] &&
+			excludes[j].equals(passthruAttributes[i])) {
+			skip = true;
+			break;
+		    }
+		}
+	    }
+	    if (skip) {
+		continue;
+	    }
+
             value = component.getAttributes().get(booleanPassthruAttributes[i]);
             if (value != null) {
                 if (value instanceof Boolean) {
@@ -742,6 +762,12 @@ private Util()
 	}
     }
 
+    public static void renderPassThruAttributes(ResponseWriter writer,
+        UIComponent component) throws IOException {
+	renderPassThruAttributes(writer, component, null);
+    }
+
+
     /**
     * Render any "passthru" attributes, where we simply just output the
     * raw name and value of the attribute.  This method is aware of the
@@ -750,13 +776,30 @@ private Util()
     * @see passthruAttributes
     */
     public static void renderPassThruAttributes(ResponseWriter writer,
-        UIComponent component) throws IOException {
+						UIComponent component,
+						String [] excludes) throws IOException {
 	Util.doAssert(null != writer);
 	Util.doAssert(null != component);
 
-        int i = 0, len = passthruAttributes.length;
+        int i = 0, len = passthruAttributes.length, j, 
+	    jLen = (null != excludes ? excludes.length : 0);
 	Object value = null;
+	boolean skip = false;
 	for (i = 0; i < len; i++) {
+	    skip = false;
+	    if (null != excludes) {
+		for (j = 0; j < jLen; j++) {
+		    if (null != excludes[j] &&
+			excludes[j].equals(passthruAttributes[i])) {
+			skip = true;
+			break;
+		    }
+		}
+	    }
+	    if (skip) {
+		continue;
+	    }
+	    
             value = component.getAttributes().get(passthruAttributes[i]);
 	    if (value != null && shouldRenderAttribute(value)) {
                 if (!(value instanceof String)) {
@@ -764,7 +807,7 @@ private Util()
                 }
 		//PENDING(rogerk) will revisit "null" param soon..
 		writer.writeAttribute(passthruAttributes[i], value,
-                                      passthruAttributes[i]);
+				      passthruAttributes[i]);
 	    }
 	}
     }
