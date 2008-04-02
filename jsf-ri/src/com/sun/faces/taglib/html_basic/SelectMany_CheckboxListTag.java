@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_CheckboxListTag.java,v 1.15 2003/10/28 21:00:35 eburns Exp $
+ * $Id: SelectMany_CheckboxListTag.java,v 1.16 2003/10/30 22:15:39 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -87,6 +87,12 @@ public class SelectMany_CheckboxListTag extends BaseComponentTag
 	
         if (null != layout) {
 	    uiSelectMany.getAttributes().put("layout", layout);
+	}
+        if (null != enabledClass) {
+	    uiSelectMany.getAttributes().put("enabledClass", enabledClass);
+	}
+        if (null != disabledClass) {
+	    uiSelectMany.getAttributes().put("disabledClass", disabledClass);
 	}
     }
     

@@ -4,13 +4,13 @@
 <form id="formRenderer1" method="post" action="/test/root">
 
 <input type="hidden" name="formRenderer1" value="formRenderer1" /></form>
-<table border="0">
+<span class="styleClass"><table border="0">
 	<tr>
-<td><input type="radio" name="radioRenderer" value="One" /> One</td>
-<td><input type="radio" checked name="radioRenderer" value="Two" /> Two</td>
-<td><input type="radio" name="radioRenderer" value="Three" /> Three</td>
+<td><input type="radio" name="radioRenderer" value="One" disabled="disabled" tabindex="5" title="title" /><span class="disabledClass"> One</span></td>
+<td><input type="radio" checked name="radioRenderer" value="Two" tabindex="5" title="title" /><span class="enabledClass"> Two</span></td>
+<td><input type="radio" name="radioRenderer" value="Three" tabindex="5" title="title" /><span class="enabledClass"> Three</span></td>
 	</tr>
-</table>
+</table></span>
 <input type="image" src="duke.gif" name="imageButton" />
 <input type="image" src="resduke.gif" name="imageButton2" />
 <input type="submit" name="labelButton1" value="PASSED" />

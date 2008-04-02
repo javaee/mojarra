@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.52 2003/10/21 22:39:41 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.53 2003/10/30 22:15:35 jvisvanathan Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.model.SelectItem;
 import javax.faces.component.UISelectOne;
+import javax.faces.component.UISelectItem;
 import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
@@ -87,6 +88,7 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
             String currentValue) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
+        
         UISelectOne uiSelectOne = (UISelectOne) component;
 	String alignStr = null;
 	Object borderObj = null;
@@ -99,6 +101,8 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
         Iterator items = Util.getSelectItemWrappers(context, uiSelectOne);
 	SelectItem curItem = null;
         SelectItemWrapper curItemWrapper = null;
+        UIComponent curComponent = null;
+        
         if ( items == null ) {
             return;
         }
@@ -137,15 +141,25 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	    writer.startElement("tr", component);
 	    writer.writeText("\n", null);
 	}
-
+        
 	while (items.hasNext()) {
 	    curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
+            curComponent = curItemWrapper.getUISelectItem();
 	    if (alignVertical) {
                 writer.writeText("\t", null);
 		writer.startElement("tr", component);
 		writer.writeText("\n", null);
 	    }
+            // disable the radio button if the attribute is set.
+            String labelClass = null;
+            if ( curItem.isDisabled() ){
+                labelClass = (String) uiSelectOne.
+                    getAttributes().get("disabledClass");
+            } else {
+                labelClass = (String) uiSelectOne.
+                    getAttributes().get("enabledClass");
+            }
 	    writer.startElement("td", component);
 	    writer.startElement("input", component);
 	    writer.writeAttribute("type", "radio", "type");
@@ -157,16 +171,29 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	    writer.writeAttribute("value",(getFormattedValue(context, component,
 	        curItem.getValue())), "value");
 
-	    Util.renderPassThruAttributes(writer, curItemWrapper.getUISelectItem());
-	    Util.renderBooleanPassThruAttributes(writer, curItemWrapper.getUISelectItem());
-
-	    writer.endElement("input");
-
+            if (curItem.isDisabled()) {
+                writer.writeAttribute("disabled", "disabled", "disabled");
+            }
+            // PENDING (visvan) Apply HTML 4.x attributes specified on selectone 
+            // component to all items in the list. This might need to be changed
+            // later.
+	    Util.renderPassThruAttributes(writer, uiSelectOne);
+	    Util.renderBooleanPassThruAttributes(writer, uiSelectOne);
+            writer.endElement("input");
+           
+            // apply any styleClass specified on the label.
+            if ( labelClass != null) {
+                writer.startElement("span", component);
+	        writer.writeAttribute("class", labelClass, "labelClass");
+            }
             String itemLabel = curItem.getLabel();
             if (itemLabel != null) {
                 writer.writeText(" ", null);
 		writer.writeText(itemLabel, null);
             }
+            if (null != labelClass) {
+	        writer.endElement("span");
+	    }
 	    writer.endElement("td");
 	    writer.writeText("\n", null);
 	    if (alignVertical) {
@@ -182,10 +209,10 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	    writer.writeText("\n", null);
 	}
         writer.endElement("table");
-
-	if (null != styleClass) {
+        if (null != styleClass) {
 	    writer.endElement("span");
 	}
+	
     }
 
 } // end of class RadioRenderer

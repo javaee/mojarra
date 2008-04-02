@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.23 2003/10/28 21:00:35 eburns Exp $
+ * $Id: SelectItemTag.java,v 1.1 2003/10/30 22:15:42 jvisvanathan Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package com.sun.faces.taglib.html_basic;
+package com.sun.faces.taglib.jsf_core;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;

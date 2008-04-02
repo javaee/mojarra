@@ -1,5 +1,5 @@
 /*
- * $Id: TestViewTag.java,v 1.1 2003/10/16 00:30:21 eburns Exp $
+ * $Id: TestViewTag.java,v 1.2 2003/10/30 22:15:48 jvisvanathan Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewTag.java,v 1.1 2003/10/16 00:30:21 eburns Exp $
+ * @version $Id: TestViewTag.java,v 1.2 2003/10/30 22:15:48 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -110,8 +110,7 @@ public void testViewTag()
     boolean result = false;    
     String value = null;
     Locale expectedLocale = new Locale("ps", "PS", "Traditional");
-    LifecycleImpl lifecycle = new LifecycleImpl();
-    Phase renderResponse = new RenderResponsePhase(Application.getCurrentInstance());    
+    Phase renderResponse = new RenderResponsePhase();    
     UIViewRoot page = new UIViewRoot();
     page.setId("root");
     page.setViewId(TEST_URI);

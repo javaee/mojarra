@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.108 2003/10/30 20:30:34 eburns Exp $
+ * $Id: Util.java,v 1.109 2003/10/30 22:15:43 jvisvanathan Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.108 2003/10/30 20:30:34 eburns Exp $ 
+ * @version $Id: Util.java,v 1.109 2003/10/30 22:15:43 jvisvanathan Exp $ 
  */
 
 public class Util extends Object
@@ -978,9 +978,7 @@ private Util()
     public static ViewHandler getViewHandler(FacesContext context) 
             throws FacesException {
 	// Get Application instance
-	ApplicationFactory factory = (ApplicationFactory)
-                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        Application application = factory.getApplication();
+        Application application = context.getApplication();
 	Assert.assert_it(application != null);
         
 	// Get the ViewHandler

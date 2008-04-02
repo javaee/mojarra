@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.27 2003/10/21 22:39:46 jvisvanathan Exp $
+ * $Id: TestRenderers_3.java,v 1.28 2003/10/30 22:15:47 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -49,7 +49,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.27 2003/10/21 22:39:46 jvisvanathan Exp $
+ * @version $Id: TestRenderers_3.java,v 1.28 2003/10/30 22:15:47 jvisvanathan Exp $
  * 
  *
  */
@@ -190,10 +190,17 @@ public class TestRenderers_3 extends JspFacesTestCase {
         throws IOException {
         System.out.println("Testing SelectManyCheckboxListRenderer");
         UISelectMany selectMany = new UISelectMany();
+        selectMany.getAttributes().put("enabledClass", "enabledClass");
+        selectMany.getAttributes().put("disabledClass", "disabledClass");
+        selectMany.getAttributes().put("styleClass", "styleClass");
+        selectMany.getAttributes().put("tabindex", new Integer(5));
+        selectMany.getAttributes().put("title", "title");
+        
         UISelectItems uiSelectItems = new UISelectItems();
         selectMany.setValue(null);
         selectMany.setId("myCheckboxlist");
         SelectItem item1 = new SelectItem("Red", "Red", null);
+        item1.setDisabled(true);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
         SelectItem item4 = new SelectItem("Yellow", "Yellow", null);

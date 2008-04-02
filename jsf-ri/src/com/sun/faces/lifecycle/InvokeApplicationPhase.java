@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.10 2003/10/06 18:11:32 eburns Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.11 2003/10/30 22:15:33 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.10 2003/10/06 18:11:32 eburns Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.11 2003/10/30 22:15:33 jvisvanathan Exp $
  * 
  */
 
@@ -50,7 +50,6 @@ public class InvokeApplicationPhase extends Phase {
 //
 // Instance Variables
 //
-private Lifecycle lifecycleDriver = null;
 
 // Attribute Instance Variables
 
@@ -60,8 +59,8 @@ private Lifecycle lifecycleDriver = null;
 // Constructors and Genericializers    
 //
 
-public InvokeApplicationPhase(Lifecycle newDriver) {
-    lifecycleDriver = newDriver;
+public InvokeApplicationPhase() {
+    super();
 }
 
 public PhaseId getId() {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.22 2003/10/21 22:39:47 jvisvanathan Exp $
+ * $Id: TestValidatorTags.java,v 1.23 2003/10/30 22:15:48 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.22 2003/10/21 22:39:47 jvisvanathan Exp $ 
+ * @version $Id: TestValidatorTags.java,v 1.23 2003/10/30 22:15:48 jvisvanathan Exp $ 
  */
 
 public class TestValidatorTags extends JspFacesTestCase
@@ -127,7 +127,7 @@ public void testValidators()
     boolean result = false;
     String value = null;    
     Phase 
-	renderResponse = new RenderResponsePhase(Application.getCurrentInstance()),
+	renderResponse = new RenderResponsePhase(),
 	processValidations = new ProcessValidationsPhase(),
 	applyRequestValues = new ApplyRequestValuesPhase();
    

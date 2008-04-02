@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.36 2003/10/17 03:47:10 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.37 2003/10/30 22:15:33 jvisvanathan Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import org.apache.commons.logging.LogFactory;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.36 2003/10/17 03:47:10 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.37 2003/10/30 22:15:33 jvisvanathan Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -112,8 +112,8 @@ public class LifecycleImpl extends Lifecycle
         phaseWrappers.add(new PhaseWrapper(new ApplyRequestValuesPhase()));
         phaseWrappers.add(new PhaseWrapper(new ProcessValidationsPhase()));
         phaseWrappers.add(new PhaseWrapper(new UpdateModelValuesPhase()));
-        phaseWrappers.add(new PhaseWrapper(new InvokeApplicationPhase(this)));
-        phaseWrappers.add(new PhaseWrapper(new RenderResponsePhase(Application.getCurrentInstance())));
+        phaseWrappers.add(new PhaseWrapper(new InvokeApplicationPhase()));
+        phaseWrappers.add(new PhaseWrapper(new RenderResponsePhase()));
     }
 
     protected Phase getRenderPhase(FacesContext context) throws FacesException {

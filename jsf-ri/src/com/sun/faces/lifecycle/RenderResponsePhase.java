@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.9 2003/09/15 22:11:46 eburns Exp $
+ * $Id: RenderResponsePhase.java,v 1.10 2003/10/30 22:15:33 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.9 2003/09/15 22:11:46 eburns Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.10 2003/10/30 22:15:33 jvisvanathan Exp $
  *
  */
 
@@ -43,7 +43,6 @@ public class RenderResponsePhase extends Phase {
 //
 // Instance Variables
 //
-private Application lifecycleDriver = null;
 
 // Attribute Instance Variables
 
@@ -53,8 +52,8 @@ private Application lifecycleDriver = null;
 // Constructors and Genericializers    
 //
 
-public RenderResponsePhase(Application newDriver) {
-    lifecycleDriver = newDriver;
+public RenderResponsePhase() {
+    super();
 }
 
 //
@@ -75,10 +74,9 @@ public PhaseId getId() {
 
 public void execute(FacesContext facesContext) throws FacesException
 {
-    Assert.assert_it(null != lifecycleDriver.getViewHandler());
     try { 
-	lifecycleDriver.getViewHandler().renderView(facesContext, 
-						    facesContext.getViewRoot()); 
+	facesContext.getApplication().getViewHandler().
+                renderView(facesContext, facesContext.getViewRoot()); 
     } catch (IOException e) { 
 	throw new FacesException(e.getMessage(), e);
     }

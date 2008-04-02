@@ -246,16 +246,16 @@
                      title="Select Quantity"
                      tabindex="20" >
 
-                <h:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
-                <h:selectitem  itemValue="1" itemLabel="1" title="One"/>
-                <h:selectitem  itemValue="2" itemLabel="2" title="Two" />
-                <h:selectitem  itemValue="3" itemLabel="3" title="Three" />
-                <h:selectitem  itemValue="4" itemLabel="4" title="Four" />
-                <h:selectitem  itemValue="5" itemLabel="5" title="Five" />
-                <h:selectitem  itemValue="6" itemLabel="6" title="Six" />
-                <h:selectitem  itemValue="7" itemLabel="7" title="Seven" />
-                <h:selectitem  itemValue="8" itemLabel="8" title="Eight" />
-                <h:selectitem  itemValue="9" itemLabel="9" title="nine" />
+                <f:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
+                <f:selectitem  itemValue="1" itemLabel="1" />
+                <f:selectitem  itemValue="2" itemLabel="2" />
+                <f:selectitem  itemValue="3" itemLabel="3" />
+                <f:selectitem  itemValue="4" itemLabel="4" />
+                <f:selectitem  itemValue="5" itemLabel="5" />
+                <f:selectitem  itemValue="6" itemLabel="6" />
+                <f:selectitem  itemValue="7" itemLabel="7" />
+                <f:selectitem  itemValue="8" itemLabel="8" />
+                <f:selectitem  itemValue="9" itemLabel="9" />
 
               </h:selectone_listbox>
 
@@ -267,15 +267,15 @@
 
 	<TD>
 
-	    <h:selectone_radio id="shipType" layout="LINE_DIRECTION">
+	    <h:selectone_radio id="shipType" layout="LINE_DIRECTION" 
+                tabindex="3" disabledClass="disabledClass" 
+                enabledClass="enabledClass" accesskey="A" 
+                styleClass = "styleClass">
 
-                <h:selectitem itemValue="nextDay" itemLabel="Next Day"
-                      tabindex="30" title="Next day shipment"/>
-                <h:selectitem itemValue="nextWeek" itemLabel="Next Week" title="Next week shipment"
-                                  tabindex="40" />
-                <h:selectitem itemValue="nextMonth" itemLabel="Next Month"
-                        tabindex="50" title="Next month shipment"/>
-
+                <f:selectitem itemValue="nextDay" itemLabel="Next Day" disabled="true"/>
+                <f:selectitem itemValue="nextWeek" itemLabel="Next Week" />
+                <f:selectitem itemValue="nextMonth" itemLabel="Next Month" />
+                 
               </h:selectone_radio>
 
 	</TD>
@@ -288,10 +288,11 @@
             <h:selectone_radio id="verticalRadio" 
                                             layout="PAGE_DIRECTION" border="1" >
 
-                <h:selectitem itemValue="nextDay" itemLabel="Next Day"
-                                   />
-                <h:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
-                <h:selectitem itemValue="nextMonth" itemLabel="Next Month" />
+                <f:selectitem itemValue="nextDay" itemLabel="Next Day"
+                                   disabled="true" />
+                <f:selectitem itemValue="nextWeek" itemLabel="Next Week"  
+                        disabled="false"/>
+                <f:selectitem itemValue="nextMonth" itemLabel="Next Month" />
 
            </h:selectone_radio>
 
@@ -485,16 +486,16 @@
 <tr>
 					<TD>Multi-select menu:</TD>
 					<TD><h:selectmany_menu id="ManyApples" styleClass="selectmanyClass">
-						<h:selectitem itemValue="0" itemLabel="zero" />
-						<h:selectitem itemValue="1" itemLabel="one" />
-						<h:selectitem itemValue="2" itemLabel="two" />
-						<h:selectitem itemValue="3" itemLabel="three" />
-						<h:selectitem itemValue="4" itemLabel="four" />
-						<h:selectitem itemValue="5" itemLabel="five" />
-						<h:selectitem itemValue="6" itemLabel="six" />
-						<h:selectitem itemValue="7" itemLabel="seven" />
-						<h:selectitem itemValue="8" itemLabel="eight" />
-						<h:selectitem itemValue="9" itemLabel="nine" />
+						<f:selectitem itemValue="0" itemLabel="zero" />
+						<f:selectitem itemValue="1" itemLabel="one" />
+						<f:selectitem itemValue="2" itemLabel="two" />
+						<f:selectitem itemValue="3" itemLabel="three" />
+						<f:selectitem itemValue="4" itemLabel="four" disabled="true"/>
+						<f:selectitem itemValue="5" itemLabel="five" />
+						<f:selectitem itemValue="6" itemLabel="six" />
+						<f:selectitem itemValue="7" itemLabel="seven" />
+						<f:selectitem itemValue="8" itemLabel="eight" />
+						<f:selectitem itemValue="9" itemLabel="nine" />
 					</h:selectmany_menu></TD>
 
 </tr>
@@ -502,32 +503,33 @@
 <tr>
 					<TD>Multi-select listbox:</TD>
 					<TD><h:selectmany_listbox >
-						<h:selectitem itemValue="0" itemLabel="zero" />
-						<h:selectitem itemValue="1" itemLabel="one" />
-						<h:selectitem itemValue="2" itemLabel="two" />
-						<h:selectitem itemValue="3" itemLabel="three" />
-						<h:selectitem itemValue="4" itemLabel="four" />
-						<h:selectitem itemValue="5" itemLabel="five" />
-						<h:selectitem itemValue="6" itemLabel="six" />
-						<h:selectitem itemValue="7" itemLabel="seven" />
-						<h:selectitem itemValue="8" itemLabel="eight" />
-						<h:selectitem itemValue="9" itemLabel="nine" />
+						<f:selectitem itemValue="0" itemLabel="zero" />
+						<f:selectitem itemValue="1" itemLabel="one" />
+						<f:selectitem itemValue="2" itemLabel="two" />
+						<f:selectitem itemValue="3" itemLabel="three" />
+						<f:selectitem itemValue="4" itemLabel="four" />
+						<f:selectitem itemValue="5" itemLabel="five" />
+						<f:selectitem itemValue="6" itemLabel="six" />
+						<f:selectitem itemValue="7" itemLabel="seven" />
+						<f:selectitem itemValue="8" itemLabel="eight" />
+						<f:selectitem itemValue="9" itemLabel="nine" />
 					</h:selectmany_listbox></TD>
 </tr>
 
 <tr>
 					<TD><h:selectmany_checkboxlist id="ManyApples3" 
-                                                styleClass="selectmanyClass">
-						<h:selectitem itemValue="0" itemLabel="zero" />
-						<h:selectitem itemValue="1" itemLabel="one" />
-						<h:selectitem itemValue="2" itemLabel="two" />
-						<h:selectitem itemValue="3" itemLabel="three" />
-						<h:selectitem itemValue="4" itemLabel="four" />
-						<h:selectitem itemValue="5" itemLabel="five" />
-						<h:selectitem itemValue="6" itemLabel="six" />
-						<h:selectitem itemValue="7" itemLabel="seven" />
-						<h:selectitem itemValue="8" itemLabel="eight" />
-						<h:selectitem itemValue="9" itemLabel="nine" />
+                                                tabindex="3" disabledClass="disabledClass" 
+                                                styleClass="styleClass" enabledClass="enabledClass" accesskey="A">>
+						<f:selectitem itemValue="0" itemLabel="zero" disabled="true" />
+						<f:selectitem itemValue="1" itemLabel="one" />
+						<f:selectitem itemValue="2" itemLabel="two" />
+						<f:selectitem itemValue="3" itemLabel="three" disabled="false"/>
+						<f:selectitem itemValue="4" itemLabel="four" />
+						<f:selectitem itemValue="5" itemLabel="five" />
+						<f:selectitem itemValue="6" itemLabel="six" />
+						<f:selectitem itemValue="7" itemLabel="seven" />
+						<f:selectitem itemValue="8" itemLabel="eight" />
+						<f:selectitem itemValue="9" itemLabel="nine" />
 					</h:selectmany_checkboxlist></TD>
 </tr>
 

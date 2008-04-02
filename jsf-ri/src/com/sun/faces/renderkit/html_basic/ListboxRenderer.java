@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.14 2003/10/07 13:05:29 eburns Exp $
+ * $Id: ListboxRenderer.java,v 1.15 2003/10/30 22:15:35 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -96,10 +96,10 @@ public class ListboxRenderer extends MenuRenderer {
 	    if (!selectText.equals("")) {
 	        writer.writeAttribute(selectText, new Boolean("true"), null);
 	    }
-
-            Util.renderPassThruAttributes(writer, curComponent);
-            Util.renderBooleanPassThruAttributes(writer, curComponent);
-
+            if ( curItem.isDisabled()) {
+                writer.writeAttribute("disabled", "disabled", "disabled");
+            }
+          
 	    writer.writeText(curItem.getLabel(), "label");
 	    writer.endElement("option");
 	    writer.writeText("\n", null);

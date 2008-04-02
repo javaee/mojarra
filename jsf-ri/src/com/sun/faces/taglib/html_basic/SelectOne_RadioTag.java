@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.35 2003/10/28 21:00:35 eburns Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.36 2003/10/30 22:15:40 jvisvanathan Exp $
  */
 
 /*
@@ -78,6 +78,15 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
 	super.overrideProperties(component);
 	UISelectOne uiSelectOne = (UISelectOne) component;
 	
+        if (null != layout) {
+	    uiSelectOne.getAttributes().put("layout", layout);
+	}
+        if (null != enabledClass) {
+	    uiSelectOne.getAttributes().put("enabledClass", enabledClass);
+	}
+        if (null != disabledClass) {
+	    uiSelectOne.getAttributes().put("disabledClass", disabledClass);
+	}
         if (null != layout) {
 	    uiSelectOne.getAttributes().put("layout", layout);
 	}

@@ -247,16 +247,16 @@
                 
                 
 
-              <span class="selectoneClass"><select name="basicForm:_id14" size="10" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
-	<option value="1" title="One">1</option>
-	<option value="2" title="Two">2</option>
-	<option value="3" title="Three">3</option>
-	<option value="4" title="Four">4</option>
-	<option value="5" title="Five">5</option>
-	<option value="6" title="Six">6</option>
-	<option value="7" title="Seven">7</option>
-	<option value="8" title="Eight">8</option>
-	<option value="9" title="nine">9</option>
+              <span class="selectoneClass"><select name="basicForm:_id14" size="10" tabindex="20" title="Select Quantity">	<option value="0">0</option>
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
 </select>
 
 	</TD>
@@ -272,14 +272,14 @@
                 
                 
                 
-
-              <table>
+                 
+              <span class="styleClass"><table>
 	<tr>
-<td><input type="radio" name="basicForm:shipType" value="nextDay" tabindex="30" title="Next day shipment" /> Next Day</td>
-<td><input type="radio" name="basicForm:shipType" value="nextWeek" tabindex="40" title="Next week shipment" /> Next Week</td>
-<td><input type="radio" name="basicForm:shipType" value="nextMonth" tabindex="50" title="Next month shipment" /> Next Month</td>
+<td><input type="radio" name="basicForm:shipType" value="nextDay" accesskey="A" tabindex="3" /><span class="enabledClass"> Next Day</span></td>
+<td><input type="radio" name="basicForm:shipType" value="nextWeek" accesskey="A" tabindex="3" /><span class="enabledClass"> Next Week</span></td>
+<td><input type="radio" name="basicForm:shipType" value="nextMonth" accesskey="A" tabindex="3" /><span class="enabledClass"> Next Month</span></td>
 	</tr>
-</table>
+</table></span>
 
 	</TD>
 
@@ -296,13 +296,13 @@
 
            <table border="1">
 	<tr>
-<td><input type="radio" name="basicForm:verticalRadio" value="nextDay" /> Next Day</td>
+<td><input type="radio" name="basicForm:verticalRadio" value="nextDay" border="1" /> Next Day</td>
 	<tr>
 	<tr>
-<td><input type="radio" name="basicForm:verticalRadio" value="nextWeek" /> Next Week</td>
+<td><input type="radio" name="basicForm:verticalRadio" value="nextWeek" border="1" /> Next Week</td>
 	<tr>
 	<tr>
-<td><input type="radio" name="basicForm:verticalRadio" value="nextMonth" /> Next Month</td>
+<td><input type="radio" name="basicForm:verticalRadio" value="nextMonth" border="1" /> Next Month</td>
 	<tr>
 </table>
 
@@ -519,7 +519,7 @@
 </tr>
 
 <tr>
-					<TD>
+					<TD>>
 						
 						
 						
@@ -530,17 +530,17 @@
 						
 						
 						
-					<span class="selectmanyClass">
-<label for="basicForm:_id53"><input name="basicForm:ManyApples3" id="basicForm:_id53" value="0" type="checkbox">zero</label>
-<label for="basicForm:_id54"><input name="basicForm:ManyApples3" id="basicForm:_id54" value="1" type="checkbox">one</label>
-<label for="basicForm:_id55"><input name="basicForm:ManyApples3" id="basicForm:_id55" value="2" type="checkbox">two</label>
-<label for="basicForm:_id56"><input name="basicForm:ManyApples3" id="basicForm:_id56" value="3" type="checkbox">three</label>
-<label for="basicForm:_id57"><input name="basicForm:ManyApples3" id="basicForm:_id57" value="4" type="checkbox">four</label>
-<label for="basicForm:_id58"><input name="basicForm:ManyApples3" id="basicForm:_id58" value="5" type="checkbox">five</label>
-<label for="basicForm:_id59"><input name="basicForm:ManyApples3" id="basicForm:_id59" value="6" type="checkbox">six</label>
-<label for="basicForm:_id60"><input name="basicForm:ManyApples3" id="basicForm:_id60" value="7" type="checkbox">seven</label>
-<label for="basicForm:_id61"><input name="basicForm:ManyApples3" id="basicForm:_id61" value="8" type="checkbox">eight</label>
-<label for="basicForm:_id62"><input name="basicForm:ManyApples3" id="basicForm:_id62" value="9" type="checkbox">nine</label></TD>
+					<span class="styleClass">
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="0" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">zero</span></label>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="1" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">one</span></label>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="2" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">two</span></label>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="3" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">three</span></label>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="4" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">four</span></label>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="5" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">five</span></label>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="6" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">six</span></label>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="7" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">seven</span></label>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="8" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">eight</span></label>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="9" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">nine</span></label></TD>
 </tr>
 
 

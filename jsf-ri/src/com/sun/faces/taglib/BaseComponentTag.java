@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.10 2003/10/28 21:00:32 eburns Exp $
+ * $Id: BaseComponentTag.java,v 1.11 2003/10/30 22:15:37 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.10 2003/10/28 21:00:32 eburns Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.11 2003/10/30 22:15:37 jvisvanathan Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -63,7 +63,11 @@ public abstract class BaseComponentTag extends UIComponentTag
     protected String styleClass_ = null;
     protected String title = null;
     protected String title_ = null;
-
+    protected String enabledClass_ = null;
+    protected String enabledClass = null;
+    protected String disabledClass_ = null;
+    protected String disabledClass = null;
+    
     // events attrs
     protected String onclick = null;
     protected String onclick_ = null;
@@ -737,6 +741,14 @@ public abstract class BaseComponentTag extends UIComponentTag
    public  void setCellpadding(String newCellpadding) {
        this.cellpadding_ = newCellpadding;
    }
+   
+   public  void setEnabledClass(String newEnabledClass) {
+       this.enabledClass_ = newEnabledClass;
+   }
+   
+   public  void setDisabledClass(String newDisabledClass) {
+       this.disabledClass_ = newDisabledClass;
+   }
 
     /**
 
@@ -956,6 +968,12 @@ public abstract class BaseComponentTag extends UIComponentTag
         if (cellpadding_ != null) {
             cellpadding = Util.evaluateElExpression(cellpadding_, pageContext);
         }
+        if (enabledClass_ != null) {
+            enabledClass = Util.evaluateElExpression(enabledClass_, pageContext);
+        }
+        if (disabledClass_ != null) {
+            disabledClass = Util.evaluateElExpression(disabledClass_, pageContext);
+        }
     }
 
 
@@ -1043,7 +1061,6 @@ public abstract class BaseComponentTag extends UIComponentTag
         }
 
         // common HTML 4.0 attributes.
-        // PENDING (visvan) id attribute clashes with faces id attribute
         if (null != title) {
             component.getAttributes().put("title", title);
         }

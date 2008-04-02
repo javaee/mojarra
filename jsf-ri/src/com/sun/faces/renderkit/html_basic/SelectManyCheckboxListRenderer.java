@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.16 2003/09/24 23:16:50 horwat Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.17 2003/10/30 22:15:36 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -87,9 +87,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             layoutVertical = layoutStr.equalsIgnoreCase("PAGE_DIRECTION") ? true : false;
         }
 
-        Util.renderPassThruAttributes(writer, component);
-        Util.renderBooleanPassThruAttributes(writer, component);
-
         Iterator items = Util.getSelectItemWrappers(context, component);
         SelectItem curItem = null;
         SelectItemWrapper curItemWrapper = null;
@@ -101,12 +98,22 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             curItem = curItemWrapper.getSelectItem();
             curComponent = curItemWrapper.getUISelectItem();
 
+            // disable the radio button if the attribute is set.
+            String labelClass = null;
+            if ( curItem.isDisabled()){
+                labelClass = (String) component.
+                    getAttributes().get("disabledClass");
+            } else {
+                labelClass = (String) component.
+                    getAttributes().get("enabledClass");
+            }
+            
 	    writer.writeText("\n", null);
-	    writer.startElement("label", curComponent);
-	    writer.writeAttribute("for", curComponent.getClientId(context), "clientId");
+            writer.startElement("label", curComponent);
+	    writer.writeAttribute("for", component.getClientId(context), "clientId");
 	    writer.startElement("input", component);
 	    writer.writeAttribute("name", component.getClientId(context), "clientId");
-	    writer.writeAttribute("id", curComponent.getClientId(context), "clientId");
+	    writer.writeAttribute("id", component.getClientId(context), "clientId");
 	    writer.writeAttribute("value",
 	        getFormattedValue(context, component, curItem.getValue()), "value");
 	    writer.writeAttribute("type", "checkbox", "type");
@@ -114,9 +121,25 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 	    if (!selectText.equals("")) {
 	        writer.writeAttribute(selectText, new Boolean("true"), null);
 	    }
-            Util.renderPassThruAttributes(writer, curComponent);
-            Util.renderBooleanPassThruAttributes(writer, curComponent);
-	    writer.writeText(curItem.getLabel(), "label");
+            if ( curItem.isDisabled()) {
+                writer.writeAttribute("disabled", "disabled", "disabled");
+            }
+            
+            // PENDING (visvan) Apply HTML 4.x attributes specified on selectone 
+            // component to all items in the list. This might need to be changed
+            // later.
+            Util.renderPassThruAttributes(writer, component);
+            Util.renderBooleanPassThruAttributes(writer, component);
+            
+            // apply any styleClass specified on the label.
+            if ( labelClass != null) {
+                writer.startElement("span", component);
+	        writer.writeAttribute("class", labelClass, "labelClass");
+            }
+            writer.writeText(curItem.getLabel(), "label");
+            if (null != labelClass) {
+	        writer.endElement("span");
+	    }
 	    writer.endElement("label");
             if (layoutVertical) {
                 writer.startElement("br", curComponent);

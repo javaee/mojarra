@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.49 2003/10/28 21:00:40 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.50 2003/10/30 22:15:46 jvisvanathan Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.49 2003/10/28 21:00:40 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.50 2003/10/30 22:15:46 jvisvanathan Exp $
  * 
  *
  */
@@ -563,11 +563,17 @@ public class TestRenderers_1 extends JspFacesTestCase
         // Test RadioRenderer.
         System.out.println("Testing RadioRenderer");
         UISelectOne uiSelectOne = new UISelectOne();
+        uiSelectOne.getAttributes().put("enabledClass", "enabledClass");
+        uiSelectOne.getAttributes().put("disabledClass", "disabledClass");
+        uiSelectOne.getAttributes().put("styleClass", "styleClass");
+        uiSelectOne.getAttributes().put("tabindex", new Integer(5));
+        uiSelectOne.getAttributes().put("title", "title");
 	UISelectItems uiSelectItems = new UISelectItems();
         uiSelectOne.setId("radioRenderer");
         root.getChildren().add(uiSelectOne);
 
         SelectItem item1 = new SelectItem("One", "One",null);
+        item1.setDisabled(true);
         SelectItem item2 = new SelectItem("Two", "Two", null);
         SelectItem item3 = new SelectItem("Three", "Three" ,null);
         

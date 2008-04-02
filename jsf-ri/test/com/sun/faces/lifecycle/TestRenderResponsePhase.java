@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.72 2003/10/07 19:53:19 rlubke Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.73 2003/10/30 22:15:45 jvisvanathan Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.72 2003/10/07 19:53:19 rlubke Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.73 2003/10/30 22:15:45 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -126,7 +126,7 @@ public void testHtmlBasicRenderKit()
     boolean result = false;    
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
-    Phase renderResponse = new RenderResponsePhase(Application.getCurrentInstance());    
+    Phase renderResponse = new RenderResponsePhase();    
     UIViewRoot page = new UIViewRoot();
     page.setId("root");
     page.setViewId(TEST_URI);

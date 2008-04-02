@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.18 2003/10/02 00:40:12 jvisvanathan Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.19 2003/10/30 22:15:44 jvisvanathan Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.event.FacesEvent;
 import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.RIConstants;
 import java.io.IOException;
@@ -37,7 +36,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.18 2003/10/02 00:40:12 jvisvanathan Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.19 2003/10/30 22:15:44 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,10 +91,9 @@ public void testInvokeNormal()
 public void testInvokeNoOp()
 {
     UIInput root = new UIInput();
-    Lifecycle life = new LifecycleImpl();
     UIViewRoot page = new UIViewRoot();
     page.setViewId("default.xul");   
-    Phase invokeApplicationPhase = new InvokeApplicationPhase(life);
+    Phase invokeApplicationPhase = new InvokeApplicationPhase();
     getFacesContext().setViewRoot(page);
 
     invokeApplicationPhase.execute(getFacesContext());
