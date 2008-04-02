@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.44 2007/02/07 20:00:56 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.45 2007/03/07 21:00:33 rlubke Exp $
  */
 
 /*
@@ -571,6 +571,9 @@ public class HtmlResponseWriter extends ResponseWriter {
                 writer.write('"');
             }
         } else {
+            if ("type".equals(name) && "radio".equals(value)) {
+                isOption = true;
+            }
             writer.write(' ');
             writer.write(name);
             writer.write("=\"");
@@ -867,6 +870,8 @@ public class HtmlResponseWriter extends ResponseWriter {
     private void isOption(String name) {
         if ("option".equalsIgnoreCase(name)) {
             isOption = true;
+        } else {
+            isOption = false;
         }
     }
 

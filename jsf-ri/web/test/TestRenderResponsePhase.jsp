@@ -350,7 +350,7 @@
                      tabindex="20" enabledClass="eclass" disabledClass="dclass">
 
                 <f:selectItem  itemDisabled="true" itemValue="0" itemLabel="0"/>
-                <f:selectItem  itemValue="1" itemLabel="1" itemDescription="First Item" />
+                <f:selectItem  itemValue="&1&amp;" itemLabel="1" itemDescription="First Item" />
                 <f:selectItem  itemValue="2" itemLabel="2" />
                 <f:selectItem  itemValue="3" itemLabel="3" itemDisabled="true"/>
                 <f:selectItem  itemValue="4" itemLabel="4" />
@@ -375,7 +375,7 @@
                 enabledClass="enabledClass" accesskey="A" 
                 styleClass = "someStyleClass" style="someStyle" disabled="true">
 
-                <f:selectItem itemValue="nextDay@" itemLabel="Next Day" itemDisabled="true"/>
+                <f:selectItem itemValue="nextDay&" itemLabel="Next Day" itemDisabled="true"/>
                 <f:selectItem itemValue="nextWeek" itemLabel="<Next Week>" />
                 <f:selectItem itemValue="nextMonth" itemLabel="<Next Month>" escape="false"/>
                  
@@ -733,7 +733,7 @@ brackets</i> on this text"></h:outputText>
 
 <tr><td>
 
-<h:outputText id="value7" value="7. You should see the <i>angle brackets</i> on
+<h:outputText id="value7" value="7. & You should see the <i>angle brackets</i> on
 this text"></h:outputText>
 
 </td>

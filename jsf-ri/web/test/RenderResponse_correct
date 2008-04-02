@@ -288,7 +288,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
         <TD>
 
              <select name="basicForm:j_id_id326" class="selectoneClass" size="1" style="someStyle" tabindex="20" title="Select Quantity" disabled="disabled">	<option value="0" class="dclass">0</option>
-	<option value="1" class="dclass">1</option>
+	<option value="&1&amp;" class="dclass">1</option>
 	<option value="2" class="dclass">2</option>
 	<option value="3" class="dclass">3</option>
 	<option value="4" class="dclass">4</option>
@@ -310,7 +310,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 	    <table id="basicForm:shipType" class="someStyleClass" style="someStyle">
 	<tr>
 <td>
-<input type="radio" name="basicForm:shipType" id="basicForm:shipType:0" value="nextDay@" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:0" class="disabledClass"> Next Day</label></td>
+<input type="radio" name="basicForm:shipType" id="basicForm:shipType:0" value="nextDay&" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:0" class="disabledClass"> Next Day</label></td>
 <td>
 <input type="radio" name="basicForm:shipType" id="basicForm:shipType:1" value="nextWeek" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:1" class="disabledClass"> &lt;Next Week&gt;</label></td>
 <td>
@@ -620,7 +620,7 @@ brackets&lt;/i&gt; on this text
 
 <tr><td>
 
-<span id="basicForm:value7">7. You should see the &lt;i&gt;angle brackets&lt;/i&gt; on
+<span id="basicForm:value7">7. &amp; You should see the &lt;i&gt;angle brackets&lt;/i&gt; on
 this text</span>
 
 </td>
