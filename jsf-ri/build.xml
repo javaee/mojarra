@@ -51,22 +51,8 @@
   <!-- The home directory for Ant -->
   <property name="ant.home" value="${basedir}/lib"/>
 
-  <!-- Application name to deploy under tomcat -->
-  <property name="app.name"       value="fruitstand"/>
- 
-  <!-- Directory name to deploy app.name under tomcat -->
-  <property name="deploy.home"  value="${tomcat.home}/webapps/${app.name}"/>
-
   <!-- Name of ultra-simple web-app -->
   <property name="basic.name"  value="basic"/>
-
-  <!-- Name of cardemo web-app -->
-  <property name="cardemo.name"  value="cardemo"/>
-
-  <!-- Directory name to deploy app.name under tomcat -->
-  <property name="basic.home"  value="${tomcat.home}/webapps/${basic.name}"/>
-
-  <property name="cardemo.home"  value="${tomcat.home}/webapps/${cardemo.name}"/>
 
   <property name="spec.pdf"  value="${basedir}/docs/JSF_LATEST.pdf"/>
 
@@ -111,6 +97,16 @@
     <pathelement location="${jstl.jar}"/>
     <pathelement location="${jstl_el.jar}"/>
   </path>
+
+  <!-- Custom Tomcat Integration -->
+  <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask"/>
+  <taskdef  name="list"     classname="org.apache.catalina.ant.ListTask"/>
+  <taskdef  name="reload"   classname="org.apache.catalina.ant.ReloadTask"/>
+  <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask"/>
+  <property name="context.path" value="/basic"/>
+  <property name="password" value="tomcat"/>
+  <property name="url"      value="http://localhost:8080/manager"/>
+  <property name="username" value="tomcat"/>
 
 
     <!-- Directory where core struts library configurations files are stored -->
@@ -177,7 +173,7 @@
 
     </target>
 
-  <target name="clean" depends="clean.tomcat"
+  <target name="clean" 
    description="Clean build and distribution directories">
     <delete    dir="${build.home}"/>
     <delete    dir="${dist.home}"/>
@@ -187,13 +183,6 @@
     </delete>
     <delete file="jsf-${version}.zip"/>
     <delete file="jsf-${version}_src.zip"/>
-  </target>
-
-  <target name="clean.tomcat"
-   description="Clean tomcat of anything we've put in it">
-    <delete    dir="${deploy.home}"/>
-    <delete    dir="${basic.home}"/>
-    <delete    dir="${cardemo.home}"/>
   </target>
 
   <target name="create.source.bundle" depends="clean">
@@ -211,94 +200,7 @@
 
   </target>
 
-
-  <target name="compile.sample" 
-	  description="Compile java files in the sample app named app.name">
-    <mkdir dir="${build.home}/${app.name}/WEB-INF/classes"/>
-    <javac  srcdir="${basedir}/web/${app.name}/WEB-INF/src"
-           destdir="${build.home}/${app.name}/WEB-INF/classes"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}">
-      <classpath refid="compile.classpath"/>
-    </javac>
-    <copy todir="${build.home}/${app.name}/WEB-INF/classes">
-        <fileset dir="${basedir}/web/${app.name}/WEB-INF/src" 
-                 includes="**/*.properties"/>
-    </copy>
-  </target>
-
-  <target name="build.war" depends="clean,prepare,compile,compile.sample,jars" >
-     <!-- name of the war file -->
-     <property name="dist.war"  value="${app.name}.war"/>
-     <mkdir  dir="${dist.home}/${app.name}"/>
-
-     <!-- copy app.name directory under dist.home -->
-    <copy todir="${dist.home}/${app.name}">
-      <fileset dir="${basedir}/web/${app.name}" />
-    </copy>
-
-    <!-- copy all the classes under ${app.name} package -->
-    <copy todir="${dist.home}/${app.name}">
-      <fileset dir="${build.home}/${app.name}"/>
-    </copy>
-
-    <mkdir dir="${dist.home}/${app.name}/WEB-INF/classes" />
-
-    <!-- copy dependent libs -->
-    <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
-    <copy  file="${commons.collections.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
-    <copy  file="${commons.digester.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
-    <copy  file="${commons.logging.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
-
-    <copy  file="${jsf-api.jar}"
-           todir="${dist.home}/${app.name}/WEB-INF/lib"/>
-    <copy  file="${build.home}/lib/${name}.jar"
-           todir="${dist.home}/${app.name}/WEB-INF/lib"/>
-
-
-    <!-- create a war file for distribution -->
-    <jar jarfile="${dist.home}/${dist.war}"
-         basedir="${dist.home}/${app.name}"/>
-  </target>
-
-  <!-- deploy the web-app under tomcat. tomcat_home needs to be set prior
-       to running this target -->
-
-  <target name="deploy.tomcat" depends="prepare,compile,compile.sample,clean.tomcat,jars">
-
-    <!-- copy app.name directory to tomcat/webapps -->
-    <copy todir="${deploy.home}">
-      <fileset dir="${basedir}/web/${app.name}" />
-    </copy>
-
-    <!-- copy all the classes under ${app.name} package -->
-    <copy todir="${deploy.home}">
-      <fileset dir="${build.home}/${app.name}"/>
-    </copy>
-
-    <mkdir dir="${deploy.home}/WEB-INF/classes" />
-    <!-- copy dependent libs to tomcat/libs -->
-    <copy  file="${commons.beanutils.jar}" todir="${deploy.home}/WEB-INF/lib"/>
-    <copy  file="${commons.collections.jar}" todir="${deploy.home}/WEB-INF/lib"/>
-    <copy  file="${commons.digester.jar}" todir="${deploy.home}/WEB-INF/lib"/>
-    <copy  file="${commons.logging.jar}" todir="${deploy.home}/WEB-INF/lib"/>
-    <copy  file="${jsf-api.jar}" 
-           todir="${deploy.home}/WEB-INF/lib"/>
-    <copy  file="${build.home}/lib/${name}.jar"  
-           todir="${deploy.home}/WEB-INF/lib"/>
-
-  </target>
-
-  <target name="deploy.tomcat.basic" depends="build.basic.war">
-    <unjar  src="${dist.home}/basic.war" dest="${basic.home}"/>
-  </target>
-
-  <target name="deploy.tomcat.cardemo" depends="build.cardemo.war">
-    <unjar  src="${dist.home}/cardemo.war" dest="${cardemo.home}"/>
-  </target>
-
-  <target name="all" depends="clean,prepare,compile,build.war,deploy.tomcat"
+  <target name="all" depends="clean,prepare,compile,build.basic.war"
    description="Clean and compile all components"/>
 
   <target name="dist" depends="jars">
@@ -410,7 +312,7 @@
     </target>
 
     <!-- builds"basic" sample app -->
-    <target name="build.basic.war" depends="clean.tomcat,prepare,compile,jars,compile.basic.sample" >
+    <target name="build.basic.war" depends="prepare,compile,jars,compile.basic.sample" >
      <!-- name of the war file -->
      <property name="dist.war"  value="${basic.name}.war"/>
 
@@ -440,46 +342,12 @@
 
     <!-- create a war file for distribution -->
     <jar jarfile="${dist.home}/${dist.war}"
-         basedir="${dist.home}/${basic.name}"/>
-
-    <copy file="${dist.home}/${dist.war}" toDir="${tomcat.home}/webapps"/>
-  </target>
-
-    <!-- builds"cardemo" sample app -->
-    <target name="build.cardemo.war" depends="clean.tomcat,prepare,compile,jars,compile.cardemo.sample" >
-     <!-- name of the war file -->
-     <property name="dist.war"  value="${cardemo.name}.war"/>
-
-     <mkdir  dir="${dist.home}/${cardemo.name}"/>
-
-     <!-- copy cardemo.directory under dist.home -->
-    <copy todir="${dist.home}/${cardemo.name}">
-      <fileset dir="${basedir}/web/${cardemo.name}" />
-    </copy>
-
-    <!-- copy all the classes under cardemo package -->
-    <copy todir="${dist.home}/${cardemo.name}">
-      <fileset dir="${build.home}/${cardemo.name}"/>
-    </copy>
-
-    <!-- copy dependent libs -->
-    <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
-    <copy  file="${commons.collections.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
-    <copy  file="${commons.digester.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
-    <copy  file="${commons.logging.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
-    <copy file="${jsf-api.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
-    <copy file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
-
-    <!-- create a war file for distribution -->
-    <jar jarfile="${dist.home}/${dist.war}"
-         basedir="${dist.home}/${cardemo.name}"/>
-
-    <copy file="${dist.home}/${dist.war}" toDir="${tomcat.home}/webapps"/>
+         basedir="${dist.home}/${basic.name}"/> 
 
   </target>
 
   <target name="compile.basic.sample"
-          description="Compile java files in the sample app named app.name">
+          description="Compile java files in the sample app named basic.name">
     <property name="basic.name"  value="basic"/>
     <mkdir dir="${build.home}/${basic.name}/WEB-INF/classes"/>
     <javac  srcdir="${basedir}/web/${basic.name}/WEB-INF/src"
@@ -495,23 +363,6 @@
     </copy>
   </target>
 
-  <target name="compile.cardemo.sample"
-          description="Compile java files in the sample app named app.name">
-    <property name="cardemo.name"  value="cardemo"/>
-    <mkdir dir="${build.home}/${cardemo.name}/WEB-INF/classes"/>
-    <javac  srcdir="${basedir}/web/${cardemo.name}/WEB-INF/src"
-           destdir="${build.home}/${cardemo.name}/WEB-INF/classes"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}">
-      <classpath refid="compile.classpath"/>
-    </javac>
-    <copy todir="${build.home}/${cardemo.name}/WEB-INF/classes">
-        <fileset dir="${basedir}/web/${cardemo.name}/WEB-INF/src"
-                 includes="**/*.properties"/>
-    </copy>
-  </target>
-
   <!-- 
        =================================================================== 
          Create the jars
@@ -523,6 +374,38 @@
     </jar>
 
   </target>
+
+
+<!--
+       ===================================================================
+         Tomcat integration targets
+       ===================================================================
+  -->
+
+  <target name="install" depends="build.basic.war"
+   description="Install webapp on Tomcat">
+    <install url="${url}" username="${username}" password="${password}"
+            path="${context.path}"
+             war="file://${dist.home}/${basic.name}"/>
+  </target>
+
+  <target name="list"
+   description="List installed webapps on Tomcat">
+    <list url="${url}" username="${username}" password="${password}"/>
+  </target>
+
+  <target name="reload" depends="build.basic.war"
+   description="Reload this webapp on Tomcat">
+    <reload url="${url}" username="${username}" password="${password}"
+            path="${context.path}"/>
+  </target>
+
+  <target name="remove"
+   description="Remove this webapp from Tomcat">
+    <remove url="${url}" username="${username}" password="${password}"
+            path="${context.path}"/>
+  </target>
+
 
   <!-- 
        =================================================================== 
