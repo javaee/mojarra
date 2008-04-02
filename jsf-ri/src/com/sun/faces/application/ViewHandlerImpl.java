@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.30 2004/01/20 04:51:42 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.31 2004/01/21 01:12:47 craigmcc Exp $ 
  */ 
 
 
@@ -46,7 +46,7 @@ import java.util.Map;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.30 2004/01/20 04:51:42 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.31 2004/01/21 01:12:47 craigmcc Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -232,11 +232,7 @@ public class ViewHandlerImpl extends Object
                 if (log.isDebugEnabled()) {
                     log.debug("Response Complete for" + viewId);
                 }
-                // PENDING -- Need to consider Portlets
-                if (response instanceof HttpServletResponse) {
-                    ((HttpServletResponse) response).sendRedirect(
-                        extContext.getRequestContextPath());
-                }
+		extContext.redirectMessage(extContext.getRequestContextPath());
             } catch (IOException ioe) {
                 throw new FacesException(ioe);
             }           
