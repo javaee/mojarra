@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainer.java,v 1.2 2002/12/17 23:30:50 eburns Exp $
+ * $Id: NamingContainer.java,v 1.3 2002/12/23 22:59:34 eburns Exp $
  */
 
 /*
@@ -66,8 +66,33 @@ public interface NamingContainer {
 
     /**
 
+    * <p>Find a component in this namespace.</p>
+
+    * <p>If the argument name does not contain any {@link
+    * UIComponent#SEPARATOR_CHAR} characters, it is interpreted to be a
+    * name in the namespace of this naming container.</p>
+
+    * <p>If the argument name does contain {@link
+    * UIComponent#SEPARATOR_CHAR} characters, each segment between
+    * {@link UIComponent#SEPARATOR_CHAR} is treated as a component
+    * identifier in its own namespace.</p>
+
+    * <p>Consider the following usage:
+    * <code>namingComponent.findComponent(&quot;containerOne.containerTwo.leafTwo&quot;)</code>,
+    * where <code>namingComponent</code> is a <code>UIComponent</code>
+    * that implements <code>NamingContainer</code>.  This call will end
+    * up calling <code>findComponentInNamespace()</code>.  The first two
+    * segments must be the component identifiers of NamingContainer
+    * instances.  <code>containerOne</code> is in
+    * <code>namingComponent</code>'s namespace,
+    * <code>containerTwo</code> is in <code>containerOne</code>'s
+    * namespace, and <code>leafTwo</code> is in
+    * <code>containerTwo</code>'s namespace.</p>
+
     * @return the component stored in the namespace under the argument
     * name, or null if not found.
+
+    * @throws IllegalArgumentException if name is malformed.
 
     */ 
 

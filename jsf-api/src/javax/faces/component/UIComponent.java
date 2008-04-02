@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.58 2002/12/17 23:30:51 eburns Exp $
+ * $Id: UIComponent.java,v 1.59 2002/12/23 22:59:35 eburns Exp $
  */
 
 /*
@@ -330,10 +330,12 @@ public interface UIComponent extends Serializable {
 
 
     /**
+       
+    * <p>Find the named component by locating the closest ancestor to
+    * this component that is a naming container and calling its
+    * <code>{@link NamingContainer#findComponentInNamespace}</code> method.</p>
 
-     * <p>Find a component in the current component tree by asking 
-     * each naming container in the tree from this component to the root 
-     * for the named component.</p>
+    * @see NamingContainer#findComponentInNamespace
 
      * @return the found component, or null if the component was not
      * found.

@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerImpl.java,v 1.3 2002/12/18 17:44:14 eburns Exp $
+ * $Id: NamingContainerImpl.java,v 1.4 2002/12/23 22:59:34 eburns Exp $
  */
 
 /*
@@ -77,10 +77,37 @@ public class NamingContainerImpl extends Object implements NamingContainer, Seri
 
     public synchronized UIComponent findComponentInNamespace(String name) {
 	UIComponent result = null;
+	int i = 0;
 	if (null == namespace) {
 	    return null;
 	}
-	return (UIComponent) namespace.get(name);
+	// If this is a simple name
+	if (-1 == (i = name.indexOf(UIComponent.SEPARATOR_CHAR))) {
+	    result = (UIComponent) namespace.get(name);
+	}
+	else {
+	    // Make sure the SEPARATOR_CHAR is not the last char in name
+	    if (name.length() == (i+1)) {
+		throw new IllegalArgumentException(name);
+	    }
+
+	    String 
+		first = name.substring(0, i),
+		rest = name.substring(i+1);
+	    NamingContainer namingContainerChild = null;
+	    try {
+		if (null != (namingContainerChild = (NamingContainer)
+			     this.findComponentInNamespace(first))) {
+		    result = 
+			namingContainerChild.findComponentInNamespace(rest);
+		}
+	    }
+	    catch (ClassCastException e) {
+		throw new IllegalArgumentException(e.getMessage());
+	    }
+	}
+	
+	return result;
     }
 
     public synchronized String generateClientId() {
