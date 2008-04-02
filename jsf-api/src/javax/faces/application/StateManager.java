@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.24 2003/12/22 23:25:42 eburns Exp $
+ * $Id: StateManager.java,v 1.25 2004/01/05 18:45:21 rlubke Exp $
  */
 
 /*
@@ -262,7 +262,6 @@ public abstract class StateManager {
      *
      * @param state the state of the rendered view, obtained from
      * {@link #saveSerializedView}.
-     * @return Object response to be sent to client.
      *
      */
     public abstract void writeState(FacesContext context,
