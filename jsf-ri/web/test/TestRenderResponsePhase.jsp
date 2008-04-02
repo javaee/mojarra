@@ -214,7 +214,7 @@
 
 	     <h:selectone_listbox styleClass="selectoneClass"
                      title="Select Quantity"
-                     accesskey="N" tabindex="20" >
+                     tabindex="20" >
 
                 <h:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
                 <h:selectitem  itemValue="1" itemLabel="1" title="One"/>

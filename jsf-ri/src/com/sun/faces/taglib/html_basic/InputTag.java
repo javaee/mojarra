@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.17 2003/10/08 00:43:23 rlubke Exp $
+ * $Id: InputTag.java,v 1.18 2003/10/13 22:56:23 jvisvanathan Exp $
  */
 
 /*
@@ -37,8 +37,6 @@ public abstract class InputTag extends BaseComponentTag
     //
 
     // Attribute Instance Variables
-    protected String label = null;
-    protected String label_ = null;
     protected boolean required = false;
     // Relationship Instance Variables
 
@@ -57,11 +55,6 @@ public abstract class InputTag extends BaseComponentTag
     
      public void setRequired(boolean newVal) {
 	required = newVal;
-    }
-
-    public void setLabel(String newLabel)
-    {
-        label_ = newLabel;
     }
 
     //
@@ -96,26 +89,6 @@ public abstract class InputTag extends BaseComponentTag
     }
 
     public String getComponentType() { return "Input"; }
-    
-
-    /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
-        if (label_ != null) {
-            label = Util.evaluateElExpression(label_, pageContext);
-   	}
-    }
-
-    //
-    // Methods from TagSupport
-    //
-
-    public int doStartTag() throws JspException {
-        // evaluate any expressions that we were passed
-        evaluateExpressions();
-
-        // chain to the parent implementation
-        return super.doStartTag();
-    }
-
+   
     
 } // end of class Input_DateTag

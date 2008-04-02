@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.101 2003/10/11 04:53:03 horwat Exp $
+ * $Id: Util.java,v 1.102 2003/10/13 22:56:26 jvisvanathan Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.101 2003/10/11 04:53:03 horwat Exp $ 
+ * @version $Id: Util.java,v 1.102 2003/10/13 22:56:26 jvisvanathan Exp $ 
  */
 
 public class Util extends Object
@@ -369,7 +369,12 @@ public class Util extends Object
         "accept", 
         "target", 
         "onsubmit", 
-        "onreset"
+        "onreset",
+        "rel",
+        "rev",
+        "shape",
+        "coords",
+        "hreflang"
     };
 
 private static long id = 0;

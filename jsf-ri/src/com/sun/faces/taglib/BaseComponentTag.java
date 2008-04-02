@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.6 2003/10/09 20:02:22 jvisvanathan Exp $
+ * $Id: BaseComponentTag.java,v 1.7 2003/10/13 22:56:22 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.6 2003/10/09 20:02:22 jvisvanathan Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.7 2003/10/13 22:56:22 jvisvanathan Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -109,6 +109,7 @@ public abstract class BaseComponentTag extends UIComponentTag
     
     protected int border = Integer.MIN_VALUE;
     protected boolean readonly = false;
+    protected boolean ismap = false;
     protected int maxlength = Integer.MIN_VALUE;
     protected int rows = Integer.MIN_VALUE;
     protected int cols = Integer.MIN_VALUE;
@@ -150,8 +151,7 @@ public abstract class BaseComponentTag extends UIComponentTag
     protected String hreflang_ = null;
     protected String hspace = null;
     protected String hspace_ = null;
-    protected String ismap = null;
-    protected String ismap_ = null;
+    
     protected String label = null;
     protected String label_ = null;
     protected String longdesc = null;
@@ -411,9 +411,9 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     // Use server side image map - For IMG/INPUT HTML elements
 
-    public void setIsmap(String newIsmap)
+    public void setIsmap(boolean newIsmap)
     {
-        ismap_ = newIsmap;
+        ismap = newIsmap;
     }
 
     // For OPTION/OPTGROUP HTML elements
@@ -832,9 +832,6 @@ public abstract class BaseComponentTag extends UIComponentTag
         if (hspace_ != null) {
             hspace = Util.evaluateElExpression(hspace_, pageContext);
         }
-        if (ismap_ != null) {
-            ismap = Util.evaluateElExpression(ismap_, pageContext);
-        }
         if (label_ != null) {
             label = Util.evaluateElExpression(label_, pageContext);
         }
@@ -1068,13 +1065,6 @@ public abstract class BaseComponentTag extends UIComponentTag
         if (null != styleClass) {
             component.getAttributes().put("styleClass", styleClass);
         }
-        if (null != dateStyle) {
-            component.getAttributes().put("dateStyle", dateStyle);
-        }
-        if (null != timeStyle) {
-            component.getAttributes().put("timeStyle", timeStyle);
-        }
-
     }
 
     protected String getDebugString() {

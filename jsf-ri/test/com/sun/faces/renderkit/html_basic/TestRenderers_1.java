@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.45 2003/10/08 00:43:26 rlubke Exp $
+ * $Id: TestRenderers_1.java,v 1.46 2003/10/13 22:56:27 jvisvanathan Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.45 2003/10/08 00:43:26 rlubke Exp $
+ * @version $Id: TestRenderers_1.java,v 1.46 2003/10/13 22:56:27 jvisvanathan Exp $
  * 
  *
  */
@@ -132,6 +132,8 @@ public class TestRenderers_1 extends JspFacesTestCase
     // General Methods
     //
     public void testRenderers() {
+//        com.sun.faces.util.DebugUtil.waitForDebugger();
+        
         Map sessionMap = getFacesContext().getExternalContext().getSessionMap();
         // Spoof a setBundle action...
         LocalizationContext locContext = new LocalizationContext(new Messages_en(), Locale.ENGLISH);
@@ -215,10 +217,16 @@ public class TestRenderers_1 extends JspFacesTestCase
         getFacesContext().getResponseWriter().writeText("\n", null);
 
         // All lookup methods fail, test of hyperlink should be empty
+        
         uiCommand = new UICommand();
         uiCommand.setId("labelLink4");
         uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
         uiCommand.getAttributes().put("key", "non.key");
+        uiCommand.getAttributes().put("rel", "rel");
+        uiCommand.getAttributes().put("rev", "rev");
+        uiCommand.getAttributes().put("shape", "shape");
+        uiCommand.getAttributes().put("coords", "coords");
+        uiCommand.getAttributes().put("hreflang", "hreflang");
         uiCommand.setValueRef("NonBean.label");
         root.getChildren().add(uiCommand);
         System.out.println("Testing empty label...");

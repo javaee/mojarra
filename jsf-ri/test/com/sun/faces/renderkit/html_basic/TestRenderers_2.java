@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.62 2003/10/07 14:02:06 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.63 2003/10/13 22:56:28 jvisvanathan Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.62 2003/10/07 14:02:06 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.63 2003/10/13 22:56:28 jvisvanathan Exp $
  * 
  *
  */
@@ -408,6 +408,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         UIGraphic img = new UIGraphic();
         img.setURL("/nonModelReferenceImage.gif");
         img.setId("myGraphicImage");
+        img.getAttributes().put("ismap", new Boolean(true));
+        img.getAttributes().put("usemap", "usemap");
         root.getChildren().add(img);
 
         ImageRenderer imageRenderer = new ImageRenderer();
@@ -426,6 +428,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing graphic support of modelReference...");
 	root.getChildren().remove(img);
 	img = new UIGraphic();
+        img.getAttributes().put("ismap", new Boolean(true));
+        img.getAttributes().put("usemap", "usemap");
 	root.getChildren().add(img);
 	TestBean testBean = (TestBean) 
 	    (Util.getValueBinding("TestBean")).getValue(getFacesContext());

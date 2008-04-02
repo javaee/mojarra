@@ -226,7 +226,7 @@
                 
                 
 
-              <span class="selectoneClass"><select name="basicForm:_id2" accesskey="N" size="10" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
+              <span class="selectoneClass"><select name="basicForm:_id2" size="10" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
 	<option value="1" title="One">1</option>
 	<option value="2" title="Two">2</option>
 	<option value="3" title="Three">3</option>

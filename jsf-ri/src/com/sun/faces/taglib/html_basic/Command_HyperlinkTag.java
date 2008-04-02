@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.41 2003/10/07 22:02:08 rlubke Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.42 2003/10/13 22:56:23 jvisvanathan Exp $
  */
 
 /*
@@ -109,6 +109,25 @@ public class Command_HyperlinkTag extends BaseComponentTag
             link.getAttributes().put("image", image);
         }
 	link.setImmediate(immediate);
+        // set HTML 4. attributes.
+        if (shape != null) {
+            link.getAttributes().put("shape", shape);
+        }
+        if (coords != null) {
+            link.getAttributes().put("coords", coords);
+        }
+        if (rel != null) {
+            link.getAttributes().put("rel", rel);
+        }
+        if (rev != null) {
+            link.getAttributes().put("rev", rev);
+        }
+        if (hreflang != null) {
+            link.getAttributes().put("hreflang", hreflang);
+        }
+        if (charset != null) {
+            link.getAttributes().put("charset", charset);
+        }
     }
 
     /* Evaluates expressions as necessary */

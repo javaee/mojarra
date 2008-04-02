@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.62 2003/10/02 00:39:59 jvisvanathan Exp $
+ * $Id: HyperlinkRenderer.java,v 1.63 2003/10/13 22:56:21 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.62 2003/10/02 00:39:59 jvisvanathan Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.63 2003/10/13 22:56:21 jvisvanathan Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -155,6 +155,8 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	StringBuffer sb = new StringBuffer();
 	writer.startElement("a", component);
 	writer.writeAttribute("href", "#", "href");
+        Util.renderPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer, component);
 	sb = new StringBuffer();
 	sb.append("document.forms[");
 	sb.append("");

@@ -1,5 +1,5 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.16 2003/10/09 20:02:22 jvisvanathan Exp $
+ * $Id: Graphic_ImageTag.java,v 1.17 2003/10/13 22:56:23 jvisvanathan Exp $
  */
 
 /*
@@ -87,8 +87,9 @@ public class Graphic_ImageTag extends BaseComponentTag
         if (usemap != null) {
             component.getAttributes().put("usemap", usemap);
         }
-        if (ismap != null) {
-            component.getAttributes().put("ismap", ismap);
+        if (ismap) {
+            component.getAttributes().put("ismap",
+                    ismap ? Boolean.TRUE : Boolean.FALSE);
         }
         if (alt != null) {
             component.getAttributes().put("alt", alt);
