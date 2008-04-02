@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.23 2005/05/05 20:51:15 edburns Exp $
+ * $Id: MockApplication.java,v 1.24 2005/07/14 15:21:19 edburns Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ import javax.el.MethodExpression;
 import javax.el.ELException;
 import javax.el.ELContextListener;
 
-import org.apache.commons.el.ExpressionFactoryImpl;
+import com.sun.el.ExpressionFactoryImpl;
 
 public class MockApplication extends Application {
 
