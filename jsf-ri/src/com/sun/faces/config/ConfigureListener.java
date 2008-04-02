@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.76 2006/05/22 22:38:07 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.77 2006/05/22 22:54:14 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -522,10 +522,10 @@ public class ConfigureListener implements ServletContextListener {
                 }
                 releaseDigester(digester);
             }
-            tlsExternalContext.set(null);
-            ApplicationAssociate.getInstance(context)
+             ApplicationAssociate.getInstance(tlsExternalContext.get())
                   .setContextName(getServletContextIdentifier(context));
-
+            tlsExternalContext.set(null);
+           
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO,
                            "jsf.config.listener.version.complete",
@@ -549,7 +549,7 @@ public class ConfigureListener implements ServletContextListener {
             FactoryFinder.releaseFactories();
             tlsExternalContext.set(new ServletContextAdapter(context));
             ApplicationAssociate
-                  .clearInstance((ExternalContext) tlsExternalContext.get());
+                  .clearInstance(tlsExternalContext.get());
 
             // Release the initialization mark on this web application
             release();
