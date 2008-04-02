@@ -95,7 +95,7 @@ public class BasicApplicationHandler implements ApplicationHandler{
             TreeFactory treeFactory = (TreeFactory)
             FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
             Assert.assert_it(null != treeFactory);
-            context.setResponseTree(treeFactory.getTree(context,treeId));
+            context.setTree(treeFactory.getTree(context,treeId));
         }
 
         return returnValue;

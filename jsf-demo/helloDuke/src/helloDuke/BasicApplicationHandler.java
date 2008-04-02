@@ -52,12 +52,6 @@ import javax.faces.event.FormEvent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.CommandEvent;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.ServletContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
@@ -97,7 +91,7 @@ public class BasicApplicationHandler implements ApplicationHandler{
             TreeFactory treeFactory = (TreeFactory)
             FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
             Assert.assert_it(null != treeFactory);
-            context.setResponseTree(treeFactory.getTree(context,treeId));
+            context.setTree(treeFactory.getTree(context,treeId));
         }
 
         return returnValue;
