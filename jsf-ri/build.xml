@@ -452,6 +452,33 @@
            Temporary Testing Targets
          ===================================================================
     -->
+<target name="push-to-maven-prepare">
+  <taskdef resource="maven-repository-importer.properties">
+    <classpath>
+      <pathelement path="${maven.repository.importer.jar}" />
+    </classpath>
+  </taskdef>
+  <delete dir="${build.dir}/maven-repo" /><!-- clean it -->
+  <maven-repository-importer destdir="${build.dir}/maven-repo" version="${snapshot.version}">
+    <artifact jar="${build.dir}/lib/jsf-impl.jar"  pom="jsf-impl.pom" />
+  </maven-repository-importer>
+</target>
+
+<target name="push-to-maven" depends="push-to-maven-prepare">
+  <!-- import to CVS-->
+  <tstamp />
+  <echo>importing to CVS...</echo>
+  <cvs dest="${build.dir}/maven-repo">
+    <commandline>
+      <argument value="-d:pserver:${user.name}@cvs.dev.java.net:/cvs" />
+      <argument line="-z9 import -ko -W *.jar -kb -m" />
+      <argument value="deploying new jars to the java.net maven repository" />
+
+      <argument value="javaserverfaces-sources/repo" />
+      <argument line="deployment-to-maven-repository t${DSTAMP}${TSTAMP}" />
+    </commandline>
+  </cvs>
+</target>
 
    
     

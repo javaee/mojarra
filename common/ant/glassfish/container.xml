@@ -133,6 +133,8 @@ grant {
     <!-- Require target to display information about the build environment -->
     <target name="props">
         <echo message="PENDING - Please add a message"/>            
+        <echo message="container.home->${container.home}" />
+        <echo message="javaee.jar->${container.home}/lib/javaee.jar" />
     </target>
     
     <target name="update.impl.manifest">

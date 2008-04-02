@@ -87,7 +87,9 @@
     <property name="impl.name"
               value="Sun Microsystems JavaServer Faces Implementation"/>
     <property name="build.number" value="NIGHTLY_${DSTAMP}"/>
-    <property name="impl.version" value="1.2_01-${build.number}"/>
+    <property name="impl.version.number" value="1.2_01" />
+    <property name="impl.version" value="${impl.version.number}-${build.number}"/>
+    <property name="snapshot.version" value="${impl.version.number}-SNAPSHOT"/>
 
     <!-- Environment -->
     <property environment="myenv" />

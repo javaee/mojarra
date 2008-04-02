@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-
-<project xmlns:ant="jelly:ant">
-
-  <property file="${user.home}/build.properties"/>
-  <property file="../../build.properties"/>
-
-</project>

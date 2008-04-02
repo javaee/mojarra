@@ -33,6 +33,7 @@
            Cactus 1.3-1.7.1
            JUnit 3.8.1
            Taglibrary Document Generator 1.3
+           Maven java.net repository importer 1.1
     -->
 
     <property name="dependency.base.dir" 
@@ -41,6 +42,7 @@
     <property name="htmlunit.version" value="1.8"/>
     <property name="cactus.version" value="13-1.7.1"/>
     <property name="taglibdoc.version" value="1.3"/>
+    <property name="maven.repository.importer.version" value="1.1"/>
 
     <property name="junit.home"
               value="${dependency.base.dir}/junit${junit.version}"/>
@@ -50,8 +52,13 @@
               value="${dependency.base.dir}/jakarta-cactus-${cactus.version}"/>
     <property name="taglibdoc.home"
               value="${dependency.base.dir}/taglibrarydoc-${taglibdoc.version}"/>
+    <property name="maven.repository.importer.home"
+              value="${dependency.base.dir}/maven-repository-importer-${maven.repository.importer.version}"/>
+
     <property name="tlddoc.jar"
               value="${taglibdoc.home}/tlddoc-${taglibdoc.version}.jar"/>
+    <property name="maven.repository.importer.jar"
+              value="${maven.repository.importer.home}/maven-repository-importer-${maven.repository.importer.version}.jar"/>
 
     <target name="update" description="Download project dependencies">
         <!-- setup the proxy if necessary -->
@@ -127,6 +134,22 @@
                       dir="${taglibdoc.home}"/>
                 <get src="http://www.ibiblio.org/maven/taglibrarydoc/jars/tlddoc-${taglibdoc.version}.jar"
                      dest="${taglibdoc.home}/tlddoc-${taglibdoc.version}.jar"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
+
+        <!-- MAVEN REPOSITORY IMPORTER -->
+        <if>
+            <not>
+                <available file="${maven.repository.importer.home}"
+                           property="ignored"/>
+            </not>
+            <then>
+                <mkdir
+                      dir="${maven.repository.importer.home}"/>
+                <get src="https://maven-repository.dev.java.net/nonav/repository/com.sun.wts.tools.mri/jars/maven-repository-importer-${maven.repository.importer.version}.jar"
+                     dest="${maven.repository.importer.home}/maven-repository-importer-${maven.repository.importer.version}.jar"
                      usetimestamp="true"/>
 
             </then>
