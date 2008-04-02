@@ -36,8 +36,6 @@
   <!-- The locations of necessary jar files -->
   <property name="junit.jar" 
             value="${tomcat.home}/../junit3.8.1/junit.jar"/>
-  <property name="ant.jar"
-            value="${myenv.ANT_HOME}/lib/ant.jar" />
   <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
   <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
   <property name="commons-logging.jar" 
@@ -49,9 +47,7 @@
   <property name="commons-beanutils.jar" 
             value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
   <property name="xerces.jar" value="${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar"/>
-  <property name="dom.jar" value="${tomcat.home}/jaxp/lib/endorsed/dom.jar"/>
-  <property name="sax.jar" value="${tomcat.home}/jaxp/lib/endorsed/sax.jar"/>
-  <property name="jaxp-api.jar" value="${tomcat.home}/jaxp/lib/jaxp-api.jar"/>
+  <property name="dom.jar.dir" value="${tomcat.home}/jaxp/lib/endorsed"/>
   <property name="jcov.jar" 
             value="${tomcat.home}/../jcov/lib/jcov.jar"/>
 
@@ -84,7 +80,6 @@
     <pathelement location="${build.classes}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/>
-    <pathelement location="${ant.jar}"/>
   </path>
 
   <path id="run.classpath">
@@ -98,8 +93,6 @@
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-beanutils.jar}"/>
     <pathelement location="${xerces.jar}"/>
-    <pathelement location="${sax.jar}"/>
-    <pathelement location="${jaxp-api.jar}"/>
   </path>
 
   <!--
@@ -173,14 +166,11 @@ necessary to generate required classes.
     <echo      message="commons-collections.jar = ${commons-collections.jar}"/>
     <echo      message="commons-digester.jar =    ${commons-digester.jar}"/>
     <echo      message="commons-logging.jar =     ${commons-logging.jar}"/>
-    <echo      message="dom.jar =                 ${dom.jar}"/>
-    <echo      message="jaxp-api.jar =            ${jaxp-api.jar}"/>
     <echo      message="jsp.jar =                 ${jsp.jar}"/>
-    <echo      message="junit.jar =               ${junit.jar}"/>
-    <echo      message="sax.jar =                 ${sax.jar}"/>
+    <echo      message="junit.jar =               ${junit.jar}"/>  
     <echo      message="servlet.jar =             ${servlet.jar}"/>
     <echo      message="xerces.jar =              ${xerces.jar}"/>
-
+    <echo      message="dom.jar.dir =      ${dom.jar.dir}"/>
   </target>
 
   <target           name="generate.html"
@@ -194,12 +184,9 @@ necessary to generate required classes.
 
       <classpath   refid="compile.classpath"/>
       <classpath   refid="run.classpath"/>
-
-      <sysproperty   key="java.endorsed.dirs"
-                   value="${tomcat.home}/jaxp/lib/endorsed"/>
-
-      <sysproperty   key="org.apache.commons.logging.Log"
-                   value="${log.impl}"/>
+      
+      <sysproperty   key="java.endorsed.dirs" value="${dom.jar.dir}"/>
+      <sysproperty   key="org.apache.commons.logging.Log" value="${log.impl}"/>
       <sysproperty   key="org.apache.commons.logging.simplelog.defaultlog"
                    value="info"/>
       <sysproperty   key="org.apache.commons.logging.simplelog.log.com.sun.faces"
@@ -233,11 +220,8 @@ necessary to generate required classes.
                     destdir="${build.generate}" fork="yes"
                     copyright="${basedir}/COPYRIGHT"
                     tagdef="${basedir}/TAG-DEF">
-      <sysproperty   key="java.endorsed.dirs"
-                   value="${tomcat.home}/jaxp/lib/endorsed"/>
-
-      <sysproperty   key="org.apache.commons.logging.Log"
-                   value="${log.impl}"/>
+      <sysproperty   key="java.endorsed.dirs" value="${dom.jar.dir}"/> 
+      <sysproperty   key="org.apache.commons.logging.Log" value="${log.impl}"/>
       <sysproperty   key="org.apache.commons.logging.simplelog.defaultlog"
                    value="info"/>
       <sysproperty   key="org.apache.commons.logging.simplelog.log.com.sun.faces"
@@ -404,11 +388,8 @@ necessary to generate required classes.
       <jvmarg line="${debug.jvm.args}"/>
       <classpath   refid="compile.classpath"/>
       <classpath   refid="run.classpath"/>
-
-      <sysproperty   key="java.endorsed.dirs"
-                   value="${tomcat.home}/jaxp/lib/endorsed"/>
-      <sysproperty   key="org.apache.commons.logging.Log"
-                   value="${log.impl}"/>
+      <sysproperty   key="java.endorsed.dirs" value="${dom.jar.dir}"/> 
+      <sysproperty   key="org.apache.commons.logging.Log" value="${log.impl}"/>
       <sysproperty   key="org.apache.commons.logging.simplelog.defaultlog"
                    value="info"/>
       <sysproperty   key="org.apache.commons.logging.simplelog.log.com.sun.faces"

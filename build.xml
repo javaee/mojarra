@@ -159,12 +159,12 @@
   
   <javaNetUpload projectName="javaserverfaces" 
       toFile="/nightly/javaserverfaces_binary.class" fromFile="${basedir}/javaserverfaces_binary.class" 
-      fileDescription="Nightly snapshot.Use at own risk." overwrite="yes" />
+      fileDescription="Nightly snapshot. Run 'java -cp . javaserverfaces_binary' to install" overwrite="yes" />
   
      
   <javaNetUpload projectName="javaserverfaces" 
       toFile="/nightly/javaserverfaces_source.class" fromFile="${basedir}/javaserverfaces_source.class" 
-      fileDescription="Nightly source snapshot." overwrite="yes" /> 
+      fileDescription="Nightly source snapshot. Run 'java -cp . javaserverfaces_source' to install" overwrite="yes" /> 
   </target>
   
   <target name="weekly" depends="build.java.net" 
@@ -177,12 +177,12 @@
   
   <javaNetUpload projectName="javaserverfaces" 
       toFile="/weekly/javaserverfaces_binary.class" fromFile="${basedir}/javaserverfaces_binary.class" 
-      fileDescription="Weekly binary snapshot." overwrite="yes" />
+      fileDescription="Weekly binary snapshot. Run 'java -cp . javaserverfaces_binary' to install" overwrite="yes" />
   
      
   <javaNetUpload projectName="javaserverfaces" 
       toFile="/weekly/javaserverfaces_source.class" fromFile="${basedir}/javaserverfaces_source.class" 
-      fileDescription="Weekly source snapshot." overwrite="yes" /> 
+      fileDescription="Weekly source snapshot. Run 'java -cp . javaserverfaces_source' to install" overwrite="yes" /> 
   </target>
   
   <target name="main" description="Build API and RI" >

@@ -15,7 +15,8 @@
 <body>
 <h:outputText value="[A]"/>
 <f:subview id="foo02">
-<jsp:include page="Begin test <c:include> with subview tag in including page"/>
+<h:outputText value="Begin test <c:include> with subview tag in including page"/>
+<jsp:include page="bar01.jsp"/>
 </f:subview>
 <h:outputText value="subview04"/>
 <f:subview id="bar02">
