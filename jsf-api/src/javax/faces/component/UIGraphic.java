@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.32 2004/01/21 07:39:54 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.33 2004/01/21 19:23:14 craigmcc Exp $
  */
 
 /*
@@ -35,13 +35,13 @@ public class UIGraphic extends UIComponentBase {
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "Graphic";
+    public static final String COMPONENT_TYPE = "javax.faces.Graphic";
 
 
     /**
      * <p>The standard component family for this component.</p>
      */
-    public static final String COMPONENT_FAMILY = "Graphic";
+    public static final String COMPONENT_FAMILY = "javax.faces.Graphic";
 
 
     // ------------------------------------------------------------ Constructors

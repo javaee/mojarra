@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.25 2004/01/21 07:39:56 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.26 2004/01/21 19:23:15 craigmcc Exp $
  */
 
 /*
@@ -30,13 +30,13 @@ public class UIPanel extends UIComponentBase {
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "Panel";
+    public static final String COMPONENT_TYPE = "javax.faces.Panel";
 
 
     /**
      * <p>The standard component family for this component.</p>
      */
-    public static final String COMPONENT_FAMILY = "Panel";
+    public static final String COMPONENT_FAMILY = "javax.faces.Panel";
 
 
     // ------------------------------------------------------------ Constructors

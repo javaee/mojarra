@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.64 2004/01/21 07:39:55 craigmcc Exp $
+ * $Id: UIInput.java,v 1.65 2004/01/21 19:23:14 craigmcc Exp $
  */
 
 /*
@@ -86,13 +86,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "Input";
+    public static final String COMPONENT_TYPE = "javax.faces.Input";
 
 
     /**
      * <p>The standard component family for this component.</p>
      */
-    public static final String COMPONENT_FAMILY = "Input";
+    public static final String COMPONENT_FAMILY = "javax.faces.Input";
 
 
     /**

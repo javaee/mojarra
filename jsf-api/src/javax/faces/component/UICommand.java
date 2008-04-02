@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.64 2004/01/21 07:39:53 craigmcc Exp $
+ * $Id: UICommand.java,v 1.65 2004/01/21 19:23:12 craigmcc Exp $
  */
 
 /*
@@ -64,13 +64,13 @@ public class UICommand extends UIComponentBase
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "Command";
+    public static final String COMPONENT_TYPE = "javax.faces.Command";
 
 
     /**
      * <p>The standard component family for this component.</p>
      */
-    public static final String COMPONENT_FAMILY = "Command";
+    public static final String COMPONENT_FAMILY = "javax.faces.Command";
 
 
     // ------------------------------------------------------------ Constructors

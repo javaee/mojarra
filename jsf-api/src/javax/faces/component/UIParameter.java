@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.21 2004/01/21 07:39:56 craigmcc Exp $
+ * $Id: UIParameter.java,v 1.22 2004/01/21 19:23:16 craigmcc Exp $
  */
 
 /*
@@ -42,13 +42,13 @@ public class UIParameter extends UIComponentBase {
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "Parameter";
+    public static final String COMPONENT_TYPE = "javax.faces.Parameter";
 
 
     /**
      * <p>The standard component family for this component.</p>
      */
-    public static final String COMPONENT_FAMILY = "Parameter";
+    public static final String COMPONENT_FAMILY = "javax.faces.Parameter";
 
 
     // ------------------------------------------------------------ Constructors

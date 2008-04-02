@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.9 2004/01/21 07:39:55 craigmcc Exp $
+ * $Id: UIMessage.java,v 1.10 2004/01/21 19:23:14 craigmcc Exp $
  */
 
 /*
@@ -30,13 +30,13 @@ public class UIMessage extends UIComponentBase {
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "Message";
+    public static final String COMPONENT_TYPE = "javax.faces.Message";
 
 
     /**
      * <p>The standard component family for this component.</p>
      */
-    public static final String COMPONENT_FAMILY = "Message";
+    public static final String COMPONENT_FAMILY = "javax.faces.Message";
 
 
     // ------------------------------------------------------------ Constructors

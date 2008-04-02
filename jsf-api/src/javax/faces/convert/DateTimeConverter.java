@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.20 2004/01/15 06:03:34 eburns Exp $
+ * $Id: DateTimeConverter.java,v 1.21 2004/01/21 19:23:25 craigmcc Exp $
  */
 
 /*
@@ -73,9 +73,16 @@ import javax.faces.context.FacesContext;
 
 public class DateTimeConverter implements Converter, StateHolder {
 
-    // -------------------------------------------------------- Static Variables
-    
-    
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard converter id for this converter.</p>
+     */
+    public static final String CONVERTER_ID = "javax.faces.DateTime";
+
+
     private static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("GMT");
 
     

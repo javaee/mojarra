@@ -1,5 +1,5 @@
 /*
- * $Id: BigDecimalConverter.java,v 1.3 2004/01/10 03:16:30 eburns Exp $
+ * $Id: BigDecimalConverter.java,v 1.4 2004/01/21 19:23:24 craigmcc Exp $
  */
 
 /*
@@ -22,6 +22,15 @@ import java.math.BigDecimal;
  */
 
 public class BigDecimalConverter implements Converter {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard converter id for this converter.</p>
+     */
+    public static final String CONVERTER_ID = "javax.faces.BigDecimal";
 
 
     // ------------------------------------------------------- Converter Methods

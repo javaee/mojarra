@@ -1,5 +1,5 @@
 /*
- * $Id: CharacterConverter.java,v 1.7 2004/01/10 03:16:32 eburns Exp $
+ * $Id: CharacterConverter.java,v 1.8 2004/01/21 19:23:25 craigmcc Exp $
  */
 
 /*
@@ -20,6 +20,15 @@ import javax.faces.context.FacesContext;
  */
 
 public class CharacterConverter implements Converter {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard converter id for this converter.</p>
+     */
+    public static final String CONVERTER_ID = "javax.faces.Character";
 
 
     // ------------------------------------------------------- Converter Methods

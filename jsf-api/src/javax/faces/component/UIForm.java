@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.38 2004/01/21 07:39:54 craigmcc Exp $
+ * $Id: UIForm.java,v 1.39 2004/01/21 19:23:14 craigmcc Exp $
  */
 
 /*
@@ -34,13 +34,13 @@ public class UIForm extends UIComponentBase implements NamingContainer {
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "Form";
+    public static final String COMPONENT_TYPE = "javax.faces.Form";
 
 
     /**
      * <p>The standard component family for this component.</p>
      */
-    public static final String COMPONENT_FAMILY = "Form";
+    public static final String COMPONENT_FAMILY = "javax.faces.Form";
 
 
     // ------------------------------------------------------------ Constructors

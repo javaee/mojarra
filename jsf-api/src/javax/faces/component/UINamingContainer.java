@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainer.java,v 1.12 2004/01/21 07:39:55 craigmcc Exp $
+ * $Id: UINamingContainer.java,v 1.13 2004/01/21 19:23:15 craigmcc Exp $
  */
 
 /*
@@ -28,13 +28,13 @@ public class UINamingContainer extends UIComponentBase
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "NamingContainer";
+    public static final String COMPONENT_TYPE = "javax.faces.NamingContainer";
 
 
     /**
      * <p>The standard component family for this component.</p>
      */
-    public static final String COMPONENT_FAMILY = "NamingContainer";
+    public static final String COMPONENT_FAMILY = "javax.faces.NamingContainer";
 
 
     // ------------------------------------------------------------ Constructors

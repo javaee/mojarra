@@ -53,13 +53,13 @@ public class UIColumn extends UIComponentBase {
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "Column";
+    public static final String COMPONENT_TYPE = "javax.faces.Column";
 
 
     /**
      * <p>The standard component family for this component.</p>
      */
-    public static final String COMPONENT_FAMILY = "Column";
+    public static final String COMPONENT_FAMILY = "javax.faces.Column";
 
 
     // ----------------------------------------------------------- Constructors

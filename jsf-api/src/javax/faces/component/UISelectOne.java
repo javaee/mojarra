@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.36 2004/01/06 14:52:12 rkitain Exp $
+ * $Id: UISelectOne.java,v 1.37 2004/01/21 19:23:17 craigmcc Exp $
  */
 
 /*
@@ -35,6 +35,18 @@ public class UISelectOne extends UIInput {
 
 
     // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "javax.faces.SelectOne";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "javax.faces.SelectOne";
 
 
     /**

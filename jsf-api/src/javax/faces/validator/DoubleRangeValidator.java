@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.34 2003/12/22 19:29:25 eburns Exp $
+ * $Id: DoubleRangeValidator.java,v 1.35 2004/01/21 19:23:31 craigmcc Exp $
  */
 
 /*
@@ -48,6 +48,12 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 
 
     // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard converter id for this converter.</p>
+     */
+    public static final String VALIDATOR_ID = "javax.faces.DoubleRange";
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.29 2003/12/22 19:29:26 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.30 2004/01/21 19:23:32 craigmcc Exp $
  */
 
 /*
@@ -48,6 +48,12 @@ public class LongRangeValidator implements Validator, StateHolder {
 
 
     // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard converter id for this converter.</p>
+     */
+    public static final String VALIDATOR_ID = "javax.faces.LongRange";
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.15 2004/01/15 06:03:34 eburns Exp $
+ * $Id: NumberConverter.java,v 1.16 2004/01/21 19:23:27 craigmcc Exp $
  */
 
 /*
@@ -99,6 +99,15 @@ import javax.faces.context.FacesContext;
  */
 
 public class NumberConverter implements Converter, StateHolder {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard converter id for this converter.</p>
+     */
+    public static final String CONVERTER_ID = "javax.faces.Number";
 
 
     // ------------------------------------------------------ Instance Variables

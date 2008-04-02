@@ -91,13 +91,13 @@ public class UIData extends UIComponentBase
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "Data";
+    public static final String COMPONENT_TYPE = "javax.faces.Data";
 
 
     /**
      * <p>The standard component family for this component.</p>
      */
-    public static final String COMPONENT_FAMILY = "Data";
+    public static final String COMPONENT_FAMILY = "javax.faces.Data";
 
 
     // ------------------------------------------------------------ Constructors
