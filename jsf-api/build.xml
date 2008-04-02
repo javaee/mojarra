@@ -339,6 +339,14 @@
           includes="OutstandingIssues.xml"/>
     <move     file="${build.dir}/OutstandingIssues.html"
             tofile="${build.dir}/OutstandingIssuesSummary.html"/>
+    <style basedir="doc"
+           destdir="${build.dir}"
+         extension=".html"
+             style="doc/OutstandingIssuesEffort.xsl"
+          includes="OutstandingIssues.xml"/>
+    <move     file="${build.dir}/OutstandingIssues.html"
+            tofile="${build.dir}/OutstandingIssuesEffort.html"/>
+
   </target>
 
 
