@@ -1,5 +1,5 @@
 /*
- * $Id: JspFacesTestCase.java,v 1.5 2003/05/02 03:11:31 eburns Exp $
+ * $Id: JspFacesTestCase.java,v 1.6 2003/05/13 03:55:45 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import java.util.Iterator;
  *  by cactus.  This class just delegates all method calls to
  *  facesService.
  *
- * @version $Id: JspFacesTestCase.java,v 1.5 2003/05/02 03:11:31 eburns Exp $
+ * @version $Id: JspFacesTestCase.java,v 1.6 2003/05/13 03:55:45 eburns Exp $
  * 
  * @see	#facesService
  *
@@ -167,7 +167,10 @@ public boolean isMember(String toTest, String [] set)
 public boolean isSubset(String [] subset, Iterator superset) {
     return facesService.isSubset(subset, superset);
 }
-    
 
+public boolean requestsHaveSameAttributeSet(HttpServletRequest request1,
+					    HttpServletRequest request2) {
+    return facesService.requestsHaveSameAttributeSet(request1, request2);
+}
 
 } // end of class JspFacesTestCase

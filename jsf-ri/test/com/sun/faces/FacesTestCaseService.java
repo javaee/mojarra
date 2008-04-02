@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.16 2003/05/06 03:24:12 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.17 2003/05/13 03:55:44 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ package com.sun.faces;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
 
@@ -34,6 +35,7 @@ import com.sun.faces.config.ConfigListener;
 import org.mozilla.util.Assert;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import java.io.IOException;
 
@@ -49,7 +51,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.16 2003/05/06 03:24:12 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.17 2003/05/13 03:55:44 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -293,9 +295,67 @@ public boolean isSubset(String [] subset, Iterator superset) {
     }
     return true;
 }
+
+/**
+
+* <p>This method allows comparing the attribute sets of two
+* HttpServletRequests for equality.</p>
+
+* @return true if every attribute in in request1 has an analog in
+* request2, with the same value as in request1, and the converse is true
+* as well.
+
+*
+*/
 	
 	
-	
-	
+public boolean requestsHaveSameAttributeSet(HttpServletRequest request1,
+					    HttpServletRequest request2) {
+    Enumeration attrNames = request1.getAttributeNames();
+    String curAttr;
+    Object valA, valB;
+
+    // make sure every name/value pair in request1 is the same
+    // name/value pare in request2.
+
+    while (attrNames.hasMoreElements()) {
+	curAttr = (String) attrNames.nextElement();
+	valA = request1.getAttribute(curAttr);
+	valB = request2.getAttribute(curAttr);
+	if (null != valA && null != valB) {
+	    // if any of the values are not equal, return false
+	    if (!valA.equals(valB)) {
+		return false;
+	    }
+	}
+	else if (null != valA || null != valB) {
+	    // one of the values is null, therefore, not equal, return false
+	    return false;
+	}
+    }
+
+    // make sure every name/value pair in request2 is the same
+    // name/value pare in request1.
+    attrNames = request2.getAttributeNames();
+
+    while (attrNames.hasMoreElements()) {
+	curAttr = (String) attrNames.nextElement();
+	valA = request2.getAttribute(curAttr);
+	valB = request1.getAttribute(curAttr);
+	if (null != valA && null != valB) {
+	    // if any of the values are not equal, return false
+	    if (!valA.equals(valB)) {
+		return false;
+	    }
+	}
+	else if (null != valA || null != valB) {
+	    // one of the values is null, therefore, not equal, return false
+	    return false;
+	}
+    }
+    return true;
+}
+    
+
 
 } // end of class FacesTestCaseService

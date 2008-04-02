@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.7 2003/05/08 23:13:11 horwat Exp $
+ * $Id: TestValueBindingImpl.java,v 1.8 2003/05/13 03:55:47 eburns Exp $
  */
 
 /*
@@ -27,6 +27,7 @@ import javax.servlet.http.Cookie;
 
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.component.UINamingContainer;
+import javax.servlet.http.HttpServletRequest;
 
 import java.util.Enumeration;
 import java.util.Map;
@@ -37,7 +38,7 @@ import java.util.Map;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.7 2003/05/08 23:13:11 horwat Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.8 2003/05/13 03:55:47 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -128,8 +129,8 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
 	valueBinding.setRef("header.ELHeader");
 	result = valueBinding.getValue(getFacesContext());
-	assertTrue(getFacesContext().getExternalContext().getRequest() == 
-		   request);
+	assertTrue(requestsHaveSameAttributeSet((HttpServletRequest) getFacesContext().getExternalContext().getRequest(),
+						(HttpServletRequest) request));
 	assertTrue(request.getHeader("ELHeader").equals("ELHeader"));
 	assertTrue(result.equals("ELHeader"));
 	
