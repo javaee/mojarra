@@ -179,6 +179,11 @@
              be put -->
         <mkdir dir="${out.test.dir}/WEB-INF/lib"/>
 
+        <copy file="${build.classes}/com/sun/faces/util/MessageFactory.class"
+          tofile="${out.test.dir}/WEB-INF/classes/com/sun/faces/util/MessageFactory.class"/>
+        <copy file="${build.classes}/com/sun/faces/util/MessageFactory$BindingFacesMessage.class"
+          tofile="${out.test.dir}/WEB-INF/classes/com/sun/faces/util/MessageFactory$BindingFacesMessage.class"/>
+
     </target>
 
     <!--
