@@ -1397,7 +1397,7 @@
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="text-attrs.xml" xpointer="xpointer(/root/*)"/>
-            <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="input-secret-attrs.xml" xpointer="xpointer(/root/*)"/>
 
             <renderer-extension>
                 <renders-children>true</renders-children>
