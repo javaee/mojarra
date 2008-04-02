@@ -214,14 +214,14 @@
             description="update nightly build">
         <if>
             <available
-                  file="${tasks.home}/javanettasks-1.0.5.jar"/>
+                  file="${tasks.home}/javanettasks-1.0.8.jar"/>
             <then>
                 <sequential>
                     <taskdef
                           resource="org/kohsuke/javanettasks.properties">
                         <classpath>
                             <pathelement
-                                  location="${tasks.home}/javanettasks-1.0.5.jar"/>
+                                  location="${tasks.home}/javanettasks-1.0.8.jar"/>
                             <fileset dir="${tasks.home}/lib"
                                      includes="*.jar"/>
                         </classpath>
@@ -248,7 +248,7 @@
                 </sequential>
             </then>
             <else>
-                <fail message="Javanettasks version 1.0.5 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
+                <fail message="Javanettasks version 1.0.8 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
             </else>
         </if>
     </target>
@@ -257,14 +257,14 @@
             description="update weekly build">
         <if>
             <available
-                  file="${tasks.home}/javanettasks-1.0.5.jar"/>
+                  file="${tasks.home}/javanettasks-1.0.8.jar"/>
             <then>
                 <sequential>
                     <taskdef
                           resource="org/kohsuke/javanettasks.properties">
                         <classpath>
                             <pathelement
-                                  location="${tasks.home}/javanettasks-1.0.5.jar"/>
+                                  location="${tasks.home}/javanettasks-1.0.8.jar"/>
                             <fileset dir="${tasks.home}/lib"
                                      includes="*.jar"/>
                         </classpath>
@@ -285,7 +285,7 @@
                 </sequential>
             </then>
             <else>
-                <fail message="Javanettasks version 1.0.5 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
+                <fail message="Javanettasks version 1.0.8 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
             </else>
         </if>
     </target>    
