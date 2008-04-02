@@ -30,7 +30,7 @@
   <property name="build.home" value="${basedir}/build"/>
 
   <!-- The base directory for the JSF APIs -->
-  <property name="jsf.api.home" value ="../jsf-api"/>
+  <property name="jsf-api.home" value ="../jsf-api"/>
 
   <!-- The base directory for distribution targets -->
   <property name="dist.home" value="${basedir}/dist"/>
@@ -74,8 +74,8 @@
             value="${tomcat.home}/jstl/lib/jstl.jar"/>
   <property name="standard.jar" 
             value="${tomcat.home}/jstl/lib/standard.jar"/>
-  <property name="jsf.api.jar" value="${jsf.api.home}/build/lib/jsf-api.jar"/>
-  <property name="jsf.api.dtd" value="${jsf.api.home}/build/lib/web-facesconfig_1_0.dtd"/>
+  <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
+  <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_0.dtd"/>
 
 <!-- ************ Compiler Defaults *************************************** -->
 
@@ -95,7 +95,7 @@
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-digester.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
-    <pathelement location="${jsf.api.jar}"/>
+    <pathelement location="${jsf-api.jar}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${xerces.jar}"/>
@@ -184,7 +184,7 @@
     <copy todir="${build.home}/classes">
         <fileset dir="${source.home}" includes="**/*.xml"/>
     </copy>
-    <copy  file="${jsf.api.dtd}"
+    <copy  file="${jsf-api.dtd}"
           todir="${build.home}/classes/com/sun/faces/config"/>
 
     </target>
@@ -295,7 +295,7 @@
     <copy  file="${standard.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${jstl.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 
-    <copy file="${jsf.api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy file="${jsf-api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 
     <!-- create dummy JAR containing only a configuration resource -->

@@ -16,6 +16,7 @@
              <td>
 
                <h:selectboolean_checkbox id="checkbox1" 
+                                 valueRef="LoginBean.validUser"
                                  checked="true" 
                                  disabled="true"
                                  size="10"

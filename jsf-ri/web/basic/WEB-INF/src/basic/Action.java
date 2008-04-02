@@ -1,5 +1,5 @@
 /*
- * $Id: Action.java,v 1.2 2003/02/20 22:50:37 ofung Exp $
+ * $Id: Action.java,v 1.3 2003/07/11 23:23:40 jvisvanathan Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Action.java,v 1.2 2003/02/20 22:50:37 ofung Exp $
+ * @version $Id: Action.java,v 1.3 2003/07/11 23:23:40 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -71,8 +71,7 @@ public class Action implements ActionListener {
     }
 
     public void processAction(ActionEvent event) {
-        System.out.println("Action.processAction : actionCommand : "+
-            event.getActionCommand());
+        System.out.println("Action.processAction invoked.");
 
 // Uncomment the following lines for a demonstration of event
 // recursion;
