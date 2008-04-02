@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.4 2002/07/31 22:40:08 eburns Exp $
+ * $Id: MessageResourcesImpl.java,v 1.5 2002/09/18 23:53:19 rkitain Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
 import java.io.FileInputStream;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Properties;
 import javax.faces.FacesException;
 import javax.faces.context.MessageImpl;
 import javax.faces.context.Message;
@@ -203,8 +205,17 @@ public class MessageResourcesImpl extends MessageResources
     */
 
     public Message getMessage(String messageId, Object params[]) {
-	Locale locale = Locale.getDefault();
-
+        //PENDING(rogerk) attempt to get the Locale from the system property
+        //possibly set in FacesContext..
+        Locale locale = null;
+        Properties properties = System.getProperties();
+        synchronized(properties) {
+            locale = (Locale)properties.get(RIConstants.FACES_LOCALE);
+        }
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        
 	return getMessage(locale, messageId, params);
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.23 2002/08/29 00:28:03 jvisvanathan Exp $
+ * $Id: FacesContextImpl.java,v 1.24 2002/09/18 23:53:18 rkitain Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.Properties;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.ServletRequest;
@@ -114,6 +115,16 @@ public class FacesContextImpl extends FacesContext
         this.request = request;
         this.response = response;
         this.locale = request.getLocale();
+
+        // PENDING(rogerk) we set the locale as a system property so it can
+        // be accessed by other methods which don't have or need facescontext.
+        Properties properties = System.getProperties();
+        synchronized(properties) {
+            if (properties.get(RIConstants.FACES_LOCALE) == null) {
+                properties.put(RIConstants.FACES_LOCALE, this.locale); 
+            }
+        }
+
 	// PENDING(edburns): don't depend on the session being there!
         if (this.request instanceof HttpServletRequest) {
             this.session =
@@ -173,6 +184,13 @@ public class FacesContextImpl extends FacesContext
 
     public void setLocale(Locale locale) {
         this.locale = locale;
+
+        // PENDING(rogerk) we set the locale as a system property so it can
+        // be accessed by other methods which don't have or need facescontext.
+        Properties properties = System.getProperties();
+        synchronized(properties) {
+            properties.put(RIConstants.FACES_LOCALE, this.locale);
+        }
     }
 
     public int getMaximumSeverity() {

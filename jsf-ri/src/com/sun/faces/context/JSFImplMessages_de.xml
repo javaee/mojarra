@@ -12,83 +12,83 @@
   </message>
   <message messageId="MSG0003" severity="3" summary="{0} field cannot be empty." />
   <message messageId="MSG0004" severity="2" summary="{0} out of range." >
-      <detail>Wert muß zwischen {1} und {2} sein.</detail>
+      <detail>Wert muss zwischen {1} und {2} sein.</detail>
   </message>
   <message messageId="MSG0005" severity="4" summary="Conversion Error." >
-      <detail>Konvertierungsfehler wahrend ansetzen {0} für Model {1} : Ausnahme: [2].</detail>
+      <detail>Konvertierungsfehler wahrend ansetzen {0} fuer Model {1} : Ausnahme: [2].</detail>
   </message>
   <message messageId="com.sun.faces.TYPECONVERSION_ERROR" severity="4" summary="Conversion Error." >
-      <detail>Konvertierungsfehler wahrend ansetzen {0} für Model {1} : Ausnahme: [2].</detail>
+      <detail>Konvertierungsfehler wahrend ansetzen {0} fuer Model {1} : Ausnahme: [2].</detail>
   </message>
   <message messageId="com.sun.faces.MODELUPDATE_ERROR" severity="4" summary="Model Update failure." >
-      <detail>Error updating value {0} for model {1} : Exception: [2].</detail>
+      <detail>Fehler wahrend Update fuer {0} Messwert fuer Model {1} : Exception: [2].</detail>
   </message>
 
   <message messageId="com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR" severity="1" summary="Construction Error." >
-      <detail>Cannot create FacesContext.  One or more input paramters might be null.</detail>
+      <detail>FacesContext kann nicht anlegen.  Vielleicht ein paar Eckdaten sind null?</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_COMPONENT_ERROR" severity="1" summary="Construction Error." >
-      <detail>Component argument is null.</detail>
+      <detail>Component Argument ist null.</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_REQUEST_TREE_ERROR" severity="1" summary="Argument Error." >
-      <detail>requestTree argument is null.</detail>
+      <detail>requestTree Argument ist null.</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_RESPONSE_TREE_ERROR" severity="1" summary="Argument Error." >
-      <detail>responseTree argument is null.</detail>
+      <detail>responseTree Argument ist null.</detail>
   </message>
 
   <message messageId="com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR" severity="1" summary="State Error." >
-      <detail>requestTree has already been set for this request.</detail>
+      <detail>requestTree ist schon fuer diesem request angesetzt.</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_MESSAGE_ERROR" severity="1" summary="Argument Error." >
-      <detail>Message parameter cannot be null.</detail>
+      <detail>Message Parameter muss nich null sein.</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_PARAMETERS_ERROR" severity="1" summary="Argument Error." >
-      <detail>One or more parameters could be null.</detail>
+      <detail>Eins oder mehrere Parameters koennte null sein.</detail>
   </message>
 
   <message messageId="com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR" severity="1" summary="Expression Error." >
-      <detail>Named Object: '{0}' not found.</detail>
+      <detail>Gennantes Object: '{0}' nicht gefunden.</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_RESPONSE_STREAM_ERROR" severity="1" summary="Argument Error." >
-      <detail>responseStream argument is null.</detail>
+      <detail>ResponseStream Argument ist null.</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_EVENT_ERROR" severity="1" summary="Argument Error." >
-      <detail>event argument is null.</detail>
+      <detail>Event Argument ist null.</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_HANDLER_ERROR" severity="1" summary="Argument Error." >
-      <detail>handler argument is null.</detail>
+      <detail>Handler Argument ist null.</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_CONTEXT_ERROR" severity="1" summary="Argument Error." >
-      <detail>context argument is null.</detail>
+      <detail>Context Argument ist null.</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_LOCALE_ERROR" severity="1" summary="Argument Error." >
-      <detail>locale argument is null.</detail>
+      <detail>Locale Argument ist null.</detail>
   </message>
 
   <message messageId="com.sun.faces.SUPPORTS_COMPONENT_ERROR" severity="1" summary="Argument Error." >
-      <detail>Component Type: '{0}' is not supported for this renderer.</detail>
+      <detail>Component Typ: '{0}' is night gestuetzt fuer diesem Renderer.</detail>
   </message>
 
   <message messageId="com.sun.faces.MISSING_RESOURCE_ERROR" severity="3" summary="Missing Resource." >
-      <detail>Can't get ResourceBundle.</detail>
+      <detail>Kann nicht ResourceBundle abholen.</detail>
   </message>
 
   <message messageId="com.sun.faces.MISSING_CLASS_ERROR" severity="1" summary="Missing Class." >
-      <detail>Can't load class '{0}'.</detail>
+      <detail>Kann nicht Class '{0}' belasten.</detail>
   </message>
   <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" severity="3" summary="Component Not Found.">
-      <detail>Can't find component for identifier: '{0}'.</detail>
+      <detail>Component fuer Bezeichner: '{0}' is nicht gefunden.</detail>
   </message>
 </messages>
 
