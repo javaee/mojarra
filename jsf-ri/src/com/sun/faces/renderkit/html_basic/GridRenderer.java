@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.24 2004/01/14 21:05:10 eburns Exp $
+ * $Id: GridRenderer.java,v 1.25 2004/01/15 04:19:33 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.24 2004/01/14 21:05:10 eburns Exp $
+ * @version $Id: GridRenderer.java,v 1.25 2004/01/15 04:19:33 eburns Exp $
  *  
  */
 
@@ -183,7 +183,11 @@ public class GridRenderer extends HtmlBasicRenderer {
 		}
 		writer.startElement("td", component);
 		if (columnStyles > 0) {
-		    writer.writeAttribute("class", columnClasses[columnStyle++], "columns");
+		    try {
+			writer.writeAttribute("class", columnClasses[columnStyle++], "columns");
+		    }
+		    catch (ArrayIndexOutOfBoundsException e) {
+		    }
 		    if (columnStyle >= columnStyles) {
 			columnStyle = 0;
 		    }
@@ -206,18 +210,18 @@ public class GridRenderer extends HtmlBasicRenderer {
 	    writer.startElement("tfoot", facet);
 	    if (footerClass != null) {
 		writer.startElement("tr", facet);
-		writer.startElement("th", facet);
+		writer.startElement("td", facet);
 		writer.writeAttribute("class", footerClass, "footerClass");
 	    } else {
 		writer.startElement("tr", facet);
-		writer.startElement("th", facet);
+		writer.startElement("td", facet);
 	    }
 	    
 	    writer.writeAttribute("colspan", new Integer(columns), "columns");
 
             encodeRecursive(context, facet);
 
-	    writer.endElement("th");
+	    writer.endElement("td");
 	    writer.endElement("tr");
 	    writer.endElement("tfoot");
 	    writer.writeText("\n", null);
