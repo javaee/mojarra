@@ -72,8 +72,7 @@ public class BookBean {
 
     public void validateQuantity(FacesContext context,
                                  UIComponent component,
-                                 Object value) {
-        System.out.println("Validator invoked");
+                                 Object value) {        
         int q = (Integer) value;
         if (q < 0) {
             throw new ValidatorException(
