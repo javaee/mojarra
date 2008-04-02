@@ -17,7 +17,7 @@
     </context-param>
     
     <listener>
-        <listener-class>imageMapRender.ImageMapServletContextListener</listener-class>
+        <listener-class>components.renderkit.ComponentsSetupListener</listener-class>
     </listener>
 
     <listener>
