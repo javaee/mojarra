@@ -1118,8 +1118,13 @@
     <p>This can all be fixed by simply adding the Object value to
     Validator.validate().  We can (and should) still send the UIComponent
     instance.</p>
+
+   <p>How do we handle "form level" validation, rather than "component
+   level" validation?</p>
+    
   </description>
   <resolution>
+   <p>5 November 2002 - edburns - Added content from http://forum.java.sun.com/thread.jsp?forum=427&thread=319464 </p>
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
