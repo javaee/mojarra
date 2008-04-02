@@ -817,8 +817,8 @@ public class RenderKitUtils {
         if (preferredContentType[0][0] != null) {
             for (int i=0; i<=resultidx; i++) {
                 if ((Double.parseDouble(results[i][0]) == highestQFactor) &&
-                    results[i][1].equals(preferredContentType[0][1]) &&
-                    results[i][2].equals(preferredContentType[0][2])) {
+                    (results[i][1]).equals(preferredContentType[0][1]) &&
+                    (results[i][2]).equals(preferredContentType[0][2])) {
                     match[0][0] = results[i][0];
                     match[0][1] = results[i][1];
                     match[0][2] = results[i][2];

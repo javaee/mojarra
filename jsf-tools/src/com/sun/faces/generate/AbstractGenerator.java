@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractGenerator.java,v 1.12 2005/08/25 17:11:02 rlubke Exp $
+ * $Id: AbstractGenerator.java,v 1.13 2006/05/22 14:58:10 rlubke Exp $
  */
 
 /*
@@ -229,7 +229,7 @@ public abstract class AbstractGenerator implements Generator {
 
     protected static class CodeWriter extends BufferedWriter {
 
-        private final String TAB = "    ";
+        private final static String TAB = "    ";
         private final int TAB_LENGTH = TAB.length();
 
         private Stack<String> depth;

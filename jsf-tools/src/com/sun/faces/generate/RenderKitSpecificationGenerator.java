@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitSpecificationGenerator.java,v 1.10 2005/10/14 22:14:39 rlubke Exp $
+ * $Id: RenderKitSpecificationGenerator.java,v 1.11 2006/05/22 14:58:14 rlubke Exp $
  */
 
 /*
@@ -200,12 +200,11 @@ public class RenderKitSpecificationGenerator implements Generator {
         Map<String, ArrayList<RendererBean>> renderersByComponentFamily =
             GeneratorUtil.getComponentFamilyRendererMap(configBean, renderKitId);
 
-        for (Iterator<String> keyIter = renderersByComponentFamily.keySet().iterator();
-             keyIter.hasNext(); ) {
+	for (Map.Entry entry : renderersByComponentFamily.entrySet()) {
 
-            String curFamily = keyIter.next();
+            String curFamily = (String)entry.getKey();
             sb.append("  <DT>" + curFamily + "</DT>\n");
-            List<RendererBean> renderers = renderersByComponentFamily.get(curFamily);
+            List<RendererBean> renderers = (List<RendererBean>)entry.getValue();
 
             for (Iterator<RendererBean> rendererIter = renderers.iterator();
                  rendererIter.hasNext(); ) {
@@ -273,10 +272,9 @@ public class RenderKitSpecificationGenerator implements Generator {
         Map<String,ArrayList<RendererBean>> renderersByComponentFamily =
             GeneratorUtil.getComponentFamilyRendererMap(configBean, renderKitId);
 
-        for (Iterator<String> keyIter = renderersByComponentFamily.keySet().iterator();
-             keyIter.hasNext(); ) {
-            String curFamily = keyIter.next();
-            List<RendererBean> renderers = renderersByComponentFamily.get(curFamily);
+	for (Map.Entry entry : renderersByComponentFamily.entrySet()) {
+            String curFamily = (String)entry.getKey();
+            List<RendererBean> renderers = (List<RendererBean>) entry.getValue();
 
             sb.append("  <TR>\n");
             sb.append("    <TD rowspan=\"" + renderers.size() + "\">" +
@@ -424,32 +422,34 @@ public class RenderKitSpecificationGenerator implements Generator {
                 sb.append("</tr>\n");
                 sb.append("	    \n");
                 // output each attribute
-                for (int j = 0, attrLen = attributes.length; j < attrLen; j++) {
-                    if (attributes[j].isAttributeIgnoredForRenderer()) {
-                        continue;
+		if (attributes != null) {
+                    for (int j = 0, attrLen = attributes.length; j < attrLen; j++) {
+                        if (attributes[j].isAttributeIgnoredForRenderer()) {
+                            continue;
+                        }
+                        sb.append(
+                            "<tr BGCOLOR=\"white\" CLASS=\"TableRowColor\">\n");
+                        sb.append(
+                            "<td ALIGN=\"right\" VALIGN=\"top\" WIDTH=\"1%\"><code>\n");
+                        sb.append(
+                            "&nbsp;" + attributes[j].getAttributeName() + "\n");
+                        sb.append("</td>\n");
+                        sb.append("<td ALIGN=\"right\" VALIGN=\"top\">" +
+                            attributes[j].isPassThrough() + "</td>\n");
+                        sb.append("<td><code>" + attributes[j].getAttributeClass() +
+                            "</code></td>\n");
+                        descBean = attributes[j].getDescription("");
+                        description = (null == descBean) ?
+                                      "" : descBean.getDescription();
+                        sb.append("<td>" + description + "</td>\n");
+                        if (null ==
+                            (defaultValue = attributes[j].getDefaultValue())) {
+                            defaultValue = "undefined";
+                        }
+                        sb.append("<td>" + defaultValue + "<td>\n");
+                        sb.append("</tr>\n");
                     }
-                    sb.append(
-                        "<tr BGCOLOR=\"white\" CLASS=\"TableRowColor\">\n");
-                    sb.append(
-                        "<td ALIGN=\"right\" VALIGN=\"top\" WIDTH=\"1%\"><code>\n");
-                    sb.append(
-                        "&nbsp;" + attributes[j].getAttributeName() + "\n");
-                    sb.append("</td>\n");
-                    sb.append("<td ALIGN=\"right\" VALIGN=\"top\">" +
-                        attributes[j].isPassThrough() + "</td>\n");
-                    sb.append("<td><code>" + attributes[j].getAttributeClass() +
-                        "</code></td>\n");
-                    descBean = attributes[j].getDescription("");
-                    description = (null == descBean) ?
-                                  "" : descBean.getDescription();
-                    sb.append("<td>" + description + "</td>\n");
-                    if (null ==
-                        (defaultValue = attributes[j].getDefaultValue())) {
-                        defaultValue = "undefined";
-                    }
-                    sb.append("<td>" + defaultValue + "<td>\n");
-                    sb.append("</tr>\n");
-                }
+		}
                 sb.append("</table>\n");
             } else {
                 sb.append("<p>This renderer-type has no attributes</p>\n");

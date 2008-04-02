@@ -168,17 +168,17 @@ public class GlassfishUpdater {
         boolean result = false;
         File javaEEJar =  new File (libDir, "javaee.jar");
         JarInputStream origJarStream = new JarInputStream(new FileInputStream(javaEEJar));
-        JarEntry newEntry = null, cur = null;
+        JarEntry cur = null;
         Pattern pat = Pattern.compile(".*javax.faces.*");
         Matcher mat = null;
-        byte[] buf = new byte[1024];
-        int n = 0;        
-        while (null != (cur = origJarStream.getNextJarEntry())) {
+        cur = origJarStream.getNextJarEntry();
+        while (null != cur) {
             mat = pat.matcher(cur.getName());
             // If the current entry does not include javax.faces...
             if (mat.matches()) {
                 result = true;
             }
+            cur = origJarStream.getNextJarEntry();
         }
         origJarStream.close();
         return result;

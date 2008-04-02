@@ -711,9 +711,7 @@ public class HtmlTaglib12Generator extends AbstractGenerator {
         //
         writer.fwrite("public String getDebugString() {\n");
         writer.indent();
-        String res = "\"id: \" + this.getId() + \" class: \" + this.getClass().getName()";
-        writer.fwrite("String result = " + res + ";\n");
-        writer.fwrite("return result;\n");
+        writer.fwrite("return \"id: \" + this.getId() + \" class: \" + this.getClass().getName();\n");
         writer.outdent();
         writer.fwrite("}\n\n");
         writer.outdent();
@@ -739,11 +737,10 @@ public class HtmlTaglib12Generator extends AbstractGenerator {
         Map<String,ComponentBean> componentsByComponentFamily =
             GeneratorUtil.getComponentFamilyComponentMap(configBean);
 
-        for (Iterator<String> keyIter = renderersByComponentFamily.keySet().iterator();
-             keyIter.hasNext(); ) {
+	for (Map.Entry entry : renderersByComponentFamily.entrySet()) {
 
-            String componentFamily = keyIter.next();
-            List<RendererBean> renderers = renderersByComponentFamily.get(componentFamily);
+            String componentFamily = (String)entry.getKey();
+            List<RendererBean> renderers = (List<RendererBean>) entry.getValue();
 
             component = componentsByComponentFamily.get(componentFamily);
 

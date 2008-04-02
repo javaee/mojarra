@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD21Generator.java,v 1.9 2006/05/16 20:55:22 rlubke Exp $
+ * $Id: JspTLD21Generator.java,v 1.10 2006/05/22 14:58:13 rlubke Exp $
  */
 
 /*
@@ -132,12 +132,10 @@ public class JspTLD21Generator extends JspTLDGenerator {
         String targetPackage =
             propManager.getProperty(PropertyManager.TARGET_PACKAGE);
 
-        for (Iterator<String> keyIter = renderersByComponentFamily.keySet().iterator();
-             keyIter.hasNext();) {
+	for (Map.Entry entry : renderersByComponentFamily.entrySet()) {
 
-            String componentFamily = keyIter.next();
-            List<RendererBean> renderers =
-            (List<RendererBean>) renderersByComponentFamily.get(componentFamily);
+            String componentFamily = (String)entry.getKey();
+            List<RendererBean> renderers = (List<RendererBean>) entry.getValue();
             for (Iterator<RendererBean> rendererIter = renderers.iterator();
                  rendererIter.hasNext();) {
 

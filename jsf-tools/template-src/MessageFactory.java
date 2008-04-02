@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.12 2006/05/10 22:04:04 rlubke Exp $
+ * $Id: MessageFactory.java,v 1.13 2006/05/22 14:58:15 rlubke Exp $
  */
 
 /*
@@ -169,7 +169,7 @@ import java.util.ResourceBundle;
         }
         
         if (null == locale) {
-            throw new NullPointerException(" locale " + locale);
+            throw new NullPointerException(" locale is null ");
         }
         
         FacesMessage message = getMessage(locale, messageId, params);

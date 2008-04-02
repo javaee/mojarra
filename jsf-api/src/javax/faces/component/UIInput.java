@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.84 2005/12/05 16:42:46 edburns Exp $
+ * $Id: UIInput.java,v 1.85 2006/05/22 14:57:56 rlubke Exp $
  */
 
 /*
@@ -1195,10 +1195,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     public ValueChangeListener[] getValueChangeListeners() {
 
-        ValueChangeListener vcl[] = (ValueChangeListener [])
-	    getFacesListeners(ValueChangeListener.class);
-        return (vcl);
-
+        return (ValueChangeListener []) getFacesListeners(ValueChangeListener.class);
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.19 2006/03/28 21:12:51 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.20 2006/05/22 14:58:11 rlubke Exp $
  */
 
 /*
@@ -86,9 +86,6 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
     private PropertyManager propManager;
     
-    private boolean hasPassThroughAttributes;
-
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -235,17 +232,6 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                                            null, false, false);
 
         writer.write("\n\n");
-        
-        // check to see if this component has any passthrough attributes        
-        PropertyBean[] pbs = cb.getProperties();
-        for (PropertyBean pb : pbs) {
-            if (pb.isPassThrough()) {
-                hasPassThroughAttributes = true;
-                break;
-            }
-            hasPassThroughAttributes = false;
-        }
-        
         
         writer.indent();       
 

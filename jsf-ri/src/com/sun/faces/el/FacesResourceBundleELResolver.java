@@ -1,5 +1,5 @@
 /*
- * $Id: FacesResourceBundleELResolver.java,v 1.7 2006/05/17 19:00:45 rlubke Exp $
+ * $Id: FacesResourceBundleELResolver.java,v 1.8 2006/05/22 14:57:59 rlubke Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
         if (null != base) {
             return null;
         }
-        if (null == base && null == property) {
+        if (null == property) {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
@@ -90,7 +90,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
             return null;
         }
 
-        if (null == base && null == property) {
+        if (null == property) {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);

@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLDGenerator.java,v 1.4 2005/08/25 17:11:04 rlubke Exp $
+ * $Id: JspTLDGenerator.java,v 1.5 2006/05/22 14:58:13 rlubke Exp $
  */
 
 /*
@@ -432,10 +432,10 @@ public abstract class JspTLDGenerator implements Generator {
             }
 
             StringBuffer sb = new StringBuffer();
-            for (Iterator<String> i = attributes.keySet().iterator(); i.hasNext(); ) {
-                String name = i.next();
+	    for (Map.Entry entry : attributes.entrySet()) {
+                String name = (String)entry.getKey();
                 sb.append(' ').append(name).append('=');
-                sb.append('"').append(attributes.get(name)).append('"');
+                sb.append('"').append((String)entry.getValue()).append('"');
             }
 
             return sb.toString();

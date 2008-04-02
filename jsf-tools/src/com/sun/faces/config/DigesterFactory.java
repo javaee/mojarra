@@ -1,5 +1,5 @@
 /*
- * $Id: DigesterFactory.java,v 1.11 2006/03/06 16:40:28 rlubke Exp $
+ * $Id: DigesterFactory.java,v 1.12 2006/05/22 14:58:08 rlubke Exp $
  */
 
 /*
@@ -337,9 +337,6 @@ public class DigesterFactory {
          */
         private HashMap<String,String> entities = new HashMap<String, String>();
         
-        private DigesterFactory digesterFactory;
-
-
         // -------------------------------------------------------- Constructors
 
 

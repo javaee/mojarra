@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicValidator.java,v 1.17 2006/03/29 23:03:50 rlubke Exp $
+ * $Id: HtmlBasicValidator.java,v 1.18 2006/05/22 14:58:04 rlubke Exp $
  */
 
 /*
@@ -84,8 +84,7 @@ public class HtmlBasicValidator extends FacesValidator {
 	    return null;
 	}
 	
-        DefaultHandler h = new HtmlBasicValidatorHandler();
-        return h;
+        return new HtmlBasicValidatorHandler();
     }
 
 

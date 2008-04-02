@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.4 2006/03/29 23:03:43 rlubke Exp $
+ * $Id: JSFVersionTracker.java,v 1.5 2006/05/22 14:57:57 rlubke Exp $
  */
 
 /*
@@ -185,8 +185,8 @@ public class JSFVersionTracker {
                 public String toString() {
                     StringBuffer result = new StringBuffer();
                     Version curVersion = null;
-                    for (String cur : this.keySet()) {
-                        curVersion = this.get(cur);
+                    for (Map.Entry cur : this.entrySet()) {
+                        curVersion = (Version)cur.getValue();
                         result.append(cur + ": " + curVersion.toString() + "\n");
                     }
                     return result.toString();

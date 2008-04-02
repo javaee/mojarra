@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateTask.java,v 1.2 2005/08/22 22:12:14 ofung Exp $
+ * $Id: ValidateTask.java,v 1.3 2006/05/22 14:58:06 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,8 @@ import javax.xml.parsers.SAXParserFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.text.MessageFormat;
 
 /**
@@ -189,35 +191,41 @@ public class ValidateTask extends Task {
                     source =
                     new InputSource(new FileInputStream(j2ee14));
                     source.setSystemId(new File(j2ee14).toURL().toString());
-                } catch (Exception e) {
+                } catch (FileNotFoundException e) {
                     //
-                }
+                } catch (MalformedURLException e) {
+		    //
+		}
             } else if (systemId.indexOf("webservice") > 0) {
                 try {
                     source =
                     new InputSource(new FileInputStream(webServices));
                     source.setSystemId(
                         new File(webServices).toURL().toString());
-                } catch (Exception e) {
+                } catch (FileNotFoundException e) {
                     //
-                }
+                } catch (MalformedURLException e) {
+		    //
+		}
             } else if (systemId.indexOf("xml.xsd") > 0) {
                 try {
                     source =
                     new InputSource(new FileInputStream(xml));
                     source.setSystemId(xml);
-                } catch (Exception e) {
+                } catch (FileNotFoundException e) {
                     //
-                }
+		}
             } else if (systemId.indexOf("web-facesconfig_1_2.xsd") > 0) {
                 try {
                     source =
                     new InputSource(new FileInputStream(facesConfig));
                     source.setSystemId(
                         new File(facesConfig).toURL().toString());
-                } catch (Exception e) {
+                } catch (FileNotFoundException e) {
                     //
-                }
+                } catch (MalformedURLException e) {
+		    //
+		}
             } else {
                 try {
                     source = super.resolveEntity(publicId, systemId);
