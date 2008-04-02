@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResources.java,v 1.7 2003/07/16 22:58:42 craigmcc Exp $
+ * $Id: MessageResources.java,v 1.1 2003/07/16 23:11:00 craigmcc Exp $
  */
 
 /*
@@ -7,9 +7,10 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.context;
+package javax.faces.application;
 
-import javax.faces.application.Message;
+
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -31,7 +32,11 @@ import javax.faces.application.Message;
  * whose <code>detail</code> and <code>summary</code> properties have been
  * localized for the specified locale.  If no localized text for the specified
  * locale is available, fallback text in a default language may be returned
- * instead.</p>
+ * instead.  If a <code>getMessage()</code> variant that includes
+ * substitution parameters, the summary and detail localized text Strings are
+ * used as a pattern string for <code>java.text.MessageResources()</code>,
+ * whose <code>format(String,Object[])</code> method is used to perform the
+ * actual substitution.</p>
  */
 
 public abstract class MessageResources {

@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.24 2003/07/14 22:59:59 craigmcc Exp $
+ * $Id: UIInput.java,v 1.25 2003/07/16 23:11:01 craigmcc Exp $
  */
 
 /*
@@ -18,8 +18,8 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.Message;
+import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
-import javax.faces.context.MessageResources;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;

@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.3 2003/07/07 20:49:26 eburns Exp $
+ * $Id: MockApplication.java,v 1.4 2003/07/16 23:11:05 craigmcc Exp $
  */
 
 /*
@@ -15,10 +15,10 @@ import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.application.MessageResources;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.convert.Converter;
-import javax.faces.context.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ValueBinding;

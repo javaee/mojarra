@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.6 2003/07/14 22:59:58 craigmcc Exp $
+ * $Id: Application.java,v 1.7 2003/07/16 23:11:00 craigmcc Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.context.MessageResources;
 import javax.faces.convert.Converter;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;

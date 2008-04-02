@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.14 2003/06/21 01:41:34 craigmcc Exp $
+ * $Id: ValidatorBase.java,v 1.15 2003/07/16 23:11:04 craigmcc Exp $
  */
 
 /*
@@ -17,9 +17,9 @@ import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.Message;
+import javax.faces.application.MessageResources;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import javax.faces.context.MessageResources;
 
 
 /**
