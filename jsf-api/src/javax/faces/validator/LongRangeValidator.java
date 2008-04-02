@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.38 2005/02/24 15:18:53 rogerk Exp $
+ * $Id: LongRangeValidator.java,v 1.39 2005/03/11 18:56:39 rogerk Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.faces.convert.Converter;
  *     has been configured on this {@link Validator}, check the component
  *     value against both limits.  If the component value is not within
  *     this specified range, throw a {@link ValidatorException} containing a
- *     {@link Validator#NOT_IN_RANGE_MESSAGE_ID} message.</li>
+ *     {@link NOT_IN_RANGE_MESSAGE_ID} message.</li>
  * <li>If a <code>maximum</code> property has been configured on this
  *     {@link Validator}, check the component value against
  *     this limit.  If the component value is greater than the
@@ -92,6 +92,21 @@ public class LongRangeValidator implements Validator, StateHolder {
     public static final String MINIMUM_MESSAGE_ID =
         "javax.faces.validator.LongRangeValidator.MINIMUM";
 
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * the maximum or minimum value check fails, and both the maximum
+     * and minimum values for this validator have been set.  The message
+     * format string for this message may optionally include the following
+     * placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the configured minimum value.</li>
+     * <li><code>{1}</code> replaced by the configured maximum value.</li>
+     * <li><code>{2}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String NOT_IN_RANGE_MESSAGE_ID =
+        "javax.faces.validator.LongRangeValidator.NOT_IN_RANGE";
 
     /**
      * <p>The message identifier of the {@link FacesMessage} to be created if
@@ -229,7 +244,7 @@ public class LongRangeValidator implements Validator, StateHolder {
 		    if (minimumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
 					   (context,
-					    Validator.NOT_IN_RANGE_MESSAGE_ID,
+					    NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
 					    stringValue(component,
 							new Long(minimum)),
@@ -253,7 +268,7 @@ public class LongRangeValidator implements Validator, StateHolder {
 		    if (maximumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
 					   (context,
-					    Validator.NOT_IN_RANGE_MESSAGE_ID,
+					    NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
 				            stringValue(component,
 							new Long(minimum)),
