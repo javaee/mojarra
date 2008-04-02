@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.1 2003/10/30 22:15:42 jvisvanathan Exp $
+ * $Id: SelectItemTag.java,v 1.2 2003/11/09 16:08:05 eburns Exp $
  */
 
 /*
@@ -39,11 +39,8 @@ public class SelectItemTag extends BaseComponentTag
     // Attribute Instance Variables
 
     protected String itemValue = null;
-    protected String itemValue_ = null;
     protected String itemLabel = null;
-    protected String itemLabel_ = null;
     protected String description = null;
-    protected String description_ = null;
    
     // Relationship Instance Variables
 
@@ -65,15 +62,15 @@ public class SelectItemTag extends BaseComponentTag
     //
 
     public void setItemValue(String value) {
-        this.itemValue_ = value;
+        this.itemValue = value;
     }
 
     public void setItemLabel(String label) {
-        this.itemLabel_ = label;
+        this.itemLabel = label;
     }
 
     public void setDescription(String description) {
-        this.description_ = description;
+        this.description = description;
     }
     
 
@@ -96,42 +93,33 @@ public class SelectItemTag extends BaseComponentTag
 	UISelectItem selectItem = (UISelectItem) component;
 	
 	if (null != itemValue) {
-	    selectItem.setItemValue(itemValue);
+	    if (isValueReference(itemValue)) {
+		selectItem.setValueBinding("itemValue", 
+					   Util.getValueBinding(itemValue));
+	    }
+	    else {
+		selectItem.setItemValue(itemValue);
+	    }
 	}
 	if (null != itemLabel) {
-	    selectItem.setItemLabel(itemLabel);
+	    if (isValueReference(itemLabel)) {
+		selectItem.setValueBinding("itemLabel", 
+					   Util.getValueBinding(itemLabel));
+	    }
+	    else {
+		selectItem.setItemLabel(itemLabel);
+	    }
 	}
 	if (null != description) {
-	    selectItem.setItemDescription(description);
+	    if (isValueReference(description)) {
+		selectItem.setValueBinding("description", 
+					   Util.getValueBinding(description));
+	    }
+	    else {
+		selectItem.setItemDescription(description);
+	    }
 	}
         
     }
-
-    /* Evaluates expressions as necessary */
-    protected void evaluateExpressions() throws JspException {
-	super.evaluateExpressions();
-        if (itemValue_ != null) {
-            itemValue = Util.evaluateElExpression(itemValue_, pageContext);
-   	}
-        if (itemLabel_ != null) {
-            itemLabel = Util.evaluateElExpression(itemLabel_, pageContext);
-   	}
-        if (description_ != null) {
-            description = Util.evaluateElExpression(description_, pageContext);
-   	}
-    }
-
-    //
-    // Methods from TagSupport
-    //
-
-    public int doStartTag() throws JspException {
-    	// evaluate any expressions that we were passed
-    	evaluateExpressions();
-
-        // chain to the parent implementation
-    	return super.doStartTag();
-    }
-
 
 } // end of class SelectItemTag
