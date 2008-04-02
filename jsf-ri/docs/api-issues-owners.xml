@@ -13,14 +13,14 @@
 <issue>
   <id>ObjectManager-1</id>
   <ri-effort>Large</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner>edburns </ri-owner>
  </issue>
 
 
 <issue>
   <id>OutputMethods-2</id>
   <ri-effort>Medium</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner>rogerk </ri-owner>
  </issue>
 
 
@@ -34,7 +34,7 @@
 <issue>
   <id>NamedChild-4</id>
   <ri-effort>Medium</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner>edburns </ri-owner>
 </issue>
 
 
@@ -48,7 +48,7 @@
 <issue>
   <id>ServletDependencies-6</id>
   <ri-effort> </ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner>rogerk </ri-owner>
 </issue>
 
 
@@ -62,28 +62,28 @@
 <issue>
   <id>ELDependencies-8</id>
   <ri-effort>Large</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner>edburns </ri-owner>
 </issue>
 
 
 <issue>
   <id>TreeCreation-9</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner>visvan </ri-owner>
 </issue>
 
 
 <issue>
   <id>ComponentNamespace-10</id>
   <ri-effort>Medium</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner>edburns </ri-owner>
 </issue>
 
 
 <issue>
   <id>ApplicationHandler-11</id>
   <ri-effort>Medium</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> rogerk</ri-owner> 
 </issue>
 
 
@@ -97,21 +97,21 @@
 <issue>
   <id>XmlModel-13</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> rogerk</ri-owner> 
 </issue>
 
 
 <issue>
   <id>CommandHyperlink-14</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> visvan</ri-owner> 
 </issue>
 
 
 <issue>
   <id>UserAgent-15</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
@@ -125,69 +125,69 @@
 <issue>
   <id>NonJSPRendering-17</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> rogerk</ri-owner>
 </issue>
 
 
 <issue>
   <id>TreeClass-18</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> visvan</ri-owner> 
 </issue>
 
 <issue>
   <id>EventTypes-19</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> edburns</ri-owner> 
 </issue>
 
 
 <issue>
   <id>UIParameter-20</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> rogerk</ri-owner> 
 </issue>
 
 
 <issue>
   <id>UIComponentBase-21</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> edburns</ri-owner> 
 </issue>
 
 
 <issue>
   <id>OASIS-22</id>
   <ri-effort>Medium</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> visvan</ri-owner> 
 </issue>
 
 
 <issue>
   <id>PortletTerminology-23</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> edburns</ri-owner> 
 </issue>
 
 
 <issue>
   <id>FacesServlet-24</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> rogerk</ri-owner> 
 </issue>
 
 
 <issue>
   <id>LookAndFeel-25</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> rogerk</ri-owner> 
 </issue>
 
 
 <issue>
   <id>ConfigFiles-26</id>
   <ri-effort>Large</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> edburns</ri-owner> 
 </issue>
 
 
@@ -201,21 +201,21 @@
 <issue>
   <id>VisibleProperty-28</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> visvan</ri-owner>
 </issue>
 
 
 <issue>
   <id>Converters-29</id>
   <ri-effort>Medium</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> edburns</ri-owner> 
 </issue>
 
 
 <issue>
   <id>OnLoad-30</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> rogerk</ri-owner>
 </issue>
 
 
@@ -229,49 +229,49 @@
 <issue>
   <id>InitialTree-32</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> visvan</ri-owner>
 </issue>
 
 
 <issue>
   <id>HandlersModifyTree-33</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
 <issue>
   <id>HandlersSelectTree-34</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
 <issue>
   <id>InitialRequestURLs-35</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> rogerk</ri-owner>
 </issue>
 
 
 <issue>
   <id>ComponentTreeParent-36</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
 <issue>
   <id>RequiredValidator-37</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> rogerk</ri-owner>
 </issue>
 
 
 <issue>
   <id>StandardComponentEvents-38</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> visvan</ri-owner>
 </issue>
 
 
@@ -285,7 +285,7 @@
 <issue>
   <id>UntypedStrings-40</id>
   <ri-effort>Medium</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
@@ -299,14 +299,14 @@
 <issue>
   <id>ValidatorsAPI-42</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> rogerk</ri-owner>
 </issue>
 
 
 <issue>
   <id>TraversalOrder-43</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
@@ -320,153 +320,167 @@
 <issue>
   <id>MultiRequest-45</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> visvan</ri-owner> 
 </issue>
 
 
 <issue>
   <id>NonVisual-46</id>
   <ri-effort>Medium</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> visvan</ri-owner> 
 </issue>
 
 
 <issue>
   <id>ValidatorCombos-47</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
 <issue>
   <id>GenericAttributes-48</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
 <issue>
   <id>AbstractClassNames-49</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> visvan</ri-owner>
 </issue>
 
 
 <issue>
   <id>NonPublicClasses-50</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> rogerk</ri-owner> 
 </issue>
 
 
 <issue>
   <id>MessageResources-51</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
 <issue>
   <id>Lifecycle-52</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
 <issue>
   <id>BackButton-53</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> rogerk</ri-owner> 
 </issue>
 
 
 <issue>
   <id>DefaultRendering-54</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> visvan</ri-owner> 
 </issue>
 
 
 <issue>
   <id>TypeSpecificRenderers-55</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> edburns</ri-owner> 
 </issue>
 
 
 <issue>
   <id>URLs-56</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> visvan</ri-owner>
 </issue>
 
 
 <issue>
   <id>RendererDelegation-57</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
 <issue>
   <id>FacesContext-58</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> rogerk</ri-owner>
 </issue>
 
 
 <issue>
   <id>UsabilityRenames-59</id>
   <ri-effort>Medium</ri-effort>
-  <ri-owner> </ri-owner> 
+  <ri-owner> visvan</ri-owner> 
 </issue>
 
 
 <issue>
   <id>ValidatorMessages-60</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> visvan</ri-owner>
 </issue>
 
 
 <issue>
   <id>URLRewriting-61</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> rogerk</ri-owner>
 </issue>
 
 
 <issue>
   <id>FileUpload-62</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> rogerk</ri-owner>
 </issue>
 
 
 <issue>
   <id>XForms-63</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
 <issue>
   <id>RenderKitComponents-64</id>
   <ri-effort>Medium</ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
 <issue>
   <id>BrowserVersions-65</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> edburns</ri-owner>
 </issue>
 
 
 <issue>
   <id>XHTML-66</id>
   <ri-effort></ri-effort>
-  <ri-owner> </ri-owner>
+  <ri-owner> visvan</ri-owner>
 </issue>
+
+<issue>
+  <id>JstlDependencies-67</id>
+  <ri-effort></ri-effort>
+  <ri-owner> edburns</ri-owner>
+</issue>
+
+<issue>
+  <id>VerbatimOutput-68</id>
+  <ri-effort></ri-effort>
+  <ri-owner> edburns</ri-owner>
+</issue>
+
+
 </issues>
