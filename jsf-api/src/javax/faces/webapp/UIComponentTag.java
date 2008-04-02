@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.45 2004/02/26 23:34:38 rkitain Exp $
+ * $Id: UIComponentTag.java,v 1.46 2004/03/30 22:07:18 eburns Exp $
  */
 
 /*
@@ -19,8 +19,6 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.el.ValueBinding;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
@@ -919,10 +917,6 @@ public abstract class UIComponentTag implements Tag {
 	    RenderKit renderKit = 
 		renderFactory.getRenderKit
                 (context, context.getViewRoot().getRenderKitId());
-	    ServletRequest request = (ServletRequest)
-		context.getExternalContext().getRequest();
-	    ServletResponse response = (ServletResponse)
-		context.getExternalContext().getResponse();
             writer = 
 		renderKit.createResponseWriter(new Writer() {
 		    public void close() throws IOException {
@@ -951,7 +945,7 @@ public abstract class UIComponentTag implements Tag {
 		    }
 		},
                                                null,
-                                               request.getCharacterEncoding());
+            pageContext.getRequest().getCharacterEncoding());
 	    
             context.setResponseWriter(writer);
         }
