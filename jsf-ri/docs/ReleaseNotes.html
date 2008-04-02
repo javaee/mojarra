@@ -2,32 +2,36 @@
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="GENERATOR" content="Mozilla/4.76C-CCK-MCD Netscape [en] (X11; U; SunOS 5.8 sun4u) [Netscape]">
+   <meta name="GENERATOR" content="Mozilla/4.79C-CCK-MCD  [en] (X11; U; SunOS 5.8 sun4u) [Netscape]">
 </head>
 <body bgcolor="#FFFFFF">
 
 <center>
 <h1>
-JavaServer<sup><font size=-1>TM</font></sup> Faces 1.0 EA1<br>
+JavaServer<sup><font size=-1>TM</font></sup> Faces (JSF) 1.0 EA4<br>
 Release Notes</h1></center>
 
 <hr>
-<br><a NAME="14145"></a>Revised:01/03/2002
-<p><a NAME="13552"></a>The purpose of this release is to introduce you to the JavaServer Faces
-framework and to provide you with an opportunity to give us feedback on
-the work we've done so far.
-<p>This Early Access release of JavaServer Faces provides an early
-alpha version of the JSF technology which is currently being
-developed under the JCP as <a href="http://jcp.org/jsr/detail/127.jsp">JSR127</a>.
-The expert group is actively working on the specification and has
-not yet released the Community or Public drafts.
-This alpha release reflects a very early snapshot of a draft specification
-which has evolved significantly since the code freeze for this EA
-release.&nbsp; This means that the APIs and designs contained in this
-release do not necessarily match what will be released in the
-upcoming Community and Public drafts of the specification.&nbsp; This
-should be kept in mind when experimenting with this JSF technology.<h1>
-Contents</h1>
+<br><a NAME="14145"></a>
+For an updated, online version of these release notes, see 
+ <a href="http://java.sun.com/webservices/docs/1.2/jsf/ReleaseNotes.html">
+ Release Notes</a><p>Revised:02/24/2003
+<p><a NAME="13552"></a>The purpose of this release is to introduce you
+to the JavaServer Faces framework and to provide you with an opportunity
+to give us feedback on the work we've done so far.
+<p>This Early Access release of JavaServer Faces technology provides
+ an early alpha
+version of the JSF technology which is currently being developed under
+the Java Community Process(SM) ("JCP(SM)") as <a href="http://jcp.org/jsr/detail/127.jsp">JSR127</a>. The
+expert group is actively working on the specification, and you should
+expect to see continued evolution between this release and the final
+draft of the specification.  Therefore, applications built on this 
+release of JavaServer Faces technology are not guaranteed to work 
+without modification on future releases.
+
+
+<h1>
+&nbsp;Contents</h1>
 
 <ul>
 <li>
@@ -40,7 +44,10 @@ Contents</h1>
 <a href="#release_includes">What This Release Includes</a></li>
 
 <li>
-<a href="#current_limitations">Current Limitations</a></li>
+<a href="#release_new">What's New in This Release</a></li>
+
+<li>
+<a href="#issues">Known Issues</a></li>
 
 <li>
 <a href="#known_bugs">Known Bugs</a></li>
@@ -63,7 +70,7 @@ Windows 2000</li>
 Windows XP</li>
 
 <li>
-Linux (Red Hat 7.2)</li>
+GNU/Linux (Red Hat 7.2)</li>
 </ul>
 <a NAME="required_software"></a>
 <h1>
@@ -86,13 +93,20 @@ supported.
 <tr>
 <td>Java Development Kit&nbsp;</td>
 
-<td>version 1.3 or later&nbsp;</td>
+<td>version 1.3.1 or later&nbsp;</td>
 </tr>
 
 <tr>
-<td>Tomcat Servlet Engine&nbsp;</td>
+<td>Java Web Services Developer Pack</td>
 
-<td>version 4.1&nbsp;</td>
+<td>version 1.1 or 1.2</td>
+</tr>
+
+<tr>
+<td>Microsoft Internet Explorer or Netscape Navigator&nbsp;</td>
+
+<td>version 6 (IE)
+<br>version 7 (Netscape)</td>
 </tr>
 </table>
 
@@ -112,59 +126,93 @@ html_basic.tld: A JSP custom tag library for building JSF applications
 that render to an HTML client.</li>
 
 <li>
-An API and reference implementation that provide tag handling, object management,
-rendering, and event processing.</li>
+jsf_core.tld: A JSP custom tag library for representing core actions independent
+of a particular RenderKit.</li>
 
 <li>
-<a href="tutorial/doc/JSF.html">JavaServer Faces</a>, a tutorial to help
-you get started.</li>
+An API and reference implementation that provide user interface 
+components, model object management, pluggable rendering, server side
+validation, data conversion, event processing, page flow management, and
+custom extensibility for all of these things.</li>
+
+<li>
+A set of demos in the samples directory.  Please note that these demos
+are provided as a proof-of-concept rather than a best-practices guide
+for writing JavaServer Faces applications.
+
+<li>
+<a href="http://java.sun.com/j2ee/javaserverfaces/docs/tutorial.html">JavaServer
+Faces</a>, a tutorial to help you get started.</li>
 </ul>
-<a NAME="current_limitations"></a>
+
+<p><a NAME="release_new"></a>
 <h1>
-Current Limitations</h1>
+What's New in This Release</h1>
+<a NAME="14607"></a>
+<p>
+   The three major new features for this release are:  Application 
+   Configuration Files, Navigation Handling, and Object Management
+   <p>
+   <h5>
+   Application Configuration Resources </h5>
+   JavaServer Faces, v 1.0 EA4 defines a portable configuration resource
+   format (as an XML document) for configuring resources required at
+   application startup time.  In previous releases, these resources had
+   to be configured programmatically.  The configurable resources include:
+   custom components, renderers, converters, and validators; render kits;
+   navigation rules; and model beans.  This new feature eliminates the need
+   for:  an ApplicationHandler to define navigation; and a ServletContextListener
+   to register converters, validators, renderers, render kits, and messages.
+  <p> 
+  <h5> Navigation Handling   </h5>
+   
+   This new feature is closely tied to the Application Configuration 
+   Resources feature described above.  In previous releases, navigation
+   rules were defined programmatically in the ApplicationHandler.  For this
+   release, navigation rules are defined in the portable configuration
+   resource, described in the previous section.
+    <p>
+   <h5>Object Management </h5>
+   
+   This new feature is also tied to the Application Configuration Resources
+   feature. In previous releases, JavaServer Faces technology enabled 
+   you to create model objects that encapsulated data and business logic
+   separately from UI component objects.  This release fully specifies how
+   these objects are created and managed.  This release also provides a
+   Managed Bean Creation facility, which creates new model objects and stores 
+   them in scope.  This facility is also configured using the Application
+   Configuration Resource.  
+   
+   <h1>
+<a <a NAME="issues"></a>Known Issues With This Release</h1>
 
-<p>This release is limited to the following pieces of JSF functionality:
 <ul>
 <li>
-UI Components (Form, Command, SelectBoolean, SelectOne, TextEntry, Output)</li>
+The current implementation does not support adding custom render kits 
+from the Application Configuration Resources file.  The workaround for
+this is to use a <tt>ServletContextListener</tt>, obtain a reference to
+the <tt>RenderKitFactory</tt>, and manually add the render kit to the
+factory.</li>
+<li>
+When using <tt>graphic_image</tt>, make sure to start your "url" attribute
+with a "/" to cause the proper context path to be prepended to your image.
+</li>
 
 <li>
-JSP Tag Library for building JSF applications</li>
+When saving tree in session, we don't support multiple concurrent&nbsp;
+requests to faces app from one client.</li>
 
 <li>
-ObjectTable for managing objects in scoped namespace</li>
+SaveState in page option cannot be used if your web app has event handlers
+and validators because they are not serializable currently.</li>
 
 <li>
-Rendering Model (and concrete RenderKit for standard HTML rendering)</li>
-
-<li>
-Event Model</li>
+Additionally, in the areas of functionality released in the EA, there are
+already significant changes in progress in the specification. Therefore,
+only experimental code should be developed against this release since it
+will not be compatabile with subsequent releases.
+</li>
 </ul>
-
-<p><br>The following pieces of functionality will be part
-of the JSF specification but are *not* included in this release:
-<ul>
-<li>
-Some UI Components (Graphic, Panel, DataGrid, DataHierarchy)</li>
-
-<li>
-Validation</li>
-
-<li>
-Page Flow &amp; Error Handling</li>
-
-<li>
-I18N</li>
-
-<li>
-Application lifecycle events</li>
-</ul>
-
-<p>Additionally, in the areas of functionality released in the EA,
-there are already significant changes in the specification with respect
-to the component classes, model object management, and the event model.
-Therefore, only experimental code should be developed against this
-release since it will not be compatibile with subsequent releases.
 <p><a NAME="known_bugs"></a>
 <h1>
 Known Bugs</h1>
@@ -180,55 +228,94 @@ Known Bugs</h1>
 </tr>
 
 <tr>
-<td>4619152...</td>
-
-<td>generate ID if not present in markup...&nbsp;</td>
+<td>4823134
+</td>
+<td>JSF tags don't offer all attributes available in equivalent HTML 4 tags
+</td>
 </tr>
 
 <tr>
-<td>4619153...</td>
-
-<td>ModelAccessor should be an interface in the API...&nbsp;</td>
+<td>4823150</td>
+<td>
+SelectItems should be localizable</td>
 </tr>
 
 <tr>
-<td>4619213...</td>
-
-<td>FacesServlet throws ServletException...&nbsp;</td>
+<td>4823152</td>
+<td>
+Investigate using a stylesheet renderer</td>
 </tr>
 
 <tr>
-<td>4619148...</td>
+<td>4823154</td>
 
-<td>should use "id" instead of "name" to identify things....&nbsp;</td>
+<td>Investigate actionReference attribute for command_button</td>
 </tr>
 
 <tr>
-<td>4619266...</td>
-
-<td>SelectOne_OptionList Tag Hander should render all options...&nbsp;</td>
-</tr>
-
-<tr>
-<td>4614601</td>
-
-<td>&lt;faces:Form> tag doesn't support method attribute</td>
+<td>4823158</td>
+<td>
+Command not invoked in rare cases with IE 5.5</td>
 </tr>
 </table>
 
-<table>
-<tr>
-<td></td>
-</tr>
-</table>
-
-<p><a NAME="14608"></a>
-<p><a NAME="19014"></a>
-<p><a NAME="19015"></a>
-<p><a NAME="17339"></a>
 <p>
 <hr>
-<p><i><font size=-1><a href="../.dt/tmp/Copyright.html">Copyright &copy;
-2001 Sun Microsystems, Inc. All rights reserved.</a></font></i>
+<p>Copyright &copy; 2002, 2003 Sun Microsystems, Inc., 4150 Network Circle, Santa
+<br>Clara, California 95054, U.S.A. All rights reserved.
+<p>Sun Microsystems, Inc. has intellectual property rights relating to
+<br>technology embodied in this product. In particular, and without
+<br>limitation, these intellectual property rights may include one or more
+<br>of the U.S. patents listed at http://www.sun.com/patents and one or
+more
+<br>additional patents or pending patent applications in the U.S. and other
+<br>countries.
+<p>This product is distributed under licenses restricting its use, copying
+<br>distribution, and decompilation. No part of this product may be
+<br>reproduced in any form by any means without prior written authorization
+<br>of Sun and its licensors, if any.
+<p>Third-party software, including font technology, is copyrighted and
+<br>licensed from Sun suppliers.
+<p>Sun, Sun Microsystems, the Sun logo, the Java Coffee Cup logo,
+<br>JavaServer, and Java are trademarks or registered trademarks of Sun
+<br>Microsystems, Inc. in the U.S. and other countries.
+<p>Federal Acquisitions: Commercial Software - Government Users Subject
+to
+<br>Standard License Terms and Conditions.
+<p>
+<hr WIDTH="100%">
+<p>Copyright &copy; 2002, 2003 Sun Microsystems, Inc., 4150 Network Circle,
+<br>Santa Clara, California 95054, Etats-Unis. Tous droits r&eacute;serv&eacute;s.
+<p>Sun Microsystems, Inc. a les droits de propri&eacute;t&eacute; intellectuels
+relatants
+<br>&agrave; la technologie incorpor&eacute;e dans ce produit. En particulier,
+et sans la
+<br>limitation, ces droits de propri&eacute;t&eacute; intellectuels peuvent
+inclure un ou
+<br>plus des brevets am&eacute;ricains &eacute;num&eacute;r&eacute;s &agrave;
+http://www.sun.com/patents et un
+<br>ou les brevets plus suppl&eacute;mentaires ou les applications de brevet
+en
+<br>attente dans les Etats - Unis et les autres pays.
+<p>Ce produit ou document est prot&eacute;g&eacute; par un copyright et
+distribu&eacute; avec
+<br>des licences qui en restreignent l'utilisation, la copie, la
+<br>distribution, et la d&eacute;compilation. Aucune partie de ce produit
+ou
+<br>document ne peut &ecirc;tre reproduite sous aucune forme, par quelque
+moyen
+<br>que ce soit, sans l'autorisation pr&eacute;alable et &eacute;crite
+de Sun et de ses
+<br>bailleurs de licence, s'il y ena.
+<p>Le logiciel d&eacute;tenu par des tiers, et qui comprend la technologie
+<br>relative aux polices de caract&egrave;res, est prot&eacute;g&eacute;
+par un copyright et
+<br>licenci&eacute; par des fournisseurs de Sun.
+<p>Sun, Sun Microsystems, le logo Sun, le logo Java Coffee Cup, JavaServer,
+<br>et Java sont des marques de fabrique ou des marques d&eacute;pos&eacute;es
+de Sun
+<br>Microsystems, Inc. aux Etats-Unis et dans d'autres pays.
+<br>&nbsp;
+<br><i><font size=-1><a href="../.dt/tmp/Copyright.html"></a></font></i>&nbsp;
 </body>
 </html>
