@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.6 2004/02/04 23:42:33 ofung Exp $
+ * $Id: TestComponent.java,v 1.7 2004/02/06 18:56:04 rlubke Exp $
  */
 
 /*
@@ -10,10 +10,10 @@
 package com.sun.faces.systest;
 
 
-import java.io.IOException;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import javax.faces.event.FacesEvent;
+
+import java.io.IOException;
 
 
 /**
@@ -27,10 +27,12 @@ public class TestComponent extends UIInput {
         this("test");
     }
 
+
     public TestComponent(String componentId) {
         super();
         setId(componentId);
     }
+
 
     public String getComponentType() {
         return ("TestComponent");
@@ -100,6 +102,7 @@ public class TestComponent extends UIInput {
     // Accumulated trace log
     private static StringBuffer trace = new StringBuffer();
 
+
     // Append to the current trace log (or clear if null)
     public static void trace(String text) {
         if (text == null) {
@@ -109,6 +112,7 @@ public class TestComponent extends UIInput {
             trace.append(text);
         }
     }
+
 
     // Retrieve the current trace log
     public static String trace() {

@@ -56,51 +56,54 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- */ 
+ */
 
 package com.sun.faces.el.impl;
 
 /**
- *
  * <p>This is a test bean that holds a single String
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
-public class Bean2
-{
-  //-------------------------------------
-  // Properties
-  //-------------------------------------
-  // property value
+public class Bean2 {
 
-  String mValue;
-  public String getValue ()
-  { return mValue; }
-  public void setValue (String pValue)
-  { mValue = pValue; }
+    //-------------------------------------
+    // Properties
+    //-------------------------------------
+    // property value
 
-  //-------------------------------------
-  // Member variables
-  //-------------------------------------
+    String mValue;
 
-  //-------------------------------------
-  /**
-   *
-   * Constructor
-   **/
-  public Bean2 (String pValue)
-  {
-    mValue = pValue;
-  }
 
-  //-------------------------------------
-  public String toString ()
-  {
-    return ("Bean2[" + mValue + "]");
-  }
+    public String getValue() {
+        return mValue;
+    }
 
-  //-------------------------------------
+
+    public void setValue(String pValue) {
+        mValue = pValue;
+    }
+
+    //-------------------------------------
+    // Member variables
+    //-------------------------------------
+
+    //-------------------------------------
+    /**
+     * Constructor
+     */
+    public Bean2(String pValue) {
+        mValue = pValue;
+    }
+
+
+    //-------------------------------------
+    public String toString() {
+        return ("Bean2[" + mValue + "]");
+    }
+
+    //-------------------------------------
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestBean.java,v 1.2 2004/02/04 23:42:39 ofung Exp $
+ * $Id: AbstractTestBean.java,v 1.3 2004/02/06 18:56:11 rlubke Exp $
  */
 
 /*
@@ -17,7 +17,13 @@ package com.sun.faces.systest.model;
 public abstract class AbstractTestBean {
 
     private String stringProperty = "String Property";
-    public String getStringProperty() { return this.stringProperty; }
+
+
+    public String getStringProperty() {
+        return this.stringProperty;
+    }
+
+
     public void setStringProperty(String stringProperty) {
         this.stringProperty = stringProperty;
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: IdTagParserImpl.java,v 1.6 2004/02/04 23:42:09 ofung Exp $
+ * $Id: IdTagParserImpl.java,v 1.7 2004/02/06 18:55:41 rlubke Exp $
  */
 
 /*
@@ -9,15 +9,14 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import java.util.ResourceBundle;
-import java.text.MessageFormat;
-
-import org.xml.sax.Attributes;
-
 import com.sun.faces.RIConstants;
-import com.sun.faces.taglib.ValidatorInfo;
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.TagParser;
+import com.sun.faces.taglib.ValidatorInfo;
+import org.xml.sax.Attributes;
+
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 
 /**
@@ -45,7 +44,6 @@ public class IdTagParserImpl implements TagParser {
 
     /**
      * <p>CommandTagParser constructor</p>
-     *
      */
     public IdTagParserImpl() {
         failed = false;
@@ -54,15 +52,15 @@ public class IdTagParserImpl implements TagParser {
         requiresIdList = new StringBuffer();
     }
 
+
     /**
-     * <p>Set the validator info object that has the current tag 
+     * <p>Set the validator info object that has the current tag
      * information</p>
      *
      * @param ValidatorInfo object with current tag info
-     *
      */
     public void setValidatorInfo(ValidatorInfo validatorInfo) {
-  	this.validatorInfo = validatorInfo;
+        this.validatorInfo = validatorInfo;
     }
 
 
@@ -79,6 +77,7 @@ public class IdTagParserImpl implements TagParser {
         return MessageFormat.format(rb.getString("TLV_ID_ERROR"), obj);
     }
 
+
     /**
      * <p>Return false if validator conditions have not been met</p>
      *
@@ -88,10 +87,10 @@ public class IdTagParserImpl implements TagParser {
         return failed;
     }
 
+
     /**
      * <p>Parse the starting element. If it is a specific JSTL tag
      * make sure that the nested JSF tags have IDs. </p>
-     *
      */
     public void parseStartElement() {
         String qn = validatorInfo.getQName();
@@ -100,26 +99,23 @@ public class IdTagParserImpl implements TagParser {
 
         if (isJstlTag(validator, qn)) {
             requiresIdCount++;
-        }
-        else if (isNamingContainerTag(validator, qn)) {
+        } else if (isNamingContainerTag(validator, qn)) {
             nestedInNamingContainer = true;
-        }
-        else if ((validator.getJSF_HTML_PRE() != null) && 
-                 (qn.startsWith(validator.getJSF_HTML_PRE())) &&
-                 (requiresIdCount > 0) ) {
+        } else if ((validator.getJSF_HTML_PRE() != null) &&
+            (qn.startsWith(validator.getJSF_HTML_PRE())) &&
+            (requiresIdCount > 0)) {
             //make sure that id is present in attributes
             if ((!(nestedInNamingContainer)) && (!hasIdAttribute(a))) {
                 //add to list of jsf tags for error report
                 failed = true;
                 requiresIdList.append(qn).append(' ');
             }
-        }
-        else if ((requiresIdCount == 0) && 
-                 (!siblingSatisfied)) {
+        } else if ((requiresIdCount == 0) &&
+            (!siblingSatisfied)) {
             //make sure jsf sibling has an id
             if ((validator.getJSF_HTML_PRE() != null) &&
                 (qn.startsWith(validator.getJSF_HTML_PRE()) ||
-                    qn.startsWith(validator.getJSF_CORE_PRE())) &&
+                qn.startsWith(validator.getJSF_CORE_PRE())) &&
                 (!hasIdAttribute(a)) && (!(nestedInNamingContainer))) {
 
                 //add to list of jsf tags for error report
@@ -127,8 +123,7 @@ public class IdTagParserImpl implements TagParser {
                 requiresIdList.append(qn).append(' ');
             }
             siblingSatisfied = true;
-        }
-        else if (requiresIdCount == 0) {
+        } else if (requiresIdCount == 0) {
             // sibling is a non-JSF tag
             // JSF tags no longer need id's
             siblingSatisfied = true;
@@ -136,10 +131,10 @@ public class IdTagParserImpl implements TagParser {
 
     }
 
+
     /**
      * <p>Parse the ending element. If it is a specific JSTL tag
      * make sure that the appropriate flags are set.</p>
-     *
      */
     public void parseEndElement() {
         String qn = validatorInfo.getQName();
@@ -173,42 +168,44 @@ public class IdTagParserImpl implements TagParser {
         return false;
     }
 
+
     /**
-     * Check to make sure that the element is either a 
+     * Check to make sure that the element is either a
      * conditional or iterator JSTL tag.
      *
-     * @param validator Parent validator 
-     * @param qn Element to be checked.
+     * @param validator Parent validator
+     * @param qn        Element to be checked.
      *
      * @return boolean True if JSTL tag is iterator or conditional
      */
     private boolean isJstlTag(FacesValidator validator, String qn) {
-        if (qn.equals(validator.getJSTL_IF_QN()) || 
+        if (qn.equals(validator.getJSTL_IF_QN()) ||
             qn.equals(validator.getJSTL_CHOOSE_QN()) ||
             qn.equals(validator.getJSTL_FOREACH_QN()) ||
             qn.equals(validator.getJSTL_FORTOKENS_QN())) {
-           return true;
+            return true;
         }
         return false;
     }
-    
+
+
     /**
-     * Check to make sure that the element is either a 
+     * Check to make sure that the element is either a
      * form tag or a subview tag.
      *
-     * @param validator Parent validator 
-     * @param qn Element to be checked.
+     * @param validator Parent validator
+     * @param qn        Element to be checked.
      *
      * @return boolean True if JSF tag is form or subview
      */
     private boolean isNamingContainerTag(FacesValidator validator, String qn) {
-        
+
         // PENDING (visvan) Handle custom implementations of NamingContainer.
         // This requires the compiler to look up a fake Faces environment
         // so that we can look up the component class based on what 
         // getComponentType() returns to detect customer NamingContainer
         // components.
-        if (qn.equals(validator.getJSF_FORM_QN()) || 
+        if (qn.equals(validator.getJSF_FORM_QN()) ||
             qn.equals(validator.getJSF_SUBVIEW_QN())) {
             return true;
         }

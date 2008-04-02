@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.18 2004/02/04 23:41:49 ofung Exp $
+ * $Id: ListboxRenderer.java,v 1.19 2004/02/06 18:55:20 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -15,18 +15,18 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import java.io.IOException;
-
-import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
 
+import java.io.IOException;
+
 /**
- * <B>ListRenderer</B> is a class that renders the current value of 
- * <code>UISelectOne<code> or <code>UISelectMany<code> component as a list of 
+ * <B>ListRenderer</B> is a class that renders the current value of
+ * <code>UISelectOne<code> or <code>UISelectMany<code> component as a list of
  * options.
  */
 
 public class ListboxRenderer extends MenuRenderer {
+
     //
     // Protected Constants
     //
@@ -62,8 +62,8 @@ public class ListboxRenderer extends MenuRenderer {
     //
     // Methods From Renderer
     //
-    protected void writeDefaultSize(ResponseWriter writer, int itemCount) 
-          throws IOException {
+    protected void writeDefaultSize(ResponseWriter writer, int itemCount)
+        throws IOException {
         // If size not specified, default to number of items
         writer.writeAttribute("size", new Integer(itemCount), "size");
     }

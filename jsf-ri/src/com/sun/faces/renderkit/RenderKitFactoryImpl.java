@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.16 2004/02/04 23:41:42 ofung Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.17 2004/02/06 18:55:13 rlubke Exp $
  */
 
 /*
@@ -11,18 +11,12 @@ package com.sun.faces.renderkit;
 
 import com.sun.faces.util.Util;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.IOException;
+import javax.faces.context.FacesContext;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import javax.faces.FacesException;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
-import javax.faces.context.FacesContext;
-
-import com.sun.faces.util.Util;
 
 
 public class RenderKitFactoryImpl extends RenderKitFactory {
@@ -51,39 +45,44 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
     public RenderKitFactoryImpl() {
         super();
         renderKits = new HashMap();
-	addRenderKit(HTML_BASIC_RENDER_KIT, new RenderKitImpl());
+        addRenderKit(HTML_BASIC_RENDER_KIT, new RenderKitImpl());
     }
-    
+
+
     public void addRenderKit(String renderKitId, RenderKit renderKit) {
 
         if (renderKitId == null || renderKit == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        synchronized(renderKits) {
+        synchronized (renderKits) {
             renderKits.put(renderKitId, renderKit);
         }
     }
 
+
     public RenderKit getRenderKit(FacesContext context, String renderKitId) {
 
         if (renderKitId == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         //PENDING (rogerk) do something with FacesContext ...
         //
         // If an instance already exists, return it.
         //
-	RenderKit renderKit = null;
+        RenderKit renderKit = null;
 
-        synchronized(renderKits) {
+        synchronized (renderKits) {
             if (renderKits.containsKey(renderKitId)) {
-		renderKit = (RenderKit) renderKits.get(renderKitId);
+                renderKit = (RenderKit) renderKits.get(renderKitId);
             }
         }
 
         return renderKit;
     }
+
 
     public Iterator getRenderKitIds() {
         return (renderKits.keySet().iterator());

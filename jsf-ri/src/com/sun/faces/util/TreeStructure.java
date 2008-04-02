@@ -1,5 +1,5 @@
 /*
- * $Id: TreeStructure.java,v 1.4 2004/02/04 23:42:18 ofung Exp $
+ * $Id: TreeStructure.java,v 1.5 2004/02/06 18:55:51 rlubke Exp $
  */
 
 /*
@@ -9,51 +9,50 @@
 
 package com.sun.faces.util;
 
-import com.sun.faces.util.Util;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 
-
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-
-import javax.faces.component.UIComponent;
-import javax.faces.FacesException;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * TreeStructure is a class that represents the structure of a UIComponent
  * instance. This class plays a key role in saving and restoring the structure
- * of the component tree. 
- * 
+ * of the component tree.
  */
-public class TreeStructure implements java.io.Serializable{
-    
+public class TreeStructure implements java.io.Serializable {
+
     ArrayList children = null;
     HashMap facets = null;
     String className = null;
     String id = null;
-    
+
+
     public TreeStructure() {
-    }    
-    
-    public TreeStructure( UIComponent component) {
+    }
+
+
+    public TreeStructure(UIComponent component) {
         Util.parameterNonNull(component);
         this.id = component.getId();
         className = component.getClass().getName();
-    }    
-    
+    }
+
+
     /**
-     * Returns the className of the UIComponent that this TreeStructure 
-     * represents. 
+     * Returns the className of the UIComponent that this TreeStructure
+     * represents.
      */
     public String getClazzName() {
         return className;
     }
-    
+
+
     /**
-     * Returns the iterator over className of the children that are attached to   
-     * the UIComponent that this TreeStructure represents. 
+     * Returns the iterator over className of the children that are attached to
+     * the UIComponent that this TreeStructure represents.
      */
     public Iterator getChildren() {
         if (children != null) {
@@ -62,10 +61,11 @@ public class TreeStructure implements java.io.Serializable{
             return (Collections.EMPTY_LIST.iterator());
         }
     }
-    
+
+
     /**
-     * Returns the iterator over className of the facets that are attached to   
-     * the UIComponent that this TreeStructure represents. 
+     * Returns the iterator over className of the facets that are attached to
+     * the UIComponent that this TreeStructure represents.
      */
     public Iterator getFacetNames() {
         if (facets != null) {
@@ -74,43 +74,47 @@ public class TreeStructure implements java.io.Serializable{
             return (Collections.EMPTY_LIST.iterator());
         }
     }
-    
+
+
     /**
      * Adds treeStruct as a child of this TreeStructure instance.
      */
     public void addChild(TreeStructure treeStruct) {
         Util.parameterNonNull(treeStruct);
-        if (children == null ) {
+        if (children == null) {
             children = new ArrayList();
-        }    
+        }
         children.add(treeStruct);
     }
-    
-     /**
-      * Adds treeStruct as a facet belonging to this TreeStructure instance.
+
+
+    /**
+     * Adds treeStruct as a facet belonging to this TreeStructure instance.
      */
     public void addFacet(String facetName, TreeStructure treeStruct) {
         Util.parameterNonNull(facetName);
         Util.parameterNonNull(treeStruct);
-        if (facets == null ) {
+        if (facets == null) {
             facets = new HashMap();
-        }    
+        }
         facets.put(facetName, treeStruct);
     }
-    
+
+
     /**
      * Returns a TreeStructure representing a facetName by looking up
      * the facet list
      */
     public TreeStructure getTreeStructureForFacet(String facetName) {
         Util.parameterNonNull(facetName);
-        if (facets != null ) {
-            return ((TreeStructure)(facets.get(facetName)));
+        if (facets != null) {
+            return ((TreeStructure) (facets.get(facetName)));
         } else {
             return null;
-        }    
+        }
     }
-    
+
+
     /**
      * Creates and returns the UIComponent that this TreeStructure
      * represents using the structure information available.
@@ -120,15 +124,15 @@ public class TreeStructure implements java.io.Serializable{
         // create the UIComponent based on the className stored.
         try {
             Class clazz = Util.loadClass(className, this);
-            component =  ((UIComponent) clazz.newInstance());
+            component = ((UIComponent) clazz.newInstance());
         } catch (Exception e) {
             Object params[] = {className};
-            throw new FacesException(
-            Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, 
+            throw new FacesException(Util.getExceptionMessage(
+                Util.MISSING_CLASS_ERROR_MESSAGE_ID,
                 params));
         }
         Util.doAssert(component != null);
         component.setId(id);
         return component;
     }
- }
+}

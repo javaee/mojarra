@@ -62,16 +62,16 @@ package com.sun.faces.el.impl;
 
 
 /**
- *
  * <p>Represents an expression String consisting of a mixture of
  * Strings and Expressions.
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class ExpressionString {
+
     //-------------------------------------
     // Properties
     //-------------------------------------
@@ -79,9 +79,11 @@ public class ExpressionString {
 
     Object[] mElements;
 
+
     public Object[] getElements() {
         return mElements;
     }
+
 
     public void setElements(Object[] pElements) {
         mElements = pElements;
@@ -89,22 +91,19 @@ public class ExpressionString {
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public ExpressionString(Object[] pElements) {
         mElements = pElements;
     }
 
     //-------------------------------------
     /**
-     *
      * Evaluates the expression string by evaluating each element,
      * converting it to a String (using toString, or "" for null values)
      * and concatenating the results into a single String.
-     **/
-    public String evaluate(
-        ExpressionInfo exprInfo)
+     */
+    public String evaluate(ExpressionInfo exprInfo)
         throws ElException {
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < mElements.length; i++) {
@@ -124,9 +123,8 @@ public class ExpressionString {
 
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < mElements.length; i++) {

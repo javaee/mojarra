@@ -1,5 +1,5 @@
 /*
- * $Id: WebXmlParser.java,v 1.5 2004/02/04 23:40:53 ofung Exp $
+ * $Id: WebXmlParser.java,v 1.6 2004/02/06 18:54:21 rlubke Exp $
  */
 
 /*
@@ -32,8 +32,8 @@ import java.util.StringTokenizer;
 
 
 public class WebXmlParser extends Object {
-    
-    // 
+
+    //
     // Private Constants
     //
     
@@ -54,11 +54,12 @@ public class WebXmlParser extends Object {
 
     /**
      * <p>Creates a new <code>WebXmlParser<code> instance.</p>
+     *
      * @param context the <code>ServletContext</code> of the current
-     *  application
-     */ 
+     *                application
+     */
     public WebXmlParser(ServletContext context) {
-        this.context = context;        
+        this.context = context;
         servletMappings = new ArrayList();
     }
   
@@ -69,58 +70,56 @@ public class WebXmlParser extends Object {
     
     
     /**
-     * <p>Obtains the <code>url-pattern</code>s for the 
-     * all {@link javax.faces.webapp.FacesServlet}s referenced in this 
+     * <p>Obtains the <code>url-pattern</code>s for the
+     * all {@link javax.faces.webapp.FacesServlet}s referenced in this
      * application's deployment descriptor <code>(web.xml)</code>.</p>
-     * 
-     * @return The <code>url-pattern</code> of the 
-     *  all {@link javax.faces.webapp.FacesServlet} instances
-     */ 
+     *
+     * @return The <code>url-pattern</code> of the
+     *         all {@link javax.faces.webapp.FacesServlet} instances
+     */
     public List getFacesServletMappings() {
         digester = new Digester();
         digester.setUseContextClassLoader(true);
         
         // Set a custom EntityResolver so that the DTD or Schema
         // is effectively ignored
-        digester.setEntityResolver(
-            new EntityResolver() {
-                public InputSource resolveEntity(String string, String string1)
-                    throws SAXException, IOException {
-                    return new InputSource(new CharArrayReader(new char[0]));
-                }
-
+        digester.setEntityResolver(new EntityResolver() {
+            public InputSource resolveEntity(String string, String string1)
+                throws SAXException, IOException {
+                return new InputSource(new CharArrayReader(new char[0]));
             }
-        );
-        
+
+        });
+
         configureRules();
         URL url = null;
         try {
             url = context.getResource("/WEB-INF/web.xml");
         } catch (MalformedURLException mue) {
-            ; 
-        }               
+            ;
+        }
 
         // No web.xml found. Don't try and parse.
         if (url == null) {
             if (log.isDebugEnabled()) {
                 log.debug("Missing web.xml file. Cannot parse.");
-            }            
+            }
             return servletMappings;
         }
-        
+
         InputSource in = new InputSource(escapeSpaces(url.toExternalForm()));
-        InputStream inStream = null;        
+        InputStream inStream = null;
         try {
-	    URLConnection conn = url.openConnection();
-	    conn.setUseCaches(false);
+            URLConnection conn = url.openConnection();
+            conn.setUseCaches(false);
             inStream = conn.getInputStream();
             in.setByteStream(inStream);
             digester.parse(in);
-        } catch (Exception e) {           
+        } catch (Exception e) {
             String message = "Unexpected error parsing /WEB-INF/web.xml: " + e;
             if (log.isErrorEnabled()) {
                 log.error(message, e);
-            }            
+            }
             throw new FacesException(message, e);
         } finally {
             if (inStream != null) {
@@ -131,19 +130,20 @@ public class WebXmlParser extends Object {
                 }
             }
             digester = null;
-        }                       
-        
+        }
+
         return servletMappings;
     }
-    
+
+
     /**
      * <p>Configure the <code>Rule</code>s for parsing this application's
      * <code>web.xml</code> file.</p>
-     */ 
+     */
     private void configureRules() {
-        
+
         // Rules for <servlet> elements
-        digester.addObjectCreate("web-app/servlet", 
+        digester.addObjectCreate("web-app/servlet",
                                  ServletBean.class);
         digester.addCallMethod("web-app/servlet/servlet-name",
                                "setServletName", 0);
@@ -160,13 +160,16 @@ public class WebXmlParser extends Object {
                                "setUrlPattern", 0);
         digester.addRule("web-app/servlet-mapping", new ServletMappingRule());
     }
-    
+
+
     /**
      * <p>Replace occurances of a ' ' with another '%20'.</p>
-     * @param src input value    
+     *
+     * @param src input value
+     *
      * @return the replacement result.
-     */ 
-    public static String escapeSpaces(String src) {        
+     */
+    public static String escapeSpaces(String src) {
         if (src.indexOf(" ") == -1) {
             return src;
         }
@@ -182,7 +185,7 @@ public class WebXmlParser extends Object {
                 result.append(curToken);
             }
         }
-        
+
         return result.toString();
     }
     
@@ -193,16 +196,16 @@ public class WebXmlParser extends Object {
     // ---------------------------------------------------------- Digester Rules
     
     /**
-     <p>This <code>Rule<code> handles the population of the
+     * <p>This <code>Rule<code> handles the population of the
      * </code>servlets</code> </code>Map</code>.</p>
-     */ 
+     */
     private class ServletRule extends Rule {
 
         public void end(String namespace, String name) throws Exception {
-            ServletBean servletBean = (ServletBean) this.digester.peek();  
+            ServletBean servletBean = (ServletBean) this.digester.peek();
             String servletClass = servletBean.getServletClass();
             if (servletClass != null && servletClass.equals(
-                "javax.faces.webapp.FacesServlet")) {                                    
+                "javax.faces.webapp.FacesServlet")) {
                 if (servletName == null) {
                     servletName = servletBean.getServletName();
                 } else {
@@ -211,15 +214,15 @@ public class WebXmlParser extends Object {
                 }
             }
         }
-        
+
     }
-    
+
     /**
      * <p>This <code>Rule<code> handles the population of the
      * </code>servletMappings</code> </code>Map</code>.</p>
-     */ 
+     */
     private class ServletMappingRule extends Rule {
-        
+
         public void end(String namespace, String name) throws Exception {
             ServletMappingBean mappingBean = (ServletMappingBean)
                 this.digester.peek();
@@ -230,16 +233,17 @@ public class WebXmlParser extends Object {
             if (servletName != null &&
                 servletName.equals(mappingBean.getServletName())) {
                 String urlPattern = mappingBean.getUrlPattern();
-           
+
                 if (urlPattern.charAt(0) == '*') {
                     urlPattern = urlPattern.substring(1);
                 } else if (urlPattern.endsWith("/*")) {
-                    urlPattern = urlPattern.substring(0, urlPattern.length() - 2);
+                    urlPattern =
+                        urlPattern.substring(0, urlPattern.length() - 2);
                 }
                 servletMappings.add(urlPattern);
             }
         }
-        
+
     }
 
     //  TESTCASE: com.sun.faces.config.ConfigFileTestCase 

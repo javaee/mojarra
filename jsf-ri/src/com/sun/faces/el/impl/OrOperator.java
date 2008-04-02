@@ -62,15 +62,15 @@ package com.sun.faces.el.impl;
 
 
 /**
- *
  * <p>The implementation of the or operator
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class OrOperator
     extends BinaryOperator {
+
     //-------------------------------------
     // Singleton
     //-------------------------------------
@@ -80,9 +80,8 @@ public class OrOperator
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public OrOperator() {
     }
 
@@ -90,18 +89,16 @@ public class OrOperator
     // Expression methods
     //-------------------------------------
     /**
-     *
      * Returns the symbol representing the operator
-     **/
+     */
     public String getOperatorSymbol() {
         return "or";
     }
 
     //-------------------------------------
     /**
-     *
      * Applies the operator to the given value
-     **/
+     */
     public Object apply(Object pLeft, Object pRight)
         throws ElException {
         // Coerce the values to booleans
@@ -115,10 +112,9 @@ public class OrOperator
 
     //-------------------------------------
     /**
-     *
      * Returns true if evaluation is necessary given the specified Left
      * value.  The And/OrOperators make use of this
-     **/
+     */
     public boolean shouldEvaluate(Object pLeft) {
         return
             (pLeft instanceof Boolean) &&
@@ -127,10 +123,9 @@ public class OrOperator
 
     //-------------------------------------
     /**
-     *
      * Returns true if the operator expects its arguments to be coerced
      * to Booleans.  The And/Or operators set this to true.
-     **/
+     */
     public boolean shouldCoerceToBoolean() {
         return true;
     }

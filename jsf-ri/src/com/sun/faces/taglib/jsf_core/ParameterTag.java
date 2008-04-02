@@ -1,5 +1,5 @@
 /*
- * $Id: ParameterTag.java,v 1.13 2004/02/04 23:42:09 ofung Exp $
+ * $Id: ParameterTag.java,v 1.14 2004/02/06 18:55:42 rlubke Exp $
  */
 
 /*
@@ -56,31 +56,36 @@ public class ParameterTag extends BaseComponentTag {
 // General Methods
 //
 
-    public String getRendererType() { return null; }
-    public String getComponentType() { return "javax.faces.Parameter"; }
+    public String getRendererType() {
+        return null;
+    }
+
+
+    public String getComponentType() {
+        return "javax.faces.Parameter";
+    }
+
 
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
-        UIParameter parameter = (UIParameter)component;
+        UIParameter parameter = (UIParameter) component;
 
         if (name != null) {
-	    if (isValueReference(name)) {
-		component.setValueBinding("name",
-					  Util.getValueBinding(name));
-	    }
-	    else {
-		parameter.setName(name);
-	    }
+            if (isValueReference(name)) {
+                component.setValueBinding("name",
+                                          Util.getValueBinding(name));
+            } else {
+                parameter.setName(name);
+            }
         }
         // if component has non null value, do not call setValue().
         if (value != null) {
-	    if (isValueReference(value)) {
-		component.setValueBinding("value",
-					  Util.getValueBinding(value));
-	    }
-	    else {
-		parameter.setValue(value);
-	    }
+            if (isValueReference(value)) {
+                component.setValueBinding("value",
+                                          Util.getValueBinding(value));
+            } else {
+                parameter.setValue(value);
+            }
         }
     }
 }

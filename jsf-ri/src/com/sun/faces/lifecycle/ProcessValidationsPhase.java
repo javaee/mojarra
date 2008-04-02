@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.18 2004/02/04 23:41:38 ofung Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.19 2004/02/06 18:55:09 rlubke Exp $
  */
 
 /*
@@ -10,27 +10,26 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.util.Util;
-
-import javax.faces.FacesException;
-import javax.faces.event.PhaseId;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
+
 /**
- * ProcessValidationsPhase executes <code>processValidators</code> on each 
+ * ProcessValidationsPhase executes <code>processValidators</code> on each
  * component in the tree.
  */
 public class ProcessValidationsPhase extends Phase {
-    
+
 //
 // Protected Constants
 //
     
 // Log instance for this class
-protected static Log log = LogFactory.getLog(ProcessValidationsPhase.class);
+    protected static Log log = LogFactory.getLog(ProcessValidationsPhase.class);
 
 //
 // Class Variables
@@ -48,8 +47,8 @@ protected static Log log = LogFactory.getLog(ProcessValidationsPhase.class);
 // Constructors and Genericializers    
 //
 
-public ProcessValidationsPhase() {
-}
+    public ProcessValidationsPhase() {
+    }
 
 //
 // Class methods
@@ -63,33 +62,33 @@ public ProcessValidationsPhase() {
 // Methods from Phase
 //
 
-public PhaseId getId() {
-    return PhaseId.PROCESS_VALIDATIONS;
-}
-
-public void execute(FacesContext facesContext) throws FacesException
-{
-    if (log.isDebugEnabled()) {
-        log.debug("Entering ProcessValidationsPhase");
+    public PhaseId getId() {
+        return PhaseId.PROCESS_VALIDATIONS;
     }
-    UIComponent component = facesContext.getViewRoot();
-    Util.doAssert(null != component);
-    
-    try {
-	component.processValidators(facesContext);
-    } catch (RuntimeException re) {
-	String exceptionMessage = re.getMessage();
-        if (null != exceptionMessage) {
-            if (log.isErrorEnabled()) {
-                log.error(exceptionMessage, re);
+
+
+    public void execute(FacesContext facesContext) throws FacesException {
+        if (log.isDebugEnabled()) {
+            log.debug("Entering ProcessValidationsPhase");
+        }
+        UIComponent component = facesContext.getViewRoot();
+        Util.doAssert(null != component);
+
+        try {
+            component.processValidators(facesContext);
+        } catch (RuntimeException re) {
+            String exceptionMessage = re.getMessage();
+            if (null != exceptionMessage) {
+                if (log.isErrorEnabled()) {
+                    log.error(exceptionMessage, re);
+                }
+                throw new FacesException(exceptionMessage, re);
             }
-            throw new FacesException(exceptionMessage, re);
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("Exiting ProcessValidationsPhase");
         }
     }
-    if (log.isDebugEnabled()) {
-        log.debug("Exiting ProcessValidationsPhase");
-    }
-}
 
 
 // The testcase for this class is TestProcessValidationsPhase.java

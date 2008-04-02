@@ -64,17 +64,17 @@ import java.util.List;
 
 
 /**
- *
  * <p>An expression representing one or more unary operators on a
  * value
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class UnaryOperatorExpression
     extends Expression {
+
     //-------------------------------------
     // Properties
     //-------------------------------------
@@ -82,9 +82,11 @@ public class UnaryOperatorExpression
 
     UnaryOperator mOperator;
 
+
     public UnaryOperator getOperator() {
         return mOperator;
     }
+
 
     public void setOperator(UnaryOperator pOperator) {
         mOperator = pOperator;
@@ -95,9 +97,11 @@ public class UnaryOperatorExpression
 
     List mOperators;
 
+
     public List getOperators() {
         return mOperators;
     }
+
 
     public void setOperators(List pOperators) {
         mOperators = pOperators;
@@ -108,9 +112,11 @@ public class UnaryOperatorExpression
 
     Expression mExpression;
 
+
     public Expression getExpression() {
         return mExpression;
     }
+
 
     public void setExpression(Expression pExpression) {
         mExpression = pExpression;
@@ -118,13 +124,11 @@ public class UnaryOperatorExpression
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
-    public UnaryOperatorExpression(
-        UnaryOperator pOperator,
-        List pOperators,
-        Expression pExpression) {
+     */
+    public UnaryOperatorExpression(UnaryOperator pOperator,
+                                   List pOperators,
+                                   Expression pExpression) {
         mOperator = pOperator;
         mOperators = pOperators;
         mExpression = pExpression;
@@ -134,9 +138,8 @@ public class UnaryOperatorExpression
     // Expression methods
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         StringBuffer buf = new StringBuffer();
         buf.append("(");
@@ -157,9 +160,8 @@ public class UnaryOperatorExpression
 
     //-------------------------------------
     /**
-     *
      * Evaluates to the literal value
-     **/
+     */
     public Object evaluate(ExpressionInfo exprInfo)
         throws ElException {
         Object value = mExpression.evaluate(exprInfo);

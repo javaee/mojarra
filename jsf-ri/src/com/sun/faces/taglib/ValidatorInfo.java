@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorInfo.java,v 1.2 2004/02/04 23:42:03 ofung Exp $
+ * $Id: ValidatorInfo.java,v 1.3 2004/02/06 18:55:35 rlubke Exp $
  */
 
 /*
@@ -9,7 +9,6 @@
 
 package com.sun.faces.taglib;
 
-import com.sun.faces.taglib.FacesValidator;
 import org.xml.sax.Attributes;
 
 /**
@@ -28,61 +27,76 @@ public class ValidatorInfo {
     private String prefix;
     private String uri;
 
+
     public void setNameSpace(String nameSpace) {
         this.nameSpace = nameSpace;
     }
+
 
     public String getNameSpace() {
         return nameSpace;
     }
 
+
     public void setLocalName(String localName) {
         this.localName = localName;
     }
+
 
     public String getLocalName() {
         return localName;
     }
 
+
     public void setQName(String qName) {
         this.qName = qName;
     }
+
 
     public String getQName() {
         return qName;
     }
 
+
     public void setAttributes(Attributes attributes) {
         this.attributes = attributes;
     }
+
 
     public Attributes getAttributes() {
         return attributes;
     }
 
+
     public void setValidator(FacesValidator validator) {
         this.validator = validator;
     }
+
 
     public FacesValidator getValidator() {
         return validator;
     }
 
+
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
+
 
     public String getPrefix() {
         return prefix;
     }
 
+
     public void setUri(String uri) {
         this.uri = uri;
     }
 
+
     public String getUri() {
         return uri;
     }
+
 
     public String toString() {
         StringBuffer mesg = new StringBuffer();
@@ -97,11 +111,11 @@ public class ValidatorInfo {
             mesg.append("\nValidatorInfo attributes.getQName(");
             mesg.append(i);
             mesg.append("): ");
-            mesg.append(attributes.getQName(i)); 
+            mesg.append(attributes.getQName(i));
             mesg.append("\nValidatorInfo attributes.getValue(");
             mesg.append(i);
             mesg.append("): ");
-            mesg.append(attributes.getValue(i)); 
+            mesg.append(attributes.getValue(i));
         }
         mesg.append("\nValidatorInfo prefix: ");
         mesg.append(prefix);

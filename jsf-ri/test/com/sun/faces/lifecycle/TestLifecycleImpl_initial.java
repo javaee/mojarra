@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.24 2004/02/05 20:52:45 horwat Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.25 2004/02/06 18:56:58 rlubke Exp $
  */
 
 /*
@@ -17,37 +17,39 @@ import org.apache.cactus.WebRequest;
 import javax.faces.FacesException;
 
 /**
- *
- *  <B>TestLifecycleImpl_initial</B> is a class ...
- *
+ * <B>TestLifecycleImpl_initial</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.24 2004/02/05 20:52:45 horwat Exp $ 
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.25 2004/02/06 18:56:58 rlubke Exp $
  */
 
-public class TestLifecycleImpl_initial extends JspFacesTestCase
-{
+public class TestLifecycleImpl_initial extends JspFacesTestCase {
+
 //
 // Protected Constants
 //
 
-public static final String TEST_URI = "/greeting.jsp";
+    public static final String TEST_URI = "/greeting.jsp";
 
-public String getExpectedOutputFilename() {
-    return "TestLifecycleImpl_initial_correct";
-}
 
-public static final String ignore[] = {
-};
+    public String getExpectedOutputFilename() {
+        return "TestLifecycleImpl_initial_correct";
+    }
 
-public String [] getLinesToIgnore() {
-    return ignore;
-}
 
-public boolean sendResponseToFile() 
-{
-    return true;
-} 
+    public static final String ignore[] = {
+    };
+
+
+    public String[] getLinesToIgnore() {
+        return ignore;
+    }
+
+
+    public boolean sendResponseToFile() {
+        return true;
+    }
 
 //
 // Class Variables
@@ -65,8 +67,14 @@ public boolean sendResponseToFile()
 // Constructors and Initializers    
 //
 
-    public TestLifecycleImpl_initial() {super("TestLifecycleImpl_initial");}
-    public TestLifecycleImpl_initial(String name) {super(name);}
+    public TestLifecycleImpl_initial() {
+        super("TestLifecycleImpl_initial");
+    }
+
+
+    public TestLifecycleImpl_initial(String name) {
+        super(name);
+    }
 
 //
 // Class methods
@@ -77,41 +85,37 @@ public boolean sendResponseToFile()
 //
 
 
-protected void initWebRequest(WebRequest theRequest)
-{
-    theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
-}
-
-public void beginExecuteInitial(WebRequest theRequest)
-{
-    initWebRequest(theRequest);
-}
-
-public void testExecuteInitial()
-{
-    boolean result = false;
-    LifecycleImpl life = new LifecycleImpl();
-
-    try {
-	life.execute(getFacesContext());
-	life.render(getFacesContext());
+    protected void initWebRequest(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
     }
-    catch (FacesException e) {
-	System.err.println("Root Cause: " + e.getCause());
-	if (null != e.getCause()) {
-	    e.getCause().printStackTrace();
-	}
-	else {
-	    e.printStackTrace();
-	}
-	
-	assertTrue(e.getMessage(), false);
+
+
+    public void beginExecuteInitial(WebRequest theRequest) {
+        initWebRequest(theRequest);
     }
-    
-    assertTrue(verifyExpectedOutput());
 
-}
 
+    public void testExecuteInitial() {
+        boolean result = false;
+        LifecycleImpl life = new LifecycleImpl();
+
+        try {
+            life.execute(getFacesContext());
+            life.render(getFacesContext());
+        } catch (FacesException e) {
+            System.err.println("Root Cause: " + e.getCause());
+            if (null != e.getCause()) {
+                e.getCause().printStackTrace();
+            } else {
+                e.printStackTrace();
+            }
+
+            assertTrue(e.getMessage(), false);
+        }
+
+        assertTrue(verifyExpectedOutput());
+
+    }
 
 
 } // end of class TestLifecycleImpl_initial

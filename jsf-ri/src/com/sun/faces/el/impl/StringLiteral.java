@@ -61,48 +61,44 @@
 package com.sun.faces.el.impl;
 
 /**
- *
  * <p>An expression representing a String literal value.
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class StringLiteral
     extends Literal {
+
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     StringLiteral(Object pValue) {
         super(pValue);
     }
 
     //-------------------------------------
     /**
-     *
      * Returns a StringLiteral parsed from the given token (enclosed by
      * single or double quotes)
-     **/
+     */
     public static StringLiteral fromToken(String pToken) {
         return new StringLiteral(getValueFromToken(pToken));
     }
 
     //-------------------------------------
     /**
-     *
      * Returns a StringLiteral with the given string value
-     **/
+     */
     public static StringLiteral fromLiteralValue(String pValue) {
         return new StringLiteral(pValue);
     }
 
     //-------------------------------------
     /**
-     *
      * Parses the given token into the literal value
-     **/
+     */
     public static String getValueFromToken(String pToken) {
         StringBuffer buf = new StringBuffer();
         int len = pToken.length() - 1;
@@ -123,10 +119,9 @@ public class StringLiteral
 
     //-------------------------------------
     /**
-     *
      * Converts the specified value to a String token, using " as the
      * enclosing quotes and escaping any characters that need escaping.
-     **/
+     */
     public static String toStringToken(String pValue) {
         // See if any escaping is needed
         if (pValue.indexOf('\"') < 0 &&
@@ -158,10 +153,9 @@ public class StringLiteral
 
     //-------------------------------------
     /**
-     *
      * Converts the specified value to an identifier token, escaping it
      * as a string literal if necessary.
-     **/
+     */
     public static String toIdentifierToken(String pValue) {
         // See if it's a valid java identifier
         if (isJavaIdentifier(pValue)) {
@@ -176,9 +170,8 @@ public class StringLiteral
 
     //-------------------------------------
     /**
-     *
      * Returns true if the specified value is a legal java identifier
-     **/
+     */
     static boolean isJavaIdentifier(String pValue) {
         int len = pValue.length();
         if (len == 0) {
@@ -201,9 +194,8 @@ public class StringLiteral
     // Expression methods
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         return toStringToken((String) getValue());
     }

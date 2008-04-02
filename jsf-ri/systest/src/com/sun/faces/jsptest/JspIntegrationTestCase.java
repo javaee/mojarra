@@ -1,5 +1,5 @@
 /*
- * $Id: JspIntegrationTestCase.java,v 1.4 2004/02/04 23:42:25 ofung Exp $
+ * $Id: JspIntegrationTestCase.java,v 1.5 2004/02/06 18:55:57 rlubke Exp $
  */
 
 /*
@@ -12,16 +12,12 @@ package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.AbstractTestCase;
-import java.net.URL;
-import java.util.Iterator;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 
 
 /**
@@ -94,7 +90,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
                           "[A] { [1] [3] } [Z]");
 
         checkJspDynamic00();
-	client = new WebClient();
+        client = new WebClient();
         checkJspDynamic01("",
                           "[A] { } [Z]");
 
@@ -109,7 +105,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         checkJspDynamic01("?mode=create&value=[3]",
                           "[A] { [1] [2] [3] } [Z]");
         checkJspDynamic00();
-	client = new WebClient();
+        client = new WebClient();
         checkJspDynamic01("",
                           "[A] { } [Z]");
     }

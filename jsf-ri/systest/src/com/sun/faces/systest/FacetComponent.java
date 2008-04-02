@@ -1,5 +1,5 @@
 /*
- * $Id: FacetComponent.java,v 1.5 2004/02/04 23:42:32 ofung Exp $
+ * $Id: FacetComponent.java,v 1.6 2004/02/06 18:56:04 rlubke Exp $
  */
 
 /*
@@ -10,10 +10,11 @@
 package com.sun.faces.systest;
 
 
-import java.io.IOException;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.component.UIOutput;
+
+import java.io.IOException;
 
 
 /**
@@ -26,6 +27,7 @@ public class FacetComponent extends UIOutput {
     public FacetComponent() {
         super();
     }
+
 
     public FacetComponent(String id) {
         super();

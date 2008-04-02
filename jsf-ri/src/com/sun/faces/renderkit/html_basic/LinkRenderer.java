@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.7 2004/02/04 23:41:49 ofung Exp $
+ * $Id: LinkRenderer.java,v 1.8 2004/02/06 18:55:20 rlubke Exp $
  */
 
 /*
@@ -11,32 +11,23 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.io.IOException;
-
-import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
-import javax.faces.component.UIOutput;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIParameter;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.event.ActionEvent;
 
-import com.sun.faces.util.Util;
+import java.io.IOException;
 
 
 /**
- * <B>LinkRenderer</B> acts as superclass for CommandLinkRenderer and 
- * OutputLinkRenderer.  
+ * <B>LinkRenderer</B> acts as superclass for CommandLinkRenderer and
+ * OutputLinkRenderer.
  */
 
 public class LinkRenderer extends HtmlBasicRenderer {
+
     //
     // Protected Constants
     //
@@ -66,8 +57,8 @@ public class LinkRenderer extends HtmlBasicRenderer {
     //
 
     public LinkRenderer() {
-	commandLinkRenderer = new CommandLinkRenderer();
-	outputLinkRenderer = new OutputLinkRenderer();
+        commandLinkRenderer = new CommandLinkRenderer();
+        outputLinkRenderer = new OutputLinkRenderer();
     }
 
     //
@@ -83,53 +74,55 @@ public class LinkRenderer extends HtmlBasicRenderer {
     //
 
     public boolean getRendersChildren() {
-	return true;
+        return true;
     }
+
 
     public void decode(FacesContext context, UIComponent component) {
-	if (context == null || component == null) {
-	    throw new NullPointerException(Util.getExceptionMessage(
-				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-	if (component instanceof UICommand) {
-	    commandLinkRenderer.decode(context, component);
-	}
-	else if (component instanceof UIOutput) {
-	    outputLinkRenderer.decode(context, component);
-	}
-	return;
+        if (component instanceof UICommand) {
+            commandLinkRenderer.decode(context, component);
+        } else if (component instanceof UIOutput) {
+            outputLinkRenderer.decode(context, component);
+        }
+        return;
     }
+
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-	if (component instanceof UICommand) {
-	    commandLinkRenderer.encodeBegin(context, component);
-	}
-	else if (component instanceof UIOutput) {
-	    outputLinkRenderer.encodeBegin(context, component);
-	}
-	return;
+        if (component instanceof UICommand) {
+            commandLinkRenderer.encodeBegin(context, component);
+        } else if (component instanceof UIOutput) {
+            outputLinkRenderer.encodeBegin(context, component);
+        }
+        return;
     }
+
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-	if (component instanceof UICommand) {
-	    commandLinkRenderer.encodeEnd(context, component);
-	}
-	else if (component instanceof UIOutput) {
-	    outputLinkRenderer.encodeEnd(context, component);
-	}
+        if (component instanceof UICommand) {
+            commandLinkRenderer.encodeEnd(context, component);
+        } else if (component instanceof UIOutput) {
+            outputLinkRenderer.encodeEnd(context, component);
+        }
 
-	return;
+        return;
     }
 
 } // end of class LinkRenderer

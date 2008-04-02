@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.12 2004/02/04 23:40:59 ofung Exp $
+ * $Id: PropertyResolverImpl.java,v 1.13 2004/02/06 18:54:28 rlubke Exp $
  */
 
 /*
@@ -14,24 +14,17 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.el.impl.BeanInfoManager;
 import com.sun.faces.el.impl.BeanInfoProperty;
 import com.sun.faces.el.impl.Coercions;
-import com.sun.faces.el.impl.ElException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import javax.faces.component.UIComponent;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -65,56 +58,54 @@ public class PropertyResolverImpl extends PropertyResolver {
         if (base instanceof Map) {
             return (((Map) base).get(property));
         } else {
-	    String name = null;
-	    BeanInfoProperty bip = null;
-	    try {
-		name = Coercions.coerceToString(property);
-		bip = 
-		    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
-	    } catch (Throwable t) {
-		// PENDING (hans) Align with std message handling
-		String message = "Error finding property '" +
-		    name + "' from bean of type " + 
-		    base.getClass().getName()  + ": " + t;
-		if (log.isDebugEnabled()) {
-		    log.debug(message, t);
-		}
-		throw new PropertyNotFoundException(message, t);
-	    }
-	    if (bip != null && bip.getReadMethod() != null) {
-		try {
-		    return bip.getReadMethod().invoke(base, sNoArgs);
-		} catch (InvocationTargetException exc) {
-		    // PENDING (hans) Align with std message handling
-		    Throwable t = exc.getTargetException();
-		    String message = "Error getting property '" +
-			name + "' from bean of type " + 
-			base.getClass().getName()  + ": " + t;
-		    if (log.isDebugEnabled()) {
-			log.debug(message, t);
-		    }
-		    throw new EvaluationException(message, t);
-		} 
-		catch (IllegalAccessException t) {
-		    // PENDING (hans) Align with std message handling
-		    String message = "Error getting property '" +
-			name + "' from bean of type " + 
-			base.getClass().getName()  + ": " + t;
-		    if (log.isDebugEnabled()) {
-			log.debug(message, t);
-		    }
-		    throw new EvaluationException(message, t);
+            String name = null;
+            BeanInfoProperty bip = null;
+            try {
+                name = Coercions.coerceToString(property);
+                bip =
+                    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
+            } catch (Throwable t) {
+                // PENDING (hans) Align with std message handling
+                String message = "Error finding property '" +
+                    name + "' from bean of type " +
+                    base.getClass().getName() + ": " + t;
+                if (log.isDebugEnabled()) {
+                    log.debug(message, t);
                 }
+                throw new PropertyNotFoundException(message, t);
             }
-	    else {
-		// No readable property with this name
-		String message = "Error getting property '" +
-		    name + "' from bean of type " + base.getClass().getName();
-		if (log.isDebugEnabled()) {
-		    log.debug(message);
-		}
-		throw new PropertyNotFoundException(message);
-	    }
+            if (bip != null && bip.getReadMethod() != null) {
+                try {
+                    return bip.getReadMethod().invoke(base, sNoArgs);
+                } catch (InvocationTargetException exc) {
+                    // PENDING (hans) Align with std message handling
+                    Throwable t = exc.getTargetException();
+                    String message = "Error getting property '" +
+                        name + "' from bean of type " +
+                        base.getClass().getName() + ": " + t;
+                    if (log.isDebugEnabled()) {
+                        log.debug(message, t);
+                    }
+                    throw new EvaluationException(message, t);
+                } catch (IllegalAccessException t) {
+                    // PENDING (hans) Align with std message handling
+                    String message = "Error getting property '" +
+                        name + "' from bean of type " +
+                        base.getClass().getName() + ": " + t;
+                    if (log.isDebugEnabled()) {
+                        log.debug(message, t);
+                    }
+                    throw new EvaluationException(message, t);
+                }
+            } else {
+                // No readable property with this name
+                String message = "Error getting property '" +
+                    name + "' from bean of type " + base.getClass().getName();
+                if (log.isDebugEnabled()) {
+                    log.debug(message);
+                }
+                throw new PropertyNotFoundException(message);
+            }
         }
 
     }
@@ -127,31 +118,29 @@ public class PropertyResolverImpl extends PropertyResolver {
             return null;
         }
 
-	Object result = null;
-	try {
-	    if (base.getClass().isArray()) {
-		result = (Array.get(base, index));
-	    } else if (base instanceof List) {
-		result = (((List) base).get(index));
-	    } else {
-		if (log.isDebugEnabled()) {
-		    log.debug("getValue:Property not found at index:" + index);
-		}
-		throw new EvaluationException("Bean of type " +
-                    base.getClass().getName() + 
-		    " doesn't have indexed properties");
-	    }
-	}
-	catch (IndexOutOfBoundsException e) {
-	    // Ignore according to spec
-	}
-	catch (Throwable t) {
-	    if (log.isDebugEnabled()) {
-		log.debug("getValue:Property not found at index:" + index);
-	    }
-	    throw new EvaluationException("Error getting index " + index, t);
-	}
-	return result;
+        Object result = null;
+        try {
+            if (base.getClass().isArray()) {
+                result = (Array.get(base, index));
+            } else if (base instanceof List) {
+                result = (((List) base).get(index));
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("getValue:Property not found at index:" + index);
+                }
+                throw new EvaluationException("Bean of type " +
+                                              base.getClass().getName() +
+                                              " doesn't have indexed properties");
+            }
+        } catch (IndexOutOfBoundsException e) {
+            // Ignore according to spec
+        } catch (Throwable t) {
+            if (log.isDebugEnabled()) {
+                log.debug("getValue:Property not found at index:" + index);
+            }
+            throw new EvaluationException("Error getting index " + index, t);
+        }
+        return result;
     }
 
 
@@ -159,65 +148,63 @@ public class PropertyResolverImpl extends PropertyResolver {
     public void setValue(Object base, Object property, Object value) {
 
         if ((base == null) || (property == null)) {
-	    String className = base == null ? 
-		"null" : base.getClass().getName();
+            String className = base == null ?
+                "null" : base.getClass().getName();
             throw new PropertyNotFoundException("Error setting property '" +
-                property + "' in bean of type " + className);
+                                                property + "' in bean of type " + className);
         }
 
         if (base instanceof Map) {
             ((Map) base).put(property, value);
         } else {
-	    String name = null;
-	    BeanInfoProperty bip = null;
-	    try {
-		name = Coercions.coerceToString(property);
-		bip = 
-		    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
-	    } catch (Throwable t) {
-		// PENDING (hans) Align with std message handling
-		String message = "Error finding property '" +
-		    name + "' in bean of type " + 
-		    base.getClass().getName()  + ": " + t;
-		if (log.isDebugEnabled()) {
-		    log.debug(message, t);
-		}
-		throw new PropertyNotFoundException(message, t);
-	    }
-	    if (bip != null && bip.getWriteMethod() != null) {
-		try {
-                    bip.getWriteMethod().invoke(base, new Object[] { value });
-		} catch (InvocationTargetException exc) {
-		    // PENDING (hans) Align with std message handling
-		    Throwable t = exc.getTargetException();
-		    String message = "Error setting property '" +
-			name + "' in bean of type " + 
-			base.getClass().getName()  + ": " + t;
-		    if (log.isDebugEnabled()) {
-			log.debug(message, t);
-		    }
-		    throw new EvaluationException(message, t);
-		} 
-		catch (IllegalAccessException t) {
-		    // PENDING (hans) Align with std message handling
-		    String message = "Error setting property '" +
-			name + "' in bean of type " + 
-			base.getClass().getName()  + ": " + t;
-		    if (log.isDebugEnabled()) {
-			log.debug(message, t);
-		    }
-		    throw new EvaluationException(message, t);
+            String name = null;
+            BeanInfoProperty bip = null;
+            try {
+                name = Coercions.coerceToString(property);
+                bip =
+                    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
+            } catch (Throwable t) {
+                // PENDING (hans) Align with std message handling
+                String message = "Error finding property '" +
+                    name + "' in bean of type " +
+                    base.getClass().getName() + ": " + t;
+                if (log.isDebugEnabled()) {
+                    log.debug(message, t);
                 }
+                throw new PropertyNotFoundException(message, t);
             }
-	    else {
-		// No write property with this name
-		String message = "Error setting property '" +
-		    name + "' in bean of type " + base.getClass().getName();
-		if (log.isDebugEnabled()) {
-		    log.debug(message);
-		}
-		throw new PropertyNotFoundException(message);
-	    }
+            if (bip != null && bip.getWriteMethod() != null) {
+                try {
+                    bip.getWriteMethod().invoke(base, new Object[]{value});
+                } catch (InvocationTargetException exc) {
+                    // PENDING (hans) Align with std message handling
+                    Throwable t = exc.getTargetException();
+                    String message = "Error setting property '" +
+                        name + "' in bean of type " +
+                        base.getClass().getName() + ": " + t;
+                    if (log.isDebugEnabled()) {
+                        log.debug(message, t);
+                    }
+                    throw new EvaluationException(message, t);
+                } catch (IllegalAccessException t) {
+                    // PENDING (hans) Align with std message handling
+                    String message = "Error setting property '" +
+                        name + "' in bean of type " +
+                        base.getClass().getName() + ": " + t;
+                    if (log.isDebugEnabled()) {
+                        log.debug(message, t);
+                    }
+                    throw new EvaluationException(message, t);
+                }
+            } else {
+                // No write property with this name
+                String message = "Error setting property '" +
+                    name + "' in bean of type " + base.getClass().getName();
+                if (log.isDebugEnabled()) {
+                    log.debug(message);
+                }
+                throw new PropertyNotFoundException(message);
+            }
         }
 
     }
@@ -228,126 +215,121 @@ public class PropertyResolverImpl extends PropertyResolver {
 
         if (base == null) {
             throw new PropertyNotFoundException("Error setting index '" +
-                index + "' in bean of type null");
+                                                index + "' in bean of type null");
         }
 
-	try {
-	    if (base.getClass().isArray()) {
-		Array.set(base, index, value);
-	    } else if (base instanceof List) {
-		((List) base).set(index, value);
-	    } else {
-		if (log.isDebugEnabled()) {
-		    log.debug("setValue:Error setting index:" + index);
-		}
-		throw new EvaluationException("Bean of type " +
-                    base.getClass().getName() + 
-		    " doesn't have indexed properties");
-	    }
-	}
-	catch (IndexOutOfBoundsException e) {
-	    throw new PropertyNotFoundException("Error setting index " + 
-						index, e);
-	}
-	catch (Throwable t) {
-	    if (log.isDebugEnabled()) {
-		log.debug("setValue:Error setting index:" + index);
-	    }
-	    throw new EvaluationException("Error setting index " + index, t);
-	}
+        try {
+            if (base.getClass().isArray()) {
+                Array.set(base, index, value);
+            } else if (base instanceof List) {
+                ((List) base).set(index, value);
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("setValue:Error setting index:" + index);
+                }
+                throw new EvaluationException("Bean of type " +
+                                              base.getClass().getName() +
+                                              " doesn't have indexed properties");
+            }
+        } catch (IndexOutOfBoundsException e) {
+            throw new PropertyNotFoundException("Error setting index " +
+                                                index, e);
+        } catch (Throwable t) {
+            if (log.isDebugEnabled()) {
+                log.debug("setValue:Error setting index:" + index);
+            }
+            throw new EvaluationException("Error setting index " + index, t);
+        }
 
     }
 
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,String)
     public boolean isReadOnly(Object base, Object property) {
-	boolean result = false;
+        boolean result = false;
 
         if ((base == null) || (property == null)) {
-	    String className = base == null ? 
-		"null" : base.getClass().getName();
+            String className = base == null ?
+                "null" : base.getClass().getName();
             throw new PropertyNotFoundException("Error testing property '" +
-                property + "' in bean of type " + className);
+                                                property + "' in bean of type " + className);
         }
 
         if (base instanceof Map) {
-	    // this marker is set in ExternalContextImpl when the Map is
-	    // created.
-	    // PENDING (hans) Isn't there a better way to handle this?
-	    result = RIConstants.IMMUTABLE_MARKER == 
-		((Map)base).get(RIConstants.IMMUTABLE_MARKER);
+            // this marker is set in ExternalContextImpl when the Map is
+            // created.
+            // PENDING (hans) Isn't there a better way to handle this?
+            result = RIConstants.IMMUTABLE_MARKER ==
+                ((Map) base).get(RIConstants.IMMUTABLE_MARKER);
         } else {
-	    String name = null;
-	    BeanInfoProperty bip = null;
-	    try {
-		name = Coercions.coerceToString(property);
-		bip = 
-		    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
-	    } catch (Throwable t) {
-		// PENDING (hans) Align with std message handling
-		String message = "Error finding property '" +
-		    name + "' in bean of type " + 
-		    base.getClass().getName()  + ": " + t;
-		if (log.isDebugEnabled()) {
-		    log.debug(message, t);
-		}
-		throw new PropertyNotFoundException(message, t);
-	    }
-	    if (bip != null && bip.getWriteMethod() == null) {
-		result = true;
+            String name = null;
+            BeanInfoProperty bip = null;
+            try {
+                name = Coercions.coerceToString(property);
+                bip =
+                    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
+            } catch (Throwable t) {
+                // PENDING (hans) Align with std message handling
+                String message = "Error finding property '" +
+                    name + "' in bean of type " +
+                    base.getClass().getName() + ": " + t;
+                if (log.isDebugEnabled()) {
+                    log.debug(message, t);
+                }
+                throw new PropertyNotFoundException(message, t);
             }
-	    else if (bip == null) {
-		// PENDING (hans) Align with std message handling
-		String message = "Error finding property '" +
-		    name + "' in bean of type " + 
-		    base.getClass().getName();
-		if (log.isDebugEnabled()) {
-		    log.debug(message);
-		}
-		throw new PropertyNotFoundException(message);
-	    }
+            if (bip != null && bip.getWriteMethod() == null) {
+                result = true;
+            } else if (bip == null) {
+                // PENDING (hans) Align with std message handling
+                String message = "Error finding property '" +
+                    name + "' in bean of type " +
+                    base.getClass().getName();
+                if (log.isDebugEnabled()) {
+                    log.debug(message);
+                }
+                throw new PropertyNotFoundException(message);
+            }
         }
-	return result;
+        return result;
     }
 
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,int)
     public boolean isReadOnly(Object base, int index) {
-	boolean result = false;
+        boolean result = false;
 
         if (base == null) {
             throw new PropertyNotFoundException("Error setting index '" +
-                index + "' in bean of type null");
+                                                index + "' in bean of type null");
         }
 
-	try {
-	    // Try to read the index, to trigger exceptions if any
-	    if (base.getClass().isArray()) {
-		Array.get(base, index);
-		result = false; // No way to know for sure
-	    } else if (base instanceof List) {
-		((List) base).get(index);
-		result = false; // No way to know for sure
-	    } else {
-		if (log.isDebugEnabled()) {
-		    log.debug("getValue:Property not found at index:" + index);
-		}
-		throw new EvaluationException("Bean of type " +
-                    base.getClass().getName() + 
-		    " doesn't have indexed properties");
-	    }
+        try {
+            // Try to read the index, to trigger exceptions if any
+            if (base.getClass().isArray()) {
+                Array.get(base, index);
+                result = false; // No way to know for sure
+            } else if (base instanceof List) {
+                ((List) base).get(index);
+                result = false; // No way to know for sure
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("getValue:Property not found at index:" + index);
+                }
+                throw new EvaluationException("Bean of type " +
+                                              base.getClass().getName() +
+                                              " doesn't have indexed properties");
+            }
+        } catch (IndexOutOfBoundsException e) {
+            throw new PropertyNotFoundException("Error setting index " +
+                                                index, e);
+        } catch (Throwable t) {
+            if (log.isDebugEnabled()) {
+                log.debug("setValue:Error setting index:" + index);
+            }
+            throw new EvaluationException("Error setting index " + index, t);
         }
-	catch (IndexOutOfBoundsException e) {
-	    throw new PropertyNotFoundException("Error setting index " + 
-						index, e);
-	}
-	catch (Throwable t) {
-	    if (log.isDebugEnabled()) {
-		log.debug("setValue:Error setting index:" + index);
-	    }
-	    throw new EvaluationException("Error setting index " + index, t);
-	}
-	return result;
+        return result;
     }
 
 
@@ -355,10 +337,10 @@ public class PropertyResolverImpl extends PropertyResolver {
     public Class getType(Object base, Object property) {
 
         if ((base == null) || (property == null)) {
-	    String className = base == null ? 
-		"null" : base.getClass().getName();
+            String className = base == null ?
+                "null" : base.getClass().getName();
             throw new PropertyNotFoundException("Error testing property '" +
-                property + "' in bean of type " + className);
+                                                property + "' in bean of type " + className);
         }
 
         if (base instanceof Map) {
@@ -369,35 +351,34 @@ public class PropertyResolverImpl extends PropertyResolver {
                 return (null);
             }
         } else {
-	    String name = null;
-	    BeanInfoProperty bip = null;
-	    try {
-		name = Coercions.coerceToString(property);
-		bip = 
-		    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
-	    } catch (Throwable t) {
-		// PENDING (hans) Align with std message handling
-		String message = "Error finding property '" +
-		    name + "' in bean of type " + 
-		    base.getClass().getName()  + ": " + t;
-		if (log.isDebugEnabled()) {
-		    log.debug(message, t);
-		}
-		throw new PropertyNotFoundException(message, t);
-	    }
-	    if (bip != null) {
-		return bip.getPropertyDescriptor().getPropertyType();
+            String name = null;
+            BeanInfoProperty bip = null;
+            try {
+                name = Coercions.coerceToString(property);
+                bip =
+                    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
+            } catch (Throwable t) {
+                // PENDING (hans) Align with std message handling
+                String message = "Error finding property '" +
+                    name + "' in bean of type " +
+                    base.getClass().getName() + ": " + t;
+                if (log.isDebugEnabled()) {
+                    log.debug(message, t);
+                }
+                throw new PropertyNotFoundException(message, t);
             }
-	    else {
-		// PENDING (hans) Align with std message handling
-		String message = "Error finding property '" +
-		    name + "' in bean of type " + 
-		    base.getClass().getName();
-		if (log.isDebugEnabled()) {
-		    log.debug(message);
-		}
-		throw new PropertyNotFoundException(message);
-	    }
+            if (bip != null) {
+                return bip.getPropertyDescriptor().getPropertyType();
+            } else {
+                // PENDING (hans) Align with std message handling
+                String message = "Error finding property '" +
+                    name + "' in bean of type " +
+                    base.getClass().getName();
+                if (log.isDebugEnabled()) {
+                    log.debug(message);
+                }
+                throw new PropertyNotFoundException(message);
+            }
         }
     }
 
@@ -408,38 +389,36 @@ public class PropertyResolverImpl extends PropertyResolver {
 
         if (base == null) {
             throw new PropertyNotFoundException("Error setting index '" +
-                index + "' in bean of type null");
+                                                index + "' in bean of type null");
         }
 
-	try {
-	    // Try to read the index, to trigger exceptions if any
-	    if (base.getClass().isArray()) {
-		Array.get(base, index);
-		result = base.getClass().getComponentType();
-	    } else if (base instanceof List) {
-		Object o = ((List) base).get(index);
-		if (o != null) {
-		    result = o.getClass();
-		}
-	    } else {
-		if (log.isDebugEnabled()) {
-		    log.debug("getValue:Property not found at index:" + index);
-		}
-		throw new EvaluationException("Bean of type " +
-                    base.getClass().getName() + 
-		    " doesn't have indexed properties");
-	    }
+        try {
+            // Try to read the index, to trigger exceptions if any
+            if (base.getClass().isArray()) {
+                Array.get(base, index);
+                result = base.getClass().getComponentType();
+            } else if (base instanceof List) {
+                Object o = ((List) base).get(index);
+                if (o != null) {
+                    result = o.getClass();
+                }
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("getValue:Property not found at index:" + index);
+                }
+                throw new EvaluationException("Bean of type " +
+                                              base.getClass().getName() +
+                                              " doesn't have indexed properties");
+            }
+        } catch (IndexOutOfBoundsException e) {
+            throw new PropertyNotFoundException("Error getting index " +
+                                                index, e);
+        } catch (Throwable t) {
+            if (log.isDebugEnabled()) {
+                log.debug("getType:Error getting index:" + index);
+            }
+            throw new EvaluationException("Error getting index " + index, t);
         }
-	catch (IndexOutOfBoundsException e) {
-	    throw new PropertyNotFoundException("Error getting index " + 
-						index, e);
-	}
-	catch (Throwable t) {
-	    if (log.isDebugEnabled()) {
-		log.debug("getType:Error getting index:" + index);
-	    }
-	    throw new EvaluationException("Error getting index " + index, t);
-	}
         return result;
     }
 

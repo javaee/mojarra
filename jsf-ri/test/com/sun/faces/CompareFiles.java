@@ -1,5 +1,5 @@
 /*
- * $Id: CompareFiles.java,v 1.13 2004/02/05 20:52:43 horwat Exp $
+ * $Id: CompareFiles.java,v 1.14 2004/02/06 18:56:16 rlubke Exp $
  */
 
 /*
@@ -9,45 +9,49 @@
 
 package com.sun.faces;
 
-import java.io.*;
-
-import java.util.List;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.Iterator;
+import java.util.List;
 
 public class CompareFiles {
 
     public CompareFiles() {
     }
 
-    public static String stripJsessionidFromLine(String line) {
-	if (null == line) {
-	    return line;
-	}
-	int 
-	    start = 0,
-	    end = 0;
-	String result = line;
 
-	if (-1 == (start = line.indexOf(";jsessionid="))) {
-	    return result;
-	}
-	
-	if (-1 == (end = line.indexOf("?", start))) {
-	    if (-1 == (end = line.indexOf("\"", start))) {
-		throw new IllegalStateException();
-	    }
-	}
-	result = stripJsessionidFromLine(line.substring(0, start) + 
-					 line.substring(end));
-	return result;
+    public static String stripJsessionidFromLine(String line) {
+        if (null == line) {
+            return line;
+        }
+        int
+            start = 0,
+            end = 0;
+        String result = line;
+
+        if (-1 == (start = line.indexOf(";jsessionid="))) {
+            return result;
+        }
+
+        if (-1 == (end = line.indexOf("?", start))) {
+            if (-1 == (end = line.indexOf("\"", start))) {
+                throw new IllegalStateException();
+            }
+        }
+        result = stripJsessionidFromLine(line.substring(0, start) +
+                                         line.substring(end));
+        return result;
     }
 
+
     /**
-     * This method compares the input files character by character. 
+     * This method compares the input files character by character.
      * Skips whitespaces and comparison is not case sensitive.
      */
-    public static boolean filesIdentical (String newFileName, String oldFileName, List oldLinesToIgnore) 
-            throws IOException {
+    public static boolean filesIdentical(String newFileName, String oldFileName, List oldLinesToIgnore)
+        throws IOException {
 
         boolean same = true;
 
@@ -56,78 +60,77 @@ public class CompareFiles {
 
         FileReader newFileReader = new FileReader(newFile);
         FileReader oldFileReader = new FileReader(oldFile);
-	LineNumberReader newReader = new LineNumberReader(newFileReader);
-	LineNumberReader oldReader = new LineNumberReader(oldFileReader);
+        LineNumberReader newReader = new LineNumberReader(newFileReader);
+        LineNumberReader oldReader = new LineNumberReader(oldFileReader);
 
-	String newLine, oldLine;
+        String newLine, oldLine;
 
-	newLine = newReader.readLine().trim();
-	oldLine = oldReader.readLine().trim();
+        newLine = newReader.readLine().trim();
+        oldLine = oldReader.readLine().trim();
 
-	// if one of the lines is null, but not the other
-	if (((null == newLine) && (null != oldLine)) ||
-	    ((null != newLine) && (null == oldLine))) {
+        // if one of the lines is null, but not the other
+        if (((null == newLine) && (null != oldLine)) ||
+            ((null != newLine) && (null == oldLine))) {
             System.out.println("1OLD=" + oldLine);
             System.out.println("1NEW=" + newLine);
-	    same = false;
-	}
+            same = false;
+        }
 
-	while (null != newLine && null != oldLine) {
-	    if (!newLine.equals(oldLine)) {
+        while (null != newLine && null != oldLine) {
+            if (!newLine.equals(oldLine)) {
 
-		if (null != oldLinesToIgnore && oldLinesToIgnore.size() > 0) {
-		    // go thru the list of oldLinesToIgnore and see if
-		    // the current oldLine matches any of them.
-		    Iterator ignoreLines = oldLinesToIgnore.iterator();
-		    boolean foundMatch = false;
-		    while (ignoreLines.hasNext()) {
-			String newTrim = ((String) ignoreLines.next()).trim();
-		        newTrim = stripJsessionidFromLine(newTrim);
-		        oldLine = stripJsessionidFromLine(oldLine);
-			if (oldLine.equals(newTrim)) {
-			    foundMatch = true;
-			    break;
-			}
-		    }
-		    // If we haven't found a match, then this mismatch is
-		    // important
-		    if (!foundMatch) {
+                if (null != oldLinesToIgnore && oldLinesToIgnore.size() > 0) {
+                    // go thru the list of oldLinesToIgnore and see if
+                    // the current oldLine matches any of them.
+                    Iterator ignoreLines = oldLinesToIgnore.iterator();
+                    boolean foundMatch = false;
+                    while (ignoreLines.hasNext()) {
+                        String newTrim = ((String) ignoreLines.next()).trim();
+                        newTrim = stripJsessionidFromLine(newTrim);
+                        oldLine = stripJsessionidFromLine(oldLine);
+                        if (oldLine.equals(newTrim)) {
+                            foundMatch = true;
+                            break;
+                        }
+                    }
+                    // If we haven't found a match, then this mismatch is
+                    // important
+                    if (!foundMatch) {
                         System.out.println("2OLD=" + oldLine);
                         System.out.println("2NEW=" + newLine);
-			same = false;
-			break;
-		    }
-		}
-		else {
-		    newLine = stripJsessionidFromLine(newLine);
-		    oldLine = stripJsessionidFromLine(oldLine);
-		    if (!newLine.equals(oldLine)) {
+                        same = false;
+                        break;
+                    }
+                } else {
+                    newLine = stripJsessionidFromLine(newLine);
+                    oldLine = stripJsessionidFromLine(oldLine);
+                    if (!newLine.equals(oldLine)) {
                         System.out.println("3OLD=" + oldLine);
                         System.out.println("3NEW=" + newLine);
-			same = false;
-			break;
-		    }
-		}
-	    }
-	    
-	    newLine = newReader.readLine();
-	    oldLine = oldReader.readLine();
+                        same = false;
+                        break;
+                    }
+                }
+            }
 
-	    // if one of the lines is null, but not the other
-	    if (((null == newLine) && (null != oldLine)) ||
-		((null != newLine) && (null == oldLine))) {
+            newLine = newReader.readLine();
+            oldLine = oldReader.readLine();
+
+            // if one of the lines is null, but not the other
+            if (((null == newLine) && (null != oldLine)) ||
+                ((null != newLine) && (null == oldLine))) {
                 System.out.println("4OLD=" + oldLine);
                 System.out.println("4NEW=" + newLine);
-		same = false;
-		break;
-	    }
-	    if (null != newLine) {
-		newLine = newLine.trim();
-	    }
-	    if (null != oldLine) {
-		oldLine = oldLine.trim();
-	    }
-	}
+                same = false;
+                break;
+            }
+            if (null != newLine) {
+                newLine = newLine.trim();
+            }
+            if (null != oldLine) {
+                oldLine = oldLine.trim();
+            }
+        }
 
         newReader.close();
         oldReader.close();
@@ -135,8 +138,8 @@ public class CompareFiles {
         // if same is true and both files have reached eof, then
         // files are identical
         if (same == true) {
-            return true;  
-        } 
+            return true;
+        }
         return false;
     }
 }

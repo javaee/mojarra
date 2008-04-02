@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.19 2004/02/04 23:44:04 ofung Exp $
+ * $Id: TestActionListenerImpl.java,v 1.20 2004/02/06 18:56:28 rlubke Exp $
  */
 
 /*
@@ -11,30 +11,16 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.context.FacesContextImpl;
+import org.apache.cactus.WebRequest;
 
-import com.sun.faces.util.DebugUtil;
-
-import java.util.List;
-
-import javax.faces.component.UICommand;
 import javax.faces.FacesException;
+import javax.faces.component.UICommand;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ReferenceSyntaxException;
+import javax.faces.el.MethodBinding;
 import javax.faces.el.MethodNotFoundException;
 import javax.faces.event.ActionEvent;
-import javax.faces.FactoryFinder;
-import javax.faces.el.MethodBinding;
-
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContext;
-
-import org.apache.cactus.WebRequest;
-import com.sun.faces.util.Util;
-
 
 
 /**
@@ -43,7 +29,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.19 2004/02/04 23:44:04 ofung Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.20 2004/02/06 18:56:28 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -55,8 +41,8 @@ import com.sun.faces.util.Util;
  * functionality.  It uses the xml configuration file:
  * <code>web/test/WEB-INF/faces-navigation.xml</code>.
  */
-public class TestActionListenerImpl extends ServletFacesTestCase
-{
+public class TestActionListenerImpl extends ServletFacesTestCase {
+
 //
 // Protected Constants
 //
@@ -77,8 +63,14 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 // Constructors and Initializers    
 //
 
-    public TestActionListenerImpl() {super("TestActionListenerImpl");}
-    public TestActionListenerImpl(String name) {super(name);}
+    public TestActionListenerImpl() {
+        super("TestActionListenerImpl");
+    }
+
+
+    public TestActionListenerImpl(String name) {
+        super(name);
+    }
 //
 // Class methods
 //
@@ -92,13 +84,15 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 //
 
     public void testProcessAction() {
-	loadFromInitParam("/WEB-INF/faces-navigation.xml");
+        loadFromInitParam("/WEB-INF/faces-navigation.xml");
         FacesContext context = getFacesContext();
 
         System.out.println("Testing With Action Literal Set...");
 
         UICommand command = new UICommand();
-        command.setAction(context.getApplication().createMethodBinding("#{newCustomer.loginRequired}", null));
+        command.setAction(
+            context.getApplication().createMethodBinding(
+                "#{newCustomer.loginRequired}", null));
         UIViewRoot page = new UIViewRoot();
         page.setViewId("/login.jsp");
         context.setViewRoot(page);
@@ -114,14 +108,16 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         System.out.println("Testing With Action Set...");
 
         command = new UICommand();
-	MethodBinding binding = 
-	    context.getApplication().createMethodBinding("#{userBean.login}",
-							 null);
+        MethodBinding binding =
+            context.getApplication().createMethodBinding("#{userBean.login}",
+                                                         null);
         command.setAction(binding);
 
         UserBean user = new UserBean();
         context.getExternalContext().getSessionMap().put("userBean", user);
-        assertTrue(user == context.getExternalContext().getSessionMap().get("userBean"));
+        assertTrue(
+            user ==
+            context.getExternalContext().getSessionMap().get("userBean"));
 
         page = new UIViewRoot();
         page.setViewId("/login.jsp");
@@ -136,6 +132,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         assertTrue(newViewId.equals("/home.jsp"));
     }
 
+
     public void testIllegalArgException() {
         boolean exceptionThrown = false;
 
@@ -146,12 +143,14 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         UserBean user = new UserBean();
         context.getExternalContext().getApplicationMap().put("UserBean", user);
 
-        assertTrue(user == context.getExternalContext().getApplicationMap().get("UserBean"));
+        assertTrue(
+            user ==
+            context.getExternalContext().getApplicationMap().get("UserBean"));
 
         UICommand command = new UICommand();
-	MethodBinding binding = 
-	    context.getApplication().createMethodBinding("#{UserBean.noMeth}", 
-							 null);
+        MethodBinding binding =
+            context.getApplication().createMethodBinding("#{UserBean.noMeth}",
+                                                         null);
         command.setAction(binding);
         ActionEvent actionEvent = new ActionEvent(command);
 
@@ -159,11 +158,12 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         try {
             actionListener.processAction(actionEvent);
         } catch (FacesException e) {
-	    assertTrue(e.getCause() instanceof MethodNotFoundException);
+            assertTrue(e.getCause() instanceof MethodNotFoundException);
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
     }
+
 
     public static class UserBean extends Object {
 

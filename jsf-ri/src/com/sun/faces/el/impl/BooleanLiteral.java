@@ -61,15 +61,15 @@
 package com.sun.faces.el.impl;
 
 /**
- *
  * <p>An expression representing a boolean literal value
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class BooleanLiteral
     extends Literal {
+
     //-------------------------------------
     // Member variables
     //-------------------------------------
@@ -79,18 +79,16 @@ public class BooleanLiteral
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public BooleanLiteral(String pToken) {
         super(getValueFromToken(pToken));
     }
 
     //-------------------------------------
     /**
-     *
      * Parses the given token into the literal value
-     **/
+     */
     static Object getValueFromToken(String pToken) {
         return
             ("true".equals(pToken)) ?
@@ -102,9 +100,8 @@ public class BooleanLiteral
     // Expression methods
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         return (getValue() == Boolean.TRUE) ? "true" : "false";
     }

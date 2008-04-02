@@ -64,17 +64,17 @@ import javax.servlet.jsp.PageContext;
 
 
 /**
- *
  * <p>This is the JSTL-specific implementation of VariableResolver.
  * It looks up variable references in the PageContext, and also
  * recognizes references to implicit objects.
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class JspVariableResolver extends
     com.sun.faces.el.impl.VariableResolver {
+
     //-------------------------------------
     // Member variables
     //-------------------------------------
@@ -83,9 +83,8 @@ public class JspVariableResolver extends
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public JspVariableResolver(PageContext pCtx) {
         mCtx = pCtx;
     }
@@ -100,11 +99,11 @@ public class JspVariableResolver extends
         }
     }
 
+
     /**
-     *
      * Resolves the specified variable within the given context.
      * Returns null if the variable is not found.
-     **/
+     */
     public Object resolve(String pName)
         throws ElException {
         // Check for implicit objects

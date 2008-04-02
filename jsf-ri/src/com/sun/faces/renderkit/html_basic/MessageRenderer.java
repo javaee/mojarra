@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.44 2004/02/04 23:41:50 ofung Exp $
+ * $Id: MessageRenderer.java,v 1.45 2004/02/06 18:55:21 rlubke Exp $
  */
 
 /*
@@ -14,25 +14,25 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import com.sun.faces.util.Util;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIMessage;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.application.FacesMessage;
+
 import java.io.IOException;
 import java.util.Iterator;
 
 /**
- *
- * <p><B>MessageRenderer</B> handles rendering for the Message<p>. 
+ * <p><B>MessageRenderer</B> handles rendering for the Message<p>.
  *
  * @version $Id
  */
 
 public class MessageRenderer extends HtmlBasicRenderer {
+
     //
     // Private/Protected Constants
     //
@@ -49,50 +49,54 @@ public class MessageRenderer extends HtmlBasicRenderer {
     // 
 
     public MessageRenderer() {
-	omRenderer = new OutputMessageRenderer();
+        omRenderer = new OutputMessageRenderer();
     }
    
     //
     // Methods From Renderer
     //
 
-    public void encodeBegin(FacesContext context, UIComponent component) 
-            throws IOException {
+    public void encodeBegin(FacesContext context, UIComponent component)
+        throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-	if (component instanceof UIOutput) {
-	    omRenderer.encodeBegin(context, component);
-	    return;
-	}
+        if (component instanceof UIOutput) {
+            omRenderer.encodeBegin(context, component);
+            return;
+        }
     }
+
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-	if (component instanceof UIOutput) {
-	    omRenderer.encodeChildren(context, component);
-	    return;
-	}
+        if (component instanceof UIOutput) {
+            omRenderer.encodeChildren(context, component);
+            return;
+        }
 
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) 
-            throws IOException {
-        Iterator messageIter = null;        
+
+    public void encodeEnd(FacesContext context, UIComponent component)
+        throws IOException {
+        Iterator messageIter = null;
         FacesMessage curMessage = null;
         ResponseWriter writer = null;
 
-	if (context == null || component == null) {
+        if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-       
+
         if (component instanceof UIOutput) {
-	    omRenderer.encodeEnd(context, component);
-	    return;
-	}
+            omRenderer.encodeEnd(context, component);
+            return;
+        }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding component " + component.getId());
         }
@@ -100,28 +104,28 @@ public class MessageRenderer extends HtmlBasicRenderer {
         // false.
         if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + 
-                component.getId() + " since " + 
-                "rendered attribute is set to false ");
+                log.trace("End encoding component " +
+                          component.getId() + " since " +
+                          "rendered attribute is set to false ");
             }
             return;
         }
         writer = context.getResponseWriter();
-        Util.doAssert(writer != null );
+        Util.doAssert(writer != null);
 
         String clientId = ((UIMessage) component).getFor();
         //"for" attribute required for Message. Should be taken care of
         //by TLD in JSP case, but need to cover non-JSP case.
         if (clientId == null) {
-	    if (log.isInfoEnabled()) {
-		log.info(Util.getExceptionMessage(
-						  Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-	    }
-	    return;
+            if (log.isInfoEnabled()) {
+                log.info(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            }
+            return;
         }
 
-	messageIter = getMessageIter(context, clientId, component);
-	
+        messageIter = getMessageIter(context, clientId, component);
+
 
         Util.doAssert(messageIter != null);
         if (!messageIter.hasNext()) {
@@ -131,46 +135,47 @@ public class MessageRenderer extends HtmlBasicRenderer {
         curMessage = (FacesMessage) messageIter.next();
 
         String
-	    summary = null,
-	    detail = null,
+            summary = null,
+            detail = null,
             severityStyle = null,
             severityStyleClass = null;
-	boolean 
-	    showSummary = ((UIMessage)component).isShowSummary(),
-	    showDetail =  ((UIMessage)component).isShowDetail();
+        boolean
+            showSummary = ((UIMessage) component).isShowSummary(),
+            showDetail = ((UIMessage) component).isShowDetail();
 
-	// make sure we have a non-null value for summary and
-	// detail.
-	summary = (null != (summary = curMessage.getSummary())) ? 
-	    summary : "";
-	detail = (null != (detail = curMessage.getDetail())) ? 
-	    detail : "";
+        // make sure we have a non-null value for summary and
+        // detail.
+        summary = (null != (summary = curMessage.getSummary())) ?
+            summary : "";
+        detail = (null != (detail = curMessage.getDetail())) ?
+            detail : "";
 
         if (curMessage.getSeverity() == FacesMessage.SEVERITY_INFO) {
-            severityStyle = (String) component.getAttributes().get("infoStyle");
+            severityStyle =
+                (String) component.getAttributes().get("infoStyle");
             severityStyleClass = (String)
                 component.getAttributes().get("infoClass");
-        }
-        else if (curMessage.getSeverity() == FacesMessage.SEVERITY_WARN) {
-            severityStyle = (String) component.getAttributes().get("warnStyle");
+        } else if (curMessage.getSeverity() == FacesMessage.SEVERITY_WARN) {
+            severityStyle =
+                (String) component.getAttributes().get("warnStyle");
             severityStyleClass = (String)
                 component.getAttributes().get("warnClass");
-        }
-        else if (curMessage.getSeverity() == FacesMessage.SEVERITY_ERROR) {
-            severityStyle = (String) component.getAttributes().get("errorStyle");
+        } else if (curMessage.getSeverity() == FacesMessage.SEVERITY_ERROR) {
+            severityStyle =
+                (String) component.getAttributes().get("errorStyle");
             severityStyleClass = (String)
                 component.getAttributes().get("errorClass");
-        }
-        else if (curMessage.getSeverity() == FacesMessage.SEVERITY_FATAL) {
-            severityStyle = (String) component.getAttributes().get("fatalStyle");
+        } else if (curMessage.getSeverity() == FacesMessage.SEVERITY_FATAL) {
+            severityStyle =
+                (String) component.getAttributes().get("fatalStyle");
             severityStyleClass = (String)
                 component.getAttributes().get("fatalClass");
         }
 
-	String 
-	    style = (String) component.getAttributes().get("style"),
-	    styleClass = (String) component.getAttributes().get("styleClass"),
-	    layout = (String) component.getAttributes().get("layout");
+        String
+            style = (String) component.getAttributes().get("style"),
+            styleClass = (String) component.getAttributes().get("styleClass"),
+            layout = (String) component.getAttributes().get("layout");
 
         // if we have style and severityStyle
         if ((style != null) && (severityStyle != null)) {
@@ -203,45 +208,45 @@ public class MessageRenderer extends HtmlBasicRenderer {
         //present or layout is list just do the spans in a linear fashion.
         if ((layout != null) && (layout.equals("table"))) {
             writer.startElement("table", component);
-	    writeIdAttributeIfNecessary(context, writer, component);
+            writeIdAttributeIfNecessary(context, writer, component);
             writer.startElement("tr", component);
             writer.startElement("td", component);
             wroteTable = true;
         }
 
-	if (styleClass != null || style != null || 
-	    shouldWriteIdAttribute(component)) {
+        if (styleClass != null || style != null ||
+            shouldWriteIdAttribute(component)) {
             writer.startElement("span", component);
-	    // don't output the id twice
-	    if (!wroteTable) {
-		writeIdAttributeIfNecessary(context, writer, component);
-	    }
+            // don't output the id twice
+            if (!wroteTable) {
+                writeIdAttributeIfNecessary(context, writer, component);
+            }
 
             wroteSpan = true;
-	    if (styleClass != null) {
-		writer.writeAttribute("class", styleClass, "styleClass");
-	    }
-	    if (style != null) {
-		writer.writeAttribute("style", style, "style");
-	    }
-        } 
+            if (styleClass != null) {
+                writer.writeAttribute("class", styleClass, "styleClass");
+            }
+            if (style != null) {
+                writer.writeAttribute("style", style, "style");
+            }
+        }
 
         Object tooltip = component.getAttributes().get("tooltip");
         boolean isTooltip = false;
         if (tooltip instanceof Boolean) {
             //if it's not a boolean can ignore it
-            isTooltip = ((Boolean)tooltip).booleanValue();
+            isTooltip = ((Boolean) tooltip).booleanValue();
         }
 
         boolean wroteTooltip = false;
         if (showSummary && showDetail && isTooltip) {
 
             if (!wroteSpan) {
-                 writer.startElement("span", component);
+                writer.startElement("span", component);
             }
             writer.writeAttribute("title", summary, "title");
             writer.flush();
-	    writer.writeText("\t", null);
+            writer.writeText("\t", null);
             wroteTooltip = true;
         } else if (wroteSpan) {
             writer.flush();
@@ -252,13 +257,13 @@ public class MessageRenderer extends HtmlBasicRenderer {
             writer.writeText(summary, null);
             writer.writeText(" ", null);
         }
-	if (showDetail) {
-	    writer.writeText(detail, null);
-	}
+        if (showDetail) {
+            writer.writeText(detail, null);
+        }
 
-	if (wroteSpan || wroteTooltip) {
+        if (wroteSpan || wroteTooltip) {
             writer.endElement("span");
-	}
+        }
 
         if (wroteTable) {
             writer.endElement("td");
@@ -269,7 +274,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
             log.trace("End encoding component " + component.getId());
         }
     }
-    
+
 } // end of class MessageRenderer
 
 

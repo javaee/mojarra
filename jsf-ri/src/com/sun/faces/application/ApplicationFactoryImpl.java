@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationFactoryImpl.java,v 1.3 2004/02/04 23:40:48 ofung Exp $
+ * $Id: ApplicationFactoryImpl.java,v 1.4 2004/02/06 18:54:14 rlubke Exp $
  */
 
 /*
@@ -9,18 +9,17 @@
 
 package com.sun.faces.application;
 
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.Application;
-
 import com.sun.faces.util.Util;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 
 /**
  * <p><strong>ApplicationFactory</strong> is a factory object that creates
  * (if needed) and returns {@link Application} instances.</p>
- *
+ * <p/>
  * <p>There must be one {@link ApplicationFactory} instance per web
  * application that is utilizing JavaServer Faces.  This instance can be
  * acquired, in a portable manner, by calling:</p>
@@ -32,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
 public class ApplicationFactoryImpl extends ApplicationFactory {
 
 // Log instance for this class
-protected static Log log = LogFactory.getLog(ApplicationFactoryImpl.class);
+    protected static Log log = LogFactory.getLog(ApplicationFactoryImpl.class);
 
 //
 // Protected Constants
@@ -64,6 +63,7 @@ protected static Log log = LogFactory.getLog(ApplicationFactoryImpl.class);
         }
     }
 
+
     /**
      * <p>Create (if needed) and return an {@link Application} instance
      * for this web application.</p>
@@ -79,6 +79,7 @@ protected static Log log = LogFactory.getLog(ApplicationFactoryImpl.class);
         return application;
     }
 
+
     /**
      * <p>Replace the {@link Application} instance that will be
      * returned for this web application.</p>
@@ -87,7 +88,8 @@ protected static Log log = LogFactory.getLog(ApplicationFactoryImpl.class);
      */
     public void setApplication(Application application) {
         if (application == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         this.application = application;

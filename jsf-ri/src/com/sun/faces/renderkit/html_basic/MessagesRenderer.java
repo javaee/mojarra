@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.12 2004/02/04 23:41:50 ofung Exp $
+ * $Id: MessagesRenderer.java,v 1.13 2004/02/06 18:55:21 rlubke Exp $
  */
 
 /*
@@ -14,24 +14,24 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import com.sun.faces.util.Util;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIMessages;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.application.FacesMessage;
+
 import java.io.IOException;
 import java.util.Iterator;
 
 /**
- *
- * <p><B>MessagesRenderer</B> handles rendering for the Messages<p>. 
+ * <p><B>MessagesRenderer</B> handles rendering for the Messages<p>.
  *
  * @version $Id
  */
 
 public class MessagesRenderer extends HtmlBasicRenderer {
+
     //
     // Prviate/Protected Constants
     //
@@ -41,69 +41,73 @@ public class MessagesRenderer extends HtmlBasicRenderer {
     // Methods From Renderer
     //
 
-    public void encodeBegin(FacesContext context, UIComponent component) 
-            throws IOException {
+    public void encodeBegin(FacesContext context, UIComponent component)
+        throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
+
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) 
-            throws IOException {
-        Iterator messageIter = null;        
+
+    public void encodeEnd(FacesContext context, UIComponent component)
+        throws IOException {
+        Iterator messageIter = null;
         FacesMessage curMessage = null;
         ResponseWriter writer = null;
-        
+
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-       
+
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-	    if (log.isTraceEnabled()) {
+            if (log.isTraceEnabled()) {
                 log.trace("End encoding component "
-                + component.getId() + " since " +
-                "rendered attribute is set to false ");
-            }	
+                          + component.getId() + " since " +
+                          "rendered attribute is set to false ");
+            }
             return;
         }
         writer = context.getResponseWriter();
-        Util.doAssert(writer != null );
+        Util.doAssert(writer != null);
 
-	// String clientId = ((UIMessages) component).getFor();
-	String clientId = null; // PENDING - "for" is actually gone now
-	// if no clientId was included
-	if (clientId == null){
-	    // and the author explicitly only wants global messages
-	    if (((UIMessages)component).isGlobalOnly()) {
-		// make it so only global messages get displayed.
-		clientId = "";
-	    }
-	}
+        // String clientId = ((UIMessages) component).getFor();
+        String clientId = null; // PENDING - "for" is actually gone now
+        // if no clientId was included
+        if (clientId == null) {
+            // and the author explicitly only wants global messages
+            if (((UIMessages) component).isGlobalOnly()) {
+                // make it so only global messages get displayed.
+                clientId = "";
+            }
+        }
 
-	//"for" attribute optional for Messages
-	messageIter = getMessageIter(context, clientId, component);
-	Util.doAssert(messageIter != null);
+        //"for" attribute optional for Messages
+        messageIter = getMessageIter(context, clientId, component);
+        Util.doAssert(messageIter != null);
 
         String layout = (String) component.getAttributes().get("layout");
-	boolean wroteTable = false;
+        boolean wroteTable = false;
 
-	//Add style and class attributes to table. If layout attribute is not
-	//present or layout is list just do the spans in a linear fashion.
+        //Add style and class attributes to table. If layout attribute is not
+        //present or layout is list just do the spans in a linear fashion.
         if ((layout != null) && (layout.equals("table"))) {
             writer.startElement("table", component);
-	    writeIdAttributeIfNecessary(context, writer, component);
+            writeIdAttributeIfNecessary(context, writer, component);
             wroteTable = true;
         }
 
@@ -111,46 +115,48 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             curMessage = (FacesMessage) messageIter.next();
 
             String
-		summary = null,
-		detail = null,
+                summary = null,
+                detail = null,
                 severityStyle = null,
                 severityStyleClass = null;
-	    boolean 
-		showSummary = ((UIMessages)component).isShowSummary(),
-		showDetail =  ((UIMessages)component).isShowDetail();
-	    
-	    // make sure we have a non-null value for summary and
-	    // detail.
-	    summary = (null != (summary = curMessage.getSummary())) ? 
-		summary : "";
-	    detail = (null != (detail = curMessage.getDetail())) ? 
-		detail : "";
-	    
+            boolean
+                showSummary = ((UIMessages) component).isShowSummary(),
+                showDetail = ((UIMessages) component).isShowDetail();
+
+            // make sure we have a non-null value for summary and
+            // detail.
+            summary = (null != (summary = curMessage.getSummary())) ?
+                summary : "";
+            detail = (null != (detail = curMessage.getDetail())) ?
+                detail : "";
+
 
             if (curMessage.getSeverity() == FacesMessage.SEVERITY_INFO) {
-                severityStyle = (String) component.getAttributes().get("infoStyle");
+                severityStyle =
+                    (String) component.getAttributes().get("infoStyle");
                 severityStyleClass = (String)
                     component.getAttributes().get("infoClass");
-            }
-            else if (curMessage.getSeverity() == FacesMessage.SEVERITY_WARN) {
-                severityStyle = (String) component.getAttributes().get("warnStyle");
+            } else if (curMessage.getSeverity() == FacesMessage.SEVERITY_WARN) {
+                severityStyle =
+                    (String) component.getAttributes().get("warnStyle");
                 severityStyleClass = (String)
                     component.getAttributes().get("warnClass");
-            }
-            else if (curMessage.getSeverity() == FacesMessage.SEVERITY_ERROR) {
-                severityStyle = (String) component.getAttributes().get("errorStyle");
+            } else if (curMessage.getSeverity() == FacesMessage.SEVERITY_ERROR) {
+                severityStyle =
+                    (String) component.getAttributes().get("errorStyle");
                 severityStyleClass = (String)
                     component.getAttributes().get("errorClass");
-            }
-            else if (curMessage.getSeverity() == FacesMessage.SEVERITY_FATAL) {
-                severityStyle = (String) component.getAttributes().get("fatalStyle");
+            } else if (curMessage.getSeverity() == FacesMessage.SEVERITY_FATAL) {
+                severityStyle =
+                    (String) component.getAttributes().get("fatalStyle");
                 severityStyleClass = (String)
                     component.getAttributes().get("fatalClass");
             }
 
-	    String 
-	        style = (String) component.getAttributes().get("style"),
-	        styleClass = (String) component.getAttributes().get("styleClass");
+            String
+                style = (String) component.getAttributes().get("style"),
+                styleClass = (String) component.getAttributes().get(
+                    "styleClass");
 
             // if we have style and severityStyle
             if ((style != null) && (severityStyle != null)) {
@@ -183,53 +189,53 @@ public class MessagesRenderer extends HtmlBasicRenderer {
 
             boolean wroteSpan = false;
 
-	    if (styleClass != null || style != null) {
+            if (styleClass != null || style != null) {
                 writer.startElement("span", component);
-		if (!wroteTable) {
-		    writeIdAttributeIfNecessary(context, writer, component);
-		}
+                if (!wroteTable) {
+                    writeIdAttributeIfNecessary(context, writer, component);
+                }
                 wroteSpan = true;
-	        if (null != styleClass) {
-		    writer.writeAttribute("class", styleClass, "styleClass");
-	        }
-	        if (style != null) {
-		    writer.writeAttribute("style", style, "style");
-	        }
-            } 
+                if (null != styleClass) {
+                    writer.writeAttribute("class", styleClass, "styleClass");
+                }
+                if (style != null) {
+                    writer.writeAttribute("style", style, "style");
+                }
+            }
 
             Object tooltip = component.getAttributes().get("tooltip");
             boolean isTooltip = false;
             if (tooltip instanceof Boolean) {
                 //if it's not a boolean can ignore it
-                isTooltip = ((Boolean)tooltip).booleanValue();
+                isTooltip = ((Boolean) tooltip).booleanValue();
             }
 
             boolean wroteTooltip = false;
             if (showSummary && showDetail && isTooltip) {
 
                 if (!wroteSpan) {
-                     writer.startElement("span", component);
+                    writer.startElement("span", component);
                 }
                 writer.writeAttribute("title", summary, "title");
                 writer.flush();
-	        writer.writeText("\t", null);
+                writer.writeText("\t", null);
                 wroteTooltip = true;
             } else if (wroteSpan) {
                 writer.flush();
             }
 
             if (!wroteTooltip && showSummary) {
-	        writer.writeText("\t", null);
-	        writer.writeText(summary, null);
-	        writer.writeText(" ", null);
+                writer.writeText("\t", null);
+                writer.writeText(summary, null);
+                writer.writeText(" ", null);
             }
-	    if (showDetail) {
-		writer.writeText(detail, null);
-	    }
+            if (showDetail) {
+                writer.writeText(detail, null);
+            }
 
-	    if (wroteSpan || wroteTooltip) {
+            if (wroteSpan || wroteTooltip) {
                 writer.endElement("span");
-	    }
+            }
 
             //close table row if present
             if (wroteTable) {
@@ -244,7 +250,7 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             writer.endElement("table");
         }
     }
-    
+
 } // end of class MessagesRenderer
 
 

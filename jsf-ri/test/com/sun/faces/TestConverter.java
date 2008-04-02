@@ -5,13 +5,12 @@
 
 package com.sun.faces;
 
-import com.sun.faces.util.Util;
-
 import javax.faces.convert.NumberConverter;
 
-public class TestConverter extends NumberConverter
-{
+public class TestConverter extends NumberConverter {
 
-    public String getConverterId() { return "TestConverter"; }
+    public String getConverterId() {
+        return "TestConverter";
+    }
 
 }

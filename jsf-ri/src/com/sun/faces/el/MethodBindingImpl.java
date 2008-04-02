@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBindingImpl.java,v 1.3 2004/02/04 23:40:58 ofung Exp $
+ * $Id: MethodBindingImpl.java,v 1.4 2004/02/06 18:54:27 rlubke Exp $
  */
 
 /*
@@ -10,16 +10,13 @@
 package com.sun.faces.el;
 
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import javax.faces.FacesException;
+import com.sun.faces.util.Util;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.faces.application.Application;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponentBase;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
@@ -27,10 +24,8 @@ import javax.faces.el.MethodNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 
-import com.sun.faces.util.Util;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 
 /**
@@ -47,25 +42,26 @@ public class MethodBindingImpl extends MethodBinding implements StateHolder {
     public MethodBindingImpl() {
     }
 
+
     public MethodBindingImpl(Application application, String ref,
                              Class args[]) {
- 
+
         if ((application == null) || (ref == null)) {
             throw new NullPointerException();
         }
-	if (!(ref.startsWith("#{") && ref.endsWith("}"))) {
-	    if (log.isErrorEnabled()) {
-		log.error(" Expression " + ref + 
-			  " does not follow the syntax #{...}");
-	    }
-	    throw new ReferenceSyntaxException(ref);
-	}
-	rawRef = ref;
-	ref = Util.stripBracketsIfNecessary(ref);
-	
+        if (!(ref.startsWith("#{") && ref.endsWith("}"))) {
+            if (log.isErrorEnabled()) {
+                log.error(" Expression " + ref +
+                          " does not follow the syntax #{...}");
+            }
+            throw new ReferenceSyntaxException(ref);
+        }
+        rawRef = ref;
+        ref = Util.stripBracketsIfNecessary(ref);
+
         this.args = args;
         String vbRef = null;
-        
+
         if (ref.endsWith("]")) {
             int left = ref.lastIndexOf("[");
             if (left < 0) {
@@ -96,7 +92,9 @@ public class MethodBindingImpl extends MethodBinding implements StateHolder {
         }
         if (this.name.length() < 1) {
             if (log.isDebugEnabled()) {
-                log.debug("Expression syntax error: Missing name after period in:" + ref);
+                log.debug(
+                    "Expression syntax error: Missing name after period in:" +
+                    ref);
             }
             throw new ReferenceSyntaxException(ref);
         }
@@ -129,8 +127,8 @@ public class MethodBindingImpl extends MethodBinding implements StateHolder {
         } catch (IllegalAccessException e) {
             throw new EvaluationException(e);
         } catch (InvocationTargetException ite) {
-	    throw new EvaluationException(ite.getTargetException());
-	}
+            throw new EvaluationException(ite.getTargetException());
+        }
 
     }
 
@@ -151,30 +149,31 @@ public class MethodBindingImpl extends MethodBinding implements StateHolder {
 
     }
 
+
     public String getExpressionString() {
-	return rawRef;
+        return rawRef;
     }
 
 
     // ----------------------------------------------------- StateHolder Methods
 
     public Object saveState(FacesContext context) {
-	Object values[] = new Object[4];
-	values[0] = name;
-	values[1] = UIComponentBase.saveAttachedState(context, vb);
-	values[2] = args;
-	values[3] = rawRef;
-	return (values);
+        Object values[] = new Object[4];
+        values[0] = name;
+        values[1] = UIComponentBase.saveAttachedState(context, vb);
+        values[2] = args;
+        values[3] = rawRef;
+        return (values);
     }
 
 
     public void restoreState(FacesContext context, Object state) {
-	Object values[] = (Object[]) state;
-	name = (String) values[0];
-	vb = (ValueBinding) UIComponentBase.restoreAttachedState(context, 
-								 values[1]);
-	args = (Class []) values[2];
-	rawRef = (String) values[3];
+        Object values[] = (Object[]) state;
+        name = (String) values[0];
+        vb = (ValueBinding) UIComponentBase.restoreAttachedState(context,
+                                                                 values[1]);
+        args = (Class[]) values[2];
+        rawRef = (String) values[3];
     }
 
 
@@ -182,12 +181,12 @@ public class MethodBindingImpl extends MethodBinding implements StateHolder {
 
 
     public boolean isTransient() {
-	return (this.transientFlag);
+        return (this.transientFlag);
     }
 
 
     public void setTransient(boolean transientFlag) {
-	this.transientFlag = transientFlag;
+        this.transientFlag = transientFlag;
     }
 
 
@@ -196,9 +195,9 @@ public class MethodBindingImpl extends MethodBinding implements StateHolder {
 
 
     private Method method(Object base) {
-	if (null == base) {
-	    throw new MethodNotFoundException(name);
-	}
+        if (null == base) {
+            throw new MethodNotFoundException(name);
+        }
 
         Class clazz = base.getClass();
         try {
@@ -208,7 +207,6 @@ public class MethodBindingImpl extends MethodBinding implements StateHolder {
         }
 
     }
-
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationFactoryImpl.java,v 1.3 2004/02/04 23:44:04 ofung Exp $
+ * $Id: TestApplicationFactoryImpl.java,v 1.4 2004/02/06 18:56:29 rlubke Exp $
  */
 
 /*
@@ -11,29 +11,22 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.application.ApplicationFactoryImpl;
-import com.sun.faces.application.ApplicationImpl;
-
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-
-import com.sun.faces.util.Util;
 import com.sun.faces.JspFacesTestCase;
 
+import javax.faces.application.Application;
+
 /**
- *
- *  <B>TestApplicationFactoryImpl</B> is a class ...
- *
+ * <B>TestApplicationFactoryImpl</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationFactoryImpl.java,v 1.3 2004/02/04 23:44:04 ofung Exp $
- * 
+ * @version $Id: TestApplicationFactoryImpl.java,v 1.4 2004/02/06 18:56:29 rlubke Exp $
  * @see	Blah
  * @see	Bloo
- *
  */
 
 public class TestApplicationFactoryImpl extends JspFacesTestCase {
+
 //
 // Protected Constants
 //
@@ -55,8 +48,14 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
 // Constructors and Initializers    
 //
 
-    public TestApplicationFactoryImpl() {super("TestApplicationFactoryImpl");}
-    public TestApplicationFactoryImpl(String name) {super(name);}
+    public TestApplicationFactoryImpl() {
+        super("TestApplicationFactoryImpl");
+    }
+
+
+    public TestApplicationFactoryImpl(String name) {
+        super(name);
+    }
 //
 // Class methods
 //
@@ -84,11 +83,13 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
         assertTrue(application3 == application4);
     }
 
+
     public void testSpecCompliance() {
         applicationFactory = new ApplicationFactoryImpl();
 
         assertTrue(null != applicationFactory.getApplication());
     }
+
 
     public void testExceptions() {
         applicationFactory = new ApplicationFactoryImpl();
@@ -98,12 +99,12 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
         //
         boolean thrown = false;
         try {
-            applicationFactory.setApplication(null); 
+            applicationFactory.setApplication(null);
         } catch (NullPointerException e) {
             thrown = true;
         }
         assertTrue(thrown);
     }
 
-            
+
 } // end of class TestApplicationFactoryImpl

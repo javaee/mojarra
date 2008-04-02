@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.11 2004/02/04 23:41:50 ofung Exp $
+ * $Id: OutputMessageRenderer.java,v 1.12 2004/02/06 18:55:21 rlubke Exp $
  */
 
 /*
@@ -12,36 +12,30 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIParameter;
+import javax.faces.component.ValueHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
-import javax.faces.component.UIParameter;
-import javax.faces.context.ResponseWriter;
-import javax.faces.context.FacesContext;
-
-import com.sun.faces.util.Util;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 
 /**
- *
- *  <B>OutputMessageRenderer</B> is a class that renderes UIOutput
- *
- *
- * 
+ * <B>OutputMessageRenderer</B> is a class that renderes UIOutput
  */
 
 public class OutputMessageRenderer extends HtmlBasicRenderer {
 
     // Log instance for this class
-    protected static final Log log = LogFactory.getLog(OutputMessageRenderer.class);
+    protected static final Log log = LogFactory.getLog(
+        OutputMessageRenderer.class);
 
     //
     // Protected Constants
@@ -80,35 +74,39 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
     // Methods From Renderer
     //
 
-    public void encodeBegin(FacesContext context, UIComponent component) 
+    public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
+
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) 
+
+    public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }
-        String 
-	    currentValue = null,
-	    style = (String) component.getAttributes().get("style"),
-	    styleClass = (String) component.getAttributes().get("styleClass");
+        String
+            currentValue = null,
+            style = (String) component.getAttributes().get("style"),
+            styleClass = (String) component.getAttributes().get("styleClass");
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null );
+        Util.doAssert(writer != null);
 
         // suppress rendering if "rendered" property on the component is
         // false.
@@ -119,10 +117,10 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             }
             return;
         }
-        Object currentObj = ((ValueHolder)component).getValue();
-        if ( currentObj != null) {
+        Object currentObj = ((ValueHolder) component).getValue();
+        if (currentObj != null) {
             if (currentObj instanceof String) {
-                currentValue = (String)currentObj;
+                currentValue = (String) currentObj;
             } else {
                 currentValue = currentObj.toString();
             }
@@ -142,7 +140,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
                 continue;
             }
 
-            parameterList.add(((UIParameter)kid).getValue());
+            parameterList.add(((UIParameter) kid).getValue());
         }
 
         // If at least one substitution parameter was specified,
@@ -151,25 +149,25 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         if (parameterList.size() > 0) {
             message = MessageFormat.format
                 (currentValue, parameterList.toArray
-                 (new Object[parameterList.size()]));
+                               (new Object[parameterList.size()]));
         } else {
             message = currentValue;
         }
 
-	boolean wroteSpan = false;
-	if (null != styleClass || null != style || 
-	    Util.hasPassThruAttributes(component) ||
-	    shouldWriteIdAttribute(component)) {
-	    writer.startElement("span", component);
-	    wroteSpan = true;
-	    
-	    if (null != styleClass) {
-		writer.writeAttribute("class", styleClass, "styleClass");
-	    }
-	    // style is rendered as a passthru attribute
-	    Util.renderPassThruAttributes(writer, component);
-	    Util.renderBooleanPassThruAttributes(writer, component);
-	}
+        boolean wroteSpan = false;
+        if (null != styleClass || null != style ||
+            Util.hasPassThruAttributes(component) ||
+            shouldWriteIdAttribute(component)) {
+            writer.startElement("span", component);
+            wroteSpan = true;
+
+            if (null != styleClass) {
+                writer.writeAttribute("class", styleClass, "styleClass");
+            }
+            // style is rendered as a passthru attribute
+            Util.renderPassThruAttributes(writer, component);
+            Util.renderBooleanPassThruAttributes(writer, component);
+        }
         Boolean escape = Boolean.TRUE;
         Object val = component.getAttributes().get("escape");
         if (val != null) {
@@ -178,8 +176,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             } else if (val instanceof String) {
                 try {
                     escape = Boolean.valueOf((String) val);
-                }
-                catch (Throwable e) {
+                } catch (Throwable e) {
                 }
             }
         }
@@ -188,9 +185,9 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         } else {
             writer.write(message);
         }
-	if (wroteSpan) {
-	    writer.endElement("span");
-	}
+        if (wroteSpan) {
+            writer.endElement("span");
+        }
     }
 
 } // end of class OutputMessageRenderer

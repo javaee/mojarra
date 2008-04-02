@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.29 2004/02/04 23:44:58 ofung Exp $
+ * $Id: TestUtil_messages.java,v 1.30 2004/02/06 18:57:17 rlubke Exp $
  */
 
 /*
@@ -11,20 +11,19 @@
 
 package com.sun.faces.util;
 
-import javax.faces.component.UIViewRoot;
 import com.sun.faces.ServletFacesTestCase;
+
+import javax.faces.component.UIViewRoot;
 
 import java.util.Locale;
 
 
-
 /**
- *
- *  <B>TestUtil_messages.java</B> is a class ...
- *
+ * <B>TestUtil_messages.java</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.29 2004/02/04 23:44:58 ofung Exp $
+ * @version $Id: TestUtil_messages.java,v 1.30 2004/02/06 18:57:17 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -103,7 +102,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID, "0"},
         {Util.INVALID_MESSAGE_SEVERITY_IN_CONFIG_ID, "1"},
         {Util.CANT_CLOSE_INPUT_STREAM_ID, "0"},
-        {Util.DUPLICATE_COMPONENT_ID_ERROR_ID, "1"},        
+        {Util.DUPLICATE_COMPONENT_ID_ERROR_ID, "1"},
         {Util.FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED_ID, "1"},
         {Util.ILLEGAL_VIEW_ID_ID, "1"},
         {Util.INVALID_EXPRESSION_ID, "1"},
@@ -121,8 +120,14 @@ public class TestUtil_messages extends ServletFacesTestCase {
 // Constructors and Initializers    
 //
 
-    public TestUtil_messages() {super("TestUtil_messages.java");}
-    public TestUtil_messages(String name) {super(name);}
+    public TestUtil_messages() {
+        super("TestUtil_messages.java");
+    }
+
+
+    public TestUtil_messages(String name) {
+        super(name);
+    }
 
     //
     // Methods from TestCase
@@ -130,10 +135,10 @@ public class TestUtil_messages extends ServletFacesTestCase {
     public void setUp() {
         super.setUp();
         UIViewRoot viewRoot = new UIViewRoot();
-	viewRoot.setViewId("viewId");
-	getFacesContext().setViewRoot(viewRoot);
-        
-     }
+        viewRoot.setViewId("viewId");
+        getFacesContext().setViewRoot(viewRoot);
+
+    }
     
 //
 // Class methods
@@ -171,36 +176,39 @@ public class TestUtil_messages extends ServletFacesTestCase {
         verifyParamsInMessages(messageInfo);
     }
 
+
     private void verifyParamsInMessages(String[][] messageInfo) {
         int numParams = 0;
 
-        for (int i=0; i<messageInfo.length; i++) {
+        for (int i = 0; i < messageInfo.length; i++) {
             try {
                 numParams = Integer.parseInt(messageInfo[i][1]);
             } catch (NumberFormatException e) {
-                 System.out.println("Invalid param number specifier!");
-                 assertTrue(false);
+                System.out.println("Invalid param number specifier!");
+                assertTrue(false);
             }
             if (numParams == 0) {
                 String message = Util.getExceptionMessage(messageInfo[i][0]);
                 assertTrue(message != null);
             } else if (numParams > 0) {
                 Object[] params = generateParams(numParams);
-                String message = Util.getExceptionMessage(messageInfo[i][0], params);                
+                String message = Util.getExceptionMessage(messageInfo[i][0],
+                                                          params);
                 assertTrue(message != null);
-                for (int j=0; j<params.length; j++) {
-                    assertTrue(message.indexOf((String)params[j])!=-1);
+                for (int j = 0; j < params.length; j++) {
+                    assertTrue(message.indexOf((String) params[j]) != -1);
                 }
             }
         }
     }
 
+
     private Object[] generateParams(int numParams) {
         Object[] params = new String[numParams];
-        for (int i=0; i<numParams; i++) {
-            params[i] = "param_"+i;
+        for (int i = 0; i < numParams; i++) {
+            params[i] = "param_" + i;
         }
         return params;
     }
-        
+
 } // end of class TestUtil_messages

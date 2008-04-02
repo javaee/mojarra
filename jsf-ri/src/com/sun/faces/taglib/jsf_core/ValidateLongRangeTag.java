@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLongRangeTag.java,v 1.6 2004/02/04 23:42:10 ofung Exp $
+ * $Id: ValidateLongRangeTag.java,v 1.7 2004/02/06 18:55:42 rlubke Exp $
  */
 
 /*
@@ -13,19 +13,17 @@ package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.util.Util;
 
-
 import javax.faces.validator.LongRangeValidator;
 import javax.faces.validator.Validator;
-
 import javax.servlet.jsp.JspException;
 
 /**
- * ValidateLongRangeTag is the tag handler class for 
+ * ValidateLongRangeTag is the tag handler class for
  * <code>validate_longrange</code> tag.
  */
 
-public class ValidateLongRangeTag extends MaxMinValidatorTag
-{
+public class ValidateLongRangeTag extends MaxMinValidatorTag {
+
 //
 // Protected Constants
 //
@@ -39,10 +37,10 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag
 //
 
 // Attribute Instance Variables
-protected String maximum_ = null;
-protected long maximum = 0;
-protected String minimum_ = null;
-protected long minimum = 0;
+    protected String maximum_ = null;
+    protected long maximum = 0;
+    protected String minimum_ = null;
+    protected long minimum = 0;
 
 
 // Relationship Instance Variables
@@ -51,11 +49,10 @@ protected long minimum = 0;
 // Constructors and Initializers    
 //
 
-public ValidateLongRangeTag()
-{
-    super();
-    super.setValidatorId("javax.faces.LongRange");
-}
+    public ValidateLongRangeTag() {
+        super();
+        super.setValidatorId("javax.faces.LongRange");
+    }
 
 //
 // Class methods
@@ -65,62 +62,60 @@ public ValidateLongRangeTag()
 // General Methods
 //
 
-public void setMaximum(String newMaximum)
-{
-    maximumSet = true;
-    maximum_ = newMaximum;
-}
+    public void setMaximum(String newMaximum) {
+        maximumSet = true;
+        maximum_ = newMaximum;
+    }
 
-public void setMinimum(String newMinimum)
-{
-    minimumSet = true;
-    minimum_ = newMinimum;
-}
+
+    public void setMinimum(String newMinimum) {
+        minimumSet = true;
+        minimum_ = newMinimum;
+    }
 
 // 
 // Methods from ValidatorTag
-// 
+//
 
-protected Validator createValidator() throws JspException
-{
-    LongRangeValidator result = null;
+    protected Validator createValidator() throws JspException {
+        LongRangeValidator result = null;
 
-    result = (LongRangeValidator) super.createValidator();
-    Util.doAssert(null != result);
+        result = (LongRangeValidator) super.createValidator();
+        Util.doAssert(null != result);
 
-    evaluateExpressions();
-    if (maximumSet) {
-	result.setMaximum(maximum);
+        evaluateExpressions();
+        if (maximumSet) {
+            result.setMaximum(maximum);
+        }
+
+        if (minimumSet) {
+            result.setMinimum(minimum);
+        }
+
+        return result;
     }
-
-    if (minimumSet) {
-	result.setMinimum(minimum);
-    }
-
-    return result;
-}
 
 /* Evaluates expressions as necessary */
-private void evaluateExpressions() throws JspException {
-   
-    if (minimum_ != null) {
-        if (Util.isVBExpression(minimum_)) {  
-            Long longObj = (Long)Util.evaluateVBExpression(minimum_);
-            Util.doAssert(null != longObj);
-            minimum = longObj.longValue();
-        } else {
-            minimum = new Long(minimum_).longValue();
+    private void evaluateExpressions() throws JspException {
+
+        if (minimum_ != null) {
+            if (Util.isVBExpression(minimum_)) {
+                Long longObj = (Long) Util.evaluateVBExpression(minimum_);
+                Util.doAssert(null != longObj);
+                minimum = longObj.longValue();
+            } else {
+                minimum = new Long(minimum_).longValue();
+            }
+        }
+        if (maximum_ != null) {
+            if (Util.isVBExpression(maximum_)) {
+                Long longObj = (Long) Util.evaluateVBExpression(maximum_);
+                Util.doAssert(null != longObj);
+                maximum = longObj.longValue();
+            } else {
+                maximum = new Long(maximum_).longValue();
+            }
         }
     }
-    if (maximum_ != null) {
-        if (Util.isVBExpression(maximum_)) {  
-            Long longObj = (Long)Util.evaluateVBExpression(maximum_);
-            Util.doAssert(null != longObj);
-            maximum = longObj.longValue();
-        } else {
-            maximum = new Long(maximum_).longValue();
-        }
-    }
-}
 
 } // end of class ValidateLongRangeTag

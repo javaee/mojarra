@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.24 2004/02/04 23:44:53 ofung Exp $
+ * $Id: TestValidatorTags.java,v 1.25 2004/02/06 18:57:13 rlubke Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import com.sun.faces.lifecycle.ProcessValidationsPhase;
 import com.sun.faces.lifecycle.RenderResponsePhase;
 import org.apache.cactus.WebRequest;
 
-import javax.faces.application.Application;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -27,42 +26,57 @@ import javax.faces.component.UIViewRoot;
 import java.util.Iterator;
 
 /**
- *
- *  <B>TestValidatorTags</B> is a class ...
- *
+ * <B>TestValidatorTags</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.24 2004/02/04 23:44:53 ofung Exp $ 
+ * @version $Id: TestValidatorTags.java,v 1.25 2004/02/06 18:57:13 rlubke Exp $
  */
 
-public class TestValidatorTags extends JspFacesTestCase
-{
+public class TestValidatorTags extends JspFacesTestCase {
+
 //
 // Protected Constants
 //
 
-public static final String TEST_URI = "/TestValidatorTags.jsp";
-public static final String OUTOFBOUNDS1_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "outOfBounds1";
-public static final String OUTOFBOUNDS1_VALUE = "3.1415";
-public static final String INBOUNDS1_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "inBounds1";
-public static final String INBOUNDS1_VALUE = "10.25";
-public static final String OUTOFBOUNDS2_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "outOfBounds2";
-public static final String OUTOFBOUNDS2_VALUE = "fox";
-public static final String INBOUNDS2_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "inBounds2";
-public static final String INBOUNDS2_VALUE = "alligator22";
-public static final String OUTOFBOUNDS3_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "outOfBounds3";
-public static final String OUTOFBOUNDS3_VALUE = "30000";
-public static final String INBOUNDS3_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "inBounds3";
-public static final String INBOUNDS3_VALUE = "1100";
-public static final String REQUIRED1_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "required1";
-public static final String REQUIRED1_VALUE = "required";
-public static final String REQUIRED2_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "required2";
-public static final String REQUIRED2_VALUE = "required";
+    public static final String TEST_URI = "/TestValidatorTags.jsp";
+    public static final String OUTOFBOUNDS1_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "outOfBounds1";
+    public static final String OUTOFBOUNDS1_VALUE = "3.1415";
+    public static final String INBOUNDS1_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "inBounds1";
+    public static final String INBOUNDS1_VALUE = "10.25";
+    public static final String OUTOFBOUNDS2_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "outOfBounds2";
+    public static final String OUTOFBOUNDS2_VALUE = "fox";
+    public static final String INBOUNDS2_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "inBounds2";
+    public static final String INBOUNDS2_VALUE = "alligator22";
+    public static final String OUTOFBOUNDS3_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "outOfBounds3";
+    public static final String OUTOFBOUNDS3_VALUE = "30000";
+    public static final String INBOUNDS3_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "inBounds3";
+    public static final String INBOUNDS3_VALUE = "1100";
+    public static final String REQUIRED1_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "required1";
+    public static final String REQUIRED1_VALUE = "required";
+    public static final String REQUIRED2_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "required2";
+    public static final String REQUIRED2_VALUE = "required";
 
-public boolean sendResponseToFile() 
-{
-    return false;
-}
+
+    public boolean sendResponseToFile() {
+        return false;
+    }
 
 //
 // Class Variables
@@ -81,11 +95,12 @@ public boolean sendResponseToFile()
 //
 
     public TestValidatorTags() {
-	super("TestValidatorTags");
+        super("TestValidatorTags");
     }
 
+
     public TestValidatorTags(String name) {
-	super(name);
+        super(name);
     }
 
 //
@@ -97,117 +112,145 @@ public boolean sendResponseToFile()
 //
 
 
-public void beginValidators(WebRequest theRequest)
-{
-    theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
-    theRequest.addParameter(OUTOFBOUNDS1_ID, OUTOFBOUNDS1_VALUE);
-    theRequest.addParameter(INBOUNDS1_ID, INBOUNDS1_VALUE);
-    theRequest.addParameter(OUTOFBOUNDS2_ID, OUTOFBOUNDS2_VALUE);
-    theRequest.addParameter(INBOUNDS2_ID, INBOUNDS2_VALUE);
-    theRequest.addParameter(OUTOFBOUNDS3_ID, OUTOFBOUNDS3_VALUE);
-    theRequest.addParameter(INBOUNDS3_ID, INBOUNDS3_VALUE);
-    theRequest.addParameter(REQUIRED1_ID, "");
-    theRequest.addParameter(REQUIRED2_ID, "");
-    theRequest.addParameter("validatorForm","validatorForm");
-  
-}
+    public void beginValidators(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+        theRequest.addParameter(OUTOFBOUNDS1_ID, OUTOFBOUNDS1_VALUE);
+        theRequest.addParameter(INBOUNDS1_ID, INBOUNDS1_VALUE);
+        theRequest.addParameter(OUTOFBOUNDS2_ID, OUTOFBOUNDS2_VALUE);
+        theRequest.addParameter(INBOUNDS2_ID, INBOUNDS2_VALUE);
+        theRequest.addParameter(OUTOFBOUNDS3_ID, OUTOFBOUNDS3_VALUE);
+        theRequest.addParameter(INBOUNDS3_ID, INBOUNDS3_VALUE);
+        theRequest.addParameter(REQUIRED1_ID, "");
+        theRequest.addParameter(REQUIRED2_ID, "");
+        theRequest.addParameter("validatorForm", "validatorForm");
 
-public void setUp() {
-    RIConstants.IS_UNIT_TEST_MODE = true;
-    super.setUp();
-}
+    }
 
-public void testValidators()
-{    
-    // Verify the parmeters are as expected
-    String paramVal = (String)(getFacesContext().getExternalContext().getRequestParameterMap()).get(OUTOFBOUNDS1_ID);
-    assertTrue(OUTOFBOUNDS1_VALUE.equals(paramVal));
+
+    public void setUp() {
+        RIConstants.IS_UNIT_TEST_MODE = true;
+        super.setUp();
+    }
+
+
+    public void testValidators() {
+        // Verify the parmeters are as expected
+        String paramVal = (String) (getFacesContext().getExternalContext()
+            .getRequestParameterMap()).get(OUTOFBOUNDS1_ID);
+        assertTrue(OUTOFBOUNDS1_VALUE.equals(paramVal));
 //    assertTrue(OUTOFBOUNDS1_VALUE.equals(getFacesContext().getServletRequest().getParameter(OUTOFBOUNDS1_ID)));
 
-    boolean result = false;
-    String value = null;    
-    Phase 
-	renderResponse = new RenderResponsePhase(),
-	processValidations = new ProcessValidationsPhase(),
-	applyRequestValues = new ApplyRequestValuesPhase();
-   
-    UIViewRoot page = new UIViewRoot();
-    page.setViewId(TEST_URI);
-    getFacesContext().setViewRoot(page);
+        boolean result = false;
+        String value = null;
+        Phase
+            renderResponse = new RenderResponsePhase(),
+            processValidations = new ProcessValidationsPhase(),
+            applyRequestValues = new ApplyRequestValuesPhase();
 
-    // This builds the tree, and usefaces saves it in the session
-    renderResponse.execute(getFacesContext());
-    assertTrue(!(getFacesContext().getRenderResponse()) &&
-        !(getFacesContext().getResponseComplete()));
+        UIViewRoot page = new UIViewRoot();
+        page.setViewId(TEST_URI);
+        getFacesContext().setViewRoot(page);
 
-    // This causes the components to be set to valid
-    applyRequestValues.execute(getFacesContext());
-    assertTrue(!(getFacesContext().getRenderResponse()) &&
-        !(getFacesContext().getResponseComplete()));
-    
-    // process the validations
-    processValidations.execute(getFacesContext());
-    // We know there are validation errors on the page
-    assertTrue(getFacesContext().getRenderResponse());
+        // This builds the tree, and usefaces saves it in the session
+        renderResponse.execute(getFacesContext());
+        assertTrue(!(getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
 
-    // verify the messages have been added correctly.
-    UIComponent comp = null;
-    Iterator messages = null;
-    
-    assertTrue(null != (messages = getFacesContext().getMessages()));
-    assertTrue(messages.hasNext());
-    
-    // check the messages for each component in the page
-    assertTrue(null != 
-	       (comp = 
-		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS1_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
-    assertTrue(messages.hasNext());
+        // This causes the components to be set to valid
+        applyRequestValues.execute(getFacesContext());
+        assertTrue(!(getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
 
-    assertTrue(null != 
-	       (comp = 
-		getFacesContext().getViewRoot().findComponent(INBOUNDS1_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
-    assertTrue(!messages.hasNext());
+        // process the validations
+        processValidations.execute(getFacesContext());
+        // We know there are validation errors on the page
+        assertTrue(getFacesContext().getRenderResponse());
 
-    assertTrue(null != 
-	       (comp = 
-		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS2_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
-    assertTrue(messages.hasNext());
+        // verify the messages have been added correctly.
+        UIComponent comp = null;
+        Iterator messages = null;
 
-    assertTrue(null != 
-	       (comp = 
-		getFacesContext().getViewRoot().findComponent(INBOUNDS2_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
-    assertTrue(!messages.hasNext());
+        assertTrue(null != (messages = getFacesContext().getMessages()));
+        assertTrue(messages.hasNext());
 
-    assertTrue(null != 
-	       (comp = 
-		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS3_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
-    assertTrue(messages.hasNext());
+        // check the messages for each component in the page
+        assertTrue(null !=
+                   (comp =
+                    getFacesContext().getViewRoot().findComponent(
+                        OUTOFBOUNDS1_ID)));
+        assertTrue(
+            null !=
+            (messages =
+             getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
+        assertTrue(messages.hasNext());
 
-    assertTrue(null != 
-	       (comp = 
-		getFacesContext().getViewRoot().findComponent(INBOUNDS3_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
-    assertTrue(!messages.hasNext());
+        assertTrue(null !=
+                   (comp =
+                    getFacesContext().getViewRoot().findComponent(INBOUNDS1_ID)));
+        assertTrue(
+            null !=
+            (messages =
+             getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
+        assertTrue(!messages.hasNext());
 
-    assertTrue(null != 
-	       (comp = 
-		getFacesContext().getViewRoot().findComponent(REQUIRED1_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
-    assertTrue(messages.hasNext());
+        assertTrue(null !=
+                   (comp =
+                    getFacesContext().getViewRoot().findComponent(
+                        OUTOFBOUNDS2_ID)));
+        assertTrue(
+            null !=
+            (messages =
+             getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
+        assertTrue(messages.hasNext());
 
-    assertTrue(null != 
-	       (comp = 
-		getFacesContext().getViewRoot().findComponent(REQUIRED2_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
-    assertTrue(messages.hasNext());
+        assertTrue(null !=
+                   (comp =
+                    getFacesContext().getViewRoot().findComponent(INBOUNDS2_ID)));
+        assertTrue(
+            null !=
+            (messages =
+             getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
+        assertTrue(!messages.hasNext());
 
-    RIConstants.IS_UNIT_TEST_MODE = false;
-}
+        assertTrue(null !=
+                   (comp =
+                    getFacesContext().getViewRoot().findComponent(
+                        OUTOFBOUNDS3_ID)));
+        assertTrue(
+            null !=
+            (messages =
+             getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
+        assertTrue(messages.hasNext());
+
+        assertTrue(null !=
+                   (comp =
+                    getFacesContext().getViewRoot().findComponent(INBOUNDS3_ID)));
+        assertTrue(
+            null !=
+            (messages =
+             getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
+        assertTrue(!messages.hasNext());
+
+        assertTrue(null !=
+                   (comp =
+                    getFacesContext().getViewRoot().findComponent(REQUIRED1_ID)));
+        assertTrue(
+            null !=
+            (messages =
+             getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
+        assertTrue(messages.hasNext());
+
+        assertTrue(null !=
+                   (comp =
+                    getFacesContext().getViewRoot().findComponent(REQUIRED2_ID)));
+        assertTrue(
+            null !=
+            (messages =
+             getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
+        assertTrue(messages.hasNext());
+
+        RIConstants.IS_UNIT_TEST_MODE = false;
+    }
 
 
 } // end of class TestValidatorTags

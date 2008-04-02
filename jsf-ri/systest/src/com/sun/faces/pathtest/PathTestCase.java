@@ -1,5 +1,5 @@
 /*
- * $Id: PathTestCase.java,v 1.3 2004/02/04 23:42:30 ofung Exp $
+ * $Id: PathTestCase.java,v 1.4 2004/02/06 18:56:02 rlubke Exp $
  */
 
 /*
@@ -73,18 +73,19 @@ public class PathTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
+
     /**
      * Verify that if an initial request comes to a FacesSevlet
      * mapped using a prefix path, that the client is redirected
-     * to the context root.  
+     * to the context root.
      * Additionally verify that after request to a particular view
      * has been made, if a subsequent request is made to the
      * prefix path, context root redirection occurs.
-     */ 
+     */
     public void testVerifyPathBehavior() throws Exception {
         final String welcomePage = "WELCOMEPAGE";
         HtmlPage page = getPage("/faces");
-        WebResponse response = page.getWebResponse();       
+        WebResponse response = page.getWebResponse();
         assertTrue(welcomePage.equals(response.getContentAsString().trim()));
         
         // Ok, now get a page
@@ -92,17 +93,16 @@ public class PathTestCase extends AbstractTestCase {
         response = textPage.getWebResponse();
         assertTrue("/hello.jsp PASSED".equals(
             response.getContentAsString().trim()));
-        
+
         page = getPage("/faces");
         response = page.getWebResponse();
-        assertTrue("WELCOMEPAGE".equals(
-            response.getContentAsString().trim()));        
+        assertTrue("WELCOMEPAGE".equals(response.getContentAsString().trim()));
     }
 
 
     protected TextPage getTextPage(String path) throws Exception {
         TextPage page = (TextPage) client.getPage(getURL(path));
-        
+
         return (page);
 
     }

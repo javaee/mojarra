@@ -60,24 +60,22 @@
 
 package com.sun.faces.el.impl;
 
-import java.util.Map;
-
-import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.el.VariableResolver;
 
 /**
- *
  * <p>Represents a name that can be used as the first element of a
  * value.
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class NamedValue
     extends Expression {
+
     //-------------------------------------
     // Constants
     //-------------------------------------
@@ -89,15 +87,15 @@ public class NamedValue
 
     String mName;
 
+
     public String getName() {
         return mName;
     }
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public NamedValue(String pName) {
         mName = pName;
     }
@@ -106,23 +104,21 @@ public class NamedValue
     // Expression methods
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         return StringLiteral.toIdentifierToken(mName);
     }
 
     //-------------------------------------
     /**
-     *
      * Evaluates by looking up the name in the VariableResolver
-     **/
+     */
     public Object evaluate(ExpressionInfo exprInfo)
         throws ElException {
-       
+
         VariableResolver resolver = exprInfo.getVariableResolver();
-	FacesContext context = exprInfo.getFacesContext();
+        FacesContext context = exprInfo.getFacesContext();
         if (resolver == null) {
             return null;
         } else {
@@ -130,59 +126,59 @@ public class NamedValue
         }
     }
 
+
     public void setValue(ExpressionInfo exprInfo, Object newValue)
-	throws ElException {
-	// PENDING (hans): Is this the behavior we want?
+        throws ElException {
+        // PENDING (hans): Is this the behavior we want?
 
-	// Resolve the variable, to create it in the correct scope
-	// if it's a managed bean that doesn't exist
-	evaluate(exprInfo);
+        // Resolve the variable, to create it in the correct scope
+        // if it's a managed bean that doesn't exist
+        evaluate(exprInfo);
 
-	// Look for the variable in all scopes and replace it where
-	// found or add it to the request scope if not found
-	ExternalContext ec = 
-	    exprInfo.getFacesContext().getExternalContext();
+        // Look for the variable in all scopes and replace it where
+        // found or add it to the request scope if not found
+        ExternalContext ec =
+            exprInfo.getFacesContext().getExternalContext();
         if (ec.getRequestMap().get(mName) != null) {
             ec.getRequestMap().put(mName, newValue);
-        }
-        else if (ec.getSessionMap() != null &&
-		 ec.getSessionMap().get(mName) != null) {
+        } else if (ec.getSessionMap() != null &&
+            ec.getSessionMap().get(mName) != null) {
             ec.getSessionMap().put(mName, newValue);
-        }
-        else if (ec.getApplicationMap().get(mName) != null) {
+        } else if (ec.getApplicationMap().get(mName) != null) {
             ec.getApplicationMap().put(mName, newValue);
-        }
-	else {
+        } else {
             ec.getRequestMap().put(mName, newValue);
-	}
+        }
     }
+
 
     public boolean isReadOnly(ExpressionInfo exprInfo)
         throws ElException {
-	boolean isReadOnly = false;
+        boolean isReadOnly = false;
 
-	if ("param".equals(mName) ||
-	    "paramValues".equals(mName) ||
-	    "header".equals(mName) ||
-	    "headerValues".equals(mName) ||
-	    "cookie".equals(mName) ||
-	    "initParam".equals(mName)) {
-	    isReadOnly = true;
-	}
-	return isReadOnly;
+        if ("param".equals(mName) ||
+            "paramValues".equals(mName) ||
+            "header".equals(mName) ||
+            "headerValues".equals(mName) ||
+            "cookie".equals(mName) ||
+            "initParam".equals(mName)) {
+            isReadOnly = true;
+        }
+        return isReadOnly;
     }
+
 
     public Class getType(ExpressionInfo exprInfo)
         throws ElException {
 
-	Class type = null;
+        Class type = null;
         VariableResolver resolver = exprInfo.getVariableResolver();
-	FacesContext context = exprInfo.getFacesContext();
+        FacesContext context = exprInfo.getFacesContext();
         if (resolver != null) {
             Object o = resolver.resolveVariable(context, mName);
-	    type = o != null ? o.getClass() : null;
+            type = o != null ? o.getClass() : null;
         }
-	return type;
+        return type;
     }
     //-------------------------------------
 }

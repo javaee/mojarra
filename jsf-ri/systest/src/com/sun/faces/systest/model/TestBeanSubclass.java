@@ -1,5 +1,5 @@
 /*
- * $Id: TestBeanSubclass.java,v 1.2 2004/02/04 23:42:41 ofung Exp $
+ * $Id: TestBeanSubclass.java,v 1.3 2004/02/06 18:56:12 rlubke Exp $
  */
 
 /*
@@ -17,7 +17,13 @@ package com.sun.faces.systest.model;
 public class TestBeanSubclass extends AbstractTestBean {
 
     private String extraProperty = "Extra Property";
-    public String getExtraProperty() { return this.extraProperty; }
+
+
+    public String getExtraProperty() {
+        return this.extraProperty;
+    }
+
+
     public void setExtraProperty(String extraProperty) {
         this.extraProperty = extraProperty;
     }

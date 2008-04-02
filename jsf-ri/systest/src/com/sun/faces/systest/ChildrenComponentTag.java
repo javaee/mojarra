@@ -1,5 +1,5 @@
 /*
- * $Id: ChildrenComponentTag.java,v 1.4 2004/02/04 23:42:32 ofung Exp $
+ * $Id: ChildrenComponentTag.java,v 1.5 2004/02/06 18:56:03 rlubke Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package com.sun.faces.systest;
 
 
-import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
 

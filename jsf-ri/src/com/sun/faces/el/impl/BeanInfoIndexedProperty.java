@@ -64,7 +64,6 @@ import java.beans.IndexedPropertyDescriptor;
 import java.lang.reflect.Method;
 
 /**
- *
  * <p>This contains the information for one indexed property in a
  * BeanInfo - IndexedPropertyDescriptor, read method, and write
  * method.  This class is necessary because the read/write methods in
@@ -73,18 +72,20 @@ import java.lang.reflect.Method;
  * publicly accessible version of the method must be found by
  * searching for a public superclass/interface that declares the
  * method (this searching is done by the BeanInfoManager).
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: ofung $
- **/
+ * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: rlubke $
+ */
 
 public class BeanInfoIndexedProperty {
+
     //-------------------------------------
     // Properties
     //-------------------------------------
     // property readMethod
 
     Method mReadMethod;
+
 
     public Method getReadMethod() {
         return mReadMethod;
@@ -95,6 +96,7 @@ public class BeanInfoIndexedProperty {
 
     Method mWriteMethod;
 
+
     public Method getWriteMethod() {
         return mWriteMethod;
     }
@@ -104,20 +106,19 @@ public class BeanInfoIndexedProperty {
 
     IndexedPropertyDescriptor mIndexedPropertyDescriptor;
 
+
     public IndexedPropertyDescriptor getIndexedPropertyDescriptor() {
         return mIndexedPropertyDescriptor;
     }
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public BeanInfoIndexedProperty
-        (
-        Method pReadMethod,
-        Method pWriteMethod,
-        IndexedPropertyDescriptor pIndexedPropertyDescriptor) {
+        (Method pReadMethod,
+         Method pWriteMethod,
+         IndexedPropertyDescriptor pIndexedPropertyDescriptor) {
         mReadMethod = pReadMethod;
         mWriteMethod = pWriteMethod;
         mIndexedPropertyDescriptor = pIndexedPropertyDescriptor;

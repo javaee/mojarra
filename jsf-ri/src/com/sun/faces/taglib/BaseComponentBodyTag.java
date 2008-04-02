@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentBodyTag.java,v 1.4 2004/02/04 23:42:02 ofung Exp $
+ * $Id: BaseComponentBodyTag.java,v 1.5 2004/02/06 18:55:33 rlubke Exp $
  */
 
 /*
@@ -11,33 +11,23 @@
 
 package com.sun.faces.taglib;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.el.impl.ElException;
-import com.sun.faces.el.impl.ExpressionInfo;
-import com.sun.faces.el.impl.JspVariableResolver;
-import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.faces.component.UIComponent;
-import javax.faces.convert.Converter;
-import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
-
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
 
 /**
- *
- *  <B>BaseComponentTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
+ * <B>BaseComponentTag</B> is a base class for most tags in the Faces Tag
+ * library.  Its primary purpose is to centralize common tag functions
+ * to a single base class. <P>
  */
 
-public abstract class BaseComponentBodyTag extends BaseComponentTag implements BodyTag
-{
+public abstract class BaseComponentBodyTag extends BaseComponentTag
+    implements BodyTag {
+
     //
     // Protected Constants
     //
@@ -65,8 +55,7 @@ public abstract class BaseComponentBodyTag extends BaseComponentTag implements B
     // Constructors and Initializers    
     //
 
-    public BaseComponentBodyTag()
-    {
+    public BaseComponentBodyTag() {
         super();
     }
 
@@ -88,13 +77,16 @@ public abstract class BaseComponentBodyTag extends BaseComponentTag implements B
 
     }
 
+
     public void setBodyContent(BodyContent bodyContent) {
         this.bodyContent = bodyContent;
     }
 
+
     public BodyContent getBodyContent() {
         return (this.bodyContent);
     }
+
 
     public JspWriter getPreviousOut() {
         return (this.bodyContent.getEnclosingWriter());
@@ -118,20 +110,22 @@ public abstract class BaseComponentBodyTag extends BaseComponentTag implements B
         return (BodyTag.EVAL_BODY_BUFFERED);
     }
 
+
     public int doAfterBody() throws JspException {
         return (getDoAfterBodyValue());
     }
 
+
     protected int getDoEndValue() throws JspException {
         return (EVAL_PAGE);
     }
+
 
     protected int getDoAfterBodyValue() throws JspException {
 
         return (SKIP_BODY);
 
     }
-
 
 
 } // end of class BaseComponentBodyTag

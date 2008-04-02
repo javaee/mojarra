@@ -1,5 +1,5 @@
 /*
- * $Id: TagParser.java,v 1.2 2004/02/04 23:42:03 ofung Exp $
+ * $Id: TagParser.java,v 1.3 2004/02/06 18:55:35 rlubke Exp $
  */
 
 /*
@@ -10,9 +10,7 @@
 package com.sun.faces.taglib;
 
 /**
- *
  * <p>Interface defining the Validator Tag Parser implementation methods</p>
- *
  */
 public interface TagParser {
 
@@ -23,6 +21,7 @@ public interface TagParser {
      */
     public String getMessage();
 
+
     /**
      * <p>Return false if validator conditions have not been met</p>
      *
@@ -30,16 +29,19 @@ public interface TagParser {
      */
     public boolean hasFailed();
 
+
     /**
      * <p>Set the Validator Info Bean</p>
      */
     public void setValidatorInfo(ValidatorInfo validatorInfo);
+
 
     /**
      * <p>Parse the starting element.  Parcel out to appropriate
      * handler method.</p>
      */
     public void parseStartElement();
+
 
     /**
      * <p>Parse the ending element.  Parcel out to appropriate

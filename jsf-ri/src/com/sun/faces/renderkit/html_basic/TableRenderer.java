@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.19 2004/02/04 23:41:51 ofung Exp $
+ * $Id: TableRenderer.java,v 1.20 2004/02/06 18:55:22 rlubke Exp $
  */
 
 /*
@@ -11,19 +11,19 @@ package com.sun.faces.renderkit.html_basic;
 
 
 import com.sun.faces.util.Util;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import javax.faces.component.UIColumn;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIData;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.faces.component.UIColumn;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIData;
-import javax.faces.component.UIOutput;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>Render a {@link UIData} component as a two-dimensional table.</p>
@@ -33,138 +33,140 @@ public class TableRenderer extends HtmlBasicRenderer {
 
     // Log instance for this class
     protected static Log log = LogFactory.getLog(ButtonRenderer.class);
-     
+
+
     public boolean getRendersChildren() {
-	return true;
+        return true;
     }
+
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
 
-	if ((context == null) || (component == null)) {
+        if ((context == null) || (component == null)) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-	}
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding component " + component.getId());
         }
 
         // suppress rendering if "rendered" property on the component is
         // false.
-	if (!component.isRendered()) {
+        if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("No encoding necessary " + 
-                component.getId() + " since " + 
-                "rendered attribute is set to false ");
+                log.trace("No encoding necessary " +
+                          component.getId() + " since " +
+                          "rendered attribute is set to false ");
             }
-	    return;
-	}
-	UIData data = (UIData) component;
-	data.setRowIndex(-1);
+            return;
+        }
+        UIData data = (UIData) component;
+        data.setRowIndex(-1);
 
-	// Render the beginning of the table
-	ResponseWriter writer = context.getResponseWriter();
+        // Render the beginning of the table
+        ResponseWriter writer = context.getResponseWriter();
         writer.startElement("table", data);
-	writeIdAttributeIfNecessary(context, writer, component);
-	String styleClass = (String) data.getAttributes().get("styleClass");
-	if (styleClass != null) {
+        writeIdAttributeIfNecessary(context, writer, component);
+        String styleClass = (String) data.getAttributes().get("styleClass");
+        if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
-	}
-        Util.renderPassThruAttributes(writer, component, 
-				      new String[] { "rows" });
-	writer.writeText("\n", null);
+        }
+        Util.renderPassThruAttributes(writer, component,
+                                      new String[]{"rows"});
+        writer.writeText("\n", null);
 
-	// Render the header facets (if any)
-	UIComponent header = getFacet(data, "header");
-	int headerFacets = getFacetCount(data, "header");
-	String headerClass = (String) data.getAttributes().get("headerClass");
-	if ((header != null) || (headerFacets > 0)) {
-	    writer.startElement("thead", data);
-	    writer.writeText("\n", null);
-	}
-	if (header != null) {
-	    writer.startElement("tr", header);
-	    writer.startElement("th", header);
-	    if (headerClass != null) {
-		writer.writeAttribute("class", headerClass, "headerClass");
-	    }
-	    writer.writeAttribute("colspan", "" + getColumnCount(data), null);
-	    writer.writeAttribute("scope", "colgroup", null);
-	    encodeRecursive(context, header);
+        // Render the header facets (if any)
+        UIComponent header = getFacet(data, "header");
+        int headerFacets = getFacetCount(data, "header");
+        String headerClass = (String) data.getAttributes().get("headerClass");
+        if ((header != null) || (headerFacets > 0)) {
+            writer.startElement("thead", data);
+            writer.writeText("\n", null);
+        }
+        if (header != null) {
+            writer.startElement("tr", header);
+            writer.startElement("th", header);
+            if (headerClass != null) {
+                writer.writeAttribute("class", headerClass, "headerClass");
+            }
+            writer.writeAttribute("colspan", "" + getColumnCount(data), null);
+            writer.writeAttribute("scope", "colgroup", null);
+            encodeRecursive(context, header);
             writer.endElement("th");
             writer.endElement("tr");
-	    writer.writeText("\n", null);
-	}
-	if (headerFacets > 0) {
-	    writer.startElement("tr", data);
-	    writer.writeText("\n", null);
-	    Iterator columns = getColumns(data);
-	    while (columns.hasNext()) {
-		UIColumn column = (UIColumn) columns.next();
-		writer.startElement("th", column);
-		if (headerClass != null) {
-		    writer.writeAttribute("class", headerClass, "headerClass");
-		}
-		writer.writeAttribute("scope", "col", null);
-		UIComponent facet = getFacet(column, "header");
-		if (facet != null) {
-		    encodeRecursive(context, facet);
-		}
-		writer.endElement("th");
-		writer.writeText("\n", null);
-	    }
+            writer.writeText("\n", null);
+        }
+        if (headerFacets > 0) {
+            writer.startElement("tr", data);
+            writer.writeText("\n", null);
+            Iterator columns = getColumns(data);
+            while (columns.hasNext()) {
+                UIColumn column = (UIColumn) columns.next();
+                writer.startElement("th", column);
+                if (headerClass != null) {
+                    writer.writeAttribute("class", headerClass, "headerClass");
+                }
+                writer.writeAttribute("scope", "col", null);
+                UIComponent facet = getFacet(column, "header");
+                if (facet != null) {
+                    encodeRecursive(context, facet);
+                }
+                writer.endElement("th");
+                writer.writeText("\n", null);
+            }
             writer.endElement("tr");
-	    writer.writeText("\n", null);
-	}
-	if ((header != null) || (headerFacets > 0)) {
-	    writer.endElement("thead");
-	    writer.writeText("\n", null);
-	}
+            writer.writeText("\n", null);
+        }
+        if ((header != null) || (headerFacets > 0)) {
+            writer.endElement("thead");
+            writer.writeText("\n", null);
+        }
 
-	// Render the footer facets (if any)
-	UIComponent footer = getFacet(data, "footer");
-	int footerFacets = getFacetCount(data, "footer");
-	String footerClass = (String) data.getAttributes().get("footerClass");
-	if ((footer != null) || (footerFacets > 0)) {
-	    writer.startElement("tfoot", data);
-	    writer.writeText("\n", null);
-	}
-	if (footer != null) {
-	    writer.startElement("tr", footer);
-	    writer.startElement("td", footer);
-	    if (footerClass != null) {
-		writer.writeAttribute("class", footerClass, "footerClass");
-	    }
-	    writer.writeAttribute("colspan", "" + getColumnCount(data), null);
-	    encodeRecursive(context, footer);
+        // Render the footer facets (if any)
+        UIComponent footer = getFacet(data, "footer");
+        int footerFacets = getFacetCount(data, "footer");
+        String footerClass = (String) data.getAttributes().get("footerClass");
+        if ((footer != null) || (footerFacets > 0)) {
+            writer.startElement("tfoot", data);
+            writer.writeText("\n", null);
+        }
+        if (footer != null) {
+            writer.startElement("tr", footer);
+            writer.startElement("td", footer);
+            if (footerClass != null) {
+                writer.writeAttribute("class", footerClass, "footerClass");
+            }
+            writer.writeAttribute("colspan", "" + getColumnCount(data), null);
+            encodeRecursive(context, footer);
             writer.endElement("td");
             writer.endElement("tr");
-	    writer.writeText("\n", null);
-	}
-	if (footerFacets > 0) {
-	    writer.startElement("tr", data);
-	    writer.writeText("\n", null);
-	    Iterator columns = getColumns(data);
-	    while (columns.hasNext()) {
-		UIColumn column = (UIColumn) columns.next();
-		writer.startElement("td", column);
-		if (footerClass != null) {
-		    writer.writeAttribute("class", footerClass, "footerClass");
-		}
-		UIComponent facet = getFacet(column, "footer");
-		if (facet != null) {
-		    encodeRecursive(context, facet);
-		}
-		writer.endElement("td");
-		writer.writeText("\n", null);
-	    }
+            writer.writeText("\n", null);
+        }
+        if (footerFacets > 0) {
+            writer.startElement("tr", data);
+            writer.writeText("\n", null);
+            Iterator columns = getColumns(data);
+            while (columns.hasNext()) {
+                UIColumn column = (UIColumn) columns.next();
+                writer.startElement("td", column);
+                if (footerClass != null) {
+                    writer.writeAttribute("class", footerClass, "footerClass");
+                }
+                UIComponent facet = getFacet(column, "footer");
+                if (facet != null) {
+                    encodeRecursive(context, facet);
+                }
+                writer.endElement("td");
+                writer.writeText("\n", null);
+            }
             writer.endElement("tr");
-	    writer.writeText("\n", null);
-	}
-	if ((footer != null) || (footerFacets > 0)) {
-	    writer.endElement("tfoot");
-	    writer.writeText("\n", null);
-	}
+            writer.writeText("\n", null);
+        }
+        if ((footer != null) || (footerFacets > 0)) {
+            writer.endElement("tfoot");
+            writer.writeText("\n", null);
+        }
 
     }
 
@@ -172,22 +174,22 @@ public class TableRenderer extends HtmlBasicRenderer {
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
 
-	if ((context == null) || (component == null)) {
+        if ((context == null) || (component == null)) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-	}
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding children " + component.getId());
         }
-	if (!component.isRendered()) {
+        if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("No encoding necessary " + 
-                component.getId() + " since " + 
-                "rendered attribute is set to false ");
+                log.trace("No encoding necessary " +
+                          component.getId() + " since " +
+                          "rendered attribute is set to false ");
             }
-	    return;
-	}
-	UIData data = (UIData) component;
+            return;
+        }
+        UIData data = (UIData) component;
 
         // Set up variables we will need
         String columnClasses[] = getColumnClasses(data);
@@ -196,84 +198,84 @@ public class TableRenderer extends HtmlBasicRenderer {
         String rowClasses[] = getRowClasses(data);
         int rowStyles = rowClasses.length;
         ResponseWriter writer = context.getResponseWriter();
-	Iterator kids = null;
-	Iterator grandkids = null;
+        Iterator kids = null;
+        Iterator grandkids = null;
 
-	// Iterate over the rows of data that are provided
-	int processed = 0;
+        // Iterate over the rows of data that are provided
+        int processed = 0;
         int rowIndex = data.getFirst() - 1;
         int rows = data.getRows();
         int rowStyle = 0;
 
-	writer.startElement("tbody", component);
-	writer.writeText("\n", null);
+        writer.startElement("tbody", component);
+        writer.writeText("\n", null);
         while (true) {
 
-	    // Have we displayed the requested number of rows?
-	    if ((rows > 0) && (++processed > rows)) {
-		break;
-	    }
+            // Have we displayed the requested number of rows?
+            if ((rows > 0) && (++processed > rows)) {
+                break;
+            }
             // Select the current row
-	    data.setRowIndex(++rowIndex);
-	    if (!data.isRowAvailable()) {
+            data.setRowIndex(++rowIndex);
+            if (!data.isRowAvailable()) {
                 break; // Scrolled past the last row
             }
 
-	    // Render the beginning of this row
+            // Render the beginning of this row
             writer.startElement("tr", data);
-	    if (rowStyles > 0) {
+            if (rowStyles > 0) {
                 writer.writeAttribute("class", rowClasses[rowStyle++],
                                       "rowClasses");
-		if (rowStyle >= rowStyles) {
-		    rowStyle = 0;
-		}
-	    }
-	    writer.writeText("\n", null);
+                if (rowStyle >= rowStyles) {
+                    rowStyle = 0;
+                }
+            }
+            writer.writeText("\n", null);
 
-	    // Iterate over the child UIColumn components for each row
-	    columnStyle = 0;
-	    kids = getColumns(data);
-	    while (kids.hasNext()) {
+            // Iterate over the child UIColumn components for each row
+            columnStyle = 0;
+            kids = getColumns(data);
+            while (kids.hasNext()) {
 
-		// Identify the next renderable column
-		UIColumn column = (UIColumn) kids.next();
+                // Identify the next renderable column
+                UIColumn column = (UIColumn) kids.next();
 
-		// Render the beginning of this cell
+                // Render the beginning of this cell
                 writer.startElement("td", column);
-		if (columnStyles > 0) {
+                if (columnStyles > 0) {
                     writer.writeAttribute("class", columnClasses[columnStyle++],
                                           "columnClasses");
-		    if (columnStyle >= columnStyles) {
-			columnStyle = 0;
-		    }
-		}
+                    if (columnStyle >= columnStyles) {
+                        columnStyle = 0;
+                    }
+                }
 
-		// Render the contents of this cell by iterating over
-		// the kids of our kids
-		grandkids = getChildren(column);
-		while (grandkids.hasNext()) {
-		    encodeRecursive(context, (UIComponent) grandkids.next());
-		}
-		
-		// Render the ending of this cell
+                // Render the contents of this cell by iterating over
+                // the kids of our kids
+                grandkids = getChildren(column);
+                while (grandkids.hasNext()) {
+                    encodeRecursive(context, (UIComponent) grandkids.next());
+                }
+
+                // Render the ending of this cell
                 writer.endElement("td");
-		writer.writeText("\n", null);
+                writer.writeText("\n", null);
 
-	    }
+            }
 
-	    // Render the ending of this row
+            // Render the ending of this row
             writer.endElement("tr");
             writer.writeText("\n", null);
 
-	}
-	writer.endElement("tbody");
-	writer.writeText("\n", null);
+        }
+        writer.endElement("tbody");
+        writer.writeText("\n", null);
 
-	// Clean up after ourselves
-	data.setRowIndex(-1);
+        // Clean up after ourselves
+        data.setRowIndex(-1);
         if (log.isTraceEnabled()) {
-            log.trace("End encoding children " + 
-                    component.getId());
+            log.trace("End encoding children " +
+                      component.getId());
         }
     }
 
@@ -281,23 +283,23 @@ public class TableRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
 
-	if ((context == null) || (component == null)) {
+        if ((context == null) || (component == null)) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-	}
-	if (!component.isRendered()) {
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("No encoding necessary " + 
-                component.getId() + " since " + 
-                "rendered attribute is set to false ");
+                log.trace("No encoding necessary " +
+                          component.getId() + " since " +
+                          "rendered attribute is set to false ");
             }
-	    return;
-	}
-	UIData data = (UIData) component;
-	data.setRowIndex(-1);
+            return;
+        }
+        UIData data = (UIData) component;
+        data.setRowIndex(-1);
         ResponseWriter writer = context.getResponseWriter();
 
-	// Render the ending of this table
+        // Render the ending of this table
         writer.endElement("table");
         writer.writeText("\n", null);
         if (log.isTraceEnabled()) {
@@ -349,13 +351,13 @@ public class TableRenderer extends HtmlBasicRenderer {
      */
     private int getColumnCount(UIData data) {
 
-	int columns = 0;
-	Iterator kids = getColumns(data);
-	while (kids.hasNext()) {
-	    UIComponent kid = (UIComponent) kids.next();
-	    columns++;
-	}
-	return (columns);
+        int columns = 0;
+        Iterator kids = getColumns(data);
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            columns++;
+        }
+        return (columns);
 
     }
 
@@ -369,15 +371,15 @@ public class TableRenderer extends HtmlBasicRenderer {
      */
     private Iterator getColumns(UIData data) {
 
-	List results = new ArrayList();
-	Iterator kids = data.getChildren().iterator();
-	while (kids.hasNext()) {
-	    UIComponent kid = (UIComponent) kids.next();
-	    if ((kid instanceof UIColumn) && kid.isRendered()) {
-		results.add(kid);
-	    }
-	}
-	return (results.iterator());
+        List results = new ArrayList();
+        Iterator kids = data.getChildren().iterator();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if ((kid instanceof UIColumn) && kid.isRendered()) {
+                results.add(kid);
+            }
+        }
+        return (results.iterator());
 
     }
 
@@ -392,22 +394,22 @@ public class TableRenderer extends HtmlBasicRenderer {
      */
     private int getFacetCount(UIData data, String name) {
 
-	int n = 0;
-	Iterator kids = getColumns(data);
-	while (kids.hasNext()) {
-	    UIComponent kid = (UIComponent) kids.next();
-	    if (getFacet(kid, name) != null) {
-		n++;
-	    }
-	}
-	return (n);
+        int n = 0;
+        Iterator kids = getColumns(data);
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if (getFacet(kid, name) != null) {
+                n++;
+            }
+        }
+        return (n);
 
     }
 
 
     /**
      * <p>Return an array of stylesheet classes to be applied to
-     * each row in the table, in the order specified.  Every row may or 
+     * each row in the table, in the order specified.  Every row may or
      * may not have a stylesheet.</p>
      *
      * @param data {@link UIData} component being rendered

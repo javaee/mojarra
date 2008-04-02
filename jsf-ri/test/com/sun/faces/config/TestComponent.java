@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.3 2004/02/04 23:44:11 ofung Exp $
+ * $Id: TestComponent.java,v 1.4 2004/02/06 18:56:35 rlubke Exp $
  */
 
 /*
@@ -14,9 +14,12 @@ import javax.faces.component.UIOutput;
 
 
 // Dummy component that can be instantiated
+
 public class TestComponent extends UIOutput {
 
 
-    public String getFamily() { return "Test"; }
+    public String getFamily() {
+        return "Test";
+    }
 
 }

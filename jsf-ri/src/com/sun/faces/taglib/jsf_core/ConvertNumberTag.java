@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.7 2004/02/04 23:42:08 ofung Exp $
+ * $Id: ConvertNumberTag.java,v 1.8 2004/02/06 18:55:41 rlubke Exp $
  */
 
 /*
@@ -9,26 +9,24 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import java.util.Locale;
+import com.sun.faces.util.Util;
 
 import javax.faces.convert.Converter;
 import javax.faces.convert.NumberConverter;
 import javax.faces.webapp.ConverterTag;
-
 import javax.servlet.jsp.JspException;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.Util;
+
+import java.util.Locale;
 
 /**
  * <p>ConvertNumberTag is a ConverterTag implementation for
  * javax.faces.convert.NumberConverter</p>
  *
- *
- * @version $Id: ConvertNumberTag.java,v 1.7 2004/02/04 23:42:08 ofung Exp $
- * 
+ * @version $Id: ConvertNumberTag.java,v 1.8 2004/02/06 18:55:41 rlubke Exp $
  */
 
 public class ConvertNumberTag extends ConverterTag {
+
     //
     // Protected Constants
     //
@@ -81,10 +79,12 @@ public class ConvertNumberTag extends ConverterTag {
         init();
     }
 
+
     public void release() {
         super.release();
         init();
     }
+
 
     private void init() {
         currencyCode = null;
@@ -128,22 +128,27 @@ public class ConvertNumberTag extends ConverterTag {
         this.currencyCode_ = currencyCode;
     }
 
+
     public void setCurrencySymbol(String currencySymbol) {
         this.currencySymbol_ = currencySymbol;
     }
+
 
     public void setGroupingUsed(String groupingUsed) {
         this.groupingUsed_ = groupingUsed;
     }
 
+
     public void setIntegerOnly(String integerOnly) {
         this.integerOnly_ = integerOnly;
     }
+
 
     public void setMaxFractionDigits(String maxFractionDigits) {
         this.maxFractionDigits_ = maxFractionDigits;
         this.maxFractionDigitsSpecified = true;
     }
+
 
     public void setMaxIntegerDigits(String maxIntegerDigits) {
         this.maxIntegerDigits_ = maxIntegerDigits;
@@ -156,17 +161,21 @@ public class ConvertNumberTag extends ConverterTag {
         this.minFractionDigitsSpecified = true;
     }
 
+
     public void setMinIntegerDigits(String minIntegerDigits) {
         this.minIntegerDigits_ = minIntegerDigits;
     }
+
 
     public void setLocale(String locale) {
         this.locale_ = locale;
     }
 
+
     public void setPattern(String pattern) {
         this.pattern_ = pattern;
     }
+
 
     public void setType(String type) {
         this.type_ = type;
@@ -208,25 +217,28 @@ public class ConvertNumberTag extends ConverterTag {
         return result;
     }
 
+
     /* Evaluates expressions as necessary */
     private void evaluateExpressions() throws JspException {
         Integer intObj = null;
-        
+
         if (currencyCode_ != null) {
-            currencyCode = (String)Util.evaluateVBExpression(currencyCode_);
+            currencyCode = (String) Util.evaluateVBExpression(currencyCode_);
         }
         if (currencySymbol_ != null) {
-            currencySymbol = (String)Util.evaluateVBExpression(currencySymbol_);
+            currencySymbol =
+                (String) Util.evaluateVBExpression(currencySymbol_);
         }
         if (pattern_ != null) {
-            pattern = (String)Util.evaluateVBExpression(pattern_);
+            pattern = (String) Util.evaluateVBExpression(pattern_);
         }
         if (type_ != null) {
-            type = (String)Util.evaluateVBExpression(type_);
+            type = (String) Util.evaluateVBExpression(type_);
         }
         if (groupingUsed_ != null) {
-            if (Util.isVBExpression(groupingUsed_)) {  
-                Boolean booleanObj = (Boolean)Util.evaluateVBExpression(groupingUsed_);
+            if (Util.isVBExpression(groupingUsed_)) {
+                Boolean booleanObj = (Boolean) Util.evaluateVBExpression(
+                    groupingUsed_);
                 Util.doAssert(null != booleanObj);
                 groupingUsed = booleanObj.booleanValue();
             } else {
@@ -234,8 +246,9 @@ public class ConvertNumberTag extends ConverterTag {
             }
         }
         if (integerOnly_ != null) {
-            if (Util.isVBExpression(integerOnly_)) {  
-                Boolean booleanObj = (Boolean)Util.evaluateVBExpression(integerOnly_);
+            if (Util.isVBExpression(integerOnly_)) {
+                Boolean booleanObj = (Boolean) Util.evaluateVBExpression(
+                    integerOnly_);
                 Util.doAssert(null != booleanObj);
                 integerOnly = booleanObj.booleanValue();
             } else {
@@ -243,8 +256,9 @@ public class ConvertNumberTag extends ConverterTag {
             }
         }
         if (maxFractionDigits_ != null) {
-            if (Util.isVBExpression(maxFractionDigits_)) {  
-                intObj = (Integer)Util.evaluateVBExpression(maxFractionDigits_);
+            if (Util.isVBExpression(maxFractionDigits_)) {
+                intObj =
+                    (Integer) Util.evaluateVBExpression(maxFractionDigits_);
                 Util.doAssert(null != intObj);
                 maxFractionDigits = intObj.intValue();
             } else {
@@ -252,8 +266,8 @@ public class ConvertNumberTag extends ConverterTag {
             }
         }
         if (maxIntegerDigits_ != null) {
-            if (Util.isVBExpression(maxIntegerDigits_)) {  
-                intObj = (Integer)Util.evaluateVBExpression(maxIntegerDigits_);
+            if (Util.isVBExpression(maxIntegerDigits_)) {
+                intObj = (Integer) Util.evaluateVBExpression(maxIntegerDigits_);
                 Util.doAssert(null != intObj);
                 maxIntegerDigits = intObj.intValue();
             } else {
@@ -261,8 +275,9 @@ public class ConvertNumberTag extends ConverterTag {
             }
         }
         if (minFractionDigits_ != null) {
-            if (Util.isVBExpression(minFractionDigits_)) {  
-                intObj = (Integer)Util.evaluateVBExpression(minFractionDigits_);
+            if (Util.isVBExpression(minFractionDigits_)) {
+                intObj =
+                    (Integer) Util.evaluateVBExpression(minFractionDigits_);
                 Util.doAssert(null != intObj);
                 minFractionDigits = intObj.intValue();
             } else {
@@ -270,8 +285,8 @@ public class ConvertNumberTag extends ConverterTag {
             }
         }
         if (minIntegerDigits_ != null) {
-            if (Util.isVBExpression(minIntegerDigits_)) {  
-                intObj = (Integer)Util.evaluateVBExpression(minIntegerDigits_);
+            if (Util.isVBExpression(minIntegerDigits_)) {
+                intObj = (Integer) Util.evaluateVBExpression(minIntegerDigits_);
                 Util.doAssert(null != intObj);
                 minIntegerDigits = intObj.intValue();
             } else {
@@ -279,8 +294,8 @@ public class ConvertNumberTag extends ConverterTag {
             }
         }
         if (locale_ != null) {
-            if (Util.isVBExpression(locale_)) {  
-                locale = (Locale)Util.evaluateVBExpression(locale_);
+            if (Util.isVBExpression(locale_)) {
+                locale = (Locale) Util.evaluateVBExpression(locale_);
             } else {
                 locale = new Locale(locale_, "");
             }

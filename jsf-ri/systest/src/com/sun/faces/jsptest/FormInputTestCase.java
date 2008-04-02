@@ -1,5 +1,5 @@
 /*
- * $Id: FormInputTestCase.java,v 1.4 2004/02/04 23:42:24 ofung Exp $
+ * $Id: FormInputTestCase.java,v 1.5 2004/02/06 18:55:56 rlubke Exp $
  */
 
 /*
@@ -12,22 +12,17 @@ package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIComponent;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import javax.faces.component.NamingContainer;
 
 
 /**
@@ -88,16 +83,22 @@ public class FormInputTestCase extends AbstractTestCase {
     private String formInput02_name = "formInput02_form";
 
     private String formInput02_names[] =
-    { "booleanProperty", "byteProperty", "doubleProperty", "floatProperty",
-      "intProperty", "longProperty", "shortProperty", "stringProperty" };
+        {
+            "booleanProperty", "byteProperty", "doubleProperty", "floatProperty",
+            "intProperty", "longProperty", "shortProperty", "stringProperty"
+        };
 
     private String formInput02_pristine[] =
-    { "true", "12", "123.45", "12.34",
-      "123", "12345", "1234", "This is a String property" };
+        {
+            "true", "12", "123.45", "12.34",
+            "123", "12345", "1234", "This is a String property"
+        };
 
     private String formInput02_updated[] =
-    { "false", "21", "543.21", "43.21",
-      "321", "54321", "4321", "This was a String property" };
+        {
+            "false", "21", "543.21", "43.21",
+            "321", "54321", "4321", "This was a String property"
+        };
 
     // ------------------------------------------------- Individual Test Methods
 
@@ -125,7 +126,8 @@ public class FormInputTestCase extends AbstractTestCase {
         HtmlForm form = getFormById(page, formInput02_name);
         assertNotNull("form exists", form);
         HtmlSubmitInput submit = (HtmlSubmitInput)
-            form.getInputByName(formInput02_name + NamingContainer.SEPARATOR_CHAR +
+            form.getInputByName(formInput02_name +
+                                NamingContainer.SEPARATOR_CHAR +
                                 "submit");
         page = (HtmlPage) submit.click();
         checkFormInput02(page, formInput02_pristine);
@@ -150,7 +152,8 @@ public class FormInputTestCase extends AbstractTestCase {
             input.setValueAttribute(formInput02_updated[i]);
         }
         HtmlSubmitInput submit = (HtmlSubmitInput)
-            form.getInputByName(formInput02_name + NamingContainer.SEPARATOR_CHAR +
+            form.getInputByName(formInput02_name +
+                                NamingContainer.SEPARATOR_CHAR +
                                 "submit");
         page = (HtmlPage) submit.click();
         checkFormInput02(page, formInput02_updated);

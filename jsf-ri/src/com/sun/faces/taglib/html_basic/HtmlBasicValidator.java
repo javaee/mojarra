@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicValidator.java,v 1.6 2004/02/04 23:42:06 ofung Exp $
+ * $Id: HtmlBasicValidator.java,v 1.7 2004/02/06 18:55:38 rlubke Exp $
  */
 
 /*
@@ -9,14 +9,11 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.DefaultHandler;
-
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
-
-
 import com.sun.faces.util.Util;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>Top level validator for the html_basic tld</p>
@@ -25,6 +22,7 @@ import com.sun.faces.util.Util;
  * @author Ed Burns
  */
 public class HtmlBasicValidator extends FacesValidator {
+
     //*********************************************************************
     // Validation and configuration state (protected)
     private ValidatorInfo validatorInfo;
@@ -39,8 +37,9 @@ public class HtmlBasicValidator extends FacesValidator {
         init();
     }
 
+
     protected void init() {
-	super.init();
+        super.init();
         failed = false;
         validatorInfo = new ValidatorInfo();
 
@@ -48,32 +47,35 @@ public class HtmlBasicValidator extends FacesValidator {
         commandTagParser.setValidatorInfo(validatorInfo);
     }
 
+
     public void release() {
-	super.release();
+        super.release();
         init();
     }
 
+
     protected DefaultHandler getSAXHandler() {
-	DefaultHandler h = new HtmlBasicValidatorHandler();
-	return h;
+        DefaultHandler h = new HtmlBasicValidatorHandler();
+        return h;
     }
 
+
     protected String getFailureMessage(String prefix, String uri) {
-	// we should only get called if this Validator failed
-	Util.doAssert(failed);	
+        // we should only get called if this Validator failed
+        Util.doAssert(failed);
 
         StringBuffer result = new StringBuffer();
         if (commandTagParser.hasFailed()) {
             result.append(commandTagParser.getMessage());
         }
-	return result.toString();
+        return result.toString();
     }
 	    
     //*********************************************************************
     // SAX handler
 
     /**
-     * The handler that provides the base of the TLV implementation. 
+     * The handler that provides the base of the TLV implementation.
      */
     private class HtmlBasicValidatorHandler extends DefaultHandler {
 
@@ -84,22 +86,22 @@ public class HtmlBasicValidator extends FacesValidator {
          * @param ns Element name space.
          * @param ln Element local name.
          * @param qn Element QName.
-         * @param a Element's Attribute list.
-         *
+         * @param a  Element's Attribute list.
          */
-	public void startElement(String ns, 
-                                 String ln, 
-                                 String qn, 
+        public void startElement(String ns,
+                                 String ln,
+                                 String qn,
                                  Attributes attrs) {
-	    maybeSnagTLPrefixes(qn, attrs);
+            maybeSnagTLPrefixes(qn, attrs);
             validatorInfo.setQName(qn);
             validatorInfo.setAttributes(attrs);
-  
+
             commandTagParser.parseStartElement();
             if (commandTagParser.hasFailed()) {
                 failed = true;
             }
         }
+
 
         /**
          * Parse the ending element. If it is a specific JSTL tag
@@ -107,10 +109,9 @@ public class HtmlBasicValidator extends FacesValidator {
          *
          * @param ln Element local name.
          * @param qn Element QName.
-         * @param a Element's Attribute list.
-         *
+         * @param a  Element's Attribute list.
          */
-	public void endElement(String ns, String ln, String qn) {
-	}
+        public void endElement(String ns, String ln, String qn) {
+        }
     }
 }

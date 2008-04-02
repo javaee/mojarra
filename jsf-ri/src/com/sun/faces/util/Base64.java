@@ -4,9 +4,9 @@
  */
 
 /*
- * $Header: /cvs/javaserverfaces-sources/jsf-ri/src/com/sun/faces/util/Attic/Base64.java,v 1.3 2004/02/04 23:42:17 ofung Exp $
- * $Revision: 1.3 $
- * $Date: 2004/02/04 23:42:17 $
+ * $Header: /cvs/javaserverfaces-sources/jsf-ri/src/com/sun/faces/util/Attic/Base64.java,v 1.4 2004/02/06 18:55:50 rlubke Exp $
+ * $Revision: 1.4 $
+ * $Date: 2004/02/06 18:55:50 $
  * ====================================================================
  *
  * The Apache Software License, Version 1.1
@@ -66,13 +66,13 @@
 package com.sun.faces.util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 
 /**
  * <p>Base64 encoder and decoder.</p>
- * <p>
+ * <p/>
  * This class provides encoding/decoding methods for
  * the Base64 encoding as defined by RFC 2045,
  * N. Freed and N. Borenstein.
@@ -80,8 +80,9 @@ import java.io.UnsupportedEncodingException;
  * Part One: Format of Internet Message Bodies. Reference
  * 1996. Available at: http://www.ietf.org/rfc/rfc2045.txt
  * </p>
+ *
  * @@author Jeffrey Rodriguez
- * @@version $Revision: 1.3 $ $Date: 2004/02/04 23:42:17 $
+ * @@version $Revision: 1.4 $ $Date: 2004/02/06 18:55:50 $
  */
 public final class Base64 {
 
@@ -98,6 +99,7 @@ public final class Base64 {
     static private final byte[] EMPTY_BYTE_ARRAY = new byte[0];
     static private byte[] base64Alphabet = new byte[BASELENGTH];
     static private byte[] lookUpBase64Alphabet = new byte[LOOKUPLENGTH];
+
 
     static {
 
@@ -121,15 +123,16 @@ public final class Base64 {
         for (int i = 0; i <= 25; i++)
             lookUpBase64Alphabet[i] = (byte) ('A' + i);
 
-        for (int i = 26,  j = 0; i <= 51; i++, j++)
+        for (int i = 26, j = 0; i <= 51; i++, j++)
             lookUpBase64Alphabet[i] = (byte) ('a' + j);
 
-        for (int i = 52,  j = 0; i <= 61; i++, j++)
+        for (int i = 52, j = 0; i <= 61; i++, j++)
             lookUpBase64Alphabet[i] = (byte) ('0' + j);
         lookUpBase64Alphabet[62] = (byte) '+';
         lookUpBase64Alphabet[63] = (byte) '/';
 
     }
+
 
     public static boolean isBase64(String isValidString) {
         return (isBase64(isValidString.getBytes()));
@@ -153,6 +156,7 @@ public final class Base64 {
         }
         return true;
     }
+
 
     /**
      * Encodes hex octects into Base64
@@ -191,14 +195,19 @@ public final class Base64 {
             k = (byte) (b1 & 0x03);
 
             encodedIndex = i * 4;
-            byte val1 = ((b1 & SIGN) == 0)?(byte) (b1 >> 2):(byte) ((b1) >> 2 ^ 0xc0);
+            byte val1 = ((b1 & SIGN) == 0) ?
+                (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
 
-            byte val2 = ((b2 & SIGN) == 0)?(byte) (b2 >> 4):(byte) ((b2) >> 4 ^ 0xf0);
-            byte val3 = ((b3 & SIGN) == 0)?(byte) (b3 >> 6):(byte) ((b3) >> 6 ^ 0xfc);
+            byte val2 = ((b2 & SIGN) == 0) ?
+                (byte) (b2 >> 4) : (byte) ((b2) >> 4 ^ 0xf0);
+            byte val3 = ((b3 & SIGN) == 0) ?
+                (byte) (b3 >> 6) : (byte) ((b3) >> 6 ^ 0xfc);
 
             encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
-            encodedData[encodedIndex + 1] = lookUpBase64Alphabet[val2 | (k << 4)];
-            encodedData[encodedIndex + 2] = lookUpBase64Alphabet[(l << 2) | val3];
+            encodedData[encodedIndex + 1] =
+                lookUpBase64Alphabet[val2 | (k << 4)];
+            encodedData[encodedIndex + 2] =
+                lookUpBase64Alphabet[(l << 2) | val3];
             encodedData[encodedIndex + 3] = lookUpBase64Alphabet[b3 & 0x3f];
         }
 
@@ -208,7 +217,8 @@ public final class Base64 {
         if (fewerThan24bits == EIGHTBIT) {
             b1 = binaryData[dataIndex];
             k = (byte) (b1 & 0x03);
-            byte val1 = ((b1 & SIGN) == 0)?(byte) (b1 >> 2):(byte) ((b1) >> 2 ^ 0xc0);
+            byte val1 = ((b1 & SIGN) == 0) ?
+                (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
             encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
             encodedData[encodedIndex + 1] = lookUpBase64Alphabet[k << 4];
             encodedData[encodedIndex + 2] = PAD;
@@ -219,11 +229,14 @@ public final class Base64 {
             l = (byte) (b2 & 0x0f);
             k = (byte) (b1 & 0x03);
 
-            byte val1 = ((b1 & SIGN) == 0)?(byte) (b1 >> 2):(byte) ((b1) >> 2 ^ 0xc0);
-            byte val2 = ((b2 & SIGN) == 0)?(byte) (b2 >> 4):(byte) ((b2) >> 4 ^ 0xf0);
+            byte val1 = ((b1 & SIGN) == 0) ?
+                (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
+            byte val2 = ((b2 & SIGN) == 0) ?
+                (byte) (b2 >> 4) : (byte) ((b2) >> 4 ^ 0xf0);
 
             encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
-            encodedData[encodedIndex + 1] = lookUpBase64Alphabet[val2 | (k << 4)];
+            encodedData[encodedIndex + 1] =
+                lookUpBase64Alphabet[val2 | (k << 4)];
             encodedData[encodedIndex + 2] = lookUpBase64Alphabet[l << 2];
             encodedData[encodedIndex + 3] = PAD;
         }
@@ -240,13 +253,12 @@ public final class Base64 {
      * @@return Base64-encoded String
      */
     public static String encode(String data) {
-         try {
-             return encode(data, DEFAULT_CHAR_ENCODING);
-         }
-         catch (UnsupportedEncodingException uee) {
-             throw new IllegalStateException(uee.toString());
-         }
-     }
+        try {
+            return encode(data, DEFAULT_CHAR_ENCODING);
+        } catch (UnsupportedEncodingException uee) {
+            throw new IllegalStateException(uee.toString());
+        }
+    }
 
 
     /**
@@ -274,8 +286,7 @@ public final class Base64 {
         OutputStreamWriter osw = new OutputStreamWriter(bos, charEncoding);
         try {
             osw.write(data);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             throw new RuntimeException(ioe.toString());
         }
 
@@ -283,18 +294,18 @@ public final class Base64 {
         byte[] encodedData = encode(bos.toByteArray());
 
         // Convert to String
-        if (encodedData==null)
+        if (encodedData == null)
             return "";
         bos = new ByteArrayOutputStream(encodedData.length);
         try {
             bos.write(encodedData);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             throw new RuntimeException(ioe.toString());
         }
 
         return bos.toString(charEncoding);
     }
+
 
     /**
      * Decodes Base64 data into octects
@@ -312,7 +323,7 @@ public final class Base64 {
 
         int numberQuadruple = base64Data.length / FOURBYTE;
         byte decodedData[] = null;
-        byte b1 = 0,b2 = 0,b3 = 0, b4 = 0, marker0 = 0, marker1 = 0;
+        byte b1 = 0, b2 = 0, b3 = 0, b4 = 0, marker0 = 0, marker1 = 0;
 
         int encodedIndex = 0;
         int dataIndex = 0;
@@ -342,7 +353,8 @@ public final class Base64 {
                 b4 = base64Alphabet[marker1];
 
                 decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
-                decodedData[encodedIndex + 1] = (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
+                decodedData[encodedIndex + 1] =
+                    (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
                 decodedData[encodedIndex + 2] = (byte) (b3 << 6 | b4);
             } else if (marker0 == PAD) {
                 //Two PAD e.g. 3c[Pad][Pad]
@@ -352,7 +364,8 @@ public final class Base64 {
                 b3 = base64Alphabet[marker0];
 
                 decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
-                decodedData[encodedIndex + 1] = (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
+                decodedData[encodedIndex + 1] =
+                    (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
             }
             encodedIndex += 3;
         }

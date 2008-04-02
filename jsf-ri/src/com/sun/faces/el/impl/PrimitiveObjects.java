@@ -61,16 +61,16 @@
 package com.sun.faces.el.impl;
 
 /**
- *
  * <p>This converts primitive values to their Object counterparts.
  * For bytes and chars, values from 0 to 255 are cached.  For shorts,
  * ints, and longs, values -1000 to 1000 are cached.
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 class PrimitiveObjects {
+
     //-------------------------------------
     // Constants
     //-------------------------------------
@@ -96,6 +96,7 @@ class PrimitiveObjects {
     static Integer[] mIntegers = createIntegers();
     static Long[] mLongs = createLongs();
 
+
     //-------------------------------------
     // Getting primitive values
     //-------------------------------------
@@ -105,6 +106,7 @@ class PrimitiveObjects {
             Boolean.TRUE :
             Boolean.FALSE;
     }
+
 
     //-------------------------------------
     public static Byte getByte(byte pValue) {
@@ -116,6 +118,7 @@ class PrimitiveObjects {
         }
     }
 
+
     //-------------------------------------
     public static Character getCharacter(char pValue) {
         if (pValue >= CHARACTER_LOWER_BOUND &&
@@ -125,6 +128,7 @@ class PrimitiveObjects {
             return new Character(pValue);
         }
     }
+
 
     //-------------------------------------
     public static Short getShort(short pValue) {
@@ -136,6 +140,7 @@ class PrimitiveObjects {
         }
     }
 
+
     //-------------------------------------
     public static Integer getInteger(int pValue) {
         if (pValue >= INTEGER_LOWER_BOUND &&
@@ -145,6 +150,7 @@ class PrimitiveObjects {
             return new Integer(pValue);
         }
     }
+
 
     //-------------------------------------
     public static Long getLong(long pValue) {
@@ -156,10 +162,12 @@ class PrimitiveObjects {
         }
     }
 
+
     //-------------------------------------
     public static Float getFloat(float pValue) {
         return new Float(pValue);
     }
+
 
     //-------------------------------------
     public static Double getDouble(double pValue) {
@@ -170,10 +178,9 @@ class PrimitiveObjects {
     // Object class equivalents of primitive classes
     //-------------------------------------
     /**
-     *
      * If the given class is a primitive class, returns the object
      * version of that class.  Otherwise, the class is just returned.
-     **/
+     */
     public static Class getPrimitiveObjectClass(Class pClass) {
         if (pClass == Boolean.TYPE) {
             return Boolean.class;
@@ -196,6 +203,7 @@ class PrimitiveObjects {
         }
     }
 
+
     //-------------------------------------
     // Initializing the cached values
     //-------------------------------------
@@ -209,6 +217,7 @@ class PrimitiveObjects {
         return ret;
     }
 
+
     //-------------------------------------
     static Character[] createCharacters() {
         int len = CHARACTER_UPPER_BOUND - CHARACTER_LOWER_BOUND + 1;
@@ -219,6 +228,7 @@ class PrimitiveObjects {
         }
         return ret;
     }
+
 
     //-------------------------------------
     static Short[] createShorts() {
@@ -231,6 +241,7 @@ class PrimitiveObjects {
         return ret;
     }
 
+
     //-------------------------------------
     static Integer[] createIntegers() {
         int len = INTEGER_UPPER_BOUND - INTEGER_LOWER_BOUND + 1;
@@ -241,6 +252,7 @@ class PrimitiveObjects {
         }
         return ret;
     }
+
 
     //-------------------------------------
     static Long[] createLongs() {

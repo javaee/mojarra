@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.10 2004/02/04 23:44:48 ofung Exp $
+ * $Id: TestRendererConversions.java,v 1.11 2004/02/06 18:57:08 rlubke Exp $
  */
 
 /*
@@ -11,41 +11,30 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.ServletFacesTestCase;
 import org.apache.cactus.WebRequest;
 
-import com.sun.faces.util.Util;
-
-
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.ServletFacesTestCase;
-
 
 /**
- *
- *  <B>TestRendererConversions</B> is a class ...
- *
+ * <B>TestRendererConversions</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.10 2004/02/04 23:44:48 ofung Exp $
- * 
+ * @version $Id: TestRendererConversions.java,v 1.11 2004/02/06 18:57:08 rlubke Exp $
  * @see	Blah
  * @see	Bloo
- *
  */
 
-public class TestRendererConversions extends ServletFacesTestCase
-{
+public class TestRendererConversions extends ServletFacesTestCase {
+
 //
 // Protected Constants
 //
-public static final String TEST_URI = "/components.jsp";
+    public static final String TEST_URI = "/components.jsp";
 
 //
 // Class Variables
@@ -64,11 +53,12 @@ public static final String TEST_URI = "/components.jsp";
 //
 
     public TestRendererConversions() {
-	super("TestRendererConversions");
+        super("TestRendererConversions");
     }
 
+
     public TestRendererConversions(String name) {
-	super(name);
+        super(name);
     }
 
 //
@@ -79,86 +69,81 @@ public static final String TEST_URI = "/components.jsp";
 // General Methods
 //
 
-public void beginEmptyStrings(WebRequest theRequest)
-{
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("number", "");
-    theRequest.addParameter("date", "");
-    theRequest.addParameter("text", "");
-    theRequest.addParameter("hidden", "");
-    theRequest.addParameter("secret", "");
-}
+    public void beginEmptyStrings(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.addParameter("number", "");
+        theRequest.addParameter("date", "");
+        theRequest.addParameter("text", "");
+        theRequest.addParameter("hidden", "");
+        theRequest.addParameter("secret", "");
+    }
 
-public void setUp() {
-    super.setUp();
-    UIViewRoot page = new UIViewRoot();
-    page.setViewId("viewId");    
-    getFacesContext().setViewRoot(page);
- }
+
+    public void setUp() {
+        super.setUp();
+        UIViewRoot page = new UIViewRoot();
+        page.setViewId("viewId");
+        getFacesContext().setViewRoot(page);
+    }
+
+
     /**
+     * Test the built-in conversion for those renderers that have it.
+     */
 
-    * Test the built-in conversion for those renderers that have it.
+    public void testEmptyStrings() {
+        UIViewRoot root = new UIViewRoot();
+        UIInput
+            text = new UIInput(),
+            hidden = new UIInput(),
+            secret = new UIInput();
 
-    */
+        text.setId("text");
+        hidden.setId("hidden");
+        secret.setId("secret");
 
-public void testEmptyStrings()
-{
-    UIViewRoot root = new UIViewRoot();
-    UIInput 
-	text = new UIInput(),
-	hidden = new UIInput(),
-	secret = new UIInput();
-    
-    text.setId("text");
-    hidden.setId("hidden");
-    secret.setId("secret");
-    
-    text.setRendererType("Text");
-    hidden.setRendererType("Hidden");
-    secret.setRendererType("Secret"); 
-    
-    root.getChildren().add(text);
-    root.getChildren().add(hidden);
-    root.getChildren().add(secret);
-    TextRenderer textRenderer = new TextRenderer();
-    HiddenRenderer hiddenRenderer = new HiddenRenderer();
-    SecretRenderer secretRenderer = new SecretRenderer();
+        text.setRendererType("Text");
+        hidden.setRendererType("Hidden");
+        secret.setRendererType("Secret");
 
-    try {
-	textRenderer.decode(getFacesContext(), text);
-	hiddenRenderer.decode(getFacesContext(), hidden);
-	secretRenderer.decode(getFacesContext(), secret);
+        root.getChildren().add(text);
+        root.getChildren().add(hidden);
+        root.getChildren().add(secret);
+        TextRenderer textRenderer = new TextRenderer();
+        HiddenRenderer hiddenRenderer = new HiddenRenderer();
+        SecretRenderer secretRenderer = new SecretRenderer();
+
+        try {
+            textRenderer.decode(getFacesContext(), text);
+            hiddenRenderer.decode(getFacesContext(), hidden);
+            secretRenderer.decode(getFacesContext(), secret);
+        } catch (Throwable e) {
+            assertTrue(false);
+        }
+        assertTrue(text.isValid());
+        assertTrue(hidden.isValid());
+        assertTrue(secret.isValid());
     }
-    catch (Throwable e) {
-        assertTrue(false);
+
+
+    public void beginNulls(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
     }
-    assertTrue(text.isValid());
-    assertTrue(hidden.isValid());
-    assertTrue(secret.isValid());
-}
-
-public void beginNulls(WebRequest theRequest)
-{
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-}
-
-public void testNulls()
-{
-    testEmptyStrings();
-}
 
 
-public void beginBadConversion(WebRequest theRequest)
-{
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-}
-
-public void testBadConversion()
-{
-    UIComponent root = new UIViewRoot();
-}
+    public void testNulls() {
+        testEmptyStrings();
+    }
 
 
+    public void beginBadConversion(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+    }
+
+
+    public void testBadConversion() {
+        UIComponent root = new UIViewRoot();
+    }
 
 
 } // end of class TestRendererConversions

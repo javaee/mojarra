@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.6 2004/02/04 23:42:05 ofung Exp $
+ * $Id: ColumnTag.java,v 1.7 2004/02/06 18:55:38 rlubke Exp $
  */
 
 /*
@@ -10,17 +10,13 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import com.sun.faces.util.*;
-import javax.faces.component.*;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-import javax.faces.el.MethodBinding;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import javax.faces.component.UIColumn;
+import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
-import org.apache.commons.logging.*;
 
 
 public class ColumnTag extends UIComponentTag {
@@ -40,12 +36,19 @@ public class ColumnTag extends UIComponentTag {
     //
     // General Methods
     //
-    public String getRendererType() { return null; }
-    public String getComponentType() { return "javax.faces.Column"; }
+    public String getRendererType() {
+        return null;
+    }
+
+
+    public String getComponentType() {
+        return "javax.faces.Column";
+    }
+
 
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
-        UIColumn column = (UIColumn)component;
+        UIColumn column = (UIColumn) component;
 
     }
 
@@ -71,6 +74,7 @@ public class ColumnTag extends UIComponentTag {
         return rc;
     }
 
+
     public int doEndTag() throws JspException {
         int rc = 0;
         try {
@@ -89,8 +93,10 @@ public class ColumnTag extends UIComponentTag {
         return rc;
     }
 
+
     public String getDebugString() {
-        String result = "id: "+this.getId()+" class: "+this.getClass().getName();
+        String result = "id: " + this.getId() + " class: " +
+            this.getClass().getName();
         return result;
     }
 

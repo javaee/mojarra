@@ -91,7 +91,7 @@ import java.util.Map;
  * send HTTP requests to a servlet container, and examine the responses.
  * It is similar in purpose to the <code>GTest</code> task in Watchdog,
  * but uses the JDK's HttpURLConnection for underlying connectivity.</p>
- *
+ * <p/>
  * <p>The task is registered with Ant using a <code>taskdef</code> directive:
  * <pre>
  *   &lt;taskdef name="systest"
@@ -100,55 +100,55 @@ import java.util.Map;
  * and accepts the following configuration properties:</p>
  * <ul>
  * <li><strong>golden</strong> - The server-relative path of the static
- *     resource containing the golden file for this request.</li>
+ * resource containing the golden file for this request.</li>
  * <li><strong>host</strong> - The server name to which this request will be
- *     sent.  Defaults to <code>localhost</code> if not specified.</li>
+ * sent.  Defaults to <code>localhost</code> if not specified.</li>
  * <li><strong>ignore</strong> - The server-relative path of the static
- *     resource containing lines from the specified golden file that should
- *     not be matched against the actual response.  If a golden file is
- *     specified but not an ignore file, then the contents must match
- *     exactly.</li>
+ * resource containing lines from the specified golden file that should
+ * not be matched against the actual response.  If a golden file is
+ * specified but not an ignore file, then the contents must match
+ * exactly.</li>
  * <li><strong>inContent</strong> - The data content that will be submitted
- *     with this request.  The test client will transparently add a carriage
- *     return and line feed, and set the content length header, if this is
- *     specified.  Otherwise, no content will be included in the request.</li>
+ * with this request.  The test client will transparently add a carriage
+ * return and line feed, and set the content length header, if this is
+ * specified.  Otherwise, no content will be included in the request.</li>
  * <li><strong>inHeaders</strong> - The set of one or more HTTP headers that
- *     will be included on the request, in the format
- *     <code>{name}:{value}{##{name}:{value}...</li>
+ * will be included on the request, in the format
+ * <code>{name}:{value}{##{name}:{value}...</li>
  * <li><strong>joinSession</strong> - Should we join the session whose session
- *     identifier was returned on the previous request.  [false]</li>
+ * identifier was returned on the previous request.  [false]</li>
  * <li><strong>message</strong> - The HTTP response message that is expected
- *     in the response from the server.  No check is made if no message
- *     is specified.</li>
+ * in the response from the server.  No check is made if no message
+ * is specified.</li>
  * <li><strong>method</strong> - The HTTP request method to be used on this
- *     request.  Defaults to <ocde>GET</code> if not specified.</li>
+ * request.  Defaults to <ocde>GET</code> if not specified.</li>
  * <li><strong>outContent</strong> - The first line of the response data
- *     content that we expect to receive.  No check is made if no content is
- *     specified.</li>
+ * content that we expect to receive.  No check is made if no content is
+ * specified.</li>
  * <li><strong>outHeaders</strong> - The set of one or more HTTP headers that
- *     are expected in the response (order independent).</li>
+ * are expected in the response (order independent).</li>
  * <li><strong>port</strong> - The port number to which this request will be
- *     sent.  Defaults to <code>8080</code> if not specified.</li>
+ * sent.  Defaults to <code>8080</code> if not specified.</li>
  * <li><strong>protocol</strong> - The protocol and version (such as
- *     "HTTP/1.0") to include in the request, if executed as a direct
- *     socket connection.  If not specified, HttpURLConnection will be used
- *     instead.</li>
+ * "HTTP/1.0") to include in the request, if executed as a direct
+ * socket connection.  If not specified, HttpURLConnection will be used
+ * instead.</li>
  * <li><strong>redirect</strong> - If set to true, follow any redirect that
- *     is returned by the server.  (Only works when using HttpURLConnection).
- *     </li>
+ * is returned by the server.  (Only works when using HttpURLConnection).
+ * </li>
  * <li><strong>request</strong> - The request URI to be transmitted for this
- *     request.  This value should start with a slash character ("/"), and
- *     be the server-relative URI of the requested resource.</li>
+ * request.  This value should start with a slash character ("/"), and
+ * be the server-relative URI of the requested resource.</li>
  * <li><strong>status</strong> - The HTTP status code that is expected in the
- *     response from the server.  Defaults to <code>200</code> if not
- *     specified.  Set to zero to disable checking the return value.</li>
+ * response from the server.  Defaults to <code>200</code> if not
+ * specified.  Set to zero to disable checking the return value.</li>
  * <li><strong>recordGolden</strong> - Record a goldenfile of the response
- *     if a goldenfile is specifed for the request and the goldenfile doesn't
- *     already exist.</li>
+ * if a goldenfile is specifed for the request and the goldenfile doesn't
+ * already exist.</li>
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.7 $ $Date: 2004/02/04 23:42:38 $
+ * @version $Revision: 1.8 $ $Date: 2004/02/06 18:56:09 $
  */
 
 public class SystestClient extends Task {
@@ -202,14 +202,15 @@ public class SystestClient extends Task {
      */
     protected boolean failonerror = true;
 
+
     public boolean getFailonerror() {
         return (this.failonerror);
     }
 
+
     public void setFailonerror(boolean failonerror) {
         this.failonerror = failonerror;
     }
-
 
 
     /**
@@ -217,9 +218,11 @@ public class SystestClient extends Task {
      */
     protected String golden = null;
 
+
     public String getGolden() {
         return (this.golden);
     }
+
 
     public void setGolden(String golden) {
         this.golden = golden;
@@ -231,9 +234,11 @@ public class SystestClient extends Task {
      */
     protected String host = "localhost";
 
+
     public String getHost() {
         return (this.host);
     }
+
 
     public void setHost(String host) {
         this.host = host;
@@ -245,9 +250,11 @@ public class SystestClient extends Task {
      */
     protected String ignore = null;
 
+
     public String getIgnore() {
         return (this.ignore);
     }
+
 
     public void setIgnore(String ignore) {
         this.ignore = ignore;
@@ -260,9 +267,11 @@ public class SystestClient extends Task {
      */
     protected String inContent = null;
 
+
     public String getInContent() {
         return (this.inContent);
     }
+
 
     public void setInContent(String inContent) {
         this.inContent = inContent;
@@ -275,9 +284,11 @@ public class SystestClient extends Task {
      */
     protected String inHeaders = null;
 
+
     public String getInHeaders() {
         return (this.inHeaders);
     }
+
 
     public void setInHeaders(String inHeaders) {
         this.inHeaders = inHeaders;
@@ -290,9 +301,11 @@ public class SystestClient extends Task {
      */
     protected boolean joinSession = false;
 
+
     public boolean getJoinSession() {
         return (this.joinSession);
     }
+
 
     public void setJoinSession(boolean joinSession) {
         this.joinSession = true;
@@ -304,9 +317,11 @@ public class SystestClient extends Task {
      */
     protected String message = null;
 
+
     public String getMessage() {
         return (this.message);
     }
+
 
     public void setMessage(String message) {
         this.message = message;
@@ -318,9 +333,11 @@ public class SystestClient extends Task {
      */
     protected String method = "GET";
 
+
     public String getMethod() {
         return (this.method);
     }
+
 
     public void setMethod(String method) {
         this.method = method;
@@ -332,9 +349,11 @@ public class SystestClient extends Task {
      */
     protected String outContent = null;
 
+
     public String getOutContent() {
         return (this.outContent);
     }
+
 
     public void setOutContent(String outContent) {
         this.outContent = outContent;
@@ -347,9 +366,11 @@ public class SystestClient extends Task {
      */
     protected String outHeaders = null;
 
+
     public String getOutHeaders() {
         return (this.outHeaders);
     }
+
 
     public void setOutHeaders(String outHeaders) {
         this.outHeaders = outHeaders;
@@ -361,9 +382,11 @@ public class SystestClient extends Task {
      */
     protected int port = 8080;
 
+
     public int getPort() {
         return (this.port);
     }
+
 
     public void setPort(int port) {
         this.port = port;
@@ -377,9 +400,11 @@ public class SystestClient extends Task {
      */
     protected String protocol = null;
 
+
     public String getProtocol() {
         return (this.protocol);
     }
+
 
     public void setProtocol(String protocol) {
         this.protocol = protocol;
@@ -391,9 +416,11 @@ public class SystestClient extends Task {
      */
     protected boolean redirect = false;
 
+
     public boolean getRedirect() {
         return (this.redirect);
     }
+
 
     public void setRedirect(boolean redirect) {
         this.redirect = redirect;
@@ -405,9 +432,11 @@ public class SystestClient extends Task {
      */
     protected String request = null;
 
+
     public String getRequest() {
         return (this.request);
     }
+
 
     public void setRequest(String request) {
         this.request = request;
@@ -419,23 +448,28 @@ public class SystestClient extends Task {
      */
     protected int status = 200;
 
+
     public int getStatus() {
         return (this.status);
     }
 
+
     public void setStatus(int status) {
         this.status = status;
     }
-    
+
+
     /**
      * Goldenfile recording.
-     */ 
+     */
     protected String recordGolden;
-    
+
+
     public String getRecordGolden() {
         return (this.recordGolden);
     }
-    
+
+
     public void setRecordGolden(String recordGolden) {
         this.recordGolden = recordGolden;
     }
@@ -458,7 +492,7 @@ public class SystestClient extends Task {
     /**
      * Execute the test that has been configured by our property settings.
      *
-     * @exception BuildException if an exception occurs
+     * @throws BuildException if an exception occurs
      */
     public void execute() throws BuildException {
 
@@ -496,7 +530,7 @@ public class SystestClient extends Task {
     /**
      * Execute the test via use of an HttpURLConnection.
      *
-     * @exception BuildException if an exception occurs
+     * @throws BuildException if an exception occurs
      */
     protected void executeHttp() throws BuildException {
 
@@ -698,7 +732,7 @@ public class SystestClient extends Task {
     /**
      * Execute the test via use of a socket with direct input/output.
      *
-     * @exception BuildException if an exception occurs
+     * @throws BuildException if an exception occurs
      */
     protected void executeSocket() throws BuildException {
 
@@ -845,7 +879,7 @@ public class SystestClient extends Task {
             while (true) {
                 line = read(is);
                 if (line == null)
-                    break;                
+                    break;
                 if (lines == 0)
                     outData = line;
                 else
@@ -976,7 +1010,7 @@ public class SystestClient extends Task {
      *
      * @param stream The input stream to read from
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      */
     protected String read(InputStream stream) throws IOException {
 
@@ -1008,7 +1042,7 @@ public class SystestClient extends Task {
      * Read and save the contents of the golden file for this test, if any.
      * Otherwise, the <code>saveGolden</code> list will be empty.
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      */
     protected void readGolden() throws IOException {
 
@@ -1048,7 +1082,7 @@ public class SystestClient extends Task {
      * Read and save the contents of the ignore file for this test, if any.
      * Otherwise, the <code>saveIgnore</code> list will be empty.
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      */
     protected void readIgnore() throws IOException {
 
@@ -1087,7 +1121,7 @@ public class SystestClient extends Task {
     /**
      * Save the specified header name and value in our collection.
      *
-     * @param name Header name to save
+     * @param name  Header name to save
      * @param value Header value to save
      */
     protected void save(String name, String value) {
@@ -1117,32 +1151,33 @@ public class SystestClient extends Task {
             return (null);
         } else {
             return ("Expected data '" + outContent + "', got data '" +
-                    data + "'");
+                data + "'");
         }
 
     }
 
-    protected String stripJsessionidFromLine(String line) {
-	if (null == line) {
-	    return line;
-	}
-	int 
-	    start = 0,
-	    end = 0;
-	String result = line;
 
-	if (-1 == (start = line.indexOf(";jsessionid="))) {
-	    return result;
-	}
-	
-	if (-1 == (end = line.indexOf("?", start))) {
-	    if (-1 == (end = line.indexOf("\"", start))) {
-		throw new IllegalStateException();
-	    }
-	}
-	result = stripJsessionidFromLine(line.substring(0, start) + 
-					 line.substring(end));
-	return result;
+    protected String stripJsessionidFromLine(String line) {
+        if (null == line) {
+            return line;
+        }
+        int
+            start = 0,
+            end = 0;
+        String result = line;
+
+        if (-1 == (start = line.indexOf(";jsessionid="))) {
+            return result;
+        }
+
+        if (-1 == (end = line.indexOf("?", start))) {
+            if (-1 == (end = line.indexOf("\"", start))) {
+                throw new IllegalStateException();
+            }
+        }
+        result = stripJsessionidFromLine(line.substring(0, start) +
+                                         line.substring(end));
+        return result;
     }
 
 
@@ -1166,12 +1201,12 @@ public class SystestClient extends Task {
                 String golden = (String) saveGolden.get(i);
                 String response = (String) saveResponse.get(i);
                 if (!validateIgnore(golden) && !golden.equals(response)) {
-		    response = stripJsessionidFromLine(response);
-		    golden = stripJsessionidFromLine(golden);
-		    if (!golden.equals(response)) {
-			ok = false;
-			break;
-		    }
+                    response = stripJsessionidFromLine(response);
+                    golden = stripJsessionidFromLine(golden);
+                    if (!golden.equals(response)) {
+                        ok = false;
+                        break;
+                    }
                 }
             }
         }
@@ -1184,11 +1219,13 @@ public class SystestClient extends Task {
         }
         System.out.println("================================================");
         if (saveIgnore.size() >= 1) {
-            System.out.println("IGNORED: =======================================");
+            System.out.println(
+                "IGNORED: =======================================");
             for (int i = 0, size = saveIgnore.size(); i < size; i++) {
                 System.out.println((String) saveIgnore.get(i));
             }
-            System.out.println("================================================");
+            System.out.println(
+                "================================================");
         }
         System.out.println("RECEIVED: ======================================");
         for (int i = 0, size = saveResponse.size(); i < size; i++) {
@@ -1198,10 +1235,11 @@ public class SystestClient extends Task {
         
         // write the goldenfile if the GF size from the server was 0
         // and the goldenfile doesn't already exist on the local filesystem.
-        if (saveGolden.size() == 0 && recordGolden != null) {            
+        if (saveGolden.size() == 0 && recordGolden != null) {
             File gf = new File(recordGolden);
-            if (!gf.exists()) {                
-                System.out.println("[INFO] RECORDING GOLDENFILE: " + recordGolden);
+            if (!gf.exists()) {
+                System.out.println(
+                    "[INFO] RECORDING GOLDENFILE: " + recordGolden);
                 // write the goldenfile using the encoding specified in the response.
                 // if there is no encoding available, default to ISO-8859-1
                 String encoding = "ISO-8859-1";
@@ -1213,19 +1251,21 @@ public class SystestClient extends Task {
                         if (charIdx > -1) {
                             encoding = val.substring(charIdx + 1).trim();
                         }
-                    }                                        
-                }               
+                    }
+                }
                 OutputStreamWriter out = null;
-                try {                   
-                    out = new OutputStreamWriter(
-                        new FileOutputStream(gf), encoding);                   
-                    for (int i = 0, size = saveResponse.size(); i < size; i++) {                        
+                try {
+                    out = new OutputStreamWriter(new FileOutputStream(gf),
+                                                 encoding);
+                    for (int i = 0, size = saveResponse.size(); i < size; i++) {
                         out.write((String) saveResponse.get(i));
                         out.write('\n');
                     }
                     out.flush();
                 } catch (Throwable t) {
-                    System.out.println("[WARNING] Unable to write goldenfile: " + t.toString());
+                    System.out.println(
+                        "[WARNING] Unable to write goldenfile: " +
+                        t.toString());
                 } finally {
                     try {
                         if (out != null) {
@@ -1234,7 +1274,7 @@ public class SystestClient extends Task {
                     } catch (IOException ioe) {
                         ; // do nothing
                     }
-                }           
+                }
             }
         }
         return ("Failed Golden File Comparison");
@@ -1284,7 +1324,7 @@ public class SystestClient extends Task {
             }
             if (!found) {
                 return ("Missing header name '" + name + "' with value '" +
-                        value + "'");
+                    value + "'");
             }
         }
 
@@ -1327,7 +1367,7 @@ public class SystestClient extends Task {
             return (null);
         } else {
             return ("Expected message='" + this.message + "', got message='" +
-                    message + "'");
+                message + "'");
         }
 
     }
@@ -1348,7 +1388,7 @@ public class SystestClient extends Task {
             return (null);
         } else {
             return ("Expected status=" + this.status + ", got status=" +
-                    status);
+                status);
         }
 
     }

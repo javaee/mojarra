@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationTestCase.java,v 1.2 2004/02/04 23:42:33 ofung Exp $
+ * $Id: NavigationTestCase.java,v 1.3 2004/02/06 18:56:04 rlubke Exp $
  */
 
 /*
@@ -12,14 +12,11 @@ package com.sun.faces.systest;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
-import java.net.URL;
-import java.util.Iterator;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -81,25 +78,24 @@ public class NavigationTestCase extends AbstractTestCase {
 
     // Test dynamically adding and removing components
     public void testRedirect() throws Exception {
-	client.setRedirectEnabled(false);
-	// the navigation-case for this url is set up to cause a redirect
+        client.setRedirectEnabled(false);
+        // the navigation-case for this url is set up to cause a redirect
         HtmlPage page = getPage("/faces/redirect.jsp");
-	HtmlForm form = getFormById(page, "redirect");
+        HtmlForm form = getFormById(page, "redirect");
         assertNotNull("form exists", form);
         HtmlSubmitInput submit = (HtmlSubmitInput)
             form.getInputByName("redirect" +
                                 NamingContainer.SEPARATOR_CHAR +
                                 "submit");
-	boolean exceptionThrown = false;
-	try {
-	    page = (HtmlPage) submit.click();
-	}
-	catch (FailingHttpStatusCodeException fhsce) {
-	    assertEquals("Didn't get expected redirect", 
-			 fhsce.getStatusCode(), 302);
-	    exceptionThrown = true;
-	}
-	assertTrue("Didn't get expected redirect", exceptionThrown);
+        boolean exceptionThrown = false;
+        try {
+            page = (HtmlPage) submit.click();
+        } catch (FailingHttpStatusCodeException fhsce) {
+            assertEquals("Didn't get expected redirect",
+                         fhsce.getStatusCode(), 302);
+            exceptionThrown = true;
+        }
+        assertTrue("Didn't get expected redirect", exceptionThrown);
     }
 
 

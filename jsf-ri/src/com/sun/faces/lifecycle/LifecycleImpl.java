@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.42 2004/02/04 23:41:37 ofung Exp $
+ * $Id: LifecycleImpl.java,v 1.43 2004/02/06 18:55:08 rlubke Exp $
  */
 
 /*
@@ -10,23 +10,20 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.util.Util;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-
+import javax.faces.lifecycle.Lifecycle;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 
 
 /**
@@ -74,7 +71,7 @@ public class LifecycleImpl extends Lifecycle {
     public void execute(FacesContext context) throws FacesException {
 
         if (context == null) {
-	    throw new NullPointerException
+            throw new NullPointerException
                 (Util.getExceptionMessage
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
@@ -92,7 +89,7 @@ public class LifecycleImpl extends Lifecycle {
 
             phase((PhaseId) PhaseId.VALUES.get(i), phases[i], context);
 
-	    if (reload((PhaseId) PhaseId.VALUES.get(i), context)) {
+            if (reload((PhaseId) PhaseId.VALUES.get(i), context)) {
                 if (log.isDebugEnabled()) {
                     log.debug("Skipping rest of execute() because of a reload");
                 }
@@ -107,7 +104,7 @@ public class LifecycleImpl extends Lifecycle {
     public void render(FacesContext context) throws FacesException {
 
         if (context == null) {
-	    throw new NullPointerException
+            throw new NullPointerException
                 (Util.getExceptionMessage
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
@@ -127,7 +124,7 @@ public class LifecycleImpl extends Lifecycle {
     public void addPhaseListener(PhaseListener listener) {
 
         if (listener == null) {
-	    throw new NullPointerException
+            throw new NullPointerException
                 (Util.getExceptionMessage
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
@@ -157,12 +154,13 @@ public class LifecycleImpl extends Lifecycle {
     public void removePhaseListener(PhaseListener listener) {
 
         if (listener == null) {
-	    throw new NullPointerException
+            throw new NullPointerException
                 (Util.getExceptionMessage
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isDebugEnabled()) {
-            log.debug("removePhaseListener(" + listener.getPhaseId().toString()
+            log.debug("removePhaseListener(" +
+                      listener.getPhaseId().toString()
                       + "," + listener);
         }
         synchronized (listeners) {
@@ -198,9 +196,9 @@ public class LifecycleImpl extends Lifecycle {
         }
 
         // Execute this phase itself (if still needed)
-	if (!skipping(phaseId, context)) {
-	    phase.execute(context);
-	}
+        if (!skipping(phaseId, context)) {
+            phase.execute(context);
+        }
 
         // Notify the "afterPhase" method of interested listeners (descending)
         synchronized (listeners) {
@@ -223,13 +221,13 @@ public class LifecycleImpl extends Lifecycle {
     // completed the Restore View phase
     private boolean reload(PhaseId phaseId, FacesContext context) {
 
-	if (!phaseId.equals(PhaseId.RESTORE_VIEW)) {
-	    return (false);
-	}
-	if (!(context.getExternalContext().getRequest() instanceof
-	      HttpServletRequest)) {
-	    return (false);
-	}
+        if (!phaseId.equals(PhaseId.RESTORE_VIEW)) {
+            return (false);
+        }
+        if (!(context.getExternalContext().getRequest() instanceof
+            HttpServletRequest)) {
+            return (false);
+        }
         HttpServletRequest request = (HttpServletRequest)
             context.getExternalContext().getRequest();
         String method = request.getMethod();
@@ -257,14 +255,14 @@ public class LifecycleImpl extends Lifecycle {
     // Return "true" if we should be skipping the actual phase execution
     private boolean skipping(PhaseId phaseId, FacesContext context) {
 
-	if (context.getResponseComplete()) {
-	    return (true);
-	} else if (context.getRenderResponse() &&
-		   !phaseId.equals(PhaseId.RENDER_RESPONSE)) {
-	    return (true);
-	} else {
-	    return (false);
-	}
+        if (context.getResponseComplete()) {
+            return (true);
+        } else if (context.getRenderResponse() &&
+            !phaseId.equals(PhaseId.RENDER_RESPONSE)) {
+            return (true);
+        } else {
+            return (false);
+        }
 
     }
 

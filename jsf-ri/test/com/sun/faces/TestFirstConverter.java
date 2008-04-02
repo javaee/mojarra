@@ -1,5 +1,5 @@
 /*
- * $Id: TestFirstConverter.java,v 1.3 2004/02/04 23:43:53 ofung Exp $
+ * $Id: TestFirstConverter.java,v 1.4 2004/02/06 18:56:18 rlubke Exp $
  */
 
 /*
@@ -14,4 +14,5 @@ package com.sun.faces;
 import javax.faces.convert.NumberConverter;
 
 public class TestFirstConverter extends NumberConverter {
+
 }

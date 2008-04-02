@@ -16,8 +16,10 @@ public class SimplePhaseListener implements PhaseListener {
     private boolean handledBefore = false;
     private boolean handledAfter = false;
 
+
     public SimplePhaseListener() {
     }
+
 
     public void afterPhase(PhaseEvent event) {
         handledAfter = true;
@@ -26,9 +28,11 @@ public class SimplePhaseListener implements PhaseListener {
         }
     }
 
+
     public void beforePhase(PhaseEvent event) {
         handledBefore = true;
     }
+
 
     public PhaseId getPhaseId() {
         return PhaseId.APPLY_REQUEST_VALUES;

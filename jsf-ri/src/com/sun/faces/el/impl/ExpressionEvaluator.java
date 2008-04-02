@@ -57,6 +57,7 @@
  * <http://www.apache.org/>.
  *
  */
+
 package com.sun.faces.el.impl;
 
 public interface ExpressionEvaluator {
@@ -64,21 +65,28 @@ public interface ExpressionEvaluator {
     /**
      * <p>Parses the provided expression and returns an Object
      * representing that expression.</p>
+     *
      * @param exprInfo ExpressionInfo containing the expression to parse
+     *
      * @return an Object representing the parsed expression
+     *
      * @throws ElException if the expression cannot be parsed
-     */ 
+     */
     Expression parseExpression(ExpressionInfo exprInfo)
         throws ElException;
 
+
     /**
-     * <p>Parses and evaluates based on the information in the 
+     * <p>Parses and evaluates based on the information in the
      * provided ExpressionInfo.</p>
+     *
      * @param exprInfo ExpressionInfo containing the information necesary to
      *                 parse and evaluate an expression
+     *
      * @return the result of the evaluation
+     *
      * @throws ElException if the expression cannot be parsed or evaluated
-     */ 
+     */
     Object evaluate(ExpressionInfo exprInfo)
         throws ElException;
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.17 2004/02/04 23:41:47 ofung Exp $
+ * $Id: HiddenRenderer.java,v 1.18 2004/02/06 18:55:18 rlubke Exp $
  */
 
 /*
@@ -19,13 +19,12 @@ import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
 
-import com.sun.faces.util.Util;
-
 /**
- * <B>HiddenRenderer</B> is a class that renders the current value of 
+ * <B>HiddenRenderer</B> is a class that renders the current value of
  * <code>UIInput<code> component as a HTML hidden variable.
  */
 public class HiddenRenderer extends HtmlBasicInputRenderer {
+
     //
     // Protected Constants
     //
@@ -63,13 +62,14 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
     // Methods From Renderer
     //
 
-    public void encodeBegin(FacesContext context, UIComponent component) 
-            throws IOException {
+    public void encodeBegin(FacesContext context, UIComponent component)
+        throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
+
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
@@ -78,24 +78,26 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
         }
     }
 
-    protected void getEndTextToRender(FacesContext context, 
-        UIComponent component, String currentValue) throws IOException {
 
-	ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null );
+    protected void getEndTextToRender(FacesContext context,
+                                      UIComponent component, String currentValue)
+        throws IOException {
 
-	writer.startElement("input", component);
-	writeIdAttributeIfNecessary(context, writer, component);
-	writer.writeAttribute("type", "hidden", "type");
+        ResponseWriter writer = context.getResponseWriter();
+        Util.doAssert(writer != null);
+
+        writer.startElement("input", component);
+        writeIdAttributeIfNecessary(context, writer, component);
+        writer.writeAttribute("type", "hidden", "type");
         String clientId = component.getClientId(context);
-	writer.writeAttribute("name", clientId, "clientId");
+        writer.writeAttribute("name", clientId, "clientId");
 
         // render default text specified
         if (currentValue != null) {
             writer.writeAttribute("value", currentValue, "value");
         }
         writer.endElement("input");
-        
+
         FormRenderer.addRenderedHiddenField(context, clientId);
     }
     

@@ -61,15 +61,15 @@
 package com.sun.faces.el.impl;
 
 /**
- *
  * <p>An expression representing a null literal value
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class NullLiteral
     extends Literal {
+
     //-------------------------------------
     // Member variables
     //-------------------------------------
@@ -78,9 +78,8 @@ public class NullLiteral
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public NullLiteral() {
         super(null);
     }
@@ -89,9 +88,8 @@ public class NullLiteral
     // Expression methods
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         return "null";
     }

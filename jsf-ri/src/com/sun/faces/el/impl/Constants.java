@@ -64,17 +64,16 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- *
  * <p>This contains all of the non-public constants, including
  * messsage strings read from the resource file.
  *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- *
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class Constants {
+
     //-------------------------------------
     // Resources
 
@@ -224,19 +223,17 @@ public class Constants {
                 String str = "ERROR: Unable to load resource " + pResourceName;
                 System.err.println(str);
                 throw new MissingResourceException
-                    (
-                        str,
-                        "com.sun.faces.el.impl.Constants",
-                        pResourceName);
+                    (str,
+                     "com.sun.faces.el.impl.Constants",
+                     pResourceName);
             } else {
                 return ret;
             }
         } catch (MissingResourceException exc) {
-            System.err.println(
-                "ERROR: Unable to load resource " +
-                pResourceName +
-                ": " +
-                exc);
+            System.err.println("ERROR: Unable to load resource " +
+                               pResourceName +
+                               ": " +
+                               exc);
             throw exc;
         }
     }

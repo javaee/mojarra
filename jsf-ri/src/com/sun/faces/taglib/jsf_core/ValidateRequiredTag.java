@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateRequiredTag.java,v 1.7 2004/02/04 23:42:10 ofung Exp $
+ * $Id: ValidateRequiredTag.java,v 1.8 2004/02/06 18:55:43 rlubke Exp $
  */
 
 /*
@@ -11,30 +11,20 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.util.Util;
-
-
-//PENDING: FIX_ME - replace RequiredValidator with Validator
-import javax.faces.validator.Validator;
 import javax.faces.webapp.ValidatorTag;
 
-import javax.servlet.jsp.JspException;
-
 /**
- *
- *  <B>ValidateRequiredTag</B> is a class ...
- *
+ * <B>ValidateRequiredTag</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ValidateRequiredTag.java,v 1.7 2004/02/04 23:42:10 ofung Exp $
- * 
+ * @version $Id: ValidateRequiredTag.java,v 1.8 2004/02/06 18:55:43 rlubke Exp $
  * @see	Blah
  * @see	Bloo
- *
  */
 
-public class ValidateRequiredTag extends ValidatorTag
-{
+public class ValidateRequiredTag extends ValidatorTag {
+
 //
 // Protected Constants
 //
@@ -56,11 +46,10 @@ public class ValidateRequiredTag extends ValidatorTag
 // Constructors and Initializers    
 //
 
-public ValidateRequiredTag()
-{
-    super();
-    super.setValidatorId("javax.faces.Required");
-}
+    public ValidateRequiredTag() {
+        super();
+        super.setValidatorId("javax.faces.Required");
+    }
 
 //
 // Class methods

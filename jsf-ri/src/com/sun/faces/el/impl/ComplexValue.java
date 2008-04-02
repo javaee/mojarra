@@ -64,19 +64,19 @@ import java.util.List;
 
 
 /**
- *
  * <p>Represents a dynamic value, which consists of a prefix and an
  * optional set of ValueSuffix elements.  A prefix is something like
  * an identifier, and a suffix is something like a "property of" or
  * "indexed element of" operator.
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class ComplexValue
     extends Expression {
+
     //-------------------------------------
     // Properties
     //-------------------------------------
@@ -84,9 +84,11 @@ public class ComplexValue
 
     Expression mPrefix;
 
+
     public Expression getPrefix() {
         return mPrefix;
     }
+
 
     public void setPrefix(Expression pPrefix) {
         mPrefix = pPrefix;
@@ -97,9 +99,11 @@ public class ComplexValue
 
     List mSuffixes;
 
+
     public List getSuffixes() {
         return mSuffixes;
     }
+
 
     public void setSuffixes(List pSuffixes) {
         mSuffixes = pSuffixes;
@@ -107,12 +111,10 @@ public class ComplexValue
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
-    public ComplexValue(
-        Expression pPrefix,
-        List pSuffixes) {
+     */
+    public ComplexValue(Expression pPrefix,
+                        List pSuffixes) {
         mPrefix = pPrefix;
         mSuffixes = pSuffixes;
     }
@@ -121,9 +123,8 @@ public class ComplexValue
     // Expression methods
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         StringBuffer buf = new StringBuffer();
         buf.append(mPrefix.getExpressionString());
@@ -138,9 +139,8 @@ public class ComplexValue
 
     //-------------------------------------
     /**
-     *
      * Evaluates by evaluating the prefix, then applying the suffixes
-     **/
+     */
     public Object evaluate(ExpressionInfo exprInfo)
         throws ElException {
         Object ret = mPrefix.evaluate(exprInfo);
@@ -148,14 +148,15 @@ public class ComplexValue
         // Apply the suffixes
         for (int i = 0; mSuffixes != null && i < mSuffixes.size(); i++) {
             ValueSuffix suffix = (ValueSuffix) mSuffixes.get(i);
-	    ret = suffix.evaluate(ret, exprInfo);
+            ret = suffix.evaluate(ret, exprInfo);
         }
 
         return ret;
     }
 
+
     public void setValue(ExpressionInfo exprInfo, Object newValue)
-	throws ElException {
+        throws ElException {
         Object ret = mPrefix.evaluate(exprInfo);
 
         // Apply the suffixes
@@ -163,48 +164,50 @@ public class ComplexValue
             ValueSuffix suffix = (ValueSuffix) mSuffixes.get(i);
             ret = suffix.evaluate(ret, exprInfo);
         }
-	if (mSuffixes != null && !mSuffixes.isEmpty()) {
-	    // Set the value
-	    ValueSuffix last = 
-		(ValueSuffix) mSuffixes.get(mSuffixes.size() - 1);
-	    last.setValue(ret, newValue, exprInfo);
-	}
+        if (mSuffixes != null && !mSuffixes.isEmpty()) {
+            // Set the value
+            ValueSuffix last =
+                (ValueSuffix) mSuffixes.get(mSuffixes.size() - 1);
+            last.setValue(ret, newValue, exprInfo);
+        }
     }
+
 
     public boolean isReadOnly(ExpressionInfo exprInfo)
         throws ElException {
         Object ret = mPrefix.evaluate(exprInfo);
-	boolean result = mPrefix.isReadOnly(exprInfo);
+        boolean result = mPrefix.isReadOnly(exprInfo);
 
         // Apply the suffixes
         for (int i = 0; mSuffixes != null && i < mSuffixes.size() - 1; i++) {
             ValueSuffix suffix = (ValueSuffix) mSuffixes.get(i);
             ret = suffix.evaluate(ret, exprInfo);
         }
-	if (mSuffixes != null && !mSuffixes.isEmpty()) {
-	    ValueSuffix last = 
-		(ValueSuffix) mSuffixes.get(mSuffixes.size() - 1);
-	    result = last.isReadOnly(ret, exprInfo);
-	}
-	return result;
+        if (mSuffixes != null && !mSuffixes.isEmpty()) {
+            ValueSuffix last =
+                (ValueSuffix) mSuffixes.get(mSuffixes.size() - 1);
+            result = last.isReadOnly(ret, exprInfo);
+        }
+        return result;
     }
+
 
     public Class getType(ExpressionInfo exprInfo)
         throws ElException {
         Object ret = mPrefix.evaluate(exprInfo);
-	Class result = mPrefix.getType(exprInfo);
+        Class result = mPrefix.getType(exprInfo);
 
         // Apply the suffixes
         for (int i = 0; mSuffixes != null && i < mSuffixes.size() - 1; i++) {
             ValueSuffix suffix = (ValueSuffix) mSuffixes.get(i);
             ret = suffix.evaluate(ret, exprInfo);
         }
-	if (mSuffixes != null && !mSuffixes.isEmpty()) {
-	    ValueSuffix last = 
-		(ValueSuffix) mSuffixes.get(mSuffixes.size() - 1);
-	    result = last.getType(ret, exprInfo);
-	}
-	return result;
+        if (mSuffixes != null && !mSuffixes.isEmpty()) {
+            ValueSuffix last =
+                (ValueSuffix) mSuffixes.get(mSuffixes.size() - 1);
+            result = last.getType(ret, exprInfo);
+        }
+        return result;
     }
 
     //-------------------------------------

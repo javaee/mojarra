@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.30 2004/02/04 23:41:47 ofung Exp $
+ * $Id: GridRenderer.java,v 1.31 2004/02/06 18:55:18 rlubke Exp $
  */
 
 /*
@@ -11,27 +11,24 @@ package com.sun.faces.renderkit.html_basic;
 
 
 import com.sun.faces.util.Util;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.Util;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
- * <B>GridRenderer</B> is a class that renders <code>UIPanel</code> component 
+ * <B>GridRenderer</B> is a class that renders <code>UIPanel</code> component
  * as a "Grid".
  */
 
 public class GridRenderer extends HtmlBasicRenderer {
-    
+
     //
     // Protected Constants
     //
@@ -72,29 +69,30 @@ public class GridRenderer extends HtmlBasicRenderer {
     //
 
     public boolean getRendersChildren() {
-	return true;
+        return true;
     }
+
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        
+
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + 
-                component.getId());
+            log.trace("Begin encoding component " +
+                      component.getId());
         }
         
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("End encoding component " 
-                + component.getId() + " since " + 
-                "rendered attribute is set to false ");
+                log.trace("End encoding component "
+                          + component.getId() + " since " +
+                          "rendered attribute is set to false ");
             }
             return;
         }
@@ -102,69 +100,69 @@ public class GridRenderer extends HtmlBasicRenderer {
         // Render the beginning of this panel
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement("table", component);
-	writeIdAttributeIfNecessary(context, writer, component);
+        writeIdAttributeIfNecessary(context, writer, component);
         String styleClass =
-	    (String) component.getAttributes().get("styleClass");
+            (String) component.getAttributes().get("styleClass");
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         Util.renderPassThruAttributes(writer, component);
-	writer.writeText("\n", null);
+        writer.writeText("\n", null);
 
-	// Render the header facet (if any)
-	UIComponent header = getFacet(component, "header");
-	String headerClass =
-	    (String) component.getAttributes().get("headerClass");
-	if (header != null) {
-	    writer.startElement("thead", component);
-	    writer.writeText("\n", null);
-	    writer.startElement("tr", header);
-	    writer.startElement("th", header);
-	    if (headerClass != null) {
-		writer.writeAttribute("class", headerClass, "headerClass");
-	    }
-	    writer.writeAttribute("colspan", "" + getColumnCount(component),
-				  null);
-	    writer.writeAttribute("scope", "colgroup", null);
-	    encodeRecursive(context, header);
+        // Render the header facet (if any)
+        UIComponent header = getFacet(component, "header");
+        String headerClass =
+            (String) component.getAttributes().get("headerClass");
+        if (header != null) {
+            writer.startElement("thead", component);
+            writer.writeText("\n", null);
+            writer.startElement("tr", header);
+            writer.startElement("th", header);
+            if (headerClass != null) {
+                writer.writeAttribute("class", headerClass, "headerClass");
+            }
+            writer.writeAttribute("colspan", "" + getColumnCount(component),
+                                  null);
+            writer.writeAttribute("scope", "colgroup", null);
+            encodeRecursive(context, header);
             writer.endElement("th");
             writer.endElement("tr");
-	    writer.writeText("\n", null);
-	    writer.endElement("thead");
-	    writer.writeText("\n", null);
-	}
+            writer.writeText("\n", null);
+            writer.endElement("thead");
+            writer.writeText("\n", null);
+        }
 
-	// Render the footer facet (if any)
-	UIComponent footer = getFacet(component, "footer");
-	String footerClass =
-	    (String) component.getAttributes().get("footerClass");
-	if (footer != null) {
-	    writer.startElement("tfoot", component);
-	    writer.writeText("\n", null);
-	    writer.startElement("tr", footer);
-	    writer.startElement("td", footer);
-	    if (footerClass != null) {
-		writer.writeAttribute("class", footerClass, "footerClass");
-	    }
-	    writer.writeAttribute("colspan", "" + getColumnCount(component),
-				  null);
-	    encodeRecursive(context, footer);
+        // Render the footer facet (if any)
+        UIComponent footer = getFacet(component, "footer");
+        String footerClass =
+            (String) component.getAttributes().get("footerClass");
+        if (footer != null) {
+            writer.startElement("tfoot", component);
+            writer.writeText("\n", null);
+            writer.startElement("tr", footer);
+            writer.startElement("td", footer);
+            if (footerClass != null) {
+                writer.writeAttribute("class", footerClass, "footerClass");
+            }
+            writer.writeAttribute("colspan", "" + getColumnCount(component),
+                                  null);
+            encodeRecursive(context, footer);
             writer.endElement("td");
             writer.endElement("tr");
-	    writer.writeText("\n", null);
-	    writer.endElement("tfoot");
-	    writer.writeText("\n", null);
-	}
+            writer.writeText("\n", null);
+            writer.endElement("tfoot");
+            writer.writeText("\n", null);
+        }
 
     }
 
 
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
-        
+
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding children " + component.getId());
@@ -174,14 +172,14 @@ public class GridRenderer extends HtmlBasicRenderer {
         // false.
         if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + 
-                component.getId() + " since " + 
-                "rendered attribute is set to false ");
+                log.trace("End encoding component " +
+                          component.getId() + " since " +
+                          "rendered attribute is set to false ");
             }
             return;
         }
 
-	// Set up the variables we will need
+        // Set up the variables we will need
         ResponseWriter writer = context.getResponseWriter();
         int columns = getColumnCount(component);
         String columnClasses[] = getColumnClasses(component);
@@ -191,57 +189,59 @@ public class GridRenderer extends HtmlBasicRenderer {
         int rowStyle = 0;
         int rowStyles = rowClasses.length;
         boolean open = false;
-	UIComponent facet = null;
-	Iterator kids = null;
-	int i = 0;
+        UIComponent facet = null;
+        Iterator kids = null;
+        int i = 0;
 
-	// Render our children, starting a new row as needed
-	writer.startElement("tbody", component);
-	writer.writeText("\n", null);
+        // Render our children, starting a new row as needed
+        writer.startElement("tbody", component);
+        writer.writeText("\n", null);
 
-	if (null != (kids = getChildren(component))) {
-	    while (kids.hasNext()) {
-		UIComponent child = (UIComponent) kids.next();
-		if ((i % columns) == 0) {
-		    if (open) {
-			writer.endElement("tr");
-			writer.writeText("\n", null);
-			open = false;
-		    }
-		    writer.startElement("tr", component);
-		    if (rowStyles > 0) {
-			writer.writeAttribute("class", rowClasses[rowStyle++], "rowClasses");
-			if (rowStyle >= rowStyles) {
-			    rowStyle = 0;
-			}
-		    }
+        if (null != (kids = getChildren(component))) {
+            while (kids.hasNext()) {
+                UIComponent child = (UIComponent) kids.next();
+                if ((i % columns) == 0) {
+                    if (open) {
+                        writer.endElement("tr");
+                        writer.writeText("\n", null);
+                        open = false;
+                    }
+                    writer.startElement("tr", component);
+                    if (rowStyles > 0) {
+                        writer.writeAttribute("class", rowClasses[rowStyle++],
+                                              "rowClasses");
+                        if (rowStyle >= rowStyles) {
+                            rowStyle = 0;
+                        }
+                    }
                     writer.writeText("\n", null);
-		    open = true;
-		    columnStyle = 0;
-		}
-		writer.startElement("td", component);
-		if (columnStyles > 0) {
-		    try {
-			writer.writeAttribute("class", columnClasses[columnStyle++], "columns");
-		    }
-		    catch (ArrayIndexOutOfBoundsException e) {
-		    }
-		    if (columnStyle >= columnStyles) {
-			columnStyle = 0;
-		    }
-		}
-		encodeRecursive(context, child);
-		writer.endElement("td");
-		writer.writeText("\n", null);
-		i++;
-	    }
-	}
+                    open = true;
+                    columnStyle = 0;
+                }
+                writer.startElement("td", component);
+                if (columnStyles > 0) {
+                    try {
+                        writer.writeAttribute("class",
+                                              columnClasses[columnStyle++],
+                                              "columns");
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                    }
+                    if (columnStyle >= columnStyles) {
+                        columnStyle = 0;
+                    }
+                }
+                encodeRecursive(context, child);
+                writer.endElement("td");
+                writer.writeText("\n", null);
+                i++;
+            }
+        }
         if (open) {
             writer.endElement("tr");
-	    writer.writeText("\n", null);
+            writer.writeText("\n", null);
         }
-	writer.endElement("tbody");
-	writer.writeText("\n", null);
+        writer.endElement("tbody");
+        writer.writeText("\n", null);
         if (log.isTraceEnabled()) {
             log.trace("End encoding children " + component.getId());
         }
@@ -253,32 +253,33 @@ public class GridRenderer extends HtmlBasicRenderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + 
-                component.getId() + " since " + 
-                "rendered attribute is set to false ");
+                log.trace("End encoding component " +
+                          component.getId() + " since " +
+                          "rendered attribute is set to false ");
             }
             return;
         }
         // Render the ending of this panel
         ResponseWriter writer = context.getResponseWriter();
-	writer.endElement("table");
-	writer.writeText("\n", null);
+        writer.endElement("table");
+        writer.writeText("\n", null);
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }
     }
 
-   /**
-    * Returns an array of stylesheet classes to be applied to
-    * each column in the list in the order specified. Every column may or
-    * may not have a stylesheet
-    */
+
+    /**
+     * Returns an array of stylesheet classes to be applied to
+     * each column in the list in the order specified. Every column may or
+     * may not have a stylesheet
+     */
     private String[] getColumnClasses(UIComponent component) {
         String values = (String) component.getAttributes().get("columnClasses");
         if (values == null) {
@@ -300,6 +301,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         return ((String[]) list.toArray(results));
     }
 
+
     /**
      * Returns number of columns of the grid converting the value
      * specified to int if necessary.
@@ -318,11 +320,12 @@ public class GridRenderer extends HtmlBasicRenderer {
         return (count);
     }
 
-   /**
-    * Returns an array of stylesheet classes to be applied to
-    * each row in the list in the order specified. Every row may or 
-    * may not have a stylesheet
-    */
+
+    /**
+     * Returns an array of stylesheet classes to be applied to
+     * each row in the list in the order specified. Every row may or
+     * may not have a stylesheet
+     */
     private String[] getRowClasses(UIComponent component) {
         String values = (String) component.getAttributes().get("rowClasses");
         if (values == null) {

@@ -1,5 +1,5 @@
 /*
- * $Id: SubviewTag.java,v 1.3 2004/02/04 23:42:09 ofung Exp $
+ * $Id: SubviewTag.java,v 1.4 2004/02/06 18:55:42 rlubke Exp $
  */
 
 /*
@@ -50,12 +50,13 @@ public class SubviewTag extends UIComponentTag {
     // General Methods
     //
 
-    public String getRendererType() { 
-        return null; 
+    public String getRendererType() {
+        return null;
     }
-    
-    public String getComponentType() { 
-        return "javax.faces.NamingContainer"; 
+
+
+    public String getComponentType() {
+        return "javax.faces.NamingContainer";
     }
 
 }

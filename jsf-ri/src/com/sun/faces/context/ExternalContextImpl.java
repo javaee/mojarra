@@ -1,29 +1,20 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.23 2004/02/04 23:40:55 ofung Exp $
+ * $Id: ExternalContextImpl.java,v 1.24 2004/02/06 18:54:23 rlubke Exp $
  */
 
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
+
 package com.sun.faces.context;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.AbstractMap;
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -36,18 +27,24 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.AbstractMap;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.23 2004/02/04 23:40:55 ofung Exp $
- *
+ * @version $Id: ExternalContextImpl.java,v 1.24 2004/02/06 18:54:23 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -65,61 +62,68 @@ public class ExternalContextImpl extends ExternalContext {
     private RequestCookieMap cookieMap = null;
     private InitParameterMap initParameterMap = null;
 
+
     public ExternalContextImpl(ServletContext sc, ServletRequest request,
-        ServletResponse response) {
+                               ServletResponse response) {
 
         // Validate the incoming parameters
         try {
             Util.parameterNonNull(sc);
             Util.parameterNonNull(request);
             Util.parameterNonNull(response);
-        } catch (Exception e ) {
-            throw new FacesException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
+        } catch (Exception e) {
+            throw new FacesException(
+                Util.getExceptionMessage(
+                    Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
 
         // Save references to our context, request, and response
         this.servletContext = sc;
-	// PENDING(edburns): Craig's workaround breaks
-	// TestValidatorTags.java because Cactus expects a certain type
-	// to be present for the value of the request.
-	if (RIConstants.IS_UNIT_TEST_MODE) {
-	    this.request = request;
-	}
-	else {
-	    // PENDING(craigmcc) - Work around a Tomcat 4.1 and 5.0 bug
-	    // where the request wrapper used on a
-	    // RequestDispatcher.forward() call delegates
-	    // removeAttribute() and setAttribute() to the wrapped
-	    // request, but not getAttribute().  This causes attributes
-	    // set via the RequestMap returned in this class to not be
-	    // visible via calls to getAttribute() on the underlying
-	    // request.
-	    if (request instanceof HttpServletRequest) {
-		this.request = new MyHttpServletRequestWrapper
-		    ((HttpServletRequest) request);
-	    } else {
-		this.request = new MyServletRequestWrapper(request);
-	    }
-	}
+        // PENDING(edburns): Craig's workaround breaks
+        // TestValidatorTags.java because Cactus expects a certain type
+        // to be present for the value of the request.
+        if (RIConstants.IS_UNIT_TEST_MODE) {
+            this.request = request;
+        } else {
+            // PENDING(craigmcc) - Work around a Tomcat 4.1 and 5.0 bug
+            // where the request wrapper used on a
+            // RequestDispatcher.forward() call delegates
+            // removeAttribute() and setAttribute() to the wrapped
+            // request, but not getAttribute().  This causes attributes
+            // set via the RequestMap returned in this class to not be
+            // visible via calls to getAttribute() on the underlying
+            // request.
+            if (request instanceof HttpServletRequest) {
+                this.request = new MyHttpServletRequestWrapper
+                    ((HttpServletRequest) request);
+            } else {
+                this.request = new MyServletRequestWrapper(request);
+            }
+        }
         this.response = response;
 
     }
+
 
     public Object getSession(boolean create) {
         return (((HttpServletRequest) request).getSession(create));
     }
 
+
     public Object getContext() {
         return this.servletContext;
     }
+
 
     public Object getRequest() {
         return this.request;
     }
 
+
     public Object getResponse() {
         return this.response;
     }
+
 
     public Map getApplicationMap() {
         if (applicationMap == null) {
@@ -128,11 +132,13 @@ public class ExternalContextImpl extends ExternalContext {
         return applicationMap;
     }
 
+
     public Map getSessionMap() {
         if (sessionMap == null)
             sessionMap = new SessionMap((HttpServletRequest) request);
-        return sessionMap;       
+        return sessionMap;
     }
+
 
     public Map getRequestMap() {
         if (requestMap == null) {
@@ -141,67 +147,79 @@ public class ExternalContextImpl extends ExternalContext {
         return requestMap;
     }
 
+
     public Map getRequestHeaderMap() {
-	if (null == requestHeaderMap) {
-	    requestHeaderMap = new RequestHeaderMap((HttpServletRequest) request);
-	}
+        if (null == requestHeaderMap) {
+            requestHeaderMap =
+                new RequestHeaderMap((HttpServletRequest) request);
+        }
         return requestHeaderMap;
     }
 
+
     public Map getRequestHeaderValuesMap() {
-	if (null == requestHeaderValuesMap) {
-	    requestHeaderValuesMap =
-            new RequestHeaderValuesMap((HttpServletRequest) request);
-	}
+        if (null == requestHeaderValuesMap) {
+            requestHeaderValuesMap =
+                new RequestHeaderValuesMap((HttpServletRequest) request);
+        }
         return requestHeaderValuesMap;
     }
 
+
     public Map getRequestCookieMap() {
-	if (null == cookieMap) {
-	    cookieMap = new RequestCookieMap((HttpServletRequest) request);
-	}
+        if (null == cookieMap) {
+            cookieMap = new RequestCookieMap((HttpServletRequest) request);
+        }
         return cookieMap;
     }
 
+
     public Map getInitParameterMap() {
-	if (null == initParameterMap) {
-	    initParameterMap = new InitParameterMap(servletContext);
-	}
+        if (null == initParameterMap) {
+            initParameterMap = new InitParameterMap(servletContext);
+        }
         return initParameterMap;
     }
 
 
     public Map getRequestParameterMap() {
-	    if (null == requestParameterMap) {
-	        requestParameterMap = new RequestParameterMap(request);
-	    }
+        if (null == requestParameterMap) {
+            requestParameterMap = new RequestParameterMap(request);
+        }
         return requestParameterMap;
     }
 
+
     public Map getRequestParameterValuesMap() {
-	if (null == requestParameterValuesMap) {
-	    requestParameterValuesMap = new RequestParameterValuesMap(request);
-	}
+        if (null == requestParameterValuesMap) {
+            requestParameterValuesMap = new RequestParameterValuesMap(request);
+        }
         return requestParameterValuesMap;
     }
 
+
     public Iterator getRequestParameterNames() {
-        final Enumeration  namEnum = request.getParameterNames();
+        final Enumeration namEnum = request.getParameterNames();
 
-	Iterator result = new Iterator() {
-		public boolean hasNext() {
-		    return namEnum.hasMoreElements();
-		}
-		public Object next() {
-		    return namEnum.nextElement();
-		}
-		public void remove() {
-		    throw new UnsupportedOperationException();
-		}
-	    };
+        Iterator result = new Iterator() {
+            public boolean hasNext() {
+                return namEnum.hasMoreElements();
+            }
 
-     	return result;
+
+            public Object next() {
+                return namEnum.nextElement();
+            }
+
+
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+
+        return result;
     }
+
 
     public Locale getRequestLocale() {
         return request.getLocale();
@@ -217,13 +235,16 @@ public class ExternalContextImpl extends ExternalContext {
         return (((HttpServletRequest) request).getPathInfo());
     }
 
+
     public Cookie[] getRequestCookies() {
-     	return (((HttpServletRequest) request).getCookies());
+        return (((HttpServletRequest) request).getCookies());
     }
+
 
     public String getRequestContextPath() {
         return (((HttpServletRequest) request).getContextPath());
     }
+
 
     public String getRequestServletPath() {
         return (((HttpServletRequest) request).getServletPath());
@@ -238,13 +259,16 @@ public class ExternalContextImpl extends ExternalContext {
         return servletContext.getInitParameter(name);
     }
 
+
     public Set getResourcePaths(String path) {
         return servletContext.getResourcePaths(path);
     }
 
+
     public InputStream getResourceAsStream(String path) {
         return servletContext.getResourceAsStream(path);
     }
+
 
     public URL getResource(String path) {
         URL url = null;
@@ -265,7 +289,7 @@ public class ExternalContextImpl extends ExternalContext {
      * @param sb The input URL to be reformatted
      */
     public String encodeActionURL(String sb) {
-     	return ((HttpServletResponse) response).encodeURL(sb);
+        return ((HttpServletResponse) response).encodeURL(sb);
     }
 
 
@@ -281,16 +305,19 @@ public class ExternalContextImpl extends ExternalContext {
         return ((HttpServletResponse) response).encodeURL(sb);
     }
 
+
     public String encodeNamespace(String aValue) {
         return aValue; // Do nothing for servlets
     }
+
 
     public String encodeURL(String url) {
         return ((HttpServletResponse) response).encodeURL(url);
     };
 
     public void dispatch(String requestURI) throws IOException, FacesException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(requestURI);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(
+            requestURI);
         try {
             requestDispatcher.forward(this.request, this.response);
         } catch (IOException ioe) {
@@ -301,10 +328,12 @@ public class ExternalContextImpl extends ExternalContext {
         }
     }
 
+
     public void redirect(String requestURI) throws IOException {
-	((HttpServletResponse) response).sendRedirect(requestURI);
-	FacesContext.getCurrentInstance().responseComplete();
+        ((HttpServletResponse) response).sendRedirect(requestURI);
+        FacesContext.getCurrentInstance().responseComplete();
     }
+
 
     public void log(String message) {
         servletContext.log(message);
@@ -315,33 +344,50 @@ public class ExternalContextImpl extends ExternalContext {
         servletContext.log(message, throwable);
     }
 
+
     public String getAuthType() {
-	return ((HttpServletRequest)request).getAuthType();
+        return ((HttpServletRequest) request).getAuthType();
     }
+
 
     public String getRemoteUser() {
-	return ((HttpServletRequest)request).getRemoteUser();
+        return ((HttpServletRequest) request).getRemoteUser();
     }
+
 
     public java.security.Principal getUserPrincipal() {
-	return ((HttpServletRequest)request).getUserPrincipal();
+        return ((HttpServletRequest) request).getUserPrincipal();
     }
 
+
     public boolean isUserInRole(String role) {
-	return ((HttpServletRequest)request).isUserInRole(role);
+        return ((HttpServletRequest) request).isUserInRole(role);
     }
 
 
     private class LocalesIterator implements Iterator {
 
-	public LocalesIterator(Enumeration locales) {
-	    this.locales = locales;
-	}
-	private Enumeration locales;
+        public LocalesIterator(Enumeration locales) {
+            this.locales = locales;
+        }
 
-	public boolean hasNext() { return locales.hasMoreElements(); }
-	public Object next() { return locales.nextElement(); }
-	public void remove() { throw new UnsupportedOperationException(); }
+
+        private Enumeration locales;
+
+
+        public boolean hasNext() {
+            return locales.hasMoreElements();
+        }
+
+
+        public Object next() {
+            return locales.nextElement();
+        }
+
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
 
     }
 
@@ -355,43 +401,53 @@ abstract class BaseContextMap extends AbstractMap {
         throw new UnsupportedOperationException();
     }
 
+
     // Unsupported by all Maps.
     public void putAll(Map t) {
         throw new UnsupportedOperationException();
     }
+
 
     // Supported by maps if overridden
     public Object remove(Object key) {
         throw new UnsupportedOperationException();
     }
 
+
     static class Entry implements Map.Entry {
+
         // immutable Entry
         private final Object key;
         private final Object value;
+
 
         Entry(Object key, Object value) {
             this.key = key;
             this.value = value;
         }
 
+
         public Object getKey() {
             return key;
         }
 
+
         public Object getValue() {
             return value;
         }
+
 
         // No support of setting the value
         public Object setValue(Object value) {
             throw new UnsupportedOperationException();
         }
 
+
         public int hashCode() {
             return ((key == null ? 0 : key.hashCode()) ^
                 (value == null ? 0 : value.hashCode()));
         }
+
 
         public boolean equals(Object obj) {
             if (obj == null || !(obj instanceof Map.Entry))
@@ -414,11 +470,14 @@ abstract class BaseContextMap extends AbstractMap {
 }
 
 class ApplicationMap extends BaseContextMap {
+
     private ServletContext servletContext = null;
+
 
     ApplicationMap(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
+
 
     public Object get(Object key) {
         if (key == null) {
@@ -426,6 +485,7 @@ class ApplicationMap extends BaseContextMap {
         }
         return servletContext.getAttribute(key.toString());
     }
+
 
     public Object put(Object key, Object value) {
         if (key == null) {
@@ -437,6 +497,7 @@ class ApplicationMap extends BaseContextMap {
         return (result);
     }
 
+
     public Object remove(Object key) {
         if (key == null) {
             return null;
@@ -447,15 +508,17 @@ class ApplicationMap extends BaseContextMap {
         return (result);
     }
 
+
     public Set entrySet() {
         Set entries = new HashSet();
         for (Enumeration e = servletContext.getAttributeNames();
-           e.hasMoreElements(); ) {
+             e.hasMoreElements();) {
             String key = (String) e.nextElement();
             entries.add(new Entry(key, servletContext.getAttribute(key)));
         }
         return entries;
     }
+
 
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof ApplicationMap))
@@ -466,11 +529,14 @@ class ApplicationMap extends BaseContextMap {
 } // END ApplicationMap
 
 class SessionMap extends BaseContextMap {
+
     private HttpServletRequest request = null;
+
 
     SessionMap(HttpServletRequest request) {
         this.request = request;
     }
+
 
     public Object get(Object key) {
         if (key == null) {
@@ -478,6 +544,7 @@ class SessionMap extends BaseContextMap {
         }
         return getSession().getAttribute(key.toString());
     }
+
 
     public Object put(Object key, Object value) {
         if (key == null) {
@@ -490,6 +557,7 @@ class SessionMap extends BaseContextMap {
         return (result);
     }
 
+
     public Object remove(Object key) {
         if (key == null) {
             return null;
@@ -501,22 +569,25 @@ class SessionMap extends BaseContextMap {
         return (result);
     }
 
+
     public Set entrySet() {
         Set entries = new HashSet();
         HttpSession session = getSession();
         for (Enumeration e = session.getAttributeNames();
-             e.hasMoreElements(); ) {
+             e.hasMoreElements();) {
             String key = (String) e.nextElement();
             entries.add(new Entry(key, session.getAttribute(key)));
         }
         return entries;
     }
 
+
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof SessionMap))
             return false;
         return super.equals(obj);
     }
+
 
     private HttpSession getSession() {
         return request.getSession(true);
@@ -525,11 +596,14 @@ class SessionMap extends BaseContextMap {
 } // END SessionMap
 
 class RequestMap extends BaseContextMap {
+
     private ServletRequest request = null;
+
 
     RequestMap(ServletRequest request) {
         this.request = request;
     }
+
 
     public Object get(Object key) {
         if (key == null) {
@@ -537,6 +611,7 @@ class RequestMap extends BaseContextMap {
         }
         return request.getAttribute(key.toString());
     }
+
 
     public Object put(Object key, Object value) {
         if (key == null) {
@@ -548,6 +623,7 @@ class RequestMap extends BaseContextMap {
         return (result);
     }
 
+
     public Object remove(Object key) {
         if (key == null) {
             return null;
@@ -557,6 +633,7 @@ class RequestMap extends BaseContextMap {
         request.removeAttribute(keyString);
         return (result);
     }
+
 
     public Set entrySet() {
         Set entries = new HashSet();
@@ -568,6 +645,7 @@ class RequestMap extends BaseContextMap {
         return entries;
     }
 
+
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof RequestMap))
             return false;
@@ -576,11 +654,14 @@ class RequestMap extends BaseContextMap {
 } // END RequestMap
 
 class RequestParameterMap extends BaseContextMap {
+
     private ServletRequest request = null;
+
 
     RequestParameterMap(ServletRequest request) {
         this.request = request;
     }
+
 
     public Object get(Object key) {
         if (key == null) {
@@ -592,15 +673,17 @@ class RequestParameterMap extends BaseContextMap {
         return request.getParameter(key.toString());
     }
 
+
     public Set entrySet() {
         Set entries = new HashSet();
         for (Enumeration e = request.getParameterNames();
-           e.hasMoreElements(); ) {
+             e.hasMoreElements();) {
             String paramName = (String) e.nextElement();
             entries.add(new Entry(paramName, request.getParameter(paramName)));
         }
         return entries;
     }
+
 
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof RequestParameterMap))
@@ -610,21 +693,25 @@ class RequestParameterMap extends BaseContextMap {
 } // END RequestParameterMap
 
 class RequestParameterValuesMap extends BaseContextMap {
+
     private ServletRequest request = null;
+
 
     RequestParameterValuesMap(ServletRequest request) {
         this.request = request;
     }
 
+
     public Object get(Object key) {
         if (key == null) {
             throw new NullPointerException();
         }
-	if (key == RIConstants.IMMUTABLE_MARKER) {
-	    return RIConstants.IMMUTABLE_MARKER;
-	}
+        if (key == RIConstants.IMMUTABLE_MARKER) {
+            return RIConstants.IMMUTABLE_MARKER;
+        }
         return request.getParameterValues(key.toString());
     }
+
 
     public Set entrySet() {
         Set entries = new HashSet();
@@ -637,6 +724,7 @@ class RequestParameterValuesMap extends BaseContextMap {
         return entries;
     }
 
+
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof RequestParameterValuesMap))
             return false;
@@ -645,21 +733,25 @@ class RequestParameterValuesMap extends BaseContextMap {
 } // END RequestParameterValuesMap
 
 class RequestHeaderMap extends BaseContextMap {
+
     private HttpServletRequest request = null;
+
 
     RequestHeaderMap(HttpServletRequest request) {
         this.request = request;
     }
 
+
     public Object get(Object key) {
         if (key == null) {
             throw new NullPointerException();
         }
-	if (key == RIConstants.IMMUTABLE_MARKER) {
-	    return RIConstants.IMMUTABLE_MARKER;
-	}
+        if (key == RIConstants.IMMUTABLE_MARKER) {
+            return RIConstants.IMMUTABLE_MARKER;
+        }
         return (request.getHeader(key.toString()));
     }
+
 
     public Set entrySet() {
         Set entries = new HashSet();
@@ -671,6 +763,7 @@ class RequestHeaderMap extends BaseContextMap {
         return entries;
     }
 
+
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof RequestHeaderMap))
             return false;
@@ -679,11 +772,14 @@ class RequestHeaderMap extends BaseContextMap {
 } // END RequestHeaderMap
 
 class RequestHeaderValuesMap extends BaseContextMap {
+
     private HttpServletRequest request = null;
+
 
     RequestHeaderValuesMap(HttpServletRequest request) {
         this.request = request;
     }
+
 
     public Object get(Object key) {
         if (key == null) {
@@ -695,6 +791,7 @@ class RequestHeaderValuesMap extends BaseContextMap {
         return (request).getHeaders(key.toString());
     }
 
+
     public Set entrySet() {
         Set entries = new HashSet();
         for (Enumeration e = request.getHeaderNames();
@@ -705,11 +802,13 @@ class RequestHeaderValuesMap extends BaseContextMap {
         return entries;
     }
 
+
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof RequestHeaderValuesMap))
             return false;
         return super.equals(obj);
     }
+
 
     // Override of containsValue was necessary as Enumeration.equals(Enumeration)
     // returned false.
@@ -732,7 +831,7 @@ class RequestHeaderValuesMap extends BaseContextMap {
         // the hash for each value and compare against the
         // sum computed above.  Ensure that the number of elements
         // in each enumeration is the same as well.
-        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
+        for (Iterator i = entrySet().iterator(); i.hasNext();) {
             int thisHash = 0;
             int thisCount = 0;
             Map.Entry entry = (Map.Entry) i.next();
@@ -748,6 +847,7 @@ class RequestHeaderValuesMap extends BaseContextMap {
         return false;
     }
 
+
     // necessary to break the rules somewhat here as it couldn't be
     // guaranteed that the hashCode of the Enumeration would
     // be the same from call to call even if the underlying values contained
@@ -758,7 +858,7 @@ class RequestHeaderValuesMap extends BaseContextMap {
             Map.Entry entry = (Map.Entry) i.next();
             hashSum += entry.getKey().hashCode();
             for (Enumeration e = (Enumeration) entry.getValue();
-               e.hasMoreElements();) {
+                 e.hasMoreElements();) {
                 hashSum += e.nextElement().hashCode();
             }
         }
@@ -767,11 +867,14 @@ class RequestHeaderValuesMap extends BaseContextMap {
 } // END RequestHeaderValuesMap
 
 class RequestCookieMap extends BaseContextMap {
+
     private HttpServletRequest request = null;
+
 
     RequestCookieMap(HttpServletRequest newRequest) {
         this.request = newRequest;
     }
+
 
     public Object get(Object key) {
         if (key == null) {
@@ -799,6 +902,7 @@ class RequestCookieMap extends BaseContextMap {
         return result;
     }
 
+
     public Set entrySet() {
         Set entries = new HashSet();
         Cookie[] cookies = request.getCookies();
@@ -811,6 +915,7 @@ class RequestCookieMap extends BaseContextMap {
         return entries;
     }
 
+
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof RequestCookieMap))
             return false;
@@ -819,11 +924,14 @@ class RequestCookieMap extends BaseContextMap {
 } // END RequestCookiesMap
 
 class InitParameterMap extends BaseContextMap {
+
     private ServletContext servletContext;
 
+
     InitParameterMap(ServletContext newServletContext) {
-	    servletContext = newServletContext;
+        servletContext = newServletContext;
     }
+
 
     public Object get(Object key) {
         if (key == null) {
@@ -836,17 +944,20 @@ class InitParameterMap extends BaseContextMap {
         return servletContext.getInitParameter(keyString);
     }
 
+
     public Set entrySet() {
         Set entries = new HashSet();
 
         for (Enumeration e = servletContext.getInitParameterNames();
-             e.hasMoreElements(); ) {
+             e.hasMoreElements();) {
             String initParamName = (String) e.nextElement();
             entries.add(new Entry(initParamName,
-                servletContext.getInitParameter(initParamName)));
+                                  servletContext.getInitParameter(
+                                      initParamName)));
         }
         return entries;
     }
+
 
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof InitParameterMap))
@@ -861,6 +972,7 @@ class MyServletRequestWrapper extends ServletRequestWrapper {
     public MyServletRequestWrapper(ServletRequest request) {
         super(request);
     }
+
 
     public Object getAttribute(String key) {
         Object result = super.getAttribute(key);
@@ -885,6 +997,7 @@ class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
     public MyHttpServletRequestWrapper(HttpServletRequest request) {
         super(request);
     }
+
 
     public Object getAttribute(String key) {
         Object result = super.getAttribute(key);

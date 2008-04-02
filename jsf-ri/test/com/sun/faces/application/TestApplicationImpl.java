@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.16 2004/02/04 23:44:04 ofung Exp $
+ * $Id: TestApplicationImpl.java,v 1.17 2004/02/06 18:56:29 rlubke Exp $
  */
 
 /*
@@ -11,41 +11,39 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.TestComponent;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
-import javax.faces.el.VariableResolver;
 import javax.faces.el.ValueBinding;
-import javax.faces.event.ActionListener;
-import javax.faces.event.PhaseId;
+import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionEvent;
-import javax.faces.FactoryFinder;
-import javax.faces.FacesException;
-
-import com.sun.faces.JspFacesTestCase;
-import com.sun.faces.TestComponent;
+import javax.faces.event.ActionListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- *  <B>TestApplicationImpl</B> is a class ...
- *
+ * <B>TestApplicationImpl</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.16 2004/02/04 23:44:04 ofung Exp $ 
+ * @version $Id: TestApplicationImpl.java,v 1.17 2004/02/06 18:56:29 rlubke Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
+
 //
 // Protected Constants
 //
@@ -69,8 +67,14 @@ public class TestApplicationImpl extends JspFacesTestCase {
 // Constructors and Initializers    
 //
 
-    public TestApplicationImpl() {super("TestApplicationImpl");}
-    public TestApplicationImpl(String name) {super(name);}
+    public TestApplicationImpl() {
+        super("TestApplicationImpl");
+    }
+
+
+    public TestApplicationImpl(String name) {
+        super(name);
+    }
 //
 // Class methods
 //
@@ -80,12 +84,13 @@ public class TestApplicationImpl extends JspFacesTestCase {
 //
 
     public void setUp() {
-	super.setUp();
-        ApplicationFactory aFactory = 
-	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        super.setUp();
+        ApplicationFactory aFactory =
+            (ApplicationFactory) FactoryFinder.getFactory(
+                FactoryFinder.APPLICATION_FACTORY);
         application = (ApplicationImpl) aFactory.getApplication();
     }
-	
+
 
     public void testAccessors() {
 
@@ -96,7 +101,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         application.setActionListener(actionListener1);
         ActionListener actionListener2 = application.getActionListener();
         ActionListener actionListener3 = application.getActionListener();
-        assertTrue((actionListener1 == actionListener2) && 
+        assertTrue((actionListener1 == actionListener2) &&
                    (actionListener1 == actionListener3));
 
         // 2. Verify "getNavigationHandler" returns the same NavigationHandler
@@ -106,7 +111,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         application.setNavigationHandler(navigationHandler1);
         NavigationHandler navigationHandler2 = application.getNavigationHandler();
         NavigationHandler navigationHandler3 = application.getNavigationHandler();
-        assertTrue((navigationHandler1 == navigationHandler2) && 
+        assertTrue((navigationHandler1 == navigationHandler2) &&
                    (navigationHandler1 == navigationHandler3));
 
         // 3. Verify "getPropertyResolver" returns the same PropertyResolver
@@ -116,7 +121,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         application.setPropertyResolver(propertyResolver1);
         PropertyResolver propertyResolver2 = application.getPropertyResolver();
         PropertyResolver propertyResolver3 = application.getPropertyResolver();
-        assertTrue((propertyResolver1 == propertyResolver2) && 
+        assertTrue((propertyResolver1 == propertyResolver2) &&
                    (propertyResolver1 == propertyResolver3));
 
         // 4. Verify "getVariableResolver" returns the same VariableResolver
@@ -126,7 +131,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         application.setVariableResolver(variableResolver1);
         VariableResolver variableResolver2 = application.getVariableResolver();
         VariableResolver variableResolver3 = application.getVariableResolver();
-        assertTrue((variableResolver1 == variableResolver2) && 
+        assertTrue((variableResolver1 == variableResolver2) &&
                    (variableResolver1 == variableResolver3));
 
         // 5. Verify "getStateManager" returns the same StateManager
@@ -136,9 +141,10 @@ public class TestApplicationImpl extends JspFacesTestCase {
         application.setStateManager(stateManager1);
         StateManager stateManager2 = application.getStateManager();
         StateManager stateManager3 = application.getStateManager();
-        assertTrue((stateManager1 == stateManager2) && 
+        assertTrue((stateManager1 == stateManager2) &&
                    (stateManager1 == stateManager3));
     }
+
 
     public void testExceptions() {
         boolean thrown;
@@ -216,7 +222,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
             thrown = true;
         }
         assertTrue(thrown);
-        
+
         thrown = false;
         try {
             application.createValueBinding("improper expression");
@@ -224,7 +230,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
             thrown = true;
         }
         assertTrue(thrown);
-        
+
         thrown = false;
         try {
             application.createValueBinding("improper\texpression");
@@ -232,7 +238,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
             thrown = true;
         }
         assertTrue(thrown);
-        
+
         thrown = false;
         try {
             application.createValueBinding("improper\rexpression");
@@ -240,7 +246,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
             thrown = true;
         }
         assertTrue(thrown);
-        
+
         thrown = false;
         try {
             application.createValueBinding("improper\nexpression");
@@ -296,30 +302,30 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(!thrown); 
-        
+        assertTrue(!thrown);
+
         try {
             application.createValueBinding("#{proper[\"a { } key\"]}");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
         assertTrue(!thrown);
-        
+
         try {
             application.createValueBinding("bean.a{indentifer");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
         assertTrue(thrown);
-        
+
         thrown = false;
         try {
-            application.createValueBinding("bean['invalid'");            
+            application.createValueBinding("bean['invalid'");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
         assertTrue(thrown);
-        
+
         thrown = false;
         try {
             application.createValueBinding("bean[[\"invalid\"]].foo");
@@ -327,7 +333,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
             thrown = true;
         }
         assertTrue(thrown);
-        
+
         thrown = false;
         try {
             application.createValueBinding("#{bean[\"[a\"]}");
@@ -335,26 +341,27 @@ public class TestApplicationImpl extends JspFacesTestCase {
             thrown = true;
         }
         assertTrue(!thrown);
-        
+
         try {
             application.createValueBinding("#{bean[\".a\"]}");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
         }
-        assertTrue(!thrown);             
+        assertTrue(!thrown);
     }
 
-            
 
     public class InvalidActionListener implements ActionListener {
+
         public void processAction(ActionEvent event) {
-	    System.setProperty(HANDLED_ACTIONEVENT1, HANDLED_ACTIONEVENT1);
+            System.setProperty(HANDLED_ACTIONEVENT1, HANDLED_ACTIONEVENT1);
         }
     }
 
     public class ValidActionListener implements ActionListener {
+
         public void processAction(ActionEvent event) {
-	    System.setProperty(HANDLED_ACTIONEVENT2, HANDLED_ACTIONEVENT2);
+            System.setProperty(HANDLED_ACTIONEVENT2, HANDLED_ACTIONEVENT2);
         }
     }
 
@@ -363,46 +370,51 @@ public class TestApplicationImpl extends JspFacesTestCase {
     //
 
     public void testAddComponentPositive() {
-	TestComponent 
-	    newTestComponent = null,
-	    testComponent = new TestComponent();
-	
-	
-	application.addComponent(testComponent.getComponentType(),
-				 "com.sun.faces.TestComponent");
-	assertTrue(null != (newTestComponent = (TestComponent)
-			    application.createComponent(testComponent.getComponentType())));
-	assertTrue(newTestComponent != testComponent);
-	
+        TestComponent
+            newTestComponent = null,
+            testComponent = new TestComponent();
+
+
+        application.addComponent(testComponent.getComponentType(),
+                                 "com.sun.faces.TestComponent");
+        assertTrue(
+            null !=
+            (newTestComponent =
+             (TestComponent)
+            application.createComponent(testComponent.getComponentType())));
+        assertTrue(newTestComponent != testComponent);
+
     }
+
 
     public void testGetComponentWithRefNegative() {
-	ValueBinding valueBinding = null;
-	boolean exceptionThrown = false;
-	UIComponent result = null;
-	getFacesContext().getExternalContext().getSessionMap().put("TAIBean",
-								   this);
-	assertTrue(null != (valueBinding = 
-		    application.createValueBinding("#{sessionScope.TAIBean}")));
+        ValueBinding valueBinding = null;
+        boolean exceptionThrown = false;
+        UIComponent result = null;
+        getFacesContext().getExternalContext().getSessionMap().put("TAIBean",
+                                                                   this);
+        assertTrue(null != (valueBinding =
+                            application.createValueBinding(
+                                "#{sessionScope.TAIBean}")));
 
-	try {
-	    result = application.createComponent(valueBinding, getFacesContext(),
-					      "notreached");
-	    assertTrue(false);
-	}
-	catch (FacesException e) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
+        try {
+            result = application.createComponent(valueBinding, getFacesContext(),
+                                                 "notreached");
+            assertTrue(false);
+        } catch (FacesException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
     }
-    
-    public void testSetViewHandlerException() throws Exception {       
+
+
+    public void testSetViewHandlerException() throws Exception {
         ViewHandler handler = new ViewHandlerImpl();
         UIViewRoot root = new UIViewRoot();
         root.setViewId("/view");
         root.setId("id");
         getFacesContext().setViewRoot(root);
-                       
+
         boolean exceptionThrown = false;
         try {
             application.setViewHandler(handler);
@@ -414,10 +426,10 @@ public class TestApplicationImpl extends JspFacesTestCase {
         mappings.add("/faces");
         ((ViewHandlerImpl) handler).setFacesMapping(mappings);
         try {
-            handler.renderView(getFacesContext(), 
-			       getFacesContext().getViewRoot());
+            handler.renderView(getFacesContext(),
+                               getFacesContext().getViewRoot());
             application.setViewHandler(handler);
-        } catch (IllegalStateException ise)  {
+        } catch (IllegalStateException ise) {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
@@ -426,11 +438,11 @@ public class TestApplicationImpl extends JspFacesTestCase {
         exceptionThrown = false;
         try {
             application.setStateManager(new StateManagerImpl());
-        } catch (IllegalStateException ise)  {
+        } catch (IllegalStateException ise) {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
     }
-	
+
 
 } // end of class TestApplicationImpl

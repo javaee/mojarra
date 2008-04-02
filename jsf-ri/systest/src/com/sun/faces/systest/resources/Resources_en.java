@@ -6,24 +6,25 @@
 /*
  * %W% %G%
  */
- 
+
 package com.sun.faces.systest.resources;
 
 import java.util.ListResourceBundle;
 
 public class Resources_en extends ListResourceBundle {
-    
+
     public Resources_en() {
     }
+
 
     /**
      * See class description.
      */
     protected Object[][] getContents() {
-        return new Object[][] {
-            { "button_key", "RES-BUNDLE KEY" },
-            { "image_key", "resbundle_image.gif" },
-            { "hyperlink_key", "RES-BUNDLE LINK" }
+        return new Object[][]{
+            {"button_key", "RES-BUNDLE KEY"},
+            {"image_key", "resbundle_image.gif"},
+            {"hyperlink_key", "RES-BUNDLE LINK"}
         };
     }
 }

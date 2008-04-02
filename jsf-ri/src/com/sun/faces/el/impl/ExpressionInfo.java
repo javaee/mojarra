@@ -10,8 +10,8 @@
 package com.sun.faces.el.impl;
 
 import javax.faces.context.FacesContext;
-import javax.faces.el.VariableResolver;
 import javax.faces.el.PropertyResolver;
+import javax.faces.el.VariableResolver;
 
 public class ExpressionInfo {
 
@@ -22,61 +22,76 @@ public class ExpressionInfo {
     private String expressionString;
     private Class expectedType;
 
+
     /**
      * Returns the {@see FacesContext}.
+     *
      * @return the FacesContext
-     */ 
+     */
     public FacesContext getFacesContext() {
         return facesContext;
     }
 
+
     /**
      * Sets the {@see FacesContext}.
+     *
      * @param facesContext FacesContext
-     */ 
+     */
     public void setFacesContext(FacesContext facesContext) {
         this.facesContext = facesContext;
     }
 
+
     /**
      * TODO
+     *
      * @return
      */
     public FunctionMapper getFunctionMapper() {
         return functionMapper;
     }
 
+
     /**
      * TODO
+     *
      * @param functionMapper
      */
     public void setFunctionMapper(FunctionMapper functionMapper) {
         this.functionMapper = functionMapper;
     }
 
+
     /**
      * TODO
+     *
      * @return
      */
     public VariableResolver getVariableResolver() {
         return variableResolver;
     }
 
+
     /**
      * TODO
+     *
      * @param variableResolver
      */
     public void setVariableResolver(VariableResolver variableResolver) {
         this.variableResolver = variableResolver;
     }
 
+
     public PropertyResolver getPropertyResolver() {
         return propertyResolver;
     }
 
+
     public void setPropertyResolver(PropertyResolver propertyResolver) {
         this.propertyResolver = propertyResolver;
     }
+
 
     /**
      * Returns the expression string with the "${}" delimiters that
@@ -90,8 +105,10 @@ public class ExpressionInfo {
         return "${" + expressionString + "}";
     }
 
+
     /**
      * TODO
+     *
      * @param expressionString
      */
     public void setExpressionString(String expressionString) {
@@ -109,16 +126,20 @@ public class ExpressionInfo {
         this.expressionString = expressionString;
     }
 
+
     /**
      * TODO
+     *
      * @return
      */
     public Class getExpectedType() {
         return expectedType;
     }
 
+
     /**
      * TODO
+     *
      * @param expectedType
      */
     public void setExpectedType(Class expectedType) {

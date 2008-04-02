@@ -1,5 +1,5 @@
 /*
- * $Id: ServletMappingBean.java,v 1.2 2004/02/04 23:40:53 ofung Exp $
+ * $Id: ServletMappingBean.java,v 1.3 2004/02/06 18:54:21 rlubke Exp $
  */
 
 /*
@@ -20,9 +20,10 @@ public class ServletMappingBean extends Object {
     /**
      * <p>The <code>web-app/servlet-mapping/servlet-name</code>
      * element.</p>
-     */ 
+     */
     private String servletName;
-    
+
+
     public String getServletName() {
         return servletName;
     }
@@ -36,9 +37,10 @@ public class ServletMappingBean extends Object {
     /**
      * <p>The <code>web-app/servlet-mapping/url-pattern</code>
      * element.</p>
-     */ 
+     */
     private String urlPattern;
-    
+
+
     public String getUrlPattern() {
         return urlPattern;
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.10 2004/02/04 23:40:57 ofung Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.11 2004/02/06 18:54:23 rlubke Exp $
  */
 
 /*
@@ -9,6 +9,9 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
+
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
@@ -17,14 +20,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+public class FacesContextFactoryImpl extends FacesContextFactory {
 
-
-import com.sun.faces.util.Util;
-import com.sun.faces.RIConstants;
-
-public class FacesContextFactoryImpl extends FacesContextFactory
-{
-    
     //
     // Protected Constants
     //
@@ -45,8 +42,7 @@ public class FacesContextFactoryImpl extends FacesContextFactory
     // Constructors and Initializers    
     //
 
-    public FacesContextFactoryImpl()
-    {
+    public FacesContextFactoryImpl() {
         super();
     }
 
@@ -62,9 +58,9 @@ public class FacesContextFactoryImpl extends FacesContextFactory
     // Methods from FacesContextFactory
     //
     public synchronized FacesContext getFacesContext(Object sc,
-						     Object request,
-						     Object response,
-						     Lifecycle lifecycle)
+                                                     Object request,
+                                                     Object response,
+                                                     Lifecycle lifecycle)
         throws FacesException {
 
         try {
@@ -72,21 +68,24 @@ public class FacesContextFactoryImpl extends FacesContextFactory
             Util.parameterNonNull(request);
             Util.parameterNonNull(response);
             Util.parameterNonNull(lifecycle);
-        } catch (Exception e ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
-        }    
+        } catch (Exception e) {
+            throw new NullPointerException(
+                Util.getExceptionMessage(
+                    Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
+        }
 
-	ServletContext ctx = (ServletContext) sc;
+        ServletContext ctx = (ServletContext) sc;
 
-	// if this is the very first FacesContext instance we're being
-	// asked to create.
-	if (null == 
-	    ctx.getAttribute(RIConstants.ONE_TIME_INITIALIZATION_ATTR)) {
-	    // initialize our Factories
-	    Util.verifyFactoriesAndInitDefaultRenderKit(ctx);
-	}
-        return (new FacesContextImpl(new ExternalContextImpl((ServletContext)sc, 
-            (ServletRequest)request, (ServletResponse)response), lifecycle));
+        // if this is the very first FacesContext instance we're being
+        // asked to create.
+        if (null ==
+            ctx.getAttribute(RIConstants.ONE_TIME_INITIALIZATION_ATTR)) {
+            // initialize our Factories
+            Util.verifyFactoriesAndInitDefaultRenderKit(ctx);
+        }
+        return (new FacesContextImpl(new ExternalContextImpl(
+            (ServletContext) sc,
+            (ServletRequest) request, (ServletResponse) response), lifecycle));
 
     }
 

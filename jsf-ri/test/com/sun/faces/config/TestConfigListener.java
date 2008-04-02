@@ -1,5 +1,5 @@
 /*
- * $Id: TestConfigListener.java,v 1.3 2004/02/04 23:44:11 ofung Exp $
+ * $Id: TestConfigListener.java,v 1.4 2004/02/06 18:56:35 rlubke Exp $
  */
 
 /*
@@ -10,13 +10,9 @@
 package com.sun.faces.config;
 
 import com.sun.faces.ServletFacesTestCase;
+import org.apache.cactus.ServletTestCase;
 
 import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContext;
-import javax.faces.component.UIComponent;
-
-import org.apache.cactus.ServletTestCase;
-import com.sun.faces.util.Util;
 
 /**
  * <p>Unit tests for Configuration File processing.</p>
@@ -56,8 +52,9 @@ public class TestConfigListener extends ServletFacesTestCase {
     //
     public void testContextInitialized() {
         ConfigListener cl = new ConfigListener();
-	ServletContextEvent e = new ServletContextEvent(getConfig().getServletContext());
-	cl.contextInitialized(e);
-	cl.contextInitialized(e);
+        ServletContextEvent e = new ServletContextEvent(
+            getConfig().getServletContext());
+        cl.contextInitialized(e);
+        cl.contextInitialized(e);
     }
 }

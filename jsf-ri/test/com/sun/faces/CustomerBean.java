@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.4 2004/02/04 23:43:51 ofung Exp $
+ * $Id: CustomerBean.java,v 1.5 2004/02/06 18:56:16 rlubke Exp $
  */
 
 /*
@@ -33,36 +33,52 @@ public class CustomerBean implements java.io.Serializable {
 
 
     private String accountId = null;
+
+
     public String getAccountId() {
         return (this.accountId);
     }
+
+
     public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 
 
     private String name = null;
+
+
     public String getName() {
         return (this.name);
     }
+
+
     public void setName(String name) {
         this.name = name;
     }
 
 
     private String symbol = null;
+
+
     public String getSymbol() {
         return (this.symbol);
     }
+
+
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
 
 
     private double totalSales = 0.0;
+
+
     public double getTotalSales() {
         return (this.totalSales);
     }
+
+
     public void setTotalSales(double totalSales) {
         this.totalSales = totalSales;
     }

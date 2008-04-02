@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.14 2004/02/05 20:52:44 horwat Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.15 2004/02/06 18:56:30 rlubke Exp $ 
  */ 
 
 
@@ -12,7 +12,7 @@
 // TestViewHandlerImpl.java 
 
 
-package com.sun.faces.application; 
+package com.sun.faces.application;
 
 
 import com.sun.faces.JspFacesTestCase;
@@ -39,50 +39,48 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map; 
-import java.util.Enumeration;
-import java.util.Vector;
 import java.util.Locale;
+import java.util.Map;
 
 
-/** 
- * 
- * <B>TestViewHandlerImpl</B> is a class ... 
- * 
- * <B>Lifetime And Scope</B> <P> 
- * 
- * @version $Id: TestViewHandlerImpl.java,v 1.14 2004/02/05 20:52:44 horwat Exp $  
- */ 
+/**
+ * <B>TestViewHandlerImpl</B> is a class ...
+ * <p/>
+ * <B>Lifetime And Scope</B> <P>
+ *
+ * @version $Id: TestViewHandlerImpl.java,v 1.15 2004/02/06 18:56:30 rlubke Exp $
+ */
 
 
-public class TestViewHandlerImpl extends JspFacesTestCase 
-{ 
-// 
+public class TestViewHandlerImpl extends JspFacesTestCase {
+
+//
 // Protected Constants 
-// 
+//
 
 
-public static final String TEST_URI = "/greeting.jsp"; 
-
-public String getExpectedOutputFilename() { 
-    return "TestViewHandlerImpl_correct"; 
-} 
+    public static final String TEST_URI = "/greeting.jsp";
 
 
-public static final String ignore[] = {
-    "    <form id=\"helloForm\" method=\"post\" action=\"/test/greeting.jsf\" enctype=\"application/x-www-form-urlencoded\">",
-    "    <form id=\"helloForm\" method=\"post\" action=\"/test/faces/greeting.jsp\" enctype=\"application/x-www-form-urlencoded\">"
-};
-     
-public String [] getLinesToIgnore() { 
-    return ignore; 
-} 
+    public String getExpectedOutputFilename() {
+        return "TestViewHandlerImpl_correct";
+    }
 
 
-public boolean sendResponseToFile() 
-{ 
-    return true; 
-} 
+    public static final String ignore[] = {
+        "    <form id=\"helloForm\" method=\"post\" action=\"/test/greeting.jsf\" enctype=\"application/x-www-form-urlencoded\">",
+        "    <form id=\"helloForm\" method=\"post\" action=\"/test/faces/greeting.jsp\" enctype=\"application/x-www-form-urlencoded\">"
+    };
+
+
+    public String[] getLinesToIgnore() {
+        return ignore;
+    }
+
+
+    public boolean sendResponseToFile() {
+        return true;
+    }
 
 
 // 
@@ -106,14 +104,14 @@ public boolean sendResponseToFile()
 // 
 
 
-    public TestViewHandlerImpl() { 
-        super("TestViewHandlerImpl"); 
-    } 
+    public TestViewHandlerImpl() {
+        super("TestViewHandlerImpl");
+    }
 
 
-    public TestViewHandlerImpl(String name) { 
-        super(name); 
-    } 
+    public TestViewHandlerImpl(String name) {
+        super(name);
+    }
 
 
     // 
@@ -127,129 +125,142 @@ public boolean sendResponseToFile()
 
 
 
-    public void beginRender(WebRequest theRequest) 
-    { 
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null); 
+    public void beginRender(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
     }
-    
+
+
     public void beginRender2(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+                          null, null);
     }
-    
+
+
     public void beginCalculateLocaleLang(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+                          null, null);
         theRequest.addHeader("Accept-Language", "es-ES,tg-AF,tk-IQ,en-US");
     }
-    
+
+
     public void beginCalculateLocaleExact(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+                          null, null);
         theRequest.addHeader("Accept-Language", "tg-AF,tk-IQ,ps-PS,en-US");
     }
-    
+
+
     public void beginCalculateLocaleLowerCase(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+                          null, null);
         theRequest.addHeader("Accept-Language", "tg-af,tk-iq,ps-ps");
     }
-    
+
+
     public void beginCalculateLocaleNoMatch(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+                          null, null);
         theRequest.addHeader("Accept-Language", "es-ES,tg-AF,tk-IQ");
     }
-    
+
+
     public void beginCalculateLocaleFindDefault(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+                          null, null);
         theRequest.addHeader("Accept-Language", "en,fr");
     }
-    
-    
+
+
     public void testGetActionURL() {
-       
-       LifecycleFactory factory = (LifecycleFactory) 
-           FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-       Lifecycle lifecycle = 
-           factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-       
-       // wrap the request so we can control the return value of getServletPath
-       TestRequest testRequest = new TestRequest(request);       
-       
-       ExternalContext extContext = new ExternalContextImpl(config.getServletContext(),
-                                                         testRequest,
-                                                         response);
-       FacesContext facesContext = new FacesContextImpl(extContext, lifecycle);
-       String contextPath = request.getContextPath();
-       
-       // Spoof the mappings so we can properly test the different possible
-       // values
-       List mappings = new ArrayList();
-       // create the same "massaged" mappings that WebXMLParser creates.
-       mappings.add("/faces");
-       mappings.add(".jsf");
-       mappings.add("/*");
-       ViewHandlerImpl handler = new ViewHandlerImpl();
-       handler.setFacesMapping(mappings);
-       
-       
-       // if getServletPath() returns "" then the viewId path returned should
-       // be the same as what was passed, prefixed by the context path.
-       testRequest.setServletPath("");
-       testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-       String path = handler.getActionURL(facesContext, "/test.jsp");
-       System.out.println("VIEW ID PATH 1: " + path);
-       assertEquals(contextPath + "/test.jsp", path);
-       
-       // if getServletPath() returns a path prefix, then the viewId path
-       // returned must have that path prefixed.
-       testRequest.setServletPath("/faces");
-       testRequest.setPathInfo("/path/test.jsp");
-       testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-       path = handler.getActionURL(facesContext, "/path/test.jsp");
-       System.out.println("VIEW ID PATH 2: " + path);
-       assertEquals(contextPath + "/faces/path/test.jsp", path);
-       
-       
-       // if getServletPath() returns a path indicating extension mapping
-       // and the viewId passed has no extension, append the extension
-       // to the provided viewId
-       testRequest.setServletPath("/path/firstRequest.jsf");
-       testRequest.setPathInfo(null);
-       testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-       path = handler.getActionURL(facesContext, "/path/test");
-       System.out.println("VIEW ID PATH 3: " + path);
-       assertEquals(contextPath + "/path/test.jsf", path);
-       
-       // if getServletPath() returns a path indicating extension mapping
-       // and the viewId passed has an extension, replace the extension with
-       // the extension defined in the deployment descriptor
-       testRequest.setServletPath("/path/firstRequest.jsf");
-       testRequest.setPathInfo(null);
-       testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-       path = handler.getActionURL(facesContext, "/path/t.est.jsp");
-       System.out.println("VIEW ID PATH 4: " + path);
-       assertEquals(contextPath + "/path/t.est.jsf", path);
-       
-       // if path info is null, the impl must check to see if 
-       // there is an exact match on the servlet path, if so, return
-       // the servlet path
-       testRequest.setServletPath("/faces");
-       testRequest.setPathInfo(null);
-       testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-       path = handler.getActionURL(facesContext, "/path/t.est");
-       System.out.println("VIEW ID PATH 5: " + path);
-       assertEquals(contextPath + "/faces/path/t.est", path);
-                     
+
+        LifecycleFactory factory = (LifecycleFactory)
+            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        Lifecycle lifecycle =
+            factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+
+        // wrap the request so we can control the return value of getServletPath
+        TestRequest testRequest = new TestRequest(request);
+
+        ExternalContext extContext = new ExternalContextImpl(
+            config.getServletContext(),
+            testRequest,
+            response);
+        FacesContext facesContext = new FacesContextImpl(extContext, lifecycle);
+        String contextPath = request.getContextPath();
+
+        // Spoof the mappings so we can properly test the different possible
+        // values
+        List mappings = new ArrayList();
+        // create the same "massaged" mappings that WebXMLParser creates.
+        mappings.add("/faces");
+        mappings.add(".jsf");
+        mappings.add("/*");
+        ViewHandlerImpl handler = new ViewHandlerImpl();
+        handler.setFacesMapping(mappings);
+
+
+        // if getServletPath() returns "" then the viewId path returned should
+        // be the same as what was passed, prefixed by the context path.
+        testRequest.setServletPath("");
+        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
+        String path = handler.getActionURL(facesContext, "/test.jsp");
+        System.out.println("VIEW ID PATH 1: " + path);
+        assertEquals(contextPath + "/test.jsp", path);
+
+        // if getServletPath() returns a path prefix, then the viewId path
+        // returned must have that path prefixed.
+        testRequest.setServletPath("/faces");
+        testRequest.setPathInfo("/path/test.jsp");
+        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
+        path = handler.getActionURL(facesContext, "/path/test.jsp");
+        System.out.println("VIEW ID PATH 2: " + path);
+        assertEquals(contextPath + "/faces/path/test.jsp", path);
+
+
+        // if getServletPath() returns a path indicating extension mapping
+        // and the viewId passed has no extension, append the extension
+        // to the provided viewId
+        testRequest.setServletPath("/path/firstRequest.jsf");
+        testRequest.setPathInfo(null);
+        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
+        path = handler.getActionURL(facesContext, "/path/test");
+        System.out.println("VIEW ID PATH 3: " + path);
+        assertEquals(contextPath + "/path/test.jsf", path);
+
+        // if getServletPath() returns a path indicating extension mapping
+        // and the viewId passed has an extension, replace the extension with
+        // the extension defined in the deployment descriptor
+        testRequest.setServletPath("/path/firstRequest.jsf");
+        testRequest.setPathInfo(null);
+        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
+        path = handler.getActionURL(facesContext, "/path/t.est.jsp");
+        System.out.println("VIEW ID PATH 4: " + path);
+        assertEquals(contextPath + "/path/t.est.jsf", path);
+
+        // if path info is null, the impl must check to see if
+        // there is an exact match on the servlet path, if so, return
+        // the servlet path
+        testRequest.setServletPath("/faces");
+        testRequest.setPathInfo(null);
+        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
+        path = handler.getActionURL(facesContext, "/path/t.est");
+        System.out.println("VIEW ID PATH 5: " + path);
+        assertEquals(contextPath + "/faces/path/t.est", path);
+
     }
-    
+
+
     public void testGetActionURLExceptions() throws Exception {
         boolean exceptionThrown = false;
-        ViewHandler handler = 
+        ViewHandler handler =
             getFacesContext().getApplication().getViewHandler();
         try {
-            handler.getActionURL(null, "/test.jsp");            
+            handler.getActionURL(null, "/test.jsp");
         } catch (NullPointerException npe) {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
-        
+
         exceptionThrown = false;
         try {
             handler.getActionURL(getFacesContext(), null);
@@ -257,23 +268,23 @@ public boolean sendResponseToFile()
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
-        
-        exceptionThrown = false;        
+
+        exceptionThrown = false;
         try {
-            handler.getActionURL(getFacesContext(), "test.jsp");            
+            handler.getActionURL(getFacesContext(), "test.jsp");
         } catch (IllegalArgumentException iae) {
             exceptionThrown = true;
         }
-        assertTrue(exceptionThrown);                
+        assertTrue(exceptionThrown);
     }
 
 
     public void testGetResourceURL() throws Exception {
 
-       LifecycleFactory factory = (LifecycleFactory) 
-           FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-       Lifecycle lifecycle = 
-           factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+        LifecycleFactory factory = (LifecycleFactory)
+            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        Lifecycle lifecycle =
+            factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
         ExternalContext extContext =
             new ExternalContextImpl(config.getServletContext(),
                                     request, response);
@@ -291,38 +302,37 @@ public boolean sendResponseToFile()
     }
 
 
-    
-    public void testRender() 
-    {     
+    public void testRender() {
         UIViewRoot newView = new UIViewRoot();
         newView.setViewId(TEST_URI);
         getFacesContext().setViewRoot(newView);
 
-        try { 
-            ViewHandler viewHandler = 
-                getFacesContext().getApplication().getViewHandler(); 
-            viewHandler.renderView(getFacesContext(), 
-                                   getFacesContext().getViewRoot()); 
-        } catch (IOException e) { 
-            System.out.println("ViewHandler IOException:"+e); 
-        } catch (FacesException fe) { 
-            System.out.println("ViewHandler FacesException: "+fe); 
+        try {
+            ViewHandler viewHandler =
+                getFacesContext().getApplication().getViewHandler();
+            viewHandler.renderView(getFacesContext(),
+                                   getFacesContext().getViewRoot());
+        } catch (IOException e) {
+            System.out.println("ViewHandler IOException:" + e);
+        } catch (FacesException fe) {
+            System.out.println("ViewHandler FacesException: " + fe);
         }
 
         assertTrue(!(getFacesContext().getRenderResponse()) &&
-            !(getFacesContext().getResponseComplete()));
+                   !(getFacesContext().getResponseComplete()));
 
-        assertTrue(verifyExpectedOutput());        
-    } 
-    
+        assertTrue(verifyExpectedOutput());
+    }
+
+
     public void testRender2() {
         // Change the viewID to end with .jsf and make sure that
         // the implementation changes .jsf to .jsp and properly dispatches
         // the message.
         UIViewRoot newView = new UIViewRoot();
         newView.setViewId(TEST_URI);
-        getFacesContext().setViewRoot(newView); 
-        
+        getFacesContext().setViewRoot(newView);
+
         newView.setViewId("/faces/greeting.jsf");
         getFacesContext().setViewRoot(newView);
         try {
@@ -335,27 +345,30 @@ public boolean sendResponseToFile()
         } catch (FacesException fe) {
             System.out.println("ViewHandler FacesException: " + fe);
         }
-        
+
         assertTrue(!(getFacesContext().getRenderResponse()) &&
                    !(getFacesContext().getResponseComplete()));
 
-        assertTrue(verifyExpectedOutput()); 
-    } 
-    
+        assertTrue(verifyExpectedOutput());
+    }
+
+
     public void testCalculateLocaleLang() {
         System.out.println("Testing calculateLocale - Language Match case");
         ViewHandler handler = new ViewHandlerImpl();
         Locale locale = handler.calculateLocale(getFacesContext());
         assertTrue(locale.equals(Locale.ENGLISH));
     }
-    
+
+
     public void testCalculateLocaleExact() {
         System.out.println("Testing calculateLocale - Exact Match case ");
         ViewHandler handler = new ViewHandlerImpl();
         Locale locale = handler.calculateLocale(getFacesContext());
         assertTrue(locale.equals(new Locale("ps", "PS")));
     }
-    
+
+
     public void testCalculateLocaleNoMatch() {
         System.out.println("Testing calculateLocale - No Match case");
         ViewHandler handler = new ViewHandlerImpl();
@@ -363,22 +376,24 @@ public boolean sendResponseToFile()
         assertTrue(locale.equals(new Locale("en", "US")));
     }
 
+
     public void testCalculateLocaleFindDefault() {
         System.out.println("Testing calculateLocale - find default");
         ViewHandler handler = new ViewHandlerImpl();
         Locale locale = handler.calculateLocale(getFacesContext());
         assertEquals(Locale.ENGLISH.toString(), locale.toString());
     }
-    
+
+
     public void testCalculateLocaleLowerCase() {
         System.out.println("Testing calculateLocale - case sensitivity");
         ViewHandler handler = new ViewHandlerImpl();
         Locale locale = handler.calculateLocale(getFacesContext());
         assertTrue(locale.equals(new Locale("ps", "PS")));
     }
-   
-    public void testTransient()
-    {
+
+
+    public void testTransient() {
 
         // precreate tree and set it in session and make sure the tree is
         // restored from session.
@@ -413,66 +428,74 @@ public boolean sendResponseToFile()
         panel1.getFacets().put("userName3", userName3);
 
         UIInput userName4 = new UIInput();
-        panel1.getFacets().put("userName4",userName4);
+        panel1.getFacets().put("userName4", userName4);
 
-        HttpSession session = (HttpSession) 
+        HttpSession session = (HttpSession)
             getFacesContext().getExternalContext().getSession(false);
         session.setAttribute(TEST_URI, root);
 
         getFacesContext().setViewRoot(root);
 
-        ViewHandler viewHandler = 
-            getFacesContext().getApplication().getViewHandler(); 
-        StateManager stateManager = 
-            getFacesContext().getApplication().getStateManager(); 
+        ViewHandler viewHandler =
+            getFacesContext().getApplication().getViewHandler();
+        StateManager stateManager =
+            getFacesContext().getApplication().getStateManager();
         stateManager.saveSerializedView(getFacesContext());
 
         // make sure that the transient property is not persisted.
-        basicForm = (UIForm)(getFacesContext().getViewRoot()).findComponent("basicForm");
+        basicForm =
+            (UIForm) (getFacesContext().getViewRoot()).findComponent(
+                "basicForm");
         assertTrue(basicForm != null);
 
-        userName = (UIInput)basicForm.findComponent("userName");
+        userName = (UIInput) basicForm.findComponent("userName");
         assertTrue(userName == null);
 
-        panel1 = (UIPanel)basicForm.findComponent("panel1");
+        panel1 = (UIPanel) basicForm.findComponent("panel1");
         assertTrue(panel1 != null);
 
-        userName1 = (UIInput)panel1.findComponent("userName1");
+        userName1 = (UIInput) panel1.findComponent("userName1");
         assertTrue(userName1 == null);
 
-        userName2 = (UIInput)panel1.findComponent("userName2");
+        userName2 = (UIInput) panel1.findComponent("userName2");
         assertTrue(userName2 != null);
 
         // make sure facets work correctly when marked transient.
         Map facetList = panel1.getFacets();
         assertTrue(!(facetList.containsKey("userName3")));
         assertTrue(facetList.containsKey("userName4"));
-    }        
+    }
+
 
     private class TestRequest extends HttpServletRequestWrapper {
-        
+
         String servletPath;
         String pathInfo;
-        
+
+
         public TestRequest(HttpServletRequest request) {
             super(request);
         }
 
+
         public String getServletPath() {
             return servletPath;
         }
-        
+
+
         public void setServletPath(String servletPath) {
-            this.servletPath = servletPath;            
+            this.servletPath = servletPath;
         }
-        
+
+
         public String getPathInfo() {
             return pathInfo;
         }
-        
+
+
         public void setPathInfo(String pathInfo) {
             this.pathInfo = pathInfo;
         }
     }
-    
-} // end of class TestViewHandlerImpl 
+
+} // end of class TestViewHandlerImpl

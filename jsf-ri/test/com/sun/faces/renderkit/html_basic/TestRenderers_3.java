@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.32 2004/02/04 23:44:49 ofung Exp $
+ * $Id: TestRenderers_3.java,v 1.33 2004/02/06 18:57:09 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -15,46 +15,42 @@
 // TestRenderers_3.java
 
 package com.sun.faces.renderkit.html_basic;
-import java.io.IOException;
+
+import com.sun.faces.JspFacesTestCase;
+import org.apache.cactus.WebRequest;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
-import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.convert.Converter;
 import javax.faces.convert.NumberConverter;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.sun.faces.renderkit.html_basic.HiddenRenderer;
-import org.apache.cactus.WebRequest;
-
-import com.sun.faces.JspFacesTestCase;
-
 /**
- *
- *  Test encode and decode methods in Renderer classes.
- *
+ * Test encode and decode methods in Renderer classes.
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.32 2004/02/04 23:44:49 ofung Exp $
- * 
- *
+ * @version $Id: TestRenderers_3.java,v 1.33 2004/02/06 18:57:09 rlubke Exp $
  */
 
 public class TestRenderers_3 extends JspFacesTestCase {
+
     //
     // Instance Variables
     //
@@ -64,12 +60,14 @@ public class TestRenderers_3 extends JspFacesTestCase {
     // Protected Constants
     //
     public static String DATE_STR = "Jan 12, 1952";
-    
+
     public static String NUMBER_STR = "47%";
-   
+
+
     public boolean sendWriterToFile() {
         return true;
     }
+
 
     public String getExpectedOutputFilename() {
         return "CorrectRenderersResponse_3";
@@ -93,6 +91,8 @@ public class TestRenderers_3 extends JspFacesTestCase {
     public TestRenderers_3() {
         super("TestRenderers_3");
     }
+
+
     public TestRenderers_3(String name) {
         super(name);
     }
@@ -106,15 +106,17 @@ public class TestRenderers_3 extends JspFacesTestCase {
     //
     public void setUp() {
         super.setUp();
-        ApplicationFactory aFactory = 
-	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationFactory aFactory =
+            (ApplicationFactory) FactoryFinder.getFactory(
+                FactoryFinder.APPLICATION_FACTORY);
         application = aFactory.getApplication();
-	UIViewRoot xmlTree = new UIViewRoot();
-	xmlTree.setViewId("viewId");
-	xmlTree.getChildren().add(new UICommand());
+        UIViewRoot xmlTree = new UIViewRoot();
+        xmlTree.setViewId("viewId");
+        xmlTree.getChildren().add(new UICommand());
         getFacesContext().setViewRoot(xmlTree);
         assertTrue(null != getFacesContext().getResponseWriter());
     }
+
 
     public void beginRenderers(WebRequest theRequest) {
         theRequest.addParameter("myMenu", "Blue");
@@ -126,6 +128,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         theRequest.addParameter("myInputDateHidden", DATE_STR);
 
     }
+
 
     public void testRenderers() {
 
@@ -140,13 +143,13 @@ public class TestRenderers_3 extends JspFacesTestCase {
             testSelectOneMenuRenderer(root);
             testHiddenRenderer(root);
             assertTrue(verifyExpectedOutput());
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             t.printStackTrace();
             assertTrue(false);
             return;
         }
     }
+
 
     public void testSelectManyListboxRenderer(UIComponent root)
         throws IOException {
@@ -157,14 +160,14 @@ public class TestRenderers_3 extends JspFacesTestCase {
         selectMany.setId("myListbox");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
-        
+
         SelectItem item3 = new SelectItem("Green", "Green", null);
         SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
         SelectItem[] itemsArray = {item3, item4};
-        SelectItemGroup itemGroup = new SelectItemGroup("group", null, true, 
-                itemsArray);
-        SelectItem[] selectItems = { item1, item2, itemGroup };
-	Object selectedValues[] = null;
+        SelectItemGroup itemGroup = new SelectItemGroup("group", null, true,
+                                                        itemsArray);
+        SelectItem[] selectItems = {item1, item2, itemGroup};
+        Object selectedValues[] = null;
         uiSelectItems.setValue(selectItems);
         uiSelectItems.setId("manyListitems");
         selectMany.getChildren().add(uiSelectItems);
@@ -177,9 +180,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
         System.out.println("    Testing decode method... ");
         selectManyListboxRenderer.decode(getFacesContext(), selectMany);
         selectedValues = (Object[]) selectMany.getSubmittedValue();
-	assertTrue(null != selectedValues);
-	assertTrue(1 == selectedValues.length);
-        assertTrue(((String)selectedValues[0]).equals("Blue"));
+        assertTrue(null != selectedValues);
+        assertTrue(1 == selectedValues.length);
+        assertTrue(((String) selectedValues[0]).equals("Blue"));
 
         // test convert method
         Object[] convertedValues =
@@ -187,9 +190,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
                 getFacesContext(),
                 selectMany,
                 selectMany.getSubmittedValue());
-	assertTrue(null != convertedValues);
-	assertTrue(1 == convertedValues.length);
-        assertTrue(((String)convertedValues[0]).equals("Blue"));
+        assertTrue(null != convertedValues);
+        assertTrue(1 == convertedValues.length);
+        assertTrue(((String) convertedValues[0]).equals("Blue"));
 
         // test encode method
 
@@ -201,6 +204,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
 
     }
 
+
     public void testSelectManyCheckboxListRenderer(UIComponent root)
         throws IOException {
         System.out.println("Testing SelectManyCheckboxListRenderer");
@@ -210,21 +214,21 @@ public class TestRenderers_3 extends JspFacesTestCase {
         selectMany.getAttributes().put("styleClass", "styleClass");
         selectMany.getAttributes().put("tabindex", new Integer(5));
         selectMany.getAttributes().put("title", "title");
-        
+
         UISelectItems uiSelectItems = new UISelectItems();
         selectMany.setValue(null);
         selectMany.setId("myCheckboxlist");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         item1.setDisabled(true);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
-        
+
         SelectItem item3 = new SelectItem("Green", "Green", null);
         SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
         SelectItem[] itemsArray = {item3, item4};
-        SelectItemGroup itemGroup = new SelectItemGroup("group", null, true, 
-                itemsArray);
-        SelectItem[] selectItems = { item1, item2, itemGroup };
-	Object selectedValues[] = null;
+        SelectItemGroup itemGroup = new SelectItemGroup("group", null, true,
+                                                        itemsArray);
+        SelectItem[] selectItems = {item1, item2, itemGroup};
+        Object selectedValues[] = null;
         uiSelectItems.setValue(selectItems);
         selectMany.getChildren().add(uiSelectItems);
         root.getChildren().add(selectMany);
@@ -237,9 +241,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
         System.out.println("    Testing decode method... ");
         selectManyCheckboxListRenderer.decode(getFacesContext(), selectMany);
         selectedValues = (Object[]) selectMany.getSubmittedValue();
-	assertTrue(null != selectedValues);
-	assertTrue(1 == selectedValues.length);
-        assertTrue(((String)selectedValues[0]).equals("Blue"));
+        assertTrue(null != selectedValues);
+        assertTrue(1 == selectedValues.length);
+        assertTrue(((String) selectedValues[0]).equals("Blue"));
 
         // test convert method
         Object[] convertedValues =
@@ -247,22 +251,22 @@ public class TestRenderers_3 extends JspFacesTestCase {
                 getFacesContext(),
                 selectMany,
                 selectMany.getSubmittedValue());
-	assertTrue(null != convertedValues);
-	assertTrue(1 == convertedValues.length);
-        assertTrue(((String)convertedValues[0]).equals("Blue"));
+        assertTrue(null != convertedValues);
+        assertTrue(1 == convertedValues.length);
+        assertTrue(((String) convertedValues[0]).equals("Blue"));
 
 
         // test encode method
         System.out.println("    Testing encode method... ");
-        selectManyCheckboxListRenderer.encodeBegin(
-            getFacesContext(),
-            selectMany);
-        selectManyCheckboxListRenderer.encodeEnd(getFacesContext(), 
-						 selectMany);
+        selectManyCheckboxListRenderer.encodeBegin(getFacesContext(),
+                                                   selectMany);
+        selectManyCheckboxListRenderer.encodeEnd(getFacesContext(),
+                                                 selectMany);
         getFacesContext().getResponseWriter().writeText("\n", null);
         getFacesContext().getResponseWriter().flush();
 
     }
+
 
     public void testSelectManyMenuRenderer(UIComponent root)
         throws IOException {
@@ -275,8 +279,8 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
         SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
-        SelectItem[] selectItems = { item1, item2, item3, item4 };
-	Object selectedValues[] = null;
+        SelectItem[] selectItems = {item1, item2, item3, item4};
+        Object selectedValues[] = null;
         uiSelectItems.setValue(selectItems);
         uiSelectItems.setId("manyMenuitems");
         selectMany.getChildren().add(uiSelectItems);
@@ -289,9 +293,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
         System.out.println("    Testing decode method... ");
         selectManyMenuRenderer.decode(getFacesContext(), selectMany);
         selectedValues = (Object[]) selectMany.getSubmittedValue();
-	assertTrue(null != selectedValues);
-	assertTrue(1 == selectedValues.length);
-        assertTrue(((String)selectedValues[0]).equals("Blue"));
+        assertTrue(null != selectedValues);
+        assertTrue(1 == selectedValues.length);
+        assertTrue(((String) selectedValues[0]).equals("Blue"));
 
         // test convert method
         Object[] convertedValues =
@@ -299,9 +303,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
                 getFacesContext(),
                 selectMany,
                 selectMany.getSubmittedValue());
-	assertTrue(null != convertedValues);
-	assertTrue(1 == convertedValues.length);
-        assertTrue(((String)convertedValues[0]).equals("Blue"));
+        assertTrue(null != convertedValues);
+        assertTrue(1 == convertedValues.length);
+        assertTrue(((String) convertedValues[0]).equals("Blue"));
 
         // test encode method
         System.out.println("    Testing encode method... ");
@@ -311,6 +315,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         getFacesContext().getResponseWriter().flush();
 
     }
+
 
     public void testSelectOneMenuRenderer(UIComponent root)
         throws IOException {
@@ -323,7 +328,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
         SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
-        SelectItem[] selectItems = { item1, item2, item3, item4 };
+        SelectItem[] selectItems = {item1, item2, item3, item4};
         String selectedValue = null;
         uiSelectItems.setValue(selectItems);
         uiSelectItems.setId("manySelectOneitems");
@@ -335,14 +340,14 @@ public class TestRenderers_3 extends JspFacesTestCase {
 
         // test decode method
         System.out.println("    Testing decode method... ");
-        selectOneMenuRenderer.decode(getFacesContext(), selectOne); 
+        selectOneMenuRenderer.decode(getFacesContext(), selectOne);
         assertTrue("Blue".equals(selectOne.getSubmittedValue()));
 
         // test convert method
         Object value = selectOneMenuRenderer.getConvertedValue(
-          getFacesContext(),
-          selectOne,
-          selectOne.getSubmittedValue());
+            getFacesContext(),
+            selectOne,
+            selectOne.getSubmittedValue());
         assertTrue("Blue".equals(value));
 
         // test encode method
@@ -353,32 +358,34 @@ public class TestRenderers_3 extends JspFacesTestCase {
         getFacesContext().getResponseWriter().flush();
 
     }
-    
+
+
     public void testHiddenRenderer(UIComponent root) throws IOException {
         System.out.println("Testing Input_DateRenderer");
         UIInput input1 = new UIInput();
         input1.setValue(null);
         input1.setId("myInputDateHidden");
-        Converter converter = application.createConverter("javax.faces.DateTime");
+        Converter converter = application.createConverter(
+            "javax.faces.DateTime");
         input1.setConverter(converter);
-	input1.getAttributes().put("dateStyle", "medium");
+        input1.getAttributes().put("dateStyle", "medium");
         root.getChildren().add(input1);
         HiddenRenderer hiddenRenderer = new HiddenRenderer();
-        
+
         DateFormat dateformatter =
-	    DateFormat.getDateInstance(DateFormat.MEDIUM,
-	    getFacesContext().getViewRoot().getLocale());
+            DateFormat.getDateInstance(DateFormat.MEDIUM,
+                                       getFacesContext().getViewRoot()
+                                       .getLocale());
         dateformatter.setTimeZone(TimeZone.getTimeZone("GMT")); 
         // test hidden renderer with converter set to date
         // test decode method
-	System.out.println("    Testing decode method...");
+        System.out.println("    Testing decode method...");
         hiddenRenderer.decode(getFacesContext(), input1);
-        Date date = (Date) hiddenRenderer.getConvertedValue(
-          getFacesContext(),
-          input1,
-          input1.getSubmittedValue());
-	assertTrue(null != date);
-	assertTrue(DATE_STR.equals(dateformatter.format(date)));
+        Date date = (Date) hiddenRenderer.getConvertedValue(getFacesContext(),
+                                                            input1,
+                                                            input1.getSubmittedValue());
+        assertTrue(null != date);
+        assertTrue(DATE_STR.equals(dateformatter.format(date)));
         
         // test encode method
         System.out.println("    Testing encode method...");
@@ -391,31 +398,31 @@ public class TestRenderers_3 extends JspFacesTestCase {
         input2.setValue(null);
         input2.setId("myNumberHidden");
         converter = application.createConverter("javax.faces.Number");
-	((NumberConverter)converter).setType("percent");
+        ((NumberConverter) converter).setType("percent");
         input2.setConverter(converter);
         root.getChildren().add(input2);
 
-	NumberFormat numberformatter = 
-	    NumberFormat.getPercentInstance(getFacesContext().
-            getViewRoot().getLocale());
+        NumberFormat numberformatter =
+            NumberFormat.getPercentInstance(getFacesContext().
+                                            getViewRoot().getLocale());
         // test decode method
         System.out.println("    Testing decode method...");
         hiddenRenderer.decode(getFacesContext(), input2);
         Number number = (Number) hiddenRenderer.getConvertedValue(
-          getFacesContext(),
-          input2,
-          input2.getSubmittedValue());
+            getFacesContext(),
+            input2,
+            input2.getSubmittedValue());
 
-	assertTrue(null != number);
-	System.out.println("NUMBER_STR:"+NUMBER_STR);
-	System.out.println("NUMBERFORMATTER:"+numberformatter.format(number));
-	assertTrue(NUMBER_STR.equals(numberformatter.format(number)));
+        assertTrue(null != number);
+        System.out.println("NUMBER_STR:" + NUMBER_STR);
+        System.out.println("NUMBERFORMATTER:" + numberformatter.format(number));
+        assertTrue(NUMBER_STR.equals(numberformatter.format(number)));
    
         // test encode method
         System.out.println("    Testing encode method...");
         hiddenRenderer.encodeBegin(getFacesContext(), input2);
         hiddenRenderer.encodeEnd(getFacesContext(), input2);
         getFacesContext().getResponseWriter().flush();
-       
+
     }
 } // end of class TestRenderers_3

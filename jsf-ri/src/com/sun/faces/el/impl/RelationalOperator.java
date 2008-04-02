@@ -65,22 +65,20 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
- *
  * <p>This is the superclass for all relational operators (except ==
  * or !=)
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public abstract class RelationalOperator
     extends BinaryOperator {
 
     //-------------------------------------
     /**
-     *
      * Applies the operator to the given value
-     **/
+     */
     public Object apply(Object pLeft, Object pRight)
         throws ElException {
         return Coercions.applyRelationalOperator(pLeft, pRight, this);
@@ -88,47 +86,38 @@ public abstract class RelationalOperator
 
     //-------------------------------------
     /**
-     *
      * Applies the operator to the given double values
-     **/
-    public abstract boolean apply(
-        double pLeft,
-        double pRight
-                                  );
+     */
+    public abstract boolean apply(double pLeft,
+                                  double pRight);
   
     //-------------------------------------
     /**
-     *
      * Applies the operator to the given long values
-     **/
-    public abstract boolean apply(
-        long pLeft,
-        long pRight
-                                  );
+     */
+    public abstract boolean apply(long pLeft,
+                                  long pRight);
   
     //-------------------------------------
     /**
-     *
      * Applies the operator to the given String values
-     **/
-    public abstract boolean apply(
-        String pLeft,
-        String pRight
-                                  );
+     */
+    public abstract boolean apply(String pLeft,
+                                  String pRight);
 
     //-------------------------------------
 
 
     /**
      * Applies the operator to the given BigDecimal values, returning a BigDecimal
-     **/
+     */
     public abstract boolean apply(BigDecimal pLeft, BigDecimal pRight);
 
     //-------------------------------------
 
     /**
      * Applies the operator to the given BigDecimal values, returning a BigDecimal
-     **/
+     */
     public abstract boolean apply(BigInteger pLeft, BigInteger pRight);
 
     //-------------------------------------
@@ -136,7 +125,9 @@ public abstract class RelationalOperator
 
     /**
      * Test return value of BigInteger/BigDecimal A.compareTo(B).
+     *
      * @param val - result of BigInteger/BigDecimal compareTo() call
+     *
      * @return - true if result is less than 0, otherwise false
      */
     protected boolean isLess(int val) {
@@ -146,9 +137,12 @@ public abstract class RelationalOperator
             return false;
     }
 
+
     /**
      * Test return value of BigInteger/BigDecimal A.compareTo(B).
+     *
      * @param val - result of BigInteger/BigDecimal compareTo() call
+     *
      * @return - true if result is equal to 0, otherwise false
      */
     protected boolean isEqual(int val) {
@@ -158,9 +152,12 @@ public abstract class RelationalOperator
             return false;
     }
 
+
     /**
      * Test return value of BigInteger/BigDecimal A.compareTo(B).
+     *
      * @param val - result of BigInteger/BigDecimal compareTo() call
+     *
      * @return - true if result is greater than 0, otherwise false
      */
     protected boolean isGreater(int val) {

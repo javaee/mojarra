@@ -9,14 +9,14 @@
 
 package com.sun.faces.taglib;
 
+import javax.servlet.jsp.tagext.TagData;
 import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.VariableInfo;
-import javax.servlet.jsp.tagext.TagData;
 
 /**
  * <p>Necessary to work around an issue with the
  * JSP <code>id</code> attribute in JWSDP 1.2.
- */ 
+ */
 public class FacesTagExtraInfo extends TagExtraInfo {
 
     //

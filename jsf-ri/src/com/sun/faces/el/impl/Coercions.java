@@ -70,13 +70,12 @@ import java.math.BigInteger;
 
 
 /**
- *
  * <p>This class contains the logic for coercing data types before
  * operators are applied to them.
- *
+ * <p/>
  * <p>The following is the list of rules applied for various type
  * conversions.
- *
+ * <p/>
  * <ul><pre>
  * Applying arithmetic operator
  *   Binary operator - A {+,-,*} B
@@ -97,7 +96,7 @@ import java.math.BigInteger;
  *       coerce both A and B to Long
  *       apply operator
  *     if operator results in exception (such as divide by 0), error
- * 
+ * <p/>
  *   Binary operator - A {/,div} B
  *     if A and B are null
  *       return 0
@@ -107,7 +106,7 @@ import java.math.BigInteger;
  *       coerce both A and B to Double
  *       apply operator
  *     if operator results in exception (such as divide by 0), error
- * 
+ * <p/>
  *   Binary operator - A {%,mod} B
  *     if A and B are null
  *       return 0
@@ -120,7 +119,7 @@ import java.math.BigInteger;
  *       coerce both A and B to Long
  *       apply operator
  *     if operator results in exception (such as divide by 0), error
- * 
+ * <p/>
  *   Unary minus operator - -A
  *     if A is null
  *       return 0
@@ -135,7 +134,7 @@ import java.math.BigInteger;
  *     if operator results in exception, error
  *     otherwise
  *       error
- *
+ * <p/>
  * Applying "empty" operator - empty A
  *   if A is null
  *     return true
@@ -151,7 +150,7 @@ import java.math.BigInteger;
  *     return true
  *   otherwise
  *     return false
- * 
+ * <p/>
  * Applying logical operators
  *   Binary operator - A {and,or} B
  *     coerce both A and B to Boolean, apply operator
@@ -159,7 +158,7 @@ import java.math.BigInteger;
  *     A and B and C and D - if B is false, then only A and B is evaluated
  *   Unary not operator - not A
  *     coerce A to Boolean, apply operator
- * 
+ * <p/>
  * Applying relational operator
  *   A {<,>,<=,>=,lt,gt,lte,gte} B
  *     if A==B
@@ -193,7 +192,7 @@ import java.math.BigInteger;
  *         use result of B.compareTo(A)
  *     otherwise
  *       error
- * 
+ * <p/>
  * Applying equality operator
  *   A {==,!=} B
  *     if A==B
@@ -221,9 +220,9 @@ import java.math.BigInteger;
  *       if an error occurs while calling A.equals(B)
  *         error
  *       apply operator to result of A.equals(B)
- * 
+ * <p/>
  * coercions
- * 
+ * <p/>
  *   coerce A to String
  *     A is String
  *       return A
@@ -233,7 +232,7 @@ import java.math.BigInteger;
  *       error
  *     otherwise
  *       return A.toString
- * 
+ * <p/>
  *   coerce A to Number type N
  *     A is null or ""
  *       return 0
@@ -269,7 +268,7 @@ import java.math.BigInteger;
  *       return <code>N.valueOf(A)</code>
  *     otherwise
  *       error
- * 
+ * <p/>
  *   coerce A to Character should be
  *     A is null or ""
  *       return (char) 0
@@ -285,7 +284,7 @@ import java.math.BigInteger;
  *       return A.charAt (0)
  *     otherwise
  *       error
- * 
+ * <p/>
  *   coerce A to Boolean
  *     A is null or ""
  *       return false
@@ -297,7 +296,7 @@ import java.math.BigInteger;
  *       return Boolean.valueOf(A)
  *     otherwise
  *       error
- * 
+ * <p/>
  *   coerce A to any other type T
  *     A is null
  *       return null
@@ -317,10 +316,11 @@ import java.math.BigInteger;
  * </pre></ul>
  *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class Coercions {
+
     //-------------------------------------
     // Constants
     //-------------------------------------
@@ -329,12 +329,10 @@ public class Coercions {
     
     //-------------------------------------
     /**
-     *
      * Coerces the given value to the specified class.
-     **/
-    public static Object coerce(
-        Object pValue,
-        Class pClass)
+     */
+    public static Object coerce(Object pValue,
+                                Class pClass)
         throws ElException {
         if (pClass == String.class) {
             return coerceToString(pValue);
@@ -353,10 +351,9 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Returns true if the given class is Byte, Short, Integer, Long,
      * Float, Double, BigInteger, or BigDecimal
-     **/
+     */
     static boolean isNumberClass(Class pClass) {
         return
             pClass == Byte.class ||
@@ -377,9 +374,8 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Coerces the specified value to a String
-     **/
+     */
     public static String coerceToString(Object pValue)
         throws ElException {
         if (pValue == null) {
@@ -404,12 +400,10 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Coerces a value to the given primitive number class
-     **/
-    public static Number coerceToPrimitiveNumber(
-        Object pValue,
-        Class pClass)
+     */
+    public static Number coerceToPrimitiveNumber(Object pValue,
+                                                 Class pClass)
         throws ElException {
         if (pValue == null ||
             "".equals(pValue)) {
@@ -457,10 +451,9 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Coerces a value to an Integer, returning null if the coercion
      * isn't possible.
-     **/
+     */
     public static Integer coerceToInteger(Object pValue)
         throws ElException {
         if (pValue == null) {
@@ -471,8 +464,9 @@ public class Coercions {
         } else if (pValue instanceof Boolean) {
             if (log.isWarnEnabled()) {
                 log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.BOOLEAN_TO_NUMBER, pValue, Integer.class.getName()));
+                    MessageUtil.getMessageWithArgs(Constants.BOOLEAN_TO_NUMBER,
+                                                   pValue,
+                                                   Integer.class.getName()));
             }
             return PrimitiveObjects.getInteger
                 (((Boolean) pValue).booleanValue() ? 1 : 0);
@@ -485,21 +479,19 @@ public class Coercions {
                 return Integer.valueOf((String) pValue);
             } catch (Exception exc) {
                 if (log.isWarnEnabled()) {
-                    log.warn(
-                        MessageUtil.getMessageWithArgs(
-                            Constants.STRING_TO_NUMBER_EXCEPTION,
-                            (String) pValue,
-                            Integer.class.getName()));
+                    log.warn(MessageUtil.getMessageWithArgs(
+                        Constants.STRING_TO_NUMBER_EXCEPTION,
+                        (String) pValue,
+                        Integer.class.getName()));
                 }
                 return null;
             }
         } else {
             if (log.isWarnEnabled()) {
-                log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.COERCE_TO_NUMBER,
-                        pValue.getClass().getName(),
-                        Integer.class.getName()));
+                log.warn(MessageUtil.getMessageWithArgs(
+                    Constants.COERCE_TO_NUMBER,
+                    pValue.getClass().getName(),
+                    Integer.class.getName()));
             }
             return null;
         }
@@ -507,12 +499,10 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Coerces a long to the given primitive number class
-     **/
-    static Number coerceToPrimitiveNumber(
-        long pValue,
-        Class pClass)
+     */
+    static Number coerceToPrimitiveNumber(long pValue,
+                                          Class pClass)
         throws ElException {
         if (pClass == Byte.class || pClass == Byte.TYPE) {
             return PrimitiveObjects.getByte((byte) pValue);
@@ -533,12 +523,10 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Coerces a double to the given primitive number class
-     **/
-    static Number coerceToPrimitiveNumber(
-        double pValue,
-        Class pClass)
+     */
+    static Number coerceToPrimitiveNumber(double pValue,
+                                          Class pClass)
         throws ElException {
         if (pClass == Byte.class || pClass == Byte.TYPE) {
             return PrimitiveObjects.getByte((byte) pValue);
@@ -559,9 +547,8 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Coerces a Number to the given primitive number class
-     **/
+     */
     static Number coerceToPrimitiveNumber(Number pValue, Class pClass)
         throws ElException {
         if (pClass == Byte.class || pClass == Byte.TYPE) {
@@ -593,9 +580,8 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Coerces a String to the given primitive number class
-     **/
+     */
     static Number coerceToPrimitiveNumber(String pValue, Class pClass)
         throws ElException {
         if (pClass == Byte.class || pClass == Byte.TYPE) {
@@ -621,9 +607,8 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Coerces a value to a Character
-     **/
+     */
     public static Character coerceToCharacter(Object pValue)
         throws ElException {
         if (pValue == null ||
@@ -659,9 +644,8 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Coerces a value to a Boolean
-     **/
+     */
     public static Boolean coerceToBoolean(Object pValue)
         throws ElException {
         if (pValue == null ||
@@ -696,10 +680,9 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Coerces a value to the specified Class that is not covered by any
      * of the above cases
-     **/
+     */
     public static Object coerceToObject(Object pValue, Class pClass)
         throws ElException {
         if (pValue == null) {
@@ -716,7 +699,8 @@ public class Coercions {
                     if (log.isErrorEnabled()) {
                         String message = MessageUtil.getMessageWithArgs(
                             Constants.NO_PROPERTY_EDITOR,
-                            str, pClass.getName());
+                            str,
+                            pClass.getName());
                         log.error(message);
                         throw new ElException(message);
                     }
@@ -758,23 +742,20 @@ public class Coercions {
     // Applying operators
     //-------------------------------------
     /**
-     *
      * Performs all of the necessary type conversions, then calls on the
      * appropriate operator.
-     **/
+     */
     public static Object applyArithmeticOperator
-        (
-        Object pLeft,
-        Object pRight,
-        ArithmeticOperator pOperator)
+        (Object pLeft,
+         Object pRight,
+         ArithmeticOperator pOperator)
         throws ElException {
         if (pLeft == null &&
             pRight == null) {
             if (log.isWarnEnabled()) {
-                log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.ARITH_OP_NULL,
-                        pOperator.getOperatorSymbol()));
+                log.warn(MessageUtil.getMessageWithArgs(
+                    Constants.ARITH_OP_NULL,
+                    pOperator.getOperatorSymbol()));
             }
             return PrimitiveObjects.getInteger(0);
         } else if (isBigDecimal(pLeft) || isBigDecimal(pRight)) {
@@ -823,15 +804,13 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Performs all of the necessary type conversions, then calls on the
      * appropriate operator.
-     **/
+     */
     public static Object applyRelationalOperator
-        (
-        Object pLeft,
-        Object pRight,
-        RelationalOperator pOperator)
+        (Object pLeft,
+         Object pRight,
+         RelationalOperator pOperator)
         throws ElException {
         if (isBigDecimal(pLeft) || isBigDecimal(pRight)) {
             BigDecimal left = (BigDecimal)
@@ -882,7 +861,8 @@ public class Coercions {
                     String message = MessageUtil.getMessageWithArgs(
                         Constants.COMPARABLE_ERROR,
                         pLeft.getClass().getName(),
-                        (pRight == null) ? "null" : pRight.getClass().getName(),
+                        (pRight == null) ?
+                        "null" : pRight.getClass().getName(),
                         pOperator.getOperatorSymbol());
                     log.error(message, exc);
                     throw new ElException(message, exc);
@@ -923,15 +903,13 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Performs all of the necessary type conversions, then calls on the
      * appropriate operator.
-     **/
+     */
     public static Object applyEqualityOperator
-        (
-        Object pLeft,
-        Object pRight,
-        EqualityOperator pOperator)
+        (Object pLeft,
+         Object pRight,
+         EqualityOperator pOperator)
         throws ElException {
         if (pLeft == pRight) {
             return PrimitiveObjects.getBoolean(pOperator.apply(true));
@@ -943,7 +921,8 @@ public class Coercions {
                 coerceToPrimitiveNumber(pLeft, BigDecimal.class);
             BigDecimal right = (BigDecimal)
                 coerceToPrimitiveNumber(pRight, BigDecimal.class);
-            return PrimitiveObjects.getBoolean(pOperator.apply(left.equals(right)));
+            return PrimitiveObjects.getBoolean(
+                pOperator.apply(left.equals(right)));
         } else if (isFloatingPointType(pLeft) ||
             isFloatingPointType(pRight)) {
             double left =
@@ -960,7 +939,8 @@ public class Coercions {
                 coerceToPrimitiveNumber(pLeft, BigInteger.class);
             BigInteger right = (BigInteger)
                 coerceToPrimitiveNumber(pRight, BigInteger.class);
-            return PrimitiveObjects.getBoolean(pOperator.apply(left.equals(right)));
+            return PrimitiveObjects.getBoolean(
+                pOperator.apply(left.equals(right)));
         } else if (isIntegerType(pLeft) ||
             isIntegerType(pRight)) {
             long left =
@@ -1008,9 +988,8 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Returns true if the given Object is of a floating point type
-     **/
+     */
     public static boolean isFloatingPointType(Object pObject) {
         return
             pObject != null &&
@@ -1019,9 +998,8 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Returns true if the given class is of a floating point type
-     **/
+     */
     public static boolean isFloatingPointType(Class pClass) {
         return
             pClass == Float.class ||
@@ -1032,10 +1010,9 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Returns true if the given string might contain a floating point
      * number - i.e., it contains ".", "e", or "E"
-     **/
+     */
     public static boolean isFloatingPointString(Object pObject) {
         if (pObject instanceof String) {
             String str = (String) pObject;
@@ -1056,9 +1033,8 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Returns true if the given Object is of an integer type
-     **/
+     */
     public static boolean isIntegerType(Object pObject) {
         return
             pObject != null &&
@@ -1067,9 +1043,8 @@ public class Coercions {
 
     //-------------------------------------
     /**
-     *
      * Returns true if the given class is of an integer type
-     **/
+     */
     public static boolean isIntegerType(Class pClass) {
         return
             pClass == Byte.class ||
@@ -1088,7 +1063,9 @@ public class Coercions {
 
     /**
      * Returns true if the given object is BigInteger.
+     *
      * @param pObject - Object to evaluate
+     *
      * @return - true if the given object is BigInteger
      */
     public static boolean isBigInteger(Object pObject) {
@@ -1096,9 +1073,12 @@ public class Coercions {
             pObject != null && pObject instanceof BigInteger;
     }
 
+
     /**
      * Returns true if the given object is BigDecimal.
+     *
      * @param pObject - Object to evaluate
+     *
      * @return - true if the given object is BigDecimal
      */
     public static boolean isBigDecimal(Object pObject) {

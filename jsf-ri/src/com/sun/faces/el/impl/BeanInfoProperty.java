@@ -64,7 +64,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 /**
- *
  * <p>This contains the information for one property in a BeanInfo -
  * PropertyDescriptor, read method, and write method.  This class is
  * necessary because the read/write methods in the PropertyDescriptor
@@ -73,18 +72,20 @@ import java.lang.reflect.Method;
  * method must be found by searching for a public superclass/interface
  * that declares the method (this searching is done by the
  * BeanInfoManager).
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: ofung $
- **/
+ * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: rlubke $
+ */
 
 public class BeanInfoProperty {
+
     //-------------------------------------
     // Properties
     //-------------------------------------
     // property readMethod
 
     Method mReadMethod;
+
 
     public Method getReadMethod() {
         return mReadMethod;
@@ -95,6 +96,7 @@ public class BeanInfoProperty {
 
     Method mWriteMethod;
 
+
     public Method getWriteMethod() {
         return mWriteMethod;
     }
@@ -104,19 +106,18 @@ public class BeanInfoProperty {
 
     PropertyDescriptor mPropertyDescriptor;
 
+
     public PropertyDescriptor getPropertyDescriptor() {
         return mPropertyDescriptor;
     }
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
-    public BeanInfoProperty(
-        Method pReadMethod,
-        Method pWriteMethod,
-        PropertyDescriptor pPropertyDescriptor) {
+     */
+    public BeanInfoProperty(Method pReadMethod,
+                            Method pWriteMethod,
+                            PropertyDescriptor pPropertyDescriptor) {
         mReadMethod = pReadMethod;
         mWriteMethod = pWriteMethod;
         mPropertyDescriptor = pPropertyDescriptor;

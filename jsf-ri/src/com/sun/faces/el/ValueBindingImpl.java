@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.28 2004/02/04 23:41:00 ofung Exp $
+ * $Id: ValueBindingImpl.java,v 1.29 2004/02/06 18:54:29 rlubke Exp $
  */
 
 /*
@@ -9,32 +9,28 @@
 
 package com.sun.faces.el;
 
-import java.util.Map;
-import java.util.Arrays;
-
-import javax.faces.el.EvaluationException;
-import javax.faces.el.ValueBinding;
-import javax.faces.el.PropertyNotFoundException;
-import javax.faces.el.ReferenceSyntaxException;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
-import javax.faces.component.StateHolder;
-import javax.faces.application.Application;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-
-import com.sun.faces.util.Util;
-
+import com.sun.faces.RIConstants;
 import com.sun.faces.el.impl.ElException;
 import com.sun.faces.el.impl.Expression;
 import com.sun.faces.el.impl.ExpressionInfo;
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-public class ValueBindingImpl extends ValueBinding implements StateHolder
-{
+import javax.faces.application.Application;
+import javax.faces.component.StateHolder;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.el.EvaluationException;
+import javax.faces.el.PropertyNotFoundException;
+import javax.faces.el.ReferenceSyntaxException;
+import javax.faces.el.ValueBinding;
+
+import java.util.Arrays;
+import java.util.Map;
+
+public class ValueBindingImpl extends ValueBinding implements StateHolder {
+
 //
 // Private/Protected Constants
 //     
@@ -52,6 +48,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
         "paramValues",
         "view"
     };
+
 
     static {
         // Sort for binary searching
@@ -88,16 +85,18 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
     public ValueBindingImpl() {
     }
 
-    public ValueBindingImpl(Application application) { 
-	Util.parameterNonNull(application);
-	this.application = application;
-	
-	if (null == applicationMap) {
+
+    public ValueBindingImpl(Application application) {
+        Util.parameterNonNull(application);
+        this.application = application;
+
+        if (null == applicationMap) {
 //PENDING(rogerk)getCurrentinstance() performance considerations.
-	    applicationMap = 
-		FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
-	}
-	Util.doAssert(null != applicationMap);
+            applicationMap =
+                FacesContext.getCurrentInstance().getExternalContext()
+                .getApplicationMap();
+        }
+        Util.doAssert(null != applicationMap);
     }
 
 //
@@ -109,13 +108,14 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
 //
  
     public void setRef(String newRef) {
-	reset();
-	Util.parameterNonEmpty(newRef);
-	ref = newRef;
+        reset();
+        Util.parameterNonEmpty(newRef);
+        ref = newRef;
     }
 
+
     public void reset() {
-	ref = null;
+        ref = null;
     }
 
 //
@@ -126,78 +126,79 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
         throws EvaluationException, PropertyNotFoundException {
         if (context == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID)
-            );
+                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
-	Object result = null;
+        Object result = null;
 
         if (log.isDebugEnabled()) {
             log.debug("getValue(ref=" + ref + ")");
         }
-	result = getValue(context, ref);
+        result = getValue(context, ref);
         if (log.isTraceEnabled()) {
             log.trace("-->Returning " + result);
         }
-	return result;
+        return result;
     }
+
 
     protected Object getValue(FacesContext context, String toEvaluate)
         throws EvaluationException, PropertyNotFoundException {
-	Object result = null;
+        Object result = null;
 
-	try {
+        try {
             ExpressionInfo info = new ExpressionInfo();
             info.setExpressionString(toEvaluate);
-            info.setExpectedType(Object.class); 
-            info.setFacesContext(context); 
+            info.setExpectedType(Object.class);
+            info.setFacesContext(context);
             info.setVariableResolver(application.getVariableResolver());
             info.setPropertyResolver(application.getPropertyResolver());
-	    result = Util.getExpressionEvaluator().evaluate(info);
+            result = Util.getExpressionEvaluator().evaluate(info);
             if (log.isDebugEnabled()) {
                 log.debug("getValue Result:" + result);
             }
-        } catch (Throwable e) {        
+        } catch (Throwable e) {
             if (e instanceof ElException) {
                 if (log.isDebugEnabled()) {
-		    Throwable l = e;
-		    Throwable t = ((ElException) e).getCause();
-		    if (t != null) {
-			l = t;
-		    }
+                    Throwable l = e;
+                    Throwable t = ((ElException) e).getCause();
+                    if (t != null) {
+                        l = t;
+                    }
                     log.debug("getValue Evaluation threw exception:", l);
                 }
-	        throw new EvaluationException(e);
+                throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
                 if (log.isDebugEnabled()) {
-		    Throwable l = e;
-		    Throwable t = ((PropertyNotFoundException) e).getCause();
-		    if (t != null) {
-			l = t;
-		    }
+                    Throwable l = e;
+                    Throwable t = ((PropertyNotFoundException) e).getCause();
+                    if (t != null) {
+                        l = t;
+                    }
                     log.debug("getValue Evaluation threw exception:", l);
                 }
-		// Just rethrow it to keep detailed message
-	        throw (PropertyNotFoundException) e;
+                // Just rethrow it to keep detailed message
+                throw (PropertyNotFoundException) e;
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("getValue Evaluation threw exception:", e);
                 }
-	        throw new EvaluationException(e);
-	    }
+                throw new EvaluationException(e);
+            }
         }
-	return result;
+        return result;
     }
+
 
     public void setValue(FacesContext context, Object value)
         throws EvaluationException, PropertyNotFoundException {
         if (context == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID)
-            );
+                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         if (isReservedIdentifier(ref)) {
             throw new ReferenceSyntaxException(
-                Util.getExceptionMessage(Util.ILLEGAL_IDENTIFIER_LVALUE_MODE_ID, new Object[]{ref}));
+                Util.getExceptionMessage(
+                    Util.ILLEGAL_IDENTIFIER_LVALUE_MODE_ID, new Object[]{ref}));
         }
         // PENDING(edburns): check for readOnly-ness        
         try {
@@ -206,47 +207,47 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
             info.setFacesContext(context);
             info.setVariableResolver(application.getVariableResolver());
             info.setPropertyResolver(application.getPropertyResolver());
-            Expression expr = 
-		Util.getExpressionEvaluator().parseExpression(info);
-	    expr.setValue(info, value);
+            Expression expr =
+                Util.getExpressionEvaluator().parseExpression(info);
+            expr.setValue(info, value);
             return;
         } catch (Throwable e) {
             if (e instanceof ElException) {
                 if (log.isDebugEnabled()) {
-		    Throwable l = e;
-		    Throwable t = ((ElException) e).getCause();
-		    if (t != null) {
-			l = t;
-		    }
+                    Throwable l = e;
+                    Throwable t = ((ElException) e).getCause();
+                    if (t != null) {
+                        l = t;
+                    }
                     log.debug("setValue Evaluation threw exception:", l);
                 }
-	        throw new EvaluationException(e);
+                throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
                 if (log.isDebugEnabled()) {
-		    Throwable l = e;
-		    Throwable t = ((PropertyNotFoundException) e).getCause();
-		    if (t != null) {
-			l = t;
-		    }
+                    Throwable l = e;
+                    Throwable t = ((PropertyNotFoundException) e).getCause();
+                    if (t != null) {
+                        l = t;
+                    }
                     log.debug("setValue Evaluation threw exception:", l);
                 }
-		// Just rethrow it to keep detailed message
-	        throw (PropertyNotFoundException) e;
+                // Just rethrow it to keep detailed message
+                throw (PropertyNotFoundException) e;
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("setValue Evaluation threw exception:", e);
                 }
-	        throw new EvaluationException(e);
-	    }
+                throw new EvaluationException(e);
+            }
         }
     }
+
 
     public boolean isReadOnly(FacesContext context)
         throws PropertyNotFoundException {
         if (context == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID)
-            );
+                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         try {
             ExpressionInfo info = new ExpressionInfo();
@@ -254,46 +255,46 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
             info.setFacesContext(context);
             info.setVariableResolver(application.getVariableResolver());
             info.setPropertyResolver(application.getPropertyResolver());
-            Expression expr = 
-		Util.getExpressionEvaluator().parseExpression(info);
-	    return expr.isReadOnly(info);
+            Expression expr =
+                Util.getExpressionEvaluator().parseExpression(info);
+            return expr.isReadOnly(info);
         } catch (Throwable e) {
             if (e instanceof ElException) {
                 if (log.isDebugEnabled()) {
-		    Throwable l = e;
-		    Throwable t = ((ElException) e).getCause();
-		    if (t != null) {
-			l = t;
-		    }
+                    Throwable l = e;
+                    Throwable t = ((ElException) e).getCause();
+                    if (t != null) {
+                        l = t;
+                    }
                     log.debug("isReadOnly Evaluation threw exception:", l);
                 }
-	        throw new EvaluationException(e);
+                throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
                 if (log.isDebugEnabled()) {
-		    Throwable l = e;
-		    Throwable t = ((PropertyNotFoundException) e).getCause();
-		    if (t != null) {
-			l = t;
-		    }
+                    Throwable l = e;
+                    Throwable t = ((PropertyNotFoundException) e).getCause();
+                    if (t != null) {
+                        l = t;
+                    }
                     log.debug("isReadOnly Evaluation threw exception:", l);
                 }
-		// Just rethrow it to keep detailed message
-	        throw (PropertyNotFoundException) e;
+                // Just rethrow it to keep detailed message
+                throw (PropertyNotFoundException) e;
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("isReadOnly Evaluation threw exception:", e);
                 }
-	        throw new EvaluationException(e);
-	    }
+                throw new EvaluationException(e);
+            }
         }
     }
+
 
     public Class getType(FacesContext context)
         throws PropertyNotFoundException {
         if (context == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID)
-            );
+                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         try {
             ExpressionInfo info = new ExpressionInfo();
@@ -301,42 +302,43 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
             info.setFacesContext(context);
             info.setVariableResolver(application.getVariableResolver());
             info.setPropertyResolver(application.getPropertyResolver());
-            Expression expr = 
-		Util.getExpressionEvaluator().parseExpression(info);
-	    return expr.getType(info);
+            Expression expr =
+                Util.getExpressionEvaluator().parseExpression(info);
+            return expr.getType(info);
         } catch (Throwable e) {
             if (e instanceof ElException) {
                 if (log.isDebugEnabled()) {
-		    Throwable l = e;
-		    Throwable t = ((ElException) e).getCause();
-		    if (t != null) {
-			l = t;
-		    }
+                    Throwable l = e;
+                    Throwable t = ((ElException) e).getCause();
+                    if (t != null) {
+                        l = t;
+                    }
                     log.debug("getType Evaluation threw exception:", l);
                 }
-	        throw new EvaluationException(e);
+                throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
                 if (log.isDebugEnabled()) {
-		    Throwable l = e;
-		    Throwable t = ((PropertyNotFoundException) e).getCause();
-		    if (t != null) {
-			l = t;
-		    }
+                    Throwable l = e;
+                    Throwable t = ((PropertyNotFoundException) e).getCause();
+                    if (t != null) {
+                        l = t;
+                    }
                     log.debug("getType Evaluation threw exception:", l);
                 }
-		// Just rethrow it to keep detailed message
-	        throw (PropertyNotFoundException) e;
+                // Just rethrow it to keep detailed message
+                throw (PropertyNotFoundException) e;
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("getType Evaluation threw exception:", e);
                 }
-	        throw new EvaluationException(e);
-	    }
+                throw new EvaluationException(e);
+            }
         }
     }
 
+
     public String getExpressionString() {
-	return "#{" + ref + "}";
+        return "#{" + ref + "}";
     }
 
 
@@ -345,13 +347,12 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
      * other class or be declared in ValueBinding. It's used by the
      * ManagedBeanFactory to ensure that properties set by an expression
      * point to an object with an accepted lifespan.</p>
-     *
-     * <p>get the scope of the expression. Return <code>null</code> 
+     * <p/>
+     * <p>get the scope of the expression. Return <code>null</code>
      * if it isn't scoped</p>
-     *
+     * <p/>
      * <p>For example, the expression: <code>sessionScope.TestBean.one</code>
      * should return "session" as the scope.</p>
-     *
      *
      * @return the scope of the expression
      */
@@ -371,7 +372,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
         String identifier = valueBinding;
         String expression = null;
 
-        if (segmentIndex > 0 ) {
+        if (segmentIndex > 0) {
             //get first segment designated by a "." or "["
             identifier = valueBinding.substring(0, segmentIndex);
 
@@ -388,33 +389,30 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
         //for the expression in that scope. The expression is the
         //second segment.
 
-	FacesContext context = FacesContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext ec = context.getExternalContext();
 
         if (identifier.equalsIgnoreCase(RIConstants.REQUEST_SCOPE)) {
-            if ((expression != null) && 
+            if ((expression != null) &&
                 (ec.getRequestMap().get(expression) != null)) {
                 return RIConstants.REQUEST;
-            }
-            else {
+            } else {
                 return null;
             }
         }
         if (identifier.equalsIgnoreCase(RIConstants.SESSION_SCOPE)) {
-            if ((expression != null) && 
+            if ((expression != null) &&
                 (Util.getSessionMap(context).get(expression) != null)) {
                 return RIConstants.SESSION;
-            }
-            else {
+            } else {
                 return null;
             }
         }
         if (identifier.equalsIgnoreCase(RIConstants.APPLICATION_SCOPE)) {
-            if ((expression != null) && 
+            if ((expression != null) &&
                 (ec.getApplicationMap().get(expression) != null)) {
                 return RIConstants.APPLICATION;
-            }
-            else {
+            } else {
                 return null;
             }
         }
@@ -437,10 +435,11 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
         return null;
     }
 
+
     /**
      * PENDING (hans) This method should move with the getScope()
      * method.
-     *
+     * <p/>
      * The the first segment of a String tokenized by a "." or "["
      *
      * @return index of the first occurrence of . or [
@@ -459,19 +458,22 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
                 //get the bracket index
                 if (segmentIndex > bracketIndex) {
                     segmentIndex = bracketIndex;
-            	 }
+                }
             }
         }
         return segmentIndex;
     }
-    
+
+
     /**
      * <p>Returns true if the profivided identifier is a reserved identifier,
      * otherwise false.</p>
+     *
      * @param identifier the identifier to check
-     * @return returns true if the profivided identifier is a 
+     *
+     * @return returns true if the profivided identifier is a
      *         reserved identifier, otherwisefalse
-     */ 
+     */
     private boolean isReservedIdentifier(String identifier) {
         return (Arrays.binarySearch(FACES_IMPLICIT_OBJECTS, identifier) >= 0);
     }   
@@ -481,31 +483,33 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
     //
 
     public Object saveState(FacesContext context) {
-	Object result = ref;
-	return result;
+        Object result = ref;
+        return result;
     }
+
 
     public void restoreState(FacesContext context, Object state) {
-	ref = state.toString();
-	if (null == application) {
-	    application = context.getApplication();
-	}
-	if (null == applicationMap) {
-	    applicationMap = context.getExternalContext().getApplicationMap();
-	}
+        ref = state.toString();
+        if (null == application) {
+            application = context.getApplication();
+        }
+        if (null == applicationMap) {
+            applicationMap = context.getExternalContext().getApplicationMap();
+        }
     }
+
 
     private boolean isTransient = false;
-    
+
+
     public boolean isTransient() {
-	return isTransient;
+        return isTransient;
     }
+
 
     public void setTransient(boolean newTransientValue) {
-	isTransient = newTransientValue;
+        isTransient = newTransientValue;
     }
 
 
-    
-    
 } // end of class ValueBindingImpl

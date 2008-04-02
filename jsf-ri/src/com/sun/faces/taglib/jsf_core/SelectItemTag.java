@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.7 2004/02/04 23:42:09 ofung Exp $
+ * $Id: SelectItemTag.java,v 1.8 2004/02/06 18:55:42 rlubke Exp $
  */
 
 /*
@@ -9,21 +9,20 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectItem;
-import javax.servlet.jsp.JspException;
-
 import com.sun.faces.taglib.BaseComponentTag;
 import com.sun.faces.util.Util;
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectItem;
+
 
 /**
- * This class is the tag handler that evaluates the 
+ * This class is the tag handler that evaluates the
  * <code>selectitem</code> custom tag.
  */
 
-public class SelectItemTag extends BaseComponentTag
-{
+public class SelectItemTag extends BaseComponentTag {
+
     //
     // Protected Constants
     //
@@ -48,8 +47,7 @@ public class SelectItemTag extends BaseComponentTag
     // Constructors and Initializers    
     //
 
-    public SelectItemTag()
-    {
+    public SelectItemTag() {
         super();
     }
 
@@ -65,23 +63,27 @@ public class SelectItemTag extends BaseComponentTag
         this.itemValue = value;
     }
 
+
     public void setItemLabel(String label) {
         this.itemLabel = label;
     }
 
+
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
 
     //
     // General Methods
     //
-    public String getRendererType() { 
+    public String getRendererType() {
         return null;
     }
-    public String getComponentType() { 
-        return "javax.faces.SelectItem"; 
+
+
+    public String getComponentType() {
+        return "javax.faces.SelectItem";
     }
     
     //
@@ -89,59 +91,55 @@ public class SelectItemTag extends BaseComponentTag
     //
 
     protected void setProperties(UIComponent component) {
-	super.setProperties(component);
-	UISelectItem selectItem = (UISelectItem) component;
-	
+        super.setProperties(component);
+        UISelectItem selectItem = (UISelectItem) component;
+
         if (null != value) {
             if (isValueReference(value)) {
                 component.setValueBinding("value",
                                           Util.getValueBinding(value));
-             } else {
-                 selectItem.setValue(value);
-             }
-	}
+            } else {
+                selectItem.setValue(value);
+            }
+        }
 
-	if (null != itemValue) {
-	    if (isValueReference(itemValue)) {
-		selectItem.setValueBinding("itemValue", 
-					   Util.getValueBinding(itemValue));
-	    }
-	    else {
-		selectItem.setItemValue(itemValue);
-	    }
-	}
-	if (null != itemLabel) {
-	    if (isValueReference(itemLabel)) {
-		selectItem.setValueBinding("itemLabel", 
-					   Util.getValueBinding(itemLabel));
-	    }
-	    else {
-		selectItem.setItemLabel(itemLabel);
-	    }
-	}
-	if (null != description) {
-	    if (isValueReference(description)) {
-		selectItem.setValueBinding("description", 
-					   Util.getValueBinding(description));
-	    }
-	    else {
-		selectItem.setItemDescription(description);
-	    }
-	}
+        if (null != itemValue) {
+            if (isValueReference(itemValue)) {
+                selectItem.setValueBinding("itemValue",
+                                           Util.getValueBinding(itemValue));
+            } else {
+                selectItem.setItemValue(itemValue);
+            }
+        }
+        if (null != itemLabel) {
+            if (isValueReference(itemLabel)) {
+                selectItem.setValueBinding("itemLabel",
+                                           Util.getValueBinding(itemLabel));
+            } else {
+                selectItem.setItemLabel(itemLabel);
+            }
+        }
+        if (null != description) {
+            if (isValueReference(description)) {
+                selectItem.setValueBinding("description",
+                                           Util.getValueBinding(description));
+            } else {
+                selectItem.setItemDescription(description);
+            }
+        }
 
 
-	if (null != super.disabled) {
-	    if (isValueReference(super.disabled)) {
-		selectItem.setValueBinding("disabled", 
-					   Util.getValueBinding(super.disabled));
-	    }
-	    else {
-		selectItem.setItemDisabled((Boolean.valueOf(super.disabled)).
-                                            booleanValue());
-	    }
-	}
-        
-        
+        if (null != super.disabled) {
+            if (isValueReference(super.disabled)) {
+                selectItem.setValueBinding("disabled",
+                                           Util.getValueBinding(super.disabled));
+            } else {
+                selectItem.setItemDisabled((Boolean.valueOf(super.disabled)).
+                                           booleanValue());
+            }
+        }
+
+
     }
 
 } // end of class SelectItemTag

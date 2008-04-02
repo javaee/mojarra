@@ -1,5 +1,5 @@
 /*
- * $Id: TestViewHandler.java,v 1.3 2004/02/04 23:43:55 ofung Exp $
+ * $Id: TestViewHandler.java,v 1.4 2004/02/06 18:56:19 rlubke Exp $
  */
 
 /*
@@ -14,4 +14,5 @@ package com.sun.faces;
 import com.sun.faces.application.ViewHandlerImpl;
 
 public class TestViewHandler extends ViewHandlerImpl {
+
 }

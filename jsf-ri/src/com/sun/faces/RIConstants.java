@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.56 2004/02/04 23:40:45 ofung Exp $
+ * $Id: RIConstants.java,v 1.57 2004/02/06 18:54:12 rlubke Exp $
  */
 
 /*
@@ -17,58 +17,55 @@ import javax.faces.render.RenderKitFactory;
 public class RIConstants {
 
     public static final String URL_PREFIX = "/faces";
-    
+
     /**
      * Used to add uniqueness to the names.
-    */
+     */
     public final static String FACES_PREFIX = "com.sun.faces.";
 
     public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX +
-	RenderKitFactory.HTML_BASIC_RENDER_KIT;
+        RenderKitFactory.HTML_BASIC_RENDER_KIT;
 
     /**
-
-    * If the following name=value pair appears in the request query
-    * string, the RestoreViewPhase will proceed directly to
-    * RenderResponsePhase.
-
-    */
+     * If the following name=value pair appears in the request query
+     * string, the RestoreViewPhase will proceed directly to
+     * RenderResponsePhase.
+     */
 
     public final static String INITIAL_REQUEST_NAME = "initialRequest";
     public final static String INITIAL_REQUEST_VALUE = "true";
 
     public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
-   
+
     /**
+     * The presence of this UIComponent attribute with the value the same
+     * as its name indicates that the UIComponent instance has already
+     * had its SelectItem "children" configured.
+     */
 
-    * The presence of this UIComponent attribute with the value the same
-    * as its name indicates that the UIComponent instance has already
-    * had its SelectItem "children" configured.
-
-    */ 
-
-    public final static String SELECTITEMS_CONFIGURED = FACES_PREFIX + "SELECTITEMS_CONFIGURED";
+    public final static String SELECTITEMS_CONFIGURED = FACES_PREFIX +
+        "SELECTITEMS_CONFIGURED";
 
     public final static String IMPL_MESSAGES = FACES_PREFIX + "IMPL_MESSAGES";
 
-    public static final String SAVESTATE_FIELD_MARKER = FACES_PREFIX + 
-            "saveStateFieldMarker";
-   
-    public static final String JSF_RI_CONFIG = 
-	"com/sun/faces/jsf-ri-config.xml";
+    public static final String SAVESTATE_FIELD_MARKER = FACES_PREFIX +
+        "saveStateFieldMarker";
+
+    public static final String JSF_RI_CONFIG =
+        "com/sun/faces/jsf-ri-config.xml";
 
     public static final String JSF_RI_STANDARD =
         "com/sun/faces/standard-html-renderkit.xml";
 
     public final static String FORM_NUMBER_ATTR = FACES_PREFIX +
-	"FormNumber";
-    
+        "FormNumber";
+
     /**
      * <p>Parser implementation for processing JSF reference expressions.</p>
      */
-    public static final String FACES_RE_PARSER = 
+    public static final String FACES_RE_PARSER =
         FACES_PREFIX + "el.impl.parser.ELParserImpl";
-    
+
     /**
      * <p>String identifer for <em>bundle attribute.</em>.</p>
      */
@@ -79,16 +76,15 @@ public class RIConstants {
      * used to store the result of the check for the ability to load the
      * required classes for the Faces RI.</p>
      */
-    public static final String HAS_REQUIRED_CLASSES_ATTR = FACES_PREFIX + "HasRequiredClasses";
+    public static final String HAS_REQUIRED_CLASSES_ATTR = FACES_PREFIX +
+        "HasRequiredClasses";
 
     /**
+     * <p>Used in resolveVariable to mark immutable maps.</p>
+     */
 
-    * <p>Used in resolveVariable to mark immutable maps.</p>
-
-    */
-    
-    public static final String IMMUTABLE_MARKER = 
-	FACES_PREFIX + "IMMUTABLE";
+    public static final String IMMUTABLE_MARKER =
+        FACES_PREFIX + "IMMUTABLE";
 
     public static final String CONFIG_ATTR = FACES_PREFIX + "ConfigBase";
 
@@ -96,8 +92,8 @@ public class RIConstants {
 
     public static final String VERIFY_OBJECTS = FACES_PREFIX + "verifyObjects";
 
-    public static final String ONE_TIME_INITIALIZATION_ATTR = 
-	FACES_PREFIX + "OneTimeInitialization";
+    public static final String ONE_TIME_INITIALIZATION_ATTR =
+        FACES_PREFIX + "OneTimeInitialization";
 
     public static final String APPLICATION = "application";
     public static final String APPLICATION_SCOPE = "applicationScope";
@@ -111,8 +107,8 @@ public class RIConstants {
     /*
      * <p>TLV Resource Bundle Location </p>
      */
-    public static final String TLV_RESOURCE_LOCATION = 
-	FACES_PREFIX + "resources.Resources";
+    public static final String TLV_RESOURCE_LOCATION =
+        FACES_PREFIX + "resources.Resources";
 
 
 }

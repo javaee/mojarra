@@ -1,5 +1,5 @@
 /*
- * $Id: DynamicComponent.java,v 1.5 2004/02/04 23:42:32 ofung Exp $
+ * $Id: DynamicComponent.java,v 1.6 2004/02/06 18:56:03 rlubke Exp $
  */
 
 /*
@@ -10,16 +10,15 @@
 package com.sun.faces.systest;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-import javax.faces.context.FacesContext;
-import javax.faces.event.FacesEvent;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 
 
 /**
@@ -29,14 +28,14 @@ import javax.faces.context.ResponseWriter;
  * <code>encodeBegin()</code> method:</p>
  * <ul>
  * <li><code>?mode=create&id=foo&value=bar</code> - Create a new
- *     <code>UIOutput</code> child with a component identifier of
- *     <code>foo</code> and a value of <code>bar</code> (optional).  Set the
- *     <code>rendererType</code> property to <code>Text</code>.  The
- *     new child will be appended to the child list.</li>
+ * <code>UIOutput</code> child with a component identifier of
+ * <code>foo</code> and a value of <code>bar</code> (optional).  Set the
+ * <code>rendererType</code> property to <code>Text</code>.  The
+ * new child will be appended to the child list.</li>
  * <li><code>?mode=delete&id=foo</code> - Remove any child with a
- *     component identifier of <code>foo</code>.</li>
+ * component identifier of <code>foo</code>.</li>
  * </ul>
- *
+ * <p/>
  * <p>In accordance with our current restrictions, this component sets
  * <code>rendersChildren</code> to <code>true</code>, and recursively
  * renders its children in <code>encodeChildren</code>.  This component
@@ -72,7 +71,9 @@ public class DynamicComponent extends UIComponentBase {
     }
 
 
-    public boolean getRendersChildren() { return (true); }
+    public boolean getRendersChildren() {
+        return (true);
+    }
 
 
     public void encodeBegin(FacesContext context) throws IOException {

@@ -70,14 +70,14 @@ import java.util.List;
 
 
 /**
- *
  * <p>Represents a function call.</p>
- * 
+ *
  * @author Shawn Bayern (in the style of Nathan's other classes)
- **/
+ */
 
 public class FunctionInvocation
     extends Expression {
+
     //-------------------------------------
     // Constants
     //-------------------------------------
@@ -91,17 +91,21 @@ public class FunctionInvocation
     private String functionName;
     private List argumentList;
 
+
     public String getFunctionName() {
         return functionName;
     }
+
 
     public void setFunctionName(String f) {
         functionName = f;
     }
 
+
     public List getArgumentList() {
         return argumentList;
     }
+
 
     public void setArgumentList(List l) {
         argumentList = l;
@@ -110,7 +114,7 @@ public class FunctionInvocation
     //-------------------------------------
     /**
      * Constructor
-     **/
+     */
     public FunctionInvocation(String functionName, List argumentList) {
         this.functionName = functionName;
         this.argumentList = argumentList;
@@ -121,7 +125,7 @@ public class FunctionInvocation
     //-------------------------------------
     /**
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         StringBuffer b = new StringBuffer();
         b.append(functionName);
@@ -139,11 +143,9 @@ public class FunctionInvocation
 
     //-------------------------------------
     /**
-     *
      * Evaluates by looking up the name in the VariableResolver
-     **/
-    public Object evaluate(
-        ExpressionInfo exprInfo)
+     */
+    public Object evaluate(ExpressionInfo exprInfo)
         throws ElException {
         FunctionMapper functions = exprInfo.getFunctionMapper();
         // if the Map is null, then the function is invalid
@@ -185,7 +187,8 @@ public class FunctionInvocation
             if (log.isErrorEnabled()) {
                 String message = MessageUtil.getMessageWithArgs(
                     Constants.INAPPROPRIATE_FUNCTION_ARG_COUNT,
-                    functionName, new Integer(params.length),
+                    functionName,
+                    new Integer(params.length),
                     new Integer(argumentList.size()));
                 log.error(message);
                 throw new ElException(message);

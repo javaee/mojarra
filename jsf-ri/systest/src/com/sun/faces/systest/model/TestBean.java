@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.3 2004/02/04 23:42:41 ofung Exp $
+ * $Id: TestBean.java,v 1.4 2004/02/06 18:56:11 rlubke Exp $
  */
 
 /*
@@ -19,81 +19,117 @@ public class TestBean {
 
 
     private boolean booleanProperty = true;
-  
+
+
     public boolean getBooleanProperty() {
         return (this.booleanProperty);
     }
+
+
     public void setBooleanProperty(boolean booleanProperty) {
         this.booleanProperty = booleanProperty;
     }
 
 
     private byte byteProperty = 12;
+
+
     public byte getByteProperty() {
         return (this.byteProperty);
     }
+
+
     public void setByteProperty(byte byteProperty) {
         this.byteProperty = byteProperty;
     }
 
 
     private double doubleProperty = 123.45;
+
+
     public double getDoubleProperty() {
         return (this.doubleProperty);
     }
+
+
     public void setDoubleProperty(double doubleProperty) {
         this.doubleProperty = doubleProperty;
     }
 
 
     private float floatProperty = (float) 12.34;
+
+
     public float getFloatProperty() {
         return (this.floatProperty);
     }
+
+
     public void setFloatProperty(float floatProperty) {
         this.floatProperty = floatProperty;
     }
 
 
     private int intProperty = 123;
+
+
     public int getIntProperty() {
         return (this.intProperty);
     }
+
+
     public void setIntProperty(int intProperty) {
         this.intProperty = intProperty;
     }
 
 
     private long longProperty = 12345;
+
+
     public long getLongProperty() {
         return (this.longProperty);
     }
+
+
     public void setLongProperty(long longProperty) {
         this.longProperty = longProperty;
     }
 
 
     private short shortProperty = 1234;
+
+
     public short getShortProperty() {
         return (this.shortProperty);
     }
+
+
     public void setShortProperty(short shortProperty) {
         this.shortProperty = shortProperty;
     }
 
 
     private String stringProperty = "This is a String property";
+
+
     public String getStringProperty() {
         return (this.stringProperty);
     }
+
+
     public void setStringProperty(String stringProperty) {
         this.stringProperty = stringProperty;
     }
-    
+
+
     private UIInput userName = null;
+
+
     public UIInput getUserName() {
         return (this.userName);
     }
+
+
     public void setUserName(UIInput userName) {
         this.userName = userName;
     }

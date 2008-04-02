@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestCase.java,v 1.5 2004/02/04 23:42:23 ofung Exp $
+ * $Id: AbstractTestCase.java,v 1.6 2004/02/06 18:55:55 rlubke Exp $
  */
 
 /*
@@ -12,18 +12,17 @@ package com.sun.faces.htmlunit;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import java.net.URL;
-import java.util.Iterator;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpState;
 
+import java.net.URL;
+import java.util.Iterator;
 
 
 /**
@@ -205,34 +204,35 @@ public abstract class AbstractTestCase extends TestCase {
 
     }
 
-    protected boolean clearAllCookies() {
-	if (null == state) {
-	    state = client.getWebConnection().getStateForUrl(domainURL);
-	    if (null == state) {
-		return false;
-	    }
-	}
 
-	Cookie[] cookies  = state.getCookies();
-	if (null == cookies) {
-	    return false;
-	}
-	java.util.Date exp = null;
-	long 
-	    curTime = System.currentTimeMillis(),
-	    latestTime = curTime; 
-	// find the freshest cookie
-	for (int i = 0, len = cookies.length; i < len; i++) {
-	    if (null != (exp = cookies[i].getExpiryDate())) {
-		curTime = exp.getTime();
-		if (latestTime < curTime) {
-		    curTime = latestTime;
-		}
-	    }
-	}
-	boolean result = 
-	    state.purgeExpiredCookies(new java.util.Date(latestTime));
-	return result;
+    protected boolean clearAllCookies() {
+        if (null == state) {
+            state = client.getWebConnection().getStateForUrl(domainURL);
+            if (null == state) {
+                return false;
+            }
+        }
+
+        Cookie[] cookies = state.getCookies();
+        if (null == cookies) {
+            return false;
+        }
+        java.util.Date exp = null;
+        long
+            curTime = System.currentTimeMillis(),
+            latestTime = curTime;
+        // find the freshest cookie
+        for (int i = 0, len = cookies.length; i < len; i++) {
+            if (null != (exp = cookies[i].getExpiryDate())) {
+                curTime = exp.getTime();
+                if (latestTime < curTime) {
+                    curTime = latestTime;
+                }
+            }
+        }
+        boolean result =
+            state.purgeExpiredCookies(new java.util.Date(latestTime));
+        return result;
     }
 
 
@@ -276,7 +276,7 @@ public abstract class AbstractTestCase extends TestCase {
     // Return the form with the specified "id" from the specified page
     // (HtmlPage.getFormByName() looks at "name" instead)
     protected HtmlForm getFormById(HtmlPage page, String id) {
-	
+
         Iterator forms = page.getAllForms().iterator();
         while (forms.hasNext()) {
             HtmlForm form = (HtmlForm) forms.next();
@@ -285,10 +285,8 @@ public abstract class AbstractTestCase extends TestCase {
             }
         }
         return (null);
-	
+
     }
-
-
 
 
 }

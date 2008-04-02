@@ -56,34 +56,31 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- */ 
+ */
 
 package com.sun.faces.el.impl;
 
 import java.beans.PropertyEditorSupport;
 
 /**
- *
  * PropertyEditor for parsing Bean2
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class Bean2Editor
-  extends PropertyEditorSupport
-{
-  //-------------------------------------
-  public void setAsText (String pText)
-    throws IllegalArgumentException
-  {
-    if ("badvalue".equals (pText)) {
-      throw new IllegalArgumentException ("Bad value " + pText);
-    }
-    else {
-      setValue (new Bean2 (pText));
-    }
-  }
+    extends PropertyEditorSupport {
 
-  //-------------------------------------
+    //-------------------------------------
+    public void setAsText(String pText)
+        throws IllegalArgumentException {
+        if ("badvalue".equals(pText)) {
+            throw new IllegalArgumentException("Bad value " + pText);
+        } else {
+            setValue(new Bean2(pText));
+        }
+    }
+
+    //-------------------------------------
 }

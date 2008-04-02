@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.52 2004/02/04 23:41:51 ofung Exp $
+ * $Id: SecretRenderer.java,v 1.53 2004/02/06 18:55:22 rlubke Exp $
  */
 
 /*
@@ -13,20 +13,19 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
-import java.io.IOException;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.Util;
+import java.io.IOException;
 
 /**
- * <B>SecretRenderer</B> is a class that renders the current value of 
+ * <B>SecretRenderer</B> is a class that renders the current value of
  * <code>UIInput<code> component as a password field.
  */
 
 public class SecretRenderer extends HtmlBasicInputRenderer {
+
     //
     // Protected Constants
     //
@@ -64,51 +63,57 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
     // Methods From Renderer
     //
 
-    public void encodeBegin(FacesContext context, UIComponent component) 
+    public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
-    public void encodeChildren(FacesContext context, UIComponent component) 
+
+    public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
-    protected void getEndTextToRender(FacesContext context, 
-        UIComponent component, String currentValue) throws IOException {
-	ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null );
+
+    protected void getEndTextToRender(FacesContext context,
+                                      UIComponent component, String currentValue)
+        throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        Util.doAssert(writer != null);
 
         String styleClass = null;
-        
+
         String redisplay = "" + component.getAttributes().get("redisplay");
         if (redisplay == null || !redisplay.equals("true")) {
             currentValue = "";
         }
 
-	writer.startElement("input", component);
-	writeIdAttributeIfNecessary(context, writer, component);
-	writer.writeAttribute("type", "password", "type");
-	writer.writeAttribute("name", component.getClientId(context), "clientId"); 
+        writer.startElement("input", component);
+        writeIdAttributeIfNecessary(context, writer, component);
+        writer.writeAttribute("type", "password", "type");
+        writer.writeAttribute("name", component.getClientId(context),
+                              "clientId");
 
         // render default text specified
         if (currentValue != null) {
-	    writer.writeAttribute("value", currentValue, "value");
+            writer.writeAttribute("value", currentValue, "value");
         }
 
         Util.renderPassThruAttributes(writer, component);
-        Util.renderBooleanPassThruAttributes(writer,component);
+        Util.renderBooleanPassThruAttributes(writer, component);
 
-	if (null != (styleClass = (String) 
-		     component.getAttributes().get("styleClass"))) {
-	    writer.writeAttribute("class", styleClass, "styleClass");
-	}
-	
-	writer.endElement("input");
+        if (null != (styleClass = (String)
+            component.getAttributes().get("styleClass"))) {
+            writer.writeAttribute("class", styleClass, "styleClass");
+        }
+
+        writer.endElement("input");
     }
 
 } // end of class SecretRenderer

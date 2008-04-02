@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.10 2004/02/04 23:44:16 ofung Exp $
+ * $Id: TestExternalContextImpl.java,v 1.11 2004/02/06 18:56:40 rlubke Exp $
  */
 
 /*
@@ -18,29 +18,28 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
+
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
- *
- *  <B>TestExternalContextImpl</B> is a class ...
- *
+ * <B>TestExternalContextImpl</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.10 2004/02/04 23:44:16 ofung Exp $
- *
+ * @version $Id: TestExternalContextImpl.java,v 1.11 2004/02/06 18:56:40 rlubke Exp $
  */
 
-public class TestExternalContextImpl extends ServletFacesTestCase
-{
+public class TestExternalContextImpl extends ServletFacesTestCase {
+
 //
 // Protected Constants
 //
@@ -84,8 +83,14 @@ public class TestExternalContextImpl extends ServletFacesTestCase
 // Constructors and Initializers
 //
 
-    public TestExternalContextImpl() {super("TestExternalContext");}
-    public TestExternalContextImpl(String name) {super(name);}
+    public TestExternalContextImpl() {
+        super("TestExternalContext");
+    }
+
+
+    public TestExternalContextImpl(String name) {
+        super(name);
+    }
 //
 // Class methods
 //
@@ -98,8 +103,8 @@ public class TestExternalContextImpl extends ServletFacesTestCase
 // General Methods
 //
     public void initializeSupported() {
-        for (int i=0; i<supported.length; i++) {
-            supported[i]=false;
+        for (int i = 0; i < supported.length; i++) {
+            supported[i] = false;
         }
     }
 
@@ -109,8 +114,10 @@ public class TestExternalContextImpl extends ServletFacesTestCase
 
 // Tests constructor's ability to create contained objects...
     public void testConstructor() {
-        ExternalContextImpl ecImpl = new ExternalContextImpl(getConfig().getServletContext(),
-            getRequest(), getResponse());
+        ExternalContextImpl ecImpl = new ExternalContextImpl(
+            getConfig().getServletContext(),
+            getRequest(),
+            getResponse());
 
         System.out.println("Testing getSession not null...");
         assertTrue(null != ecImpl.getSession(false));
@@ -128,30 +135,41 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         assertTrue(null != ecImpl.getRequestMap());
     }
 
+
     public void testServletContext() {
         getConfig().getServletContext().setAttribute("foo", "bar");
-        ServletContext sc = (ServletContext)getFacesContext().getExternalContext().getContext();
+        ServletContext sc = (ServletContext) getFacesContext()
+            .getExternalContext()
+            .getContext();
         assertTrue(null != sc.getAttribute("foo"));
-        assertTrue(null != getFacesContext().getExternalContext().getApplicationMap().get("foo"));
+        assertTrue(
+            null !=
+            getFacesContext().getExternalContext().getApplicationMap().get(
+                "foo"));
     }
 
+
     public void testGetSession() {
-        Object session = getFacesContext().getExternalContext().getSession(false);
-        assertTrue (null != session);
+        Object session = getFacesContext().getExternalContext().getSession(
+            false);
+        assertTrue(null != session);
         assertTrue(session instanceof HttpSession);
     }
 
+
     public void testGetRequest() {
         Object request = getFacesContext().getExternalContext().getRequest();
-        assertTrue (null != request);
+        assertTrue(null != request);
         assertTrue(request instanceof ServletRequest);
     }
 
+
     public void testGetResponse() {
         Object response = getFacesContext().getExternalContext().getResponse();
-        assertTrue (null != response);
+        assertTrue(null != response);
         assertTrue(response instanceof ServletResponse);
     }
+
 
     public void beginGetRequestParameterNames(WebRequest theRequest) {
         theRequest.addParameter("One", "one");
@@ -159,11 +177,13 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         theRequest.addParameter("Three", "three");
     }
 
+
     public void testGetRequestParameterNames() {
-        Iterator iter = getFacesContext().getExternalContext().getRequestParameterNames();
-        boolean oneFound=false,twoFound=false,threeFound=false;
+        Iterator iter = getFacesContext().getExternalContext()
+            .getRequestParameterNames();
+        boolean oneFound = false, twoFound = false, threeFound = false;
         while (iter.hasNext()) {
-            String paramName = (String)iter.next();
+            String paramName = (String) iter.next();
             if (paramName.equals("One")) {
                 oneFound = true;
             } else if (paramName.equals("Two")) {
@@ -175,21 +195,27 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         assertTrue(oneFound && twoFound && threeFound);
     }
 
+
     public void beginGetLocale(WebRequest theRequest) {
         theRequest.addHeader("Accept-Language", "de");
     }
 
+
     public void testGetLocale() {
-        Locale locale = getFacesContext().getExternalContext().getRequestLocale();
+        Locale locale = getFacesContext().getExternalContext()
+            .getRequestLocale();
         assertTrue(locale.getLanguage().equals("de"));
     }
+
 
     public void beginGetRequestPathInfo(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", "/test", "/foo", "/bar", null);
     }
 
+
     public void testGetRequestPathInfo() {
-        String pathInfo = getFacesContext().getExternalContext().getRequestPathInfo();
+        String pathInfo = getFacesContext().getExternalContext()
+            .getRequestPathInfo();
         assertTrue(pathInfo.equals("/bar"));
     }
 
@@ -231,24 +257,31 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         theRequest.setURL("localhost:8080", "/test", "/foo", "/bar", null);
     }
 
+
     public void testGetRequestContextPath() {
-        String contextPath = getFacesContext().getExternalContext().getRequestContextPath();
+        String contextPath = getFacesContext().getExternalContext()
+            .getRequestContextPath();
         assertTrue(contextPath.equals("/test"));
     }
 
+
     public void testGetInitParameter() {
-        String expectedValue = config.getServletContext().getInitParameter("testInitParam");
-        String value = getFacesContext().getExternalContext().getInitParameter("testInitParam");
+        String expectedValue = config.getServletContext().getInitParameter(
+            "testInitParam");
+        String value = getFacesContext().getExternalContext().getInitParameter(
+            "testInitParam");
         assertTrue(expectedValue.equals(value));
     }
 
+
     public void testGetResourcePaths() {
-        Set paths = getFacesContext().getExternalContext().getResourcePaths("/");
+        Set paths = getFacesContext().getExternalContext().getResourcePaths(
+            "/");
         Object[] pathArray = paths.toArray();
         assertTrue(pathArray.length > 0);
         boolean foundIt = false;
         // assert that WEB-INF is found (at least)
-        for (int i=0; i<pathArray.length; i++) {
+        for (int i = 0; i < pathArray.length; i++) {
             if (pathArray[i].equals("/WEB-INF/")) {
                 foundIt = true;
                 break;
@@ -257,8 +290,10 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         assertTrue(foundIt);
     }
 
+
     public void testGetResourceAsStream() {
-        InputStream is = getFacesContext().getExternalContext().getResourceAsStream("/TestExternalContext");
+        InputStream is = getFacesContext().getExternalContext()
+            .getResourceAsStream("/TestExternalContext");
         assertTrue(null != is);
     }
 
@@ -267,14 +302,18 @@ public class TestExternalContextImpl extends ServletFacesTestCase
     public void testEncodeActionURL() {
     }
 
+
     public void testEncodeResourceURL() {
     }
+
 
     public void testEncodeNamespaceURL() {
     }
 
+
     public void testEncodeURL() {
     }
+
 
     public void testDispatchMessage() {
     }
@@ -282,7 +321,8 @@ public class TestExternalContextImpl extends ServletFacesTestCase
 
     public void testApplicatonMap() {
         System.out.println("Testing ApplicationMap...");
-        Map applicationMap = getFacesContext().getExternalContext().getApplicationMap();
+        Map applicationMap = getFacesContext().getExternalContext()
+            .getApplicationMap();
         System.out.println("    Testing UnsupportedOperationException(s)...");
         initializeSupported();
         supported[GET] = true;
@@ -299,12 +339,13 @@ public class TestExternalContextImpl extends ServletFacesTestCase
 
         testUnsupportedExceptions(applicationMap, supported);
 
-        System.out.println("    Testing supported methods of ApplicationMap...");
+        System.out.println(
+            "    Testing supported methods of ApplicationMap...");
         applicationMap.put("foo", "bar");
-        String value = (String)applicationMap.get("foo");
+        String value = (String) applicationMap.get("foo");
         assertTrue(value.equals("bar"));
-        String removed = (String)applicationMap.remove("foo");
-        assertTrue(null == (String)applicationMap.get("foo"));
+        String removed = (String) applicationMap.remove("foo");
+        assertTrue(null == (String) applicationMap.get("foo"));
         assertTrue(removed.equals("bar"));
         applicationMap.put("foo", "bar");
         assertTrue(applicationMap.containsKey("foo"));
@@ -313,14 +354,17 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         assertTrue(!applicationMap.values().isEmpty());
         assertTrue(!applicationMap.keySet().isEmpty());
         assertTrue(applicationMap.size() >= 1);
-        assertTrue(applicationMap.hashCode() ==
-            getFacesContext().getExternalContext().getApplicationMap().hashCode());
+        assertTrue(
+            applicationMap.hashCode() ==
+            getFacesContext().getExternalContext().getApplicationMap()
+            .hashCode());
         assertTrue(applicationMap.equals(
             getFacesContext().getExternalContext().getApplicationMap()));
         assertTrue(!applicationMap.equals(null));
         assertTrue(!applicationMap.equals(new HashMap()));
         applicationMap.remove("foo");
     }
+
 
     public void testSessionMap() {
         System.out.println("Testing SessionMap...");
@@ -343,10 +387,10 @@ public class TestExternalContextImpl extends ServletFacesTestCase
 
         System.out.println("    Testing supported methods of SessionMap...");
         sessionMap.put("foo", "bar");
-        String value = (String)sessionMap.get("foo");
+        String value = (String) sessionMap.get("foo");
         assertTrue(value.equals("bar"));
-        String removed = (String)sessionMap.remove("foo");
-        assertTrue(null == (String)sessionMap.get("foo"));
+        String removed = (String) sessionMap.remove("foo");
+        assertTrue(null == (String) sessionMap.get("foo"));
         assertTrue(removed.equals("bar"));
         sessionMap.put("foo", "bar");
         assertTrue(sessionMap.containsKey("foo"));
@@ -356,13 +400,15 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         assertTrue(!sessionMap.keySet().isEmpty());
         assertTrue(sessionMap.size() >= 1);
         assertTrue(sessionMap.hashCode() ==
-            getFacesContext().getExternalContext().getSessionMap().hashCode());
+                   getFacesContext().getExternalContext().getSessionMap()
+                   .hashCode());
         assertTrue(sessionMap.equals(
             getFacesContext().getExternalContext().getSessionMap()));
         assertTrue(!sessionMap.equals(null));
         assertTrue(!sessionMap.equals(new HashMap()));
         sessionMap.remove("foo");
     }
+
 
     public void testRequestMap() {
         System.out.println("Testing RequestMap...");
@@ -384,10 +430,10 @@ public class TestExternalContextImpl extends ServletFacesTestCase
 
         System.out.println("    Testing supported methods of RequestMap...");
         requestMap.put("foo", "bar");
-        String value = (String)requestMap.get("foo");
+        String value = (String) requestMap.get("foo");
         assertTrue(value.equals("bar"));
-        String removed = (String)requestMap.remove("foo");
-        assertTrue(null == (String)requestMap.get("foo"));
+        String removed = (String) requestMap.remove("foo");
+        assertTrue(null == (String) requestMap.get("foo"));
         assertTrue(removed.equals("bar"));
         requestMap.put("foo", "bar");
         assertTrue(requestMap.containsKey("foo"));
@@ -397,7 +443,8 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         assertTrue(!requestMap.keySet().isEmpty());
         assertTrue(requestMap.size() >= 1);
         assertTrue(requestMap.hashCode() ==
-            getFacesContext().getExternalContext().getRequestMap().hashCode());
+                   getFacesContext().getExternalContext().getRequestMap()
+                   .hashCode());
         assertTrue(requestMap.equals(
             getFacesContext().getExternalContext().getRequestMap()));
         assertTrue(!requestMap.equals(null));
@@ -405,13 +452,16 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         requestMap.remove("foo");
     }
 
+
     public void beginRequestParameterMap(WebRequest theRequest) {
         theRequest.addParameter("foo", "bar");
     }
 
+
     public void testRequestParameterMap() {
         System.out.println("Testing RequestParameterMap...");
-        Map requestParameterMap = getFacesContext().getExternalContext().getRequestParameterMap();
+        Map requestParameterMap = getFacesContext().getExternalContext()
+            .getRequestParameterMap();
         System.out.println("    Testing UnsupportedOperationException(s)...");
         initializeSupported();
         supported[GET] = true;
@@ -425,9 +475,10 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         supported[SIZE] = true;
         testUnsupportedExceptions(requestParameterMap, supported);
 
-        System.out.println("    Testing supported methods of RequestParameterMap...");
+        System.out.println(
+            "    Testing supported methods of RequestParameterMap...");
         assertTrue(requestParameterMap.get("foo") instanceof String);
-        String value = (String)requestParameterMap.get("foo");
+        String value = (String) requestParameterMap.get("foo");
         assertTrue(value.equals("bar"));
         assertTrue(requestParameterMap.containsKey("foo"));
         assertTrue(requestParameterMap.containsValue("bar"));
@@ -435,13 +486,16 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         assertTrue(!requestParameterMap.values().isEmpty());
         assertTrue(!requestParameterMap.keySet().isEmpty());
         assertTrue(requestParameterMap.size() >= 1);
-        assertTrue(requestParameterMap.hashCode() ==
-            getFacesContext().getExternalContext().getRequestParameterMap().hashCode());
+        assertTrue(
+            requestParameterMap.hashCode() ==
+            getFacesContext().getExternalContext().getRequestParameterMap()
+            .hashCode());
         assertTrue(requestParameterMap.equals(
             getFacesContext().getExternalContext().getRequestParameterMap()));
         assertTrue(!requestParameterMap.equals(null));
         assertTrue(!requestParameterMap.equals(new HashMap()));
     }
+
 
     public void beginRequestParameterValuesMap(WebRequest theRequest) {
         theRequest.addParameter("foo", "one");
@@ -449,12 +503,14 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         theRequest.addParameter("foo", "three");
     }
 
+
     public void testRequestParameterValuesMap() {
         System.out.println("Testing RequestParameterValuesMap...");
-        Map requestParameterValuesMap = getFacesContext().getExternalContext().getRequestParameterValuesMap();
+        Map requestParameterValuesMap = getFacesContext().getExternalContext()
+            .getRequestParameterValuesMap();
         System.out.println("    Testing UnsupportedOperationException(s)...");
         initializeSupported();
-        supported[GET]=true;
+        supported[GET] = true;
         supported[CONTAINS_KEY] = true;
         supported[CONTAINS_VALUE] = true;
         supported[ENTRY_SET] = true;
@@ -465,32 +521,43 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         supported[SIZE] = true;
         testUnsupportedExceptions(requestParameterValuesMap, supported);
 
-        System.out.println("    Testing supported methods of RequesParameterValuesMap...");
+        System.out.println(
+            "    Testing supported methods of RequesParameterValuesMap...");
         assertTrue(requestParameterValuesMap.get("foo") instanceof String[]);
-        String[] returnValues = (String[])requestParameterValuesMap.get("foo");
-        String[] values = {"one", "two", "three",};
+        String[] returnValues = (String[]) requestParameterValuesMap.get("foo");
+        String[] values = {"one", "two", "three", };
         assertTrue(Arrays.equals(values, returnValues));
         assertTrue(requestParameterValuesMap.containsKey("foo"));
-        assertTrue(requestParameterValuesMap.containsValue(request.getParameterValues("foo")));
+        assertTrue(
+            requestParameterValuesMap.containsValue(
+                request.getParameterValues("foo")));
         assertTrue(!requestParameterValuesMap.entrySet().isEmpty());
         assertTrue(!requestParameterValuesMap.values().isEmpty());
         assertTrue(!requestParameterValuesMap.keySet().isEmpty());
         assertTrue(requestParameterValuesMap.size() >= 1);
-        assertTrue(requestParameterValuesMap.hashCode() ==
-            getFacesContext().getExternalContext().getRequestParameterValuesMap().hashCode());
-        assertTrue(requestParameterValuesMap.equals(
-            getFacesContext().getExternalContext().getRequestParameterValuesMap()));
+        assertTrue(
+            requestParameterValuesMap.hashCode() ==
+            getFacesContext().getExternalContext()
+            .getRequestParameterValuesMap()
+            .hashCode());
+        assertTrue(
+            requestParameterValuesMap.equals(
+                getFacesContext().getExternalContext()
+                .getRequestParameterValuesMap()));
         assertTrue(!requestParameterValuesMap.equals(null));
         assertTrue(!requestParameterValuesMap.equals(new HashMap()));
     }
+
 
     public void beginRequestHeaderMap(WebRequest theRequest) {
         theRequest.addHeader("foo", "bar");
     }
 
+
     public void testRequestHeaderMap() {
         System.out.println("Testing RequestHeaderMap...");
-        Map requestHeaderMap = getFacesContext().getExternalContext().getRequestHeaderMap();
+        Map requestHeaderMap = getFacesContext().getExternalContext()
+            .getRequestHeaderMap();
         System.out.println("    Testing UnsupportedOperationException(s)...");
         initializeSupported();
         supported[GET] = true;
@@ -504,9 +571,10 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         supported[SIZE] = true;
         testUnsupportedExceptions(requestHeaderMap, supported);
 
-        System.out.println("    Testing supported methods of RequesHeaderMap...");
+        System.out.println(
+            "    Testing supported methods of RequesHeaderMap...");
         assertTrue(requestHeaderMap.get("foo") instanceof String);
-        String value = (String)requestHeaderMap.get("foo");
+        String value = (String) requestHeaderMap.get("foo");
         assertTrue(value.equals("bar"));
         assertTrue(requestHeaderMap.containsKey("foo"));
         assertTrue(requestHeaderMap.containsValue("bar"));
@@ -514,13 +582,16 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         assertTrue(!requestHeaderMap.values().isEmpty());
         assertTrue(!requestHeaderMap.keySet().isEmpty());
         assertTrue(requestHeaderMap.size() >= 1);
-        assertTrue(requestHeaderMap.hashCode() ==
-            getFacesContext().getExternalContext().getRequestHeaderMap().hashCode());
+        assertTrue(
+            requestHeaderMap.hashCode() ==
+            getFacesContext().getExternalContext().getRequestHeaderMap()
+            .hashCode());
         assertTrue(requestHeaderMap.equals(
             getFacesContext().getExternalContext().getRequestHeaderMap()));
         assertTrue(!requestHeaderMap.equals(null));
         assertTrue(!requestHeaderMap.equals(new HashMap()));
     }
+
 
     public void beginRequestHeaderValuesMap(WebRequest theRequest) {
         theRequest.addHeader("foo", "one");
@@ -528,9 +599,11 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         theRequest.addHeader("foo", "three");
     }
 
+
     public void testRequestHeaderValuesMap() {
         System.out.println("Testing RequestHeaderValuesMap...");
-        Map requestHeaderValuesMap = getFacesContext().getExternalContext().getRequestHeaderValuesMap();
+        Map requestHeaderValuesMap = getFacesContext().getExternalContext()
+            .getRequestHeaderValuesMap();
         System.out.println("    Testing UnsupportedOperationException(s)...");
         initializeSupported();
         supported[GET] = true;
@@ -544,36 +617,42 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         supported[SIZE] = true;
         testUnsupportedExceptions(requestHeaderValuesMap, supported);
 
-        System.out.println("    Testing supported methods of RequesHeaderValuesMap...");
+        System.out.println(
+            "    Testing supported methods of RequesHeaderValuesMap...");
         assertTrue(requestHeaderValuesMap.get("One") instanceof Enumeration);
-        Enumeration enum = (Enumeration)requestHeaderValuesMap.get("foo");
+        Enumeration enum = (Enumeration) requestHeaderValuesMap.get("foo");
         String returnValues = null;
         while (enum.hasMoreElements()) {
-            returnValues = (String)enum.nextElement();
+            returnValues = (String) enum.nextElement();
         }
 
         String value = "one,two,three";
         assertTrue(returnValues.equals(value));
         assertTrue(requestHeaderValuesMap.containsKey("foo"));
-        assertTrue(requestHeaderValuesMap.containsValue(request.getHeaders("foo")));
+        assertTrue(
+            requestHeaderValuesMap.containsValue(request.getHeaders("foo")));
         assertTrue(!requestHeaderValuesMap.containsValue(null));
         assertTrue(!requestHeaderValuesMap.containsValue(new Integer(1)));
         assertTrue(!requestHeaderValuesMap.containsValue(
-            new TestEnumeration(new String[] {"one", "two", "three"})));
+            new TestEnumeration(new String[]{"one", "two", "three"})));
         assertTrue(requestHeaderValuesMap.containsValue(
-            new TestEnumeration(new String[] {"one,two,three"})));
+            new TestEnumeration(new String[]{"one,two,three"})));
         assertTrue(!requestHeaderValuesMap.containsValue(
-            new TestEnumeration(new String[] {"one,three,two"})));
+            new TestEnumeration(new String[]{"one,three,two"})));
         assertTrue(!requestHeaderValuesMap.containsValue(
-            new TestEnumeration(new String[] {"one,two,three", "four"})));
+            new TestEnumeration(new String[]{"one,two,three", "four"})));
         assertTrue(!requestHeaderValuesMap.entrySet().isEmpty());
         assertTrue(!requestHeaderValuesMap.values().isEmpty());
         assertTrue(!requestHeaderValuesMap.keySet().isEmpty());
         assertTrue(requestHeaderValuesMap.size() >= 1);
-        assertTrue(requestHeaderValuesMap.hashCode() ==
-            getFacesContext().getExternalContext().getRequestHeaderValuesMap().hashCode());
-        assertTrue(requestHeaderValuesMap.equals(
-            getFacesContext().getExternalContext().getRequestHeaderValuesMap()));
+        assertTrue(
+            requestHeaderValuesMap.hashCode() ==
+            getFacesContext().getExternalContext().getRequestHeaderValuesMap()
+            .hashCode());
+        assertTrue(
+            requestHeaderValuesMap.equals(
+                getFacesContext().getExternalContext()
+                .getRequestHeaderValuesMap()));
         assertTrue(!requestHeaderValuesMap.equals(null));
         assertTrue(!requestHeaderValuesMap.equals(new HashMap()));
     }
@@ -622,8 +701,10 @@ public class TestExternalContextImpl extends ServletFacesTestCase
 
     public void testInitParameterMap() {
         System.out.println("Testing InitParameterMap...");
-        String expectedValue = config.getServletContext().getInitParameter("testInitParam");
-        Map initParameterMap = getFacesContext().getExternalContext().getInitParameterMap();
+        String expectedValue = config.getServletContext().getInitParameter(
+            "testInitParam");
+        Map initParameterMap = getFacesContext().getExternalContext()
+            .getInitParameterMap();
         System.out.println("    Testing UnsupportedOperationException(s)...");
         initializeSupported();
         supported[GET] = true;
@@ -637,22 +718,27 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         supported[SIZE] = true;
         testUnsupportedExceptions(initParameterMap, supported);
 
-        System.out.println("    Testing supported methods of InitParameterMap...");
+        System.out.println(
+            "    Testing supported methods of InitParameterMap...");
         assertTrue(initParameterMap.get("testInitParam") instanceof String);
-        assertTrue((initParameterMap.get("testInitParam")).equals(expectedValue));
+        assertTrue(
+            (initParameterMap.get("testInitParam")).equals(expectedValue));
         assertTrue(initParameterMap.containsKey("testInitParam"));
         assertTrue(initParameterMap.containsValue(expectedValue));
         assertTrue(!initParameterMap.entrySet().isEmpty());
         assertTrue(!initParameterMap.values().isEmpty());
         assertTrue(!initParameterMap.keySet().isEmpty());
         assertTrue(initParameterMap.size() >= 1);
-        assertTrue(initParameterMap.hashCode() ==
-            getFacesContext().getExternalContext().getInitParameterMap().hashCode());
+        assertTrue(
+            initParameterMap.hashCode() ==
+            getFacesContext().getExternalContext().getInitParameterMap()
+            .hashCode());
         assertTrue(initParameterMap.equals(
             getFacesContext().getExternalContext().getInitParameterMap()));
         assertTrue(!initParameterMap.equals(null));
         assertTrue(!initParameterMap.equals(new HashMap()));
     }
+
 
     private void testUnsupportedExceptions(Map map, boolean[] supported) {
 
@@ -790,9 +876,13 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         }
     }
 
+
     static class TestEnumeration implements Enumeration {
+
         List myList = new ArrayList();
         Iterator i = null;
+
+
         TestEnumeration(String[] values) {
             for (int i = 0; i < values.length; i++) {
                 myList.add(values[i]);
@@ -800,9 +890,11 @@ public class TestExternalContextImpl extends ServletFacesTestCase
             i = myList.iterator();
         }
 
+
         public boolean hasMoreElements() {
             return i.hasNext();
         }
+
 
         public Object nextElement() {
             return i.next();

@@ -1,5 +1,5 @@
 /*
- * $Id: ServletBean.java,v 1.2 2004/02/04 23:40:53 ofung Exp $
+ * $Id: ServletBean.java,v 1.3 2004/02/06 18:54:20 rlubke Exp $
  */
 
 /*
@@ -13,37 +13,39 @@ package com.sun.faces.config;
 /**
  * <p>This bean contains the <code>servlet-name</code> and <code>
  * servlet-class</code> information for exactly one occurance of the
- * <code>servlet</code> element in a web application deployment 
+ * <code>servlet</code> element in a web application deployment
  * descriptor.</p>
  */
 public class ServletBean {
-    
+
     /**
      * <p>The <code>web-app/servlet/servlet-name</code> element.</p>
-     */ 
+     */
     private String servletName;
+
 
     public String getServletName() {
         return servletName;
     }
 
 
-    public void setServletName(String servletName) {       
+    public void setServletName(String servletName) {
         this.servletName = servletName;
     }
 
-    
+
     /**
      * <p>The <code>web-app/servlet/servlet-class</code> element.</p>
-     */ 
+     */
     private String servletClass;
-    
+
+
     public String getServletClass() {
         return servletClass;
     }
 
 
-    public void setServletClass(String servletClass) {        
+    public void setServletClass(String servletClass) {
         this.servletClass = servletClass;
     }
 

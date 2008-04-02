@@ -1,5 +1,5 @@
 /*
- * $Id: VerbatimTag.java,v 1.7 2004/02/04 23:42:10 ofung Exp $
+ * $Id: VerbatimTag.java,v 1.8 2004/02/06 18:55:43 rlubke Exp $
  */
 
 /*
@@ -9,18 +9,16 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import javax.servlet.jsp.JspException;
-
-import javax.faces.webapp.UIComponentBodyTag;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+import javax.faces.webapp.UIComponentBodyTag;
+import javax.servlet.jsp.JspException;
 
 /**
  * <p>Tag implementation that creates a {@link UIOutput} instance
  * and allows the user to write raw markup.</p>
- *
  */
 
 public class VerbatimTag extends UIComponentBodyTag {
@@ -40,30 +38,36 @@ public class VerbatimTag extends UIComponentBodyTag {
     // --------------------------------------------------------- Public Methods
 
 
-    public String getRendererType() { return "javax.faces.Text"; }
-    public String getComponentType() { return "javax.faces.Output"; }
+    public String getRendererType() {
+        return "javax.faces.Text";
+    }
+
+
+    public String getComponentType() {
+        return "javax.faces.Output";
+    }
 
 
     protected void setProperties(UIComponent component) {
 
-	super.setProperties(component);
-	if (null != escape) {
-	    if (isValueReference(escape)) {
-		ValueBinding vb =
+        super.setProperties(component);
+        if (null != escape) {
+            if (isValueReference(escape)) {
+                ValueBinding vb =
                     FacesContext.getCurrentInstance().getApplication().
                     createValueBinding(escape);
-		component.setValueBinding("escape", vb);
-	    } else {
-		boolean _escape = new Boolean(escape).booleanValue();
-		component.getAttributes().put
+                component.setValueBinding("escape", vb);
+            } else {
+                boolean _escape = new Boolean(escape).booleanValue();
+                component.getAttributes().put
                     ("escape", _escape ? Boolean.TRUE : Boolean.FALSE);
-	    }
-	} else {
+            }
+        } else {
             component.getAttributes().put("escape", Boolean.FALSE);
         }
-	component.setTransient(true);
+        component.setTransient(true);
 
-    }    
+    }
 
 
     /**
@@ -75,8 +79,8 @@ public class VerbatimTag extends UIComponentBodyTag {
         if (getBodyContent() != null) {
             String value = getBodyContent().getString().trim();
             if (value != null) {
-		UIOutput output = (UIOutput) getComponentInstance();
-		output.setValue(value);
+                UIOutput output = (UIOutput) getComponentInstance();
+                output.setValue(value);
             }
         }
         return (getDoAfterBodyValue());

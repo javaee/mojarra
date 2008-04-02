@@ -1,5 +1,5 @@
 /*
- * $Id: Phase.java,v 1.3 2004/02/04 23:41:38 ofung Exp $
+ * $Id: Phase.java,v 1.4 2004/02/06 18:55:08 rlubke Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 package com.sun.faces.lifecycle;
 
-import javax.faces.FacesException;     
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
@@ -35,10 +35,11 @@ public abstract class Phase {
      *
      * @param context FacesContext for the current request being processed
      *
-     * @exception FacesException if a processing error occurred while
-     *  executing this phase
+     * @throws FacesException if a processing error occurred while
+     *                        executing this phase
      */
     public abstract void execute(FacesContext context) throws FacesException;
+
 
     /**
      * <p>Returns the current {@link Lifecycle} <strong>Phase</strong> identifier.

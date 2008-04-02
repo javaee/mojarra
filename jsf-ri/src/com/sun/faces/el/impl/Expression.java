@@ -62,54 +62,54 @@ package com.sun.faces.el.impl;
 
 
 /**
- *
  * <p>The abstract class from which all expression types
  * derive.
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public abstract class Expression {
+
     //-------------------------------------
     // Member variables
     //-------------------------------------
 
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public abstract String getExpressionString();
 
     //-------------------------------------
     /**
-     *
      * Evaluates the expression in the given context
-     **/
+     */
     public abstract Object evaluate(ExpressionInfo exprInfo)
         throws ElException;
 
     //-------------------------------------
 
     public void setValue(ExpressionInfo exprInfo, Object newValue)
-	throws ElException {
-	// PENDING: Align with how all other messages are created
-	throw new ElException("Read-only expressions can't be set");
+        throws ElException {
+        // PENDING: Align with how all other messages are created
+        throw new ElException("Read-only expressions can't be set");
     }
 
-    public boolean isReadOnly(ExpressionInfo exprInfo) 
+
+    public boolean isReadOnly(ExpressionInfo exprInfo)
         throws ElException {
-	return true;
+        return true;
     }
 
-    public Class getType(ExpressionInfo exprInfo) 
+
+    public Class getType(ExpressionInfo exprInfo)
         throws ElException {
-	Object value = evaluate(exprInfo);
-	if (value != null) {
-	    return value.getClass();
-	}
-	return null;
+        Object value = evaluate(exprInfo);
+        if (value != null) {
+            return value.getClass();
+        }
+        return null;
     }
 }

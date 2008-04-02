@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.19 2004/02/04 23:41:47 ofung Exp $
+ * $Id: GroupRenderer.java,v 1.20 2004/02/06 18:55:18 rlubke Exp $
  */
 
 /*
@@ -10,23 +10,21 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-
-import java.io.IOException;
-import java.util.Iterator;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * Arbitrary grouping "renderer" that simply renders its children
- * recursively in the <code>encodeEnd()</code> method. 
+ * recursively in the <code>encodeEnd()</code> method.
  *
- * @version $Id: GroupRenderer.java,v 1.19 2004/02/04 23:41:47 ofung Exp $
- *  
+ * @version $Id: GroupRenderer.java,v 1.20 2004/02/06 18:55:18 rlubke Exp $
  */
 public class GroupRenderer extends HtmlBasicRenderer {
 
@@ -69,42 +67,43 @@ public class GroupRenderer extends HtmlBasicRenderer {
     //
 
     public boolean getRendersChildren() {
-	return true;
+        return true;
     }
+
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + 
-                component.getId());
+            log.trace("Begin encoding component " +
+                      component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + 
-                component.getId() + " since " + 
-                "rendered attribute is set to false ");
+                log.trace("End encoding component " +
+                          component.getId() + " since " +
+                          "rendered attribute is set to false ");
             }
             return;
         }
 
-	// Render a span around this group if necessary
-	String 
-	    style = (String) component.getAttributes().get("style"),
-	    styleClass = (String) component.getAttributes().get("styleClass");
-	ResponseWriter writer = context.getResponseWriter();
+        // Render a span around this group if necessary
+        String
+            style = (String) component.getAttributes().get("style"),
+            styleClass = (String) component.getAttributes().get("styleClass");
+        ResponseWriter writer = context.getResponseWriter();
 
-	if (spanned(component)) {
-	    writer.startElement("span", component);
-	    writeIdAttributeIfNecessary(context, writer, component);
-	    if (styleClass != null) {
-		writer.writeAttribute("class", styleClass, "styleClass");
-	    }
-	    if (style != null) {
-		writer.writeAttribute("style", style, "style");
-	    }
-	}
+        if (spanned(component)) {
+            writer.startElement("span", component);
+            writeIdAttributeIfNecessary(context, writer, component);
+            if (styleClass != null) {
+                writer.writeAttribute("class", styleClass, "styleClass");
+            }
+            if (style != null) {
+                writer.writeAttribute("style", style, "style");
+            }
+        }
 
     }
 
@@ -118,18 +117,18 @@ public class GroupRenderer extends HtmlBasicRenderer {
         // false.
         if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + 
-                component.getId() + " since " + 
-                "rendered attribute is set to false ");
+                log.trace("End encoding component " +
+                          component.getId() + " since " +
+                          "rendered attribute is set to false ");
             }
             return;
         }
 
-	// Render our children recursively
-	Iterator kids = getChildren(component);
-	while (kids.hasNext()) {
-	    encodeRecursive(context, (UIComponent) kids.next());
-	}
+        // Render our children recursively
+        Iterator kids = getChildren(component);
+        while (kids.hasNext()) {
+            encodeRecursive(context, (UIComponent) kids.next());
+        }
         if (log.isTraceEnabled()) {
             log.trace("End encoding children " + component.getId());
         }
@@ -141,30 +140,31 @@ public class GroupRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + 
-                component.getId() + " since " + 
-                "rendered attribute is set to false ");
+                log.trace("End encoding component " +
+                          component.getId() + " since " +
+                          "rendered attribute is set to false ");
             }
             return;
         }
 
-	// Close our span element if necessary
-	ResponseWriter writer = context.getResponseWriter();
-	if (spanned(component)) {
-	    writer.endElement("span");
-	}
+        // Close our span element if necessary
+        ResponseWriter writer = context.getResponseWriter();
+        if (spanned(component)) {
+            writer.endElement("span");
+        }
         if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + 
-                    component.getId());
+            log.trace("End encoding component " +
+                      component.getId());
         }
 
     }
+
 
     /**
      * <p>Return true if we need to render a span element around this group.
@@ -172,13 +172,13 @@ public class GroupRenderer extends HtmlBasicRenderer {
      * @param component <code>UIComponent</code> for this group
      */
     private boolean spanned(UIComponent component) {
-	if (shouldWriteIdAttribute(component) ||
-	    (component.getAttributes().get("style") != null) ||
-	    (component.getAttributes().get("styleClass") != null)) {
-	    return (true);
-	} else {
-	    return (false);
-	}
+        if (shouldWriteIdAttribute(component) ||
+            (component.getAttributes().get("style") != null) ||
+            (component.getAttributes().get("styleClass") != null)) {
+            return (true);
+        } else {
+            return (false);
+        }
 
     }
 

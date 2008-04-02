@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTagParserImpl.java,v 1.8 2004/02/04 23:42:05 ofung Exp $
+ * $Id: CommandTagParserImpl.java,v 1.9 2004/02/06 18:55:38 rlubke Exp $
  */
 
 /*
@@ -9,23 +9,20 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import java.util.ResourceBundle;
-import java.text.MessageFormat;
-
+import com.sun.faces.RIConstants;
+import com.sun.faces.taglib.TagParser;
+import com.sun.faces.taglib.ValidatorInfo;
 import org.xml.sax.Attributes;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.taglib.FacesValidator;
-import com.sun.faces.taglib.ValidatorInfo;
-import com.sun.faces.taglib.TagParser;
-
-import com.sun.faces.util.Util;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 /**
  * <p> Parses the command tag attributes and verifies that the required
  * attributes are present</p>
  */
 public class CommandTagParserImpl implements TagParser {
+
     //*********************************************************************
     // Validation and configuration state (protected)
 
@@ -39,23 +36,23 @@ public class CommandTagParserImpl implements TagParser {
 
     /**
      * <p>CommandTagParserImpl constructor</p>
-     *
      */
     public CommandTagParserImpl() {
         failed = false;
-	failureMessages = new StringBuffer();
+        failureMessages = new StringBuffer();
     }
+
 
     /**
      * <p>Set the validator info object that has the current tag
      * information</p>
      *
      * @param ValidatorInfo object with current tag info
-     *
      */
     public void setValidatorInfo(ValidatorInfo validatorInfo) {
         this.validatorInfo = validatorInfo;
     }
+
 
     /**
      * <p>Get the failure message</p>
@@ -63,18 +60,20 @@ public class CommandTagParserImpl implements TagParser {
      * @return String Failure message
      */
     public String getMessage() {
-	return failureMessages.toString();
+        return failureMessages.toString();
     }
+
 
     /**
      * <p>Return false if validator conditions have not been met</p>
      *
-     * @return boolean false if validation conditions have not been met 
+     * @return boolean false if validation conditions have not been met
      */
     public boolean hasFailed() {
         return failed;
     }
-	    
+
+
     /**
      * <p>Parse the starting element.  Parcel out to appropriate
      * handler method.</p>
@@ -83,9 +82,10 @@ public class CommandTagParserImpl implements TagParser {
         String qn = validatorInfo.getQName();
 
         if (-1 != (qn.indexOf("commandButton"))) {
-	    handleCommandButton();
+            handleCommandButton();
         }
     }
+
 
     /**
      * <p>Parse the end element</p>
@@ -100,7 +100,7 @@ public class CommandTagParserImpl implements TagParser {
 
     /**
      * <p>set failed flag to true unless tag has a value attribute</p>.
-     *
+     * <p/>
      * <p>PRECONDITION: qn is a commandButton</p>
      */
     private void handleCommandButton() {
@@ -118,7 +118,7 @@ public class CommandTagParserImpl implements TagParser {
             }
         }
         if (failed = !(hasValue || hasImage)) {
-  	    Object[] obj = new Object[1];
+            Object[] obj = new Object[1];
             obj[0] = qn;
             ResourceBundle rb = ResourceBundle.getBundle(
                 RIConstants.TLV_RESOURCE_LOCATION);
@@ -128,5 +128,5 @@ public class CommandTagParserImpl implements TagParser {
         }
 
     }
- 
+
 }

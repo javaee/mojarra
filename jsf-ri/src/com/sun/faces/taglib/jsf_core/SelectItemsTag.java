@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsTag.java,v 1.5 2004/02/04 23:42:09 ofung Exp $
+ * $Id: SelectItemsTag.java,v 1.6 2004/02/06 18:55:42 rlubke Exp $
  */
 
 /*
@@ -9,18 +9,19 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.util.Util;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItems;
-import com.sun.faces.util.Util;
-import com.sun.faces.taglib.BaseComponentTag;
 
 /**
- * This class is the tag handler that evaluates the 
+ * This class is the tag handler that evaluates the
  * <code>selectitems</code> custom tag.
  */
 
-public class SelectItemsTag extends BaseComponentTag
-{
+public class SelectItemsTag extends BaseComponentTag {
+
     //
     // Protected Constants
     //
@@ -41,8 +42,7 @@ public class SelectItemsTag extends BaseComponentTag
     // Constructors and Initializers    
     //
 
-    public SelectItemsTag()
-    {
+    public SelectItemsTag() {
         super();
     }
 
@@ -57,28 +57,31 @@ public class SelectItemsTag extends BaseComponentTag
     //
     // General Methods
     //
-    public String getRendererType() { 
-        return null; 
+    public String getRendererType() {
+        return null;
     }
-    public String getComponentType() { 
-        return "javax.faces.SelectItems"; 
+
+
+    public String getComponentType() {
+        return "javax.faces.SelectItems";
     }
+
 
     //
     // Methods from BaseComponentTag
     //
     protected void setProperties(UIComponent component) {
-	super.setProperties(component);
-	UISelectItems selectItems = (UISelectItems) component;
-	
+        super.setProperties(component);
+        UISelectItems selectItems = (UISelectItems) component;
+
         if (null != value) {
             if (isValueReference(value)) {
                 component.setValueBinding("value",
                                           Util.getValueBinding(value));
-             } else {
-                 selectItems.setValue(value);
-             }
-	}
+            } else {
+                selectItems.setValue(value);
+            }
+        }
     }
 
 } // end of class SelectItemsTag

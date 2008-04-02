@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.14 2004/02/04 23:44:46 ofung Exp $
+ * $Id: TestRenderKit.java,v 1.15 2004/02/06 18:57:05 rlubke Exp $
  */
 
 /*
@@ -11,59 +11,43 @@
 
 package com.sun.faces.renderkit;
 
+import com.sun.faces.FileOutputResponseWriter;
+import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.TextRenderer;
+import org.apache.cactus.ServletTestCase;
 
-import java.io.Writer;
-import java.util.Iterator;
-
-import javax.faces.component.UIOutput;
+import javax.faces.FactoryFinder;
+import javax.faces.context.ResponseStream;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.context.ResponseStream;
 
-import com.sun.faces.util.Util;
-
-
-import org.apache.cactus.ServletTestCase;
-
-import com.sun.faces.CompareFiles;
-import com.sun.faces.FileOutputResponseWrapper;
-import com.sun.faces.FileOutputResponseWriter;
-import com.sun.faces.ServletFacesTestCase;
-
-import java.io.PrintStream;
-import java.io.FileOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.Writer;
 
 /**
- *
- *  <B>TestRenderKit</B> is a class ...
- *
+ * <B>TestRenderKit</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.14 2004/02/04 23:44:46 ofung Exp $
- * 
+ * @version $Id: TestRenderKit.java,v 1.15 2004/02/06 18:57:05 rlubke Exp $
  * @see	Blah
  * @see	Bloo
- *
  */
 
 public class TestRenderKit extends ServletFacesTestCase {
+
 //
 // Protected Constants
 //
 
-public static final String OUTPUT_FILENAME = 
-    FileOutputResponseWriter.FACES_RESPONSE_ROOT + "TestRenderKit_out";
+    public static final String OUTPUT_FILENAME =
+        FileOutputResponseWriter.FACES_RESPONSE_ROOT + "TestRenderKit_out";
 
-public static final String CORRECT_OUTPUT_FILENAME = 
-    FileOutputResponseWriter.FACES_RESPONSE_ROOT + "TestRenderKit_correct";
+    public static final String CORRECT_OUTPUT_FILENAME =
+        FileOutputResponseWriter.FACES_RESPONSE_ROOT + "TestRenderKit_correct";
 
 
 
@@ -84,8 +68,14 @@ public static final String CORRECT_OUTPUT_FILENAME =
 // Constructors and Initializers    
 //
 
-    public TestRenderKit() {super("TestRenderKit");}
-    public TestRenderKit(String name) {super(name);}
+    public TestRenderKit() {
+        super("TestRenderKit");
+    }
+
+
+    public TestRenderKit(String name) {
+        super(name);
+    }
 //
 // Class methods
 //
@@ -98,86 +88,88 @@ public static final String CORRECT_OUTPUT_FILENAME =
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         renderKit = renderKitFactory.getRenderKit(getFacesContext(),
-						  RenderKitFactory.HTML_BASIC_RENDER_KIT);
+                                                  RenderKitFactory.HTML_BASIC_RENDER_KIT);
 
         // 1. Verify "getRenderer()" returns a Renderer instance
         //  
-        Renderer renderer = renderKit.getRenderer("javax.faces.Form", "javax.faces.Form");
+        Renderer renderer = renderKit.getRenderer("javax.faces.Form",
+                                                  "javax.faces.Form");
         assertTrue(renderer instanceof FormRenderer);
 
-	// 2. Verify "getRenderer()" returns null
-	// 
-	renderer = renderKit.getRenderer("Foo", "Bar");
-	assertTrue(renderer == null);
+        // 2. Verify "getRenderer()" returns null
+        //
+        renderer = renderKit.getRenderer("Foo", "Bar");
+        assertTrue(renderer == null);
 
-	// 3. Verify NPE
-	//
-	boolean exceptionThrown = false;
-	try {
-	    renderer = renderKit.getRenderer(null, null);
-	} catch (NullPointerException e) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
+        // 3. Verify NPE
+        //
+        boolean exceptionThrown = false;
+        try {
+            renderer = renderKit.getRenderer(null, null);
+        } catch (NullPointerException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
     }
 
+
     public void testAddRenderer() {
-	boolean bool = false;
-	FormRenderer formRenderer = new FormRenderer();
-	TextRenderer textRenderer = new TextRenderer();
+        boolean bool = false;
+        FormRenderer formRenderer = new FormRenderer();
+        TextRenderer textRenderer = new TextRenderer();
 
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         renderKit = renderKitFactory.getRenderKit(getFacesContext(),
-						  RenderKitFactory.HTML_BASIC_RENDER_KIT);
-	// Test to see if addRenderer replaces the renderer if given
-	// the same rendererType.
-	//
+                                                  RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        // Test to see if addRenderer replaces the renderer if given
+        // the same rendererType.
+        //
         renderKit.addRenderer("Form", "Form", formRenderer);
-	assertTrue(renderKit.getRenderer("Form", "Form") instanceof FormRenderer);
+        assertTrue(
+            renderKit.getRenderer("Form", "Form") instanceof FormRenderer);
         renderKit.addRenderer("Form", "Form", textRenderer);
-	assertTrue(renderKit.getRenderer("Form", "Form") instanceof TextRenderer);
+        assertTrue(
+            renderKit.getRenderer("Form", "Form") instanceof TextRenderer);
 
-	bool = false;
-	try {
-	    renderKit.addRenderer("BlahFamily", null, formRenderer);
-	}
-	catch (NullPointerException e) {
-	    bool = true;
-	}
-	assertTrue(bool);
+        bool = false;
+        try {
+            renderKit.addRenderer("BlahFamily", null, formRenderer);
+        } catch (NullPointerException e) {
+            bool = true;
+        }
+        assertTrue(bool);
 
-	bool = false;
-	try {
-	    renderKit.addRenderer(null, "BlahRenderer", formRenderer);
-	}
-	catch (NullPointerException e) {
-	    bool = true;
-	}
-	assertTrue(bool);
-	
-	bool = false;
-	try {
-	    renderKit.addRenderer("BlahFamily", "BlahRenderer", null);
-	}
-	catch (NullPointerException e) {
-	    bool = true;
-	}
-	assertTrue(bool);
-	
+        bool = false;
+        try {
+            renderKit.addRenderer(null, "BlahRenderer", formRenderer);
+        } catch (NullPointerException e) {
+            bool = true;
+        }
+        assertTrue(bool);
+
+        bool = false;
+        try {
+            renderKit.addRenderer("BlahFamily", "BlahRenderer", null);
+        } catch (NullPointerException e) {
+            bool = true;
+        }
+        assertTrue(bool);
+
     }
-    
+
+
     public void testCreateResponseStream() throws Exception {
         RenderKitFactory renderKitFactory = (RenderKitFactory)
-                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         renderKit = renderKitFactory.getRenderKit(getFacesContext(),
-						  RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        
+                                                  RenderKitFactory.HTML_BASIC_RENDER_KIT);
+
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ResponseStream stream = renderKit.createResponseStream(out);
         stream.write('a');
         stream.write((byte) 'b');
-        stream.write(new byte[] { (byte) 'c', (byte) 'd', (byte) 'e' }, 1, 2);
+        stream.write(new byte[]{(byte) 'c', (byte) 'd', (byte) 'e'}, 1, 2);
         stream.flush();
         String result = out.toString();
         assertTrue(result.equals("abde"));
@@ -185,39 +177,52 @@ public static final String CORRECT_OUTPUT_FILENAME =
             stream.close();
         } catch (IOException ioe) {
             ; // ignore
-        }        
+        }
     }
+
 
     public void testCreateResponseWriter() throws Exception {
 
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
-						  RenderKitFactory.HTML_BASIC_RENDER_KIT);
+                                                            RenderKitFactory.HTML_BASIC_RENDER_KIT);
         try {
             renderKit.createResponseWriter(new Writer() {
                 public void close() throws IOException {
                 }
+
+
                 public void flush() throws IOException {
                 }
+
+
                 public void write(char cbuf) throws IOException {
                 }
+
+
                 public void write(char[] cbuf, int off,
-                    int len) throws IOException {
+                                  int len) throws IOException {
                 }
+
+
                 public void write(int c) throws IOException {
                 }
+
+
                 public void write(String str) throws IOException {
                 }
+
+
                 public void write(String str, int off,
-                    int len) throws IOException {
+                                  int len) throws IOException {
                 }
             }, null, "foo");
 
             fail("IllegalArgumentException Should Have Been Thrown!");
 
-	} catch (IllegalArgumentException iae) {
-	}
+        } catch (IllegalArgumentException iae) {
+        }
     }
 
 } // end of class TestRenderKit

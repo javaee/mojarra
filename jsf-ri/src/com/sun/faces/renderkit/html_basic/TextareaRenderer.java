@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.8 2004/02/04 23:41:52 ofung Exp $
+ * $Id: TextareaRenderer.java,v 1.9 2004/02/06 18:55:23 rlubke Exp $
  */
 
 /*
@@ -13,26 +13,19 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
-import java.io.IOException;
-
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.Util;
-
-
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import java.io.IOException;
 
 /**
- * <B>TextareaRenderer</B> is a class that renders the current value of 
+ * <B>TextareaRenderer</B> is a class that renders the current value of
  * <code>UIInput<code> component as a Textarea.
  */
 
 public class TextareaRenderer extends HtmlBasicInputRenderer {
+
     //
     // Protected Constants
     //
@@ -70,39 +63,44 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
     // Methods From Renderer
     //
 
-    public void encodeBegin(FacesContext context, UIComponent component) 
-           throws IOException {
-               
+    public void encodeBegin(FacesContext context, UIComponent component)
+        throws IOException {
+
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
+
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
-    protected void getEndTextToRender(FacesContext context, UIComponent component,
-            String currentValue) throws IOException {
-                
-        ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null );	
 
-	writer.startElement("textarea", component);
-	writeIdAttributeIfNecessary(context, writer, component);
-	writer.writeAttribute("name", component.getClientId(context), "clientId");
+    protected void getEndTextToRender(FacesContext context, UIComponent component,
+                                      String currentValue) throws IOException {
+
+        ResponseWriter writer = context.getResponseWriter();
+        Util.doAssert(writer != null);
+
+        writer.startElement("textarea", component);
+        writeIdAttributeIfNecessary(context, writer, component);
+        writer.writeAttribute("name", component.getClientId(context),
+                              "clientId");
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 
         // render default text specified
-        if ( currentValue != null ) {
-	    writer.writeText(currentValue, "value");
+        if (currentValue != null) {
+            writer.writeText(currentValue, "value");
         }
 
-	writer.endElement("textarea");
+        writer.endElement("textarea");
     }
 
 } // end of class TextareaRenderer

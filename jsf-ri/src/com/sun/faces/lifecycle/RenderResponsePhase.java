@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.12 2004/02/04 23:41:38 ofung Exp $
+ * $Id: RenderResponsePhase.java,v 1.13 2004/02/06 18:55:09 rlubke Exp $
  */
 
 /*
@@ -12,34 +12,30 @@
 package com.sun.faces.lifecycle;
 
 
-import com.sun.faces.util.Util;
-
-import javax.faces.FacesException;
-import javax.faces.application.Application;
-import javax.faces.event.PhaseId;
-import javax.faces.context.FacesContext;
-
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
+
+import java.io.IOException;
+
 
 /**
-
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.12 2004/02/04 23:41:38 ofung Exp $
- *
+ * @version $Id: RenderResponsePhase.java,v 1.13 2004/02/06 18:55:09 rlubke Exp $
  */
 
 public class RenderResponsePhase extends Phase {
+
 //
 // Protected Constants
 //
 // Log instance for this class
-protected static Log log = LogFactory.getLog(RenderResponsePhase.class);
+    protected static Log log = LogFactory.getLog(RenderResponsePhase.class);
 
 //
 // Class Variables
@@ -57,9 +53,9 @@ protected static Log log = LogFactory.getLog(RenderResponsePhase.class);
 // Constructors and Genericializers    
 //
 
-public RenderResponsePhase() {
-    super();
-}
+    public RenderResponsePhase() {
+        super();
+    }
 
 //
 // Class methods
@@ -73,28 +69,30 @@ public RenderResponsePhase() {
 // Methods from Phase
 //
 
-public PhaseId getId() {
-    return PhaseId.RENDER_RESPONSE;
-}
+    public PhaseId getId() {
+        return PhaseId.RENDER_RESPONSE;
+    }
 
-public void execute(FacesContext facesContext) throws FacesException
-{
-    if (log.isDebugEnabled()) {
-        log.debug("Entering RenderResponsePhase");
+
+    public void execute(FacesContext facesContext) throws FacesException {
+        if (log.isDebugEnabled()) {
+            log.debug("Entering RenderResponsePhase");
+        }
+        if (log.isDebugEnabled()) {
+            log.debug(
+                "About to render view " +
+                facesContext.getViewRoot().getViewId());
+        }
+        try {
+            facesContext.getApplication().getViewHandler().
+                renderView(facesContext, facesContext.getViewRoot());
+        } catch (IOException e) {
+            throw new FacesException(e.getMessage(), e);
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("Exiting RenderResponsePhase");
+        }
     }
-    if (log.isDebugEnabled()) {
-        log.debug("About to render view " + facesContext.getViewRoot().getViewId());
-    }
-    try { 
-	facesContext.getApplication().getViewHandler().
-                renderView(facesContext, facesContext.getViewRoot()); 
-    } catch (IOException e) { 
-	throw new FacesException(e.getMessage(), e);
-    }
-    if (log.isDebugEnabled()) {
-        log.debug("Exiting RenderResponsePhase");
-    }
-}
 
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.79 2004/02/04 23:44:49 ofung Exp $
+ * $Id: TestRenderers_2.java,v 1.80 2004/02/06 18:57:09 rlubke Exp $
  */
 
 /*
@@ -11,52 +11,45 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.TestBean;
 import com.sun.faces.util.Util;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Iterator;
+import org.apache.cactus.WebRequest;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UISelectItems;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.component.UIMessage;
-import javax.faces.component.UIMessages;
-import javax.faces.component.UIParameter;
-import javax.faces.component.UISelectBoolean;
-import javax.faces.component.UISelectOne;
 import javax.faces.component.UIGraphic;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIMessage;
+import javax.faces.component.UIMessages;
+import javax.faces.component.UIOutput;
+import javax.faces.component.UIParameter;
+import javax.faces.component.UISelectBoolean;
+import javax.faces.component.UISelectItems;
+import javax.faces.component.UISelectOne;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIForm;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
-import org.apache.cactus.WebRequest;
-
-import com.sun.faces.JspFacesTestCase;
-import com.sun.faces.TestBean;
+import java.io.IOException;
+import java.io.StringWriter;
 
 /**
- *
- *  Test encode and decode methods in Renderer classes.
- *
+ * Test encode and decode methods in Renderer classes.
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.79 2004/02/04 23:44:49 ofung Exp $
- * 
- *
+ * @version $Id: TestRenderers_2.java,v 1.80 2004/02/06 18:57:09 rlubke Exp $
  */
 
-public class TestRenderers_2 extends JspFacesTestCase
-{
+public class TestRenderers_2 extends JspFacesTestCase {
+
     //
     // Instance Variables
     //
@@ -68,23 +61,26 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public static String DATE_STR = "Jan 12, 1952";
     public static String DATE_STR_LONG = "Sat, Jan 12, 1952 AD at 12:31:31 PM";
-    
+
     public static String TIME_STR = "12:31:31 PM";
     public static String NUMBER_STR = "47%";
     public static String NUMBER_STR_PATTERN = "1999.8765432";
-        
+
+
     public boolean sendWriterToFile() {
         return true;
-    }    
+    }
+
 
     public String getExpectedOutputFilename() {
         return "CorrectRenderersResponse_2";
     }
 
-    public String [] getLinesToIgnore() {
-        String[] lines =  {
-	    "<img id=\"myGraphicImage\" src=\"/test/nonModelReferenceImage.gif\" usemap=\"usemap\" ismap=\"ismap\" alt=\"\" /><img id=\"_id0\" src=\"/test/foo/modelReferenceImage.gif\" usemap=\"usemap\" ismap=\"ismap\" alt=\"\" /><span>My name is Bobby Orr</span>"
-};
+
+    public String[] getLinesToIgnore() {
+        String[] lines = {
+            "<img id=\"myGraphicImage\" src=\"/test/nonModelReferenceImage.gif\" usemap=\"usemap\" ismap=\"ismap\" alt=\"\" /><img id=\"_id0\" src=\"/test/foo/modelReferenceImage.gif\" usemap=\"usemap\" ismap=\"ismap\" alt=\"\" /><span>My name is Bobby Orr</span>"
+        };
         return lines;
     }   
  
@@ -95,7 +91,7 @@ public class TestRenderers_2 extends JspFacesTestCase
     //
     // Instance Variables
     //
-    private FacesContextFactory  facesContextFactory = null;
+    private FacesContextFactory facesContextFactory = null;
 
     // Attribute Instance Variables
     // Relationship Instance Variables
@@ -103,8 +99,14 @@ public class TestRenderers_2 extends JspFacesTestCase
     // Constructors and Initializers    
     //
 
-    public TestRenderers_2() {super("TestRenderers_2");}
-    public TestRenderers_2(String name) {super(name);}
+    public TestRenderers_2() {
+        super("TestRenderers_2");
+    }
+
+
+    public TestRenderers_2(String name) {
+        super(name);
+    }
 
     //
     // Class methods
@@ -114,15 +116,17 @@ public class TestRenderers_2 extends JspFacesTestCase
     // Methods from TestCase
     //
     public void setUp() {
-	super.setUp();
-        ApplicationFactory aFactory = 
-	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        super.setUp();
+        ApplicationFactory aFactory =
+            (ApplicationFactory) FactoryFinder.getFactory(
+                FactoryFinder.APPLICATION_FACTORY);
         application = aFactory.getApplication();
         UIViewRoot page = new UIViewRoot();
-        page.setViewId("viewId");       
+        page.setViewId("viewId");
         getFacesContext().setViewRoot(page);
-	assertTrue(null != getFacesContext().getResponseWriter());
-    }     
+        assertTrue(null != getFacesContext().getResponseWriter());
+    }
+
 
     public void beginRenderers(WebRequest theRequest) {
         // for CheckboxRenderer
@@ -147,7 +151,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("myGraphicImage", "graphicimage");
 
         theRequest.addParameter("myOutputMessage", "outputmessage");
-    } 
+    }
+
 
     public void testRenderers() throws Exception {
 
@@ -165,7 +170,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         testInputTextRenderer(root);
         testOutputTextRenderer(root);
         testTextareaRenderer(root);
-        testGraphicImageRenderer(root);            
+        testGraphicImageRenderer(root);
         testOutputMessageRenderer(root);
         testMessageRenderer(root);
         testMessagesRenderer(root);
@@ -173,7 +178,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue(verifyExpectedOutput());
 
     }
-    
+
+
     //
     // General Methods
     //
@@ -183,7 +189,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         selectBoolean.setValue(null);
         selectBoolean.setId("myCheckbox");
         root.getChildren().add(selectBoolean);
-             
+
         CheckboxRenderer checkboxRenderer = new CheckboxRenderer();
 
         // First test no parameter coming in - (the checkbox
@@ -194,10 +200,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing decode method - no parameter");
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
         assertEquals("false", selectBoolean.getSubmittedValue());
-        Object value = checkboxRenderer.getConvertedValue(
-           getFacesContext(),
-           selectBoolean,
-           selectBoolean.getSubmittedValue());
+        Object value = checkboxRenderer.getConvertedValue(getFacesContext(),
+                                                          selectBoolean,
+                                                          selectBoolean.getSubmittedValue());
         assertEquals(Boolean.FALSE, value);
 
         // Test parameter coming in - (the checkbox has been checked)
@@ -205,64 +210,60 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
 
         System.out.println("    Testing decode method - parameter (on)");
-	selectBoolean = new UISelectBoolean();
+        selectBoolean = new UISelectBoolean();
         selectBoolean.setId("myCheckboxOn");
         selectBoolean.setValue(null);
-        checkboxRenderer.decode(getFacesContext(), selectBoolean); 
+        checkboxRenderer.decode(getFacesContext(), selectBoolean);
         assertEquals("true", selectBoolean.getSubmittedValue());
-        value = checkboxRenderer.getConvertedValue(
-           getFacesContext(),
-           selectBoolean,
-           selectBoolean.getSubmittedValue());
+        value = checkboxRenderer.getConvertedValue(getFacesContext(),
+                                                   selectBoolean,
+                                                   selectBoolean.getSubmittedValue());
         assertEquals(Boolean.TRUE, value);
         
 
         // test decode method
 
         System.out.println("    Testing decode method - parameter (yes)");
-	selectBoolean = new UISelectBoolean();
+        selectBoolean = new UISelectBoolean();
         selectBoolean.setId("myCheckboxYes");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
         assertEquals("true", selectBoolean.getSubmittedValue());
-        value = checkboxRenderer.getConvertedValue(
-           getFacesContext(),
-           selectBoolean,
-           selectBoolean.getSubmittedValue());
+        value = checkboxRenderer.getConvertedValue(getFacesContext(),
+                                                   selectBoolean,
+                                                   selectBoolean.getSubmittedValue());
         assertEquals(Boolean.TRUE, value);
        
         // test decode method
 
         System.out.println("    Testing decode method - parameter (true)");
-	selectBoolean = new UISelectBoolean();
+        selectBoolean = new UISelectBoolean();
         selectBoolean.setId("myCheckboxTrue");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
         assertEquals("true", selectBoolean.getSubmittedValue());
-        value = checkboxRenderer.getConvertedValue(
-           getFacesContext(),
-           selectBoolean,
-           selectBoolean.getSubmittedValue());
+        value = checkboxRenderer.getConvertedValue(getFacesContext(),
+                                                   selectBoolean,
+                                                   selectBoolean.getSubmittedValue());
         assertEquals(Boolean.TRUE, value);
         
         // test decode method
         
         System.out.println("    Testing decode method - parameter (true)");
-	selectBoolean = new UISelectBoolean();
+        selectBoolean = new UISelectBoolean();
         selectBoolean.setId("myCheckboxTrue");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
         assertEquals("true", selectBoolean.getSubmittedValue());
-        value = checkboxRenderer.getConvertedValue(
-           getFacesContext(),
-           selectBoolean,
-           selectBoolean.getSubmittedValue());
+        value = checkboxRenderer.getConvertedValue(getFacesContext(),
+                                                   selectBoolean,
+                                                   selectBoolean.getSubmittedValue());
         assertEquals(Boolean.TRUE, value);
         
          
         // test decode method with checkbox disabled.
         System.out.println("    Testing decode method - parameter (yes)");
-	selectBoolean = new UISelectBoolean();
+        selectBoolean = new UISelectBoolean();
         selectBoolean.setId("mycheckboxDisabled");
         selectBoolean.getAttributes().put("disabled", "true");
         selectBoolean.setValue(Boolean.TRUE);
@@ -273,7 +274,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         
         // test encode method
         System.out.println("    Testing encode method - rendering checked");
-	selectBoolean = new UISelectBoolean();
+        selectBoolean = new UISelectBoolean();
         selectBoolean.setId("myCheckbox");
         selectBoolean.setSelected(true);
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
@@ -286,11 +287,13 @@ public class TestRenderers_2 extends JspFacesTestCase
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
         getFacesContext().getResponseWriter().writeText("\n", null);
 
-        System.out.println("    Testing encode method - rendering unchecked with label");
+        System.out.println(
+            "    Testing encode method - rendering unchecked with label");
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
         getFacesContext().getResponseWriter().writeText("\n", null);
     }
+
 
     public void testLinkRenderer(UIComponent root) throws IOException {
         System.out.println("Testing LinkRenderer");
@@ -305,10 +308,11 @@ public class TestRenderers_2 extends JspFacesTestCase
         hyperlinkRenderer.decode(getFacesContext(), command);
 
         // Verify command event was set for the application..
-        System.out.println("    Testing added application event (commandEvent)..");
+        System.out.println(
+            "    Testing added application event (commandEvent)..");
         // PENDING FIX
-      /*  Iterator iter = getFacesContext().getFacesEvents();
-        assertTrue(iter.hasNext()); */
+        /*  Iterator iter = getFacesContext().getFacesEvents();
+          assertTrue(iter.hasNext()); */
 
         // Test encode method
 
@@ -318,10 +322,11 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().getResponseWriter().writeText("\n", null);
     }
 
+
     public void testListboxRenderer(UIComponent root) throws IOException {
         System.out.println("Testing ListboxRenderer");
         UISelectOne selectOne = new UISelectOne();
-	UISelectItems uiSelectItems = new UISelectItems();
+        UISelectItems uiSelectItems = new UISelectItems();
         selectOne.setValue(null);
         selectOne.setId("myListbox");
         SelectItem item1 = new SelectItem(new Long(100), "Long1", null);
@@ -330,9 +335,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         SelectItem item4 = new SelectItem(new Long(103), "Long4", null);
         SelectItem[] selectItems = {item1, item2, item3, item4};
         uiSelectItems.setValue(selectItems);
-	uiSelectItems.setId("items");
-	Converter converter = application.createConverter("javax.faces.Number");
-	selectOne.setConverter(converter);
+        uiSelectItems.setId("items");
+        Converter converter = application.createConverter("javax.faces.Number");
+        selectOne.setConverter(converter);
         selectOne.getChildren().add(uiSelectItems);
         root.getChildren().add(selectOne);
 
@@ -344,10 +349,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue("100".equals(selectOne.getSubmittedValue()));
                    
         // test convert method
-        Object value = listboxRenderer.getConvertedValue(
-          getFacesContext(),
-          selectOne,
-          selectOne.getSubmittedValue());
+        Object value = listboxRenderer.getConvertedValue(getFacesContext(),
+                                                         selectOne,
+                                                         selectOne.getSubmittedValue());
         assertTrue(value.equals(new Long(100)));
 
         // test encode method
@@ -357,6 +361,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         listboxRenderer.encodeEnd(getFacesContext(), selectOne);
         getFacesContext().getResponseWriter().writeText("\n", null);
     }
+
 
     public void testSecretRenderer(UIComponent root) throws IOException {
         System.out.println("Testing SecretRenderer");
@@ -374,10 +379,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue("secret".equals(textEntry.getSubmittedValue()));
 
         // test convert method
-        Object value = secretRenderer.getConvertedValue(
-          getFacesContext(),
-          textEntry,
-          textEntry.getSubmittedValue());
+        Object value = secretRenderer.getConvertedValue(getFacesContext(),
+                                                        textEntry,
+                                                        textEntry.getSubmittedValue());
         assertTrue("secret".equals(value));
 
         // test encode method
@@ -387,6 +391,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         secretRenderer.encodeEnd(getFacesContext(), textEntry);
         getFacesContext().getResponseWriter().writeText("\n", null);
     }
+
 
     public void testInputTextRenderer(UIComponent root) throws IOException {
         System.out.println("Testing InputTextRenderer");
@@ -404,10 +409,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue("text".equals(text.getSubmittedValue()));
 
         // test convert method
-        Object value = textRenderer.getConvertedValue(
-          getFacesContext(),
-          text,
-          text.getSubmittedValue());
+        Object value = textRenderer.getConvertedValue(getFacesContext(),
+                                                      text,
+                                                      text.getSubmittedValue());
         assertTrue("text".equals(value));
 
         // test encode method
@@ -416,6 +420,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         textRenderer.encodeBegin(getFacesContext(), text);
         textRenderer.encodeEnd(getFacesContext(), text);
     }
+
 
     public void testOutputTextRenderer(UIComponent root) throws IOException {
         System.out.println("Testing OutputTextRenderer");
@@ -437,6 +442,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         textRenderer.encodeBegin(getFacesContext(), text);
         textRenderer.encodeEnd(getFacesContext(), text);
     }
+
 
     public void testGraphicImageRenderer(UIComponent root) throws IOException {
         System.out.println("Testing GraphicImageRenderer");
@@ -461,43 +467,46 @@ public class TestRenderers_2 extends JspFacesTestCase
         imageRenderer.encodeEnd(getFacesContext(), img);
 
         System.out.println("    Testing graphic support of modelReference...");
-	root.getChildren().remove(img);
-	img = new UIGraphic();
+        root.getChildren().remove(img);
+        img = new UIGraphic();
         img.getAttributes().put("ismap", new Boolean(true));
         img.getAttributes().put("usemap", "usemap");
-	root.getChildren().add(img);
-	TestBean testBean = (TestBean) 
-	    (Util.getValueBinding("#{TestBean}")).getValue(getFacesContext());
-	assertTrue(null != testBean); // set in FacesTestCaseService
-	testBean.setImagePath("/foo/modelReferenceImage.gif");
-	img.setValueBinding("value", Util.getValueBinding("#{TestBean.imagePath}"));
+        root.getChildren().add(img);
+        TestBean testBean = (TestBean)
+            (Util.getValueBinding("#{TestBean}")).getValue(getFacesContext());
+        assertTrue(null != testBean); // set in FacesTestCaseService
+        testBean.setImagePath("/foo/modelReferenceImage.gif");
+        img.setValueBinding("value",
+                            Util.getValueBinding("#{TestBean.imagePath}"));
 
         imageRenderer.encodeBegin(getFacesContext(), img);
         imageRenderer.encodeEnd(getFacesContext(), img);
     }
 
-    public void testOutputMessageRenderer(UIComponent root) throws IOException {	System.out.println("Testing OutputMessageRenderer");
-	UIOutput output = new UIOutput();
-	output.setId("myOutputMessage");
-	output.setValue("My name is {0} {1}");
-	UIParameter param1, param2 = null;
-	param1 = new UIParameter();
-	param1.setId("p1");
-	param2 = new UIParameter();
-	param2.setId("p2");
-		param1.setValue("Bobby");
-	param2.setValue("Orr");
-	output.getChildren().add(param1);
-	output.getChildren().add(param2);
-	root.getChildren().add(output);
 
-	OutputMessageRenderer outputMessageRenderer = new OutputMessageRenderer();
-	// test encode method
+    public void testOutputMessageRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing OutputMessageRenderer");
+        UIOutput output = new UIOutput();
+        output.setId("myOutputMessage");
+        output.setValue("My name is {0} {1}");
+        UIParameter param1, param2 = null;
+        param1 = new UIParameter();
+        param1.setId("p1");
+        param2 = new UIParameter();
+        param2.setId("p2");
+        param1.setValue("Bobby");
+        param2.setValue("Orr");
+        output.getChildren().add(param1);
+        output.getChildren().add(param2);
+        root.getChildren().add(output);
 
-	System.out.println("	Testing encode method...");
+        OutputMessageRenderer outputMessageRenderer = new OutputMessageRenderer();
+        // test encode method
 
-	outputMessageRenderer.encodeBegin(getFacesContext(), output);
-	outputMessageRenderer.encodeEnd(getFacesContext(), output);
+        System.out.println("	Testing encode method...");
+
+        outputMessageRenderer.encodeBegin(getFacesContext(), output);
+        outputMessageRenderer.encodeEnd(getFacesContext(), output);
     }
 
 
@@ -517,15 +526,19 @@ public class TestRenderers_2 extends JspFacesTestCase
         // This allows us to capture the output and check for
         // correctness without using a goldenfile.
         StringWriter writer = new StringWriter();
-        HtmlResponseWriter htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        HtmlResponseWriter htmlWriter = new HtmlResponseWriter(writer,
+                                                               "text/html",
+                                                               "ISO-8859-1");
         getFacesContext().setResponseWriter(htmlWriter);
 
         MessageRenderer messageRenderer = new MessageRenderer();
 
         // populate facescontext with some errors
         getFacesContext().addMessage(message.getFor(),
-            new FacesMessage(FacesMessage.SEVERITY_INFO,
-            "global message summary_0", "global message detail_0"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_INFO,
+                                         "global message summary_0",
+                                         "global message detail_0"));
 
         // test encode method
 
@@ -544,10 +557,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         message = new UIMessage();
         message.setId("myMessage_1");
         message.setFor("myMessage_1");
-        message.getAttributes().put("warnClass" , "warnClass");
-        message.getAttributes().put("errorClass" , "errorClass");
-        message.getAttributes().put("infoClass" , "infoClass");
-        message.getAttributes().put("fatalClass" , "fatalClass");
+        message.getAttributes().put("warnClass", "warnClass");
+        message.getAttributes().put("errorClass", "errorClass");
+        message.getAttributes().put("infoClass", "infoClass");
+        message.getAttributes().put("fatalClass", "fatalClass");
         message.setShowDetail(true);
         message.setShowSummary(true);
         root.getChildren().add(message);
@@ -559,12 +572,14 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer = new MessageRenderer();
 
         //add a styleClass so span is rendered
-	message.getAttributes().put("styleClass", "styleClass");
+        message.getAttributes().put("styleClass", "styleClass");
 
         // populate facescontext with some errors
         getFacesContext().addMessage(message.getFor(),
-            new FacesMessage(FacesMessage.SEVERITY_WARN,
-            "global message summary_1", "global message detail_1"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_WARN,
+                                         "global message summary_1",
+                                         "global message detail_1"));
 
         // test encode method
 
@@ -575,7 +590,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         //Span should have class attribute for styleClass
         //Summary and detail should be in body of span separated by space
-        assertTrue(result.indexOf("<span id=\"myMessage_1\" class=\"warnClass\">	global message summary_1 global message detail_1</span>") != -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_1\" class=\"warnClass\">	global message summary_1 global message detail_1</span>") !=
+            -1);
 
         try {
             writer.close();
@@ -587,10 +605,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         message = new UIMessage();
         message.setId("myMessage_2");
         message.setFor("myMessage_2");
-        message.getAttributes().put("warnClass" , "warnClass");
-        message.getAttributes().put("errorClass" , "errorClass");
-        message.getAttributes().put("infoClass" , "infoClass");
-        message.getAttributes().put("fatalClass" , "fatalClass");
+        message.getAttributes().put("warnClass", "warnClass");
+        message.getAttributes().put("errorClass", "errorClass");
+        message.getAttributes().put("infoClass", "infoClass");
+        message.getAttributes().put("fatalClass", "fatalClass");
         message.setShowDetail(true);
         message.setShowSummary(true);
         root.getChildren().add(message);
@@ -602,12 +620,14 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer = new MessageRenderer();
 
         //add a styleClass so span is rendered
-	message.getAttributes().put("style", "style");
+        message.getAttributes().put("style", "style");
 
         // populate facescontext with some errors
         getFacesContext().addMessage(message.getFor(),
-            new FacesMessage(FacesMessage.SEVERITY_ERROR,
-            "global message summary_2", "global message detail_2"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_ERROR,
+                                         "global message summary_2",
+                                         "global message detail_2"));
 
         // test encode method
 
@@ -617,7 +637,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         result = writer.toString();
         //Span should have style attribute
         //Summary and detail should be in body of span separated by space
-        assertTrue(result.indexOf("<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2 global message detail_2</span>") != -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2 global message detail_2</span>") !=
+            -1);
 
         try {
             writer.close();
@@ -629,10 +652,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         message = new UIMessage();
         message.setId("myMessage_3");
         message.setFor("myMessage_3");
-        message.getAttributes().put("warnClass" , "warnClass");
-        message.getAttributes().put("errorClass" , "errorClass");
-        message.getAttributes().put("infoClass" , "infoClass");
-        message.getAttributes().put("fatalClass" , "fatalClass");
+        message.getAttributes().put("warnClass", "warnClass");
+        message.getAttributes().put("errorClass", "errorClass");
+        message.getAttributes().put("infoClass", "infoClass");
+        message.getAttributes().put("fatalClass", "fatalClass");
         message.setShowDetail(true);
         message.setShowSummary(true);
         root.getChildren().add(message);
@@ -645,13 +668,15 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer = new MessageRenderer();
 
         //add a styleClass so span is rendered
-	message.getAttributes().put("styleClass", "styleClass");
-	message.getAttributes().put("style", "style");
+        message.getAttributes().put("styleClass", "styleClass");
+        message.getAttributes().put("style", "style");
 
         // populate facescontext with some errors
         getFacesContext().addMessage(message.getFor(),
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_3", "global message detail_3"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_3",
+                                         "global message detail_3"));
 
         // test encode method
 
@@ -662,7 +687,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         //Span should have class attribute for styleClass and style attribute
         //Summary and detail should be in body of span separated by space
-        assertTrue(result.indexOf("<span id=\"myMessage_3\" class=\"fatalClass\" style=\"style\">	global message summary_3 global message detail_3</span>") != -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_3\" class=\"fatalClass\" style=\"style\">	global message summary_3 global message detail_3</span>") !=
+            -1);
 
         try {
             writer.close();
@@ -683,18 +711,20 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer = new MessageRenderer();
 
         //add a styleClass so span is rendered
-	message.getAttributes().put("styleClass", "styleClass");
-	message.getAttributes().put("style", "style");
+        message.getAttributes().put("styleClass", "styleClass");
+        message.getAttributes().put("style", "style");
 
         //set tooltip criteria to true
-	message.getAttributes().put("tooltip", new Boolean(true));
+        message.getAttributes().put("tooltip", new Boolean(true));
         message.setShowDetail(true);
         message.setShowSummary(true);
 
         // populate facescontext with some errors
         getFacesContext().addMessage(message.getFor(),
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_4", "global message detail_4"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_4",
+                                         "global message detail_4"));
 
         // test encode method
 
@@ -707,7 +737,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         //  and title for tooltip attributes
         //Summary should go in the title attribute and only the 
         //  detail displayed in the body of the span
-        assertTrue(result.indexOf("<span id=\"myMessage_4\" class=\"styleClass\" style=\"style\" title=\"global message summary_4\">	global message detail_4</span>") != -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_4\" class=\"styleClass\" style=\"style\" title=\"global message summary_4\">	global message detail_4</span>") !=
+            -1);
 
         try {
             writer.close();
@@ -728,25 +761,27 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer = new MessageRenderer();
 
         //add a styleClass so span is rendered
-	message.getAttributes().put("styleClass", "styleClass");
-	message.getAttributes().put("style", "style");
+        message.getAttributes().put("styleClass", "styleClass");
+        message.getAttributes().put("style", "style");
 
         //set tooltip criteria to true
-	message.getAttributes().put("tooltip", new Boolean(true));
+        message.getAttributes().put("tooltip", new Boolean(true));
         message.setShowDetail(true);
         message.setShowSummary(true);
-        message.getAttributes().put("warnClass" , "warnClass");
-        message.getAttributes().put("errorClass" , "errorClass");
-        message.getAttributes().put("infoClass" , "infoClass");
-        message.getAttributes().put("fatalClass" , "fatalClass");
+        message.getAttributes().put("warnClass", "warnClass");
+        message.getAttributes().put("errorClass", "errorClass");
+        message.getAttributes().put("infoClass", "infoClass");
+        message.getAttributes().put("fatalClass", "fatalClass");
 
         //Set layout to table
-	message.getAttributes().put("layout", "table");
+        message.getAttributes().put("layout", "table");
 
         // populate facescontext with some errors
         getFacesContext().addMessage(message.getFor(),
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_5", "global message detail_5"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_5",
+                                         "global message detail_5"));
 
         // test encode method
 
@@ -760,7 +795,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         //Summary should go in the title attribute and only the 
         //  detail displayed in the body of the span
         //Should be wrapped in a table
-        assertTrue(result.indexOf("<table id=\"myMessage_5\"><tr><td><span class=\"fatalClass\" style=\"style\" title=\"global message summary_5\">	global message detail_5</span></td></tr></table>") != -1);
+        assertTrue(
+            result.indexOf(
+                "<table id=\"myMessage_5\"><tr><td><span class=\"fatalClass\" style=\"style\" title=\"global message summary_5\">	global message detail_5</span></td></tr></table>") !=
+            -1);
 
         try {
             writer.close();
@@ -768,9 +806,9 @@ public class TestRenderers_2 extends JspFacesTestCase
             ; // ignore
         }
 
-	//
-	// test showSummary(false) works
-	// 
+        //
+        // test showSummary(false) works
+        //
 
         root.getChildren().remove(message);
         message = new UIMessage();
@@ -785,14 +823,16 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer = new MessageRenderer();
 
         //set tooltip criteria to true
-	message.getAttributes().put("tooltip", new Boolean(true));
+        message.getAttributes().put("tooltip", new Boolean(true));
         message.setShowDetail(true);
         message.setShowSummary(false);
 
         // populate facescontext with some errors
         getFacesContext().addMessage(message.getFor(),
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_6", "global message detail_6"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_6",
+                                         "global message detail_6"));
 
         // test encode method
 
@@ -801,7 +841,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         result = writer.toString();
 
-	// should not contain summary.
+        // should not contain summary.
         assertTrue(-1 != result.indexOf("global message detail_6"));
         assertEquals(-1, result.indexOf("global message summary_6"));
 
@@ -811,9 +851,9 @@ public class TestRenderers_2 extends JspFacesTestCase
             ; // ignore
         }
 
-	//
-	// test showDetail(false) works
-	// 
+        //
+        // test showDetail(false) works
+        //
 
         root.getChildren().remove(message);
         message = new UIMessage();
@@ -828,14 +868,16 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer = new MessageRenderer();
 
         //set tooltip criteria to true
-	message.getAttributes().put("tooltip", new Boolean(true));
+        message.getAttributes().put("tooltip", new Boolean(true));
         message.setShowDetail(false);
         message.setShowSummary(true);
 
         // populate facescontext with some errors
         getFacesContext().addMessage(message.getFor(),
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_6", "global message detail_6"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_6",
+                                         "global message detail_6"));
 
         // test encode method
 
@@ -844,7 +886,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         result = writer.toString();
 
-	// should not contain detail.
+        // should not contain detail.
         assertEquals(-1, result.indexOf("global message detail_6"));
         assertTrue(-1 != result.indexOf("global message summary_6"));
 
@@ -854,9 +896,9 @@ public class TestRenderers_2 extends JspFacesTestCase
             ; // ignore
         }
 
-	//
-	// test showDetail(false), showSummary(false) works
-	// 
+        //
+        // test showDetail(false), showSummary(false) works
+        //
 
         root.getChildren().remove(message);
         message = new UIMessage();
@@ -871,14 +913,16 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer = new MessageRenderer();
 
         //set tooltip criteria to true
-	message.getAttributes().put("tooltip", new Boolean(true));
+        message.getAttributes().put("tooltip", new Boolean(true));
         message.setShowDetail(false);
         message.setShowSummary(false);
 
         // populate facescontext with some errors
         getFacesContext().addMessage(message.getFor(),
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_6", "global message detail_6"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_6",
+                                         "global message detail_6"));
 
         // test encode method
 
@@ -887,7 +931,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         result = writer.toString();
 
-	// should not contain detail.
+        // should not contain detail.
         assertEquals(-1, result.indexOf("global message detail_6"));
         assertEquals(-1, result.indexOf("global message summary_6"));
 
@@ -902,11 +946,12 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().setViewRoot(originalRoot);
     }
 
+
     public void testMessagesRenderer(UIComponent root) throws IOException {
         System.out.println("Testing MessagesRenderer");
         UIMessages messages = new UIMessages();
         messages.setId("myMessage_0");
-	String myFor = "myMessage_0";
+        String myFor = "myMessage_0";
         // messages.setFor("myMessage_0");
         root.getChildren().add(messages);
 
@@ -919,18 +964,24 @@ public class TestRenderers_2 extends JspFacesTestCase
         // This allows us to capture the output and check for
         // correctness without using a goldenfile.
         StringWriter writer = new StringWriter();
-        HtmlResponseWriter htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        HtmlResponseWriter htmlWriter = new HtmlResponseWriter(writer,
+                                                               "text/html",
+                                                               "ISO-8859-1");
         getFacesContext().setResponseWriter(htmlWriter);
 
         MessagesRenderer messagesRenderer = new MessagesRenderer();
 
         // populate facescontext with some errors
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_INFO,
-            "global message summary_0.0", "global message detail_0.0"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_INFO,
+                                         "global message summary_0.0",
+                                         "global message detail_0.0"));
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_INFO,
-            "global message summary_0.1", "global message detail_0.1"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_INFO,
+                                         "global message summary_0.1",
+                                         "global message detail_0.1"));
 
         // test encode method
 
@@ -951,14 +1002,14 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_1");
-	myFor = "myMessage_1";
+        myFor = "myMessage_1";
         // messages.setFor("myMessage_1");
         messages.setShowDetail(true);
         messages.setShowSummary(true);
-        messages.getAttributes().put("warnClass" , "warnClass");
-        messages.getAttributes().put("errorClass" , "errorClass");
-        messages.getAttributes().put("infoClass" , "infoClass");
-        messages.getAttributes().put("fatalClass" , "fatalClass");
+        messages.getAttributes().put("warnClass", "warnClass");
+        messages.getAttributes().put("errorClass", "errorClass");
+        messages.getAttributes().put("infoClass", "infoClass");
+        messages.getAttributes().put("fatalClass", "fatalClass");
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -968,18 +1019,24 @@ public class TestRenderers_2 extends JspFacesTestCase
         messagesRenderer = new MessagesRenderer();
 
         //add a styleClass so span is rendered
-	messages.getAttributes().put("styleClass", "styleClass");
+        messages.getAttributes().put("styleClass", "styleClass");
 
         // populate facescontext with some errors
-	getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_WARN,
-	    "global message summary_1.0", "global message detail_1.0"));
-	getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_WARN,
-            "global message summary_1.1", "global message detail_1.1"));
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_WARN,
-            "global message summary_1.1", "global message detail_1.1"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_WARN,
+                                         "global message summary_1.0",
+                                         "global message detail_1.0"));
+        getFacesContext().addMessage(myFor,
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_WARN,
+                                         "global message summary_1.1",
+                                         "global message detail_1.1"));
+        getFacesContext().addMessage(myFor,
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_WARN,
+                                         "global message summary_1.1",
+                                         "global message detail_1.1"));
 
         // test encode method
 
@@ -991,8 +1048,14 @@ public class TestRenderers_2 extends JspFacesTestCase
         //Span should have class attribute for styleClass
         //Summary and detail should be in body of span separated by space
         //Verify that both messages are included
-        assertTrue(result.indexOf("<span id=\"myMessage_1\" class=\"warnClass\">	global message summary_1.0 global message detail_1.0</span>") != -1);
-        assertTrue(result.indexOf("<span id=\"myMessage_1\" class=\"warnClass\">	global message summary_1.1 global message detail_1.1</span>") != -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_1\" class=\"warnClass\">	global message summary_1.0 global message detail_1.0</span>") !=
+            -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_1\" class=\"warnClass\">	global message summary_1.1 global message detail_1.1</span>") !=
+            -1);
 
         try {
             writer.close();
@@ -1004,11 +1067,11 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages = new UIMessages();
         messages.setId("myMessage_2");
         // messages.setFor("myMessage_2");
-	myFor = "myMessage_2";
-        messages.getAttributes().put("warnClass" , "warnClass");
-        messages.getAttributes().put("errorClass" , "errorClass");
-        messages.getAttributes().put("infoClass" , "infoClass");
-        messages.getAttributes().put("fatalClass" , "fatalClass");
+        myFor = "myMessage_2";
+        messages.getAttributes().put("warnClass", "warnClass");
+        messages.getAttributes().put("errorClass", "errorClass");
+        messages.getAttributes().put("infoClass", "infoClass");
+        messages.getAttributes().put("fatalClass", "fatalClass");
         messages.setShowDetail(true);
         messages.setShowSummary(true);
         root.getChildren().add(messages);
@@ -1020,18 +1083,24 @@ public class TestRenderers_2 extends JspFacesTestCase
         messagesRenderer = new MessagesRenderer();
 
         //add a styleClass so span is rendered
-	messages.getAttributes().put("style", "style");
+        messages.getAttributes().put("style", "style");
 
         // populate facescontext with some errors
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_ERROR,
-            "global message summary_2.0", "global message detail_2.0"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_ERROR,
+                                         "global message summary_2.0",
+                                         "global message detail_2.0"));
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_ERROR,
-            "global message summary_2.1", "global message detail_2.1"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_ERROR,
+                                         "global message summary_2.1",
+                                         "global message detail_2.1"));
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_ERROR,
-            "global message summary_2.2", "global message detail_2.2"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_ERROR,
+                                         "global message summary_2.2",
+                                         "global message detail_2.2"));
 
         // test encode method
 
@@ -1043,9 +1112,18 @@ public class TestRenderers_2 extends JspFacesTestCase
         //Span should have style attribute
         //Summary and detail should be in body of span separated by space
         //Verify that three messages are included
-        assertTrue(result.indexOf("<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2.0 global message detail_2.0</span>") != -1);
-        assertTrue(result.indexOf("<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2.1 global message detail_2.1</span>") != -1);
-        assertTrue(result.indexOf("<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2.2 global message detail_2.2</span>") != -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2.0 global message detail_2.0</span>") !=
+            -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2.1 global message detail_2.1</span>") !=
+            -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2.2 global message detail_2.2</span>") !=
+            -1);
 
         try {
             writer.close();
@@ -1057,11 +1135,11 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages = new UIMessages();
         messages.setId("myMessage_3");
         // messages.setFor("myMessage_3");
-	myFor = "myMessage_3";
-	messages.getAttributes().put("warnClass" , "warnClass");
-        messages.getAttributes().put("errorClass" , "errorClass");
-        messages.getAttributes().put("infoClass" , "infoClass");
-        messages.getAttributes().put("fatalClass" , "fatalClass");
+        myFor = "myMessage_3";
+        messages.getAttributes().put("warnClass", "warnClass");
+        messages.getAttributes().put("errorClass", "errorClass");
+        messages.getAttributes().put("infoClass", "infoClass");
+        messages.getAttributes().put("fatalClass", "fatalClass");
         messages.setShowDetail(true);
         messages.setShowSummary(true);
         root.getChildren().add(messages);
@@ -1074,16 +1152,20 @@ public class TestRenderers_2 extends JspFacesTestCase
         messagesRenderer = new MessagesRenderer();
 
         //add a styleClass so span is rendered
-	messages.getAttributes().put("styleClass", "styleClass");
-	messages.getAttributes().put("style", "style");
+        messages.getAttributes().put("styleClass", "styleClass");
+        messages.getAttributes().put("style", "style");
 
         // populate facescontext with some errors
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_3.0", "global message detail_3.0"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_3.0",
+                                         "global message detail_3.0"));
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_3.1", "global message detail_3.1"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_3.1",
+                                         "global message detail_3.1"));
 
         // test encode method
 
@@ -1095,8 +1177,14 @@ public class TestRenderers_2 extends JspFacesTestCase
         //Span should have class attribute for styleClass and style attribute
         //Summary and detail should be in body of span separated by space
         //Verify that both messages are included
-        assertTrue(result.indexOf("<span id=\"myMessage_3\" class=\"fatalClass\" style=\"style\">	global message summary_3.0 global message detail_3.0</span>") != -1);
-        assertTrue(result.indexOf("<span id=\"myMessage_3\" class=\"fatalClass\" style=\"style\">	global message summary_3.1 global message detail_3.1</span>") != -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_3\" class=\"fatalClass\" style=\"style\">	global message summary_3.0 global message detail_3.0</span>") !=
+            -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_3\" class=\"fatalClass\" style=\"style\">	global message summary_3.1 global message detail_3.1</span>") !=
+            -1);
 
         try {
             writer.close();
@@ -1108,11 +1196,11 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages = new UIMessages();
         messages.setId("myMessage_4");
         // messages.setFor("myMessage_4");
-	myFor = "myMessage_4";
-	messages.getAttributes().put("warnClass" , "warnClass");
-        messages.getAttributes().put("errorClass" , "errorClass");
-        messages.getAttributes().put("infoClass" , "infoClass");
-        messages.getAttributes().put("fatalClass" , "fatalClass");
+        myFor = "myMessage_4";
+        messages.getAttributes().put("warnClass", "warnClass");
+        messages.getAttributes().put("errorClass", "errorClass");
+        messages.getAttributes().put("infoClass", "infoClass");
+        messages.getAttributes().put("fatalClass", "fatalClass");
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -1122,24 +1210,30 @@ public class TestRenderers_2 extends JspFacesTestCase
         messagesRenderer = new MessagesRenderer();
 
         //add a styleClass so span is rendered
-	messages.getAttributes().put("styleClass", "styleClass");
-	messages.getAttributes().put("style", "style");
+        messages.getAttributes().put("styleClass", "styleClass");
+        messages.getAttributes().put("style", "style");
 
         //set tooltip criteria to true
-	messages.getAttributes().put("tooltip", new Boolean(true));
+        messages.getAttributes().put("tooltip", new Boolean(true));
         messages.setShowDetail(true);
         messages.setShowSummary(true);
 
         // populate facescontext with some errors
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_4.0", "global message detail_4.0"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_4.0",
+                                         "global message detail_4.0"));
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_4.1", "global message detail_4.1"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_4.1",
+                                         "global message detail_4.1"));
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_4.2", "global message detail_4.2"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_4.2",
+                                         "global message detail_4.2"));
 
         // test encode method
 
@@ -1153,9 +1247,18 @@ public class TestRenderers_2 extends JspFacesTestCase
         //Summary should go in the title attribute and only the 
         //  detail displayed in the body of the span
         //Verify that three messages are included
-       assertTrue(result.indexOf("<span id=\"myMessage_4\" class=\"fatalClass\" style=\"style\" title=\"global message summary_4.0\">	global message detail_4.0</span>") != -1);
-       assertTrue(result.indexOf("<span id=\"myMessage_4\" class=\"fatalClass\" style=\"style\" title=\"global message summary_4.1\">	global message detail_4.1</span>") != -1);
-       assertTrue(result.indexOf("<span id=\"myMessage_4\" class=\"fatalClass\" style=\"style\" title=\"global message summary_4.2\">	global message detail_4.2</span>") != -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_4\" class=\"fatalClass\" style=\"style\" title=\"global message summary_4.0\">	global message detail_4.0</span>") !=
+            -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_4\" class=\"fatalClass\" style=\"style\" title=\"global message summary_4.1\">	global message detail_4.1</span>") !=
+            -1);
+        assertTrue(
+            result.indexOf(
+                "<span id=\"myMessage_4\" class=\"fatalClass\" style=\"style\" title=\"global message summary_4.2\">	global message detail_4.2</span>") !=
+            -1);
 
         try {
             writer.close();
@@ -1167,7 +1270,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages = new UIMessages();
         messages.setId("myMessage_5");
         // messages.setFor("myMessage_5");
-	myFor = "myMessage_5";
+        myFor = "myMessage_5";
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -1177,27 +1280,33 @@ public class TestRenderers_2 extends JspFacesTestCase
         messagesRenderer = new MessagesRenderer();
 
         //add a styleClass so span is rendered
-	messages.getAttributes().put("styleClass", "styleClass");
-	messages.getAttributes().put("style", "style");
+        messages.getAttributes().put("styleClass", "styleClass");
+        messages.getAttributes().put("style", "style");
 
         //set tooltip criteria to true
-	messages.getAttributes().put("tooltip", new Boolean(true));
+        messages.getAttributes().put("tooltip", new Boolean(true));
         messages.setShowDetail(true);
         messages.setShowSummary(true);
 
         //Set layout to table
-	messages.getAttributes().put("layout", "table");
+        messages.getAttributes().put("layout", "table");
 
         // populate facescontext with some errors
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_5.0", "global message detail_5.0"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_5.0",
+                                         "global message detail_5.0"));
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_5.1", "global message detail_5.1"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_5.1",
+                                         "global message detail_5.1"));
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_5.2", "global message detail_5.2"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_5.2",
+                                         "global message detail_5.2"));
 
         // test encode method
 
@@ -1212,10 +1321,20 @@ public class TestRenderers_2 extends JspFacesTestCase
         //  detail displayed in the body of the span
         //Verify that three messages are included
         //Should be wrapped in a table
-        assertTrue(result.indexOf("<table id=\"myMessage_5\"><tr><td><span") == 0);
-        assertTrue(result.indexOf("<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.0\">	global message detail_5.0</span></tr></td>") != -1);
-        assertTrue(result.indexOf("<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.1\">	global message detail_5.1</span></tr></td>") != -1);
-        assertTrue(result.indexOf("<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.2\">	global message detail_5.2</span></tr></td>") != -1);
+        assertTrue(
+            result.indexOf("<table id=\"myMessage_5\"><tr><td><span") == 0);
+        assertTrue(
+            result.indexOf(
+                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.0\">	global message detail_5.0</span></tr></td>") !=
+            -1);
+        assertTrue(
+            result.indexOf(
+                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.1\">	global message detail_5.1</span></tr></td>") !=
+            -1);
+        assertTrue(
+            result.indexOf(
+                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.2\">	global message detail_5.2</span></tr></td>") !=
+            -1);
         assertTrue(result.endsWith("</span></tr></td></table>"));
 
         try {
@@ -1228,7 +1347,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages = new UIMessages();
         messages.setId("myMessage_6");
         // messages.setFor("myMessage_6");
-	myFor = "myMessage_6";
+        myFor = "myMessage_6";
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -1238,27 +1357,33 @@ public class TestRenderers_2 extends JspFacesTestCase
         messagesRenderer = new MessagesRenderer();
 
         //add a styleClass so span is rendered
-	messages.getAttributes().put("styleClass", "styleClass");
-	messages.getAttributes().put("style", "style");
+        messages.getAttributes().put("styleClass", "styleClass");
+        messages.getAttributes().put("style", "style");
 
         //set tooltip criteria to false
-	messages.getAttributes().put("tooltip", new Boolean(false));
+        messages.getAttributes().put("tooltip", new Boolean(false));
         messages.setShowDetail(false);
         messages.setShowSummary(true);
 
         //Set layout to table
-	messages.getAttributes().put("layout", "table");
+        messages.getAttributes().put("layout", "table");
 
         // populate facescontext with some errors
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_6.0", "global message detail_6.0"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_6.0",
+                                         "global message detail_6.0"));
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_6.1", "global message detail_6.1"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_6.1",
+                                         "global message detail_6.1"));
         getFacesContext().addMessage(myFor,
-            new FacesMessage(FacesMessage.SEVERITY_FATAL,
-            "global message summary_6.2", "global message detail_6.2"));
+                                     new FacesMessage(
+                                         FacesMessage.SEVERITY_FATAL,
+                                         "global message summary_6.2",
+                                         "global message detail_6.2"));
 
         // test encode method
 
@@ -1267,8 +1392,8 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         result = writer.toString();
 
-	assertTrue(-1 == result.indexOf("detail"));
-	assertTrue(-1 != result.indexOf("summary"));
+        assertTrue(-1 == result.indexOf("detail"));
+        assertTrue(-1 != result.indexOf("summary"));
 
         try {
             writer.close();
@@ -1300,10 +1425,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue("TextareaRenderer".equals(textEntry.getSubmittedValue()));
 
         // test convert method
-        Object value = textAreaRenderer.getConvertedValue(
-          getFacesContext(),
-          textEntry,
-          textEntry.getSubmittedValue());
+        Object value = textAreaRenderer.getConvertedValue(getFacesContext(),
+                                                          textEntry,
+                                                          textEntry.getSubmittedValue());
         assertTrue("TextareaRenderer".equals(value));
 
         // test encode method
@@ -1312,6 +1436,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         textAreaRenderer.encodeBegin(getFacesContext(), textEntry);
         textAreaRenderer.encodeEnd(getFacesContext(), textEntry);
         getFacesContext().getResponseWriter().writeText("\n", null);
-    }       
-    
+    }
+
 } // end of class TestRenderers_2

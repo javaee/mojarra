@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.30 2004/02/04 23:44:34 ofung Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.31 2004/02/06 18:56:58 rlubke Exp $
  */
 
 /*
@@ -11,50 +11,38 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.ServletFacesTestCase;
 import org.apache.cactus.WebRequest;
 
-import com.sun.faces.util.Util;
-
-
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
-
-import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.lifecycle.Phase;
-import java.io.IOException;
 
 import java.util.Iterator;
 
 /**
- *
- *  <B>TestProcessValidationsPhase</B> is a class ...
- *
+ * <B>TestProcessValidationsPhase</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.30 2004/02/04 23:44:34 ofung Exp $
- * 
+ * @version $Id: TestProcessValidationsPhase.java,v 1.31 2004/02/06 18:56:58 rlubke Exp $
  * @see	Blah
  * @see	Bloo
- *
  */
 
-public class TestProcessValidationsPhase extends ServletFacesTestCase
-{
+public class TestProcessValidationsPhase extends ServletFacesTestCase {
+
 //
 // Protected Constants
 //
 
-public static final String TEST_URI = "/components.jsp";
+    public static final String TEST_URI = "/components.jsp";
 
-public static final String DID_VALIDATE = "didValidate";
-public static UIInput userName = null;
+    public static final String DID_VALIDATE = "didValidate";
+    public static UIInput userName = null;
 
 //
 // Class Variables
@@ -73,11 +61,12 @@ public static UIInput userName = null;
 //
 
     public TestProcessValidationsPhase() {
-	super("TestProcessValidationsPhase");
+        super("TestProcessValidationsPhase");
     }
 
+
     public TestProcessValidationsPhase(String name) {
-	super(name);
+        super(name);
     }
 
 //
@@ -88,79 +77,80 @@ public static UIInput userName = null;
 // General Methods
 //
 
-public void beginCallback(WebRequest theRequest)
-{
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
-    theRequest.addParameter("basicForm", "basicForm");
-}
-
-public void testCallback()
-{
-    UIComponent root = null;
-    userName = null;
-    String value = null;
-    Phase 
-        restoreView = new RestoreViewPhase(),
-	applyValues = new ApplyRequestValuesPhase(), 
-	processValidations = new ProcessValidationsPhase();
-
-    try {
-        restoreView.execute(getFacesContext());
-    }
-    catch (Throwable e) {
-        e.printStackTrace();
-        assertTrue(false);
-    }
-    assertTrue((getFacesContext().getRenderResponse()) &&
-        !(getFacesContext().getResponseComplete()));
-    assertTrue(null != getFacesContext().getViewRoot());
-
-    root = getFacesContext().getViewRoot();
-    UIForm basicForm = new UIForm();
-    basicForm.setId("basicForm");
-    UIInput userName1 = new UIInput();
-    userName1.setId("userName");
-    root.getChildren().add(basicForm);
-    basicForm.getChildren().add(userName1);
-
-    // clear the property
-    System.setProperty(DID_VALIDATE, EMPTY);
-
-    try {
-	userName = (UIInput) root.findComponent("basicForm" + NamingContainer.SEPARATOR_CHAR + "userName");
-    }
-    catch (Throwable e) {
-	System.out.println(e.getMessage());
-	assertTrue("Can't find userName in tree", false);
+    public void beginCallback(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.addParameter(
+            "basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
+        theRequest.addParameter("basicForm", "basicForm");
     }
 
-    // add the validator
-    Validator validator = new Validator() {
-        public Iterator getAttributeNames() {
-            return null;
+
+    public void testCallback() {
+        UIComponent root = null;
+        userName = null;
+        String value = null;
+        Phase
+            restoreView = new RestoreViewPhase(),
+            applyValues = new ApplyRequestValuesPhase(),
+            processValidations = new ProcessValidationsPhase();
+
+        try {
+            restoreView.execute(getFacesContext());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+        assertTrue((getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
+        assertTrue(null != getFacesContext().getViewRoot());
+
+        root = getFacesContext().getViewRoot();
+        UIForm basicForm = new UIForm();
+        basicForm.setId("basicForm");
+        UIInput userName1 = new UIInput();
+        userName1.setId("userName");
+        root.getChildren().add(basicForm);
+        basicForm.getChildren().add(userName1);
+
+        // clear the property
+        System.setProperty(DID_VALIDATE, EMPTY);
+
+        try {
+            userName =
+                (UIInput) root.findComponent(
+                    "basicForm" + NamingContainer.SEPARATOR_CHAR + "userName");
+        } catch (Throwable e) {
+            System.out.println(e.getMessage());
+            assertTrue("Can't find userName in tree", false);
         }
 
-        public void validate(FacesContext context, UIComponent component, Object value){
-            assertTrue(component == userName);
-            System.setProperty(DID_VALIDATE, DID_VALIDATE);
-	    return;
-        }
-    };
-    userName.addValidator(validator);
+        // add the validator
+        Validator validator = new Validator() {
+            public Iterator getAttributeNames() {
+                return null;
+            }
 
-    assertTrue(userName.isValid());
 
-    applyValues.execute(getFacesContext());
-    assertTrue((getFacesContext().getRenderResponse()) &&
-        !(getFacesContext().getResponseComplete()));
-    
-    processValidations.execute(getFacesContext());
-    assertTrue(!System.getProperty(DID_VALIDATE).equals(EMPTY));
-    assertTrue(userName.isValid());
-    assertTrue(null == userName.getSubmittedValue());
-    assertTrue("jerry".equals(userName.getValue()));
-    System.setProperty(DID_VALIDATE, EMPTY);
-}
+            public void validate(FacesContext context, UIComponent component, Object value) {
+                assertTrue(component == userName);
+                System.setProperty(DID_VALIDATE, DID_VALIDATE);
+                return;
+            }
+        };
+        userName.addValidator(validator);
+
+        assertTrue(userName.isValid());
+
+        applyValues.execute(getFacesContext());
+        assertTrue((getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
+
+        processValidations.execute(getFacesContext());
+        assertTrue(!System.getProperty(DID_VALIDATE).equals(EMPTY));
+        assertTrue(userName.isValid());
+        assertTrue(null == userName.getSubmittedValue());
+        assertTrue("jerry".equals(userName.getValue()));
+        System.setProperty(DID_VALIDATE, EMPTY);
+    }
 
 } // end of class TestProcessValidationsPhase

@@ -1,5 +1,5 @@
 /*
- * $Id: JstlIntegrationTestCase.java,v 1.9 2004/02/04 23:42:26 ofung Exp $
+ * $Id: JstlIntegrationTestCase.java,v 1.10 2004/02/06 18:55:57 rlubke Exp $
  */
 
 /*
@@ -12,20 +12,17 @@ package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
-import java.net.URL;
-import java.util.Iterator;
-import javax.faces.component.NamingContainer;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import javax.faces.component.NamingContainer;
 
 
 /**
@@ -56,15 +53,19 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     private String jstlForEach01_name = "jstlForeach01_form";
 
     private String jstlForEach01_names[] =
-    { "arrayProp0", "arrayProp1", "arrayProp2", "arrayProp3", "arrayProp4" };
+        {"arrayProp0", "arrayProp1", "arrayProp2", "arrayProp3", "arrayProp4"};
 
     private String jstlForEach01_pristine[] =
-    { "First String", "Second String", "Third String", "Fourth String",
-      "Fifth String" };
+        {
+            "First String", "Second String", "Third String", "Fourth String",
+            "Fifth String"
+        };
 
     private String jstlForEach01_updated[] =
-    { "New First String", "Second String", "Third String", "New Fourth String",
-      "Fifth String" };
+        {
+            "New First String", "Second String", "Third String", "New Fourth String",
+            "Fifth String"
+        };
 
 
     // ---------------------------------------------------- Overall Test Methods
@@ -99,401 +100,404 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     public void testEmpty() {
     }
 
-    /********************** PENDING(): re-enable these when we figure
+
+    /**
+     * ******************* PENDING(): re-enable these when we figure
      * out how to do c:forEach.
-
-    // Components Inside Choose (Explicit Identifiers)
-    public void testJstlChoose01() throws Exception {
-
-        // Check each individual case multiple times
-        checkJstlChoose00();
-        checkJstlChoose01a();
-        checkJstlChoose01a();
-        checkJstlChoose01a();
-        checkJstlChoose00();
-        checkJstlChoose01b();
-        checkJstlChoose01b();
-        checkJstlChoose01b();
-        checkJstlChoose00();
-        checkJstlChoose01c();
-        checkJstlChoose01c();
-        checkJstlChoose01c();
-
-        // Check cases in ascending order
-        checkJstlChoose00();
-        checkJstlChoose01a();
-        checkJstlChoose01b();
-        checkJstlChoose01c();
-
-        // Check cases in descending order
-        checkJstlChoose00();
-        checkJstlChoose01c();
-        checkJstlChoose01b();
-        checkJstlChoose01a();
-
-        // Check cases in random order
-        checkJstlChoose00();
-        checkJstlChoose01b();
-        checkJstlChoose01a();
-        checkJstlChoose01c();
-
-    }
-
-
-    // Components Inside Choose (In Naming Container)
-    public void testJstlChoose02() throws Exception {
-
-        // Check each individual case multiple times
-        checkJstlChoose00();
-        checkJstlChoose02a();
-        checkJstlChoose02a();
-        checkJstlChoose02a();
-        checkJstlChoose00();
-        checkJstlChoose02b();
-        checkJstlChoose02b();
-        checkJstlChoose02b();
-        checkJstlChoose00();
-        checkJstlChoose02c();
-        checkJstlChoose02c();
-        checkJstlChoose02c();
-
-        // Check cases in ascending order
-        checkJstlChoose00();
-        checkJstlChoose02a();
-        checkJstlChoose02b();
-        checkJstlChoose02c();
-
-        // Check cases in descending order
-        checkJstlChoose00();
-        checkJstlChoose02c();
-        checkJstlChoose02b();
-        checkJstlChoose02a();
-
-        // Check cases in random order
-        checkJstlChoose00();
-        checkJstlChoose02b();
-        checkJstlChoose02a();
-        checkJstlChoose02c();
-
-    }
-
-
-    // Form with fields rendered inside a <c:forEach> - pristine
-    public void testJstForEach01_pristine() throws Exception {
-
-        checkJstlForEach00();
-        checkJstlForEach01(getJstlForEach01(), jstlForEach01_pristine);
-        checkJstlForEach00();
-        checkJstlForEach01(getJstlForEach01(), jstlForEach01_pristine);
-        checkJstlForEach00();
-
-    }
-
-
-    // Form with fields rendered inside a <c:forEach> - submit unchanged
-    public void testJstForEach01_submit01() throws Exception {
-
-        checkJstlForEach00();
-        HtmlPage page = getJstlForEach01();
-        checkJstlForEach01(page, jstlForEach01_pristine);
-        HtmlForm form = getFormById(page, jstlForEach01_name);
-        assertNotNull("form exists", form);
-        HtmlSubmitInput submit = (HtmlSubmitInput)
-            form.getInputByName(jstlForEach01_name +
-                                NamingContainer.SEPARATOR_CHAR +
-                                "submit");
-        page = (HtmlPage) submit.click();
-        checkJstlForEach01(page, jstlForEach01_pristine);
-        checkJstlForEach00();
-
-    }
-
-
-    // Form with fields rendered inside a <c:forEach> - submit modified
-    public void testJstForEach01_submit02() throws Exception {
-
-        checkJstlForEach00();
-        HtmlPage page = getJstlForEach01();
-        checkJstlForEach01(page, jstlForEach01_pristine);
-        HtmlForm form = getFormById(page, jstlForEach01_name);
-        assertNotNull("form exists", form);
-        for (int i = 0; i < jstlForEach01_names.length; i++) {
-            HtmlTextInput input = (HtmlTextInput)
-                form.getInputByName(jstlForEach01_name +
-                                    NamingContainer.SEPARATOR_CHAR +
-                                    jstlForEach01_names[i]);
-            assertNotNull("field '" + jstlForEach01_names[i] + "' exists", input);
-            input.setValueAttribute(jstlForEach01_updated[i]);
-        }
-        HtmlSubmitInput submit = (HtmlSubmitInput)
-            form.getInputByName(jstlForEach01_name + NamingContainer.SEPARATOR_CHAR +
-                                "submit");
-        page = (HtmlPage) submit.click();
-        checkJstlForEach01(page, jstlForEach01_updated);
-        checkJstlForEach00();
-
-    }
-
-
-    // Components Inside Conditional
-    public void testJstlIf01() throws Exception {
-
-        // Check the "true" case multiple times in a row
-        checkJstlIf00();
-        checkJstlIf01a();
-        checkJstlIf01a();
-        checkJstlIf01a();
-        checkJstlIf01a();
-
-        // Check the "false case multiple times in a row
-        checkJstlIf00();
-        checkJstlIf01b();
-        checkJstlIf01b();
-        checkJstlIf01b();
-        checkJstlIf01b();
-
-        // Check alternating access to the same page (first pattern)
-        checkJstlIf00();
-        checkJstlIf01a();
-        checkJstlIf01b();
-        checkJstlIf01a();
-        checkJstlIf01b();
-
-        // Check alternating access to the same page (second pattern)
-        checkJstlIf00();
-        checkJstlIf01b();
-        checkJstlIf01a();
-        checkJstlIf01b();
-        checkJstlIf01a();
-
-    }
-
-
-    // Components and facets inside conditional
-    public void testJstlIf02() throws Exception {
-
-        // Check each style sequentially
-        checkJstlIf00();
-        checkJstlIf02a();
-        checkJstlIf02a();
-        checkJstlIf02a();
-        checkJstlIf00();
-        checkJstlIf02b();
-        checkJstlIf02b();
-        checkJstlIf02b();
-        checkJstlIf00();
-        checkJstlIf02c();
-        checkJstlIf02c();
-        checkJstlIf02c();
-        checkJstlIf00();
-        checkJstlIf02d();
-        checkJstlIf02d();
-        checkJstlIf02d();
-        checkJstlIf00();
-        checkJstlIf02e();
-        checkJstlIf02e();
-        checkJstlIf02e();
-
-        // Check each style in ascending order
-        checkJstlIf00();
-        checkJstlIf02a();
-        checkJstlIf02b();
-        checkJstlIf02c();
-        checkJstlIf02d();
-        checkJstlIf02e();
-
-        // Check each style in descending order
-        checkJstlIf00();
-        checkJstlIf02e();
-        checkJstlIf02d();
-        checkJstlIf02c();
-        checkJstlIf02b();
-        checkJstlIf02a();
-
-        // Check each style in a more random order
-        checkJstlIf00();
-        checkJstlIf02c();
-        checkJstlIf02e();
-        checkJstlIf02a();
-        checkJstlIf02d();
-        checkJstlIf02b();
-
-    }
-
-
-    // Component and Template Text Inside Conditional
-    public void testJstlIf03() throws Exception {
-
-        // Check the "true" case multiple times in a row
-        checkJstlIf00();
-        checkJstlIf03a();
-        checkJstlIf03a();
-        checkJstlIf03a();
-        checkJstlIf03a();
-
-        // Check the "false case multiple times in a row
-        checkJstlIf00();
-        checkJstlIf03b();
-        checkJstlIf03b();
-        checkJstlIf03b();
-        checkJstlIf03b();
-
-        // Check alternating access to the same page (first pattern)
-        checkJstlIf00();
-        checkJstlIf03a();
-        checkJstlIf03b();
-        checkJstlIf03a();
-        checkJstlIf03b();
-
-        // Check alternating access to the same page (second pattern)
-        checkJstlIf00();
-        checkJstlIf03b();
-        checkJstlIf03a();
-        checkJstlIf03b();
-        checkJstlIf03a();
-
-    }
-
-
-    // Renders-Child Component Inside Conditional (no nested template text) (
-    public void testJstlIf04() throws Exception {
-
-        // Check the "true" case multiple times in a row
-        checkJstlIf00();
-        checkJstlIf04a();
-        checkJstlIf04a();
-        checkJstlIf04a();
-        checkJstlIf04a();
-
-        // Check the "false case multiple times in a row
-        checkJstlIf00();
-        checkJstlIf04b();
-        checkJstlIf04b();
-        checkJstlIf04b();
-        checkJstlIf04b();
-
-        // Check alternating access to the same page (first pattern)
-        checkJstlIf00();
-        checkJstlIf04a();
-        checkJstlIf04b();
-        checkJstlIf04a();
-        checkJstlIf04b();
-
-        // Check alternating access to the same page (second pattern)
-        checkJstlIf00();
-        checkJstlIf04b();
-        checkJstlIf04a();
-        checkJstlIf04b();
-        checkJstlIf04a();
-
-    }
-
-
-    // Test importing JSPs with literal text
-    public void testJstlImport01() throws Exception {
-
-        checkJstlImport00();
-        checkJstlImport01();
-        checkJstlImport01();
-
-        checkJstlImport00();
-        checkJstlImport01();
-        checkJstlImport01();
-
-    }
-
-
-    // Test importing JSPs with simple components
-    public void testJstlImport02() throws Exception {
-
-        checkJstlImport00();
-        checkJstlImport02();
-        checkJstlImport02();
-
-        checkJstlImport00();
-        checkJstlImport02();
-        checkJstlImport02();
-
-    }
-
-
-    // Test selectively importing JSPs with simple components (explicit ids)
-    public void testJstlImport03() throws Exception {
-
-        // Check each individual case multiple times
-        checkJstlImport00();
-        checkJstlImport03a();
-        checkJstlImport03a();
-        checkJstlImport03a();
-        checkJstlImport00();
-        checkJstlImport03b();
-        checkJstlImport03b();
-        checkJstlImport03b();
-        checkJstlImport00();
-        checkJstlImport03c();
-        checkJstlImport03c();
-        checkJstlImport03c();
-
-        // Check cases in ascending order
-        checkJstlImport00();
-        checkJstlImport03a();
-        checkJstlImport03b();
-        checkJstlImport03c();
-
-        // Check cases in descending order
-        checkJstlImport00();
-        checkJstlImport03c();
-        checkJstlImport03b();
-        checkJstlImport03a();
-
-        // Check cases in random order
-        checkJstlImport00();
-        checkJstlImport03b();
-        checkJstlImport03a();
-        checkJstlImport03c();
-
-    }
-
-
-    // Test selectively importing JSPs with simple components (naming container)
-    public void testJstlImport04() throws Exception {
-
-        // Check each individual case multiple times
-        checkJstlImport00();
-        checkJstlImport04a();
-        checkJstlImport04a();
-        checkJstlImport04a();
-        checkJstlImport00();
-        checkJstlImport04b();
-        checkJstlImport04b();
-        checkJstlImport04b();
-        checkJstlImport00();
-        checkJstlImport04c();
-        checkJstlImport04c();
-        checkJstlImport04c();
-
-        // Check cases in ascending order
-        checkJstlImport00();
-        checkJstlImport04a();
-        checkJstlImport04b();
-        checkJstlImport04c();
-
-        // Check cases in descending order
-        checkJstlImport00();
-        checkJstlImport04c();
-        checkJstlImport04b();
-        checkJstlImport04a();
-
-        // Check cases in random order
-        checkJstlImport00();
-        checkJstlImport04b();
-        checkJstlImport04a();
-        checkJstlImport04c();
-
-    }
-
-
-    ****************************************/
+     * <p/>
+     * // Components Inside Choose (Explicit Identifiers)
+     * public void testJstlChoose01() throws Exception {
+     * <p/>
+     * // Check each individual case multiple times
+     * checkJstlChoose00();
+     * checkJstlChoose01a();
+     * checkJstlChoose01a();
+     * checkJstlChoose01a();
+     * checkJstlChoose00();
+     * checkJstlChoose01b();
+     * checkJstlChoose01b();
+     * checkJstlChoose01b();
+     * checkJstlChoose00();
+     * checkJstlChoose01c();
+     * checkJstlChoose01c();
+     * checkJstlChoose01c();
+     * <p/>
+     * // Check cases in ascending order
+     * checkJstlChoose00();
+     * checkJstlChoose01a();
+     * checkJstlChoose01b();
+     * checkJstlChoose01c();
+     * <p/>
+     * // Check cases in descending order
+     * checkJstlChoose00();
+     * checkJstlChoose01c();
+     * checkJstlChoose01b();
+     * checkJstlChoose01a();
+     * <p/>
+     * // Check cases in random order
+     * checkJstlChoose00();
+     * checkJstlChoose01b();
+     * checkJstlChoose01a();
+     * checkJstlChoose01c();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Components Inside Choose (In Naming Container)
+     * public void testJstlChoose02() throws Exception {
+     * <p/>
+     * // Check each individual case multiple times
+     * checkJstlChoose00();
+     * checkJstlChoose02a();
+     * checkJstlChoose02a();
+     * checkJstlChoose02a();
+     * checkJstlChoose00();
+     * checkJstlChoose02b();
+     * checkJstlChoose02b();
+     * checkJstlChoose02b();
+     * checkJstlChoose00();
+     * checkJstlChoose02c();
+     * checkJstlChoose02c();
+     * checkJstlChoose02c();
+     * <p/>
+     * // Check cases in ascending order
+     * checkJstlChoose00();
+     * checkJstlChoose02a();
+     * checkJstlChoose02b();
+     * checkJstlChoose02c();
+     * <p/>
+     * // Check cases in descending order
+     * checkJstlChoose00();
+     * checkJstlChoose02c();
+     * checkJstlChoose02b();
+     * checkJstlChoose02a();
+     * <p/>
+     * // Check cases in random order
+     * checkJstlChoose00();
+     * checkJstlChoose02b();
+     * checkJstlChoose02a();
+     * checkJstlChoose02c();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Form with fields rendered inside a <c:forEach> - pristine
+     * public void testJstForEach01_pristine() throws Exception {
+     * <p/>
+     * checkJstlForEach00();
+     * checkJstlForEach01(getJstlForEach01(), jstlForEach01_pristine);
+     * checkJstlForEach00();
+     * checkJstlForEach01(getJstlForEach01(), jstlForEach01_pristine);
+     * checkJstlForEach00();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Form with fields rendered inside a <c:forEach> - submit unchanged
+     * public void testJstForEach01_submit01() throws Exception {
+     * <p/>
+     * checkJstlForEach00();
+     * HtmlPage page = getJstlForEach01();
+     * checkJstlForEach01(page, jstlForEach01_pristine);
+     * HtmlForm form = getFormById(page, jstlForEach01_name);
+     * assertNotNull("form exists", form);
+     * HtmlSubmitInput submit = (HtmlSubmitInput)
+     * form.getInputByName(jstlForEach01_name +
+     * NamingContainer.SEPARATOR_CHAR +
+     * "submit");
+     * page = (HtmlPage) submit.click();
+     * checkJstlForEach01(page, jstlForEach01_pristine);
+     * checkJstlForEach00();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Form with fields rendered inside a <c:forEach> - submit modified
+     * public void testJstForEach01_submit02() throws Exception {
+     * <p/>
+     * checkJstlForEach00();
+     * HtmlPage page = getJstlForEach01();
+     * checkJstlForEach01(page, jstlForEach01_pristine);
+     * HtmlForm form = getFormById(page, jstlForEach01_name);
+     * assertNotNull("form exists", form);
+     * for (int i = 0; i < jstlForEach01_names.length; i++) {
+     * HtmlTextInput input = (HtmlTextInput)
+     * form.getInputByName(jstlForEach01_name +
+     * NamingContainer.SEPARATOR_CHAR +
+     * jstlForEach01_names[i]);
+     * assertNotNull("field '" + jstlForEach01_names[i] + "' exists", input);
+     * input.setValueAttribute(jstlForEach01_updated[i]);
+     * }
+     * HtmlSubmitInput submit = (HtmlSubmitInput)
+     * form.getInputByName(jstlForEach01_name + NamingContainer.SEPARATOR_CHAR +
+     * "submit");
+     * page = (HtmlPage) submit.click();
+     * checkJstlForEach01(page, jstlForEach01_updated);
+     * checkJstlForEach00();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Components Inside Conditional
+     * public void testJstlIf01() throws Exception {
+     * <p/>
+     * // Check the "true" case multiple times in a row
+     * checkJstlIf00();
+     * checkJstlIf01a();
+     * checkJstlIf01a();
+     * checkJstlIf01a();
+     * checkJstlIf01a();
+     * <p/>
+     * // Check the "false case multiple times in a row
+     * checkJstlIf00();
+     * checkJstlIf01b();
+     * checkJstlIf01b();
+     * checkJstlIf01b();
+     * checkJstlIf01b();
+     * <p/>
+     * // Check alternating access to the same page (first pattern)
+     * checkJstlIf00();
+     * checkJstlIf01a();
+     * checkJstlIf01b();
+     * checkJstlIf01a();
+     * checkJstlIf01b();
+     * <p/>
+     * // Check alternating access to the same page (second pattern)
+     * checkJstlIf00();
+     * checkJstlIf01b();
+     * checkJstlIf01a();
+     * checkJstlIf01b();
+     * checkJstlIf01a();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Components and facets inside conditional
+     * public void testJstlIf02() throws Exception {
+     * <p/>
+     * // Check each style sequentially
+     * checkJstlIf00();
+     * checkJstlIf02a();
+     * checkJstlIf02a();
+     * checkJstlIf02a();
+     * checkJstlIf00();
+     * checkJstlIf02b();
+     * checkJstlIf02b();
+     * checkJstlIf02b();
+     * checkJstlIf00();
+     * checkJstlIf02c();
+     * checkJstlIf02c();
+     * checkJstlIf02c();
+     * checkJstlIf00();
+     * checkJstlIf02d();
+     * checkJstlIf02d();
+     * checkJstlIf02d();
+     * checkJstlIf00();
+     * checkJstlIf02e();
+     * checkJstlIf02e();
+     * checkJstlIf02e();
+     * <p/>
+     * // Check each style in ascending order
+     * checkJstlIf00();
+     * checkJstlIf02a();
+     * checkJstlIf02b();
+     * checkJstlIf02c();
+     * checkJstlIf02d();
+     * checkJstlIf02e();
+     * <p/>
+     * // Check each style in descending order
+     * checkJstlIf00();
+     * checkJstlIf02e();
+     * checkJstlIf02d();
+     * checkJstlIf02c();
+     * checkJstlIf02b();
+     * checkJstlIf02a();
+     * <p/>
+     * // Check each style in a more random order
+     * checkJstlIf00();
+     * checkJstlIf02c();
+     * checkJstlIf02e();
+     * checkJstlIf02a();
+     * checkJstlIf02d();
+     * checkJstlIf02b();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Component and Template Text Inside Conditional
+     * public void testJstlIf03() throws Exception {
+     * <p/>
+     * // Check the "true" case multiple times in a row
+     * checkJstlIf00();
+     * checkJstlIf03a();
+     * checkJstlIf03a();
+     * checkJstlIf03a();
+     * checkJstlIf03a();
+     * <p/>
+     * // Check the "false case multiple times in a row
+     * checkJstlIf00();
+     * checkJstlIf03b();
+     * checkJstlIf03b();
+     * checkJstlIf03b();
+     * checkJstlIf03b();
+     * <p/>
+     * // Check alternating access to the same page (first pattern)
+     * checkJstlIf00();
+     * checkJstlIf03a();
+     * checkJstlIf03b();
+     * checkJstlIf03a();
+     * checkJstlIf03b();
+     * <p/>
+     * // Check alternating access to the same page (second pattern)
+     * checkJstlIf00();
+     * checkJstlIf03b();
+     * checkJstlIf03a();
+     * checkJstlIf03b();
+     * checkJstlIf03a();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Renders-Child Component Inside Conditional (no nested template text) (
+     * public void testJstlIf04() throws Exception {
+     * <p/>
+     * // Check the "true" case multiple times in a row
+     * checkJstlIf00();
+     * checkJstlIf04a();
+     * checkJstlIf04a();
+     * checkJstlIf04a();
+     * checkJstlIf04a();
+     * <p/>
+     * // Check the "false case multiple times in a row
+     * checkJstlIf00();
+     * checkJstlIf04b();
+     * checkJstlIf04b();
+     * checkJstlIf04b();
+     * checkJstlIf04b();
+     * <p/>
+     * // Check alternating access to the same page (first pattern)
+     * checkJstlIf00();
+     * checkJstlIf04a();
+     * checkJstlIf04b();
+     * checkJstlIf04a();
+     * checkJstlIf04b();
+     * <p/>
+     * // Check alternating access to the same page (second pattern)
+     * checkJstlIf00();
+     * checkJstlIf04b();
+     * checkJstlIf04a();
+     * checkJstlIf04b();
+     * checkJstlIf04a();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Test importing JSPs with literal text
+     * public void testJstlImport01() throws Exception {
+     * <p/>
+     * checkJstlImport00();
+     * checkJstlImport01();
+     * checkJstlImport01();
+     * <p/>
+     * checkJstlImport00();
+     * checkJstlImport01();
+     * checkJstlImport01();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Test importing JSPs with simple components
+     * public void testJstlImport02() throws Exception {
+     * <p/>
+     * checkJstlImport00();
+     * checkJstlImport02();
+     * checkJstlImport02();
+     * <p/>
+     * checkJstlImport00();
+     * checkJstlImport02();
+     * checkJstlImport02();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Test selectively importing JSPs with simple components (explicit ids)
+     * public void testJstlImport03() throws Exception {
+     * <p/>
+     * // Check each individual case multiple times
+     * checkJstlImport00();
+     * checkJstlImport03a();
+     * checkJstlImport03a();
+     * checkJstlImport03a();
+     * checkJstlImport00();
+     * checkJstlImport03b();
+     * checkJstlImport03b();
+     * checkJstlImport03b();
+     * checkJstlImport00();
+     * checkJstlImport03c();
+     * checkJstlImport03c();
+     * checkJstlImport03c();
+     * <p/>
+     * // Check cases in ascending order
+     * checkJstlImport00();
+     * checkJstlImport03a();
+     * checkJstlImport03b();
+     * checkJstlImport03c();
+     * <p/>
+     * // Check cases in descending order
+     * checkJstlImport00();
+     * checkJstlImport03c();
+     * checkJstlImport03b();
+     * checkJstlImport03a();
+     * <p/>
+     * // Check cases in random order
+     * checkJstlImport00();
+     * checkJstlImport03b();
+     * checkJstlImport03a();
+     * checkJstlImport03c();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * // Test selectively importing JSPs with simple components (naming container)
+     * public void testJstlImport04() throws Exception {
+     * <p/>
+     * // Check each individual case multiple times
+     * checkJstlImport00();
+     * checkJstlImport04a();
+     * checkJstlImport04a();
+     * checkJstlImport04a();
+     * checkJstlImport00();
+     * checkJstlImport04b();
+     * checkJstlImport04b();
+     * checkJstlImport04b();
+     * checkJstlImport00();
+     * checkJstlImport04c();
+     * checkJstlImport04c();
+     * checkJstlImport04c();
+     * <p/>
+     * // Check cases in ascending order
+     * checkJstlImport00();
+     * checkJstlImport04a();
+     * checkJstlImport04b();
+     * checkJstlImport04c();
+     * <p/>
+     * // Check cases in descending order
+     * checkJstlImport00();
+     * checkJstlImport04c();
+     * checkJstlImport04b();
+     * checkJstlImport04a();
+     * <p/>
+     * // Check cases in random order
+     * checkJstlImport00();
+     * checkJstlImport04b();
+     * checkJstlImport04a();
+     * checkJstlImport04c();
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * **************************************
+     */
 
     // --------------------------------------------------------- Private Methods
 
@@ -645,11 +649,13 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
     }
 
+
     // Check the actual facet page with true/true/true flags
     private void checkJstlIf02a() throws Exception {
 
         HtmlPage page = getPage
-            ("/faces/jsp/jstl-if-02.jsp?component=true&header=true&footer=true");
+            (
+                "/faces/jsp/jstl-if-02.jsp?component=true&header=true&footer=true");
         assertEquals("Correct page title",
                      "jstl-if-02", page.getTitleText());
         assertEquals("Correct body element",
@@ -663,7 +669,8 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     private void checkJstlIf02b() throws Exception {
 
         HtmlPage page = getPage
-            ("/faces/jsp/jstl-if-02.jsp?component=true&header=true&footer=false");
+            (
+                "/faces/jsp/jstl-if-02.jsp?component=true&header=true&footer=false");
         assertEquals("Correct page title",
                      "jstl-if-02", page.getTitleText());
         assertEquals("Correct body element",
@@ -677,7 +684,8 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     private void checkJstlIf02c() throws Exception {
 
         HtmlPage page = getPage
-            ("/faces/jsp/jstl-if-02.jsp?component=true&header=false&footer=true");
+            (
+                "/faces/jsp/jstl-if-02.jsp?component=true&header=false&footer=true");
         assertEquals("Correct page title",
                      "jstl-if-02", page.getTitleText());
         assertEquals("Correct body element",
@@ -691,7 +699,8 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     private void checkJstlIf02d() throws Exception {
 
         HtmlPage page = getPage
-            ("/faces/jsp/jstl-if-02.jsp?component=true&header=false&footer=false");
+            (
+                "/faces/jsp/jstl-if-02.jsp?component=true&header=false&footer=false");
         assertEquals("Correct page title",
                      "jstl-if-02", page.getTitleText());
         assertEquals("Correct body element",
@@ -705,7 +714,8 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     private void checkJstlIf02e() throws Exception {
 
         HtmlPage page = getPage
-            ("/faces/jsp/jstl-if-02.jsp?component=false&header=true&footer=true");
+            (
+                "/faces/jsp/jstl-if-02.jsp?component=false&header=true&footer=true");
         assertEquals("Correct page title",
                      "jstl-if-02", page.getTitleText());
         assertEquals("Correct body element",

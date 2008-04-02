@@ -56,19 +56,18 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- */ 
+ */
 
 package com.sun.faces.el.impl.beans;
 
 /**
- *
  * <p>A private bean subclassing a public bean
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: ofung $
- **/
+ * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: rlubke $
+ */
 
 class PrivateBean1a
-  extends PublicBean1
-{
+    extends PublicBean1 {
+
 }

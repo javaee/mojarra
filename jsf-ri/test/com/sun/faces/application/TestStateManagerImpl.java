@@ -1,5 +1,5 @@
 /*
- * $Id: TestStateManagerImpl.java,v 1.7 2004/02/04 23:44:05 ofung Exp $
+ * $Id: TestStateManagerImpl.java,v 1.8 2004/02/06 18:56:30 rlubke Exp $
  */
 
 /*
@@ -9,29 +9,28 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
 
-import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIGraphic;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
-import javax.faces.component.UIGraphic;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.application.ViewHandler;
-import javax.servlet.http.HttpSession;
 import javax.faces.render.RenderKitFactory;
+import javax.servlet.http.HttpSession;
 
-import com.sun.faces.RIConstants;
 import java.util.ArrayList;
 
 
 /**
  * This class tests the <code>StateManagerImpl</code> class
- * functionality.  
+ * functionality.
  */
 public class TestStateManagerImpl extends ServletFacesTestCase {
 
-    
+
     //
     // Constructors/Initializers
     //
@@ -54,61 +53,61 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
     public void testDuplicateIdDetectionServer() throws Exception {
 
         UIViewRoot root = null;
-        
+
         UIComponent comp1 = null;
-        
+
         UIComponent comp2 = null;
-        
+
         UIComponent comp3 = null;
-        
+
         UIComponent facet1 = null;
-        
+
         UIComponent facet2 = null;
         
         // construct a view
         root = new UIViewRoot();
         root.setViewId("/test");
         root.setId("root");
-        
+
         comp1 = new UIInput();
         comp1.setId("comp1");
-        
+
         comp2 = new UIOutput();
         comp2.setId("comp2");
-        
+
         comp3 = new UIGraphic();
         comp3.setId("comp3");
-        
+
         facet1 = new UIOutput();
         facet1.setId("comp4");
-        
+
         facet2 = new UIOutput();
         facet2.setId("comp2");
-        
+
         comp2.getFacets().put("facet1", facet1);
         comp2.getFacets().put("facet2", facet2);
-        
+
         root.getChildren().add(comp1);
         root.getChildren().add(comp2);
         root.getChildren().add(comp3);
-                
+
         FacesContext context = getFacesContext();
-        HttpSession session = 
+        HttpSession session =
             (HttpSession) context.getExternalContext().getSession(false);
         session.setAttribute("/test", root);
-        
-        
-        
+
+
         context.setViewRoot(root);
-        
-        StateManagerImpl stateManager = (StateManagerImpl) context.getApplication().getStateManager();
-        
+
+        StateManagerImpl stateManager = (StateManagerImpl) context.getApplication()
+            .getStateManager();
+
         boolean exceptionThrown = false;
         try {
             stateManager.saveSerializedView(context);
         } catch (IllegalStateException ise) {
             exceptionThrown = true;
-        }        
+        }
         assertTrue(exceptionThrown);
         
         
@@ -118,33 +117,33 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         root = new UIViewRoot();
         root.setViewId("/test");
         root.setId("root");
-        
+
         comp1 = new UIInput();
         comp1.setId("comp1");
-        
+
         comp2 = new UIOutput();
         comp2.setId(null);
-        
+
         comp3 = new UIGraphic();
         comp3.setId(null);
-        
+
         facet1 = new UIOutput();
         facet1.setId("comp4");
-        
+
         facet2 = new UIOutput();
         facet2.setId("comp2");
-        
+
         comp2.getFacets().put("facet1", facet1);
         comp2.getFacets().put("facet2", facet2);
-        
+
         root.getChildren().add(comp1);
         root.getChildren().add(comp2);
         root.getChildren().add(comp3);
-                
+
         session.setAttribute("/test", root);
-        
+
         context.setViewRoot(root);
-        
+
         exceptionThrown = false;
         try {
             stateManager.saveSerializedView(context);
@@ -159,35 +158,35 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         root = new UIViewRoot();
         root.setViewId("/test");
         root.setId("root");
-        
+
         comp1 = new UIInput();
         comp1.setId("comp1");
         comp1.setTransient(true);
-        
+
         comp2 = new UIOutput();
         comp2.setId("comp1");
         comp2.setTransient(true);
-        
+
         comp3 = new UIGraphic();
         comp3.setId("comp3");
-        
+
         facet1 = new UIOutput();
         facet1.setId("comp4");
-        
+
         facet2 = new UIOutput();
         facet2.setId("comp2");
-        
+
         comp2.getFacets().put("facet1", facet1);
         comp2.getFacets().put("facet2", facet2);
-        
+
         root.getChildren().add(comp1);
         root.getChildren().add(comp2);
         root.getChildren().add(comp3);
-                
+
         session.setAttribute("/test", root);
-        
+
         context.setViewRoot(root);
-        
+
         exceptionThrown = false;
         try {
             stateManager.saveSerializedView(context);
@@ -197,25 +196,27 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         assertTrue(exceptionThrown);
     }
 
+
     public void testDuplicateIdDetectionClient() throws Exception {
-	StateManagerImpl wrapper = 
-	    new StateManagerImpl() {
-		public boolean isSavingStateInClient(FacesContext context) {
-		    return true;
-		}
-	    };
-	getFacesContext().getApplication().setStateManager(wrapper);
-	testDuplicateIdDetectionServer();
+        StateManagerImpl wrapper =
+            new StateManagerImpl() {
+                public boolean isSavingStateInClient(FacesContext context) {
+                    return true;
+                }
+            };
+        getFacesContext().getApplication().setStateManager(wrapper);
+        testDuplicateIdDetectionServer();
     }
-    
+
+
     public void testRemoveViewFromSession() {
         ArrayList viewList = new ArrayList(10);
         FacesContext context = getFacesContext();
         UIViewRoot newViewRoot = new UIViewRoot();
         newViewRoot.setViewId("viewId");
         context.setViewRoot(newViewRoot);
-        
-        HttpSession session = 
+
+        HttpSession session =
             (HttpSession) context.getExternalContext().getSession(false);
         for (int i = 0; i < 21; ++i) {
             String viewId = "viewId" + i;
@@ -225,16 +226,16 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
             session.setAttribute(viewId, viewRoot);
         }
         session.setAttribute("com.sun.faces.VIEW_LIST", viewList);
-   
+
         StateManagerImpl stateManager = new StateManagerImpl();
         stateManager.restoreView(context, "viewId2",
-                RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        
-        viewList = (ArrayList)session.getAttribute(RIConstants.FACES_PREFIX 
-                + "VIEW_LIST");
+                                 RenderKitFactory.HTML_BASIC_RENDER_KIT);
+
+        viewList = (ArrayList) session.getAttribute(RIConstants.FACES_PREFIX
+                                                    + "VIEW_LIST");
         assertTrue(viewList.size() == 20);
         assertTrue(!(viewList.contains("viewId0")));
         assertTrue((session.getAttribute("viewId0")) == null);
     }
-	
+
 }

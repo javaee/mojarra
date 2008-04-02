@@ -61,30 +61,28 @@
 package com.sun.faces.el.impl;
 
 /**
- *
  * <p>An expression representing a floating point literal value.  The
  * value is stored internally as a double.
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class FloatingPointLiteral
     extends Literal {
+
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public FloatingPointLiteral(String pToken) {
         super(getValueFromToken(pToken));
     }
 
     //-------------------------------------
     /**
-     *
      * Parses the given token into the literal value
-     **/
+     */
     static Object getValueFromToken(String pToken) {
         return new Double(pToken);
     }
@@ -93,9 +91,8 @@ public class FloatingPointLiteral
     // Expression methods
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         return getValue().toString();
     }

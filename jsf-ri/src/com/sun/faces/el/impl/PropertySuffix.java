@@ -62,18 +62,18 @@ package com.sun.faces.el.impl;
 
 
 /**
- *
  * <p>Represents an operator that obtains the value of another value's
  * property.  This is a specialization of ArraySuffix - a.b is
  * equivalent to a["b"]
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class PropertySuffix
     extends ArraySuffix {
+
     //-------------------------------------
     // Properties
     //-------------------------------------
@@ -81,9 +81,11 @@ public class PropertySuffix
 
     String mName;
 
+
     public String getName() {
         return mName;
     }
+
 
     public void setName(String pName) {
         mName = pName;
@@ -91,9 +93,8 @@ public class PropertySuffix
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public PropertySuffix(String pName) {
         super(null);
         mName = pName;
@@ -101,9 +102,8 @@ public class PropertySuffix
 
     //-------------------------------------
     /**
-     *
      * Gets the value of the index
-     **/
+     */
     protected Object evaluateIndex(ExpressionInfo exprInfo)
         throws ElException {
         return mName;
@@ -111,9 +111,8 @@ public class PropertySuffix
 
     //-------------------------------------
     /**
-     *
      * Returns the operator symbol
-     **/
+     */
     protected String getOperatorSymbol() {
         return ".";
     }
@@ -122,9 +121,8 @@ public class PropertySuffix
     // ValueSuffix methods
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         return "." + StringLiteral.toIdentifierToken(mName);
     }

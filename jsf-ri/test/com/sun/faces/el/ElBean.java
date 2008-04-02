@@ -1,5 +1,5 @@
 /*
- * $Id: ElBean.java,v 1.3 2004/02/04 23:44:20 ofung Exp $
+ * $Id: ElBean.java,v 1.4 2004/02/06 18:56:44 rlubke Exp $
  */
 
 /*
@@ -21,7 +21,9 @@ import java.util.Map;
 public class ElBean {
 
 
-    public ElBean() { }
+    public ElBean() {
+    }
+
 
     public ElBean(String stringProperty) {
         this.stringProperty = stringProperty;
@@ -29,51 +31,73 @@ public class ElBean {
 
 
     private boolean booleanProperty = true;
+
+
     public boolean getBooleanProperty() {
         return (this.booleanProperty);
     }
+
+
     public void setBooleanProperty(boolean booleanProperty) {
         this.booleanProperty = booleanProperty;
     }
 
 
     private byte byteProperty = 123;
+
+
     public byte getByteProperty() {
         return (this.byteProperty);
     }
+
+
     public void setByteProperty(byte byteProperty) {
         this.byteProperty = byteProperty;
     }
 
 
     private double doubleProperty = 654.321;
+
+
     public double getDoubleProperty() {
         return (this.doubleProperty);
     }
+
+
     public void setDoubleProperty(double doubleProperty) {
         this.doubleProperty = doubleProperty;
     }
 
 
     private float floatProperty = (float) 123.45;
+
+
     public float getFloatProperty() {
         return (this.floatProperty);
     }
+
+
     public void setFloatProperty(float floatProperty) {
         this.floatProperty = floatProperty;
     }
 
 
-    private int intArray[] = { 1, 2, 3 };
+    private int intArray[] = {1, 2, 3};
+
+
     public int[] getIntArray() {
         return (this.intArray);
     }
+
+
     public void setIntArray(int intArray[]) {
         this.intArray = intArray;
     }
 
 
     private List intList = null;
+
+
     public List getIntList() {
         if (intList == null) {
             intList = new ArrayList();
@@ -85,30 +109,42 @@ public class ElBean {
         }
         return (intList);
     }
+
+
     public void setIntList(List intList) {
         this.intList = intList;
     }
 
 
     private int intProperty = 1234;
+
+
     public int getIntProperty() {
         return (this.intProperty);
     }
+
+
     public void setIntProperty(int intProperty) {
         this.intProperty = intProperty;
     }
 
 
     private long longProperty = 54321;
+
+
     public long getLongProperty() {
         return (this.longProperty);
     }
+
+
     public void setLongProperty(long longProperty) {
         this.longProperty = longProperty;
     }
 
 
     private ElBean nestedArray[] = null;
+
+
     public ElBean[] getNestedArray() {
         if (nestedArray == null) {
             nestedArray = new ElBean[2];
@@ -117,12 +153,16 @@ public class ElBean {
         }
         return (this.nestedArray);
     }
+
+
     public void setNestedArray(ElBean nestedArray[]) {
         this.nestedArray = nestedArray;
     }
 
 
     private List nestedList = null;
+
+
     public List getNestedList() {
         if (nestedList == null) {
             nestedList = new ArrayList();
@@ -133,12 +173,16 @@ public class ElBean {
         }
         return (this.nestedList);
     }
+
+
     public void setNestedList(List nestedList) {
         this.nestedList = nestedList;
     }
 
 
     private Map nestedMap = null;
+
+
     public Map getNestedMap() {
         if (nestedMap == null) {
             nestedMap = new HashMap();
@@ -148,45 +192,61 @@ public class ElBean {
         }
         return (this.nestedMap);
     }
+
+
     public void setNestedMap(Map nestedMap) {
         this.nestedMap = nestedMap;
     }
 
 
     private ElBean nestedProperty = null;
+
+
     public ElBean getNestedProperty() {
         if (nestedProperty == null) {
             nestedProperty = new ElBean();
         }
         return (this.nestedProperty);
     }
+
+
     public void setNestedProperty(ElBean nestedProperty) {
         this.nestedProperty = nestedProperty;
     }
 
 
     private short shortProperty = 321;
+
+
     public short getShortProperty() {
         return (this.shortProperty);
     }
+
+
     public void setShortProperty(short shortProperty) {
         this.shortProperty = shortProperty;
     }
 
 
     private String stringProperty = "This is a String";
+
+
     public String getStringProperty() {
         return (this.stringProperty);
-    } 
+    }
+
+
     public void setStringProperty(String stringProperty) {
         this.stringProperty = stringProperty;
     }
 
+
     private String nullString = null;
+
+
     public String getNullStringProperty() {
-        return ("String length is:"+ nullString.length());
+        return ("String length is:" + nullString.length());
     }
-    
 
 
 }

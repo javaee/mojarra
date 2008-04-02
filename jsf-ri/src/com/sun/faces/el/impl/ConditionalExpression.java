@@ -62,18 +62,18 @@ package com.sun.faces.el.impl;
 
 
 /**
- *
  * <p>Represents a conditional expression.  I've decided not to produce an
  * abstract base "TernaryOperatorExpression" class since (a) future ternary
  * operators are unlikely and (b) it's not clear that there would be a
  * meaningful way to abstract them.  (For instance, would they all be right-
  * associative?  Would they all have two fixed operator symbols?)
- * 
+ *
  * @author Shawn Bayern
- **/
+ */
 
 public class ConditionalExpression
     extends Expression {
+
     //-------------------------------------
     // Properties
     //-------------------------------------
@@ -81,9 +81,11 @@ public class ConditionalExpression
 
     Expression mCondition;
 
+
     public Expression getCondition() {
         return mCondition;
     }
+
 
     public void setCondition(Expression pCondition) {
         mCondition = pCondition;
@@ -94,9 +96,11 @@ public class ConditionalExpression
 
     Expression mTrueBranch;
 
+
     public Expression getTrueBranch() {
         return mTrueBranch;
     }
+
 
     public void setTrueBranch(Expression pTrueBranch) {
         mTrueBranch = pTrueBranch;
@@ -107,9 +111,11 @@ public class ConditionalExpression
 
     Expression mFalseBranch;
 
+
     public Expression getFalseBranch() {
         return mFalseBranch;
     }
+
 
     public void setFalseBranch(Expression pFalseBranch) {
         mFalseBranch = pFalseBranch;
@@ -117,13 +123,11 @@ public class ConditionalExpression
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
-    public ConditionalExpression(
-        Expression pCondition,
-        Expression pTrueBranch,
-        Expression pFalseBranch) {
+     */
+    public ConditionalExpression(Expression pCondition,
+                                 Expression pTrueBranch,
+                                 Expression pFalseBranch) {
         mCondition = pCondition;
         mTrueBranch = pTrueBranch;
         mFalseBranch = pFalseBranch;
@@ -133,9 +137,8 @@ public class ConditionalExpression
     // Expression methods
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         return
             "( " + mCondition.getExpressionString() + " ? " +
@@ -145,16 +148,13 @@ public class ConditionalExpression
 
     //-------------------------------------
     /**
-     *
      * Evaluates the conditional expression and returns the literal result
-     **/
-    public Object evaluate(
-        ExpressionInfo exprInfo)
+     */
+    public Object evaluate(ExpressionInfo exprInfo)
         throws ElException {
         // first, evaluate the condition (and coerce the result to a boolean value)
         boolean condition =
-            Coercions.coerceToBoolean(
-                mCondition.evaluate(exprInfo)).booleanValue();
+            Coercions.coerceToBoolean(mCondition.evaluate(exprInfo)).booleanValue();
 
         // then, use this boolean to branch appropriately
         if (condition)

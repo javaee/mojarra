@@ -64,16 +64,16 @@ import java.util.List;
 
 
 /**
- *
  * <p>An expression representing a binary operator on a value
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class BinaryOperatorExpression
     extends Expression {
+
     //-------------------------------------
     // Properties
     //-------------------------------------
@@ -81,9 +81,11 @@ public class BinaryOperatorExpression
 
     Expression mExpression;
 
+
     public Expression getExpression() {
         return mExpression;
     }
+
 
     public void setExpression(Expression pExpression) {
         mExpression = pExpression;
@@ -94,9 +96,11 @@ public class BinaryOperatorExpression
 
     List mOperators;
 
+
     public List getOperators() {
         return mOperators;
     }
+
 
     public void setOperators(List pOperators) {
         mOperators = pOperators;
@@ -107,9 +111,11 @@ public class BinaryOperatorExpression
 
     List mExpressions;
 
+
     public List getExpressions() {
         return mExpressions;
     }
+
 
     public void setExpressions(List pExpressions) {
         mExpressions = pExpressions;
@@ -117,13 +123,11 @@ public class BinaryOperatorExpression
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
-    public BinaryOperatorExpression(
-        Expression pExpression,
-        List pOperators,
-        List pExpressions) {
+     */
+    public BinaryOperatorExpression(Expression pExpression,
+                                    List pOperators,
+                                    List pExpressions) {
         mExpression = pExpression;
         mOperators = pOperators;
         mExpressions = pExpressions;
@@ -133,9 +137,8 @@ public class BinaryOperatorExpression
     // Expression methods
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         StringBuffer buf = new StringBuffer();
         buf.append("(");
@@ -155,11 +158,9 @@ public class BinaryOperatorExpression
 
     //-------------------------------------
     /**
-     *
      * Evaluates to the literal value
-     **/
-    public Object evaluate(
-        ExpressionInfo exprInfo)
+     */
+    public Object evaluate(ExpressionInfo exprInfo)
         throws ElException {
         Object value = mExpression.evaluate(exprInfo);
         for (int i = 0, size = mOperators.size(); i < size; i++) {
@@ -173,8 +174,7 @@ public class BinaryOperatorExpression
 
             if (operator.shouldEvaluate(value)) {
                 Expression expression = (Expression) mExpressions.get(i);
-                Object nextValue = expression.evaluate(
-                    exprInfo);
+                Object nextValue = expression.evaluate(exprInfo);
 
                 value = operator.apply(value, nextValue);
             }

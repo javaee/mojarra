@@ -67,22 +67,28 @@ public interface ELParser {
 
     /**
      * <p>Returns an Object (unevaluated) representing the parsed expression.</p>
+     *
      * @return returns a String if the expression string is a single String,
      *         an Expression if the expression string is a single Expression,
      *         an ExpressionString if it's a mixture of both.
-     * @throws ElParseException if the expression cannot be parsed
+     *
+     * @throws ElParseException      if the expression cannot be parsed
      * @throws IllegalStateException if the parser has not be initialized
      */
     public Object ExpressionString() throws ElParseException;
 
+
     /**
      * <p>Initialize this <code>ELParser</code> with the provided {@link Reader}.</p>
+     *
      * @param r a Reader containing the expression to parse
      */
     public void initParser(Reader r);
 
+
     /**
      * <p>Initialize this <code>ELParser</code> with the provided {@link InputStream}.</p>
+     *
      * @param in an InputStream containing the expression to parse
      */
     public void initParser(InputStream in);

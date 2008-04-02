@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.21 2004/02/04 23:44:33 ofung Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.22 2004/02/06 18:56:57 rlubke Exp $
  */
 
 /*
@@ -11,46 +11,30 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.ServletFacesTestCase;
 import org.apache.cactus.WebRequest;
 
-import com.sun.faces.util.Util;
-
-
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
-import javax.faces.event.FacesEvent;
-import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.lifecycle.Phase;
-import com.sun.faces.RIConstants;
-import java.io.IOException;
-
-import java.util.Iterator;
 
 /**
- *
- *  <B>TestInvokeApplicationPhase</B> is a class ...
- *
+ * <B>TestInvokeApplicationPhase</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.21 2004/02/04 23:44:33 ofung Exp $
- * 
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.22 2004/02/06 18:56:57 rlubke Exp $
  * @see	Blah
  * @see	Bloo
- *
  */
 
-public class TestInvokeApplicationPhase extends ServletFacesTestCase
-{
+public class TestInvokeApplicationPhase extends ServletFacesTestCase {
+
 //
 // Protected Constants
 //
 
-public static final String DID_COMMAND = "didCommand";
-public static final String DID_FORM = "didForm";
+    public static final String DID_COMMAND = "didCommand";
+    public static final String DID_FORM = "didForm";
 
 //
 // Class Variables
@@ -69,11 +53,12 @@ public static final String DID_FORM = "didForm";
 //
 
     public TestInvokeApplicationPhase() {
-	super("TestInvokeApplicationPhase");
+        super("TestInvokeApplicationPhase");
     }
 
+
     public TestInvokeApplicationPhase(String name) {
-	super(name);
+        super(name);
     }
 
 //
@@ -84,21 +69,20 @@ public static final String DID_FORM = "didForm";
 // General Methods
 //
 
-public void testInvokeNormal()
-{
-}
+    public void testInvokeNormal() {
+    }
 
-public void testInvokeNoOp()
-{
-    UIInput root = new UIInput();
-    UIViewRoot page = new UIViewRoot();
-    page.setViewId("default.xul");   
-    Phase invokeApplicationPhase = new InvokeApplicationPhase();
-    getFacesContext().setViewRoot(page);
 
-    invokeApplicationPhase.execute(getFacesContext());
-    assertTrue(!(getFacesContext().getRenderResponse()) &&
-        !(getFacesContext().getResponseComplete()));
-}
+    public void testInvokeNoOp() {
+        UIInput root = new UIInput();
+        UIViewRoot page = new UIViewRoot();
+        page.setViewId("default.xul");
+        Phase invokeApplicationPhase = new InvokeApplicationPhase();
+        getFacesContext().setViewRoot(page);
+
+        invokeApplicationPhase.execute(getFacesContext());
+        assertTrue(!(getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
+    }
 
 } // end of class TestInvokeApplicationPhase

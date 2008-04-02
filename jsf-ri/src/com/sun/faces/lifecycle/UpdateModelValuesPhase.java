@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.34 2004/02/04 23:41:38 ofung Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.35 2004/02/06 18:55:09 rlubke Exp $
  */
 
 /*
@@ -9,27 +9,23 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.context.FacesContextImpl;
-
-import com.sun.faces.util.Util;
-
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageFactory;
-
-import javax.faces.FacesException;
-import javax.faces.event.PhaseId;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-
+import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
+
 
 /**
- * UpdateModelValuesPhase executes <code>processUpdates</code> on each 
+ * UpdateModelValuesPhase executes <code>processUpdates</code> on each
  * component in the tree so that it may have a chance to update its model value.
  */
 public class UpdateModelValuesPhase extends Phase {
+
 //
 // Protected Constants
 //
@@ -42,7 +38,7 @@ public class UpdateModelValuesPhase extends Phase {
 // Instance Variables
 //
 // Log instance for this class
-protected static Log log = LogFactory.getLog(UpdateModelValuesPhase.class);
+    protected static Log log = LogFactory.getLog(UpdateModelValuesPhase.class);
 
 // Attribute Instance Variables
 
@@ -53,8 +49,8 @@ protected static Log log = LogFactory.getLog(UpdateModelValuesPhase.class);
 // Constructors and Genericializers    
 //
 
-public UpdateModelValuesPhase() {
-}
+    public UpdateModelValuesPhase() {
+    }
 
 //
 // Class methods
@@ -68,43 +64,42 @@ public UpdateModelValuesPhase() {
 // Methods from Phase
 //
 
-public PhaseId getId() {
-    return PhaseId.UPDATE_MODEL_VALUES;
-}
-
-public void execute(FacesContext facesContext) 
-{
-    if (log.isDebugEnabled()) {
-        log.debug("Entering UpdateModelValuesPhase");
-    }
-    UIComponent component = facesContext.getViewRoot();
-    Util.doAssert(null != component);
-    String exceptionMessage = null;
-    
-    try {
-        component.processUpdates(facesContext);
-    } 
-    catch (IllegalStateException e) {
-	exceptionMessage = e.getMessage();
-    }
-    catch (FacesException fe) {
-	exceptionMessage = fe.getMessage();
+    public PhaseId getId() {
+        return PhaseId.UPDATE_MODEL_VALUES;
     }
 
-    if (null != exceptionMessage) {
-        Object[] params = new Object[3];
-        params[2] = exceptionMessage;
-        facesContext.addMessage(component.getClientId(facesContext), 
-	    MessageFactory.getMessage(facesContext,
-	    Util.MODEL_UPDATE_ERROR_MESSAGE_ID,params));
-        if (log.isErrorEnabled()) {
-	    log.error(exceptionMessage);
-	}
+
+    public void execute(FacesContext facesContext) {
         if (log.isDebugEnabled()) {
-            log.debug("Exiting UpdateModelValuesPhase");
+            log.debug("Entering UpdateModelValuesPhase");
+        }
+        UIComponent component = facesContext.getViewRoot();
+        Util.doAssert(null != component);
+        String exceptionMessage = null;
+
+        try {
+            component.processUpdates(facesContext);
+        } catch (IllegalStateException e) {
+            exceptionMessage = e.getMessage();
+        } catch (FacesException fe) {
+            exceptionMessage = fe.getMessage();
+        }
+
+        if (null != exceptionMessage) {
+            Object[] params = new Object[3];
+            params[2] = exceptionMessage;
+            facesContext.addMessage(component.getClientId(facesContext),
+                                    MessageFactory.getMessage(facesContext,
+                                                              Util.MODEL_UPDATE_ERROR_MESSAGE_ID,
+                                                              params));
+            if (log.isErrorEnabled()) {
+                log.error(exceptionMessage);
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("Exiting UpdateModelValuesPhase");
+            }
         }
     }
-}
 
 
 

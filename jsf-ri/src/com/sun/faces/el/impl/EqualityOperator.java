@@ -62,33 +62,30 @@ package com.sun.faces.el.impl;
 
 
 /**
- *
  * <p>This is the superclass for all equality operators (==, !=)
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public abstract class EqualityOperator
     extends BinaryOperator {
+
     //-------------------------------------
     /**
-     *
      * Applies the operator to the given value
-     **/
-    public Object apply(
-        Object pLeft,
-        Object pRight)
+     */
+    public Object apply(Object pLeft,
+                        Object pRight)
         throws ElException {
         return Coercions.applyEqualityOperator(pLeft, pRight, this);
     }
 
     //-------------------------------------
     /**
-     *
      * Applies the operator given the fact that the two elements are
      * equal.
-     **/
+     */
     public abstract boolean apply(boolean pAreEqual);
   
     //-------------------------------------

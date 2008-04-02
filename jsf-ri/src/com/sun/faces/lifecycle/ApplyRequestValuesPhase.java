@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.15 2004/02/04 23:41:36 ofung Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.16 2004/02/06 18:55:07 rlubke Exp $
  */
 
 /*
@@ -10,22 +10,22 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.util.Util;
-
-import javax.faces.FacesException;
-import javax.faces.event.PhaseId;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
+
 /**
- * ApplyRequestValuesPhase executes <code>processDecodes</code> on each 
+ * ApplyRequestValuesPhase executes <code>processDecodes</code> on each
  * component in the tree so that it may update it's current value from the
  * information included in the current request (parameters, headers, c
  * cookies and so on.)
  */
 public class ApplyRequestValuesPhase extends Phase {
+
     //
     // Protected Constants
     //
@@ -65,15 +65,16 @@ public class ApplyRequestValuesPhase extends Phase {
         return PhaseId.APPLY_REQUEST_VALUES;
     }
 
+
     public void execute(FacesContext facesContext) throws FacesException {
-        
+
         if (log.isDebugEnabled()) {
             log.debug("Entering ApplyRequestValuesPhase");
         }
-         
+
         UIComponent component = facesContext.getViewRoot();
         Util.doAssert(null != component);
-        
+
         try {
             component.processDecodes(facesContext);
         } catch (RuntimeException re) {

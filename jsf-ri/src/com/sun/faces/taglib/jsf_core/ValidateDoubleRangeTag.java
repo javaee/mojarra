@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateDoubleRangeTag.java,v 1.6 2004/02/04 23:42:10 ofung Exp $
+ * $Id: ValidateDoubleRangeTag.java,v 1.7 2004/02/06 18:55:42 rlubke Exp $
  */
 
 /*
@@ -13,19 +13,17 @@ package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.util.Util;
 
-
 import javax.faces.validator.DoubleRangeValidator;
 import javax.faces.validator.Validator;
-
 import javax.servlet.jsp.JspException;
 
 /**
- * ValidateDoubleRangeTag is the tag handler class for 
+ * ValidateDoubleRangeTag is the tag handler class for
  * <code>validate_doublerange</code> tag.
  */
 
-public class ValidateDoubleRangeTag extends MaxMinValidatorTag
-{
+public class ValidateDoubleRangeTag extends MaxMinValidatorTag {
+
 //
 // Protected Constants
 //
@@ -40,10 +38,10 @@ public class ValidateDoubleRangeTag extends MaxMinValidatorTag
 
 // Attribute Instance Variables
 
-protected String maximum_ = null;
-protected double maximum = 0;
-protected String minimum_ = null;
-protected double minimum = 0;
+    protected String maximum_ = null;
+    protected double maximum = 0;
+    protected String minimum_ = null;
+    protected double minimum = 0;
 
 
 // Relationship Instance Variables
@@ -52,11 +50,10 @@ protected double minimum = 0;
 // Constructors and Initializers    
 //
 
-public ValidateDoubleRangeTag()
-{
-    super();
-    super.setValidatorId("javax.faces.DoubleRange");
-}
+    public ValidateDoubleRangeTag() {
+        super();
+        super.setValidatorId("javax.faces.DoubleRange");
+    }
 
 //
 // Class methods
@@ -66,62 +63,60 @@ public ValidateDoubleRangeTag()
 // General Methods
 //
 
-public void setMaximum(String newMaximum)
-{
-    maximumSet = true;
-    maximum_ = newMaximum;
-}
+    public void setMaximum(String newMaximum) {
+        maximumSet = true;
+        maximum_ = newMaximum;
+    }
 
-public void setMinimum(String newMinimum)
-{
-    minimumSet = true;
-    minimum_ = newMinimum;
-}
+
+    public void setMinimum(String newMinimum) {
+        minimumSet = true;
+        minimum_ = newMinimum;
+    }
 
 // 
 // Methods from ValidatorTag
-// 
+//
 
-protected Validator createValidator() throws JspException
-{
-    DoubleRangeValidator result = null;
+    protected Validator createValidator() throws JspException {
+        DoubleRangeValidator result = null;
 
-    result = (DoubleRangeValidator) super.createValidator();
-    Util.doAssert(null != result);
+        result = (DoubleRangeValidator) super.createValidator();
+        Util.doAssert(null != result);
 
-    evaluateExpressions();
-    if (maximumSet) {
-	result.setMaximum(maximum);
+        evaluateExpressions();
+        if (maximumSet) {
+            result.setMaximum(maximum);
+        }
+
+        if (minimumSet) {
+            result.setMinimum(minimum);
+        }
+
+        return result;
     }
-
-    if (minimumSet) {
-	result.setMinimum(minimum);
-    }
-
-    return result;
-}
 
 /* Evaluates expressions as necessary */
-private void evaluateExpressions() throws JspException {
-   
-    if (minimum_ != null) {
-        if (Util.isVBExpression(minimum_)) {  
-            Double doubleObj = (Double)Util.evaluateVBExpression(minimum_);
-            Util.doAssert(null != doubleObj);
-            minimum = doubleObj.doubleValue();
-        } else {
-            minimum = new Double(minimum_).doubleValue();
+    private void evaluateExpressions() throws JspException {
+
+        if (minimum_ != null) {
+            if (Util.isVBExpression(minimum_)) {
+                Double doubleObj = (Double) Util.evaluateVBExpression(minimum_);
+                Util.doAssert(null != doubleObj);
+                minimum = doubleObj.doubleValue();
+            } else {
+                minimum = new Double(minimum_).doubleValue();
+            }
+        }
+        if (maximum_ != null) {
+            if (Util.isVBExpression(maximum_)) {
+                Double doubleObj = (Double) Util.evaluateVBExpression(maximum_);
+                Util.doAssert(null != doubleObj);
+                maximum = doubleObj.doubleValue();
+            } else {
+                maximum = new Double(maximum_).doubleValue();
+            }
         }
     }
-    if (maximum_ != null) {
-        if (Util.isVBExpression(maximum_)) {  
-            Double doubleObj = (Double)Util.evaluateVBExpression(maximum_);
-            Util.doAssert(null != doubleObj);
-            maximum = doubleObj.doubleValue();
-        } else {
-            maximum = new Double(maximum_).doubleValue();
-        }
-    }
-}
 
 } // end of class ValidateDoubleRangeTag

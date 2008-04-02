@@ -1,5 +1,5 @@
 /*
- * $Id: LocaleTestCase.java,v 1.3 2004/02/04 23:42:26 ofung Exp $
+ * $Id: LocaleTestCase.java,v 1.4 2004/02/06 18:55:58 rlubke Exp $
  */
 
 /*
@@ -12,16 +12,12 @@ package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.AbstractTestCase;
-import java.net.URL;
-import java.util.Iterator;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 
 
 /**
@@ -79,15 +75,15 @@ public class LocaleTestCase extends AbstractTestCase {
 
     // Test dynamically adding and removing components
     public void testLocaleAndEncoding() throws Exception {
-	client.addRequestHeader("Content-Type", 
-				"text/html; charset=ISO-8859-4");
+        client.addRequestHeader("Content-Type",
+                                "text/html; charset=ISO-8859-4");
         HtmlPage page = getPage("/faces/renderkit02A.jsp");
-	// PENDING(edburns): when you figure out why the encoding
-	// doesn't get passed through, fix this.
-	boolean correct = 
-	    page.getPageEncoding().equals("ISO-8859-1") ||
-	    page.getPageEncoding().equals("ISO-8859-4");
-	assertTrue("Encoding not as expected", correct);
+        // PENDING(edburns): when you figure out why the encoding
+        // doesn't get passed through, fix this.
+        boolean correct =
+            page.getPageEncoding().equals("ISO-8859-1") ||
+            page.getPageEncoding().equals("ISO-8859-4");
+        assertTrue("Encoding not as expected", correct);
     }
 
 

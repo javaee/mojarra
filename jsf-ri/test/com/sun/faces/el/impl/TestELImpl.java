@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: TestELImpl.java,v 1.5 2004/02/04 23:44:25 ofung Exp $
+ * $Id: TestELImpl.java,v 1.6 2004/02/06 18:56:49 rlubke Exp $
  */
 
 // TestELImpl
@@ -12,13 +12,7 @@
 package com.sun.faces.el.impl;
 
 import com.sun.faces.JspFacesTestCase;
-import com.sun.faces.RIConstants;
 import com.sun.faces.el.impl.beans.Factory;
-import com.sun.faces.el.impl.ExpressionEvaluatorImpl;
-import com.sun.faces.el.impl.ElException;
-import com.sun.faces.el.impl.ExpressionInfo;
-import com.sun.faces.el.VariableResolverImpl;
-import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
@@ -27,10 +21,9 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,10 +40,11 @@ public class TestELImpl extends JspFacesTestCase {
     private static final String EVAL_INPUT_FILE = "/evaluationTests.txt";
     private static final String PARSER_GOLDEN_FILE = "parserTestsOutput.txt";
     private static final String EVAL_GOLDEN_FILE = "evaluationTestsOutput.txt";
-    private static final String[] EMPTY_IGNORE_LIST = { };
+    private static final String[] EMPTY_IGNORE_LIST = {};
 
     // Class Variables
     private String responseFile = null;
+
 
     //
     // Constructors
@@ -58,6 +52,7 @@ public class TestELImpl extends JspFacesTestCase {
     public TestELImpl() {
         super("TestELImpl");
     }
+
 
     public TestELImpl(String name) {
         super(name);
@@ -70,13 +65,16 @@ public class TestELImpl extends JspFacesTestCase {
         assertTrue(getFacesContext().getResponseWriter() != null);
     }
 
+
     public boolean sendWriterToFile() {
         return true;
     }
 
+
     public String[] getLinesToIgnore() {
         return EMPTY_IGNORE_LIST;
     }
+
 
     public String getExpectedOutputFilename() {
         return responseFile;
@@ -87,10 +85,11 @@ public class TestELImpl extends JspFacesTestCase {
         responseFile = PARSER_GOLDEN_FILE;
         LineNumberReader reader = getReaderForFile(PARSER_INPUT_FILE);
         Writer writer = getFacesContext().getResponseWriter();
-	//Writer writer = new OutputStreamWriter(System.out);
-        ExpressionEvaluatorImpl e = 
-	    (ExpressionEvaluatorImpl) Util.getExpressionEvaluator();
-        for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+        //Writer writer = new OutputStreamWriter(System.out);
+        ExpressionEvaluatorImpl e =
+            (ExpressionEvaluatorImpl) Util.getExpressionEvaluator();
+        for (String line = reader.readLine(); line != null; line =
+            reader.readLine()) {
             if (line.startsWith("#") ||
                 "".equals(line.trim())) {
                 writer.write(line + "\n");
@@ -102,11 +101,12 @@ public class TestELImpl extends JspFacesTestCase {
                 }
 
                 writer.write("Attribute value: " + line + "\n");
-                try {                    
+                try {
                     String result = e.parseAndRender(line);
                     writer.write("Parses to: " + result + "\n");
-                } catch (ElException elex) {                    
-                    writer.write("Causes an error: " + elex.getMessage() + "\n");
+                } catch (ElException elex) {
+                    writer.write(
+                        "Causes an error: " + elex.getMessage() + "\n");
                 }
             }
         }
@@ -118,13 +118,15 @@ public class TestELImpl extends JspFacesTestCase {
         assertTrue(verifyExpectedOutput());
     }
 
+
     public void testELEvaluation() throws Exception {
         responseFile = EVAL_GOLDEN_FILE;
-	FacesContext fc = FacesContext.getCurrentInstance();
+        FacesContext fc = FacesContext.getCurrentInstance();
         createTestContext(fc);
         LineNumberReader reader = getReaderForFile(EVAL_INPUT_FILE);
-        Writer writer = getFacesContext().getResponseWriter(); 
-        for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+        Writer writer = getFacesContext().getResponseWriter();
+        for (String line = reader.readLine(); line != null; line =
+            reader.readLine()) {
             if (line.startsWith("*") ||
                 "".equals(line.trim())) {
                 writer.write(line + "\n");
@@ -135,18 +137,17 @@ public class TestELImpl extends JspFacesTestCase {
                 try {
                     Class cl = parseClassName(typeStr);
                     writer.write("ExpectedType: " + cl + "\n");
-		    Object val = null;
-		    Class type = null;
-		    if (Util.isVBExpression(line)) {
-			ValueBinding vb = Util.getValueBinding(line);
-			val = vb.getValue(fc);
-			type = val == null ? null : val.getClass();
-		    }
-		    else {
-			val = line;
-			type = String.class;
-		    }
-		    
+                    Object val = null;
+                    Class type = null;
+                    if (Util.isVBExpression(line)) {
+                        ValueBinding vb = Util.getValueBinding(line);
+                        val = vb.getValue(fc);
+                        type = val == null ? null : val.getClass();
+                    } else {
+                        val = line;
+                        type = String.class;
+                    }
+
                     writer.write("Evaluates to: " + val + "\n");
                     if (val != null) {
                         writer.write("With type: " + type + "\n");
@@ -154,9 +155,9 @@ public class TestELImpl extends JspFacesTestCase {
                     writer.write("\n");
                 } catch (Exception exc) {
                     writer.write("Causes an error: " + exc);
-		    //exc.printStackTrace(new PrintWriter(writer));
+                    //exc.printStackTrace(new PrintWriter(writer));
                     writer.write("\n");
-		}
+                }
             }
         }
         try {
@@ -175,8 +176,10 @@ public class TestELImpl extends JspFacesTestCase {
     private LineNumberReader getReaderForFile(String file) {
         return new LineNumberReader(
             new InputStreamReader(
-                getFacesContext().getExternalContext().getResourceAsStream(file)));
+                getFacesContext().getExternalContext().getResourceAsStream(
+                    file)));
     }
+
 
     //
     // Class Methods
@@ -207,16 +210,17 @@ public class TestELImpl extends JspFacesTestCase {
         }
     }
 
+
     static void createTestContext(FacesContext context) {
-	UIViewRoot root = new UIViewRoot();
-	UIInput input = new UIInput();
-	input.setValue("inputValue");
-	root.getChildren().add(input);
-	context.setViewRoot(root);
-	ExternalContext ec = context.getExternalContext();
-	Map requestMap = ec.getRequestMap();
-	Map sessionMap = ec.getSessionMap();
-	Map applicationMap = ec.getApplicationMap();
+        UIViewRoot root = new UIViewRoot();
+        UIInput input = new UIInput();
+        input.setValue("inputValue");
+        root.getChildren().add(input);
+        context.setViewRoot(root);
+        ExternalContext ec = context.getExternalContext();
+        Map requestMap = ec.getRequestMap();
+        Map sessionMap = ec.getSessionMap();
+        Map applicationMap = ec.getApplicationMap();
 
         // Create some basic values for lookups
         requestMap.put("val1b", "request-scoped1");

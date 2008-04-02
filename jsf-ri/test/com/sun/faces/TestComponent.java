@@ -5,14 +5,17 @@
 
 package com.sun.faces;
 
-import com.sun.faces.util.Util;
-
 import javax.faces.component.UIComponentBase;
 
-public class TestComponent extends UIComponentBase
-{
+public class TestComponent extends UIComponentBase {
 
-    public String getFamily() { return "TestFamily"; }
-    public String getComponentType() { return "TestComponent"; }
+    public String getFamily() {
+        return "TestFamily";
+    }
+
+
+    public String getComponentType() {
+        return "TestComponent";
+    }
 
 }

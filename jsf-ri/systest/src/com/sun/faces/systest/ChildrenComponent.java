@@ -1,5 +1,5 @@
 /*
- * $Id: ChildrenComponent.java,v 1.4 2004/02/04 23:42:31 ofung Exp $
+ * $Id: ChildrenComponent.java,v 1.5 2004/02/06 18:56:02 rlubke Exp $
  */
 
 /*
@@ -10,12 +10,13 @@
 package com.sun.faces.systest;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 
 /**
@@ -28,6 +29,7 @@ public class ChildrenComponent extends UIOutput {
     public ChildrenComponent() {
         super();
     }
+
 
     public ChildrenComponent(String id) {
         super();
@@ -64,7 +66,7 @@ public class ChildrenComponent extends UIOutput {
 
     private void encodeRecursive(FacesContext context, UIComponent component)
         throws IOException {
-        
+
         component.encodeBegin(context);
         if (component.getRendersChildren()) {
             component.encodeChildren(context);

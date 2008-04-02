@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.10 2004/02/04 23:44:20 ofung Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.11 2004/02/06 18:56:45 rlubke Exp $
  */
 
 /*
@@ -11,42 +11,30 @@
 
 package com.sun.faces.el;
 
-import com.sun.faces.util.Util;
-
-
-
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
-
 import org.apache.cactus.WebRequest;
 
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
-import javax.faces.el.PropertyResolver;
-import javax.faces.component.UIOutput;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIOutput;
-import javax.faces.context.ExternalContext;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- *
- *  <B>TestPropertyResolverImpl</B> is a class ...
- *
+ * <B>TestPropertyResolverImpl</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.10 2004/02/04 23:44:20 ofung Exp $
- * 
+ * @version $Id: TestPropertyResolverImpl.java,v 1.11 2004/02/06 18:56:45 rlubke Exp $
  * @see	Blah
  * @see	Bloo
- *
  */
 
-public class TestPropertyResolverImpl extends ServletFacesTestCase
-{
+public class TestPropertyResolverImpl extends ServletFacesTestCase {
+
 //
 // Protected Constants
 //
@@ -70,8 +58,14 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
 // Constructors and Initializers    
 //
 
-    public TestPropertyResolverImpl() {super("TestFacesContext");}
-    public TestPropertyResolverImpl(String name) {super(name);}
+    public TestPropertyResolverImpl() {
+        super("TestFacesContext");
+    }
+
+
+    public TestPropertyResolverImpl(String name) {
+        super(name);
+    }
 //
 // Class methods
 //
@@ -81,7 +75,7 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
 //
 
     public void setUp() {
-	super.setUp();
+        super.setUp();
         bean = new ElBean();
         resolver = new PropertyResolverImpl();
     }
@@ -90,7 +84,7 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
     public void tearDown() {
         resolver = null;
         bean = null;
-	super.tearDown();
+        super.tearDown();
     }
 
 //
@@ -104,44 +98,44 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
 
 
         // ---------- Should Return Null ----------
-	value = resolver.getValue(bean, null);
-	assertNull(value);            
+        value = resolver.getValue(bean, null);
+        assertNull(value);
 
-	value = resolver.getValue(null, "booleanProperty");
-	assertNull(value);            
-            
-	value = resolver.getValue(null, null);
-	assertNull(value);            
+        value = resolver.getValue(null, "booleanProperty");
+        assertNull(value);
 
-	value = resolver.getValue(bean.getIntArray(), -1);
-	assertNull(value);            
-            
-	value = resolver.getValue(bean.getIntArray(), 3);
-	assertNull(value);            
-            
-	value = resolver.getValue(bean.getIntList(), -1);
-	assertNull(value);            
-            
-	value = resolver.getValue(bean.getIntList(), 5);
-	assertNull(value);            
+        value = resolver.getValue(null, null);
+        assertNull(value);
+
+        value = resolver.getValue(bean.getIntArray(), -1);
+        assertNull(value);
+
+        value = resolver.getValue(bean.getIntArray(), 3);
+        assertNull(value);
+
+        value = resolver.getValue(bean.getIntList(), -1);
+        assertNull(value);
+
+        value = resolver.getValue(bean.getIntList(), 5);
+        assertNull(value);
             
         // ---------- Should throw EvaluationException
-	
-	try {
-	    value = resolver.getValue(bean, "nullStringProperty"); 
+
+        try {
+            value = resolver.getValue(bean, "nullStringProperty");
             fail("Should have thrown EvaluationException");
-	} catch (EvaluationException e) {
-	    ; // Expected result
-	}
+        } catch (EvaluationException e) {
+            ; // Expected result
+        }
 
         // ---------- Should Throw PropertyNotFoundException
 
-	try {
-	    value = resolver.getValue(bean, "dontExist"); 
+        try {
+            value = resolver.getValue(bean, "dontExist");
             fail("Should have thrown EvaluationException");
-	} catch (PropertyNotFoundException e) {
-	    ; // Expected result
-	}
+        } catch (PropertyNotFoundException e) {
+            ; // Expected result
+        }
 
     }
 
@@ -307,11 +301,14 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
     // Positive getValue() tests on a Map base object
     public void testStringGetMap() throws Exception {
 
-	getFacesContext().getExternalContext().getRequestMap().put("testValue", this);
-	assertTrue(this == resolver.getValue(getFacesContext().getExternalContext().getRequestMap(),
-						     "testValue"));
+        getFacesContext().getExternalContext().getRequestMap().put("testValue",
+                                                                   this);
+        assertTrue(this == resolver.getValue(
+            getFacesContext().getExternalContext().getRequestMap(),
+            "testValue"));
 
     }
+
 
     // Postitive setValue() tests on a JavaBean base object
     public void testStringSetBean() throws Exception {
@@ -436,37 +433,39 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
 
 
     public void testReadOnlyObject() {
-	ExternalContext ec = getFacesContext().getExternalContext();
+        ExternalContext ec = getFacesContext().getExternalContext();
 
-	// these are mutable Maps
-	assertTrue(!resolver.isReadOnly(ec.getApplicationMap(), "hello"));
-	assertTrue(!resolver.isReadOnly(ec.getSessionMap(), "hello"));
-	assertTrue(!resolver.isReadOnly(ec.getRequestMap(), "hello"));
-	
-	// these are immutable Maps
-	assertTrue(resolver.isReadOnly(ec.getRequestParameterMap(), "hello"));
-	assertTrue(resolver.isReadOnly(ec.getRequestParameterValuesMap(), 
-				       "hello"));
-	assertTrue(resolver.isReadOnly(ec.getRequestHeaderMap(), "hello"));
-	assertTrue(resolver.isReadOnly(ec.getRequestHeaderValuesMap(), 
-				       "hello"));
-	assertTrue(resolver.isReadOnly(ec.getRequestCookieMap(), "hello"));
-	assertTrue(resolver.isReadOnly(ec.getInitParameterMap(), "hello"));
+        // these are mutable Maps
+        assertTrue(!resolver.isReadOnly(ec.getApplicationMap(), "hello"));
+        assertTrue(!resolver.isReadOnly(ec.getSessionMap(), "hello"));
+        assertTrue(!resolver.isReadOnly(ec.getRequestMap(), "hello"));
 
-	UIViewRoot root = new UIViewRoot();
-	assertTrue(resolver.isReadOnly(root, "childCount"));
-	
-	TestBean testBean = (TestBean) ec.getSessionMap().get("TestBean");
-	assertTrue(resolver.isReadOnly(testBean, "readOnly"));
-	assertTrue(!resolver.isReadOnly(testBean, "one"));
+        // these are immutable Maps
+        assertTrue(resolver.isReadOnly(ec.getRequestParameterMap(), "hello"));
+        assertTrue(resolver.isReadOnly(ec.getRequestParameterValuesMap(),
+                                       "hello"));
+        assertTrue(resolver.isReadOnly(ec.getRequestHeaderMap(), "hello"));
+        assertTrue(resolver.isReadOnly(ec.getRequestHeaderValuesMap(),
+                                       "hello"));
+        assertTrue(resolver.isReadOnly(ec.getRequestCookieMap(), "hello"));
+        assertTrue(resolver.isReadOnly(ec.getInitParameterMap(), "hello"));
+
+        UIViewRoot root = new UIViewRoot();
+        assertTrue(resolver.isReadOnly(root, "childCount"));
+
+        TestBean testBean = (TestBean) ec.getSessionMap().get("TestBean");
+        assertTrue(resolver.isReadOnly(testBean, "readOnly"));
+        assertTrue(!resolver.isReadOnly(testBean, "one"));
     }
+
 
     public void testReadOnlyIndex() {
-	// PENDING(edburns): implement readonly index tests.
+        // PENDING(edburns): implement readonly index tests.
     }
-    
+
+
     public void testType() {
-	// PENDING(edburns): implement type tests
+        // PENDING(edburns): implement type tests
     }
-    
+
 } // end of class TestPropertyResolverImpl

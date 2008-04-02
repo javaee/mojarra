@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.9 2004/02/04 23:41:43 ofung Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.10 2004/02/06 18:55:14 rlubke Exp $
  */
 
 /*
@@ -10,44 +10,26 @@
 
 package com.sun.faces.renderkit;
 
-import javax.faces.render.ResponseStateManager;
-import javax.faces.application.StateManager.SerializedView;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import java.io.StringReader;
-import javax.faces.FacesException;
-
-import java.io.IOException;
-import java.io.Writer;
-import java.io.Reader;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
-
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Base64;
-import com.sun.faces.util.Util;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-
-import com.sun.faces.util.Util;
-import java.util.Locale;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.application.StateManager.SerializedView;
+import javax.faces.context.FacesContext;
+import javax.faces.render.ResponseStateManager;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.util.Map;
+
 
 /**
- *
- *  <B>RenderKitImpl</B> is a class ...
- *
+ * <B>RenderKitImpl</B> is a class ...
  */
 
 public class ResponseStateManagerImpl extends ResponseStateManager {
@@ -55,10 +37,10 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     //
     // Protected Constants
     //
-    protected static Log log = 
+    protected static Log log =
         LogFactory.getLog(ResponseStateManagerImpl.class);
-    private static final String FACES_VIEW_STATE = 
-            "com.sun.faces.FACES_VIEW_STATE";
+    private static final String FACES_VIEW_STATE =
+        "com.sun.faces.FACES_VIEW_STATE";
     //
     // Class Variables
     //
@@ -96,7 +78,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     //
 
     public Object getComponentStateToRestore(FacesContext context) {
-     
+
         // requestMap is a local variable so we don't need to synchronize
         Map requestMap = context.getExternalContext().getRequestMap();
         Object state = requestMap.get(FACES_VIEW_STATE);
@@ -104,22 +86,25 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         requestMap.put(FACES_VIEW_STATE, null);
         return state;
     }
-    
-    public Object getTreeStructureToRestore(FacesContext context, 
-        String treeId) {
+
+
+    public Object getTreeStructureToRestore(FacesContext context,
+                                            String treeId) {
         Object structure = null;
         Object state = null;
-        
-        Map requestParamMap = context.getExternalContext().getRequestParameterMap();
-        
-        String viewString = (String) requestParamMap.get(RIConstants.FACES_VIEW);
-        if ( viewString == null ) {
+
+        Map requestParamMap = context.getExternalContext()
+            .getRequestParameterMap();
+
+        String viewString = (String) requestParamMap.get(
+            RIConstants.FACES_VIEW);
+        if (viewString == null) {
             return null;
         }
-        byte[] bytes  = Base64.decode(viewString.getBytes());
+        byte[] bytes = Base64.decode(viewString.getBytes());
         try {
             ObjectInputStream ois = new ObjectInputStream(
-                    new ByteArrayInputStream(bytes));
+                new ByteArrayInputStream(bytes));
             structure = ois.readObject();
             state = ois.readObject();
             Map requestMap = context.getExternalContext().getRequestMap();
@@ -136,39 +121,43 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         }
         return structure;
     }
-    
-    public void writeState(FacesContext context, SerializedView view) throws IOException {
+
+
+    public void writeState(FacesContext context, SerializedView view)
+        throws IOException {
         ByteArrayOutputStream bos = null;
-        String hiddenField = null; 
-       
-	bos = new ByteArrayOutputStream();
-	ObjectOutput output = new ObjectOutputStream(bos);
-	output.writeObject(view.getStructure());
-	output.writeObject(view.getState());
-	
-	hiddenField = " <input type=\"hidden\" name=\"" 
-	    + RIConstants.FACES_VIEW +  "\"" + " value=\"" +
-	    (new String(Base64.encode(bos.toByteArray()), "ISO-8859-1")) + 
+        String hiddenField = null;
+
+        bos = new ByteArrayOutputStream();
+        ObjectOutput output = new ObjectOutputStream(bos);
+        output.writeObject(view.getStructure());
+        output.writeObject(view.getState());
+
+        hiddenField = " <input type=\"hidden\" name=\""
+            + RIConstants.FACES_VIEW + "\"" + " value=\"" +
+            (new String(Base64.encode(bos.toByteArray()), "ISO-8859-1")) +
             "\" />\n ";
-	context.getResponseWriter().write(hiddenField);
+        context.getResponseWriter().write(hiddenField);
     }
-    
-    protected String replaceMarkers(String response, String marker, 
-        String hiddenField) {
-       
+
+
+    protected String replaceMarkers(String response, String marker,
+                                    String hiddenField) {
+
         int markerIdx = response.indexOf(marker);
-        while (markerIdx != -1 ) {
-            String replacedContent = response.substring(0,markerIdx);
+        while (markerIdx != -1) {
+            String replacedContent = response.substring(0, markerIdx);
             int markerEnd = markerIdx + marker.length();
-            String endPortion = response.substring(markerEnd, response.length());
+            String endPortion = response.substring(markerEnd,
+                                                   response.length());
             replacedContent = replacedContent.concat(hiddenField);
             replacedContent = replacedContent.concat(endPortion);
             response = replacedContent;
             markerIdx = response.indexOf(marker);
         }
         return response;
-   }                               
-    
+    }
+
 
 } // end of class ResponseStateManagerImpl
 

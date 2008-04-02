@@ -15,6 +15,7 @@ public class ElParseException extends Exception {
         super();
     }
 
+
     public ElParseException(String message) {
         super(message);
     }

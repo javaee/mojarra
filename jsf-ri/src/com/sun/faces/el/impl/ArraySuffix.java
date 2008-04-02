@@ -63,25 +63,19 @@ package com.sun.faces.el.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Map;
-
 import javax.faces.el.PropertyResolver;
-import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 
+import java.util.List;
+
 /**
- *
  * <p>Represents an operator that obtains a Map entry, an indexed
  * value, a property value, or an indexed property value of an object,
  * any other value types supported by a custom PropertyResolver.</p>
  * <p>This class has been rewritten for JSF to delegate most of the
  * evaluation to the provided PropertyResolver, so the rules depend
  * on which PropertyResolver is used.
- *
- **/
+ */
 
 public class ArraySuffix
     extends ValueSuffix {
@@ -101,9 +95,11 @@ public class ArraySuffix
 
     Expression mIndex;
 
+
     public Expression getIndex() {
         return mIndex;
     }
+
 
     public void setIndex(Expression pIndex) {
         mIndex = pIndex;
@@ -111,29 +107,25 @@ public class ArraySuffix
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public ArraySuffix(Expression pIndex) {
         mIndex = pIndex;
     }
 
     //-------------------------------------
     /**
-     *
      * Gets the value of the index
-     **/
-    protected Object evaluateIndex(
-        ExpressionInfo exprInfo)
+     */
+    protected Object evaluateIndex(ExpressionInfo exprInfo)
         throws ElException {
         return mIndex.evaluate(exprInfo);
     }
 
     //-------------------------------------
     /**
-     *
      * Returns the operator symbol
-     **/
+     */
     protected String getOperatorSymbol() {
         return "[]";
     }
@@ -142,114 +134,111 @@ public class ArraySuffix
     // ValueSuffix methods
     //-------------------------------------
     /**
-     *
      * Returns the expression in the expression language syntax
-     **/
+     */
     public String getExpressionString() {
         return "[" + mIndex.getExpressionString() + "]";
     }
 
     //-------------------------------------
     /**
-     *
      * Evaluates the expression in the given context, operating on the
      * given value.
-     **/
+     */
     public Object evaluate(Object pValue, ExpressionInfo exprInfo)
         throws ElException {
-	// Let the PropertyResolver evaluate the property
-	PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
-	Object indexVal = evaluateIndex(exprInfo);
-	if (pValue != null && indexVal != null &&
-	    (pValue instanceof List || pValue.getClass().isArray())) {
-	    Integer indexObj = Coercions.coerceToInteger(indexVal);
-	    if (indexObj == null) {
-		String message = MessageUtil.getMessageWithArgs(
-		    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
+        // Let the PropertyResolver evaluate the property
+        PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+        Object indexVal = evaluateIndex(exprInfo);
+        if (pValue != null && indexVal != null &&
+            (pValue instanceof List || pValue.getClass().isArray())) {
+            Integer indexObj = Coercions.coerceToInteger(indexVal);
+            if (indexObj == null) {
+                String message = MessageUtil.getMessageWithArgs(
+                    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
                     indexVal.getClass().getName());
-		if (log.isErrorEnabled()) {
-		    log.error(message);
-		}
-		throw new ReferenceSyntaxException(message);
-	    }
-	    return propertyResolver.getValue(pValue, indexObj.intValue());
-	}
-	else {
-	    return propertyResolver.getValue(pValue, indexVal);
-	}
+                if (log.isErrorEnabled()) {
+                    log.error(message);
+                }
+                throw new ReferenceSyntaxException(message);
+            }
+            return propertyResolver.getValue(pValue, indexObj.intValue());
+        } else {
+            return propertyResolver.getValue(pValue, indexVal);
+        }
     }
 
+
     public void setValue(Object pValue, Object newValue,
-			 ExpressionInfo exprInfo) throws ElException {
-	// Let the PropertyResolver set the property
-	PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
-	Object indexVal = evaluateIndex(exprInfo);
-	if (pValue != null && indexVal != null &&
-	    (pValue instanceof List || pValue.getClass().isArray())) {
-	    Integer indexObj = Coercions.coerceToInteger(indexVal);
-	    if (indexObj == null) {
-		String message = MessageUtil.getMessageWithArgs(
-		    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
+                         ExpressionInfo exprInfo) throws ElException {
+        // Let the PropertyResolver set the property
+        PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+        Object indexVal = evaluateIndex(exprInfo);
+        if (pValue != null && indexVal != null &&
+            (pValue instanceof List || pValue.getClass().isArray())) {
+            Integer indexObj = Coercions.coerceToInteger(indexVal);
+            if (indexObj == null) {
+                String message = MessageUtil.getMessageWithArgs(
+                    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
                     indexVal.getClass().getName());
-		if (log.isErrorEnabled()) {
-		    log.error(message);
-		}
-		throw new ReferenceSyntaxException(message);
-	    }
-	    propertyResolver.setValue(pValue, indexObj.intValue(),
-				      newValue);
-	    }
-	else {
-	    propertyResolver.setValue(pValue, indexVal, newValue);
-	}
+                if (log.isErrorEnabled()) {
+                    log.error(message);
+                }
+                throw new ReferenceSyntaxException(message);
+            }
+            propertyResolver.setValue(pValue, indexObj.intValue(),
+                                      newValue);
+        } else {
+            propertyResolver.setValue(pValue, indexVal, newValue);
+        }
     }
+
 
     public boolean isReadOnly(Object pValue, ExpressionInfo exprInfo)
         throws ElException {
-	// Let the PropertyResolver test the property
-	PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
-	Object indexVal = evaluateIndex(exprInfo);
-	if (pValue != null && indexVal != null &&
-	    (pValue instanceof List || pValue.getClass().isArray())) {
-	    Integer indexObj = Coercions.coerceToInteger(indexVal);
-	    if (indexObj == null) {
-		String message = MessageUtil.getMessageWithArgs(
-		    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
+        // Let the PropertyResolver test the property
+        PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+        Object indexVal = evaluateIndex(exprInfo);
+        if (pValue != null && indexVal != null &&
+            (pValue instanceof List || pValue.getClass().isArray())) {
+            Integer indexObj = Coercions.coerceToInteger(indexVal);
+            if (indexObj == null) {
+                String message = MessageUtil.getMessageWithArgs(
+                    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
                     indexVal.getClass().getName());
-		if (log.isErrorEnabled()) {
-			log.error(message);
-		}
-		throw new ReferenceSyntaxException(message);
-	    }
-	    return propertyResolver.isReadOnly(pValue, indexObj.intValue());
-	}
-	else {
-	    return propertyResolver.isReadOnly(pValue, indexVal);
-	}
+                if (log.isErrorEnabled()) {
+                    log.error(message);
+                }
+                throw new ReferenceSyntaxException(message);
+            }
+            return propertyResolver.isReadOnly(pValue, indexObj.intValue());
+        } else {
+            return propertyResolver.isReadOnly(pValue, indexVal);
+        }
     }
+
 
     public Class getType(Object pValue, ExpressionInfo exprInfo)
         throws ElException {
-	// Let the PropertyResolver get the type
-	PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
-	Object indexVal = evaluateIndex(exprInfo);
-	if (pValue != null && indexVal != null &&
-	    (pValue instanceof List || pValue.getClass().isArray())) {
-	    Integer indexObj = Coercions.coerceToInteger(indexVal);
-	    if (indexObj == null) {
-		String message = MessageUtil.getMessageWithArgs(
-		    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
+        // Let the PropertyResolver get the type
+        PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+        Object indexVal = evaluateIndex(exprInfo);
+        if (pValue != null && indexVal != null &&
+            (pValue instanceof List || pValue.getClass().isArray())) {
+            Integer indexObj = Coercions.coerceToInteger(indexVal);
+            if (indexObj == null) {
+                String message = MessageUtil.getMessageWithArgs(
+                    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
                     indexVal.getClass().getName());
-		if (log.isErrorEnabled()) {
-			log.error(message);
-		}
-		throw new ReferenceSyntaxException(message);
-	    }
-	    return propertyResolver.getType(pValue, indexObj.intValue());
-	}
-	else {
-	    return propertyResolver.getType(pValue, indexVal);
-	}
+                if (log.isErrorEnabled()) {
+                    log.error(message);
+                }
+                throw new ReferenceSyntaxException(message);
+            }
+            return propertyResolver.getType(pValue, indexObj.intValue());
+        } else {
+            return propertyResolver.getType(pValue, indexVal);
+        }
     }
 
     //-------------------------------------

@@ -1,5 +1,5 @@
 /*
- * $Id: TestOldVariableResolver.java,v 1.2 2004/02/04 23:43:53 ofung Exp $
+ * $Id: TestOldVariableResolver.java,v 1.3 2004/02/06 18:56:19 rlubke Exp $
  */
 
 /*
@@ -14,4 +14,5 @@ package com.sun.faces;
 import com.sun.faces.el.VariableResolverImpl;
 
 public class TestOldVariableResolver extends VariableResolverImpl {
+
 }

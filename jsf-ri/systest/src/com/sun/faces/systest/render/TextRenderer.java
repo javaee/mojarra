@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.6 2004/02/04 23:42:43 ofung Exp $
+ * $Id: TextRenderer.java,v 1.7 2004/02/06 18:56:14 rlubke Exp $
  */
 
 /*
@@ -13,33 +13,25 @@ package com.sun.faces.systest.render;
 
 import com.sun.faces.util.Util;
 
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
-import com.sun.faces.util.Util;
-
-
-
-
 import java.io.IOException;
 
 /**
- *
- *  <B>TextRenderer</B> is a class ...
- *
+ * <B>TextRenderer</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.6 2004/02/04 23:42:43 ofung Exp $
- * 
+ * @version $Id: TextRenderer.java,v 1.7 2004/02/06 18:56:14 rlubke Exp $
  * @see	Blah
  * @see	Bloo
- *
  */
 
 public class TextRenderer extends Renderer {
+
     //
     // Protected Constants
     //
@@ -80,17 +72,19 @@ public class TextRenderer extends Renderer {
     public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-	}
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
-    public void encodeBegin(FacesContext context, UIComponent component) 
-            throws IOException {
+
+    public void encodeBegin(FacesContext context, UIComponent component)
+        throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
+
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
@@ -99,26 +93,28 @@ public class TextRenderer extends Renderer {
         }
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) 
-            throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
-	Util.doAssert(writer != null );
 
-	String styleClass = null;
-        
+    public void encodeEnd(FacesContext context, UIComponent component)
+        throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        Util.doAssert(writer != null);
+
+        String styleClass = null;
+
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             return;
-        }    
-          
+        }
+
         writer.writeText("This IS TEXT FROM THE CUSTOM RENDERER", null);
     }
+
 
     public String convertClientId(FacesContext context, String clientId) {
         return clientId;

@@ -61,15 +61,15 @@
 package com.sun.faces.el.impl;
 
 /**
- *
  * <p>The implementation of the not equals operator
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class NotEqualsOperator
     extends EqualityOperator {
+
     //-------------------------------------
     // Singleton
     //-------------------------------------
@@ -79,9 +79,8 @@ public class NotEqualsOperator
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public NotEqualsOperator() {
     }
 
@@ -89,19 +88,17 @@ public class NotEqualsOperator
     // Expression methods
     //-------------------------------------
     /**
-     *
      * Returns the symbol representing the operator
-     **/
+     */
     public String getOperatorSymbol() {
         return "!=";
     }
 
     //-------------------------------------
     /**
-     *
      * Applies the operator given the fact that the two elements are
      * equal.
-     **/
+     */
     public boolean apply(boolean pAreEqual) {
         return !pAreEqual;
     }

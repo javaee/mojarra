@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.13 2004/02/04 23:44:50 ofung Exp $
+ * $Id: TestRenderers_4.java,v 1.14 2004/02/06 18:57:09 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -16,34 +16,27 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import java.io.IOException;
+import com.sun.faces.JspFacesTestCase;
+import org.apache.cactus.WebRequest;
 
-import javax.faces.component.UIPanel;
-import javax.faces.component.UICommand;
-import javax.faces.component.UIOutput;
 import javax.faces.component.UIComponent;
-import javax.faces.component.NamingContainer;
+import javax.faces.component.UIOutput;
+import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContextFactory;
 
-import org.apache.cactus.WebRequest;
-
-import com.sun.faces.JspFacesTestCase;
-
-import java.util.ArrayList;
+import java.io.IOException;
 
 /**
- *
- *  Test encode and decode methods in Renderer classes.
- *
+ * Test encode and decode methods in Renderer classes.
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.13 2004/02/04 23:44:50 ofung Exp $
- * 
- *
+ * @version $Id: TestRenderers_4.java,v 1.14 2004/02/06 18:57:09 rlubke Exp $
  */
 
 public class TestRenderers_4 extends JspFacesTestCase {
+
     //
     // Protected Constants
     //
@@ -51,6 +44,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
     public boolean sendWriterToFile() {
         return true;
     }
+
 
     public String getExpectedOutputFilename() {
         return "CorrectRenderersResponse_4";
@@ -74,6 +68,8 @@ public class TestRenderers_4 extends JspFacesTestCase {
     public TestRenderers_4() {
         super("TestRenderers_4");
     }
+
+
     public TestRenderers_4(String name) {
         super(name);
     }
@@ -88,14 +84,16 @@ public class TestRenderers_4 extends JspFacesTestCase {
     public void setUp() {
         super.setUp();
         UIViewRoot page = new UIViewRoot();
-        page.setViewId("viewId");       
+        page.setViewId("viewId");
         getFacesContext().setViewRoot(page);
         assertTrue(null != getFacesContext().getResponseWriter());
     }
 
+
     public void beginRenderers(WebRequest theRequest) {
 
     }
+
 
     public void testRenderers() {
 
@@ -105,142 +103,141 @@ public class TestRenderers_4 extends JspFacesTestCase {
             root.setId("root");
 
             testGridRenderer(root);
-	    
-	    root = new UIViewRoot();
+
+            root = new UIViewRoot();
             root.setId("root");
             testGridRendererWithNonRenderedChildren(root);
 
-	    getFacesContext().getResponseWriter().close();
+            getFacesContext().getResponseWriter().close();
             assertTrue(verifyExpectedOutput());
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             t.printStackTrace();
             assertTrue(false);
             return;
         }
     }
 
+
     public void testGridRenderer(UIComponent root)
         throws IOException {
         System.out.println("Testing GridRenderer");
-	GridRenderer gridRenderer = null;
-	UIPanel 
-	    panel = null,
-	    headerGroup = null,
-	    footerGroup = null;
-	UIOutput 
-	    header1 = null,
-	    header2 = null,
-	    footer1 = null,
-	    footer2 = null,
-	    body1 = null,
-	    body2 = null;
+        GridRenderer gridRenderer = null;
+        UIPanel
+            panel = null,
+            headerGroup = null,
+            footerGroup = null;
+        UIOutput
+            header1 = null,
+            header2 = null,
+            footer1 = null,
+            footer2 = null,
+            body1 = null,
+            body2 = null;
 
-	panel = new UIPanel();
-	root.getChildren().add(panel);
-	
-	headerGroup = new UIPanel();
-	headerGroup.setId("header");
-	headerGroup.setRendererType("javax.faces.Group");
-	header1 = new UIOutput();
-	header1.setValue("header1 ");
-	headerGroup.getChildren().add(header1);
-	header2 = new UIOutput();
-	header2.setValue("header2 ");
-	headerGroup.getChildren().add(header2);
-	panel.getFacets().put("header", headerGroup);
-	
-	footerGroup = new UIPanel();
-	footerGroup.setId("footer");
-	footerGroup.setRendererType("javax.faces.Group");
-	footer1 = new UIOutput();
-	footer1.setValue("footer1 ");
-	footerGroup.getChildren().add(footer1);
-	footer2 = new UIOutput();
-	footer2.setValue("footer2 ");
-	footerGroup.getChildren().add(footer2);
-	panel.getFacets().put("footer", footerGroup);
+        panel = new UIPanel();
+        root.getChildren().add(panel);
 
-	body1 = new UIOutput();
-	body1.setValue("body1");
-	panel.getChildren().add(body1);
+        headerGroup = new UIPanel();
+        headerGroup.setId("header");
+        headerGroup.setRendererType("javax.faces.Group");
+        header1 = new UIOutput();
+        header1.setValue("header1 ");
+        headerGroup.getChildren().add(header1);
+        header2 = new UIOutput();
+        header2.setValue("header2 ");
+        headerGroup.getChildren().add(header2);
+        panel.getFacets().put("header", headerGroup);
 
-	body2 = new UIOutput();
-	body2.setValue("body2");
-	panel.getChildren().add(body2);
+        footerGroup = new UIPanel();
+        footerGroup.setId("footer");
+        footerGroup.setRendererType("javax.faces.Group");
+        footer1 = new UIOutput();
+        footer1.setValue("footer1 ");
+        footerGroup.getChildren().add(footer1);
+        footer2 = new UIOutput();
+        footer2.setValue("footer2 ");
+        footerGroup.getChildren().add(footer2);
+        panel.getFacets().put("footer", footerGroup);
 
-	gridRenderer = new GridRenderer();
+        body1 = new UIOutput();
+        body1.setValue("body1");
+        panel.getChildren().add(body1);
+
+        body2 = new UIOutput();
+        body2.setValue("body2");
+        panel.getChildren().add(body2);
+
+        gridRenderer = new GridRenderer();
 
         System.out.println("    Testing encodeBegin method... ");
-	gridRenderer.encodeBegin(getFacesContext(), panel);
-	gridRenderer.encodeChildren(getFacesContext(), panel);
+        gridRenderer.encodeBegin(getFacesContext(), panel);
+        gridRenderer.encodeChildren(getFacesContext(), panel);
         gridRenderer.encodeEnd(getFacesContext(), panel);
 
     }
+
 
     public void testGridRendererWithNonRenderedChildren(UIComponent root)
         throws IOException {
         System.out.println("Testing GridRenderer");
-	GridRenderer gridRenderer = null;
-	UIPanel 
-	    panel = null,
-	    headerGroup = null,
-	    footerGroup = null;
-	UIOutput 
-	    header1 = null,
-	    header2 = null,
-	    footer1 = null,
-	    footer2 = null,
-	    body1 = null,
-	    body2 = null;
+        GridRenderer gridRenderer = null;
+        UIPanel
+            panel = null,
+            headerGroup = null,
+            footerGroup = null;
+        UIOutput
+            header1 = null,
+            header2 = null,
+            footer1 = null,
+            footer2 = null,
+            body1 = null,
+            body2 = null;
 
-	panel = new UIPanel();
-	root.getChildren().add(panel);
-	
-	// the header should not be rendered
-	headerGroup = new UIPanel();
-	headerGroup.setRendered(false);
-	headerGroup.setId("header");
-	headerGroup.setRendererType("javax.faces.Group");
-	header1 = new UIOutput();
-	header1.setValue("header1 ");
-	headerGroup.getChildren().add(header1);
-	header2 = new UIOutput();
-	header2.setValue("header2 ");
-	headerGroup.getChildren().add(header2);
-	panel.getFacets().put("header", headerGroup);
-	
-	footerGroup = new UIPanel();
-	footerGroup.setId("footer");
-	footerGroup.setRendererType("javax.faces.Group");
-	footer1 = new UIOutput();
-	footer1.setValue("footer1 ");
-	footerGroup.getChildren().add(footer1);
-	footer2 = new UIOutput();
-	footer2.setValue("footer2 ");
-	footerGroup.getChildren().add(footer2);
-	panel.getFacets().put("footer", footerGroup);
+        panel = new UIPanel();
+        root.getChildren().add(panel);
 
-	// this child should not be rendered
-	body1 = new UIOutput();
-	body1.setRendered(false);
-	body1.setValue("body1");
-	panel.getChildren().add(body1);
+        // the header should not be rendered
+        headerGroup = new UIPanel();
+        headerGroup.setRendered(false);
+        headerGroup.setId("header");
+        headerGroup.setRendererType("javax.faces.Group");
+        header1 = new UIOutput();
+        header1.setValue("header1 ");
+        headerGroup.getChildren().add(header1);
+        header2 = new UIOutput();
+        header2.setValue("header2 ");
+        headerGroup.getChildren().add(header2);
+        panel.getFacets().put("header", headerGroup);
 
-	body2 = new UIOutput();
-	body2.setValue("body2");
-	panel.getChildren().add(body2);
+        footerGroup = new UIPanel();
+        footerGroup.setId("footer");
+        footerGroup.setRendererType("javax.faces.Group");
+        footer1 = new UIOutput();
+        footer1.setValue("footer1 ");
+        footerGroup.getChildren().add(footer1);
+        footer2 = new UIOutput();
+        footer2.setValue("footer2 ");
+        footerGroup.getChildren().add(footer2);
+        panel.getFacets().put("footer", footerGroup);
 
-	gridRenderer = new GridRenderer();
+        // this child should not be rendered
+        body1 = new UIOutput();
+        body1.setRendered(false);
+        body1.setValue("body1");
+        panel.getChildren().add(body1);
+
+        body2 = new UIOutput();
+        body2.setValue("body2");
+        panel.getChildren().add(body2);
+
+        gridRenderer = new GridRenderer();
 
         System.out.println("    Testing encodeBegin method... ");
-	gridRenderer.encodeBegin(getFacesContext(), panel);
-	gridRenderer.encodeChildren(getFacesContext(), panel);
+        gridRenderer.encodeBegin(getFacesContext(), panel);
+        gridRenderer.encodeChildren(getFacesContext(), panel);
         gridRenderer.encodeEnd(getFacesContext(), panel);
 
     }
-
-
 
 
 } // end of class TestRenderers_4

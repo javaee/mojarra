@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentType.java,v 1.7 2004/02/04 23:44:47 ofung Exp $
+ * $Id: TestComponentType.java,v 1.8 2004/02/06 18:57:07 rlubke Exp $
  */
 
 /*
@@ -11,36 +11,25 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import javax.faces.FacesException;
-import javax.faces.render.RenderKit;
-import javax.faces.render.Renderer;
-import javax.faces.component.UIComponent;
+import junit.framework.TestCase;
+import org.apache.cactus.ServletTestCase;
+
 import javax.faces.component.UIOutput;
 import javax.faces.component.UISelectMany;
 
-import java.util.Iterator;
-
-
-import java.io.IOException;
-
-import org.apache.cactus.ServletTestCase;
-import junit.framework.TestCase;
-
 /**
- *
- *  <B>TestComponentType.java</B> is a class ...
- *
+ * <B>TestComponentType.java</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestComponentType.java,v 1.7 2004/02/04 23:44:47 ofung Exp $
- * 
+ * @version $Id: TestComponentType.java,v 1.8 2004/02/06 18:57:07 rlubke Exp $
  * @see	Blah
  * @see	Bloo
- *
  */
 
-    public class TestComponentType extends TestCase // ServletTestCase
+public class TestComponentType extends TestCase // ServletTestCase
 {
+
 //
 // Protected Constants
 //
@@ -60,8 +49,14 @@ import junit.framework.TestCase;
 // Constructors and Initializers    
 //
 
-    public TestComponentType() {super("TestComponentType.java");}
-    public TestComponentType(String name) {super(name);}
+    public TestComponentType() {
+        super("TestComponentType.java");
+    }
+
+
+    public TestComponentType(String name) {
+        super(name);
+    }
 
 //
 // Class methods
@@ -97,6 +92,7 @@ import junit.framework.TestCase;
 
 
     public class MyComponent extends UISelectMany {
+
     }
 
 

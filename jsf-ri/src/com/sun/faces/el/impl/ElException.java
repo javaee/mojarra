@@ -13,22 +13,27 @@ public class ElException extends Exception {
 
     Throwable t;
 
+
     public ElException() {
         super();
     }
 
+
     public ElException(String message) {
         super(message);
     }
+
 
     public ElException(String message, Throwable t) {
         super(message);
         this.t = t;
     }
 
+
     public ElException(Throwable t) {
         this.t = t;
     }
+
 
     public Throwable getCause() {
         return t;

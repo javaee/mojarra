@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.64 2004/02/04 23:41:45 ofung Exp $
+ * $Id: CheckboxRenderer.java,v 1.65 2004/02/06 18:55:16 rlubke Exp $
  *
  */
 
@@ -12,37 +12,26 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.component.UISelectBoolean;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
-import javax.faces.FacesException;
-import javax.faces.convert.ConverterException;
-
-import org.apache.commons.beanutils.ConversionException;
-import org.apache.commons.beanutils.ConvertUtils;
-
-import com.sun.faces.util.Util;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.convert.ConverterException;
+
+import java.io.IOException;
+import java.util.Map;
+
 /**
- * <B>CheckboxRenderer</B> is a class that renders the current value of 
+ * <B>CheckboxRenderer</B> is a class that renders the current value of
  * <code>UISelectBoolean<code> as a checkbox.
  */
 
 public class CheckboxRenderer extends HtmlBasicInputRenderer {
-    
+
     //
     // Protected Constants
     //
@@ -88,7 +77,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin decoding component " + component.getId());
@@ -100,18 +89,19 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         // cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
             if (log.isTraceEnabled()) {
-                log.trace("No decoding necessary since the component " + 
-                    component.getId() + " is disabled");
+                log.trace("No decoding necessary since the component " +
+                          component.getId() + " is disabled");
             }
             return;
-        } 
+        }
 
         String clientId = component.getClientId(context);
-        Util.doAssert(clientId != null );
+        Util.doAssert(clientId != null);
         // Convert the new value
         UIInput uiInput = (UIInput) component;
-        Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
-        String newValue = (String)requestParameterMap.get(clientId);
+        Map requestParameterMap = context.getExternalContext()
+            .getRequestParameterMap();
+        String newValue = (String) requestParameterMap.get(clientId);
         //if there was nothing sent in the request the checkbox wasn't checked
         // if the checkbox is not disabled. 
         if (newValue == null) {
@@ -133,52 +123,60 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         }
     }
 
+
     public Object getConvertedValue(FacesContext context, UIComponent component,
-            Object submittedValue) throws ConverterException {
-     
+                                    Object submittedValue)
+        throws ConverterException {
+
         String newValue = (String) submittedValue;
         Object convertedValue = Boolean.valueOf(newValue);
-	return convertedValue;
+        return convertedValue;
     }
 
-    public void encodeBegin(FacesContext context, UIComponent component) 
+
+    public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
-    public void encodeChildren(FacesContext context, UIComponent component) 
+
+    public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
     }
+
 
     protected void getEndTextToRender(FacesContext context, UIComponent component,
-            String currentValue) throws IOException {
- 
-	ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null );
-	String styleClass = null;
+                                      String currentValue) throws IOException {
 
-	writer.startElement("input", component);
-	writeIdAttributeIfNecessary(context, writer, component);
-	writer.writeAttribute("type", "checkbox", "type");
-	writer.writeAttribute("name", component.getClientId(context), "clientId"); 
+        ResponseWriter writer = context.getResponseWriter();
+        Util.doAssert(writer != null);
+        String styleClass = null;
+
+        writer.startElement("input", component);
+        writeIdAttributeIfNecessary(context, writer, component);
+        writer.writeAttribute("type", "checkbox", "type");
+        writer.writeAttribute("name", component.getClientId(context),
+                              "clientId");
 
         if (currentValue != null && currentValue.equals("true")) {
-	    writer.writeAttribute("checked", new Boolean("true"), "value");
+            writer.writeAttribute("checked", new Boolean("true"), "value");
         }
-        if (null != (styleClass = (String) 
-		     component.getAttributes().get("styleClass"))) {
-	    writer.writeAttribute("class", styleClass, "styleClass");
-	}
+        if (null != (styleClass = (String)
+            component.getAttributes().get("styleClass"))) {
+            writer.writeAttribute("class", styleClass, "styleClass");
+        }
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 
-	writer.endElement("input");
+        writer.endElement("input");
     }
 
 } // end of class CheckboxRenderer

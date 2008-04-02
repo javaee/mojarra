@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWrapper.java,v 1.6 2004/02/04 23:43:52 ofung Exp $
+ * $Id: FileOutputResponseWrapper.java,v 1.7 2004/02/06 18:56:17 rlubke Exp $
  */
 
 /*
@@ -11,33 +11,26 @@
 
 package com.sun.faces;
 
-import com.sun.faces.util.Util;
-
-
-
-import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
-import java.io.PrintWriter;
-import java.io.FileOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
- *
- *  The sole purpose of <B>FileOutputResponseWrapper</B> is to wrap an
- *  ServletResponse and change its writer object  so that
- *  output can be directed to a file.  <P>
- *
+ * The sole purpose of <B>FileOutputResponseWrapper</B> is to wrap an
+ * ServletResponse and change its writer object  so that
+ * output can be directed to a file.  <P>
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWrapper.java,v 1.6 2004/02/04 23:43:52 ofung Exp $
- * 
- *
+ * @version $Id: FileOutputResponseWrapper.java,v 1.7 2004/02/06 18:56:17 rlubke Exp $
  */
 
-public class FileOutputResponseWrapper extends HttpServletResponseWrapper
-{
+public class FileOutputResponseWrapper extends HttpServletResponseWrapper {
+
 //
 // Protected Constants
 //
@@ -49,8 +42,8 @@ public class FileOutputResponseWrapper extends HttpServletResponseWrapper
 //
 // Instance Variables
 //
-protected PrintWriter out = null;
-public static String  FACES_RESPONSE_FILENAME = "FacesResponse.txt";
+    protected PrintWriter out = null;
+    public static String FACES_RESPONSE_FILENAME = "FacesResponse.txt";
 
 // Attribute Instance Variables
 
@@ -61,23 +54,23 @@ public static String  FACES_RESPONSE_FILENAME = "FacesResponse.txt";
 // Constructors and Initializers    
 //
 
-public FileOutputResponseWrapper(HttpServletResponse toWrap)
-{
-    super(toWrap);
-    try {
-	FileOutputResponseWriter.initializeFacesResponseRoot();
-        File file = new File ( FACES_RESPONSE_FILENAME );
-        FileOutputStream fs = new FileOutputStream(file);
-        out = new PrintWriter(fs);
-    } catch ( Exception e ) {
-        System.out.println(e.getMessage());
+    public FileOutputResponseWrapper(HttpServletResponse toWrap) {
+        super(toWrap);
+        try {
+            FileOutputResponseWriter.initializeFacesResponseRoot();
+            File file = new File(FACES_RESPONSE_FILENAME);
+            FileOutputStream fs = new FileOutputStream(file);
+            out = new PrintWriter(fs);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
-}
 
-public void flushBuffer() throws IOException {
-    out.flush();
-    out.close();
-}
+
+    public void flushBuffer() throws IOException {
+        out.flush();
+        out.close();
+    }
 
 
 //
@@ -88,11 +81,9 @@ public void flushBuffer() throws IOException {
 // Methods from ServletResponse 
 //
 
-public PrintWriter getWriter() {
-    return out;
-}
-
-
+    public PrintWriter getWriter() {
+        return out;
+    }
 
 
 } // end of class FileOutputResponseWrapper

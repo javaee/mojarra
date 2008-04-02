@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCase.java,v 1.12 2004/02/04 23:43:51 ofung Exp $
+ * $Id: FacesTestCase.java,v 1.13 2004/02/06 18:56:16 rlubke Exp $
  */
 
 /*
@@ -11,48 +11,48 @@
 
 package com.sun.faces;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletConfig;
 import javax.servlet.jsp.PageContext;
 
 /**
+ * This interface defines the contract between something that extends a
+ * cactus TestCase class (JspTestCase or ServletTestCase) and
+ * FacesTestCaseService.
+ */
 
-* This interface defines the contract between something that extends a
-* cactus TestCase class (JspTestCase or ServletTestCase) and
-* FacesTestCaseService.
+public interface FacesTestCase {
 
-*/
+    public HttpServletRequest getRequest();
 
-public interface FacesTestCase
-{
 
-public HttpServletRequest getRequest();
+    public HttpServletResponse getResponse();
 
-public HttpServletResponse getResponse();
 
-public ServletConfig getConfig();
+    public ServletConfig getConfig();
 
-public PageContext getPageContext();
 
-/**
+    public PageContext getPageContext();
 
-* @return true if the ServletResponse output should be sent to a file
 
-*/
+    /**
+     * @return true if the ServletResponse output should be sent to a file
+     */
 
-public boolean sendResponseToFile();
+    public boolean sendResponseToFile();
 
-/**
 
-* @return the name of the expected output filename for this testcase.
+    /**
+     * @return the name of the expected output filename for this testcase.
+     */
 
-*/
+    public String getExpectedOutputFilename();
 
-public String getExpectedOutputFilename();
 
-public String [] getLinesToIgnore();
+    public String[] getLinesToIgnore();
 
-public boolean sendWriterToFile();
+
+    public boolean sendWriterToFile();
 
 } // end of interface FacesTestCase

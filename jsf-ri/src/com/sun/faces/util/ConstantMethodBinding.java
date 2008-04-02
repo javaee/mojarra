@@ -1,5 +1,5 @@
 /*
- * $Id: ConstantMethodBinding.java,v 1.3 2004/02/04 23:42:17 ofung Exp $
+ * $Id: ConstantMethodBinding.java,v 1.4 2004/02/06 18:55:50 rlubke Exp $
  */
 
 /*
@@ -9,37 +9,43 @@
 
 package com.sun.faces.util;
 
+import javax.faces.component.StateHolder;
+import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
 
-import javax.faces.context.FacesContext;
-import javax.faces.component.StateHolder;
-
-public class ConstantMethodBinding extends MethodBinding implements StateHolder {
+public class ConstantMethodBinding extends MethodBinding
+    implements StateHolder {
 
     private String outcome = null;
 
-    public ConstantMethodBinding() {}
+
+    public ConstantMethodBinding() {
+    }
+
 
     public ConstantMethodBinding(String yourOutcome) {
-	outcome = yourOutcome;
+        outcome = yourOutcome;
     }
 
+
     public Object invoke(FacesContext context, Object params[]) {
-	return outcome;
+        return outcome;
     }
+
+
     public Class getType(FacesContext context) {
-	return String.class;
+        return String.class;
     }
 
     // ----------------------------------------------------- StateHolder Methods
 
     public Object saveState(FacesContext context) {
-	return outcome;
+        return outcome;
     }
 
 
     public void restoreState(FacesContext context, Object state) {
-	outcome = (String) state;
+        outcome = (String) state;
     }
 
 
@@ -47,11 +53,11 @@ public class ConstantMethodBinding extends MethodBinding implements StateHolder 
 
 
     public boolean isTransient() {
-	return (this.transientFlag);
+        return (this.transientFlag);
     }
 
 
     public void setTransient(boolean transientFlag) {
-	this.transientFlag = transientFlag;
+        this.transientFlag = transientFlag;
     }
 }

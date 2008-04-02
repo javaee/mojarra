@@ -1,5 +1,5 @@
 /*
- * $Id: OutputVerbatimTag.java,v 1.4 2004/02/04 23:42:33 ofung Exp $
+ * $Id: OutputVerbatimTag.java,v 1.5 2004/02/06 18:56:04 rlubke Exp $
  */
 
 /*
@@ -10,8 +10,6 @@
 package com.sun.faces.systest;
 
 
-import java.io.IOException;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.webapp.UIComponentBodyTag;
 import javax.servlet.jsp.JspException;

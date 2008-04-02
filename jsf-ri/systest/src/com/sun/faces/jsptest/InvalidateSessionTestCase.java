@@ -1,5 +1,5 @@
 /*
- * $Id: InvalidateSessionTestCase.java,v 1.3 2004/02/04 23:42:25 ofung Exp $
+ * $Id: InvalidateSessionTestCase.java,v 1.4 2004/02/06 18:55:56 rlubke Exp $
  */
 
 /*
@@ -11,17 +11,14 @@ package com.sun.faces.jsptest;
 
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlBody;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.AbstractTestCase;
-import java.net.URL;
-import java.util.Iterator;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -83,22 +80,22 @@ public class InvalidateSessionTestCase extends AbstractTestCase {
 
 
     public void testInvalidateSession() throws Exception {
-	HtmlForm form;
-	HtmlSubmitInput submit;
-	HtmlAnchor link;
-	HtmlTextInput input;
+        HtmlForm form;
+        HtmlSubmitInput submit;
+        HtmlAnchor link;
+        HtmlTextInput input;
         HtmlPage page;
 
-	page = getPage("/faces/session-invalidator.jsp");
-	form = getFormById(page, "form");
+        page = getPage("/faces/session-invalidator.jsp");
+        form = getFormById(page, "form");
         submit = (HtmlSubmitInput)
-	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
                                 "button1");
-	
-	// press button1
-	page = (HtmlPage) submit.click();
-	assertEquals("Test with action that invalidates a session.",
-		     page.getTitleText());
+
+        // press button1
+        page = (HtmlPage) submit.click();
+        assertEquals("Test with action that invalidates a session.",
+                     page.getTitleText());
     }
 
 

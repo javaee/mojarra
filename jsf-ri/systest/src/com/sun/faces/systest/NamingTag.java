@@ -1,5 +1,5 @@
 /*
- * $Id: NamingTag.java,v 1.2 2004/02/04 23:42:33 ofung Exp $
+ * $Id: NamingTag.java,v 1.3 2004/02/06 18:56:04 rlubke Exp $
  */
 
 /*
@@ -10,10 +10,7 @@
 package com.sun.faces.systest;
 
 
-import java.io.IOException;
-import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
-import javax.servlet.jsp.JspException;
 
 
 /**

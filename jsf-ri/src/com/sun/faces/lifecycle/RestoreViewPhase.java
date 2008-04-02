@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.13 2004/02/04 23:41:38 ofung Exp $
+ * $Id: RestoreViewPhase.java,v 1.14 2004/02/06 18:55:09 rlubke Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ package com.sun.faces.lifecycle;
 import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -32,17 +31,15 @@ import java.util.Locale;
 import java.util.Map;
 
 
-
 /**
-
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.13 2004/02/04 23:41:38 ofung Exp $
- * 
+ * @version $Id: RestoreViewPhase.java,v 1.14 2004/02/06 18:55:09 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
+
     //
     // Protected Constants
     //
@@ -93,23 +90,21 @@ public class RestoreViewPhase extends Phase {
         return PhaseId.RESTORE_VIEW;
     }
 
+
     /**
+     * PRECONDITION: the necessary factories have been installed in the
+     * ServletContext attr set. <P>
+     * <p/>
+     * POSTCONDITION: The facesContext has been initialized with a tree.
+     */
 
-    * PRECONDITION: the necessary factories have been installed in the
-    * ServletContext attr set. <P>
-
-    * POSTCONDITION: The facesContext has been initialized with a tree. 
-
-    */
-
-    public void execute(FacesContext facesContext) throws FacesException
-    {
+    public void execute(FacesContext facesContext) throws FacesException {
         if (log.isDebugEnabled()) {
             log.debug("Entering RestoreViewPhase");
         }
         if (null == facesContext) {
             throw new FacesException(Util.getExceptionMessage(
-                     Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
 
         // If an app had explicitely set the tree in the context, use that;
@@ -128,8 +123,8 @@ public class RestoreViewPhase extends Phase {
 
         // Reconstitute or create the request tree
         Map requestMap = facesContext.getExternalContext().getRequestMap();
-        String viewId = (String) 
-                   requestMap.get("javax.servlet.include.path_info");
+        String viewId = (String)
+            requestMap.get("javax.servlet.include.path_info");
         if (viewId == null) {
             viewId = facesContext.getExternalContext().getRequestPathInfo();
         }
@@ -141,52 +136,53 @@ public class RestoreViewPhase extends Phase {
             viewId = (String)
                 requestMap.get("javax.servlet.include.servlet_path");
         }
-        
+
         if (viewId == null) {
             Object request = facesContext.getExternalContext().getRequest();
             if (request instanceof HttpServletRequest) {
-                viewId = ((HttpServletRequest) request).getServletPath();    
+                viewId = ((HttpServletRequest) request).getServletPath();
             }
         }
-        
+
         if (viewId == null) {
             if (log.isDebugEnabled()) {
                 log.debug("viewId is null");
             }
             throw new FacesException(Util.getExceptionMessage(
-                    Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
+                Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
-        
-	
-	// try to restore the view
-	if (null == (viewRoot = (Util.getViewHandler(facesContext)).
-		     restoreView(facesContext, viewId))) {
-             
+
+
+        // try to restore the view
+        if (null == (viewRoot = (Util.getViewHandler(facesContext)).
+            restoreView(facesContext, viewId))) {
+
             if (log.isDebugEnabled()) {
                 log.debug("New request: creating a view for " + viewId);
             }
-	    // if that fails, create one
-	    viewRoot = (Util.getViewHandler(facesContext)).
+            // if that fails, create one
+            viewRoot = (Util.getViewHandler(facesContext)).
                 createView(facesContext, viewId);
             facesContext.renderResponse();
-	} else {
+        } else {
             if (log.isDebugEnabled()) {
-                 log.debug("Postback: Restored view for " + viewId);
+                log.debug("Postback: Restored view for " + viewId);
             }
         }
-	Util.doAssert(null != viewRoot);
+        Util.doAssert(null != viewRoot);
 
         facesContext.setViewRoot(viewRoot);
         doPerComponentActions(facesContext, viewRoot);
-        
+
         if (log.isDebugEnabled()) {
-           log.debug("Exiting RestoreViewPhase");
+            log.debug("Exiting RestoreViewPhase");
         }
-    }    
+    }
+
 
     /**
-      * <p>Do any per-component actions necessary during reconstitute</p>
-      */
+     * <p>Do any per-component actions necessary during reconstitute</p>
+     */
     protected void doPerComponentActions(FacesContext context, UIComponent uic) {
         Iterator kids = uic.getFacetsAndChildren();
         while (kids.hasNext()) {
@@ -195,9 +191,9 @@ public class RestoreViewPhase extends Phase {
       
         // if this component has a component value reference expression,
         // make sure to populate the ValueBinding for it.
-	ValueBinding valueBinding = null;
-	if (null != (valueBinding = uic.getValueBinding("binding"))) {
-	    valueBinding.setValue(context, uic);
+        ValueBinding valueBinding = null;
+        if (null != (valueBinding = uic.getValueBinding("binding"))) {
+            valueBinding.setValue(context, uic);
         }
     }
 

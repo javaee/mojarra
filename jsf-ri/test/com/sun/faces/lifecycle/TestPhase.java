@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.12 2004/02/04 23:44:34 ofung Exp $
+ * $Id: TestPhase.java,v 1.13 2004/02/06 18:56:58 rlubke Exp $
  */
 
 /*
@@ -11,53 +11,33 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.ServletFacesTestCase;
 import org.apache.cactus.WebRequest;
 
-import com.sun.faces.util.Util;
-
-
-import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
 
-import java.util.Iterator;
-
-import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.CompareFiles;
-import com.sun.faces.FileOutputResponseWrapper;
-import com.sun.faces.lifecycle.Phase;
-import java.io.PrintStream;
-import java.io.FileOutputStream;
-import java.io.File;
-import java.io.IOException;
-
 
 /**
- *
- *  <B>TestPhase</B> is a class ...
- *
+ * <B>TestPhase</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.12 2004/02/04 23:44:34 ofung Exp $
- * 
+ * @version $Id: TestPhase.java,v 1.13 2004/02/06 18:56:58 rlubke Exp $
  * @see	Blah
  * @see	Bloo
- *
  */
 
-public class TestPhase extends ServletFacesTestCase
-{
+public class TestPhase extends ServletFacesTestCase {
+
 //
 // Protected Constants
 //
 
-public static final String TEST_URI = "/components.jsp";
+    public static final String TEST_URI = "/components.jsp";
 
 //
 // Class Variables
@@ -75,8 +55,14 @@ public static final String TEST_URI = "/components.jsp";
 // Constructors and Initializers    
 //
 
-    public TestPhase() {super("TestPhase");}
-    public TestPhase(String name) {super(name);}
+    public TestPhase() {
+        super("TestPhase");
+    }
+
+
+    public TestPhase(String name) {
+        super(name);
+    }
 
 //
 // Class methods
@@ -86,55 +72,53 @@ public static final String TEST_URI = "/components.jsp";
 // General Methods
 //
 
-public void beginExecute(WebRequest theRequest)
-{
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
-}
-
-public void testExecute()
-{
-
-    Phase restoreView = new RestoreViewPhase();
-    try {
-        restoreView.execute(getFacesContext());
-    }
-    catch (Throwable e) {
-        e.printStackTrace();
-        assertTrue(false);
+    public void beginExecute(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.addParameter(
+            "basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
     }
 
-    assertTrue((getFacesContext().getRenderResponse()) &&
-        !(getFacesContext().getResponseComplete()));
-    assertTrue(null != getFacesContext().getViewRoot());
 
-    // 2. Add components to tree
-    //
-    UIComponent root = getFacesContext().getViewRoot();
-    UIForm basicForm = new UIForm();
-    basicForm.setId("basicForm");
-    UIInput userName = new UIInput();
-    userName.setId("userName");
-    root.getChildren().add(basicForm);
-    basicForm.getChildren().add(userName);
-    
-    UIViewRoot page = new UIViewRoot();
-    page.getChildren().add(basicForm);
-    page.setViewId("root");    
-    getFacesContext().setViewRoot(page);
+    public void testExecute() {
 
-    Phase applyValues = new ApplyRequestValuesPhase();
+        Phase restoreView = new RestoreViewPhase();
+        try {
+            restoreView.execute(getFacesContext());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
 
-    try {
-	applyValues.execute(getFacesContext());
+        assertTrue((getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
+        assertTrue(null != getFacesContext().getViewRoot());
+
+        // 2. Add components to tree
+        //
+        UIComponent root = getFacesContext().getViewRoot();
+        UIForm basicForm = new UIForm();
+        basicForm.setId("basicForm");
+        UIInput userName = new UIInput();
+        userName.setId("userName");
+        root.getChildren().add(basicForm);
+        basicForm.getChildren().add(userName);
+
+        UIViewRoot page = new UIViewRoot();
+        page.getChildren().add(basicForm);
+        page.setViewId("root");
+        getFacesContext().setViewRoot(page);
+
+        Phase applyValues = new ApplyRequestValuesPhase();
+
+        try {
+            applyValues.execute(getFacesContext());
+        } catch (Throwable e) {
+            System.out.println("Throwable: " + e.getMessage());
+            e.printStackTrace();
+            assertTrue(false);
+        }
+        assertTrue((getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
     }
-    catch (Throwable e) {
-	System.out.println("Throwable: " + e.getMessage());
-	e.printStackTrace();
-	assertTrue(false);
-    }
-    assertTrue((getFacesContext().getRenderResponse()) &&
-        !(getFacesContext().getResponseComplete()));
-}
 
 } // end of class TestPhase

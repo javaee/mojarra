@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.9 2004/02/04 23:42:08 ofung Exp $
+ * $Id: CoreValidator.java,v 1.10 2004/02/06 18:55:41 rlubke Exp $
  */
 
 /*
@@ -9,14 +9,11 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import java.io.IOException;
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.DefaultHandler;
-
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
-
 import com.sun.faces.util.Util;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>A TagLibrary Validator class to allow a TLD to mandate that
@@ -47,11 +44,12 @@ public class CoreValidator extends FacesValidator {
         init();
     }
 
+
     /**
      * <p>Initialize state</p>
      */
     protected void init() {
-	super.init();
+        super.init();
         failed = false;
         validatorInfo = new ValidatorInfo();
 
@@ -59,11 +57,12 @@ public class CoreValidator extends FacesValidator {
         idTagParser.setValidatorInfo(validatorInfo);
     }
 
+
     /**
      * <p>Release and re-initialize state</p>
      */
     public void release() {
-	super.release();
+        super.release();
         init();
     }
 
@@ -75,25 +74,26 @@ public class CoreValidator extends FacesValidator {
      * <p>Get the validator handler</p>
      */
     protected DefaultHandler getSAXHandler() {
-	DefaultHandler h = new CoreValidatorHandler();
-	return h;
+        DefaultHandler h = new CoreValidatorHandler();
+        return h;
     }
+
 
     /**
      * <p>Create failure message from any failed validations</p>
      *
      * @param prefix Tag library prefix
-     * @param uri Tag library uri
+     * @param uri    Tag library uri
      */
     protected String getFailureMessage(String prefix, String uri) {
-	// we should only get called if this Validator failed
-	Util.doAssert(failed);
+        // we should only get called if this Validator failed
+        Util.doAssert(failed);
         StringBuffer result = new StringBuffer();
 
         if (idTagParser.hasFailed()) {
             result.append(idTagParser.getMessage());
         }
-	return result.toString();
+        return result.toString();
     }
 
 
@@ -107,19 +107,18 @@ public class CoreValidator extends FacesValidator {
 
         /**
          * Parse the starting element. If it is a specific JSTL tag
-         * make sure that the nested JSF tags have IDs. 
+         * make sure that the nested JSF tags have IDs.
          *
          * @param ns Element name space.
          * @param ln Element local name.
          * @param qn Element QName.
-         * @param a Element's Attribute list.
-         *
+         * @param a  Element's Attribute list.
          */
-	public void startElement(String ns, 
-                                 String ln, 
-                                 String qn, 
+        public void startElement(String ns,
+                                 String ln,
+                                 String qn,
                                  Attributes attrs) {
-	    maybeSnagTLPrefixes(qn, attrs);
+            maybeSnagTLPrefixes(qn, attrs);
 
             validatorInfo.setQName(qn);
             validatorInfo.setAttributes(attrs);
@@ -132,16 +131,16 @@ public class CoreValidator extends FacesValidator {
             }
         }
 
+
         /**
          * <p>Parse the ending element. If it is a specific JSTL tag
          * make sure that the nested count is decreased.</p>
          *
          * @param ln Element local name.
          * @param qn Element QName.
-         * @param a Element's Attribute list.
-         *
+         * @param a  Element's Attribute list.
          */
-	public void endElement(String ns, String ln, String qn) {
+        public void endElement(String ns, String ln, String qn) {
             validatorInfo.setQName(qn);
             idTagParser.parseEndElement();
         }

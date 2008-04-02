@@ -72,7 +72,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * <p>This is the main class for evaluating expression Strings.  An
  * expression String is a String that may contain expressions of the
  * form ${...}.  Multiple expressions may appear in the same
@@ -81,12 +80,12 @@ import java.util.Map;
  * expressions and any intervening non-expression text, then
  * converting the resulting String to the expected type using the
  * PropertyEditor mechanism.
- *
+ * <p/>
  * <p>In the special case where the expression String is a single
  * expression, the value of the expression String is determined by
  * evaluating the expression, without any intervening conversion to a
  * String.
- *
+ * <p/>
  * <p>The evaluator maintains a cache mapping expression Strings to
  * their parsed results.  For expression Strings containing no
  * expression elements, it maintains a cache mapping
@@ -95,7 +94,7 @@ import java.util.Map;
  * time they are used.  All instances of the evaluator share the same
  * cache.  The cache may be bypassed by setting a flag on the
  * evaluator's constructor.
- *
+ * <p/>
  * <p>The evaluator must be passed a VariableResolver in its
  * constructor.  The VariableResolver is used to resolve variable
  * names encountered in expressions, and can also be used to implement
@@ -104,25 +103,26 @@ import java.util.Map;
  * lookups and implicit objects - these differences can be
  * encapsulated in the VariableResolver passed to the evaluator's
  * constructor.
- *
+ * <p/>
  * <p>Most VariableResolvers will need to perform their resolution
  * against some context.  For example, a JSP environment needs a
  * PageContext to resolve variables.  The evaluate() method takes a
  * generic Object context which is eventually passed to the
  * VariableResolver - the VariableResolver is responsible for casting
  * the context to the proper type.
- *
+ * <p/>
  * <p>Once an evaluator instance has been constructed, it may be used
  * multiple times, and may be used by multiple simultaneous Threads.
  * In other words, an evaluator instance is well-suited for use as a
  * singleton.
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
+
     //-------------------------------------
     // Constants
     //-------------------------------------    
@@ -132,15 +132,21 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
     // Member variables
     //-------------------------------------
 
-    /** The mapping from expression String to its parsed form (String,
-     Expression, or ExpressionString) **/
+    /**
+     * The mapping from expression String to its parsed form (String,
+     * Expression, or ExpressionString) *
+     */
     Map cachedExpressionStrings = null;
 
-    /** The mapping from ExpectedType to Maps mapping literal String to
-     parsed value **/
+    /**
+     * The mapping from ExpectedType to Maps mapping literal String to
+     * parsed value *
+     */
     static Map sCachedExpectedTypes;
 
-    /** Flag if the cache should be bypassed **/
+    /**
+     * Flag if the cache should be bypassed *
+     */
     boolean mBypassCache;
 
     private String parserImplClass = DEFAULT_EL_PARSER;
@@ -148,20 +154,19 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
 
     //-------------------------------------
     /**
-     *
      * Constructor
-     **/
+     */
     public ExpressionEvaluatorImpl(String parserClass) {
-       this(parserClass, false);
+        this(parserClass, false);
     }
 
+
     /**
-     *
      * Constructor
      *
      * @param pBypassCache flag indicating if the cache should be
-     * bypassed
-     **/
+     *                     bypassed
+     */
     public ExpressionEvaluatorImpl(String parserClass, boolean pBypassCache) {
         mBypassCache = pBypassCache;
         if (!mBypassCache) {
@@ -178,35 +183,35 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
         this.parserImplClass = parserImplClass;
     }
 
+
     /**
-     *
      * Prepare an expression for later evaluation.  This method should perform
-     * syntactic validation of the expression; if in doing so it detects 
+     * syntactic validation of the expression; if in doing so it detects
      * errors, it should raise an ELParseException.
      *
      * @param exprInfo ExpressionInfo
+     *
      * @return The Expression object encapsulating the arguments.
      *
-     * @exception ElException Thrown if parsing errors were found.
-     **/
+     * @throws ElException Thrown if parsing errors were found.
+     */
     public Expression parseExpression(ExpressionInfo exprInfo)
         throws ElException {
         // Validate and then create an Expression object.
-        Object parsedValue = 
-	    parseExpressionString(exprInfo.getExpressionString());
+        Object parsedValue =
+            parseExpressionString(exprInfo.getExpressionString());
 
-	// PENDING (hans) There must be a cleaner way to deal with
-	// String parse results, e.g., letting the parser return
-	// an Expression subclass that just returns its value. Or
-	// maybe this method should return a ValueBinding instead?
-        if ((parsedValue instanceof String) || 
+        // PENDING (hans) There must be a cleaner way to deal with
+        // String parse results, e.g., letting the parser return
+        // an Expression subclass that just returns its value. Or
+        // maybe this method should return a ValueBinding instead?
+        if ((parsedValue instanceof String) ||
             (parsedValue instanceof ExpressionString)) {
-	    // Create an Expression object that knows how to evaluate this.
-	    return new ELExpression(this);
-	}
-	else {
-	    return (Expression) parsedValue;
-	}
+            // Create an Expression object that knows how to evaluate this.
+            return new ELExpression(this);
+        } else {
+            return (Expression) parsedValue;
+        }
     }
 
     //-------------------------------------
@@ -214,9 +219,10 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
      * Evaluates the given expression String
      *
      * @param exprInfo ExpressionInfo
+     *
      * @return the expression String evaluated to the given expected
-     * type
-     **/
+     *         type
+     */
     public Object evaluate(ExpressionInfo exprInfo)
         throws ElException {
         String expressionString = exprInfo.getExpressionString();
@@ -253,12 +259,11 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
 
     //-------------------------------------
     /**
-     *
      * Gets the parsed form of the given expression string.  If the
      * parsed form is cached (and caching is not bypassed), return the
      * cached form, otherwise parse and cache the value.  Returns either
      * a String, Expression, or ExpressionString.
-     **/
+     */
     public Object parseExpressionString(String pExpressionString)
         throws ElException {
         // See if it's an empty String
@@ -282,34 +287,32 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
                     cachedExpressionStrings.put(pExpressionString, ret);
             } catch (ElParseException exc) {
                 if (exc instanceof ParseException) {
-                    String message = formatParseException(pExpressionString, (ParseException) exc);
+                    String message = formatParseException(pExpressionString,
+                                                          (ParseException) exc);
                     throw new ElException(message, exc);
                 } else {
                     throw new ElException(exc.getMessage(), exc);
                 }
-            } 
+            }
         }
         return ret;
     }
 
     //-------------------------------------
     /**
-     *
      * Converts the given value to the specified expected type.
-     **/
-    protected Object convertToExpectedType(
-        Object pValue,
-        Class pExpectedType)
+     */
+    protected Object convertToExpectedType(Object pValue,
+                                           Class pExpectedType)
         throws ElException {
         return Coercions.coerce(pValue, pExpectedType);
     }
 
     //-------------------------------------
     /**
-     *
      * Converts the given String, specified as a static expression
      * string, to the given expected type.  The conversion is cached.
-     **/
+     */
     protected Object convertStaticValueToExpectedType(String pValue, Class pExpectedType)
         throws ElException {
         // See if the value is already of the expected type
@@ -341,22 +344,24 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
         ELParser elParser;
         try {
             if (parserClass == null) {
-                parserClass = Thread.currentThread().getContextClassLoader().loadClass(parser);
+                parserClass =
+                    Thread.currentThread().getContextClassLoader().loadClass(
+                        parser);
             }
             elParser = (ELParser) parserClass.newInstance();
         } catch (Throwable t) {
             // TODO Clean this up
-            throw new RuntimeException("Unable to create parser: " + t.toString());
+            throw new RuntimeException(
+                "Unable to create parser: " + t.toString());
         }
         return elParser;
     }
 
     //-------------------------------------
     /**
-     *
      * Creates or returns the Map that maps string literals to parsed
      * values for the specified expected type.
-     **/
+     */
     static Map getOrCreateExpectedTypeMap(Class pExpectedType) {
         synchronized (sCachedExpectedTypes) {
             Map ret = (Map) sCachedExpectedTypes.get(pExpectedType);
@@ -372,13 +377,11 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
     // Formatting ParseException
     //-------------------------------------
     /**
-     *
      * Formats a ParseException into an error message suitable for
      * displaying on a web page
-     **/
-    static String formatParseException(
-        String pExpressionString,
-        ParseException pExc) {
+     */
+    static String formatParseException(String pExpressionString,
+                                       ParseException pExc) {
         // Generate the String of expected tokens
         StringBuffer expectedBuf = new StringBuffer();
         int maxSize = 0;
@@ -418,21 +421,19 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
 
         // Format the error message
         return MessageFormat.format
-            (
-                Constants.PARSE_EXCEPTION,
-                new Object[]{
-                    expected,
-                    encountered,
-                });
+            (Constants.PARSE_EXCEPTION,
+             new Object[]{
+                 expected,
+                 encountered,
+             });
     }
 
     //-------------------------------------
     /**
-     *
      * Used to convert raw characters to their escaped version when
      * these raw version cannot be used as part of an ASCII string
      * literal.
-     **/
+     */
     static String addEscapes(String str) {
         StringBuffer retval = new StringBuffer();
         char ch;
@@ -458,7 +459,8 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
                 default:
                     if ((ch = str.charAt(i)) < 0x20 || ch > 0x7e) {
                         String s = "0000" + Integer.toString(ch, 16);
-                        retval.append("\\u" + s.substring(s.length() - 4, s.length()));
+                        retval.append(
+                            "\\u" + s.substring(s.length() - 4, s.length()));
                     } else {
                         retval.append(ch);
                     }
@@ -472,10 +474,9 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
     // Testing methods
     //-------------------------------------
     /**
-     *
      * Parses the given expression string, then converts it back to a
      * String in its canonical form.  This is used to test parsing.
-     **/
+     */
     public String parseAndRender(String pExpressionString)
         throws ElException {
         Object val = parseExpressionString(pExpressionString);
@@ -490,18 +491,22 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
         }
     }
 
+
     /**
-     * An object that encapsulates an expression to be evaluated by 
+     * An object that encapsulates an expression to be evaluated by
      * the JSTL evaluator.
      */
     private class ELExpression
         extends Expression {
+
         private ExpressionEvaluator evaluator;
         private ExpressionInfo exprInfo;
+
 
         public ELExpression(ExpressionEvaluator evaluator) {
             this.evaluator = evaluator;
         }
+
 
         public Object evaluate(ExpressionInfo exprInfo)
             throws ElException {
@@ -509,10 +514,10 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
             return evaluator.evaluate(exprInfo);
         }
 
+
         /**
-         *
          * Returns the expression in the expression language syntax
-         **/
+         */
         public String getExpressionString() {
             return (exprInfo != null) ? exprInfo.getExpressionString() : "";
         }

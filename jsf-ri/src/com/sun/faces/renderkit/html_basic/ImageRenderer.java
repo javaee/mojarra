@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.30 2004/02/04 23:41:48 ofung Exp $
+ * $Id: ImageRenderer.java,v 1.31 2004/02/06 18:55:19 rlubke Exp $
  */
 
 /*
@@ -12,30 +12,25 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-
-import java.io.IOException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.Util;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
- *  <B>ImageRenderer</B> is a class that handles the rendering of the graphic
- *  ImageTag
- * @version $Id: ImageRenderer.java,v 1.30 2004/02/04 23:41:48 ofung Exp $
- * 
+ * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
+ * ImageTag
+ *
+ * @version $Id: ImageRenderer.java,v 1.31 2004/02/06 18:55:19 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
+
     //
     // Protected Constants
     //
@@ -75,28 +70,33 @@ public class ImageRenderer extends HtmlBasicRenderer {
     // Methods From Renderer
     //
 
-    public void encodeBegin(FacesContext context, UIComponent component) 
-            throws IOException {
+    public void encodeBegin(FacesContext context, UIComponent component)
+        throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
+
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) 
-            throws IOException {
+
+    public void encodeEnd(FacesContext context, UIComponent component)
+        throws IOException {
         ResponseWriter writer = null;
-	String styleClass = null;
-        
+        String styleClass = null;
+
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        
+
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding component " + component.getId());
         }
@@ -104,39 +104,40 @@ public class ImageRenderer extends HtmlBasicRenderer {
         // false.
         if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + 
-                component.getId() + " since " + 
-                "rendered attribute is set to false ");
+                log.trace("End encoding component " +
+                          component.getId() + " since " +
+                          "rendered attribute is set to false ");
             }
             return;
         }
-       
+
         writer = context.getResponseWriter();
-        Util.doAssert(writer != null );
-        
-	writer.startElement("img", component);
-	writeIdAttributeIfNecessary(context, writer, component);
-	writer.writeAttribute("src", src(context,component), "value");
+        Util.doAssert(writer != null);
+
+        writer.startElement("img", component);
+        writeIdAttributeIfNecessary(context, writer, component);
+        writer.writeAttribute("src", src(context, component), "value");
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
-	if (null != (styleClass = (String) 
-		     component.getAttributes().get("styleClass"))) {
-	    writer.writeAttribute("class", styleClass, "styleClass");
-	}
-	String altText = (String)component.getAttributes().get("alt");
-	if (altText == null) {
-	    writer.writeAttribute("alt", "", "alt");
-	}
-	writer.endElement("img");
+        if (null != (styleClass = (String)
+            component.getAttributes().get("styleClass"))) {
+            writer.writeAttribute("class", styleClass, "styleClass");
+        }
+        String altText = (String) component.getAttributes().get("alt");
+        if (altText == null) {
+            writer.writeAttribute("alt", "", "alt");
+        }
+        writer.endElement("img");
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }
     }
 
+
     private String src(FacesContext context, UIComponent component) {
-        String value = (String)((UIGraphic)component).getValue(); 
-        if (value == null ) {
+        String value = (String) ((UIGraphic) component).getValue();
+        if (value == null) {
             return "";
         }
         value = context.getApplication().getViewHandler().

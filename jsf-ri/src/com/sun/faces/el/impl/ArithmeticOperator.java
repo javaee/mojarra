@@ -65,57 +65,51 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
- *
  * <p>This is the superclass for all binary arithmetic operators
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
- **/
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ */
 
 public abstract class ArithmeticOperator
     extends BinaryOperator {
+
     //-------------------------------------
     /**
-     *
      * Applies the operator to the given value
-     **/
-    public Object apply(
-        Object pLeft,
-        Object pRight)
+     */
+    public Object apply(Object pLeft,
+                        Object pRight)
         throws ElException {
         return Coercions.applyArithmeticOperator(pLeft, pRight, this);
     }
 
     //-------------------------------------
     /**
-     *
      * Applies the operator to the given double values, returning a double
-     **/
+     */
     public abstract double apply(double pLeft, double pRight);
   
     //-------------------------------------
     /**
-     *
      * Applies the operator to the given double values, returning a double
-     **/
+     */
     public abstract long apply(long pLeft, long pRight);
   
     //-------------------------------------
 
     /**
-     *
      * Applies the operator to the given BigDecimal values, returning a
      * BigDecimal.
-     **/
+     */
     public abstract BigDecimal apply(BigDecimal pLeft, BigDecimal pRight);
 
     //-------------------------------------
 
     /**
-     *
      * Applies the operator to the given BigInteger values, returning a
      * BigInteger.
-     **/
+     */
     public abstract BigInteger apply(BigInteger pLeft, BigInteger pRight);
 
     //-------------------------------------

@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleFactoryImpl.java,v 1.9 2004/02/04 23:44:33 ofung Exp $
+ * $Id: TestLifecycleFactoryImpl.java,v 1.10 2004/02/06 18:56:57 rlubke Exp $
  */
 
 /*
@@ -12,32 +12,25 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.ServletFacesTestCase;
-
 import org.apache.cactus.ServletTestCase;
 
-import com.sun.faces.util.Util;
-
-
-import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-import com.sun.faces.RIConstants;
+import javax.faces.lifecycle.LifecycleFactory;
+
 import java.util.Iterator;
 
 /**
- *
- *  <B>TestLifecycleFactoryImpl</B> is a class ...
- *
+ * <B>TestLifecycleFactoryImpl</B> is a class ...
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleFactoryImpl.java,v 1.9 2004/02/04 23:44:33 ofung Exp $
- * 
+ * @version $Id: TestLifecycleFactoryImpl.java,v 1.10 2004/02/06 18:56:57 rlubke Exp $
  * @see	Blah
  * @see	Bloo
- *
  */
 
-public class TestLifecycleFactoryImpl extends ServletFacesTestCase
-{
+public class TestLifecycleFactoryImpl extends ServletFacesTestCase {
+
 //
 // Protected Constants
 //
@@ -58,8 +51,14 @@ public class TestLifecycleFactoryImpl extends ServletFacesTestCase
 // Constructors and Initializers    
 //
 
-    public TestLifecycleFactoryImpl() {super("TestLifecycleFactoryImpl");}
-    public TestLifecycleFactoryImpl(String name) {super(name);}
+    public TestLifecycleFactoryImpl() {
+        super("TestLifecycleFactoryImpl");
+    }
+
+
+    public TestLifecycleFactoryImpl(String name) {
+        super(name);
+    }
 
 //
 // Class methods
@@ -69,72 +68,69 @@ public class TestLifecycleFactoryImpl extends ServletFacesTestCase
 // General Methods
 //
 
-public void testDefault()
-{
-    LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
-    Lifecycle life = null, life2 = null;
+    public void testDefault() {
+        LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
+        Lifecycle life = null, life2 = null;
 
-    assertTrue(factory != null);
+        assertTrue(factory != null);
 
-    // Make sure the default instance exists
-    life = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-    assertTrue(null != life);
+        // Make sure the default instance exists
+        life = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+        assertTrue(null != life);
 
-    // Make sure multiple requests for the same name give the same
-    // instance.
-    life2 = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-    assertTrue(life == life2);
-}
-
-public void testIdIterator()
-{
-    LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
-
-    String 
-	l1 = "l1", 
-	l2 = "l2", 
-	l3 = "l3";
-    LifecycleImpl 
-	life1 = new LifecycleImpl(),
-	life2 = new LifecycleImpl(),
-	life3 = new LifecycleImpl();
-    int i = 0;
-    Iterator iter = null;
-
-    factory.addLifecycle(l1, life1);
-    factory.addLifecycle(l2, life2);
-    factory.addLifecycle(l3, life3);
-
-    iter = factory.getLifecycleIds();
-    while (iter.hasNext()) {
-	iter.next();
-	i++;
+        // Make sure multiple requests for the same name give the same
+        // instance.
+        life2 = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+        assertTrue(life == life2);
     }
 
-    assertTrue(4 == i);
-}
 
-public void testIllegalArgumentException()
-{
-    LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
-    Lifecycle life = null;
-    assertTrue(factory != null);
+    public void testIdIterator() {
+        LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
 
-    boolean exceptionThrown = false;
-    // Try to get an IllegalArgumentException
-    try {
-	LifecycleImpl lifecycle = new LifecycleImpl();
-	factory.addLifecycle("bogusId", lifecycle);
-	factory.addLifecycle("bogusId", lifecycle);
+        String
+            l1 = "l1",
+            l2 = "l2",
+            l3 = "l3";
+        LifecycleImpl
+            life1 = new LifecycleImpl(),
+            life2 = new LifecycleImpl(),
+            life3 = new LifecycleImpl();
+        int i = 0;
+        Iterator iter = null;
+
+        factory.addLifecycle(l1, life1);
+        factory.addLifecycle(l2, life2);
+        factory.addLifecycle(l3, life3);
+
+        iter = factory.getLifecycleIds();
+        while (iter.hasNext()) {
+            iter.next();
+            i++;
+        }
+
+        assertTrue(4 == i);
     }
-    catch (IllegalArgumentException e) {
-	exceptionThrown = true;
+
+
+    public void testIllegalArgumentException() {
+        LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
+        Lifecycle life = null;
+        assertTrue(factory != null);
+
+        boolean exceptionThrown = false;
+        // Try to get an IllegalArgumentException
+        try {
+            LifecycleImpl lifecycle = new LifecycleImpl();
+            factory.addLifecycle("bogusId", lifecycle);
+            factory.addLifecycle("bogusId", lifecycle);
+        } catch (IllegalArgumentException e) {
+            exceptionThrown = true;
+        } catch (UnsupportedOperationException e) {
+            assertTrue(false);
+        }
+        assertTrue(exceptionThrown);
     }
-    catch (UnsupportedOperationException e) {
-	assertTrue(false);
-    }
-    assertTrue(exceptionThrown);
-}
 
 
 } // end of class TestLifecycleFactoryImpl

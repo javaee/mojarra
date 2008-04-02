@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.73 2004/02/04 23:41:45 ofung Exp $
+ * $Id: ButtonRenderer.java,v 1.74 2004/02/06 18:55:16 rlubke Exp $
  */
 
 /*
@@ -12,33 +12,30 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-
-import java.util.Map;
-import java.util.MissingResourceException;
-
-import javax.faces.component.UIComponent;
-import javax.faces.component.UICommand;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.event.ActionEvent;
-import java.io.IOException;
-
-import com.sun.faces.util.Util;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.component.UICommand;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.event.ActionEvent;
+
+import java.io.IOException;
+import java.util.Map;
+
 /**
- * <B>ButtonRenderer</B> is a class that renders the current value of 
+ * <B>ButtonRenderer</B> is a class that renders the current value of
  * <code>UICommand<code> as a Button.
  */
 
 public class ButtonRenderer extends HtmlBasicRenderer {
+
     //
     // Protected Constants
     //
     // Log instance for this class
-     protected static Log log = LogFactory.getLog(ButtonRenderer.class);
+    protected static Log log = LogFactory.getLog(ButtonRenderer.class);
 
     //
     // Class Variables
@@ -65,17 +62,18 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     // General Methods
     //
 
-    /** Follow the UE Spec for Button:
+    /**
+     * Follow the UE Spec for Button:
      * http://javaweb.sfbay.sun.com/engineering/jsue/j2ee/WebServices/
      * JavaServerFaces/uispecs/UICommand_Button.html
      */
     protected String padLabel(String label) {
-	if (label.length() == 3) {
+        if (label.length() == 3) {
             label = "\u00a0\u00a0" + label + "\u00a0\u00a0";
-	} else if (label.length() == 2) {
-	    label = "\u00a0\u00a0\u00a0" + label + "\u00a0\u00a0\u00a0";
-	}
-	return label;
+        } else if (label.length() == 2) {
+            label = "\u00a0\u00a0\u00a0" + label + "\u00a0\u00a0\u00a0";
+        }
+        return label;
     }
 
     //
@@ -84,8 +82,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
     public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-	    throw new NullPointerException(Util.getExceptionMessage(
-				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin decoding component " + component.getId());
@@ -95,8 +93,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
             if (log.isTraceEnabled()) {
-                log.trace("No decoding necessary since the component " + 
-                    component.getId() + " is disabled");
+                log.trace("No decoding necessary since the component " +
+                          component.getId() + " is disabled");
             }
             return;
         } 
@@ -108,37 +106,39 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         // can get the command name by calling currentValue. This way we can 
         // get around the IE bug.
         String clientId = component.getClientId(context);
-        Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
-        String value = (String)requestParameterMap.get(clientId);
+        Map requestParameterMap = context.getExternalContext()
+            .getRequestParameterMap();
+        String value = (String) requestParameterMap.get(clientId);
         if (value == null) {
-            if (requestParameterMap.get(clientId+".x") == null &&
-                requestParameterMap.get(clientId+".y") == null) {
+            if (requestParameterMap.get(clientId + ".x") == null &&
+                requestParameterMap.get(clientId + ".y") == null) {
                 return;
             }
         }
 
         String type = (String) component.getAttributes().get("type");
-        if ((type != null) && (type.toLowerCase().equals("reset")) ) {
+        if ((type != null) && (type.toLowerCase().equals("reset"))) {
             return;
         }
         ActionEvent actionEvent = new ActionEvent(component);
-	component.queueEvent(actionEvent);
-        
+        component.queueEvent(actionEvent);
+
         if (log.isDebugEnabled()) {
             log.debug("This command resulted in form submission " +
-                    " ActionEvent queued " + actionEvent);
+                      " ActionEvent queued " + actionEvent);
         }
         if (log.isTraceEnabled()) {
             log.trace("End decoding component " + component.getId());
         }
         return;
     }
-    
-    public void encodeBegin(FacesContext context, UIComponent component) 
-             throws IOException  {
+
+
+    public void encodeBegin(FacesContext context, UIComponent component)
+        throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding component " + component.getId());
@@ -147,68 +147,72 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         // false.
         if (!component.isRendered()) {
             if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + component.getId() + 
-                " since rendered attribute is set to false ");
+                log.trace("End encoding component " + component.getId() +
+                          " since rendered attribute is set to false ");
             }
             return;
         }
         
         // Which button type (SUBMIT, RESET, or BUTTON) should we generate?
         String type = (String) component.getAttributes().get("type");
-	    String styleClass = null;
+        String styleClass = null;
         if (type == null) {
             type = "submit";
-	    // This is needed in the decode method
-	    component.getAttributes().put("type", type);
+            // This is needed in the decode method
+            component.getAttributes().put("type", type);
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null );
-        
+        Util.doAssert(writer != null);
+
         String label = "";
         Object value = ((UICommand) component).getValue();
         if (value != null) {
-              label = value.toString();
-        } 
+            label = value.toString();
+        }
         String imageSrc = (String) component.getAttributes().get("image");
         writer.startElement("input", component);
-	writeIdAttributeIfNecessary(context, writer, component);
+        writeIdAttributeIfNecessary(context, writer, component);
         if (imageSrc != null) {
             writer.writeAttribute("type", "image", "type");
             writer.writeURIAttribute("src", imageSrc, "image");
-            writer.writeAttribute("name", component.getClientId(context), "clientId");
-         } else {
+            writer.writeAttribute("name", component.getClientId(context),
+                                  "clientId");
+        } else {
             writer.writeAttribute("type", type.toLowerCase(), "type");
-            writer.writeAttribute("name", component.getClientId(context), "clientId");
+            writer.writeAttribute("name", component.getClientId(context),
+                                  "clientId");
             writer.writeAttribute("value", padLabel(label), "value");
-         }
+        }
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 
-        if (null != (styleClass = (String) 
+        if (null != (styleClass = (String)
             component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
-	}
+        }
         writer.endElement("input");
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }
     }
-    
+
+
     public void encodeChildren(FacesContext context, UIComponent component)
-            throws IOException {
+        throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) 
-            throws IOException {
+
+    public void encodeEnd(FacesContext context, UIComponent component)
+        throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
