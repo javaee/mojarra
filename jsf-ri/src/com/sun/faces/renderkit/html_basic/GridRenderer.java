@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.23 2004/01/14 17:13:02 eburns Exp $
+ * $Id: GridRenderer.java,v 1.24 2004/01/14 21:05:10 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.23 2004/01/14 17:13:02 eburns Exp $
+ * @version $Id: GridRenderer.java,v 1.24 2004/01/14 21:05:10 eburns Exp $
  *  
  */
 
@@ -134,7 +134,8 @@ public class GridRenderer extends HtmlBasicRenderer {
 	UIComponent facet = null;
 	Iterator kids = null;
 
-	if (null != (facet = (UIComponent) component.getFacet("header"))) {
+	if (null != (facet = (UIComponent) component.getFacet("header")) &&
+	    facet.isRendered()) {
 	    
 	    writer.startElement("thead", facet);
 	    if (headerClass != null) {
@@ -159,6 +160,10 @@ public class GridRenderer extends HtmlBasicRenderer {
 	writer.startElement("tbody", component);
 	if (null != (kids = component.getChildren().iterator())) {
 	    while (kids.hasNext()) {
+		UIComponent child = (UIComponent) kids.next();
+		if (!child.isRendered()) {
+		    continue;
+		}
 		if ((i % columns) == 0) {
 		    if (open) {
 			writer.endElement("tr");
@@ -183,7 +188,6 @@ public class GridRenderer extends HtmlBasicRenderer {
 			columnStyle = 0;
 		    }
 		}
-		UIComponent child = (UIComponent) kids.next();
 		encodeRecursive(context, child);
 		writer.endElement("td");
 		writer.writeText("\n", null);
@@ -196,8 +200,9 @@ public class GridRenderer extends HtmlBasicRenderer {
         }
 	writer.endElement("tbody");
 
-	if (null != (facet = (UIComponent) component.getFacet("footer"))) {
-
+	if (null != (facet = (UIComponent) component.getFacet("footer")) &&
+	    facet.isRendered()) {
+	    
 	    writer.startElement("tfoot", facet);
 	    if (footerClass != null) {
 		writer.startElement("tr", facet);

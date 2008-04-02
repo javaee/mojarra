@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.10 2003/10/21 16:42:05 eburns Exp $
+ * $Id: TestRenderers_4.java,v 1.11 2004/01/14 21:05:11 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -38,7 +38,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.10 2003/10/21 16:42:05 eburns Exp $
+ * @version $Id: TestRenderers_4.java,v 1.11 2004/01/14 21:05:11 eburns Exp $
  * 
  *
  */
@@ -105,6 +105,11 @@ public class TestRenderers_4 extends JspFacesTestCase {
             root.setId("root");
 
             testGridRenderer(root);
+	    
+	    root = new UIViewRoot();
+            root.setId("root");
+            testGridRendererWithNonRenderedChildren(root);
+
 	    getFacesContext().getResponseWriter().close();
             assertTrue(verifyExpectedOutput());
         }
@@ -157,6 +162,68 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	panel.getFacets().put("footer", footerGroup);
 
 	body1 = new UIOutput();
+	body1.setValue("body1");
+	panel.getChildren().add(body1);
+
+	body2 = new UIOutput();
+	body2.setValue("body2");
+	panel.getChildren().add(body2);
+
+	gridRenderer = new GridRenderer();
+
+        System.out.println("    Testing encodeBegin method... ");
+	gridRenderer.encodeBegin(getFacesContext(), panel);
+	gridRenderer.encodeChildren(getFacesContext(), panel);
+        gridRenderer.encodeEnd(getFacesContext(), panel);
+
+    }
+
+    public void testGridRendererWithNonRenderedChildren(UIComponent root)
+        throws IOException {
+        System.out.println("Testing GridRenderer");
+	GridRenderer gridRenderer = null;
+	UIPanel 
+	    panel = null,
+	    headerGroup = null,
+	    footerGroup = null;
+	UIOutput 
+	    header1 = null,
+	    header2 = null,
+	    footer1 = null,
+	    footer2 = null,
+	    body1 = null,
+	    body2 = null;
+
+	panel = new UIPanel();
+	root.getChildren().add(panel);
+	
+	// the header should not be rendered
+	headerGroup = new UIPanel();
+	headerGroup.setRendered(false);
+	headerGroup.setId("header");
+	headerGroup.setRendererType("Group");
+	header1 = new UIOutput();
+	header1.setValue("header1 ");
+	headerGroup.getChildren().add(header1);
+	header2 = new UIOutput();
+	header2.setValue("header2 ");
+	headerGroup.getChildren().add(header2);
+	panel.getFacets().put("header", headerGroup);
+	
+	footerGroup = new UIPanel();
+	footerGroup.setId("footer");
+	footerGroup.setRendererType("Group");
+	footer1 = new UIOutput();
+	footer1.setValue("footer1 ");
+	footerGroup.getChildren().add(footer1);
+	footer2 = new UIOutput();
+	footer2.setValue("footer2 ");
+	footerGroup.getChildren().add(footer2);
+	panel.getFacets().put("footer", footerGroup);
+
+	// this child should not be rendered
+	body1 = new UIOutput();
+	body1.setRendered(false);
 	body1.setValue("body1");
 	panel.getChildren().add(body1);
 
