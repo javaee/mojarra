@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.33 2004/01/14 17:12:54 eburns Exp $
+ * $Id: UIDataTestCase.java,v 1.34 2004/01/19 04:43:28 craigmcc Exp $
  */
 
 /*
@@ -194,7 +194,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         UIData data = (UIData) component;
         setupModel();
         setupRenderers();
-        setupTree();
+        setupTree(true);
 
         for (int i = 0; i < beans.size(); i++) {
 
@@ -240,7 +240,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         UIData data = (UIData) component;
         setupModel();
         setupRenderers();
-        setupTree();
+        setupTree(true);
 
         for (int i = 0; i < beans.size(); i++) {
 
@@ -380,7 +380,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         // Set up for this test
         setupModel();
         setupRenderers();
-        UICommand command = setupTree();
+        UICommand command = setupTree(true);
         UIData data = (UIData) component;
         checkLocalValues(nulls);
 
@@ -460,6 +460,116 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
     }
 
 
+    // Test request processing lifecycle (with controls in header facets)
+    public void testTreeLifecycleFacets() throws Exception {
+
+        ValueBinding vbCommand = application.createValueBinding("foo.command");
+        ValueBinding vbInput = application.createValueBinding("foo.input");
+        ValueBinding vbOutput = application.createValueBinding("foo.output");
+        String before[] =
+            { "input3", "input4", "input5", "input6", "input7" };
+        String after[] =
+            { "input3", "input4A", "input5", "input6B", "input7" };
+        String nulls[] =
+            { null, null, null, null, null };
+
+	// Instantiate and store a bean used to count calls
+	UIDataHeaderBean hb = new UIDataHeaderBean();
+	facesContext.getExternalContext().getRequestMap().
+	    put("hb", hb);
+
+        // Set up for this test
+        setupModel();
+        setupRenderers();
+        UICommand command = setupTree(false); // command and input in headers
+        UIData data = (UIData) component;
+        checkLocalValues(nulls);
+
+        // Set up our fake request parameters (three command invocations)
+        Map params = new HashMap();
+	params.put("data:hcommand", "");
+        params.put("data:5:command", "");
+        params.put("data:7:command", "");
+	params.put("data:hinput", "New Value");
+        params.put("data:3:input", "input3");
+        params.put("data:4:input", "input4A");
+        params.put("data:5:input", "input5");
+        params.put("data:6:input", "input6B");
+        params.put("data:7:input", "input7");
+        MockExternalContext econtext =
+          (MockExternalContext) facesContext.getExternalContext();
+        econtext.setRequestParameterMap(params);
+        checkMessages(0);
+
+        // Simulate the Request Processing Lifecycle
+        TestDataActionListener.trace(null);
+        TestDataValidator.trace(null);
+        TestDataValueChangeListener.trace(null);
+        UIViewRoot root = (UIViewRoot) data.getParent();
+
+        //   APPLY REQUEST VALUES
+	command.setImmediate(true);
+        root.processDecodes(facesContext);
+        assertEquals("/data:5:command" +
+                     "/data:7:command",
+                     TestDataActionListener.trace());
+        assertEquals("", TestDataValidator.trace());
+        assertEquals("", TestDataValueChangeListener.trace());
+        checkMessages(0);
+        checkSubmittedValues(after);
+
+        //   PERFORM VALIDATIONS
+        root.processValidators(facesContext);
+        assertEquals("/data:5:command" +
+                     "/data:7:command",
+                     TestDataActionListener.trace());
+        assertEquals("/data:3:input/input3" +
+                     "/data:4:input/input4A" +
+                     "/data:5:input/input5" +
+                     "/data:6:input/input6B" +
+                     "/data:7:input/input7",
+                     TestDataValidator.trace());
+        assertEquals("/data:4:input/input4/input4A" +
+                     "/data:6:input/input6/input6B",
+                     TestDataValueChangeListener.trace());
+        checkLocalValues(after);
+        checkModelInputs(before);
+        checkMessages(0);
+
+        //   UPDATE MODEL VALUES
+        root.processUpdates(facesContext);
+        assertEquals("/data:5:command" +
+                     "/data:7:command",
+                     TestDataActionListener.trace());
+        assertEquals("/data:3:input/input3" +
+                     "/data:4:input/input4A" +
+                     "/data:5:input/input5" +
+                     "/data:6:input/input6B" +
+                     "/data:7:input/input7",
+                     TestDataValidator.trace());
+        assertEquals("/data:4:input/input4/input4A" +
+                     "/data:6:input/input6/input6B",
+                     TestDataValueChangeListener.trace());
+        checkModelInputs(after);
+        checkMessages(0);
+        checkLocalValues(nulls);
+	assertEquals("Header input property updated",
+		     "New Value", hb.getValue());
+
+        //   RENDER RESPONSE
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_8.xml");
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_8.xml");
+
+	// Check call counts
+	assertEquals("header action called once", 1, hb.getActionCount());
+	assertEquals("header validate called once", 1, hb.getValidateCount());
+	assertEquals("header update called once", 1, hb.getUpdateCount());
+
+    }
+
+
     // Test request processing lifecycle (modify model in Invoke Application)
     public void testTreeModify1() throws Exception {
 
@@ -476,7 +586,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         // Set up for this test
         setupModel();
         setupRenderers();
-        UICommand command = setupTree();
+        UICommand command = setupTree(true);
         UIData data = (UIData) component;
         checkLocalValues(nulls);
 
@@ -575,7 +685,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         // Set up for this test
         setupModel();
         setupRenderers();
-        UICommand command = setupTree();
+        UICommand command = setupTree(true);
         UIData data = (UIData) component;
         checkLocalValues(nulls);
 
@@ -633,7 +743,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         // Set up for this test
         setupModel();
         setupRenderers();
-        setupTree();
+        setupTree(true);
 
         // Validate the rendered output
         renderResponse();
@@ -650,7 +760,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         // Set up for this test
         setupModel();
         setupRenderers();
-        setupTree();
+        setupTree(true);
 
         // Validate the rendered output
         ((UIData) component).setFirst(7);
@@ -672,7 +782,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         // Set up for this test
         setupModel();
         setupRenderers();
-        setupTree();
+        setupTree(true);
         UIData data = (UIData) component;
 
         // Use value references to update certain values directly
@@ -707,7 +817,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         // Set up for this test
         setupModel();
         setupRenderers();
-        setupTree();
+        setupTree(true);
         UIData data = (UIData) component;
 
         // Set up our fake request parameters (no command invocations)
@@ -881,7 +991,6 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                          FacesMessage.SEVERITY_ERROR,
                          message.getSeverity());
             n++;
-            // System.err.println(message.getSummary());
         }
         assertEquals("expected message count", expected, n);
 
@@ -1070,7 +1179,9 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
 
     // Set up the component tree corresponding to the data model
-    protected UICommand setupTree() throws Exception {
+    // labels==true - header facet of command and input contain labels
+    // labels==false - header facet of command and input contain controls
+    protected UICommand setupTree(boolean labels) throws Exception {
 
         // Attach our UIData to the view root
         UIData data = (UIData) component;
@@ -1088,13 +1199,27 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         UIOutput output;
         UIOutput label;
         UIOutput constant;
+	UICommand hcommand;
+	UIInput hinput;
 
         column = new UIColumn();
         column.setId("commandColumn");
-        label = new UIOutput();
-        label.setId("commandHeader");
-        label.setValue("Command Header");
-        column.getFacets().put("header", label);
+	if (labels) {
+	    label = new UIOutput();
+	    label.setId("commandHeader");
+	    label.setValue("Command Header");
+	    column.getFacets().put("header", label);
+	} else {
+	    hcommand = new UICommand();
+	    hcommand.setId("hcommand");
+	    hcommand.setImmediate(true);
+	    hcommand.setActionListener
+		(application.createMethodBinding
+		 ("#{hb.action}",
+		  new Class[] { ActionEvent.class }));
+	    hcommand.setValue("Command Action");
+	    column.getFacets().put("header", hcommand);
+	}
         label = new UIOutput();
         label.setId("commandFooter");
         label.setValue("Command Footer");
@@ -1109,10 +1234,25 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
         column = new UIColumn();
         column.setId("inputColumn");
-        label = new UIOutput();
-        label.setId("inputHeader");
-        label.setValue("Input Header");
-        column.getFacets().put("header", label);
+	if (labels) {
+	    label = new UIOutput();
+	    label.setId("inputHeader");
+	    label.setValue("Input Header");
+	    column.getFacets().put("header", label);
+	} else {
+	    hinput = new UIInput();
+	    hinput.setId("hinput");
+	    hinput.setValidator
+		(application.createMethodBinding
+		 ("#{hb.validate}",
+		  new Class[] { FacesContext.class,
+				UIComponent.class,
+				Object.class }));
+	    hinput.setValueBinding
+		("value",
+		 application.createValueBinding("#{hb.value}"));
+	    column.getFacets().put("header", hinput);
+	}
         label = new UIOutput();
         label.setId("inputFooter");
         label.setValue("Input Footer");
@@ -1395,13 +1535,10 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             }
             UIInput input = (UIInput) component;
             String clientId = input.getClientId(context);
-            // System.err.println("decode(" + clientId + ")");
 
             // Decode incoming request parameters
             Map params = context.getExternalContext().getRequestParameterMap();
             if (params.containsKey(clientId)) {
-                // System.err.println("  '" + input.currentValue(context) +
-                //                    "' --> '" + params.get(clientId) + "'");
                 input.setSubmittedValue((String) params.get(clientId));
             }
         }

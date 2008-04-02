@@ -635,7 +635,6 @@ public class UIData extends UIComponentBase
      */
     public void encodeBegin(FacesContext context) throws IOException {
 
-        
         model = null; // Rre-evaluate even with server-side state saving
         if (!keepSaved(context)) {
             saved = new HashMap();
@@ -851,7 +850,7 @@ public class UIData extends UIComponentBase
      */
     private void iterate(FacesContext context, PhaseId phaseId) {
 
-	// Process each facet exactly once
+	// Process each facet of this component exactly once
 	setRowIndex(-1);
 	Iterator facets = getFacets().keySet().iterator();
 	while (facets.hasNext()) {
@@ -868,7 +867,34 @@ public class UIData extends UIComponentBase
 	    }
 	}
 
-	// Iterate over our children, once per row
+	// Process each facet of our child UIColumn components exactly once
+	setRowIndex(-1);
+	Iterator columns = getChildren().iterator();
+	while (columns.hasNext()) {
+	    UIComponent column = (UIComponent) columns.next();
+	    if (!(column instanceof UIColumn)) {
+		continue;
+	    }
+	    if (!column.isRendered()) {
+		continue;
+	    }
+	    Iterator columnFacets = column.getFacets().keySet().iterator();
+	    while (columnFacets.hasNext()) {
+		UIComponent columnFacet = (UIComponent)
+		    column.getFacets().get(columnFacets.next());
+		if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+		    columnFacet.processDecodes(context);
+		} else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+		    columnFacet.processValidators(context);
+		} else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+		    columnFacet.processUpdates(context);
+		} else {
+		    throw new IllegalArgumentException();
+		}
+	    }
+	}
+
+	// Iterate over our UIColumn children, once per row
 	int processed = 0;
         int rowIndex = getFirst() - 1;
 	int rows = getRows();
@@ -887,20 +913,29 @@ public class UIData extends UIComponentBase
             }
 
 	    // Perform phase-specific processing as required
+	    // on the *children* of the UIColumn (facets have
+	    // been done a single time with rowIndex=-1 already)
 	    Iterator kids = getChildren().iterator();
 	    while (kids.hasNext()) {
 		UIComponent kid = (UIComponent) kids.next();
 		if (!(kid instanceof UIColumn)) {
 		    continue;
 		}
-		if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-		    kid.processDecodes(context);
-		} else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-		    kid.processValidators(context);
-		} else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-		    kid.processUpdates(context);
-		} else {
-		    throw new IllegalArgumentException();
+		Iterator grandkids = kid.getChildren().iterator();
+		while (grandkids.hasNext()) {
+		    UIComponent grandkid = (UIComponent) grandkids.next();
+		    if (!grandkid.isRendered()) {
+			continue;
+		    }
+		    if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+			grandkid.processDecodes(context);
+		    } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+			grandkid.processValidators(context);
+		    } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+			grandkid.processUpdates(context);
+		    } else {
+			throw new IllegalArgumentException();
+		    }
 		}
 	    }
 
