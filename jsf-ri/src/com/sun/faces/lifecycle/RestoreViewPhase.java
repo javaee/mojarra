@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.25 2005/07/20 00:34:08 rogerk Exp $
+ * $Id: RestoreViewPhase.java,v 1.26 2005/07/21 13:46:30 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import java.util.logging.Level;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.25 2005/07/20 00:34:08 rogerk Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.26 2005/07/21 13:46:30 rogerk Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -146,7 +146,7 @@ public class RestoreViewPhase extends Phase {
 			 restoreView(facesContext, viewId))) {
                 Object[] params = {viewId};
 		throw new ViewExpiredException(Util.getExceptionMessageString(
-                    Util.RESTORE_VIEW_ERROR_MESSAGE_ID, params));
+                    Util.RESTORE_VIEW_ERROR_MESSAGE_ID, params), viewId);
 	    }
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Postback: Restored view for " + viewId);

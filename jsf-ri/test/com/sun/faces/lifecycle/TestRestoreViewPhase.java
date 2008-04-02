@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.23 2005/07/20 00:34:09 rogerk Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.24 2005/07/21 13:46:30 rogerk Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.23 2005/07/20 00:34:09 rogerk Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.24 2005/07/21 13:46:30 rogerk Exp $
  */
 
 public class TestRestoreViewPhase extends ServletFacesTestCase {
@@ -272,6 +272,9 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
             restoreView.execute(context);
         } catch (ViewExpiredException e) {
             exceptionThrown = true;
+            assertTrue(e.getViewId().equals(TEST_URI));
+            String expected = "viewId:"+e.getViewId()+" - View "+e.getViewId()+" could not be restored.";
+            assertTrue(e.getMessage().equals(expected));
         }
         assertTrue(exceptionThrown);
     }
