@@ -50,7 +50,7 @@
 
         <h:graphic_image id="waveImg" url="/wave.med.gif" />
   	<h:input_text id="userNo" value="#{UserNumberBean.userNumber}"
-                      validate="#{UserNumberBean.validate}"/>          
+                      validator="#{UserNumberBean.validate}"/>          
 	 <h:command_button id="submit" action="success" value="Submit" />
          <p>
 	 <h:messages style="color: red; font-family: 'New Century Schoolbook', serif; font-style: oblique; text-decoration: overline" id="errors1" for="userNo"/>

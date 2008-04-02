@@ -1,5 +1,5 @@
 /*
- * $Id: TestMapping.java,v 1.2 2003/12/17 15:20:16 rkitain Exp $
+ * $Id: TestMapping.java,v 1.3 2003/12/19 23:59:59 jvisvanathan Exp $
  */
 
 /*
@@ -121,6 +121,7 @@ public class TestMapping extends HtmlUnitTestCase {
      * to the form for guessing duke's number
      */
     public void testGuessNumberNullInput() throws Exception {
+        int numberFound = 0;
         HtmlPage greetingPage = accessAppAndGetGreetingJSP();
         HtmlForm guessForm = (HtmlForm) greetingPage.getAllForms().get(0);
         assertTrue(guessForm != null);              
@@ -130,14 +131,13 @@ public class TestMapping extends HtmlUnitTestCase {
         
         for (Iterator iter = resultPage.getAllHtmlChildElements(); iter.hasNext(); ) {
             HtmlElement element = (HtmlElement) iter.next();
-            if (element.getTagName().equalsIgnoreCase("h2")) {
-                if (element.getTagName().equalsIgnoreCase("font")) {
-                    assertTrue(element.getAttributeValue("color").equals("RED"));
-                    assertTrue(element.asText().trim().equals(
-                                    "Conversion Error setting value '' for 'UserNumberBean.userNumber'."));
-                }                
+            if (element.asText().trim().equals("Sorry, null is incorrect.")) {
+                numberFound++;
+                System.out.println("Incorrect guess 'null'.");
+                break;
             }
-        }        
+        }     
+        assertTrue(numberFound == 1);
     }
     
     /* 
@@ -145,6 +145,7 @@ public class TestMapping extends HtmlUnitTestCase {
      * the specified range of 0 and 10.
      */ 
     public void testGuessNumberInvalidInputRange() throws Exception {
+        boolean testFailed = false;
         HtmlPage greetingPage = accessAppAndGetGreetingJSP();
         HtmlForm guessForm = (HtmlForm) greetingPage.getAllForms().get(0);
         assertTrue(guessForm != null);
@@ -159,11 +160,15 @@ public class TestMapping extends HtmlUnitTestCase {
         assertTrue(failed.getTitleText().equals("Hello"));
         for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();) {
             HtmlElement element = (HtmlElement) iter.next();
-            if (element.getTagName().equalsIgnoreCase("font")) {
-                assertTrue(element.getAttributeValue("color").equals("RED"));
+            if (element.getTagName().equalsIgnoreCase("span")) {
+                testFailed = true;
+                assertTrue(element.getAttributeValue("style").startsWith("color: red;"));
                 assertTrue(element.asText().trim().startsWith("Validation Error"));
             }
         }  
+        // make sure validation error occurred
+        assertTrue(testFailed == true);
+        testFailed= false;
         
         guessForm = (HtmlForm) failed.getAllForms().get(0);
         assertTrue(guessForm != null);
@@ -178,11 +183,14 @@ public class TestMapping extends HtmlUnitTestCase {
         assertTrue(failed.getTitleText().equals("Hello"));
         for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();) {
             HtmlElement element = (HtmlElement) iter.next();
-            if (element.getTagName().equalsIgnoreCase("font")) {
-                assertTrue(element.getAttributeValue("color").equals("RED"));
-                assertTrue(element.asText().trim().startsWith("Validation Error:"));
+            if (element.getTagName().equalsIgnoreCase("span")) {
+                testFailed = true;
+                assertTrue(element.getAttributeValue("style").startsWith("color: red;"));
+                assertTrue(element.asText().trim().startsWith("Validation Error"));
             }
         }  
+        // make sure validation error occurred
+        assertTrue(testFailed == true);
         
     }
     

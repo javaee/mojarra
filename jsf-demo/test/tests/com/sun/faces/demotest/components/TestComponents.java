@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponents.java,v 1.11 2003/10/23 20:37:32 eburns Exp $
+ * $Id: TestComponents.java,v 1.12 2003/12/19 23:59:57 jvisvanathan Exp $
  */
 
 /*
@@ -88,7 +88,6 @@ public class TestComponents extends HtmlUnitTestCase {
     }
 
     public void testResultSet() throws Exception {
-	/********************* PENDING(visvan): uncomment this
 	HtmlPage page = accessAppAndGetPage("result-set.jsf");
 	HtmlAnchor anchor = null;
 	assertNotNull(page);
@@ -99,7 +98,6 @@ public class TestComponents extends HtmlUnitTestCase {
 	page = executeResultSet(page, "10", "-2");
 	//stay on same page
 	page = executeResultSet(page, "10", "10");
-	***********************/
     }
 
     public void testTabbedPane() throws Exception {
@@ -209,16 +207,15 @@ public class TestComponents extends HtmlUnitTestCase {
 	HtmlForm form = (HtmlForm) page.getAllForms().get(0);     
 	assertNotNull(form);
 	HtmlHiddenInput hidden1, hidden2 = null;
-
 	// verify that clicking on the <newListNum> link causes the
 	// the correct current page display.
 	// simulate the link being clicked
 
-	hidden1 = (HtmlHiddenInput) form.getInputByName("_id1:_id2_curPage");
+	hidden1 = (HtmlHiddenInput) form.getInputByName("_id0:_id9_curPage");
 	assertNotNull(hidden1);
 	hidden1.setValueAttribute(currentListNum);
 
-	hidden2 = (HtmlHiddenInput) form.getInputByName("_id1:_id2_action");
+	hidden2 = (HtmlHiddenInput) form.getInputByName("_id0:_id9_action");
 	assertNotNull(hidden2);
 	hidden2.setValueAttribute(newListNum);
 	page = (HtmlPage) form.submit();

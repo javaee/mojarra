@@ -1,5 +1,5 @@
 /*
- * $Id: TestGuessNumber.java,v 1.7 2003/12/17 15:20:15 rkitain Exp $
+ * $Id: TestGuessNumber.java,v 1.8 2003/12/19 23:59:58 jvisvanathan Exp $
  */
 
 /*
@@ -109,6 +109,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
      * to the form for guessing duke's number
      */
     public void testGuessNumberNullInput() throws Exception {
+        int numberFound = 0;
         HtmlPage greetingPage = accessAppAndGetGreetingJSP();
         HtmlForm guessForm = (HtmlForm) greetingPage.getAllForms().get(0);
         assertTrue(guessForm != null);              
@@ -118,14 +119,14 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         
         for (Iterator iter = resultPage.getAllHtmlChildElements(); iter.hasNext(); ) {
             HtmlElement element = (HtmlElement) iter.next();
-            if (element.getTagName().equalsIgnoreCase("h2")) {
-                if (element.getTagName().equalsIgnoreCase("font")) {
-                    assertTrue(element.getAttributeValue("color").equals("RED"));
-                    assertTrue(element.asText().trim().equals(
-                                    "Conversion Error setting value '' for 'UserNumberBean.userNumber'."));
-                }                
+            if (element.asText().trim().equals("Sorry, null is incorrect.")) {
+                numberFound++;
+                System.out.println("Incorrect guess 'null'.");
+                break;
             }
         }        
+        // mkae sure error was encountered.
+        assertTrue(numberFound == 1);
     }
     
     /* 
@@ -133,6 +134,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
      * the specified range of 0 and 10.
      */ 
     public void testGuessNumberInvalidInputRange() throws Exception {
+        boolean testFailed = false;
         HtmlPage greetingPage = accessAppAndGetGreetingJSP();
         HtmlForm guessForm = (HtmlForm) greetingPage.getAllForms().get(0);
         assertTrue(guessForm != null);
@@ -140,18 +142,22 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         HtmlTextInput input = (HtmlTextInput) guessForm.getInputByName("helloForm" + NamingContainer.SEPARATOR_CHAR + "userNo");
         assertTrue(input != null);
 
-        input.setValueAttribute(Integer.toString(-1));
+        input.setValueAttribute(Integer.toString(-1234));
         
         HtmlPage failed = (HtmlPage) guessForm.submit("helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
         for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();) {
             HtmlElement element = (HtmlElement) iter.next();
-            if (element.getTagName().equalsIgnoreCase("font")) {
-                assertTrue(element.getAttributeValue("color").equals("RED"));
+            if (element.getTagName().equalsIgnoreCase("span")) {
+                testFailed = true;
+                assertTrue(element.getAttributeValue("style").startsWith("color: red;"));
                 assertTrue(element.asText().trim().startsWith("Validation Error"));
             }
         }  
+        // make sure validation error occurred
+        assertTrue(testFailed == true);
+        testFailed= false;
         
         guessForm = (HtmlForm) failed.getAllForms().get(0);
         assertTrue(guessForm != null);
@@ -166,11 +172,14 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         assertTrue(failed.getTitleText().equals("Hello"));
         for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();) {
             HtmlElement element = (HtmlElement) iter.next();
-            if (element.getTagName().equalsIgnoreCase("font")) {
-                assertTrue(element.getAttributeValue("color").equals("RED"));
-                assertTrue(element.asText().trim().startsWith("Validation Error:"));
+            if (element.getTagName().equalsIgnoreCase("span")) {
+                testFailed = true;
+                assertTrue(element.getAttributeValue("style").startsWith("color: red;"));
+                assertTrue(element.asText().trim().startsWith("Validation Error"));
             }
         }  
+        // make sure validation error occurred
+        assertTrue(testFailed == true);
         
     }
     
