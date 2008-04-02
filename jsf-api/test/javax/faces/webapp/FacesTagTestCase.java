@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTagTestCase.java,v 1.5 2003/04/29 18:52:03 eburns Exp $
+ * $Id: FacesTagTestCase.java,v 1.6 2003/05/02 04:23:46 craigmcc Exp $
  */
 
 /*
@@ -145,16 +145,13 @@ public class FacesTagTestCase extends TestCase {
         configure("C1", "C2", true, false);
 
         render();
-        assertEquals("/bROOT/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA/eROOT", text());
-	System.out.println("1 tree: " + tree()); System.out.flush();
-        assertEquals("//ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
         reset();
         render();
-	System.out.println("1 text: " + text());
-        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA", text());
-	System.out.println("1 tree: " + tree()); System.out.flush();
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -167,18 +164,14 @@ public class FacesTagTestCase extends TestCase {
         configure(null, null, true, false);
 
         render();
-        assertEquals("/bROOT/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA/eROOT", 
-		     text());
-	System.out.println("2 tree: " + tree()); System.out.flush();
-        assertEquals("//ROOT/A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-	System.out.println("2 text: " + text());
-        assertEquals("/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA", text());
-	System.out.println("2 tree: " + tree()); System.out.flush();
-        assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -191,18 +184,14 @@ public class FacesTagTestCase extends TestCase {
         configure(null, "C2", true, false);
 
         render();
-        assertEquals("/bROOT/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA/eROOT", 
-		     text());
-	System.out.println("3 tree: " + tree()); System.out.flush();
-        assertEquals("//ROOT/A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-	System.out.println("3 text: " + text());
-        assertEquals("/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA", text());
-	System.out.println("3 tree: " + tree()); System.out.flush();
-        assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -215,18 +204,14 @@ public class FacesTagTestCase extends TestCase {
         configure("C1", null, true, false);
 
         render();
-        assertEquals("/bROOT/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA/eROOT",
-		     text());
-	System.out.println("4 tree: " + tree()); System.out.flush();
-        assertEquals("//ROOT/A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-	System.out.println("4 text: " + text());
-        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA", text());
-	System.out.println("4 tree: " + tree()); System.out.flush();
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -256,18 +241,14 @@ public class FacesTagTestCase extends TestCase {
         configure("C1", "C2", false, false);
 
         render();
-        assertEquals("/bROOT/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA/eROOT", 
-		     text());
-	System.out.println("5 tree: " + tree()); System.out.flush();
-        assertEquals("//ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-	System.out.println("5 text: " + text());
-        assertEquals("/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA", text());
-	System.out.println("5 tree: " + tree()); System.out.flush();
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -279,17 +260,14 @@ public class FacesTagTestCase extends TestCase {
         configure("C1", "C2", true, true);
 
         render();
-        assertEquals("/bROOT/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA/eROOT", text());
-	System.out.println("6 tree: " + tree()); System.out.flush();
-        assertEquals("//ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-	System.out.println("6 text: " + text());
-        assertEquals("/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA", text());
-	System.out.println("6 tree: " + tree()); System.out.flush();
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/BROOT/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA/EROOT", text());
+        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -301,16 +279,13 @@ public class FacesTagTestCase extends TestCase {
         add(null, new TestTag("A", "a"));
 
         render();
-        assertEquals("/bROOT/bA/eA/eROOT", text());
-	System.out.println("7 tree: " + tree()); System.out.flush();
-        assertEquals("//ROOT/A-a", tree());
+        assertEquals("/BROOT/bA/eA/EROOT", text());
+        assertEquals("/ROOT/A-a", tree());
 
         reset();
         render();
-	System.out.println("7 text: " + text());
-        assertEquals("/bA/eA", text());
-	System.out.println("7 tree: " + tree()); System.out.flush();
-        assertEquals("//A-a", tree());
+        assertEquals("/BROOT/bA/eA/EROOT", text());
+        assertEquals("/ROOT/A-a", tree());
 
     }
 
@@ -321,16 +296,13 @@ public class FacesTagTestCase extends TestCase {
         add(null, new TestTag(null, "a"));
 
         render();
-        assertEquals("/bROOT/b/e/eROOT", text());
-	System.out.println("8 tree: " + tree()); System.out.flush();
-        assertEquals("//ROOT/-a", tree());
+        assertEquals("/BROOT/b/e/EROOT", text());
+        assertEquals("/ROOT/-a", tree());
 
         reset();
         render();
-	System.out.println("8 text: " + text());
-        assertEquals("/b/e", text());
-	System.out.println("8 tree: " + tree()); System.out.flush();
-        assertEquals("//-a", tree());
+        assertEquals("/BROOT/b/e/EROOT", text());
+        assertEquals("/ROOT/-a", tree());
 
     }
 
