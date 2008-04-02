@@ -12,7 +12,7 @@
 
   <property name="Name" value="JavaServer Faces RI"/>
   <property name="name" value="jsf-ri"/>
-  <property name="version" value="20030408"/>
+  <property name="version" value="20030519"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -219,13 +219,26 @@
   <target name="all" depends="clean,prepare,compile,build.basic.war"
    description="Clean and compile all components"/>
 
+  <target name="copydocs" 
+          description="Copy necessary files from docs directory to dist.home">
+    <mkdir dir="${dist.home}"/>
+    <mkdir dir="${dist.home}/docs"/>
+    <mkdir dir="${dist.home}/docs/style"/>
+    <copy todir="${dist.home}/docs">
+      <fileset dir="${basedir}/docs"
+               includes="index.html,samples.html,ReleaseNotes.html"/>
+    </copy>
+    <copy todir="${dist.home}/docs/style">
+      <fileset dir="${basedir}/docs/style" includes="default.css"/>
+    </copy>
+  </target>
+
   <target name="prepare.dist" depends="jars">
     <mkdir dir="${dist.home}"/>
     <mkdir dir="${dist.home}/samples"/>
 
     <echo> Handle the top level files </echo>
     <copy file="README" todir="${dist.home}"/>
-    <copy file="ReleaseNotes.html" todir="${dist.home}"/>
     <copy file="LICENSE.html" todir="${dist.home}"/>
     <copy file="LICENSE-APACHE.txt" todir="${dist.home}"/>
     <copy file="LICENSE-MOZILLA.txt" todir="${dist.home}"/>
@@ -238,6 +251,8 @@
     <copy todir="${dist.home}/javadocs">
       <fileset dir="${jsf.api.home}/build/javadocs"/>
     </copy>
+
+    <antcall target="copydocs"/>
    </target>
 
    
