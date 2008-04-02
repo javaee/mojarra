@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewFromPage.java,v 1.1 2003/08/22 16:49:32 eburns Exp $
+ * $Id: TestRestoreViewFromPage.java,v 1.2 2003/08/22 19:03:10 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.lifecycle.Phase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewFromPage.java,v 1.1 2003/08/22 16:49:32 eburns Exp $
+ * @version $Id: TestRestoreViewFromPage.java,v 1.2 2003/08/22 19:03:10 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,7 +124,7 @@ public void testRestoreViewFromPage()
     try {
         FileOutputStream os = new FileOutputStream(RESTORE_VIEW_OUTPUT_FILE);
         PrintStream ps = new PrintStream(os);
-        com.sun.faces.util.DebugUtil.printView(getFacesContext().getViewRoot(), ps );
+        com.sun.faces.util.DebugUtil.printTree(getFacesContext().getViewRoot(), ps );
         
         List ignoreList = new ArrayList();
 	for (int i = 0; i < ignore.length; i++) {
