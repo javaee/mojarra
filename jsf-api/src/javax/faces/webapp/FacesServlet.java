@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.15 2003/06/26 17:51:21 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.16 2003/10/10 14:31:53 eburns Exp $
  */
 
 /*
@@ -111,6 +111,11 @@ public final class FacesServlet implements Servlet {
 
     /**
      * <p>Acquire the factory instances we will require.</p>
+     *
+     * @exception ServletException if, for any reason, the startup of
+     * this Faces application failed.  This includes errors in the
+     * config file that is parsed before or during the processing of
+     * this <code>init()</code> method.
      */
     public void init(ServletConfig servletConfig) throws ServletException {
 
