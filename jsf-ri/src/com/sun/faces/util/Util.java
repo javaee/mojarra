@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.59 2003/05/04 21:39:44 horwat Exp $
+ * $Id: Util.java,v 1.60 2003/05/05 15:20:42 rkitain Exp $
  */
 
 /*
@@ -41,7 +41,6 @@ import javax.faces.component.SelectItem;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.context.MessageResourcesImpl;
-import com.sun.faces.application.NavigationConfig;
 import javax.faces.context.FacesContext;
 
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.59 2003/05/04 21:39:44 horwat Exp $
+ * @version $Id: Util.java,v 1.60 2003/05/05 15:20:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -438,9 +437,6 @@ private Util()
 	context.setAttribute(RIConstants.DEFAULT_RENDER_KIT, 
 			     defaultRenderKit);
 
-	// PENDING(rogerk): need a cleaner way to do this
-	context.setAttribute(RIConstants.NAVIGATION_CONFIG_ATTR, 
-			     new NavigationConfig(context));
 	context.setAttribute(RIConstants.ONE_TIME_INITIALIZATION_ATTR,
 			     RIConstants.ONE_TIME_INITIALIZATION_ATTR);
     }
