@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.10 2003/08/28 21:08:59 craigmcc Exp $
+ * $Id: MockApplication.java,v 1.11 2003/09/04 03:56:44 eburns Exp $
  */
 
 /*
@@ -49,11 +49,12 @@ public class MockApplication extends Application {
 
 
     private ActionListener actionListener = null;
+    private static boolean processActionCalled = false;
     public ActionListener getActionListener() {
 	if (null == actionListener) {
 	    actionListener = new ActionListener() {
 		    public void processAction(ActionEvent e) {
-			throw new UnsupportedOperationException();
+			processActionCalled = true;
 		    }
 		    public PhaseId getPhaseId() {
 			return PhaseId.INVOKE_APPLICATION;
@@ -66,17 +67,14 @@ public class MockApplication extends Application {
 			    return false;
 			}
 			ActionListener other = (ActionListener) otherObj;
-			boolean exceptionThrown = false;
 			if (other.getPhaseId() != this.getPhaseId()) {
 			    return false;
 			}
-			try {
-			    other.processAction(null);
-			}
-			catch (UnsupportedOperationException e) {
-			    exceptionThrown = true;
-			}
-			return exceptionThrown;
+			processActionCalled = false;
+			other.processAction(null);
+			boolean result = processActionCalled;
+			processActionCalled = false;
+			return result;
 		    }
 		};
 	}

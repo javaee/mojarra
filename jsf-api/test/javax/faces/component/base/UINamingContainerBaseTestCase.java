@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainerBaseTestCase.java,v 1.3 2003/07/28 22:22:28 eburns Exp $
+ * $Id: UINamingContainerBaseTestCase.java,v 1.4 2003/09/04 03:56:43 eburns Exp $
  */
 
 /*
@@ -100,7 +100,7 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
 	// try invalid expressions
 	boolean exceptionThrown = false;
 	try {
-	    component.findComponent(".");
+	    component.findComponent("" + UIComponent.SEPARATOR_CHAR);
 	}
 	catch (IllegalArgumentException e) {
 	    exceptionThrown = true;
@@ -109,7 +109,7 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
 
 	exceptionThrown = false;
 	try {
-	    component.findComponent("containerOne.");
+	    component.findComponent("containerOne" + UIComponent.SEPARATOR_CHAR);
 	}
 	catch (IllegalArgumentException e) {
 	    exceptionThrown = true;
@@ -118,7 +118,10 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
 	
 	exceptionThrown = false;
 	try {
-	    component.findComponent("containerOne.containerTwo.");
+	    component.findComponent("containerOne" + 
+				    UIComponent.SEPARATOR_CHAR + 
+				    "containerTwo" + 
+				    UIComponent.SEPARATOR_CHAR);
 	}
 	catch (IllegalArgumentException e) {
 	    exceptionThrown = true;
@@ -127,7 +130,7 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
 
 	exceptionThrown = false;
 	try {
-	    component.findComponent("containerOne.containerTwo.containerThree.");
+	    component.findComponent("containerOne" + UIComponent.SEPARATOR_CHAR + "containerTwo" + UIComponent.SEPARATOR_CHAR + "containerThree" + UIComponent.SEPARATOR_CHAR);
 	}
 	catch (IllegalArgumentException e) {
 	    exceptionThrown = true;
@@ -137,7 +140,7 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
 	// Throw a non-NamingContainer in the middle
 	exceptionThrown = false;
 	try {
-	    component.findComponent("containerOne.leafOne.containerTwo");
+	    component.findComponent("containerOne" + UIComponent.SEPARATOR_CHAR + "leafOne" + UIComponent.SEPARATOR_CHAR + "containerTwo");
 	}
 	catch (IllegalArgumentException e) {
 	    exceptionThrown = true;
@@ -146,7 +149,7 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
 
 	exceptionThrown = false;
 	try {
-	    component.findComponent("containerTwo.containerOne");
+	    component.findComponent("containerTwo" + UIComponent.SEPARATOR_CHAR + "containerOne");
 	}
 	catch (IllegalArgumentException e) {
 	    exceptionThrown = true;
@@ -155,7 +158,7 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
 
 	exceptionThrown = false;
 	try {
-	    component.findComponent("containerOne.containerTwo.leafThree");
+	    component.findComponent("containerOne" + UIComponent.SEPARATOR_CHAR + "containerTwo" + UIComponent.SEPARATOR_CHAR + "leafThree");
 	}
 	catch (IllegalArgumentException e) {
 	    exceptionThrown = true;
@@ -199,17 +202,17 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
 	assertEquals("find containerOne", containerOne,
 		     component.findComponent("containerOne"));
 	assertEquals("find containerTwo", containerTwo,
-		     component.findComponent("containerOne.containerTwo"));
+		     component.findComponent("containerOne" + UIComponent.SEPARATOR_CHAR + "containerTwo"));
 	assertEquals("find containerThree", containerThree,
-		     component.findComponent("containerOne.containerTwo.containerThree"));
+		     component.findComponent("containerOne" + UIComponent.SEPARATOR_CHAR + "containerTwo" + UIComponent.SEPARATOR_CHAR + "containerThree"));
 
 	// Test the leaves are found
 	assertEquals("find leafOne", leafOne,
-		     component.findComponent("containerOne.leafOne"));
+		     component.findComponent("containerOne" + UIComponent.SEPARATOR_CHAR + "leafOne"));
 	assertEquals("find leafTwo", leafTwo,
-		     component.findComponent("containerOne.containerTwo.leafTwo"));
+		     component.findComponent("containerOne" + UIComponent.SEPARATOR_CHAR + "containerTwo" + UIComponent.SEPARATOR_CHAR + "leafTwo"));
 	assertEquals("find leafThree", leafThree,
-		     component.findComponent("containerOne.containerTwo.containerThree.leafThree"));
+		     component.findComponent("containerOne" + UIComponent.SEPARATOR_CHAR + "containerTwo" + UIComponent.SEPARATOR_CHAR + "containerThree" + UIComponent.SEPARATOR_CHAR + "leafThree"));
 
     }
 
@@ -247,82 +250,4 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
             (UINamingContainerBase) component;
 
     }
-
-    public void testStateHolder() {
-	UINamingContainerSub
-	    preSave = null,
-	    postSave = null;
-	Object state = null;
-	UIForm
-	    form1 = null,
-	    form2 = null;
-
-	// test namer with no names
-	preSave = new UINamingContainerSub();
-	preSave.setId("naming");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	state = preSave.getState(facesContext);
-	assertTrue(null != state);
-	
-	postSave = new UINamingContainerSub();
-	postSave.setId("naming");
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test namer with names
-	preSave = new UINamingContainerSub();
-	preSave.setId("naming");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	form1 = new UIFormBase();
-	form1.setId("form1");
-	form2 = new UIFormBase();
-	form2.setId("form2");
-	preSave.getChildren().add(form1);
-	preSave.getChildren().add(form2);
-	state = preSave.getState(facesContext);
-	assertTrue(null != state);
-	
-	postSave = new UINamingContainerSub();
-	postSave.setId("naming");
-	try {
-	    postSave.restoreState(facesContext, state);
-	    form1 = new UIFormBase();
-	    postSave.getChildren().add(form1);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-    }
-
-    protected boolean propertiesAreEqual(FacesContext context,
-					 UIComponent comp1,
-					 UIComponent comp2) {
-	UINamingContainerSub 
-	    name1 = (UINamingContainerSub) comp1,
-	    name2 = (UINamingContainerSub) comp2;
-	NamingContainerSupport
-	    container1, container2;
-	if (super.propertiesAreEqual(context, comp1, comp2)) {
-	    container1 = (NamingContainerSupport) name1.getNamingContainer();
-	    container2 = (NamingContainerSupport) name2.getNamingContainer();
-	    if (!container2.equals(container1)) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-    private class UINamingContainerSub extends UINamingContainerBase {
-	public NamingContainer getNamingContainer() {
-	    return namespace;
-	}
-    }
-
 }

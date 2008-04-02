@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.8 2003/08/26 17:54:13 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.9 2003/09/04 03:56:44 eburns Exp $
  */
 
 /*
@@ -50,8 +50,10 @@ public class MockViewHandler extends Object implements ViewHandler {
 		    public SerializedView getSerializedView(FacesContext context) {
 			return null;
 		    }
-		    public void saveView(FacesContext context, Reader content, 
-			SerializedView state) {}
+		    public Object saveView(FacesContext context, Object content, 
+			SerializedView state) {
+                        return null;
+                    }
 		    protected UIViewRoot restoreTreeStructure(FacesContext context, 
 							   String viewId) {
 			return null;
