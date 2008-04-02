@@ -1,5 +1,5 @@
 /*
- * $Id: TestListener.java,v 1.2 2003/09/25 23:21:49 craigmcc Exp $
+ * $Id: TestListener.java,v 1.3 2003/09/29 22:49:36 craigmcc Exp $
  */
 
 /*
@@ -17,6 +17,15 @@ import javax.faces.event.PhaseId;
 public class TestListener implements FacesListener {
 
 
+    public TestListener(String id, PhaseId phaseId,
+                        String fromId, String toId) {
+        this.id = id;
+        this.phaseId = phaseId;
+        this.fromId = fromId; // When an event with this id is received ...
+        this.toId = toId;     // queue an additional event with this id
+    }
+
+
     public TestListener(String id, PhaseId phaseId) {
         this.id = id;
         this.phaseId = phaseId;
@@ -28,8 +37,10 @@ public class TestListener implements FacesListener {
     }
 
 
+    private String fromId = null;
     private String id = null;
     private PhaseId phaseId = null;
+    private String toId = null;
 
 
     public String getId() {
@@ -46,6 +57,10 @@ public class TestListener implements FacesListener {
         }
         if (event.getId() != null) {
             trace(event.getId());
+            if (event.getId().equals(fromId)) {
+                event.getComponent().queueEvent
+                    (new TestEvent(event.getComponent(), toId));
+            }
         }
     }
 

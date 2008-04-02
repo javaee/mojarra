@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.3 2003/09/29 22:20:58 craigmcc Exp $
+ * $Id: UIViewRootTestCase.java,v 1.4 2003/09/29 22:49:36 craigmcc Exp $
  */
 
 /*
@@ -77,41 +77,28 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     // ------------------------------------------------- Individual Test Methods
 
 
-    // Test event broadcasting
-    /* PENDING(craigmcc) - ConcurrentModificationException on ArrayList/LinkedList
+    // Test event queuing and dequeuing during broadcasting
     public void testEventBroadcasting() {
 
-        // This test is intended to verify that we can actually
-        // modify the event queue (by removing and adding events)
-        // while an Iterator is running over it.  The test sort of
-        // cheats because it simulates the underlying algorithm
-        // using the same data structure.
-        List queue = new ArrayList();
-        StringBuffer results = new StringBuffer();
+        // Register a listener that will conditionally queue a new event
+        UIViewRoot root = new UIViewRoot();
+        root.addFacesListener
+            (new TestListener("t", PhaseId.APPLY_REQUEST_VALUES, "2", "4"));
+        TestListener.trace(null);
 
-        queue.add(new TestEvent(component, "1"));
-        queue.add(new TestEvent(component, "2"));
-        queue.add(new TestEvent(component, "3"));
-        queue.add(new TestEvent(component, "4"));
+        // Queue some events, including the trigger one
+        root.queueEvent(new TestEvent(root, "1"));
+        root.queueEvent(new TestEvent(root, "2"));
+        root.queueEvent(new TestEvent(root, "3"));
 
-        Iterator events = queue.iterator();
-        while (events.hasNext()) {
-            TestEvent event = (TestEvent) events.next();
-            results.append(event.getId());
-            if ("2".equals(event.getId())) {
-                results.append("R");
-                events.remove();
-            } else if ("3".equals(event.getId())) {
-                results.append("A");
-                queue.add(new TestEvent(component, "5"));
-            }
-        }
+        // Simulate the Apply Request Values phase
+        root.processDecodes(facesContext);
 
-        assertEquals("12R3A45", results.toString());
-        assertEquals(4, queue.size());
+        // Validate the results (expect 4th event to also be queued)
+        String expected = "/t/1/t/2/t/3/t/4";
+        assertEquals(expected, TestListener.trace());
 
     }
-    */
 
 
     // Test event queuing and broadcasting

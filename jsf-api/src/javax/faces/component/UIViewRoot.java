@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.4 2003/09/25 23:21:34 craigmcc Exp $
+ * $Id: UIViewRoot.java,v 1.5 2003/09/29 22:49:36 craigmcc Exp $
  */
 
 /*
@@ -127,7 +127,7 @@ public class UIViewRoot extends UIComponentBase implements NamingContainer {
      * instance is lazily instantiated.  This list is <strong>NOT</strong>
      * part of the state that is saved and restored for this component.</p>
      */
-    private transient List eventsList = null;
+    private transient List events = null;
 
 
     /**
@@ -147,10 +147,10 @@ public class UIViewRoot extends UIComponentBase implements NamingContainer {
             throw new NullPointerException();
         }
         // We are a UIViewRoot, so no need to check for the ISE
-        if (eventsList == null) {
-            eventsList = new ArrayList(5);
+        if (events == null) {
+            events = new ArrayList(5);
         }
-        eventsList.add(event);
+        events.add(event);
 
     }
 
@@ -163,23 +163,25 @@ public class UIViewRoot extends UIComponentBase implements NamingContainer {
      */
     private void broadcastEvents(FacesContext context, PhaseId phaseId) {
 
-        if (eventsList == null) {
+        if (events == null) {
             return;
         }
 
-        // PENDING(craigmcc) - confirm that we can modify the underlying
-        // list (removes and appends) for an ArrayList.
-        Iterator events = eventsList.iterator();
-        while (events.hasNext()) {
-            FacesEvent event = (FacesEvent) events.next();
+        // We cannot use an Iterator because we will get
+        // ConcurrentModificationException errors, so fake it
+        int cursor = 0;
+        while (cursor < events.size()) {
+            FacesEvent event = (FacesEvent) events.get(cursor);
             UIComponent source = event.getComponent();
             if (!source.broadcast(event, phaseId)) {
-                events.remove(); // Removes event from underlying List
+                events.remove(cursor); // Stay at current position
+            } else {
+                cursor++; // Advance to next event
             }
         }
 
-        if (eventsList.size() < 1) {
-            eventsList = null;
+        if (events.size() < 1) {
+            events = null;
         }
 
     }
