@@ -24,6 +24,11 @@
     <listener>
         <listener-class>components.renderkit.ComponentsSetupListener</listener-class>
     </listener>
+
+    <listener>
+        <listener-class>demo.model.ImageAreaSetup</listener-class>
+    </listener>
+
     
     <!-- Faces Servlet -->
     <servlet>

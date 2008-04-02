@@ -74,6 +74,23 @@ Faces technology.</p>
 
 </tr>
 
+<tr>
+
+<td>Image Map
+</td>
+
+<td><a href="ShowSource.jsp?filename=/imagemap.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
+
+<td><a href="ShowSource.jsp?filename=/src/"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
+
+<td><a href="faces/imagemap.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+</td>
+
+</tr>
+
+
 </table>
 
 </body>

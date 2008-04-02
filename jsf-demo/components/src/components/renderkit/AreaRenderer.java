@@ -51,6 +51,11 @@ import java.io.IOException;
 import components.components.UIArea;
 import components.model.ImageArea;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
 /**
  * This class converts the internal representation of a <code>UIArea</code>
  * component into the output stream associated with the response to a
@@ -103,6 +108,16 @@ public class AreaRenderer extends BaseRenderer {
             return;
         }
 
+        HttpServletRequest request =
+            (HttpServletRequest) context.getServletRequest();
+        HttpServletResponse response =
+            (HttpServletResponse) context.getServletResponse();
+        String contextPath = request.getContextPath();
+	String imagePath = null;
+        if ( !contextPath.endsWith("/")) {
+            contextPath = contextPath + "/";
+        }
+
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<area shape=\"");
         writer.write(ia.getShape());
@@ -114,11 +129,23 @@ public class AreaRenderer extends BaseRenderer {
 	writer.write("'; document.forms[0].submit()\"");
 	writer.write(" onmouseover=\"");
 	writer.write("document.forms[0].mapImage.src='");
-	writer.write((String) component.getAttribute("onmouseover"));
+	imagePath = (String) component.getAttribute("onmouseover");
+	if ('/' == imagePath.charAt(0)) {
+	    writer.write(imagePath);
+	}
+	else {
+	    writer.write(contextPath + imagePath);
+	}
 	writer.write("';\"");
 	writer.write(" onmouseout=\"");
 	writer.write("document.forms[0].mapImage.src='");
-	writer.write((String) component.getAttribute("onmouseout"));
+	imagePath = (String) component.getAttribute("onmouseout");
+	if ('/' == imagePath.charAt(0)) {
+	    writer.write(imagePath);
+	}
+	else {
+	    writer.write(contextPath + imagePath);
+	}
 	writer.write("';\"");
 	writer.write(" alt=\"");
 	writer.write(ia.getAlt());
