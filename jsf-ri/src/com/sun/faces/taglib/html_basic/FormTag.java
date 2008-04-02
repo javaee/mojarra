@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.33 2002/11/25 19:56:38 jvisvanathan Exp $
+ * $Id: FormTag.java,v 1.34 2003/02/04 20:54:19 visvan Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import javax.faces.FacesException;
 import com.sun.faces.util.Util;
 
 import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.RIConstants;
 
 /**
  *
@@ -31,7 +32,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FormTag.java,v 1.33 2002/11/25 19:56:38 jvisvanathan Exp $
+ * @version $Id: FormTag.java,v 1.34 2003/02/04 20:54:19 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -96,6 +97,20 @@ public FormTag()
 
 	if (null == form.getFormName()) {
 	    form.setFormName(getFormName());
+             // we set the bundle attribute on the root component here  
+             // so that we don't set it again during postback. 
+             // This cannot be done in FacesTag since this is specific
+             // to FormTag. Since formName is a required attribute,
+             // we can be sure that these statements will be executed
+             // the first time the tags are processed.
+            if ( getBundle() != null) { 
+                // set it as an attribute on the root component so that
+                // it is available to children and doesn't have to be repeated
+                // in every tag.
+                FacesContext context = FacesContext.getCurrentInstance();
+                UIComponent root = context.getTree().getRoot();
+                root.setAttribute(RIConstants.BUNDLE_ATTR, getBundle());
+            }
 	}
         // action, method, enctype, accept-charset, accept, target, onsubmit, onreset
         if (null == component.getAttribute("onsubmit") && getOnsubmit() != null ) {
@@ -127,6 +142,7 @@ public FormTag()
                 getFormClass() != null ) {
             component.setAttribute("formClass", getFormClass()); 
         }
+
     }
     
 //

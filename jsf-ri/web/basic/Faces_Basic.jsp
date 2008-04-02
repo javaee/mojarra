@@ -22,7 +22,7 @@
 
 
        <f:use_faces>  
-        <h:form formName="basicForm" >
+        <h:form formName="basicForm" bundle="basicBundle">
 
             <table> 
 
@@ -49,8 +49,7 @@
             </tr>
 
             <tr> 
-              <td> <h:output_text id="userLabel" key="usernameLabel" 
-                                      bundle="basicBundle"/> </td>
+              <td> <h:output_text id="userLabel" key="usernameLabel" /> </td>
               <td> 
                    <h:input_text id="userName" 
                                      modelReference="LoginBean.userName">
@@ -65,8 +64,7 @@
             </tr>
 
             <tr>
-               <td> <h:output_text id="pwdLabel" key="passwordLabel" 
-                                      bundle="basicBundle" /> </td>
+               <td> <h:output_text id="pwdLabel" key="passwordLabel" /> </td>
 
                <td> 
                     <h:input_secret id="password" > 
@@ -82,7 +80,7 @@
 
             <tr>
                <td> <h:output_text id="doubleLabel" 
-                            key="doubleLabel" bundle="basicBundle" /> </td>
+                            key="doubleLabel" /> </td>
 
                <td> 
 
@@ -100,7 +98,7 @@
 
             <tr>
                <td> <h:output_text id="intLabel" 
-                        key="intLabel" bundle="basicBundle" /> </td>
+                        key="intLabel" /> </td>
 
                <td> 
 
@@ -118,8 +116,7 @@
              </tr>
 
             <tr>
-               <td> <h:output_text id="stringLength" key="characterLabel" 
-                                      bundle="basicBundle" /> </td>
+               <td> <h:output_text id="stringLength" key="characterLabel" /> </td>
 
                <td> 
 
@@ -138,8 +135,7 @@
 
        
              <tr>
-                <td> <h:output_text id="addrLabel" key="addressLabel" 
-                                      bundle="basicBundle" /> </td>
+                <td> <h:output_text id="addrLabel" key="addressLabel" /> </td>
                 <td> <h:input_textarea rows="10" cols="10" 
                                                id="address" /> </td>
              </tr>
@@ -148,8 +144,7 @@
              <td> <h:selectboolean_checkbox rendered="true"
                        modelReference="LoginBean.validUser"/> 
                   <h:output_text id="checkLabel" 
-                                     key="validUserLabel"
-                                                bundle="basicBundle"/>
+                                     key="validUserLabel" />
 
                   </td>
                   <td> <h:output_text id="testvisible" value="This should not be visible"
@@ -168,8 +163,7 @@
 	      <h:command_hyperlink id="link" 
                   target="/faces/Basic_Thanks.jsp"
                   commandName="thankyoulink" label="Link to Thank You page"
-                                                key="linkLabel" 
-                                                bundle="basicBundle"/>
+                                                key="linkLabel" />
 
 	</TD>
 
@@ -297,8 +291,7 @@
       </TR>
       <TR>
         <TD><h:output_text id="graphicLabel1" value="Graphic Image (url From Resource Bundle): " /></TD>
-        <TD><h:graphic_image key="imageurl"
-                bundle="basicBundle" /></TD>
+        <TD><h:graphic_image key="imageurl" /></TD>
       </TR>
 
       <TR><TD><HR></HR></TD></TR>
@@ -331,7 +324,7 @@
       <TR>
         <TD><h:output_text id="buttonlabel4" value="Submit Button rendered with label from resource:" /> 
             <h:command_button type="submit" 
-                commandName="login" key="loginButton"  bundle="basicBundle">
+                commandName="login" key="loginButton" >
             </h:command_button>
         </TD>
       </TR>

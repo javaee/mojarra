@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.20 2003/02/04 01:17:42 edburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.21 2003/02/04 20:54:19 visvan Exp $
  */
 
 /*
@@ -221,18 +221,27 @@ public abstract class HtmlBasicRenderer extends Renderer {
     protected String getKeyAndLookupInBundle(FacesContext context,
 					     UIComponent component, 
 					     String keyAttr) throws MissingResourceException{
-	String key = null, bundleName = null, bundleAttr = "bundle";
+	String key = null, bundleName = null;
 	ResourceBundle bundle = null;
 
 	ParameterCheck.nonNull(context);
 	ParameterCheck.nonNull(component);
 	ParameterCheck.nonNull(keyAttr);
-	
+
+        key = (String) component.getAttribute(keyAttr);
+        bundleName = (String)component.getAttribute(RIConstants.BUNDLE_ATTR);
+
+        // if the bundleName is null for this component, it might have
+        // been set on the root component.
+        if ( bundleName == null ) {
+            UIComponent root = context.getTree().getRoot();
+            Assert.assert_it(root != null);
+            bundleName = (String)root.getAttribute(RIConstants.BUNDLE_ATTR);
+        }
 	// verify our component has the proper attributes for key and bundle.
-	if (null == (key = (String) component.getAttribute(keyAttr)) ||
-	    null == (bundleName = (String)component.getAttribute(bundleAttr))){
-	    throw new MissingResourceException(Util.getExceptionMessage(Util.MISSING_RESOURCE_ERROR_MESSAGE_ID),
-					       bundleName, key);
+	if (null == key || null == bundleName) {
+	    throw new MissingResourceException(Util.getExceptionMessage(
+                Util.MISSING_RESOURCE_ERROR_MESSAGE_ID),bundleName, key);
 	}
 	
 	// verify the required Class is loadable

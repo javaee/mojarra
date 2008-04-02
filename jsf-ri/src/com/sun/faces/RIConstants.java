@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.22 2003/01/21 23:23:13 rkitain Exp $
+ * $Id: RIConstants.java,v 1.23 2003/02/04 20:54:18 visvan Exp $
  */
 
 /*
@@ -102,5 +102,10 @@ public class RIConstants {
      * <p>Phase identifier for <em>Render Response</em>.</p>
      */
     public static final int RENDER_RESPONSE_PHASE = 50;    
+
+    /**
+     * <p>String identifer for <em>bundle attribute.</em>.</p>
+     */
+    public static final String BUNDLE_ATTR = "com.sun.faces.bundle";
 
 }
