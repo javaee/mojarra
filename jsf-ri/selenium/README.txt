@@ -1,5 +1,5 @@
 #
-# $Id: README.txt,v 1.2 2006/03/30 22:46:11 rlubke Exp $
+# $Id: README.txt,v 1.3 2006/03/30 23:23:16 rlubke Exp $
 #
 
 What is Selenium?  Here is a direct quote from the Selenium web site [1]:
@@ -43,7 +43,18 @@ How do I run the tests?
        * Load and run the tests in this order make sure the base URL
          is set to localhost:8080 or whatever is appropriate
            + shale-sql-browser.html
-         
+      - shale-usecases
+       * download the shale-usecases application from
+         http://struts.apache.org and install it on GlassFish
+       * From the browser, load the Selenium IDE
+       * Load and run the tests in this order make sure the base URL
+         is set to localhost:8080 or whatever is appropriate
+           + shale-usecases.html  
+       * NOTE:
+           + run the tests using 'walk' mode.  It seems the locale switch
+             causes the test to trip up when in 'run' mode
+           + this doesn't validate the remoting examples as they return XML
+             and it seems Selenium can't validate the text.
 TODO:
   - Add Selenium test cases for:
      * shale-sql-browser
