@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.4 2003/04/30 19:55:25 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.5 2003/04/30 23:28:12 rkitain Exp $
  */
 
 /*
@@ -211,9 +211,9 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
                 List list = cmp.getMapEntries();
                 for (int i=0;i<list.size();i++) {
                     cmpm = (ConfigManagedPropertyMap)list.get(i);
-                    assertTrue(cmpv.getValueCategory()==ConfigManagedBeanPropertyValue.VALUE ||
-                        cmpv.getValueCategory()==ConfigManagedBeanPropertyValue.VALUE_REF ||
-                        cmpv.getValueCategory()==ConfigManagedBeanPropertyValue.NULL_VALUE);
+                    assertTrue(cmpm.getValueCategory()==ConfigManagedPropertyMap.VALUE ||
+                        cmpm.getValueCategory()==ConfigManagedPropertyMap.VALUE_REF ||
+                        cmpm.getValueCategory()==ConfigManagedPropertyMap.NULL_VALUE);
                 }
             } else {
                 cmpv = (ConfigManagedBeanPropertyValue)cmp.getValue();
