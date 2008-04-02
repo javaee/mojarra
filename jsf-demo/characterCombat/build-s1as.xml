@@ -1,0 +1,173 @@
+<project name="characterCombat" default="build" basedir=".">
+ 
+  <property file="build.properties"/>                <!-- this demo local -->
+  <property file="${user.home}/build.properties"/>   <!-- user local      -->
+
+  <!-- Configure the context path for this application -->
+  <property name="context.path" value="/jsf-characterCombat"/>
+  <property name="example" value="jsf-characterCombat" />
+  <property name="build"   value="${basedir}/build" />
+
+  <path id="classpath">
+    <pathelement location="${commons-beanutils.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-digester.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${jsf-api.jar}"/>
+    <pathelement location="${jsf-impl.jar}"/>
+    <pathelement location="${jstl.jar}"/>
+    <pathelement location="${servlet.jar}"/>
+    <pathelement location="${build}/${example}/WEB-INF/classes"/>
+  </path>
+
+  <target name="init" depends="check.changes,verifyPreconditions">
+    <tstamp/>        
+  </target>
+    
+  <target name="check.changes">
+    <uptodate property="skip.build"
+              targetfile="${build}/last-build">
+      <srcfiles dir="${basedir}">
+        <include name="src/**/*.*"/>
+        <include name="conf/**/*.*"/>
+        <include name="web/**/*.*"/>
+      </srcfiles>
+    </uptodate>
+  </target>
+
+  <target name="clean" >
+    <delete dir="${build}" />
+    <delete dir="${context.path}" />
+  </target>
+
+  <target name="verifyPreconditions" unless="skip.build">
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${servlet.jar}"/>
+       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile characterCombat.  Please define the property servlet.jar in your build.properties file and ensure that the file exists."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-beanutils.jar}"/>
+       <param name="fail.message" value="${commons-beanutils.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-digester.jar}"/>
+       <param name="fail.message" value="${commons-digester.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-logging.jar}"/>
+       <param name="fail.message" value="${commons-logging.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-collections.jar}"/>
+       <param name="fail.message" value="${commons-collections.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf-api.jar}"/>
+       <param name="fail.message" value="${jsf-api.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf-impl.jar}"/>
+       <param name="fail.message" value="${jsf-impl.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${standard.jar}"/>
+       <param name="fail.message" value="${standard.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jstl.jar}"/>
+       <param name="fail.message" value="${jstl.jar} must exist."/>
+    </antcall>
+
+  </target>
+
+  <target name="prepare" depends="init"
+          description="Create build directories.">
+    <mkdir dir="${build}/${example}" />
+    <mkdir dir="${build}/${example}/WEB-INF" />
+    <mkdir dir="${build}/${example}/WEB-INF/classes" />
+    <mkdir dir="${build}/${example}/WEB-INF/lib" />
+  </target>
+
+  <target name="copyJars" depends="prepare" if="build.standalone">
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-logging.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-digester.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-collections.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-api.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-impl.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jstl.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${standard.jar}" />
+  </target>
+ 
+  <!-- Executable Targets -->
+
+  <target name="build" unless="skip.build" depends="copyJars" 
+          description="Compile Java files and copy static files." >
+    <touch file="${build}/last-build"/>
+    <javac srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
+      <include name="**/*.java" />
+      <classpath refid="classpath"/>
+    </javac>
+    <copy todir="${build}/${example}/WEB-INF">
+      <fileset dir="web/WEB-INF">
+        <include name="*.xml" />
+      </fileset>
+    </copy>
+
+    <copy todir="${build}/${example}/">
+      <fileset dir="web">
+        <include name="*.css" />
+        <include name="*.html" />
+        <include name="*.gif" />
+        <include name="*.jpg" />
+        <include name="*.jsp" />
+        <include name="*.xml" />
+      </fileset>
+    </copy>
+    <copy todir="${build}/${example}/WEB-INF/classes/${example}" >
+      <fileset dir="web" >
+         <include name="*properties"/>
+      </fileset>
+    </copy>
+
+    <jar jarfile="${example}.war" basedir="${build}/${example}"/>
+    <copy todir="${build}" file="${example}.war" />
+    <delete file="${example}.war" />
+  </target>	 
+
+  <target name="checkRequiredFile">
+    <available file="${file}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.fail"/>
+  </target>
+
+  <target name="checkRequired.fail" unless="requirement.satisfied">
+    <fail message="${fail.message}"/>
+  </target>
+
+  <target name="props"
+          description="Display resolved properties">
+
+    <echo message="commons-beanutils.jar =  	${commons-beanutils.jar}"/>
+    <echo message="commons-collections.jar =	${commons-collections.jar}"/>
+    <echo message="commons-digester.jar =  	${commons-digester.jar}"/>
+    <echo message="commons-logging.jar =  	${commons-logging.jar}"/>
+    <echo message="jsf-api.jar =	  	${jsf-api.jar}"/>
+    <echo message="jsf-impl.jar =		${jsf-impl.jar}"/>
+    <echo message="jstl.jar =			${jstl.jar}"/>
+    <echo message="servlet.jar =		${servlet.jar}"/>
+    <echo message="standard.jar =	 	${standard.jar}"/>
+
+  </target>
+
+
+</project>
+

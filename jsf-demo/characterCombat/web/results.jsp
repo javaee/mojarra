@@ -26,6 +26,11 @@
      !
   </p>
 
+  <h:form>
+    <h:commandButton action="#{modelBean.select}" value="Home Page"/>
+  </h:form>
+
+
 </body>
 </html>
 </f:view>

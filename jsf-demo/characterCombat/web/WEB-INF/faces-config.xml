@@ -4,8 +4,6 @@
  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-<!-- The faces-config for the standard renderkit demo -->
-
 <faces-config>
 
   <managed-bean>
@@ -50,5 +48,16 @@
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/results.jsp</from-view-id>
+    <navigation-case>
+      <description>
+        If the action returns "success", goto
+        results.jsp
+      </description>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/main.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
 
 </faces-config>
