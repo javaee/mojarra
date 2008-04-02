@@ -1,5 +1,5 @@
 /*
- * $Id: ElTagParserImpl.java,v 1.6 2003/11/08 00:03:55 horwat Exp $
+ * $Id: ElTagParserImpl.java,v 1.7 2003/11/12 04:44:00 horwat Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package com.sun.faces.taglib.jsf_core;
 
 import java.io.IOException;
-import javax.faces.application.Application;
 import javax.faces.el.ReferenceSyntaxException;
 import com.sun.faces.RIConstants;
 import com.sun.faces.el.impl.ElException;
@@ -122,10 +121,19 @@ public class ElTagParserImpl implements TagParser {
             else if (qname.equals(JSF_COMPONENTREF_QN) ||
                      qname.equals(JSF_VALUEREF_QN) ||
                      qname.equals(JSF_ACTIONREF_QN)) {
+                ExpressionEvaluator evaluator = 
+                    Util.getExpressionEvaluator(RIConstants.FACES_RE_PARSER);
+                ExpressionInfo exprInfo = new ExpressionInfo();
                 try {
-                    Application.getCurrentInstance().
-                        getValueBinding(value);
-                } catch (Throwable ex) {
+                    value = Util.stripBracketsIfNecessary(value);
+                } catch (ReferenceSyntaxException rse) {
+                    failed = true;
+                    buildErrorMessage(qn, qname, value);
+                }
+                exprInfo.setExpressionString(value);
+                try {
+                    evaluator.parseExpression(exprInfo);
+                } catch (ElException ex) {
                     failed = true;
                     buildErrorMessage(qn, qname, value);
                 }
