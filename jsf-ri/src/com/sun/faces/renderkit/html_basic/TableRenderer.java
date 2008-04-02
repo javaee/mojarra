@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.7 2003/10/20 20:30:31 craigmcc Exp $
+ * $Id: TableRenderer.java,v 1.8 2003/10/23 06:12:47 craigmcc Exp $
  */
 
 /*
@@ -48,14 +48,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -162,36 +160,24 @@ public class TableRenderer extends HtmlBasicRenderer {
         writer.writeText("\n", null);
 
 	// Iterate over the rows of data that are provided
-	Map requestMap = context.getExternalContext().getRequestMap();
-	String var = data.getVar();
-	Object old = null;
-	if (var != null) {
-	    old = requestMap.get(var);
-	}
-	int first = data.getFirst(); // Zero relative
-	int rows = data.getRows();
+	int processed = 0;
+        int rowIndex = data.getFirst() - 1;
+        int rows = data.getRows();
         int rowStyle = 0;
-	int rowCount = data.getRowCount();
-	int showCount = 0;
+
 	writer.startElement("tbody", component);
-        for (int i = first; i <= rowCount; i++) {
+        while (true) {
 
 	    // Have we displayed the requested number of rows?
-	    if ((rows > 0) && (++showCount > rows)) {
+	    if ((rows > 0) && (++processed > rows)) {
 		break;
 	    }
-
-            // Have we displayed the last row that exists?
-            if (i >= rowCount) {
-                break;
+            // Select the current row
+            try {
+                data.setRowIndex(++rowIndex);
+            } catch (IndexOutOfBoundsException e) {
+                break; // Scrolled past the last row
             }
-
-	    // Expose the current row in the specified request attribute
-	    data.setRowIndex(i);
-	    Object row = data.getRowData();
-	    if (var != null) {
-		requestMap.put(var, row);
-	    }
 
 	    // Render the beginning of this row
             writer.startElement("tr", data);
@@ -248,13 +234,6 @@ public class TableRenderer extends HtmlBasicRenderer {
 
 	// Clean up after ourselves
 	data.setRowIndex(-1);
-	if (var != null) {
-	    if (old != null) {
-		requestMap.put(var, old);
-	    } else {
-		requestMap.remove(var);
-	    }
-	}
 
 	// Render the table footer row
 	// PENDING(craigmcc) - what if some or all children do not have one?
