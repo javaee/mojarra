@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.4 2003/09/30 12:48:45 eburns Exp $
+ * $Id: ConfigParser.java,v 1.5 2003/09/30 13:52:30 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ import java.io.Reader;
 import java.io.IOException;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
+import org.xml.sax.EntityResolver;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -140,6 +141,18 @@ class ConfigParser extends Object {
     //
     // General Methods
     //
+
+    EntityResolver getEntityResolver() {
+	return digester.getEntityResolver();
+    }
+
+    void setEntityResolver(EntityResolver newResolver) {
+	digester.setEntityResolver(newResolver);
+    }
+
+    EntityResolver getDefaultEntityResolver() {
+	return digester;
+    }
 
     void parseConfig(Reader input) throws IOException, SAXException {        
 	digester.clear();

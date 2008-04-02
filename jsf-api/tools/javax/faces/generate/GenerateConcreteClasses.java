@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.5 2003/09/30 12:48:46 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.6 2003/09/30 13:52:31 eburns Exp $
  */
 
 /*
@@ -264,6 +264,7 @@ public class GenerateConcreteClasses extends GenerateBase {
 
     public static void main(String [] args) {
 	String 
+	    absolutePathToEntityDeclarationsFile = null,
 	    absolutePathToTopMatterFile = null,
 	    absolutePathToConfigFile = null,
 	    absolutePathToOutputDir = null;
@@ -277,6 +278,9 @@ public class GenerateConcreteClasses extends GenerateBase {
 		else if (args[i].equals("-f")) {
 		    absolutePathToConfigFile = args[++i];
 		}
+		else if (args[i].equals("-e")) {
+		    absolutePathToEntityDeclarationsFile = args[++i];
+		}
 		else if (args[i].equals("-c")) {
 		    absolutePathToTopMatterFile = args[++i];
 		}
@@ -289,8 +293,8 @@ public class GenerateConcreteClasses extends GenerateBase {
 
 	// generate the classes
 	GenerateConcreteClasses me = new GenerateConcreteClasses();
-	me.init(absolutePathToConfigFile, absolutePathToTopMatterFile,
-		absolutePathToOutputDir);
+	me.init(absolutePathToConfigFile, absolutePathToEntityDeclarationsFile,
+		absolutePathToTopMatterFile, absolutePathToOutputDir);
 	me.generateClasses();
     }
 

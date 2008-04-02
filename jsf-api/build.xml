@@ -114,7 +114,7 @@
          Build the API code
        ===================================================================
   -->
-  <target name="build" depends="prepare,prepare.generate">
+  <target name="build" depends="prepare,generate">
 
     <javac destdir="${build.classes}"
            debug="${debug}"
@@ -139,7 +139,8 @@
 
   </target>
 
-  <target name="tools" depends="prepare.generate">
+  <target name="tools" depends="prepare.generate" 
+                       if="standard-html-renderkit-impl">
 
     <javac srcdir="${tools.dir}"
            destdir="${build.classes}"
@@ -158,7 +159,8 @@
 
   </target>
 
-  <target name="generate" depends="tools">
+  <target name="generate" depends="tools" 
+          if="standard-html-renderkit-impl">
 
     <copy todir="${build.classes}" 
           file="${basedir}/doc/web-facesconfig_1_0.dtd"/>
@@ -169,6 +171,7 @@
       <classpath refid="compile.classpath" />
       <classpath refid="test.classpath" />
       <arg line="-f ${basedir}/doc/standard-html-renderkit.xml"/>
+      <arg line="-e ${standard-html-renderkit-impl}"/>
       <arg line="-d ${build.generate}"/>
       <arg line="-c ${basedir}/COPYRIGHT"/>
   </java>

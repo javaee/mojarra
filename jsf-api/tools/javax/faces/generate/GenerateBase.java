@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateBase.java,v 1.4 2003/09/30 12:48:46 eburns Exp $
+ * $Id: GenerateBase.java,v 1.5 2003/09/30 13:52:30 eburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
+import org.xml.sax.EntityResolver;
 
 import org.apache.commons.logging.Log;
 
@@ -74,16 +75,25 @@ public abstract class GenerateBase extends Object {
      */
 			
     protected void init(String absolutePathToConfigFile,
+			String absolutePathToEntityDeclarationsFile,
 			String absolutePathToTopMatterFile,
 			String absolutePathToOutputDir) throws IllegalStateException {
 	// parse the config file
-	File configFile = null;
-	URL configUrl = null;
+	File 
+	    entityFile = null,
+	    configFile = null;
+	URL 
+	    entityUrl = null,
+	    configUrl = null;
+
 	BufferedReader topMatterReader = null;
 	
 	try {
 	    configFile = new File(absolutePathToConfigFile);
 	    configUrl = configFile.toURL();
+	    entityFile = new File(absolutePathToEntityDeclarationsFile);
+	    entityUrl = entityFile.toURL();
+
 	    if (null != absolutePathToTopMatterFile) {
 		topMatterReader = 
 		    new BufferedReader(new FileReader(absolutePathToTopMatterFile));
@@ -130,7 +140,49 @@ public abstract class GenerateBase extends Object {
 	    topMatter = topMatterBuf.toString();
 	}	
 
+	final URL finalEntityUrl = entityUrl;
 	parser = new ConfigParser();
+	parser.setEntityResolver(new EntityResolver() {
+		// Get a hook into the entity resolution system, so we
+		// can resolve the standard-html-renderkit-impl entity.
+		public InputSource resolveEntity(String publicId,
+						 String systemId) throws SAXException, IOException {
+		    InputSource result = null;
+		    EntityResolver defaultResolver = 
+			GenerateBase.this.parser.getDefaultEntityResolver();
+		    int lastSlash = -1;
+		    String entity = null;
+		    boolean tryDefaultResolver = true;
+		    
+		    // see if we need to resolve this entity on our own.
+		    if (null != systemId &&
+			(-1 != (lastSlash = systemId.lastIndexOf("/")))) {
+			entity = systemId.substring(lastSlash + 1);
+			// if the requested systemId is contained in our
+			// finalEntityUrl
+			if (-1 != 
+			    finalEntityUrl.toExternalForm().indexOf(entity)) {
+			    // build an input source around it.
+			    InputStream localStream = null;
+			    try {
+				localStream = finalEntityUrl.openStream();
+				result = new InputSource(finalEntityUrl.toExternalForm());
+				result.setByteStream(localStream);
+				tryDefaultResolver = false;
+			    }
+			    catch (IOException lioe) {
+				// fall through to defaultResolver
+			    }
+			}
+		    }
+
+		    if (tryDefaultResolver) {
+			result = defaultResolver.resolveEntity(publicId, 
+							       systemId);
+		    }
+		    return result;
+		}
+	    });
 	
 	// read in and parse the config file
         InputStream stream = null;
@@ -258,3 +310,19 @@ public abstract class GenerateBase extends Object {
     protected abstract Log getLog();
 
 } // end of class GenerateBase
+
+class LocalEntityResolver extends Object implements EntityResolver {
+    GenerateBase base = null;
+
+    LocalEntityResolver(GenerateBase yourBase) {
+	base = yourBase; // are belong to us.
+    }
+
+    public InputSource resolveEntity(String publicId,
+				     String systemId) throws SAXException, IOException {
+	System.out.println("publicId: " + publicId + " systemId: " + systemId);
+	return base.parser.getDefaultEntityResolver().resolveEntity(publicId,
+								    systemId);
+    }
+
+}
