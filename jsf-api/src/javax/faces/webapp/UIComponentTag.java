@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.50 2004/08/13 20:08:24 rlubke Exp $
+ * $Id: UIComponentTag.java,v 1.51 2004/08/31 19:50:19 edburns Exp $
  */
 
 /*
@@ -394,6 +394,10 @@ public abstract class UIComponentTag implements Tag {
      * @exception JspException if an error occurs
      */
     public int doStartTag() throws JspException {
+	// make sure that these ivars are reset at the beginning of the
+	// lifecycle for this tag.
+	createdComponents = null;
+	createdFacets = null;
         
         context = 
            (FacesContext) pageContext.getAttribute(CURRENT_FACES_CONTEXT);
