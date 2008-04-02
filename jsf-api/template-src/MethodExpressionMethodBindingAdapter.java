@@ -1,5 +1,5 @@
 /*
- * $Id: MethodExpressionMethodBindingAdapter.java,v 1.4 2005/08/22 22:08:12 ofung Exp $
+ * $Id: MethodExpressionMethodBindingAdapter.java,v 1.5 2006/07/31 20:55:30 rlubke Exp $
  */
 
 /*
@@ -114,16 +114,19 @@ import java.io.Serializable;
     }
 
     public boolean equals(Object other) {
-	assert(null != binding);
-	boolean result = false;
-	
-	// don't bother even trying to compare, if we're not assignment
-	// compatabile with "other"
-	if (MethodExpression.class.isAssignableFrom(other.getClass())) {
-	    MethodExpression otherVE = (MethodExpression) other;
-	    result = this.getExpressionString().equals(otherVE.getExpressionString());
-	}
-	return result;
+        
+        if (other == null) {
+            return false;
+        }
+
+        // don't bother even trying to compare, if we're not assignment
+        // compatabile with "other"
+        if (MethodExpression.class.isAssignableFrom(other.getClass())) {
+            MethodExpression otherVE = (MethodExpression) other;
+            return this.getExpressionString().equals(otherVE.getExpressionString());
+        }
+        return false;
+        
     }
 
     public int hashCode() {

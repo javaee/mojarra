@@ -1,5 +1,5 @@
 /*
- * $Id: ValueExpressionValueBindingAdapter.java,v 1.3 2005/08/22 22:08:13 ofung Exp $
+ * $Id: ValueExpressionValueBindingAdapter.java,v 1.4 2006/07/31 20:55:30 rlubke Exp $
  */
 
 /*
@@ -149,16 +149,19 @@ import java.io.Serializable;
     }
 
     public boolean equals(Object other) {
-	assert(null != binding);
-	boolean result = false;
-	
-	// don't bother even trying to compare, if we're not assignment
-	// compatabile with "other"
-	if (ValueExpression.class.isAssignableFrom(other.getClass())) {
-	    ValueExpression otherVE = (ValueExpression) other;
-	    result = this.getExpressionString().equals(otherVE.getExpressionString());
-	}
-	return result;
+    
+        if (other == null) {
+            return false;
+        }
+
+        // don't bother even trying to compare, if we're not assignment
+        // compatabile with "other"
+        if (ValueExpression.class.isAssignableFrom(other.getClass())) {
+            ValueExpression otherVE = (ValueExpression) other;
+            return this.getExpressionString().equals(otherVE.getExpressionString());
+        }
+        return false;
+        
     }
 
     public int hashCode() {
