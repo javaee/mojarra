@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.28 2004/04/07 17:36:58 rkitain Exp $
+ * $Id: UIViewRoot.java,v 1.29 2004/11/11 18:03:06 edburns Exp $
  */
 
 /*
@@ -15,13 +15,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import javax.faces.FactoryFinder;
+import javax.faces.FacesException;
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.lifecycle.Lifecycle;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseListener;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.el.ValueBinding;
+import javax.faces.el.MethodBinding;
+import javax.faces.webapp.FacesServlet;
 
 
 /**
@@ -170,6 +178,63 @@ public class UIViewRoot extends UIComponentBase {
 
     // ------------------------------------------------ Event Management Methods
 
+    private MethodBinding beforePhase = null;
+    private MethodBinding afterPhase = null;
+
+    /**
+     * @return the {@link MethodBinding} that will be invoked before
+     * this view is rendered.
+     *
+     */
+
+    public MethodBinding getBeforePhaseListener() {
+	return beforePhase;
+    }
+
+    /**
+     * @param newBeforePhase the {@link MethodBinding} that will be
+     * invoked before this view is rendered.
+     *
+     */
+
+    public void setBeforePhaseListener(MethodBinding newBeforePhase) {
+	beforePhase = newBeforePhase;
+    }
+
+    /**
+     * @return the {@link MethodBinding} that will be invoked after
+     * this view is rendered.
+     *
+     */
+
+    public MethodBinding getAfterPhaseListener() {
+	return afterPhase;
+    }
+
+    /**
+     * @param newAfterPhase the {@link MethodBinding} that will be
+     * invoked after this view is rendered.
+     *
+     */
+
+    public void setAfterPhaseListener(MethodBinding newAfterPhase) {
+	afterPhase = newAfterPhase;
+    }
+
+    private List phaseListeners = null;
+
+    public void removePhaseListener(PhaseListener toRemove) {
+	if (null != phaseListeners) {
+	    phaseListeners.remove(toRemove);
+	}
+    }
+
+    public void addPhaseListener(PhaseListener newPhaseListener) {
+	if (null == phaseListeners) {
+	    phaseListeners = new ArrayList();
+	}
+	phaseListeners.add(newPhaseListener);
+    }
 
     /**
      * <p>An array of Lists of events that have been queued for later
@@ -314,16 +379,112 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Override the default {@link UIComponentBase#encodeBegin}
-     * behavior to reset the mechanism used in {@link #createUniqueId}
-     * before falling through to the standard superclass processing.</p>
+     * behavior.  Reset the mechanism used in {@link #createUniqueId}
+     * before falling through to the standard superclass processing.  If
+     * {@link #getBeforePhaseListener} returns non-<code>null</code>,
+     * invoke it, passing a {@link PhaseEvent} for the {@link
+     * PhaseId.RENDER_RESPONSE} phase.  If the internal list populated
+     * by calls to {@link #addPhaseListener} is non-empty, any listeners
+     * in that list must have their {@link PhaseListener#beforePhase}
+     * method called, passing the <code>PhaseEvent</code>.  Any errors
+     * that occur during invocation of any of the the beforePhase
+     * listeners must be logged and swallowed.</p>
      *
      */
 
     public void encodeBegin(FacesContext context) throws IOException {
 	lastId = 0;
+
+	// avoid creating the PhaseEvent if possible by doing redundant
+	// null checks.
+	if (null != beforePhase || null != phaseListeners) {
+	    PhaseEvent event = createPhaseEvent(context);
+	    if (null != beforePhase) {
+		try {
+		    beforePhase.invoke(context, 
+				       new Object [] { event });
+		}
+		catch (Exception e) {
+		    // PENDING(edburns): log this
+		}
+	    }
+	    if (null != phaseListeners) {
+		Iterator iter = phaseListeners.iterator();
+		PhaseListener curListener = null;
+		while (iter.hasNext()) {
+		    curListener = (PhaseListener) iter.next();
+		    try {
+			curListener.beforePhase(event);
+		    }
+		    catch (Exception e) {
+			// PENDING(edburns): log this
+		    }
+		}
+	    }
+	}
+
 	super.encodeBegin(context);
     }
 
+    /**
+     * <p>Override the default {@link UIComponentBase#encodeEnd}
+     * behavior.  If {@link #getAfterPhaseListener} returns
+     * non-<code>null</code>, invoke it, passing a {@link PhaseEvent}
+     * for the {@link PhaseId.RENDER_RESPONSE} phase.  Any errors that
+     * occur during invocation of the afterPhase listener must be
+     * logged and swallowed.</p>
+     */
+
+    public void encodeEnd(FacesContext context) throws IOException {
+	super.encodeEnd(context);
+
+	// avoid creating the PhaseEvent if possible by doing redundant
+	// null checks.
+	if (null != afterPhase || null != phaseListeners) {
+	    PhaseEvent event = createPhaseEvent(context);
+	    if (null != afterPhase) {
+		try {
+		    afterPhase.invoke(context, 
+				      new Object [] { event });
+		}
+		catch (Exception e) {
+		    // PENDING(edburns): log this
+		}
+	    }
+	    if (null != phaseListeners) {
+		Iterator iter = phaseListeners.iterator();
+		PhaseListener curListener = null;
+		while (iter.hasNext()) {
+		    curListener = (PhaseListener) iter.next();
+		    try {
+			curListener.afterPhase(event);
+		    }
+		    catch (Exception e) {
+			// PENDING(edburns): log this
+		    }
+		}
+	    }
+
+	}
+	
+    }
+
+    private PhaseEvent createPhaseEvent(FacesContext context) throws FacesException {
+	Lifecycle lifecycle = null;
+	LifecycleFactory lifecycleFactory = (LifecycleFactory)
+	    FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+	String lifecycleId =
+	    context.getExternalContext().getInitParameter(FacesServlet.LIFECYCLE_ID_ATTR);
+	if (lifecycleId == null) {
+	    lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
+	}
+	lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
+	    
+	PhaseEvent result = new PhaseEvent(context, PhaseId.RENDER_RESPONSE,
+					   lifecycle);
+	return result;
+    }
+	
 
     /**
      * <p>Override the default {@link UIComponentBase#processValidators}
@@ -493,11 +654,14 @@ public class UIViewRoot extends UIComponentBase {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[4];
+        Object values[] = new Object[7];
         values[0] = super.saveState(context);
         values[1] = renderKitId;
         values[2] = viewId;
         values[3] = locale;
+        values[4] = saveAttachedState(context, beforePhase);
+        values[5] = saveAttachedState(context, afterPhase);
+        values[6] = saveAttachedState(context, phaseListeners);
         return (values);
 
     }
@@ -510,6 +674,9 @@ public class UIViewRoot extends UIComponentBase {
         renderKitId = (String) values[1];
         viewId = (String) values[2];
         locale = (Locale)values[3];
+	beforePhase = (MethodBinding) restoreAttachedState(context, values[4]);
+	afterPhase = (MethodBinding) restoreAttachedState(context, values[5]);
+	phaseListeners = (List) restoreAttachedState(context, values[6]);
 
     }
 

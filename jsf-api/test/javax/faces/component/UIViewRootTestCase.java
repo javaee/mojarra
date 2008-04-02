@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.15 2004/04/07 17:39:27 rkitain Exp $
+ * $Id: UIViewRootTestCase.java,v 1.16 2004/11/11 18:03:07 edburns Exp $
  */
 
 /*
@@ -14,14 +14,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import javax.faces.FactoryFinder;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseListener;
+import javax.faces.event.PhaseId;
 import javax.faces.validator.Validator;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.event.PhaseId;
 import javax.faces.el.ValueBinding;
+import javax.faces.el.MethodBinding;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -65,6 +70,39 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
         return (new TestSuite(UIViewRootTestCase.class));
 
+    }
+
+    public static String FACTORIES[][] = {
+	{ FactoryFinder.APPLICATION_FACTORY, 
+	  "javax.faces.mock.MockApplicationFactory"
+	},
+	{ FactoryFinder.FACES_CONTEXT_FACTORY, 
+	  "javax.faces.mock.MockFacesContextFactory"
+	},
+	{ FactoryFinder.LIFECYCLE_FACTORY, 
+	  "javax.faces.mock.MockLifecycleFactory"
+	},
+	{ FactoryFinder.RENDER_KIT_FACTORY, 
+	  "javax.faces.mock.MockRenderKitFactory"
+	}
+    };
+
+    public void setUp() {
+	super.setUp();
+	for (int i = 0, len = FACTORIES.length; i < len; i++) {
+	    System.getProperties().remove(FACTORIES[i][0]);
+	}
+
+	FactoryFinder.releaseFactories();
+	int len, i = 0;
+
+	// simulate the "faces implementation specific" part
+	for (i = 0, len = FACTORIES.length; i < len; i++) {
+	    FactoryFinder.setFactory(FACTORIES[i][0],
+				     FACTORIES[i][1]);
+	}
+
+	
     }
 
     /**
@@ -167,6 +205,103 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	
     }
 
+    public void testPhaseMethBinding() throws Exception {
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	doTestPhaseMethodBinding(root);
+    }
+
+    public void testPhaseListener() throws Exception {
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	doTestPhaseListener(root);
+    }
+
+    public void testPhaseMethodBindingAndListener() throws Exception {
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	doTestPhaseMethodBindingAndListener(root);
+    }
+
+
+    public void testPhaseMethBindingState() throws Exception {
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	Object state = root.saveState(facesContext);
+	root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	root.restoreState(facesContext, state);
+
+	doTestPhaseMethodBinding(root);
+    }
+
+    public void testPhaseListenerState() throws Exception {
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	Object state = root.saveState(facesContext);
+	root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	root.restoreState(facesContext, state);
+
+	doTestPhaseListener(root);
+    }
+
+    public void testPhaseMethodBindingAndListenerState() throws Exception {
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	Object state = root.saveState(facesContext);
+	root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	root.restoreState(facesContext, state);
+
+	doTestPhaseMethodBindingAndListener(root);
+    }
+
+
+	
+    public void doTestPhaseMethodBinding(UIViewRoot root) throws Exception {
+	PhaseListenerBean phaseListenerBean = new PhaseListenerBean();
+	facesContext.getExternalContext().getRequestMap().put("bean",
+							    phaseListenerBean);
+	Class [] args = new Class [] { PhaseEvent.class };
+	MethodBinding 
+	    beforeBinding = facesContext.getApplication().createMethodBinding("#{bean.beforePhase}", args),
+	    afterBinding = facesContext.getApplication().createMethodBinding("#{bean.afterPhase}", args);
+	root.setBeforePhaseListener(beforeBinding);
+	root.setAfterPhaseListener(afterBinding);
+	root.encodeBegin(facesContext);
+	root.encodeEnd(facesContext);
+	assertTrue(phaseListenerBean.isBeforePhaseCalled());
+	assertTrue(phaseListenerBean.isAfterPhaseCalled());
+	
+	
+    }
+
+    public void doTestPhaseListener(UIViewRoot root) throws Exception {
+	PhaseListenerBean phaseListener = new PhaseListenerBean();
+	root.addPhaseListener(phaseListener);
+	root.encodeBegin(facesContext);
+	root.encodeEnd(facesContext);
+	assertTrue(phaseListener.isBeforePhaseCalled());
+	assertTrue(phaseListener.isAfterPhaseCalled());
+	
+	
+    }
+
+    public void doTestPhaseMethodBindingAndListener(UIViewRoot root) throws Exception {
+	PhaseListenerBean phaseListener = new PhaseListenerBean();
+	PhaseListenerBean phaseListenerBean = new PhaseListenerBean();
+	facesContext.getExternalContext().getRequestMap().put("bean",
+							    phaseListenerBean);
+	Class [] args = new Class [] { PhaseEvent.class };
+	MethodBinding 
+	    beforeBinding = facesContext.getApplication().createMethodBinding("#{bean.beforePhase}", args),
+	    afterBinding = facesContext.getApplication().createMethodBinding("#{bean.afterPhase}", args);
+	root.setBeforePhaseListener(beforeBinding);
+	root.setAfterPhaseListener(afterBinding);
+	root.addPhaseListener(phaseListener);
+	root.encodeBegin(facesContext);
+	root.encodeEnd(facesContext);
+	assertTrue(phaseListenerBean.isBeforePhaseCalled());
+	assertTrue(phaseListenerBean.isAfterPhaseCalled());
+	assertTrue(phaseListener.isBeforePhaseCalled());
+	assertTrue(phaseListener.isAfterPhaseCalled());
+	
+    }
+
+
+
 
     // --------------------------------------------------------- Support Methods
 
@@ -258,6 +393,32 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         vr.setRenderKitId("foo");
         vr.setViewId("bar");
         vr.setLocale(new Locale("fr", "FR"));
+    }
+
+    public static class PhaseListenerBean extends Object implements PhaseListener {
+	private boolean beforePhaseCalled = false;
+	private boolean afterPhaseCalled = false;
+
+	public PhaseListenerBean() {}
+
+	public boolean isBeforePhaseCalled() {
+	    return beforePhaseCalled;
+	}
+	
+	public boolean isAfterPhaseCalled() {
+	    return afterPhaseCalled;
+	}
+	
+	public void beforePhase(PhaseEvent e) {
+	    beforePhaseCalled = true;
+	}
+	    
+	public void afterPhase(PhaseEvent e) {
+	    afterPhaseCalled = true;
+	}
+
+	public PhaseId getPhaseId() { return PhaseId.RENDER_RESPONSE; }
+	    
     }
 
 
