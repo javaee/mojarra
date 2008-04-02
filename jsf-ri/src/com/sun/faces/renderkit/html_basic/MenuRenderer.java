@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.63 2005/10/18 00:27:05 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.64 2005/10/27 16:44:50 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -470,7 +470,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         if (!getMultipleText(component).equals("")) {
-            writer.writeAttribute("multiple", "multiple", "multiple");
+            writer.writeAttribute("multiple", true, "multiple");
         }
 
         // Determine how many option(s) we need to render, and update
@@ -584,7 +584,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         isSelected = isSelected(newValue, valuesArray);
 
         if (isSelected) {
-            writer.writeAttribute("selected", "selected", "selected");
+            writer.writeAttribute("selected", true, "selected");
         }
 
 	String labelClass = null;

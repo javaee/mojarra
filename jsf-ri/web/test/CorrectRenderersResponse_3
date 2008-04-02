@@ -1,10 +1,10 @@
-<select id="myMenu" name="myMenu" multiple="multiple" size="1">	<option value="Red">Red</option>
-	<option value="Blue" selected="selected">Blue</option>
+<select id="myMenu" name="myMenu" multiple size="1">	<option value="Red">Red</option>
+	<option value="Blue" selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </select>
-<select id="myListbox" name="myListbox" multiple="multiple" size="5">	<option value="Red">Red</option>
-	<option value="Blue" selected="selected">Blue</option>
+<select id="myListbox" name="myListbox" multiple size="5">	<option value="Red">Red</option>
+	<option value="Blue" selected>Blue</option>
 <optgroup label="group">	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </optgroup></select>
@@ -25,7 +25,7 @@
 </table></td>	</tr>
 </table>
 <select id="myOnemenu" name="myOnemenu" size="1">	<option value="Red">Red</option>
-	<option value="Blue" selected="selected">Blue</option>
+	<option value="Blue" selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </select>

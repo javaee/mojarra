@@ -485,7 +485,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 
 <tr>
 					<TD>Multi-select menu:</TD>
-					<TD><select id="basicForm:ManyApples" name="basicForm:ManyApples" class="selectmanyClass" multiple="multiple" size="1" style="someStyle">	<option value="0" class="eclass">zero</option>
+					<TD><select id="basicForm:ManyApples" name="basicForm:ManyApples" class="selectmanyClass" multiple size="1" style="someStyle">	<option value="0" class="eclass">zero</option>
 	<option value="1" class="eclass">one</option>
 	<option value="2" class="eclass">two</option>
 	<option value="3" class="eclass">three</option>
@@ -501,7 +501,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 
 <tr>
 					<TD>Multi-select listbox:</TD>
-					<TD><select name="basicForm:_id_id555" multiple="multiple" size="10" style="someStyle">	<option value="0" class="dclass">zero</option>
+					<TD><select name="basicForm:_id_id555" multiple size="10" style="someStyle">	<option value="0" class="dclass">zero</option>
 	<option value="1" class="dclass">one</option>
 	<option value="2" class="dclass">two</option>
 	<option value="3" class="dclass">three</option>
