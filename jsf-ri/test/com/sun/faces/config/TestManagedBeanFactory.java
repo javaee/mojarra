@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.19 2004/05/03 19:30:41 jvisvanathan Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.20 2004/05/04 21:48:35 rkitain Exp $
  */
 
 /*
@@ -86,6 +86,10 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         mbf = new ManagedBeanFactory(bean);
 
         assertNotNull(mbf.newInstance(getFacesContext()));
+
+	bean.setManagedBeanScope("request");
+	mbf.setManagedBeanBean(bean);
+        assertTrue(mbf.getScope().equals("request"));
     }
 
 

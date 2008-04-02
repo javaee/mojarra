@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.21 2004/05/04 19:55:03 rlubke Exp $
+ * $Id: ManagedBeanFactory.java,v 1.22 2004/05/04 21:48:34 rkitain Exp $
  */
 
 /*
@@ -140,7 +140,7 @@ public class ManagedBeanFactory extends Object {
     public void setManagedBeanBean(ManagedBeanBean newBean) {
         synchronized (this) {
             //ManagedBeanBean clone method implemented to return deep copy
-            this.managedBean = managedBean; // (ManagedBeanBean) newBean.clone();
+            this.managedBean = newBean; // (ManagedBeanBean) newBean.clone();
             //set the scope
             scope = managedBean.getManagedBeanScope();
         }
