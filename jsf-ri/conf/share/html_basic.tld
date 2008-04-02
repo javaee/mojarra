@@ -2734,6 +2734,11 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+      <name>layout</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
       <name>lang</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>

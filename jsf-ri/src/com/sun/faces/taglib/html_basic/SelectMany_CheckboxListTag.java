@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_CheckboxListTag.java,v 1.7 2003/08/15 19:15:18 rlubke Exp $
+ * $Id: SelectMany_CheckboxListTag.java,v 1.8 2003/09/03 19:51:37 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -16,6 +16,7 @@
 package com.sun.faces.taglib.html_basic;
 
 import javax.servlet.jsp.JspException;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
 
 import com.sun.faces.taglib.FacesTag;
@@ -41,6 +42,8 @@ public class SelectMany_CheckboxListTag extends FacesTag
 
     // Attribute Instance Variables
 
+    protected String layout = null;
+
     // Relationship Instance Variables
 
     //
@@ -60,6 +63,10 @@ public class SelectMany_CheckboxListTag extends FacesTag
     // Accessors
     //
 
+    public void setLayout(String newLayout) {
+	layout = newLayout;
+    }
+
     //
     // General Methods
     //
@@ -70,6 +77,16 @@ public class SelectMany_CheckboxListTag extends FacesTag
     public String getComponentType() {
         return "SelectMany"; 
     }
+
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+	UISelectMany uiSelectMany = (UISelectMany) component;
+	
+        if (null != layout) {
+	    uiSelectMany.setAttribute("layout", layout);
+	}
+    }
+    
 
     //
     // Methods from TagSupport
