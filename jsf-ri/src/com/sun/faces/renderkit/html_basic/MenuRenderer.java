@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.68 2006/03/01 19:04:19 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.69 2006/03/13 21:21:47 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -484,11 +484,12 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
              logger.fine("Rendering " + itemCount + " options");
         }
         // If "size" is *not* set explicitly, we have to default it correctly
-        Integer size = (Integer) component.getAttributes().get("size");
-        if (null == size || size == Integer.MIN_VALUE) {
-            size = itemCount;
+        Object size = component.getAttributes().get("size");
+        if ((null == size) ||
+            ((size instanceof Integer) &&
+            ((Integer) size).intValue() == Integer.MIN_VALUE)) {
+            writeDefaultSize(writer, itemCount);
         }
-        writeDefaultSize(writer, size);
 
         RenderKitUtils.renderPassThruAttributes(context, 
                                                 writer, 
@@ -612,8 +613,12 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("class", labelClass, "labelClass");
         }
 
-
-        writer.writeText(curItem.getLabel(), "label");
+        if (curItem.isEscape()) {
+            writer.writeText(curItem.getLabel(), "label");
+        }
+        else {
+            writer.write(curItem.getLabel());
+        }
         writer.endElement("option");
         writer.writeText("\n", null);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.12 2005/12/05 16:42:59 edburns Exp $
+ * $Id: SelectItem.java,v 1.13 2006/03/13 21:21:46 edburns Exp $
  */
 
 /*
@@ -75,7 +75,7 @@ public class SelectItem implements Serializable {
      */
     public SelectItem(Object value) {
 
-        this(value, value.toString(), null, false);
+        this(value, value.toString(), null, false, true);
 
     }
 
@@ -95,7 +95,7 @@ public class SelectItem implements Serializable {
      */
     public SelectItem(Object value, String label) {
 
-        this(value, label, null, false);
+        this(value, label, null, false, true);
 
     }
 
@@ -115,7 +115,7 @@ public class SelectItem implements Serializable {
      */
     public SelectItem(Object value, String label, String description) {
 
-        this(value, label, description, false);
+        this(value, label, description, false, true);
 
     }
 
@@ -136,13 +136,39 @@ public class SelectItem implements Serializable {
     public SelectItem(Object value, String label, String description,
                       boolean disabled) {
 
+        this(value, label, description, disabled, true);
+
+    }
+    
+    /**
+     * <p>Construct a <code>SelectItem</code> instance with the specified
+     * property values.</p>
+     *
+     * @param value Value to be delivered to the model if this
+     *  item is selected by the user
+     * @param label Label to be rendered for this item in the response
+     * @param description Description of this item, for use in tools
+     * @param disabled Flag indicating that this option is disabled
+     * @param escape Flag indicating that the text of this option should be
+     * escaped when rendered.
+     *
+     * @throws NullPointerException if <code>value</code>
+     *  or <code>label</code> is <code>null</code>
+     * @since 1.2
+     */
+    public SelectItem(Object value, String label, String description,
+                      boolean disabled, boolean escape) {
+
         super();
         setValue(value);
         setLabel(label);
         setDescription(description);
         setDisabled(disabled);
+        setEscape(escape);
 
     }
+
+    
 
 
     // ------------------------------------------------------ Instance Variables
@@ -252,6 +278,27 @@ public class SelectItem implements Serializable {
 
         this.value = value;
 
+    }
+
+    /**
+     * Holds value of property escape.
+     */
+    private boolean escape;
+
+    /**
+     * Getter for property escape.
+     * @return Value of property escape.
+     */
+    public boolean isEscape() {
+        return this.escape;
+    }
+
+    /**
+     * Setter for property escape.
+     * @param escape New value of property escape.
+     */
+    public void setEscape(boolean escape) {
+        this.escape = escape;
     }
 
 

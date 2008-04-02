@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.37 2005/08/22 22:07:57 ofung Exp $
+ * $Id: UISelectItem.java,v 1.38 2006/03/13 21:21:46 edburns Exp $
  */
 
 /*
@@ -97,6 +97,8 @@ public class UISelectItem extends UIComponentBase {
     private String itemDescription = null;
     private boolean itemDisabled = false;
     private boolean itemDisabledSet = false;
+    private boolean itemEscaped = true;
+    private boolean itemEscapedSet = false;
     private String itemLabel = null;
     private Object itemValue = null;
     private Object value = null;
@@ -179,6 +181,41 @@ public class UISelectItem extends UIComponentBase {
         this.itemDisabledSet = true;
 
     }
+    
+    /**
+     * <p>Return the escape setting for the label of this selection item.</p>
+     */
+    public boolean isItemEscaped() {
+
+	if (this.itemEscapedSet) {
+	    return (this.itemEscaped);
+	}
+	ValueExpression ve = getValueExpression("itemEscaped");
+	if (ve != null) {
+	    try {
+		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
+	} else {
+	    return (this.itemEscaped);
+	}
+
+    }
+
+    /**
+     * <p>Set the escape value for the label of this selection item.</p>
+     *
+     * @param itemEscaped The new disabled flag
+     */
+    public void setItemEscaped(boolean itemEscaped) {
+
+        this.itemEscaped = itemEscaped;
+        this.itemEscapedSet = true;
+
+    }
+    
 
     /**
      * <p>Return the localized label for this selection item.</p>
@@ -293,14 +330,16 @@ public class UISelectItem extends UIComponentBase {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[7];
+        Object values[] = new Object[9];
         values[0] = super.saveState(context);
         values[1] = itemDescription;
         values[2] = itemDisabled ? Boolean.TRUE : Boolean.FALSE;
         values[3] = itemDisabledSet ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = itemLabel;
-        values[5] = itemValue;
-        values[6] = value;
+        values[4] = itemEscaped ? Boolean.TRUE : Boolean.FALSE;
+        values[5] = itemEscapedSet ? Boolean.TRUE : Boolean.FALSE;
+        values[6] = itemLabel;
+        values[7] = itemValue;
+        values[8] = value;
         return (values);
 
     }
@@ -313,9 +352,11 @@ public class UISelectItem extends UIComponentBase {
         itemDescription = (String) values[1];
         itemDisabled = ((Boolean) values[2]).booleanValue();
         itemDisabledSet = ((Boolean) values[3]).booleanValue();
-        itemLabel = (String) values[4];
-        itemValue = values[5];
-        value = values[6];
+        itemEscaped = ((Boolean) values[4]).booleanValue();
+        itemEscapedSet = ((Boolean) values[5]).booleanValue();
+        itemLabel = (String) values[6];
+        itemValue = values[7];
+        value = values[8];
 
     }
 

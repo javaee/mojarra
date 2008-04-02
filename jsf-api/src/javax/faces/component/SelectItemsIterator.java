@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.12 2006/01/30 17:16:27 rogerk Exp $
+ * $Id: SelectItemsIterator.java,v 1.13 2006/03/13 21:21:46 edburns Exp $
  */
 
 /*
@@ -37,6 +37,8 @@ import java.util.NoSuchElementException;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import javax.el.ValueExpression;
+import javax.faces.context.FacesContext;
 
 import javax.faces.model.SelectItem;
 
@@ -127,7 +129,8 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                 item = new SelectItem(ui.getItemValue(),
                                       ui.getItemLabel(),
                                       ui.getItemDescription(),
-                                      ui.isItemDisabled());
+                                      ui.isItemDisabled(), 
+                                      ui.isItemEscaped());
             }
             return (item);
         } else if (kid instanceof UISelectItems) {

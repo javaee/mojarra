@@ -675,6 +675,19 @@
 
         <attribute>
             <description>
+                Flag indicating that characters that are sensitive in
+                the value of the <![CDATA[<code>itemLabel</code>]]>
+                attribute must be escaped. This flag is set to "true" by
+                default.
+            </description>
+            <name>escape</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
                 Value to be returned to the server if this
                 option is selected by the user.
             </description>

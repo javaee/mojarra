@@ -50,6 +50,7 @@ import java.util.Set;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.MessageUtils;
+import javax.el.ValueExpression;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -287,11 +288,13 @@ public class RenderKitUtils {
             if (kid instanceof UISelectItem) {
                 UISelectItem item = (UISelectItem) kid;
                 Object value = item.getValue();
+                
                 if (value == null) {
                     list.add(new SelectItem(item.getItemValue(),
                                             item.getItemLabel(),
                                             item.getItemDescription(),
-                                            item.isItemDisabled()));
+                                            item.isItemDisabled(),
+                                            item.isItemEscaped()));
                 } else if (value instanceof SelectItem) {
                     list.add((SelectItem) value);
                 } else {

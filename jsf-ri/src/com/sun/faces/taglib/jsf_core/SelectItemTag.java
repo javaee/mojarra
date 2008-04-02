@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.12 2005/08/22 22:10:25 ofung Exp $
+ * $Id: SelectItemTag.java,v 1.13 2006/03/13 21:21:47 edburns Exp $
  */
 
 /*
@@ -165,7 +165,36 @@ public class SelectItemTag extends UIComponentELTag {
                         booleanValue());
             }
         }
+        if (null != escape) {
+            if (!escape.isLiteralText()) {
+                selectItem.setValueExpression("escape", escape);
+            } else {
+                selectItem.setItemEscaped(
+                    Boolean.valueOf(escape.getExpressionString()).
+                        booleanValue());            }
+        }
 
+    }
+
+    /**
+     * Holds value of property escape.
+     */
+    private ValueExpression escape;
+
+    /**
+     * Getter for property escape.
+     * @return Value of property escape.
+     */
+    public ValueExpression getEscape() {
+        return this.escape;
+    }
+
+    /**
+     * Setter for property escape.
+     * @param escape New value of property escape.
+     */
+    public void setEscape(ValueExpression escape) {
+        this.escape = escape;
     }
 
 } // end of class SelectItemTag
