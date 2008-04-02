@@ -1,5 +1,5 @@
 /*
- * $Id: TestCoreValidator.java,v 1.3 2003/02/20 22:50:10 ofung Exp $
+ * $Id: TestCoreValidator.java,v 1.4 2003/03/12 19:54:20 rkitain Exp $
  */
 
 /*
@@ -21,7 +21,6 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponentBase;
 import javax.faces.validator.Validator;
@@ -29,10 +28,10 @@ import javax.faces.component.AttributeDescriptor;
 
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.FileOutputResponseWrapper;
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 import com.sun.faces.CompareFiles;
 import com.sun.faces.lifecycle.LifecycleImpl;
+import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.lifecycle.RenderResponsePhase;
 
 import com.sun.faces.TestBean;
@@ -54,7 +53,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestCoreValidator.java,v 1.3 2003/02/20 22:50:10 ofung Exp $
+ * @version $Id: TestCoreValidator.java,v 1.4 2003/03/12 19:54:20 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -118,13 +117,10 @@ public void beginIfShouldFail(WebRequest theRequest)
 public void testIfShouldFail()
 {
     boolean result = false;
-    int rc = Phase.GOTO_NEXT;
     UIComponentBase root = null;
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
-    Phase 
-	renderResponse = new RenderResponsePhase(lifecycle, 
-				       RIConstants.RENDER_RESPONSE_PHASE);
+    Phase renderResponse = new RenderResponsePhase(lifecycle); 
     root = new UIComponentBase() {
 	    public String getComponentType() { return "Root"; }
 	};
@@ -139,7 +135,7 @@ public void testIfShouldFail()
 
     boolean exceptionThrown = false;
     try {
-	rc = renderResponse.execute(getFacesContext());
+	renderResponse.execute(getFacesContext());
     }
     catch (Throwable e) {
 	// If this exception message contains the string "output_text"
@@ -159,13 +155,11 @@ public void beginIfShouldSuccess(WebRequest theRequest)
 public void testIfShouldSuccess()
 {
     boolean result = false;
-    int rc = Phase.GOTO_NEXT;
     UIComponentBase root = null;
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase 
-	renderResponse = new RenderResponsePhase(lifecycle, 
-				       RIConstants.RENDER_RESPONSE_PHASE);
+	renderResponse = new RenderResponsePhase(lifecycle);
     root = new UIComponentBase() {
 	    public String getComponentType() { return "Root"; }
 	};
@@ -180,7 +174,7 @@ public void testIfShouldSuccess()
 
     boolean exceptionThrown = false;
     try {
-	rc = renderResponse.execute(getFacesContext());
+	renderResponse.execute(getFacesContext());
     }
     catch (Throwable e) {
 	exceptionThrown = true;
@@ -197,13 +191,11 @@ public void beginIteratorShouldFail(WebRequest theRequest)
 public void testIteratorShouldFail()
 {
     boolean result = false;
-    int rc = Phase.GOTO_NEXT;
     UIComponentBase root = null;
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase 
-	renderResponse = new RenderResponsePhase(lifecycle, 
-				       RIConstants.RENDER_RESPONSE_PHASE);
+	renderResponse = new RenderResponsePhase(lifecycle);
     root = new UIComponentBase() {
 	    public String getComponentType() { return "Root"; }
 	};
@@ -219,7 +211,7 @@ public void testIteratorShouldFail()
     boolean exceptionThrown = false;
 
     try {
-	rc = renderResponse.execute(getFacesContext());
+	renderResponse.execute(getFacesContext());
     }
     catch (Throwable e) {
 	// If this exception message contains the string "output_text"
@@ -239,13 +231,11 @@ public void beginIteratorShouldSuccess(WebRequest theRequest)
 public void testIteratorShouldSuccess()
 {
     boolean result = false;
-    int rc = Phase.GOTO_NEXT;
     UIComponentBase root = null;
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase 
-	renderResponse = new RenderResponsePhase(lifecycle, 
-				       RIConstants.RENDER_RESPONSE_PHASE);
+	renderResponse = new RenderResponsePhase(lifecycle);
     root = new UIComponentBase() {
 	    public String getComponentType() { return "Root"; }
 	};
@@ -260,7 +250,7 @@ public void testIteratorShouldSuccess()
 
     boolean exceptionThrown = false;
     try {
-	rc = renderResponse.execute(getFacesContext());
+	renderResponse.execute(getFacesContext());
     }
     catch (Throwable e) {
 	exceptionThrown = true;

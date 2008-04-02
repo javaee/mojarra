@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.6 2003/02/20 22:50:10 ofung Exp $
+ * $Id: TestValidatorTags.java,v 1.7 2003/03/12 19:54:20 rkitain Exp $
  */
 
 /*
@@ -17,17 +17,18 @@ import org.mozilla.util.Assert;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 
 import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
-import com.sun.faces.lifecycle.LifecycleImpl;
-import com.sun.faces.lifecycle.RenderResponsePhase;
-import com.sun.faces.lifecycle.ProcessValidationsPhase;
+import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.ApplyRequestValuesPhase;
+import com.sun.faces.lifecycle.LifecycleImpl;
+import com.sun.faces.lifecycle.Phase;
+import com.sun.faces.lifecycle.ProcessValidationsPhase;
+import com.sun.faces.lifecycle.RenderResponsePhase;
 
 
 import javax.faces.tree.Tree;
@@ -41,7 +42,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.6 2003/02/20 22:50:10 ofung Exp $
+ * @version $Id: TestValidatorTags.java,v 1.7 2003/03/12 19:54:20 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -136,16 +137,12 @@ public void testValidators()
     assertTrue(OUTOFBOUNDS1_VALUE.equals(getFacesContext().getServletRequest().getParameter(OUTOFBOUNDS1_ID)));
 
     boolean result = false;
-    int rc = Phase.GOTO_NEXT;
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase 
-	renderResponse = new RenderResponsePhase(lifecycle, 
-				       RIConstants.RENDER_RESPONSE_PHASE),
-	processValidations = new ProcessValidationsPhase(lifecycle,
-					  RIConstants.PROCESS_VALIDATIONS_PHASE),
-	applyRequestValues = new ApplyRequestValuesPhase(lifecycle,
-					RIConstants.APPLY_REQUEST_VALUES_PHASE);
+	renderResponse = new RenderResponsePhase(lifecycle),
+	processValidations = new ProcessValidationsPhase(),
+	applyRequestValues = new ApplyRequestValuesPhase();
 
     TreeFactory treeFactory = (TreeFactory)
          FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
@@ -155,17 +152,19 @@ public void testValidators()
     getFacesContext().setTree(requestTree);
 
     // This builds the tree, and usefaces saves it in the session
-    rc = renderResponse.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
+    renderResponse.execute(getFacesContext());
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
 
     // This causes the components to be set to valid
-    rc = applyRequestValues.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
+    applyRequestValues.execute(getFacesContext());
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
     
     // process the validations
-    rc = processValidations.execute(getFacesContext());
+    processValidations.execute(getFacesContext());
     // We know there are validation errors on the page
-    assertTrue(Phase.GOTO_RENDER == rc);
+    assertTrue(((FacesContextImpl)getFacesContext()).getRenderResponse());
 
     // verify the messages have been added correctly.
     UIComponent comp = null;

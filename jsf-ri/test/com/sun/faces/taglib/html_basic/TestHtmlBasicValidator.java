@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlBasicValidator.java,v 1.3 2003/02/20 22:50:09 ofung Exp $
+ * $Id: TestHtmlBasicValidator.java,v 1.4 2003/03/12 19:54:19 rkitain Exp $
  */
 
 /*
@@ -21,7 +21,6 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponentBase;
 import javax.faces.validator.Validator;
@@ -29,10 +28,10 @@ import javax.faces.component.AttributeDescriptor;
 
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.FileOutputResponseWrapper;
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 import com.sun.faces.CompareFiles;
 import com.sun.faces.lifecycle.LifecycleImpl;
+import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.lifecycle.RenderResponsePhase;
 
 import com.sun.faces.TestBean;
@@ -54,7 +53,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlBasicValidator.java,v 1.3 2003/02/20 22:50:09 ofung Exp $
+ * @version $Id: TestHtmlBasicValidator.java,v 1.4 2003/03/12 19:54:19 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -111,13 +110,10 @@ public void beginPageShouldFail(WebRequest theRequest)
 public void testPageShouldFail()
 {
     boolean result = false;
-    int rc = Phase.GOTO_NEXT;
     UIComponentBase root = null;
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
-    Phase 
-	renderResponse = new RenderResponsePhase(lifecycle, 
-				       RIConstants.RENDER_RESPONSE_PHASE);
+    Phase renderResponse = new RenderResponsePhase(lifecycle);
     root = new UIComponentBase() {
 	    public String getComponentType() { return "Root"; }
 	};
@@ -132,7 +128,7 @@ public void testPageShouldFail()
 
     boolean exceptionThrown = false;
     try {
-	rc = renderResponse.execute(getFacesContext());
+	renderResponse.execute(getFacesContext());
     }
     catch (Throwable e) {
 	// If this exception message contains the string "command_button"
@@ -152,13 +148,10 @@ public void beginPageShouldSucceed(WebRequest theRequest)
 public void testPageShouldSucceed()
 {
     boolean result = false;
-    int rc = Phase.GOTO_NEXT;
     UIComponentBase root = null;
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
-    Phase 
-	renderResponse = new RenderResponsePhase(lifecycle, 
-				       RIConstants.RENDER_RESPONSE_PHASE);
+    Phase renderResponse = new RenderResponsePhase(lifecycle); 
     root = new UIComponentBase() {
 	    public String getComponentType() { return "Root"; }
 	};
@@ -173,7 +166,7 @@ public void testPageShouldSucceed()
 
     boolean exceptionThrown = false;
     try {
-	rc = renderResponse.execute(getFacesContext());
+	renderResponse.execute(getFacesContext());
     }
     catch (Throwable e) {
 	exceptionThrown = true;
