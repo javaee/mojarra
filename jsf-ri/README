@@ -1,8 +1,8 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20030912A
-jsf-api-spec for this implementation: JSF_20030912.pdf
+jsf-api cvs tag for this implementation: JSF_API_20030930
+jsf-api-spec for this implementation: JSF_20030930.pdf
 
 Installation Notes
 ==================
@@ -21,648 +21,567 @@ distribution in your WEB-INF/lib directory in your webapp.
 Major changes/features in this release:
 =======================================
 
-SECTION: API Changes
+SECTION: API Changes by scarab issue
 
-  Issues:
+    JSFA92 
 
-    JSFA29 DataGrid
+      * Add requirements for <f:subview/> tag.
 
-    JSFA118 FactoryFinder
+      * Remove "lenient" attribute from <f:convert_datetime/>.
 
-    JSFA92 Jsp Processing
+      * Miscellaneous cleanups (see change bars).
 
-    JSFA22 State Saving
+      SPEC IMPACT: Needs to have "lenient" property removed from Section
+      3.3.3 if it was added (Ed, can you double check this?).
 
-  Code changes: 72 messages
+      RI IMPACT: Remove "lenient" attribute from the TLD and
+      implementation class for the <f:convert_datetime> tag.
 
-    web-facesconfig_1_0.dtd
+      DEMO IMPACT: All date/time parsing must strictly match the
+      specified pattern.
 
-    - I forgot to add the ELEMENT definitions for the factory elements
+      RI IMPACT:
 
-    - Clarify the DTD such that <summary> and <detail> elements with no
-      "xml:lang" should be associated with the language associated wth
-      the default Locale for the underlying JVM.
+      * Implement new tag for <f:subview/>
 
-    - Clarify MessageResources() such that, when localized text for a
-      particular Locale is not available, it can return the text
-      associated with the language specified by the default Locale
-      (i.e. by the text that was configured with no xml:lang
-      attributes).
+      * Relax the current TLV so that, if you are nested inside a naming
+	container tag that is inside a conditional or iterator, you need
+	not have an id.
 
-    FactoryFinder.java
+      * Review change bars in Chapter 9 carefully for current compliance and/or
+	problems where the spec is not complete enough.
 
-    - comment typo
+      * Remove the long-ago deprecated FacesTag and FacesBodyTag classes
+	that were replaced by UIComponentTag and UIComponentBodyTag.
 
-    - guard against null implementations List.
+   JSFA98
 
-    FacesContext.java:  
+    Clarify responsibilities of methods on RenderKit and
+    RenderKitFactory to be more consistent with other factories like
+    Applicaton.
 
-    - Refine responsibilities of setViewRoot() to include clearing any
-      queued events and messages.  This needs to be ported to the HEAD
-      branch unconditionally, no matter what happens with DataGrid.
+    M src/javax/faces/render/RenderKit.java
 
-    UIData.java
+    - addRenderer() can repace existing Renderers for the same identifier.
 
-    - Refine responsibilities of setRowIndex() to also expose
-      the corresponding data object via the "var" property, if present.
+    - getRenderer() returns null instead of IAE if no Renderer is registered
+      for the specified type.
 
-    RepeaterSupport.java 
-
-    - Ensure that the default "valid" property for Repeater-child
-      components is "true", which is the same as for non-Repeater
-      children.
-
-    - Change SEPARATOR for repeaters from ':' to '_'
-
-    UICommandBase.java UIGraphicBase.java UIInputBase.java 
-      UIOutputBase.java UIPanelBase.java UIParameterBase.java 
-      UISelectItemBase.java UISelectItemsBase.java 
-
-    - When we are nested in a Repeater whose rowIndex is currently zero,
-      store "previous", "valid", and "value" properties locally instead of
-      in the Repeater.
-
-    RepeaterMessage.java 
-
-    - Add a wrapper for messages enqueued for a component that is nested
-      in a Repeater.
-
-    ExternalContext.java 
-
-    - Add four security-related methods (getAuthType, getRemoteUser,
-      getUserPrincipal, and isUserInRole) to ExternalContext so that
-      applications can check these things independent of the Servlet and
-      Portlet APIs.
-
-    RenderKit.java 
-
-    - Remove IAE when addRenderer() is called with the same rendererType.
-
-    UIComponent.java 
-
-    - Change SEPARATOR_CHAR for components from '_' to ':'
-
-    AttributeTag.java, ConverterTag.java, UIComponentTag.java
-      ValidatorTag.java
-
-    - Expose a stack of the currently nested UIComponentTag instances as a
-      request scope attribue, so that pages included via <c:import> or
-      <jsp:include> can be assembled into a single component tree.  Add
-      new public static method getParentUIComponentTag(PageContext) so that
-      other comnponent tags can use it instead of walking getParent().
+    - getResponseStream() renamed to createResponseStream() for consistency
+      with createResponseWriter().
 
 
-    UIComponentTagTestCase.java
+    M src/javax/faces/render/RenderKtFactory.java
 
-    - In reset(), remove the request scope attribute in case a previous
-      run left it there accidentally.
+    - addRenderKit() can replace existing RenderKits for the same identifier.
 
-    TestUtil.java, UICommandBaseTestCase.java UIComponentBaseTestCase.java 
-	UIInputBaseTestCase.java UIOutputBaseTestCase.java 
-	UIParameterBaseTestCase.java UISelectItemBaseTestCase.java 
-	UIViewRootBaseTestCase.java ValueHolderTestCaseBase.java 
+    - getRenderKit() returns null instead of IAE of no RenderKit is registered
+      for the specified identifier.  The first form (taking only a
+      renderKitId) must return an application-wide singeton; the second
+      form (customized by a FacesContext) need not.
 
-    - Fix faulty logic in string comparisons.
+    RI IMPACTS:
 
-    UISelectMany.java 
+    - Modify implementation of RenderKitImpl and RenderKitFactoryImpl
+      to reflect the revised responsibilities.
 
-    - Spec javadoc changes for UISelectMany.
+    - Update unit tests to reflect ability to replace existing RenderKits and
+      Renderers, and null-returns on unknown identifiers.
 
-    StateManager.java ViewHandler.java UIComponentBase.java
-      ResponseStateManager.java MockViewHandler.java StateHolder.java
-      UIComponent.java UIData.java UICommandBase.java
-      UIComponentBase.java UIGraphicBase.java
-      UIInputBase.java UIOutputBase.java UIPanelBase.java 
-      UIParameterBase.java UISelectItemBase.java 
-      UISelectItemsBase.java UIViewRootBase.java 
-      DateTimeConverter.java NumberConverter.java 
-      DoubleRangeValidator.java LengthValidator.java 
-      LongRangeValidator.java StringRangeValidator.java 
-      UIColumnTestCase.java UIDataTestCase.java 
-      TestActionListener.java TestValidator.java 
-      TestValueChangedListener.java UICommandBaseTestCase.java 
-      UIComponentBaseStateTestCase.java UIComponentBaseTestCase.java 
-      UIGraphicBaseTestCase.java UIInputBaseTestCase.java 
-      UIOutputBaseTestCase.java UIPanelBaseTestCase.java 
-      UIParameterBaseTestCase.java UISelectItemBaseTestCase.java 
-      UISelectItemsBaseTestCase.java UIViewRootBaseTestCase.java 
-      ValueHolderTestCaseBase.java 
-      MockViewHandler.java 
+   JSFA80/106
 
-    - Implement the state saving changes proposed by Adam Winer in
-      <http://archives.java.sun.com/cgi-bin/wa?A2=ind0309&L=jsr-127-eg&F=&S=&X=23B32C05625A57F670&Y=ed.burns@sun.com&P=6085>.
-      This change only impacts the state saving case.  The restore case
-      is the same.
+      * Require that StateManager saves and restores the current Locale
+	from/to the FacesContext.
 
-    - Implement state saving name changes proposed by Adam Winer in
-      <http://archives.java.sun.com/cgi-bin/wa?A2=ind0309&L=jsr-127-eg&F=&S=&X=23B32C05625A57F670&Y=ed.burns@sun.com&P=6218>.
+   JSFA101
 
-    StateManager.java ViewHandler.java 
+      we now have a tool that generates the concrete html components in
+      the package javax.faces.component.html from meta-data in the
+      standard-html-renderkit.xml file.  This tool will be expanded to
+      generate the TLD and tag handler classes as well.
 
-    - Implement state saving changes proposed by Adam winer in
-      <http://archives.java.sun.com/cgi-bin/wa?A2=ind0309&L=jsr-127-eg&F=&S=&X=23B32C05625A57F670&Y=ed.burns@sun.com&P=11103>
+      The spec now includes a standard-html-renderkit.xml file, which is
+      a faces-config file that defines the standard html renderkit.
 
-    StateHolderSaver.java 
 
-    - made this class public, pending moving to UIComponent package, when it
-      can be made private again.
+    JSFA116
 
-    - null out the className if an attached object is marked transient.
-   
-    UIComponentBase.java
+      * <jsp:include> and <c:import> now work.
 
-    - Make UIComponent.validateId() disallow the use of
-      UIComponent.SEPARATOR_CHAR in ids, per Adam's suggestion on
-      20030911.
+    JSFA120
 
-    - Special case code for handling facets and state management.  Since
-      facets are stored in a HashMap, there is no ordering.  There needs to
-      be ordering for state management to work correctly.  Thus, flatten out
-      the facet HashMap into name/value pairs, stored in an array.
+      Implement the API-related changes for queueing events and have
+      them bubble up to the UIViewRoot (unless intercepted or modified
+      by some component in between the source component and the tree
+      root).
 
-    MockViewHandler.java
+    JSFA121
 
-    - Fix compilation error I introduced.
+      Make the code that parses the faces-config.xml install any
+      phase-listener instances it finds.
+
+      Add phase-listener syntax to DTD.
+
+      RI Impact:
+
+      The digester rules need to change to cause a PhaseListener to be
+      added when a <phase-listener> element is encountered in the
+      faces-config.xml file.
+
+    JSFA122
+
+      M src/javax/faces/component/UISelectMany.java
+
+      - document that valueRefs for UISelectMany may also support "List of
+	String".
     
-    StateManager.java UIData.java UICommandBase.java
-      UIComponentBase.java UIGraphicBase.java UIInputBase.java
-      UIOutputBase.java UIPanelBase.java UIParameterBase.java
-      UISelectItemBase.java UISelectItemsBase.java
+    JSFA123
 
-    - restoreAttachedObject now merges any attached objects that were
-      registered during component creation time except for converter,
-      repeater that get overwritten.
+      RI and Demo Impact: any place that implements 
+
+      UIComponent.decode() or UIComponent.processDecodes() will have to
+      remove the "throws IOException" statement.
+				    
+    JSFA22 
+
+      Remove the setComponent() method from StateHolder.  Move the
+      responsibility of letting your attached object know about yourself to be
+      the responsibility of the attachee.  For example, for things that have a
+      ValueHolderSupport, such as UIOutputBase, they must manually call
+      setComponent() on the ValueHolderSupport instance.
+
+      DataGrid now works with save state in client or on server.
+      Previously it only worked on server.
+
+      Bugfix to correctly handle UIComponentBase.getAttributes() special
+      attribute/property transparency map.
+
+    JSFA76
+
+      FormRenderer.encode() must render a hidden field with the name being
+      the clientId of the UIForm component.  The value is inconsequential,
+      but may need to be non-null.  Not sure.  Whatever you need to do to
+      make the below logic in decode() work.
+
+      FormRenderer.decode() must check
+      RequestParameterMap.containsKey(clientId).  If so, it must call
+      UIForm.setSubmitted(true).  Because we rendered a hidden field in
+      encode, this will only happen to be the case if this is the form that
+      was submitted.
+
+    JSFA115
+
+      Per EG discussion, we decided to add back two convenience methods
+      that can be used for efficiency, because they avoid allocating the
+      underlying List or Map if it's not already there:
+
+      * public int getChildCount();
+
+      * public UIComponent getFacet(String name);
+
+      RI IMPACT: No *required* changes, but code that currently calls
+      component.getChildren().size() or component.getFacets().get("...")
+      should be revised to use the new method signatures (for
+      readability as well as potential performance improvement).
+
+      [JSFA115] For symmetry with the way that children and facets are
+      handled, replace all the attribute-related methods with a
+      getAttributes() that returns a mutable Map.
+
+      RI IMPACT: Replace all the getAttribute(), getAttributeNames(),
+      and setAttribute() calls with corresponding sequences.
+
+      DEMO IMPACT: Same as RI IMPACT.
+
+      NOTE: I tagged the jsf-api repository just before this commit with
+      tag "JSF_API_20030919_BEFORE_ATTRIBUTES" if you want to be latest
+      and greatest before this change that breaks compiling -- I did
+      some bugfixes.
+
+      [JSFA115] Switching to behavioral interfaces like ValueHolder has
+      introduced some duplicate logic in the component classes that used
+      to extend UIOutput.  It makes sense to create a support class to
+      which these component classes can delegate the required behavior,
+      in the same way that components implementing NamingContainer can
+      delegate to NamingContainerSupport.
+
+      [JSFA115] Flesh out ValueHolderSupport, including its support for
+      saving and restoring its own state as an attached object.
+
+      [JSFA115] Make all components that implement ValueHolder delegate
+      this functionality to an instance of ValueHolderSupport, and make
+      sure this instance variable is saved and restored as an attached
+      object.
+
+      [JSFA115] Add a new test case in ValueHolderTestCaseBase that
+      ensures all of the properties reflected in the ValueHolder
+      interface (including a precisely configured Converter instance)
+      are correctly saved and restored.  This test is inherited by all
+      of the component test cases for components that implement
+      ValueHolder, so saving/restoring the attached object will be
+      tested in all of those cases.
+
+      [JSFA115] Bugfix.  getChildren().set() would fail if an old child
+      was being replaced with a new one that has the same "id".  The
+      check for validateMissing() here is superfluous, because the old
+      component will be removed if it is present.
+
+      [JSFA115] Unit test updates for transition back to concrete
+      component classes.  See next commit message for detailed impacts.
+
+      [JSFA115] Switch generic components back to concrete classes;
+      eliminate the javax.faces.component.base package.
+
+      RI IMPACT:
+
+      * Change jsf-ri-config.xml to register the revised concrete
+        component classes.
+
+      * Change unit tests that instantiate concrete components.
+
+      DEMO IMPACT:
+
+      * Change inheritance of any demo-level component class that
+        inherits from
+	a concrete Faces base class.
+
+   TCK related changes
+
+     RI Impact: FacesContext Impl needs to throw IllegalStateException from
+     every FacesContext method (except release()) if any method is called
+     after release() is called.  That's all for now, since our RI doesn't
+     recycle FacesContext instances.
+
+     State that the implementation of FacesContext.release() must call
+     setCurrentInstance(null).
+
+   JSFA119
+
+     RI Impact: I think this will break some of our lifecycle tests.  Also, I
+     think we're going to want to change the exception we catch in
+     UpdateModelValuesPhase to be RuntimeException.
+
+     M src/javax/faces/component/UIComponent.java
+
+     - Spec that if a RuntimeException is thrown during decode, validation,
+       or update model processing, it is caught, renderResponse() is called,
+       and the exception is re-thrown.
+
+     M src/javax/faces/component/base/UIComponentBase.java
+
+     - implement the above behavior
+
+   JSFA110/JSFA42
+
+     M src/javax/faces/application/ViewHandler.java
+
+     +     * <p>The default implementation of <code>restoreView</code>
+     +     * must examine the deployment descriptor for this web
+     +     * application to determine the manner in which the {@link
+     +     * javax.faces.webapp.FacesServlet} has been mapped to
+     +     * incoming urls.  If prefix mapping is used, this method
+     +     * simply calls {@link
+     +     * javax.faces.context.ExternalContext#dispatchMessage}
+     +     * passing the <code>viewId</code> of the argument
+     +     * <code>viewToRender</code>.  If suffix mapping is used, the
+     +     * default implementation must check the the servlet context
+     +     * init parameter named by the value of the constant {@link
+     +     * #DEFAULT_SUFFIX_PARAM_NAME}.  If this parameter is not
+     +     * defined, use {@link #DEFAULT_SUFFIX} as the suffix.  Append
+     +     * the suffix to the <code>viewId</code> of the argument
+     +     * <code>viewToRender</code>, and call {@link
+     +     * javax.faces.context.ExternalContext#dispatchMessage} on the
+     +     * result.</p>
+
+     and new method:
+
+     +    /**
+     +     * <p>Returns the context relative path of the argument
+     +     * <code>viewId</code>, including any <code>url-pattern</code>
+     +     * prefix mapping defined by the application.</p>
+     +     *
+     +     * <p>The default implementation must examine the deployment
+     +     * descriptor for the current webapp and determine the
+     +     * <code>url-pattern</code> mapping given for the {@link
+     +     * javax.faces.webapp.FacesServlet}.  If the mapping is a
+     +     * prefix mapping, prepend the prefix mapping to the viewId,
+     +     * making sure to take any wildcards into account.  If the
+     +     * mapping is an extension mapping, take no action and just
+     +     * return the argument <code>viewId</code>.  The default
+     +     * implementation expects the argument <code>viewId</code> to
+     +     * be a context relative path, starting with '<code>/</code>'.
+     +     * If this is not the case, the default implementation thows
+     +     * <code>IllegalArgumentException</code>.</p>
+     +     *
+     +     * @param context the {@link FacesContext} for this request.
+     +     *
+     +     * @param viewId the context relative path of this viewId.
+     +     *
+     +     * @exception NullPointerException if <code>context</code> or
+     +     * <code>viewId</code> is <code>null</code>.
+     +     *
+     +     * @exception IllegalArgumentException if <code>viewId</code> is not
+     +     * valid for this <code>ViewHandler</code>.
+     +     *
+     +     */
+
+     +    public String getViewIdPath(FacesContext context, String viewId);
+
+     M src/javax/faces/context/ExternalContext.java
+
+     - remove 
+
+	public abstract String encodeURL(String url);
+
+   JSFA3
+
+     M src/javax/faces/application/ViewHandler.java
+
+     - add component id uniqueness checking to the ViewHandler.renderView's list of
+       things to do.
+
+     M src/javax/faces/component/NamingContainer.java
+
+      - remove all methods
+
+      - update SEPARATOR_CHAR
+
+     R src/javax/faces/component/NamingContainerSupport.java
+
+     - remove this class.
+
+     M src/javax/faces/component/UIComponent.java
+
+     - remove SEPARATOR_CHAR, defined on NamingContainer
+
+     - change getClientId() 
+
+	In particular, change
+	 UIComponentBase.getClientId(FacesContext)
+       to always generate the client ID as it does in the no-Renderer-
+       exists case, and only after that finishes, to call Renderer
+       convertClientId() to transform the ID into a proper form for output:
+
+	Renderer renderer = getRenderer();
+	if (renderer != null) {
+	  clientId = renderer.convertClientId(context, clientId);
+	}
+
+	   * <p>Return a client-side identifier for this component, generating
+     +     * one if necessary.  The associated {@link
+     +     * javax.faces.render.Renderer}, if present, will be asked to
+     +     * convert the clientId to a form suitable for transmission to the
+     +     * client.</p>
+
+     - change setId()
+
+     6. Spec setId() to throw IllegalArgumentException if either:
+     - the ID contains NamingContainer.SEPARATOR_CHAR
+     - the ID begins with UIViewRoot.UNIQUE_ID_PREFIX
+
+	   *
+	   * @param id The new component identifier
+	   *
+     +     * @exception IllegalArgumentException if <code>id</code> is zero
+     +     * length, begins with {@link NamingContainer#SEPARATOR_CHAR}, or
+     +     * {@link UIViewRoot#UNIQUE_ID_PREFIX}, or contains invalid
+     +     * characters
+
+     4. Rewrite UIComponentBase.findComponent() as a brute force search.
+       Change UIComponent.findComponent()'s spec to read as follows:
+
+       /**
+	* Searches for a component with a matching ID.  The search will
+	* begin either from the root of the component tree or the
+	* nearest ancestor NamingContainer, whichever is closer, and
+	* continue recursively through all children and facets, but will not
+	* continue inside any NamingContainers.
+	* <p>
+	* If this component is itself a NamingContainer, the search will
+	* first recursively search children and facets inside of the component,
+	* then search from the root of the component tree or the
+	* nearest ancestor NamingContainer, whichever is closer.
+	* <p>
+	* If the ID contains instances of NamingContainer.SEPARATOR_CHAR,
+	* then the call is treated as a request for a recursive search.
+	* The ID will be divided into a series of IDs separated by
+	* NamingContainer.SEPARATOR_CHAR, reading from left to right.
+	* The search begins as above, but will instead search for a component
+	* matching the first ID.  If that search suceeds, findComponent()
+	* will search recursively all children and facets inside of that
+	* component for a descendant matching the second ID; etc.
+	* If any step of the search fails, findComponent() returns null
+	* (and does not throw an exception).
+	*/
+
+     M src/javax/faces/component/UIComponentBase.java
+
+     - new findComponent implementation.
+
+     - new setId implementation
+
+     - remove all traces of naming container interaction from the children
+       inner List impl.
+
+     M src/javax/faces/component/UIForm.java
+
+     - no longer implements NamingContainer.
+
+     R src/javax/faces/component/UINamingContainer.java
+
+     - no longer needed
+
+     M src/javax/faces/component/UIViewRoot.java
+
+     - no longer implements NamingContainer.
+
+     M src/javax/faces/render/Renderer.java
+
+     11. Change Renderer.getClientId(FacesContext context) to
+     Renderer.convertClientId(FacesContext context, String clientId)
+     with the following default implementation
+
+     public String convertClientId(FacesContext context, String clientId)
+     {
+	return clientId;
+     }
+
+   
+
 
 SECTION: Spec document changes:
 
-    DataGrid changes.
+  [JSFA120] Implement spec changes related to event bubbling changes.
 
-    State that by-type Converter registration must occurr for the Class
-    instances that correspond to the java language primitive types, as 
-    given in <WRAPPER>.TYPE, where <WRAPPER> is one of the java.lang wrapper
-    classes for the primitive types.
+    * [2.2.2 ... 2.2.5] -- Refine the lifecycle phase descriptions to document
+      that event broadcasting is performed by the processXxx method of
+      the UIViewRoot instance at the root of the component tree.
 
-    Modify RestoreView to require that implementetations skip to
-    renderResponse(), after restoring the view, if there is no POST
-    data or query parameters.
+    * [2.3] -- Refine overall description of the Common Event Processing
+      to match the new behavior factoring.
 
-    2.1.1 
+    * [3.1.10] -- Document the new UIComponent.queueEvent() method.
 
-      We now require the caller to set the new view into the FacesContext.
+    * [6.1.6] -- Remove FacesContext.addFacesEvent() and
+      getFacesEvents().
 
-    2.2.1
+    * Further [JSFA120] related commit (document updated behavior of
+      UIViewRoot) plus some cosmetic changes.  Impact analysis for all
+      of [JSFA120] was in the previous spec commit message.
 
-      It is the restore view phase's responsibility to set the viewRoot into
-      the FacesContext.
+    * [JSFA120] Ensure that an ANY_PHASE listener sees any single event
+      once, instead of once per phase in the case where there are
+      listeners registered for later phases explicitly.
 
-    3.1.11 
+    * [JSFA120] Correct implementation of event queueing so that we
+      won't see ConcurrentModificationException errors if new events are
+      queued while the existing ones are being processed.  Essentially,
+      this required simulating an Iterator.
 
-      Change getState to saveState.
+    RI IMPACTS:
 
-    3.2.1.3
+    * Any renderer whose decode method needs to queue events must call the
+      queueEvent() method on the source UIComponent, instead of calling
+      the removed FacesContext.addFacesEvent() method.
 
-      Change getState to saveState.
+    * FacesContextImpl - remove event queue functionality.
 
-    3.2.4.2
+    * LifecycleImpl - remove event broadcasting functionality, which is now
+      handled by UIViewRoot.  Add call to
+      UIViewRoot.processApplication() during Invoke Application phase.
 
-      Change getState to saveState.
+   JSFA3, JSFA101, JSFA110, JSFA76
 
-    4.1.4
+   3.1.1 
 
-      UIForm calls ViewHandler.writeState.
+     New rules for component id validitiy
 
-    7.1.1
+   3.2.2 
 
-      the default ActionListener has to call context.renderResponse() so that
-      the Process Validations through Invoke Application phases are
-      skipped when UICommand has immediate="true".
+     Emasculate this section, since NamingContainer has no more PME.
 
-    7.5 
+   3.1.6
 
-      ViewHandler.restoreView() returns UIViewRoot; is not responsible for
-      setting it into the FacesContext.
+     New description of find component
 
-    7.6.1 
+   4.1.4.{2,3,4}, 4.1.15.{2,3,4}
 
-      Remove StateManager.writeStateMarker.
+     No methods on NamingContainer
 
-    8.3 
+   6.1.2
 
-      Remove ResponseStateManager.writeStateMarker.
+     Remove ExternalContext.encodeURL().
 
-    remove commandName from JSP example.
+   10.3.3.
+
+     Import current DTD.
+
+   8.6
+
+     New section documenting the concrete HTML component classes.
+
+   JSFA76/JSFA104
+
+   4.1.4.
+
+     Fix assertion to say that the form Renderer must call writeState.
+
+   4.1.4.3
+
+     Document new methods:
+
+     public boolean isSubmitted();
+
+     public void setSubmitted(boolean submitted);
+
+     public void processDecodes(FacesContext context) throws IOException;
+
+     public void processValidators(FacesContext context);
+
+     public void processUpdates(FacesContext context);
+
+   8.5.3 
+
+     Document the new requirements on FormRenderer.
+
+   4.1.4.3 
+
+     Spec assertion to cause the UIForm to call setSubmitted(false) from
+     its saveState().
+
+   JSFA121
+
+     SECTION 11.1.  Note that you can add cause a PhaseListener to be added
+     by making an entry in the faces-config.xml file.
+
+     RI Impact:
+
+     Need to modify digester rules such that the <phase-listener> element 
+     causes Lifecycle.addPhaseListener() to be called.
+
+   JSFA119
+
+     RI IMPACT: Make sure that the RI never ever uses the presence of
+     messages in the FacesContext as a cue for skipping to render response.
+
+     2.2.3
+
+       Removed text that talks about using the presence of Messages as a cue
+       for skipping to Render Response Phase.
+
+     RI Impact: I think this will break some of our lifecycle tests.
+     Also, I think we're going to want to change the exception we catch
+     in UpdateModelValuesPhase to be RuntimeException.
+
+     sections 2.2.3, 2.2.4, 3.1.11
+
+     - Spec that if a RuntimeException is thrown during decode, validation,
+       or update model processing, it is caught, renderResponse() is
+       called, and the exception is re-thrown.
+
+
 
 SECTION: RI Changes: 150 commit messages
-
-  FacesContextImpl.java 
-
-  - Implement wrapping a FacesEvent inside a RepeaterEvent if appropriate.
-
-	tabbedpanes.jsp 
-
-  Changed the command attribute "label" to "value". Added "converter"
-      attribute to commands.
-
-
-  Modify tabbed panes demo to use <jsp:include> instead of <% include %>
-  to prove that it works.
-
-  
-	AreaRenderer.java MenuBarRenderer.java ResultSetControls.java 
-
-Log Message:
-Revise the generated JavaScript to put the DOM object name in square
-brackets and quotes.  This allows us to utilize arbitrarily complex
-client identifiers and things will still work.
-
-M components/web/menu.jsp
-
-- Altered markup to allow automated testing.
-
-M test/tests/com/sun/faces/demotest/components/TestComponents.java
-
-- Added test to exercise menu.jsp
-
-	TestComponents.java 
-Log Message:
-Start work on automation of result-set.jsp.
-
-	build.xml 
-Log Message:
-At Ana von Klopp's request, include TLDDoc in dist bundle.
-
-	XulViewHandlerImpl.java 
-	UserNumberBean.java 
-	AreaComponent.java MapComponent.java 
-	CustomerBean.java FormatValidator.java 
-Log Message:
-r=visvan
-
-Implement Adam's name change suggestions from
-<http://wspack.sfbay.sun.com/jsf/eg-archive/2509.html>.
-
-	XulViewHandlerImpl.java 
-Added Files:
-	BuildComponentFromTag.java BuildComponentFromTagImpl.java 
-	XmlDialectProvider.java XmlXulRuleSet.java 
-	XulDialectProvider.java 
-	RIConstants.java 
-Log Message:
-[r=edburns]
-
-Added navigation support to nonjsp demo.
-
-	BuildComponentFromTagImpl.java 
-Log Message:
-[r=craigmcc]
-
-Changed the command attribute "label" to "value". Added "converter" attribute to commands. 
-
-	helloDuke.xul 
-Log Message:
-[r=craigmcc]
-
-Changed the command attribute "label" to "value". Added "converter" attribute to commands. 
-
-	greeting.jsp response.jsp 
-Log Message:
-[r=craigmcc]
-
-Changed the command attribute "label" to "value". Added "converter" attribute to commands. 
-
-	command_button_row.jsp command_hyperlink_row.jsp 
-	panel_grid_row.jsp 
-Log Message:
-[r=craigmcc]
-
-Changed the command attribute "label" to "value". Added "converter" attribute to commands. 
-
-	command_button_row.jsp command_hyperlink_row.jsp 
-	Resources.properties Resources_en_US.properties 
-Log Message:
-[r=edburns]
-
-Port Craig's fix to the RI head.
-
-The <a> element for a hyperlnk has to be rendered in encodeBegin() rather than encodeEnd(), so that any nested content becomes the hyperlink label.
-
-Fixed hyperlink portion of standard demo so that image is displayed properly.
-
-jsf-demo:
-
-M standard/src/standard/Resources.properties
-M standard/src/standard/Resources_en_US.properties
-M standard/web/command_button_row.jsp
-M standard/web/command_hyperlink_row.jsp
-
-M cardemo/src/cardemo/FormatValidator.java
-    Now implements StateHolder.
-
-M cardemo/web/ImageMap.jsp
-M cardemo/web/outofstock.jsp
-   Remove "-" from ids.
-
-M cardemo/web/WEB-INF/web.xml
-    change state saving method to "client"
-
-M components/src/components/renderkit/MapRenderer.java
-    do not render "form". make use to <h:form>. 
-
-M components/src/components/components/AreaComponent.java
-  save targetImage attribute as part of the state.
-
-M components/src/components/components/GraphComponent.java
-  make GraphListener implement StateHolder and mark it as transient. Because the
-  listener is registered in the constructor, it doesn't have to be persisted.
-
-M components/src/components/components/PaneComponent.java
-  make PaneSelectedListener implement StateHolder and mark it as transient. Because the
-  listener is registered in the constructor, it doesn't have to be persisted.
-  Removed Pending comments.
-
-M components/src/components/renderkit/ResultSetControls.java
-  make the class public and add a no-arg constructor so that it can be
-  instantiated via Reflection.
-
-M components/src/components/renderkit/TabLabelRenderer.java
-  Removed Pending comments.
-
-M components/src/components/taglib/ResultSetTag.java
-  extend UIComponentTag instead of UIComponentBodyTag.
-
-	TestComponents.java 
-Log Message:
-use ":" as the seperator char;  For example "JSPid1:menu2"
-    
-	html_basic.tld 
-Log Message:
-[JSFA29] Merge TableRenderer (for DataGrid) and associated tags and
-behavior changes in FacesContextImpl from JSF_RI_DATAGRID_BRANCH.
-
-	jsf-ri-config.xml 
-Log Message:
-[JSFA29] Merge TableRenderer (for DataGrid) and associated tags and
-behavior changes in FacesContextImpl from JSF_RI_DATAGRID_BRANCH.
-
-	FacesContextImpl.java 
-Log Message:
-[JSFA29] Merge TableRenderer (for DataGrid) and associated tags and
-behavior changes in FacesContextImpl from JSF_RI_DATAGRID_BRANCH.
-
-	TableRenderer.java 
-Log Message:
-[JSFA29] Merge TableRenderer (for DataGrid) and associated tags and
-behavior changes in FacesContextImpl from JSF_RI_DATAGRID_BRANCH.
-
-	ColumnTag.java DataTableTag.java 
-Log Message:
-[JSFA29] Merge TableRenderer (for DataGrid) and associated tags and
-behavior changes in FacesContextImpl from JSF_RI_DATAGRID_BRANCH.
-
-M src/com/sun/faces/taglib/jsf_core/ActionListenerTag.java
-M src/com/sun/faces/taglib/jsf_core/ValueChangedListenerTag.java
-
-  Use the new static method to find the parent UIComponentTag
-  (related to allowing included pages to have components).
-
-M test/com/sun/faces/lifecycle/TestRenderResponsePhase.java
-M web/test/RenderResponse_correct
-M web/test/TestLifecycleImpl_initial_correct
-M web/test/TestViewHandlerImpl_correct
-
-  Update golden files to reflect change in separator character.
-
-
-M systest/src/com/sun/faces/jsptst/JstlIntegrationTestCase.java
-A systest/web/jsp/jstl-import-00.jsp
-A systest/web/jsp/jstl-import-01.jsp
-A systest/web/jsp/jstl-import-01a.jsp
-A systest/web/jsp/jstl-import-01b.jsp
-A systest/web/jsp/jstl-import-02.jsp
-A systest/web/jsp/jstl-import-02a.jsp
-A systest/web/jsp/jstl-import-02b.jsp
-
-  Initial systests for including pages via <c:import>.
-
-	JstlIntegrationTestCase.java 
-Log Message:
-Add test scenarios that conditionally include subpages.  At present,
-you have to have explicit component ids on components in the subpages
-(just as if you had included them with <%@ include %> instead).
-
-	ExternalContextImpl.java 
-Log Message:
-Provide callthrough methods for getAuthType(), getRemoteUser(), getUserPrincipal(),
-and isUserInRole().
-
-M src/com/sun/faces/config/ConfigParser.java
-
-- Make sure to have by-class registration on <WRAPPER>.TYPE Class
-  instances, where <WRAPPER> is one of: Boolean, Byte, Character, Short,
-  Integer, Float, Long, or Double.  This is necessary to support
-  UISelectMany having model types "array of primitive".
-
-M src/com/sun/faces/renderkit/html_basic/HtmlBasicRenderer.java
-
-- moved some methods to Util.
-
-M src/com/sun/faces/renderkit/html_basic/MenuRenderer.java
-
-- Logic changes for UISelectMany.  See UISelectMany javadoc.
-
-M src/com/sun/faces/util/Util.java
-
-- take methods from HtmlBasicRenderer.
-
-- remove unused defaultConverter stuff.
-
-M test/com/sun/faces/convert/TestConverters.java
-
-- test of this feature.
-
-M test/com/sun/faces/util/TestUtil_local.java
-
-- removed testDefaultConverters stuff.
-
-	html_basic.tld jsf_core.tld 
-Log Message:
-Change the short names to be more TLDDoc friendly.
-
-M src/com/sun/faces/renderkit/html_basic/HyperlinkRenderer.java
-
-- Place [' and '] around our clientId.
-
-M test/com/sun/faces/lifecycle/TestRenderResponsePhase.java
-M test/com/sun/faces/renderkit/html_basic/TestRenderers_1.java
-M web/test/CorrectRenderersResponse
-M web/test/RenderResponse_correct
-
-- accomodate the tests.
-
-M src/com/sun/faces/application/ActionListenerImpl.jaiva
-
-- Don't cast to UICommand, instead use ActionSource.
-
-A src/com/sun/faces/application/StateManagerImpl.java
-
-- Break this out since name changes make it impossible to have it be the
-  same class.
-
-- add method to tell if we're saving in the client.  Take that method
-  away from Util.
-
-M src/com/sun/faces/application/ViewHandlerImpl.java
-
-- name changes.
-
-M src/com/sun/faces/renderkit/ResponseStateManagerImpl.java
-
-- remove the writeStateMarker() functionality.
-
-M src/com/sun/faces/renderkit/html_basic/FormRenderer.java
-
-- Call writeState().  Moved from tag.
-
-M src/com/sun/faces/taglib/html_basic/FormTag.java
-
-- no need for doEndTag().  Moved into Renderer.
-
-M src/com/sun/faces/taglib/jsf_core/ViewTag.java
-
-- lots of logic changes.  see diffs.
-
-M src/com/sun/faces/util/Util.java
-
-- remove boolean convenience method for accessing the state init param.
-
-M test/com/sun/faces/lifecycle/TestSaveStateInPage.java
-
-- Change to accomodate new API.
-
-	renderkit02.jsp renderkit03.jsp 
-Log Message:
-Craig, Is this ok with you:
-
-According to the spec change in section 2.1.1, we need to call 
-facesContext.setViewRoot() passing in the newly created view to handle the 
-non-faces-request generates faces response case.
-
-	Util.java 
-Log Message:
-[r=edburns]
-
-Removing stale generateId method. No longer used and the id's it generates are not valid.
-
-	html_basic.tld 
-Log Message:
-[r=craigmcc]
-
-Changed the command attribute "label" to "value". Added "converter" attribute to commands. 
-
-Log Message:
-M src/com/sun/faces/application/StateManagerImpl.java
-  * bugfix: while restoring the tree strucuture, process the children
-    if facets.
-  * remove the parameter to build and restoreTreeStructure method that
-    was used to tell if the root is being processed. It not required
-    since the root is processed separately.
-
-M test/com/sun/faces/lifecycle/TestSaveStateInPage.java
-  update method signatures to go with the above change,
-
-	TestNavigationHandler.java 
-Log Message:
-null outcome is now valid.  NavigationHandler should just keep the originating
-view identifier.  This test now reflects this.
-
-	HtmlResponseWriter.java 
-Log Message:
-This change bundle ensures empty elements meet the HTML compatability guidelines
-outlined in the XHTML specification - http://www.w3.org/TR/xhtml1/#C_2 
-
-	RenderKitImpl.java 
-Log Message:
-addRenderer now replaces existing renderer if the rendererType is the same.
-
-	TestRenderKit.java 
-Log Message:
-changes to reflect the change that allows addRenderer to replace renderers
-
-M build-tests.xml
-   - added TestConfigListener
-M src/com/sun/faces/jsf-ri-config.xml
-   - add new message
-M src/com/sun/faces/config/ConfigListener.java
-   - clean up exception handling a bit; incorporate
-      mechanism to prevent contextInitialized method
-      execution more than once for the same webapp;
-M src/com/sun/faces/config/ConfigParser.java
-   - clean up exception handling a bit;
-M src/com/sun/faces/util/Util.java
-   - new message id
-M test/com/sun/faces/FacesTestCaseService.java
-   - manually reset the mechanism to allow
-     ConfigLister.contextInitialized execution (for each test);
-M test/com/sun/faces/util/TestUtil_messages.java
-   - new message id;
-A test/com/sun/faces/config/ConfigListenerReset.java
-   - utility class used by test framework to manually reset
-      machanism to allow ConfigListener.contextInitialized execution
-      (for each test);
-A test/com/sun/faces/config/TestConfigListener.java
-   - manually invokes ConfigListener.contextInitialized method consecutively; 
-
-	ConfigListener.java 
-Log Message:
-removed local assignment of ClassLoader since it's an instance var;
-
-	ConfigManagedBean.java 
-Log Message:
-M src/com/sun/faces/config/ConfigManagedBean.java
-  - remove unnecessary "throws FacesException"
-  - added logging;
-  - check for null "property" in addProperty method 
-
-	TestManagedBeanFactory.java 
-Log Message:
-M test/com/sun/faces/config/TestManagedBeanFactory.java
-   - added test for exceptions; 
-
-	ConfigListener.java 
-Log Message:
-M src/com/sun/faces/config/ConfigListener.java
-   - calls Util.getCurrentLoader..
-   - removed hack method 
-
-	Util.java 
-Log Message:
-M src/com/sun/faces/util/Util.java
-   - added "getCurrentLoader" method; 
-
-	FacesTestCaseService.java 
-Log Message:
-R test/com/sun/faces/config/ConfigListenerReset.java
-   - hack class no longer needed 
-M test/com/sun/faces/FacesTestCaseService.java
-   - call configListener.contextDestroyed to remove current
-     loader from set; 
-
-	MessageResourcesImpl.java 
-Log Message:
-M src/com/sun/faces/application/MessageResourcesImpl.java
-  - don't perform locale matching when adding a catalog.  Look
-    for the specific locale (see findCatalogForSpecificLocale())
-  - Minor cleanup
-
-M src/com/sun/faces/config/ConfigParser.java
-  - Use findCatalogForSpecificLocale() vs locale matching.
-    If a catalog for the specific locale doesn't exist, create
-    and return, otherwise return and add the message for that
-    locale.
-
-	TestConverters.java 
-Log Message:
-Removed JDK 1.4.x dependencies.
 
 Known Issues With This Release
 ==============================
