@@ -1,5 +1,5 @@
 /*
- * $Id: ScalarDataModel.java,v 1.5 2003/10/16 00:42:24 craigmcc Exp $
+ * $Id: ScalarDataModel.java,v 1.6 2003/10/20 20:26:02 craigmcc Exp $
  */
 
 /*
@@ -43,13 +43,13 @@
 package javax.faces.model;
 
 
+import java.util.List;
 import javax.faces.FacesException;
 
 
 /**
  * <p><strong>ScalarDataModel</strong> is a convenience implementation of
- * {@link DataModel} that wraps a single Java object.  The resulting
- * {@link DataModel} instance will appear to have a single row.</p>
+ * {@link DataModel} that wraps an individual Java object.</p>
  */
 
 public class ScalarDataModel extends DataModel {
@@ -64,24 +64,21 @@ public class ScalarDataModel extends DataModel {
      */
     public ScalarDataModel() {
 
-        super();
+        this(null);
 
     }
 
 
     /**
      * <p>Construct a new {@link ScalarDataModel} wrapping the specified
-     * object instance.</p>
+     * scalar object.</p>
      *
-     * @param instance Object instance to be wrapped
-     *
-     * @exception NullPointerException if <code>instance</code>
-     *  is <code>null</code>
+     * @param scalar Scalar to be wrapped (if any)
      */
-    public ScalarDataModel(Object instance) {
+    public ScalarDataModel(Object scalar) {
 
         super();
-        setWrappedData(instance);
+        setWrappedData(scalar);
 
     }
 
@@ -89,22 +86,43 @@ public class ScalarDataModel extends DataModel {
     // ------------------------------------------------------ Instance Variables
 
 
-    // The current row index (one relative)
-    private int index = -1;
+    // The currently selected row index (zero-relative)
+    protected int index;
 
 
-    // The object instance we are wrapping
-    private Object instance = null;
+    // The scalar we are wrapping
+    private Object scalar;
 
 
     // -------------------------------------------------------------- Properties
 
 
     /**
+     * @exception FacesException {@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
+     */ 
+    public boolean isRowAvailable() {
+
+        if (scalar == null) {
+            throw new IllegalStateException();
+        } else if (index == 0) {
+            return (true);
+        } else {
+            return (false);
+        }
+
+    }
+
+
+    /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowCount() {
 
+        if (scalar == null) {
+            throw new IllegalStateException();
+        }
         return (1);
 
     }
@@ -112,13 +130,17 @@ public class ScalarDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalArgumentException (@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public Object getRowData() {
 
-        if (index == -1) {
-            return (null);
+        if (scalar == null) {
+            throw new IllegalStateException();
+        } else if (!isRowAvailable()) {
+            throw new IllegalArgumentException();
         } else {
-            return (instance);
+            return (scalar);
         }
 
     }
@@ -126,28 +148,39 @@ public class ScalarDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowIndex() {
 
+        if (scalar == null) {
+            throw new IllegalStateException();
+        }
         return (index);
 
     }
 
 
     /**
+     * @exception FacesException {@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
      * @exception IllegalArgumentException {@inheritDoc}
-     * @exception FacesException {@inheritDoc}     
      */ 
     public void setRowIndex(int rowIndex) {
 
-        if ((rowIndex < -1) || (rowIndex >= 1)) {
+        if (scalar == null) {
+            throw new IllegalStateException();
+        } else if (rowIndex < -1) {
             throw new IllegalArgumentException();
         }
         int old = index;
         index = rowIndex;
         if ((old != index) && (listeners != null)) {
+            Object rowData = null;
+            if (isRowAvailable()) {
+                rowData = getRowData();
+            }
             DataModelEvent event =
-                new DataModelEvent(this, index, getRowData());
+                new DataModelEvent(this, index, rowData);
             int n = listeners.size();
             for (int i = 0; i < n; i++) {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
@@ -157,31 +190,24 @@ public class ScalarDataModel extends DataModel {
     }
 
 
-    /**
-     * <p>Return the wrapped data for this {@link ScalarDataModel} instance.</p>
-     */
     public Object getWrappedData() {
 
-        return (this.instance);
+        return (this.scalar);
 
     }
 
 
     /**
-     * <p>Set the wrapped data for this {@link ScalarDataModel} instance.</p>
-     *
-     * @param data The data to be wrapped
-     *
-     * @exception NullPointerException if <code>data</code>
-     *  is <code>null</code>
+     * @exception ClassCastException {@inheritDoc}
      */
     public void setWrappedData(Object data) {
 
         if (data == null) {
-            throw new NullPointerException();
+            scalar = null;
+            return;
         }
-        instance = data;
-        index = 0; // By definition we have exactly one row
+        scalar = data;
+        index = 0;
 
     }
 

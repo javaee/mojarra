@@ -1,5 +1,5 @@
 /*
- * $Id: ResultDataModel.java,v 1.6 2003/10/16 00:42:24 craigmcc Exp $
+ * $Id: ResultDataModel.java,v 1.7 2003/10/20 20:26:01 craigmcc Exp $
  */
 
 /*
@@ -68,7 +68,7 @@ public class ResultDataModel extends DataModel {
      */
     public ResultDataModel() {
 
-        super();
+        this(null);
 
     }
 
@@ -77,10 +77,7 @@ public class ResultDataModel extends DataModel {
      * <p>Construct a new {@link ResultDataModel} wrapping the specified
      * <code>Result</code>.</p>
      *
-     * @param result <code>Result</code> to be wrapped
-     *
-     * @exception NullPointerException if <code>result</code>
-     *  is <code>null</code>
+     * @param result <code>Result</code> to be wrapped (if any)
      */
     public ResultDataModel(Result result) {
 
@@ -93,11 +90,11 @@ public class ResultDataModel extends DataModel {
     // ------------------------------------------------------ Instance Variables
 
 
-    // The current row index (one relative)
-    private int index = -1;
+    // The current row index (zero relative)
+    private int index;
 
 
-    // The Result we are wraping
+    // The Result we are wrapping
     private Result result = null;
 
 
@@ -110,10 +107,31 @@ public class ResultDataModel extends DataModel {
 
 
     /**
+     * @exception FacesException {@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
+     */ 
+    public boolean isRowAvailable() {
+
+        if (result == null) {
+            throw new IllegalStateException();
+        } else if ((index >= 0) && (index < rows.length)) {
+            return (true);
+        } else {
+            return (false);
+        }
+
+    }
+
+
+    /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowCount() {
 
+        if (result == null) {
+            throw new IllegalStateException();
+        }
         return (rows.length);
 
     }
@@ -121,11 +139,15 @@ public class ResultDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalArgumentException (@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public Object getRowData() {
 
-        if (index == -1) {
-            return (null);
+        if (result == null) {
+            throw new IllegalStateException();
+        } else if (!isRowAvailable()) {
+            throw new IllegalArgumentException();
         } else {
             return (rows[index]);
         }
@@ -135,9 +157,13 @@ public class ResultDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowIndex() {
 
+        if (result == null) {
+            throw new IllegalStateException();
+        }
         return (index);
 
     }
@@ -146,17 +172,24 @@ public class ResultDataModel extends DataModel {
     /**
      * @exception FacesException {@inheritDoc}
      * @exception IllegalArgumentException {@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
 
-        if ((rowIndex < -1) || (rowIndex >= getRowCount())) {
+        if (result == null) {
+            throw new IllegalStateException();
+        } else if (rowIndex < -1) {
             throw new IllegalArgumentException();
         }
         int old = index;
         index = rowIndex;
         if ((old != index) && (listeners != null)) {
+            Object rowData = null;
+            if (isRowAvailable()) {
+                rowData = getRowData();
+            }
             DataModelEvent event =
-                event = new DataModelEvent(this, index, getRowData());
+                new DataModelEvent(this, index, rowData);
             int n = listeners.size();
             for (int i = 0; i < n; i++) {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
@@ -166,10 +199,7 @@ public class ResultDataModel extends DataModel {
     }
 
 
-    /**
-     * <p>Return the wrapped data for this {@link ResultDataModel} instance.</p>
-     */
-    public Result getWrappedData() {
+    public Object getWrappedData() {
 
         return (this.result);
 
@@ -177,25 +207,18 @@ public class ResultDataModel extends DataModel {
 
 
     /**
-     * <p>Set the wrapped data for this {@link ResultDataModel} instance.</p>
-     *
-     * @param data The data to be wrapped
-     *
-     * @exception NullPointerException if <code>data</code>
-     *  is <code>null</code>
+     * @exception ClassCastException {@inheritDoc}
      */
-    public void setWrappedData(Result data) {
+    public void setWrappedData(Object data) {
 
         if (data == null) {
-            throw new NullPointerException();
+            result = null;
+            rows = null;
+            return;
         }
-        result = data;
-        rows = data.getRows();
-        if (rows.length > 0) {
-            index = 0;
-        } else {
-            index = -1;
-        }
+        result = (Result) data;
+        rows = result.getRows();
+        index = 0;
 
     }
 

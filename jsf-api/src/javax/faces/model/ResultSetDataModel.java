@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.12 2003/10/16 00:42:24 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.13 2003/10/20 20:26:01 craigmcc Exp $
  */
 
 /*
@@ -80,7 +80,7 @@ public class ResultSetDataModel extends DataModel {
      */
     public ResultSetDataModel() {
 
-        super();
+        this(null);
 
     }
 
@@ -89,14 +89,7 @@ public class ResultSetDataModel extends DataModel {
      * <p>Construct a new {@link ResultSetDataModel} wrapping the specified
      * <code>ResultSet</code>.</p>
      *
-     * @param resultSet <code>ResultSet</code> to be wrapped
-     *
-     * @exception FacesException if the specified result set cannot be
-     *  initialized
-     * @exception IllegalArgumentException if <code>resultSet</code> is of
-     *  type <code>ResultSet.TYPE_FORWARD_ONLY</code>
-     * @exception NullPointerException if <code>resultSet</code>
-     *  is <code>null</code>
+     * @param resultSet <code>ResultSet</code> to be wrapped (if any)
      */
     public ResultSetDataModel(ResultSet resultSet) {
 
@@ -113,7 +106,7 @@ public class ResultSetDataModel extends DataModel {
     private int current = -1;
 
 
-    // The current row index (one relative)
+    // The current row index (zero relative)
     private int index = -1;
 
 
@@ -128,56 +121,44 @@ public class ResultSetDataModel extends DataModel {
     // Has the row at the current index been updated?
     private boolean updated = false;
 
-    // The number of rows in this ResultSet, or Integer.MIN_VALUE if unknown yet
-    private int size = Integer.MIN_VALUE;
-
 
     // -------------------------------------------------------------- Properties
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
+     * @exception FacesException {@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
      */ 
-    public int getRowCount() {
+    public boolean isRowAvailable() {
 
-        // PENDING(craigmcc) - Count every time, because the underlying
-        // ResultSet might allow rows to be inserted or removed.  Ultimately,
-        // this will probably return an "I don't know" answer
+        if (resultSet == null) {
+            throw new IllegalStateException();
+        } else if (index < 0) {
+            return (false);
+        }
         try {
-            if (resultSet.last()) {
-                size = resultSet.getRow();
+            if (resultSet.absolute(index + 1)) {
+                return (true);
             } else {
-                size = 0;
+                return (false);
             }
         } catch (SQLException e) {
             throw new FacesException(e);
         }
-        return (size);
 
     }
 
 
     /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalStateException (@inheritDoc}
      */ 
-    public Object getRowData() {
+    public int getRowCount() {
 
-        if (index == -1) {
-            return (null);
+        if (resultSet == null) {
+            throw new IllegalStateException();
         } else {
-            // PENDING(craigmcc) - Spec required behavior of the Map we create
-            try {
-                resultSet.absolute(index + 1);
-                TreeMap map = new TreeMap(String.CASE_INSENSITIVE_ORDER);
-                int n = metadata.getColumnCount();
-                for (int i = 1; i <= n; i++) {
-                    String name = metadata.getColumnName(i);
-                    map.put(name, resultSet.getObject(name));
-                }
-                return (map);
-            } catch (SQLException e) {
-                throw new FacesException(e);
-            }
+            return (-1);
         }
 
     }
@@ -185,9 +166,43 @@ public class ResultSetDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalArgumentException (@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
+     */ 
+    public Object getRowData() {
+
+        if (resultSet == null) {
+            throw new IllegalStateException();
+        } else if (!isRowAvailable()) {
+            throw new IllegalArgumentException();
+        }
+        // PENDING(craigmcc) - Spec required behavior of the Map we create
+        try {
+            // NOTE:  isRowAvailable() positioned us already
+            TreeMap map = new TreeMap(String.CASE_INSENSITIVE_ORDER);
+            ResultSetMetaData metadata = getMetaData();
+            int n = metadata.getColumnCount();
+            for (int i = 1; i <= n; i++) {
+                String name = metadata.getColumnName(i);
+                map.put(name, resultSet.getObject(name));
+            }
+            return (map);
+        } catch (SQLException e) {
+            throw new FacesException(e);
+        }
+
+    }
+
+
+    /**
+     * @exception FacesException {@inheritDoc}     
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowIndex() {
 
+        if (resultSet == null) {
+            throw new IllegalStateException();
+        }
         return (index);
 
     }
@@ -196,44 +211,46 @@ public class ResultSetDataModel extends DataModel {
     /**
      * @exception FacesException {@inheritDoc}
      * @exception IllegalArgumentException {@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
 
-        if ((rowIndex < -1) || (rowIndex >= getRowCount())) {
+        if (resultSet == null) {
+            throw new IllegalStateException();
+        } else if (rowIndex < -1) {
             throw new IllegalArgumentException();
         }
-        try {
-            // Tell the ResultSet that the previous row was updated if necessary
-            if (updated) {
+
+        // Tell the ResultSet that the previous row was updated if necessary
+        if (updated) {
+            try {
                 resultSet.updateRow();
                 updated = false;
+            } catch (SQLException e) {
+                throw new FacesException(e);
             }
-            // Position to the new row
-            if ((rowIndex >= 0) && (!resultSet.absolute(rowIndex + 1))) {
-                throw new IllegalArgumentException();
-            }
-        } catch (SQLException e) {
-            throw new FacesException(e);
         }
+
         int old = index;
         index = rowIndex;
         if ((old != index) && (listeners != null)) {
+            Object rowData = null;
+            if (isRowAvailable()) {
+                rowData = getRowData();
+            }
             DataModelEvent event =
-                event = new DataModelEvent(this, index, getRowData());
+                new DataModelEvent(this, index, rowData);
             int n = listeners.size();
             for (int i = 0; i < n; i++) {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
         }
 
+
     }
 
 
-    /**
-     * <p>Return the wrapped data for this {@link ResultSetDataModel}
-     * instance.</p>
-     */
-    public ResultSet getWrappedData() {
+    public Object getWrappedData() {
 
         return (this.resultSet);
 
@@ -241,53 +258,53 @@ public class ResultSetDataModel extends DataModel {
 
 
     /**
-     * <p>Set the wrapped data for this {@link ResultDataModel} instance.</p>
-     *
-     * @param data The data to be wrapped
-     *
-     * @exception FacesException if the specified result set cannot be
-     *  initialized
-     * @exception IllegalArgumentException if <code>resultSet</code> is of
-     *  type <code>ResultSet.TYPE_FORWARD_ONLY</code>
-     * @exception NullPointerException if <code>data</code>
-     *  is <code>null</code>
+     * @exception ClassCastException {@inheritDoc}
      */
-    public void setWrappedData(ResultSet data) {
+    public void setWrappedData(Object data) {
 
         if (data == null) {
-            throw new NullPointerException();
+            this.resultSet = null;
+            this.metadata = null;
+            return;
         }
-        try {
-            if (ResultSet.TYPE_FORWARD_ONLY == data.getType()) {
-                throw new IllegalArgumentException();
-            }
-            if (data.absolute(1)) {
-                index = 0;
-            } else {
-                index = -1;
-            }
-        } catch (SQLException e) {
-            throw new IllegalArgumentException();
-        }
-        resultSet = data;
-        try {
-            metadata = data.getMetaData();
-        } catch (SQLException e) {
-            throw new FacesException(e);
-        }
+
+        resultSet = (ResultSet) data;
+        index = 0;
         updated = false;
 
     }
 
 
-    // --------------------------------------------------------- Package Methods
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * <p>Return the <code>ResultSetMetaData</code> for the
+     * <code>ResultSet</code> we are wrapping, caching it the first time
+     * it is returned.</p>
+     *
+     * @exception FacesException if the <code>ResultSetMetaData</code>
+     *  cannot be acquired
+     */
+    private ResultSetMetaData getMetaData() {
+
+        if (metadata == null) {
+            try {
+                metadata = resultSet.getMetaData();
+            } catch (SQLException e) {
+                throw new FacesException(e);
+            }
+        }
+        return (metadata);
+
+    }
 
 
     /**
      * <p>Mark the current row as having been updated, so that we will call
      * <code>updateRow()</code> before moving elsewhere.</p>
      */
-    void updated() {
+    private void updated() {
 
         this.updated = true;
 

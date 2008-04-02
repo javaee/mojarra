@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelTestCaseBase.java,v 1.5 2003/10/16 00:42:27 craigmcc Exp $
+ * $Id: DataModelTestCaseBase.java,v 1.6 2003/10/20 20:26:04 craigmcc Exp $
  */
 
 /*
@@ -170,7 +170,12 @@ public abstract class DataModelTestCaseBase extends TestCase {
         assertNotNull("model exists", model);
 
         // Correct row count
-        assertEquals("correct row count", beans.length, model.getRowCount());
+        if (model instanceof ResultSetDataModel) {
+            assertEquals("correct row count", -1, model.getRowCount());
+        } else {
+            assertEquals("correct row count", beans.length,
+                         model.getRowCount());
+        }
 
         // Correct row index
         assertEquals("correct row index", 0, model.getRowIndex());
@@ -191,6 +196,24 @@ public abstract class DataModelTestCaseBase extends TestCase {
         model.removeDataModelListener(listener);
         model.setRowIndex(0);
         assertEquals("/-1/0/-1", TestListener.trace());
+
+    }
+
+
+    // Test row available manipulations
+    public void testRowAvailable() throws Exception {
+
+        // Position to the "no current row" position
+        model.setRowIndex(-1);
+        assertTrue(!model.isRowAvailable());
+
+        // Position to an arbitrarily high row number
+        model.setRowIndex(beans.length);
+        assertTrue(!model.isRowAvailable());
+
+        // Position to a known good row number
+        model.setRowIndex(0);
+        assertTrue(model.isRowAvailable());
 
     }
 
@@ -265,12 +288,6 @@ public abstract class DataModelTestCaseBase extends TestCase {
         // Negative setRowIndex() tests
         try {
             model.setRowIndex(-2);
-            fail("Should have thrown IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
-        try {
-            model.setRowIndex(model.getRowCount());
             fail("Should have thrown IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             ; // Expected result

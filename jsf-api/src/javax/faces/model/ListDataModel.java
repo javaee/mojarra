@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.6 2003/10/16 00:42:24 craigmcc Exp $
+ * $Id: ListDataModel.java,v 1.7 2003/10/20 20:26:01 craigmcc Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import javax.faces.FacesException;
 
 /**
  * <p><strong>ListDataModel</strong> is a convenience implementation of
- * {@link DataModel} that wraps a <code>List</code> of Java objects.</p>
+ * {@link DataModel} that wraps an <code>List</code> of Java objects.</p>
  */
 
 public class ListDataModel extends DataModel {
@@ -64,19 +64,16 @@ public class ListDataModel extends DataModel {
      */
     public ListDataModel() {
 
-        super();
+        this(null);
 
     }
 
 
     /**
      * <p>Construct a new {@link ListDataModel} wrapping the specified
-     * <code>List</code>.</p>
+     * list.</p>
      *
-     * @param list <code>List</code> to be wrapped
-     *
-     * @exception NullPointerException if <code>list</code>
-     *  is <code>null</code>
+     * @param list List to be wrapped (if any)
      */
     public ListDataModel(List list) {
 
@@ -89,22 +86,43 @@ public class ListDataModel extends DataModel {
     // ------------------------------------------------------ Instance Variables
 
 
-    // The current row index (one relative)
-    private int index = -1;
+    // The current row index (zero relative)
+    private int index;
 
 
     // The list we are wrapping
-    private List list = null;
+    private List list;
 
 
     // -------------------------------------------------------------- Properties
 
 
     /**
+     * @exception FacesException {@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
+     */ 
+    public boolean isRowAvailable() {
+
+        if (list == null) {
+            throw new IllegalStateException();
+        } else if ((index >= 0) && (index < list.size())) {
+            return (true);
+        } else {
+            return (false);
+        }
+
+    }
+
+
+    /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowCount() {
 
+        if (list == null) {
+            throw new IllegalStateException();
+        }
         return (list.size());
 
     }
@@ -112,11 +130,15 @@ public class ListDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalArgumentException (@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public Object getRowData() {
 
-        if (index == -1) {
-            return (null);
+        if (list == null) {
+            throw new IllegalStateException();
+        } else if (!isRowAvailable()) {
+            throw new IllegalArgumentException();
         } else {
             return (list.get(index));
         }
@@ -126,9 +148,13 @@ public class ListDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowIndex() {
 
+        if (list == null) {
+            throw new IllegalStateException();
+        }
         return (index);
 
     }
@@ -136,18 +162,25 @@ public class ListDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
      * @exception IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
 
-        if ((rowIndex < -1) || (rowIndex >= getRowCount())) {
+        if (list == null) {
+            throw new IllegalStateException();
+        } else if (rowIndex < -1) {
             throw new IllegalArgumentException();
         }
         int old = index;
         index = rowIndex;
         if ((old != index) && (listeners != null)) {
+            Object rowData = null;
+            if (isRowAvailable()) {
+                rowData = getRowData();
+            }
             DataModelEvent event =
-                event = new DataModelEvent(this, index, getRowData());
+                new DataModelEvent(this, index, rowData);
             int n = listeners.size();
             for (int i = 0; i < n; i++) {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
@@ -157,10 +190,7 @@ public class ListDataModel extends DataModel {
     }
 
 
-    /**
-     * <p>Return the wrapped data for this {@link ListDataModel} instance.</p>
-     */
-    public List getWrappedData() {
+    public Object getWrappedData() {
 
         return (this.list);
 
@@ -168,24 +198,16 @@ public class ListDataModel extends DataModel {
 
 
     /**
-     * <p>Set the wrapped data for this {@link ListDataModel} instance.</p>
-     *
-     * @param data The data to be wrapped
-     *
-     * @exception NullPointerException if <code>data</code>
-     *  is <code>null</code>
+     * @exception ClassCastException {@inheritDoc}
      */
-    public void setWrappedData(List data) {
+    public void setWrappedData(Object data) {
 
         if (data == null) {
-            throw new NullPointerException();
+            list = null;
+            return;
         }
-        list = data;
-        if (list.size() > 0) {
-            index = 0;
-        } else {
-            index = -1;
-        }
+        list = (List) data;
+        index = 0;
 
     }
 

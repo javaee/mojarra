@@ -1,5 +1,5 @@
 /*
- * $Id: DataModel.java,v 1.5 2003/10/16 00:42:23 craigmcc Exp $
+ * $Id: DataModel.java,v 1.6 2003/10/20 20:26:01 craigmcc Exp $
  */
 
 /*
@@ -61,6 +61,15 @@ import javax.faces.component.Repeater;
  * object that represents the data that corresponds to the current
  * row index.</p>
  *
+ * <p>A concrete {@link DataModel} instance is attached to a particular
+ * collection of underlying data by calling the <code>setWrappedData()</code>
+ * method.  It can be detached from that underlying data collection by
+ * passing a <code>null</code> parameter to this method.  In addition,
+ * concrete {@link DataModel} implementations should provide a convenience
+ * constructor that takes a wrapped object of the appropriate type (and passes
+ * it on via a call to <code>setWrappedData()</code), in addition
+ * to a zero-arguments constructor.</p>
+ *
  * <p>Event listeners may be registered to receive notifications
  * of when a new row index is selected.</p>
  */
@@ -72,50 +81,100 @@ public abstract class DataModel {
 
 
     /**
+     * <p>Return a flag indicating whether there is <code>rowData</code>
+     * available at the current <code>rowIndex</code>.
+     *
+     * @exception FacesException if an error occurs getting the row availability
+     * @exception IllegalStateException if this {@link DataModel} is not
+     *  currently attached to an underlying data collection
+     */
+    public abstract boolean isRowAvailable();
+
+
+    /**
      * <p>Return the number of rows of data objects represented by this
-     * {@link DataModel}.</p>
+     * {@link DataModel}.  If the number of rows is unknown, return -1.</p>
      *
      * @exception FacesException if an error occurs getting the row count
+     * @exception IllegalStateException if this {@link DataModel} is not
+     *  currently attached to an underlying data collection
      */
     public abstract int getRowCount();
 
 
     /**
      * <p>Return an object representing the data for the currenty selected
-     * row index.  If row index is -1, <code>null</code> is returned.</p>
+     * row index.</p>
      *
-     * @exception FacesException if an error occurs getting the data
+     * @exception FacesException if an error occurs getting the row data
+     * @exception IllegalArgumentException if there is now row data available
+     *  at the currently selected row index
+     * @exception IllegalStateException if this {@link DataModel} is not
+     *  currently attached to an underlying data collection
      */
     public abstract Object getRowData();
 
 
     /**
-     * <p>Return the zero-relative index of the currently selected row.
-     * If we are positioned before the first row, -1 will be returned.
-     * When a {@link DataModel} instance is initialized, the
-     * <code>rowIndex</code> will be zero if the underlying data has at least
-     * one row, or -1 otherwise.</p>
-     * </p>
+     * <p>Return the zero-relative index of the currently selected row.  If
+     * we are not currently positioned on a row, return -1.</p>
      *
      * @exception FacesException if an error occurs getting the row index
+     * @exception IllegalStateException if this {@link DataModel} is not
+     *  currently attached to an underlying data collection
      */
     public abstract int getRowIndex();
 
 
     /**
-     * <p>Set the zero-relative index of the currently selected row.  Setting
-     * the index to -1 indicates that no row is currently selected.  If
-     * the current index is changed by this method, send a
-     * {@link DataModelEvent} to the <code>rowSelected()</code> method of each
-     * registered {@link DataModelListener}.</p>
+     * <p>Set the zero-relative index of the currently selected row, or -1
+     * to indicate that we are not positioned on a row.  It is
+     * possible to set the row index at a value for which the underlying data
+     * collection does not contain any row data.  Therefore, callers may
+     * use the <code>isRowAvailable()</code> method to detect whether row data
+     * will be available for use by the <code>getRowData()</code> method.</p>
      *
-     * @param rowIndex The new zero-relative index, or -1 to select no row
+     * <p>If the currently selected row index is changed by this call,
+     * a {@link DataModelEvent} will be sent to the <code>rowSelected()</code>
+     * method of all registered {@link DataModelListener}s.</p>
+     *
+     * @param rowIndex The new zero-relative index (must be non-negative)
      *
      * @exception FacesException if an error occurs setting the row index
      * @exception IllegalArgumentException if <code>rowIndex</code>
-     *  is &lt; -1 or &gt;= the number of available rows
+     *  is less than -1
+     * @exception IllegalStateException if this {@link DataModel} is not
+     *  currently attached to an underlying data collection
      */
     public abstract void setRowIndex(int rowIndex);
+
+
+    /**
+     * <p>Return the object representing the data wrapped by this
+     * {@link DataModel}, if any.</p>
+     */
+    public abstract Object getWrappedData();
+
+
+    /**
+     * <p>Set the object representing the data collection wrapped by this
+     * {@link DataModel}.  If the specified <code>data</code> is
+     * <code>null</code>, detach this {@link DataModel} from any previously
+     * wrapped data collection instead.</p>
+     *
+     * <p>If <code>data</code> is non-<code>null</code>, the currently selected
+     * row index must be set to zero, and a {@link DataModelEvent} must be sent
+     * to the <code>rowSelected()</code> method of all registered
+     * {@link DataModelListener}s indicating that this row is now selected.</p>
+     *
+     * @param data Data collection to be wrapped, or <code>null</code> to
+     *  detach from any previous data collection
+     *
+     * @exception ClassCastException if <code>data</code> is not of the
+     *  appropriate type for this {@link DataModel} implementation
+     */
+    public abstract void setWrappedData(Object data);
+
 
 
     // ------------------------------------------------------ Instance Variables

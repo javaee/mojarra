@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.6 2003/10/16 00:42:23 craigmcc Exp $
+ * $Id: ArrayDataModel.java,v 1.7 2003/10/20 20:26:01 craigmcc Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ public class ArrayDataModel extends DataModel {
      */
     public ArrayDataModel() {
 
-        super();
+        this(null);
 
     }
 
@@ -72,10 +72,7 @@ public class ArrayDataModel extends DataModel {
      * <p>Construct a new {@link ArrayDataModel} wrapping the specified
      * array.</p>
      *
-     * @param array Array to be wrapped
-     *
-     * @exception NullPointerException if <code>array</code>
-     *  is <code>null</code>
+     * @param array Array to be wrapped (if any)
      */
     public ArrayDataModel(Object array[]) {
 
@@ -89,21 +86,42 @@ public class ArrayDataModel extends DataModel {
 
 
     // The array we are wrapping
-    private Object array[] = null;
+    private Object array[];
 
 
-    // The current row index (one relative)
-    private int index = -1;
+    // The current row index (zero relative)
+    private int index;
 
 
     // -------------------------------------------------------------- Properties
 
 
     /**
+     * @exception FacesException {@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
+     */ 
+    public boolean isRowAvailable() {
+
+        if (array == null) {
+            throw new IllegalStateException();
+        } else if ((index >= 0) && (index < array.length)) {
+            return (true);
+        } else {
+            return (false);
+        }
+
+    }
+
+
+    /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowCount() {
 
+        if (array == null) {
+            throw new IllegalStateException();
+        }
         return (array.length);
 
     }
@@ -111,11 +129,15 @@ public class ArrayDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalArgumentException (@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public Object getRowData() {
 
-        if (index == -1) {
-            return (null);
+        if (array == null) {
+            throw new IllegalStateException();
+        } else if (!isRowAvailable()) {
+            throw new IllegalArgumentException();
         } else {
             return (array[index]);
         }
@@ -125,9 +147,13 @@ public class ArrayDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
+     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowIndex() {
 
+        if (array == null) {
+            throw new IllegalStateException();
+        }
         return (index);
 
     }
@@ -135,18 +161,25 @@ public class ArrayDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}
+     * @exception IllegalStateException (@inheritDoc}
      * @exception IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
 
-        if ((rowIndex < -1) || (rowIndex >= getRowCount())) {
+        if (array == null) {
+            throw new IllegalStateException();
+        } else if (rowIndex < -1) {
             throw new IllegalArgumentException();
         }
         int old = index;
         index = rowIndex;
         if ((old != index) && (listeners != null)) {
+            Object rowData = null;
+            if (isRowAvailable()) {
+                rowData = getRowData();
+            }
             DataModelEvent event =
-                new DataModelEvent(this, index, getRowData());
+                new DataModelEvent(this, index, rowData);
             int n = listeners.size();
             for (int i = 0; i < n; i++) {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
@@ -156,10 +189,7 @@ public class ArrayDataModel extends DataModel {
     }
 
 
-    /**
-     * <p>Return the wrapped data for this {@link ArrayDataModel} instance.</p>
-     */
-    public Object[] getWrappedData() {
+    public Object getWrappedData() {
 
         return (this.array);
 
@@ -167,24 +197,16 @@ public class ArrayDataModel extends DataModel {
 
 
     /**
-     * <p>Set the wrapped data for this {@link ArrayDataModel} instance.</p>
-     *
-     * @param data The data to be wrapped
-     *
-     * @exception NullPointerException if <code>data</code>
-     *  is <code>null</code>
+     * @exception ClassCastException {@inheritDoc}
      */
-    public void setWrappedData(Object data[]) {
+    public void setWrappedData(Object data) {
 
         if (data == null) {
-            throw new NullPointerException();
+            array = null;
+            return;
         }
-        array = data;
-        if (array.length > 0) {
-            index = 0;
-        } else {
-            index = -1;
-        }
+        array = (Object[]) data;
+        index = 0;
 
     }
 
