@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.23 2005/05/18 17:33:46 jayashri Exp $
+ * $Id: VariableResolverImpl.java,v 1.24 2005/08/02 21:44:55 jayashri Exp $
  */
 
 /*
@@ -13,9 +13,6 @@ import java.util.Arrays;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.el.ELConstants;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -35,9 +32,6 @@ import com.sun.faces.util.Util;
  */
 
 public class VariableResolverImpl extends VariableResolver {
-    
-    private static final Log log = LogFactory
-            .getLog(VariableResolverImpl.class);
     
     private ELResolver elResolver = null;
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.32 2005/07/29 17:42:21 jayashri Exp $
+ * $Id: ManagedBeanFactory.java,v 1.33 2005/08/02 21:44:54 jayashri Exp $
  */
 
 /*
@@ -150,6 +150,10 @@ public class ManagedBeanFactory extends Object {
             //set the scope
             scope = managedBean.getManagedBeanScope();
         }
+    }
+    
+    public ManagedBeanBean getManagedBeanBean() {
+        return this.managedBean;
     }
 
     public Map getManagedBeanFactoryMap() {

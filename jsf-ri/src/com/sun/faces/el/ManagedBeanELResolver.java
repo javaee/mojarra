@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.5 2005/07/20 17:03:53 edburns Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.6 2005/08/02 21:44:54 jayashri Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -12,6 +12,7 @@ import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Locale;
 
 import javax.el.ELContext;
 import javax.el.ELException;
@@ -22,6 +23,9 @@ import javax.faces.context.FacesContext;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.config.beans.DescriptionBean;
+import com.sun.faces.config.beans.DisplayNameBean;
+import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.util.Util;
 
 public class ManagedBeanELResolver extends ELResolver {
@@ -127,19 +131,31 @@ public class ManagedBeanELResolver extends ELResolver {
         for (Iterator i = mbMap.entrySet().iterator(); i.hasNext(); ) {
             Map.Entry entry = (Map.Entry) i.next();
             String managedBeanName = (String) entry.getKey();
-            ManagedBeanFactory managedBean = (ManagedBeanFactory)
+            ManagedBeanFactory managedBeanFactory = (ManagedBeanFactory)
                 entry.getValue();
+            ManagedBeanBean managedBean = managedBeanFactory.getManagedBeanBean();
+            
             if ( managedBean != null) {
-                String desc = 
-                managedBean.getBeanDescription((
-                    facesContext.getViewRoot().getLocale()).toString());
-                if (desc == null) {
+                Locale curLocale = Util.getLocaleFromContextOrSystem(facesContext);
+                String locale = curLocale.toString();
+                DescriptionBean descBean = managedBean.getDescription(locale);
+                DisplayNameBean displayNameBean = managedBean.getDisplayName(locale);
+                String desc = "",
+                        displayName = "";
+                descBean = (null != descBean) ? descBean :
+                    managedBean.getDescription("");
+                if (null != descBean) {
                     // handle the case where the lang or xml:lang attributes
                     // are not specified on the description
-                    desc = managedBean.getBeanDescription("");
+                    desc = descBean.getDescription();
+                }
+                displayNameBean = (null != displayNameBean) ? displayNameBean :
+                    managedBean.getDisplayName("");
+                if (null != displayNameBean) {
+                    displayName = displayNameBean.getDisplayName();
                 }
                 list.add(Util.getFeatureDescriptor(managedBeanName, 
-                    managedBeanName, desc,false, false, true,
+                    displayName, desc, false, false, true,
                     managedBean.getManagedBeanClass(), Boolean.TRUE));
             }
         }
