@@ -74,12 +74,10 @@
     <!-- Output directory for tests -->
     <property name="out.test.dir" value="${build.home}/test"/>
 
-    <!-- map tomcat.home to tomcat.home.40 -->
-    <property name="tomcat.home.40" value="${tomcat.home}"/>
-
     <!-- Compilation Classpath -->
     <path id="compile.classpath">
       <pathelement location="${servlet.jar}"/>
+      <pathelement location="${jsp.jar}"/>
       <pathelement location="${junit.jar}"/>
       <pathelement location="${cactus.jar}"/>
       <pathelement location="${httpclient.jar}"/>
@@ -95,7 +93,6 @@
       <!-- For cactus.properties -->
       <pathelement location="${conf.test.dir}"/>
       <pathelement location="${jstl.jar}"/>
-      <pathelement location="${jstl_el.jar}"/>
     </path>
 
 <!-- ========== Executable Targets ======================================== -->
@@ -212,11 +209,47 @@
 
     </target>
 
+<!--
+        Prepare test directory structure for Tomcat 5.x servlet engine
+-->
+    <target name="prepare.test.tomcat.50" depends="prepare.test.war,copy-test-data-files" if="tomcat.home.50">
 
-   <target name="copy-test-data-files">
+        <property name="out.tomcat.50.dir" value="${out.test.dir}/servers/tomcat50"/>
+        <filter token="out.tomcat.50.full.dir" value="${out.tomcat.50.dir}"/>
+
+        <mkdir dir="${out.tomcat.50.dir}/webapps/test"/>
+        <mkdir dir="${out.tomcat.50.dir}/conf"/>
+
+        <!-- Expand the war file -->
+        <unjar src="${out.test.dir}/test.war" dest="${out.tomcat.50.dir}/webapps/test"/>
+    
+        <!-- Copy configuration files -->
+        <copy file="${conf.test.dir}/tomcat50/server.xml"
+            todir="${out.tomcat.50.dir}/conf" filtering="on"/>
+
+        <!-- Copy JspRedirector (jsp) file needed for JSP cactus tests. -->
+        <copy file="${cactus.home}/web/jspRedirector.jsp"
+            todir="${out.tomcat.50.dir}/webapps/test"/>
+
+    </target>
+
+
+
+   <target name="copy-test-data-files" 
+           depends="copy-test-data-files-40,copy-test-data-files-50"/>
+
+   <target name="copy-test-data-files-40" if="tomcat.home.40">
         <!-- Copy Unit test static files. -->
         <property name="out.tomcat.40.dir" value="${out.test.dir}/servers/tomcat40"/>
         <copy todir="${out.tomcat.40.dir}/webapps/test">
+            <fileset dir="${basedir}/web/test"/>
+        </copy>
+   </target>
+
+   <target name="copy-test-data-files-50" if="tomcat.home.50">
+        <!-- Copy Unit test static files. -->
+        <property name="out.tomcat.50.dir" value="${out.test.dir}/servers/tomcat50"/>
+        <copy todir="${out.tomcat.50.dir}/webapps/test">
             <fileset dir="${basedir}/web/test"/>
         </copy>
    </target>
@@ -255,8 +288,8 @@
             <arg value="start"/>
             <classpath>
               <pathelement location="${jstl.jar}"/>
-              <pathelement location="${jstl_el.jar}"/>
               <pathelement location="${servlet.jar}"/>
+              <pathelement location="${jsp.jar}"/>
               <pathelement location="${sax.jar}"/>
               <pathelement location="${jaxp-api.jar}"/>
               <pathelement location="${commons-logging.jar}"/>
@@ -292,6 +325,104 @@
         </java>
 
     </target>
+
+<!--
+        Run unit tests on Tomcat 5.0 servlet engine
+-->
+    <target name="test.tomcat.50" depends="prepare.test.tomcat.50">
+
+        <!-- Start the servlet engine, wait for it to be started, run the
+             unit tests, stop the servlet engine, wait for it to be stopped.
+             The servlet engine is automatically stopped if the tests fail for
+             any reason.-->
+
+        <runservertests testURL="http://localhost:8080/test"
+            startTarget="start.tomcat.50"
+            stopTarget="stop.tomcat.50"
+            testTarget="run.cactus.test"/>
+
+    </target>
+
+    <path id="tomcat.50.classpath">
+              <pathelement location="${jstl.jar}"/>
+              <pathelement location="${servlet.jar}"/>
+              <pathelement location="${jsp.jar}"/>
+              <pathelement location="${sax.jar}"/>
+              <pathelement location="${jaxp-api.jar}"/>
+              <pathelement location="${commons-logging.jar}"/>
+              <pathelement location="${commons-collections.jar}"/>
+              <pathelement location="${commons-beanutils.jar}"/>
+              <pathelement location="${commons-modeler.jar}"/>
+              <pathelement location="${commons-digester.jar}"/>
+              <pathelement location="${jasper-compiler.jar}"/>
+              <pathelement location="${jasper-runtime.jar}"/>
+              <pathelement location="${naming-common.jar}"/>
+              <pathelement location="${naming-resources.jar}"/>
+              <pathelement location="${crimson.jar}"/>
+              <pathelement location="${jmx.jar}"/>
+              <pathelement location="${java.home}/../lib/tools.jar"/>
+              <fileset dir="${tomcat.home.50}">
+                  <include name="bin/bootstrap.jar"/>
+                  <include name="server/lib/catalina.jar"/>
+                  <include name="server/lib/tomcat-coyote.jar"/>
+                  <include name="server/lib/tomcat-http11.jar"/>
+                  <include name="server/lib/tomcat-util.jar"/>
+                  <include name="server/lib/servlets-webdav.jar"/>
+                  <include name="server/lib/servlets-default.jar"/>
+                  <include name="server/lib/servlets-invoker.jar"/>
+                  <include name="server/lib/servlets-common.jar"/>
+              </fileset>
+    </path>
+
+
+<!--
+        Start Tomcat 5.0 servlet engine
+-->
+    <target name="start.tomcat.50">
+
+        <echo message="${out.tomcat.50.dir}"/>
+
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+            <jvmarg value="-Dcatalina.home=${tomcat.home.50}"/>
+            <jvmarg value="-Dcatalina.base=${tomcat.home.50}"/>
+            <jvmarg value="-Djava.endorsed.dirs=${tomcat.home.50}"/>
+            <jvmarg value="-Djava.io.tmpdir=${tomcat.home.50}/temp"/>
+            <arg value="-config"/>
+            <arg value="${out.tomcat.50.dir}/conf/server.xml"/>
+            <!-- uncomment this to attach the debugger to the tomcat vm -->
+            <jvmarg line="${debug.jvm.args}"/>
+
+
+<!--            <arg value="-config"/>
+            <arg value="${out.tomcat.50.dir}/conf/server.xml"/> -->
+            <arg value="start"/>
+            <classpath refid="tomcat.50.classpath"/>
+        </java>
+
+    </target>
+
+<!--
+        Stop Tomcat 5.0 servlet engine
+-->
+    <target name="stop.tomcat.50">
+
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+            <jvmarg value="-Dcatalina.home=${tomcat.home.50}"/>
+            <arg value="stop"/>
+            <classpath>
+              <pathelement location="${jaxp-api.jar}"/>
+              <pathelement location="${commons-logging.jar}"/>
+              <pathelement location="${crimson.jar}"/>
+              <pathelement location="${sax.jar}"/>
+              <fileset dir="${tomcat.home.50}">
+                  <include name="bin/bootstrap.jar"/>
+                  <include name="server/catalina.jar"/>
+              </fileset>
+            </classpath>
+        </java>
+
+    </target>
+
 
 <!--
         Start the Cactus test using JUnit test runner.

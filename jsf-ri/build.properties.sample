@@ -6,13 +6,15 @@
 # modules that the jsf-ri depends on.  Copy this file to "build.properties"
 # in the top-level source directory, and customize it as needed.
 #
-# $Id: build.properties.sample,v 1.18 2003/04/03 18:35:08 jvisvanathan Exp $
+# $Id: build.properties.sample,v 1.19 2003/04/26 02:39:05 eburns Exp $
 # -----------------------------------------------------------------------------
 
 
 # ----- Compile Control Flags -----
 
 compile.deprecation = true
+
+compile.debug = true
 
 
 # ----- Build Control Flags -----
@@ -33,7 +35,7 @@ compile.deprecation = true
 
 # ----- Default Paths for Dependent Packages -----
 
-base.path=/usr/local
+base.path=D:\\Files_2k\
 
 # --------------------------------------------------
 #		 REQUIRED LIBRARIES
@@ -43,23 +45,36 @@ commons-logging.jar=${tomcat.home}/jwsdp-shared/lib/commons-logging.jar
 commons-digester.jar=${tomcat.home}/server/lib/commons-digester.jar
 commons-beanutils.jar=${tomcat.home}/server/lib/commons-beanutils.jar
 commons-collections.jar=${tomcat.home}/common/lib/commons-collections.jar
-xerces.jar=${tomcat.home}/jaxp-1.2.2/lib/endorsed/xercesImpl.jar
+commons-modeler.jar=${tomcat.home}/server/lib/commons-modeler.jar
+naming-resources.jar=${tomcat.home}/common/lib/naming-resources.jar
+jasper-compiler.jar=${tomcat.home}/common/lib/jasper-compiler.jar
+jasper-runtime.jar=${tomcat.home}/common/lib/jasper-runtime.jar
+xerces.jar=${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar
 jstl.jar=${tomcat.home}/jstl-1.0.3/standard/lib/jstl.jar
 standard.jar=${tomcat.home}/jstl-1.0.3/standard/lib/standard.jar
+#jstl.jar=${tomcat.home}/jstl/lib/jstl.jar
+#standard.jar=${tomcat.home}/jstl/lib/standard.jar
 
 
 # Set the following only if you are building with JWSDP1.2.x
 # or TOMCAT 5.x
 #jsp.jar=${tomcat.home}/common/lib/jsp-api.jar
 #servlet.jar=${tomcat.home}/common/lib/servlet-api.jar
+#jmx.jar=${tomcat.home}/common/lib/jmx.jar
+#naming-common.jar=${tomcat.home}/common/lib/naming-common.jar
+	  
+# set the property tomcat.home.50 to point to tomcat.home if running tomcat.5
+# set the property tomcat.home.40 to point to tomcat.home if running tomcat.4
+tomcat.home.50=${tomcat.home}
 
 
 # --------------------------------------------------
 #  REQUIRED LIBRARIES TO RUN UNIT TESTS
 # --------------------------------------------------
-jaxp-api.jar=${tomcat.home}/jaxp-1.2.2/lib/jaxp-api.jar
-crimson.jar=<path to jwsdp1.0.home>/tools/deploytool/endorsed/crimson.jar
-sax.jar=${tomcat.home}/jaxp-1.2.2/lib/endorsed/sax.jar
+jaxp-api.jar=${tomcat.home}/jaxp/lib/jaxp-api.jar
+crimson.jar=D:\\Files_2k\\jwsdp-1_0_01\\tools\\deploytool\\endorsed\\crimson.jar
+#sax.jar=${tomcat.home}/jaxp-1.2.2/lib/endorsed/sax.jar
+sax.jar=${tomcat.home}/jaxp/lib/endorsed/sax.jar
 
 # ----- Commons Cactus, version 13-1.4.1 -----
 cactus.home=${base.path}/jakarta-cactus-13-1.4.1
@@ -91,7 +106,8 @@ junit.loc=http://prdownloads.sourceforge.net/junit/junit3.8.1.zip
 
 
 # ----- Jakarta Tomcat, version 4.0.x or later -----
-tomcat.home=<path to tomcat or jwsdp installation>
+tomcat.home=D:\\Files_2k\\jwsdp-1.1
+tomcat.home.40=${tomcat.home}
 tomcat.loc=http://jakarta.apache.org/builds/jakarta-tomcat-4.0/release/v4.1.12/bin/jakarta-tomcat-4.1.12.tar.gz
 
 username=tomcat
@@ -112,3 +128,7 @@ password=tomcat
 # comment build.standalone property and uncomment build.wspack property
 build.standalone=true
 #build.wspack=true
+#jsf-ri.jar=../jsf-ri/build/lib/jsf-ri.jar
+wspack.home=${tomcat.home}
+
+

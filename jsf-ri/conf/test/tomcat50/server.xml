@@ -1,0 +1,25 @@
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<Server port="8005" shutdown="SHUTDOWN" debug="0">
+
+  <Service name="Tomcat-Standalone">
+
+    <Connector className="org.apache.coyote.tomcat5.CoyoteConnector"
+               port="8080" minProcessors="5" maxProcessors="75"
+               acceptCount="10" debug="0"/>
+
+    <Engine name="Catalina" defaultHost="localhost" debug="0">
+
+      <Realm className="org.apache.catalina.realm.MemoryRealm" />
+
+     <Host name="localhost" debug="0" appBase="@out.tomcat.50.full.dir@/webapps">
+      </Host>
+
+    </Engine>
+
+  </Service>
+
+</Server>

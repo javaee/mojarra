@@ -388,12 +388,17 @@
     </target>
 
 
-    <target name="run.cactus.test" depends="compile.test,jars"
-     description="Run unit tests requiring cactus">
+    <target name="run.cactus.test" depends="compile.test,jars,run.cactus.test.40,run.cactus.test.50"
+     description="Run unit tests requiring cactus"/>
 
+    <target name="run.cactus.test.40" if="tomcat.home.40">
         <ant antfile="build-tests.xml" target="test.tomcat.40"/>
-    
     </target>
+
+    <target name="run.cactus.test.50" if="tomcat.home.50">
+        <ant antfile="build-tests.xml" target="test.tomcat.50"/>
+    </target>
+
 
     <!-- builds"basic" sample app -->
     <target name="build.basic.war" depends="prepare,compile,jars,compile.basic.sample" >
