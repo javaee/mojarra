@@ -11,10 +11,10 @@
     
     <p>Test from issue <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=62">62</a>.</p>
       <h:form id="form">
-        <h:dataTable value="#{outer62.model}" var="yyy">
+        <h:dataTable id="outer" value="#{outer62.model}" var="yyy">
           <h:column>
             outer
-            <h:dataTable value="#{yyy.model}" var="www">
+            <h:dataTable id="inner" value="#{yyy.model}" var="www">
               <h:column>
                 inner
                 <h:commandLink action="#{outer62.action}">link</h:commandLink>
