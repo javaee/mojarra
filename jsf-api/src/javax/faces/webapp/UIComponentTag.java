@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.24 2003/10/23 06:05:06 jvisvanathan Exp $
+ * $Id: UIComponentTag.java,v 1.25 2003/10/24 23:34:43 craigmcc Exp $
  */
 
 /*
@@ -163,6 +163,9 @@ public abstract class UIComponentTag implements Tag {
     public void setComponentRef(String componentRef) {
 
 	this.componentRef = componentRef;
+        if ((componentRef != null) && !overrideSet) {
+            override = false;
+        }
 
     }
 
@@ -181,6 +184,28 @@ public abstract class UIComponentTag implements Tag {
     public void setId(String id) {
 
         this.id = id;
+
+    }
+
+
+    /**
+     * <p>The "override properties" flag for this component.</p>
+     */
+    private boolean override = true;
+    private boolean overrideSet = false;
+
+
+    /**
+     * <p>Set the flag indicating whether <code>overrideProperties()</code>
+     * should be called on a redisplay of an existing component, instead of
+     * only when the component is initially created by this tag.</p>
+     *
+     * @param override The new override value
+     */
+    public void setOverride(boolean override) {
+
+        this.override = override;
+        this.overrideSet = true;
 
     }
 
@@ -515,6 +540,8 @@ public abstract class UIComponentTag implements Tag {
 	this.componentRef = null;
         this.id = null;
         this.created = false;
+        this.override = true;
+        this.overrideSet = false;
         this.rendered = true;
         this.renderedSet = false;
     }
@@ -589,8 +616,11 @@ public abstract class UIComponentTag implements Tag {
      * <li>If this {@link UIComponentTag} instance has the
      *     <code>facetName</code> attribute set, ask the parent
      *     {@link UIComponent} for a facet with this name.  If not found,
-     *     create one, call <code>overrideProperties() with the new
-     *     component as a parameter, and register it under this name.  In either
+     *     create one, call <code>overrideProperties()</code> with the new
+     *     component as a parameter, and register it under this name.
+     *     if found, call <code>overrideProperties()</code> if the
+     *     <code>override</code> attribute has been set to <code>true</code>,
+     *     or no <code>componentRef</code> attribute has been set.  In either
      *     case, return the facet {@link UIComponent}.</li>
      * <li>Determine the component id to be assigned to the new
      *     component, as follows:  if this {@link UIComponentTag} has
@@ -602,7 +632,10 @@ public abstract class UIComponentTag implements Tag {
      * <li>Ask the parent {@link UIComponent} for a child this identifier.
      *     If not found, create one, call <code>overrideProperties()</code>
      *     with the new component as a parameter, and register it as a child
-     *     with this identifier.  In either
+     *     with this identifier.  If found, call
+     *     <code>overrideProperties()</code> if the <code>override</code>
+     *     attribute has been set to <code>true</code>, or no
+     *     <code>componentRef</code> attribute has been set.  In either
      *     case, return the child {@link UIComponent}.</li>
      * </ol>
      */
@@ -670,6 +703,8 @@ public abstract class UIComponentTag implements Tag {
             if (component == null) {
                 component = createFacet(context, parentComponent, facetName,
                         newId);
+            } else if (override) {
+                overrideProperties(component);
             }
             return (component);
         }
@@ -678,6 +713,8 @@ public abstract class UIComponentTag implements Tag {
         component = getChild(parentComponent, newId);
         if (component == null) {
             component = createChild(context, parentComponent, newId);
+        } else if (override) {
+            overrideProperties(component);
         }
         return (component);
 
