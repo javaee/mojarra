@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.155 2005/04/21 18:55:40 edburns Exp $
+ * $Id: Util.java,v 1.156 2005/04/26 19:36:17 edburns Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import java.text.MessageFormat;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.155 2005/04/21 18:55:40 edburns Exp $
+ * @version $Id: Util.java,v 1.156 2005/04/26 19:36:17 edburns Exp $
  */
 
 public class Util extends Object {
@@ -1137,6 +1137,15 @@ public class Util extends Object {
 
         return renderKit.getResponseStateManager();
 
+    }
+
+    public static RenderKit getCurrentRenderKit(FacesContext context) {
+	RenderKitFactory renderKitFactory = (RenderKitFactory)
+	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+	RenderKit renderKit = 
+	    renderKitFactory.getRenderKit(context, 
+				      context.getViewRoot().getRenderKitId());
+	return renderKit;
     }
 
 

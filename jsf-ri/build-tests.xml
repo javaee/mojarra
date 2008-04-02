@@ -314,17 +314,13 @@
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestApplicationImpl_Config"/>
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestNavigationHandler"/>
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestStateManagerImpl"/>
-<!-- PENDING: return to running
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestViewHandlerImpl"/>
--->
             <test todir="${test.results.dir}" name="com.sun.faces.config.ConfigFileTestCase"/>
 <!-- PENDING: return to running, these need to be rewritten
             <test todir="${test.results.dir}" name="com.sun.faces.config.TestConfigListener"/>
 -->
             <test todir="${test.results.dir}" name="com.sun.faces.config.TestManagedBeanFactory"/>
-<!-- PENDING: return to running
             <test todir="${test.results.dir}" name="com.sun.faces.context.TestExternalContextImpl"/>
--->
             <test todir="${test.results.dir}" name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.context.TestFacesContextImpl"/> 
             <test todir="${test.results.dir}" name="com.sun.faces.convert.TestConverters"/>
@@ -336,15 +332,11 @@
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
-<!-- PENDING: return to running
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
--->
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestPhase"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestProcessEvents"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
-<!-- PENDING: return to running
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestRenderResponsePhase"/> 
--->
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestRestoreViewPhase"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
             <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestComponentType"/>

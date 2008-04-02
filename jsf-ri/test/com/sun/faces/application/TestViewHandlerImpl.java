@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.23 2005/03/17 15:16:17 edburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.24 2005/04/26 19:36:18 edburns Exp $ 
  */ 
 
 
@@ -24,6 +24,7 @@ import org.apache.cactus.WebRequest;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.StateManager;
+import javax.faces.application.StateManager.SerializedView;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
@@ -31,13 +32,17 @@ import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.RenderKit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -49,7 +54,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.23 2005/03/17 15:16:17 edburns Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.24 2005/04/26 19:36:18 edburns Exp $
  */
 
 
@@ -133,6 +138,10 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
                           null, null);
     }
 
+    public void beginTransient(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+	theRequest.addParameter("com.sun.faces.VIEW", "_id1");
+    }
 
     public void beginCalculateLocaleLang(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
@@ -428,11 +437,26 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 
         getFacesContext().setViewRoot(root);
 
-        ViewHandler viewHandler =
-            Util.getViewHandler(getFacesContext());
         StateManager stateManager =
             getFacesContext().getApplication().getStateManager();
-        stateManager.saveSerializedView(getFacesContext());
+	SerializedView viewState = 
+	    stateManager.saveSerializedView(getFacesContext());
+	assertTrue(null != viewState);
+	try {
+	    RenderKit curKit = Util.getCurrentRenderKit(getFacesContext());
+	    StringWriter writer = new StringWriter();
+	    ResponseWriter responseWriter = 
+		curKit.createResponseWriter(writer, "text/html",
+					    "ISO-8859-1");
+	    getFacesContext().setResponseWriter(responseWriter);
+	    stateManager.writeState(getFacesContext(), viewState);
+	    root = stateManager.restoreView(getFacesContext(), TEST_URI, 
+					    RenderKitFactory.HTML_BASIC_RENDER_KIT);
+	    getFacesContext().setViewRoot(root);
+	}
+	catch (Throwable ioe) {
+	    fail();
+	}
 
         // make sure that the transient property is not persisted.
         basicForm =

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.105 2005/04/21 18:55:29 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.106 2005/04/26 19:36:16 edburns Exp $
  */
 
 /*
@@ -1049,8 +1049,8 @@ public abstract class UIComponentBase extends UIComponent {
                 facetSaveState[0][0] = facetName;
                 facetSaveState[0][1] = facetState;
                 childState[i] = facetSaveState;
+		i++;
             }
-            i++;
         }
         return stateStruct;
     }

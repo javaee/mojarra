@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.13 2004/02/26 20:34:20 eburns Exp $
+ * $Id: TestExternalContextImpl.java,v 1.14 2005/04/26 19:36:18 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Set;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.13 2004/02/26 20:34:20 eburns Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.14 2005/04/26 19:36:18 edburns Exp $
  */
 
 public class TestExternalContextImpl extends ServletFacesTestCase {
@@ -649,10 +649,6 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
             requestHeaderValuesMap.hashCode() ==
             getFacesContext().getExternalContext().getRequestHeaderValuesMap()
             .hashCode());
-        assertTrue(
-            requestHeaderValuesMap.equals(
-                getFacesContext().getExternalContext()
-                .getRequestHeaderValuesMap()));
         assertTrue(!requestHeaderValuesMap.equals(null));
         assertTrue(!requestHeaderValuesMap.equals(new HashMap()));
     }
