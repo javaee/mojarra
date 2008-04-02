@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.39 2005/05/12 22:08:20 jayashri Exp $
+ * $Id: TestUtil_messages.java,v 1.40 2005/05/17 03:30:42 edburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import com.sun.faces.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.39 2005/05/12 22:08:20 jayashri Exp $
+ * @version $Id: TestUtil_messages.java,v 1.40 2005/05/17 03:30:42 edburns Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -118,7 +118,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.MANAGED_BEAN_TYPE_CONVERSION_ERROR_ID, "4"},
         {Util.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID, "0"},
         {Util.APPLICATION_ASSOCIATE_EXISTS_ID, "0"},
-        {Util.OBJECT_IS_READONLY, "1"}
+        {Util.OBJECT_IS_READONLY, "1"},
+        {Util.INCORRECT_JSP_VERSION_ID, "1"}                
     };
 
     private String[][] toolsMessageInfo = {

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.158 2005/05/05 20:51:28 edburns Exp $
+ * $Id: Util.java,v 1.159 2005/05/17 03:30:41 edburns Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import java.text.MessageFormat;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.158 2005/05/05 20:51:28 edburns Exp $
+ * @version $Id: Util.java,v 1.159 2005/05/17 03:30:41 edburns Exp $
  */
 
 public class Util extends Object {
@@ -324,6 +324,9 @@ public class Util extends Object {
     public static final String APPLICATION_INIT_COMPLETE_ERROR_ID = 
             "com.sun.faces.APPLICATION_INIT_COMPLETE_ERROR_ID";
 
+    public static final String INCORRECT_JSP_VERSION_ID = 
+            "com.sun.faces.INCORRECT_JSP_VERSION";
+    
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
 // parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).

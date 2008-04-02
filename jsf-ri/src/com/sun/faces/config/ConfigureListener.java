@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.33 2005/05/16 20:16:16 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.34 2005/05/17 03:30:40 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -1334,9 +1334,23 @@ public class ConfigureListener implements ServletContextListener {
     }
 
     public void registerELResolverandListenerWithJsp(ServletContext context) {
-        
-        if (JspFactory.getDefaultFactory() == null || (JspFactory.getDefaultFactory().
-            getJspApplicationContext(context)) == null) {
+        JspFactory jspFactory = JspFactory.getDefaultFactory();
+        if (jspFactory == null) {
+            return;
+        }
+        if (jspFactory.getDefaultFactory() == null) {
+            return;
+        }
+        try {
+            jspFactory.getClass().getMethod("getJspApplicationContext", new Class[] {
+                ServletContext.class });
+        } catch (Exception e) {
+            log.warn(Util.getExceptionMessage(Util.INCORRECT_JSP_VERSION_ID,
+                                              new Object [] { "getJspApplicationContext" }));
+            return;
+        }
+                        
+        if (jspFactory.getJspApplicationContext(context) == null) {
             return;
         }
         ApplicationAssociate appAssociate =  
