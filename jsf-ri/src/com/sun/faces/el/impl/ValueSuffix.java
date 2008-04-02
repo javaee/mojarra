@@ -64,7 +64,7 @@ package com.sun.faces.el.impl;
  * 
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
  **/
 
 public abstract class ValueSuffix {
@@ -84,6 +84,16 @@ public abstract class ValueSuffix {
     public abstract Object evaluate(
         Object pValue,
         ExpressionInfo exprInfo)
+        throws ElException;
+
+    public abstract void setValue(Object pValue, Object newValue,
+				  ExpressionInfo exprInfo) 
+	throws ElException;
+
+    public abstract boolean isReadOnly(Object pValue, ExpressionInfo exprInfo)
+        throws ElException;
+
+    public abstract Class getType(Object pValue, ExpressionInfo exprInfo)
         throws ElException;
 
     //-------------------------------------

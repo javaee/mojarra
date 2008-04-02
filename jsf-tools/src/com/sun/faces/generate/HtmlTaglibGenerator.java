@@ -213,8 +213,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append("            if (value != null) {\n");
 	    result.append("                if (isValueReference(value)) {\n");
 	    result.append("                    ValueBinding vb = \n");
-	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
-	    result.append("                        createValueBinding(value);\n");
+	    result.append("                        Util.getValueBinding(value);\n");
 	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"value\", vb);\n"); 
 	    result.append("                } else {\n"); 
@@ -228,8 +227,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append("            if (converter != null) {\n");
 	    result.append("                if (isValueReference(converter)) {\n");
 	    result.append("                    ValueBinding vb = \n");
-	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
-	    result.append("                        createValueBinding(converter);\n");
+	    result.append("                        Util.getValueBinding(converter);\n");
 	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"converter\", vb);\n"); 
 	    result.append("                } else {\n"); 
@@ -287,8 +285,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append("            if (value != null) {\n");
 	    result.append("                if (isValueReference(value)) {\n");
 	    result.append("                    ValueBinding vb = \n");
-	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
-	    result.append("                        createValueBinding(value);\n");
+	    result.append("                        Util.getValueBinding(value);\n");
 	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"value\", vb);\n"); 
 	    result.append("                } else {\n"); 
@@ -302,8 +299,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append("            if (converter != null) {\n");
 	    result.append("                if (isValueReference(converter)) {\n");
 	    result.append("                    ValueBinding vb = \n");
-	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
-	    result.append("                        createValueBinding(converter);\n");
+	    result.append("                        Util.getValueBinding(converter);\n");
 	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"converter\", vb);\n"); 
 	    result.append("                } else {\n"); 
@@ -538,8 +534,8 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    if (metaType.equals("renderer")) {
 	        result.append("        if ("+ivar+" != null) {\n");
 		result.append("            if (isValueReference("+ivar+")) {\n");
-		result.append("                ValueBinding vb = FacesContext.getCurrentInstance().");
-		result.append("getApplication().createValueBinding("+ivar+");\n");
+		result.append("                ValueBinding vb = ");
+		result.append("Util.getValueBinding("+ivar+");\n");
                 result.append("                "+componentType.toLowerCase());
 		if (ivar.equals("_for")) {
 	            result.append(".setValueBinding(\""+"_"+vbKey+"\", vb);\n");
@@ -590,8 +586,8 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	        if (valueBindingEnabledProperties.contains(attributeName)) {
 	            result.append("        if ("+ivar+" != null) {\n");
 		    result.append("            if (isValueReference("+ivar+")) {\n");
-		    result.append("                ValueBinding vb = FacesContext.getCurrentInstance().");
-		    result.append("getApplication().createValueBinding("+ivar+");\n");
+		    result.append("                ValueBinding vb = ");
+		    result.append("Util.getValueBinding("+ivar+");\n");
                     result.append("                "+componentType.toLowerCase());
 		    result.append(".setValueBinding(\""+vbKey+"\", vb);\n");
 		    result.append("            } else {\n");
@@ -651,8 +647,8 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    if (valueBindingEnabledProperties.contains(attributeName)) {
 	        result.append("        if ("+ivar+" != null) {\n");
 	        result.append("            if (isValueReference("+ivar+")) {\n");
-		result.append("                ValueBinding vb = FacesContext.getCurrentInstance().");
-		result.append("getApplication().createValueBinding("+ivar+");\n");
+		result.append("                ValueBinding vb = ");
+		result.append("Util.getValueBinding("+ivar+");\n");
                 result.append("                "+componentType.toLowerCase());
 		result.append(".setValueBinding(\""+vbKey+"\", vb);\n");
 		result.append("            } else {\n");

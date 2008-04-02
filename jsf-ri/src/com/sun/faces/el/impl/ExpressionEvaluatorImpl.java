@@ -55,7 +55,6 @@
 
 package com.sun.faces.el.impl;
 
-import com.sun.faces.el.ext.parser.TokenMgrError;
 import com.sun.faces.el.impl.parser.ELParser;
 import com.sun.faces.el.impl.parser.ElParseException;
 import com.sun.faces.el.impl.parser.ParseException;
@@ -188,10 +187,20 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
     public Expression parseExpression(ExpressionInfo exprInfo)
         throws ElException {
         // Validate and then create an Expression object.
-        parseExpressionString(exprInfo.getExpressionString());
-        
-        // Create an Expression object that knows how to evaluate this.
-        return new ELExpression(this);
+        Object parsedValue = 
+	    parseExpressionString(exprInfo.getExpressionString());
+
+	// PENDING (hans) There must be a cleaner way to deal with
+	// String parse results, e.g., letting the parser return
+	// an Expression subclass that just returns its value. Or
+	// maybe this method should return a ValueBinding instead?
+        if (parsedValue instanceof String) {
+	    // Create an Expression object that knows how to evaluate this.
+	    return new ELExpression(this);
+	}
+	else {
+	    return (Expression) parsedValue;
+	}
     }
 
     //-------------------------------------
@@ -272,13 +281,7 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
                 } else {
                     throw new ElException(exc.getMessage(), exc);
                 }
-            } catch (TokenMgrError exc) {
-                // Note - this should never be reached, since the parser is
-                // constructed to tokenize any input (illegal inputs get
-                // parsed to <BADLY_ESCAPED_STRING_LITERAL> or
-                // <ILLEGAL_CHARACTER>
-                throw new ElException(exc.getMessage());
-            }
+            } 
         }
         return ret;
     }

@@ -9,12 +9,34 @@
 
 package com.sun.faces.el.impl;
 
+import javax.faces.context.FacesContext;
+import javax.faces.el.VariableResolver;
+import javax.faces.el.PropertyResolver;
+
 public class ExpressionInfo {
 
+    private FacesContext facesContext;
     private FunctionMapper functionMapper;
     private VariableResolver variableResolver;
+    private PropertyResolver propertyResolver;
     private String expressionString;
     private Class expectedType;
+
+    /**
+     * Returns the {@see FacesContext}.
+     * @return the FacesContext
+     */ 
+    public FacesContext getFacesContext() {
+        return facesContext;
+    }
+
+    /**
+     * Sets the {@see FacesContext}.
+     * @param facesContext FacesContext
+     */ 
+    public void setFacesContext(FacesContext facesContext) {
+        this.facesContext = facesContext;
+    }
 
     /**
      * TODO
@@ -48,12 +70,24 @@ public class ExpressionInfo {
         this.variableResolver = variableResolver;
     }
 
+    public PropertyResolver getPropertyResolver() {
+        return propertyResolver;
+    }
+
+    public void setPropertyResolver(PropertyResolver propertyResolver) {
+        this.propertyResolver = propertyResolver;
+    }
+
     /**
-     * TODO
+     * Returns the expression string with the "${}" delimiters that
+     * the JSP 2.0 evaluator requires. An alternative would be to
+     * modify the parser, but I think that can wait until a merged
+     * JSF/JSP evaluator is designed.
+     *
      * @return
      */
     public String getExpressionString() {
-        return expressionString;
+        return "${" + expressionString + "}";
     }
 
     /**

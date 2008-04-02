@@ -202,6 +202,7 @@
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/WEB-INF/classes"
             debug="${compile.debug}"
+            excludes="**/TestELImpl.java"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
 
@@ -318,7 +319,9 @@
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/> 
             <test name="com.sun.faces.convert.TestConverters"/>
+<!--
             <test name="com.sun.faces.el.impl.TestELImpl"/>
+-->
             <test name="com.sun.faces.el.TestPropertyResolverImpl"/>
             <test name="com.sun.faces.el.TestValueBindingImpl"/>
             <test name="com.sun.faces.el.TestVariableResolverImpl"/>

@@ -55,6 +55,11 @@
 
 package com.sun.faces.el.impl;
 
+import java.util.Map;
+
+import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
+import javax.faces.el.VariableResolver;
 
 /**
  *
@@ -63,7 +68,7 @@ package com.sun.faces.el.impl;
  * 
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
  **/
 
 public class NamedValue
@@ -112,12 +117,86 @@ public class NamedValue
         throws ElException {
        
         VariableResolver resolver = exprInfo.getVariableResolver();
+	FacesContext context = exprInfo.getFacesContext();
         if (resolver == null) {
             return null;
         } else {
-            return resolver.resolve(mName);
+            return resolver.resolveVariable(context, mName);
         }
     }
 
+    public void setValue(ExpressionInfo exprInfo, Object newValue)
+	throws ElException {
+	// PENDING (hans): Is this the behavior we want?
+
+	// Resolve the variable, to create it in the correct scope
+	// if it's a managed bean that doesn't exist
+	evaluate(exprInfo);
+
+	// Look for the variable in all scopes and replace it where
+	// found or add it to the request scope if not found
+	ExternalContext ec = 
+	    exprInfo.getFacesContext().getExternalContext();
+        if (ec.getRequestMap().get(mName) != null) {
+            ec.getRequestMap().put(mName, newValue);
+        }
+        else if (ec.getSessionMap() != null &&
+		 ec.getSessionMap().get(mName) != null) {
+            ec.getSessionMap().put(mName, newValue);
+        }
+        else if (ec.getApplicationMap().get(mName) != null) {
+            ec.getApplicationMap().put(mName, newValue);
+        }
+	else {
+            ec.getRequestMap().put(mName, newValue);
+	}
+    }
+
+    public boolean isReadOnly(ExpressionInfo exprInfo)
+        throws ElException {
+	boolean isReadOnly = false;
+
+	if ("param".equals(mName) ||
+	    "paramValues".equals(mName) ||
+	    "header".equals(mName) ||
+	    "headerValues".equals(mName) ||
+	    "cookie".equals(mName) ||
+	    "initParam".equals(mName)) {
+	    isReadOnly = true;
+	}
+	return isReadOnly;
+    }
+
+    public Class getType(ExpressionInfo exprInfo)
+        throws ElException {
+
+	Class type = null;
+	if ("applicationScope".equals(mName) ||
+	    "requestScope".equals(mName) ||
+	    "sessionScope".equals(mName) ||
+	    "param".equals(mName) ||
+	    "paramValues".equals(mName) ||
+	    "header".equals(mName) ||
+	    "headerValues".equals(mName) ||
+	    "cookie".equals(mName) ||
+	    "initParam".equals(mName)) {
+	    type = Map.class;
+	}
+	if (type == null) {
+	    ExternalContext ec = 
+		exprInfo.getFacesContext().getExternalContext();
+	    if (ec.getRequestMap().get(mName) != null) {
+		type = ec.getRequestMap().get(mName).getClass();
+	    }
+	    else if (ec.getSessionMap() != null &&
+		     ec.getSessionMap().get(mName) != null) {
+		type = ec.getSessionMap().get(mName).getClass();
+	    }
+	    else if (ec.getApplicationMap().get(mName) != null) {
+		type = ec.getApplicationMap().get(mName).getClass();
+	    }
+	}
+	return type;
+    }
     //-------------------------------------
 }

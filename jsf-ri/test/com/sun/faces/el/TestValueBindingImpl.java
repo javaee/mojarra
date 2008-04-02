@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.22 2003/12/17 15:15:19 rkitain Exp $
+ * $Id: TestValueBindingImpl.java,v 1.23 2004/01/06 04:28:48 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.io.Serializable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.22 2003/12/17 15:15:19 rkitain Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.23 2004/01/06 04:28:48 eburns Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase
@@ -349,83 +349,6 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	
 	// PENDING(edburns): test set with implicit objects.
 	
-    }
-    
-    public void testGetLastSegment() {
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
-	valueBinding.setRef("a.b.c");
-	assertTrue(valueBinding.getLastSegment().equals("c"));
-
-	valueBinding.setRef("a[1].b.c");
-	assertTrue(valueBinding.getLastSegment().equals("c"));
-
-	valueBinding.setRef("a[1]");
-	assertTrue(valueBinding.getLastSegment().equals("[1]"));
-
-	valueBinding.setRef("a[\"1\"]");
-	assertTrue(valueBinding.getLastSegment().equals("[\"1\"]"));
-
-	valueBinding.setRef("a[0].b[\"1\"]");
-	assertTrue(valueBinding.getLastSegment().equals("[\"1\"]"));
-
-	valueBinding.setRef("a");
-	assertTrue(valueBinding.getLastSegment().equals("a"));
-
-	valueBinding.setRef("foo");
-	assertTrue(valueBinding.getLastSegment().equals("foo"));
-
-	boolean exceptionThrown = false ;
-	try {
-	    valueBinding.setRef("a[");
-	    valueBinding.getLastSegment();
-	}
-	catch (PropertyNotFoundException e) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
-
-	exceptionThrown = false ;
-	try {
-	    valueBinding.setRef("apple][");
-	    valueBinding.getLastSegment();
-	}
-	catch (PropertyNotFoundException e) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
-
-	exceptionThrown = false ;
-	try {
-	    valueBinding.setRef("a.");
-	    valueBinding.getLastSegment();
-	}
-	catch (PropertyNotFoundException e) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
-
-    }
-
-    public void testHasMultipleSegments() {
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
-	valueBinding.setRef("cookie.cookie");
-	assertTrue(valueBinding.hasMultipleSegments());
-	valueBinding.setRef("cookie.monster");
-	assertTrue(valueBinding.hasMultipleSegments());
-	valueBinding.setRef("cookie");
-	assertTrue(!valueBinding.hasMultipleSegments());
-	valueBinding.setRef("cookie[1]");
-	assertTrue(valueBinding.hasMultipleSegments());
-	valueBinding.setRef("cookie[1].hello");
-	assertTrue(valueBinding.hasMultipleSegments());
-    }
-
-    public void testStripQuotesIfNecessary() {
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
-	assertTrue(valueBinding.stripQuotesIfNecessary("\"hasQuotes\"").equals("hasQuotes"));
-	assertTrue(valueBinding.stripQuotesIfNecessary("\"openQuote").equals("\"openQuote"));
-	assertTrue(valueBinding.stripQuotesIfNecessary("\'singleQuotes\'").equals("singleQuotes"));
-	assertTrue(valueBinding.stripQuotesIfNecessary("endQuote\'").equals("endQuote\'"));
     }
 
     public void testReadOnly_singleCase() {
@@ -908,7 +831,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         
         exceptionThrown = false;
         try {
-            valueBinding.setRef("empty applicationScope");
+            valueBinding.setRef("foo applicationScope");
             valueBinding.getValue(getFacesContext());
         } catch (PropertyNotFoundException e) {
             exceptionThrown = true;
@@ -954,6 +877,11 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	assertEquals("ValueBinding not expected value", "Justyna", 
 		     (String) input.getValueBinding("buckaroo").getValue(getFacesContext()));
 	
+    }
+
+    public void testMixedELValueParser() throws Exception {
+	String [] args =  {"one"};
+	com.sun.faces.el.MixedELValueParser.main(args);
     }
 
 

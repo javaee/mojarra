@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.6 2003/12/17 15:14:13 rkitain Exp $
+ * $Id: CoreValidator.java,v 1.7 2004/01/06 04:28:45 eburns Exp $
  */
 
 /*
@@ -35,7 +35,6 @@ public class CoreValidator extends FacesValidator {
 
     private ValidatorInfo validatorInfo;
     private IdTagParserImpl idTagParser;
-    private ElTagParserImpl elTagParser;
 
     //*********************************************************************
     // Constructor and lifecycle management
@@ -58,9 +57,6 @@ public class CoreValidator extends FacesValidator {
 
         idTagParser = new IdTagParserImpl();
         idTagParser.setValidatorInfo(validatorInfo);
-
-        elTagParser = new ElTagParserImpl();
-        elTagParser.setValidatorInfo(validatorInfo);
     }
 
     /**
@@ -97,9 +93,6 @@ public class CoreValidator extends FacesValidator {
         if (idTagParser.hasFailed()) {
             result.append(idTagParser.getMessage());
         }
-        if (elTagParser.hasFailed()) {
-            result.append(elTagParser.getMessage());
-        }
 	return result.toString();
     }
 
@@ -133,10 +126,8 @@ public class CoreValidator extends FacesValidator {
             validatorInfo.setValidator(CoreValidator.this);
 
             idTagParser.parseStartElement();
-            elTagParser.parseStartElement();
 
-            if (idTagParser.hasFailed() || 
-                elTagParser.hasFailed()) {
+            if (idTagParser.hasFailed()) {
                 failed = true;
             }
         }

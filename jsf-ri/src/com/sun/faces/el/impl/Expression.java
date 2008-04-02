@@ -63,7 +63,7 @@ package com.sun.faces.el.impl;
  * 
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
  **/
 
 public abstract class Expression {
@@ -88,4 +88,19 @@ public abstract class Expression {
 
     //-------------------------------------
 
+    public void setValue(ExpressionInfo exprInfo, Object newValue)
+	throws ElException {
+	// PENDING: Align with how all other messages are created
+	throw new ElException("Read-only expressions can't be set");
+    }
+
+    public boolean isReadOnly(ExpressionInfo exprInfo) 
+        throws ElException {
+	return true;
+    }
+
+    public Class getType(ExpressionInfo exprInfo) 
+        throws ElException {
+	return null;
+    }
 }

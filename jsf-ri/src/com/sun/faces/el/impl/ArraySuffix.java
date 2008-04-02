@@ -63,6 +63,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.el.PropertyResolver;
 
 /**
  *
@@ -106,7 +107,7 @@ import java.util.Map;
  * 
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
  **/
 
 public class ArraySuffix
@@ -184,9 +185,6 @@ public class ArraySuffix
     public Object evaluate(Object pValue, ExpressionInfo exprInfo)
         throws ElException {
         Object indexVal;
-        String indexStr;
-        BeanInfoProperty property;
-        BeanInfoIndexedProperty ixproperty;
 
         // Check for null value
         if (pValue == null) {
@@ -199,6 +197,156 @@ public class ArraySuffix
         }
 
         // Evaluate the index
+        else if ((indexVal = evaluateIndex(exprInfo)) == null) {
+            if (log.isWarnEnabled()) {
+                log.warn(
+                    MessageUtil.getMessageWithArgs(
+                        Constants.CANT_GET_NULL_INDEX, getOperatorSymbol()));
+                return null;
+            }
+        }
+	else {
+	    // Let the PropertyResolver evaluate the property
+	    PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+	    if (pValue instanceof List || pValue.getClass().isArray()) {
+		Integer indexObj = Coercions.coerceToInteger(indexVal);
+		if (indexObj == null) {
+		    if (log.isErrorEnabled()) {
+			String message = MessageUtil.getMessageWithArgs(
+			    Constants.BAD_INDEX_VALUE,
+                            getOperatorSymbol(),
+                            indexVal.getClass().getName());
+			log.error(message);
+			throw new ElException(message);
+		    }
+		    return null;
+		}
+		return propertyResolver.getValue(pValue, indexObj.intValue());
+	    }
+	    else {
+		String name = Coercions.coerceToString(indexVal);
+		return propertyResolver.getValue(pValue, name);
+	    }
+	}
+	return null;
+    }
+
+    public void setValue(Object pValue, Object newValue,
+			 ExpressionInfo exprInfo) throws ElException {
+
+        Object indexVal;
+
+        // Check for null value
+        if (pValue == null) {
+            if (log.isWarnEnabled()) {
+                log.warn(
+                    MessageUtil.getMessageWithArgs(
+                        Constants.CANT_GET_INDEXED_VALUE_OF_NULL, getOperatorSymbol()));
+                return;
+            }
+        }
+        // Evaluate the index
+        else if ((indexVal = evaluateIndex(exprInfo))
+            == null) {
+            if (log.isWarnEnabled()) {
+                log.warn(
+                    MessageUtil.getMessageWithArgs(
+                        Constants.CANT_GET_NULL_INDEX, getOperatorSymbol()));
+                return;
+            }
+        }
+	else {
+	    // Let the PropertyResolver set the property
+	    PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+	    if (pValue instanceof List || pValue.getClass().isArray()) {
+		Integer indexObj = Coercions.coerceToInteger(indexVal);
+		if (indexObj == null) {
+		    if (log.isErrorEnabled()) {
+			String message = MessageUtil.getMessageWithArgs(
+			    Constants.BAD_INDEX_VALUE,
+                            getOperatorSymbol(),
+                            indexVal.getClass().getName());
+			log.error(message);
+			throw new ElException(message);
+		    }
+		    return;
+		}
+		propertyResolver.setValue(pValue, indexObj.intValue(),
+					  newValue);
+	    }
+	    else {
+		String name = Coercions.coerceToString(indexVal);
+		propertyResolver.setValue(pValue, name, newValue);
+	    }
+	}
+    }
+
+    public boolean isReadOnly(Object pValue, ExpressionInfo exprInfo)
+        throws ElException {
+
+        Object indexVal;
+
+        // Check for null value
+        if (pValue == null) {
+            if (log.isWarnEnabled()) {
+                log.warn(
+                    MessageUtil.getMessageWithArgs(
+                        Constants.CANT_GET_INDEXED_VALUE_OF_NULL, getOperatorSymbol()));
+                return true;
+            }
+        }
+        // Evaluate the index
+        else if ((indexVal = evaluateIndex(exprInfo))
+            == null) {
+            if (log.isWarnEnabled()) {
+                log.warn(
+                    MessageUtil.getMessageWithArgs(
+                        Constants.CANT_GET_NULL_INDEX, getOperatorSymbol()));
+                return true;
+            }
+        }
+	else {
+	    // Let the PropertyResolver test the property
+	    PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+	    if (pValue instanceof List || pValue.getClass().isArray()) {
+		Integer indexObj = Coercions.coerceToInteger(indexVal);
+		if (indexObj == null) {
+		    if (log.isErrorEnabled()) {
+			String message = MessageUtil.getMessageWithArgs(
+			    Constants.BAD_INDEX_VALUE,
+                            getOperatorSymbol(),
+                            indexVal.getClass().getName());
+			log.error(message);
+			throw new ElException(message);
+		    }
+		    return true;
+		}
+		return propertyResolver.isReadOnly(pValue, 
+						   indexObj.intValue());
+	    }
+	    else {
+		String name = Coercions.coerceToString(indexVal);
+		return propertyResolver.isReadOnly(pValue, name);
+	    }
+	}
+	return true;
+    }
+
+    public Class getType(Object pValue, ExpressionInfo exprInfo)
+        throws ElException {
+
+        Object indexVal;
+
+        // Check for null value
+        if (pValue == null) {
+            if (log.isWarnEnabled()) {
+                log.warn(
+                    MessageUtil.getMessageWithArgs(
+                        Constants.CANT_GET_INDEXED_VALUE_OF_NULL, getOperatorSymbol()));
+                return null;
+            }
+        }
+        // Evaluate the index
         else if ((indexVal = evaluateIndex(exprInfo))
             == null) {
             if (log.isWarnEnabled()) {
@@ -208,127 +356,31 @@ public class ArraySuffix
                 return null;
             }
         }
-
-        // See if it's a Map
-        else if (pValue instanceof Map) {
-            Map val = (Map) pValue;
-            return val.get(indexVal);
-        }
-
-        // See if it's a List or array
-        else if (pValue instanceof List ||
-            pValue.getClass().isArray()) {
-            Integer indexObj = Coercions.coerceToInteger(indexVal);
-            if (indexObj == null) {
-                if (log.isErrorEnabled()) {
-                    String message = MessageUtil.getMessageWithArgs(
-                        Constants.BAD_INDEX_VALUE,
-                        getOperatorSymbol(), indexVal.getClass().getName());
-                    log.error(message);
-                    throw new ElException(message);
-                }
-                return null;
-            } else if (pValue instanceof List) {
-                try {
-                    return ((List) pValue).get(indexObj.intValue());
-                } catch (ArrayIndexOutOfBoundsException aob) {
-                    if (log.isWarnEnabled()) {
-                        log.warn(
-                            MessageUtil.getMessageWithArgs(
-                                Constants.EXCEPTION_ACCESSING_LIST, indexObj), aob);
-                    }
-                    return null;
-                } catch (IndexOutOfBoundsException iob) {
-                    if (log.isWarnEnabled()) {
-                        log.warn(
-                            MessageUtil.getMessageWithArgs(
-                                Constants.EXCEPTION_ACCESSING_LIST, indexObj), iob);
-                    }
-                    return null;
-                } catch (Throwable t) {
-                    if (log.isErrorEnabled()) {
-                        String message = MessageUtil.getMessageWithArgs(
-                            Constants.EXCEPTION_ACCESSING_LIST,
-                            indexObj);
-                        log.error(message, t);
-                        throw new ElException(message, t);
-                    }
-                    return null;
-                }
-            } else {
-                try {
-                    return Array.get(pValue, indexObj.intValue());
-                } catch (ArrayIndexOutOfBoundsException aob) {
-                    if (log.isWarnEnabled()) {
-                        log.warn(
-                            MessageUtil.getMessageWithArgs(
-                                Constants.EXCEPTION_ACCESSING_ARRAY, indexObj), aob);
-                    }
-                    return null;
-                } catch (IndexOutOfBoundsException iob) {
-                    if (log.isWarnEnabled()) {
-                        log.warn(
-                            MessageUtil.getMessageWithArgs(
-                                Constants.EXCEPTION_ACCESSING_ARRAY, indexObj), iob);
-                    }
-                    return null;
-                } catch (Throwable t) {
-                    if (log.isErrorEnabled()) {
-                        String message = MessageUtil.getMessageWithArgs(
-                            Constants.EXCEPTION_ACCESSING_ARRAY,
-                            indexObj);
-                        log.error(message, t);
-                        throw new ElException(message, t);
-                    }
-                    return null;
-                }
-            }
-        }
-
-        // Coerce to a String for property access
-
-        else if ((indexStr = Coercions.coerceToString(indexVal)) ==
-            null) {
-            return null;
-        }
-
-        // Look for a JavaBean property
-        else if ((property = BeanInfoManager.getBeanInfoProperty
-            (pValue.getClass(), indexStr)) != null &&
-            property.getReadMethod() != null) {
-            try {
-                return property.getReadMethod().invoke(pValue, sNoArgs);
-            } catch (InvocationTargetException exc) {
-                if (log.isErrorEnabled()) {
-                    String message = MessageUtil.getMessageWithArgs(
-                        Constants.ERROR_GETTING_PROPERTY, indexStr, pValue.getClass().getName());
-                    Throwable t = exc.getTargetException();
-                    log.warn(message, t);
-                    throw new ElException(message, t);
-                }
-                return null;
-            } catch (Throwable t) {
-                if (log.isErrorEnabled()) {
-                    String message = MessageUtil.getMessageWithArgs(
-                        Constants.ERROR_GETTING_PROPERTY, indexStr, pValue.getClass().getName());
-                    log.warn(message, t);
-                    throw new ElException(message, t);
-                }
-                return null;
-            }
-        } else {
-            if (log.isErrorEnabled()) {
-                String message = MessageUtil.getMessageWithArgs(
-                    Constants.CANT_FIND_INDEX,
-                    indexVal,
-                    pValue.getClass().getName(),
-                    getOperatorSymbol());
-                log.error(message);
-                throw new ElException(message);
-            }
-            return null;
-        }
-        return null;
+	else {
+	    // Let the PropertyResolver test the property
+	    PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+	    if (pValue instanceof List || pValue.getClass().isArray()) {
+		Integer indexObj = Coercions.coerceToInteger(indexVal);
+		if (indexObj == null) {
+		    if (log.isErrorEnabled()) {
+			String message = MessageUtil.getMessageWithArgs(
+			    Constants.BAD_INDEX_VALUE,
+                            getOperatorSymbol(),
+                            indexVal.getClass().getName());
+			log.error(message);
+			throw new ElException(message);
+		    }
+		    return null;
+		}
+		return propertyResolver.getType(pValue, 
+						indexObj.intValue());
+	    }
+	    else {
+		String name = Coercions.coerceToString(indexVal);
+		return propertyResolver.getType(pValue, name);
+	    }
+	}
+	return null;
     }
 
     //-------------------------------------

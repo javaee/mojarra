@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.119 2004/01/05 23:14:23 eburns Exp $
+ * $Id: Util.java,v 1.120 2004/01/06 04:28:47 eburns Exp $
  */
 
 /*
@@ -17,13 +17,13 @@ import com.sun.faces.el.impl.ExpressionEvaluatorImpl;
 import com.sun.faces.renderkit.RenderKitImpl;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.lang.reflect.Constructor;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -57,6 +57,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
+import com.sun.faces.el.MixedELValueBinding;
 import com.sun.faces.el.impl.ElException;
 import com.sun.faces.el.impl.ExpressionInfo;
 import com.sun.faces.el.impl.JspVariableResolver;
@@ -67,7 +68,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.119 2004/01/05 23:14:23 eburns Exp $ 
+ * @version $Id: Util.java,v 1.120 2004/01/06 04:28:47 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -79,14 +80,8 @@ public class Util extends Object
     protected static Log log = LogFactory.getLog(Util.class);
     
     /**
-     * The parser implementation for handling JSP EL expressions.
-     */ 
-    private static final ExpressionEvaluator JSP_EXPRESSION_EVALUATOR =
-        new ExpressionEvaluatorImpl(RIConstants.JSP_EL_PARSER);
-    
-    /**
      * The parser implementation for handling Faces RE expressions.
-     */ 
+     */
     private static final ExpressionEvaluator FACES_EXPRESSION_EVALUATOR =
         new ExpressionEvaluatorImpl(RIConstants.FACES_RE_PARSER);
 
@@ -854,10 +849,21 @@ private Util()
     }
     
     public static ValueBinding getValueBinding(String valueRef) {
-        ApplicationFactory af = (ApplicationFactory)
-            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        Application a = af.getApplication();
-        return (a.createValueBinding(valueRef));
+	ValueBinding vb = null;
+	// Check if it's a single expression
+	if (valueRef.trim().startsWith("#{") && 
+	    valueRef.trim().endsWith("}")) {
+	    ApplicationFactory af = (ApplicationFactory)
+		FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+	    Application a = af.getApplication();
+	    vb = (a.createValueBinding(valueRef));
+	}
+	else {
+	    // It must be a mixed literal/expression
+	    vb = new MixedELValueBinding();
+	    ((MixedELValueBinding) vb).setRef(valueRef);
+	}
+	return vb;
     }         
 
     public static MethodBinding createMethodBinding(String methodRef, 
@@ -868,7 +874,7 @@ private Util()
         MethodBinding binding = application.createMethodBinding(methodRef, 
 								params);
         return binding;
-    }         
+    }
 
     public static MethodBinding createConstantMethodBinding(String outcome){
 	return new ConstantMethodBinding(outcome);
@@ -919,74 +925,12 @@ private Util()
     
     
     /**
-     * <p>Return an {@link ExpressionEvaluator} instance using the specified parser.</p>
-     * @param parser the parser to be used for this expressionEvaluator
-     * @return an ExpressionEvaluator using the specified parser
+     * <p>Return the single {@link ExpressionEvaluator} instance.</p>
+
+     * @return an ExpressionEvaluator
      */
-    public static ExpressionEvaluator getExpressionEvaluator(String parser) {       
-        Util.doAssert(parser != null);
-        if (parser.equals(RIConstants.FACES_RE_PARSER)) 
-            return FACES_EXPRESSION_EVALUATOR;
-        else if (parser.equals(RIConstants.JSP_EL_PARSER))
-            return JSP_EXPRESSION_EVALUATOR;
-        else 
-            return null;                      
-    }
-
-
-    /*
-     * Evaluate the EL expression for the given attribute.
-     * @throws JspException if an error occurs during evaluation
-     */
-    public static String evaluateElExpression(String expression, PageContext pageContext) 
-                                              throws JspException {
-        if (expression != null) {
-            //PENDING: horwat: put in quick and dirty expression check.
-            //this method will be called often so it needs to be efficient!
-            if (isVBExpression(expression)) {
-
-                ExpressionInfo exprInfo = new ExpressionInfo();
-                exprInfo.setExpressionString(expression);
-                exprInfo.setExpectedType(String.class);
-                exprInfo.setVariableResolver(new JspVariableResolver(pageContext));
-                try {
-                    expression = (String)
-                        getExpressionEvaluator(RIConstants.JSP_EL_PARSER).evaluate(exprInfo);
-                } catch (ElException ele) {
-                    throw new JspException(ele.getMessage(), ele);
-                }
-            }
-        }
-
-        return expression;
-    }
-
-    /*
-     * Evaluate the EL expression for the given attribute.
-     * @throws JspException if an error occurs during evaluation
-     */
-    public static Object evaluateElExpression(String expression, PageContext pageContext, Class expectedType) 
-	throws JspException {
-	Object result = null;
-        if (expression != null) {
-            //PENDING: horwat: put in quick and dirty expression check.
-            //this method will be called often so it needs to be efficient!
-            if (isVBExpression(expression)) {
-
-                ExpressionInfo exprInfo = new ExpressionInfo();
-                exprInfo.setExpressionString(expression);
-                exprInfo.setExpectedType(expectedType);
-                exprInfo.setVariableResolver(new JspVariableResolver(pageContext));
-                try {
-                    result = 
-                        getExpressionEvaluator(RIConstants.JSP_EL_PARSER).evaluate(exprInfo);
-                } catch (ElException ele) {
-                    throw new JspException(ele.getMessage(), ele);
-                }
-            }
-        }
-
-        return result;
+    public static ExpressionEvaluator getExpressionEvaluator() {
+	return FACES_EXPRESSION_EVALUATOR;
     }
 
     /*

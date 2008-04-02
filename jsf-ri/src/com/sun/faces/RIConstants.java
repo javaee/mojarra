@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.50 2003/12/17 15:13:18 rkitain Exp $
+ * $Id: RIConstants.java,v 1.51 2004/01/06 04:28:23 eburns Exp $
  */
 
 /*
@@ -67,19 +67,6 @@ public class RIConstants {
      * <p>Parser implementation for processing JSF reference expressions.</p>
      */
     public static final String FACES_RE_PARSER = 
-        FACES_PREFIX + "el.ext.parser.FacesREParser";
-    
-    /**
-     * <p>ExpressionEvaluator implementation for processing JSP/JSTL-based
-     * EL expressions.</p>
-     */
-    public static final String JSP_EL_EVALUATOR = 
-        FACES_PREFIX + "el.impl.ExpressionEvaluatorImpl";
-
-    /**
-     * <p>Parser implementation for processing JSP/JSTL-based EL expressions.</p>
-     */
-    public static final String JSP_EL_PARSER = 
         FACES_PREFIX + "el.impl.parser.ELParserImpl";
     
     /**

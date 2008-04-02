@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.37 2003/12/22 23:25:48 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.38 2004/01/06 04:28:24 eburns Exp $
  */
 
 /*
@@ -846,7 +846,7 @@ public class ApplicationImpl extends Application {
             ExpressionInfo exprInfo = new ExpressionInfo();
             exprInfo.setExpressionString(ref);            
             ExpressionEvaluator evaluator =
-                Util.getExpressionEvaluator(RIConstants.FACES_RE_PARSER);
+                Util.getExpressionEvaluator();
             // this will be cached so it won't have to be parsed again when
             // evaluated.
             evaluator.parseExpression(exprInfo);
