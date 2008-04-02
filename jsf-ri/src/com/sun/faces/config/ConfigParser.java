@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.20 2003/07/22 19:44:39 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.21 2003/07/24 16:41:08 rlubke Exp $
  */
 
 /*
@@ -19,12 +19,8 @@ import com.sun.faces.util.Util;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -33,7 +29,6 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Message;
 import javax.faces.application.MessageImpl;
-import javax.faces.context.FacesContext;
 import javax.faces.context.MessageResources;
 import javax.faces.application.NavigationHandler;
 import javax.faces.el.PropertyResolver;
@@ -520,7 +515,7 @@ final class ConfigManagedBeanPropertyValueRule extends Rule {
     public ConfigManagedBeanPropertyValueRule() {
         super();
     }
-    public void begin(Attributes attributes) throws Exception {
+    public void begin(String namespace, String name, Attributes attributes) throws Exception {
         ConfigManagedBeanPropertyValue cpv = (ConfigManagedBeanPropertyValue)digester.peek();
         cpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
     }
@@ -530,7 +525,7 @@ final class ConfigManagedBeanPropertyValueRefRule extends Rule {
     public ConfigManagedBeanPropertyValueRefRule() {
         super();
     }
-    public void begin(Attributes attributes) throws Exception {
+    public void begin(String namespace, String name, Attributes attributes) throws Exception {
         ConfigManagedBeanPropertyValue cpv = (ConfigManagedBeanPropertyValue)digester.peek();
         cpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_REF);
     }
@@ -540,7 +535,7 @@ final class ConfigManagedBeanPropertyValueTypeRule extends Rule {
     public ConfigManagedBeanPropertyValueTypeRule() {
         super();
     }
-    public void begin(Attributes attributes) throws Exception {
+    public void begin(String namespace, String name, Attributes attributes) throws Exception {
         ConfigManagedBeanPropertyValue cpv = (ConfigManagedBeanPropertyValue)digester.peek();
         cpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_CLASS);
     }
@@ -550,7 +545,7 @@ final class ConfigManagedBeanPropertyValueNullRule extends Rule {
     public ConfigManagedBeanPropertyValueNullRule() {
         super();
     }
-    public void begin(Attributes attributes) throws Exception {
+    public void begin(String namespace, String name, Attributes attributes) throws Exception {
         ConfigManagedBeanPropertyValue cpv = (ConfigManagedBeanPropertyValue)digester.peek();
         cpv.setValueCategory(ConfigManagedBeanPropertyValue.NULL_VALUE);
     }
@@ -565,7 +560,7 @@ final class ConfigManagedPropertyMapValueRule extends Rule {
     public ConfigManagedPropertyMapValueRule() {
         super();
     }
-    public void begin(Attributes attributes) throws Exception {
+    public void begin(String namespace, String name, Attributes attributes) throws Exception {
         ConfigManagedPropertyMap cpm = (ConfigManagedPropertyMap)digester.peek();
         cpm.setValueCategory(ConfigManagedPropertyMap.VALUE);
     }
@@ -575,7 +570,7 @@ final class ConfigManagedPropertyMapRefRule extends Rule {
     public ConfigManagedPropertyMapRefRule() {
         super();
     }
-    public void begin(Attributes attributes) throws Exception {
+    public void begin(String namespace, String name, Attributes attributes) throws Exception {
         ConfigManagedPropertyMap cpm = (ConfigManagedPropertyMap)digester.peek();
         cpm.setValueCategory(ConfigManagedPropertyMap.VALUE_REF);
     }
@@ -585,7 +580,7 @@ final class ConfigManagedPropertyMapNullRule extends Rule {
     public ConfigManagedPropertyMapNullRule() {
         super();
     }
-    public void begin(Attributes attributes) throws Exception {
+    public void begin(String namespace, String name, Attributes attributes) throws Exception {
         ConfigManagedPropertyMap cpm = (ConfigManagedPropertyMap)digester.peek();
         cpm.setValueCategory(ConfigManagedPropertyMap.NULL_VALUE);
     }
@@ -599,7 +594,7 @@ final class ComponentsRule extends Rule {
     public ComponentsRule() {
         super();
     }
-    public void end() throws Exception {
+    public void end(String namespace, String name) throws Exception {
         ConfigComponent cc = (ConfigComponent)digester.peek();
         ApplicationFactory aFactory =
            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
@@ -617,7 +612,7 @@ final class ConvertersRule extends Rule {
     public ConvertersRule() {
        super();
     }
-    public void end() throws Exception {
+    public void end(String namespace, String name) throws Exception {
         ConfigConverter cc = (ConfigConverter)digester.peek();
         ApplicationFactory aFactory =
            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
@@ -635,7 +630,7 @@ final class ValidatorsRule extends Rule {
     public ValidatorsRule() {
        super();
     }
-    public void end() throws Exception {
+    public void end(String namespace, String name) throws Exception {
         ConfigValidator cc = (ConfigValidator)digester.peek();
         ApplicationFactory aFactory =
            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
@@ -653,7 +648,7 @@ final class ManagedBeansRule extends Rule {
     public ManagedBeansRule() {
         super();
     }
-    public void end() throws Exception {
+    public void end(String namespace, String name) throws Exception {
         ConfigManagedBean cmb = (ConfigManagedBean)digester.peek();
         ApplicationFactory aFactory =
             (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
@@ -675,7 +670,7 @@ final class ApplicationRule extends Rule {
     public ApplicationRule() {
         super();
     }
-    public void end() throws Exception {
+    public void end(String namespace, String name) throws Exception {
         ConfigApplication ca = (ConfigApplication)digester.peek();
         ApplicationFactory aFactory =
             (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
@@ -739,7 +734,7 @@ final class NavigationCaseRule extends Rule {
     public NavigationCaseRule() {
         super();
     }
-    public void end() throws Exception {
+    public void end(String namespace, String name) throws Exception {
         ConfigNavigationCase cnc = (ConfigNavigationCase)digester.pop();
         ConfigNavigationRule cnr = (ConfigNavigationRule)digester.peek();
         cnc.setFromTreeId(cnr.getFromTreeId());
@@ -773,7 +768,7 @@ final class RenderKitRule extends Rule {
     public RenderKitRule() {
         super();
     }
-    public void end() throws Exception {
+    public void end(String namespace, String name) throws Exception {
         ConfigRenderKit cr = (ConfigRenderKit)digester.peek();
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
@@ -824,7 +819,7 @@ final class MessageResourceRule extends Rule {
     public MessageResourceRule() {
         super();
     }
-    public void end() throws Exception {
+    public void end(String namespace, String name) throws Exception {
         ApplicationFactory aFactory =
             (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application =
