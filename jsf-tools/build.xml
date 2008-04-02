@@ -203,7 +203,7 @@ necessary to generate required classes.
          Clean up build and distribution directories
        ===================================================================
   -->
-  <target name="clean" description="Clean build directory">
+  <target name="clean" description="Clean build directory" depends="clean.generated">
     <delete dir="${build.dir}" />
     <delete>
       <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
@@ -214,6 +214,9 @@ necessary to generate required classes.
     <delete dir="${dist.dir}"/>
   </target>
 
+  <target name="clean.generated" description="Clean generated code">
+    <delete dir="${build.generate}" />
+  </target>
 
   <!--
        ===================================================================
