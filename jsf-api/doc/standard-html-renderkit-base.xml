@@ -948,6 +948,32 @@
 
     </ul>
 
+     <p>General notes regarding the rendering of JavaScript in the
+     standard components.</p>
+
+     <ul>
+
+       <p>The intent of the standard renderkit is to specify the minimal
+       Renderers a JSF implementation must provide.  As such, it is the
+       baseline for building JSF applications that are maximally
+       portable across JSF implementations and user agents.  Therefore,
+       the use of JavaScript must be minimized as not all browsers
+       support JavaScript, nor do all users enable JavaScript support in
+       their user agents.</p>
+
+       <p>Compliant implementations must only generate JavaScript in the
+       <a href="javax.faces.Commandjavax.faces.Link.html">
+       <code>javax.faces.Link</code> renderer for the
+       <code>javax.faces.Command</code></a> component.  The generation
+       of JavaScript in any other Renderer in the HTML_BASIC renderkit
+       is not permitted.  However, any JavaScript code provided by the
+       user as the value of a passthru attribute, such as "onmouseover",
+       is excluded from this restriction.</p>
+
+     </ul>
+
+
+
     </ul>]]>
 
         </description>
