@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.33 2006/05/22 22:43:04 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.34 2006/05/22 23:35:52 rlubke Exp $
  */
 
 /*
@@ -265,7 +265,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                                        ResponseWriter writer)
           throws IOException {
         String result = context.getApplication().getDefaultRenderKitId();        
-        if (!RenderKitFactory.HTML_BASIC_RENDER_KIT.equals(result)) {
+        if (result != null && 
+            !RenderKitFactory.HTML_BASIC_RENDER_KIT.equals(result)) {
             writer.startElement("input", context.getViewRoot());
             writer.writeAttribute("type", "hidden", "type");
             writer.writeAttribute("name",

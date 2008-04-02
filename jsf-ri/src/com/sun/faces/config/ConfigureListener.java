@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.77 2006/05/22 22:54:14 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.78 2006/05/22 23:35:51 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -522,8 +522,12 @@ public class ConfigureListener implements ServletContextListener {
                 }
                 releaseDigester(digester);
             }
-             ApplicationAssociate.getInstance(tlsExternalContext.get())
-                  .setContextName(getServletContextIdentifier(context));
+            ApplicationAssociate associate = 
+                  ApplicationAssociate.getInstance(tlsExternalContext.get());
+            if (associate != null) {
+                associate.setContextName(getServletContextIdentifier(context));
+            }
+                  
             tlsExternalContext.set(null);
            
             if (LOGGER.isLoggable(Level.INFO)) {
