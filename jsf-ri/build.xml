@@ -375,7 +375,8 @@ must exist.  This is necessary for the MessageFactory class.
     </target>
 
     <target name="passthru">
-        <ant antfile="build-tests.xml" target="safe.remove"/>
+        <echo>Invoking target ${passthru}</echo>
+        <ant antfile="build-tests.xml" target="${passthru}"/>
     </target>
 
   <!-- 

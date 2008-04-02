@@ -17,6 +17,7 @@
   <!-- Initial application element with partial values -->
   <application>
     <action-listener>com.sun.faces.TestActionListener</action-listener>
+    <message-bundle>com.sun.faces.TestMessages</message-bundle>
     <variable-resolver>com.sun.faces.TestOldVariableResolver</variable-resolver>
   </application>
 

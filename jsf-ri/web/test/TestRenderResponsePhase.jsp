@@ -13,6 +13,8 @@
         <H3> JSF Basic Components Test Page </H3>
 
 <f:view>
+
+  <f:loadBundle basename="com.sun.faces.TestMessages" var="testMessages" />
 <h:form id="basicForm" title="basicForm" styleClass="formClass"
       accept="html,wml" >
 
@@ -78,7 +80,10 @@
 
 	<TD>
 
-	      <h:command_link id="link" styleClass="hyperlinkClass"><f:verbatim>link text</f:verbatim></h:command_link>
+	      <h:command_link id="link" styleClass="hyperlinkClass">
+                <f:verbatim>link text with localized output</f:verbatim> 
+                <h:output_text value="#{testMessages.euroMessage}" />
+              </h:command_link>
 
 	</TD>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlUtils.java,v 1.2 2003/10/28 21:00:39 eburns Exp $
+ * $Id: HtmlUtils.java,v 1.3 2003/11/11 20:03:16 eburns Exp $
  */
 
 /*
@@ -341,6 +341,10 @@ public class HtmlUtils {
      * 4.7.4.
      */
     static private void _writeDecRef(Writer out, char ch) throws IOException {
+	if (ch == '\u20ac') {
+	    out.write("&euro;");
+	    return;
+	}
         out.write("&#");
         // Formerly used String.valueOf().  This version tests out
         // about 40% faster in a microbenchmark (and on systems where GC is

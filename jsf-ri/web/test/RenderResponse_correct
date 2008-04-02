@@ -13,6 +13,8 @@
         <H3> JSF Basic Components Test Page </H3>
 
 
+
+  
 <form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp" class="formClass" title="basicForm" accept="html,wml">
 
 
@@ -87,7 +89,10 @@
 
 	<TD>
 
-	      <a href="#" onmousedown="document.forms[0]['basicForm:link'].value='basicForm:link'; document.forms[0].submit()" class="hyperlinkClass">link text</a><input type="hidden" name="basicForm:link" />
+	      
+                 
+                
+              <a href="#" onmousedown="document.forms[0]['basicForm:link'].value='basicForm:link'; document.forms[0].submit()" class="hyperlinkClass">link text with localized outputMessage with &euro;</a><input type="hidden" name="basicForm:link" />
 
 	</TD>
 
@@ -99,7 +104,7 @@
 
 	      
                 
-              <a href="#" onmousedown="document.forms[0]['basicForm:imageLink'].value='basicForm:imageLink'; document.forms[0].submit()"><img id="basicForm:_id1" src="duke.gif" alt="" /></a><input type="hidden" name="basicForm:imageLink" />
+              <a href="#" onmousedown="document.forms[0]['basicForm:imageLink'].value='basicForm:imageLink'; document.forms[0].submit()"><img id="basicForm:_id2" src="duke.gif" alt="" /></a><input type="hidden" name="basicForm:imageLink" />
 
 	</TD>
 
@@ -138,7 +143,7 @@
               
               
               
-            <a href="#" onmousedown="document.forms[0]['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms[0]['name'].value='horwat';document.forms[0]['value'].value='password'; document.forms[0].submit()"><img id="basicForm:_id5" src="duke.gif" alt="" /></a><input type="hidden" name="basicForm:hrefParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />
+            <a href="#" onmousedown="document.forms[0]['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms[0]['name'].value='horwat';document.forms[0]['value'].value='password'; document.forms[0].submit()"><img id="basicForm:_id6" src="duke.gif" alt="" /></a><input type="hidden" name="basicForm:hrefParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />
         </TD>
       </TR>
 
@@ -158,7 +163,7 @@
 
 	      
                 
-              <a href="test.html"><img id="basicForm:_id7" src="duke.gif" alt="" /></a>
+              <a href="test.html"><img id="basicForm:_id8" src="duke.gif" alt="" /></a>
 
 	</TD>
 
@@ -197,7 +202,7 @@
               
               
               
-            <a href="test.html?name=horwat&value=password"><img id="basicForm:_id11" src="duke.gif" alt="" /></a>
+            <a href="test.html?name=horwat&value=password"><img id="basicForm:_id12" src="duke.gif" alt="" /></a>
         </TD>
       </TR>
 
@@ -219,7 +224,7 @@
 
 	<TD>
 
-            <input type="checkbox" name="basicForm:_id13" class="selectbooleanClass" />
+            <input type="checkbox" name="basicForm:_id14" class="selectbooleanClass" />
 	</TD>
 
       </TR>
@@ -241,7 +246,7 @@
                 
                 
 
-              <span class="selectoneClass"><select name="basicForm:_id14" size="10" tabindex="20" title="Select Quantity">	<option value="0">0</option>
+              <span class="selectoneClass"><select name="basicForm:_id15" size="10" tabindex="20" title="Select Quantity">	<option value="0">0</option>
 	<option value="1">1</option>
 	<option value="2">2</option>
 	<option value="3">3</option>
@@ -311,7 +316,7 @@
 
 	<TD>
                 
-            <input type="text" name="basicForm:_id31" value="Wed, Jul 10, 1996" class="inputClass" />
+            <input type="text" name="basicForm:_id32" value="Wed, Jul 10, 1996" class="inputClass" />
 	</TD>
 
       </TR>
@@ -499,7 +504,7 @@
 						
 						
 						
-					<select name="basicForm:_id42" multiple size="10">	<option value="0">zero</option>
+					<select name="basicForm:_id43" multiple size="10">	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
@@ -560,7 +565,7 @@
 
 
     
-<input type="hidden" name="basicForm:_id65" value="48%" />
+<input type="hidden" name="basicForm:_id66" value="48%" />
 
   <TABLE>
 
