@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.22 2003/10/27 15:58:45 eburns Exp $
+ * $Id: ConfigListener.java,v 1.23 2003/11/05 04:41:26 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -146,12 +146,14 @@ public class ConfigListener implements ServletContextListener
                       RIConstants.JSF_RI_CONFIG);
         }
 	try {
-	    jarInputStream = configURL.openStream();
+	    URLConnection conn = configURL.openConnection();
+	    conn.setUseCaches(false);
+            jarInputStream = conn.getInputStream();
 	    source = new InputSource(configURL.toExternalForm());
 	    source.setByteStream(jarInputStream);
             configParser.parseConfig(source);
 	    jarInputStream.close();
-	} 
+	}
 	catch (Exception ee) {
 	    try {
 		if (null != jarInputStream) {
@@ -163,7 +165,7 @@ public class ConfigListener implements ServletContextListener
 	    }
 	    
 	    Object[] obj = new Object[1];
-	    obj[0]=jarInputStream;
+	    obj[0] = jarInputStream;
 	    String msg = Util.getExceptionMessage(
 	        Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj);
 	    if (log.isWarnEnabled()) {

@@ -1,5 +1,5 @@
 /*
- * $Id: WebXmlParser.java,v 1.1 2003/10/07 19:53:10 rlubke Exp $
+ * $Id: WebXmlParser.java,v 1.2 2003/11/05 04:41:26 eburns Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -101,8 +102,10 @@ public class WebXmlParser extends Object {
         
         InputSource in = new InputSource(escapeSpaces(url.toExternalForm()));
         InputStream inStream = null;        
-        try {            
-            inStream = url.openStream();            
+        try {
+	    URLConnection conn = url.openConnection();
+	    conn.setUseCaches(false);
+            inStream = conn.getInputStream();
             in.setByteStream(inStream);
             digester.parse(in);
         } catch (Exception e) {           
