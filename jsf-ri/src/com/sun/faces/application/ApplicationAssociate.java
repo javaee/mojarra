@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.1 2004/05/07 13:53:09 eburns Exp $
+ * $Id: ApplicationAssociate.java,v 1.2 2004/05/11 21:35:23 eburns Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.InstancePool;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigureListener;
 
@@ -86,6 +87,13 @@ public class ApplicationAssociate extends Object {
     private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX + 
 	"ApplicationAssociate";
 
+
+    /**
+     * <p>Used by the EL system to pool instances of ExpressionInfo.
+     * </p>
+     */
+    private InstancePool expressionInfoInstancePool;
+
     public ApplicationAssociate(ApplicationImpl appImpl) {
 	app = appImpl;
 	ServletContext servletContext = null;
@@ -102,6 +110,8 @@ public class ApplicationAssociate extends Object {
         managedBeanFactoriesMap = new HashMap();
         caseListMap = new HashMap();
         wildcardMatchList = new TreeSet(new SortIt());
+	
+	expressionInfoInstancePool = new InstancePool();
     }
     
     public static ApplicationAssociate getInstance(Object servletContext) {
@@ -302,6 +312,19 @@ public class ApplicationAssociate extends Object {
 
         String viewId;
         ConfigNavigationCase navCase;
+    }
+
+    /**
+     * <p>@return the {@link InstancePool} that is allocated for the
+     * purposes of holding {@link com.sun.faces.el.impl.ExpressionInfo}
+     * instances.  The ApplicationAssociate does nothing but serve as
+     * the owning reference of the <code>InstancePool</code>.  Actual
+     * usage of the <code>InstancePool</code> happens in the EL
+     * package.</p>
+     */ 
+
+    public InstancePool getExpressionInfoInstancePool() {
+	return expressionInfoInstancePool;
     }
 
 }

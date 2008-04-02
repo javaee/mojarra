@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.32 2004/04/27 17:25:06 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.33 2004/05/11 21:35:24 eburns Exp $
  */
 
 /*
@@ -14,6 +14,9 @@ import com.sun.faces.el.impl.ElException;
 import com.sun.faces.el.impl.Expression;
 import com.sun.faces.el.impl.ExpressionInfo;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.InstancePool;
+import com.sun.faces.util.InstancePool.NewInstance;
+import com.sun.faces.application.ApplicationAssociate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -73,6 +76,8 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
 
     protected Application application = null;
 
+    protected ApplicationAssociate appAssociate = null;
+
     protected static Map applicationMap = null;
 
 //
@@ -87,14 +92,28 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
 
     public ValueBindingImpl(Application application) {
         Util.parameterNonNull(application);
+	//PENDING(rogerk)getCurrentinstance() performance considerations.
+	FacesContext facesContext = FacesContext.getCurrentInstance();
         this.application = application;
-
+	this.appAssociate = 
+	    ApplicationAssociate.getInstance(facesContext.getExternalContext().getContext());
+	
         if (null == applicationMap) {
-//PENDING(rogerk)getCurrentinstance() performance considerations.
             applicationMap =
-                FacesContext.getCurrentInstance().getExternalContext()
+                facesContext.getExternalContext()
                 .getApplicationMap();
         }
+
+	if (null != this.appAssociate) {
+	    InstancePool pool = this.appAssociate.getExpressionInfoInstancePool();
+	    if (!pool.isInitialized()) {
+		pool.setInstantiator(new NewInstance() {
+			public Object newInstance() {
+			    return new ExpressionInfo();
+			}
+		    });
+	    }
+	}						      
         Util.doAssert(null != applicationMap);
     }
 
@@ -144,8 +163,8 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
         throws EvaluationException, PropertyNotFoundException {
         Object result = null;
 
+	ExpressionInfo info = checkoutExpressionInfo();
         try {
-            ExpressionInfo info = new ExpressionInfo();
             info.setExpressionString(toEvaluate);
             info.setExpectedType(Object.class);
             info.setFacesContext(context);
@@ -165,6 +184,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
                     }
                     log.debug("getValue Evaluation threw exception:", l);
                 }
+		checkinExpressionInfo(info);
                 throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
                 if (log.isDebugEnabled()) {
@@ -176,14 +196,17 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
                     log.debug("getValue Evaluation threw exception:", l);
                 }
                 // Just rethrow it to keep detailed message
+		checkinExpressionInfo(info);
                 throw (PropertyNotFoundException) e;
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("getValue Evaluation threw exception:", e);
                 }
+		checkinExpressionInfo(info);
                 throw new EvaluationException(e);
             }
         }
+	checkinExpressionInfo(info);
         return result;
     }
 
@@ -200,8 +223,8 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
                     Util.ILLEGAL_IDENTIFIER_LVALUE_MODE_ID, new Object[]{ref}));
         }
         // PENDING(edburns): check for readOnly-ness        
+	ExpressionInfo info = checkoutExpressionInfo();
         try {
-            ExpressionInfo info = new ExpressionInfo();
             info.setExpressionString(ref);
             info.setFacesContext(context);
             info.setVariableResolver(application.getVariableResolver());
@@ -209,6 +232,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
             Expression expr =
                 Util.getExpressionEvaluator().parseExpression(info);
             expr.setValue(info, value);
+	    checkinExpressionInfo(info);
             return;
         } catch (Throwable e) {
             if (e instanceof ElException) {
@@ -220,6 +244,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
                     }
                     log.debug("setValue Evaluation threw exception:", l);
                 }
+		checkinExpressionInfo(info);
                 throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
                 if (log.isDebugEnabled()) {
@@ -231,11 +256,13 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
                     log.debug("setValue Evaluation threw exception:", l);
                 }
                 // Just rethrow it to keep detailed message
+		checkinExpressionInfo(info);
                 throw (PropertyNotFoundException) e;
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("setValue Evaluation threw exception:", e);
                 }
+		checkinExpressionInfo(info);
                 throw new EvaluationException(e);
             }
         }
@@ -248,15 +275,17 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
             throw new NullPointerException(
                 Util.getExceptionMessageString(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
+	ExpressionInfo info = checkoutExpressionInfo();
         try {
-            ExpressionInfo info = new ExpressionInfo();
             info.setExpressionString(ref);
             info.setFacesContext(context);
             info.setVariableResolver(application.getVariableResolver());
             info.setPropertyResolver(application.getPropertyResolver());
             Expression expr =
                 Util.getExpressionEvaluator().parseExpression(info);
-            return expr.isReadOnly(info);
+	    boolean result = expr.isReadOnly(info);
+	    checkinExpressionInfo(info);
+            return result;
         } catch (Throwable e) {
             if (e instanceof ElException) {
                 if (log.isDebugEnabled()) {
@@ -267,6 +296,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
                     }
                     log.debug("isReadOnly Evaluation threw exception:", l);
                 }
+		checkinExpressionInfo(info);
                 throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
                 if (log.isDebugEnabled()) {
@@ -278,11 +308,13 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
                     log.debug("isReadOnly Evaluation threw exception:", l);
                 }
                 // Just rethrow it to keep detailed message
+		checkinExpressionInfo(info);
                 throw (PropertyNotFoundException) e;
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("isReadOnly Evaluation threw exception:", e);
                 }
+		checkinExpressionInfo(info);
                 throw new EvaluationException(e);
             }
         }
@@ -295,15 +327,17 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
             throw new NullPointerException(
                 Util.getExceptionMessageString(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
+	ExpressionInfo info = checkoutExpressionInfo();
         try {
-            ExpressionInfo info = new ExpressionInfo();
             info.setExpressionString(ref);
             info.setFacesContext(context);
             info.setVariableResolver(application.getVariableResolver());
             info.setPropertyResolver(application.getPropertyResolver());
             Expression expr =
                 Util.getExpressionEvaluator().parseExpression(info);
-            return expr.getType(info);
+	    Class result = expr.getType(info);
+	    checkinExpressionInfo(info);
+            return result;
         } catch (Throwable e) {
             if (e instanceof ElException) {
                 if (log.isDebugEnabled()) {
@@ -314,6 +348,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
                     }
                     log.debug("getType Evaluation threw exception:", l);
                 }
+		checkinExpressionInfo(info);
                 throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
                 if (log.isDebugEnabled()) {
@@ -325,11 +360,13 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
                     log.debug("getType Evaluation threw exception:", l);
                 }
                 // Just rethrow it to keep detailed message
+		checkinExpressionInfo(info);
                 throw (PropertyNotFoundException) e;
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("getType Evaluation threw exception:", e);
                 }
+		checkinExpressionInfo(info);
                 throw new EvaluationException(e);
             }
         }
@@ -383,6 +420,28 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
 
     public void setTransient(boolean newTransientValue) {
         isTransient = newTransientValue;
+    }
+
+    // helper methods
+
+    private ExpressionInfo checkoutExpressionInfo() {
+	ExpressionInfo result = null;
+	if (null != appAssociate) {
+	    // PENDING(edburns): generic types would be nice here
+	    result = (ExpressionInfo)
+		appAssociate.getExpressionInfoInstancePool().checkout();
+	    result.reset();
+	}
+	else {
+	    result = new ExpressionInfo();
+	}
+	return result;
+    }
+    
+    private void checkinExpressionInfo(ExpressionInfo toCheckin) {
+	if (null != appAssociate) {
+	    appAssociate.getExpressionInfoInstancePool().checkin(toCheckin);
+	}
     }
 
 

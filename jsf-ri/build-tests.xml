@@ -376,7 +376,7 @@
     <target name="run.test" depends="compile.test,copy-test-data-files">
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
             <!-- uncomment the below line to enable attaching a debugger -->
-            <!-- <jvmarg line="${debug.jvm.args}"/> -->
+            <jvmarg line="${debug.jvm.args}"/>
 
             <classpath>
                 <pathelement path="${java.class.path}"/>
@@ -387,6 +387,7 @@
             <formatter type="plain" usefile="false"/>
             <jvmarg line="-Djcov.file=${out.test.dir}/jsf-impl-junit.jcov"/>
             <test name="com.sun.faces.util.TestUtil_local"/>
+            <test name="com.sun.faces.util.TestInstancePool_local"/>
         </junit>
 
     </target>

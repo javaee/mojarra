@@ -192,7 +192,7 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
         throws ElException {
         // Validate and then create an Expression object.
         Object parsedValue =
-            parseExpressionString(exprInfo.getExpressionString());
+            parseExpressionString(exprInfo.jspExpressionString.toString());
 
         // PENDING (hans) There must be a cleaner way to deal with
         // String parse results, e.g., letting the parser return
@@ -217,16 +217,16 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
      */
     public Object evaluate(ExpressionInfo exprInfo)
         throws ElException {
-        String expressionString = exprInfo.getExpressionString();
         Class expectedType = exprInfo.getExpectedType();
         // Check for null expression strings
-        if (expressionString == null) {
+        if (0 == exprInfo.jspExpressionString.bufLen) {
             throw new ElException
                 (Constants.NULL_EXPRESSION_STRING);
         }
 
         // Get the parsed version of the expression string
-        Object parsedValue = parseExpressionString(expressionString);
+        Object parsedValue = 
+	    parseExpressionString(exprInfo.jspExpressionString.toString());
 
         // Evaluate differently based on the parsed type
         if (parsedValue instanceof String) {
@@ -511,7 +511,7 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
          * Returns the expression in the expression language syntax
          */
         public String getExpressionString() {
-            return (exprInfo != null) ? exprInfo.getExpressionString() : "";
+            return (exprInfo != null) ? exprInfo.jspExpressionString.toString() : "";
         }
     }
 

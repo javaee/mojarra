@@ -20,7 +20,24 @@ public class ExpressionInfo {
     private VariableResolver variableResolver;
     private PropertyResolver propertyResolver;
     private String expressionString;
+    /**
+     * This is public for performance reasons.  
+     */
+    public final JSPExpressionString jspExpressionString = new JSPExpressionString();
     private Class expectedType;
+
+    /**
+     * <p>Reset the state of this instance to be the same as a freshly
+     * instantiated instance.</p>
+     */
+    public void reset() {
+	facesContext = null;
+	functionMapper = null;
+	variableResolver = null;
+	propertyResolver = null;
+	expressionString = null;
+	jspExpressionString.set(null);
+    }
 
 
     /**
@@ -124,6 +141,7 @@ public class ExpressionInfo {
             expressionString = buf.toString();
         }
         this.expressionString = expressionString;
+	this.jspExpressionString.set(expressionString);
     }
 
 
@@ -145,4 +163,41 @@ public class ExpressionInfo {
     public void setExpectedType(Class expectedType) {
         this.expectedType = expectedType;
     }
+
+    public static class JSPExpressionString extends Object {
+
+    public static final int ALLOC_INCR = 256;
+
+    public JSPExpressionString() {
+	buf = new char[ALLOC_INCR];
+	buf[0] = '$';
+	buf[1] = '{';
+    }
+
+    public char buf[] = null;
+    public int bufLen = 0;
+    public int bufSize = ALLOC_INCR;
+    
+    public void set(String newString) {
+	if (null == newString) {
+	    bufLen = 0;
+	    return;
+	}
+	int newBufSize, len;
+	if (bufSize < (newBufSize = ((len = newString.length()) + 3))) {
+	    bufSize = newBufSize;
+	    buf = new char[bufSize];
+	    buf[0] = '$';
+	    buf[1] = '{';
+	}
+	char [] src = newString.toCharArray();
+	System.arraycopy(src, 0, buf, 2, len);
+	buf[len + 2] = '}'; 
+	bufLen = len + 3;
+    }
+
+    public String toString() {
+	return new String(buf, 0, bufLen);
+    }
+}
 }
