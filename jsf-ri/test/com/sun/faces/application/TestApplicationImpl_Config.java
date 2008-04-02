@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.7 2003/05/20 20:57:13 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.8 2003/06/26 19:08:45 horwat Exp $
  */
 
 /*
@@ -30,7 +30,6 @@ import javax.faces.FactoryFinder;
 import javax.faces.component.*;
 import javax.faces.convert.Converter;
 import javax.faces.validator.Validator;
-import javax.faces.validator.RequiredValidator;
 import javax.faces.application.Message;
 import com.sun.faces.convert.*;
 
@@ -52,7 +51,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.7 2003/05/20 20:57:13 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.8 2003/06/26 19:08:45 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -372,13 +371,13 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
     public void testValidatorPositive() {
 	Validator 
 	    newTestValidator = null,
-	    testValidator = new RequiredValidator();
+	    testValidator = new Validator();
 	Validator val = null;
 	
 	// runtime addition
 	
 	application.addValidator("Billybob",
-				 "javax.faces.validator.RequiredValidator");
+				 "javax.faces.validator.Validator");
 	assertTrue(null != (newTestValidator = (Validator)
 			    application.getValidator("Billybob")));
 	assertTrue(newTestValidator != testValidator);
@@ -389,8 +388,6 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(null != (val = application.getValidator("Length")));
 	assertTrue(val instanceof Validator);
 	assertTrue(null != (val = application.getValidator("LongRange")));
-	assertTrue(val instanceof Validator);
-	assertTrue(null != (val = application.getValidator("Required")));
 	assertTrue(val instanceof Validator);
 
     }
@@ -428,7 +425,6 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	    "DoubleRange",
 	    "Length",
 	    "LongRange",
-	    "Required",
 	    "StringRange"	
 	};
 	

@@ -1,5 +1,5 @@
 /*
- * $Id: TestSecondValidator.java,v 1.1 2003/06/13 22:16:51 eburns Exp $
+ * $Id: TestSecondValidator.java,v 1.2 2003/06/26 19:08:44 horwat Exp $
  */
 
 /*
@@ -11,7 +11,9 @@
 
 package com.sun.faces;
 
-import javax.faces.validator.RequiredValidator;
+//PENDING: FIX_ME - replace RequiredValidator with Validator
+import javax.faces.validator.Validator;
 
-public class TestSecondValidator extends RequiredValidator {
+//PENDING: FIX_ME - replace RequiredValidator with Validator
+public class TestSecondValidator extends Validator {
 }

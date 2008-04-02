@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateRequiredTag.java,v 1.3 2003/05/20 23:08:01 jvisvanathan Exp $
+ * $Id: ValidateRequiredTag.java,v 1.4 2003/06/26 19:08:43 horwat Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ package com.sun.faces.taglib.jsf_core;
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
-import javax.faces.validator.RequiredValidator;
+//PENDING: FIX_ME - replace RequiredValidator with Validator
 import javax.faces.validator.Validator;
 import javax.faces.webapp.ValidatorTag;
 
@@ -26,7 +26,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ValidateRequiredTag.java,v 1.3 2003/05/20 23:08:01 jvisvanathan Exp $
+ * @version $Id: ValidateRequiredTag.java,v 1.4 2003/06/26 19:08:43 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo

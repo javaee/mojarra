@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.38 2003/06/20 13:25:24 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.39 2003/06/26 19:08:41 horwat Exp $
  */
 
 /*
@@ -137,6 +137,27 @@ public class FacesContextImpl extends FacesContext
     public ExternalContext getExternalContext() {
         return externalContext;
     }
+
+    /**
+     * <p>Return the {@link Application} instance associated with this
+     * web application.</p>
+     */
+    public Application getApplication() {
+        //PENDING - I'm a placeholder. Implement me.
+        return FacesContext.getCurrentInstance().getApplication();
+    }
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the {@link UIComponent}s for
+     * which at least one {@link Message} has been queued.  If there are no
+     * such components, an empty <code>Iterator</code> is returned.</p>
+     */
+    public Iterator getComponentsWithMessages() {
+        //PENDING - I'm a placeholder. Implement me.
+        return Collections.EMPTY_LIST.iterator();
+    }
+
 
     public Iterator getFacesEvents() {
         if (facesEvents != null) {
