@@ -175,18 +175,6 @@ public class SVGRenderKit extends RenderKit {
                     curContentType = supportedTypes[j].trim();
                     if (-1 != curDesiredType.indexOf(curContentType)) {
                         contentType = curDesiredType;
-                        /*
-                        if (-1 != curContentType.indexOf(SVG_CONTENT_TYPE)) {
-                            contentType = SVG_CONTENT_TYPE;
-                            requestMap.put(CONTENT_TYPE_IS_SVG, Boolean.TRUE);
-                        }
-                        else if (-1 != curContentType.indexOf(XHTML_CONTENT_TYPE) ||
-                                 -1 != curContentType.indexOf(APPLICATION_XML_CONTENT_TYPE) ||
-                                 -1 != curContentType.indexOf(TEXT_XML_CONTENT_TYPE)) {
-                            contentType = XHTML_CONTENT_TYPE;
-                            requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML,
-                                	   Boolean.TRUE);
-                        }*/        
                         break;
                     }
                 }
