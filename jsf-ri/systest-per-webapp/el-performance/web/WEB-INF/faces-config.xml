@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!DOCTYPE faces-config PUBLIC
+ "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+ "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<faces-config>
+
+  <managed-bean>
+    <managed-bean-name>lesser</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>booleanProperty</property-name>
+      <value>true</value>
+    </managed-property>
+    <managed-property>
+      <property-name>byteProperty</property-name>
+      <value>11</value>
+    </managed-property>
+    <managed-property>
+      <property-name>doubleProperty</property-name>
+      <value>300.14</value>
+    </managed-property>
+    <managed-property>
+      <property-name>floatProperty</property-name>
+      <value>12.3</value>
+    </managed-property>
+    <managed-property>
+      <property-name>intProperty</property-name>
+      <value>3000</value>
+    </managed-property>
+    <managed-property>
+      <property-name>longProperty</property-name>
+      <value>5000</value>
+    </managed-property>
+    <managed-property>
+      <property-name>shortProperty</property-name>
+      <value>4000</value>
+    </managed-property>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>A String Value</value>
+    </managed-property>
+    <managed-property>
+      <property-name>bean</property-name>
+      <value>#{nested.stringProperty}</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>greater</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>booleanProperty</property-name>
+      <value>false</value>
+    </managed-property>
+    <managed-property>
+      <property-name>byteProperty</property-name>
+      <value>21</value>
+    </managed-property>
+    <managed-property>
+      <property-name>doubleProperty</property-name>
+      <value>321.54</value>
+    </managed-property>
+    <managed-property>
+      <property-name>floatProperty</property-name>
+      <value>21.43</value>
+    </managed-property>
+    <managed-property>
+      <property-name>intProperty</property-name>
+      <value>5000</value>
+    </managed-property>
+    <managed-property>
+      <property-name>longProperty</property-name>
+      <value>54321</value>
+    </managed-property>
+    <managed-property>
+      <property-name>shortProperty</property-name>
+      <value>4321</value>
+    </managed-property>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>New String Value</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>nested</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>nested 0</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>nested1</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>bean</property-name>
+      <value>#{nested2.bean.bean.stringProperty}</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>nested2</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>bean</property-name>
+      <value>#{nested3}</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>nested3</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>bean</property-name>
+      <value>#{nested4}</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>nested4</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>Finally, a simple property</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>evaluator</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.EvaluatorBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>reps</property-name>
+      <value>3000</value>
+    </managed-property>
+    <managed-property>
+      <property-name>expressions</property-name>
+      <list-entries>
+        <value>nested1.bean</value>
+        <null-value/>
+      </list-entries>
+    </managed-property>
+
+
+  </managed-bean>
+
+
+
+</faces-config>
