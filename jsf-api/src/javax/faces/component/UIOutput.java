@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.34 2003/10/09 19:18:10 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.35 2003/10/25 00:34:37 craigmcc Exp $
  */
 
 /*
@@ -12,8 +12,10 @@ package javax.faces.component;
 
 import java.io.IOException;
 
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
 
 
 /**
@@ -72,13 +74,10 @@ public class UIOutput extends UIComponentBase
     // ------------------------------------------------------ Instance Variables
 
 
-    /**
-     * <p>The {@link ConvertableValueHolderSupport} instance to which we
-     * delegate our {@link ConvertableValueHolder} implementation processing.
-     * </p>
-     */
-    private ConvertableValueHolderSupport support =
-        new ConvertableValueHolderSupport(this);
+    private Converter converter = null;
+    private boolean valid = true;
+    private Object value = null;
+    private String valueRef = null;
 
 
 
@@ -87,56 +86,56 @@ public class UIOutput extends UIComponentBase
 
     public Converter getConverter() {
 
-        return (support.getConverter());
+        return (this.converter);
 
     }
 
 
     public void setConverter(Converter converter) {
 
-        support.setConverter(converter);
+        this.converter = converter;
 
     }
 
 
     public boolean isValid() {
 
-        return (support.isValid());
+        return (this.valid);
 
     }
 
 
     public void setValid(boolean valid) {
 
-        support.setValid(valid);
+        this.valid = valid;
 
     }
 
 
     public Object getValue() {
 
-        return (support.getValue());
+        return (this.value);
 
     }
 
 
     public void setValue(Object value) {
 
-        support.setValue(value);
+        this.value = value;
 
     }
 
 
     public String getValueRef() {
 
-        return (support.getValueRef());
+        return (this.valueRef);
 
     }
 
 
     public void setValueRef(String valueRef) {
 
-        support.setValueRef(valueRef);
+        this.valueRef = valueRef;
 
     }
 
@@ -149,7 +148,20 @@ public class UIOutput extends UIComponentBase
      */ 
     public Object currentValue(FacesContext context) {
 
-        return (support.currentValue(context));
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        Object value = getValue();
+        if (value != null) {
+            return (value);
+        }
+        String valueRef = getValueRef();
+        if (valueRef != null) {
+            Application application = context.getApplication();
+            ValueBinding binding = application.getValueBinding(valueRef);
+            return (binding.getValue(context));
+        }
+        return (null);
 
     }
 
@@ -159,9 +171,12 @@ public class UIOutput extends UIComponentBase
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[2];
+        Object values[] = new Object[5];
         values[0] = super.saveState(context);
-        values[1] = saveAttachedState(context, support);
+        values[1] = saveAttachedState(context, converter);
+        values[2] = this.valid ? Boolean.TRUE : Boolean.FALSE;
+        values[3] = value;
+        values[4] = valueRef;
         return (values);
 
     }
@@ -172,9 +187,10 @@ public class UIOutput extends UIComponentBase
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        support = (ConvertableValueHolderSupport)
-            restoreAttachedState(context, values[1]);
-	support.setComponent(this);
+        converter = (Converter) restoreAttachedState(context, values[1]);
+        valid = ((Boolean) values[2]).booleanValue();
+        value = values[3];
+        valueRef = (String) values[4];
 
     }
 

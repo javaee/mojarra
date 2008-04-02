@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.19 2003/10/09 19:18:11 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.20 2003/10/25 00:34:38 craigmcc Exp $
  */
 
 /*
@@ -11,7 +11,9 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 
 /**
@@ -40,12 +42,8 @@ public class UIPanel extends UIComponentBase implements ValueHolder {
     // ------------------------------------------------------ Instance Variables
 
 
-    /**
-     * <p>The {@link ValueHolderSupport} instance to which we delegate
-     * our {@link ValueHolder} implementation processing.</p>
-     */
-    private ValueHolderSupport support = new ValueHolderSupport(this);
-
+    private Object value = null;
+    private String valueRef = null;
 
 
     // -------------------------------------------------- UIComponent Properties
@@ -67,28 +65,28 @@ public class UIPanel extends UIComponentBase implements ValueHolder {
 
     public Object getValue() {
 
-        return (support.getValue());
+        return (this.value);
 
     }
 
 
     public void setValue(Object value) {
 
-        support.setValue(value);
+        this.value = value;
 
     }
 
 
     public String getValueRef() {
 
-        return (support.getValueRef());
+        return (this.valueRef);
 
     }
 
 
     public void setValueRef(String valueRef) {
 
-        support.setValueRef(valueRef);
+        this.valueRef = valueRef;
 
     }
 
@@ -98,7 +96,20 @@ public class UIPanel extends UIComponentBase implements ValueHolder {
 
     public Object currentValue(FacesContext context) {
 
-        return (support.currentValue(context));
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        Object value = getValue();
+        if (value != null) {
+            return (value);
+        }
+        String valueRef = getValueRef();
+        if (valueRef != null) {
+            Application application = context.getApplication();
+            ValueBinding binding = application.getValueBinding(valueRef);
+            return (binding.getValue(context));
+        }
+        return (null);
 
     }
 
@@ -108,9 +119,10 @@ public class UIPanel extends UIComponentBase implements ValueHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[2];
+        Object values[] = new Object[3];
         values[0] = super.saveState(context);
-        values[1] = saveAttachedState(context, support);
+        values[1] = value;
+        values[2] = valueRef;
         return (values);
 
     }
@@ -121,8 +133,9 @@ public class UIPanel extends UIComponentBase implements ValueHolder {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        support = (ValueHolderSupport) restoreAttachedState(context, values[1]);
-	support.setComponent(this);
+        value = values[1];
+        valueRef = (String) values[2];
+
     }
 
 

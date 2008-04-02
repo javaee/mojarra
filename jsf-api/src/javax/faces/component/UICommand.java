@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.46 2003/10/09 19:18:07 craigmcc Exp $
+ * $Id: UICommand.java,v 1.47 2003/10/25 00:34:37 craigmcc Exp $
  */
 
 /*
@@ -11,7 +11,9 @@ package javax.faces.component;
 
 
 import javax.faces.application.Action;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
@@ -63,12 +65,8 @@ public class UICommand extends UIComponentBase
     // ------------------------------------------------------ Instance Variables
 
 
-    /**
-     * <p>The {@link ValueHolderSupport} instance to which we delegate
-     * our {@link ValueHolder} implementation processing.</p>
-     */
-    private ValueHolderSupport support = new ValueHolderSupport(this);
-
+    private Object value = null;
+    private String valueRef = null;
 
 
     // ------------------------------------------------- ActionSource Properties
@@ -144,33 +142,34 @@ public class UICommand extends UIComponentBase
 
     public Object getValue() {
 
-        return (support.getValue());
+        return (this.value);
 
     }
 
 
     public void setValue(Object value) {
 
-        support.setValue(value);
+        this.value = value;
 
     }
 
 
     public String getValueRef() {
 
-        return (support.getValueRef());
+        return (this.valueRef);
 
     }
 
 
     public void setValueRef(String valueRef) {
 
-        support.setValueRef(valueRef);
+        this.valueRef = valueRef;
 
     }
 
 
     // ---------------------------------------------------- ActionSource Methods
+
 
     /** 
      * @exception NullPointerException {@inheritDoc}
@@ -199,7 +198,20 @@ public class UICommand extends UIComponentBase
      */ 
     public Object currentValue(FacesContext context) {
 
-        return (support.currentValue(context));
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        Object value = getValue();
+        if (value != null) {
+            return (value);
+        }
+        String valueRef = getValueRef();
+        if (valueRef != null) {
+            Application application = context.getApplication();
+            ValueBinding binding = application.getValueBinding(valueRef);
+            return (binding.getValue(context));
+        }
+        return (null);
 
     }
 
@@ -211,12 +223,13 @@ public class UICommand extends UIComponentBase
 
         removeDefaultActionListener(context);
 
-        Object values[] = new Object[5];
+        Object values[] = new Object[6];
         values[0] = super.saveState(context);
-        values[1] = saveAttachedState(context, support);
-        values[2] = action;
-        values[3] = actionRef;
-        values[4] = immediate ? Boolean.TRUE : Boolean.FALSE;
+        values[1] = action;
+        values[2] = actionRef;
+        values[3] = immediate ? Boolean.TRUE : Boolean.FALSE;
+        values[4] = value;
+        values[5] = valueRef;
 
         addDefaultActionListener(context);
         return (values);
@@ -230,11 +243,11 @@ public class UICommand extends UIComponentBase
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        support = (ValueHolderSupport) restoreAttachedState(context,values[1]);
-	support.setComponent(this);
-        action = (String) values[2];
-        actionRef = (String) values[3];
-        immediate = ((Boolean) values[4]).booleanValue();
+        action = (String) values[1];
+        actionRef = (String) values[2];
+        immediate = ((Boolean) values[3]).booleanValue();
+        value = values[4];
+        valueRef = (String) values[5];
 
         addDefaultActionListener(context);
 
