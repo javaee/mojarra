@@ -93,6 +93,8 @@
 
     <!-- Environment -->
     <property environment="myenv" />
+    <property name="http.proxy.host" value=""/>
+    <property name="http.proxy.port" value=""/>
 
     <!-- Debug args (OVERRIDE IN BUILD.PROPERTIES) -->
     <property name="debug.jvm.args" value=""/>
