@@ -13,11 +13,16 @@
 <title>subview03</title>
 </head>
 <body>
-<h:outputText value="Begin test <c:include> with subview tag in included page"/>
-<jsp:include page="foo01.jsp"/>
-<h:outputText value="subview03"/>
-<jsp:include page="bar01.jsp"/>
-<h:outputText value="End test <c:include> with subview tag in included page"/>
+<p>
+<h:outputText value="Begin test <c:include> with subview tag in included page"/></p>
+
+<p><jsp:include page="foo01.jsp"/></p>
+
+<p><h:outputText value="subview03"/></p>
+
+<p><jsp:include page="bar01.jsp"/></p>
+
+<p><h:outputText value="End test <c:include> with subview tag in included page"/></p>
 </body>
 </html>
 </f:view>

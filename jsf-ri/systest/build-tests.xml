@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.93 2005/10/15 01:32:09 edburns Exp $
+ $Id: build-tests.xml,v 1.94 2005/11/10 20:06:44 edburns Exp $
 -->
 
 <!--
@@ -912,6 +912,13 @@
          request="${context.path}/faces/interweaving05.jsp"
          recordGolden="${local.golden.path}/interweaving05.txt"
          golden="${golden.path}/interweaving05.txt" failonerror="${failonerror}"/>
+
+   <tester host="${host}" port="${port}" protocol="${protocol}"
+        request="${context.path}/faces/include-import-interweaving.jsp"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+        golden="${golden.path}/include-import-interweaving.txt" 
+        failonerror="${failonerror}"/>
+
   </target>
 
 </project>

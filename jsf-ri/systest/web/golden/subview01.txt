@@ -13,7 +13,37 @@
 <title>subview01</title>
 </head>
 <body>
-Begin test &lt;c:import&gt; with subview tag in imported pagefoo01subview01bar01End test &lt;c:import&gt; with subview tag in imported page
+Begin test &lt;c:import&gt; with subview tag in imported page
+
+<p>
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+foo01
+
+</p>
+
+<p>subview01</p>
+
+<p><!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+bar01
+</p>
+
+<p>End test &lt;c:import&gt; with subview tag in imported page</p>
 </body>
 </html>
 

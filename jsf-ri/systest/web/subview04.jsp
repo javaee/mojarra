@@ -13,16 +13,22 @@
 <title>subview04</title>
 </head>
 <body>
-<h:outputText value="[A]"/>
+<p>
+<h:outputText value="[A]"/></p>
+
 <f:subview id="foo02">
-<h:outputText value="Begin test <c:include> with subview tag in including page"/>
-<jsp:include page="bar01.jsp"/>
+<p><h:outputText value="Begin test <c:include> with subview tag in including page"/></p>
+
+<p><jsp:include page="bar01.jsp"/></p>
 </f:subview>
-<h:outputText value="subview04"/>
+
+<p><h:outputText value="subview04"/></p>
+
 <f:subview id="bar02">
-<jsp:include page="bar02.jsp"/>
+<p><jsp:include page="bar02.jsp"/></p>
 </f:subview>
-<h:outputText value="End test <c:include> with subview tag in including page"/>
+
+<p><h:outputText value="End test <c:include> with subview tag in including page"/></p>
 </body>
 </html>
 </f:view>

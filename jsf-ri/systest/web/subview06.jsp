@@ -13,13 +13,15 @@
 <title>subview06</title>
 </head>
 <body>
-<h:outputText value="Begin test <c:import> with iterator tag in imported page"/>
+<p><h:outputText value="Begin test <c:import> with iterator tag in imported page"/></p>
 <f:subview id="subviewOuter">
-<br>
-<c:import url="subviewIterator01.jsp"/>
+<br />
+<p><c:import url="subviewIterator01.jsp"/></p>
 </f:subview>
-<h:outputText value="Text from subview06.jsp"/>
-<h:outputText value="End test <c:import> with iterator tag in imported page"/>
+
+<p><h:outputText value="Text from subview06.jsp"/></p>
+
+<p><h:outputText value="End test <c:import> with iterator tag in imported page"/></p>
 </body>
 </html>
 </f:view>

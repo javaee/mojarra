@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.11 2005/11/08 04:14:55 edburns Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.12 2005/11/10 20:06:42 edburns Exp $
  */
 
 /*
@@ -885,14 +885,14 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
 
     protected UIOutput createVerbatimComponent() {
-	assert(null != context);
+	assert(null != getFacesContext());
 	UIOutput verbatim = null;
-	Application application = context.getApplication();
+	Application application = getFacesContext().getApplication();
 	verbatim = (UIOutput)
 	    application.createComponent("javax.faces.HtmlOutputText");
 	verbatim.setTransient(true);
 	verbatim.getAttributes().put("escape", Boolean.FALSE);
-	verbatim.setId(context.getViewRoot().createUniqueId());
+	verbatim.setId(getFacesContext().getViewRoot().createUniqueId());
 	return verbatim;
     }
 
@@ -983,20 +983,11 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 	createdFacets = null;
 	UIComponent verbatim = null;
         
-        context = 
-           (FacesContext) pageContext.getAttribute(CURRENT_FACES_CONTEXT);
-        
-        if (context == null) {
-            context = FacesContext.getCurrentInstance();
-            
-            if (context == null) { // PENDING - i18n
-                throw new JspException("Cannot find FacesContext");
-            }
-            
-            // store the current FacesContext for use by other
-            // UIComponentTags in the same page
-            pageContext.setAttribute(CURRENT_FACES_CONTEXT, context);
-        }        
+        context = getFacesContext();
+	if (null == context) {
+	    // PENDING(edburns): I18N
+	    throw new JspException("Can't find FacesContext");
+	}
 
         parentTag = getParentUIComponentClassicTagBase(pageContext);
         Map requestMap = context.getExternalContext().getRequestMap();
@@ -1014,6 +1005,17 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 	// custom tag output into a transient component.
         if (null == getFacetName() &&
 	    null != parentTag) {
+            // If we're not inside a JSP tag, flush the buffer 
+            // to our wrapped response
+            if (null == this.getParent()) {
+        	JspWriter out = pageContext.getOut();
+		try {
+		    out.flush();
+		}
+		catch (IOException ioe) {
+		    throw new JspException(ioe);
+		}
+	    }
 	    verbatim = parentTag.createVerbatimComponentFromBodyContent();
 	}
 
@@ -1573,9 +1575,24 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
 
     protected FacesContext getFacesContext() {
-
+	
+	if (context == null) {
+            if (null == (context = (FacesContext)
+                    pageContext.getAttribute(CURRENT_FACES_CONTEXT))) {
+                context = FacesContext.getCurrentInstance();
+	    
+                if (context == null) { // PENDING - i18n
+                    throw new RuntimeException("Cannot find FacesContext");
+                }
+	    
+                // store the current FacesContext for use by other
+                // UIComponentTags in the same page
+                pageContext.setAttribute(CURRENT_FACES_CONTEXT, context);
+            }
+	}
+	
 	return (context);
-
+	
     }
 
 

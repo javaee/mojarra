@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerResponseWrapper.java,v 1.3 2005/08/22 22:10:08 ofung Exp $ 
+ * $Id: ViewHandlerResponseWrapper.java,v 1.4 2005/11/10 20:06:43 edburns Exp $ 
  */ 
 
 
@@ -138,6 +138,16 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper
 	    basos.resetByteArray();
 	}
 	    
+    }
+    
+    public void clearWrappedResponse() throws IOException {
+	ServletResponse wrapped = this.getResponse();
+	if (null != caw) {
+	    caw.reset();
+	}
+	else if (null != basos) {
+	    basos.resetByteArray();
+	}
     }
 
 //

@@ -13,8 +13,19 @@
 <title>subview06</title>
 </head>
 <body>
-Begin test &lt;c:import&gt; with iterator tag in imported page
-<br>
+<p>Begin test &lt;c:import&gt; with iterator tag in imported page</p>
+
+<br />
+<p><!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
 
   <br>
   
@@ -35,10 +46,14 @@ Begin test &lt;c:import&gt; with iterator tag in imported page
     <input type="text" name="subviewOuter:subviewInner:_id_id17_id_3" value="This component has no ID " /><br>
   
 
-Text from subview06.jspEnd test &lt;c:import&gt; with iterator tag in imported page
 
 
+</p>
 
+
+<p>Text from subview06.jsp</p>
+
+<p>End test &lt;c:import&gt; with iterator tag in imported page</p>
 </body>
 </html>
 

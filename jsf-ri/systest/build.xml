@@ -359,7 +359,7 @@
   <target name="passthru" depends="compile"
    description="Convenience target to execute just one test.  Just change the nested traget attribute.">
 
-    <ant antfile="build-tests.xml" target="test.jsp"/>
+    <ant antfile="build-tests.xml" target="test.subview"/>
 
   </target>
 

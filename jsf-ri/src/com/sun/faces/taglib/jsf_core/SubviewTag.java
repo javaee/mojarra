@@ -1,5 +1,5 @@
 /*
- * $Id: SubviewTag.java,v 1.7 2005/08/22 22:10:26 ofung Exp $
+ * $Id: SubviewTag.java,v 1.8 2005/11/10 20:06:43 edburns Exp $
  */
 
 /*
@@ -29,7 +29,13 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import com.sun.faces.application.ViewHandlerResponseWrapper;
+import java.io.IOException;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.webapp.UIComponentELTag;
+import javax.servlet.jsp.JspException;
 
 public class SubviewTag extends UIComponentELTag {
 
@@ -78,5 +84,43 @@ public class SubviewTag extends UIComponentELTag {
     public String getComponentType() {
         return "javax.faces.NamingContainer";
     }
+    
+    protected UIComponent createVerbatimComponentFromBodyContent() {
+	UIOutput verbatim = (UIOutput)
+                super.createVerbatimComponentFromBodyContent();
+        String value = null;
+	
+	Object response = getFacesContext().getExternalContext().getResponse();
+	if (response instanceof ViewHandlerResponseWrapper) {
+	    ViewHandlerResponseWrapper wrapped =
+		    (ViewHandlerResponseWrapper) response;
+	    try {
+		if (wrapped.isBytes()) {
+		    wrapped.flushContentToWrappedResponse();
+		} else if (wrapped.isChars()) {
+		    char [] chars = wrapped.getChars();
+		    if (null != chars && 0 < chars.length) {
+                        if (null != verbatim) {
+                            value = (String) verbatim.getValue();
+                        }
+			verbatim = super.createVerbatimComponent();
+                        if (null != value) {
+                            verbatim.setValue(value + new String(chars));
+                        }
+                        else {
+                            verbatim.setValue(new String(chars));
+                        }
+		    }
+		}
+		wrapped.clearWrappedResponse();
+	    } catch (IOException e) {
+		throw new FacesException(new JspException("Can't write content above <f:view> tag"
+			+ " " + e.getMessage()));
+	    }
+	}
+	
+	return verbatim;
+    }
+    
 
 }
