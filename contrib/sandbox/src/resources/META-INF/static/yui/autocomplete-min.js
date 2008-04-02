@@ -1,4 +1,9 @@
-/* Copyright (c) 2006, Yahoo! Inc. All rights reserved. Code licensed under the BSD License: http://developer.yahoo.com/yui/license.txt version: 0.12.1 */
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 0.12.2
+*/
 
 YAHOO.widget.AutoComplete=function(elInput,elContainer,oDataSource,oConfigs){if(elInput&&elContainer&&oDataSource){if(oDataSource&&(oDataSource instanceof YAHOO.widget.DataSource)){this.dataSource=oDataSource;}
 else{return;}
