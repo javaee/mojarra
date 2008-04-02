@@ -386,7 +386,7 @@ necessary to generate required classes.
   <xmlcatalog id="standard-renderkit">
 
     <dtd 
-      publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+      publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
       location="${jsf-api.dir}/doc/web-facesconfig_1_1.dtd" />
 
   </xmlcatalog>

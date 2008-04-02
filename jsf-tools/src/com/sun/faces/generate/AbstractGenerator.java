@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractGenerator.java,v 1.3 2004/02/04 23:46:34 ofung Exp $
+ * $Id: AbstractGenerator.java,v 1.4 2004/05/11 18:56:27 rkitain Exp $
  */
 
 /*
@@ -227,7 +227,7 @@ public abstract class AbstractGenerator {
         // Configure preregistered entities
         if (dtd != null) {
             digester.register
-              ("-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN",
+              ("-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN",
                (new File(dtd)).toURL().toString());
         }
         return (digester);
