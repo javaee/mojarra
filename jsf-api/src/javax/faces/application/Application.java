@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.5 2003/06/24 16:52:13 craigmcc Exp $
+ * $Id: Application.java,v 1.6 2003/07/14 22:59:58 craigmcc Exp $
  */
 
 /*
@@ -233,7 +233,7 @@ public abstract class Application {
      * @param componentRef {@link ValueBinding} representing a component
      *  reference (typically specified by the <code>componentRef</code>
      *  attribute of a custom tag)
-     * @param FacesContext {@link FacesContext} for the current request
+     * @param context {@link FacesContext} for the current request
      * @param componentType Component type to create if the {@link ValueBinding}
      *  does not return a component instance
      *

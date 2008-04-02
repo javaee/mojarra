@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.23 2003/06/21 01:41:32 craigmcc Exp $
+ * $Id: UIInput.java,v 1.24 2003/07/14 22:59:59 craigmcc Exp $
  */
 
 /*
@@ -240,8 +240,7 @@ public class UIInput extends UIOutput {
     /**
      * <p>Set the valid state of this {@link UIInput} component.</p>
      *
-     *
-     * @param boolean The new valid state
+     * @param valid The new valid state
      */
     public void setValid(boolean valid) {
 

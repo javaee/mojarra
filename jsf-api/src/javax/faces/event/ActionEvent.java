@@ -1,5 +1,5 @@
 /*
- * $Id: ActionEvent.java,v 1.4 2003/06/21 00:17:45 craigmcc Exp $
+ * $Id: ActionEvent.java,v 1.5 2003/07/14 23:00:01 craigmcc Exp $
  */
 
 /*
@@ -33,9 +33,9 @@ public class ActionEvent extends FacesEvent {
      * @exception IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
-    public ActionEvent(UIComponent source) {
+    public ActionEvent(UIComponent component) {
 
-        super(source);
+        super(component);
 
     }
 

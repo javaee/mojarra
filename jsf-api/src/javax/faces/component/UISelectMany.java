@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.26 2003/04/29 18:51:32 eburns Exp $
+ * $Id: UISelectMany.java,v 1.27 2003/07/14 22:59:59 craigmcc Exp $
  */
 
 /*
@@ -64,7 +64,7 @@ public class UISelectMany extends UISelectBase {
      * <p>Set the currently selected items, or <code>null</code> to indicate
      * that there are no currently selected items.</p>
      *
-     * @param selectedItemss The new selected items (if any)
+     * @param selectedItems The new selected items (if any)
      */
     public void setSelectedValues(Object selectedItems[]) {
 

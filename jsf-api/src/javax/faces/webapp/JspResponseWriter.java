@@ -1,5 +1,5 @@
 /*
- * $Id: JspResponseWriter.java,v 1.5 2003/02/20 22:46:45 ofung Exp $
+ * $Id: JspResponseWriter.java,v 1.6 2003/07/14 23:00:02 craigmcc Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ public final class JspResponseWriter extends ResponseWriterBase {
      * <p>Create a <code>JspResponseWriter</code> that wraps the specified
      * <code>PageContext</code>.</p>
      *
-     * @param writer The <code>JspWriter</code> to be wrapped
+     * @param pageContext The <code>PageContext</code> to be wrapped
      *
      * @exception NullPointerException if <code>pageContext</code> is null
      */

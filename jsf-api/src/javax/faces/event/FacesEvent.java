@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.4 2003/02/20 22:46:28 ofung Exp $
+ * $Id: FacesEvent.java,v 1.5 2003/07/14 23:00:01 craigmcc Exp $
  */
 
 /*
@@ -36,9 +36,9 @@ public class FacesEvent extends EventObject {
      * @exception IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
-    public FacesEvent(UIComponent source) {
+    public FacesEvent(UIComponent component) {
 
-        super(source);
+        super(component);
 
     }
 
