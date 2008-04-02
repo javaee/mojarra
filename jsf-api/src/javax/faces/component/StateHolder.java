@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolder.java,v 1.5 2003/09/15 20:17:19 eburns Exp $
+ * $Id: StateHolder.java,v 1.6 2003/09/22 18:55:31 eburns Exp $
  */
 
 /*
@@ -71,5 +71,18 @@ public interface StateHolder {
     public boolean isTransient();
 
     public void setTransient(boolean newTransientValue);
+
+    /**
+     * <p>Allows attached objects to maintain a reference to the {@link
+     * UIComponent} to which they are attached.  This method is called
+     * after {@link #restoreState}.</p>
+     *
+     * @param yourComponent the <code>UIComponent</code> to which this
+     * <code>StateHolder</code> instance is attached, or
+     * <code>null</code> if there is no <code>UIComponent</code> for
+     * this instance.
+     */
+    
+    public void setComponent(UIComponent yourComponent);
 
 }
