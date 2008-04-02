@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.2 2003/02/18 18:05:40 craigmcc Exp $
+ * $Id: CoreValidator.java,v 1.3 2003/03/13 23:01:32 eburns Exp $
  */
 
 /*
@@ -33,27 +33,6 @@ public class CoreValidator extends FacesValidator {
 
     //*********************************************************************
     // Constants
-
-    // QName for JSTL conditional tag
-    private final String JSTL_IF_QN = "c:if";
-
-    // QName for JSTL conditional tag
-    private final String JSTL_CHOOSE_QN = "c:choose";
-
-    // QName for JSTL iterator tag
-    private final String JSTL_FOREACH_QN = "c:forEach";
-
-    // QName for JSTL iterator tag
-    private final String JSTL_FORTOKENS_QN = "c:forTokens";
-
-    // Prefix for JSF HTML tags 
-    private final String JSF_HTML_PRE = "h:";
-
-    // Prefix for JSF CORE tags 
-    private final String JSF_CORE_PRE = "f:";
-
-    // Separator character
-    private final char SPACE = ' ';
 
     //*********************************************************************
     // Validation and configuration state (protected)
@@ -101,6 +80,7 @@ public class CoreValidator extends FacesValidator {
 	return result;
     }
 
+
     //*********************************************************************
     // SAX handler
 
@@ -121,6 +101,7 @@ public class CoreValidator extends FacesValidator {
          */
 	public void startElement(
                 String ns, String ln, String qn, Attributes a) {
+	    maybeSnagTLPrefixes(qn, a);
 
             if (isJstlTag(qn)) {
                 requiresIdCount++;

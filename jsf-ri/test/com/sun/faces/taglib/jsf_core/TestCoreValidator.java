@@ -1,5 +1,5 @@
 /*
- * $Id: TestCoreValidator.java,v 1.4 2003/03/12 19:54:20 rkitain Exp $
+ * $Id: TestCoreValidator.java,v 1.5 2003/03/13 23:01:33 eburns Exp $
  */
 
 /*
@@ -29,6 +29,7 @@ import javax.faces.component.AttributeDescriptor;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.FileOutputResponseWrapper;
 import com.sun.faces.util.Util;
+import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.CompareFiles;
 import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.lifecycle.Phase;
@@ -53,7 +54,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestCoreValidator.java,v 1.4 2003/03/12 19:54:20 rkitain Exp $
+ * @version $Id: TestCoreValidator.java,v 1.5 2003/03/13 23:01:33 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -258,6 +259,31 @@ public void testIteratorShouldSuccess()
     assertTrue(!exceptionThrown);
 
 }
+
+public void beginPrefixSnagging(WebRequest theRequest)
+{
+    theRequest.setURL("localhost:8080", null, null, TEST_URI_IF_FAIL, null);
+}
+
+
+/**
+
+* This method assumes the prefixes in the page referenced by
+* TEST_URI_IF_FAIL are "h" for the jsf html taglib, "f" for the jsf core
+* taglib, and "c" for the JSTL core taglib.
+
+*/
+
+public void testPrefixSnagging() {
+    FacesValidator facesValidator = null;
+    assertTrue(Assert.enabled);
+    assertTrue(null != (facesValidator = (FacesValidator)
+			System.getProperties().get("com.sun.faces.taglib.jsf_core.CoreValidator")));
+    assertTrue(facesValidator.getJSF_HTML_PRE().equals("h"));
+    assertTrue(facesValidator.getJSF_CORE_PRE().equals("f"));
+    assertTrue(facesValidator.getJSTL_CORE_PRE().equals("c"));
+}
+
 
 
 } // end of class TestCoreValidator

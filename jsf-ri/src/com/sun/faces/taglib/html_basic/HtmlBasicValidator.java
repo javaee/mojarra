@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicValidator.java,v 1.1 2003/02/03 23:04:33 edburns Exp $
+ * $Id: HtmlBasicValidator.java,v 1.2 2003/03/13 23:01:31 eburns Exp $
  */
 
 /*
@@ -23,19 +23,6 @@ import org.mozilla.util.Assert;
  * @author Ed Burns
  */
 public class HtmlBasicValidator extends FacesValidator {
-
-    //*********************************************************************
-    // Constants
-
-    // Prefix for JSF HTML tags 
-    private final String JSF_HTML_PRE = "h:";
-
-    // Prefix for JSF CORE tags 
-    private final String JSF_CORE_PRE = "f:";
-
-    // Separator character
-    private final char SPACE = ' ';
-
     //*********************************************************************
     // Validation and configuration state (protected)
 
@@ -92,6 +79,7 @@ public class HtmlBasicValidator extends FacesValidator {
          */
 	public void startElement(
                 String ns, String ln, String qn, Attributes a) {
+	    maybeSnagTLPrefixes(qn, a);
 	    if (-1 != (qn.indexOf("command_button"))) {
 		handleCommandButton(ns, ln, qn, a);
 	    }
