@@ -60,6 +60,7 @@
     <property name="cardemo.war" value="${basedir}/carstore/build/jsf-cardemo.war"/>        
     <property name="mapping-extension.war" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-extension.war"/>        
     <property name="mapping-prefix.war" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-prefix.war"/>        
+    <property name="test.results.dir" value="${basedir}/testresults"/>
 
     <path id="classpath">
         <pathelement location="${htmlunit.jar}"/>
@@ -187,6 +188,7 @@
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes">
             <classpath refid="run.classpath"/>
             <formatter type="plain" usefile="false"/>
+            <formatter type="xml" usefile="true"/>
             <jvmarg line="${debug.jvm.args}"/>
             <jvmarg value="-Dhost=${host}"/>
             <jvmarg value="-Dport=${port}"/> 
@@ -195,7 +197,7 @@
             <jvmarg value="-Dcontext.path=${context.path}"/>
 
             <!-- Suite of tests -->
-            <batchtest fork="yes">
+            <batchtest fork="yes" todir="${test.results.dir}">
                 <fileset dir="test/tests">
                     <include name="**/${demo.name}/**Test*.java"/>    
                 </fileset>    
@@ -252,6 +254,8 @@
     <!-- Global test target to run all unit tests -->
     <target name="test" depends="build" 
             description="Runs all of available demo unit tests">
+        <delete dir="${test.results.dir}"/>
+        <mkdir dir="${test.results.dir}"/>
 <!--        <antcall target="run.mapping-extension.tests"/>   
             <antcall target="run.mapping-prefix.tests"/>    -->
         <antcall target="run.cardemo.tests"/>    
