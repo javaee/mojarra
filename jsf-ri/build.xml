@@ -74,6 +74,7 @@
   <!-- ************ Dependencies **** *************************************** -->
 
   <!-- The locations of necessary jar files -->
+  <property name="jstl_el.jar" value="${lib.home}/jstl_el.jar"/>
   <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
   <property name="servlet.jar" value="${lib.home}/servlet.jar"/>
   <property name="xerces.jar" value="${lib.home}/xerces.jar"/>
@@ -108,6 +109,7 @@
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${jstl.jar}"/>
+    <pathelement location="${jstl_el.jar}"/>
   </path>
 
 
@@ -324,6 +326,7 @@
     <copy todir="${dist.home}/lib">
       <fileset dir="${lib.home}" includes="commons*.jar"/>
     </copy>
+    <copy file="${jstl_el.jar}" todir="${dist.home}/lib"/>
     <copy file="${jstl.jar}" todir="${dist.home}/lib"/>
     <copy file="${standard.jar}" todir="${dist.home}/lib"/>
     <copy file="${jsf-api.jar}" todir="${dist.home}/lib"/>
@@ -430,6 +433,7 @@
     <copy  file="${commons.logging.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${standard.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${jstl.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy  file="${jstl_el.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 
     <copy file="${jsf-api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>

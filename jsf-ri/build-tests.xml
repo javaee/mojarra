@@ -92,6 +92,7 @@
       <!-- For cactus.properties -->
       <pathelement location="${conf.test.dir}"/>
       <pathelement location="${jstl.jar}"/>
+      <pathelement location="${jstl_el.jar}"/>
     </path>
 
 <!-- ========== Executable Targets ======================================== -->
@@ -248,6 +249,7 @@
             <arg value="start"/>
             <classpath>
               <pathelement location="${jstl.jar}"/>
+              <pathelement location="${jstl_el.jar}"/>
               <pathelement location="${java.home}/../lib/tools.jar"/>
               <fileset dir="${tomcat.home.40}">
                   <include name="bin/bootstrap.jar"/>
