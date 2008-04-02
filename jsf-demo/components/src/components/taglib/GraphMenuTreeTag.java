@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuTreeTag.java,v 1.6 2003/09/25 17:48:11 horwat Exp $
+ * $Id: GraphMenuTreeTag.java,v 1.7 2003/11/09 22:45:56 jvisvanathan Exp $
  */
 
 /*
@@ -45,6 +45,7 @@ package components.taglib;
 import components.model.Graph;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentBodyTag;
 import javax.servlet.jsp.JspException;
 import components.components.GraphComponent;
@@ -131,7 +132,9 @@ public class GraphMenuTreeTag extends UIComponentBodyTag {
     
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
-
+        FacesContext context = FacesContext.getCurrentInstance();
+        ValueBinding vb = null;
+        
         GraphComponent graphComponent = (GraphComponent)component;
         if ((action_listener != null) &&
             (component.getAttributes().get("action_listener") == null)) {
@@ -150,23 +153,24 @@ public class GraphMenuTreeTag extends UIComponentBodyTag {
             (component.getAttributes().get("unselectedClass") == null)) {
             component.getAttributes().put("unselectedClass", unselectedClass);
         }
-        if(graphComponent.getValueRef() == null && valueRef != null ) {
-            graphComponent.setValueRef(valueRef);
+        if ( valueRef != null) {
+            vb = context.getApplication().getValueBinding(valueRef);
+            component.setValueBinding("value", vb); 
         }
-        // if there is no modelReference attribute set on this tag, then
+        
+        // if there is no valueRef attribute set on this tag, then
         // we need to build the graph.
-        FacesContext context = FacesContext.getCurrentInstance();
         if ( valueRef == null ) {
-            graphComponent.setValueRef("sessionScope.graph_tree");
-            Graph graph = (Graph)
-            ((Util.getValueBinding(graphComponent.getValueRef())).getValue(context));
+            vb = context.getApplication().getValueBinding("sessionScope.graph_menu");
+            component.setValueBinding("value", vb); 
+           
             // In the postback case, graph exists already. So make sure
             // it doesn't created again.
+            Graph graph = (Graph) ((GraphComponent)component).getValue();
             if ( graph == null ) {
                 graph = new Graph();
-                (Util.getValueBinding(graphComponent.getValueRef())).
-                    setValue(context, graph);
-            }     
+                vb.setValue(context, graph);
+            }    
         } 
     }
 

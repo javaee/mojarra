@@ -38,7 +38,8 @@
  
 package components.taglib;
 
-
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import components.components.AreaComponent;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
@@ -141,7 +142,9 @@ public class AreaTag extends UIComponentTag {
             area.getAttributes().put("styleClass", styleClass);
         }
         if (valueRef != null) {
-            area.setValueRef(valueRef);
+            FacesContext context = FacesContext.getCurrentInstance();
+            ValueBinding vb = context.getApplication().getValueBinding(valueRef);
+            area.setValueBinding("value", vb);
         }
         // target image is required
         area.setTargetImage(targetImage);

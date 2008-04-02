@@ -1,5 +1,5 @@
 /*
- * $Id: MenuTreeRenderer.java,v 1.6 2003/10/23 05:20:05 eburns Exp $
+ * $Id: MenuTreeRenderer.java,v 1.7 2003/11/09 22:45:55 jvisvanathan Exp $
  */
 
 /*
@@ -84,7 +84,7 @@ public class MenuTreeRenderer extends MenuBarRenderer {
         throws IOException {
         Graph graph = null;
         // Acquire the root node of the graph representing the menu
-        graph = (Graph) ((GraphComponent)component).currentValue(context);
+        graph = (Graph) ((GraphComponent)component).getValue();
         if (graph == null) {
             throw new FacesException("Graph could not be located");
         }

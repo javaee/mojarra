@@ -1,5 +1,5 @@
 /*
- * $Id: GraphComponent.java,v 1.9 2003/11/06 15:57:53 eburns Exp $
+ * $Id: GraphComponent.java,v 1.10 2003/11/09 22:45:53 jvisvanathan Exp $
  */
 
 /*
@@ -97,7 +97,7 @@ public class GraphComponent extends UIOutput {
 
             // Acquire the root node of the graph representing the menu
             FacesContext context = FacesContext.getCurrentInstance();
-            graph = (Graph) component.currentValue(context);
+            graph = (Graph) component.getValue();
             if (graph == null) {
                 throw new FacesException("Graph could not be located");
             }

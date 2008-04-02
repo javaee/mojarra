@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataBean.java,v 1.5 2003/10/27 04:15:59 craigmcc Exp $
+ * $Id: UIDataBean.java,v 1.6 2003/11/09 22:45:58 jvisvanathan Exp $
  */
 
 /*
@@ -148,7 +148,7 @@ public class UIDataBean {
         FacesContext context = FacesContext.getCurrentInstance();
         append("click(rowIndex=" + data.getRowIndex() +
                ",accountId=" +
-               accountId.currentValue(context) + ")");
+               accountId.getValue() + ")");
 	clear();
 	return (null);
 
@@ -259,7 +259,7 @@ public class UIDataBean {
         FacesContext context = FacesContext.getCurrentInstance();
         append("press(rowIndex=" + data.getRowIndex() +
                ",accountId=" +
-               accountId.currentValue(context) + ")");
+               accountId.getValue() + ")");
 	clear();
 	return (null);
 

@@ -151,9 +151,6 @@ public class AreaComponent extends UIOutput {
      */
     public Object getValue() {
 
-        if (getValueRef() != null) {
-            return (null);
-        }
         if (super.getValue() == null) {
             setValue(new ImageArea(getAlt(), getCoords(), getShape()));
         }

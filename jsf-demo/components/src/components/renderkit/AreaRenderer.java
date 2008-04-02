@@ -125,7 +125,7 @@ public class AreaRenderer extends BaseRenderer {
         AreaComponent area = (AreaComponent) component;
         String targetImageId = 
                 area.findComponent(area.getTargetImage()).getClientId(context);
-        ImageArea iarea = (ImageArea) area.currentValue(context);
+        ImageArea iarea = (ImageArea) area.getValue();
         ResponseWriter writer = context.getResponseWriter();
         StringBuffer sb = null;
 

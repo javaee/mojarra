@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuBarTag.java,v 1.7 2003/09/25 17:48:10 horwat Exp $
+ * $Id: GraphMenuBarTag.java,v 1.8 2003/11/09 22:45:56 jvisvanathan Exp $
  */
 
 /*
@@ -50,6 +50,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.UIComponentTag;
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 
 /**
@@ -137,7 +140,9 @@ public class GraphMenuBarTag extends UIComponentTag {
     
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
-
+        FacesContext context = FacesContext.getCurrentInstance();
+        ValueBinding vb = null;
+        
         GraphComponent graphComponent = (GraphComponent)component;
         if ((action_listener != null) &&
             (component.getAttributes().get("action_listener") == null)) {
@@ -156,23 +161,23 @@ public class GraphMenuBarTag extends UIComponentTag {
             (component.getAttributes().get("unselectedClass") == null)) {
             component.getAttributes().put("unselectedClass", unselectedClass);
         }
-        if(graphComponent.getValueRef() == null && valueRef != null ) {
-            graphComponent.setValueRef(valueRef);
-        } 
+        if ( valueRef != null) {
+            vb = context.getApplication().getValueBinding(valueRef);
+            component.setValueBinding("value", vb); 
+        }
         
         // if there is no valueRef attribute set on this tag, then
         // we need to build the graph.
-        FacesContext context = FacesContext.getCurrentInstance();
         if ( valueRef == null ) {
-            graphComponent.setValueRef("sessionScope.graph_menu");
-            Graph graph = (Graph)
-            ((Util.getValueBinding(graphComponent.getValueRef())).getValue(context));
+            vb = context.getApplication().getValueBinding("sessionScope.graph_menu");
+            component.setValueBinding("value", vb); 
+           
             // In the postback case, graph exists already. So make sure
             // it doesn't created again.
+            Graph graph = (Graph) ((GraphComponent)component).getValue();
             if ( graph == null ) {
                 graph = new Graph();
-                (Util.getValueBinding(graphComponent.getValueRef())).
-                    setValue(context, graph);
+                vb.setValue(context, graph);
             }     
         } 
     }
