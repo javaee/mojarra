@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.202 2006/12/17 07:45:01 rlubke Exp $
+ * $Id: Util.java,v 1.203 2006/12/19 18:35:49 rlubke Exp $
  */
 
 /*
@@ -36,6 +36,7 @@ import javax.el.ELResolver;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.validator.Validator;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -78,7 +79,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.202 2006/12/17 07:45:01 rlubke Exp $
+ * @version $Id: Util.java,v 1.203 2006/12/19 18:35:49 rlubke Exp $
  */
 
 public class Util {
@@ -168,8 +169,8 @@ public class Util {
      * @return a <code>Listener</code> instance based off the provided
      *  <code>type</code> and <binding>
      */
-    public static Object createListenerInstance(ValueExpression type,
-                                                ValueExpression binding) {
+    public static Object getListenerInstance(ValueExpression type,
+                                             ValueExpression binding) {
 
         FacesContext faces = FacesContext.getCurrentInstance();
         Object instance = null;
