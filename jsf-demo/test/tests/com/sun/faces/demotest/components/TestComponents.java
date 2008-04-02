@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponents.java,v 1.4 2003/09/08 22:59:29 eburns Exp $
+ * $Id: TestComponents.java,v 1.5 2003/09/16 21:54:40 rkitain Exp $
  */
 
 /*
@@ -105,7 +105,7 @@ public class TestComponents extends HtmlUnitTestCase {
 	anchor = page.getFirstAnchorByText("File " + treeNum);
 	assertNotNull(anchor);
 	// simulate the link being clicked
-	hidden = (HtmlHiddenInput) form.getInputByName("JSPid1_menu" + 
+	hidden = (HtmlHiddenInput) form.getInputByName("JSPid1:menu" + 
 						       treeNum);
 	assertNotNull(hidden);
 	hidden.setValueAttribute("/File");
@@ -125,7 +125,7 @@ public class TestComponents extends HtmlUnitTestCase {
 	anchor = page.getFirstAnchorByText("File " + treeNum);
 	assertNotNull(anchor);
 	// simulate the link being clicked
-	hidden = (HtmlHiddenInput) form.getInputByName("JSPid1_menu" + 
+	hidden = (HtmlHiddenInput) form.getInputByName("JSPid1:menu" + 
 						       treeNum);
 	assertNotNull(hidden);
 	hidden.setValueAttribute("/File");
@@ -152,7 +152,7 @@ public class TestComponents extends HtmlUnitTestCase {
 	anchor = page.getFirstAnchorByText("Edit " + treeNum);
 	assertNotNull(anchor);
 	// simulate link being clicked
-	hidden = (HtmlHiddenInput) form.getInputByName("JSPid1_menu" + 
+	hidden = (HtmlHiddenInput) form.getInputByName("JSPid1:menu" + 
 						       treeNum);
 	assertNotNull(hidden);
 	hidden.setValueAttribute("/Edit");
