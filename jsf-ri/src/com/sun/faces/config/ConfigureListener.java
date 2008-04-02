@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.73 2006/05/17 17:31:28 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.74 2006/05/18 17:02:16 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -293,6 +293,27 @@ public class ConfigureListener implements ServletContextListener {
     }
 
     /**
+     * A subclass of ConfigureListener can override isFeatureEnabled and reset
+     * one of the boolean values.  This method lets the user know that this 
+     * happened for a particular feature.
+     */
+    public void logOverriddenContextConfigValues() {
+        for (BooleanWebContextInitParameter param : BooleanWebContextInitParameter.values()) {
+
+            if (webConfig.getBooleanContextInitParameter(param) != isFeatureEnabled(param)) {
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    LOGGER.log(Level.INFO,
+                               (isFeatureEnabled(param)
+                                ? "jsf.config.webconfig.configinfo.reset.enabled"
+                                : "jsf.config.webconfig.configinfo.reset.disabled"),
+                               new Object[]{webConfig.getServletContextName(),
+                                            param.getQualifiedName()});
+                }
+            }
+        }
+    }
+
+    /**
      * <p>During the execution of {@link #contextInitialized}, this
      * method will return the ServletContext instance.</p>
      */
@@ -304,6 +325,7 @@ public class ConfigureListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
         webConfig = WebConfiguration.getInstance(context);
+        logOverriddenContextConfigValues();
         Digester digester = null;
         boolean initialized = false;
         

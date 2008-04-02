@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.2 2006/04/20 23:49:06 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.3 2006/05/18 17:02:16 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -315,7 +315,11 @@ public class WebConfiguration {
     public boolean getBooleanContextInitParameter(
           BooleanWebContextInitParameter param) {
 
-        return booleanContextParameters.get(param);
+        if (booleanContextParameters.get(param) != null) {
+            return booleanContextParameters.get(param);
+        } else {
+            return param.getDefaultValue();
+        }
 
     }
 
