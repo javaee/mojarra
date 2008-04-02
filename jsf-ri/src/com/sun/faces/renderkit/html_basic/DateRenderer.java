@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.9 2002/09/11 20:02:21 edburns Exp $
+ * $Id: DateRenderer.java,v 1.10 2002/09/13 23:43:46 visvan Exp $
  */
 
 /*
@@ -18,7 +18,6 @@ import java.util.TimeZone;
 import java.util.Date;
 import java.lang.Long;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
@@ -31,9 +30,6 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
-
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.ConversionException;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -51,7 +47,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.9 2002/09/11 20:02:21 edburns Exp $
+ * @version $Id: DateRenderer.java,v 1.10 2002/09/13 23:43:46 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,68 +120,53 @@ public class DateRenderer extends HtmlBasicRenderer {
 		componentType.equals(UIOutput.TYPE));
     }
 
-    public boolean decode(FacesContext context, UIComponent component) 
-            throws IOException {
-	boolean result = true;
+     public Object getConvertedValue(FacesContext context, UIComponent component,
+            String newValue) throws IOException {
+	
         Object convertedValue = null;
         Class modelType = null;
-        String newValue = null;
         String modelRef = null;
         String compoundId = null;
 	Date newDateValue = null;
-
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-	if (!(component instanceof UIInput)) {
-	    // do nothing in output case
-	    return result;
-	}
-	
-        compoundId = component.getCompoundId();
-        Assert.assert_it(compoundId != null );
         
-	if (null == (newValue = 
-		     context.getServletRequest().getParameter(compoundId))) {
-	    return result;
+        if (null == newValue) {
+	    return newValue;
 	}
-	
-        modelRef = component.getModelReference();
+	modelRef = component.getModelReference();
 	
 	// Try to get the newValue as a Date
 	try {
 	    newDateValue = this.parseDate(context, component, newValue);
 	}
-	catch (ParseException e) {
-	    component.setValue(newValue);
-            addConversionErrorMessage(context, component, e.getMessage()); 
-	    return false;
+	catch (ParseException pe) {
+	    throw new IOException(pe.getMessage());
 	}
 	
 	if (null != modelRef) {
 	    try {
 		modelType = context.getModelType(modelRef);
 	    } catch (FacesException fe ) {
-		throw new IOException(Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
+		throw new IOException(Util.getExceptionMessage(
+                        Util.CONVERSION_ERROR_MESSAGE_ID));
 	    }    
 	    Assert.assert_it(modelType != null );
 	    
 	    // Verify the modelType is one of the supported types
 	    if (modelType.isAssignableFrom(Date.class)) {
-		component.setValue(newDateValue);
+		convertedValue = newDateValue;
 	    }	    
 	    else if (modelType.isAssignableFrom(Long.class)) {
-		component.setValue(new Long(newDateValue.getTime()));
+		convertedValue = (new Long(newDateValue.getTime()));
 	    }
 	    else {
-		throw new IOException(Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
+		throw new IOException(Util.getExceptionMessage(
+                        Util.CONVERSION_ERROR_MESSAGE_ID));
 	    }
 	}
 	else {
-	    component.setValue(newDateValue);
+	    convertedValue = newDateValue;
 	}
-	return result;
+	return convertedValue;
     }
     
     public void encodeBegin(FacesContext context, UIComponent component) 

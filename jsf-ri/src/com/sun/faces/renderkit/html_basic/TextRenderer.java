@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.34 2002/09/11 20:02:30 edburns Exp $
+ * $Id: TextRenderer.java,v 1.35 2002/09/13 23:43:47 visvan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.34 2002/09/11 20:02:30 edburns Exp $
+ * @version $Id: TextRenderer.java,v 1.35 2002/09/13 23:43:47 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,30 +92,6 @@ public class TextRenderer extends HtmlBasicRenderer {
         }    
         return (componentType.equals(UIInput.TYPE) ||
             componentType.equals(UIOutput.TYPE));
-    }
-
-    public boolean decode(FacesContext context, UIComponent component) 
-            throws IOException {
-        Object convertedValue = null;
-        Class modelType = null;
-        
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        
-        if (!(component instanceof UIInput)) {
-            // do nothing in output case
-            return true;
-        }
-
-        String compoundId = component.getCompoundId();
-        Assert.assert_it(compoundId != null );
-        
-        String newValue = context.getServletRequest().getParameter(compoundId);
-       
-        component.setValue(newValue);
-        
-	return true;
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 

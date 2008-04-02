@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.36 2002/09/11 20:02:20 edburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.37 2002/09/13 23:43:46 visvan Exp $
  *
  */
 
@@ -18,7 +18,6 @@ import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.util.Iterator;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.context.FacesContext;
@@ -40,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.36 2002/09/11 20:02:20 edburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.37 2002/09/13 23:43:46 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,33 +91,21 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UISelectBoolean.TYPE));
     }
 
-    public boolean decode(FacesContext context, UIComponent component) 
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        String compoundId = component.getCompoundId();
-        Assert.assert_it(compoundId != null );
-        String newValue = context.getServletRequest().getParameter(compoundId);
-        String modelRef = component.getModelReference();
-
-        //PENDING(rogerk) if there was nothing sent in the request,
-        //the checkbox wasn't checked..
-        //
+    public Object getConvertedValue(FacesContext context, UIComponent component,
+            String newValue) throws IOException {
+     
+        //if there was nothing sent in the request the checkbox wasn't checked..
         if (newValue == null) {
             newValue = "false";
-
-        // Otherwise, if the checkbox was checked, the value
-        // coming in could be "on", "yes" or "true".
-
+            // Otherwise, if the checkbox was checked, the value
+            // coming in could be "on", "yes" or "true".
         } else if (newValue.equalsIgnoreCase("on") ||
             newValue.equalsIgnoreCase("yes") ||
             newValue.equalsIgnoreCase("true")) {
             newValue = "true";
         }
-        component.setValue(Boolean.valueOf(newValue));
-	return true;
+        Object convertedValue = Boolean.valueOf(newValue);
+	return convertedValue;
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 

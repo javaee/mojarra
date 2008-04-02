@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.9 2002/09/11 20:02:27 edburns Exp $
+ * $Id: NumberRenderer.java,v 1.10 2002/09/13 23:43:46 visvan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.9 2002/09/11 20:02:27 edburns Exp $
+ * @version $Id: NumberRenderer.java,v 1.10 2002/09/13 23:43:46 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -98,35 +98,18 @@ public class NumberRenderer extends HtmlBasicRenderer {
                 componentType.equals(UIOutput.TYPE));
     }
 
-    public boolean decode(FacesContext context, UIComponent component) 
-            throws IOException {
-	boolean result = true;
-        
-        if (!(component.getComponentType() == UIInput.TYPE)) {
-            return result;
-        }
-                 
-        Number convertedValue = null;
+    public Object getConvertedValue(FacesContext context, UIComponent component,
+            String newValue) throws IOException {
+	
+        Object convertedValue = null;
         Number parsedValue = null;
         Class modelType = null;
        
-        if (context == null || component == null) {
-            throw new NullPointerException(
-               Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-	
-        String compoundId = component.getCompoundId();
-        Assert.assert_it(compoundId != null );
-        
-        String newValue = context.getServletRequest().getParameter(compoundId);
-        if ( newValue != null ) {
-            newValue = newValue.trim();
-        }    
         if ( newValue == null || newValue.length() == 0) {
-            component.setValue(newValue);
-            return result;
+            return newValue;
         }
         
+        newValue = newValue.trim();
         // get FormatPool Instance from ServletContext
         FormatPool formatPool = (FormatPool)
 	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
@@ -135,16 +118,13 @@ public class NumberRenderer extends HtmlBasicRenderer {
         try {
             parsedValue = formatPool.numberFormat_parse(context, component, newValue);
         } catch (ParseException pe ) {
-            component.setValue(newValue);
-            addConversionErrorMessage( context, component, pe.getMessage());
-            return false;
+            throw new IOException(pe.getMessage());
         }
+        
         // if modelReference is null, store value as Number.
         String modelRef = component.getModelReference();
         if ( modelRef == null ) {
-             component.setValue(parsedValue);
-             return result;
-             
+             return parsedValue;
         }    
         // convert the parsed value to model property type.
         try {
@@ -160,12 +140,11 @@ public class NumberRenderer extends HtmlBasicRenderer {
                 (modelType.getName()).equals("char")) {
             // 36 is the maximum value allowed for radix.
             char charvalue = Character.forDigit(parsedValue.intValue(),36);
-            component.setValue(new Character(charvalue));
+            convertedValue = (new Character(charvalue));
         } else {
             convertedValue = convertToModelType(modelType, parsedValue);
-            component.setValue(convertedValue);
         }    
-        return result;
+        return convertedValue;
     }
     
     protected Number convertToModelType(Class modelType, Number parsedValue) {

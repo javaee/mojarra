@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.9 2002/08/29 01:28:18 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.10 2002/09/13 23:43:46 visvan Exp $
  */
 
 /*
@@ -238,5 +238,43 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	
 	return bundle.getString(key);
     }
+    
+    public boolean decode(FacesContext context, UIComponent component) 
+            throws IOException {
+        Object convertedValue = null;
+       
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        
+        if (component.getComponentType() == UIOutput.TYPE) {
+            // do nothing in output case
+            return true;
+        }
+
+        String compoundId = component.getCompoundId();
+        Assert.assert_it(compoundId != null );
+        
+        String newValue = context.getServletRequest().getParameter(compoundId);
+        try {
+            convertedValue = getConvertedValue(context, component, newValue);   
+        } catch (IOException ioe) {
+            addConversionErrorMessage(context, component, ioe.getMessage());
+            component.setValue(newValue);
+            return false;
+        }    
+        component.setValue(convertedValue);
+        return true;
+    }
+    
+    /**
+     * Simply returns the value. This method needs to be overridden by
+     * renderers that needs to peform type conversion
+     */
+    public Object getConvertedValue(FacesContext context, UIComponent component,
+            String newValue) throws IOException {
+       return newValue;            
+    }            
 
 } // end of class HtmlBasicRenderer
