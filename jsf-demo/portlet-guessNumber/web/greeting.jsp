@@ -36,25 +36,28 @@
  maintenance of any nuclear facility.
 -->
 
-<HTML>
-    <HEAD> <title>Hello</title> </HEAD>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <body bgcolor="white">
+    <%@ taglib uri="http://java.sun.com/jsf/portlet/components" prefix="p" %>
+
     <f:view>
+    <%-- Embed JSF tags with in portletPage tag if you expect multiple instances
+          of this portlet to exist within a portal page --%>
+    <p:portletPage>
     <h:form id="helloForm" >
-      <h2>Hi. My name is Duke.  I'm thinking of a number from
+      Hi. My name is Duke.  I'm thinking of a number from
       <h:outputText value="#{UserNumberBean.minimum}"/> to
       <h:outputText value="#{UserNumberBean.maximum}"/>.  Can you guess
-      it?</h2>
+      it?
 
         <h:graphicImage id="waveImg" url="/wave.med.gif" />
   	<h:inputText id="userNo" value="#{UserNumberBean.userNumber}"
                       validator="#{UserNumberBean.validate}"/>          
 	 <h:commandButton id="submit" action="success" value="Submit" />
-         <p>
+         
 	 <h:message style="color: red; font-family: 'New Century Schoolbook', serif; font-style: oblique; text-decoration: overline" id="errors1" for="userNo"/>
 
     </h:form>
+    </p:portletPage>
     </f:view>
-</HTML>  
+ 

@@ -36,18 +36,21 @@
  maintenance of any nuclear facility.
 -->
 
-<HTML>
-    <HEAD> <title>Guess The Number</title> </HEAD>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <body bgcolor="white">
+    <%@ taglib uri="http://java.sun.com/jsf/portlet/components" prefix="p" %>
+
     <f:view>
+     <%-- Embed JSF tags with in portletPage tag if you expect multiple instances
+          of this portlet to exist within a portal page --%>
+    <p:portletPage>
     <h:form id="responseForm" >
         <h:graphicImage id="waveImg" url="/wave.med.gif" />
-    <h2><h:outputText id="result" 
-    			value="#{UserNumberBean.response}"/></h2>   
-    <h:commandButton id="back" value="Back" action="success"/><p>
+    <h:outputText id="result" 
+    			value="#{UserNumberBean.response}"/>
+    <h:commandButton id="back" value="Back" action="success"/>
 
     </h:form>
+    </p:portletPage>
     </f:view>
- </HTML>
+ 
