@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.19 2003/05/20 16:35:29 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.20 2003/06/13 16:55:43 eburns Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.19 2003/05/20 16:35:29 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.20 2003/06/13 16:55:43 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -138,6 +138,15 @@ public void setUp()
     } else {
 	response = facesTestCase.getResponse();
     }
+
+    // Since we run using tomcat's deploy targets, we must obtain the
+    // absolute path to where we are to write our output files.
+    String testRootDir = 
+	facesTestCase.getConfig().getServletContext().getInitParameter("testRootDir");
+    
+    Assert.assert_it(null != testRootDir);
+    System.setProperty("testRootDir", testRootDir);
+
 
     LifecycleFactory factory = (LifecycleFactory)
 	FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
@@ -225,7 +234,7 @@ public boolean verifyExpectedOutput()
     } else {
         outputFileName = FileOutputResponseWriter.RESPONSE_WRITER_FILENAME;
     }
-    correctFileName = FileOutputResponseWrapper.FACES_RESPONSE_ROOT +
+    correctFileName = FileOutputResponseWriter.FACES_RESPONSE_ROOT +
 	facesTestCase.getExpectedOutputFilename();
     
     errorMessage = "File Comparison failed: diff -u " + outputFileName + " " + 

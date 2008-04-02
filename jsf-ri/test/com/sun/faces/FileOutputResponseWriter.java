@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.4 2003/05/15 21:33:10 jvisvanathan Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.5 2003/06/13 16:55:43 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.4 2003/05/15 21:33:10 jvisvanathan Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.5 2003/06/13 16:55:43 eburns Exp $
  * 
  *
  */
@@ -49,9 +49,8 @@ public class FileOutputResponseWriter extends ResponseWriter
 // Instance Variables
 //
 protected PrintWriter out = null;
-public static final String FACES_RESPONSE_ROOT = "./build/test/servers/tomcat/webapps/test/";
-public static final String  RESPONSE_WRITER_FILENAME = FACES_RESPONSE_ROOT + 
-    "ResponseWriter.txt";
+public static String  FACES_RESPONSE_ROOT = null;
+public static String  RESPONSE_WRITER_FILENAME = "ResponseWriter.txt";
 
 // Attribute Instance Variables
 
@@ -66,17 +65,34 @@ public FileOutputResponseWriter()
 {
     super();
     try {
+	initializeFacesResponseRoot();
         File file = new File ( RESPONSE_WRITER_FILENAME );
         FileOutputStream fs = new FileOutputStream(file);
         out = new PrintWriter(fs);
     } catch ( Exception e ) {
         System.out.println(e.getMessage());
+	Assert.assert_it(false);
     }
 }
 
 //
 // Class methods
 //
+
+    public static void initializeFacesResponseRoot() {
+	if (null == FACES_RESPONSE_ROOT) {
+	    String testRootDir;
+	    // prepend the testRootDir to the RESPONSE_WRITER_FILENAME
+	    testRootDir = System.getProperty("testRootDir");
+	    Assert.assert_it(null != testRootDir);
+	    FACES_RESPONSE_ROOT = testRootDir + "/";
+	    RESPONSE_WRITER_FILENAME = 
+		FACES_RESPONSE_ROOT + RESPONSE_WRITER_FILENAME;
+	    FileOutputResponseWrapper.FACES_RESPONSE_FILENAME = 
+		FACES_RESPONSE_ROOT + 
+		FileOutputResponseWrapper.FACES_RESPONSE_FILENAME;
+	}
+    }
 
 //
 // Methods from Writer

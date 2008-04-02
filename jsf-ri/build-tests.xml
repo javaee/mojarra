@@ -74,6 +74,10 @@
     <!-- Output directory for tests -->
     <property name="out.test.dir" value="${build.home}/test"/>
 
+    <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
+
+    <property name="url"      value="http://localhost:8080/manager"/>
+
     <!-- Compilation Classpath -->
     <path id="compile.classpath">
       <pathelement location="${servlet.jar}"/>
@@ -93,6 +97,10 @@
       <!-- For cactus.properties -->
       <pathelement location="${conf.test.dir}"/>
       <pathelement location="${jstl.jar}"/>
+    </path>
+
+    <path id="catalina-ant.classpath">
+      <pathelement location="${catalina-ant.jar}"/>
     </path>
 
 <!-- ========== Executable Targets ======================================== -->
@@ -119,14 +127,11 @@
     <target name="prepare.test" depends="init">
 
         <!-- Create target directories for classes -->
-        <mkdir dir="${out.test.dir}/classes"/>
-
-        <!-- Create directory where servlet engines will run -->
-        <mkdir dir="${out.test.dir}/servers"/>
+        <mkdir dir="${out.test.dir}/WEB-INF/classes"/>
 
         <!-- Create a lib directory where needed libs for the test war will
              be put -->
-        <mkdir dir="${out.test.dir}/lib"/>
+        <mkdir dir="${out.test.dir}/WEB-INF/lib"/>
 
     </target>
 
@@ -136,198 +141,83 @@
     <target name="compile.test" depends="prepare.test">
 
         <javac srcdir="${src.test.dir}"
-            destdir="${out.test.dir}/classes"
+            destdir="${out.test.dir}/WEB-INF/classes"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
 
             <classpath refid="compile.classpath"/>
         </javac>
-        <copy todir="${out.test.dir}/classes">
+        <copy todir="${out.test.dir}/WEB-INF/classes">
             <fileset dir="${src.test.dir}" includes="**/*.properties"/>
         </copy>
 
     </target>
 
-    <target name="prepare.test.war" depends="compile.test">
-
-       <copy todir="${out.test.dir}/classes">
-        <fileset dir="${build.home}/classes" includes="**/*.*"/>
-       </copy>
+    <target name="prepare.test.webapp" 
+            description="put the test webapp in the WAR file format in out.test.dir"
+            depends="compile.test">
 
         <!-- Copy needed libs in /lib -->
-        <copy file="${junit.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${cactus.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${aspectjrt.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons-beanutils.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons-collections.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons-digester.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons-logging.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${jsf.api.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${jstl.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${standard.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${basedir}/build/lib/jsf-ri.jar" todir="${out.test.dir}/lib"/>
+        <copy file="${junit.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${cactus.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${aspectjrt.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${commons-beanutils.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${commons-collections.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${commons-digester.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${commons-logging.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${jsf.api.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${jstl.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${standard.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${basedir}/build/lib/jsf-ri.jar" todir="${out.test.dir}/WEB-INF/lib"/>
 
-        <war warfile="${out.test.dir}/test.war"
-             webxml="${conf.test.dir}/web.xml">
+        <!-- copy the all important web.xml -->
+        <filter token="test.root.dir" value="${out.test.dir}"/>
+        <copy file="${conf.test.dir}/web.xml" todir="${out.test.dir}/WEB-INF"
+              filtering="on"/>
 
-            <classes dir="${out.test.dir}/classes"/>
-
-            <!-- We need to copy the Cactus, JUnit and Struts jars in the war.
-                 This is because if we just put these jars in the global
-                 classpath for the Servlet engine, the Cactus jar might not be
-                 able to load the test case class as the test classes are loaded
-                 by the war classloader. This will depend on servlet engines -->
-
-            <lib dir="${out.test.dir}/lib"/>
-
-        </war>
+        <!-- copy the test data files -->
+        <antcall target="copy-test-data-files"/>
 
     </target>
 
-    <target name="copyServerConfFile.tomcat4" 
-        depends="prepare.test.war,copy-test-data-files" if="tomcat4.home">
-
-        <filter token="out.tomcat.full.dir" value="${out.test.dir}/servers/tomcat"/>
-        <copy file="${conf.test.dir}/tomcat40/server.xml"
-            todir="${out.tomcat.dir}/conf" filtering="on"/>
-
+    <target name="execute.cactus.tests" depends="prepare.test.webapp">
+      <antcall target="safe.remove"/>
+      <antcall target="install"/>
+      <antcall target="run.cactus.test"/>
+      <antcall target="remove"/>
     </target>
 
-    <target name="copyServerConfFile.tomcat5" 
-        depends="prepare.test.war,copy-test-data-files" if="tomcat5.home">
-
-        <filter token="out.tomcat.full.dir" value="${out.test.dir}/servers/tomcat"/>
-        <copy file="${conf.test.dir}/tomcat50/server.xml"
-            todir="${out.tomcat.dir}/conf" filtering="on"/>
+    <target name="copy-test-data-files">
+       <!-- Copy Unit test static files. -->
+       <copy todir="${out.test.dir}">
+           <fileset dir="${basedir}/web/test"/>
+           <fileset dir="${cactus.home}/web" includes="jspRedirector.jsp"/>
+       </copy>
     </target>
 
-    
-
-<!--
-        Prepare test directory structure for Tomcat servlet engine
--->
-    <target name="prepare.test.tomcat" 
-         depends="prepare.test.war,copy-test-data-files">
-
-        <property name="out.tomcat.dir" value="${out.test.dir}/servers/tomcat"/>
-
-        <mkdir dir="${out.tomcat.dir}/webapps/test"/>
-        <mkdir dir="${out.tomcat.dir}/conf"/>
-
-        <!-- Expand the war file -->
-        <unjar src="${out.test.dir}/test.war" dest="${out.tomcat.dir}/webapps/test"/>
-    
-        <!-- Copy JspRedirector (jsp) file needed for JSP cactus tests. -->
-        <copy file="${cactus.home}/web/jspRedirector.jsp"
-            todir="${out.tomcat.dir}/webapps/test"/>
-
+    <target name="install" depends="prepare.test.webapp"
+            description="Install cactus unit test webapp">
+       <install url="${url}" username="${username}" password="${password}"
+                path="/test"
+                war="file://${out.test.dir}"/>
     </target>
 
-
-   <target name="copy-test-data-files">
-        <!-- Copy Unit test static files. -->
-        <property name="out.tomcat.dir" value="${out.test.dir}/servers/tomcat"/>
-        <copy todir="${out.tomcat.dir}/webapps/test">
-            <fileset dir="${basedir}/web/test"/>
-        </copy>
-   </target>
-
-<!--
-        Run unit tests on Tomcat servlet engine
--->
-    <target name="test.tomcat" depends="prepare.test.tomcat,
-            copyServerConfFile.tomcat4, copyServerConfFile.tomcat5">
-
-        <!-- Start the servlet engine, wait for it to be started, run the
-             unit tests, stop the servlet engine, wait for it to be stopped.
-             The servlet engine is automatically stopped if the tests fail for
-             any reason.-->
-
-        <runservertests testURL="http://localhost:8080/test"
-            startTarget="start.tomcat"
-            stopTarget="stop.tomcat"
-            testTarget="run.cactus.test"/>
-
+    <target name="remove"
+            description="Remove cactus unit test webapp">
+      <remove url="${url}" username="${username}" password="${password}"
+            path="/test"/>
     </target>
 
-    <path id="tomcat.classpath">
-              <pathelement location="${jstl.jar}"/>
-              <pathelement location="${servlet.jar}"/>
-              <pathelement location="${jsp.jar}"/>
-              <pathelement location="${sax.jar}"/>
-              <pathelement location="${jaxp-api.jar}"/>
-              <pathelement location="${commons-logging.jar}"/>
-              <pathelement location="${commons-el.jar}"/>
-              <pathelement location="${commons-collections.jar}"/>
-              <pathelement location="${commons-beanutils.jar}"/>
-              <pathelement location="${commons-modeler.jar}"/>
-              <pathelement location="${commons-digester.jar}"/>
-              <pathelement location="${jasper-compiler.jar}"/>
-              <pathelement location="${jasper-runtime.jar}"/>
-              <pathelement location="${naming-common.jar}"/>
-              <pathelement location="${ant.jar}"/>
-              <pathelement location="${naming-resources.jar}"/>
-              <pathelement location="${crimson.jar}"/>
-              <pathelement location="${jmx.jar}"/>
-              <pathelement location="${java.home}/../lib/tools.jar"/>
-              <fileset dir="${tomcat.home}">
-                  <include name="bin/bootstrap.jar"/>
-                  <include name="server/lib/catalina.jar"/>
-                  <include name="server/lib/tomcat-coyote.jar"/>
-                  <include name="server/lib/tomcat-http11.jar"/>
-                  <include name="server/lib/tomcat-util.jar"/>
-                  <include name="server/lib/servlets-webdav.jar"/>
-                  <include name="server/lib/servlets-default.jar"/>
-                  <include name="server/lib/servlets-invoker.jar"/>
-                  <include name="server/lib/servlets-common.jar"/>
-              </fileset>
-    </path>
-
-
-<!--
-        Start Tomcat servlet engine
--->
-    <target name="start.tomcat">
-
-        <echo message="${out.tomcat.dir}"/>
-
-        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
-            <jvmarg line="${debug.jvm.args}"/>
-            <classpath refid="tomcat.classpath"/>
-            <arg value="start"/>
-            <sysproperty key="catalina.home" value="${tomcat.home}"/>
-            <sysproperty key="java.endorsed.dirs" 
-               value="${tomcat.home}"/>
-            
-            <arg value="-config"/>
-            <arg value="${out.tomcat.dir}/conf/server.xml"/> 
-        </java>
-
+    <target name="safe.remove"
+            description="Remove cactus unit test webapp, don't fail on error">
+      <exec executable="ant.bat" os="Windows 2000" failonerror="false">
+        <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} remove"/>
+      </exec>
+      <exec executable="ant" os="SunOS,Linux" failonerror="false">
+        <arg line="-f build-tests.xml remove"/>
+      </exec>
     </target>
-
-<!--
-        Stop Tomcat servlet engine
--->
-    <target name="stop.tomcat">
-
-        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
-            <sysproperty key="catalina.home" value="${tomcat.home}"/>
-            <arg value="stop"/>
-            <classpath>
-              <pathelement location="${jaxp-api.jar}"/>
-              <pathelement location="${commons-logging.jar}"/>
-              <pathelement location="${crimson.jar}"/>
-              <pathelement location="${sax.jar}"/>
-              <fileset dir="${tomcat.home}">
-                  <include name="bin/bootstrap.jar"/>
-                  <include name="server/catalina.jar"/>
-              </fileset>
-            </classpath>
-        </java>
-
-    </target>
-
 
 <!--
         Start the Cactus test using JUnit test runner.
@@ -337,13 +227,14 @@
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
             <classpath>
                 <pathelement path="${java.class.path}"/>
-                <pathelement location="${out.test.dir}/classes"/>
+                <pathelement location="${out.test.dir}/WEB-INF/classes"/>
                 <!-- For cactus.properties -->
                 <pathelement location="${conf.test.dir}"/>
             </classpath>
             <classpath refid="compile.classpath"/>
 
             <formatter type="plain" usefile="false"/>
+
             <!-- Suite of tests -->
             <test name="com.sun.faces.application.TestApplicationImpl_Config"/>
             <test name="com.sun.faces.application.TestAppConfig"/>
@@ -410,11 +301,12 @@
     <target name="run.test" depends="compile.test,copy-test-data-files">
 
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
-            <jvmarg line="${debug.jvm.args}"/>
+            <!-- uncomment the below line to enable attaching a debugger -->
+            <!-- <jvmarg line="${debug.jvm.args}"/> -->
 
             <classpath>
                 <pathelement path="${java.class.path}"/>
-                <pathelement location="${out.test.dir}/classes"/>
+                <pathelement location="${out.test.dir}/WEB-INF/classes"/>
             </classpath>
             <classpath refid="compile.classpath"/>
 
@@ -425,5 +317,12 @@
 
     </target>
 
+    <!-- Custom Tomcat Integration -->
+    <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
+        <classpath refid="catalina-ant.classpath" />
+    </taskdef>
+    <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
+      <classpath refid="catalina-ant.classpath" />
+    </taskdef>
 
 </project>

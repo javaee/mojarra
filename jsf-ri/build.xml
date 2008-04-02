@@ -190,6 +190,7 @@
 
   <target name="clean" 
    description="Clean build and distribution directories">
+    <ant antfile="build-tests.xml" target="safe.remove"/>
     <delete    dir="${build.home}"/>
     <delete    dir="${dist.home}"/>
     <delete> 
@@ -431,9 +432,8 @@
 
     <target name="run.cactus.test" depends="compile.test,jars"
      description="Run unit tests requiring cactus">
-        <ant antfile="build-tests.xml" target="test.tomcat"/>
+        <ant antfile="build-tests.xml" target="execute.cactus.tests"/>
     </target>
-
 
     <!-- builds"basic" sample app -->
     <target name="build.basic.war" depends="prepare,compile,jars,compile.basic.sample" >

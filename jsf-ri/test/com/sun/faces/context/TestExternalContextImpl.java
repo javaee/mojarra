@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.5 2003/05/15 17:36:23 craigmcc Exp $
+ * $Id: TestExternalContextImpl.java,v 1.6 2003/06/13 16:55:45 eburns Exp $
  */
 
 /*
@@ -62,7 +62,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.5 2003/05/15 17:36:23 craigmcc Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.6 2003/06/13 16:55:45 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -267,8 +267,8 @@ public class TestExternalContextImpl extends ServletFacesTestCase
     }
 
     public void testGetInitParameter() {
-        String expectedValue = (String)config.getServletContext().getInitParameter("saveStateInClient");
-        String value = getFacesContext().getExternalContext().getInitParameter("saveStateInClient");
+        String expectedValue = (String)config.getServletContext().getInitParameter("testInitParam");
+        String value = getFacesContext().getExternalContext().getInitParameter("testInitParam");
         assertTrue(expectedValue.equals(value));
     }
 
@@ -475,7 +475,7 @@ public class TestExternalContextImpl extends ServletFacesTestCase
 
     public void testInitParameterMap() {
         System.out.println("Testing InitParameterMap methods...");
-        String expectedValue = (String)config.getServletContext().getInitParameter("saveStateInClient");
+        String expectedValue = (String)config.getServletContext().getInitParameter("testInitParam");
         Map initParameterMap = getFacesContext().getExternalContext().getInitParameterMap();
         System.out.println("    Testing UnsupportedOperationException(s)...");
         initializeSupported();
@@ -483,8 +483,8 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         testUnsupportedExceptions(initParameterMap, supported);
 
         System.out.println("    Testing Get Method...");
-        assertTrue(initParameterMap.get("saveStateInClient") instanceof String);
-        assertTrue(((String)initParameterMap.get("saveStateInClient")).equals(expectedValue));
+        assertTrue(initParameterMap.get("testInitParam") instanceof String);
+        assertTrue(((String)initParameterMap.get("testInitParam")).equals(expectedValue));
     }
 
     private void testUnsupportedExceptions(Map map, boolean[] supported) {

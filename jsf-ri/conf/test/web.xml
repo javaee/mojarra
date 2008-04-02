@@ -16,6 +16,14 @@
         <param-name>saveStateInClient</param-name>
         <param-value>false</param-value>
     </context-param>
+    <context-param>
+        <param-name>testRootDir</param-name>
+        <param-value>@test.root.dir@</param-value>
+    </context-param>
+    <context-param>
+        <param-name>testInitParam</param-name>
+        <param-value>testInitParam</param-value>
+    </context-param>
 
     <servlet>
         <servlet-name>ServletRedirector</servlet-name>
