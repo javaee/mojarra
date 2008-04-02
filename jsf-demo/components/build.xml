@@ -198,7 +198,7 @@
   </target>	
 
   <target name="build.jar" depends="build.components">
-    <jar destfile="${build}/demo-${example}.jar" basedir="${build}/classes"/>
+    <jar jarfile="${build}/demo-${example}.jar" basedir="${build}/classes"/>
   </target>
      
 
