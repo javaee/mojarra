@@ -36,6 +36,7 @@ import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.WeakHashMap;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -305,6 +306,19 @@ public class ConverterPropertyEditorFactory {
         public String generateClassNameFor(Class<?> targetClass,
             boolean vmFormat) {
             String name = targetClass.getName();
+            if (targetClass.isArray()) {                            
+                int idx = name.lastIndexOf('[');
+                int bracketCount = idx + 1;
+                int semiIdx = name.indexOf(';');
+                if (semiIdx == -1) {
+                    // primitive array
+                    name = PRIM_MAP.get(name.charAt(idx + 1));
+                } else {
+                    // Object array
+                    name = name.substring(idx + 2, semiIdx);
+                }
+                name += "Array" + bracketCount + 'd';                
+            }
             Matcher m = UnderscorePattern.matcher(name);
             // Replace existing underscores with one extra underscore.
             name = m.replaceAll("$0_");
@@ -487,6 +501,19 @@ public class ConverterPropertyEditorFactory {
     private ClassTemplateInfo templateInfo;
     // Cache of DisposableClassLoaders keyed on the class loader of the target.
     private Map<ClassLoader, WeakReference<DisposableClassLoader>> classLoaderCache;
+    
+    private static final Map<Character,String> PRIM_MAP =
+          new HashMap<Character,String>(8, 1.0f);
+    static {
+        PRIM_MAP.put('B', "byte");
+        PRIM_MAP.put('C', "char");
+        PRIM_MAP.put('S', "short");
+        PRIM_MAP.put('I', "int");
+        PRIM_MAP.put('F', "float");
+        PRIM_MAP.put('J', "long");
+        PRIM_MAP.put('D', "double");
+        PRIM_MAP.put('Z', "boolean");
+    }
 
     /**
      * Create a <code>ConverterPropertyEditorFactory</code> that uses the
