@@ -5,7 +5,7 @@
 
 				<tr>
 					<td>Multi-select menu:</td>
-					<td><h:selectmany_menu id="ManyApples" size="7">
+					<td><h:selectmany_menu id="ManyApples" >
 						<f:selectitem itemValue="0" itemLabel="zero" />
 						<f:selectitem itemValue="1" itemLabel="one" />
 						<f:selectitem itemValue="2" itemLabel="two" />
@@ -20,7 +20,7 @@
 				</tr>
 				<tr>
 					<td>Multi-select menumodel:</td>
-					<td><h:selectmany_menu id="menumodel" size="3">
+					<td><h:selectmany_menu id="menumodel" >
 						<f:selectitems id="menumodelitems"
 							value="#{LoginBean.options}" />
 					</h:selectmany_menu></td>
@@ -28,7 +28,7 @@
 
                                 <tr>
 					<td>Multi-select menumodel with options of the type java.lang.Long:</td>
-					<td><h:selectmany_menu id="menuLongmodel" size="3"
+					<td><h:selectmany_menu id="menuLongmodel"
                                                value="#{LoginBean.currentLongOptions}">
                                                
 						<f:selectitems id="menumodelonglitems"
@@ -38,7 +38,7 @@
 
                                 <tr>
 					<td>Multi-select menumodel Group:</td>
-					<td><h:selectmany_menu id="listGroup" size="3"
+					<td><h:selectmany_menu id="listGroup"
                                                 value="#{LoginBean.currentOptions}">
 						<f:selectitems id="menumodelitemsGroup"
 							value="#{LoginBean.optionsGroup}" />

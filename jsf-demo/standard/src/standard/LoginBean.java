@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.6 2003/12/17 15:19:58 rkitain Exp $
+ * $Id: LoginBean.java,v 1.7 2003/12/23 21:32:59 rkitain Exp $
  */
 
 /*
@@ -48,6 +48,7 @@ public class LoginBean {
     ArrayList booleanList = new ArrayList(3);
     ArrayList stringList = new ArrayList(3);
     Long[] currentLongOptions = null;
+    String[] currentStringOptions = null;
     Boolean currentBooleanOption = null;
   //  Long currentLongOption = null;
     long currentLongOption;
@@ -57,7 +58,6 @@ public class LoginBean {
     private ArrayList optionsGroup = null;
     
     private Object currentOption = defaultOptions[4];
-    private ArrayList currentOptions = null;
     private Date date = new Date(System.currentTimeMillis());
     private String currentShipment = "nextMonth";
     private char charVal = 'e';
@@ -97,9 +97,16 @@ public class LoginBean {
         optionsGroup.add(group1);
         optionsGroup.add(group2);
         
-        currentOptions = new ArrayList(2);
-        currentOptions.add(defaultOptions[3]);
-        currentOptions.add(defaultOptions[4]);
+        currentStringOptions = new String[2];
+        for (i = 0; i < defaultOptions.length; i++) {
+            stringList.add(new SelectItem(defaultOptions[i], 
+                (defaultOptions[i].toString()), "stringOptions"));
+        }
+
+System.out.println("SETTING CURRENT OPTIONS IN CONSTRUCTOR...");
+
+        currentStringOptions[0] = defaultOptions[3];
+        currentStringOptions[1] = defaultOptions[4];
        
         for (i = 0; i < longOptions.length; i++) {
 	    longList.add(new SelectItem(longOptions[i], 
@@ -280,22 +287,13 @@ public class LoginBean {
        // System.out.println("set currentLongOption " + currentLongOption.toString());
     }
 
-    public Object[] getCurrentOptions() {
+    public String[] getCurrentOptions() {
         System.out.println("get current options");
-        return currentOptions.toArray();
+        return currentStringOptions;
     }
 
-    public void setCurrentOptions(Object[] newCurrentOptions) {
-        int len = 0;
-        if (null == newCurrentOptions ||
-            (len = newCurrentOptions.length) == 0) {
-            return;
-        }
-        currentOptions.clear();
-        currentOptions = new ArrayList(len);
-        for (int i = 0; i < len; i++) {
-            currentOptions.add(newCurrentOptions[i]);
-        }
+    public void setCurrentOptions(String[] newCurrentOptions) {
+        currentStringOptions = newCurrentOptions;
         System.out.println("set current options");
     }
     
