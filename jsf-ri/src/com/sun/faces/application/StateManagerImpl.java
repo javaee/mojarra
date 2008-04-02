@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.23 2004/07/22 17:40:44 rogerk Exp $ 
+ * $Id: StateManagerImpl.java,v 1.24 2004/08/05 20:02:19 jayashri Exp $ 
  */ 
 
 
@@ -35,7 +35,7 @@ import java.util.Set;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.23 2004/07/22 17:40:44 rogerk Exp $
+ * @version $Id: StateManagerImpl.java,v 1.24 2004/08/05 20:02:19 jayashri Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -47,12 +47,27 @@ public class StateManagerImpl extends StateManager {
 
     private static final String FACES_VIEW_LIST =
         RIConstants.FACES_PREFIX + "VIEW_LIST";
+    
+    private static final String ENABLE_HA_PARAM = "enableHighAvailability";
+    
+    private static final String JSF_ENABLE_HA_PARAM = 
+        RIConstants.FACES_PREFIX + ENABLE_HA_PARAM;
+    
+    private static final String APPSERVER_ENABLE_HA_PARAM = 
+        "com.sun.appserver." + ENABLE_HA_PARAM;
+    
 
     /**
      * Number of views to be saved in session.
      */
     int noOfViews = 0;
-
+    
+    /**
+     * value of <code>com.sun.faces.enableHighAvailability</code>
+     * <code>com.sun.appserver.enableHighAvailability</code>
+     * parameter
+     */
+    private Boolean haStateSavingSet = null;
 
     public SerializedView saveSerializedView(FacesContext context) 
         throws IllegalStateException{
@@ -70,12 +85,13 @@ public class StateManagerImpl extends StateManager {
         removeTransientChildrenAndFacets(context, viewRoot, new HashSet());
 
         if (!isSavingStateInClient(context)) {
+            // save state in server
             if (log.isDebugEnabled()) {
-                log.debug("Saving view in session for viewId " +
+                log.debug("Begin saving view in session for viewId " +
                           viewRoot.getViewId());
             }
+            Map sessionMap = Util.getSessionMap(context);
             synchronized (this) {
-                Map sessionMap = Util.getSessionMap(context);
                 // viewList maintains a list of viewIds corresponding to 
                 // all the views stored in session.
                 ArrayList viewList = (ArrayList) sessionMap.get(
@@ -99,10 +115,35 @@ public class StateManagerImpl extends StateManager {
 		if (!foundMatch) {
 		    viewList.add(viewRoot.getViewId());
 		}
-                sessionMap.put(viewRoot.getViewId(), viewRoot);
                 sessionMap.put(FACES_VIEW_LIST, viewList);
+            
+                // if highly available state saving option is chosen, save
+                // the SerializedView in session instead of UIViewRoot since
+                // the UIComponent instances are not serializable.
+                if (isHAStateSavingSet(context)) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Highly Available state saving option enabled ");
+                        log.debug("Begin creating serialized view for " +
+                          viewRoot.getViewId());
+                    }
+                    result = new SerializedView(getTreeStructureToSave(context),
+                                        getComponentStateToSave(context));
+                    if (log.isDebugEnabled()) {
+                        log.debug("End creating serialized view " +
+                          viewRoot.getViewId());
+                    }
+                    sessionMap.put(viewRoot.getViewId(), result);
+
+                } else {
+                    sessionMap.put(viewRoot.getViewId(), viewRoot);
+                }
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("End saving view in session for viewId " +
+                      viewRoot.getViewId());
             }
         } else {
+            // save state in client
             if (log.isDebugEnabled()) {
                 log.debug("Begin creating serialized view for " +
                           viewRoot.getViewId());
@@ -190,6 +231,7 @@ public class StateManagerImpl extends StateManager {
 
         UIViewRoot viewRoot = null;
         if (isSavingStateInClient(context)) {
+            // restore view from response.
             if (log.isDebugEnabled()) {
                 log.debug("Begin restoring view from response " + viewId);
             }
@@ -198,8 +240,8 @@ public class StateManagerImpl extends StateManager {
                 restoreComponentState(context, viewRoot, renderKitId);
             } else {
                 if (log.isDebugEnabled()) {
-                    log.debug("Possibly a new request. Tree structure could not be restored for "
-                              + viewId);
+                    log.debug("Possibly a new request. Tree structure could not "
+                        + " be restored for " + viewId);
                 }
             }
             if (log.isDebugEnabled()) {
@@ -207,14 +249,37 @@ public class StateManagerImpl extends StateManager {
             }
         } else {
             // restore tree from session.
+            // if high available state saving option is chosen, restore
+            // the SerializedView from session instead of UIViewRoot.
+            if (log.isDebugEnabled()) {
+                log.debug("Begin restoring view in session for viewId " + viewId);
+            }
             Map sessionMap = Util.getSessionMap(context);
             synchronized (this) {
-                viewRoot = (UIViewRoot) sessionMap.get(viewId);
-                if (log.isDebugEnabled()) {
-                    log.debug(
-                        "Restoring view from session for viewId " + viewId);
+                if (isHAStateSavingSet(context)) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("High available state saving option enabled");
+                        log.debug("Begin restoring serialized view for "+viewId);
+                    }
+                    SerializedView serializedView = (SerializedView) 
+                        sessionMap.get(viewId);
+                    viewRoot = restoreSerializedView(context, serializedView, 
+                        viewId);
+                    if (log.isDebugEnabled()) {
+                        log.debug("End restoring serialized view " + viewId);
+                    }
+
+                } else {
+                    viewRoot = (UIViewRoot) sessionMap.get(viewId);
+                    if (log.isDebugEnabled()) {
+                        log.debug(
+                            "Restoring view from session for viewId " + viewId);
+                    }
                 }
                 removeViewFromSession(context, viewRoot);
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("End restoring view in session for viewId " + viewId);
             }
         }
         return viewRoot;
@@ -420,5 +485,55 @@ public class StateManagerImpl extends StateManager {
             restoreComponentTreeStructure(facetTreeStructure, facetComponent);
         }
     }
+    
+    /**
+     * Returns true one of <code>com.sun.faces.enableHighAvailability</code>
+     * or <code>com.sun.appserver.enableHighAvailability</code>
+     * servlet context parameter is set.
+     */
+    protected boolean isHAStateSavingSet(FacesContext context) {
+	if (null != haStateSavingSet) {
+	    return haStateSavingSet.booleanValue();
+	}
+	haStateSavingSet = Boolean.FALSE;
 
+        String haStateSavingParam = context.getExternalContext().
+            getInitParameter(JSF_ENABLE_HA_PARAM);
+        if (haStateSavingParam != null){
+	    haStateSavingSet = Boolean.valueOf(haStateSavingParam);
+        } else {
+            haStateSavingParam = context.getExternalContext().
+            getInitParameter(APPSERVER_ENABLE_HA_PARAM);   
+            if (haStateSavingParam != null){
+	        haStateSavingSet = Boolean.valueOf(haStateSavingParam);
+            }
+        }
+        return haStateSavingSet.booleanValue();
+    }
+    
+    /**
+     * Returns the <code> UIViewRoot</code> corresponding the 
+     * <code> viewId </code> by restoring the view structure and state.
+     */
+    protected UIViewRoot restoreSerializedView(FacesContext context, 
+        SerializedView sv, String viewId) {
+        if ( sv == null) {
+            if (log.isDebugEnabled()) {
+                log.debug("Possibly a new request. Tree structure could not "
+                        + " be restored for " + viewId);
+            }
+            return null;
+        }
+        TreeStructure structRoot = (TreeStructure) sv.getStructure();
+        if (structRoot == null) {
+            return null;
+        }
+        UIComponent viewRoot = structRoot.createComponent();
+        if (viewRoot != null) {
+             restoreComponentTreeStructure(structRoot, viewRoot);
+             Object state = sv.getState();
+             viewRoot.processRestoreState(context, state);
+        }
+        return ((UIViewRoot)viewRoot);
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.25 2004/05/10 19:56:08 jvisvanathan Exp $
+ * $Id: ViewTag.java,v 1.26 2004/08/05 20:02:19 jayashri Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Locale;
  * any renderers or attributes. It exists mainly to save the state of
  * the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.25 2004/05/10 19:56:08 jvisvanathan Exp $
+ * @version $Id: ViewTag.java,v 1.26 2004/08/05 20:02:19 jayashri Exp $
  */
 
 public class ViewTag extends UIComponentBodyTag {
@@ -176,7 +176,11 @@ public class ViewTag extends UIComponentBodyTag {
                 Util.SAVING_STATE_ERROR_MESSAGE_ID, params), ie);    
         }
         try {
-            if (view == null) {
+            // if high availability is enabled, view will not null even in the
+            // state saving in server mode. Thats why it is required to check
+            // state saving method here.
+            if (view == null || 
+                (!(stateManager.isSavingStateInClient(context)))) {
                 getPreviousOut().write(content);
             } else {
                 contentLen = content.length();

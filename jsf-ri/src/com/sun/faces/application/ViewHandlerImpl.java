@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.44 2004/07/20 21:54:48 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.45 2004/08/05 20:02:19 jayashri Exp $ 
  */ 
 
 
@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.44 2004/07/20 21:54:48 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.45 2004/08/05 20:02:19 jayashri Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -408,18 +408,20 @@ public class ViewHandlerImpl extends ViewHandler {
             message = message +"context " + context;
             throw new NullPointerException(message);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin writing state to response for viewId" +
-                      context.getViewRoot().getViewId());
-        }
+        
         if (Util.getStateManager(context).isSavingStateInClient(context)) {
+            if (log.isTraceEnabled()) {
+                log.trace("Begin writing state to response for viewId" +
+                      context.getViewRoot().getViewId());
+            }
             context.getResponseWriter().writeText(
                 RIConstants.SAVESTATE_FIELD_MARKER, null);
-        }
-        if (log.isTraceEnabled()) {
-            log.trace("End writing state to response for viewId" +
+            if (log.isTraceEnabled()) {
+                log.trace("End writing state to response for viewId" +
                       context.getViewRoot().getViewId());
+            }
         }
+        
     }
 
 
