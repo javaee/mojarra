@@ -92,7 +92,6 @@
                                 <td valign="top"> <font face="Arial, Helvetica">
         <h:input_text id="middleInitial" size="1" maxlength="1" 
             valueRef="CustomerBean.middleInitial" > 
-            <f:validate_stringrange minimum="A" maximum="z"/> 
         </h:input_text>
         <h:output_errors  for="middleInitial"/> 
         </font></td>

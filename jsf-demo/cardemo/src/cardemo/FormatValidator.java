@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.6 2003/09/15 20:26:01 eburns Exp $
+ * $Id: FormatValidator.java,v 1.7 2003/10/22 00:34:57 jvisvanathan Exp $
  */
 
 /*
@@ -216,7 +216,7 @@ public class FormatValidator implements Validator, StateHolder {
                 Message errMsg = getMessageResources().getMessage(context, 
                         FORMAT_INVALID_MESSAGE_ID, 
                         (new Object[] {formatPatterns}));
-                context.addMessage(component, errMsg);
+                context.addMessage((component.getClientId(context)), errMsg);
             }
         }
     }

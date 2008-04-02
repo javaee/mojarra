@@ -1,5 +1,5 @@
 /*
- * $Id: LoginForm.java,v 1.1 2003/10/19 05:18:03 craigmcc Exp $
+ * $Id: LoginForm.java,v 1.2 2003/10/22 00:34:58 jvisvanathan Exp $
  */
 
 /*
@@ -56,8 +56,9 @@ public class LoginForm {
         if ("user".equals(username) && "pass".equals(password)) {
             return ("success");
         } else {
-            FacesContext.getCurrentInstance().addMessage
-                (this.username,
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage
+                (this.username.getClientId(context),
                  new MessageImpl(Message.SEVERITY_ERROR,
                                  "Invalid username or password, please retry",
                                  null));
