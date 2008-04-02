@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.20 2003/08/18 22:45:25 eburns Exp $
+ * $Id: RenderKit.java,v 1.21 2003/08/20 22:43:51 eburns Exp $
  */
 
 /*
@@ -117,6 +117,12 @@ public abstract class RenderKit {
      * IANA</a> for a list of character encodings.
      *
      * @return a new {@link ResponseWriter}.
+     *
+     * @exception IllegalArgumentException if no matching content type
+     * can be found in <code>contentTypeList</code>, or no matching
+     * character encoding can be found for the argument
+     * <code>characterEncoding</code>.
+     *
      */
 
     public abstract ResponseWriter createResponseWriter(Writer writer,
