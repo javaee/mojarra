@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.19 2003/09/24 23:16:38 horwat Exp $
+ * $Id: ImageRenderer.java,v 1.20 2003/09/26 21:56:07 rkitain Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.19 2003/09/24 23:16:38 horwat Exp $
+ * @version $Id: ImageRenderer.java,v 1.20 2003/09/26 21:56:07 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -114,10 +114,13 @@ public class ImageRenderer extends HtmlBasicRenderer {
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
-
 	if (null != (styleClass = (String) 
 		     component.getAttributes().get("styleClass"))) {
 	    writer.writeAttribute("class", styleClass, "styleClass");
+	}
+	String altText = (String)component.getAttributes().get("alt");
+	if (altText == null) {
+	    writer.writeAttribute("alt", "", "alt");
 	}
 	writer.endElement("img");
     }

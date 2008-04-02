@@ -1,9 +1,9 @@
 <form id="formRenderer0" method="post" action="/test/facesviewId;jsessionid=4DC027279CF0211363CCDC2807A21D05">
 
-<input type="hidden" name="formRenderer0" value="formRenderer0"></form>
+<input type="hidden" name="formRenderer0" value="formRenderer0" /></form>
 <form id="formRenderer1" method="post" action="/test/facesviewId;jsessionid=4DC027279CF0211363CCDC2807A21D05">
 
-<input type="hidden" name="formRenderer1" value="formRenderer1"></form>
+<input type="hidden" name="formRenderer1" value="formRenderer1" /></form>
 <table border="0">
 	<tr>
 <td><input type="radio" name="radioRenderer" value="One" /> One</td>

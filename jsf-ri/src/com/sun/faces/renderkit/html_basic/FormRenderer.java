@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.61 2003/09/24 23:28:51 craigmcc Exp $
+ * $Id: FormRenderer.java,v 1.62 2003/09/26 21:56:07 rkitain Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.61 2003/09/24 23:28:51 craigmcc Exp $
+ * @version $Id: FormRenderer.java,v 1.62 2003/09/26 21:56:07 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -192,6 +192,7 @@ public class FormRenderer extends HtmlBasicRenderer {
 	writer.writeAttribute("type", "hidden", "type");
 	writer.writeAttribute("name", component.getClientId(context), "clientId");
         writer.writeAttribute("value", component.getClientId(context), "value");
+	writer.endElement("input");
 
         writer.endElement("form");
     }
