@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.67 2005/03/11 18:14:07 edburns Exp $
+ $Id: build-tests.xml,v 1.68 2005/03/15 15:50:33 rogerk Exp $
 -->
 
 <!--
@@ -617,6 +617,11 @@
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/standard/messages01.jsp"
           golden="${golden.path}/standard/messages01.txt" failonerror="${failonerror}"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/standard/messages02.jsp"
+          golden="${golden.path}/standard/messages02.txt" failonerror="${failonerror}"
+          recordGolden="/home/rogerk/messages02.txt"/>
           
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/standard/component01.jsp"

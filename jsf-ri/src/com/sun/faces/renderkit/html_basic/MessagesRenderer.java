@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.19 2004/12/16 17:56:38 edburns Exp $
+ * $Id: MessagesRenderer.java,v 1.20 2005/03/15 15:50:32 rogerk Exp $
  */
 
 /*
@@ -98,24 +98,35 @@ public class MessagesRenderer extends HtmlBasicRenderer {
 
         //"for" attribute optional for Messages
         messageIter = getMessageIter(context, clientId, component);
+
         assert (messageIter != null);
 
         String layout = (String) component.getAttributes().get("layout");
-        boolean wroteTable = false;
-
-        //Add style and class attributes to table. If layout attribute is not
-        //present or layout is list just do the spans in a linear fashion.
-        if ((layout != null) && (layout.equals("table"))) {
-            writer.startElement("table", component);
-            writeIdAttributeIfNecessary(context, writer, component);
-            wroteTable = true;
-        }
-
         boolean showSummary = ((UIMessages)component).isShowSummary();
         boolean showDetail = ((UIMessages)component).isShowDetail();
         String style = (String) component.getAttributes().get("style");
         String styleClass = (String) component.getAttributes().get(
                     "styleClass");
+
+        boolean wroteTable = false;
+
+        //For layout attribute of "table" render as HTML table.
+        //If layout attribute is not present, or layout attribute
+        //is "list", render as HTML list. 
+        if ((layout != null) && (layout.equals("table"))) {
+            writer.startElement("table", component);
+            wroteTable = true;
+        } else {
+            writer.startElement("ul", component);
+        }
+
+        //Render "table" or "ul" level attributes.
+        writeIdAttributeIfNecessary(context, writer, component);
+        if (null != styleClass) {
+            writer.writeAttribute("class", styleClass, "styleClass");
+        }
+        // style is rendered as a passthru attribute
+        Util.renderPassThruAttributes(context, writer, component);
 
         while (messageIter.hasNext()) {
             curMessage = (FacesMessage) messageIter.next();
@@ -156,51 +167,27 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                     component.getAttributes().get("fatalClass");
             }
 
-            // if we have style and severityStyle
-            if ((style != null) && (severityStyle != null)) {
-                // severityStyle wins
-                style = severityStyle;
-            }
-            // if we have no style, but do have severityStyle
-            else if ((style == null) && (severityStyle != null)) {
-                // severityStyle wins
-                style = severityStyle;
-            }
-
-            // if we have styleClass and severityStyleClass
-            if ((styleClass != null) && (severityStyleClass != null)) {
-                // severityStyleClass wins
-                styleClass = severityStyleClass;
-            }
-            // if we have no styleClass, but do have severityStyleClass
-            else if ((styleClass == null) && (severityStyleClass != null)) {
-                // severityStyleClass wins
-                styleClass = severityStyleClass;
-            }
-
             //Done intializing local variables. Move on to rendering.
 
             if (wroteTable) {
                 writer.startElement("tr", component);
+            } else {
+                writer.startElement("li", component);
+            }
+
+            if (severityStyle != null) {
+                style = severityStyle;
+                writer.writeAttribute("style", style, "style");
+            }
+            if (severityStyleClass != null) {
+                styleClass = severityStyleClass;
+                writer.writeAttribute("class", styleClass, "styleClass");
+            }
+
+            if (wroteTable) {
                 writer.startElement("td", component);
             }
-
-            boolean wroteSpan = false;
-
-            if (styleClass != null || style != null || 
-		Util.hasPassThruAttributes(component)) {
-                writer.startElement("span", component);
-                if (!wroteTable) {
-                    writeIdAttributeIfNecessary(context, writer, component);
-                }
-                wroteSpan = true;
-                if (null != styleClass) {
-                    writer.writeAttribute("class", styleClass, "styleClass");
-                }
-                // style is rendered as a passthru attribute
-                Util.renderPassThruAttributes(context, writer, component);
-            }
-
+            
             Object tooltip = component.getAttributes().get("tooltip");
             boolean isTooltip = false;
             if (tooltip instanceof Boolean) {
@@ -210,16 +197,11 @@ public class MessagesRenderer extends HtmlBasicRenderer {
 
             boolean wroteTooltip = false;
             if (showSummary && showDetail && isTooltip) {
-
-                if (!wroteSpan) {
-                    writer.startElement("span", component);
-                }
+                writer.startElement("span", component);
                 writer.writeAttribute("title", summary, "title");
                 writer.flush();
                 writer.writeText("\t", null);
                 wroteTooltip = true;
-            } else if (wroteSpan) {
-                writer.flush();
             }
 
             if (!wroteTooltip && showSummary) {
@@ -231,7 +213,7 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                 writer.writeText(detail, null);
             }
 
-            if (wroteSpan || wroteTooltip) {
+            if (wroteTooltip) {
                 writer.endElement("span");
             }
 
@@ -239,6 +221,8 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             if (wroteTable) {
                 writer.endElement("td");
                 writer.endElement("tr");
+            } else {
+                writer.endElement("li");
             }
 
         } //messageIter
@@ -246,6 +230,8 @@ public class MessagesRenderer extends HtmlBasicRenderer {
         //close table if present
         if (wroteTable) {
             writer.endElement("table");
+        } else {
+            writer.endElement("ul");
         }
     }
 

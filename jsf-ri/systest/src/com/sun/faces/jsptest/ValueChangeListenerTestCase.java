@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTestCase.java,v 1.5 2005/02/08 19:23:49 rlubke Exp $
+ * $Id: ValueChangeListenerTestCase.java,v 1.6 2005/03/15 15:50:34 rogerk Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -119,18 +120,22 @@ public class ValueChangeListenerTestCase extends AbstractTestCase {
 	    hasMessagesContent = false; // do we have the h:messages
 					// content we're looking for.
 	HtmlSpan span = null;
+        HtmlUnorderedList ulist = null;
 
 	for (int i = 0; i < list.size(); i++) {
 	    span = (HtmlSpan) list.get(i);
-        System.out.println("SPAN: " + span.asXml());
-	    if (-1 != span.asXml().indexOf("dir=\"LTR\"")
-            && span.asXml().indexOf("lang=\"en\"") != -1) {
-            hasMessagesContent = true;
-	    }
 	    if (-1 != span.asXml().indexOf("dir=\"RTL\"")
-            && span.asXml().indexOf("lang=\"de\"") != -1) {
-            hasMessageContent = true;
+                && span.asXml().indexOf("lang=\"de\"") != -1) {
+                hasMessageContent = true;
+            }
         }
+        list = getAllElementsOfGivenClass(page, null, HtmlUnorderedList.class);
+        for (int i = 0; i < list.size(); i++) {
+            ulist = (HtmlUnorderedList) list.get(i);
+	    if (-1 != ulist.asXml().indexOf("dir=\"LTR\"")
+                && ulist.asXml().indexOf("lang=\"en\"") != -1) {
+                hasMessagesContent = true;
+            }
 	}
 	assertTrue(hasMessagesContent && hasMessageContent);
 	

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.50 2004/12/16 17:56:38 edburns Exp $
+ * $Id: MessageRenderer.java,v 1.51 2005/03/15 15:50:32 rogerk Exp $
  */
 
 /*
@@ -174,8 +174,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
 
         String
             style = (String) component.getAttributes().get("style"),
-            styleClass = (String) component.getAttributes().get("styleClass"),
-            layout = (String) component.getAttributes().get("layout");
+            styleClass = (String) component.getAttributes().get("styleClass");
 
         // if we have style and severityStyle
         if ((style != null) && (severityStyle != null)) {
@@ -204,24 +203,11 @@ public class MessageRenderer extends HtmlBasicRenderer {
         boolean wroteSpan = false;
         boolean wroteTable = false;
 
-        //Add style and class attributes to table. If layout attribute is not
-        //present or layout is list just do the spans in a linear fashion.
-        if ((layout != null) && (layout.equals("table"))) {
-            writer.startElement("table", component);
-            writeIdAttributeIfNecessary(context, writer, component);
-            writer.startElement("tr", component);
-            writer.startElement("td", component);
-            wroteTable = true;
-        }
-
         if (styleClass != null || style != null ||
             shouldWriteIdAttribute(component) || 
 	    Util.hasPassThruAttributes(component)) {
             writer.startElement("span", component);
-            // don't output the id twice
-            if (!wroteTable) {
-                writeIdAttributeIfNecessary(context, writer, component);
-            }
+            writeIdAttributeIfNecessary(context, writer, component);
 
             wroteSpan = true;
             if (styleClass != null) {
@@ -265,11 +251,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
             writer.endElement("span");
         }
 
-        if (wroteTable) {
-            writer.endElement("td");
-            writer.endElement("tr");
-            writer.endElement("table");
-        }
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }

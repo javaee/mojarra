@@ -27,7 +27,7 @@
 
 
 
-<span class="errors">	{0}: Validation Error: Value is required. </span> 
+<ul class="errors"><li>	{0}: Validation Error: Value is required. </li></ul> 
 
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.85 2004/08/24 19:52:44 rogerk Exp $
+ * $Id: TestRenderers_2.java,v 1.86 2005/03/15 15:50:36 rogerk Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.85 2004/08/24 19:52:44 rogerk Exp $
+ * @version $Id: TestRenderers_2.java,v 1.86 2005/03/15 15:50:36 rogerk Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -583,7 +583,6 @@ public class TestRenderers_2 extends JspFacesTestCase {
         messageRenderer.encodeEnd(getFacesContext(), message);
 
         result = writer.toString();
-
         //Span should have class attribute for styleClass
         //Summary and detail should be in body of span separated by space
         assertTrue(
@@ -769,9 +768,6 @@ public class TestRenderers_2 extends JspFacesTestCase {
         message.getAttributes().put("infoClass", "infoClass");
         message.getAttributes().put("fatalClass", "fatalClass");
 
-        //Set layout to table
-        message.getAttributes().put("layout", "table");
-
         // populate facescontext with some errors
         getFacesContext().addMessage(message.getFor(),
                                      new FacesMessage(
@@ -785,7 +781,6 @@ public class TestRenderers_2 extends JspFacesTestCase {
         messageRenderer.encodeEnd(getFacesContext(), message);
 
         result = writer.toString();
-
         //Span should containt class for styleClass, style, 
         //  and title for tooltip attributes
         //Summary should go in the title attribute and only the 
@@ -793,7 +788,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         //Should be wrapped in a table
         assertTrue(
             result.indexOf(
-                "<table id=\"myMessage_5\"><tr><td><span class=\"fatalClass\" style=\"style\" title=\"global message summary_5\">	global message detail_5</span></td></tr></table>") !=
+                "<span id=\"myMessage_5\" class=\"fatalClass\" style=\"style\" title=\"global message summary_5\">	global message detail_5</span>") !=
             -1);
 
         try {
@@ -988,7 +983,6 @@ public class TestRenderers_2 extends JspFacesTestCase {
 
         //no span should be rendered since none of the criteria was met
         assertTrue(result.indexOf("span") == -1);
-
         try {
             writer.close();
         } catch (IOException ioe) {
@@ -1040,18 +1034,17 @@ public class TestRenderers_2 extends JspFacesTestCase {
         messagesRenderer.encodeEnd(getFacesContext(), messages);
 
         result = writer.toString();
-
-        //Span should have class attribute for styleClass
-        //Summary and detail should be in body of span separated by space
-        //Verify that both messages are included
+        //Verify Html list (<ul> with id/class
         assertTrue(
-            result.indexOf(
-                "<span id=\"myMessage_1\" class=\"warnClass\">	global message summary_1.0 global message detail_1.0</span>") !=
-            -1);
+            result.indexOf("<ul id=\"myMessage_1\" class=\"styleClass\">")
+                != -1);
+        //Verify Html list items
         assertTrue(
-            result.indexOf(
-                "<span id=\"myMessage_1\" class=\"warnClass\">	global message summary_1.1 global message detail_1.1</span>") !=
-            -1);
+            result.indexOf("<li class=\"infoClass\">") != -1);
+        assertTrue(
+            result.indexOf("<li class=\"warnClass\">") != -1);
+        assertTrue(
+            result.indexOf("<li class=\"fatalClass\">") != -1);
 
         try {
             writer.close();
@@ -1078,7 +1071,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
 
         messagesRenderer = new MessagesRenderer();
 
-        //add a styleClass so span is rendered
+        //add a style
         messages.getAttributes().put("style", "style");
 
         // populate facescontext with some errors
@@ -1105,21 +1098,13 @@ public class TestRenderers_2 extends JspFacesTestCase {
 
         result = writer.toString();
 
-        //Span should have style attribute
-        //Summary and detail should be in body of span separated by space
-        //Verify that three messages are included
+        //Verify Html list (<ul> with id/style)
         assertTrue(
-            result.indexOf(
-                "<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2.0 global message detail_2.0</span>") !=
-            -1);
+            result.indexOf("<ul id=\"myMessage_2\" style=\"style\">") != -1);
+
+        //Verify Html item (<li> with class)
         assertTrue(
-            result.indexOf(
-                "<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2.1 global message detail_2.1</span>") !=
-            -1);
-        assertTrue(
-            result.indexOf(
-                "<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2.2 global message detail_2.2</span>") !=
-            -1);
+            result.indexOf("<li class=\"errorClass\">") != -1);
 
         try {
             writer.close();
@@ -1170,18 +1155,12 @@ public class TestRenderers_2 extends JspFacesTestCase {
 
         result = writer.toString();
 
-        //Span should have class attribute for styleClass and style attribute
-        //Summary and detail should be in body of span separated by space
-        //Verify that both messages are included
+        //Verify Html list (<ul> with id/style/class)
         assertTrue(
-            result.indexOf(
-                "<span id=\"myMessage_3\" class=\"fatalClass\" style=\"style\">	global message summary_3.0 global message detail_3.0</span>") !=
-            -1);
+            result.indexOf("<ul id=\"myMessage_3\" class=\"styleClass\" style=\"style\">") != -1);
+        //Verify Html item (<li> with class)
         assertTrue(
-            result.indexOf(
-                "<span id=\"myMessage_3\" class=\"fatalClass\" style=\"style\">	global message summary_3.1 global message detail_3.1</span>") !=
-            -1);
-
+            result.indexOf("<li class=\"fatalClass\">") != -1);
         try {
             writer.close();
         } catch (IOException ioe) {
@@ -1238,24 +1217,10 @@ public class TestRenderers_2 extends JspFacesTestCase {
 
         result = writer.toString();
 
-        //Span should containt class for styleClass, style, 
-        //  and title for tooltip attributes
-        //Summary should go in the title attribute and only the 
-        //  detail displayed in the body of the span
-        //Verify that three messages are included
+        //Verify <ul> with id/style/class
+        //Verify <li> with class;span containing tool tip
         assertTrue(
-            result.indexOf(
-                "<span id=\"myMessage_4\" class=\"fatalClass\" style=\"style\" title=\"global message summary_4.0\">	global message detail_4.0</span>") !=
-            -1);
-        assertTrue(
-            result.indexOf(
-                "<span id=\"myMessage_4\" class=\"fatalClass\" style=\"style\" title=\"global message summary_4.1\">	global message detail_4.1</span>") !=
-            -1);
-        assertTrue(
-            result.indexOf(
-                "<span id=\"myMessage_4\" class=\"fatalClass\" style=\"style\" title=\"global message summary_4.2\">	global message detail_4.2</span>") !=
-            -1);
-
+            result.indexOf("<ul id=\"myMessage_4\" class=\"styleClass\" style=\"style\"><li class=\"errorClass\"><span title=\"global message summary_2\">") != -1);
         try {
             writer.close();
         } catch (IOException ioe) {
@@ -1275,7 +1240,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
 
         messagesRenderer = new MessagesRenderer();
 
-        //add a styleClass so span is rendered
+        //add a styleClass
         messages.getAttributes().put("styleClass", "styleClass");
         messages.getAttributes().put("style", "style");
 
@@ -1311,27 +1276,11 @@ public class TestRenderers_2 extends JspFacesTestCase {
 
         result = writer.toString();
 
-        //Span should containt class for styleClass, style, 
-        //  and title for tooltip attributes
-        //Summary should go in the title attribute and only the 
-        //  detail displayed in the body of the span
-        //Verify that three messages are included
-        //Should be wrapped in a table
+        //Verify wrapped in <table>
         assertTrue(
-            result.indexOf("<table id=\"myMessage_5\"><tr><td><span") == 0);
+            result.indexOf("<table id=\"myMessage_5\" class=\"styleClass\" style=\"style\">") != -1);
         assertTrue(
-            result.indexOf(
-                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.0\">	global message detail_5.0</span></td></tr>") !=
-            -1);
-        assertTrue(
-            result.indexOf(
-                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.1\">	global message detail_5.1</span></td></tr>") !=
-            -1);
-        assertTrue(
-            result.indexOf(
-                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.2\">	global message detail_5.2</span></td></tr>") !=
-            -1);
-        assertTrue(result.endsWith("</span></td></tr></table>"));
+            result.indexOf("<tr><td><span title=\"global message summary_5.0\">") != -1);
 
         try {
             writer.close();
@@ -1352,7 +1301,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
 
         messagesRenderer = new MessagesRenderer();
 
-        //add a styleClass so span is rendered
+        //add a styleClass 
         messages.getAttributes().put("styleClass", "styleClass");
         messages.getAttributes().put("style", "style");
 
