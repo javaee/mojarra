@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.4 2003/09/26 20:00:38 horwat Exp $
+ * $Id: TableRenderer.java,v 1.5 2003/10/17 03:47:12 eburns Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	    return;
 	}
 	UIData data = (UIData) component;
-	data.setRowIndex(0);
+	data.setRowIndex(-1);
 
 	// Render the beginning of the table
 	ResponseWriter writer = context.getResponseWriter();
@@ -142,7 +142,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	}
 	writer.writeText("\n", null);
 	kids = data.getChildren().iterator();
-	data.setRowIndex(0);
+	data.setRowIndex(-1);
 	while (kids.hasNext()) {
 	    UIComponent kid = (UIComponent) kids.next();
 	    if (!(kid instanceof UIColumn)) {
@@ -166,10 +166,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	if (var != null) {
 	    old = requestMap.get(var);
 	}
-	int first = data.getFirst(); // One relative
-	if (first < 1) {
-	    first = 1;
-	}
+	int first = data.getFirst(); // Zero relative
 	int rows = data.getRows();
         int rowStyle = 0;
 	int rowCount = data.getRowCount();
@@ -180,6 +177,11 @@ public class TableRenderer extends HtmlBasicRenderer {
 	    if ((rows > 0) && (++showCount > rows)) {
 		break;
 	    }
+
+            // Have we displayed the last row that exists?
+            if (i >= rowCount) {
+                break;
+            }
 
 	    // Expose the current row in the specified request attribute
 	    data.setRowIndex(i);
@@ -241,7 +243,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	}
 
 	// Clean up after ourselves
-	data.setRowIndex(0);
+	data.setRowIndex(-1);
 	if (var != null) {
 	    if (old != null) {
 		requestMap.put(var, old);
@@ -288,7 +290,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	    return;
 	}
 	UIData data = (UIData) component;
-	data.setRowIndex(0);
+	data.setRowIndex(-1);
 
 	// Render the footer facet (if any)
 	ResponseWriter writer = context.getResponseWriter();

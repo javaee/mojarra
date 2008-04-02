@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.10 2003/09/08 20:10:09 jvisvanathan Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.11 2003/10/17 03:47:11 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ package com.sun.faces.renderkit.html_basic;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
+import javax.faces.component.ConvertableValueHolder;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.UIInput;
 import javax.faces.convert.Converter;
@@ -79,7 +80,9 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
         
-        converter = valueHolder.getConverter();
+        if (component instanceof ConvertableValueHolder) {
+            converter = ((ConvertableValueHolder) component).getConverter();
+        }
         
 	if (converter == null && valueRef != null) {
             Class converterType = 

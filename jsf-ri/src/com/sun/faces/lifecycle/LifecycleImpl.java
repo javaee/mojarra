@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.35 2003/10/06 18:11:32 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.36 2003/10/17 03:47:10 eburns Exp $
  */
 
 /*
@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 
 /**
@@ -42,7 +45,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.35 2003/10/06 18:11:32 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.36 2003/10/17 03:47:10 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -60,6 +63,8 @@ public class LifecycleImpl extends Lifecycle
 //
 // Class Variables
 //
+
+    protected static final Log log = LogFactory.getLog(LifecycleImpl.class);
 
 //
 // Instance Variables
@@ -143,9 +148,16 @@ public class LifecycleImpl extends Lifecycle
         int curPhaseId = 0;
         Assert.assert_it(null != phaseIter);
 
+        if (log.isDebugEnabled()) {
+            log.debug("execute() begin");
+        }
+
         while (phaseIter.hasNext()) {
 	    wrapper = (PhaseWrapper)phaseIter.next();
 	    curPhase = wrapper.instance;
+            if (log.isTraceEnabled()) {
+                log.trace("execute(phaseId=" + curPhase + ")");
+            }
 
 	    maybeCallListeners(curPhase, BEFORE);
 
@@ -155,14 +167,27 @@ public class LifecycleImpl extends Lifecycle
             // Go to Render Phase?
             if ((curPhase.getId() == PhaseId.RESTORE_VIEW) && 
                 (!hasPostDataOrQueryParams(context))) {
+
+                if (log.isTraceEnabled()) {
+                    log.trace("Restore view has detected reload request");
+                }
                 curPhase = getRenderPhase(context);
                 context.renderResponse();
             }
 
             if (context.getResponseComplete()) {
+
+                if (log.isTraceEnabled()) {
+                    log.trace("Response complete was called");
+                }
 		maybeCallListeners(curPhase, AFTER);
                 return;
             } else if (context.getRenderResponse()) {
+
+                if (log.isTraceEnabled()) {
+                    log.trace("Render response was called");
+                }
+
 		// If we're skipping to RENDER_RESPONSE, be sure to call
 		// the after listener for the current phase.
 		maybeCallListeners(curPhase, AFTER);
@@ -184,6 +209,12 @@ public class LifecycleImpl extends Lifecycle
 
             curPhaseId++;
         }
+
+        if (log.isDebugEnabled()) {
+            log.debug("execute() end");
+        }
+
+
     }
 
     
