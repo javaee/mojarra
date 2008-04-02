@@ -36,7 +36,7 @@
              <td>
 
                <h:output_text id="outputText0" 
-                       outputClass="output_text0"
+                       styleClass="output_text0"
                        valueRef="LoginBean.userName"/>
 
 

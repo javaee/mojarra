@@ -72,7 +72,7 @@
 
 
 <h:panel_grid id="choicesPanel" columns="2" footerClass="subtitle"
-   headerClass="subtitlebig" panelClass="medium" columnClasses="subtitle,medium">
+   headerClass="subtitlebig" styleClass="medium" columnClasses="subtitle,medium">
 
 <f:facet name="header">
     <h:panel_group>

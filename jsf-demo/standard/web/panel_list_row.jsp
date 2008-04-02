@@ -18,7 +18,7 @@
                  columnClasses="list-column-center,list-column-left,
                  list-column-center, list-column-right"
                  headerClass="list-header"
-                  panelClass="list-background"
+                  styleClass="list-background"
                   rowClasses="list-row-even,list-row-odd">
 
                   <!-- Column Headings -->

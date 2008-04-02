@@ -73,7 +73,7 @@
             <table border="0" align="left">
             <tr>
             <td>
-            <h:graphic_image  graphicClass="alignLeft" url="/150x126_Jalopy.jpg" /></tr>
+            <h:graphic_image  styleClass="alignLeft" url="/150x126_Jalopy.jpg" /></tr>
                           </table>
                           <p><br>
             <B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">

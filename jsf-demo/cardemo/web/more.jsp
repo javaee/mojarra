@@ -122,7 +122,7 @@
             </FONT></B>
             <BR>
             <h:command_button id="custom" action="custom"
-                commandClass="package-selected"
+                styleClass="package-selected"
                 key="Custom" bundle="carDemoBundle">
                 <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>

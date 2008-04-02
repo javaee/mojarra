@@ -44,7 +44,7 @@
     <hr>
       <f:view>
         <h:form id="errorForm" formName="errorForm">
-            <h:output_text id="hello_label" text="Login Failed" />
+            <h:output_text id="helloLabel" text="Login Failed" />
              <P></P>
         </h:form>
        </f:view>

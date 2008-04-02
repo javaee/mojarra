@@ -56,7 +56,7 @@
              <h:panel_grid id="logonPanel2" columns="2"
                footerClass="form-footer"
                headerClass="form-header"
-                panelClass="form-background"
+                styleClass="form-background"
              columnClasses="form-prompt,form-field">
 
             <f:facet name="header">

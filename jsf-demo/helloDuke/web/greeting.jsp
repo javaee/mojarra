@@ -45,7 +45,7 @@
     <jsp:useBean id="UserNameBean" class="helloDuke.UserNameBean" scope="session" />
     <f:view>
     <h:form id="helloForm" formName="helloForm" >
-        <h:graphic_image id="wave_img" url="/wave.med.gif" />
+        <h:graphic_image id="waveImg" url="/wave.med.gif" />
   	<h:input_text id="username"
 			valueRef="UserNameBean.userName"/>
   	<h:command_button id="submit" action="success" label="Submit" 
