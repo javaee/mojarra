@@ -44,6 +44,7 @@ import javax.faces.model.ScalarDataModel;
 import javax.servlet.jsp.jstl.sql.Result;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.HashMap;
@@ -1396,8 +1397,11 @@ public class UIData extends UIComponentBase
 
 
 // Private class to represent saved state information
-class SavedState {
+@SuppressWarnings({"SerializableHasSerializationMethods",
+                   "NonSerializableFieldInSerializableClass"})
+class SavedState implements Serializable {
 
+    private static final long serialVersionUID = 2920252657338389849L;
     private Object submittedValue;
 
     Object getSubmittedValue() {
