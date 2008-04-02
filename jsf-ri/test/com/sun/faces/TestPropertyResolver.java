@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolver.java,v 1.5 2005/05/06 22:02:03 edburns Exp $
+ * $Id: TestPropertyResolver.java,v 1.6 2005/08/09 17:38:28 jayashri Exp $
  */
 
 /*
@@ -17,50 +17,58 @@ import javax.faces.el.PropertyNotFoundException;
 
 public class TestPropertyResolver extends PropertyResolver {
    
+    PropertyResolver root = null;
     public TestPropertyResolver(PropertyResolver propertyResolver) {       
+        root = propertyResolver;
     }
-
-
-    // Specified by javax.faces.el.PropertyResolver.getType(Object,int)
-    public Class getType(Object base, int index)  
-        throws EvaluationException, PropertyNotFoundException{
-        return null;
-    }
-
-    // Specified by javax.faces.el.PropertyResolver.getType(Object,String)
-    public Class getType(Object base, Object property) {
-        return null;
-    }
-
-    // Specified by javax.faces.el.PropertyResolver.getValue(Object,int)
-    public Object getValue(Object base, int index) {
-        return null;
-    }
-
+    
     // Specified by javax.faces.el.PropertyResolver.getValue(Object,String)
     public Object getValue(Object base, Object property) {
-        Object result = null;
-        return result;
+         if (property.equals("customPRTest1")) {
+            return "TestPropertyResolver";
+         }
+         return root.getValue(base, property);
     }
 
-    // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,int)
-    public boolean isReadOnly(Object base, int index) {
-        return false;
+    public Object getValue(Object base, int index)
+        throws EvaluationException, PropertyNotFoundException {
+        return root.getValue(base, index);
     }
 
-    // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,String)
-    public boolean isReadOnly(Object base, Object property) {
-        return false;
+
+    public void setValue(Object base, Object name, Object value)
+        throws EvaluationException, PropertyNotFoundException {
+        root.setValue(base, name, value);
     }
 
-    // Specified by javax.faces.el.PropertyResolver.setValue(Object,int,Object)
-    public void setValue(Object base, int index, Object value) {
-            
+
+    public void setValue(Object base, int index, Object value)
+        throws EvaluationException, PropertyNotFoundException {
+        root.setValue(base, index, value);
     }
 
-    // Specified by
-    // javax.faces.el.PropertyResolver.setValue(Object,String,Object)
-    public void setValue(Object base, Object property, Object value) {
+
+    public boolean isReadOnly(Object base, Object name)
+        throws PropertyNotFoundException {
+        return root.isReadOnly(base, name);
+    }
+
+
+    public boolean isReadOnly(Object base, int index)
+        throws PropertyNotFoundException {
+        return root.isReadOnly(base, index);
+    }
+
+
+    public Class getType(Object base, Object name)
+        throws PropertyNotFoundException {
+        return root.getType(base, name);
+    }
+
+
+    public Class getType(Object base, int index)
+        throws PropertyNotFoundException {
+        return root.getType(base, index);
     }
     
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.25 2005/07/19 19:33:18 edburns Exp $
+ * $Id: TestApplicationImpl.java,v 1.26 2005/08/09 17:38:29 jayashri Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.el.ValueExpression;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.25 2005/07/19 19:33:18 edburns Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.26 2005/08/09 17:38:29 jayashri Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -426,6 +426,21 @@ public class TestApplicationImpl extends JspFacesTestCase {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
+        
+        // make sure FacesException is thrown when a bogus ValueExpression is
+        // passed to createComponent. JSF RI Issue 162
+        assertTrue(null != (valueBinding =
+                            application.getExpressionFactory().createValueExpression(
+                            getFacesContext().getELContext(), "#{a.b}", Object.class)));
+
+        try {
+            result = application.createComponent(valueBinding, getFacesContext(),
+                                                 "notreached");
+            assertTrue(false);
+        } catch (FacesException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
     }
 
 
@@ -508,6 +523,36 @@ public class TestApplicationImpl extends JspFacesTestCase {
         value = rb.getString("label");
         assertEquals("Abflug", value);
         
+    }
+    
+    public void testLegacyPropertyResolversWithUnifiedEL() {
+      
+        ValueExpression ve1 = application.getExpressionFactory().
+            createValueExpression(getFacesContext().getELContext(),
+                "#{mixedBean.customPRTest1}", Object.class);
+        Object result = ve1.getValue(getFacesContext().getELContext());     
+        assertTrue(result.equals("TestPropertyResolver"));
+        
+        ValueExpression ve2 = application.getExpressionFactory().
+            createValueExpression(getFacesContext().getELContext(),
+                "#{mixedBean.customPRTest2}", Object.class);
+        result = ve2.getValue(getFacesContext().getELContext());      
+        assertTrue(result.equals("PropertyResolverTestImpl"));
+    }
+    
+    public void testLegacyVariableResolversWithUnifiedEL() {
+      
+        ValueExpression ve1 = application.getExpressionFactory().
+            createValueExpression(getFacesContext().getELContext(),
+                "#{customVRTest1}", Object.class);
+        Object result = ve1.getValue(getFacesContext().getELContext());        
+        assertTrue(result.equals("TestVariableResolver"));
+        
+        ValueExpression ve2 = application.getExpressionFactory().
+            createValueExpression(getFacesContext().getELContext(),
+                "#{customVRTest2}", Object.class);
+        result = ve2.getValue(getFacesContext().getELContext());      
+        assertTrue(result.equals("TestOldVariableResolver"));
     }
     
     public static void clearResourceBundlesFromAssociate(ApplicationImpl application) {

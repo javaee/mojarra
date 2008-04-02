@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.65 2005/07/21 00:56:39 edburns Exp $
+ * $Id: ApplicationImpl.java,v 1.66 2005/08/09 17:38:25 jayashri Exp $
  */
 
 /*
@@ -183,14 +183,15 @@ public class ApplicationImpl extends Application {
                 result = this.createComponent(componentType);
                 componentExpression.setValue((context.getELContext()), result);
             }
-        } catch (ELException elex) {
-            throw new FacesException(elex);
+        } catch (Exception ex) {
+            throw new FacesException(ex);
         }
 
         return (UIComponent) result;    
     }
 
     public ELResolver getELResolver() {
+        
         if (compositeELResolver != null) {
             return compositeELResolver;
         }
@@ -537,17 +538,26 @@ public class ApplicationImpl extends Application {
             message = message +" componentType " + componentType;
             throw new NullPointerException(message);
         }
-        UIComponent returnVal = (UIComponent) newThing(componentType,
-                                                       componentMap);
+        UIComponent returnVal = null;
+        try {
+            returnVal = (UIComponent) newThing(componentType, componentMap);
+        } catch (Exception ex) {     
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, 
+                        "jsf.cannot_instantiate_component_error", ex);
+            }
+            throw new FacesException(ex);
+        }
         if (returnVal == null) {
             Object[] params = {componentType};
             if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, 
-                        "jsf.cannot_instantiate_component_error", params);
+                    logger.log(Level.SEVERE, 
+                            "jsf.cannot_instantiate_component_error", params);
             }
             throw new FacesException(Util.getExceptionMessageString(
-                Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+                    Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
+        
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created component " + componentType);
         }
@@ -570,17 +580,20 @@ public class ApplicationImpl extends Application {
 
         Object result = null;
         boolean createOne = false;
-
-        if (null != (result = componentBinding.getValue(context))) {
-            // if the result is not an instance of UIComponent
-            createOne = (!(result instanceof UIComponent));
-            // we have to create one.
+        try {
+            if (null != (result = componentBinding.getValue(context))) {
+                // if the result is not an instance of UIComponent
+                createOne = (!(result instanceof UIComponent));
+                // we have to create one.
+            }
+          
+            if (null == result || createOne) {
+                result = this.createComponent(componentType);
+                componentBinding.setValue(context, result);
+            }
+        } catch (Exception ex) {
+            throw new FacesException(ex);
         }
-        if (null == result || createOne) {
-            result = this.createComponent(componentType);
-            componentBinding.setValue(context, result);
-        }
-
         return (UIComponent) result;
     }
 
@@ -925,10 +938,8 @@ public class ApplicationImpl extends Application {
         Object result = null;
         Class clazz = null;
         Object value = null;
-
         synchronized (this) {
             value = map.get(key);
-
             if (value == null) {
                 return null;
             }
@@ -950,11 +961,8 @@ public class ApplicationImpl extends Application {
             result = clazz.newInstance();
         } catch (Throwable t) {
             Object[] params = {clazz.getName()};
-             if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, t.getMessage(), t);
-            }
-            throw new FacesException(Util.getExceptionMessageString(
-                Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
+            throw new FacesException((Util.getExceptionMessageString(
+                Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params)), t);
         }
         return result;
     }

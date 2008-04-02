@@ -1,5 +1,5 @@
 /*
- * $Id: TestOldVariableResolver.java,v 1.5 2005/05/06 22:02:03 edburns Exp $
+ * $Id: TestOldVariableResolver.java,v 1.6 2005/08/09 17:38:28 jayashri Exp $
  */
 
 /*
@@ -17,8 +17,9 @@ import javax.faces.context.FacesContext;
 
 public class TestOldVariableResolver extends VariableResolver {
    
-    public TestOldVariableResolver() {
-       
+    VariableResolver resolver = null;
+    public TestOldVariableResolver(VariableResolver variableResolver) {
+       this.resolver = variableResolver;
     }
     
     //
@@ -28,7 +29,10 @@ public class TestOldVariableResolver extends VariableResolver {
     // Specified by javax.faces.el.VariableResolver.resolveVariable()
     public Object resolveVariable(FacesContext context, String name)
             throws EvaluationException {
-        return null;
+        if (name.equals("customVRTest2")) {
+            return "TestOldVariableResolver";
+        }
+        return resolver.resolveVariable(context, name);
     }
 
 }

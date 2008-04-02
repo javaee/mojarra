@@ -103,6 +103,7 @@
       com.sun.faces.TestNavigationHandler
     </navigation-handler>
     <property-resolver>com.sun.faces.TestPropertyResolver</property-resolver>
+    <property-resolver>com.sun.faces.application.PropertyResolverTestImpl</property-resolver>
     <variable-resolver>com.sun.faces.TestVariableResolver</variable-resolver>
     <view-handler>com.sun.faces.TestViewHandler</view-handler>
     

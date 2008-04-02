@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverTestImpl.java,v 1.5 2005/05/06 22:02:03 edburns Exp $
+ * $Id: PropertyResolverTestImpl.java,v 1.6 2005/08/09 17:38:29 jayashri Exp $
  */
 
 /*
@@ -14,8 +14,18 @@ import javax.faces.el.PropertyResolver;
 
 public class PropertyResolverTestImpl extends TestPropertyResolver{
 
+    PropertyResolver root = null;
+    
     public PropertyResolverTestImpl(PropertyResolver root) {
-        super(root);
+       super(root);
+       this.root = root;
+    }
+    
+     public Object getValue(Object base, Object property) {
+        if (property.equals("customPRTest2")) {
+            return "PropertyResolverTestImpl";
+        }
+        return root.getValue(base, property);
     }
 
 }

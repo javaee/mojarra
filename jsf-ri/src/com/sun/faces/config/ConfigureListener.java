@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.45 2005/08/03 02:24:26 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.46 2005/08/09 17:38:26 jayashri Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -480,7 +480,7 @@ public class ConfigureListener implements ServletContextListener {
         ApplicationAssociate associate =
                 ApplicationAssociate.getInstance(getExternalContextDuringInitialize());
         
-        Object instance;
+        Object instance = null;
         Object prevInChain = null;
         String value;
         String[] values;
@@ -542,23 +542,21 @@ public class ConfigureListener implements ServletContextListener {
         values = config.getPropertyResolvers();
         if ((values != null) && (values.length > 0)) {
             // initialize the prevInChain to DummyPropertyResolver instance 
-            // to satisfy decorator pattern
+            // to satisfy decorator pattern as well as satisfy the requirements 
+            // of unified EL. This resolver sets propertyResolved to false on
+            // invocation of its method, so that variable resolution can move
+            // further in the chain.
             prevInChain = new DummyPropertyResolverImpl();            
             for (int i = 0; i < values.length; i++) {
                 if (logger.isLoggable(Level.FINER)) {
                     logger.finer("setPropertyResolver(" + values[i] + ')');
                 }
                 instance = Util.createInstance(values[i],
-                        PropertyResolver.class, prevInChain);
+                        PropertyResolver.class, ((PropertyResolver)prevInChain));
                 prevInChain = instance;
             }
-            // place DummyPropertyResolver at the chain that sets the
-            // propertyResolved to true to satisfy the requirements of new EL.
-            instance = Util.createInstance(
-                    "com.sun.faces.el.DummyPropertyResolverImpl",
-                    PropertyResolver.class, prevInChain);
-            legacyPRChainHead = (PropertyResolver) instance;
-            associate.setLegacyPRChainHead(legacyPRChainHead);
+            legacyPRChainHead = (PropertyResolver) instance; 
+            associate.setLegacyPRChainHead(legacyPRChainHead); 
         }
         
         // process custom el-resolver elements if any
@@ -596,8 +594,11 @@ public class ConfigureListener implements ServletContextListener {
         prevInChain = null;
         values = config.getVariableResolvers();
         if ((values != null) && (values.length > 0)) {
-            // initialize the prevInChain DummyVariableResolver instance to 
-            // satisfy decorator pattern
+            // initialize the prevInChain to DummyVariableResolver instance 
+            // to satisfy decorator pattern as well as satisfy the requirements 
+            // of unified EL. This resolver sets propertyResolved to false on
+            // invocation of its method, so that variable resolution can move
+            // further in the chain.
             prevInChain = new DummyVariableResolverImpl();
             for (int i = 0; i < values.length; i++) {
                 if (logger.isLoggable(Level.FINER)) {
@@ -607,13 +608,8 @@ public class ConfigureListener implements ServletContextListener {
                         (values[i], VariableResolver.class, prevInChain);
                 prevInChain = instance;
             }
-            // place DummyVariableResolver at the chain that sets the
-            // propertyResolved to true to satisfy the requirements of new EL.
-            instance = Util.createInstance(
-                    "com.sun.faces.el.DummyVariableResolverImpl",
-                    VariableResolver.class, prevInChain);
-            legacyVRChainHead = (VariableResolver) instance;
-            associate.setLegacyVRChainHead(legacyVRChainHead);
+            legacyVRChainHead = (VariableResolver) instance; 
+            associate.setLegacyVRChainHead(legacyVRChainHead); 
         }
 
         values = config.getViewHandlers();

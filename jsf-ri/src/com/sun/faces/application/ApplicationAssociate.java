@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.17 2005/07/29 20:10:24 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.18 2005/08/09 17:38:25 jayashri Exp $
  */
 
 /*
@@ -201,15 +201,7 @@ public class ApplicationAssociate extends Object {
      * Application.getPropertyResolver()
      */
     public PropertyResolver getLegacyPropertyResolver(){
-        // place DummyPropertyResolver at the chain that sets the
-        // propertyResolved to true to satisfy the requirements of unified EL.
-        if (legacyPropertyResolver != null) {
-            Object instance = Util.createInstance(
-                    "com.sun.faces.el.DummyPropertyResolverImpl",
-                    PropertyResolver.class, legacyPropertyResolver);
-            return ((PropertyResolver) instance);        
-        } 
-        return null;
+        return legacyPropertyResolver;
     }
     
     /**
@@ -225,15 +217,7 @@ public class ApplicationAssociate extends Object {
      * Application.getVariableResolver()
      */
     public VariableResolver getLegacyVariableResolver(){
-        // place DummyVariableResolver at the chain that sets the
-        // propertyResolved to true to satisfy the requirements of new EL.
-        if (legacyVariableResolver != null) {
-            Object instance = Util.createInstance(
-                    "com.sun.faces.el.DummyVariableResolverImpl",
-                    VariableResolver.class, legacyVariableResolver);
-            return ((VariableResolver) instance);
-        }
-        return null;
+        return legacyVariableResolver;
     }
     
 
@@ -422,30 +406,48 @@ public class ApplicationAssociate extends Object {
         if ((scopeIsApplication = 
             scope.equalsIgnoreCase(RIConstants.APPLICATION)) ||
             (scopeIsSession = scope.equalsIgnoreCase(RIConstants.SESSION))) {
-            synchronized (this) {
-                try {
-                    bean = managedBean.newInstance(context);
-                    if (logger.isLoggable(Level.FINE)) {
-                        logger.fine("Created bean " + managedBeanName 
-                                + " successfully ");
+            if (scopeIsApplication) {
+                Map applicationMap = context.getExternalContext().
+                        getApplicationMap();
+                synchronized (applicationMap) {
+                    try {
+                        bean = managedBean.newInstance(context);
+                        if (logger.isLoggable(Level.FINE)) {
+                            logger.fine("Created application scoped bean " + 
+                                    managedBeanName + " successfully ");
+                        }
+                    } catch (Exception ex) {
+                        Object[] params = {managedBeanName};
+                        if (logger.isLoggable(Level.SEVERE)) {
+                            logger.log(Level.SEVERE, 
+                                    "jsf.managed_bean_creation_error", params);
+                        }
+                        throw new FacesException(ex);
                     }
-                } catch (Exception ex) {
-                    Object[] params = {managedBeanName};
-                    if (logger.isLoggable(Level.SEVERE)) {
-                        logger.log(Level.SEVERE, 
-                                "jsf.managed_bean_creation_error", params);
+                    //add bean to appropriate scope
+                    applicationMap.put(managedBeanName, bean);
+                } 
+            } else {
+                Map sessionMap = Util.getSessionMap(context);
+                synchronized (sessionMap) {
+                    try {
+                        bean = managedBean.newInstance(context);
+                        if (logger.isLoggable(Level.FINE)) {
+                            logger.fine("Created session scoped bean " 
+                                    + managedBeanName + " successfully ");
+                        }
+                    } catch (Exception ex) {
+                        Object[] params = {managedBeanName};
+                        if (logger.isLoggable(Level.SEVERE)) {
+                            logger.log(Level.SEVERE, 
+                                    "jsf.managed_bean_creation_error", params);
+                        }
+                        throw new FacesException(ex);
                     }
-                    throw new FacesException(ex);
+                    //add bean to appropriate scope
+                    sessionMap.put(managedBeanName, bean);
                 }
-                //add bean to appropriate scope
-                if (scopeIsApplication) {
-                    context.getExternalContext().
-                        getApplicationMap().put(managedBeanName, bean);
-                }
-                if (scopeIsSession) {
-                    Util.getSessionMap(context).put(managedBeanName, bean);
-                }
-            }
+            }              
         } else {
             scopeIsRequest = scope.equalsIgnoreCase(RIConstants.REQUEST);
             try {

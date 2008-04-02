@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.167 2005/07/22 16:58:21 jayashri Exp $
+ * $Id: Util.java,v 1.168 2005/08/09 17:38:27 jayashri Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.167 2005/07/22 16:58:21 jayashri Exp $
+ * @version $Id: Util.java,v 1.168 2005/08/09 17:38:27 jayashri Exp $
  */
 
 public class Util extends Object {
@@ -1309,8 +1309,11 @@ public class Util extends Object {
                                 clazz.getConstructor(parameterTypes);
                             Object[] parameters = new Object[]{root};
                             returnObject = construct.newInstance(parameters);
-                        } catch (NoSuchMethodException nsme) {
+                        } catch (Exception ex) {
                             // OK - there's no adapter constructor
+                            if ( logger.isLoggable(Level.FINE)) {
+                                logger.log(Level.FINE, ex.getMessage(), ex);
+                            }
                         }
                     }
 
