@@ -148,6 +148,21 @@
                 </description>
                 <type>java.lang.String</type>
             </attribute>
+            <attribute>
+                <name>usemap</name>
+                <display-name>usemap</display-name>
+                <description>Image map associated with this element.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>ismap</name>
+                <display-name>Ismap</display-name>
+                <description>
+                   True if it is a server side Image map
+                </description>
+                <type>java.lang.Boolean</type>
+            </attribute>
             &event-attrs;
         </renderer>
     </component>

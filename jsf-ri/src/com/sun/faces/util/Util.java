@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.39 2002/11/12 22:17:00 jvisvanathan Exp $
+ * $Id: Util.java,v 1.40 2002/11/13 20:08:58 jvisvanathan Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.39 2002/11/12 22:17:00 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.40 2002/11/13 20:08:58 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -154,7 +154,8 @@ public class Util extends Object
 
     private static String booleanPassthruAttributes[] = {
 	"disabled",
-	"readonly"
+	"readonly",
+        "ismap"
     };
 	
     /**
@@ -208,7 +209,8 @@ public class Util extends Object
         "cellspacing",
         "cellpadding",
         "summary",
-        "bgcolor"
+        "bgcolor",
+        "usemap"
     };
 
 private static long id = 0;

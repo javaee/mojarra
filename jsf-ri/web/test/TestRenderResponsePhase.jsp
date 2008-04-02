@@ -142,6 +142,10 @@
 
 	</TD>
 
+        <TD> 
+            <h:graphic_image id="graphicImage" url="/duke.gif" ismap="true" usemap="#map1" /> 
+        </TD>
+
       </TR>
 
       <TR>

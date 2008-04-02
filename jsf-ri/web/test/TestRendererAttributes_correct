@@ -262,6 +262,16 @@ Image
 
 		class java.lang.String
 
+	usemap
+
+		Image map associated with this element.
+
+		usemap
+
+		usemap
+
+		class java.lang.String
+
 	ondblclick
 
 		The element was double clicked.
@@ -302,16 +312,6 @@ Image
 
 		class java.lang.String
 
-	height
-
-		The height dimension for this component.
-
-		Image Height Override
-
-		height
-
-		class java.lang.Integer
-
 	longdesc
 
 		link to long description (complements alt).
@@ -321,6 +321,16 @@ Image
 		longdesc
 
 		class java.lang.String
+
+	height
+
+		The height dimension for this component.
+
+		Image Height Override
+
+		height
+
+		class java.lang.Integer
 
 	width
 
@@ -341,6 +351,16 @@ Image
 		onkeyup
 
 		class java.lang.String
+
+	ismap
+
+		True if it is a server side Image map
+
+		Ismap
+
+		ismap
+
+		class java.lang.Boolean
 
 	onfocus
 

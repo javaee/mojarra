@@ -19,7 +19,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 
-<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=01012512B94456B39985D5613414B001">
+<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=43E2D1C210F60310C19348F5A5A19918">
 
   <TABLE BORDER="1">
 
@@ -116,7 +116,7 @@
 
 	<TD>
 
-            <input type="image" src="duke.gif;jsessionid=01012512B94456B39985D5613414B001" name="/basicForm/pushButton" disabled >
+            <input type="image" src="duke.gif;jsessionid=43E2D1C210F60310C19348F5A5A19918" name="/basicForm/pushButton" disabled >
             
 	</TD>
 
@@ -127,7 +127,7 @@
 
 	<TD>
 
-            <input type="image" src="duke.gif;jsessionid=01012512B94456B39985D5613414B001" name="/basicForm/imageOnlyButton"> 
+            <input type="image" src="duke.gif;jsessionid=43E2D1C210F60310C19348F5A5A19918" name="/basicForm/imageOnlyButton"> 
              
 	</TD>
 
@@ -150,6 +150,10 @@
 	      <a href="hello.html"><image src="duke.gif"></A>
 
 	</TD>
+
+        <TD> 
+            <img src="/test/duke.gif;jsessionid=43E2D1C210F60310C19348F5A5A19918" usemap="#map1"  ismap > 
+        </TD>
 
       </TR>
 
