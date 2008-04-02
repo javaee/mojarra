@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.5 2003/10/17 03:47:12 eburns Exp $
+ * $Id: TableRenderer.java,v 1.6 2003/10/19 06:06:48 craigmcc Exp $
  */
 
 /*
@@ -93,6 +93,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	UIComponent header = (UIComponent) data.getFacet("header");
 	if (header != null) {
 	    String headerClass = (String) data.getAttributes().get("headerClass");
+	    writer.startElement("thead", header);
             writer.startElement("tr", header);
             writer.startElement("td", header);
             writer.writeAttribute("colspan", "" + getColumnCount(data), null);
@@ -103,6 +104,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	    encodeRecursive(context, header);
             writer.endElement("td");
             writer.endElement("tr");
+	    writer.endElement("thead");
             writer.writeText("\n", null);
 	}
 
@@ -136,6 +138,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 
 	// Render the table header row
 	// PENDING(craigmcc) - what if some or all children do not have one?
+	// PENDING(craigmcc) - this row should be in the <thead> section
         writer.startElement("tr", data);
 	if (headerClass != null) {
             writer.writeAttribute("class", headerClass, "headerClass");
@@ -171,6 +174,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         int rowStyle = 0;
 	int rowCount = data.getRowCount();
 	int showCount = 0;
+	writer.startElement("tbody", component);
         for (int i = first; i <= rowCount; i++) {
 
 	    // Have we displayed the requested number of rows?
@@ -241,6 +245,7 @@ public class TableRenderer extends HtmlBasicRenderer {
             writer.writeText("\n", null);
 
 	}
+	writer.endElement("tbody");
 
 	// Clean up after ourselves
 	data.setRowIndex(-1);
@@ -254,6 +259,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 
 	// Render the table footer row
 	// PENDING(craigmcc) - what if some or all children do not have one?
+	// PENDING(craigmcc) - this element should be in the <tfoot> section
         writer.startElement("tr", data);
 	if (footerClass != null) {
             writer.writeAttribute("class", footerClass, "footerClass");
@@ -297,6 +303,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	UIComponent footer = (UIComponent) data.getFacet("footer");
 	if (footer != null) {
 	    String footerClass = (String) data.getAttributes().get("footerClass");
+	    writer.startElement("tfoot", component);
             writer.startElement("tr", footer);
             writer.startElement("td", footer);
             writer.writeAttribute("colspan", "" + getColumnCount(data), null);
@@ -308,6 +315,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	    encodeRecursive(context, footer);
             writer.endElement("td");
             writer.endElement("tr");
+	    writer.endElement("tfoot");
             writer.writeText("\n", null);
 	}
 
