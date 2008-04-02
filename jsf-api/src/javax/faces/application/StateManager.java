@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.36 2005/03/15 20:37:36 edburns Exp $
+ * $Id: StateManager.java,v 1.37 2005/04/04 20:10:36 rogerk Exp $
  */
 
 /*
@@ -212,7 +212,7 @@ public abstract class StateManager {
      * instance with the tree structure coming from element zero and
      * the component state coming from element one and calls through to
      * {@link
-     * #writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView}.
+     * #writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView)}.
      * If not, does nothing.</p>
      *
      * @since 1.2
