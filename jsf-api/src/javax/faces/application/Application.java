@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.36 2005/07/19 19:33:16 edburns Exp $
+ * $Id: Application.java,v 1.37 2005/08/09 21:54:55 edburns Exp $
  */
 
 /*
@@ -263,10 +263,11 @@ public abstract class Application {
     public abstract void setPropertyResolver(PropertyResolver resolver);
     
     /**
-     * <p>Find a <code>ResourceBundle</code> as defined in the application
-     * configuration resources under the specified name.  If a
-     * <code>ResourceBundle</code> was defined for the name, return an
-     * instance that uses the locale of the current {@link UIViewRoot}.</p>
+     * <p>Find a <code>ResourceBundle</code> as defined in the
+     * application configuration resources under the specified name.  If
+     * a <code>ResourceBundle</code> was defined for the name, return an
+     * instance that uses the locale of the current {@link
+     * javax.faces.component.UIViewRoot}.</p>
      *
      * @returns <code>ResourceBundle</code> for the current UIViewRoot,
      * otherwise null

@@ -353,8 +353,7 @@ necessary to generate required classes.
   </xmlcatalog>
 
   <target name="docs" depends="prepare.generate,tools" 
-                      if="standard-html-renderkit-impl"
-                  unless="skip.generation">
+                      if="standard-html-renderkit-impl">
 
       <generateRenderkitDocs generatorConfig="${basedir}/conf/HtmlBasicTaglib12.properties"
                         facesConfig="${build.temp}/standard-html-renderkit.xml"

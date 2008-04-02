@@ -19,7 +19,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="20050726"/>
+  <property name="version"          value="1_2"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -129,6 +129,7 @@
   <target name="set.tools.property" unless="jsf-tools">
     <available property="jsf-tools" value="${jsf-tools.dir}"
                file="${jsf-tools.dir}/build.xml"/>
+    <echo message="jsf-tools property is ${jsf-tools}" />
   </target>
 
   <target name="attributes"
@@ -257,7 +258,8 @@ jsf-api.jar.
 
   </target>
 
-  <target name="facesdoc" if="jsf-tools" unless="skip.generation" depends="set.tools.property">
+  <target name="facesdoc" if="jsf-tools" depends="set.tools.property">
+    <echo message="in facesdoc"/>
     <ant dir="${jsf-tools.dir}" inheritall="false" target="docs"/>
 
     <mkdir dir="${build.renderkitdocs}"/>
