@@ -119,6 +119,81 @@
   </component>
 
   <component>
+    <component-type>OutputLink</component-type>
+    <component-class>javax.faces.component.html.HtmlOutputLink</component-class>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>tabindex</property-name>
+      <property-class>int</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>type</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>charset</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>styleClass</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>accessKey</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>onfocus</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>onblur</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>value</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>valueRef</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+  </component>
+
+  <component>
     <component-type>OutputMessage</component-type>
     <component-class>javax.faces.component.html.HtmlOutputMessage</component-class>
   </component>
@@ -1317,7 +1392,47 @@
         <attribute-name>tabindex</attribute-name>
         <attribute-class>int</attribute-class>
       </attribute>
-
+ 
+      <attribute>
+        <description>for use with client-side image maps</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>shape</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+      <attribute>
+        <description>for use with client-side image maps</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>coords</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+      <attribute>
+        <description>forward link types</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>rel</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+      <attribute>
+        <description>reverse link types</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>rev</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+       <attribute>
+        <description>language code</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>hreflang</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
       <attribute>
         <description>the element got the focus</description>
         <display-name></display-name>
@@ -1334,19 +1449,19 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <attribute>
-        <attribute-name>image</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      <attribute>
-        <attribute-name>imageKey</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+      <supported-component-type>
+        <component-type>CommandLink</component-type>
+      </supported-component-type>
+      <supported-component-type>
+        <component-type>OutputLink</component-type>
+      </supported-component-type>
       <supported-component-class>
-        <component-class>javax.faces.component.UICommand</component-class>
+        <component-class>javax.faces.component.html.HtmlCommandLink</component-class>
+      </supported-component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.html.HtmlOutputLink</component-class>
       </supported-component-class>
     </renderer>
-
     <renderer>
       <renderer-type>Image</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.ImageRenderer</renderer-class>

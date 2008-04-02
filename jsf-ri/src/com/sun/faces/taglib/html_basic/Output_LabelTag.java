@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LabelTag.java,v 1.14 2003/10/07 20:15:53 horwat Exp $
+ * $Id: Output_LabelTag.java,v 1.15 2003/10/28 21:00:34 eburns Exp $
  */
 
 /*
@@ -88,7 +88,8 @@ public class Output_LabelTag extends BaseComponentTag
     }
     
     /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
+    protected void evaluateExpressions() throws JspException {
+	super.evaluateExpressions();
         if (forValue_ != null) {
             forValue = Util.evaluateElExpression(forValue_, pageContext);
    	}

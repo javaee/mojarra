@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.3 2003/10/28 21:00:30 eburns Exp $
+ * $Id: OutputLinkRenderer.java,v 1.1 2003/10/28 21:00:30 eburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// LinkRenderer.java
+// OutputLinkRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
 
@@ -20,9 +20,8 @@ import java.util.Map;
 import java.io.IOException;
 
 import javax.faces.component.UIForm;
-import javax.faces.component.UICommand;
-import javax.faces.component.UIOutput;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -33,20 +32,18 @@ import org.mozilla.util.Assert;
 
 /**
  *
- *  <B>LinkRenderer</B> is a class ...
+ *  <B>OutputLinkRenderer</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LinkRenderer.java,v 1.3 2003/10/28 21:00:30 eburns Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.1 2003/10/28 21:00:30 eburns Exp $
  */
 
-public class LinkRenderer extends HtmlBasicRenderer {
+public class OutputLinkRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
     // Separator character
-    private final char QUOTE = '\"';
-
 
     //
     // Class Variables
@@ -61,18 +58,9 @@ public class LinkRenderer extends HtmlBasicRenderer {
 
     // Relationship Instance Variables
 
-    protected CommandLinkRenderer commandLinkRenderer = null;
-
-    protected OutputLinkRenderer outputLinkRenderer = null;
-
     //
     // Constructors and Initializers
     //
-
-    public LinkRenderer() {
-	commandLinkRenderer = new CommandLinkRenderer();
-	outputLinkRenderer = new OutputLinkRenderer();
-    }
 
     //
     // Class methods
@@ -86,38 +74,73 @@ public class LinkRenderer extends HtmlBasicRenderer {
     // Methods From Renderer
     //
 
-    public boolean getRendersChildren() {
-	return true;
-    }
-
     public void decode(FacesContext context, UIComponent component) {
 	if (context == null || component == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-	if (component instanceof UICommand) {
-	    commandLinkRenderer.decode(context, component);
-	}
-	else if (component instanceof UIOutput) {
-	    outputLinkRenderer.decode(context, component);
-	}
+	// take no action, this is an Output component.
 	return;
     }
 
+    public boolean getRendersChildren() {
+	return true;
+    }
+
+    private String clientId = null;
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-	if (component instanceof UICommand) {
-	    commandLinkRenderer.encodeBegin(context, component);
+	UIOutput output = (UIOutput) component;
+	String hrefVal = getCurrentValue(context, component);
+
+        // suppress rendering if "rendered" property on the output is
+        // false, or if we have no href.
+        if (!output.isRendered() || null == hrefVal || 0 == hrefVal.length()) {
+            return;
+        }
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it( writer != null );
+
+	clientId = output.getClientId(context);
+
+	//Write Anchor attributes
+
+        LinkRenderer.Param paramList[] = getParamList(context, component);
+	StringBuffer sb = new StringBuffer();
+	int 
+	    i = 0,
+	    len = paramList.length;
+	writer.startElement("a", component);
+	sb = new StringBuffer();
+	sb.append(hrefVal);
+	if (0 < len) {
+	    sb.append("?");
 	}
-	else if (component instanceof UIOutput) {
-	    outputLinkRenderer.encodeBegin(context, component);
-	}
-	return;
+        for (i = 0; i < len; i++) {
+	    if (0 != i) {
+		sb.append("&");
+	    }
+	    sb.append(paramList[i].getName());
+	    sb.append("=");
+	    sb.append(paramList[i].getValue());
+	}	    
+	writer.writeURIAttribute("href", sb.toString(), "href");
+        Util.renderPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer, component);
+
+        //handle css style class
+	String styleClass = (String)
+            output.getAttributes().get("styleClass");
+	if (styleClass != null) {
+            writer.writeAttribute("class", styleClass, "styleClass");
+        }
+	writer.closeStartTag(component);
+
     }
 
     public void encodeChildren(FacesContext context, UIComponent component)
@@ -136,20 +159,23 @@ public class LinkRenderer extends HtmlBasicRenderer {
 	}
     }
 
+
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-	if (component instanceof UICommand) {
-	    commandLinkRenderer.encodeEnd(context, component);
-	}
-	else if (component instanceof UIOutput) {
-	    outputLinkRenderer.encodeEnd(context, component);
-	}
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it( writer != null );
 
+	//Write Anchor inline elements
+
+        //Done writing Anchor element
+        writer.endElement("a");
 	return;
     }
 
-} // end of class LinkRenderer
+
+
+} // end of class OutputLinkRenderer

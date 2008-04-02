@@ -1,5 +1,5 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.17 2003/10/13 22:56:23 jvisvanathan Exp $
+ * $Id: Graphic_ImageTag.java,v 1.18 2003/10/28 21:00:34 eburns Exp $
  */
 
 /*
@@ -106,7 +106,8 @@ public class Graphic_ImageTag extends BaseComponentTag
     // Methods from TagSupport
     // 
     /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
+    protected void evaluateExpressions() throws JspException {
+	super.evaluateExpressions();
         if (url_ != null) {
             url = Util.evaluateElExpression(url_, pageContext);
    	}

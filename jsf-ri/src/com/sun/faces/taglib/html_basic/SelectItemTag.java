@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.22 2003/10/07 20:15:54 horwat Exp $
+ * $Id: SelectItemTag.java,v 1.23 2003/10/28 21:00:35 eburns Exp $
  */
 
 /*
@@ -108,7 +108,8 @@ public class SelectItemTag extends BaseComponentTag
     }
 
     /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
+    protected void evaluateExpressions() throws JspException {
+	super.evaluateExpressions();
         if (itemValue_ != null) {
             itemValue = Util.evaluateElExpression(itemValue_, pageContext);
    	}

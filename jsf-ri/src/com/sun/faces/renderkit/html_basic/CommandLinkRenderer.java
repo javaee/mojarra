@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.1 2003/10/28 04:29:56 eburns Exp $
+ * $Id: CommandLinkRenderer.java,v 1.2 2003/10/28 21:00:29 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandLinkRenderer.java,v 1.1 2003/10/28 04:29:56 eburns Exp $
+ * @version $Id: CommandLinkRenderer.java,v 1.2 2003/10/28 21:00:29 eburns Exp $
  */
 
 public class CommandLinkRenderer extends HtmlBasicRenderer {
@@ -195,11 +195,6 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-	String style = (String)
-            command.getAttributes().get("style");
-	if (style != null) {
-            writer.writeAttribute("style", style, "style");
-        }
 	writer.closeStartTag(component);
 
     }
@@ -261,48 +256,6 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 
 
 	return;
-    }
-
-    protected Param[] getParamList(FacesContext context, UIComponent command) {
-        ArrayList parameterList = new ArrayList();
-
-	Iterator kids = command.getChildren().iterator();
-	while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-
-            if (kid instanceof UIParameter) {
-                UIParameter uiParam = (UIParameter) kid;
-                Param param = new Param(uiParam.getName(),
-                    ((String)uiParam.currentValue(context)));
-                parameterList.add(param);
-            }
-	}
-
-        return (Param[]) parameterList.toArray(new Param[parameterList.size()]);
-    }
-
-    //inner class to store parameter name and value pairs
-    protected class Param {
-
-        public Param(String name, String value) {
-            set(name, value);
-        }
-
-        private String name;
-        private String value;
-
-        public void set(String name, String value) {
-            this.name = name;
-            this.value = value;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getValue() {
-            return value;
-        }
     }
 
 } // end of class CommandLinkRenderer

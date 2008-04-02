@@ -152,6 +152,67 @@
 
 	<TD>
 
+	      <a href="test.html" class="hyperlinkClass">output link text</a>
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      
+                
+              <a href="test.html"><img id="basicForm:_id7" src="duke.gif" alt="" /></a>
+
+	</TD>
+
+        <TD> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif" usemap="#map1" ismap="ismap" alt="" /> 
+        </TD>
+
+      </TR>
+
+      <TR>
+        <TD>
+            
+            <a href="test.html" class="hyperlinkClass">link text</a>
+       </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            
+              
+              
+              
+            <a href="test.html?name=horwat&value=password" class="hyperlinkClass">link text</a>
+        </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            <a href="test.html"><img src="duke.gif"></a>
+        </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            
+              
+              
+              
+            <a href="test.html?name=horwat&value=password"><img id="basicForm:_id11" src="duke.gif" alt="" /></a>
+        </TD>
+      </TR>
+
+
+
+      <TR>
+
+	<TD>
+
 	      Output Text
               
               
@@ -164,7 +225,7 @@
 
 	<TD>
 
-            <input type="checkbox" name="basicForm:_id7" class="selectbooleanClass" />
+            <input type="checkbox" name="basicForm:_id13" class="selectbooleanClass" />
 	</TD>
 
       </TR>
@@ -186,7 +247,7 @@
                 
                 
 
-              <span class="selectoneClass"><select name="basicForm:_id8" size="10" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
+              <span class="selectoneClass"><select name="basicForm:_id14" size="10" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
 	<option value="1" title="One">1</option>
 	<option value="2" title="Two">2</option>
 	<option value="3" title="Three">3</option>
@@ -256,7 +317,7 @@
 
 	<TD>
                 
-            <span class="inputClass"><input type="text" name="basicForm:_id25" value="Wed, Jul 10, 1996" /></span>
+            <span class="inputClass"><input type="text" name="basicForm:_id31" value="Wed, Jul 10, 1996" /></span>
 	</TD>
 
       </TR>
@@ -444,7 +505,7 @@
 						
 						
 						
-					<select name="basicForm:_id36" multiple size="10">	<option value="0">zero</option>
+					<select name="basicForm:_id42" multiple size="10">	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
@@ -470,21 +531,21 @@
 						
 						
 					<span class="selectmanyClass">
-<label for="basicForm:_id47"><input name="basicForm:ManyApples3" id="basicForm:_id47" value="0" type="checkbox">zero</label>
-<label for="basicForm:_id48"><input name="basicForm:ManyApples3" id="basicForm:_id48" value="1" type="checkbox">one</label>
-<label for="basicForm:_id49"><input name="basicForm:ManyApples3" id="basicForm:_id49" value="2" type="checkbox">two</label>
-<label for="basicForm:_id50"><input name="basicForm:ManyApples3" id="basicForm:_id50" value="3" type="checkbox">three</label>
-<label for="basicForm:_id51"><input name="basicForm:ManyApples3" id="basicForm:_id51" value="4" type="checkbox">four</label>
-<label for="basicForm:_id52"><input name="basicForm:ManyApples3" id="basicForm:_id52" value="5" type="checkbox">five</label>
-<label for="basicForm:_id53"><input name="basicForm:ManyApples3" id="basicForm:_id53" value="6" type="checkbox">six</label>
-<label for="basicForm:_id54"><input name="basicForm:ManyApples3" id="basicForm:_id54" value="7" type="checkbox">seven</label>
-<label for="basicForm:_id55"><input name="basicForm:ManyApples3" id="basicForm:_id55" value="8" type="checkbox">eight</label>
-<label for="basicForm:_id56"><input name="basicForm:ManyApples3" id="basicForm:_id56" value="9" type="checkbox">nine</label></TD>
+<label for="basicForm:_id53"><input name="basicForm:ManyApples3" id="basicForm:_id53" value="0" type="checkbox">zero</label>
+<label for="basicForm:_id54"><input name="basicForm:ManyApples3" id="basicForm:_id54" value="1" type="checkbox">one</label>
+<label for="basicForm:_id55"><input name="basicForm:ManyApples3" id="basicForm:_id55" value="2" type="checkbox">two</label>
+<label for="basicForm:_id56"><input name="basicForm:ManyApples3" id="basicForm:_id56" value="3" type="checkbox">three</label>
+<label for="basicForm:_id57"><input name="basicForm:ManyApples3" id="basicForm:_id57" value="4" type="checkbox">four</label>
+<label for="basicForm:_id58"><input name="basicForm:ManyApples3" id="basicForm:_id58" value="5" type="checkbox">five</label>
+<label for="basicForm:_id59"><input name="basicForm:ManyApples3" id="basicForm:_id59" value="6" type="checkbox">six</label>
+<label for="basicForm:_id60"><input name="basicForm:ManyApples3" id="basicForm:_id60" value="7" type="checkbox">seven</label>
+<label for="basicForm:_id61"><input name="basicForm:ManyApples3" id="basicForm:_id61" value="8" type="checkbox">eight</label>
+<label for="basicForm:_id62"><input name="basicForm:ManyApples3" id="basicForm:_id62" value="9" type="checkbox">nine</label></TD>
 </tr>
 
 
     
-<input type="hidden" name="basicForm:_id57" value="48%" />
+<input type="hidden" name="basicForm:_id63" value="48%" />
 
   <TABLE>
 

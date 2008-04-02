@@ -1,5 +1,5 @@
 /*
- * $Id: Command_LinkTag.java,v 1.3 2003/10/28 21:00:33 eburns Exp $
+ * $Id: Output_LinkTag.java,v 1.1 2003/10/28 21:00:35 eburns Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ package com.sun.faces.taglib.html_basic;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UICommand;
+import javax.faces.component.UIOutput;
 import javax.servlet.jsp.JspException;
 
 import com.sun.faces.taglib.BaseComponentBodyTag;
@@ -23,10 +23,10 @@ import java.io.IOException;
 
 /**
  * This class is the tag handler that evaluates the 
- * <code>command_link</code> custom tag.
+ * <code>output_link</code> custom tag.
  */
 
-public class Command_LinkTag extends BaseComponentBodyTag
+public class Output_LinkTag extends BaseComponentBodyTag
 {
     //
     // Protected Constants
@@ -41,12 +41,6 @@ public class Command_LinkTag extends BaseComponentBodyTag
     //
 
     // Attribute Instance Variables
-    protected String commandname = null;
-    protected String commandname_ = null;
-    protected String actionRef = null;
-    protected String actionRef_ = null;
-    protected boolean immediate = false;
-
     
     // Relationship Instance Variables
 
@@ -62,19 +56,6 @@ public class Command_LinkTag extends BaseComponentBodyTag
     // Accessors
     //
 
-    public void setCommandName(String newCommandname) {
-        ParameterCheck.nonNull(newCommandname);
-        commandname_ = newCommandname;
-    }
- 
-    public void setActionRef(String newActionRef) {
-        actionRef_ = newActionRef;
-    }
-
-    public void setImmediate(boolean newImmediate) {
-        immediate = newImmediate;
-    }
-
     //
     // General Methods
     //
@@ -83,24 +64,14 @@ public class Command_LinkTag extends BaseComponentBodyTag
         return "Link"; 
     }
     public String getComponentType() { 
-        return "CommandLink"; 
+        return "OutputLink"; 
     }
 
 
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
-	UICommand link = (UICommand) component;
-        if (actionRef != null ) {
-	    link.setActionRef(actionRef);
-	}
-        if (action != null ) {
-	    link.setAction(action);
-	}
-        if (value != null) {
-            link.setValue(value);
-        }
-	link.setImmediate(immediate);
+	UIOutput link = (UIOutput) component;
         // set HTML 4. attributes.
         if (shape != null) {
             link.getAttributes().put("shape", shape);
@@ -125,28 +96,9 @@ public class Command_LinkTag extends BaseComponentBodyTag
         }
     }
 
-    /* Evaluates expressions as necessary */
-    protected void evaluateExpressions() throws JspException {
-	super.evaluateExpressions();
-        if (commandname_ != null) {
-            commandname = Util.evaluateElExpression(commandname_, pageContext);
-        }
-        if (actionRef_ != null) {
-            actionRef = Util.evaluateElExpression(actionRef_, pageContext);
-        }
-    }
-    
     //
     // Methods from TagSupport
     // 
-
-    public int doStartTag() throws JspException {
-        // evaluate any expressions that we were passed
-        evaluateExpressions();
-
-        // chain to the parent implementation
-        return super.doStartTag();
-    }
 
     public int doEndTag() throws JspException {
 	String content = null;     
@@ -172,4 +124,4 @@ public class Command_LinkTag extends BaseComponentBodyTag
     }
 
 
-} // end of class Command_LinkTag
+} // end of class Output_LinkTag

@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.47 2003/10/07 20:15:51 horwat Exp $
+ * $Id: Command_ButtonTag.java,v 1.48 2003/10/28 21:00:33 eburns Exp $
  */
 
 /*
@@ -103,7 +103,8 @@ public class Command_ButtonTag extends BaseComponentTag
     }
 
     /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
+    protected void evaluateExpressions() throws JspException {
+	super.evaluateExpressions();
         if (image_ != null) {
             image = Util.evaluateElExpression(image_, pageContext);
         }

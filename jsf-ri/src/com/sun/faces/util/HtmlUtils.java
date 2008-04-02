@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlUtils.java,v 1.1 2003/08/04 21:54:51 rkitain Exp $
+ * $Id: HtmlUtils.java,v 1.2 2003/10/28 21:00:39 eburns Exp $
  */
 
 /*
@@ -511,33 +511,35 @@ public class HtmlUtils {
             } else {
                 if (buf == null) {
                     buf = new ByteArrayOutputStream(MAX_BYTES_PER_CHAR);
-                    if (encoding != null)
+                    if (encoding != null) {
                         writer = new OutputStreamWriter(buf, encoding);
-                    else
+		    }
+		    else {
                         writer = new OutputStreamWriter(buf);
+		    }
                     charArray = new char[1];
                 }
-            }
             
-            // convert to external encoding before hex conversion
-            try {
-                // An inspection of OutputStreamWriter reveals
-                // that write(char) always allocates a one element
-                // character array.  We can reuse our own.
-                charArray[0] = ch;
-                writer.write(charArray, 0, 1);
-                writer.flush();
-            } catch(IOException e) {
-                buf.reset();
-                continue;
-            }
+		// convert to external encoding before hex conversion
+		try {
+		    // An inspection of OutputStreamWriter reveals
+		    // that write(char) always allocates a one element
+		    // character array.  We can reuse our own.
+		    charArray[0] = ch;
+		    writer.write(charArray, 0, 1);
+		    writer.flush();
+		} catch(IOException e) {
+		    buf.reset();
+		    continue;
+		}
             
-            byte[] ba = buf.toByteArray();
-            for (int j = 0; j < ba.length; j++) {
-                writeURIDoubleHex(out, ba[j] + 256);
+		byte[] ba = buf.toByteArray();
+		for (int j = 0; j < ba.length; j++) {
+		    writeURIDoubleHex(out, ba[j] + 256);
+		}
+		
+		buf.reset();
             }
-            
-            buf.reset();
         }
     }
     

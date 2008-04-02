@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.61 2003/10/26 04:09:42 craigmcc Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.62 2003/10/28 21:00:29 eburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import com.sun.faces.util.Util;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import javax.faces.FactoryFinder;
@@ -25,6 +26,7 @@ import javax.faces.component.ConvertibleValueHolder;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIParameter;
 import javax.faces.component.NamingContainer;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
@@ -390,5 +392,47 @@ public abstract class HtmlBasicRenderer extends Renderer {
       public String convertClientId(FacesContext context, String clientId) {          
           return clientId;
       }
+
+    protected Param[] getParamList(FacesContext context, UIComponent command) {
+        ArrayList parameterList = new ArrayList();
+
+	Iterator kids = command.getChildren().iterator();
+	while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+
+            if (kid instanceof UIParameter) {
+                UIParameter uiParam = (UIParameter) kid;
+                Param param = new Param(uiParam.getName(),
+                    ((String)uiParam.currentValue(context)));
+                parameterList.add(param);
+            }
+	}
+
+        return (Param[]) parameterList.toArray(new Param[parameterList.size()]);
+    }
+
+    //inner class to store parameter name and value pairs
+    protected class Param {
+
+        public Param(String name, String value) {
+            set(name, value);
+        }
+
+        private String name;
+        private String value;
+
+        public void set(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 
 } // end of class HtmlBasicRenderer

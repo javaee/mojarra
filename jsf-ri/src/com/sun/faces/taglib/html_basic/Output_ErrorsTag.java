@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.17 2003/10/21 17:00:40 jvisvanathan Exp $
+ * $Id: Output_ErrorsTag.java,v 1.18 2003/10/28 21:00:34 eburns Exp $
  */
 
 /*
@@ -93,7 +93,8 @@ public class Output_ErrorsTag extends BaseComponentTag {
     }
 
     /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
+    protected void evaluateExpressions() throws JspException {
+	super.evaluateExpressions();
         if (forValue_ != null) {
             forValue = Util.evaluateElExpression(forValue_, pageContext);
    	}

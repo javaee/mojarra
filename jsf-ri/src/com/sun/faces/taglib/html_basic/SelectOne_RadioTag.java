@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.34 2003/10/07 20:15:55 horwat Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.35 2003/10/28 21:00:35 eburns Exp $
  */
 
 /*
@@ -87,7 +87,8 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
     }
 
     /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
+    protected void evaluateExpressions() throws JspException {
+	super.evaluateExpressions();
         if (layout_ != null) {
             layout = Util.evaluateElExpression(layout_, pageContext);
         }

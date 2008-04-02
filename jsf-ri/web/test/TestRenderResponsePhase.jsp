@@ -158,6 +158,67 @@
 
 	<TD>
 
+	      <h:output_link value="test.html" id="output_link" styleClass="hyperlinkClass"><f:verbatim>output link text</f:verbatim></h:output_link>
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <h:output_link value="test.html"id="output_imageLink">
+                <h:graphic_image url="duke.gif"/>
+              </h:output_link>
+
+	</TD>
+
+        <TD> 
+            <h:graphic_image id="output_graphicImage" url="/duke.gif" ismap="true" usemap="#map1" /> 
+        </TD>
+
+      </TR>
+
+      <TR>
+        <TD>
+            <h:output_link value="test.html" id="output_commandLink" styleClass="hyperlinkClass"><f:verbatim>link text</f:verbatim>
+            </h:output_link>
+       </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            <h:output_link value="test.html" id="output_commandParamLink" styleClass="hyperlinkClass">
+              <f:verbatim>link text</f:verbatim>
+              <f:parameter id="hlParam7" name="name" value="horwat"/>
+              <f:parameter id="hlParam8" name="value" value="password"/>
+            </h:output_link>
+        </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            <h:output_link value="test.html" id="output_hrefLink"><f:verbatim><img src="duke.gif"></f:verbatim></h:output_link>
+        </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            <h:output_link value="test.html" id="output_hrefParamLink">
+              <h:graphic_image url="duke.gif"/>
+              <f:parameter id="hlParam5" name="name" value="horwat"/>
+              <f:parameter id="hlParam6" name="value" value="password"/>
+            </h:output_link>
+        </TD>
+      </TR>
+
+
+
+      <TR>
+
+	<TD>
+
 	      <h:output_text value="Output Text" />
               <h:output_text id="testvisible1" value="This should not be visible"
                                rendered="false" />

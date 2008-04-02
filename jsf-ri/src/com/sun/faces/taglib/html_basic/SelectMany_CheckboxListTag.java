@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_CheckboxListTag.java,v 1.14 2003/10/07 20:15:55 horwat Exp $
+ * $Id: SelectMany_CheckboxListTag.java,v 1.15 2003/10/28 21:00:35 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -91,7 +91,8 @@ public class SelectMany_CheckboxListTag extends BaseComponentTag
     }
     
     /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
+    protected void evaluateExpressions() throws JspException {
+	super.evaluateExpressions();
         if (layout_ != null) {
             layout = Util.evaluateElExpression(layout_, pageContext);
         }

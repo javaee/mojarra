@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GridTag.java,v 1.18 2003/10/09 20:02:23 jvisvanathan Exp $
+ * $Id: Panel_GridTag.java,v 1.19 2003/10/28 21:00:35 eburns Exp $
  */
 
 /*
@@ -164,7 +164,8 @@ public class Panel_GridTag extends BaseComponentTag {
     }    
 
     /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
+    protected void evaluateExpressions() throws JspException {
+	super.evaluateExpressions();
         if (columnClasses_ != null) {
             columnClasses = Util.evaluateElExpression(columnClasses_, pageContext);
    	}

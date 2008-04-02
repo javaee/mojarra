@@ -1148,13 +1148,6 @@ lass</description>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>imagekey</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
       <property-name>charset</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
@@ -1184,6 +1177,20 @@ lass</description>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>value</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>valueRef</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
