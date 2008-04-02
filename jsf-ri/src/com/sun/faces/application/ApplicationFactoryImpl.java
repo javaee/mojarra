@@ -1,0 +1,83 @@
+/*
+ * $Id: ApplicationFactoryImpl.java,v 1.1 2003/03/28 18:32:18 horwat Exp $
+ */
+
+/*
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+package com.sun.faces.application;
+
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Application;
+
+import com.sun.faces.util.Util;
+
+/**
+ * <p><strong>ApplicationFactory</strong> is a factory object that creates
+ * (if needed) and returns {@link Application} instances.</p>
+ *
+ * <p>There must be one {@link ApplicationFactory} instance per web
+ * application that is utilizing JavaServer Faces.  This instance can be
+ * acquired, in a portable manner, by calling:</p>
+ * <pre>
+ *   ApplicationFactory factory = (ApplicationFactory)
+ *    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+ * </pre>
+ */
+public class ApplicationFactoryImpl extends ApplicationFactory {
+
+//
+// Protected Constants
+//
+
+//
+// Class Variables
+//
+
+// Attribute Instance Variables
+
+    private Application application;
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers
+//
+
+
+    /*
+     * Constructor
+     */
+    public ApplicationFactoryImpl() {
+        super();
+        application = null;
+    }
+
+    /**
+     * <p>Create (if needed) and return an {@link Application} instance
+     * for this web application.</p>
+     */
+    public Application getApplication() {
+
+        if (application == null) {
+            application = new ApplicationImpl();
+        }
+        return application;
+    }
+
+    /**
+     * <p>Replace the {@link Application} instance that will be
+     * returned for this web application.</p>
+     *
+     * @param application The replacement {@link Application} instance
+     */
+    public void setApplication(Application application) {
+        if (application == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
+        this.application = application;
+    }
+}

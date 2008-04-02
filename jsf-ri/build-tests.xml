@@ -316,7 +316,9 @@
             <test name="com.sun.faces.el.TestVariableResolverImpl"/>
             <test name="com.sun.faces.el.TestPropertyResolverImpl"/>
             <test name="com.sun.faces.context.TestExternalContextImpl"/>
+            <test name="com.sun.faces.application.TestApplicationFactoryImpl"/>
 <!--
+            <test name="com.sun.faces.application.TestApplicationImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.util.TestUtil"/>

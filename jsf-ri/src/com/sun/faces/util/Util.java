@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.50 2003/03/26 21:37:15 horwat Exp $
+ * $Id: Util.java,v 1.51 2003/03/28 18:32:23 horwat Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.50 2003/03/26 21:37:15 horwat Exp $
+ * @version $Id: Util.java,v 1.51 2003/03/28 18:32:23 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -379,6 +379,7 @@ private Util()
 	LifecycleFactory lifecycleFactory = null;
 	TreeFactory treeFactory = null;
 	FacesContextFactory facesContextFactory = null;
+	ApplicationFactory applicationFactory = null;
 	RenderKit defaultRenderKit = null;
 
 	renderKitFactory = (RenderKitFactory)
@@ -396,6 +397,10 @@ private Util()
 	facesContextFactory = (FacesContextFactory)
 	    FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
 	Assert.assert_it(null != facesContextFactory);
+
+	applicationFactory = (ApplicationFactory)
+	    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+	Assert.assert_it(null != applicationFactory);
 
 	defaultRenderKit = 
 	    renderKitFactory.getRenderKit(RIConstants.DEFAULT_RENDER_KIT);
