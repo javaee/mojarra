@@ -131,7 +131,7 @@
         <list url="${url}" username="${username}" password="${password}"/>
     </target>
 
-    <target name="install" description="Install web application" depends="build">
+    <target name="install" unless="no.installer" description="Install web application" depends="build">
         <install url="${url}" username="${username}" password="${password}"
             path="${context.path}" war="file://${demo.path}/"/>
     </target>
@@ -141,12 +141,12 @@
             path="${context.path}"/>
     </target>
 
-    <target name="remove" description="Remove web application">
+    <target name="remove" unless="no.installer" description="Remove web application">
         <remove url="${url}" username="${username}" password="${password}"
             path="${context.path}"/>
     </target>
     
-    <target name="safe.remove"
+    <target name="safe.remove" unless="no.installer"
         description="Remove demo webapp, don't fail on error">
         <exec executable="ant.bat" os="Windows 2000" failonerror="false">
             <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} -Dcontext.path=${context.path} remove"/>

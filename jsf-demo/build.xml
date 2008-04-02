@@ -193,7 +193,7 @@
     </antcall>
   </target>
 
-  <target name="test" depends="main">
+  <target name="test" depends="main,run.test">
       <echo>
           Before running this target you must:
             
@@ -201,6 +201,8 @@
              2. Run 'ant clean.wspack'
              3. Start Tomcat/JWSDP
      </echo> 
+  </target>
+  <target name="run.test">
     <!--<ant target="test" antfile="cardemo/crashtest.xml" inheritAll="false"/>-->
       <ant target="test" antfile="build-tests.xml"/>
   </target>
