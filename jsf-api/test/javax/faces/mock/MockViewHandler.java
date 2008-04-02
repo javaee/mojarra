@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.25 2004/02/26 20:31:55 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.26 2004/04/07 17:40:25 rkitain Exp $
  */
 
 /*
@@ -32,6 +32,7 @@ public class MockViewHandler extends ViewHandler {
     public UIViewRoot createView(FacesContext context, String viewId) {
 	UIViewRoot result = new UIViewRoot();
 	result.setViewId(viewId);
+        result.setRenderKitId(calculateRenderKitId(context));
 	return result;
     }
 
