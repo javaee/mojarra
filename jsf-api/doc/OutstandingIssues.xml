@@ -1721,4 +1721,36 @@
 </issue>
 
 
+<issue>
+  <id>VerbatimOutput-68</id>
+  <originator>EG</originator>
+  <summary>Need a mechansim for including raw HTML (or whatever)</summary>
+  <description>
+    <p>Although JSF components will normally generate the HTML (or other)
+    markup language to render themselves, there are cases where we'd like
+    to be able to output raw markup directly.  In a JSP page, you can do
+    that using embedded template text, but there needs to be a mechanism
+    for this purpose at the component API level.  Options include:</p>
+    <ul>
+    <li>New <code>UIVerbatim</code> component that specifically contains
+        markup, but is otherwise treated similarly to <code>UIOutput</code>.
+        </li>
+    <li>New <code>Verbatim</code> Renderer that treats any
+        <code>UIOutput</code> component as the source of raw markup,
+        and just renders it literally.  <em>(Craig:  I'm not sure that
+        this is functionally any different than the <code>Text</code>
+        renderer processing an UIOutput component, unless we decide to
+        make that one do some sort of filtering for characters sensitive
+        to HTML.)</em></li>
+    </ul>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>08 Oct 2002</status-date>
+  <priority>1</priority>
+  <effort>Small</effort>
+</issue>
+
+
 </issues>
