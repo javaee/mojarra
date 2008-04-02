@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.18 2003/08/22 21:02:58 rkitain Exp $
+ * $Id: ErrorsRenderer.java,v 1.19 2003/08/25 20:40:12 rlubke Exp $
  */
 
 /*
@@ -12,15 +12,19 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 
 import java.util.Iterator;
 
 import javax.faces.application.Message;
 import javax.faces.component.UIComponent;
+import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import org.mozilla.util.Assert;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 
@@ -30,7 +34,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsRenderer.java,v 1.18 2003/08/22 21:02:58 rkitain Exp $
+ * @version $Id: ErrorsRenderer.java,v 1.19 2003/08/25 20:40:12 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -39,8 +43,9 @@ import java.io.IOException;
 
 public class ErrorsRenderer extends HtmlBasicRenderer {
     //
-    // Protected Constants
+    // Prviate/Protected Constants
     //
+    private static final Log log = LogFactory.getLog(ErrorsRenderer.class);
 
     //
     // Class Variables
@@ -118,18 +123,38 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
         // 
         String forComponent = (String)component.getAttribute("for");
         if (null != forComponent) {
+          
             if (forComponent.length() == 0) {
                 messageIter = context.getMessages(null);
             } else {
                 UIComponent root = context.getViewRoot();
                 Assert.assert_it(null != root);
                 UIComponent comp = null;
+                UIComponent currentParent = component;
                 try {
-                    comp = root.findComponent(forComponent);
+                    // Scan recursively up the tree for the component 
+                    // identified with forComponent
+                    while (currentParent != null) {                       
+                        comp = currentParent.findComponent(forComponent);
+                        if (comp != null)
+                            break;
+                        currentParent = currentParent.getParent();
+                    }                   
+                    // PENDING (rluble): Recurse down the tree as well if we
+                    // cant find anything here or above.
                 } catch (Throwable t) {
                     Object[] params = {forComponent};
                     throw new RuntimeException(Util.getExceptionMessage(
                         Util.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+                }
+                // log a message if we were unable to find the specified component
+                // (probably a misconfigured 'for' attribute
+                if (comp == null) {
+                    if (log.isWarnEnabled()) {
+                        log.warn(Util.getExceptionMessage(
+                               Util.COMPONENT_NOT_FOUND_IN_VIEW_WARNING, 
+                               new Object[]{ forComponent }));
+                    }
                 }
                 messageIter = context.getMessages(comp);
             }

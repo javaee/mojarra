@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.79 2003/08/25 05:39:48 eburns Exp $
+ * $Id: Util.java,v 1.80 2003/08/25 20:40:13 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.79 2003/08/25 05:39:48 eburns Exp $
+ * @version $Id: Util.java,v 1.80 2003/08/25 20:40:13 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -262,6 +262,9 @@ public class Util extends Object
 
    public static final String CONTENT_TYPE_ERROR_MESSAGE_ID =
          "com.sun.faces.CONTENT_TYPE_ERROR";
+    
+   public static final String COMPONENT_NOT_FOUND_IN_VIEW_WARNING =
+         "com.sun.faces.COMPONENT_NOT_FOUND_IN_VIEW_WARNING";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

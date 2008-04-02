@@ -833,6 +833,15 @@
       <summary xml:lang="es">Unrecognized Content Type.</summary>
       <summary xml:lang="fr">Unrecognized Content Type.</summary>
     </message>
+      
+    <message>
+      <message-id>com.sun.faces.COMPONENT_NOT_FOUND_IN_VIEW_WARNING</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Unable to find component with ID ''{0}'' in view.</summary>
+      <summary xml:lang="de">Unable to find component with ID ''{0}'' in view.</summary>
+      <summary xml:lang="es">Unable to find component with ID ''{0}'' in view.</summary>
+      <summary xml:lang="fr">Unable to find component with ID ''{0}'' in view.</summary>
+    </message>
   </message-resources>
 
   <!-- Standard Validators -->
