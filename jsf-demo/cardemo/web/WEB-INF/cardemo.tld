@@ -18,7 +18,7 @@
   <short-name>JavaServerFaces Framework Tag Library</short-name>
   <uri>cardemotaglibrary_1.1</uri>
   <description>
-    This tag library contains tags for representing an imagemap.
+    This tag library contains tags used by the CarDemo application.
   </description>
 
   <!-- ===================== ImageMap tags ====================== -->
