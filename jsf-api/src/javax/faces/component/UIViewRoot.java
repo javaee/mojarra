@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.31 2004/11/18 14:11:04 edburns Exp $
+ * $Id: UIViewRoot.java,v 1.32 2004/11/18 15:07:37 edburns Exp $
  */
 
 /*
@@ -243,7 +243,7 @@ public class UIViewRoot extends UIComponentBase {
      * <p>Allow an arbitrary method to be called for the "beforePhase"
      * event as the UIViewRoot runs through its lifecycle.  This method
      * will be called for all phases except {@link
-     * PhaseId.RENDER_RESPONSE}.  Unlike a true {@link PhaseListener},
+     * PhaseId#RESTORE_VIEW}.  Unlike a true {@link PhaseListener},
      * this approach doesn't allow for only receiving {@link
      * PhaseEvent}s for a given phase.</p>
      *
@@ -273,7 +273,7 @@ public class UIViewRoot extends UIComponentBase {
      * <p>Allow an arbitrary method to be called for the "afterPhase"
      * event as the UIViewRoot runs through its lifecycle.  This method
      * will be called for all phases except {@link
-     * PhaseId.RENDER_RESPONSE}.  Unlike a true {@link PhaseListener},
+     * PhaseId#RESTORE_VIEW}.  Unlike a true {@link PhaseListener},
      * this approach doesn't allow for only receiving {@link
      * PhaseEvent}s for a given phase.</p>
      *
