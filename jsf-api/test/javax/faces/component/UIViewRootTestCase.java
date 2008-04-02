@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.7 2003/10/20 21:42:23 jvisvanathan Exp $
+ * $Id: UIViewRootTestCase.java,v 1.8 2003/11/10 21:45:50 eburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.event.PhaseId;
+import javax.faces.el.ValueBinding;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -112,6 +113,17 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         checkEventQueueing(PhaseId.INVOKE_APPLICATION);
         checkEventQueueing(PhaseId.ANY_PHASE);
 
+    }
+
+    public void testLocaleFromVB() throws Exception {
+	UIViewRoot root = new UIViewRoot();
+	ValueBinding binding = application.getValueBinding("locale");
+	request.setAttribute("locale", Locale.CHINESE);
+	assertEquals(Locale.getDefault(), root.getLocale());
+	root.setValueBinding("locale", binding);
+	assertEquals(Locale.CHINESE, root.getLocale());
+	root.setLocale(Locale.CANADA_FRENCH);
+	assertEquals(Locale.CANADA_FRENCH, root.getLocale());
     }
 
 

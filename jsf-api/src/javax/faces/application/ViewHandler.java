@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.23 2003/10/24 17:55:27 eburns Exp $
+ * $Id: ViewHandler.java,v 1.24 2003/11/10 21:45:48 eburns Exp $
  */
 
 /*
@@ -186,6 +186,10 @@ public interface ViewHandler {
      * <p>PENDING(edburns): do we formalize that the renderkitId should
      * be set into the ViewRoot here?</p>
      *
+     * <p>The implementation must call {@link #calculateLocale} and
+     * store the result as the <code>Locale</code> of the newly created
+     * <code>UIViewRoot</code></p>
+     *
      * <p>In all cases, the returned <code>UIViewRoot</code> must be set
      * as the viewRoot of the {@link FacesContext}.</p>
      *
@@ -255,16 +259,19 @@ public interface ViewHandler {
     public String getViewIdPath(FacesContext context, String viewId);
 
     /** 
-     * Returns a locale to use for the client. Attempts to find a
+     * <p>Returns a locale to use for the client. Attempts to find a
      * match based on the HTTP header Accept-language as retrieved by
      * ExternalContext.getLocales() and Application.getSupportedLocales(),
      * using the matching algorithm as described in JSTL 8.3.2. If no
      * match is found, returns Application.getDefaultLocale unless null,
-     * otherwise Locale.getDefault().
+     * otherwise Locale.getDefault().</p>
      * 
-     * This method is invoked by the default view handler on the first
+     * <p>This method is invoked by the default view handler on the first
      * incoming JSF request. On any subsequent requests, the default view
-     * handler uses the locale from the incoming UIViewRoot.
+     * handler uses the locale from the incoming UIViewRoot.</p>
+     *
+     * <p>The <code>ViewHandler</code> must call this method from the
+     * {@link #createView} method.</p>
      *
      * @param context {@link FacesContext} for the current request
      * 

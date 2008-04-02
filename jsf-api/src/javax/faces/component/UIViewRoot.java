@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.13 2003/11/06 15:39:45 eburns Exp $
+ * $Id: UIViewRoot.java,v 1.14 2003/11/10 21:45:49 eburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+import javax.faces.el.ValueBinding;
 
 
 /**
@@ -281,10 +282,20 @@ public class UIViewRoot extends UIComponentBase {
      *  VM.
      */
     public Locale getLocale() {
-        if (locale == null ) {
-            return Locale.getDefault();
-        }
-        return locale;
+	Locale result = null;
+	if (null != locale) {
+	    result = this.locale;
+	}
+	else {
+	    ValueBinding vb = getValueBinding("locale");
+	    if (vb != null) {
+		result = (Locale) vb.getValue(getFacesContext());
+	    } 
+	    else {
+		result = Locale.getDefault();
+	    }
+	}
+	return result;
     }
 
 
