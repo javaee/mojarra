@@ -130,6 +130,8 @@
                 </h:panelGrid>
             </h:panelGroup>
         </h:panelGrid>
+        
+        <jsp:include page="forEach03Include.jsp" />       
 
         <h:commandButton id="submit" value="Submit" />
     </h:form>

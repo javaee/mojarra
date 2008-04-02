@@ -29,19 +29,19 @@
   
     Array[0]: 
     This component has no ID <br>
-    <input id="j_id_id15j_id_1" type="text" name="j_id_id15j_id_1" value="This component has no ID " /><br>
+    <input id="j_id_id15i0" type="text" name="j_id_id15i0" value="This component has no ID " /><br>
   
     Array[1]: 
     This component has no ID <br>
-    <input id="j_id_id15j_id_2" type="text" name="j_id_id15j_id_2" value="This component has no ID " /><br>
+    <input id="j_id_id15i0j_id_1" type="text" name="j_id_id15i0j_id_1" value="This component has no ID " /><br>
   
     Array[2]: 
     This component has no ID <br>
-    <input id="j_id_id15j_id_3" type="text" name="j_id_id15j_id_3" value="This component has no ID " /><br>
+    <input id="j_id_id15i0j_id_2" type="text" name="j_id_id15i0j_id_2" value="This component has no ID " /><br>
   
     Array[3]: 
     This component has no ID <br>
-    <input id="j_id_id15j_id_4" type="text" name="j_id_id15j_id_4" value="This component has no ID " /><br>
+    <input id="j_id_id15i0j_id_3" type="text" name="j_id_id15i0j_id_3" value="This component has no ID " /><br>
   
 
 </p>

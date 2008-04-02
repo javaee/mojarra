@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.25 2006/08/25 09:50:18 tony_robertson Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.26 2006/10/03 21:18:58 rlubke Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.jsp.JspException;
@@ -201,6 +202,13 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
     private static final String PREVIOUS_JSP_ID_SET = 
 	"javax.faces.webapp.PREVIOUS_JSP_ID_SET";
+
+    /**
+     * Used to store information about dynamic include
+     * sources.
+     */
+    private static final String JAVAX_FACES_INCLUDE_LIST =
+          "javax.faces.webapp.INCLUDE_LIST";
     
     // ------------------------------------------------------ Instance Variables
     /**
@@ -1394,12 +1402,12 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         if (null == facesJspId) {
             if (null != jspId) {
                 facesJspId = UNIQUE_ID_PREFIX + jspId;
-                // if this tag happens to be nested within <c:forEach> or we're
-                // the target of an include, jspId will be the same for each
-                //  iteration. So it is transformed into a unique "id" by 
-                // appending a counter which gets stored in request scope
-                // with jspId as the key for use during the next iteration.  
-                if (isDuplicateId(facesJspId) || isIncludedOrForwarded()) {
+                // if this tag happens to be nested within <c:forEach>,
+                //  jspId will be the same for each iteration. So it is 
+                // transformed into a unique "id" by appending a counter which 
+                // gets stored in request scope with jspId as the key for use 
+                // during the next iteration.  
+                if (isDuplicateId(facesJspId)) {
                     facesJspId = generateIncrementedId(facesJspId);
                 } 
             } else {
@@ -1534,15 +1542,45 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <p>Defined on {@link JspIdConsumer}.  This method is called by
      * the container before {@link #doStartTag}.  The argument is
      * guaranteed to be unique within the page.</p>
+     * 
+     * <p>IMPLEMENTATION NOTE:  This method will detect where we
+     * are in an include and assign a unique ID for each include
+     * in a particular 'logical page'.  This allows us to avoid
+     * possible duplicate ID situations for included pages that
+     * have components without explicit IDs.</p>
      *
      * @param id the container generated id for this tag, guaranteed to
      * be unique within the page.
      */
 
     public void setJspId(String id) {
-	facesJspId = null;
-        updatePreviousJspIdAndIteratorStatus(id);
-	jspId = id;
+        if (isIncluded()) {
+            StringBuilder builder = new StringBuilder(id.length() + 3);
+            builder.append(id);
+            ExternalContext extContext = context.getExternalContext();
+            Map<String,Object> reqMap = extContext.getRequestMap();
+            List<String> includeList = 
+                  TypedCollections.dynamicallyCastList(
+                        ((List) reqMap.get(JAVAX_FACES_INCLUDE_LIST)), 
+                        String.class);
+            if (includeList == null) {
+                includeList = new IdentityArrayList<String>(6);
+                reqMap.put(JAVAX_FACES_INCLUDE_LIST, includeList);
+            }            
+            String key = (String) reqMap.get("javax.servlet.include.request_uri");
+            int idx = includeList.indexOf(key);
+            if (idx != -1) {
+                builder.append('i').append(idx);               
+            } else {
+                includeList.add(key);
+                builder.append('i').append(includeList.size() - 1);             
+            }
+            jspId = builder.toString();
+        } else {
+            jspId = id;
+        }
+        facesJspId = null;
+        updatePreviousJspIdAndIteratorStatus(jspId);        
     }
 
     /**
@@ -1574,7 +1612,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         }
         assert(null != previousJspIdSet);
         // detect the iterator case
-        if (previousJspIdSet.contains(id) && !isIncludedOrForwarded()) {
+        if (previousJspIdSet.contains(id)) {
             if (log.isLoggable(Level.FINEST)) {
                 log.log(Level.FINEST, "Id " + id + 
                         " is nested within an iterating tag.");
@@ -1587,7 +1625,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         }
     }
     
-    private boolean isIncludedOrForwarded() {
+    private boolean isIncluded() {
         return (getFacesContext().getExternalContext().getRequestMap().
                 containsKey("javax.servlet.include.request_uri"));
     }
@@ -1794,4 +1832,39 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         return null;
     }
 
+    
+    // ----------------------------------------------------------- Inner Classes
+    
+    
+    private static class IdentityArrayList<E> extends ArrayList<E> {
+        
+        IdentityArrayList() {
+            super(16);
+        }
+        
+        IdentityArrayList(int initialcapacity) {
+            super(initialcapacity);
+        }
+
+
+        /**
+         * Searches for the first occurence of the given argument, testing
+         * for identity equality using the <tt>==</tt>.
+         *
+         * @param elem an object.
+         *
+         * @return the index of the first occurrence of the argument in this
+         *         list; returns <tt>-1</tt> if the object is not found.        
+         */
+        @Override public int indexOf(Object elem) {
+            int idx = 0;
+            for (Object o : this) {
+                if (o == elem) {
+                    return idx;
+                }
+                idx++;
+            }
+            return -1;
+        }
+    }
 }

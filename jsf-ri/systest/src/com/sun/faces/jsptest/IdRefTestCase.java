@@ -147,5 +147,55 @@ public class IdRefTestCase extends AbstractTestCase {
         assertTrue("All cleared inputs have messages", messageMap.keySet()
                 .containsAll(Arrays.asList(testIds)));
     }
+    
+    public void testIncludedLoopIdRefs() throws Exception {
+        HtmlPage page = getPage("/faces/forEach03.jsp");
+        Map inputTagsById = mapElementsByAttribute(page.getDocumentElement(),
+                "input", "id", "type", "text");
+        String[] testIds = {
+              "myform:inputId11",
+              "myform:inputId11j_id_1",
+              "myform:inputId11j_id_2"
+        };
+        for (int i = 0; i < testIds.length; i++) {
+            HtmlTextInput input = (HtmlTextInput) inputTagsById.get(testIds[i]);
+            input.setValueAttribute("");
+        }
+        List list = getAllElementsOfGivenClass(page, null,
+                HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+        Map messageMap = mapMessagesById(page.getDocumentElement());
+        assertEquals("One 'value required' message for each cleared input",
+                testIds.length, messageMap.size());
+        assertTrue("Only cleared inputs have messages", Arrays.asList(testIds)
+                .containsAll(messageMap.keySet()));
+        assertTrue("All cleared inputs have messages", messageMap.keySet()
+                .containsAll(Arrays.asList(testIds)));
+    }
+    
+    public void testIncludeNoLoopIdRef() throws Exception {
+         HtmlPage page = getPage("/faces/forEach03.jsp");
+        Map inputTagsById = mapElementsByAttribute(page.getDocumentElement(),
+                "input", "id", "type", "text");
+        String[] testIds = {
+              "myform:Short11",              
+        };
+        for (int i = 0; i < testIds.length; i++) {
+            HtmlTextInput input = (HtmlTextInput) inputTagsById.get(testIds[i]);
+            input.setValueAttribute("");
+        }
+         List list = getAllElementsOfGivenClass(page, null,
+                HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+        Map messageMap = mapMessagesById(page.getDocumentElement());
+        assertEquals("One 'value required' message for each cleared input",
+                testIds.length, messageMap.size());
+        assertTrue("Only cleared inputs have messages", Arrays.asList(testIds)
+                .containsAll(messageMap.keySet()));
+        assertTrue("All cleared inputs have messages", messageMap.keySet()
+                .containsAll(Arrays.asList(testIds)));
+    }
 
 }
