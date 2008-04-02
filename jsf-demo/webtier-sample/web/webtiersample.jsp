@@ -115,8 +115,5 @@
                 </fieldset>
             </h:form>
         </f:view>
-    
-        <%@ include file="demo_info.html"%>
-  
     </body>
 </html>
