@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.5 2003/05/01 02:03:41 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.6 2003/05/01 02:08:46 rkitain Exp $
  */
 
 /*
@@ -301,6 +301,7 @@ public class ConfigParser {
         digester.addCallMethod(prefix + "/managed-bean-name", "setManagedBeanId", 0);
         digester.addCallMethod(prefix + "/managed-bean-class", "setManagedBeanClass", 0);
         digester.addCallMethod(prefix + "/managed-bean-scope", "setManagedBeanScope", 0);
+        digester.addCallMethod(prefix + "/managed-bean-create", "setManagedBeanCreate", 0);
         configureRulesManagedBeanProperty(digester, prefix + "/managed-property");
     }
 
