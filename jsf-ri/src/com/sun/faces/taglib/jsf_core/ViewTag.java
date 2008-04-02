@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.10 2003/10/17 01:59:17 jvisvanathan Exp $
+ * $Id: ViewTag.java,v 1.11 2003/10/22 04:43:35 eburns Exp $
  */
 
 /*
@@ -15,11 +15,14 @@ import javax.servlet.ServletRequest;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.application.StateManager;
+import javax.faces.application.ViewHandler;
 import javax.faces.webapp.UIComponentBodyTag;
 import javax.faces.application.StateManager.SerializedView;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.BodyContent;
@@ -41,7 +44,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.10 2003/10/17 01:59:17 jvisvanathan Exp $
+ * @version $Id: ViewTag.java,v 1.11 2003/10/22 04:43:35 eburns Exp $
  * 
  *
  */
@@ -126,9 +129,14 @@ public class ViewTag extends UIComponentBodyTag
 	
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Assert.assert_it(facesContext != null);
+
+	// this must happen after our overriderProperties executes.
+	((ServletResponse)facesContext.getExternalContext().getResponse()).
+	    setLocale(facesContext.getViewRoot().getLocale());
+
 	ResponseWriter writer = facesContext.getResponseWriter();
         Assert.assert_it(writer != null);
-        
+	
 	try {
             writer.startDocument();
         } catch (IOException e) {
@@ -207,14 +215,28 @@ public class ViewTag extends UIComponentBodyTag
     
     public int doEndTag() throws JspException {
         int rc = super.doEndTag();
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ResponseWriter writer = facesContext.getResponseWriter();
+	// PENDING(): remove these getCurrentInstance calls, since we
+	// have a facesContext ivar.
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null);
         try {
             writer.endDocument();
         } catch (IOException e) {
             throw new JspException(e.getMessage());
         }
+	
+	// store the response character encoding
+	HttpSession session = null;
+
+	if (null != 
+	    (session = 
+	     (HttpSession)context.getExternalContext().getSession(false))){
+	    ServletResponse response = (ServletResponse)
+		context.getExternalContext().getResponse();
+	    session.setAttribute(ViewHandler.CHARACTER_ENCODING_KEY,
+				 response.getCharacterEncoding());
+	}
         return rc;
     }
 

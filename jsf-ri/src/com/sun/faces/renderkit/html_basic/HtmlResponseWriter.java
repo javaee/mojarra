@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.8 2003/09/09 20:44:21 rkitain Exp $
+ * $Id: HtmlResponseWriter.java,v 1.9 2003/10/22 04:43:34 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // Content Type for this Writer.
     //
-    private String contentType = null;
+    private String contentType = "text/html";
 
     // Character encoding of that Writer - this may be null
     // if the encoding isn't known.
@@ -69,7 +69,9 @@ public class HtmlResponseWriter extends ResponseWriter {
     public HtmlResponseWriter(Writer writer, String contentType, String encoding) 
         throws FacesException {
         this.writer = writer;
-	this.contentType = contentType;
+	if (null != contentType) {
+	    this.contentType = contentType;
+	}
 	this.encoding = encoding;
 
 	// Check the character encoding

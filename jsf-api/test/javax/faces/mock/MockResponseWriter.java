@@ -1,5 +1,5 @@
 /*
- * $Id: MockResponseWriter.java,v 1.3 2003/08/18 22:45:27 eburns Exp $
+ * $Id: MockResponseWriter.java,v 1.4 2003/10/22 04:43:06 eburns Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ public class MockResponseWriter extends ResponseWriter {
     // --------------------------------------------------- ResponseWrter Methods
 
     public String getContentType() {
-        throw new UnsupportedOperationException();
+        return "text/html";
     }
 
     public String getCharacterEncoding() {

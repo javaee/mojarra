@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.21 2003/10/17 20:49:37 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.22 2003/10/22 04:43:33 eburns Exp $ 
  */ 
 
 
@@ -18,6 +18,8 @@ import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.mozilla.util.Assert;
+
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.StateManager;
@@ -26,6 +28,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,7 +42,7 @@ import java.util.Enumeration;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.21 2003/10/17 20:49:37 rlubke Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.22 2003/10/22 04:43:33 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -181,6 +184,45 @@ public class ViewHandlerImpl extends Object
             context.renderResponse();
         }
         viewRoot.setViewId(viewId);
+
+	// set the request character encoding 
+	HttpSession session = null;
+	HttpServletRequest request = 
+	    (HttpServletRequest) extContext.getRequest();
+	String 
+	    contentType = null,
+	    charEnc = null;
+
+	// look for a charset in the Content-Type header first.
+	if (null != (contentType = request.getHeader("Content-Type"))) {
+	    // see if this header had a charset
+	    String charsetStr = "charset=";
+	    int 
+		len = charsetStr.length(),
+		i = 0;
+	    
+	    // if we have a charset in this Content-Type header AND it
+	    // has a non-zero length.
+	    if (-1 != (i = contentType.indexOf(charsetStr)) &&
+		(i + len < contentType.length())) {
+		charEnc = contentType.substring(i + len);
+	    }
+	}
+	// failing that, look in the session for a previously saved one
+	if (null == charEnc) {
+	    if (null != (session=(HttpSession)extContext.getSession(false))) {
+		charEnc =(String) session.getAttribute(CHARACTER_ENCODING_KEY);
+	    }
+	}
+	if (null != charEnc) {
+	    try {
+		request.setCharacterEncoding(charEnc);
+	    }
+	    catch (java.io.UnsupportedEncodingException uee) {
+		throw new FacesException(uee);
+	    }
+	}
+	
         return viewRoot;
     }
 

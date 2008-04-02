@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.19 2003/10/20 17:20:23 rlubke Exp $
+ * $Id: ViewHandler.java,v 1.20 2003/10/22 04:43:03 eburns Exp $
  */
 
 /*
@@ -37,8 +37,9 @@ import javax.faces.component.UIViewRoot;
  * <p>A default implementation of <code>ViewHandler</code> must be
  * provided by the JSF implementation, which will be utilized unless
  * <code>setViewHandler()</code> is called to establish a different one.
- * During <em>Render Response</em>, this default instance will treat the
- * <code>viewId</code> property of the response view as a
+ * This default implementation is designed to render JavaServer Faces
+ * JSP pages.  During <em>Render Response</em>, this default instance
+ * will treat the <code>viewId</code> property of the response view as a
  * context-relative path (after prefixing it with a slash), and will
  * perform a {@link javax.faces.context.ExternalContext#dispatchMessage}
  * call to that path.</p>
@@ -48,6 +49,15 @@ import javax.faces.component.UIViewRoot;
  */
 
 public interface ViewHandler {
+
+    /**
+     * <p>The key, in the session's attribute set, under which the
+     * response character encoding is stored and retrieved.</p>
+     *
+     */
+    public static String CHARACTER_ENCODING_KEY = 
+	"javax.faces.request.charset";
+
 
     /**
      * <p>Allow the web application to define an alternate suffix for
@@ -79,25 +89,38 @@ public interface ViewHandler {
      * javax.faces.context.ResponseStream} instances for the current
      * request.</p>
      *
-     * <p>The default implementation of <code>renderView</code> must
-     * use <code>HttpServletRequest.getServletPath()</code> in 
-     * conjunction with the one or more <code>url-pattern</code> mappings 
-     * obtained from the deployment descriptor for this web application to 
-     * determine which mapping was used to invoke the 
-     * {@link javax.faces.webapp.FacesServlet} If a prefix mapping was used, 
-     * this method simply calls 
-     * {@link javax.faces.context.ExternalContext#dispatchMessage} passing the
+     * <p>The default implementation of <code>renderView</code> must use
+     * <code>HttpServletRequest.getServletPath()</code> in conjunction
+     * with the one or more <code>url-pattern</code> mappings obtained
+     * from the deployment descriptor for this web application to
+     * determine which mapping was used to invoke the {@link
+     * javax.faces.webapp.FacesServlet} If a prefix mapping was used,
+     * this method simply calls {@link
+     * javax.faces.context.ExternalContext#dispatchMessage} passing the
      * <code>viewId</code> of the argument <code>viewToRender</code>.
-     * If a suffix mapping was used, the default implementation must check
-     * the servlet context init parameter named by the value of the
-     * constant {@link #DEFAULT_SUFFIX_PARAM_NAME}.  If this parameter
-     * is not defined, use {@link #DEFAULT_SUFFIX} as the suffix.  If
-     * the <code>viewId</code> of the argument <code>viewToRender</code>
-     * has a suffix, replace it with the new suffix.  Otherwise append
-     * the new suffix.  Then call {@link
+     * If a suffix mapping was used, the default implementation must
+     * check the servlet context init parameter named by the value of
+     * the constant {@link #DEFAULT_SUFFIX_PARAM_NAME}.  If this
+     * parameter is not defined, use {@link #DEFAULT_SUFFIX} as the
+     * suffix.  If the <code>viewId</code> of the argument
+     * <code>viewToRender</code> has a suffix, replace it with the new
+     * suffix.  Otherwise append the new suffix.  Then call {@link
      * javax.faces.context.ExternalContext#dispatchMessage} on the
      * result.</p>
-     * 
+     *
+     * <p>The default implementation of <code>ViewHandler</code>, being
+     * designed for Faces pages written as JSPs, must cause the response
+     * <code>Locale</code> to be set to that of the {@link UIViewRoot}
+     * during the <code>doStartTag()</code> method for the
+     * <code>&lt;f:view&gt;</code> tag.  The default implementation must
+     * also call <code>getCharacterEncoding()</code> on the
+     * <code>ServletResponse</code> and store the result in the session
+     * (if one is present already) under the key with the name equal to
+     * the default value of the constant {@link
+     * #CHARACTER_ENCODING_KEY}.  This must happen during the
+     * <code>doEndTag()</code> method for the
+     * <code>&lt;f:view&gt;</code> tag.</p>
+     *
      * @param context {@link FacesContext} for the current request
      *
      * @param viewToRender the view to render
@@ -127,6 +150,17 @@ public interface ViewHandler {
      * call <code>FacesContext.renderResponse()</code> to cause the
      * intervening phases between <em>Restore View</em> and <em>Render
      * Response</em> to be skipped.<p>
+     *
+     * <p>Before returning the {@link UIViewRoot}, the default
+     * implementation must attempt to set the character encoding for
+     * this request.  First, the <code>Content-Type</code> header is
+     * consulted.  If a character encoding can be found there, set it as
+     * the request character encoding.  Otherwise, look in the session
+     * (if present) under the key given by the value of {@link
+     * #CHARACTER_ENCODING_KEY}.  If there is a value, this must have
+     * been set by a previous run through the
+     * <code>&lt;f:view&gt;</code> tag.  Set this value as the request
+     * character encoding.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param viewId the view identifier for the current request

@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.10 2003/08/28 23:12:24 craigmcc Exp $
+ * $Id: ResponseWriter.java,v 1.11 2003/10/22 04:43:04 eburns Exp $
  */
 
 /*
@@ -31,8 +31,9 @@ public abstract class ResponseWriter extends Writer {
 
 
     /**
-     * <p>Return the content type (such as "text/html") for this
-     * {@link ResponseWriter}.</p>
+     * <p>Return the content type (such as "text/html") for this {@link
+     * ResponseWriter}.  Note: this must not include the "charset="
+     * suffix.</p>
      */
     public abstract String getContentType();
 

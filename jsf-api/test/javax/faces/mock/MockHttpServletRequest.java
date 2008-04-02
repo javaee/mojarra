@@ -1,5 +1,5 @@
 /*
- * $Id: MockHttpServletRequest.java,v 1.4 2003/04/29 18:13:05 eburns Exp $
+ * $Id: MockHttpServletRequest.java,v 1.5 2003/10/22 04:43:06 eburns Exp $
  */
 
 /*
@@ -278,7 +278,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 
     public String getCharacterEncoding() {
-        throw new UnsupportedOperationException();
+	return "ISO-8859-1";
     }
 
 
@@ -288,7 +288,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
 
     public String getContentType() {
-        throw new UnsupportedOperationException();
+        return "text/html";
     }
 
 

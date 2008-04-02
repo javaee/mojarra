@@ -1,5 +1,5 @@
 /*
- * $Id: MockHttpServletResponse.java,v 1.3 2003/07/20 00:41:45 craigmcc Exp $
+ * $Id: MockHttpServletResponse.java,v 1.4 2003/10/22 04:43:06 eburns Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
 
     private String encoding = "ISO-8859-1";
+    private String contentType = "text/html";
 
 
     // -------------------------------------------- HttpServletResponse Methods
@@ -133,7 +134,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
     }
 
     public String getContentType() {
-        throw new UnsupportedOperationException();
+	return (this.contentType);
     }
 
     public Locale getLocale() {
@@ -180,7 +181,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
 
     public void setContentType(String type) {
-        throw new UnsupportedOperationException();
+        contentType = type;
     }
 
 

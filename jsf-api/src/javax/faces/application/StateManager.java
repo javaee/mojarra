@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.22 2003/10/06 18:34:16 eburns Exp $
+ * $Id: StateManager.java,v 1.23 2003/10/22 04:43:03 eburns Exp $
  */
 
 /*
@@ -240,7 +240,9 @@ public abstract class StateManager {
      * state to be saved to the response, the implementation of this
      * method must call {@link
      * javax.faces.render.ResponseStateManager#writeState} to cause the
-     * state to be saved to the response.</p>
+     * state to be saved to the response.  The state must be written in
+     * such a way that it can be transmitted no matter what the request
+     * charset is.  The recommend encoding is Base64.</p>
      *
      * <p>If the <code>ServletContext</code> init parameter directs the
      * state to be saved on the server, it must be done so such that it
