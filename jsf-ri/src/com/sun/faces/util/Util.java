@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.41 2002/11/25 19:56:41 jvisvanathan Exp $
+ * $Id: Util.java,v 1.42 2003/02/04 01:44:08 visvan Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.41 2002/11/25 19:56:41 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.42 2003/02/04 01:44:08 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -388,11 +388,20 @@ private Util()
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (kid instanceof UISelectItem) {
-                UISelectItem item = (UISelectItem) kid;
-                list.add(new SelectItemWrapper( kid, 
+                Object value = kid.currentValue(context);
+                if ( value == null ) {
+                    UISelectItem item = (UISelectItem) kid;
+                    list.add(new SelectItemWrapper( kid,
                                         new SelectItem(item.getItemValue(),
                                         item.getItemLabel(),
                                         item.getItemDescription())));
+                } else if ( value instanceof SelectItem){
+                    list.add(new SelectItemWrapper(kid,
+                            ((SelectItem)value)));
+                } else {
+                    throw new IllegalArgumentException(Util.getExceptionMessage(
+                        Util.CONVERSION_ERROR_MESSAGE_ID));
+                }
             } else if (kid instanceof UISelectItems && null != context) {
                 Object value = kid.currentValue(context);
                 if (value instanceof SelectItem) {
@@ -422,6 +431,9 @@ private Util()
                         list.add(new SelectItemWrapper( kid, 
                             new SelectItem(val.toString(), key.toString(),null)));
                     }
+                } else {
+                    throw new IllegalArgumentException(Util.getExceptionMessage(
+                        Util.CONVERSION_ERROR_MESSAGE_ID));
                 }
             }
         }

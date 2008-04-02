@@ -258,15 +258,15 @@
       <TR>
 
 	<TD>
-		<h:selectone_radio id="verticalRadio" layout="PAGE_DIRECTION" border="1" >
+            <h:selectone_radio id="verticalRadio" 
+             modelReference="LoginBean.currentShipment" 
+             layout="PAGE_DIRECTION" border="1" >
 
-  		<h:selectitem itemValue="nextDay" itemLabel="Next Day" 
-                                  selected="true" />
-		<h:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
-		<h:selectitem itemValue="nextMonth" itemLabel="Next Month" />
+                <h:selectitem modelReference="LoginBean.nextDay" />
+                <h:selectitem modelReference="LoginBean.nextWeek" />
+                <h:selectitem modelReference="LoginBean.nextMonth" />
 
                 </h:selectone_radio>
-
                 <h:output_text id="verticalLabel" value="Radio laid out vertically" />
 	</TD>
 

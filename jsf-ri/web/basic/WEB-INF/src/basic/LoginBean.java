@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.17 2002/10/14 21:29:36 jvisvanathan Exp $
+ * $Id: LoginBean.java,v 1.18 2003/02/04 01:44:09 visvan Exp $
  */
 
 /*
@@ -22,6 +22,10 @@ public class LoginBean {
     String address = null;
     Boolean validUser = null;
     Integer pin = null;
+
+    SelectItem nextWeek = null;
+    SelectItem nextMonth = null;
+    SelectItem nextDay = null;
 
     String defaultOptions[] = {
 	"pinto",
@@ -286,5 +290,49 @@ public class LoginBean {
     {
 	imagePath = newImagePath;
     }
+
+    public SelectItem getNextWeek()
+    {
+        return new SelectItem("nextWeek", "nextWeek", "nextWeek");
+    }
+
+    public void setNextWeek(SelectItem newNextWeek)
+    {
+        nextWeek = newNextWeek;
+    }
+
+    public SelectItem getNextDay()
+    {
+        return new SelectItem("nextDay", "nextDay", "nextDay");
+    }
+
+    public void setNextDay(SelectItem newNextDay)
+    {
+        nextDay = newNextDay;
+    }
+
+    public SelectItem getNextMonth()
+    {
+        return new SelectItem("nextMonth", "nextMonth", "nextMonth");
+    }
+
+    public void setNextMonth(SelectItem newNextMonth)
+    {
+        nextMonth = newNextMonth;
+    }
+
+    protected String currentShipment= "nextMonth";
+
+    public String getCurrentShipment()
+    {
+        return currentShipment;
+    }
+
+    public void setCurrentShipment(String shipment)
+    {
+        currentShipment = shipment;
+    }
+
+   
 
 }
