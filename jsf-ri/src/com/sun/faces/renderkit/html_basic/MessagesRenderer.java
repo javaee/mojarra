@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.24 2006/01/11 15:28:10 rlubke Exp $
+ * $Id: MessagesRenderer.java,v 1.25 2006/03/24 16:43:03 rlubke Exp $
  */
 
 /*
@@ -210,7 +210,10 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             boolean wroteTooltip = false;
             if (showSummary && showDetail && isTooltip) {
                 writer.startElement("span", component);
-                writer.writeAttribute("title", summary, "title");
+                String title = (String) component.getAttributes().get("title");
+                if (title == null || title.length() == 0) {
+                    writer.writeAttribute("title", summary, "title");
+                }               
                 writer.flush();
                 writer.writeText("\t", null);
                 wroteTooltip = true;
