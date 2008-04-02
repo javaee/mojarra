@@ -46,13 +46,9 @@
 <web-app>
     <context-param>
         <param-name>saveStateInClient</param-name>
-        <param-value>false</param-value>
+        <param-value>true</param-value>
     </context-param>
     
-    <listener>
-        <listener-class>guessNumber.BasicServletContextListener</listener-class>
-    </listener>
-
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

@@ -204,8 +204,8 @@
      <classpath refid="classpath"/>
     </javac>
     <copy todir="${build}/WEB-INF">
-      <fileset dir="web/WEB-INF"    >
-        <include name="web.xml" />
+        <fileset dir="web/WEB-INF">
+        <include name="*.xml" />
       </fileset>
     </copy>
 

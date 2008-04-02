@@ -38,30 +38,6 @@
  
 package guessNumber;
 
-import java.util.SortedMap;
-import javax.faces.FacesException;         // FIXME - subpackage?
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.tree.Tree;
-import javax.faces.tree.TreeFactory;
-import javax.faces.FactoryFinder;
-import javax.faces.lifecycle.ApplicationHandler;
-import javax.faces.event.FormEvent;
-import javax.faces.event.FacesEvent;
-import javax.faces.event.CommandEvent;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.ServletContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
-
-import com.sun.faces.RIConstants;
-
 import java.util.Random;
 
 public class UserNumberBean {
