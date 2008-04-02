@@ -304,7 +304,6 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
-<!--
             <test name="com.sun.faces.application.TestActionListenerImpl"/>
             <test name="com.sun.faces.application.TestApplicationFactoryImpl"/>
             <test name="com.sun.faces.application.TestApplicationImpl"/>
@@ -338,7 +337,6 @@
             <test name="com.sun.faces.renderkit.html_basic.TestHtmlResponseWriter"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
--->
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
