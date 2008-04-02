@@ -100,14 +100,14 @@ Rendered via Faces components:
 
 	          <f:facet name="next">
                     <h:panel_group>
-                      <h:output_text value="Next&nbsp;"/>
+                      <h:output_text value="Next"/>
                       <h:graphic_image url="/images/arrow-right.gif" />
                     </h:panel_group>
                   </f:facet>
 
 	          <f:facet name="previous">
                     <h:panel_group>
-                      <h:output_text value="Previous&nbsp;"/>
+                      <h:output_text value="Previous"/>
                       <h:graphic_image url="/images/arrow-left.gif" />
                     </h:panel_group>
                   </f:facet>
