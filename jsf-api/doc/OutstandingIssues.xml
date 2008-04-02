@@ -1532,6 +1532,14 @@
     <p>In addition, it may be appropriate to consider factoring <em>in</em>
     method calls to eliminate the need for components and applications to
     use factories to retrieve MessageResources and Converter instances.</p>
+
+   <p> I'd like to see the FacesContext made available from a
+     thread-local variable via a static method call such as
+     FacesContext.currentContext().  This obviously goes hand-in-hand
+     with guaranteeing single-threaded processing throughout the
+     lifecycle, but I think such a guarantee is probably overdue
+     anyway. </p>
+
   </description>
   <resolution>
   </resolution>
