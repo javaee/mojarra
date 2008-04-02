@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.16 2003/09/12 16:25:23 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.17 2003/09/20 00:48:13 craigmcc Exp $
  */
 
 /*
@@ -982,7 +982,8 @@ public abstract class UIComponentTag implements Tag {
     private void removeOldChildren() {
 
         // Remove old children that are no longer present
-        List oldList = (List) component.getAttribute(JSP_CREATED_COMPONENT_IDS);
+        List oldList =
+            (List) component.getAttributes().get(JSP_CREATED_COMPONENT_IDS);
         if (oldList != null) {
 
             if (createdComponents != null) {
@@ -1012,7 +1013,12 @@ public abstract class UIComponentTag implements Tag {
         }
 
         // Save the current list as a component attribute
-        component.setAttribute(JSP_CREATED_COMPONENT_IDS, createdComponents);
+        if (createdComponents != null) {
+            component.getAttributes().put(JSP_CREATED_COMPONENT_IDS,
+                                          createdComponents);
+        } else {
+            component.getAttributes().remove(JSP_CREATED_COMPONENT_IDS);
+        }
         createdComponents = null;
 
     }
@@ -1030,7 +1036,8 @@ public abstract class UIComponentTag implements Tag {
     private void removeOldFacets() {
 
         // Remove old facets that are no longer present
-        List oldList = (List) component.getAttribute(JSP_CREATED_FACET_NAMES);
+        List oldList =
+            (List) component.getAttributes().get(JSP_CREATED_FACET_NAMES);
         if (oldList != null) {
 
             if (createdFacets != null) {
@@ -1058,7 +1065,12 @@ public abstract class UIComponentTag implements Tag {
         }
 
         // Save the current list as a component attribute
-        component.setAttribute(JSP_CREATED_FACET_NAMES, createdFacets);
+        if (createdFacets != null) {
+            component.getAttributes().put(JSP_CREATED_FACET_NAMES,
+                                          createdFacets);
+        } else {
+            component.getAttributes().remove(JSP_CREATED_FACET_NAMES);
+        }
         createdFacets = null;
 
     }

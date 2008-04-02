@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBaseTestCase.java,v 1.9 2003/09/19 00:57:15 craigmcc Exp $
+ * $Id: UIInputBaseTestCase.java,v 1.10 2003/09/20 00:48:18 craigmcc Exp $
  */
 
 /*
@@ -84,36 +84,36 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
         UIInput input = (UIInput) component;
 
         assertEquals(input.getPrevious(),
-                     (String) input.getAttribute("previous"));
+                     (String) input.getAttributes().get("previous"));
         input.setPrevious("foo");
-        assertEquals("foo", (String) input.getAttribute("previous"));
+        assertEquals("foo", (String) input.getAttributes().get("previous"));
         input.setPrevious(null);
-        assertNull((String) input.getAttribute("previous"));
-        input.setAttribute("previous", "bar");
+        assertNull((String) input.getAttributes().get("previous"));
+        input.getAttributes().put("previous", "bar");
         assertEquals("bar", input.getPrevious());
-        input.setAttribute("previous", null);
+        input.getAttributes().put("previous", null);
         assertNull(input.getPrevious());
 
         input.setRequired(true);
         assertEquals(Boolean.TRUE,
-                     (Boolean) input.getAttribute("required"));
+                     (Boolean) input.getAttributes().get("required"));
         input.setRequired(false);
         assertEquals(Boolean.FALSE,
-                     (Boolean) input.getAttribute("required"));
-        input.setAttribute("required", Boolean.TRUE);
+                     (Boolean) input.getAttributes().get("required"));
+        input.getAttributes().put("required", Boolean.TRUE);
         assertTrue(input.isRequired());
-        input.setAttribute("required", Boolean.FALSE);
+        input.getAttributes().put("required", Boolean.FALSE);
         assertTrue(!input.isRequired());
 
         input.setValid(false);
         assertEquals(Boolean.FALSE,
-                     (Boolean) input.getAttribute("valid"));
+                     (Boolean) input.getAttributes().get("valid"));
         input.setValid(true);
         assertEquals(Boolean.TRUE,
-                     (Boolean) input.getAttribute("valid"));
-        input.setAttribute("valid", Boolean.FALSE);
+                     (Boolean) input.getAttributes().get("valid"));
+        input.getAttributes().put("valid", Boolean.FALSE);
         assertTrue(!input.isValid());
-        input.setAttribute("valid", Boolean.TRUE);
+        input.getAttributes().put("valid", Boolean.TRUE);
         assertTrue(input.isValid());
 
     }

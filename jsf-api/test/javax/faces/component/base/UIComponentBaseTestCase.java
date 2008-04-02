@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.15 2003/09/19 22:44:58 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.16 2003/09/20 00:48:17 craigmcc Exp $
  */
 
 /*
@@ -405,8 +405,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	preSave.setComponentRef("blah");
 	preSave.setRendered(false);
 	preSave.setTransient(true);
-	preSave.setAttribute("buckaroo", "perfectTommy");
-	preSave.setAttribute("reno", "nevada");
+	preSave.getAttributes().put("buckaroo", "perfectTommy");
+	preSave.getAttributes().put("reno", "nevada");
 	testParent.getChildren().add(preSave);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
@@ -525,27 +525,27 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     protected boolean attributesAreEqual(UIComponent comp1,
 					 UIComponent comp2) {
-	Iterator attrNames = comp1.getAttributeNames();
+	Iterator attrNames = comp1.getAttributes().keySet().iterator();
 	Object val1, val2;
 	String attrName = null;
 
 	// make sure every attribute in comp1 is the same in comp2
 	while (attrNames.hasNext()) {
 	    attrName = (String) attrNames.next();
-	    val1 = comp1.getAttribute(attrName);
-	    val2 = comp2.getAttribute(attrName);
+	    val1 = comp1.getAttributes().get(attrName);
+	    val2 = comp2.getAttributes().get(attrName);
 	    // if they're not both null, or not the same string
 	    if (!TestUtil.equalsWithNulls(val1, val2)) {
 		return false;
 	    }
 	}
 
-	attrNames = comp2.getAttributeNames();
+	attrNames = comp2.getAttributes().keySet().iterator();
 	// make sure every attribute in comp2 is the same in comp1
 	while (attrNames.hasNext()) {
 	    attrName = (String) attrNames.next();
-	    val1 = comp1.getAttribute(attrName);
-	    val2 = comp2.getAttribute(attrName);
+	    val1 = comp1.getAttributes().get(attrName);
+	    val2 = comp2.getAttributes().get(attrName);
 	    if (!TestUtil.equalsWithNulls(val1, val2)) {
 		return false;
 	    }

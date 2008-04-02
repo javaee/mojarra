@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.20 2003/09/19 23:01:56 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.21 2003/09/20 00:48:11 craigmcc Exp $
  */
 
 /*
@@ -133,115 +133,122 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
-     * <p>The set of attribute values, keyed by the corresponding attribute
-     * name.</p>
-     *
-     * <p><strong>IMPLEMENTATION NOTE</strong> - The collection for attributes
-     * must be lazily instantiated the first time that it is actually used,
-     * in order to avoid wasted object creations.  This can be done by
-     * calling <code>getAttributes()</code>.</p>
-     *
-     * <p><strong>IMPLEMENTATION NOTE</strong> - It is assumed that components
-     * can only be modified in the context of a single thread.</p>
+     * <p>The <code>Map</code> containing our attributes, keyed by
+     * attribute name.</p>
      */
-    private HashMap attributes = null;
+    private Map attributes = null;
 
 
-    /**
-     * <p>Create (if necessary) and return the collection to be used for
-     * attributes storage.</p>
-     */
-    private Map getAttributes() {
+    public Map getAttributes() {
 
         if (attributes == null) {
-            attributes = new HashMap();
+            attributes = new HashMap() {
+
+                    public boolean containsKey(Object key) {
+                        PropertyDescriptor pd =
+                            getPropertyDescriptor((String) key);
+                        if (pd == null) {
+                            return (super.containsKey(key));
+                        } else {
+                            return (false);
+                        }
+                    }
+
+                    public Object get(Object key) {
+                        if (key == null) {
+                            throw new NullPointerException();
+                        }
+                        String name = (String) key;
+                        PropertyDescriptor pd =
+                            getPropertyDescriptor(name);
+                        if (pd != null) {
+                            try {
+                                Method readMethod = pd.getReadMethod();
+                                if (readMethod != null) {
+                                    return (readMethod.invoke
+                                            (UIComponentBase.this, empty));
+                                } else {
+                                    throw new IllegalArgumentException(name);
+                                }
+                            } catch (IllegalAccessException e) {
+                                throw new FacesException(e);
+                            } catch (InvocationTargetException e) {
+                                throw new FacesException
+                                    (e.getTargetException());
+                            }
+                        } else {
+                            return (super.get(key));
+                        }
+                    }
+
+                    public Object put(Object key, Object value) {
+                        if (key == null) {
+                            throw new NullPointerException();
+                        }
+                        String name = (String) key;
+                        PropertyDescriptor pd =
+                            getPropertyDescriptor(name);
+                        if (pd != null) {
+                            try {
+                                Object result = null;
+                                Method readMethod = pd.getReadMethod();
+                                if (readMethod != null) {
+                                    result = readMethod.invoke
+                                        (UIComponentBase.this, empty);
+                                }
+                                Method writeMethod = pd.getWriteMethod();
+                                if (writeMethod != null) {
+                                    writeMethod.invoke
+                                        (UIComponentBase.this,
+                                         new Object[] { value });
+                                } else {
+                                    throw new IllegalArgumentException(null);
+                                }
+                                return (result);
+                            } catch (IllegalAccessException e) {
+                                throw new FacesException(e);
+                            } catch (InvocationTargetException e) {
+                                throw new FacesException
+                                    (e.getTargetException());
+                            }
+                        } else {
+                            if (value == null) {
+                                throw new NullPointerException();
+                            }
+                            return (super.put(key, value));
+                        }
+                    }
+
+                    public void putAll(Map map) {
+                        if (map == null) {
+                            throw new NullPointerException();
+                        }
+                        Iterator keys = map.keySet().iterator();
+                        while (keys.hasNext()) {
+                            Object key = keys.next();
+                            put(key, map.get(key));
+                        }
+                    }
+
+                    public Object remove(Object key) {
+                        if (key == null) {
+                            throw new NullPointerException();
+                        }
+                        String name = (String) key;
+                        PropertyDescriptor pd =
+                            getPropertyDescriptor(name);
+                        if (pd != null) {
+                            throw new IllegalArgumentException(name);
+                        } else {
+                            return (super.remove(key));
+                        }
+                    }
+
+
+                };
+
         }
         return (attributes);
-
-    }
-
-
-    /**
-     * <p>Have we allocated a collection for attributes yet?</p>
-     */
-    private boolean isAttributesAllocated() {
-
-        return (attributes != null);
-
-    }
-
-    public Object getAttribute(String name) {
-
-        // Validate method parameters
-        if (name == null) {
-            throw new NullPointerException();
-        }
-
-        // Return the specified property value (if this is a property)
-        PropertyDescriptor pd = getPropertyDescriptor(name);
-        if (pd != null) {
-            try {
-                Method readMethod = pd.getReadMethod();
-                if (readMethod != null) {
-                    return (readMethod.invoke(this, empty));
-                }
-            } catch (IllegalAccessException e) {
-                throw new FacesException(e);
-            } catch (InvocationTargetException e) {
-                throw new FacesException(e.getTargetException());
-            }
-        }
-
-        // Return the selected attribute value
-        if (!isAttributesAllocated()) {
-            return (null);
-        }
-        return (getAttributes().get(name));
-
-    }
-
-    public Iterator getAttributeNames() {
-
-        if (isAttributesAllocated()) {
-            return (getAttributes().keySet().iterator());
-        } else {
-            return (Collections.EMPTY_LIST.iterator());
-        }
-
-    }
-
-    public void setAttribute(String name, Object value) {
-
-        // Validate method parameters
-        if (name == null) {
-            throw new NullPointerException();
-        }
-
-        // Set the specified property value (if this is a property)
-        PropertyDescriptor pd = getPropertyDescriptor(name);
-        if (pd != null) {
-            try {
-                Method writeMethod = pd.getWriteMethod();
-                if (writeMethod != null) {
-                    writeMethod.invoke(this, new Object[] { value });
-                    return;
-                }
-            } catch (IllegalAccessException e) {
-                throw new FacesException(e);
-            } catch (InvocationTargetException e) {
-                throw new FacesException(e.getTargetException());
-            }
-        }
-
-
-        // Set or remove the specified value
-        if (value != null) {
-            getAttributes().put(name, value);
-        } else {
-            if (isAttributesAllocated()) {
-                getAttributes().remove(name);
-            }
-        }
 
     }
 

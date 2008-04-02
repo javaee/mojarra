@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicBaseTestCase.java,v 1.5 2003/09/19 00:57:15 craigmcc Exp $
+ * $Id: UIGraphicBaseTestCase.java,v 1.6 2003/09/20 00:48:18 craigmcc Exp $
  */
 
 /*
@@ -73,14 +73,14 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
         UIGraphic graphic = (UIGraphic) component;
 
         assertEquals(graphic.getURL(),
-                     (String) graphic.getAttribute("URL"));
+                     (String) graphic.getAttributes().get("URL"));
         graphic.setURL("foo");
-        assertEquals("foo", (String) graphic.getAttribute("URL"));
+        assertEquals("foo", (String) graphic.getAttributes().get("URL"));
         graphic.setURL(null);
-        assertNull((String) graphic.getAttribute("URL"));
-        graphic.setAttribute("URL", "bar");
+        assertNull((String) graphic.getAttributes().get("URL"));
+        graphic.getAttributes().put("URL", "bar");
         assertEquals("bar", graphic.getURL());
-        graphic.setAttribute("URL", null);
+        graphic.getAttributes().put("URL", null);
         assertNull(graphic.getURL());
 
     }

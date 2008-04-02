@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterBaseTestCase.java,v 1.6 2003/09/19 00:57:16 craigmcc Exp $
+ * $Id: UIParameterBaseTestCase.java,v 1.7 2003/09/20 00:48:18 craigmcc Exp $
  */
 
 /*
@@ -76,14 +76,14 @@ public class UIParameterBaseTestCase extends ValueHolderTestCaseBase {
         UIParameter parameter = (UIParameter) component;
 
         assertEquals(parameter.getName(),
-                     (String) parameter.getAttribute("name"));
+                     (String) parameter.getAttributes().get("name"));
         parameter.setName("foo");
-        assertEquals("foo", (String) parameter.getAttribute("name"));
+        assertEquals("foo", (String) parameter.getAttributes().get("name"));
         parameter.setName(null);
-        assertNull((String) parameter.getAttribute("name"));
-        parameter.setAttribute("name", "bar");
+        assertNull((String) parameter.getAttributes().get("name"));
+        parameter.getAttributes().put("name", "bar");
         assertEquals("bar", parameter.getName());
-        parameter.setAttribute("name", null);
+        parameter.getAttributes().put("name", null);
         assertNull(parameter.getName());
 
     }

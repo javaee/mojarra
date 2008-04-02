@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.4 2003/09/19 00:57:13 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.5 2003/09/20 00:48:15 craigmcc Exp $
  */
 
 /*
@@ -80,27 +80,27 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 
         data.setFirst(6);
         assertEquals(data.getFirst(),
-                     ((Integer) data.getAttribute("first")).intValue());
-        data.setAttribute("first", new Integer(7));
+                     ((Integer) data.getAttributes().get("first")).intValue());
+        data.getAttributes().put("first", new Integer(7));
         assertEquals(data.getFirst(),
-                     ((Integer) data.getAttribute("first")).intValue());
+                     ((Integer) data.getAttributes().get("first")).intValue());
 
         data.setRows(10);
         assertEquals(data.getRows(),
-                     ((Integer) data.getAttribute("rows")).intValue());
-        data.setAttribute("rows", new Integer(20));
+                     ((Integer) data.getAttributes().get("rows")).intValue());
+        data.getAttributes().put("rows", new Integer(20));
         assertEquals(data.getRows(),
-                     ((Integer) data.getAttribute("rows")).intValue());
+                     ((Integer) data.getAttributes().get("rows")).intValue());
 
         assertEquals(data.getVar(),
-                     (String) data.getAttribute("var"));
+                     (String) data.getAttributes().get("var"));
         data.setVar("foo");
-        assertEquals("foo", (String) data.getAttribute("var"));
+        assertEquals("foo", (String) data.getAttributes().get("var"));
         data.setVar(null);
-        assertNull((String) data.getAttribute("var"));
-        data.setAttribute("var", "bar");
+        assertNull((String) data.getAttributes().get("var"));
+        data.getAttributes().put("var", "bar");
         assertEquals("bar", data.getVar());
-        data.setAttribute("var", null);
+        data.getAttributes().put("var", null);
         assertNull(data.getVar());
 
     }

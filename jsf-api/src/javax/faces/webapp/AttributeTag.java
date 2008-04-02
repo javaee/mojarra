@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.7 2003/09/12 16:25:22 craigmcc Exp $
+ * $Id: AttributeTag.java,v 1.8 2003/09/20 00:48:13 craigmcc Exp $
  */
 
 /*
@@ -92,8 +92,8 @@ public class AttributeTag extends TagSupport {
         if (component == null) { // PENDING - i18n
             throw new JspException("No component associated with UIComponentTag");
         }
-        if (component.getAttribute(name) == null) {
-            component.setAttribute(name, value);
+        if (component.getAttributes().get(name) == null) {
+            component.getAttributes().put(name, value);
         }
         return (SKIP_BODY);
 

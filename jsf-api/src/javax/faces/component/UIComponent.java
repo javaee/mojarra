@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.95 2003/09/19 22:08:29 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.96 2003/09/20 00:48:10 craigmcc Exp $
  */
 
 /*
@@ -57,58 +57,40 @@ public interface UIComponent extends StateHolder {
 
 
     /**
-     * <p>If the specified <code>name</code> identifies a readable property
-     * of this {@link UIComponent}'s implementation class, return the value
-     * of that property (wrapping Java primitives in their corresponding
-     * wrapper classes if necessary).  Otherwise, return the value of the
-     * attribute with the specified <code>name</code> (if any); otherwise,
-     * return <code>null</code>.</p>
-     *
-     * @param name Name of the requested property or attribute
-     *
-     * @exception FacesException if an introspection exception occurs when
-     *  introspecting the {@link UIComponent} implementation class
-     * @exception FacesException if the called property getter throws an
-     *  exception
-     * @exception NullPointerException if <code>name</code> is
-     *  <code>null</code>
+     * <p>Return a mutable <code>Map</code> representing the attributes
+     * (and properties, see below) associated wth this {@link UIComponent},
+     * keyed by attribute name (which must be a String).  The returned
+     * implementation must support all of the standard and optional
+     * <code>Map</code> methods, plus support the following additional
+     * requirements:</p>
+     * <ul>
+     * <li>The <code>Map</code> implementation must implement
+     *     the <code>java.io.Serializable</code> interface.</li>
+     * <li>Any attempt to add a <code>null</code> key or value must
+     *     throw a <code>NullPointerException</code>.</li>
+     * <li>Any attempt to add a key that is not a String must throw
+     *     a <code>ClassCastException</code>.</li>
+     * <li>If the attribute name specified as a key matches a property
+     *     of this {@link UIComponent}'s implementation class, the following
+     *     methods will have special behavior:
+     *     <ul>
+     *     <li><code>containsKey</code> - Return <code>false</code>.</li>
+     *     <li><code>get()</code> - If the property is readable, call
+     *         the getter method and return the returned value (wrapping
+     *         primitive values in their corresponding wrapper classes);
+     *         otherwise throw <code>IllegalArgumentException</code>.</li>
+     *     <li><code>put()</code> - If the property is writeable, call
+     *         the setter method to set the corresponding value (unwrapping
+     *         primitive values in their corresponding wrapper classes).
+     *         If the property is not writeable, or an attempt is made to
+     *         set a property of primitive type to <code>null</code>,
+     *         throw <code>IllegalArgumentException</code>.</li>
+     *     <li><code>remove</code> - Throw
+     *         <code>IllegalArgumentException</code>.</li>
+     *     </ul></li>
+     * </ul>
      */
-    public Object getAttribute(String name);
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the names of all
-     * currently defined attributes of this {@link UIComponent} that
-     * have a non-null value.  This <code>Iterator</code> will
-     * <strong>not</strong> include the names of properties on the
-     * {@link UIComponent} implementation class, even though their values
-     * are accessible via <code>getAttribute()</code>.</p>
-     */
-    public Iterator getAttributeNames();
-
-
-    /**
-     * <p>If the specified <code>name</code> identifies a writeable property
-     * of ths {@link UIComponent}'s implementation class, whose property type
-     * is assignment-compatible with the specified <code>value</code> (for
-     * properties whose type is a primitive, the <code>value</code> type must
-     * be the corresponding wrapper class), set the value of this property to
-     * the specified <code>value</code>.  Otherwise, set the new value of the
-     * attribute with the specified <code>name</code>, replacing any existing
-     * value for that name.</p>
-     *
-     * @param name Name of the requested property or attribute
-     * @param value New value (or <code>null</code> to remove
-     *  any attribute value for the specified name
-     *
-     * @exception FacesException if an introspection exception occurs when
-     *  introspecting the {@link UIComponent} implementation class
-     * @exception FacesException if the called property setter throws an
-     *  exception
-     * @exception NullPointerException if <code>name</code>
-     *  is <code>null</code>
-     */
-    public void setAttribute(String name, Object value);
+    public Map getAttributes();
 
 
     // ------------------------------------------------------------- Properties

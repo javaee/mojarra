@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.15 2003/09/19 00:57:14 craigmcc Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.16 2003/09/20 00:48:16 craigmcc Exp $
  */
 
 /*
@@ -79,25 +79,25 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
         UICommand command = (UICommand) component;
 
         assertEquals(command.getAction(),
-                     (String) command.getAttribute("action"));
+                     (String) command.getAttributes().get("action"));
         command.setAction("foo");
-        assertEquals("foo", (String) command.getAttribute("action"));
+        assertEquals("foo", (String) command.getAttributes().get("action"));
         command.setAction(null);
-        assertNull((String) command.getAttribute("action"));
-        command.setAttribute("action", "bar");
+        assertNull((String) command.getAttributes().get("action"));
+        command.getAttributes().put("action", "bar");
         assertEquals("bar", command.getAction());
-        command.setAttribute("action", null);
+        command.getAttributes().put("action", null);
         assertNull(command.getAction());
 
         assertEquals(command.getActionRef(),
-                     (String) command.getAttribute("actionRef"));
+                     (String) command.getAttributes().get("actionRef"));
         command.setActionRef("foo");
-        assertEquals("foo", (String) command.getAttribute("actionRef"));
+        assertEquals("foo", (String) command.getAttributes().get("actionRef"));
         command.setActionRef(null);
-        assertNull((String) command.getAttribute("actionRef"));
-        command.setAttribute("actionRef", "bar");
+        assertNull((String) command.getAttributes().get("actionRef"));
+        command.getAttributes().put("actionRef", "bar");
         assertEquals("bar", command.getActionRef());
-        command.setAttribute("actionRef", null);
+        command.getAttributes().put("actionRef", null);
         assertNull(command.getActionRef());
 
     }

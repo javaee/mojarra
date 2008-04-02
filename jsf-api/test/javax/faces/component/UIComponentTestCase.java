@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.35 2003/09/19 23:01:58 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.36 2003/09/20 00:48:14 craigmcc Exp $
  */
 
 /*
@@ -103,17 +103,17 @@ public class UIComponentTestCase extends TestCase {
     // Negative tests on attribute methods
     public void testAttributesNegative() {
 
-        // getAttribute() - null
+        // getAttributes().get() - null
         try {
-            Object value = component.getAttribute(null);
+            Object value = component.getAttributes().get(null);
             fail("should have thrown NullPointerException");
         } catch (NullPointerException e) {
             ; // Expected result
         }
 
-        // setAttribute() - null
+        // getAttributes().put() - null
         try {
-            component.setAttribute(null, "bar");
+            component.getAttributes().put(null, "bar");
             fail("should have thrown NullPointerException");
         } catch (NullPointerException e) {
             ; // Expected result
@@ -129,22 +129,22 @@ public class UIComponentTestCase extends TestCase {
         checkAttributeMissing(component, "foo");
         checkAttributeMissing(component, "baz");
 
-        component.setAttribute("foo", "bar");
+        component.getAttributes().put("foo", "bar");
         checkAttributeCount(component, expectedAttributes.length + 1);
         checkAttributePresent(component, "foo", "bar");
         checkAttributeMissing(component, "baz");
 
-        component.setAttribute("baz", "bop");
+        component.getAttributes().put("baz", "bop");
         checkAttributeCount(component, expectedAttributes.length + 2);
         checkAttributePresent(component, "foo", "bar");
         checkAttributePresent(component, "baz", "bop");
 
-        component.setAttribute("baz", "boo");
+        component.getAttributes().put("baz", "boo");
         checkAttributeCount(component, expectedAttributes.length + 2);
         checkAttributePresent(component, "foo", "bar");
         checkAttributePresent(component, "baz", "boo");
 
-        component.setAttribute("foo", null);
+        component.getAttributes().remove("foo");
         checkAttributeCount(component, expectedAttributes.length + 1);
         checkAttributeMissing(component, "foo");
         checkAttributePresent(component, "baz", "boo");
@@ -156,52 +156,52 @@ public class UIComponentTestCase extends TestCase {
     public void testAttributesTransparency() {
 
         assertEquals(component.getChildren(),
-                     (List) component.getAttribute("children"));
+                     (List) component.getAttributes().get("children"));
 
         assertEquals(component.getComponentRef(),
-                     (String) component.getAttribute("componentRef"));
+                     (String) component.getAttributes().get("componentRef"));
         component.setComponentRef("foo");
-        assertEquals("foo", (String) component.getAttribute("componentRef"));
+        assertEquals("foo", (String) component.getAttributes().get("componentRef"));
         component.setComponentRef(null);
-        assertNull((String) component.getAttribute("componentRef"));
-        component.setAttribute("componentRef", "bar");
+        assertNull((String) component.getAttributes().get("componentRef"));
+        component.getAttributes().put("componentRef", "bar");
         assertEquals("bar", component.getComponentRef());
-        component.setAttribute("componentRef", null);
+        component.getAttributes().put("componentRef", null);
         assertNull(component.getComponentRef());
 
         assertEquals(component.getFacets(),
-                     (Map) component.getAttribute("facets"));
+                     (Map) component.getAttributes().get("facets"));
 
         assertEquals(component.getId(),
-                     (String) component.getAttribute("id"));
+                     (String) component.getAttributes().get("id"));
 
         assertEquals(component.getParent(),
-                     (UIComponent) component.getAttribute("parent"));
+                     (UIComponent) component.getAttributes().get("parent"));
 
         assertEquals(component.isRendered(),
-                     ((Boolean) component.getAttribute("rendered")).booleanValue());
+                     ((Boolean) component.getAttributes().get("rendered")).booleanValue());
         component.setRendered(false);
         assertEquals(Boolean.FALSE,
-                     (Boolean) component.getAttribute("rendered"));
+                     (Boolean) component.getAttributes().get("rendered"));
         component.setRendered(true);
         assertEquals(Boolean.TRUE,
-                     (Boolean) component.getAttribute("rendered"));
-        component.setAttribute("rendered", Boolean.FALSE);
+                     (Boolean) component.getAttributes().get("rendered"));
+        component.getAttributes().put("rendered", Boolean.FALSE);
         assertTrue(!component.isRendered());
-        component.setAttribute("rendered", Boolean.TRUE);
+        component.getAttributes().put("rendered", Boolean.TRUE);
         assertTrue(component.isRendered());
 
         component.setRendererType("foo");
-        assertEquals("foo", (String) component.getAttribute("rendererType"));
+        assertEquals("foo", (String) component.getAttributes().get("rendererType"));
         component.setRendererType(null);
-        assertNull((String) component.getAttribute("rendererType"));
-        component.setAttribute("rendererType", "bar");
+        assertNull((String) component.getAttributes().get("rendererType"));
+        component.getAttributes().put("rendererType", "bar");
         assertEquals("bar", component.getRendererType());
-        component.setAttribute("rendererType", null);
+        component.getAttributes().put("rendererType", null);
         assertNull(component.getRendererType());
 
         assertEquals(component.getRendersChildren(),
-                     ((Boolean) component.getAttribute("rendersChildren")).booleanValue());
+                     ((Boolean) component.getAttributes().get("rendersChildren")).booleanValue());
 
 
     }
@@ -997,7 +997,7 @@ public class UIComponentTestCase extends TestCase {
     // Validate that the specified number of attributes are present.
     protected void checkAttributeCount(UIComponent component, int count) {
         int result = 0;
-        Iterator names = component.getAttributeNames();
+        Iterator names = component.getAttributes().keySet().iterator();
         while (names.hasNext()) {
             names.next();
             result++;
@@ -1010,8 +1010,8 @@ public class UIComponentTestCase extends TestCase {
     protected void checkAttributeMissing(UIComponent component,
                                          String name) {
         assertNull("Attribute " + name + " should be missing",
-                   component.getAttribute(name));
-        Iterator keys = component.getAttributeNames();
+                   component.getAttributes().get(name));
+        Iterator keys = component.getAttributes().keySet().iterator();
         while (keys.hasNext()) {
             String key = (String) keys.next();
             if (name.equals(key)) {
@@ -1026,18 +1026,18 @@ public class UIComponentTestCase extends TestCase {
     protected void checkAttributePresent(UIComponent component,
                                          String name, Object value) {
         assertNotNull("attribute " + name + " should be present",
-                      component.getAttribute(name));
+                      component.getAttributes().get(name));
         if (value != null) {
             assertEquals("attribute " + name + " value should be equal",
-                         value, component.getAttribute(name));
+                         value, component.getAttributes().get(name));
         }
-        Iterator keys = component.getAttributeNames();
+        Iterator keys = component.getAttributes().keySet().iterator();
         while (keys.hasNext()) {
             String key = (String) keys.next();
             if (name.equals(key)) {
                 if (value != null) {
                     assertEquals("attribute " + name + " value should match",
-                                 value, component.getAttribute(name));
+                                 value, component.getAttributes().get(name));
                 }
                 return;
             }

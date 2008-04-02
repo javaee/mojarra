@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBooleanBaseTestCase.java,v 1.3 2003/09/19 00:57:16 craigmcc Exp $
+ * $Id: UISelectBooleanBaseTestCase.java,v 1.4 2003/09/20 00:48:18 craigmcc Exp $
  */
 
 /*
@@ -75,13 +75,13 @@ public class UISelectBooleanBaseTestCase extends UIInputBaseTestCase {
 
         selectBoolean.setSelected(false);
         assertEquals(Boolean.FALSE,
-                     (Boolean) selectBoolean.getAttribute("selected"));
+                     (Boolean) selectBoolean.getAttributes().get("selected"));
         selectBoolean.setSelected(true);
         assertEquals(Boolean.TRUE,
-                     (Boolean) selectBoolean.getAttribute("selected"));
-        selectBoolean.setAttribute("selected", Boolean.FALSE);
+                     (Boolean) selectBoolean.getAttributes().get("selected"));
+        selectBoolean.getAttributes().put("selected", Boolean.FALSE);
         assertTrue(!selectBoolean.isSelected());
-        selectBoolean.setAttribute("selected", Boolean.TRUE);
+        selectBoolean.getAttributes().put("selected", Boolean.TRUE);
         assertTrue(selectBoolean.isSelected());
 
     }

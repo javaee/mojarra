@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBaseTestCase.java,v 1.7 2003/09/19 00:57:16 craigmcc Exp $
+ * $Id: UISelectItemBaseTestCase.java,v 1.8 2003/09/20 00:48:18 craigmcc Exp $
  */
 
 /*
@@ -76,36 +76,36 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
         UISelectItem selectItem = (UISelectItem) component;
 
         assertEquals(selectItem.getItemDescription(),
-                     (String) selectItem.getAttribute("itemDescription"));
+                     (String) selectItem.getAttributes().get("itemDescription"));
         selectItem.setItemDescription("foo");
-        assertEquals("foo", (String) selectItem.getAttribute("itemDescription"));
+        assertEquals("foo", (String) selectItem.getAttributes().get("itemDescription"));
         selectItem.setItemDescription(null);
-        assertNull((String) selectItem.getAttribute("itemDescription"));
-        selectItem.setAttribute("itemDescription", "bar");
+        assertNull((String) selectItem.getAttributes().get("itemDescription"));
+        selectItem.getAttributes().put("itemDescription", "bar");
         assertEquals("bar", selectItem.getItemDescription());
-        selectItem.setAttribute("itemDescription", null);
+        selectItem.getAttributes().put("itemDescription", null);
         assertNull(selectItem.getItemDescription());
 
         assertEquals(selectItem.getItemLabel(),
-                     (String) selectItem.getAttribute("itemLabel"));
+                     (String) selectItem.getAttributes().get("itemLabel"));
         selectItem.setItemLabel("foo");
-        assertEquals("foo", (String) selectItem.getAttribute("itemLabel"));
+        assertEquals("foo", (String) selectItem.getAttributes().get("itemLabel"));
         selectItem.setItemLabel(null);
-        assertNull((String) selectItem.getAttribute("itemLabel"));
-        selectItem.setAttribute("itemLabel", "bar");
+        assertNull((String) selectItem.getAttributes().get("itemLabel"));
+        selectItem.getAttributes().put("itemLabel", "bar");
         assertEquals("bar", selectItem.getItemLabel());
-        selectItem.setAttribute("itemLabel", null);
+        selectItem.getAttributes().put("itemLabel", null);
         assertNull(selectItem.getItemLabel());
 
         assertEquals(selectItem.getItemValue(),
-                     (String) selectItem.getAttribute("itemValue"));
+                     (String) selectItem.getAttributes().get("itemValue"));
         selectItem.setItemValue("foo");
-        assertEquals("foo", (String) selectItem.getAttribute("itemValue"));
+        assertEquals("foo", (String) selectItem.getAttributes().get("itemValue"));
         selectItem.setItemValue(null);
-        assertNull((String) selectItem.getAttribute("itemValue"));
-        selectItem.setAttribute("itemValue", "bar");
+        assertNull((String) selectItem.getAttributes().get("itemValue"));
+        selectItem.getAttributes().put("itemValue", "bar");
         assertEquals("bar", selectItem.getItemValue());
-        selectItem.setAttribute("itemValue", null);
+        selectItem.getAttributes().put("itemValue", null);
         assertNull(selectItem.getItemValue());
 
     }

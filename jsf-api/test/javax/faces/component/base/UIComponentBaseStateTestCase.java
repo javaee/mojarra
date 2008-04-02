@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseStateTestCase.java,v 1.8 2003/09/18 01:21:15 eburns Exp $
+ * $Id: UIComponentBaseStateTestCase.java,v 1.9 2003/09/20 00:48:17 craigmcc Exp $
  */
 
 /*
@@ -137,7 +137,7 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	input.setRequired(true);
 	input.setRendered(false);
 	input.setComponentRef("componentRef1");
-	input.setAttribute("attr1", "attr1");
+	input.getAttributes().put("attr1", "attr1");
 	input.addValueChangedListener(new TestValueChangedListener("ANY1",
 								   PhaseId.ANY_PHASE));
 	DoubleRangeValidator doubleVal = new DoubleRangeValidator();
