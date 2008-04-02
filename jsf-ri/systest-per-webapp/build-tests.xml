@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.13 2005/03/11 18:14:16 edburns Exp $
+ $Id: build-tests.xml,v 1.14 2005/03/18 22:12:50 edburns Exp $
 -->
 
 <!--
@@ -69,6 +69,18 @@
              value="${basedir}/replace-application/src/java" />
       <param name="context.path" value="/jsf-replace-application"/>
       <param name="testcase" value="com/sun/faces/systest/ReplaceApplicationTestCase.class"/>
+
+    </antcall>
+
+    <antcall target="test.webapp">
+      <param name="webapp.build.home" 
+             value="${basedir}/replace-statemanager/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/replace-statemanager/web" />
+      <param name="source.home" 
+             value="${basedir}/replace-statemanager/src/java" />
+      <param name="context.path" value="/jsf-replace-statemanager"/>
+      <param name="testcase" value="com/sun/faces/systest/ReplaceStateManagerTestCase.class"/>
 
     </antcall>
 

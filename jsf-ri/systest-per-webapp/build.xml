@@ -223,6 +223,10 @@
     </antcall>
 
     <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-replace-statemanager"/>
+    </antcall>
+
+    <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-el-performance"/>
     </antcall>
 
@@ -254,6 +258,17 @@
       <param name="source.home" 
              value="${basedir}/replace-application/src/java" />
       <param name="context.path" value="/jsf-replace-application"/>
+
+    </antcall>
+
+    <antcall target="install.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/replace-statemanager/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/replace-statemanager/web" />
+      <param name="source.home" 
+             value="${basedir}/replace-statemanager/src/java" />
+      <param name="context.path" value="/jsf-replace-statemanager"/>
 
     </antcall>
 
@@ -340,6 +355,17 @@
 
     <antcall target="reload.one">
       <param name="webapp.build.home" 
+             value="${basedir}/replace-statemanager/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/replace-statemanager/web" />
+      <param name="source.home" 
+             value="${basedir}/replace-statemanager/src/java" />
+      <param name="context.path" value="/jsf-replace-statemanager"/>
+
+    </antcall>
+
+    <antcall target="reload.one">
+      <param name="webapp.build.home" 
              value="${basedir}/el-performance/build" />
       <param name="webapp.web.home" 
              value="${basedir}/el-performance/web" />
@@ -410,6 +436,9 @@
       <param name="context.path" value="/jsf-replace-application"/>
     </antcall>
     <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-replace-statemanager"/>
+    </antcall>
+    <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-el-performance"/>
     </antcall>
     <antcall target="safe.remove.one">
@@ -455,6 +484,7 @@
     <delete dir="${basedir}/build" />
 
     <delete    dir="${basedir}/replace-application/build"/>
+    <delete    dir="${basedir}/replace-statemanager/build"/>
     <delete    dir="${basedir}/el-performance/build"/>
     <delete    dir="${basedir}/command-link-redirect/build"/>
     <delete    dir="${basedir}/command-link-back-button/build"/>

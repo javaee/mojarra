@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.17 2005/03/15 21:09:30 edburns Exp $
+ * $Id: ResponseStateManager.java,v 1.18 2005/03/18 22:12:50 edburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.render;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.application.StateManager;
 import javax.faces.application.StateManager.SerializedView;
 
 import java.io.IOException;
@@ -72,7 +73,11 @@ public abstract class ResponseStateManager {
 	if (state instanceof SerializedView) {
 	    view = (SerializedView) state;
 	}
-	// PENDING(edburns): handle else case
+	else {
+	    StateManager stateManager = 
+		context.getApplication().getStateManager();
+	    view = stateManager.new SerializedView(state, null);
+	}
 	writeState(context, view);
     }
 
