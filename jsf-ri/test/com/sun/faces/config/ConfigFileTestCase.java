@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.11 2003/05/02 07:05:53 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.12 2003/05/03 04:08:47 eburns Exp $
  */
 
 /*
@@ -403,7 +403,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    "Radio",
 	    "Secret",
 	    "SelectManyCheckbox",
-	    "TextArea",
+	    "Textarea",
 	    "Text",
 	    "Time"
 	};

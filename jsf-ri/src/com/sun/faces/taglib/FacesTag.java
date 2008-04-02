@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.32 2003/04/04 05:11:26 eburns Exp $
+ * $Id: FacesTag.java,v 1.33 2003/05/03 04:08:43 eburns Exp $
  */
 
 /*
@@ -36,14 +36,14 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.32 2003/04/04 05:11:26 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.33 2003/05/03 04:08:43 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public abstract class FacesTag extends javax.faces.webapp.FacesTag
+public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 {
     //
     // Protected Constants

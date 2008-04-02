@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangedListenerTag.java,v 1.4 2003/03/13 01:06:35 eburns Exp $
+ * $Id: ValueChangedListenerTag.java,v 1.5 2003/05/03 04:08:45 eburns Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import javax.faces.component.UISelectBoolean;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.UISelectMany;
 import javax.faces.event.ValueChangedListener;
-import javax.faces.webapp.FacesTag;
+import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -28,7 +28,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * <p>Tag implementation that creates a {@link ValueChangedListener} instance
  * and registers it on the {@link UIComponent} associated with our most
  * immediate surrounding instance of a tag whose implementation class
- * is a subclass of {@link FacesTag}.  This tag creates no output to the
+ * is a subclass of {@link UIComponentTag}.  This tag creates no output to the
  * page currently being created.</p>
  *
  * <p>This class may be used directly to implement a generic event handler
@@ -81,7 +81,7 @@ public class ValueChangedListenerTag extends TagSupport {
     /**
      * <p>Create a new instance of the specified {@link ValueChangedListener}
      * class, and register it with the {@link UIComponent} instance associated
-     * with our most immediately surrounding {@link FacesTag} instance, if
+     * with our most immediately surrounding {@link UIComponentTag} instance, if
      * the {@link UIComponent} instance was created by this execution of the
      * containing JSP page.</p>
      *
@@ -89,15 +89,15 @@ public class ValueChangedListenerTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
 
-        // Locate our parent FacesTag
+        // Locate our parent UIComponentTag
         Tag tag = getParent();
-        while ((tag != null) && !(tag instanceof FacesTag)) {
+        while ((tag != null) && !(tag instanceof UIComponentTag)) {
             tag = tag.getParent();
         }
         if (tag == null) { 
             throw new JspException(Util.getExceptionMessage(Util.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID));
         }
-        FacesTag facesTag = (FacesTag) tag;
+        UIComponentTag facesTag = (UIComponentTag) tag;
 
         // Nothing to do unless this tag created a component
         if (!facesTag.getCreated()) {

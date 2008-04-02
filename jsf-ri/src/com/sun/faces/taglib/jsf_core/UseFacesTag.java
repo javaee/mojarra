@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.12 2003/04/29 20:52:19 eburns Exp $
+ * $Id: UseFacesTag.java,v 1.13 2003/05/03 04:08:45 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.Map;
 import javax.servlet.ServletConfig;
 import javax.faces.webapp.JspResponseWriter;
 import javax.servlet.jsp.JspWriter;
-import javax.faces.webapp.FacesBodyTag;
+import javax.faces.webapp.UIComponentBodyTag;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
@@ -45,14 +45,14 @@ import javax.servlet.jsp.tagext.BodyTag;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.12 2003/04/29 20:52:19 eburns Exp $
+ * @version $Id: UseFacesTag.java,v 1.13 2003/05/03 04:08:45 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class UseFacesTag extends FacesBodyTag
+public class UseFacesTag extends UIComponentBodyTag
 {
     //
     // Protected Constants
