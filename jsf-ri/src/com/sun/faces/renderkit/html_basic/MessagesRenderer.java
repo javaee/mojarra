@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.15 2004/03/31 18:48:38 eburns Exp $
+ * $Id: MessagesRenderer.java,v 1.16 2004/08/24 19:52:44 rogerk Exp $
  */
 
 /*
@@ -111,6 +111,12 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             wroteTable = true;
         }
 
+        boolean showSummary = ((UIMessages)component).isShowSummary();
+        boolean showDetail = ((UIMessages)component).isShowDetail();
+        String style = (String) component.getAttributes().get("style");
+        String styleClass = (String) component.getAttributes().get(
+                    "styleClass");
+
         while (messageIter.hasNext()) {
             curMessage = (FacesMessage) messageIter.next();
 
@@ -119,9 +125,6 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                 detail = null,
                 severityStyle = null,
                 severityStyleClass = null;
-            boolean
-                showSummary = ((UIMessages) component).isShowSummary(),
-                showDetail = ((UIMessages) component).isShowDetail();
 
             // make sure we have a non-null value for summary and
             // detail.
@@ -152,11 +155,6 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                 severityStyleClass = (String)
                     component.getAttributes().get("fatalClass");
             }
-
-            String
-                style = (String) component.getAttributes().get("style"),
-                styleClass = (String) component.getAttributes().get(
-                    "styleClass");
 
             // if we have style and severityStyle
             if ((style != null) && (severityStyle != null)) {
@@ -239,8 +237,8 @@ public class MessagesRenderer extends HtmlBasicRenderer {
 
             //close table row if present
             if (wroteTable) {
-                writer.endElement("tr");
                 writer.endElement("td");
+                writer.endElement("tr");
             }
 
         } //messageIter

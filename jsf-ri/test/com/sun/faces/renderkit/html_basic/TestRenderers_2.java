@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.84 2004/06/11 20:14:54 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.85 2004/08/24 19:52:44 rogerk Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.84 2004/06/11 20:14:54 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.85 2004/08/24 19:52:44 rogerk Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -1321,17 +1321,17 @@ public class TestRenderers_2 extends JspFacesTestCase {
             result.indexOf("<table id=\"myMessage_5\"><tr><td><span") == 0);
         assertTrue(
             result.indexOf(
-                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.0\">	global message detail_5.0</span></tr></td>") !=
+                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.0\">	global message detail_5.0</span></td></tr>") !=
             -1);
         assertTrue(
             result.indexOf(
-                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.1\">	global message detail_5.1</span></tr></td>") !=
+                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.1\">	global message detail_5.1</span></td></tr>") !=
             -1);
         assertTrue(
             result.indexOf(
-                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.2\">	global message detail_5.2</span></tr></td>") !=
+                "<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.2\">	global message detail_5.2</span></td></tr>") !=
             -1);
-        assertTrue(result.endsWith("</span></tr></td></table>"));
+        assertTrue(result.endsWith("</span></td></tr></table>"));
 
         try {
             writer.close();
