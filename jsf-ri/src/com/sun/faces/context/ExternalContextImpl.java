@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.7 2003/05/15 17:39:01 craigmcc Exp $
+ * $Id: ExternalContextImpl.java,v 1.8 2003/05/16 19:36:11 craigmcc Exp $
  */
 
 /*
@@ -298,9 +298,9 @@ public class ExternalContextImpl extends ExternalContext {
             requestDispatcher.forward(this.request, this.response);
         } catch (IOException ioe) {
             // e.printStackTrace();
-            throw new IOException(ioe.getMessage()); 
+            throw ioe;
         } catch (ServletException se) {
-            throw new FacesException(se.getMessage()); 
+            throw new FacesException(se); 
         }
     }
 }
