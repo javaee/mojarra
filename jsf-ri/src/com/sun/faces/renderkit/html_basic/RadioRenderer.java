@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.66 2004/04/26 16:37:37 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.67 2004/05/04 19:55:08 rlubke Exp $
  */
 
 /*
@@ -113,7 +113,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         writer.writeAttribute("type", "radio", "type");
         if (null != curItem.getValue() &&
             curItem.getValue().equals(curValue)) {
-            writer.writeAttribute("checked", new Boolean("true"), null);
+            writer.writeAttribute("checked", Boolean.TRUE, null);
         }
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");

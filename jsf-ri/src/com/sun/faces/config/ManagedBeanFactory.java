@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.20 2004/05/03 19:30:30 jvisvanathan Exp $
+ * $Id: ManagedBeanFactory.java,v 1.21 2004/05/04 19:55:03 rlubke Exp $
  */
 
 /*
@@ -843,7 +843,8 @@ public class ManagedBeanFactory extends Object {
         if (null != value && null != valueType) {
             if (valueType == Boolean.TYPE ||
                 valueType == java.lang.Boolean.class) {
-                value = new Boolean(value.toString());
+                value = value.toString().toLowerCase().equals("true")
+                        ? Boolean.TRUE : Boolean.FALSE;
             } else if (valueType == Byte.TYPE ||
                 valueType == java.lang.Byte.class) {
                 value = new Byte(value.toString());

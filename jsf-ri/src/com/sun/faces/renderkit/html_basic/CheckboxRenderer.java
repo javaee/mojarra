@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.67 2004/03/31 18:48:34 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.68 2004/05/04 19:55:07 rlubke Exp $
  *
  */
 
@@ -167,7 +167,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
                               "clientId");
 
         if (currentValue != null && currentValue.equals("true")) {
-            writer.writeAttribute("checked", new Boolean("true"), "value");
+            writer.writeAttribute("checked", Boolean.TRUE, "value");
         }
         if (null != (styleClass = (String)
             component.getAttributes().get("styleClass"))) {

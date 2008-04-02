@@ -98,6 +98,16 @@ class PrimitiveObjects {
 
 
     //-------------------------------------
+    // Constructors
+    //-------------------------------------
+    private PrimitiveObjects() {
+
+        throw new IllegalStateException();
+        
+    }
+
+
+    //-------------------------------------
     // Getting primitive values
     //-------------------------------------
     public static Boolean getBoolean(boolean pValue) {

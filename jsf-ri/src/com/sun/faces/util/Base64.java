@@ -4,9 +4,9 @@
  */
 
 /*
- * $Header: /cvs/javaserverfaces-sources/jsf-ri/src/com/sun/faces/util/Attic/Base64.java,v 1.5 2004/02/26 20:33:26 eburns Exp $
- * $Revision: 1.5 $
- * $Date: 2004/02/26 20:33:26 $
+ * $Header: /cvs/javaserverfaces-sources/jsf-ri/src/com/sun/faces/util/Attic/Base64.java,v 1.6 2004/05/04 19:55:10 rlubke Exp $
+ * $Revision: 1.6 $
+ * $Date: 2004/05/04 19:55:10 $
  * ====================================================================
  *
  * The Apache Software License, Version 1.1
@@ -82,7 +82,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  *
  * @@author Jeffrey Rodriguez
- * @@version $Revision: 1.5 $ $Date: 2004/02/26 20:33:26 $
+ * @@version $Revision: 1.6 $ $Date: 2004/05/04 19:55:10 $
  */
 public final class Base64 {
 
@@ -130,6 +130,15 @@ public final class Base64 {
             lookUpBase64Alphabet[i] = (byte) ('0' + j);
         lookUpBase64Alphabet[62] = (byte) '+';
         lookUpBase64Alphabet[63] = (byte) '/';
+
+    }
+
+    //
+    // Constructors and Initializers
+    //
+    private Base64() {
+
+        throw new IllegalStateException();
 
     }
 

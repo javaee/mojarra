@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.62 2004/04/27 17:25:02 eburns Exp $
+ * $Id: RIConstants.java,v 1.63 2004/05/04 19:55:00 rlubke Exp $
  */
 
 /*
@@ -132,6 +132,16 @@ public class RIConstants {
 
     public static void setHtmlTagLibValidatorActive(boolean state) {
 	htmlTLVActive = state;
+    }
+
+    //
+    // Constructors and Initializers
+    //
+
+    private RIConstants() {
+
+        throw new IllegalStateException();
+        
     }
 
 

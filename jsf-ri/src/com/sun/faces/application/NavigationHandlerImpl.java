@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.29 2004/03/31 18:48:22 eburns Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.30 2004/05/04 19:55:02 rlubke Exp $
  */
 
 /*
@@ -336,7 +336,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             cncFromAction = cnc.getFromAction();
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
-            if (((cncFromAction == null) || (cncFromAction == "*"))
+            if (((cncFromAction == null) || (cncFromAction.equals("*")))
                 && (fromOutcome != null)) {
                 if (fromOutcome.equals(outcome)) {
                     result.viewId = toViewId;

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.14 2004/04/30 14:31:55 eburns Exp $
+ * $Id: ConfigureListener.java,v 1.15 2004/05/04 19:55:03 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
@@ -341,7 +341,7 @@ public class ConfigureListener implements ServletContextListener {
             verifyObjects(context, fcb);
         }
 
-        context.setAttribute(RIConstants.CONFIG_ATTR, new Boolean(true));
+        context.setAttribute(RIConstants.CONFIG_ATTR, Boolean.TRUE);
 
     }
 

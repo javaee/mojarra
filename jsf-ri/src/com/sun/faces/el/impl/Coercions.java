@@ -326,7 +326,18 @@ public class Coercions {
     //-------------------------------------
     private static final Number ZERO = new Integer(0);
     private static Log log = LogFactory.getLog(Coercions.class);
+
+
+    //------------------------------------
+    // Constructors
+    //------------------------------------
+    private Coercions() {
+
+        throw new IllegalStateException();
+
+    }
     
+
     //-------------------------------------
     /**
      * Coerces the given value to the specified class.

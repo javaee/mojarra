@@ -60,10 +60,20 @@ import java.text.MessageFormat;
 /**
  * <p>Utility class for generating parameterized messages.</p>
  *
- * @version $Id: MessageUtil.java,v 1.4 2004/02/26 20:32:43 eburns Exp $
+ * @version $Id: MessageUtil.java,v 1.5 2004/05/04 19:55:05 rlubke Exp $
  */
 
 public class MessageUtil {
+
+    //-----------------------------------
+    // Constructors
+    //-----------------------------------
+    private MessageUtil() {
+
+        throw new IllegalStateException();
+
+    }
+    
 
     /**
      * <p>Returns a formatted message based on the provided template and

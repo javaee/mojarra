@@ -209,6 +209,16 @@ public class Constants {
 
 
     //-------------------------------------
+    // Constructors
+    //-------------------------------------
+    private Constants() {
+
+        throw new IllegalStateException();
+
+    }
+
+
+    //-------------------------------------
     // Getting resources
     //-------------------------------------
     /**
