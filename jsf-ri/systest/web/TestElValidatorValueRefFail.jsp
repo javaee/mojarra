@@ -16,12 +16,12 @@ This page should Fail.
 <br>
 <br>
 
-<f:use_faces>
+<f:view>
 
   <p>This command button has an invalid valueRef expression</p>
   <h:command_button label="hello" valueRef="-3"/>
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>

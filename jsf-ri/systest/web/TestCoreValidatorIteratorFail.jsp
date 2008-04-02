@@ -17,14 +17,14 @@ This page should FAIL.
 <br>
 <br>
 
-<f:use_faces>
+<f:view>
 
   <c:forEach var="i" begin="0" end="3" varStatus="status">
     Array[<c:out value="${i}"/>]: 
     <h:output_text value="NO ID" key="no_id"/><br>
   </c:forEach>
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>

@@ -16,13 +16,13 @@ This page should Succeed.
 <br>
 <br>
 
-<f:use_faces>
+<f:view>
 
   <h:command_button label="hello"/>
 
   <h:command_button key="hello"/>
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>

@@ -14,7 +14,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 
-       <f:use_faces>
+       <f:view>
         <h:form id="/basicForm">
 
             <h:textentry_input id="userName" />
@@ -37,7 +37,7 @@
 
 
         </h:form>
-       </f:use_faces>
+       </f:view>
 
     </BODY>
 </HTML>

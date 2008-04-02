@@ -20,11 +20,11 @@ This page should Succeed.
 <br>
 <br>
 
-<f:use_faces>
+<f:view>
 
   <h:command_button label="hello" actionRef="ford" />
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>

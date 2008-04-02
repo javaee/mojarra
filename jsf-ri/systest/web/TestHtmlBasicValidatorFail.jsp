@@ -16,14 +16,14 @@ This page should FAIL.
 <br>
 <br>
 
-<f:use_faces>
+<f:view>
 
   <p>This must have either a label or key attribute.</p>
   <h:command_button>
     <h:output_text value="hello"/>
   </h:command_button>
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>

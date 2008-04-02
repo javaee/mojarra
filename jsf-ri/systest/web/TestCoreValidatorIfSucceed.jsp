@@ -19,13 +19,13 @@ This page should succeed.
 
 <% request.setAttribute("one", new String("one")); %>
 
-<f:use_faces>
+<f:view>
 
   <c:if test="${one == 'one'}">
     <h:output_text id="has_id" value="HAS ID" key="has_id"/>
   </c:if>
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>

@@ -12,7 +12,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<f:use_faces>
+<f:view>
 <h:form formName="basicForm" id="basicForm">
 
   <TABLE BORDER="1">
@@ -77,7 +77,7 @@
   </TABLE>
 
 </h:form>
-</f:use_faces>
+</f:view>
 
     </BODY>
 </HTML>

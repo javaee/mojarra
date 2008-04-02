@@ -16,11 +16,11 @@ This page should Succeed.
 <br>
 <br>
 
-<f:use_faces>
+<f:view>
 
   <h:command_button label="hello" valueRef="3" />
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>

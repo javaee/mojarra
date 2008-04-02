@@ -20,12 +20,12 @@ This page should Fail.
 <br>
 <br>
 
-<f:use_faces>
+<f:view>
 
   <p>This command button has an invalid componentRef expression</p>
   <h:command_button label="hello" componentRef=".ford"/>
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>

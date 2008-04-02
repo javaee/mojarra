@@ -17,9 +17,9 @@
 
   </head>
   <body>
-      <f:use_faces>
+      <f:view>
           <h:input_text id="username" componentRef="usernamecomponent" size="20"/> 
-      </f:use_faces>
+      </f:view>
   </body>
 </html>
 <%

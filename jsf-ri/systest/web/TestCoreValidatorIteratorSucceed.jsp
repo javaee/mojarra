@@ -17,14 +17,14 @@ This page should succeed.
 <br>
 <br>
 
-<f:use_faces>
+<f:view>
 
   <c:forEach var="i" begin="0" end="3" varStatus="status">
     Array[<c:out value="${i}"/>]: 
     <h:output_text id="has_id" value="Has ID" key="has_id"/><br>
   </c:forEach>
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>

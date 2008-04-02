@@ -20,12 +20,12 @@ This page should Fail.
 <br>
 <br>
 
-<f:use_faces>
+<f:view>
 
   <p>This command button has an invalid id expression</p>
   <h:command_button id="${${ford}}" label="hello" />
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>

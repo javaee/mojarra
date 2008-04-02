@@ -19,13 +19,13 @@ This page should FAIL.
 
 <% request.setAttribute("one", new String("one")); %>
 
-<f:use_faces>
+<f:view>
 
   <c:if test="${one == 'one'}">
     <h:output_text  value="NO ID" key="no_id"/>
   </c:if>
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>

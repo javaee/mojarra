@@ -80,12 +80,12 @@
 
   <body>
 
-<f:use_faces>
+<f:view>
 
 
 <h:output_errors outputClass="errors"/> 
 
-</f:use_faces>
+</f:view>
 
 
 

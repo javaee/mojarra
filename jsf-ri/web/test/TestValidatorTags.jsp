@@ -14,7 +14,7 @@
   <body>
     <h1>Test Validator Tags</h1>
 
-<f:use_faces>
+<f:view>
 <h:form formName="validatorForm" id="validatorForm">
 <table>
 
@@ -151,7 +151,7 @@
 
 </table>
 </h:form>
-</f:use_faces>
+</f:view>
 
   </body>
 </html>

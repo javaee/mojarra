@@ -21,11 +21,11 @@ This page should Succeed.
 <br>
 <br>
 
-<f:use_faces>
+<f:view>
 
   <h:command_button id="${\"pageScope.first\" + \"pageScope.last\"}" label="indiana" />
 
-</f:use_faces>
+</f:view>
 
 </body>
 </head>
