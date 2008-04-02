@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.11 2003/10/09 22:58:13 craigmcc Exp $
+ * $Id: UIGraphicTestCase.java,v 1.12 2003/11/05 03:42:25 eburns Exp $
  */
 
 /*
@@ -69,16 +69,16 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
         super.testAttributesTransparency();
         UIGraphic graphic = (UIGraphic) component;
 
-        assertEquals(graphic.getURL(),
-                     (String) graphic.getAttributes().get("URL"));
-        graphic.setURL("foo");
-        assertEquals("foo", (String) graphic.getAttributes().get("URL"));
-        graphic.setURL(null);
-        assertNull((String) graphic.getAttributes().get("URL"));
-        graphic.getAttributes().put("URL", "bar");
-        assertEquals("bar", graphic.getURL());
-        graphic.getAttributes().put("URL", null);
-        assertNull(graphic.getURL());
+        assertEquals(graphic.getUrl(),
+                     (String) graphic.getAttributes().get("url"));
+        graphic.setUrl("foo");
+        assertEquals("foo", (String) graphic.getAttributes().get("url"));
+        graphic.setUrl(null);
+        assertNull((String) graphic.getAttributes().get("url"));
+        graphic.getAttributes().put("url", "bar");
+        assertEquals("bar", graphic.getUrl());
+        graphic.getAttributes().put("url", null);
+        assertNull(graphic.getUrl());
 
     }
 
@@ -89,7 +89,7 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
         super.testPristine();
         UIGraphic graphic = (UIGraphic) component;
 
-        assertNull("no url", graphic.getURL());
+        assertNull("no url", graphic.getUrl());
 
     }
 
@@ -109,15 +109,15 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
         super.testPropertiesValid();
         UIGraphic graphic = (UIGraphic) component;
 
-        // Test transparency between "value" and "URL" properties
-        graphic.setURL("foo");
+        // Test transparency between "value" and "Url" properties
+        graphic.setUrl("foo");
         assertEquals("foo", (String) graphic.getValue());
-        graphic.setURL(null);
+        graphic.setUrl(null);
         assertNull(graphic.getValue());
         graphic.setValue("bar");
-        assertEquals("bar", graphic.getURL());
+        assertEquals("bar", graphic.getUrl());
         graphic.setValue(null);
-        assertNull(graphic.getURL());
+        assertNull(graphic.getUrl());
 
     }
 
