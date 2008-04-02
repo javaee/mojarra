@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.24 2002/12/03 23:19:30 craigmcc Exp $
+ * $Id: UICommand.java,v 1.25 2002/12/04 22:36:10 jvisvanathan Exp $
  */
 
 /*
@@ -128,42 +128,6 @@ public class UICommand extends UIComponentBase {
 
 
     /**
-     * <p>Render the beginning of an HTML submit button, if the value of
-     * the rendered attribute is <code>true</code>. </p>
-     *
-     * @param context FacesContext for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void encodeBegin(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeBegin(context);
-            return;
-        }
-
-        // if rendered is false, do not perform default encoding.
-        if (!isRendered()) {
-            return;
-        }
-
-        // Perform default encoding
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("<button name=\"");
-        writer.write(getCompoundId());
-        writer.write("\" type=\"submit\" value=\"submit\">\n");
-
-    }
-
-
-    /**
      * <p>Render the current value of this component as an HTML submit
      * button, if the value of the rendered attribute is <code>true</code>. </p>
      *
@@ -192,7 +156,17 @@ public class UICommand extends UIComponentBase {
 
         // Perform default encoding
         ResponseWriter writer = context.getResponseWriter();
-        writer.write("</button>\n");
+        writer.write("<input type=\"submit\"");
+        Object currentValue = currentValue(context);
+        if (currentValue != null) {
+            writer.write(" name=\"");
+            writer.write(getCompoundId());
+            writer.write("\"");
+            writer.write(" value=\"");
+            writer.write(currentValue.toString());
+            writer.write("\"");
+        }
+        writer.write(">");
 
     }
 

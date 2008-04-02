@@ -1568,6 +1568,8 @@
 
 <p>Also check out Adam's post <a href="http://swjscmail1.java.sun.com/cgi-bin/wa?A2=ind0209&amp;L=jsr-127-eg&amp;D=0&amp;X=6F83683A67B23EB98E&amp;Y=ed.burns@sun.com&amp;P=14616">on the VisibleProperty thread</a>.</p>
 
+  <p> Clean up javadocs. (Specifically, adding "@return" and using "Returns" instead of "Return"
+      on all methods that have return value.) </p>
   </description>
   <resolution>
     <p><em>02 Oct 2002</em> - Consolidate [DecodeEncode-41] into this.</p>

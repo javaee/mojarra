@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.17 2002/12/03 23:02:01 jvisvanathan Exp $
+ * $Id: UISelectBoolean.java,v 1.18 2002/12/04 22:36:10 jvisvanathan Exp $
  */
 
 /*
@@ -82,7 +82,11 @@ public class UISelectBoolean extends UIInput {
      */
     public void setSelected(boolean selected) {
 
-        setAttribute("value", new Boolean(selected));
+        if (selected) {
+            setAttribute("value", Boolean.TRUE);
+        } else {
+            setAttribute("value", Boolean.FALSE);
+        }
 
     }
 
