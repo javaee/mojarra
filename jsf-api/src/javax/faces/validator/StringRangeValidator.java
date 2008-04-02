@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.14 2003/06/20 23:58:57 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.15 2003/06/24 16:55:19 craigmcc Exp $
  */
 
 /*
@@ -21,9 +21,7 @@ import javax.faces.application.Message;
  * maximum values.  The following algorithm is implemented:</p>
  * <ul>
  * <li>Call getValue() to retrieve the current value of the component.
- *     If it is <code>null</code>, exit immediately.  (If null values
- *     should not be allowed, a {@link RequiredValidator} can be configured
- *     to check for this case.)</li>
+ *     If it is <code>null</code>, exit immediately.</li>
  * <li>Convert the current component value to String, if necessary,
  *     by calling <code>toString()</code>.</p>
  * <li>If a <code>maximum</code> property has been configured on this

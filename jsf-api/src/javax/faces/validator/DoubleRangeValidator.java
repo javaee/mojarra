@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.16 2003/06/20 23:58:55 craigmcc Exp $
+ * $Id: DoubleRangeValidator.java,v 1.17 2003/06/24 16:55:19 craigmcc Exp $
  */
 
 /*
@@ -22,9 +22,7 @@ import javax.faces.application.Message;
  * maximum values.  The following algorithm is implemented:</p>
  * <ul>
  * <li>Call getValue() to retrieve the current value of the component.
- *     If it is <code>null</code>, exit immediately.  (If null values
- *     should not be allowed, a {@link RequiredValidator} can be configured
- *     to check for this case.)</li>
+ *     If it is <code>null</code>, exit immediately.</li>
  * <li>If the current component value is not a floating point type, or
  *     a String that is convertible to double,
  *     add a TYPE_MESSAGE_ID message to the {@link FacesContext} for this

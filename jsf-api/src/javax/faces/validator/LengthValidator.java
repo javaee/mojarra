@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.18 2003/06/20 23:58:56 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.19 2003/06/24 16:55:19 craigmcc Exp $
  */
 
 /*
@@ -21,10 +21,7 @@ import javax.faces.application.Message;
  * the number of characters in the String representation of the value of the
  * associated component.  The following algorithm is implemented:</p>
  * <ul>
- * <li>Call getValue() to retrieve the current value of the component.
- *     If it is <code>null</code>, exit immediately.  (If null values
- *     should not be allowed, a {@link RequiredValidator} can be configured
- *     to check for this case.)</li>
+ * <li>Call getValue() to retrieve the current value of the component.</li>
  * <li>Convert the value to a String, if necessary, by calling its
  *     <code>toString()</code> method.</li>
  * <li>If a <code>maximum</code> property has been configured on this
