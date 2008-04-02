@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.33 2005/07/03 07:34:16 jhook Exp $ 
+ * $Id: StateManagerImpl.java,v 1.34 2005/07/20 00:34:07 rogerk Exp $ 
  */ 
 
 
@@ -38,7 +38,7 @@ import javax.faces.component.NamingContainer;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.33 2005/07/03 07:34:16 jhook Exp $
+ * @version $Id: StateManagerImpl.java,v 1.34 2005/07/20 00:34:07 rogerk Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -286,22 +286,22 @@ public class StateManagerImpl extends StateManager {
 		Object [] stateArray = null;
 		synchronized (sessionObj) {
 		    logicalMap = (Map) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP);
-            if (logicalMap != null) {
-                    actualMap = (Map) logicalMap.get(idInLogicalMap);
-                    if (actualMap != null) {
-                        context.getExternalContext().getRequestMap().put(RIConstants.LOGICAL_VIEW_MAP, 
+                    if (logicalMap != null) {
+                        actualMap = (Map) logicalMap.get(idInLogicalMap);
+                        if (actualMap != null) {
+                            context.getExternalContext().getRequestMap().put(RIConstants.LOGICAL_VIEW_MAP, 
                                 idInLogicalMap);
-                        stateArray = (Object []) actualMap.get(idInActualMap);
+                            stateArray = (Object []) actualMap.get(idInActualMap);
+                        }
                     }
-            }
 		}
-        if (stateArray == null) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine( "Session Available, but View State does not exist for viewId: "
-                        + viewId);
-            }
-            return null;
-        }
+                if (stateArray == null) {
+                    if (logger.isLoggable(Level.FINE)) {
+                        logger.fine( "Session Available, but View State does not exist for viewId: "
+                            + viewId);
+                    }
+                    return null;
+                }
 		structRoot = (TreeStructure)stateArray[0];
 		viewRoot = (UIViewRoot) structRoot.createComponent();
 		restoreComponentTreeStructure(structRoot, viewRoot);

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.22 2005/06/06 18:04:48 edburns Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.23 2005/07/20 00:34:09 rogerk Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import com.sun.faces.util.Util;
 
 import org.apache.cactus.WebRequest;
 
+import javax.faces.application.ViewExpiredException;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
@@ -21,6 +22,8 @@ import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
+
+import javax.servlet.http.HttpSession;
 
 import java.util.Locale;
 
@@ -30,7 +33,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.22 2005/06/06 18:04:48 edburns Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.23 2005/07/20 00:34:09 rogerk Exp $
  */
 
 public class TestRestoreViewPhase extends ServletFacesTestCase {
@@ -225,6 +228,54 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 
         context.setViewRoot(null);
     }
+
+    public void beginRestoreViewExpired(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.addParameter("javax.faces.ViewState",
+                                "_id1:_id2");
+    }
+
+    public void testRestoreViewExpired() {
+        // precreate tree and set it in session and make sure the tree is
+        // restored from session.
+                                                                                                                        
+        FacesContext context = getFacesContext();
+        UIViewRoot root = Util.getViewHandler(context).createView(context,
+                                                                  null);
+        root.setViewId(TEST_URI);
+        context.setViewRoot(root);
+                                                                                                                        
+                                                                                                                        
+        UIForm basicForm = new UIForm();
+        basicForm.setId("basicForm");
+        UIInput userName = new UIInput();
+                                                                                                                        
+        userName.setId("userName");
+        root.getChildren().add(basicForm);
+        basicForm.getChildren().add(userName);
+                                                                                                                        
+        Locale locale = new Locale("France", "french");
+        root.setLocale(locale);
+                                                                                                                        
+        // here we do what the StateManager does to save the state in
+        // the server.
+        Util.getStateManager(context).saveSerializedView(context);
+        context.setViewRoot(null);
+                                                                                                                        
+        // invalidate the session before we attempt to restore
+        ((HttpSession)context.getExternalContext().getSession(true)).invalidate();
+                                                                                                                        
+        Phase restoreView = new RestoreViewPhase();
+                                                                                                                        
+        boolean exceptionThrown = false;
+        try {
+            restoreView.execute(context);
+        } catch (ViewExpiredException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+    }
+
 
 
 } // end of class TestRestoreViewPhase

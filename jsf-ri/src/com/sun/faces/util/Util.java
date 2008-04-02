@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.164 2005/06/23 20:29:34 jayashri Exp $
+ * $Id: Util.java,v 1.165 2005/07/20 00:34:08 rogerk Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import java.text.MessageFormat;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.164 2005/06/23 20:29:34 jayashri Exp $
+ * @version $Id: Util.java,v 1.165 2005/07/20 00:34:08 rogerk Exp $
  */
 
 public class Util extends Object {
@@ -341,6 +341,9 @@ public class Util extends Object {
 
     public static final String EVAL_ATTR_UNEXPECTED_TYPE =
         "com.sun.faces.EVAL_ATTR_UNEXPECTED_TYPE";
+    
+    public static final String RESTORE_VIEW_ERROR_MESSAGE_ID = 
+        "com.sun.faces.RESTORE_VIEW_ERROR";
     
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.24 2005/06/23 20:29:34 jayashri Exp $
+ * $Id: RestoreViewPhase.java,v 1.25 2005/07/20 00:34:08 rogerk Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import java.util.Map;
 
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.application.ViewExpiredException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -33,7 +34,7 @@ import java.util.logging.Level;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.24 2005/06/23 20:29:34 jayashri Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.25 2005/07/20 00:34:08 rogerk Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -143,8 +144,9 @@ public class RestoreViewPhase extends Phase {
 	    // try to restore the view
 	    if (null == (viewRoot = (Util.getViewHandler(facesContext)).
 			 restoreView(facesContext, viewId))) {
-		throw new FacesException(Util.getExceptionMessageString(
-                Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
+                Object[] params = {viewId};
+		throw new ViewExpiredException(Util.getExceptionMessageString(
+                    Util.RESTORE_VIEW_ERROR_MESSAGE_ID, params));
 	    }
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Postback: Restored view for " + viewId);

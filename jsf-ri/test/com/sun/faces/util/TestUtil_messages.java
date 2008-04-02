@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.42 2005/05/23 14:38:38 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.43 2005/07/20 00:34:10 rogerk Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import com.sun.faces.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.42 2005/05/23 14:38:38 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.43 2005/07/20 00:34:10 rogerk Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -123,7 +123,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.EL_OUT_OF_BOUNDS_ERROR_ID, "1"},
         {Util.EL_PROPERTY_TYPE_ERROR_ID, "1"},
         {Util.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,"2"},
-        {Util.EVAL_ATTR_UNEXPECTED_TYPE, "3"}
+        {Util.EVAL_ATTR_UNEXPECTED_TYPE, "3"},
+        {Util.RESTORE_VIEW_ERROR_MESSAGE_ID, "1"}
     };
 
     private String[][] toolsMessageInfo = {
