@@ -1098,7 +1098,13 @@
             <description>
                 <![CDATA[
       <p>Renders an HTML "table" element compliant with the HTML 401
-      specification.  Please consult the javadoc for <code>UIData</code>
+      specification.  Render the "caption" facet, if present, inside a "caption" 
+      element immediately below the "table" element.  If the "captionClass" 
+      attribute is specified, render its value as the value of the "class" 
+      attribute on the "caption" element.  If the "captionStyle" attribute
+      is specified, render its value as the value of the "style" attribute
+      on the "caption" element.</p> 
+      <p>Please consult the javadoc for <code>UIData</code>
       to supplement this specification.  If the "styleClass" attribute
       is specified, render its value as the value of the "class"
       attribute on the "table" element.  Any pass-through attributes are
@@ -1179,6 +1185,9 @@
             <renderer-class>
                 <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/data-table-renderer-class/text())"/>
             </renderer-class>
+            <facet>
+                <facet-name>caption</facet-name>
+            </facet>
             <facet>
                 <facet-name>header</facet-name>
             </facet>

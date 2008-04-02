@@ -133,6 +133,27 @@
     <attribute>
         <description>
           Space-separated list of CSS style class(es) that will be
+          applied to any caption generated for this table.
+        </description>
+        <display-name>Caption CSS Classes</display-name>
+        <icon></icon>
+        <attribute-name>captionClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+    </attribute>
+                                                                                        
+    <attribute>
+        <description>
+          CSS style(s) to be applied when this caption is rendered.
+        </description>
+        <display-name>Caption CSS Styles</display-name>
+        <icon></icon>
+        <attribute-name>captionStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+    </attribute>
+
+    <attribute>
+        <description>
+          Space-separated list of CSS style class(es) that will be
           applied to any header generated for this table.
         </description>
         <display-name>Header CSS Classes</display-name>
