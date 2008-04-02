@@ -469,19 +469,16 @@ moved to
 <issue>
   <id>UIParameter-20</id>
   <originator>EG</originator>
-  <summary>Should UIParameter be a component?</summary>
+  <summary>JSFA20 in Scarab</summary>
   <description>
-    <p>Should UIParameter be a component?  If it's not, how would we do
-    things like specify the substitution parameters for the
-    <code>Message</code> renderer type?</p>
+    <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA20">JSFA20</a> in Scarab.
   </description>
   <resolution>
-    
   </resolution>
-  <status>OPEN</status>
-  <status-date>06 Sep 2002</status-date>
-  <priority>2</priority>
-  <effort>Small</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
