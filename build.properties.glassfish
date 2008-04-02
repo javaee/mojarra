@@ -5,7 +5,7 @@
 # javaserverfaces-sources for your local environment.  It defines the location
 # of all external modules that the javaserverfaces-source project relies on.
 #
-# $Id: build.properties.glassfish,v 1.1 2005/06/21 00:55:47 jayashri Exp $
+# $Id: build.properties.glassfish,v 1.2 2005/09/16 20:44:23 jayashri Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
@@ -27,9 +27,9 @@ tomcat.home=
 #    Required libraries to build API and RI
 # --------------------------------------------------
 
-servlet.jar=${tomcat.home}/lib/j2ee.jar
-jsp.jar=${tomcat.home}/lib/j2ee.jar
-el-api.jar=${tomcat.home}/lib/j2ee.jar
+servlet.jar=${tomcat.home}/lib/javaee.jar
+jsp.jar=${tomcat.home}/lib/javaee.jar
+el-api.jar=${tomcat.home}/lib/javaee.jar
 
 # ----- Commons Library JARs
 commons-logging.jar=${tomcat.home}/lib/commons-logging.jar
