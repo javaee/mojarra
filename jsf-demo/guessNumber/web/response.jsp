@@ -36,19 +36,31 @@
  maintenance of any nuclear facility.
 -->
 
-<HTML>
-    <HEAD> <title>Guess The Number</title> </HEAD>
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+    <head> <title>Guess The Number</title> </head>
+    <%@ page contentType="application/xhtml+xml" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <body bgcolor="white">
     <f:view>
     <h:form id="responseForm" >
         <h:graphicImage id="waveImg" url="/wave.med.gif" />
-    <h2><h:outputText id="result" 
+    <h2><h:outputText id="result" lang="en"
     			value="#{UserNumberBean.response}"/></h2>   
     <h:commandButton id="back" value="Back" action="success"/><p>
 
     </h:form>
     </f:view>
+
+    <p>
+      <a href="http://validator.w3.org/check?uri=referer"><img
+          src="http://www.w3.org/Icons/valid-xhtml10"
+          alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+    </p>
+
     </body>
- </HTML>
+ </html>

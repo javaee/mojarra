@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.69 2004/10/12 14:39:51 rlubke Exp $
+ * $Id: CheckboxRenderer.java,v 1.70 2004/12/16 17:56:37 edburns Exp $
  *
  */
 
@@ -173,7 +173,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
             component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        Util.renderPassThruAttributes(writer, component);
+        Util.renderPassThruAttributes(context, writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 
         writer.endElement("input");

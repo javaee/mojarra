@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.150 2004/12/14 18:47:16 edburns Exp $
+ * $Id: Util.java,v 1.151 2004/12/16 17:56:39 edburns Exp $
  */
 
 /*
@@ -44,6 +44,8 @@ import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -58,7 +60,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.150 2004/12/14 18:47:16 edburns Exp $
+ * @version $Id: Util.java,v 1.151 2004/12/16 17:56:39 edburns Exp $
  */
 
 public class Util extends Object {
@@ -809,10 +811,11 @@ public class Util extends Object {
     }
 
 
-    public static void renderPassThruAttributes(ResponseWriter writer,
+    public static void renderPassThruAttributes(FacesContext context, 
+						ResponseWriter writer,
                                                 UIComponent component)
         throws IOException {
-        renderPassThruAttributes(writer, component, null);
+        renderPassThruAttributes(context, writer, component, null);
     }
 
 
@@ -824,7 +827,8 @@ public class Util extends Object {
      *
      * @see passthruAttributes
      */
-    public static void renderPassThruAttributes(ResponseWriter writer,
+    public static void renderPassThruAttributes(FacesContext context, 
+						ResponseWriter writer,
                                                 UIComponent component,
                                                 String[] excludes)
         throws IOException {
@@ -860,12 +864,18 @@ public class Util extends Object {
 					  passthruAttributes[i][0]);
 		}
 		else {
-		    // we have an XML prefix.  Write out both prefixed
-		    // and un-prefixed elements, per
-		    // http://www.w3.org/TR/xhtml1/#C_7
-		    writer.writeAttribute(passthruAttributes[i][1] + ':' +
-					  passthruAttributes[i][0], value,
-					  passthruAttributes[i][0]);
+		    if (null == context) {
+			context = FacesContext.getCurrentInstance();
+		    }
+		    // we have an XML prefix.  
+		    if (null != context && 
+			null != context.getExternalContext().getRequestMap().get(RIConstants.CONTENT_TYPE_IS_XHTML)) {
+			// if we're XHTML, write it out per
+			// http://www.w3.org/TR/xhtml1/#C_7
+			writer.writeAttribute(passthruAttributes[i][1] + ':' +
+					      passthruAttributes[i][0], value,
+					      passthruAttributes[i][0]);
+		    }
 		    writer.writeAttribute(passthruAttributes[i][0], value,
 					  passthruAttributes[i][0]);
 		}
@@ -1507,6 +1517,49 @@ public class Util extends Object {
 	return sb.toString();
     }
 
+    /**
+     * <p>PRECONDITION: argument <code>response</code> is non-null and
+     * has a method called <code>getContentType</code> that takes no
+     * arguments and returns a String, with no side-effects.</p>
+     *
+     * <p>This method allows us to get the contentType in both the
+     * servlet and portlet cases, without introducing a compile-time
+     * dependency on the portlet api.</p>
+     *
+     */ 
+
+    public static String getContentTypeFromResponse(Object response) {
+	String result = null;
+	if (null != response) {
+	    Method method = null;
+
+	    try {
+		method = response.getClass().getMethod("getContentType", null);
+		if (null != method) {
+		    Object obj = method.invoke(response, null);
+		    if (null != obj) {
+			result = obj.toString();
+		    }
+		}
+	    }
+	    catch (NoSuchMethodException nsme) {
+		throw new FacesException(nsme);
+	    }
+	    catch (IllegalAccessException iae) {
+		throw new FacesException(iae);
+	    }
+	    catch (IllegalArgumentException iare) {
+		throw new FacesException(iare);
+	    }
+	    catch (InvocationTargetException ite) {
+		throw new FacesException(ite);
+	    }
+	    catch (SecurityException e) {
+		throw new FacesException(e);
+	    }
+	}
+	return result;
+    }		
 
 
 } // end of class Util

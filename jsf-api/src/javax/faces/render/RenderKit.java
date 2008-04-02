@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.29 2004/02/26 20:31:12 eburns Exp $
+ * $Id: RenderKit.java,v 1.30 2004/12/16 17:56:35 edburns Exp $
  */
 
 /*
@@ -109,12 +109,14 @@ public abstract class RenderKit {
      *
      * @param contentTypeList an "Accept header style" list of content
      * types for this response, or <code>null</code> if the
-     * <code>RenderKit</code> should choose the best fit.  As of the
-     * current version, the values accepted by the Standard render-kit
-     * for this parameter include any valid "Accept header style" String
-     * that includes the String <code>text/html</code>.  This will
-     * expand in a future version.  The RenderKit must support a value
-     * for this argument that comes straight from the
+     * <code>contentType</code> of the response should be consulted
+     * first, then the RenderKit should choose the best fit, if
+     * <code>null</code>.  As of the current version, the values
+     * accepted by the Standard render-kit for this parameter include
+     * any valid "Accept header style" String that includes the String
+     * <code>text/html</code> or <code>application/xhtml+xml</code>.
+     * This may change in a future version.  The RenderKit must support
+     * a value for this argument that comes straight from the
      * <code>Accept</code> HTTP header, and therefore requires parsing
      * according to the specification of the <code>Accept</code> header.
      * Please see <a
@@ -131,9 +133,10 @@ public abstract class RenderKit {
      * @return a new {@link ResponseWriter}.
      *
      * @exception IllegalArgumentException if no matching content type
-     * can be found in <code>contentTypeList</code>, or no matching
-     * character encoding can be found for the argument
-     * <code>characterEncoding</code>.
+     * can be found in <code>contentTypeList</code>, no appropriate
+     * content type can be found with the implementation dependent best
+     * fit algorithm, or no matching character encoding can be found for
+     * the argument <code>characterEncoding</code>.
      *
      */
     public abstract ResponseWriter createResponseWriter(Writer writer,

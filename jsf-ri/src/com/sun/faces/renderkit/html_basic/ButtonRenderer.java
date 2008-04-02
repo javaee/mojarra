@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.80 2004/12/14 21:08:55 jayashri Exp $
+ * $Id: ButtonRenderer.java,v 1.81 2004/12/16 17:56:36 edburns Exp $
  */
 
 /*
@@ -194,7 +194,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         }
         writer.writeAttribute("onclick", sb.toString(), null);
 
-        Util.renderPassThruAttributes(writer, component, 
+        Util.renderPassThruAttributes(context, writer, component, 
 				      new String[]{"onclick"});
         Util.renderBooleanPassThruAttributes(writer, component);
 

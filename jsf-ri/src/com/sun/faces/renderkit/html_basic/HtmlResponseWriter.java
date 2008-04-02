@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.16 2004/03/31 18:48:36 eburns Exp $
+ * $Id: HtmlResponseWriter.java,v 1.17 2004/12/16 17:56:37 edburns Exp $
  */
 
 /*
@@ -69,6 +69,14 @@ public class HtmlResponseWriter extends ResponseWriter {
     public HtmlResponseWriter(Writer writer, String contentType, String encoding)
         throws FacesException {
         this.writer = writer;
+	// PENDING(): Do the right thing for XHTML vs HTML:
+	/*
+	 * - When in HTML mode, use HTML attribute minimization ("disabled")
+	 *   and HTML-style empty tags (<br>, not <br />)
+	 * - When in XHTML mode, use XML rules (disabled="disabled" and 
+         *   <br />)
+	 */
+
         if (null != contentType) {
             this.contentType = contentType;
         }

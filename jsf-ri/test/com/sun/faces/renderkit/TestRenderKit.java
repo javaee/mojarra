@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.16 2004/02/26 20:34:36 eburns Exp $
+ * $Id: TestRenderKit.java,v 1.17 2004/12/16 17:56:43 edburns Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import org.apache.cactus.ServletTestCase;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.ResponseStream;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
@@ -32,7 +33,7 @@ import java.io.Writer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.16 2004/02/26 20:34:36 eburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.17 2004/12/16 17:56:43 edburns Exp $
  */
 
 public class TestRenderKit extends ServletFacesTestCase {
@@ -185,8 +186,7 @@ public class TestRenderKit extends ServletFacesTestCase {
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
                                                             RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        try {
-            renderKit.createResponseWriter(new Writer() {
+	Writer wrappedWriter = new Writer() {
                 public void close() throws IOException {
                 }
 
@@ -215,12 +215,41 @@ public class TestRenderKit extends ServletFacesTestCase {
                 public void write(String str, int off,
                                   int len) throws IOException {
                 }
-            }, null, "foo");
+            };
+
+	// use an invalid encoding
+        try {
+            renderKit.createResponseWriter(wrappedWriter, null, "foo");
 
             fail("IllegalArgumentException Should Have Been Thrown!");
 
         } catch (IllegalArgumentException iae) {
         }
+	
+	ResponseWriter writer = null;
+
+	// see that the proper content type is picked up based on the
+	// contentTypeList param
+	writer = renderKit.createResponseWriter(wrappedWriter, 
+						"application/xhtml+xml,text/html", 
+						"ISO-8859-1");
+	assertEquals(writer.getContentType(), "application/xhtml+xml");
+	writer = renderKit.createResponseWriter(wrappedWriter, 
+						"text/html,application/xhtml+xml",
+						"ISO-8859-1");
+	assertEquals(writer.getContentType(), "text/html");
+
+	// see that IAE is thrown if the content type isn't known
+	try {
+	    writer = renderKit.createResponseWriter(wrappedWriter, 
+						    "application/pdf",
+						    "ISO-8859-1");
+	    
+            fail("IllegalArgumentException Should Have Been Thrown!");
+
+        } catch (IllegalArgumentException iae) {
+        }
+
     }
 
 } // end of class TestRenderKit

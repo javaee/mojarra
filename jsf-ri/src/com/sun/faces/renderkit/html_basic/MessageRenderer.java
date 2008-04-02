@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.49 2004/10/27 16:58:59 edburns Exp $
+ * $Id: MessageRenderer.java,v 1.50 2004/12/16 17:56:38 edburns Exp $
  */
 
 /*
@@ -228,7 +228,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
                 writer.writeAttribute("class", styleClass, "styleClass");
             }
 	    // style is rendered as a passthru attribute
-	    Util.renderPassThruAttributes(writer, component);
+	    Util.renderPassThruAttributes(context, writer, component);
         }
 
         Object tooltip = component.getAttributes().get("tooltip");

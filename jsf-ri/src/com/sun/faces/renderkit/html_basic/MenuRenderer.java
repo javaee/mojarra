@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.53 2004/10/12 14:39:52 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.54 2004/12/16 17:56:37 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -474,7 +474,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             writeDefaultSize(writer, itemCount);
         }
 
-        Util.renderPassThruAttributes(writer, component);
+        Util.renderPassThruAttributes(context, writer, component);
 	// don't render disabled here, because it is dealt with in a
 	// special fashin further down the callstack.
         Util.renderBooleanPassThruAttributes(writer, component, 

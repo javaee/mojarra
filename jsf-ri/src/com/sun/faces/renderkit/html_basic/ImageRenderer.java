@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.35 2004/10/12 14:39:52 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.36 2004/12/16 17:56:37 edburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -26,7 +27,7 @@ import java.io.IOException;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.35 2004/10/12 14:39:52 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.36 2004/12/16 17:56:37 edburns Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -117,8 +118,14 @@ public class ImageRenderer extends HtmlBasicRenderer {
         writer.startElement("img", component);
         writeIdAttributeIfNecessary(context, writer, component);
         writer.writeAttribute("src", src(context, component), "value");
+	// if we're writing XHTML and we have a null alt attribute
+	if (null != context.getExternalContext().getRequestMap().get(RIConstants.CONTENT_TYPE_IS_XHTML) && 
+	    null == component.getAttributes().get("alt")) {
+	    // write out an empty alt
+	    writer.writeAttribute("alt", "", "alt");
+	}
 
-        Util.renderPassThruAttributes(writer, component);
+        Util.renderPassThruAttributes(context, writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
         if (null != (styleClass = (String)
             component.getAttributes().get("styleClass"))) {

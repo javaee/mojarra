@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.22 2004/02/26 20:34:46 eburns Exp $
+ * $Id: TestUtil.java,v 1.23 2004/12/16 17:56:43 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.22 2004/02/26 20:34:46 eburns Exp $
+ * @version $Id: TestUtil.java,v 1.23 2004/12/16 17:56:43 edburns Exp $
  */
 
 public class TestUtil extends ServletFacesTestCase {
@@ -91,7 +91,7 @@ public class TestUtil extends ServletFacesTestCase {
             input.getAttributes().put("notPresent", "notPresent");
             input.getAttributes().put("onblur", "javascript:f.blur()");
             input.getAttributes().put("onchange", "javascript:h.change()");
-            Util.renderPassThruAttributes(writer, input);
+            Util.renderPassThruAttributes(null, writer, input);
             String expectedResult = " onblur=\"javascript:f.blur()\" onchange=\"javascript:h.change()\"";
             assertEquals(expectedResult, sw.toString());
 
@@ -102,7 +102,7 @@ public class TestUtil extends ServletFacesTestCase {
             getFacesContext().setResponseWriter(writer);
             input.getAttributes().remove("onblur");
             input.getAttributes().remove("onchange");
-            Util.renderPassThruAttributes(writer, input);
+            Util.renderPassThruAttributes(null, writer, input);
             assertTrue(0 == sw.toString().length());
         } catch (IOException e) {
             assertTrue(false);
@@ -126,7 +126,7 @@ public class TestUtil extends ServletFacesTestCase {
             HtmlInputText input = new HtmlInputText();
             input.setId("testRenderPassthruAttributes");
             input.setSize(12);
-            Util.renderPassThruAttributes(writer, input);
+            Util.renderPassThruAttributes(null, writer, input);
             String expectedResult = " size=\"12\"";
             assertEquals(expectedResult, sw.toString());
 
@@ -145,7 +145,7 @@ public class TestUtil extends ServletFacesTestCase {
             writer = renderKit.createResponseWriter(sw, "text/html",
                                                     "ISO-8859-1");
             input.setSize(Integer.MIN_VALUE);
-            Util.renderPassThruAttributes(writer, input);
+            Util.renderPassThruAttributes(null, writer, input);
             expectedResult = "";
             assertEquals(expectedResult, sw.toString());
 

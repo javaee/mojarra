@@ -1,4 +1,4 @@
-<%@ page contentType="text/plain"
+<%@ page contentType="text/html"
 %><%@ page import="javax.faces.FactoryFinder"
 %><%@ page import="javax.faces.context.FacesContext"
 %><%@ page import="javax.faces.context.FacesContextFactory"

@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.32 2004/10/12 14:39:52 rlubke Exp $
+ * $Id: LabelRenderer.java,v 1.33 2004/12/16 17:56:37 edburns Exp $
  */
 
 /*
@@ -118,7 +118,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("for", forClientId, "for");
         }
 
-        Util.renderPassThruAttributes(writer, component);
+        Util.renderPassThruAttributes(context, writer, component);
         if (null != styleClass) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }

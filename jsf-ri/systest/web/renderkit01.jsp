@@ -1,4 +1,4 @@
-<%@ page contentType="text/plain"
+<%@ page contentType="text/html"
 %><%@ page import="java.util.Iterator"
 %><%@ page import="java.util.Map"
 %><%@ page import="javax.faces.FactoryFinder"

@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.16 2004/10/12 14:39:53 rlubke Exp $
+ * $Id: OutputMessageRenderer.java,v 1.17 2004/12/16 17:56:38 edburns Exp $
  */
 
 /*
@@ -166,7 +166,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
                 writer.writeAttribute("class", styleClass, "styleClass");
             }
             // style is rendered as a passthru attribute
-            Util.renderPassThruAttributes(writer, component);
+            Util.renderPassThruAttributes(context, writer, component);
             Util.renderBooleanPassThruAttributes(writer, component);
         }
         Boolean escape = Boolean.TRUE;

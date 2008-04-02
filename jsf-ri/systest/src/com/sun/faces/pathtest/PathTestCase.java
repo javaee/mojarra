@@ -1,5 +1,5 @@
 /*
- * $Id: PathTestCase.java,v 1.5 2004/02/26 20:33:37 eburns Exp $
+ * $Id: PathTestCase.java,v 1.6 2004/12/16 17:56:40 edburns Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ public class PathTestCase extends AbstractTestCase {
         assertTrue(welcomePage.equals(response.getContentAsString().trim()));
         
         // Ok, now get a page
-        TextPage textPage = getTextPage("/faces/hello.jsp");
+        HtmlPage textPage = getHtmlPage("/faces/hello.jsp");
         response = textPage.getWebResponse();
         assertTrue("/hello.jsp PASSED".equals(
             response.getContentAsString().trim()));
@@ -100,8 +100,8 @@ public class PathTestCase extends AbstractTestCase {
     }
 
 
-    protected TextPage getTextPage(String path) throws Exception {
-        TextPage page = (TextPage) client.getPage(getURL(path));
+    protected HtmlPage getHtmlPage(String path) throws Exception {
+        HtmlPage page = (HtmlPage) client.getPage(getURL(path));
 
         return (page);
 

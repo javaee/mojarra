@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.23 2004/10/12 14:39:51 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.24 2004/12/16 17:56:36 edburns Exp $
  */
 
 /*
@@ -13,9 +13,11 @@ package com.sun.faces.renderkit;
 
 import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.render.ResponseStateManager;
@@ -24,13 +26,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <B>RenderKitImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.23 2004/10/12 14:39:51 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.24 2004/12/16 17:56:36 edburns Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -48,6 +51,7 @@ public class RenderKitImpl extends RenderKit {
 //
     // used for ResponseWriter creation;
     private static String HTML_CONTENT_TYPE = "text/html";
+    private static String XHTML_CONTENT_TYPE = "application/xhtml+xml";
     private static String CHAR_ENCODING = "ISO-8859-1";
 //
 // Ivars used during actual client lifetime
@@ -139,25 +143,58 @@ public class RenderKitImpl extends RenderKit {
     }
 
 
-    public ResponseWriter createResponseWriter(Writer writer, String contentTypeList,
+    public ResponseWriter createResponseWriter(Writer writer, 
+					       String contentTypeList,
                                                String characterEncoding) {
         if (writer == null) {
             return null;
         }
-        // Set the default content type to html;  However, if a content type list
-        // argument was specified, make sure it contains an html content type;
-        // PENDING(rogerk) ideally, we want to analyze the content type string
-        // in more detail, to determine the preferred content type - as outlined in
-        // http://www.ietf.org/rfc/rfc2616.txt?number=2616 - Section 14.1
-        // (since this is not an html renderkit);
-        //
-        String contentType = HTML_CONTENT_TYPE;
-        if (contentTypeList != null) {
-            if (contentTypeList.indexOf(contentType) < 0) {
+        String contentType = null;
+
+	// if no contentTypeList was passed
+	if (null == contentTypeList) {
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    
+	    contentTypeList = 
+		Util.getContentTypeFromResponse(context.getExternalContext().getResponse());
+	}
+
+	if (null != contentTypeList) {
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    Map requestMap = context.getExternalContext().getRequestMap();
+
+	    // search for the first occurrence of XHTML_CONTENT_TYPE or
+	    // HTML_CONTENT_TYPE.  Choose whichever we find first.
+	    String[] types = contentTypeList.split(",");
+	    String curContentType = null;
+	    
+	    for (int i = 0; i < types.length; i++) {
+		curContentType = types[i].trim();
+		if (-1 != curContentType.indexOf(HTML_CONTENT_TYPE)) {
+		    contentType = HTML_CONTENT_TYPE;
+		    requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML,
+				   Boolean.TRUE);
+		    break;
+		}
+		else if (-1 != curContentType.indexOf(XHTML_CONTENT_TYPE)) {
+		    contentType = XHTML_CONTENT_TYPE;
+		    requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML,
+				   Boolean.TRUE);
+		    break;
+		}
+	    }
+	    // If none of the contentTypes about which we know was in
+	    // contentTypeList
+	    if (null == contentType) {
                 throw new IllegalArgumentException(Util.getExceptionMessageString(
                     Util.CONTENT_TYPE_ERROR_MESSAGE_ID));
-            }
-        }
+	    }
+	}
+	else {
+	    // there was no argument contentType list, or Accept header
+	    contentType = HTML_CONTENT_TYPE;
+	}
+
         if (characterEncoding == null) {
             characterEncoding = CHAR_ENCODING;
         }

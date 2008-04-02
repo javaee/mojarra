@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.33 2004/03/31 18:48:35 eburns Exp $
+ * $Id: GridRenderer.java,v 1.34 2004/12/16 17:56:37 edburns Exp $
  */
 
 /*
@@ -106,7 +106,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        Util.renderPassThruAttributes(writer, component);
+        Util.renderPassThruAttributes(context, writer, component);
         writer.writeText("\n", null);
 
         // Render the header facet (if any)

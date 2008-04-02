@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.16 2004/10/12 14:39:53 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.17 2004/12/16 17:56:38 edburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.16 2004/10/12 14:39:53 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.17 2004/12/16 17:56:38 edburns Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -162,7 +162,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
                                  context.getExternalContext()
                                  .encodeResourceURL(sb.toString()),
                                  "href");
-        Util.renderPassThruAttributes(writer, component);
+        Util.renderPassThruAttributes(context, writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 
         //handle css style class
