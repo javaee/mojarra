@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.63 2004/07/26 21:12:45 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.64 2004/08/02 20:22:44 rogerk Exp $
  */
 
 /*
@@ -298,7 +298,9 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
                               m[i].getName().equals("setIntProperty") ||
                               m[i].getName().equals("getIntProperty") ||
                               m[i].getName().equals("getTrueValue") ||
-                              m[i].getName().equals("getFalseValue"));
+                              m[i].getName().equals("getFalseValue") ||
+                              m[i].getName().equals("setNonManagedBean") ||
+                              m[i].getName().equals("getNonManagedBean"));
                 if (m[i].getName().equals("getSimpleProperty")) {
                     Object args[] = null;
                     Object value = m[i].invoke(bean, args);
@@ -639,4 +641,38 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	assertTrue(bean.getCustomerBean() instanceof com.sun.faces.CustomerBean);
 	
     }
+
+    public void testNonManagedBeans() throws Exception {
+        parseConfig("WEB-INF/faces-config.xml",
+                    config.getServletContext());
+                                                                                        
+        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+                                                                                        
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
+        Object bean =
+            associate.createAndMaybeStoreManagedBeans(getFacesContext(),
+                                                      "SimpleBean");
+
+        // Assert the methods exist on the created bean..
+        try {
+            Class c = bean.getClass();
+            Method m[] = c.getDeclaredMethods();
+            int methodCnt = 0;
+            for (int i = 0; i < m.length; i++) {
+                if (m[i].getName().equals("setNonManagedBean")) {
+                    methodCnt++;
+                }
+                if (m[i].getName().equals("getNonManagedBean")) {
+                    methodCnt++;
+                }
+            }
+            assertEquals("non managed bean methods not found", methodCnt, 2);
+        } catch (Throwable t) {
+            assertTrue(false);
+        }
+
+    }
+
 }

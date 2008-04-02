@@ -46,4 +46,12 @@ public class SimpleBean {
     public boolean getFalseValue() {
         return false;
     }
+
+    private NonManagedBean nonManagedBean = null;
+    public NonManagedBean getNonManagedBean() {
+        return nonManagedBean;
+    }
+    public void setNonManagedBean(NonManagedBean nmb) {
+        nonManagedBean = nmb;
+    }
 }
