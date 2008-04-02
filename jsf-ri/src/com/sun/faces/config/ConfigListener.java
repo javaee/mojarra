@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.19 2003/09/16 18:10:11 rkitain Exp $
+ * $Id: ConfigListener.java,v 1.20 2003/09/29 19:27:13 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -125,18 +125,33 @@ public class ConfigListener implements ServletContextListener
         configParser = new ConfigParser(servletContext);
 	String initParamFileList = null;
 	InputStream jarInputStream = null;
+        InputSource source = null;
 	
 	// Step 0, load our own JSF_RI_CONFIG
-	jarInputStream = this.getClass().getClassLoader().
-	    getResourceAsStream(RIConstants.JSF_RI_CONFIG);
-	Assert.assert_it(null != jarInputStream);
+	URL configURL = 
+	    Util.getCurrentLoader(this).getResource(RIConstants.JSF_RI_CONFIG);
+	Assert.assert_it(null != configURL);
         if (log.isDebugEnabled()) {
             log.debug("Loading JSF_RI_CONFIG configuration resources from " +
                       RIConstants.JSF_RI_CONFIG);
         }
 	try {
-            configParser.parseConfig(jarInputStream);
-	} catch (Exception ee) {
+	    jarInputStream = configURL.openStream();
+	    source = new InputSource(configURL.toExternalForm());
+	    source.setByteStream(jarInputStream);
+            configParser.parseConfig(source);
+	    jarInputStream.close();
+	} 
+	catch (Exception ee) {
+	    try {
+		if (null != jarInputStream) {
+		    jarInputStream.close();
+		}
+	    } 
+	    catch (IOException ioe) {
+		jarInputStream = null;
+	    }
+	    
 	    Object[] obj = new Object[1];
 	    obj[0]=jarInputStream;
 	    String msg = Util.getExceptionMessage(
