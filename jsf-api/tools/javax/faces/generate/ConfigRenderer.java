@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigRenderer.java,v 1.1 2003/09/25 22:22:05 eburns Exp $
+ * $Id: ConfigRenderer.java,v 1.2 2003/09/30 12:48:46 eburns Exp $
  */
 
 /*
@@ -48,7 +48,14 @@ public class ConfigRenderer extends Object {
 
     private List componentClasses = null;
     public List getComponentClasses() {
-        return (this.componentClasses);
+	List result = null;
+	if (null == componentClasses) {
+	    result = Collections.EMPTY_LIST;
+	}
+	else {
+	    result = componentClasses;
+	}
+	return result;
     }
     public void addComponentClass(String componentClass) {
 	if (null == componentClasses) {

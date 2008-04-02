@@ -18,7 +18,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="20030912"/>
+  <property name="version"          value="20030930"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -114,7 +114,7 @@
          Build the API code
        ===================================================================
   -->
-  <target name="build" depends="prepare,generate">
+  <target name="build" depends="prepare,prepare.generate">
 
     <javac destdir="${build.classes}"
            debug="${debug}"
@@ -139,7 +139,7 @@
 
   </target>
 
-  <target name="tools" depends="prepare.generate" if="jsf-ri-config">
+  <target name="tools" depends="prepare.generate">
 
     <javac srcdir="${tools.dir}"
            destdir="${build.classes}"
@@ -158,7 +158,7 @@
 
   </target>
 
-  <target name="generate" depends="tools" if="jsf-ri-config">
+  <target name="generate" depends="tools">
 
     <copy todir="${build.classes}" 
           file="${basedir}/doc/web-facesconfig_1_0.dtd"/>
@@ -168,19 +168,9 @@
       <jvmarg line="${debug.jvm.args}"/>
       <classpath refid="compile.classpath" />
       <classpath refid="test.classpath" />
-      <arg line="-f ${jsf-ri-config}"/>
+      <arg line="-f ${basedir}/doc/standard-html-renderkit.xml"/>
       <arg line="-d ${build.generate}"/>
       <arg line="-c ${basedir}/COPYRIGHT"/>
-      <arg value="javax.faces.component.UICommand"/>
-      <arg value="javax.faces.component.UIData"/>
-      <arg value="javax.faces.component.UIForm"/>
-      <arg value="javax.faces.component.UIGraphic"/>
-      <arg value="javax.faces.component.UIInput"/>    
-      <arg value="javax.faces.component.UIOutput"/>
-      <arg value="javax.faces.component.UIPanel"/>
-      <arg value="javax.faces.component.UISelectBoolean"/>
-      <arg value="javax.faces.component.UISelectMany"/>
-      <arg value="javax.faces.component.UISelectOne"/>
   </java>
 
   </target>

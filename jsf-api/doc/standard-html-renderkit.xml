@@ -1,0 +1,1004 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd" [ 
+  <!ENTITY core-attrs SYSTEM "core-attrs.xml">
+  <!ENTITY events-attrs SYSTEM "events-attrs.xml">
+  <!ENTITY i18n-attrs SYSTEM "i18n-attrs.xml">
+  <!ENTITY % impl SYSTEM "standard-html-renderkit-impl.xml">
+  %impl;
+]>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config>
+
+  <!-- Standard Components -->
+
+  <component>
+    <component-type>Column</component-type>
+    <component-class>javax.faces.component.UIColumn</component-class>
+  </component>
+
+  <component>
+    <component-type>Command</component-type>
+    <component-class>javax.faces.component.base.UICommandBase</component-class>
+  </component>
+
+  <component>
+    <component-type>Data</component-type>
+    <component-class>javax.faces.component.UIData</component-class>
+  </component>
+
+  <component>
+    <component-type>Form</component-type>
+    <component-class>javax.faces.component.base.UIFormBase</component-class>
+  </component>
+
+  <component>
+    <component-type>Graphic</component-type>
+    <component-class>javax.faces.component.base.UIGraphicBase</component-class>
+  </component>
+
+  <component>
+    <component-type>Input</component-type>
+    <component-class>javax.faces.component.base.UIInputBase</component-class>
+  </component>
+
+  <component>
+    <component-type>NamingContainer</component-type>
+    <component-class>javax.faces.component.base.UINamingContainerBase</component-class>
+  </component>
+
+  <component>
+    <component-type>Output</component-type>
+    <component-class>javax.faces.component.base.UIOutputBase</component-class>
+  </component>
+
+  <component>
+    <component-type>Panel</component-type>
+    <component-class>javax.faces.component.base.UIPanelBase</component-class>
+  </component>
+
+  <component>
+    <component-type>Parameter</component-type>
+    <component-class>javax.faces.component.base.UIParameterBase</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectBoolean</component-type>
+    <component-class>javax.faces.component.base.UISelectBooleanBase</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectItem</component-type>
+    <component-class>javax.faces.component.base.UISelectItemBase</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectItems</component-type>
+    <component-class>javax.faces.component.base.UISelectItemsBase</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectMany</component-type>
+    <component-class>javax.faces.component.base.UISelectManyBase</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectOne</component-type>
+    <component-class>javax.faces.component.base.UISelectOneBase</component-class>
+  </component>
+    
+  <component>
+    <component-type>ViewRoot</component-type>
+    <component-class>javax.faces.component.base.UIViewRootBase</component-class>
+  </component>
+
+  <!-- standard renderkit -->
+  <render-kit>
+
+    <renderer>
+      <renderer-type>Button</renderer-type>
+      <renderer-class>&button-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>what kind of widget is needed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>type</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>specific to each type of field</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>size</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>short description</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>alt</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>position in tabbing order</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>accessibility key character</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>accesskey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>some text was selected</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onselect</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element value was changed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onchange</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlCommandButton</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Checkbox</renderer-type>
+      <renderer-class>&checkbox-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>for radio buttons and check boxes</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>checked</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>specific to each type of field</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>size</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>position in tabbing order</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>accessibility key character</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>accesskey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>some text was selected</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onselect</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element value was changed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onchange</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlSelectBooleanCheckbox</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Data</renderer-type>
+      <renderer-class>&data-renderer-class;</renderer-class>
+      <component-class>javax.faces.component.HtmlPanelData</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Errors</renderer-type>
+      <renderer-class>&errors-renderer-class;</renderer-class>
+      <!-- PENDING(edburns): make sure we render DIV and stuff the below
+           attrs there.  -->
+
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+
+      <component-class>javax.faces.component.HtmlOutputErrors</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Form</renderer-type>
+      <renderer-class>&form-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+
+      <attribute>
+        <description>HTTP method used to submit the form</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>method</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>application/x-www-form-urlencoded</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>enctype</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>list of MIME types for file upload</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>accept</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the form was submitted</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onsubmit</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the form was reset</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onreset</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>list of supported charsets</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>acceptcharset</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlForm</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Grid</renderer-type>
+      <renderer-class>&grid-renderer-class;</renderer-class>
+      <component-class>javax.faces.component.HtmlPanelGrid</component-class>
+    </renderer>
+    <renderer>
+      <renderer-type>Group</renderer-type>
+      <renderer-class>&group-renderer-class;</renderer-class>
+      <component-class>javax.faces.component.HtmlPanelGroup</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Hidden</renderer-type>
+      <renderer-class>&hidden-renderer-class;</renderer-class>
+      <component-class>javax.faces.component.HtmlInputHidden</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Hyperlink</renderer-type>
+      <renderer-class>&hyperlink-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>char encoding of linked resource</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>charset</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>advisory content type</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>type</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>accessibility key character</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>accesskey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>position in tabbing order</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <attribute-name>image</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <attribute-name>imageKey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <component-class>javax.faces.component.HtmlCommandHyperlink</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Image</renderer-type>
+      <renderer-class>&image-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>short description</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>alt</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>link to long description (complements alt)</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>longdesc</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>override height</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>height</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>override width</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>width</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlGraphicImage</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Label</renderer-type>
+      <renderer-class>&label-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>matches field ID value</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>for</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>accessibility key character</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>accesskey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlOutputLabel</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>List</renderer-type>
+      <renderer-class>&list-renderer-class;</renderer-class>
+      <component-class>javax.faces.component.HtmlPanelList</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Listbox</renderer-type>
+      <renderer-class>&listbox-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>rows visible</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>size</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>position in tabbing order</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element value was changed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onchange</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlSelectOneListbox</component-class>
+      <component-class>javax.faces.component.HtmlSelectManyListbox</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Menu</renderer-type>
+      <renderer-class>&menu-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>rows visible</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>size</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>position in tabbing order</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element value was changed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onchange</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlSelectOneMenu</component-class>
+      <component-class>javax.faces.component.HtmlSelectManyMenu</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Message</renderer-type>
+      <renderer-class>&message-renderer-class;</renderer-class>
+      <!-- PENDING(edburns): make sure we render DIV and stuff the below
+           attrs there.  -->
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+
+      <component-class>javax.faces.component.HtmlOutputMessage</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>RadioButtonList</renderer-type>
+      <renderer-class>&radio-renderer-class;</renderer-class>
+      <!-- PENDING(edburns): make sure we render DIV and stuff the below
+           attrs there, as appropriate.  -->
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>position in tabbing order</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element value was changed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onchange</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlSelectOneRadioButtonList</component-class>
+    </renderer>
+    <renderer>
+      <renderer-type>Secret</renderer-type>
+      <renderer-class>&secret-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>for text and passwd</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>readonly</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>specific to each type of field</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>size</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>max chars for text fields</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>maxlength</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>position in tabbing order</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>accessibility key character</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>accesskey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>some text was selected</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onselect</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element value was changed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onchange</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlInputSecret</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>CheckboxList</renderer-type>
+      <renderer-class>&selectmanycheckboxlist-renderer-class;</renderer-class>
+
+      <!-- PENDING(edburns): this should probably be merged with the
+           Checkbox renderer -->
+      <component-class>javax.faces.component.HtmlSelectManyCheckboxList</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Table</renderer-type>
+      <renderer-class>&table-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>CSS classes for formatting columns</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>columnClasses</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS classes for formatting footers</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>footerClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS classes for formatting headers</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>headerClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS classes for formatting rows</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>rowClasses</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlDataTable</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Textarea</renderer-type>
+      <renderer-class>&textarea-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>number of rows</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>rows</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>number of columns</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>cols</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>uneditable</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>readonly</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>position in tabbing order</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>accessibility key character</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>accesskey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>some text was selected</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onselect</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element value was changed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onchange</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlInputTextarea</component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Text</renderer-type>
+      <renderer-class>&text-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+      <attribute>
+        <description>for text and passwd</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>readonly</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>specific to each type of field</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>size</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>max chars for text fields</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>maxlength</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>position in tabbing order</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>accessibility key character</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>accesskey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>some text was selected</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onselect</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element value was changed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onchange</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <component-class>javax.faces.component.HtmlInputText</component-class>
+    </renderer>
+  </render-kit>
+
+</faces-config>

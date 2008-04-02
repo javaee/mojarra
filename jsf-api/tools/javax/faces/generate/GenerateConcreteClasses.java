@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.4 2003/09/29 14:57:45 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.5 2003/09/30 12:48:46 eburns Exp $
  */
 
 /*
@@ -54,82 +54,65 @@ public class GenerateConcreteClasses extends GenerateBase {
     //
 
     /**
-     * <p>This method applys the following algorithm to derive the
-     * <code>destClass</code> from each of the elements in
-     * <code>absoluteClassNames</code>.</p>
+     *
+     * <p>Generate the java classes for each of the renderers in the
+     * config file using the following algorithm.</p> 
+     *
+     * <p>According to the DTD, each <code>renderer</code> may have one
+     * or more <code>component-class</code> elements.  For each
+     * <code>renderer</code> in the config file:</p>
      *
      * <ul>
      *
-     * <p>Consider the sample className
-     * <code>javax.faces.component.UICommand</code></p>
+     * <p>for each <code>component-class</code> element.</p>
      *
-     * <p>Find the last dot in className.</p>
-     * 
-     * <p>Assume the next two chars after the last dot can be thrown
-     * out.</p>
+     * <ul>
      *
-     * <p>Save the rest of the string to a var, componentType.  In this
-     * case, it's <code>command</code>.</p>
+     * <p>use the value of the component class as the name of the class
+     * to generate.</p>
      *
-     * <p>Generated class name is <code>className.substring(0, lastDot)
-     * + "." + "html.Html" + componentType + &lt;rendererType&gt;</code>,
-     * where &lt;rendererType&gt; is each of the renderers that supports
-     * that component, as specified in the config file.</p>
+     * <p>call {@link generateClass}, passing the class name, and the
+     * renderer type</p>
      *
-     * <p>So for the <code>Button</code> renderer type, you'd get
-     * <code>javax.faces.component.html.HtmlCommandButton</code>.</p>
-     *
+     * </ul>
+
      * </ul>
      */
 
-    public void generateClasses(List absoluteClassNames) {
+    public void generateClasses() {
 	String 
-	    componentType = null,
 	    rendererType = null,
-	    destRoot = null,
-	    sourceClass = null,
 	    destClass = null,
 	    generatedClass = null,
 	    fileName = null;
 	int 
 	    lastDot = 0;
-	List rendererTypes = null;
+	Iterator 
+	    classIter = null,
+	    rendererIter = getParser().getRendererTypes();
 
-	for (int i = 0, len = absoluteClassNames.size(); i < len; i++) {
-	    //
-	    // Build up the "destRoot" local varible
-	    // 
-	    sourceClass = (String) absoluteClassNames.get(i);
-	    rendererTypes = 
-		getParser().getRendererTypesForClass(sourceClass);
-	    lastDot = sourceClass.lastIndexOf(".");
-	    componentType = sourceClass.substring(lastDot + 3);
-	    destRoot = sourceClass.substring(0, lastDot + 1) + "html.Html" + 
-		componentType;
+	// for each renderer in the renderkit
+	while (rendererIter.hasNext()) {
+	    rendererType = (String) rendererIter.next();
+	    classIter = getParser().getClassesForRendererType(rendererType).iterator();
 
-	    //
-	    // For each rendererType, generate a class
-	    // 
-	    for (int j = 0, jLen = rendererTypes.size(); j < jLen; j++){
-		rendererType = (String) rendererTypes.get(j);
-		// special case, if the renderer type and the component
-		// type are the same, 
-		if (rendererType.equals(componentType)) {
-		    // omit the renderer type from the class name.
-		    destClass = destRoot;
+	    // for each component-class element within the current
+	    // renderer
+	    while (classIter.hasNext()) {
+		destClass = (String) classIter.next();
+
+		// generate a class.
+		if (null != destClass && 
+		    null != (generatedClass = 
+			     generateClass(destClass, rendererType))) {
+		    // 
+		    // Write the generated class to the outputDir
+		    // 
+		    fileName = getParser().replaceOccurrences(destClass, ".", 
+							      File.separator) + 
+			".java";
+		    writeContentsToFile(generatedClass, fileName);
 		}
-		else {
-		    destClass = destRoot + rendererType;
-		}
-		generatedClass = generateClass(destClass, rendererType,
-					       sourceClass);
-		// 
-		// Write the generated class to the outputDir
-		// 
-		fileName = getParser().replaceOccurrences(destClass, ".", 
-							  File.separator) + 
-		    ".java";
-		writeContentsToFile(generatedClass, fileName);
 	    }
 	}
     }
@@ -140,46 +123,92 @@ public class GenerateConcreteClasses extends GenerateBase {
 
     /**
      * <p>Generate a concrete class named by the argument
-     * <code>fullyQualifiedDestClass</code>, that is a subclass of
-     * <code>fullyQualifiedSrcClass</code>.</p>
+     * <code>fullyQualifiedDestClass</code>.  Derive the base class for
+     * this generated class from the argument.</p>
+     *
+     * <p>This method makes the following assumptions about the
+     * <code>fullyQualifiedDestClass</code> argument.</p>
+     *
+     * <ul>
+     *
+     * <p>it is a fully qualified class name</p>
+     *
+     * <p>the first four characters after the last occurrence of '.' in
+     * the string are "Html".  If not, this method returns null.</p>
+     *
+     * <p>it ends with <code>rendererType</code>.  If not, this method
+     * returns null.</p>
+     *
+     * <p>The characters between "Html" and <code>rendererType</code>
+     * are the component type for this class.</p>
+     *
+     * <p>The result of prepending <code>javax.faces.component.UI</code>
+     * to the component type is the super-class for this generated
+     * class.</p>
+     *
+     * </ul>
      *
      * @return the java source code of the generated class, as a String.
      */
 
     protected String generateClass(String fullyQualifiedDestClass, 
-				   String rendererType,
-				   String fullyQualifiedSrcClass) {
+				   String rendererType) {
 	StringBuffer result = new StringBuffer(40000);
 	Map attrs = null;
 	Iterator iter = null;
 	String 
+	    fullyQualifiedSrcClass = null,
+	    componentType = null,
 	    topMatter = null,
 	    destClass = null,
 	    attrName = null,
 	    attrClass = null;
-	int lastDot = fullyQualifiedDestClass.lastIndexOf(".");
+	int 
+	    rendererIndex,
+	    lastDot = fullyQualifiedDestClass.lastIndexOf(".");
+	
 	destClass = fullyQualifiedDestClass.substring(lastDot + 1);
 
+	// verify the Html condition
+	if (!("Html".equals(fullyQualifiedDestClass.substring(lastDot + 1, 
+							      lastDot + 5)))){
+	    return null;
+	}
+	
+	if (!(fullyQualifiedDestClass.endsWith(rendererType))) {
+	    return null;
+	}
+	rendererIndex = fullyQualifiedDestClass.indexOf(rendererType);
+
+	// pull out the component type from the name.
+	componentType = 
+	    fullyQualifiedDestClass.substring(lastDot + 5, rendererIndex);
+	// special case, deal with the case where the componentType and
+	// the rendererType are the same.
+	if (rendererIndex == (lastDot + 5)) {
+	    componentType = rendererType;
+	}
+	
+	fullyQualifiedSrcClass = "javax.faces.component.UI" + componentType;
+	
 	if (getLog().isInfoEnabled()) {
-	    getLog().info("Generating " + 
-			  fullyQualifiedDestClass + " from\n" + 
-			  fullyQualifiedSrcClass + 
-		     " + meta-data.");
+	    getLog().info("Generating " + fullyQualifiedDestClass + 
+			  " from meta-data.");
 	}
 	if (null != (topMatter = getTopMatter())) {
 	    result.append(topMatter);
 	    result.append("\n\n");
 	}
-
+	
 	// package declaration
 	result.append("package " + 
 		      fullyQualifiedDestClass.substring(0, lastDot) + ";\n\n");
-
+	
 	// class declaration
 	result.append("public class " + destClass + 
 		      " extends " + fullyQualifiedSrcClass + 
 		      " {\n\n");
-
+	
 	// constructor
 	result.append("  public " + destClass + "() {\n");
 	result.append("    super();\n");
@@ -238,7 +267,6 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    absolutePathToTopMatterFile = null,
 	    absolutePathToConfigFile = null,
 	    absolutePathToOutputDir = null;
-	List sourceClasses = new ArrayList();
 
 	// parse the arguments
 	try {
@@ -252,9 +280,6 @@ public class GenerateConcreteClasses extends GenerateBase {
 		else if (args[i].equals("-c")) {
 		    absolutePathToTopMatterFile = args[++i];
 		}
-		else {
-		    sourceClasses.add(args[i]);
-		}
 	    }
 	}
 	catch (ArrayIndexOutOfBoundsException e) {
@@ -266,7 +291,7 @@ public class GenerateConcreteClasses extends GenerateBase {
 	GenerateConcreteClasses me = new GenerateConcreteClasses();
 	me.init(absolutePathToConfigFile, absolutePathToTopMatterFile,
 		absolutePathToOutputDir);
-	me.generateClasses(sourceClasses);
+	me.generateClasses();
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateBase.java,v 1.3 2003/09/26 23:07:43 eburns Exp $
+ * $Id: GenerateBase.java,v 1.4 2003/09/30 12:48:46 eburns Exp $
  */
 
 /*
@@ -212,10 +212,6 @@ public abstract class GenerateBase extends Object {
 
 	// make any directories we need
 	makeDirectories(absFile.getParentFile());
-	
-	if (getLog().isInfoEnabled()) {
-	    getLog().info("Got FileWriter for " + absFile.toString() + ".");
-	}
 	
 	return (new FileWriter(absFile));
     }

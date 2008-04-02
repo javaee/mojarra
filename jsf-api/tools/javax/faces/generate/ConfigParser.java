@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.3 2003/09/26 21:12:09 eburns Exp $
+ * $Id: ConfigParser.java,v 1.4 2003/09/30 12:48:45 eburns Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
 import org.apache.commons.digester.Digester;
@@ -155,8 +156,38 @@ class ConfigParser extends Object {
 	return result;
     }
 
+    Iterator getRendererTypes() {
+	Iterator result = null;
+	if (null == renderersByRendererType) {
+	    result = Collections.EMPTY_LIST.iterator();
+	}
+	else {
+	    result = renderersByRendererType.keySet().iterator();
+	}
+	return result;
+    }
+
+    List getClassesForRendererType(String rendererType) {
+	List result = null;
+
+	if (null == renderersByRendererType) {
+	    result = Collections.EMPTY_LIST;
+	}
+	else {
+	    result = ((ConfigRenderer)renderersByRendererType.get(rendererType)).getComponentClasses();
+	}
+	return result;
+    }
+
     Map getAttributesForRenderer(String rendererType) {
-	Map result = (Map) ((ConfigRenderer)renderersByRendererType.get(rendererType)).getAttributes();
+	Map result = null;
+
+	if (null == renderersByRendererType) {
+	    result = Collections.EMPTY_MAP;
+	}
+	else {
+	    result = (Map) ((ConfigRenderer)renderersByRendererType.get(rendererType)).getAttributes();
+	}
 	return result;
     }
 
