@@ -58,10 +58,18 @@
 package com.sun.faces.systest.ant;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
+
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -69,13 +77,8 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
 
 
 /**
@@ -134,10 +137,13 @@ import org.apache.tools.ant.Task;
  * <li><strong>status</strong> - The HTTP status code that is expected in the
  *     response from the server.  Defaults to <code>200</code> if not
  *     specified.  Set to zero to disable checking the return value.</li>
+ * <li><strong>recordGolden</strong> - Record a goldenfile of the response
+ *     if a goldenfile is specifed for the request and the goldenfile doesn't
+ *     already exist.</li>
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.2 $ $Date: 2003/05/13 00:18:57 $
+ * @version $Revision: 1.3 $ $Date: 2003/08/14 21:37:09 $
  */
 
 public class SystestClient extends Task {
@@ -399,6 +405,19 @@ public class SystestClient extends Task {
     public void setStatus(int status) {
         this.status = status;
     }
+    
+    /**
+     * Goldenfile recording.
+     */ 
+    protected String recordGolden;
+    
+    public String getRecordGolden() {
+        return (this.recordGolden);
+    }
+    
+    public void setRecordGolden(String recordGolden) {
+        this.recordGolden = recordGolden;
+    }
 
 
     // ------------------------------------------------------- Static Variables
@@ -528,7 +547,7 @@ public class SystestClient extends Task {
                     log.trace("INPD: " + inContent);
                 }
                 OutputStream os = conn.getOutputStream();
-                for (int i = 0; i < inContent.length(); i++)
+                for (int i = 0, length = inContent.length(); i < length; i++)
                     os.write(inContent.charAt(i));
                 os.close();
             }
@@ -723,7 +742,7 @@ public class SystestClient extends Task {
                 if (log.isTraceEnabled()) {
                     log.trace("INPD: " + inContent);
                 }
-                for (int i = 0; i < inContent.length(); i++)
+                for (int i = 0, length = inContent.length(); i < length; i++)
                     pw.print(inContent.charAt(i));
             }
             pw.flush();
@@ -1079,7 +1098,7 @@ public class SystestClient extends Task {
             ok = false;
         }
         if (ok) {
-            for (int i = 0; i < saveGolden.size(); i++) {
+            for (int i = 0, size = saveGolden.size(); i < size; i++) {
                 String golden = (String) saveGolden.get(i);
                 String response = (String) saveResponse.get(i);
                 if (!validateIgnore(golden) && !golden.equals(response)) {
@@ -1092,22 +1111,64 @@ public class SystestClient extends Task {
             return (null);
         }
         System.out.println("EXPECTED: ======================================");
-        for (int i = 0; i < saveGolden.size(); i++) {
+        for (int i = 0, size = saveGolden.size(); i < size; i++) {
             System.out.println((String) saveGolden.get(i));
         }
         System.out.println("================================================");
         if (saveIgnore.size() >= 1) {
             System.out.println("IGNORED: =======================================");
-            for (int i = 0; i < saveIgnore.size(); i++) {
+            for (int i = 0, size = saveIgnore.size(); i < size; i++) {
                 System.out.println((String) saveIgnore.get(i));
             }
             System.out.println("================================================");
         }
         System.out.println("RECEIVED: ======================================");
-        for (int i = 0; i < saveResponse.size(); i++) {
+        for (int i = 0, size = saveResponse.size(); i < size; i++) {
             System.out.println((String) saveResponse.get(i));
         }
         System.out.println("================================================");
+        
+        // write the goldenfile if the GF size from the server was 0
+        // and the goldenfile doesn't already exist on the local filesystem.
+        if (saveGolden.size() == 0 && recordGolden != null) {            
+            File gf = new File(recordGolden);
+            if (!gf.exists()) {                
+                System.out.println("[INFO] RECORDING GOLDENFILE: " + recordGolden);
+                // write the goldenfile using the encoding specified in the response.
+                // if there is no encoding available, default to ISO-8859-1
+                String encoding = "ISO-8859-1";
+                if (saveHeaders.containsKey("content-type")) {
+                    List vals = (List) saveHeaders.get("content-type");
+                    if (vals != null) {
+                        String val = (String) vals.get(0);
+                        int charIdx = val.indexOf('=');
+                        if (charIdx > -1) {
+                            encoding = val.substring(charIdx + 1).trim();
+                        }
+                    }                                        
+                }               
+                OutputStreamWriter out = null;
+                try {                   
+                    out = new OutputStreamWriter(
+                        new FileOutputStream(gf), encoding);                   
+                    for (int i = 0, size = saveResponse.size(); i < size; i++) {                        
+                        out.write((String) saveResponse.get(i));
+                        out.write('\n');
+                    }
+                    out.flush();
+                } catch (Throwable t) {
+                    System.out.println("[WARNING] Unable to write goldenfile: " + t.toString());
+                } finally {
+                    try {
+                        if (out != null) {
+                            out.close();
+                        }
+                    } catch (IOException ioe) {
+                        ; // do nothing
+                    }
+                }           
+            }
+        }
         return ("Failed Golden File Comparison");
 
     }
@@ -1147,7 +1208,7 @@ public class SystestClient extends Task {
                 return ("Missing header name '" + name + "'");
             }
             boolean found = false;
-            for (int i = 0; i < list.size(); i++) {
+            for (int i = 0, size = list.size(); i < size; i++) {
                 if (value.equals((String) list.get(i))) {
                     found = true;
                     break;
@@ -1173,7 +1234,7 @@ public class SystestClient extends Task {
      */
     protected boolean validateIgnore(String line) {
 
-        for (int i = 0; i < saveIgnore.size(); i++) {
+        for (int i = 0, size = saveIgnore.size(); i < size; i++) {
             String ignore = (String) saveIgnore.get(i);
             if (ignore.equals(line)) {
                 return (true);
