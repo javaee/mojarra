@@ -1,5 +1,5 @@
 /*
- * $Id: DataTableTag.java,v 1.5 2003/10/07 20:15:52 horwat Exp $
+ * $Id: DataTableTag.java,v 1.6 2003/10/21 17:00:40 jvisvanathan Exp $
  */
 
 /*
@@ -62,7 +62,7 @@ public class DataTableTag extends BaseComponentTag {
     // -------------------------------------------------------------- Properties
 
 
-    public String getComponentType() { return ("Data"); }
+    public String getComponentType() { return ("DataTable"); }
 
     public String getRendererType() { return ("Table"); }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.16 2003/10/07 20:15:53 horwat Exp $
+ * $Id: Output_ErrorsTag.java,v 1.17 2003/10/21 17:00:40 jvisvanathan Exp $
  */
 
 /*
@@ -79,7 +79,7 @@ public class Output_ErrorsTag extends BaseComponentTag {
         return "Errors"; 
     }
     public String getComponentType() {
-        return "Output"; 
+        return "OutputErrors"; 
     }
 
     protected void overrideProperties(UIComponent component) {

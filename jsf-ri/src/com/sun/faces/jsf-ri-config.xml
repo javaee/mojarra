@@ -109,6 +109,11 @@
   </component>
 
   <component>
+    <component-type>OutputErrors</component-type>
+    <component-class>javax.faces.component.html.HtmlOutputErrors</component-class>
+  </component>
+  
+  <component>
     <component-type>OutputLabel</component-type>
     <component-class>javax.faces.component.html.HtmlOutputLabel</component-class>
   </component>
@@ -157,36 +162,6 @@
     <component-type>SelectBooleanCheckbox</component-type>
     <component-class>javax.faces.component.html.HtmlSelectBooleanCheckbox</component-class>
   </component>
-  <component>
-    <component-type>SelectManyCheckboxList</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectManyCheckboxList</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectManyListbox</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectManyListbox</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectManyMenu</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectManyMenu</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectOneListbox</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectOneListbox</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectOneMenu</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectOneMenu</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectOneRadioButtonList</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectOneRadioButtonList</component-class>
-  </component>
-
   <component>
     <component-type>SelectManyCheckboxList</component-type>
     <component-class>javax.faces.component.html.HtmlSelectManyCheckboxList</component-class>
