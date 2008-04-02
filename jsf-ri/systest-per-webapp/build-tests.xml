@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.28 2006/07/25 21:06:08 rlubke Exp $
+ $Id: build-tests.xml,v 1.29 2006/07/31 23:05:02 rlubke Exp $
 -->
 
 <!--
@@ -47,6 +47,7 @@
          systest-per-webapp build.xml. -->
     <property name="applications"
               value="replace-application,
+                   invalid-mapping,
                    replace-statemanager,                                    
                    nested-datatables,
                    jar-ordering,                  
@@ -67,6 +68,8 @@
               value="com/sun/faces/systest/ReplaceApplicationTestCase.class"/>
     <property name="replace-statemanager"
               value="com/sun/faces/systest/ReplaceStateManagerTestCase.class"/>
+    <property name="invalid-mapping"
+              value="com/sun/faces/systest/InvalidMappingTestCase.class"/>
     <property name="nested-datatables"
               value="com/sun/faces/systest/NestedDatatablesTestCase.class"/>
     <property name="jar-ordering"

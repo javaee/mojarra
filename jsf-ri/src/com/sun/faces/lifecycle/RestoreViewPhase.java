@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.35 2006/07/28 15:35:13 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.36 2006/07/31 23:05:03 rlubke Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.35 2006/07/28 15:35:13 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.36 2006/07/31 23:05:03 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -245,6 +245,15 @@ public class RestoreViewPhase extends Phase {
         initDefaultSuffix(context);
                
         String mapping = Util.getFacesMapping(context);
+        
+        // if the FacesServlet is mapped to /* throw an 
+        // Exception in order to prevent an endless 
+        // RequestDispatcher loop
+        if ("/*".equals(mapping)) {
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                  MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
+        }
+        
         boolean isPrefixMapped = Util.isPrefixMapped(mapping);
         ExternalContext extContext = context.getExternalContext();
         

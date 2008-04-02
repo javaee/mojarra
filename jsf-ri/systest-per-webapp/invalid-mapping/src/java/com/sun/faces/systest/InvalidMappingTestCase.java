@@ -1,18 +1,15 @@
 package com.sun.faces.systest;
 
-import java.net.URL;
-
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-public class ViewExpiredExceptionTestCase extends AbstractTestCase {
+public class InvalidMappingTestCase extends AbstractTestCase {
 
-    public ViewExpiredExceptionTestCase(String name) {
+    public InvalidMappingTestCase(String name) {
         super(name);
     }
 
@@ -45,16 +42,8 @@ public class ViewExpiredExceptionTestCase extends AbstractTestCase {
     public void testViewExpiredExceptionErrorPage() throws Exception {
         WebClient client = new WebClient();
         client.setThrowExceptionOnFailingStatusCode(false);
-        client.setTimeout(0);
-       
-        HtmlPage page = (HtmlPage) client.getPage("/faces/test.jsp", client);
-
-        HtmlSubmitInput submit = (HtmlSubmitInput) 
-            getInputContainingGivenId(page, "submit");
-
-        Thread.sleep(65000);
-
-        HtmlPage errorPage = (HtmlPage) submit.click();
-        assertTrue(errorPage.asText().indexOf("Error page invoked") >= 0);
+        client.setTimeout(0);                
+        HtmlPage page = (HtmlPage) getPage("/test.jsp", client);       
+        assertTrue(page.asText().contains("The FacesServlet cannot have a url-pattern of /*"));
     }
 }

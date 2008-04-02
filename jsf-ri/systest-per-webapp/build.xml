@@ -56,7 +56,8 @@
          systest-per-webapp build-tests.xml. -->
     <property name="applications"
               value="replace-application,
-                   replace-statemanager,                                    
+                   replace-statemanager,  
+                   invalid-mapping,
                    nested-datatables,
                    jar-ordering,                  
                    replace-lifecycle,

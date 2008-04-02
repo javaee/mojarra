@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestCase.java,v 1.15 2006/03/29 23:03:55 rlubke Exp $
+ * $Id: AbstractTestCase.java,v 1.16 2006/07/31 23:05:00 rlubke Exp $
  */
 
 /*
@@ -185,6 +185,23 @@ public abstract class AbstractTestCase extends TestCase {
         }
         return (page);
 
+    }
+
+
+    /**
+     * The same as {@link #getPage(String)} except this uses the specified
+     * WebClient.
+     * @param path context-relative path
+     * @param client WebClient
+     * @return an HtmlPage instance
+     * @throws Exception if an error occurs
+     */
+    protected HtmlPage getPage(String path, WebClient client) throws Exception {
+        HtmlPage page  = (HtmlPage) client.getPage(getURL(path));
+        if (sessionId == null) {
+            parseSession(page);
+        }
+        return (page);
     }
 
 
