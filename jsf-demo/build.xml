@@ -228,7 +228,9 @@
     <copy todir="${dist.home}/samples"
           file="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
     <copy todir="${dist.home}/samples" 
-          file="${basedir}/nonjsp/dist/jsf-nonjsp.war"/> 
+          file="${basedir}/nonjsp/dist/jsf-nonjsp.war"/>
+      <copy todir="${dist.home}/samples"
+            file="${basedir}/webtier-sample/build/webtier-sample.war"/>
     <echo> copy the demo-components.jar </echo>
     <copy todir="${dist.home}/samples" 
      file="${basedir}/components/build/jsf-components/WEB-INF/lib/demo-components.jar"/>
@@ -239,6 +241,10 @@
 
     <copy todir="${dist.home}/samples/guessNumber" includeEmptyDirs="false">
       <fileset dir="${basedir}/guessNumber" excludes="build.xml,wspack-build.xml"/>
+    </copy>
+    <copy todir="${dist.home}/samples/webtier-sample" includeEmptyDirs="false">
+        <fileset dir="${basedir}/webtier-sample"
+                 excludes="wspack-build.xml"/>
     </copy>
     <copy file="${basedir}/guessNumber/wspack-build.xml"
           tofile="${dist.home}/samples/guessNumber/build.xml" />

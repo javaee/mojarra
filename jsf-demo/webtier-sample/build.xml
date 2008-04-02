@@ -184,7 +184,7 @@
           path="${context.path}"/>
   </target>
 
-  <target name="build" unless="skip.build" depends="copyJars" 
+  <target name="build" unless="skip.build" depends="prepare" 
      description="Compile Java files and copy static files." >
       <touch file="${build}/last-build"/>
     <javac srcdir="src/java" destdir="${build}/${example}/WEB-INF/classes"
