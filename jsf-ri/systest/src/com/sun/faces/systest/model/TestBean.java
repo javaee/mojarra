@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.26 2006/03/07 21:02:48 edburns Exp $
+ * $Id: TestBean.java,v 1.27 2006/03/22 20:50:00 edburns Exp $
  */
 
 /*
@@ -233,8 +233,13 @@ public enum Color { Red, Blue, Green, Orange }
     }
     private String responseWriterInfo = null;
     public String getResponseWriterInfo() {
-        responseWriterInfo = FacesContext.getCurrentInstance().
-            getResponseWriter().getClass().getName();
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            Object responseWriter = context.getResponseWriter();
+            if (null != responseWriter) {
+                responseWriterInfo = responseWriter.getClass().getName();
+            }
+        }
         return responseWriterInfo;
     }
     public void setResponseWriterInfo(String responseWriterInfo) {

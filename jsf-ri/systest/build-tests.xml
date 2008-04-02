@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.108 2006/03/20 19:20:28 rlubke Exp $
+ $Id: build-tests.xml,v 1.109 2006/03/22 20:49:59 edburns Exp $
 -->
 
 <!--
@@ -163,9 +163,8 @@
     <target name="test.duplicateIds"
             description="Test duplicate ID detection">
 
-        <!--
-  <jsf.tester request="${context.path}/faces/duplicateIds01.jsp"
-       status="500"/> -->
+        <jsf.tester request="${context.path}/faces/duplicateIds01.jsp"
+                    status="500"/> 
 
         <jsf.tester request="${context.path}/faces/duplicateIds02.jsp"
                 status="200"/>

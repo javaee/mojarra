@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.15 2006/02/14 19:59:41 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.16 2006/03/22 20:49:58 edburns Exp $
  */
 
 /*
@@ -46,9 +46,12 @@ import javax.servlet.jsp.tagext.Tag;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
 
 
 /**
@@ -192,9 +195,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     /**
      * Used to store the previousJspId Map in requestScope
      */
-    private static final String PREVIOUS_JSP_ID_MAP = 
-	"javax.faces.webapp.PREVIOUS_JSP_ID_MAP";
-
+    private static final String PREVIOUS_JSP_ID_SET = 
+	"javax.faces.webapp.PREVIOUS_JSP_ID_SET";
+    
     // ------------------------------------------------------ Instance Variables
     /**
      * <p>The <code>bodyContent</code> for this tag handler.</p>
@@ -1360,6 +1363,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             // with several levels of nesting.
             if (childComponents != null) {
                 result = childComponents.contains(componentId);
+                if (result && (!isNestedInIterator)) {
+                    return true;
+                }
             }
             else {
                 result = parentTag.isNestedInIterator;
@@ -1400,7 +1406,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     /**
      * <p>Create the component identifier to be used for this component.</p>
      */
-    private String createId() {
+    private String createId() throws JspException {
 
 	if (this.id == null) {
 	    return getFacesJspId();
@@ -1411,7 +1417,11 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             // stored in request scope with jspId as the key for use during next
             // iteration.
             if (isDuplicateId(this.id)) {
-                this.id = generateIdForIteratorChild(this.id);
+                if (isNestedInIterator) {
+                    this.id = generateIdForIteratorChild(this.id);
+                } else {
+                    throw new JspException("Duplicate Id Found:"+this.id);
+                }
             }
 	    return (this.id);
         }
@@ -1456,24 +1466,31 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
     
     private void updatePreviousJspIdAndIteratorStatus(String id) {
-        Map<Object,String> previousJspIdMap = null;
-        String oldJspId = null;
+        Set<String> previousJspIdSet = null;
        
-        if (null == (previousJspIdMap = (Map<Object, String>)
-            pageContext.getRequest().getAttribute(PREVIOUS_JSP_ID_MAP))) {
-            pageContext.getRequest().setAttribute(PREVIOUS_JSP_ID_MAP, 
-                    previousJspIdMap = new HashMap<Object,String>());
+        if (null == (previousJspIdSet = (Set<String>)
+            pageContext.getRequest().getAttribute(PREVIOUS_JSP_ID_SET))) {
+            pageContext.getRequest().setAttribute(PREVIOUS_JSP_ID_SET, 
+                    previousJspIdSet = new HashSet<String>());
         }
-        assert(null != previousJspIdMap);
-        oldJspId = previousJspIdMap.get(this);
+        assert(null != previousJspIdSet);
         // detect the iterator case
-        if (null != oldJspId && oldJspId.equals(id)) {
+        if (previousJspIdSet.contains(id) && !isIncludedOrForwarded()) {
+            if (log.isLoggable(Level.FINEST)) {
+                log.log(Level.FINEST, "Id " + id + 
+                        " is nested within an iterating tag.");
+            }
             isNestedInIterator = true;
         }
         else {
             isNestedInIterator = false;
-            previousJspIdMap.put(this, id);
+            previousJspIdSet.add(id);
         }
+    }
+    
+    private boolean isIncludedOrForwarded() {
+        return (getFacesContext().getExternalContext().getRequestMap().
+                containsKey("javax.servlet.include.request_uri"));
     }
 
     public String getJspId() {

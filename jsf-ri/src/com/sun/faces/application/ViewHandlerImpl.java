@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.67 2006/03/14 22:18:24 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.68 2006/03/22 20:49:59 edburns Exp $ 
  */ 
 
 
@@ -61,13 +61,14 @@ import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.io.FastStringWriter;
+import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.67 2006/03/14 22:18:24 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.68 2006/03/22 20:49:59 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -147,6 +148,9 @@ public class ViewHandlerImpl extends ViewHandler {
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Completed building view for : \n" +
                     viewToRender.getViewId());
+        }
+        if (logger.isLoggable(Level.FINEST)) {
+            DebugUtil.printTree(viewToRender, logger, Level.FINEST);
         }
         
         // set up the ResponseWriter

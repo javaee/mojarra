@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.33 2006/02/21 20:37:51 rlubke Exp $
+ * $Id: DebugUtil.java,v 1.34 2006/03/22 20:49:59 edburns Exp $
  */
 
 /*
@@ -34,7 +34,6 @@ package com.sun.faces.util;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
 
@@ -44,6 +43,10 @@ import javax.faces.model.SelectItem;
 
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.io.FastStringWriter;
+import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
 
 /**
  * <B>DebugUtil</B> is a class ...
@@ -154,6 +157,12 @@ public class DebugUtil {
         printTree(root, writer);
         writer.flush();
     }
+    
+    public static void printTree(UIComponent root, Logger logger, Level level) {
+        StringWriter sw = new StringWriter();
+        printTree(root, sw);
+        logger.log(level, sw.toString());
+    }
 
     public static void printTree(UIComponent root, Writer out) {
         if (null == root) {
@@ -173,7 +182,7 @@ public class DebugUtil {
         int j = 0;
 
         if (root instanceof javax.faces.component.UISelectOne) {
-            items = RenderKitUtils.getSelectItems(null, root);
+            items = RenderKitUtils.getSelectItems(FacesContext.getCurrentInstance(), root);
             indentPrintln(out, " {");
             while (items.hasNext()) {
                 curItem = (SelectItem) items.next();

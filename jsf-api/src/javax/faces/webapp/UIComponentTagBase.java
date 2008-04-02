@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagBase.java,v 1.6 2005/12/05 16:43:05 edburns Exp $
+ * $Id: UIComponentTagBase.java,v 1.7 2006/03/22 20:49:58 edburns Exp $
  */
 
 /*
@@ -34,6 +34,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.servlet.jsp.tagext.JspTag;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * <p><strong><code>UIComponentTagBase</code></strong> is the base class
  * for all JSP tags that correspond to a {@link
@@ -44,6 +47,9 @@ import javax.servlet.jsp.tagext.JspTag;
  */
 
 public abstract class UIComponentTagBase extends Object implements JspTag {
+    
+    protected static Logger log = Logger.getLogger("javax.faces.webapp", 
+            "javax.faces.LogStrings");
 
     /**
      * <p>Return the {@link FacesContext} instance for the current
