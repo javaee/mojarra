@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.2 2003/03/31 21:15:37 rkitain Exp $
+ * $Id: TestApplicationImpl.java,v 1.3 2003/05/01 06:20:44 eburns Exp $
  */
 
 /*
@@ -26,9 +26,11 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
+import javax.faces.FactoryFinder;
 
 import org.mozilla.util.Assert;
 import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.TestComponent;
 
 /**
  *
@@ -36,7 +38,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.2 2003/03/31 21:15:37 rkitain Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.3 2003/05/01 06:20:44 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -77,8 +79,15 @@ public class TestApplicationImpl extends JspFacesTestCase {
 // General Methods
 //
 
+    public void setUp() {
+	super.setUp();
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        application = (ApplicationImpl) aFactory.getApplication();
+    }
+	
+
     public void testAccessors() {
-        application = new ApplicationImpl();
 
         // 1. Verify "getActionListener" returns the same ActionListener
         //    instance if called multiple times.
@@ -123,7 +132,6 @@ public class TestApplicationImpl extends JspFacesTestCase {
     }
 
     public void testExceptions() {
-        application = new ApplicationImpl();
         boolean thrown;
 
         // 1. Verify NullPointer exception which occurs when attempting
@@ -233,5 +241,24 @@ public class TestApplicationImpl extends JspFacesTestCase {
 	    System.setProperty(HANDLED_ACTIONEVENT2, HANDLED_ACTIONEVENT2);
         }
     }
+
+    //
+    // Test Config related methods
+    //
+
+    public void testAddComponentPositive() {
+	TestComponent 
+	    newTestComponent = null,
+	    testComponent = new TestComponent();
+	
+	
+	application.addComponent(testComponent.getComponentType(),
+				 "com.sun.faces.TestComponent");
+	assertTrue(null != (newTestComponent = (TestComponent)
+			    application.getComponent(testComponent.getComponentType())));
+	assertTrue(newTestComponent != testComponent);
+	
+    }
+	
 
 } // end of class TestApplicationImpl

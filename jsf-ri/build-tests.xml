@@ -441,6 +441,9 @@
             <formatter type="plain" usefile="false"/>
             <!-- Suite of tests -->
             <test name="com.sun.faces.config.ConfigFileTestCase"/>
+
+            <test name="com.sun.faces.application.TestApplicationImpl_Config"/>
+            <test name="com.sun.faces.application.TestAppConfig"/>
             <test name="com.sun.faces.config.TestManagedBeanFactory"/>
 
             <!-- To run the following tests, comment last 3 tests, uncomment

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.7 2003/04/29 20:51:30 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.8 2003/05/01 06:20:38 eburns Exp $
  */
 
 /*
@@ -23,7 +23,6 @@ import javax.faces.el.VariableResolver;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.ReferenceSyntaxException;
-import javax.faces.el.PropertyNotFoundException;
 import javax.faces.application.NavigationHandler;
 import javax.faces.event.PhaseId;
 import javax.faces.validator.Validator;
@@ -32,7 +31,6 @@ import javax.faces.FacesException;
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
-import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
@@ -58,13 +56,14 @@ public class ApplicationImpl extends Application {
 
 // Attribute Instance Variables
 
+// Relationship Instance Variables
+
     private ActionListener actionListener = null;
     private NavigationHandler navigationHandler = null;
     private PropertyResolver propertyResolver = null;
     private VariableResolver variableResolver = null;
     private HashMap valueBindingMap;
-
-// Relationship Instance Variables
+    private AppConfig appConfig = null;
 
 //
 // Constructors and Initializers
@@ -78,6 +77,7 @@ public class ApplicationImpl extends Application {
         valueBindingMap = new HashMap();
 
         actionListener = new ActionListenerImpl();
+	appConfig = new AppConfig();
     }
 
     /**
@@ -255,10 +255,11 @@ public class ApplicationImpl extends Application {
     }
 
     public void addComponent(String componentType, String componentClass) {
+	appConfig.addComponent(componentType, componentClass);
     }
 
     public UIComponent getComponent(String componentType) throws FacesException {
-        return null;
+        return appConfig.getComponent(componentType);
     }
 
     public Iterator getComponentTypes() {
@@ -299,71 +300,15 @@ public class ApplicationImpl extends Application {
         return null;
     }
 
+    // 
+    // Methods leveraged by the RI only
+    //
 
-    private static final String APPLICATION = "application";
-    private static final String SESSION = "session";
-    private static final String REQUEST = "request";
-
-    protected HashMap managedBeanFactories;
-
-    /**
-     * The ConfigFile managed has populated the managedBeanFactories
-     * HashMap with ManagedBeanFactory object keyed by the bean name.
-     * Find the ManagedBeanFactory object and if it exists instantiate
-     * the bean and store it in the appropriate scope, if any.
-     */
-    public Object createAndMaybeStoreManagedBeans(FacesContext context,
-        String managedBeanName) throws PropertyNotFoundException {
-
-        ManagedBeanFactory managedBean = (ManagedBeanFactory) 
-            managedBeanFactories.get(managedBeanName);
-        if ( managedBean == null ) {
-            return null;
-        }
-    
-        Object bean;
-        try {
-            bean = managedBean.newInstance();
-        } catch (Exception ex) {
-            //FIX_ME: I18N error message
-            throw new PropertyNotFoundException("Error instantiating bean", ex);
-        }
-        //add bean to appropriate scope
-        String scope = managedBean.getScope();
-        //scope cannot be null
-        Assert.assert_it(null != scope);
-
-        if (scope.equalsIgnoreCase(APPLICATION)) {
-            context.getExternalContext().
-                getApplicationMap().put(managedBeanName, bean);
-        }
-        else if (scope.equalsIgnoreCase(SESSION)) {
-            context.getExternalContext().
-                getSessionMap().put(managedBeanName, bean);
-        }
-        else if (scope.equalsIgnoreCase(REQUEST)) {
-            context.getExternalContext().
-                getRequestMap().put(managedBeanName, bean);
-        }
-
-        return bean;
+    public AppConfig getAppConfig() {
+	return appConfig;
     }
 
-    /**
-     * ConfigFiles manager populates the managedBeanFactories
-     * HashMap with ManagedBeanFactory Objects.
-     */
-    public void addManagedBeanFactory(String managedBeanName,
-                                      ManagedBeanFactory factory) {
-
-        managedBeanFactories.put(managedBeanName, factory);
-    }
-
-    /**
-     * Clear Hashmap when ConfigFile is reparsed.
-     */
-    public void clearManagedBeanFactories() {
-        managedBeanFactories = new HashMap();
-    }
+    // The testcase for this class is com.sun.faces.application.TestApplicationImpl.java 
+    // The testcase for this class is com.sun.faces.application.TestApplicationImpl_Config.java 
 
 }

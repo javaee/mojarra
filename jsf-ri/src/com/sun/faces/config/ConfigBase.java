@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigBase.java,v 1.2 2003/04/29 20:51:31 eburns Exp $
+ * $Id: ConfigBase.java,v 1.3 2003/05/01 06:20:39 eburns Exp $
  */
 
 /*
@@ -131,7 +131,7 @@ public class ConfigBase {
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
         ManagedBeanFactory mbf = new ManagedBeanFactory(managedBean);
-        application.addManagedBeanFactory(managedBean.getManagedBeanId(), mbf);
+        application.getAppConfig().addManagedBeanFactory(managedBean.getManagedBeanId(), mbf);
     }
     public Map getManagedBeans() {
         if (managedBeans == null) {

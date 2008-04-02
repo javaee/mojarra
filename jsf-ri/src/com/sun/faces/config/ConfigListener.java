@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.4 2003/04/30 19:55:23 eburns Exp $
+ * $Id: ConfigListener.java,v 1.5 2003/05/01 06:20:39 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -43,6 +43,7 @@ package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import com.sun.faces.application.ApplicationImpl;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
@@ -55,6 +56,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.ApplicationFactory;
 
 public class ConfigListener implements ServletContextListener
 {
@@ -112,6 +115,14 @@ public class ConfigListener implements ServletContextListener
 	Assert.assert_it(null != jarInputStream);
 
         configBase = configParser.parseConfig(jarInputStream);
+
+	// plug the configBase into the application
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = 
+	    (ApplicationImpl)aFactory.getApplication();
+	application.getAppConfig().setConfigBase(configBase);
+
 	Assert.assert_it(null != configBase);
 	
 	// Step 2, load any additional config files from the

@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.7 2003/04/29 20:51:46 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.8 2003/05/01 06:20:41 eburns Exp $
  */
 
 /*
@@ -224,7 +224,8 @@ public class ValueBindingImpl extends ValueBinding
 	catch (Throwable e) {
 	    Object [] params = { toEvaluate };
             //possible opportunity to create and install a managed bean
-            Object bean = application.createAndMaybeStoreManagedBeans
+            Object bean = 
+		application.getAppConfig().createAndMaybeStoreManagedBeans
                 (context, getBeanName());
 
             if ( bean != null) {
@@ -251,7 +252,8 @@ public class ValueBindingImpl extends ValueBinding
 	    Object [] params = { ref };
 
             //possible opportunity to create and install a managed bean
-            Object bean = application.createAndMaybeStoreManagedBeans
+            Object bean = 
+		application.getAppConfig().createAndMaybeStoreManagedBeans
                 (context, getBeanName());
 
             if ( bean != null) {

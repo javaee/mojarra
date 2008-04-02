@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.5 2003/04/30 23:28:12 rkitain Exp $
+ * $Id: ConfigFileTestCase.java,v 1.6 2003/05/01 06:20:45 eburns Exp $
  */
 
 /*
@@ -257,7 +257,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
 
-        Object bean = application.createAndMaybeStoreManagedBeans(getFacesContext(),
+        Object bean = application.getAppConfig().createAndMaybeStoreManagedBeans(getFacesContext(),
             "SimpleBean");
 
         Map managedBeans = base.getManagedBeans();
@@ -309,4 +309,5 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	assertTrue(null != configBase.getManagedBeans().get("TestBean1"));
 	assertTrue(null != configBase.getManagedBeans().get("TestBean2"));
     }
+
 }
