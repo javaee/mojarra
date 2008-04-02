@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TimeTag.java,v 1.8 2003/07/07 20:53:04 eburns Exp $
+ * $Id: Output_TimeTag.java,v 1.9 2003/07/09 19:04:25 rlubke Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Output_TimeTag.java,v 1.8 2003/07/07 20:53:04 eburns Exp $
+ * @version $Id: Output_TimeTag.java,v 1.9 2003/07/09 19:04:25 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -73,10 +73,6 @@ public Output_TimeTag()
 //
     public String getLocalRendererType() { return "Time"; }
     public String getComponentType() { return "Output"; }
-
-    public UIComponent createComponent() {
-        return (new UIOutput());
-    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);

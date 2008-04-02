@@ -1,5 +1,5 @@
 /*
- * $Id: Output_DateTimeTag.java,v 1.8 2003/07/07 20:53:04 eburns Exp $
+ * $Id: Output_DateTimeTag.java,v 1.9 2003/07/09 19:04:24 rlubke Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Output_DateTimeTag.java,v 1.8 2003/07/07 20:53:04 eburns Exp $
+ * @version $Id: Output_DateTimeTag.java,v 1.9 2003/07/09 19:04:24 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -73,10 +73,6 @@ public Output_DateTimeTag()
 //
     public String getLocalRendererType() { return "DateTime"; }
     public String getComponentType() { return "Output"; }
-
-    public UIComponent createComponent() {
-        return (new UIOutput());
-    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);

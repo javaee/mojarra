@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.7 2003/07/07 20:53:03 eburns Exp $
+ * $Id: Input_SecretTag.java,v 1.8 2003/07/09 19:04:24 rlubke Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_SecretTag.java,v 1.7 2003/07/07 20:53:03 eburns Exp $
+ * @version $Id: Input_SecretTag.java,v 1.8 2003/07/09 19:04:24 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -71,10 +71,6 @@ public Input_SecretTag()
 //
 
     public String getLocalRendererType() { return "Secret"; }
-
-    public UIComponent createComponent() {
-        return (new UIInput());
-    }
 
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);

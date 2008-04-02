@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_ListboxTag.java,v 1.5 2003/06/27 22:29:34 rkitain Exp $
+ * $Id: SelectOne_ListboxTag.java,v 1.6 2003/07/09 19:04:27 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_ListboxTag.java,v 1.5 2003/06/27 22:29:34 rkitain Exp $
+ * @version $Id: SelectOne_ListboxTag.java,v 1.6 2003/07/09 19:04:27 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -80,9 +80,6 @@ public SelectOne_ListboxTag()
 
     public String getLocalRendererType() { return "Listbox"; }
     public String getComponentType() { return "SelectOne"; }
-    public UIComponent createComponent() {
-        return (new UISelectOne());
-    }
 
 //
 // Methods from TagSupport

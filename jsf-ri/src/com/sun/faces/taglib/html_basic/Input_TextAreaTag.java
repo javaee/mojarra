@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextAreaTag.java,v 1.6 2003/07/07 20:53:03 eburns Exp $
+ * $Id: Input_TextAreaTag.java,v 1.7 2003/07/09 19:04:24 rlubke Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_TextAreaTag.java,v 1.6 2003/07/07 20:53:03 eburns Exp $
+ * @version $Id: Input_TextAreaTag.java,v 1.7 2003/07/09 19:04:24 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -65,9 +65,6 @@ public Input_TextAreaTag()
 //
 
     public String getLocalRendererType() { return "Textarea"; }
-    public UIComponent createComponent() {
-        return (new UIInput());
-    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);

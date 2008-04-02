@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_DataTag.java,v 1.6 2003/07/07 20:53:05 eburns Exp $
+ * $Id: Panel_DataTag.java,v 1.7 2003/07/09 19:04:26 rlubke Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.servlet.jsp.JspException;
 
 /**
  *
- * @version $Id: Panel_DataTag.java,v 1.6 2003/07/07 20:53:05 eburns Exp $
+ * @version $Id: Panel_DataTag.java,v 1.7 2003/07/09 19:04:26 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -67,13 +67,6 @@ public class Panel_DataTag extends FacesTag {
         return var;
     }
 
-    //
-    // Methods from FacesTag
-    //
-     public UIComponent createComponent() {
-        return (new UIPanel());
-    }
-    
     public void release() {
         super.release();
         this.var = null;

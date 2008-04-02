@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_ListTag.java,v 1.6 2003/07/07 20:53:05 eburns Exp $
+ * $Id: Panel_ListTag.java,v 1.7 2003/07/09 19:04:26 rlubke Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.servlet.jsp.JspException;
 
 /**
  *
- * @version $Id: Panel_ListTag.java,v 1.6 2003/07/07 20:53:05 eburns Exp $
+ * @version $Id: Panel_ListTag.java,v 1.7 2003/07/09 19:04:26 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,15 +102,8 @@ public class Panel_ListTag extends FacesTag {
     public String getRowClasses() {
       return rowClasses;
     }
-    
-    // 
-    // Methods from FacesTag
-    //
-    public UIComponent createComponent() {
-        return (new UIPanel());
-    }
-    
-   
+
+
     public void release() {
         super.release();
         this.columnClasses = null;

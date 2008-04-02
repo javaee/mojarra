@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextTag.java,v 1.8 2003/07/07 20:53:03 eburns Exp $
+ * $Id: Input_TextTag.java,v 1.9 2003/07/09 19:04:24 rlubke Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_TextTag.java,v 1.8 2003/07/07 20:53:03 eburns Exp $
+ * @version $Id: Input_TextTag.java,v 1.9 2003/07/09 19:04:24 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -65,10 +65,6 @@ public class Input_TextTag extends InputTag
 //
 
     public String getLocalRendererType() { return "Text"; }
-
-    public UIComponent createComponent() {
-        return (new UIInput());
-    }
 
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);

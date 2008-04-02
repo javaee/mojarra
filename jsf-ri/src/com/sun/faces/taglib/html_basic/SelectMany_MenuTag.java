@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_MenuTag.java,v 1.7 2003/06/27 22:29:34 rkitain Exp $
+ * $Id: SelectMany_MenuTag.java,v 1.8 2003/07/09 19:04:27 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -30,7 +30,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectMany_MenuTag.java,v 1.7 2003/06/27 22:29:34 rkitain Exp $
+ * @version $Id: SelectMany_MenuTag.java,v 1.8 2003/07/09 19:04:27 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -78,11 +78,7 @@ public SelectMany_MenuTag()
 //
 
     public String getLocalRendererType() { return "Menu"; } 
-    public String getComponentType() { return "SelectMany"; } 
-    
-    public UIComponent createComponent() {
-        return (new UISelectMany());
-    }
+    public String getComponentType() { return "SelectMany"; }
 
 //
 // Methods from TagSupport
