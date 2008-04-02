@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.19 2005/09/26 14:11:48 rogerk Exp $
+ * $Id: TestBean.java,v 1.20 2005/09/28 16:03:08 edburns Exp $
  */
 
 /*
@@ -48,6 +48,8 @@ import javax.faces.el.PropertyNotFoundException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 /**
  * <p>Test JavaBean for managed object creation facility.</p>
@@ -540,6 +542,61 @@ public class TestBean {
     }
 
 
+    @PostConstruct 
+    public void postConstruct() {
+        setPostConstructCalled(true);
+    }
 
+    @PreDestroy
+    public void preDestroy() {
+        setPreDestroyCalled(true);
+    }
+
+    /**
+     * Holds value of property postConstructCalled.
+     */
+    private boolean postConstructCalled;
+
+    /**
+     * Getter for property postConstructCalled.
+     * @return Value of property postConstructCalled.
+     */
+    public boolean isPostConstructCalled() {
+
+        return this.postConstructCalled;
+    }
+
+    /**
+     * Setter for property postConstructCalled.
+     * @param postConstructCalled New value of property postConstructCalled.
+     */
+    public void setPostConstructCalled(boolean postConstructCalled) {
+
+        this.postConstructCalled = postConstructCalled;
+    }
+
+    /**
+     * Holds value of property preDestroyCalled.
+     */
+    private boolean preDestroyCalled;
+
+    /**
+     * Getter for property preDestroyCalled.
+     * @return Value of property preDestroyCalled.
+     */
+    public boolean isPreDestroyCalled() {
+
+        return this.preDestroyCalled;
+    }
+
+    /**
+     * Setter for property preDestroyCalled.
+     * @param preDestroyCalled New value of property preDestroyCalled.
+     */
+    public void setPreDestroyCalled(boolean preDestroyCalled) {
+
+        this.preDestroyCalled = preDestroyCalled;
+    }
+    
 	
 }

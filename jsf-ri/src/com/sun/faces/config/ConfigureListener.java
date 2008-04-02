@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.51 2005/08/26 15:27:03 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.52 2005/09/28 16:03:05 edburns Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -108,6 +108,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.ServletRequestListener;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 
 
 /**
@@ -115,7 +119,7 @@ import java.util.logging.Level;
  * configure the Reference Implementation runtime environment.</p>
  * <p/>
  */
-public class ConfigureListener implements ServletContextListener {
+public class ConfigureListener implements ServletRequestListener, HttpSessionListener, ServletContextListener {
 
 
     // -------------------------------------------------------- Static Variables
@@ -285,6 +289,32 @@ public class ConfigureListener implements ServletContextListener {
     public static ExternalContext getExternalContextDuringInitialize() {
 	return (ExternalContext) tlsExternalContext.get();
     }
+    
+    // 
+    // Methods from ServletRequestListener
+    //
+    
+    public void requestDestroyed(ServletRequestEvent sre) {
+
+
+    }
+    
+    public void requestInitialized(ServletRequestEvent sre) {
+        
+    }
+    
+    //
+    // Methods from HttpSessionListener
+    //
+    
+    public void sessionCreated(HttpSessionEvent se) {
+        
+    }
+    public void sessionDestroyed(HttpSessionEvent se) {
+        
+    }
+    
+    
 
     public void contextInitialized(ServletContextEvent sce) {
         

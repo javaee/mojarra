@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.90 2005/08/22 22:10:30 ofung Exp $
+ $Id: build-tests.xml,v 1.91 2005/09/28 16:03:06 edburns Exp $
 -->
 
 <!--
@@ -433,6 +433,26 @@
         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         recordGolden="${local.golden.path}/resourceInjection01.txt"
         failonerror="${failonerror}"/> 
+        
+    <junit printsummary="yes" fork="yes"
+          haltonfailure="yes" haltonerror="yes">
+
+      <!-- uncomment the below line to enable attaching a debugger -->
+      <jvmarg line="${debug.jvm.args}"/>
+
+      <classpath refid="html.classpath"/>
+      <formatter  type="plain"      usefile="false"/>
+      <formatter  type="xml"        usefile="true"/>
+      <sysproperty key="host"         value="${host}"/>
+      <sysproperty key="port"         value="${port}"/>
+      <sysproperty key="context.path" value="${context.path}"/>
+
+      <batchtest todir="${test.results.dir}">
+        <fileset    dir="${basedir}/build/WEB-INF/classes"              
+               includes="com/sun/faces/systest/lifecycle/*TestCase.class"/>
+      </batchtest> 
+    </junit>
+        
         
   </target>
 
