@@ -30,6 +30,46 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <managed-bean-name>listenerBean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.ListenerBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>TestValueChangeListener01</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.TestValueChangeListener01
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>TestActionListener01</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.TestActionListener01
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>validatorBean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.ValidatorBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+                                                                                
+  <managed-bean>
+    <managed-bean-name>converterBean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.ConverterBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <!-- Managed Bean #1, No Property Overrides -->
   <managed-bean>
     <managed-bean-name>test1</managed-bean-name>
@@ -102,6 +142,12 @@
     <validator-class>com.sun.faces.systest.TestValidator</validator-class>
   </validator>
 
+  <validator>
+    <description>TestValidator01 Description</description>
+    <validator-id>TestValidator01</validator-id>
+    <validator-class>com.sun.faces.systest.TestValidator01</validator-class>
+  </validator>
+
   <!-- converter -->
   <converter>
     <description>Test Converter</description>
@@ -109,6 +155,12 @@
     <converter-class>com.sun.faces.systest.TestConverter</converter-class>
   </converter>
   
+  <converter>
+    <description>TestConverter01 Description</description>
+    <converter-id>TestConverter01</converter-id>
+    <converter-class>com.sun.faces.systest.TestConverter01</converter-class>
+  </converter>
+
   <!-- component -->
   <component>
     <component-type>TestComponent</component-type>

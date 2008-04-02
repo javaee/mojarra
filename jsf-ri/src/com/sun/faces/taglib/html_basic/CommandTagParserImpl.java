@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTagParserImpl.java,v 1.11 2004/04/17 02:01:36 eburns Exp $
+ * $Id: CommandTagParserImpl.java,v 1.12 2004/12/02 18:42:23 rogerk Exp $
  */
 
 /*
@@ -79,10 +79,14 @@ public class CommandTagParserImpl implements TagParser {
      * handler method.</p>
      */
     public void parseStartElement() {
-        String qn = validatorInfo.getQName();
+        String ns = validatorInfo.getNameSpace();
+        String ln = validatorInfo.getLocalName();
 
-        if (-1 != (qn.indexOf("commandButton"))) {
-            handleCommandButton();
+        if (ns.equals(RIConstants.HTML_NAMESPACE)) {
+            if (ln.equals("commandButton")) {
+                handleCommandButton();
+            }
+        
         }
     }
 
@@ -105,25 +109,25 @@ public class CommandTagParserImpl implements TagParser {
      */
     private void handleCommandButton() {
         Attributes attrs = validatorInfo.getAttributes();
-        String qn = validatorInfo.getQName();
+        String ln = validatorInfo.getLocalName();
         boolean hasValue = false;
         boolean hasImage = false;
 	boolean hasBinding = false;
 
         for (int i = 0; i < attrs.getLength(); i++) {
-            if (attrs.getQName(i).equals("value")) {
+            if (attrs.getLocalName(i).equals("value")) {
                 hasValue = true;
             }
-            if (attrs.getQName(i).equals("image")) {
+            if (attrs.getLocalName(i).equals("image")) {
                 hasImage = true;
             }
-            if (attrs.getQName(i).equals("binding")) {
+            if (attrs.getLocalName(i).equals("binding")) {
                 hasBinding = true;
             }
         }
         if (failed = (!hasBinding && !(hasValue || hasImage))) {
             Object[] obj = new Object[1];
-            obj[0] = qn;
+            obj[0] = ln;
             ResourceBundle rb = ResourceBundle.getBundle(
                 RIConstants.TLV_RESOURCE_LOCATION);
             failureMessages.append(

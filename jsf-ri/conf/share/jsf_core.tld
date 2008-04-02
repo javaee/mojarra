@@ -73,7 +73,7 @@
 
     <attribute>
       <name>type</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
         Fully qualified Java class name of an ActionListener to be
@@ -81,6 +81,15 @@
       </description>
     </attribute>
 
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value binding expression that evaluates to an object that 
+        implements javax.faces.event.ActionListener.
+      </description>
+    </attribute>
   </tag>
 
 
@@ -201,6 +210,16 @@
         formatted to include, or parsed expecting.  Valid
         values are "date", "time", and "both".  Default
         value is "date".
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value binding expression that evaluates to an object that 
+        implements javax.faces.convert.Converter.
       </description>
     </attribute>
 
@@ -340,6 +359,16 @@
       </description>
     </attribute>
 
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value binding expression that evaluates to an object that 
+        implements javax.faces.convert.Converter.
+      </description>
+    </attribute>
+
   </tag>
 
 
@@ -356,11 +385,21 @@
 
     <attribute>
       <name>converterId</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
         Converter identifier of the Converter instance to be
         created and registered.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value binding expression that evaluates to an object that 
+        implements javax.faces.convert.Converter.
       </description>
     </attribute>
 
@@ -681,6 +720,16 @@
     </description>
 
     <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value binding expression that evaluates to an object that 
+        implements javax.faces.validator.Validator.
+      </description>
+    </attribute>
+
+    <attribute>
       <name>maximum</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
@@ -698,6 +747,7 @@
       </description>
     </attribute>
 
+
   </tag>
 
 
@@ -712,6 +762,16 @@
       UIComponent associated with the closest parent
       UIComponent custom action.
     </description>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value binding expression that evaluates to an object that 
+        implements javax.faces.validator.Validator.
+      </description>
+    </attribute>
 
     <attribute>
       <name>maximum</name>
@@ -745,6 +805,16 @@
       UIComponent associated with the closest parent
       UIComponent custom action.
     </description>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value binding expression that evaluates to an object that
+        implements javax.faces.validator.Validator.
+      </description>
+    </attribute>
 
     <attribute>
       <name>maximum</name>
@@ -781,7 +851,7 @@
 
     <attribute>
       <name>validatorId</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
         Validator identifier of the Validator
@@ -789,6 +859,15 @@
       </description>
     </attribute>
 
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value binding expression that evaluates to an object that 
+        implements javax.faces.validator.Validator.
+      </description>
+    </attribute>
   </tag>
 
 
@@ -805,7 +884,7 @@
 
     <attribute>
       <name>type</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
         Fully qualified Java class name of a
@@ -813,6 +892,15 @@
       </description>
     </attribute>
 
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value binding expression that evaluates to an object that 
+        implements javax.faces.event.ValueChangeListener.
+      </description>
+    </attribute>
   </tag>
 
 

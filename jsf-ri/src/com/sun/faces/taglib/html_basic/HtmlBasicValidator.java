@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicValidator.java,v 1.12 2004/11/23 19:26:53 rlubke Exp $
+ * $Id: HtmlBasicValidator.java,v 1.13 2004/12/02 18:42:23 rogerk Exp $
  */
 
 /*
@@ -60,7 +60,6 @@ public class HtmlBasicValidator extends FacesValidator {
     protected DefaultHandler getSAXHandler() {
 	// don't run the TLV if we're in designTime, or the RIConstants
 	// says not to.
-	
 	if (java.beans.Beans.isDesignTime() || 
 	    !RIConstants.HTML_TLV_ACTIVE) {
 	    return null;
@@ -75,7 +74,8 @@ public class HtmlBasicValidator extends FacesValidator {
         // we should only get called if this Validator failed        
 
         StringBuffer result = new StringBuffer();
-        if (commandTagParser.hasFailed()) {
+      
+        if (commandTagParser.getMessage() != null) {
             result.append(commandTagParser.getMessage());
         }
         return result.toString();
@@ -96,13 +96,15 @@ public class HtmlBasicValidator extends FacesValidator {
          * @param ns Element name space.
          * @param ln Element local name.
          * @param qn Element QName.
-         * @param a  Element's Attribute list.
+         * @param attrs  Element's Attribute list.
          */
         public void startElement(String ns,
                                  String ln,
                                  String qn,
                                  Attributes attrs) {
             maybeSnagTLPrefixes(qn, attrs);
+            validatorInfo.setNameSpace(ns);
+            validatorInfo.setLocalName(ln);
             validatorInfo.setQName(qn);
             validatorInfo.setAttributes(attrs);
 
@@ -117,9 +119,9 @@ public class HtmlBasicValidator extends FacesValidator {
          * Parse the ending element. If it is a specific JSTL tag
          * make sure that the nested count is decreased.
          *
+         * @param ns Element namespace.
          * @param ln Element local name.
          * @param qn Element QName.
-         * @param a  Element's Attribute list.
          */
         public void endElement(String ns, String ln, String qn) {
         }

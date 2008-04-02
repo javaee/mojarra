@@ -1,5 +1,5 @@
 /*
- * $Id: FacesValidator.java,v 1.12 2004/04/20 18:27:24 eburns Exp $
+ * $Id: FacesValidator.java,v 1.13 2004/12/02 18:42:23 rogerk Exp $
  */
 
 /*
@@ -85,6 +85,13 @@ public abstract class FacesValidator extends TagLibraryValidator {
         return JSTL_IF_QN;
     }
 
+    // Local Name for JSTL conditional tag
+    protected String JSTL_IF_LN = "if";
+
+
+    public String getJSTL_IF_LN() {
+        return JSTL_IF_LN;
+    }
 
     // QName for JSTL conditional tag
     protected String JSTL_CHOOSE_QN = ":choose";
@@ -94,6 +101,13 @@ public abstract class FacesValidator extends TagLibraryValidator {
         return JSTL_CHOOSE_QN;
     }
 
+    // Local Name for JSTL conditional tag
+    protected String JSTL_CHOOSE_LN = "choose";
+
+
+    public String getJSTL_CHOOSE_LN() {
+        return JSTL_CHOOSE_LN;
+    }
 
     // QName for JSTL iterator tag
     protected String JSTL_FOREACH_QN = ":forEach";
@@ -103,6 +117,13 @@ public abstract class FacesValidator extends TagLibraryValidator {
         return JSTL_FOREACH_QN;
     }
 
+    // Local Name for JSTL iterator tag
+    protected String JSTL_FOREACH_LN = "forEach";
+
+
+    public String getJSTL_FOREACH_LN() {
+        return JSTL_FOREACH_LN;
+    }
 
     // QName for JSTL iterator tag
     protected String JSTL_FORTOKENS_QN = ":forTokens";
@@ -112,6 +133,13 @@ public abstract class FacesValidator extends TagLibraryValidator {
         return JSTL_FORTOKENS_QN;
     }
 
+    // Local Name for JSTL iterator tag
+    protected String JSTL_FORTOKENS_LN = "forTokens";
+
+
+    public String getJSTL_FORTOKENS_LN() {
+        return JSTL_FORTOKENS_LN;
+    }
 
     // QName for JSF Form tag
     protected String JSF_FORM_QN = ":form";
@@ -121,6 +149,13 @@ public abstract class FacesValidator extends TagLibraryValidator {
         return JSF_FORM_QN;
     }
 
+    // Local Name for JSF Form tag
+    protected String JSF_FORM_LN = "form";
+
+
+    public String getJSF_FORM_LN() {
+        return JSF_FORM_LN;
+    }
 
     // QName for JSF subview tag
     protected String JSF_SUBVIEW_QN = ":subview";
@@ -130,6 +165,13 @@ public abstract class FacesValidator extends TagLibraryValidator {
         return JSF_SUBVIEW_QN;
     }
     
+    // Local Name for JSF subview tag
+    protected String JSF_SUBVIEW_LN = "subview";
+
+
+    public String getJSF_SUBVIEW_LN() {
+        return JSF_SUBVIEW_LN;
+    }
     
 
 
@@ -192,6 +234,7 @@ public abstract class FacesValidator extends TagLibraryValidator {
 
             // parse the page
             SAXParserFactory f = SAXParserFactory.newInstance();
+            f.setNamespaceAware(true);
             f.setValidating(true);
             SAXParser p = f.newSAXParser();
             p.parse(page.getInputStream(), h);

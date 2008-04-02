@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.67 2004/07/26 21:12:43 rlubke Exp $
+ * $Id: RIConstants.java,v 1.68 2004/12/02 18:42:22 rogerk Exp $
  */
 
 /*
@@ -106,7 +106,14 @@ public class RIConstants {
 
     public static final Object NO_VALUE = new String();
 
-    public static boolean HTML_TLV_ACTIVE = false;
+    public static boolean HTML_TLV_ACTIVE = true;
+    public static boolean CORE_TLV_ACTIVE = true;
+    public static final String CORE_NAMESPACE = 
+        "http://java.sun.com/jsf/core";
+    public static final String HTML_NAMESPACE = 
+        "http://java.sun.com/jsf/html";
+    public static final String JSTL_NAMESPACE = 
+        "http://java.sun.com/jsp/jstl/core";
 
     //
     // Constructors and Initializers

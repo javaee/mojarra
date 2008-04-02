@@ -1,5 +1,5 @@
 /*
- * $Id: IdTagParserImpl.java,v 1.8 2004/02/26 20:33:17 eburns Exp $
+ * $Id: IdTagParserImpl.java,v 1.9 2004/12/02 18:42:24 rogerk Exp $
  */
 
 /*
@@ -93,16 +93,18 @@ public class IdTagParserImpl implements TagParser {
      * make sure that the nested JSF tags have IDs. </p>
      */
     public void parseStartElement() {
+        String ns = validatorInfo.getNameSpace();
+        String ln = validatorInfo.getLocalName();
+
         String qn = validatorInfo.getQName();
         Attributes a = validatorInfo.getAttributes();
         FacesValidator validator = validatorInfo.getValidator();
 
-        if (isJstlTag(validator, qn)) {
+        if (isJstlTag(validator, ns, ln)) {
             requiresIdCount++;
-        } else if (isNamingContainerTag(validator, qn)) {
+        } else if (isNamingContainerTag(validator, ns, ln)) {
             nestedInNamingContainer = true;
-        } else if ((validator.getJSF_HTML_PRE() != null) &&
-            (qn.startsWith(validator.getJSF_HTML_PRE())) &&
+        } else if ((ns.equals(RIConstants.HTML_NAMESPACE)) &&
             (requiresIdCount > 0)) {
             //make sure that id is present in attributes
             if ((!(nestedInNamingContainer)) && (!hasIdAttribute(a))) {
@@ -113,9 +115,8 @@ public class IdTagParserImpl implements TagParser {
         } else if ((requiresIdCount == 0) &&
             (!siblingSatisfied)) {
             //make sure jsf sibling has an id
-            if ((validator.getJSF_HTML_PRE() != null) &&
-                (qn.startsWith(validator.getJSF_HTML_PRE()) ||
-                qn.startsWith(validator.getJSF_CORE_PRE())) &&
+            if (((ns.equals(RIConstants.HTML_NAMESPACE)) ||
+                (ns.equals(RIConstants.CORE_NAMESPACE))) &&
                 (!hasIdAttribute(a)) && (!(nestedInNamingContainer))) {
 
                 //add to list of jsf tags for error report
@@ -137,13 +138,13 @@ public class IdTagParserImpl implements TagParser {
      * make sure that the appropriate flags are set.</p>
      */
     public void parseEndElement() {
-        String qn = validatorInfo.getQName();
+        String ns = validatorInfo.getNameSpace();
+        String ln = validatorInfo.getLocalName();
         FacesValidator validator = validatorInfo.getValidator();
-
-        if (isJstlTag(validator, qn)) {
+        if (isJstlTag(validator, ns, ln)) {
             requiresIdCount--;
             siblingSatisfied = false;
-        } else if (isNamingContainerTag(validator, qn)) {
+        } else if (isNamingContainerTag(validator, ns, ln)) {
             nestedInNamingContainer = false;
         }
     }
@@ -173,15 +174,18 @@ public class IdTagParserImpl implements TagParser {
      * conditional or iterator JSTL tag.
      *
      * @param validator Parent validator
-     * @param qn        Element to be checked.
+     * @param ns        The Namespace.
+     * @param ln        The Local Name.
      * @return boolean True if JSTL tag is iterator or conditional
      */
-    private boolean isJstlTag(FacesValidator validator, String qn) {
-        if (qn.equals(validator.getJSTL_IF_QN()) ||
-            qn.equals(validator.getJSTL_CHOOSE_QN()) ||
-            qn.equals(validator.getJSTL_FOREACH_QN()) ||
-            qn.equals(validator.getJSTL_FORTOKENS_QN())) {
-            return true;
+    private boolean isJstlTag(FacesValidator validator, String ns, String ln) {
+        if (ns.equals(RIConstants.JSTL_NAMESPACE)) {
+            if (ln.equals(validator.getJSTL_IF_LN()) ||
+                ln.equals(validator.getJSTL_CHOOSE_LN()) ||
+                ln.equals(validator.getJSTL_FOREACH_LN()) ||
+                ln.equals(validator.getJSTL_FORTOKENS_LN())) {
+                return true;
+            }
         }
         return false;
     }
@@ -192,19 +196,26 @@ public class IdTagParserImpl implements TagParser {
      * form tag or a subview tag.
      *
      * @param validator Parent validator
-     * @param qn        Element to be checked.
+     * @param ns        The Namespace.
+     * @param ln        The Local Name.
      * @return boolean True if JSF tag is form or subview
      */
-    private boolean isNamingContainerTag(FacesValidator validator, String qn) {
+    private boolean isNamingContainerTag(FacesValidator validator, String ns, String ln) {
 
         // PENDING (visvan) Handle custom implementations of NamingContainer.
         // This requires the compiler to look up a fake Faces environment
         // so that we can look up the component class based on what 
         // getComponentType() returns to detect customer NamingContainer
         // components.
-        if (qn.equals(validator.getJSF_FORM_QN()) ||
-            qn.equals(validator.getJSF_SUBVIEW_QN())) {
-            return true;
+        if (ns.equals(RIConstants.HTML_NAMESPACE)) {
+            if (ln.equals(validator.getJSF_FORM_LN())) {
+                return true; 
+            }
+        } 
+        if (ns.equals(RIConstants.CORE_NAMESPACE)) {
+            if (ln.equals(validator.getJSF_SUBVIEW_LN())) {
+                return true;
+            }
         }
         return false;
     }

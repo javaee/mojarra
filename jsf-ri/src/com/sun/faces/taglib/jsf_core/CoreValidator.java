@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.13 2004/11/30 21:36:56 rlubke Exp $
+ * $Id: CoreValidator.java,v 1.14 2004/12/02 18:42:24 rogerk Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
 import org.xml.sax.Attributes;
@@ -31,6 +32,7 @@ public class CoreValidator extends FacesValidator {
 
     private ValidatorInfo validatorInfo;
     private IdTagParserImpl idTagParser;
+    private CoreTagParserImpl coreTagParser;
 
     //*********************************************************************
     // Constructor and lifecycle management
@@ -53,7 +55,11 @@ public class CoreValidator extends FacesValidator {
         validatorInfo = new ValidatorInfo();
 
         idTagParser = new IdTagParserImpl();
-        idTagParser.setValidatorInfo(validatorInfo);
+        idTagParser.setValidatorInfo(validatorInfo);        
+  
+        coreTagParser = new CoreTagParserImpl();
+        coreTagParser.setValidatorInfo(validatorInfo);
+        
     }
 
 
@@ -73,6 +79,10 @@ public class CoreValidator extends FacesValidator {
      * <p>Get the validator handler</p>
      */
     protected DefaultHandler getSAXHandler() {
+        if (java.beans.Beans.isDesignTime() || 
+	    !RIConstants.CORE_TLV_ACTIVE) {
+	    return null;
+	}
         DefaultHandler h = new CoreValidatorHandler();
         return h;
     }
@@ -88,9 +98,13 @@ public class CoreValidator extends FacesValidator {
         // we should only get called if this Validator failed        
         StringBuffer result = new StringBuffer();
 
-        if (idTagParser.hasFailed()) {
+        if (idTagParser.getMessage() != null) {
             result.append(idTagParser.getMessage());
         }
+        if (coreTagParser.getMessage() != null) {
+            result.append(coreTagParser.getMessage());
+        }
+        
         return result.toString();
     }
 
@@ -116,8 +130,11 @@ public class CoreValidator extends FacesValidator {
                                  String ln,
                                  String qn,
                                  Attributes attrs) {
+            debugPrintTagData(ns,ln,qn,attrs);
             maybeSnagTLPrefixes(qn, attrs);
 
+            validatorInfo.setNameSpace(ns);
+            validatorInfo.setLocalName(ln);
             validatorInfo.setQName(qn);
             validatorInfo.setAttributes(attrs);
             validatorInfo.setValidator(CoreValidator.this);
@@ -125,6 +142,12 @@ public class CoreValidator extends FacesValidator {
             idTagParser.parseStartElement();
 
             if (idTagParser.hasFailed()) {
+                failed = true;
+            }
+            
+            coreTagParser.parseStartElement();
+
+            if (coreTagParser.hasFailed()) {
                 failed = true;
             }
         }
@@ -139,8 +162,12 @@ public class CoreValidator extends FacesValidator {
          * @param qn Element QName.
          */
         public void endElement(String ns, String ln, String qn) {
+            validatorInfo.setNameSpace(ns);
+            validatorInfo.setLocalName(ln);
             validatorInfo.setQName(qn);
             idTagParser.parseEndElement();
+            coreTagParser.parseEndElement();
+            
         }
     }
 }

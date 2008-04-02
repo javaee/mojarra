@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.8 2004/03/31 18:48:50 eburns Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.9 2004/12/02 18:42:24 rogerk Exp $
  */
 
 /*
@@ -14,6 +14,8 @@ import com.sun.faces.util.Util;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
@@ -58,6 +60,13 @@ public class ValueChangeListenerTag extends TagSupport {
     private String type = null;
     private String type_ = null;
 
+    /**
+     * <p>The value binding expression used to create a listener instance and it is 
+     * also used to wire up this listener to an {@link ValueChangeListener} property 
+     * of a JavaBean class.</p>
+     */
+    private String binding= null;
+    private String binding_ = null;
 
     /**
      * <p>Set the fully qualified class name of the
@@ -71,6 +80,22 @@ public class ValueChangeListenerTag extends TagSupport {
 
     }
 
+    /*
+     * <p>Set the value binding expression  for this listener.</p>
+     *
+     * @param binding The new value binding expression
+     *
+     * @throws JspException if a JSP error occurs
+     */
+    public void setBinding(String binding) 
+        throws JspException {
+        if (binding != null && !Util.isValueReference(binding)) {
+            Object[] params = {binding};
+            throw new JspException(
+                Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, params));
+        }
+        this.binding_ = binding;
+    }
 
     // --------------------------------------------------------- Public Methods
 
@@ -86,10 +111,16 @@ public class ValueChangeListenerTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
 
+        ValueChangeListener handler = null;
+        
+        // Refers to the handler that could not be created.
+        String handlerError = null;
+        
         // Locate our parent UIComponentTag
         UIComponentTag tag =
             UIComponentTag.getParentUIComponentTag(pageContext);
         if (tag == null) {
+            Object params [] = {this.getClass().getName()};
             throw new JspException(
                 Util.getExceptionMessageString(
                     Util.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID));
@@ -100,23 +131,67 @@ public class ValueChangeListenerTag extends TagSupport {
             return (SKIP_BODY);
         }
 
-        // evaluate any VB expression that we were passed
-        type = (String) Util.evaluateVBExpression(type_);
-        
-        // Create and register an instance with the appropriate component
-        ValueChangeListener handler = createValueChangeListener();
-
         UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(
                 Util.getExceptionMessageString(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
-        // We need to cast here because addValueChangeListener
-        // method does not apply to al components (it is not a method on
-        // UIComponent/UIComponentBase).
-        if (component instanceof EditableValueHolder) {
-            ((EditableValueHolder) component).addValueChangeListener(handler);
+        if (!(component instanceof EditableValueHolder)) {
+            Object params [] = {this.getClass().getName()};
+            throw new JspException(
+                Util.getExceptionMessageString(
+                    Util.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
         }
+        
+        // If "binding" is set, use it to create a listener instance.
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        ValueBinding vb = null;
+        if (binding_ != null) {
+            handlerError = binding_;
+            vb = Util.getValueBinding(binding_);
+            if (vb != null) {
+                try {
+                    handler = (ValueChangeListener)vb.getValue(context);
+                    if (handler != null) {
+                        ((EditableValueHolder)component).addValueChangeListener(handler);
+                        return (SKIP_BODY);
+                    }
+                } catch (Exception e) {
+                    throw new JspException(e);
+                }
+            }
+        } 
+        // If "type" is set, use it to create the listener
+        // instance.  If "type" and "binding" are both set, store the 
+        // listener instance in the value of the property represented by
+        // the value binding expression.    
+        if (type_ != null) {
+            handlerError = type_;
+            type = (String) Util.evaluateVBExpression(type_);
+            handler = createValueChangeListener();
+            if (handler != null) {
+                if (vb != null) {
+                    try {
+                        vb.setValue(context, handler);
+                    } catch (Exception e) {
+                        throw new JspException(e);
+                    }
+                }
+            }
+        }
+              
+        if (handler == null) {
+            Object params [] = {"javax.faces.event.ValueChangeListener", handlerError};
+            throw new JspException(
+                Util.getExceptionMessageString(
+                    Util.CANT_CREATE_CLASS_ERROR_ID, params));
+        }
+        
+        // We need to cast here because addValueChangeListener
+        // method does not apply to all components (it is not a method on
+        // UIComponent/UIComponentBase).
+        ((EditableValueHolder) component).addValueChangeListener(handler);
 
         return (SKIP_BODY);
 

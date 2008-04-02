@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.63 2004/11/12 18:00:26 jayashri Exp $
+ $Id: build-tests.xml,v 1.64 2004/12/02 18:42:25 rogerk Exp $
 -->
 
 <!--
@@ -82,6 +82,7 @@
    description="Execute all tests against installed application"
        depends="test.init,
                 test.config,
+                test.listener,
                 test.duplicateIds,
                 test.renderkit,
                 test.hello,
@@ -91,8 +92,10 @@
                 test.converter,
                 test.converter01,
                 test.converter02,
+                test.converter03,
                 test.validator,
                 test.validator01,
+                test.validator02,
                 test.component,
                 test.component01,
                 test.navigation,
@@ -378,6 +381,13 @@
 
   </target>
 
+  <target name="test.listener"
+   description="Test listener">
+                                                                                
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+        request="${context.path}/faces/listener.jsp"
+         status="200" failonerror="${failonerror}"/>
+  </target>
 
   <target name="test.managed"
    description="Test managed bean creation facility">
@@ -448,6 +458,14 @@
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/TestHtmlBasicValidatorSucceed.jsp"
+      status="200" failonerror="${failonerror}"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/TestCoreValidatorFail.jsp"
+      status="500" failonerror="${failonerror}"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/TestCoreValidatorSucceed.jsp"
       status="200" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
@@ -530,6 +548,14 @@
         golden="${golden.path}/standard/converter02.txt" failonerror="${failonerror}"/>
   </target>
   
+  <target name="test.converter03"
+   description="Test converter">
+                                                                                     
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+        request="${context.path}/faces/converter03.jsp"
+         status="200" failonerror="${failonerror}"/>
+  </target>
+
   <target name="test.validator"
    description="Test Validator creation facility">
 
@@ -545,6 +571,14 @@
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/validator01.jsp"
       outContent="/validator01.jsp PASSED" failonerror="${failonerror}"/>
+  </target>
+
+  <target name="test.validator02"
+   description="Test validator">
+                                                                                     
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+        request="${context.path}/faces/validator02.jsp"
+         status="200" failonerror="${failonerror}"/>
   </target>
   
   <target name="test.component"
@@ -662,4 +696,5 @@
          request="${context.path}/faces/subview06.jsp"
          golden="${golden.path}/subview06.txt" failonerror="${failonerror}"/>
   </target>
+
 </project>

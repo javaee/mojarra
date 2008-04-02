@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.148 2004/11/30 21:36:56 rlubke Exp $
+ * $Id: Util.java,v 1.149 2004/12/02 18:42:24 rogerk Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.148 2004/11/30 21:36:56 rlubke Exp $
+ * @version $Id: Util.java,v 1.149 2004/12/02 18:42:24 rogerk Exp $
  */
 
 public class Util extends Object {
@@ -171,6 +171,9 @@ public class Util extends Object {
 
     public static final String NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID =
         "com.sun.faces.NOT_NESTED_IN_FACES_TAG_ERROR";
+    
+    public static final String NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID =
+        "com.sun.faces.NOT_NESTED_IN_TYPE_TAG_ERROR";
 
     public static final String NULL_BODY_CONTENT_ERROR_MESSAGE_ID =
         "com.sun.faces.NULL_BODY_CONTENT_ERROR";
@@ -275,6 +278,8 @@ public class Util extends Object {
         "com.sun.faces.ASSERTION_FAILED";
     public static final String OBJECT_CREATION_ERROR_ID =
         "com.sun.faces.OBJECT_CREATION_ERROR";
+    public static final String CANT_CREATE_CLASS_ERROR_ID = 
+        "com.sun.faces.CANT_CREATE_CLASS_ERROR";
     
     public static final String CYCLIC_REFERENCE_ERROR_ID =
         "com.sun.faces.CYCLIC_REFERENCE_ERROR";
@@ -1422,6 +1427,28 @@ public class Util extends Object {
 	}
 	return result;
     }
+
+    /**
+     * <p>Return <code>true</code> if the specified value conforms to the
+     * syntax requirements of a value binding expression. </p> 
+     *
+     * @param value The value to evaluate
+     *
+     * @exception NullPointerException if <code>value</code> is
+     *  <code>null</code>
+     */
+    public static boolean isValueReference(String value) {
+                                                                                
+        if (value == null) {
+            throw new NullPointerException();
+        }
+        if ((value.indexOf("#{") != -1) &&
+            (value.indexOf("#{") < value.indexOf('}'))) {
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * <p/>

@@ -356,6 +356,7 @@
             <test todir="${test.results.dir}"  name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
             <test todir="${test.results.dir}"  name="com.sun.faces.renderkit.TestRenderKit"/>
             <test todir="${test.results.dir}"  name="com.sun.faces.renderkit.TestRenderKitFactory"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.taglib.TlvTestCase"/>
             <test todir="${test.results.dir}"  name="com.sun.faces.taglib.jsf_core.TestLoadBundleTag"/>
             <test todir="${test.results.dir}"  name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
             <test todir="${test.results.dir}"  name="com.sun.faces.taglib.jsf_core.TestViewTag"/>
