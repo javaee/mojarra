@@ -19,7 +19,7 @@
 
   <property name="Name"             value="JavaServer Faces Tools"/>
   <property name="name"             value="jsf-tools"/>
-  <property name="version"          value="20040111"/>
+  <property name="version"          value="20040113"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
