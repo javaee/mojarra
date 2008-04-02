@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.5 2003/05/08 23:13:10 horwat Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.6 2003/05/10 00:43:06 horwat Exp $
  */
 
 /*
@@ -109,6 +109,95 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         //make sure bean instantiated properly. Get property back from bean.
         assertTrue(testBean.getOne().equals("one"));
+
+        //make sure scope is stored properly
+        assertTrue(mbf.getScope().equals("session"));
+    }
+
+    public void testPrimitiveProperty() throws Exception {
+        //Testing primitive properties
+        cmb = new ConfigManagedBean();
+        cmb.setManagedBeanClass(beanName);
+        cmb.setManagedBeanScope("session");
+
+        boolean testBoolean = true;
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("boolProp");
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValue(Boolean.toString(testBoolean));
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+
+        byte testByte = 100;
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("byteProp");
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValue(Byte.toString(testByte));
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+
+        char testChar = 'z';
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("charProp");
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValue(Character.toString(testChar));
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+
+        double testDouble = 11.278D;
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("doubleProp");
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValue(Double.toString(testDouble));
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+
+        float testFloat = 45.789F;
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("floatProp");
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValue(Float.toString(testFloat));
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+
+        int testInt = 42;
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("intProp");
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValue(Integer.toString(testInt));
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+
+        long testLong = 3147893289L;
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("longProp");
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValue(Long.toString(testLong));
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+
+        short testShort = 25432;
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("shortProp");
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValue(Short.toString(testShort));
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+
+        mbf = new ManagedBeanFactory(cmb);
+
+        //testing with a property set
+        assertNotNull(testBean = (TestBean) mbf.newInstance());
+
+        //make sure bean instantiated properly. Get property back from bean.
+        assertTrue(testBean.getBoolProp() == testBoolean);
+        assertTrue(testBean.getByteProp() == testByte);
+        assertTrue(testBean.getCharProp() == testChar);
+        assertTrue(testBean.getDoubleProp() == testDouble);
+        assertTrue(testBean.getFloatProp() == testFloat);
+        assertTrue(testBean.getIntProp() == testInt);
+        assertTrue(testBean.getLongProp() == testLong);
+        assertTrue(testBean.getShortProp() == testShort);
 
         //make sure scope is stored properly
         assertTrue(mbf.getScope().equals("session"));

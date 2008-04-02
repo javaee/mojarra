@@ -68,6 +68,75 @@ public class TestBean extends Object {
         return boolProp;
     }
 
+    protected byte byteProp = Byte.MAX_VALUE;
+
+    public void setByteProp(byte newByteProp) {
+        byteProp = newByteProp;
+    }
+
+    public byte getByteProp() {
+        return byteProp;
+    }
+
+    protected char charProp = 'a';
+
+    public void setCharProp(char newCharProp) {
+        charProp = newCharProp;
+    }
+
+    public char getCharProp() {
+        return charProp;
+    }
+
+    protected double doubleProp = 37.266D;
+
+    public void setDoubleProp(double newDoubleProp) {
+        doubleProp = newDoubleProp;
+    }
+
+    public double getDoubleProp() {
+        return doubleProp;
+    }
+
+    protected float floatProp = 87.363F;
+
+    public void setFloatProp(float newFloatProp) {
+        floatProp = newFloatProp;
+    }
+
+    public float getFloatProp() {
+        return floatProp;
+    }
+
+    protected int intProp = Integer.MAX_VALUE;
+
+    public void setIntProp(int newIntProp) {
+        intProp = newIntProp;
+    }
+
+    public int getIntProp() {
+        return intProp;
+    }
+
+    protected long longProp = Long.MAX_VALUE;
+
+    public void setLongProp(long newLongProp) {
+        longProp = newLongProp;
+    }
+
+    public long getLongProp() {
+        return longProp;
+    }
+
+    protected short shortProp = Short.MAX_VALUE;
+
+    public void setShortProp(short newShortProp) {
+        shortProp = newShortProp;
+    }
+
+    public short getShortProp() {
+        return shortProp;
+    }
 
     protected InnerBean inner = null;
 

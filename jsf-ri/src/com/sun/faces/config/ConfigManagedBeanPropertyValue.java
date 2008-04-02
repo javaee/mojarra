@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBeanPropertyValue.java,v 1.3 2003/05/04 21:39:37 horwat Exp $
+ * $Id: ConfigManagedBeanPropertyValue.java,v 1.4 2003/05/10 00:43:03 horwat Exp $
  */
 
 /*
@@ -36,10 +36,9 @@ public class ConfigManagedBeanPropertyValue implements Cloneable {
         this.value = value;
     }
 
-    public void convertValue(String valueClass) {
+    public void convertValue(Class valueClass) {
         try {
-            value = ConvertUtils.convert
-            ((String) value, Util.loadClass(valueClass, this));
+            value = ConvertUtils.convert((String) value, valueClass);
         } catch (Exception ex) {
             //value could not be converted. Default is String.
             Object[] obj = new Object[2];

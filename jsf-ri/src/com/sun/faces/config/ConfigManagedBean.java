@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBean.java,v 1.4 2003/05/04 21:39:37 horwat Exp $
+ * $Id: ConfigManagedBean.java,v 1.5 2003/05/10 00:43:03 horwat Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
         }
         Class propertyType = getPropertyType(property);
         if (propertyType != null) {
-            property.convertValue(propertyType.getName());
+            property.convertValue(replaceIfPrimitive(propertyType));
         }
         properties.put(property.getPropertyName(), property);
     }
@@ -190,5 +190,35 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
 
         return propertyType;
     }
+
+    /**
+     * check to see if value is a primitive and convert it to the
+     * corresponding class.
+     *
+     * @param value the class object returned from the Bean's PropertyDescriptor
+     *
+     * @return true if value is a primitive type
+     */
+    private static Class replaceIfPrimitive(Class value) {
+        if (value.equals(Boolean.TYPE)) {
+            return Boolean.class;
+        } else if (value.equals(Byte.TYPE)) {
+            return Byte.class;
+        } else if (value.equals(Character.TYPE)) {
+            return Character.class;
+        } else if (value.equals(Double.TYPE)) {
+            return Double.class;
+        } else if (value.equals(Float.TYPE)) {
+            return Float.class;
+        } else if (value.equals(Integer.TYPE)) {
+            return Integer.class;
+        } else if (value.equals(Long.TYPE)) {
+            return Long.class;
+        } else if (value.equals(Short.TYPE)) {
+            return Short.class;
+        }
+        return value;
+    }
+
 
 }

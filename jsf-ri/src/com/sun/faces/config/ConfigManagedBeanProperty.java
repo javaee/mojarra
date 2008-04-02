@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBeanProperty.java,v 1.3 2003/05/04 21:39:37 horwat Exp $
+ * $Id: ConfigManagedBeanProperty.java,v 1.4 2003/05/10 00:43:03 horwat Exp $
  */
 
 /*
@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.faces.FacesException;
+import com.sun.faces.util.Util;
+
 public class ConfigManagedBeanProperty implements Cloneable {
 
     private String propertyName = null;
@@ -24,7 +27,7 @@ public class ConfigManagedBeanProperty implements Cloneable {
     private String mapKeyClass = null;
     private String mapValueClass = null;
 
-    public void convertValue(String valueClass) {
+    public void convertValue(Class valueClass) {
         value.convertValue(valueClass);
     }
 
@@ -49,7 +52,7 @@ public class ConfigManagedBeanProperty implements Cloneable {
             values = new ArrayList();
         }
         if (getArrayType() != null ) {
-            value.convertValue(arrayValueType);
+            value.convertValue(findAppropriateClass(arrayValueType));
         }
         values.add(value);
     }
@@ -83,10 +86,10 @@ public class ConfigManagedBeanProperty implements Cloneable {
         }
 
         if (mapKeyClass != null) {
-            mapEntry.convertKey(mapKeyClass);
+            mapEntry.convertKey(findAppropriateClass(mapKeyClass));
         }
         if (mapValueClass != null) {
-            mapEntry.convertValue(mapValueClass);
+            mapEntry.convertValue(findAppropriateClass(mapValueClass));
         }
 
         mapEntries.add(mapEntry);
@@ -150,4 +153,46 @@ public class ConfigManagedBeanProperty implements Cloneable {
         }
         return cmbp;
     }
+
+    /**
+     * convert the String representation of the class to the Class
+     * object
+     *
+     * @param value the name of the class. Could be primitive.
+     *
+     * @return the class object representing the string class name
+     */
+     private Class findAppropriateClass(String value) {
+        //check for primitives and convert to class
+        if (value.equals("boolean")) {
+            return Boolean.class;
+        } else if (value.equals("byte")) {
+            return Byte.class;
+        } else if (value.equals("char")) {
+            return Character.class;
+        } else if (value.equals("double")) {
+            return Double.class;
+        } else if (value.equals("float")) {
+            return Float.class;
+        } else if (value.equals("int")) {
+            return Integer.class;
+        } else if (value.equals("long")) {
+            return Long.class;
+        } else if (value.equals("short")) {
+	    return Short.class;
+        }
+
+        //not a primitive so the string represents a class that can be loaded
+        Class valueClass;
+        try {
+            valueClass = Util.loadClass(value, this);
+        } catch (ClassNotFoundException ex) {
+            Object[] obj = new Object[1];
+            obj[0] = value;
+            throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
+        }
+
+        return valueClass;
+     }
+
 }

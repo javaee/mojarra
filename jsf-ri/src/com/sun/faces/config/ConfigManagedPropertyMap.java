@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedPropertyMap.java,v 1.3 2003/05/04 21:39:38 horwat Exp $
+ * $Id: ConfigManagedPropertyMap.java,v 1.4 2003/05/10 00:43:03 horwat Exp $
  */
 
 /*
@@ -36,10 +36,9 @@ public class ConfigManagedPropertyMap implements Cloneable {
     public void setKey(String key) {
         this.key = key;
     }
-    public void convertKey(String valueClass) {
+    public void convertKey(Class valueClass) {
 	try {
-            key = ConvertUtils.convert((String) key, 
-                Util.loadClass(valueClass, this));
+            key = ConvertUtils.convert((String) key, valueClass);
 	} catch (Exception ex) {
             //value could not be converted. Default is String.
             Object[] obj = new Object[2];
@@ -55,11 +54,9 @@ public class ConfigManagedPropertyMap implements Cloneable {
     public void setValue(String value) {
         this.value = value;
     }
-    public void convertValue(String valueClass) {
+    public void convertValue(Class valueClass) {
 	try {
-            value = ConvertUtils.convert(
-                (String) value, 
-                Util.loadClass(valueClass, this));
+            value = ConvertUtils.convert((String) value, valueClass);
 	} catch (Exception ex) {
             //value could not be converted. Default is String.
             Object[] obj = new Object[2];
