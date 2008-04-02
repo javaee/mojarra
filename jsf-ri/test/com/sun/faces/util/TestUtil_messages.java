@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.56 2006/08/30 17:42:52 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.57 2006/09/19 21:13:32 jdlee Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.56 2006/08/30 17:42:52 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.57 2006/09/19 21:13:32 jdlee Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -149,7 +149,6 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.CHILD_NOT_OF_EXPECTED_TYPE_ID, "3"},
         {MessageUtils.COMMAND_LINK_NO_FORM_MESSAGE_ID, "0"},
         {MessageUtils.FACES_CONTEXT_NOT_FOUND_ID, "0"},
-        {MessageUtils.NO_IMPLEMENTATION_CONFIG_FILE_FOUND_MESSAGE_ID, "1"},
         {MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, "2"},
         {MessageUtils.CANT_WRITE_ID_ATTRIBUTE_ERROR_MESSAGE_ID, "1"},
         {MessageUtils.NOT_NESTED_IN_UICOMPONENT_TAG_ERROR_MESSAGE_ID, "0"},

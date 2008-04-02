@@ -171,8 +171,6 @@ public class MessageUtils {
           "com.sun.faces.NOT_NESTED_IN_UICOMPONENT_TAG_ERROR";
     public static final String NO_DTD_FOUND_ERROR_ID =
           "com.sun.faces.NO_DTD_FOUND_ERROR";
-    public static final String NO_IMPLEMENTATION_CONFIG_FILE_FOUND_MESSAGE_ID =
-          "com.sun.faces.NO_IMPLEMENTATION_CONFIG_FOUND";
     public static final String NO_COMPONENT_ASSOCIATED_WITH_UICOMPONENT_TAG_MESSAGE_ID =
           "com.sun.faces.NO_COMPONENT_ASSOCIATED_WITH_UICOMPONENT_TAG";
     public static final String NULL_BODY_CONTENT_ERROR_MESSAGE_ID =

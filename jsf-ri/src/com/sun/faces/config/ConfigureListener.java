@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.85 2006/09/11 20:45:56 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.86 2006/09/19 21:13:30 jdlee Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -352,19 +352,9 @@ public class ConfigureListener implements ServletContextListener {
             digester = digester(isFeatureEnabled(BooleanWebContextInitParameter.ValidateFacesConfigFiles));
             
             // Step 2, parse the RI configuration resource
-            URL url = Util.getCurrentLoader(this).getResource(JSF_RI_CONFIG);
+            Bootstrapper bootstrapper = new Bootstrapper();
+            bootstrapper.populateFacesConfigBean(fcb);
             
-            // 'url' cannot be null
-            if (url == null) {
-                throw new FacesException(
-                      MessageUtils.getExceptionMessageString(
-                            MessageUtils.NO_IMPLEMENTATION_CONFIG_FILE_FOUND_MESSAGE_ID,
-                                                             JSF_RI_CONFIG)
-                );
-            }
-            
-            parse(digester, url, fcb);
-
             // Step 3, parse any "/META-INF/faces-config.xml" resources        
             SortedMap<String, URL> sortedJarMap = new TreeMap<String, URL>();
             List<URL> unsortedResourceList = new ArrayList<URL>();
@@ -405,7 +395,8 @@ public class ConfigureListener implements ServletContextListener {
             } catch (IOException e) {
                 throw new FacesException(e);
             }
-            // Load the sorted resources first:           
+            // Load the sorted resources first:          
+            URL url = null;
             for (Entry<String, URL> entry : sortedJarMap.entrySet()) {
                 url = entry.getValue();
                 parse(digester, url, fcb);

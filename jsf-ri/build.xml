@@ -85,6 +85,8 @@
         <mkdir dir="${build.dir}/javadocs"/>
         <mkdir dir="${build.dir}/tlddocs"/>
         <mkdir dir="${build.dir}/lib"/>
+        <delete dir="${build.generate.dir}"/>
+        <mkdir dir="${build.generate.dir}"/>
     </target>        
 
     <target name="copy.template.sources" depends="prepare"
@@ -142,7 +144,7 @@
     </target>
 
     <target name="generate"
-            depends="check.taglib.generation.necessity"
+            depends="check.taglib.generation.necessity,create.runtime.config"
             unless="skip.taglib.generation">        
         <path id="ant.classpath">
             <pathelement location="${myenv.ANT_HOME}/lib/ant.jar"/>
@@ -154,10 +156,7 @@
             </fileset>
         </copy>
         
-        <delete dir="${build.generate.dir}"/>
-
         <mkdir dir="${tools.dir}/build/classes"/>
-        <mkdir dir="${build.generate.dir}"/>
         <javac srcdir="${tools.dir}/src"
                destdir="${tools.dir}/build/classes">
             <classpath>
@@ -213,8 +212,8 @@
 
         <touch file="${build.generate.dir}/last-taglib-generation"/>
 
-    </target>    
-    
+    </target>
+
     <target name="compile" depends="prepare,generate,copy.template.sources"
             description="Just compile the classes">
         <if>
@@ -401,7 +400,7 @@
          =================================================================== 
     -->
 
-    <target name="jars" depends="compile,create.runtime.config">
+    <target name="jars" depends="create.runtime.config,compile">
         <unjar dest="${build.classes.dir}">
             <fileset dir="${jsf.build.home}/common/lib"
                      includes="com-sun-commons*.jar"/>
@@ -414,8 +413,9 @@
 
     <target name="main" depends="update,jars"/>
 
-    <target name="create.runtime.config">
-        <xslt in="${build.dir}/classes/com/sun/faces/standard-html-renderkit.xml"
+    <target name="create.runtime.config" depends="prepare">
+<!--    in="${build.dir}/classes/com/sun/faces/standard-html-renderkit.xml"-->
+        <xslt in="${api.dir}/doc/standard-html-renderkit.xml" 
               out="merged.xml"
               style="conf/xslt/merge-config.xsl">
         </xslt>
@@ -448,6 +448,17 @@
             </replacevalue>
         </replace>
         <delete file="${basedir}/merged.xml"/>
+    	<taskdef name="generateBootstrap"
+    		classname="com.sun.faces.ant.BootstrapperTask">
+    		<classpath>
+    			<pathelement location="${tools.dir}/build/classes" />
+    		</classpath>
+    	</taskdef>
+    	<generateBootstrap 
+    		runtimeConfig="${impl.dir}/${build.dir}/classes/com/sun/faces/jsf-ri-runtime.xml"
+    		copyright="${jsf.build.home}/legal/jsf-cddl/jsf-cddl-header.txt"
+    		outputDir="${impl.dir}/${build.generate.dir}">
+    	</generateBootstrap>
     </target>
 
     <!--
