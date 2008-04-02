@@ -84,14 +84,14 @@
 
                <td> 
 
-                    <h:input_number id="double">
+                    <h:input_number id="doubleVar">
 		     <f:validate_doublerange minimum="3.2" maximum="3.9"/>
                     </h:input_number>
 
 
                </td>
 
--              <td> <h:output_errors id="err3" for="double"/> </td>
+-              <td> <h:output_errors id="err3" for="doubleVar"/> </td>
 
 
              </tr>
@@ -102,7 +102,7 @@
 
                <td> 
 
-                    <h:input_number id="integer">
+                    <h:input_number id="integerVar">
 
 		     <f:validate_longrange minimum="1" maximum="10"/>
 
@@ -110,7 +110,7 @@
 
                </td>
 
-              <td> <h:output_errors id="err4" for="integer"/> </td>
+              <td> <h:output_errors id="err4" for="integerVar"/> </td>
 
 
              </tr>
@@ -120,7 +120,7 @@
 
                <td> 
 
-                    <h:input_text size="1" id="string" 
+                    <h:input_text size="1" id="stringVar" 
                                   valueRef="LoginBean.string"> 
 
 		     <f:validate_stringrange maximum="f" minimum="a"/>
@@ -128,7 +128,7 @@
 
                </td>
 
-              <td> <h:output_errors id="err5" for="string"/> </td>
+              <td> <h:output_errors id="err5" for="stringVar"/> </td>
 
 
              </tr>
