@@ -1,5 +1,5 @@
 /*
- * $Id: AppConfig.java,v 1.4 2003/05/01 20:39:49 eburns Exp $
+ * $Id: AppConfig.java,v 1.5 2003/05/05 15:19:00 rkitain Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import org.mozilla.util.ParameterCheck;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -37,7 +38,7 @@ import com.sun.faces.context.MessageResourcesImpl;
  *  <p>AppConfig is a helper class to the ApplicationImpl that serves as
  *  a shim between it and the config system.</p>
  *
- * @version $Id: AppConfig.java,v 1.4 2003/05/01 20:39:49 eburns Exp $
+ * @version $Id: AppConfig.java,v 1.5 2003/05/05 15:19:00 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -55,6 +56,8 @@ public class AppConfig extends Object
     private static final String JSF_API_RESOURCE_FILENAME = "com/sun/faces/context/JSFMessages";
 
     private static final String JSF_RI_RESOURCE_FILENAME = "com/sun/faces/context/JSFImplMessages";
+
+    private Application application= null;
 
 //
 // Class Variables
@@ -76,10 +79,11 @@ public class AppConfig extends Object
 // Constructors and Initializers    
 //
 
-public AppConfig()
+public AppConfig(Application application)
 {
     super();
     reset();
+    this.application = application;
 }
 
 //
@@ -93,6 +97,10 @@ public AppConfig()
     public void setConfigBase(ConfigBase newBase) {
 	ParameterCheck.nonNull(newBase);
 	yourBase = newBase;
+        NavigationHandlerImpl navHandler = (NavigationHandlerImpl)application.getNavigationHandler();
+        if (navHandler instanceof NavigationHandlerImpl) {
+            ((NavigationHandlerImpl)navHandler).initialize(newBase);
+        }
     }
 
     public ConfigBase getConfigBase() {
