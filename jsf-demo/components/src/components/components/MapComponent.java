@@ -45,8 +45,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.FacesException;
-import javax.faces.component.ActionSource;
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
@@ -67,8 +66,8 @@ import javax.faces.event.PhaseId;
  * which are fired whenever the current area is changed.</p>
  */
 
-public class MapComponent extends UIComponentBase
-    implements ActionSource {
+public class MapComponent extends UICommand
+ {
 
 
     // ------------------------------------------------------ Instance Variables
@@ -136,68 +135,7 @@ public class MapComponent extends UIComponentBase
         return ("Map");
 
     }
-
-
-    // -------------------------------------------------- Action Source Methods
-
-    public MethodBinding getAction() {
-	    return (this.action);
-	}
-
-    public void setAction(MethodBinding action) {
-        this.action = action;
-    }
-
-    public MethodBinding getActionListener() {
-        return (this.actionListener);
-    }
-
-
-    public void setActionListener(MethodBinding actionListener) {
-        this.actionListener = actionListener;
-    }
-
-    public boolean isImmediate() {
-	if (this.immediateSet) {
-	    return (this.immediate);
-	}
-	ValueBinding vb = getValueBinding("immediate");
-	if (vb != null) {
-	    Boolean value = (Boolean) vb.getValue(getFacesContext());
-	    return (value.booleanValue());
-	} else {
-	    return (this.immediate);
-	}
-    }
-
-    public void setImmediate(boolean immediate) {
-	// if the immediate value is changing.
-	if (immediate != this.immediate) {
-	    FacesContext context = getFacesContext();
-	    // remove the current default action listener
-	    removeDefaultActionListener(context);
-	    this.immediate = immediate;
-	    addDefaultActionListener(context);
-	}
-	this.immediateSet = true;
-    }
-    
-    public void addActionListener(ActionListener listener) {
-        addFacesListener(listener);
-    }
-
-    public ActionListener[] getActionListeners() {
-
-        ActionListener al[] = (ActionListener [])
-	    getFacesListeners(ActionListener.class);
-        return (al);
-
-    }
-
-    public void removeActionListener(ActionListener listener) {
-        removeFacesListener(listener);
-    }
-
+   
     // ----------------------------------------------------- Event Methods
 
     private static Class signature[] = { AreaSelectedEvent.class };
