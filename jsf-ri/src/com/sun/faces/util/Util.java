@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.139 2004/05/07 13:53:15 eburns Exp $
+ * $Id: Util.java,v 1.140 2004/06/04 20:48:02 eburns Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.139 2004/05/07 13:53:15 eburns Exp $
+ * @version $Id: Util.java,v 1.140 2004/06/04 20:48:02 eburns Exp $
  */
 
 public class Util extends Object {
@@ -572,7 +572,6 @@ public class Util extends Object {
         Util.doAssert(null !=
                       context.getAttribute(RIConstants.HTML_BASIC_RENDER_KIT));
         context.removeAttribute(RIConstants.HTML_BASIC_RENDER_KIT);
-        context.removeAttribute(RIConstants.CONFIG_ATTR);
 	ApplicationAssociate.clearInstance(context);
     }
 

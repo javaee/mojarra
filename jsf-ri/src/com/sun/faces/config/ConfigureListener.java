@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.19 2004/05/12 18:30:37 ofung Exp $
+ * $Id: ConfigureListener.java,v 1.20 2004/06/04 20:48:01 eburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -343,7 +343,6 @@ public class ConfigureListener implements ServletContextListener {
             verifyObjects(context, fcb);
         }
 
-        context.setAttribute(RIConstants.CONFIG_ATTR, Boolean.TRUE);
 	tlsServletContext.set(null);
     }
 
@@ -357,7 +356,6 @@ public class ConfigureListener implements ServletContextListener {
         }
 
         // Release any allocated application resources
-        context.removeAttribute(RIConstants.CONFIG_ATTR);
 	FactoryFinder.releaseFactories();
 	ApplicationAssociate.clearInstance(context);
 	tlsServletContext.set(null);

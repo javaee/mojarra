@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.64 2004/05/12 04:35:04 eburns Exp $
+ * $Id: RIConstants.java,v 1.65 2004/06/04 20:48:00 eburns Exp $
  */
 
 /*
@@ -85,8 +85,6 @@ public class RIConstants {
 
     public static final String IMMUTABLE_MARKER =
         FACES_PREFIX + "IMMUTABLE";
-
-    public static final String CONFIG_ATTR = FACES_PREFIX + "ConfigBase";
 
     public static final String VALIDATE_XML = FACES_PREFIX + "validateXml";
 
