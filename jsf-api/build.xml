@@ -113,8 +113,8 @@
   <target name="set.standard-html-renderkit.property" 
           unless="standard-html-renderkit">
     <available property="standard-html-renderkit-impl" 
-          value="${jsf-ri.dir}/conf/share/standard-html-renderkit-impl.xml"
-          file="${jsf-ri.dir}/conf/share/standard-html-renderkit-impl.xml"/>
+          value="${jsf-ri.dir}/src/com/sun/faces/standard-html-renderkit-impl.xml"
+          file="${jsf-ri.dir}/src/com/sun/faces/standard-html-renderkit-impl.xml"/>
   </target>
 
 
