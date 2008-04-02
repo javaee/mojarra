@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.54 2007/01/31 19:47:53 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.55 2007/03/08 18:57:02 rlubke Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.54 2007/01/31 19:47:53 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.55 2007/03/08 18:57:02 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -123,27 +123,7 @@ public class ExternalContextImpl extends ExternalContext {
 
         // Save references to our context, request, and response
         this.servletContext = sc;
-        // PENDING(edburns): Craig's workaround breaks
-        // TestValidatorTags.java because Cactus expects a certain type
-        // to be present for the value of the request.
-        if (Util.isUnitTestModeEnabled()) {
-            this.request = request;
-        } else {
-            // PENDING(craigmcc) - Work around a Tomcat 4.1 and 5.0 bug
-            // where the request wrapper used on a
-            // RequestDispatcher.forward() call delegates
-            // removeAttribute() and setAttribute() to the wrapped
-            // request, but not getAttribute().  This causes attributes
-            // set via the RequestMap returned in this class to not be
-            // visible via calls to getAttribute() on the underlying
-            // request.
-            if (request instanceof HttpServletRequest) {
-                this.request = new MyHttpServletRequestWrapper
-                    ((HttpServletRequest) request);
-            } else {
-                this.request = new MyServletRequestWrapper(request);
-            }
-        }
+        this.request = request;        
         this.response = response;
         WebConfiguration config = WebConfiguration.getInstance(sc);
         if (config
@@ -1547,53 +1527,3 @@ class InitParameterMap extends BaseContextMap<String> {
     }
 
 } // END InitParameterMap
-
-
-class MyServletRequestWrapper extends ServletRequestWrapper {
-
-    public MyServletRequestWrapper(ServletRequest request) {
-        super(request);
-    }
-
-
-    public Object getAttribute(String key) {
-        Object result = super.getAttribute(key);
-        if (result == null) {
-            ServletRequest wrapped = getRequest();
-            if ((wrapped != null) &&
-                (wrapped instanceof ServletRequestWrapper)) {
-                wrapped = ((ServletRequestWrapper) wrapped).getRequest();
-            }
-            if (wrapped != null) {
-                result = wrapped.getAttribute(key);
-            }
-        }
-        return (result);
-    }
-
-}
-
-
-class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
-
-    public MyHttpServletRequestWrapper(HttpServletRequest request) {
-        super(request);
-    }
-
-
-    public Object getAttribute(String key) {
-        Object result = super.getAttribute(key);
-        if (result == null) {
-            ServletRequest wrapped = getRequest();
-            if ((wrapped != null) &&
-                (wrapped instanceof ServletRequestWrapper)) {
-                wrapped = ((ServletRequestWrapper) wrapped).getRequest();
-            }
-            if (wrapped != null) {
-                result = wrapped.getAttribute(key);
-            }
-        }
-        return (result);
-    }
-
-}
