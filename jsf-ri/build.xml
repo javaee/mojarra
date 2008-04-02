@@ -57,6 +57,9 @@
   <!-- The base directory for component tests -->
   <property name="test.home" value="${basedir}/test"/>
 
+  <!-- The directory in which test results are written -->
+  <property name="test.results.dir" value="${basedir}/testresults"/>
+
   <!-- The base directory for dependent jars -->
   <property name="lib.home" value="${basedir}/lib"/>
 
@@ -349,10 +352,20 @@ must exist.  This is necessary for the MessageFactory class.
     
   </target>
 
-
-  <target name="compile" depends="prepare,generate,copy.template.sources"
-   description="Just compile the classes">
-    <!-- Run javac through everything -->
+ <target name="compile.old" if="old.compiler">
+    <javac srcdir="${source.home}:${build.generate}"
+           destdir="${build.classes}"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+          fork="true"
+          executable="${old.compiler}"
+          optimize="${compile.optimize}">
+      <compilerarg line="${jcov.javac.args}" />
+      <classpath refid="compile.classpath"/>
+    </javac>
+  </target>
+                                                                                                                                    
+  <target name="compile.standard" unless="old.compiler">
     <javac srcdir="${source.home}:${build.generate}"
            destdir="${build.classes}"
              debug="${compile.debug}"
@@ -361,6 +374,13 @@ must exist.  This is necessary for the MessageFactory class.
       <compilerarg line="${jcov.javac.args}" />
       <classpath refid="compile.classpath"/>
     </javac>
+  </target>
+
+  <target name="compile" depends="prepare,generate,copy.template.sources"
+   description="Just compile the classes">
+    <!-- Run javac through everything -->
+    <antcall target="compile.old"/>
+    <antcall target="compile.standard"/>
 
     <copy todir="${build.classes}">
         <fileset dir="${source.home}" includes="**/*.properties"/>
@@ -389,6 +409,7 @@ must exist.  This is necessary for the MessageFactory class.
     <ant antfile="build-tests.xml" target="remove.tstamp"/>
     <delete    dir="${build.home}"/>
     <delete    dir="${dist.home}"/>
+    <delete    dir="${test.results.dir}"/>
     <delete> 
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
       <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
@@ -481,8 +502,11 @@ must exist.  This is necessary for the MessageFactory class.
     
     </target>
 
-    <target name="test" depends="run.junit.test,run.cactus.test,test.config,run.systest,run.systest-per-webapp"
-     description="Run all unit and system tests">
+    <target name="test" depends="init.test,run.junit.test,run.cactus.test,test.config,run.systest,run.systest-per-webapp"
+     description="Run all unit and system tests"/>
+
+    <target name="init.test">
+        <mkdir dir="${test.results.dir}"/>
     </target>
 
     <target name="run.systest" description="Run system tests">
@@ -725,6 +749,7 @@ must exist.  This is necessary for the MessageFactory class.
       <classpath  refid="test.classpath"/>
       <formatter   type="plain"
                 usefile="false"/>
+      <formatter type="xml" usefile="true" />
 
       <sysproperty   key="basedir"
                    value="${build.home}"/>
@@ -742,8 +767,9 @@ must exist.  This is necessary for the MessageFactory class.
                    value="${log.digester}"/>
       <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester.sax"
                    value="${log.sax}"/>
+      <sysproperty   key="base.dir" value="${basedir}/build"/>
 
-      <batchtest>
+      <batchtest todir="${test.results.dir}">
         <fileset    dir="${basedir}/build/test"
                includes="com/sun/faces/config/ConfigureListenerTestCase.class"/>
       </batchtest>

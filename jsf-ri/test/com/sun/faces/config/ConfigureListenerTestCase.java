@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListenerTestCase.java,v 1.7 2004/05/07 13:53:22 eburns Exp $
+ * $Id: ConfigureListenerTestCase.java,v 1.8 2004/06/16 19:48:08 rlubke Exp $
  */
 
 /*
@@ -774,7 +774,7 @@ public class ConfigureListenerTestCase extends TestCase {
     private void setUp(String directory) throws Exception {
 
         // Configure the directory on our MockServletContext
-        File basedir = new File(System.getProperty("basedir"));
+        File basedir = new File(System.getProperty("base.dir"));
         File webapp = new File(basedir, directory);
         context.setDirectory(webapp);
 

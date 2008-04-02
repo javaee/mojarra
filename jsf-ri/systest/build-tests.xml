@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.59 2004/06/11 20:14:53 jvisvanathan Exp $
+ $Id: build-tests.xml,v 1.60 2004/06/16 19:48:05 rlubke Exp $
 -->
 
 <!--
@@ -36,6 +36,9 @@
   <property name="local.golden.path" value="${basedir}/web/golden"/>
   <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.2.3"/>
 
+  <!-- Test results directory -->
+  <property name="test.results.dir" value="../testresults"/>
+
   <!-- Default value for debugging arguments is no.  Override in
        build.properties -->
   <property name="debug.jvm.args" value=""/>
@@ -69,7 +72,8 @@
 
   <target name="test"
    description="Execute all tests against installed application"
-       depends="test.config,
+       depends="test.init,
+                test.config,
                 test.duplicateIds,
                 test.renderkit,
                 test.hello,
@@ -95,6 +99,10 @@
                 test.methodRef,
                 test.valueBindingGet
                "/>
+
+    <target name="test.init">
+        <mkdir dir="${test.results.dir}"/>
+    </target>
 
     <target name="test.duplicateIds"
         description="Test duplicate ID detection">
@@ -123,11 +131,12 @@
 
       <classpath refid="html.classpath"/>
       <formatter  type="plain"      usefile="false"/>
+      <formatter  type="xml"        usefile="true"/>
       <sysproperty key="host"         value="${host}"/>
       <sysproperty key="port"         value="${port}"/>
       <sysproperty key="context.path" value="${context.path}"/>
 
-      <batchtest>
+      <batchtest todir="${test.results.dir}">
         <fileset    dir="${basedir}/build/WEB-INF/classes"
                includes="com/sun/faces/systest/TestDuplicateIds04.class"/>
       </batchtest>
@@ -201,6 +210,7 @@
 
       <classpath refid="html.classpath"/>
       <formatter  type="plain"      usefile="false"/>
+      <formatter  type="xml"        usefile="true"/>
       <sysproperty key="host"         value="${host}"/>
       <sysproperty key="port"         value="${port}"/>
       <sysproperty key="context.path" value="${context.path}"/>
@@ -218,7 +228,7 @@
                  value="true"/>
 -->
 
-      <batchtest>
+      <batchtest todir="${test.results.dir}">
         <fileset    dir="${basedir}/build/WEB-INF/classes"
                includes="com/sun/faces/jsptest/*TestCase.class"/>
       </batchtest>
@@ -235,6 +245,7 @@
 
             <classpath refid="html.classpath"/>
             <formatter type="plain" usefile="false"/>
+            <formatter type="xml"   usefile="true"/>
             <sysproperty key="host" value="${host}"/>
             <sysproperty key="port" value="${port}"/>
             <sysproperty key="context.path" value="${context.path}"/>
@@ -252,7 +263,7 @@
             value="true"/>
             -->
 
-            <batchtest>
+            <batchtest todir="${test.results.dir}">
                 <fileset dir="${basedir}/build/WEB-INF/classes"
                     includes="com/sun/faces/pathtest/*TestCase.class,com/sun/faces/systest/NavigationTestCase.class"/>
             </batchtest>
@@ -272,6 +283,7 @@
 
       <classpath refid="html.classpath"/>
       <formatter  type="plain"      usefile="false"/>
+      <formatter  type="xml"        usefile="true"/>
       <sysproperty key="host"         value="${host}"/>
       <sysproperty key="port"         value="${port}"/>
       <sysproperty key="context.path" value="${context.path}"/>
@@ -289,7 +301,7 @@
                  value="true"/>
 -->
 
-      <batchtest>
+      <batchtest todir="${test.results.dir}">
         <fileset    dir="${basedir}/build/WEB-INF/classes"
                includes="com/sun/faces/methodref/*TestCase.class"/>
       </batchtest>

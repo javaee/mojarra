@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.4 2004/06/01 17:06:27 eburns Exp $
+ $Id: build-tests.xml,v 1.5 2004/06/16 19:48:07 rlubke Exp $
 -->
 
 <!--
@@ -38,6 +38,9 @@
   <!-- Default value for debugging arguments is no.  Override in
        build.properties -->
   <property name="debug.jvm.args" value=""/>
+
+  <!-- Test results directory -->
+  <property name="test.results.dir" value="../testresults"/>
 
   <!-- HtmlUnit client classpath -->
   <path id="html.classpath">
@@ -92,6 +95,7 @@
 
       <classpath refid="html.classpath"/>
       <formatter  type="plain"      usefile="false"/>
+      <formatter  type="xml"        usefile="true"/>
       <sysproperty key="host"         value="${host}"/>
       <sysproperty key="port"         value="${port}"/>
       <sysproperty key="context.path" value="${context.path}"/>
@@ -109,7 +113,7 @@
                  value="true"/>
 -->
 
-      <batchtest>
+      <batchtest todir="${test.results.dir}">
         <fileset    dir="${webapp.build.home}/WEB-INF/classes"
                includes="${testcase}"/>
       </batchtest>

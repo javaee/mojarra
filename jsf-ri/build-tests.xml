@@ -310,63 +310,64 @@
             <classpath refid="compile.classpath"/>
 
             <formatter type="plain" usefile="false"/>
+            <formatter type="xml" usefile="true"/>
 
             <!-- Suite of tests -->
-            <test name="com.sun.faces.application.TestActionListenerImpl"/>
-            <test name="com.sun.faces.application.TestApplicationFactoryImpl"/>
-            <test name="com.sun.faces.application.TestApplicationImpl"/>
-            <test name="com.sun.faces.application.TestApplicationImpl_Config"/>
-            <test name="com.sun.faces.application.TestNavigationHandler"/>
-            <test name="com.sun.faces.application.TestStateManagerImpl"/>
-            <test name="com.sun.faces.application.TestViewHandlerImpl"/>
-            <test name="com.sun.faces.config.ConfigFileTestCase"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.application.TestActionListenerImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.application.TestApplicationFactoryImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.application.TestApplicationImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.application.TestApplicationImpl_Config"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.application.TestNavigationHandler"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.application.TestStateManagerImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.application.TestViewHandlerImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.config.ConfigFileTestCase"/>
 <!-- PENDING: return to running, these need to be rewritten
-            <test name="com.sun.faces.config.TestConfigListener"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.config.TestConfigListener"/>
 -->
-            <test name="com.sun.faces.config.TestManagedBeanFactory"/>
-            <test name="com.sun.faces.context.TestExternalContextImpl"/>
-            <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
-            <test name="com.sun.faces.context.TestFacesContextImpl"/> 
-            <test name="com.sun.faces.convert.TestConverters"/>
-            <test name="com.sun.faces.el.impl.TestELImpl"/>
-            <test name="com.sun.faces.el.TestPropertyResolverImpl"/>
-            <test name="com.sun.faces.el.TestValueBindingImpl"/>
-            <test name="com.sun.faces.el.TestVariableResolverImpl"/>
-            <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
-            <test name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
-            <test name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
-            <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
-            <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
-            <test name="com.sun.faces.lifecycle.TestPhase"/>
-            <test name="com.sun.faces.lifecycle.TestProcessEvents"/>
-            <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
-            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/> 
-            <test name="com.sun.faces.lifecycle.TestRestoreViewPhase"/>
-            <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestHtmlResponseWriter"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.config.TestManagedBeanFactory"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.context.TestExternalContextImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.context.TestFacesContextImpl"/> 
+            <test todir="${test.results.dir}" name="com.sun.faces.convert.TestConverters"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.el.impl.TestELImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.el.TestPropertyResolverImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueBindingImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.el.TestVariableResolverImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestPhase"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestProcessEvents"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestRenderResponsePhase"/> 
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestRestoreViewPhase"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestHtmlResponseWriter"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
 <!-- PENDING: return to running
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
 -->
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
-            <test name="com.sun.faces.renderkit.TestRenderKit"/>
-            <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
-            <test name="com.sun.faces.taglib.jsf_core.TestLoadBundleTag"/>
-            <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
-            <test name="com.sun.faces.taglib.jsf_core.TestViewTag"/>
-            <test name="com.sun.faces.util.TestUtil"/>
-            <test name="com.sun.faces.util.TestUtil_messages"/>
-            <test name="com.sun.faces.taglib.jsf_core.TestCoreTagsVBEnabled"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.renderkit.TestRenderKit"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.renderkit.TestRenderKitFactory"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.taglib.jsf_core.TestLoadBundleTag"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.taglib.jsf_core.TestViewTag"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.util.TestUtil"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.util.TestUtil_messages"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.taglib.jsf_core.TestCoreTagsVBEnabled"/>
             <!-- To run the following tests, uncomment
                  following tests and set javax.faces.STATE_SAVING_METHOD 
                  property in conf/test/web.xml to client. Tests that 
                  excercise save state in server code have to be commented as 
                  well 
-            <test name="com.sun.faces.lifecycle.TestSaveStateInPage"/>
-            <test name="com.sun.faces.lifecycle.TestRestoreViewFromPage"/> -->
+            <test todir="${test.results.dir}"  name="com.sun.faces.lifecycle.TestSaveStateInPage"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.lifecycle.TestRestoreViewFromPage"/> -->
 
         </junit>
 
@@ -385,9 +386,10 @@
             <classpath refid="compile.classpath"/>
 
             <formatter type="plain" usefile="false"/>
+            <formatter type="xml" usefile="true"/>
             <jvmarg line="-Djcov.file=${out.test.dir}/jsf-impl-junit.jcov"/>
-            <test name="com.sun.faces.util.TestUtil_local"/>
-            <test name="com.sun.faces.util.TestInstancePool_local"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.util.TestUtil_local"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.util.TestInstancePool_local"/>
         </junit>
 
     </target>

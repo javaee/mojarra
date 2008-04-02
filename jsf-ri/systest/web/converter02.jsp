@@ -5,6 +5,7 @@
 <jsp:useBean id="numConverter" class="javax.faces.convert.NumberConverter" scope="session" />
 <%
    // configure the converter
+   numConverter.setLocale(java.util.Locale.US);
    numConverter.setType("currency");
 %>
 <f:view>
