@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.1 2003/09/25 22:22:04 eburns Exp $
+ * $Id: ConfigParser.java,v 1.2 2003/09/26 14:54:41 eburns Exp $
  */
 
 /*
@@ -9,7 +9,9 @@
 
 package javax.faces.generate;
 
-import java.io.InputStream;
+import java.io.Reader;
+import java.io.IOException;
+import org.xml.sax.SAXException;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -137,7 +139,7 @@ class ConfigParser extends Object {
     // General Methods
     //
 
-    void parseConfig(InputStream input) throws Exception {        
+    void parseConfig(Reader input) throws IOException, SAXException {        
 	digester.clear();
 	digester.parse(input);
     }

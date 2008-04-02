@@ -99,6 +99,9 @@
   -->
   <target name="prepare">
     <tstamp />
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.classes}"/>
+    <mkdir dir="${build.lib}"/>
   </target>
 
 
@@ -108,9 +111,6 @@
        ===================================================================
   -->
   <target name="build" depends="prepare">
-    <mkdir dir="${build.dir}"/>
-    <mkdir dir="${build.classes}"/>
-    <mkdir dir="${build.lib}"/>
 
     <javac srcdir="${src.dir}"
            destdir="${build.classes}"
@@ -134,7 +134,7 @@
 
   </target>
 
-  <target name="tools" depends="build">
+  <target name="tools" depends="prepare">
 
     <javac srcdir="${tools.dir}"
            destdir="${build.classes}"
@@ -165,6 +165,7 @@
       <classpath refid="test.classpath" />
       <arg line="-f ${jsf-ri.dir}/src/com/sun/faces/jsf-ri-config.xml"/>
       <arg line="-d ${src.dir}"/>
+      <arg line="-c ${basedir}/COPYRIGHT"/>
       <arg value="javax.faces.component.UICommand"/>
     </java>
 
