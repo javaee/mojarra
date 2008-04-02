@@ -179,6 +179,13 @@ public class InjectionProviderFactory {
          * @param managedBean target ManagedBean
          */
         public void invokePreDestroy(Object managedBean) { }
+
+        /**
+         * <p>This is a no-op.</p>
+         * @param managedBean target ManagedBean
+         */
+        public void invokePostConstruct(Object managedBean)
+        throws InjectionProviderException { }
     }
 
 } // END InjectionProviderFactory

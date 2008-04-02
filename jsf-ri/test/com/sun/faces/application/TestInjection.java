@@ -75,14 +75,20 @@ public class TestInjection extends ServletFacesTestCase {
         assertNotNull(injectionProvider);
         try {
             injectionProvider.inject(protectedBean);
+            injectionProvider.invokePostConstruct(protectedBean);
             injectionProvider.invokePreDestroy(protectedBean);
             injectionProvider.inject(packagePrivateBean);
+            injectionProvider.invokePostConstruct(packagePrivateBean);
             injectionProvider.invokePreDestroy(packagePrivateBean);
             injectionProvider.inject(privateBean);
+            injectionProvider.invokePostConstruct(privateBean);
             injectionProvider.invokePreDestroy(privateBean);
             injectionProvider.inject(concreteBean);
+            injectionProvider.invokePostConstruct(concreteBean);
             injectionProvider.invokePreDestroy(concreteBean);
         } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
             assertTrue(false);
         }
         

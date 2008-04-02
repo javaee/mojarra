@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.89 2006/10/18 16:29:10 edburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.90 2006/10/18 17:11:58 rlubke Exp $ 
  */ 
 
 
@@ -46,6 +46,7 @@ import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
@@ -68,7 +69,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.89 2006/10/18 16:29:10 edburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.90 2006/10/18 17:11:58 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -89,6 +90,8 @@ public class ViewHandlerImpl extends ViewHandler {
      * or, if that isn't defined, the value of <code>DEFAULT_SUFFIX</code>
      */
     private String contextDefaultSuffix;
+
+    private ServletContext servletContext;
     private int bufSize = -1;
 
     public ViewHandlerImpl() {
@@ -111,6 +114,21 @@ public class ViewHandlerImpl extends ViewHandler {
         ExternalContext extContext = context.getExternalContext();
         ServletRequest request = (ServletRequest) extContext.getRequest();
         ServletResponse response = (ServletResponse) extContext.getResponse();
+        if (servletContext == null) {
+            servletContext = (ServletContext) extContext.getContext();
+        }
+        if (Util.isPrefixMapped(Util.getFacesMapping(context))) {
+            // if an image has been requested of the ViewHandler,
+            // set responseComplete() to terminate the remainder of
+            // the lifecycle and return null;
+            String viewId = viewToRender.getViewId();
+            String mimeType = servletContext.getMimeType(viewId);
+            if (mimeType != null && mimeType.startsWith("image")) {
+                context.responseComplete();
+                extContext.dispatch(viewId);
+                return;
+            }
+        }
         
         try {
             if (executePageToBuildView(context, viewToRender)) {

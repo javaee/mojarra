@@ -41,11 +41,11 @@ public interface InjectionProvider {
      * steps:
      *    <ul>
      *        <li>Inject the supported resources per the Servlet 2.5
-     *           specification into the provided object</li>
-     *        <li>Inoke any method marked with the <code>@PostConstruct</code>
-     *          annotation (per the Common Annotations Specification)</li>
+     *           specification into the provided object</li>        
      *    </ul>
      * </p>
+     * <p>This method <em>must not</em> invoke any methods
+     * annotated with <code>@PostConstruct</code>
      * @param managedBean the target managed bean
      * @throws InjectionProviderException if an error occurs during 
      *  resource injection
@@ -62,5 +62,17 @@ public interface InjectionProvider {
      *  the method annotated by the <code>@PreDestroy</code> annotation
      */
     public void invokePreDestroy(Object managedBean) 
+    throws InjectionProviderException;
+    
+    
+    /**
+     * <p>The implemenation of this method must invoke any
+     * method marked with the <code>@PostConstruct</code> annotation
+     * (per the Common Annotations Specification).
+     * @param managedBean the target managed bean
+     * @throws InjectionProviderException if an error occurs when invoking
+     *  the method annotated by the <code>@PostConstruct</code> annotation
+     */
+    public void invokePostConstruct(Object managedBean) 
     throws InjectionProviderException;
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.13 2006/09/01 01:22:36 tony_robertson Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.14 2006/10/18 17:11:56 rlubke Exp $
  */
 
 /*
@@ -58,6 +58,7 @@ import com.sun.faces.config.beans.MapEntriesBean;
 import com.sun.faces.config.beans.MapEntryBean;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.spi.ManagedBeanFactory;
+import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
@@ -283,7 +284,20 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
         // populate the bean with its contents
         try {
-            // what kind of bean is this?
+            ApplicationAssociate associate = 
+                    ApplicationAssociate.getInstance(
+                          context.getExternalContext());   
+            InjectionProvider injectionProvider = 
+                  associate.getInjectionProvider();
+            
+            // Perform resource injection first
+            if (injectable) {
+                injectionProvider.inject(bean);    
+            }
+            
+            
+            // now setup the managed properties which may
+            // leverage the injected info from the previous step
             switch (beanType = getBeanType(bean)) {
                 case TYPE_IS_LIST:
                     copyListEntriesFromConfigToList(
@@ -305,12 +319,9 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                     break;
             }
             
-            // inject after properties have been set
+            // now invoke methods marked with @PostConstruct
             if (injectable) {
-                ApplicationAssociate associate = 
-                    ApplicationAssociate.getInstance(
-                          context.getExternalContext());
-                associate.getInjectionProvider().inject(bean);
+                injectionProvider.invokePostConstruct(bean);                
             }
             
         } catch (FacesException fe) {
