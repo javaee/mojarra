@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.30 2003/08/22 16:49:28 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.31 2003/08/22 19:25:10 rlubke Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.30 2003/08/22 16:49:28 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.31 2003/08/22 19:25:10 rlubke Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -76,9 +76,7 @@ public class LifecycleImpl extends Lifecycle
     protected ArrayList phaseListeners;
 
 
-    protected Object lock = null;
-
-    protected ViewHandler viewHandler = null;
+    protected Object lock = null;    
 
     // keeps track of total number of events processed 
     // per event source component
@@ -133,28 +131,7 @@ public class LifecycleImpl extends Lifecycle
     
         Assert.assert_it(null != renderPhase);
         renderPhase.execute(context);
-    }
-
-    //
-    // Methods from Lifecycle
-    //
-
-    public ViewHandler getViewHandler() {
-        if (null == viewHandler) {  
-	        viewHandler = 
-                Application.getCurrentInstance().getViewHandler();
-        }
-        return viewHandler;
-    }
-
-    public void setViewHandler(ViewHandler handler) {
-        if (handler == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                Util.NULL_HANDLER_ERROR_MESSAGE_ID));
-        }
-
-        viewHandler = handler;
-    }
+    }   
 
     public void execute(FacesContext context) throws FacesException {
         if (context == null) {

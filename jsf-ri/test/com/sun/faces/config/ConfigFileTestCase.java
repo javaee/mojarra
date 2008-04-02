@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.29 2003/08/22 17:27:35 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.30 2003/08/22 19:25:13 rlubke Exp $
  */
 
 /*
@@ -150,14 +150,14 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         UIComponent comp = null;
         while (iter.hasNext()) {
             cType = (String)iter.next();
-            comp = application.getComponent(cType);
+            comp = application.createComponent(cType);
             assertNotNull(comp);
         }
-        UIComponent command = application.getComponent("Command");
+        UIComponent command = application.createComponent("Command");
         assertNotNull(command);
         comp = null;
         application.addComponent("fooType", "javax.faces.component.UICommand");
-        comp = application.getComponent("fooType");
+        comp = application.createComponent("fooType");
         assertNotNull(comp);
 
         // <converter>
@@ -186,14 +186,14 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         Validator val = null;
         while (iter.hasNext()) {
             valId = (String)iter.next();
-            val = application.getValidator(valId);
+            val = application.createValidator(valId);
             assertNotNull(val);
         }
-        Validator second = application.getValidator("Second");
+        Validator second = application.createValidator("Second");
         assertNotNull(second);
         val = null;
         application.addValidator("fooId", "javax.faces.validator.DoubleRangeValidator");
-        val = application.getValidator("fooId");
+        val = application.createValidator("fooId");
         assertNotNull(val);
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.8 2003/08/21 14:18:12 rlubke Exp $
+ * $Id: TestConverters.java,v 1.9 2003/08/22 19:25:14 rlubke Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.8 2003/08/21 14:18:12 rlubke Exp $
+ * @version $Id: TestConverters.java,v 1.9 2003/08/22 19:25:14 rlubke Exp $
  * 
  *
  */
@@ -132,7 +132,7 @@ public class TestConverters extends JspFacesTestCase
         root.getChildren().add(text);
 
         Converter converter = null;
-        converter = application.getConverter("Date");
+        converter = application.createConverter("Date");
 
         // date
         String stringToConvert = "Jan 1, 1967";
@@ -144,7 +144,7 @@ public class TestConverters extends JspFacesTestCase
         assertTrue(str.equals(stringToConvert));
 
         // time
-        converter = application.getConverter("Time");
+        converter = application.createConverter("Time");
         text = new UIInputBase();
         text.setId("my_input_time");
         stringToConvert = "10:10:10 AM";
@@ -155,7 +155,7 @@ public class TestConverters extends JspFacesTestCase
         assertTrue(str.equals(stringToConvert));
 
         // datetime
-        converter = application.getConverter("DateTime");
+        converter = application.createConverter("DateTime");
         text = new UIInputBase();
         text.setId("my_input_datetime");
         stringToConvert = "Jan 1, 1967 10:10:10 AM";
@@ -173,7 +173,7 @@ public class TestConverters extends JspFacesTestCase
         text.setId("my_input_number");
         root.getChildren().add(text);
 
-        Converter converter = application.getConverter("Number");
+        Converter converter = application.createConverter("Number");
 
         String stringToConvert = "99.9";
         Object obj = converter.getAsObject(getFacesContext(), text,
@@ -191,7 +191,7 @@ public class TestConverters extends JspFacesTestCase
         text.setId("my_input_boolean");
         root.getChildren().add(text);
 
-        Converter converter = application.getConverter("Boolean");
+        Converter converter = application.createConverter("Boolean");
 
         String stringToConvert = "true";
         Object obj = converter.getAsObject(getFacesContext(), text,

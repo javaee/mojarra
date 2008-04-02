@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.6 2003/08/14 16:05:00 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.7 2003/08/22 19:25:11 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import com.sun.faces.TestComponent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.6 2003/08/14 16:05:00 rlubke Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.7 2003/08/22 19:25:11 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -325,7 +325,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
 	application.addComponent(testComponent.getComponentType(),
 				 "com.sun.faces.TestComponent");
 	assertTrue(null != (newTestComponent = (TestComponent)
-			    application.getComponent(testComponent.getComponentType())));
+			    application.createComponent(testComponent.getComponentType())));
 	assertTrue(newTestComponent != testComponent);
 	
     }
@@ -340,7 +340,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
 		    application.getValueBinding("sessionScope.TAIBean")));
 
 	try {
-	    result = application.getComponent(valueBinding, getFacesContext(),
+	    result = application.createComponent(valueBinding, getFacesContext(),
 					      "notreached");
 	    assertTrue(false);
 	}

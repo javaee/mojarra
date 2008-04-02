@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.22 2003/08/22 16:49:38 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.23 2003/08/22 19:25:09 rlubke Exp $
  */
 
 /*
@@ -59,6 +59,7 @@ public class ApplicationImpl extends Application {
     private NavigationHandler navigationHandler = null;
     private PropertyResolver propertyResolver = null;
     private VariableResolver variableResolver = null;
+    private ViewHandler viewHandler = null;
     //
     // This map stores reference expression | value binding instance
     // mappings.
@@ -116,27 +117,22 @@ public class ApplicationImpl extends Application {
     public Converter createConverter(String converterId) {
         return null;  
     }
-
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    
     public ViewHandler getViewHandler() {
-        return null;  
+        return viewHandler;
     }
 
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    
     public void setViewHandler(ViewHandler handler) {
-        
-    }
-
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION
-    public UIComponent createComponent(String componentType) throws FacesException {
-        return null;  
-    }
-
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION
-    public UIComponent createComponent(ValueBinding componentRef, FacesContext context, String componentType)
-        throws FacesException {
-        return null;  
-    }
+        if (handler == null) {
+            throw new NullPointerException(
+                    Util.getExceptionMessage(
+                            Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        // PENDING (rlubke) Make sure IllegalStateException is thrown if
+        // at least one response has been rendered.
+        viewHandler = handler;    
+    }   
 
     // PENDING (rlubke) PROVIDE IMPLEMENTATION
     public void addConverter(Class targetClass, String converterClass) {
@@ -152,12 +148,7 @@ public class ApplicationImpl extends Application {
     public Iterator getConverterTypes() {
         return null;  //To change body of implemented methods use Options | File Templates.
     }
-
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION
-    public Validator createValidator(String validatorId) throws FacesException {
-        return null;  //To change body of implemented methods use Options | File Templates.
-    }
-
+    
     /**
      * <p>Replace the default {@link ActionListener} that will be registered
      * with relevant components during the <em>Restore View</em>
@@ -188,7 +179,7 @@ public class ApplicationImpl extends Application {
 
     /**
      * <p>Return the {@link NavigationHandler} instance that will be passed
-     * the outcome returned by any invoked {@link Action} for this
+     * the outcome returned by any invoked {@link javax.faces.application.Action} for this
      * web application.	 The default implementation must provide the behavior
      * described in the {@link NavigationHandler} class description.</p>
      */
@@ -201,7 +192,7 @@ public class ApplicationImpl extends Application {
 
     /**
      * <p>Set the {@link NavigationHandler} instance that will be passed
-     * the outcome returned by any invoked {@link Action} for this
+     * the outcome returned by any invoked {@link javax.faces.application.Action} for this
      * web application.</p>
      *
      * @param handler The new {@link NavigationHandler} instance
@@ -327,7 +318,7 @@ public class ApplicationImpl extends Application {
     /**
      *<p>Register a new mapping of component type to the name of the 
      * {@link UIComponent} class.  Subsequent calls to
-     * <code>getComponent()</code> will serve as a factory for {@link UIComponent}
+     * <code>createComponent()</code> will serve as a factory for {@link UIComponent}
      *  instances.
      *
      * @param componentType The component type to be registered
@@ -359,7 +350,7 @@ public class ApplicationImpl extends Application {
      *  be created.
      * @exception NullPointerException if <code>componentType</code> is <code>null</code>.
      */
-    public UIComponent getComponent(String componentType) throws FacesException {
+    public UIComponent createComponent(String componentType) throws FacesException {
 	if (componentType == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -374,7 +365,7 @@ public class ApplicationImpl extends Application {
     }
 
     /**
-     * <p>Instantiate and return a new instance of {@link UIcomponent} instance
+     * <p>Instantiate and return a new instance of {@link UIComponent} instance
      * using either the component reference argument or the component type
      * argument.</p>
      *
@@ -391,34 +382,30 @@ public class ApplicationImpl extends Application {
      *  be created.
      * @exception NullPointerException if <code>componentType</code> is <code>null</code>.
      */
-    public UIComponent getComponent(ValueBinding componentRef,
-                                    FacesContext context,
-                                    String componentType)
-                                    throws FacesException {
-	if (null == componentRef || null == context || null == componentType) {
-	    throw new NullPointerException(Util.getExceptionMessage(
-		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-	}
-	
-	Object result = null;
-	boolean createOne = false;
+    public UIComponent createComponent(
+            ValueBinding componentRef,
+            FacesContext context,
+            String componentType)
+            throws FacesException {
+        if (null == componentRef || null == context || null == componentType) {
+            throw new NullPointerException(
+                    Util.getExceptionMessage(
+                            Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
 
-	if (null != (result = componentRef.getValue(context))) {
-	    // if the result is not an instance of UIComponent
-	    createOne = (!(result instanceof UIComponent));
-	    // we have to create one.
-	}
-	if (null == result || createOne) {
-	    result = this.getComponent(componentType);
-	}
+        Object result = null;
+        boolean createOne = false;
 
-	if (null == result) {
-            Object[] params = {componentType};
-	    throw new FacesException(Util.getExceptionMessage(
-		      Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,params));
-	}
+        if (null != (result = componentRef.getValue(context))) {
+            // if the result is not an instance of UIComponent
+            createOne = (!(result instanceof UIComponent));
+            // we have to create one.
+        }
+        if (null == result || createOne) {
+            result = this.createComponent(componentType);
+        }
 
-	return (UIComponent) result;
+        return (UIComponent) result;
     }
 
     /**
@@ -493,7 +480,7 @@ public class ApplicationImpl extends Application {
     /**
      *<p>Register a new mapping of validator id to the name of the 
      * {@link Validator} class.  Subsequent calls to
-     * <code>getValidator()</code> will serve as a factory for {@link Validator}
+     * <code>createValidator()</code> will serve as a factory for {@link Validator}
      *  instances.
      *
      * @param validatorId The validator identifier to be registered
@@ -525,7 +512,7 @@ public class ApplicationImpl extends Application {
      * cannot be created.
      * @exception NullPointerException if <code>validatorId</code> is <code>null</code>.
      */
-    public Validator getValidator(String validatorId) throws FacesException {
+    public Validator createValidator(String validatorId) throws FacesException {
 	if (validatorId == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.15 2003/08/22 17:27:33 rlubke Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.16 2003/08/22 19:25:12 rlubke Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.15 2003/08/22 17:27:33 rlubke Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.16 2003/08/22 19:25:12 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -113,51 +113,51 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	application.addComponent(testComponent.getComponentType(),
 				 "com.sun.faces.TestComponent");
 	assertTrue(null != (newTestComponent = (TestComponent)
-			    application.getComponent(testComponent.getComponentType())));
+			    application.createComponent(testComponent.getComponentType())));
 	assertTrue(newTestComponent != testComponent);
 
 	// built-in components
-	assertTrue(null != (uic = application.getComponent("Command")));
+	assertTrue(null != (uic = application.createComponent("Command")));
 	assertTrue(uic instanceof UICommand);
 	
-	assertTrue(null != (uic = application.getComponent("Form")));
+	assertTrue(null != (uic = application.createComponent("Form")));
 	assertTrue(uic instanceof UIForm);
 	
-	assertTrue(null != (uic = application.getComponent("Graphic")));
+	assertTrue(null != (uic = application.createComponent("Graphic")));
 	assertTrue(uic instanceof UIGraphic);
 	
-	assertTrue(null != (uic = application.getComponent("Input")));
+	assertTrue(null != (uic = application.createComponent("Input")));
 	assertTrue(uic instanceof UIInput);
 	
-	assertTrue(null != (uic = application.getComponent("NamingContainer")));
+	assertTrue(null != (uic = application.createComponent("NamingContainer")));
 	assertTrue(uic instanceof NamingContainer);
 	
-	assertTrue(null != (uic = application.getComponent("Output")));
+	assertTrue(null != (uic = application.createComponent("Output")));
 	assertTrue(uic instanceof UIOutput);
 	
-	assertTrue(null != (uic = application.getComponent("Panel")));
+	assertTrue(null != (uic = application.createComponent("Panel")));
 	assertTrue(uic instanceof UIPanel);
 	
-	assertTrue(null != (uic = application.getComponent("Parameter")));
+	assertTrue(null != (uic = application.createComponent("Parameter")));
 	assertTrue(uic instanceof UIParameter);
 	
 
-	assertTrue(null != (uic = application.getComponent("SelectBoolean")));
+	assertTrue(null != (uic = application.createComponent("SelectBoolean")));
 	assertTrue(uic instanceof UISelectBoolean);
 	
-	assertTrue(null != (uic = application.getComponent("SelectItem")));
+	assertTrue(null != (uic = application.createComponent("SelectItem")));
 	assertTrue(uic instanceof UISelectItem);
 	
-	assertTrue(null != (uic = application.getComponent("SelectItems")));
+	assertTrue(null != (uic = application.createComponent("SelectItems")));
 	assertTrue(uic instanceof UISelectItems);
 	
-	assertTrue(null != (uic = application.getComponent("SelectMany")));
+	assertTrue(null != (uic = application.createComponent("SelectMany")));
 	assertTrue(uic instanceof UISelectMany);
 	
-	assertTrue(null != (uic = application.getComponent("SelectOne")));
+	assertTrue(null != (uic = application.createComponent("SelectOne")));
 	assertTrue(uic instanceof UISelectOne);
         
-    assertTrue(null != (uic = application.getComponent("ViewRoot")));
+    assertTrue(null != (uic = application.createComponent("ViewRoot")));
     assertTrue(uic instanceof UIViewRoot);
 	
     }
@@ -169,7 +169,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	try {
 	    application.addComponent("William",
 				     "BillyBoy");
-	    application.getComponent("William");
+	    application.createComponent("William");
 	}
 	catch (FacesException e) {
 	    exceptionThrown = true;
@@ -179,7 +179,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	// non-existent mapping
 	exceptionThrown = false;
 	try {
-	    application.getComponent("Joebob");
+	    application.createComponent("Joebob");
 	}
 	catch (FacesException e) {
 	    exceptionThrown = true;
@@ -361,15 +361,15 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	application.addValidator("Billybob",
 				 "javax.faces.validator.LengthValidator");
 	assertTrue(null != (newTestValidator = (Validator)
-			    application.getValidator("Billybob")));
+			    application.createValidator("Billybob")));
 	assertTrue(newTestValidator != testValidator);
 
 	// test standard components
-	assertTrue(null != (val = application.getValidator("DoubleRange")));
+	assertTrue(null != (val = application.createValidator("DoubleRange")));
 	assertTrue(val instanceof Validator);
-	assertTrue(null != (val = application.getValidator("Length")));
+	assertTrue(null != (val = application.createValidator("Length")));
 	assertTrue(val instanceof Validator);
-	assertTrue(null != (val = application.getValidator("LongRange")));
+	assertTrue(null != (val = application.createValidator("LongRange")));
 	assertTrue(val instanceof Validator);
 
     }
@@ -381,7 +381,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	try {
 	    application.addValidator("William",
 				     "BillyBoy");
-	    application.getValidator("William");
+	    application.createValidator("William");
 	}
 	catch (FacesException e) {
 	    exceptionThrown = true;
@@ -391,7 +391,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	// non-existent mapping
 	exceptionThrown = false;
 	try {
-	    application.getValidator("Joebob");
+	    application.createValidator("Joebob");
 	}
 	catch (FacesException e) {
 	    exceptionThrown = true;
