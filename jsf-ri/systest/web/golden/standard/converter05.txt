@@ -13,6 +13,6 @@
         <body>
             
 
-            <span id="outputDatetime1">7/10/96 3:31:31 PM EDT</span><span id="outputDatetime2">7/10/96 3:31:31 PM EDT</span><span id="outputDatetime3">7/10/96 3:31:31 PM EDT</span>
+            <span id="outputDatetime1">7/10/96 3:31:31 PM EDT</span><span id="outputDatetime2">7/10/96 3:31:31 PM EDT</span><span id="outputDatetime3">7/10/96 3:31:31 PM EDT</span><span id="outputDatetime4">8/10/96 05:31:31 AM EST</span>
         </body>
     </html>

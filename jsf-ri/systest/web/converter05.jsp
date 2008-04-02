@@ -12,7 +12,7 @@
 
         <body>
             <%
-                java.util.Locale localeObject = new java.util.Locale("en_US");
+                java.util.Locale localeObject = new java.util.Locale("en", "US");
                 java.util.TimeZone tzObject =
                     java.util.TimeZone.getTimeZone("America/New_York");
                 String localeString = "en";
@@ -22,6 +22,8 @@
                 request.setAttribute("timeZoneObject", tzObject);
                 request.setAttribute("localeString", localeString);
                 request.setAttribute("timeZoneString", timeZoneString);
+                request.setAttribute("localeObjectAU", new java.util.Locale("en", "AU"));
+                request.setAttribute("timeZoneStringAU", "Australia/Melbourne");
 
             %>
 
@@ -54,6 +56,13 @@
                                        dateStyle="short"
                                        locale="#{requestScope.localeObject}"
                                        timeZone="#{requestScope.timeZoneObject}"/>
+                </h:outputText>
+                <h:outputText id="outputDatetime4"
+                              value="7/10/96 12:31:31 PM PDT">
+                    <f:convertDateTime type="both" timeStyle="full"
+                                       dateStyle="short"
+                                       locale="#{requestScope.localeObjectAU}"
+                                       timeZone="#{requestScope.timeZoneStringAU}"/>
                 </h:outputText>
             </f:view>
         </body>
