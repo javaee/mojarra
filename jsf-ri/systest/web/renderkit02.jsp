@@ -40,6 +40,7 @@
     // Set the "DEFAULT" renderkit Id
     //
     view.setRenderKitId("DEFAULT");
+    facesContext.setViewRoot(view);
 
     facesContext.renderResponse();
 
