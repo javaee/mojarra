@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.76 2006/05/18 23:07:54 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.77 2006/06/05 18:33:54 rogerk Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -577,10 +577,17 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Object valuesArray = null;
         Object itemValue = null;
         
-        boolean isSelected;
+        boolean isSelected = false;;
+        boolean containsValue = false;
         if (submittedValues != null) {
-            valuesArray = submittedValues;
-            itemValue = valueString;
+            containsValue = containsaValue(submittedValues);
+            if (containsValue) {
+                valuesArray = submittedValues;
+                itemValue = valueString;
+            } else {
+                valuesArray = getCurrentSelectedValues(context, component);
+                itemValue = curItem.getValue();
+            }
         } else {
             valuesArray = getCurrentSelectedValues(context, component);
             itemValue = curItem.getValue();
@@ -635,6 +642,18 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     }
 
+    boolean containsaValue(Object valueArray) {
+        if (null != valueArray) {
+            int len = Array.getLength(valueArray);
+            for (int i = 0; i < len; i++) {
+                Object value = Array.get(valueArray, i);
+                if (value != null && !(value.equals(RIConstants.NO_VALUE))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     boolean isSelected(Object itemValue, Object valueArray) {
         if (null != valueArray) {
