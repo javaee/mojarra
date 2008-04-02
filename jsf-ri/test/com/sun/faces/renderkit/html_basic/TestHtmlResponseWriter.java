@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.22 2006/10/06 20:36:06 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.23 2006/10/13 19:01:00 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.22 2006/10/06 20:36:06 rlubke Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.23 2006/10/13 19:01:00 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -289,6 +289,49 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
         result = swx.toString();
         System.out.println(result);
         assertTrue((!result.contains("<[CDATA[") && !result.contains("]]>")));
+    }
+
+    public void testWriteStyleElement() throws Exception {
+        StringWriter sw = new StringWriter();
+        StringWriter swx = new StringWriter();
+        writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+        ResponseWriter xmlWriter = renderKit.createResponseWriter(swx, "application/xhtml+xml", "UTF-8");
+        UIOutput output = new UIOutput();
+        writer.startElement("style", output);
+        writer.writeAttribute("src", "http://foo.net/some.css", "src");
+        writer.writeAttribute("type", "text/css", "type");
+        writer.endElement("style");
+        String result = sw.toString();
+        System.out.println(result);
+        assertTrue((!result.contains("<!--") && !result.contains("-->")));
+
+        xmlWriter.startElement("style", output);
+        xmlWriter.writeAttribute("src", "http://foo.net/some.css", "src");
+        xmlWriter.writeAttribute("type", "text/css", "type");
+        xmlWriter.endElement("style");
+        result = swx.toString();
+        System.out.println(result);
+        assertTrue((!result.contains("<![CDATA[") && !result.contains("]]>")));
+
+        sw = new StringWriter();
+        swx = new StringWriter();
+        writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+        xmlWriter = renderKit.createResponseWriter(swx, "application/xhtml+xml", "UTF-8");
+        writer.startElement("style", output);
+        writer.writeAttribute("type", "text/css", "type");
+        writer.write(".h1 { color: red }");
+        writer.endElement("style");
+        result = sw.toString();
+        System.out.println(result);
+        assertTrue((result.contains("<!--") && result.contains("-->")));
+
+        xmlWriter.startElement("style", output);
+        xmlWriter.writeAttribute("type", "text/css", "type");
+        xmlWriter.write(".h1 { color: red }");
+        xmlWriter.endElement("style");
+        result = swx.toString();
+        System.out.println(result);
+        assertTrue((result.contains("<![CDATA[") && result.contains("]]>")));
     }
 
 

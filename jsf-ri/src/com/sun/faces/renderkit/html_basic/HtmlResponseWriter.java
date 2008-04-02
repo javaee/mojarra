@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.35 2006/10/12 20:19:08 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.36 2006/10/13 19:01:00 rlubke Exp $
  */
 
 /*
@@ -75,9 +75,12 @@ public class HtmlResponseWriter extends ResponseWriter {
     private boolean writingCdata;
 
     // flag to indicate that we're writing a 'script' or 'style' element
-    private boolean scriptOrStyle;
+    private boolean isScript;
 
-    // flag to indicate that we're writing a 'src' attribute as part of 
+    // flag to indicate that we're writing a 'style' element
+    private boolean isStyle;
+
+    // flag to indicate that we're writing a 'src' attribute as part of
     // 'script' or 'style' element 
     private boolean scriptOrStyleSrc;
 
@@ -220,13 +223,17 @@ public class HtmlResponseWriter extends ResponseWriter {
             RIConstants.XHTML_CONTENT_TYPE);
         if (isScriptOrStyle(name) && !scriptOrStyleSrc) {
             if (isXhtml) {
-                writer.write("\n//]]>\n");
+                if (isScript) {
+                    writer.write("\n//]]>\n");
+                } else {
+                    writer.write("\n]]>\n");
+                }
             } else {
                 writer.write("\n//-->\n");
             }
         }
-        scriptOrStyle = false;
-        scriptOrStyle = false;
+        isScript = false;
+        isStyle = false;
         if ("cdata".equalsIgnoreCase(name)) {
             writer.write("]]>");
             writingCdata = false;
@@ -391,7 +398,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             return;
         }
 
-        if (name.equalsIgnoreCase("src") && scriptOrStyle) {
+        if (name.equalsIgnoreCase("src") && isScriptOrStyle()) {
             scriptOrStyleSrc = true;
         }
 
@@ -654,11 +661,16 @@ public class HtmlResponseWriter extends ResponseWriter {
             closeStart = false;
         }
         if (isScriptOrStyle() && !scriptOrStyleSrc) {
-            scriptOrStyle = false;
+            isScript = false;
+            isStyle = false;
             isXhtml = getContentType().equals(
                 RIConstants.XHTML_CONTENT_TYPE);
             if (isXhtml) {
-                writer.write("\n//<![CDATA[");
+                if (isScript) {
+                    writer.write("\n//<![CDATA[");
+                } else {
+                    writer.write("\n<![CDATA[");
+                }
             } else {
                 writer.write("\n<!--");
             }
@@ -667,20 +679,23 @@ public class HtmlResponseWriter extends ResponseWriter {
 
 
     private boolean isScriptOrStyle(String name) {
-        if ("script".equalsIgnoreCase(name) ||
-            "style".equalsIgnoreCase(name)) {
-            scriptOrStyle = true;
+        if ("script".equalsIgnoreCase(name)) {
+            isScript = true;
+            dontEscape = true;
+        } else if ("style".equalsIgnoreCase(name)) {
+            isStyle = true;
             dontEscape = true;
         } else {
-            scriptOrStyle = false;
+            isScript = false;
+            isStyle = false;
             dontEscape = false;
         }
 
-        return scriptOrStyle;
+        return (isScript || isStyle);
     }
 
     private boolean isScriptOrStyle() {
-        return scriptOrStyle;
+        return (isScript || isStyle);
     }
 
 }
