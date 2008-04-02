@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.50 2003/05/14 22:46:34 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.51 2003/06/26 18:52:41 jvisvanathan Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.50 2003/05/14 22:46:34 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.51 2003/06/26 18:52:41 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -176,23 +176,17 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (value == null) {
             if (requestParameterMap.get(clientId+".x") == null &&
                 requestParameterMap.get(clientId+".y") == null) {
-                component.setValid(true);
                 return;
             }
         }
 
         String type = (String) component.getAttribute("type");
         if ((type != null) && (type.toLowerCase().equals("reset")) ) {
-            component.setValid(true);
             return;
         }
 
-        //PENDING(rogerk) fire action event
-        //
         ((UICommand)component).fireActionEvent(context);
-
-        component.setValid(true);
-	return;
+        return;
     }
     
      public void encodeBegin(FacesContext context, UIComponent component) 

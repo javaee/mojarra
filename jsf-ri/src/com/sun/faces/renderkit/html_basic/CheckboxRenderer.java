@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.47 2003/04/29 20:51:49 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.48 2003/06/26 18:52:41 jvisvanathan Exp $
  *
  */
 
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.47 2003/04/29 20:51:49 eburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.48 2003/06/26 18:52:41 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -121,7 +121,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         }    
 
         // Convert the new value
-
+        UIInput uiInput = (UIInput) component;
         Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
         String newValue = (String)requestParameterMap.get(clientId);
         try {
@@ -129,11 +129,10 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         } catch (ConverterException ce) {
             ((UIInput)component).setValue(newValue);
             addConversionErrorMessage(context, component, ce.getMessage());
-            component.setValid(false);
+            uiInput.setValid(false);
             return;
         }
-        ((UIInput)component).setValue(convertedValue);
-        component.setValid(true);
+        uiInput.setValue(convertedValue);
     }
 
     public Object getConvertedValue(FacesContext context, UIComponent component,

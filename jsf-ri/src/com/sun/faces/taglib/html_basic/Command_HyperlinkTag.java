@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.28 2003/04/29 20:52:05 eburns Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.29 2003/06/26 18:52:45 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.28 2003/04/29 20:52:05 eburns Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.29 2003/06/26 18:52:45 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -136,9 +136,6 @@ public class Command_HyperlinkTag extends FacesTag
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UICommand link = (UICommand) component;
-        if (null == link.getCommandName()) {
-	    link.setCommandName(getCommandName());
-	}
         if (null == link.getActionRef() && actionRef != null ) {
 	    link.setActionRef(actionRef);
 	}

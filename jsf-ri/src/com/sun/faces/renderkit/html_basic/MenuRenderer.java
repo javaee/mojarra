@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.14 2003/05/21 19:53:05 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.15 2003/06/26 18:52:43 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -39,7 +39,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.14 2003/05/21 19:53:05 eburns Exp $
+ * @version $Id: MenuRenderer.java,v 1.15 2003/06/26 18:52:43 jvisvanathan Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -109,8 +109,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             String newValue = (String)requestParameterMap.get(clientId);
             ((UISelectOne)component).setValue(newValue);
         }    
-        component.setValid(true);
-	return;
+        return;
     }
 
     public void encodeBegin(FacesContext context, UIComponent component)

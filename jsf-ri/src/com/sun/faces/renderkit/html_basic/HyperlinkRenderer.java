@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.46 2003/05/27 22:56:04 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.47 2003/06/26 18:52:42 jvisvanathan Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.46 2003/05/27 22:56:04 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.47 2003/06/26 18:52:42 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -113,15 +113,11 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
         Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
         String value = (String)requestParameterMap.get(clientId);
         if (value == null || value.equals("")) {
-	    component.setValid(true);
-	    return;
+            return;
         }
 
         //PENDING(rogerk) fire action event
-        //
         command.fireActionEvent(context);
-	
-        command.setValid(true);
 	return;
     }
     
@@ -187,7 +183,9 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
         //PENDING(rogerk) what if "href" attribute is not set (null)???
         //
         String href = (String)command.getAttribute("href");
-        String commandName = command.getCommandName();
+        String commandName="";
+        // PENDING(visvan) FIX AFTER SUCCESSFUL RI COMPILATION
+        //commandName = command.getCommandName();
 
         //Write Anchor
         writer.write("<a href=");

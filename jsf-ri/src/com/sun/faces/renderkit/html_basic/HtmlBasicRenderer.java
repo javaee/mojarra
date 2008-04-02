@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.40 2003/05/13 22:55:22 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.41 2003/06/26 18:52:42 jvisvanathan Exp $
  */
 
 /*
@@ -299,7 +299,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
         
         if (!(component instanceof UIInput)) {
-	    component.setValid(true);
             // do nothing in output case
             return;
         }
@@ -340,12 +339,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
         } catch (ConverterException ce) {
             uiInput.setValue(newValue);
             addConversionErrorMessage(context, component, ce.getMessage());
-            component.setValid(false);
+            uiInput.setValid(false);
             return;
         }   
         uiInput.setValue(convertedValue);
-        component.setValid(true);
-    }
+     }
     
     /**
      * Simply returns the value. This method needs to be overridden by

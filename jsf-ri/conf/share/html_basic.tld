@@ -198,11 +198,6 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
-        <name>commandName</name>
-        <required>true</required>
-        <rtexprvalue>false</rtexprvalue>
-      </attribute>
-      <attribute>
         <name>key</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
@@ -369,11 +364,6 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute> 
-      <attribute>
-        <name>commandName</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-      </attribute>
     <attribute>
       <name>key</name>
       <required>false</required>
