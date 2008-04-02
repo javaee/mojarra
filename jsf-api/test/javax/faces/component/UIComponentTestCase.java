@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.22 2003/02/03 22:57:53 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.23 2003/02/04 19:06:12 edburns Exp $
  */
 
 /*
@@ -470,17 +470,17 @@ public class UIComponentTestCase extends TestCase {
         // Add facets one at a time and check the count
         component.addFacet("test1", test1);
 	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     test1.getAttribute(UIComponent.FACET_PARENT), 
+		     test1.getAttribute(UIComponent.FACET_PARENT_ATTR), 
 		     component);
         checkFacetCount(component, 1);
         component.addFacet("test2", test2);
 	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     test2.getAttribute(UIComponent.FACET_PARENT), 
+		     test2.getAttribute(UIComponent.FACET_PARENT_ATTR), 
 		     component);
         checkFacetCount(component, 2);
         component.addFacet("test3", test3);
 	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     test3.getAttribute(UIComponent.FACET_PARENT), 
+		     test3.getAttribute(UIComponent.FACET_PARENT_ATTR), 
 		     component);
         checkFacetCount(component, 3);
 
@@ -496,7 +496,7 @@ public class UIComponentTestCase extends TestCase {
 
         component.addFacet("test3", test3dup);
 	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     test3dup.getAttribute(UIComponent.FACET_PARENT), 
+		     test3dup.getAttribute(UIComponent.FACET_PARENT_ATTR), 
 		     component);
 	// Note that this doesn't throw any exception
         checkFacetCount(component, 3);
@@ -510,7 +510,7 @@ public class UIComponentTestCase extends TestCase {
         // Remove a facet
         component.removeFacet("test2");
 	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     test2.getAttribute(UIComponent.FACET_PARENT), 
+		     test2.getAttribute(UIComponent.FACET_PARENT_ATTR), 
 		     null);
         checkFacetCount(component, 2);
         facet = component.getFacet("test1");
@@ -779,17 +779,17 @@ public class UIComponentTestCase extends TestCase {
         // Add facets and children one at a time.
         testComponent.addFacet("facet1", facet1);
 	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     facet1.getAttribute(UIComponent.FACET_PARENT), 
+		     facet1.getAttribute(UIComponent.FACET_PARENT_ATTR), 
 		     testComponent);
         testComponent.addChild(child1);
         testComponent.addFacet("facet2", facet2);
 	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     facet2.getAttribute(UIComponent.FACET_PARENT), 
+		     facet2.getAttribute(UIComponent.FACET_PARENT_ATTR), 
 		     testComponent);
         testComponent.addChild(child2);
         testComponent.addFacet("facet3", facet3);
 	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     facet3.getAttribute(UIComponent.FACET_PARENT), 
+		     facet3.getAttribute(UIComponent.FACET_PARENT_ATTR), 
 		     testComponent);
         testComponent.addChild(child3);
 
