@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolver.java,v 1.4 2004/01/10 05:43:50 eburns Exp $
+ * $Id: PropertyResolver.java,v 1.5 2004/01/20 23:13:29 craigmcc Exp $
  */
 
 /*
@@ -65,9 +65,11 @@ public abstract class PropertyResolver {
      * @exception EvaluationException if an exception is thrown while getting
      *  the property value (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
+     * @exception PropertyNotFoundException if the index is out of
+     *  bounds or if <code>base</code> is <code>null</code>
      */
     public abstract Object getValue(Object base, int index)
-        throws EvaluationException;
+        throws EvaluationException, PropertyNotFoundException;
 
 
     /**
