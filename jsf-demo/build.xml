@@ -70,9 +70,9 @@
   <!-- dependent jars -->
   <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
 
-  <property name="jsf-api.jar"
+  <property name="jsf.api.jar"
             value="${jsf.api.home}/build/lib/jsf-api.jar" />
-  <property name="jsf-ri.jar"
+  <property name="jsf.ri.jar"
             value="${jsf.ri.home}/build/lib/jsf-ri.jar" />
 
   <property name="webapp" value="demo" />
@@ -102,8 +102,8 @@
     <copy todir="${jsf-demo.home}/lib" file="${commons-logging.jar}" />
     <copy todir="${jsf-demo.home}/lib" file="${commons-digester.jar}" />
     <copy todir="${jsf-demo.home}/lib" file="${commons-collections.jar}" />
-    <copy todir="${jsf-demo.home}/lib" file="${jsf-api.jar}" />
-    <copy todir="${jsf-demo.home}/lib" file="${jsf-ri.jar}" />
+    <copy todir="${jsf-demo.home}/lib" file="${jsf.api.jar}" />
+    <copy todir="${jsf-demo.home}/lib" file="${jsf.ri.jar}" />
     <copy todir="${jsf-demo.home}/lib" file="${standard.jar}" />
     <copy todir="${jsf-demo.home}/lib" file="${jstl.jar}" />
   </target>
