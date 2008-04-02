@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.4 2003/04/30 19:55:23 eburns Exp $
+ * $Id: ConfigParser.java,v 1.5 2003/05/01 02:03:41 rkitain Exp $
  */
 
 /*
@@ -131,7 +131,10 @@ public class ConfigParser {
         try {
             input = servletContext.getResourceAsStream(configPath);
         } catch (Throwable t) {
-            throw new RuntimeException("Error Opening File:"+configPath);
+            Object[] obj = new Object[1];
+            obj[0] = configPath;
+            throw new RuntimeException(Util.getExceptionMessage(
+                Util.ERROR_OPENING_FILE_ERROR_MESSAGE_ID, obj));
         }
 	base = this.parseConfig(input, base);
 
@@ -151,9 +154,10 @@ public class ConfigParser {
             digester.push(base);
             base = (ConfigBase) digester.parse(input);
         } catch (Throwable t) {
-            throw new RuntimeException("Unable to parse inputStream: " +
-				       input.toString() + ": "+
-				       t.getMessage());
+            Object[] obj = new Object[1];
+            obj[0] = input.toString(); 
+            throw new RuntimeException(Util.getExceptionMessage(
+                Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj)+t.getMessage());
         }
 	
         try {
@@ -413,8 +417,10 @@ public class ConfigParser {
         String validateXml = sc.getInitParameter(RIConstants.VALIDATE_XML);
         if (validateXml != null) {
             if (!(validateXml.equals("true")) && !(validateXml.equals("false"))) {
-                throw new RuntimeException("Validate Xml initialization parameter must "+
-                    "be 'true' or 'false'");
+                Object[] obj = new Object[1];
+                obj[0] = "validateXml";
+                throw new RuntimeException(Util.getExceptionMessage(
+                    Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID, obj));
             }
         } else if (validateXml == null) {
             validateXml = "false";

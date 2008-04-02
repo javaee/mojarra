@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBean.java,v 1.2 2003/04/29 20:51:33 eburns Exp $
+ * $Id: ConfigManagedBean.java,v 1.3 2003/05/01 02:03:41 rkitain Exp $
  */
 
 /*
@@ -25,6 +25,8 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
     private String managedBeanId;
     private String managedBeanClass;
     private String managedBeanScope;
+    private String managedBeanCreate;
+
     private HashMap properties = null;
 
     public String getManagedBeanId() {
@@ -48,6 +50,13 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
         this.managedBeanScope = managedBeanScope;
     }
 
+    public String getManagedBeanCreate() {
+        return (this.managedBeanCreate);
+    }
+    public void setManagedBeanCreate(String managedBeanCreate) {
+        this.managedBeanCreate = managedBeanCreate;
+    }
+    
     public void addProperty(ConfigManagedBeanProperty property) {
         if (properties == null) {
             properties = new HashMap();
@@ -79,6 +88,7 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
         sb.append("ID:"+getManagedBeanId()+
             "\nCLASS:"+getManagedBeanClass()+
             "\nSCOPE:"+getManagedBeanScope()+
+            "\nCREATE:"+getManagedBeanCreate()+
             "\nPROPERTIES...");
         if (properties.size() > 0) {
             Iterator iter = properties.keySet().iterator();
