@@ -337,6 +337,15 @@
 
     <jar jarfile="${build.lib}/${name}.jar"
          basedir="${build.classes}" >
+	 <manifest>
+	  <attribute name="Specification-Title" value="JavaServer Faces"/>
+	  <attribute name="Specification-Version" value="1.0"/>
+	  <attribute name="Implementation-Title" value="'${name}': ${Name} Reference Implementation"/>
+	  <attribute name="Implementation-Version" value="${version}"/>
+	  <attribute name="Implementation-Vendor" value="Sun Microsystems, Inc."/>
+  	  <attribute name="Implementation-Vendor-Id" value="com.sun"/>
+	  <attribute name="Extension-Name" value="javax.faces"/>
+	</manifest>
     </jar>
 
   </target>
