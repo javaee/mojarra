@@ -317,7 +317,6 @@
 
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/> 
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
             <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
@@ -341,6 +340,7 @@
 
 
 <!-- put non-running testcases here
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
             <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
