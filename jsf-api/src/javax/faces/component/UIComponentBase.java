@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.133 2006/06/05 21:14:25 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.134 2006/06/12 23:26:50 rlubke Exp $
  */
 
 /*
@@ -44,6 +44,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
@@ -189,7 +190,7 @@ public abstract class UIComponentBase extends UIComponent {
      * <p>The <code>Map</code> containing our attributes, keyed by
      * attribute name.</p>
      */
-    private Map<String,Object> attributes = null;
+    private AttributesMap attributes = null;
 
 
     public Map<String, Object> getAttributes() {
@@ -1237,12 +1238,12 @@ public abstract class UIComponentBase extends UIComponent {
         if (values == null) {
              values = new Object[8];
         }
-        // copy over "attributes" to a temporary map, so that
-        // any references maintained due to "attributes" being an inner class
-        // is not saved.
-        if ( attributes != null && attributes.size() > 0) {
-            HashMap<String, Object> attributesCopy = new HashMap<String, Object>(attributes);
-            values[0] = attributesCopy;
+        
+        if (attributes != null) {
+            Map backing = attributes.getBackingAttributes();
+            if (backing != null && !backing.isEmpty()) {
+                values[0] = backing;
+            }
         }
         values[1] = saveBindingsState(context);
         values[2] = clientId;
@@ -1263,12 +1264,9 @@ public abstract class UIComponentBase extends UIComponent {
         // we need to get the map that knows how to handle attribute/property 
         // transparency before we restore its values.        
         if ( values[0] != null ) {
-            Map tempMap = (Map) values[0];
-            if (tempMap.size() > 0) { 
-                getAttributes().putAll(tempMap);            
-            }
+            attributes = new AttributesMap((Map) values[0]);
         }
-	bindings = restoreBindingsState(context, values[1]);
+        bindings = restoreBindingsState(context, values[1]);
         clientId = (String) values[2];
         id = (String) values[3];
         rendered = ((Boolean) values[4]).booleanValue();
@@ -1489,14 +1487,39 @@ public abstract class UIComponentBase extends UIComponent {
 
     // Private implementation of Map that supports the functionality
     // required by UIComponent.getFacets()
-    private class AttributesMap extends HashMap<String, Object> {
+    // HISTORY:
+    //   Versions 1.333 and older used inheritence to provide the
+    //     basic map functionality.  This was wasteful since a 
+    //     component could be completely configured via ValueExpressions
+    //     or (Bindings) which means an empty Map would always be
+    //     present when it wasn't needed.  By using composition,
+    //     we control if and when the Map is instantiated thereby
+    //     reducing uneeded object allocation.  This change also
+    //     has a nice side effect in state saving since we no
+    //     longer need to duplicate the map, we just provide the
+    //     private 'attributes' map directly to the state saving process.
+    private class AttributesMap implements Map, Serializable {
+        
+        private Map attributes;
+        
+        // -------------------------------------------------------- Constructors
+        
+        private AttributesMap() { }
+        
+        private AttributesMap(Map<String,Object> attributes) {
+            this.attributes = attributes;            
+        }
 
         public boolean containsKey(Object keyObj) {
             String key = (String) keyObj;
             PropertyDescriptor pd =
                 getPropertyDescriptor(key);
             if (pd == null) {
-                return (super.containsKey(key));
+                if (attributes != null) {
+                    return attributes.containsKey(key);
+                } else {
+                    return (false);
+                }                
             } else {
                 return (false);
             }
@@ -1508,7 +1531,7 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new NullPointerException();
             }
             PropertyDescriptor pd =
-                getPropertyDescriptor((String) key);
+                getPropertyDescriptor(key);
             if (pd != null) {
                 try {
                     Method readMethod = pd.getReadMethod();
@@ -1524,28 +1547,36 @@ public abstract class UIComponentBase extends UIComponent {
                     throw new FacesException
                         (e.getTargetException());
                 }
-            } else if (super.containsKey(key)) {
-                return (super.get(key));
+            } else if (attributes != null) {
+                if (attributes.containsKey(key)) {
+                    return (attributes.get(key));
+                }
             }
             ValueExpression ve = getValueExpression(key);
             if (ve != null) {
-		Object result = null;
-		try {
-		    result = ve.getValue(getFacesContext().getELContext());
-		    return result;
-		}
-		catch (ELException e) {
-		    throw new FacesException(e);
-		}
+                Object result = null;
+                try {
+                    result = ve.getValue(getFacesContext().getELContext());
+                    return result;
+                }
+                catch (ELException e) {
+                    throw new FacesException(e);
+                }
             }
             return (null);
         }
 
-        public Object put(String key, Object value) {
-            if (key == null) {
+        public Object put(Object keyValue, Object value) {
+            if (keyValue == null) {
                 throw new NullPointerException();
             }
+            
+            if (!(keyValue instanceof String)) {
+                // PENDING i18n
+                throw new ClassCastException("Key must be a String");
+            }
 
+            String key = keyValue.toString();
             PropertyDescriptor pd =
                 getPropertyDescriptor(key);
             if (pd != null) {
@@ -1575,18 +1606,22 @@ public abstract class UIComponentBase extends UIComponent {
                 if (value == null) {
                     throw new NullPointerException();
                 }
-                return (super.put(key, value));
+                if (attributes == null) {
+                    initMap();
+                }
+                return (attributes.put(key, value));
             }
         }
 
-        public void putAll(Map<? extends String, ? extends Object> map) {
+        public void putAll(Map map) {
             if (map == null) {
                 throw new NullPointerException();
             }
             
-            for (Map.Entry<? extends String, ? extends Object> entry : map.entrySet()) {
-                put(entry.getKey(), entry.getValue());
+            if (attributes == null) {
+                initMap();
             }
+            attributes.putAll(map);
         }
 
         public Object remove(Object keyObj) {
@@ -1599,10 +1634,104 @@ public abstract class UIComponentBase extends UIComponent {
             if (pd != null) {
                 throw new IllegalArgumentException(key);
             } else {
-                return (super.remove(key));
+                if (attributes != null) {
+                    return (attributes.remove(key));
+                } else {
+                    return null;
+                }
             }
         }
 
+
+        public int size() {
+            return (attributes != null ? attributes.size() : 0);            
+        }
+
+        public boolean isEmpty() {
+            return (attributes == null || attributes.isEmpty());
+        }
+
+        public boolean containsValue(java.lang.Object value) {
+            return (attributes != null && attributes.containsValue(value));
+        }
+
+        public void clear() {
+            if (attributes != null) {
+                attributes.clear();
+            }
+        }
+
+        public Set keySet() {
+            return (attributes != null
+                    ? attributes.keySet()
+                    : Collections.EMPTY_SET);
+        }
+
+        public Collection values() {
+            return (attributes != null
+                    ? attributes.values()
+                    : Collections.EMPTY_LIST);
+        }
+
+        public Set entrySet() {
+            return (attributes != null
+                    ? attributes.entrySet()
+                    : Collections.EMPTY_SET);
+        }
+        
+        Map getBackingAttributes() {
+            return attributes;
+        }
+
+        public boolean equals(Object o) {
+            if (o == this) {
+                return true;
+            }
+
+            if (!(o instanceof Map)) {
+                return false;
+            }
+            Map t = (Map) o;
+            if (t.size() != size()) {
+                return false;
+            }
+
+            try {                   
+                for (Object e : entrySet()) {
+                    Entry entry = (Entry) e;
+                    Object key = entry.getKey();
+                    Object value = entry.getValue();
+                    if (value == null) {
+                        if (!(t.get(key) == null && t.containsKey(key))) {
+                            return false;
+                        }
+                    } else {
+                        if (!value.equals(t.get(key))) {
+                            return false;
+                        }
+                    }
+                }
+            } catch (ClassCastException unused) {
+                return false;
+            } catch (NullPointerException unused) {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        public int hashCode() {
+            int h = 0;
+            for (Object o : entrySet()) {
+                h += o.hashCode();
+            }
+            return h;
+        }
+        
+        private void initMap() {
+            attributes = new HashMap(8);
+        }
     }
 
 
