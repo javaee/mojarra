@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayGuard.java,v 1.7 2005/08/22 22:10:17 ofung Exp $
+ * $Id: ByteArrayGuard.java,v 1.8 2005/08/26 15:27:09 rlubke Exp $
  */
 
 /*
@@ -219,7 +219,8 @@ public class ByteArrayGuard {
         
         // if there is a session....
         if ( sessionObj != null ) {
-            Map sessionMap = context.getExternalContext().getSessionMap();
+            Map<String,Object> sessionMap = 
+                context.getExternalContext().getSessionMap();
             
             // try to get a legacy password from the session to use
             statePwd = (String) sessionMap.get(SESSION_KEY_FOR_PASSWORD);

@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolverForJsp.java,v 1.5 2005/08/22 22:10:12 ofung Exp $
+ * $Id: ImplicitObjectELResolverForJsp.java,v 1.6 2005/08/26 15:27:05 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -35,7 +35,6 @@ import java.util.Iterator;
 
 import javax.el.ELContext;
 import javax.el.ELException;
-import javax.el.ELResolver;
 import javax.el.PropertyNotFoundException;
 import javax.el.PropertyNotWritableException;
 import javax.faces.component.UIViewRoot;
@@ -169,7 +168,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
             return null;
         }
        
-        ArrayList list = new ArrayList(2);
+        ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>(2);
         list.add(Util.getFeatureDescriptor("facesContext", "facesContext",
         "facesContext",false, false, true, FacesContext.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("view", "view",

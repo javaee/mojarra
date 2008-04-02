@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.28 2005/08/22 22:10:17 ofung Exp $
+ * $Id: RenderKitImpl.java,v 1.29 2005/08/26 15:27:11 rlubke Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.28 2005/08/22 22:10:17 ofung Exp $
+ * @version $Id: RenderKitImpl.java,v 1.29 2005/08/26 15:27:11 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -87,7 +87,7 @@ public class RenderKitImpl extends RenderKit {
      * Renderer instances themselves.
      */
 
-    private HashMap rendererFamilies;
+    private HashMap<String,HashMap<Object,Renderer>> rendererFamilies;
 
     private ResponseStateManager responseStateManager = null;
 //
@@ -96,7 +96,7 @@ public class RenderKitImpl extends RenderKit {
 
     public RenderKitImpl() {
         super();
-	rendererFamilies = new HashMap();
+	rendererFamilies = new HashMap<String, HashMap<Object,Renderer>>();
     }
 
 
@@ -122,12 +122,12 @@ public class RenderKitImpl extends RenderKit {
             throw new NullPointerException(message);
                 
         }
-	HashMap renderers = null;
+	HashMap<Object,Renderer> renderers = null;
 
         synchronized (rendererFamilies) {
 	    // PENDING(edburns): generics would be nice here.
-	    if (null == (renderers = (HashMap) rendererFamilies.get(family))) {
-		rendererFamilies.put(family, renderers = new HashMap());
+	    if (null == (renderers = rendererFamilies.get(family))) {
+		rendererFamilies.put(family, renderers = new HashMap<Object, Renderer>());
 	    }
             renderers.put(rendererType, renderer);
         }
@@ -146,11 +146,11 @@ public class RenderKitImpl extends RenderKit {
 
         assert (rendererFamilies != null);
 
-	HashMap renderers = null;
+	HashMap<Object,Renderer> renderers = null;
         Renderer renderer = null;
 
-	if (null != (renderers = (HashMap) rendererFamilies.get(family))) {
-	    renderer = (Renderer) renderers.get(rendererType);
+	if (null != (renderers = rendererFamilies.get(family))) {
+	    renderer = renderers.get(rendererType);
 	}
 	
         return renderer;
@@ -198,7 +198,7 @@ public class RenderKitImpl extends RenderKit {
         }
 
 	if (null != desiredContentTypeList) {
-	    Map requestMap = context.getExternalContext().getRequestMap();
+	    Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
 	    
 	    desiredTypes = contentTypeSplit(desiredContentTypeList);
 	    String curContentType = null, curDesiredType = null;                       

@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.28 2005/08/22 22:10:16 ofung Exp $
+ * $Id: RestoreViewPhase.java,v 1.29 2005/08/26 15:27:08 rlubke Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import java.util.logging.Level;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.28 2005/08/22 22:10:16 ofung Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.29 2005/08/26 15:27:08 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -222,9 +222,9 @@ public class RestoreViewPhase extends Phase {
             valueExpression.setValue(context.getELContext(), uic);
         }
 
-        Iterator kids = uic.getFacetsAndChildren();
+        Iterator<UIComponent> kids = uic.getFacetsAndChildren();
         while (kids.hasNext()) {
-            doPerComponentActions(context, (UIComponent) kids.next());
+            doPerComponentActions(context, kids.next());
         }
       
     }

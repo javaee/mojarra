@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.74 2005/08/22 22:10:18 ofung Exp $
+ * $Id: CheckboxRenderer.java,v 1.75 2005/08/26 15:27:13 rlubke Exp $
  *
  */
 
@@ -42,7 +42,6 @@ import javax.faces.convert.ConverterException;
 
 import com.sun.faces.util.Util;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 
@@ -91,9 +90,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
     //
 
     public void decode(FacesContext context, UIComponent component) {
-
-        Object convertedValue = null;
-
+       
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -119,9 +116,9 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         assert (clientId != null);
         // Convert the new value
 
-        Map requestParameterMap = context.getExternalContext()
+        Map<String,String> requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
-        String newValue = (String) requestParameterMap.get(clientId);
+        String newValue = requestParameterMap.get(clientId);
         //if there was nothing sent in the request the checkbox wasn't checked
         // if the checkbox is not disabled. 
         if (newValue == null) {
@@ -150,8 +147,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         throws ConverterException {
 
         String newValue = (String) submittedValue;
-        Object convertedValue = Boolean.valueOf(newValue);
-        return convertedValue;
+        return Boolean.valueOf(newValue);
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.36 2005/08/22 22:10:10 ofung Exp $
+ * $Id: ExternalContextImpl.java,v 1.37 2005/08/26 15:27:04 rlubke Exp $
  */
 
 /*
@@ -31,20 +31,21 @@ package com.sun.faces.context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.AbstractCollection;
 import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.AbstractSet;
 import java.util.NoSuchElementException;
-import java.util.AbstractCollection;
-import java.util.Collection;
+import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -62,18 +63,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.context.BaseContextMap.EntryIterator;
-import com.sun.faces.context.BaseContextMap.KeyIterator;
-import com.sun.faces.context.BaseContextMap.ValueIterator;
 import com.sun.faces.util.Util;
-import java.io.UnsupportedEncodingException;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.36 2005/08/22 22:10:10 ofung Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.37 2005/08/26 15:27:04 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -81,18 +78,18 @@ public class ExternalContextImpl extends ExternalContext {
     private ServletRequest request = null;
     private ServletResponse response = null;
 
-    private ApplicationMap applicationMap = null;
-    private SessionMap sessionMap = null;
-    private RequestMap requestMap = null;
-    private Map requestParameterMap = null;
-    private Map requestParameterValuesMap = null;
-    private Map requestHeaderMap = null;
-    private Map requestHeaderValuesMap = null;
-    private Map cookieMap = null;
-    private Map initParameterMap = null;
+    private Map<String,Object> applicationMap = null;
+    private Map<String,Object> sessionMap = null;
+    private Map<String,Object> requestMap = null;
+    private Map<String,String> requestParameterMap = null;
+    private Map<String,String[]> requestParameterValuesMap = null;
+    private Map<String,String> requestHeaderMap = null;
+    private Map<String,String[]> requestHeaderValuesMap = null;
+    private Map<String,Object> cookieMap = null;
+    private Map<String,String> initParameterMap = null;
 
     static final Class theUnmodifiableMapClass =
-        Collections.unmodifiableMap(new HashMap()).getClass();
+        Collections.unmodifiableMap(new HashMap<Object,Object>()).getClass();
     
     public ExternalContextImpl(ServletContext sc, ServletRequest request,
                                ServletResponse response) {
@@ -157,7 +154,7 @@ public class ExternalContextImpl extends ExternalContext {
     }
     
     public void setRequestCharacterEncoding(String encoding) throws UnsupportedEncodingException {
-        ((ServletRequest)request).setCharacterEncoding(encoding);
+        request.setCharacterEncoding(encoding);
     }
 
     public Object getResponse() {
@@ -171,10 +168,10 @@ public class ExternalContextImpl extends ExternalContext {
     }
     
     public void setResponseCharacterEncoding(String encoding) {
-        ((ServletResponse)response).setCharacterEncoding(encoding);
+        response.setCharacterEncoding(encoding);
     }
 
-    public Map getApplicationMap() {
+    public Map<String,Object> getApplicationMap() {
         if (applicationMap == null) {
             applicationMap = new ApplicationMap(servletContext);
         }
@@ -182,7 +179,7 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
 
-    public Map getSessionMap() {
+    public Map<String,Object> getSessionMap() {
         if (sessionMap == null) {
             sessionMap = new SessionMap((HttpServletRequest) request);
         }
@@ -190,7 +187,7 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
 
-    public Map getRequestMap() {
+    public Map<String,Object> getRequestMap() {
         if (requestMap == null) {
             requestMap = new RequestMap(this.request);
         }
@@ -198,61 +195,67 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
 
-    public Map getRequestHeaderMap() {
+    public Map<String,String> getRequestHeaderMap() {
         if (null == requestHeaderMap) {
             requestHeaderMap = 
-            Collections.unmodifiableMap(new RequestHeaderMap((HttpServletRequest) request));
+                Collections.<String, String>unmodifiableMap(
+                    new RequestHeaderMap((HttpServletRequest) request));                                                      
         }
         return requestHeaderMap;
     }
 
 
-    public Map getRequestHeaderValuesMap() {
+    public Map<String,String[]> getRequestHeaderValuesMap() {
         if (null == requestHeaderValuesMap) {
             requestHeaderValuesMap = 
-                Collections.unmodifiableMap(new RequestHeaderValuesMap((HttpServletRequest) request));
+                Collections.<String,String[]>unmodifiableMap(
+                    new RequestHeaderValuesMap((HttpServletRequest) request));
         }
         return requestHeaderValuesMap;
     }
 
 
-    public Map getRequestCookieMap() {
+    public Map<String,Object> getRequestCookieMap() {
         if (null == cookieMap) {
             cookieMap =
-            Collections.unmodifiableMap(new RequestCookieMap((HttpServletRequest) request));
+                Collections.<String,Object>unmodifiableMap(
+                    new RequestCookieMap((HttpServletRequest) request));
         }
         return cookieMap;
     }
 
 
-    public Map getInitParameterMap() {
+    public Map<String,String> getInitParameterMap() {
         if (null == initParameterMap) {
             initParameterMap = 
-            Collections.unmodifiableMap(new InitParameterMap(servletContext));
+                Collections.<String,String>unmodifiableMap(
+                    new InitParameterMap(servletContext));
         }
         return initParameterMap;
     }
 
 
-    public Map getRequestParameterMap() {
+    public Map<String,String> getRequestParameterMap() {
         if (null == requestParameterMap) {
             requestParameterMap = 
-                Collections.unmodifiableMap(new RequestParameterMap(request));
+                Collections.<String,String>unmodifiableMap(
+                    new RequestParameterMap(request));
         }
         return requestParameterMap;
     }
 
 
-    public Map getRequestParameterValuesMap() {
+    public Map<String,String[]> getRequestParameterValuesMap() {
         if (null == requestParameterValuesMap) {
             requestParameterValuesMap = 
-            Collections.unmodifiableMap(new RequestParameterValuesMap(request));
+                Collections.<String,String[]>unmodifiableMap(
+                    new RequestParameterValuesMap(request));
         }
         return requestParameterValuesMap;
     }
 
 
-    public Iterator getRequestParameterNames() {
+    public Iterator<String> getRequestParameterNames() {
         final Enumeration namEnum = request.getParameterNames();
 
         return new Iterator() {
@@ -278,7 +281,7 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
 
-    public Iterator getRequestLocales() {
+    public Iterator<Locale> getRequestLocales() {
         return (new LocalesIterator(request.getLocales()));
     }
 
@@ -303,7 +306,7 @@ public class ExternalContextImpl extends ExternalContext {
     }
     
     public String getRequestCharacterEncoding() {
-        return (((ServletRequest) request).getCharacterEncoding());
+        return (request.getCharacterEncoding());
     }
 
      
@@ -312,7 +315,7 @@ public class ExternalContextImpl extends ExternalContext {
     }
     
     public String getResponseCharacterEncoding() {
-        return (((ServletResponse) response).getCharacterEncoding());
+        return (response.getCharacterEncoding());
     }
     
     public String getResponseContentType() {
@@ -328,7 +331,7 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
 
-    public Set getResourcePaths(String path) {
+    public Set<String> getResourcePaths(String path) {
         return servletContext.getResourcePaths(path);
     }
 
@@ -381,7 +384,7 @@ public class ExternalContextImpl extends ExternalContext {
 
     public String encodeURL(String url) {
         return ((HttpServletResponse) response).encodeURL(url);
-    };
+    }
 
     public void dispatch(String requestURI) throws IOException, FacesException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(
@@ -482,7 +485,7 @@ abstract class BaseContextMap extends AbstractMap {
         throw new UnsupportedOperationException();
     }
 
-    public Set entrySet() {
+    public Set<?> entrySet() {
         if (entrySet == null) {
             entrySet = new EntrySet();
         }
@@ -490,7 +493,7 @@ abstract class BaseContextMap extends AbstractMap {
         return entrySet;
     }
 
-    public Set keySet() {
+    public Set<?> keySet() {
         if (keySet == null) {
             keySet = new KeySet();
         }
@@ -498,7 +501,7 @@ abstract class BaseContextMap extends AbstractMap {
         return keySet;
     }
 
-    public Collection values() {
+    public Collection<?> values() {
         if (values == null) {
             values = new ValueCollection();
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: TreeStructure.java,v 1.10 2005/08/22 22:10:29 ofung Exp $
+ * $Id: TreeStructure.java,v 1.11 2005/08/26 15:27:19 rlubke Exp $
  */
 
 /*
@@ -46,8 +46,8 @@ public class TreeStructure implements java.io.Serializable {
 
     private static final long serialVersionUID = 8320767450484935667L;
 
-    ArrayList children = null;
-    HashMap facets = null;
+    ArrayList<TreeStructure> children = null;
+    HashMap<String,TreeStructure> facets = null;
     String className = null;
     String id = null;
 
@@ -104,7 +104,7 @@ public class TreeStructure implements java.io.Serializable {
     public void addChild(TreeStructure treeStruct) {
         Util.parameterNonNull(treeStruct);
         if (children == null) {
-            children = new ArrayList();
+            children = new ArrayList<TreeStructure>();
         }
         children.add(treeStruct);
     }
@@ -117,7 +117,7 @@ public class TreeStructure implements java.io.Serializable {
         Util.parameterNonNull(facetName);
         Util.parameterNonNull(treeStruct);
         if (facets == null) {
-            facets = new HashMap();
+            facets = new HashMap<String, TreeStructure>();
         }
         facets.put(facetName, treeStruct);
     }
@@ -130,7 +130,7 @@ public class TreeStructure implements java.io.Serializable {
     public TreeStructure getTreeStructureForFacet(String facetName) {
         Util.parameterNonNull(facetName);
         if (facets != null) {
-            return ((TreeStructure) (facets.get(facetName)));
+            return ((facets.get(facetName)));
         } else {
             return null;
         }

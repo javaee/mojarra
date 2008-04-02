@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.67 2005/08/22 22:10:08 ofung Exp $
+ * $Id: ApplicationImpl.java,v 1.68 2005/08/26 15:26:58 rlubke Exp $
  */
 
 /*
@@ -38,6 +38,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.List;
 
 import javax.el.ArrayELResolver;
 import javax.el.BeanELResolver;
@@ -115,14 +116,14 @@ public class ApplicationImpl extends Application {
     // These three maps store store "identifier" | "class name"
     // mappings.
     //
-    private Map componentMap = null;
-    private Map converterIdMap = null;
-    private Map converterTypeMap = null;
-    private Map validatorMap = null;
+    private Map<String,String> componentMap = null;
+    private Map<String,String> converterIdMap = null;
+    private Map<Class,String> converterTypeMap = null;
+    private Map<String,String> validatorMap = null;
     private String messageBundle = null;
 
-    private ArrayList elContextListeners = null;
-    private ArrayList elResolvers = null;
+    private ArrayList<ELContextListener> elContextListeners = null;
+    private ArrayList<ELResolver> elResolvers = null;
     private CompositeELResolver compositeELResolver = null;
 
     /**
@@ -131,8 +132,8 @@ public class ApplicationImpl extends Application {
     public ApplicationImpl() {
         super();
 	associate = new ApplicationAssociate(this);
-        componentMap = new HashMap();
-        converterIdMap = new HashMap();
+        componentMap = new HashMap<String,String>();
+        converterIdMap = new HashMap<String,String>();
         converterTypeMap = new HashMap();
         validatorMap = new HashMap();
 
@@ -144,7 +145,7 @@ public class ApplicationImpl extends Application {
     public void addELContextListener(ELContextListener listener) {
         if (listener != null) {
             if (elContextListeners == null) {
-                elContextListeners = new ArrayList();
+                elContextListeners = new ArrayList<ELContextListener>();
             }
             elContextListeners.add(listener);
         }
@@ -158,9 +159,8 @@ public class ApplicationImpl extends Application {
     
     public ELContextListener [] getELContextListeners() {
         if (elContextListeners != null ) {
-            return ((ELContextListener[])
-                       elContextListeners.toArray(
-                           new ELContextListener[elContextListeners.size()]));
+            return (elContextListeners.toArray(
+                       new ELContextListener[elContextListeners.size()]));
         } else {
             return (EMPTY_EL_CTX_LIST_ARRAY);
         }
@@ -276,7 +276,7 @@ public class ApplicationImpl extends Application {
                     Util.APPLICATION_INIT_COMPLETE_ERROR_ID));
         }
         if (elResolvers == null) {
-            elResolvers = new ArrayList();
+            elResolvers = new ArrayList<ELResolver>();
         }
         elResolvers.add(resolver);
     }
@@ -618,8 +618,9 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public Iterator getComponentTypes() {
-        Iterator result = Collections.EMPTY_LIST.iterator();
+    public Iterator<String> getComponentTypes() {
+        List<String> list = Collections.emptyList();
+        Iterator<String> result = list.iterator();                
         synchronized (this) {
             result = componentMap.keySet().iterator();
         }
@@ -723,7 +724,7 @@ public class ApplicationImpl extends Application {
         //Search for converters registered to superclasses of targetClass
         Class superclass = targetClass.getSuperclass();
         if (superclass != null) {
-            returnVal = (Converter) createConverterBasedOnClass(superclass);
+            returnVal = createConverterBasedOnClass(superclass);
             if (returnVal != null) {
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("Created converter of type " +
@@ -766,7 +767,7 @@ public class ApplicationImpl extends Application {
         //Search for converters registered to superclasses of targetClass
         Class superclass = targetClass.getSuperclass();
         if (superclass != null) {
-            returnVal = (Converter) createConverterBasedOnClass(superclass);
+            returnVal = createConverterBasedOnClass(superclass);
             if (returnVal != null) {
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("Created converter of type " +
@@ -778,8 +779,9 @@ public class ApplicationImpl extends Application {
         return returnVal;
     }
 
-    public Iterator getConverterIds() {
-        Iterator result = Collections.EMPTY_LIST.iterator();
+    public Iterator<String> getConverterIds() {
+        List<String> list = Collections.emptyList();
+        Iterator<String> result = list.iterator();
         synchronized (this) {
             result = converterIdMap.keySet().iterator();
         }
@@ -788,8 +790,9 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public Iterator getConverterTypes() {
-        Iterator result = Collections.EMPTY_LIST.iterator();
+    public Iterator<Class> getConverterTypes() {
+        List<Class> list = Collections.emptyList();
+        Iterator<Class> result = list.iterator();
         synchronized (this) {
             result = converterTypeMap.keySet().iterator();
         }
@@ -797,12 +800,12 @@ public class ApplicationImpl extends Application {
     }
 
 
-    ArrayList supportedLocales = null;
+    ArrayList<Locale> supportedLocales = null;
 
 
-    public Iterator getSupportedLocales() {
-        Iterator result = Collections.EMPTY_LIST.iterator();
-
+    public Iterator<Locale> getSupportedLocales() {
+        List<Locale> list = Collections.emptyList();
+        Iterator<Locale> result = list.iterator();
         synchronized (this) {
             if (null != supportedLocales) {
                 result = supportedLocales.iterator();
@@ -812,7 +815,7 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public void setSupportedLocales(Collection newLocales) {
+    public void setSupportedLocales(Collection<Locale> newLocales) {
         if (null == newLocales) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
@@ -820,7 +823,7 @@ public class ApplicationImpl extends Application {
             throw new NullPointerException(message);
         }
         synchronized (this) {
-            supportedLocales = new ArrayList(newLocales);
+            supportedLocales = new ArrayList<Locale>(newLocales);
         }
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "set Supported Locales");
@@ -910,8 +913,9 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public Iterator getValidatorIds() {
-        Iterator result = Collections.EMPTY_LIST.iterator();
+    public Iterator<String> getValidatorIds() {
+        List<String> list = Collections.emptyList();
+        Iterator<String> result = list.iterator();
         synchronized (this) {
             result = validatorMap.keySet().iterator();
         }

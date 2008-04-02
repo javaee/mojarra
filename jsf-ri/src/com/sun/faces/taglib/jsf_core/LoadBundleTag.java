@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.11 2005/08/22 22:10:25 ofung Exp $
+ * $Id: LoadBundleTag.java,v 1.12 2005/08/26 15:27:18 rlubke Exp $
  */
 
 /*
@@ -146,11 +146,11 @@ public class LoadBundleTag extends TagSupport {
 
 
                 public boolean containsValue(Object value) {
-                    Enumeration keys = bundle.getKeys();
+                    Enumeration<String> keys = bundle.getKeys();
                     Object curObj = null;
                     boolean result = false;
                     while (keys.hasMoreElements()) {
-                        curObj = bundle.getObject((String) keys.nextElement());
+                        curObj = bundle.getObject(keys.nextElement());
                         if ((curObj == value) ||
                             ((null != curObj) && curObj.equals(value))) {
                             result = true;
@@ -162,11 +162,11 @@ public class LoadBundleTag extends TagSupport {
 
 
                 public Set entrySet() {
-                    HashMap mappings = new HashMap();
-                    Enumeration keys = bundle.getKeys();
+                    HashMap<String,Object> mappings = new HashMap<String, Object>();
+                    Enumeration<String> keys = bundle.getKeys();
                     while (keys.hasMoreElements()) {
-                        Object key = keys.nextElement();
-                        Object value = bundle.getObject((String) key);
+                        String key = keys.nextElement();
+                        Object value = bundle.getObject(key);
                         mappings.put(key, value);
                     }
                     return mappings.entrySet();
@@ -178,11 +178,8 @@ public class LoadBundleTag extends TagSupport {
                         return false;
                     }
 
-                    if (entrySet().equals(((Map) obj).entrySet())) {
-                        return true;
-                    }
+                    return entrySet().equals(((Map) obj).entrySet());
 
-                    return false;
                 }
 
 
@@ -207,15 +204,15 @@ public class LoadBundleTag extends TagSupport {
 
                 public boolean isEmpty() {
                     boolean result = true;
-                    Enumeration keys = bundle.getKeys();
+                    Enumeration<String> keys = bundle.getKeys();
                     result = !keys.hasMoreElements();
                     return result;
                 }
 
 
                 public Set keySet() {
-                    Set keySet = new HashSet();
-                    Enumeration keys = bundle.getKeys();
+                    Set<String> keySet = new HashSet<String>();
+                    Enumeration<String> keys = bundle.getKeys();
                     while (keys.hasMoreElements()) {
                         keySet.add(keys.nextElement());
                     }
@@ -243,7 +240,7 @@ public class LoadBundleTag extends TagSupport {
 
                 public int size() {
                     int result = 0;
-                    Enumeration keys = bundle.getKeys();
+                    Enumeration<String> keys = bundle.getKeys();
                     while (keys.hasMoreElements()) {
                         keys.nextElement();
                         result++;
@@ -253,11 +250,11 @@ public class LoadBundleTag extends TagSupport {
 
 
                 public java.util.Collection values() {
-                    ArrayList result = new ArrayList();
-                    Enumeration keys = bundle.getKeys();
+                    ArrayList<Object> result = new ArrayList<Object>();
+                    Enumeration<String> keys = bundle.getKeys();
                     while (keys.hasMoreElements()) {
                         result.add(
-                            bundle.getObject((String) keys.nextElement()));
+                            bundle.getObject(keys.nextElement()));
                     }
                     return result;
                 }

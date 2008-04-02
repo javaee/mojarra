@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.28 2005/08/22 22:10:21 ofung Exp $
+ * $Id: TableRenderer.java,v 1.29 2005/08/26 15:27:17 rlubke Exp $
  */
 
 /*
@@ -31,7 +31,6 @@ package com.sun.faces.renderkit.html_basic;
 
 
 import com.sun.faces.util.Util;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import javax.faces.component.UIColumn;
@@ -116,9 +115,9 @@ public class TableRenderer extends HtmlBasicRenderer {
         if (headerFacets > 0) {
             writer.startElement("tr", data);
             writer.writeText("\n", null);
-            Iterator columns = getColumns(data);
+            Iterator<UIColumn> columns = getColumns(data);
             while (columns.hasNext()) {
-                UIColumn column = (UIColumn) columns.next();
+                UIColumn column = columns.next();
                 String columnHeaderClass = 
                     (String) column.getAttributes().get("headerClass");
                 writer.startElement("th", column);
@@ -167,9 +166,9 @@ public class TableRenderer extends HtmlBasicRenderer {
         if (footerFacets > 0) {
             writer.startElement("tr", data);
             writer.writeText("\n", null);
-            Iterator columns = getColumns(data);
+            Iterator<UIColumn> columns = getColumns(data);
             while (columns.hasNext()) {
-                UIColumn column = (UIColumn) columns.next();
+                UIColumn column = columns.next();
                 String columnFooterClass = 
                     (String) column.getAttributes().get("footerClass");
                 writer.startElement("td", column);
@@ -225,7 +224,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         int rowStyles = rowClasses.length;
         ResponseWriter writer = context.getResponseWriter();
         Iterator kids = null;
-        Iterator grandkids = null;
+        Iterator<UIComponent> grandkids = null;
 
         // Iterate over the rows of data that are provided
         int processed = 0;
@@ -280,7 +279,7 @@ public class TableRenderer extends HtmlBasicRenderer {
                 // the kids of our kids
                 grandkids = getChildren(column);
                 while (grandkids.hasNext()) {
-                    encodeRecursive(context, (UIComponent) grandkids.next());
+                    encodeRecursive(context, grandkids.next());
                 }
 
                 // Render the ending of this cell
@@ -352,7 +351,7 @@ public class TableRenderer extends HtmlBasicRenderer {
             return (new String[0]);
         }
         values = values.trim();
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         while (values.length() > 0) {
             int comma = values.indexOf(",");
             if (comma >= 0) {
@@ -364,7 +363,7 @@ public class TableRenderer extends HtmlBasicRenderer {
             }
         }
         String results[] = new String[list.size()];
-        return ((String[]) list.toArray(results));
+        return (list.toArray(results));
 
     }
 
@@ -380,7 +379,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         int columns = 0;
         Iterator kids = getColumns(data);
         while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+            kids.next();
             columns++;
         }
         return (columns);
@@ -395,14 +394,14 @@ public class TableRenderer extends HtmlBasicRenderer {
      *
      * @param data <code>UIData</code> for which to extract children
      */
-    private Iterator getColumns(UIData data) {
+    private Iterator<UIColumn> getColumns(UIData data) {
 
-        List results = new ArrayList();
-        Iterator kids = data.getChildren().iterator();
+        List<UIColumn> results = new ArrayList<UIColumn>();
+        Iterator<UIComponent> kids = data.getChildren().iterator();
         while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+            UIComponent kid = kids.next();
             if ((kid instanceof UIColumn) && kid.isRendered()) {
-                results.add(kid);
+                results.add((UIColumn) kid);
             }
         }
         return (results.iterator());
@@ -447,7 +446,7 @@ public class TableRenderer extends HtmlBasicRenderer {
             return (new String[0]);
         }
         values = values.trim();
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         while (values.length() > 0) {
             int comma = values.indexOf(",");
             if (comma >= 0) {
@@ -459,7 +458,7 @@ public class TableRenderer extends HtmlBasicRenderer {
             }
         }
         String results[] = new String[list.size()];
-        return ((String[]) list.toArray(results));
+        return (list.toArray(results));
 
     }
 

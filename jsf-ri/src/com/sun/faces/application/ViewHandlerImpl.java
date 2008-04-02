@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.58 2005/08/22 22:10:08 ofung Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.59 2005/08/26 15:27:00 rlubke Exp $ 
  */ 
 
 
@@ -34,20 +34,18 @@
 package com.sun.faces.application;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.StateManager;
 import javax.faces.application.StateManager.SerializedView;
 import javax.faces.application.ViewHandler;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -55,7 +53,6 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -65,12 +62,10 @@ import javax.servlet.jsp.jstl.core.Config;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
-import java.io.StringWriter;
-
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.58 2005/08/22 22:10:08 ofung Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.59 2005/08/26 15:27:00 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -252,49 +247,7 @@ public class ViewHandlerImpl extends ViewHandler {
         
         viewToRender.encodeAll(context);                       
     }
-    
-    private void removeTransientChildrenAndFacets(FacesContext context,
-            UIComponent component, Set componentIds) throws IllegalStateException{
-        UIComponent kid;
-        // deal with children that are marked transient.
-        Iterator kids = component.getChildren().iterator();
-        String id;
-        while (kids.hasNext()) {
-            kid = (UIComponent) kids.next();
-            // check for id uniqueness
-            id = kid.getClientId(context);
-            if (id != null && !componentIds.add(id)) {
-                throw new IllegalStateException(Util.getExceptionMessageString(
-                        Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
-                        new Object[]{id}));
-            }
-            
-            if (kid.isTransient()) {
-                kids.remove();
-            } else {
-                removeTransientChildrenAndFacets(context, kid, componentIds);
-            }
-        }
-        // deal with facets that are marked transient.
-        kids = component.getFacets().values().iterator();
-        while (kids.hasNext()) {
-            kid = (UIComponent) kids.next();
-            // check for id uniqueness
-            id = kid.getClientId(context);
-            if (id != null && !componentIds.add(id)) {
-                throw new IllegalStateException(Util.getExceptionMessageString(
-                        Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
-                        new Object[]{id}));
-            }
-            
-            if (kid.isTransient()) {
-                kids.remove();
-            } else {
-                removeTransientChildrenAndFacets(context, kid, componentIds);
-            }
-            
-        }
-    }
+        
     
     public UIViewRoot restoreView(FacesContext context, String viewId) {
         if (context == null) {
@@ -501,9 +454,9 @@ public class ViewHandlerImpl extends ViewHandler {
         // determine the locales that are acceptable to the client based on the 
         // Accept-Language header and the find the best match among the 
         // supported locales specified by the client.
-        Iterator locales = context.getExternalContext().getRequestLocales();
+        Iterator<Locale> locales = context.getExternalContext().getRequestLocales();
         while (locales.hasNext()) {
-            Locale perf = (Locale) locales.next();
+            Locale perf = locales.next();
             result = findMatch(context, perf);
             if (result != null) {
                 break;
@@ -531,9 +484,9 @@ public class ViewHandlerImpl extends ViewHandler {
         }
         String result = null;
 
-        Map requestParamMap = context.getExternalContext()
+        Map<String,String> requestParamMap = context.getExternalContext()
             .getRequestParameterMap();
-        result = (String) requestParamMap.get(
+        result = requestParamMap.get(
             ResponseStateManager.RENDER_KIT_ID_PARAM);
 
         if (result == null) {
@@ -553,9 +506,9 @@ public class ViewHandlerImpl extends ViewHandler {
      */
     protected Locale findMatch(FacesContext context, Locale perf) {
         Locale result = null;
-        Iterator it = context.getApplication().getSupportedLocales();
+        Iterator<Locale> it = context.getApplication().getSupportedLocales();
         while (it.hasNext()) {
-            Locale supportedLocale = (Locale) it.next();
+            Locale supportedLocale = it.next();
 
             if (perf.equals(supportedLocale)) {
                 // exact match
@@ -783,7 +736,7 @@ public class ViewHandlerImpl extends ViewHandler {
         // using a prefix path mapping
         if (pathInfo != null) {
             return servletPath;
-        } else if (pathInfo == null && servletPath.indexOf('.') < 0) {
+        } else if (servletPath.indexOf('.') < 0) {
             // if pathInfo is null and no '.' is present, assume the
             // FacesServlet was invoked using prefix path but without
             // any pathInfo - i.e. GET /contextroot/faces or

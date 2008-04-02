@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.22 2005/08/22 22:10:21 ofung Exp $
+ * $Id: OutputLinkRenderer.java,v 1.23 2005/08/26 15:27:16 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,6 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 
@@ -50,7 +49,7 @@ import java.util.logging.Level;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.22 2005/08/22 22:10:21 ofung Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.23 2005/08/26 15:27:16 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -101,8 +100,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
              logger.fine("No decoding necessary since the component "
                       + component.getId() +
                       " is not an instance or a sub class of UIInput");
-        }
-        return;
+        }       
     }
 
 
@@ -159,9 +157,9 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
             }
             return;
         }
-        Iterator kids = component.getChildren().iterator();
+        Iterator<UIComponent> kids = component.getChildren().iterator();
         while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+            UIComponent kid = kids.next();
             kid.encodeBegin(context);
             if (kid.getRendersChildren()) {
                 kid.encodeChildren(context);
@@ -212,8 +210,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
             //Done writing Anchor element
             writer.endElement("a");
         }
-
-        return;
+       
     }
 
     private void renderAsActive(FacesContext context, UIOutput component) 

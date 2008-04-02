@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.25 2005/08/22 22:10:15 ofung Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.26 2005/08/26 15:27:07 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import java.util.logging.Level;
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
  * in the JSF RI. <P>
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.25 2005/08/22 22:10:15 ofung Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.26 2005/08/26 15:27:07 rlubke Exp $
  * @see	javax.faces.lifecycle.LifecycleFactory
  */
 
@@ -76,7 +76,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
 
     // Relationship Instance Variables
 
-    protected HashMap lifecycleMap = null;
+    protected HashMap<String,LifecycleWrapper> lifecycleMap = null;
     protected Object lock = null;
 
     //
@@ -85,7 +85,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
 
     public LifecycleFactoryImpl() {
         super();
-        lifecycleMap = new HashMap();
+        lifecycleMap = new HashMap<String, LifecycleWrapper>();
 
         // We must have an implementation under this key.
         lifecycleMap.put(LifecycleFactory.DEFAULT_LIFECYCLE,
@@ -110,7 +110,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
      */
 
     boolean alreadyCreated(String lifecycleId) {
-        LifecycleWrapper wrapper = (LifecycleWrapper) lifecycleMap.get(
+        LifecycleWrapper wrapper = lifecycleMap.get(
             lifecycleId);
         return (null != wrapper && wrapper.created);
     }
@@ -133,7 +133,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         }
 
         if (null ==
-            (wrapper = (LifecycleWrapper) lifecycleMap.get(lifecycleId))) {
+            (wrapper = lifecycleMap.get(lifecycleId))) {
             message = Util.getExceptionMessageString(
                 Util.LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID,
                 params);
@@ -217,7 +217,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
             throw new IllegalArgumentException(message);
         }
 
-        wrapper = (LifecycleWrapper) lifecycleMap.get(lifecycleId);
+        wrapper = lifecycleMap.get(lifecycleId);
         result = wrapper.instance;
         wrapper.created = true;
 
@@ -228,7 +228,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
     }
 
 
-    public Iterator getLifecycleIds() {
+    public Iterator<String> getLifecycleIds() {
         return lifecycleMap.keySet().iterator();
     }
 
@@ -236,7 +236,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
 // Helper classes
 //
 
-    static class LifecycleWrapper extends Object {
+    static class LifecycleWrapper {
 
 
         Lifecycle instance = null;

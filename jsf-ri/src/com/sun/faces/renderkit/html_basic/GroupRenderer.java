@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.26 2005/08/22 22:10:19 ofung Exp $
+ * $Id: GroupRenderer.java,v 1.27 2005/08/26 15:27:14 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,6 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import javax.faces.component.UIComponent;
@@ -44,7 +43,7 @@ import java.util.Iterator;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method.
  *
- * @version $Id: GroupRenderer.java,v 1.26 2005/08/22 22:10:19 ofung Exp $
+ * @version $Id: GroupRenderer.java,v 1.27 2005/08/26 15:27:14 rlubke Exp $
  */
 public class GroupRenderer extends HtmlBasicRenderer {
 
@@ -148,9 +147,9 @@ public class GroupRenderer extends HtmlBasicRenderer {
         }
 
         // Render our children recursively
-        Iterator kids = getChildren(component);
+        Iterator<UIComponent> kids = getChildren(component);
         while (kids.hasNext()) {
-            encodeRecursive(context, (UIComponent) kids.next());
+            encodeRecursive(context, kids.next());
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"End encoding children " + component.getId());

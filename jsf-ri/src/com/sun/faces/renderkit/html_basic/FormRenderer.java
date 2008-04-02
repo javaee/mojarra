@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.90 2005/08/22 22:10:18 ofung Exp $
+ * $Id: FormRenderer.java,v 1.91 2005/08/26 15:27:13 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,6 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
@@ -96,7 +95,7 @@ public class FormRenderer extends HtmlBasicRenderer {
             logger.log(Level.FINER, 
                     "Begin decoding component " + component.getId());
         }
-        Map requestParameterMap = context.getExternalContext()
+        Map<String,String> requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
         if (requestParameterMap.containsKey(clientId)) {
             ((UIForm) component).setSubmitted(true);

@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.26 2005/08/22 22:10:17 ofung Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.27 2005/08/26 15:27:11 rlubke Exp $
  */
 
 /*
@@ -113,7 +113,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     public Object getComponentStateToRestore(FacesContext context) {
 
         // requestMap is a local variable so we don't need to synchronize
-        Map requestMap = context.getExternalContext().getRequestMap();
+        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
         Object state = requestMap.get(FACES_VIEW_STATE);
         // null out the temporary attribute, since we don't need it anymore.
         requestMap.remove(FACES_VIEW_STATE);
@@ -121,9 +121,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     }
 
     public boolean isPostback(FacesContext context) {
-	boolean result = context.getExternalContext().getRequestParameterMap().
-                containsKey(javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
-	return result;
+        return context.getExternalContext().getRequestParameterMap().
+                    containsKey(ResponseStateManager.VIEW_STATE_PARAM);
     }
 
     public Object getState(FacesContext context, String viewId) {
@@ -134,11 +133,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                                             String treeId) {
 	StateManager stateManager = Util.getStateManager(context);
         
-	Map requestParamMap = context.getExternalContext()
+	Map<String,String> requestParamMap = context.getExternalContext()
 	    .getRequestParameterMap();
 	
-	String viewString = (String) requestParamMap.get(
-							 javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
+	String viewString = requestParamMap.get(
+                             ResponseStateManager.VIEW_STATE_PARAM);
 	Object structure = null;
 	if (viewString == null) {
 	    return null;
@@ -166,7 +165,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 		}
 		structure = ois.readObject();
 		state = ois.readObject();
-		Map requestMap = context.getExternalContext().getRequestMap();
+		Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
 		// store the state object temporarily in request scope
 		// until it is processed by getComponentStateToRestore
 		// which resets it.
@@ -200,7 +199,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     
     public void writeState(FacesContext context, SerializedView view)
         throws IOException {
-        String hiddenField = null;
+        
 	StateManager stateManager = Util.getStateManager(context);
         ResponseWriter writer = context.getResponseWriter();
 
@@ -259,7 +258,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     
     public boolean isCompressStateSet(FacesContext context) {
 	if (null != compressStateSet) {
-	    return compressStateSet.booleanValue();
+	    return compressStateSet;
 	}
 	compressStateSet = Boolean.TRUE;
 
@@ -268,7 +267,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         if (compressStateParam != null){
 	    compressStateSet = Boolean.valueOf(compressStateParam);
         }
-	return compressStateSet.booleanValue();
+	return compressStateSet;
     }
 
 

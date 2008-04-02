@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.98 2005/08/22 22:10:19 ofung Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.99 2005/08/26 15:27:15 rlubke Exp $
  */
 
 /*
@@ -37,7 +37,6 @@ import com.sun.faces.util.Util;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIForm;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
@@ -151,10 +150,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
         String clientId = component.getClientId(context);
         assert (clientId != null);
-        Map requestMap = context.getExternalContext().getRequestParameterMap();
+        Map<String,String> requestMap = context.getExternalContext().getRequestParameterMap();
         // Don't overwrite the value unless you have to!
         if (requestMap.containsKey(clientId)) {
-            String newValue = (String) requestMap.get(clientId);
+            String newValue = requestMap.get(clientId);
             setSubmittedValue(component, newValue);
             if (logger.isLoggable(Level.FINE)) {
                  logger.fine("new value after decoding" + newValue);
@@ -174,8 +173,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         throws IOException {
 
         String currentValue = null;
-        ResponseWriter writer = null;
-        String styleClass = null;
+        ResponseWriter writer = null;       
 
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessageString(
@@ -228,9 +226,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (component.getRendersChildren()) {
             component.encodeChildren(context);
         } else {
-            Iterator kids = getChildren(component);
+            Iterator<UIComponent> kids = getChildren(component);
             while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
+                UIComponent kid = kids.next();
                 encodeRecursive(context, kid);
             }
         }
@@ -245,12 +243,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
      *
      * @param component <code>UIComponent</code> for which to extract children
      */
-    protected Iterator getChildren(UIComponent component) {
+    protected Iterator<UIComponent> getChildren(UIComponent component) {
 
-        List results = new ArrayList();
-        Iterator kids = component.getChildren().iterator();
+        List<UIComponent> results = new ArrayList<UIComponent>();
+        Iterator<UIComponent> kids = component.getChildren().iterator();
         while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+            UIComponent kid = kids.next();
             if (kid.isRendered()) {
                 results.add(kid);
             }
@@ -466,9 +464,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
      */
     private UIComponent findUIComponentBelow(UIComponent startPoint, String forComponent) {
         UIComponent retComp = null;
-        List children = startPoint.getChildren();
+        List<UIComponent> children = startPoint.getChildren();
         for (int i = 0, size = children.size(); i < size; i++) {
-            UIComponent comp = (UIComponent) children.get(i);
+            UIComponent comp = children.get(i);
 
             if (comp instanceof NamingContainer) {
                 retComp = comp.findComponent(forComponent);
@@ -535,11 +533,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
 
     protected Param[] getParamList(FacesContext context, UIComponent command) {
-        ArrayList parameterList = new ArrayList();
+        ArrayList<Param> parameterList = new ArrayList<Param>();
 
-        Iterator kids = command.getChildren().iterator();
+        Iterator<UIComponent> kids = command.getChildren().iterator();
         while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+            UIComponent kid = kids.next();
 
             if (kid instanceof UIParameter) {
                 UIParameter uiParam = (UIParameter) kid;

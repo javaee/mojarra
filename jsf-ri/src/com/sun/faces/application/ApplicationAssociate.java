@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.20 2005/08/24 16:13:32 edburns Exp $
+ * $Id: ApplicationAssociate.java,v 1.21 2005/08/26 15:26:58 rlubke Exp $
  */
 
 /*
@@ -49,7 +49,6 @@ import javax.faces.el.VariableResolver;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigureListener;
-import com.sun.faces.config.ManagedBeanFactoryImpl;
 import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.config.beans.ResourceBundleBean;
@@ -69,7 +68,7 @@ import javax.faces.component.UIViewRoot;
  * handle the rest.</p>
  */
 
-public class ApplicationAssociate extends Object {
+public class ApplicationAssociate {
 
     // Log instance for this class
     private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
@@ -94,20 +93,20 @@ public class ApplicationAssociate extends Object {
      * some of them will have a trailing asterisk "*" signifying wild
      * card, and some may be specified as an asterisk "*".
      */
-    private Map caseListMap = null;
+    private Map<String,List<ConfigNavigationCase>> caseListMap = null;
 
     /**
      * The List that contains the <code>ConfigNavigationCase</code>
      * objects for a <code>from-view-id</code>.
      */
-    private List caseList = null;
+    private List<ConfigNavigationCase> caseList = null;
 
     /**
      * The List that contains all view identifier strings ending in an
      * asterisk "*".  The entries are stored without the trailing
      * asterisk.
      */
-    private TreeSet wildcardMatchList = null;
+    private TreeSet<String> wildcardMatchList = null;
 
     // Flag indicating that a response has been rendered.
     private boolean responseRendered = false;
@@ -142,8 +141,8 @@ public class ApplicationAssociate extends Object {
         }
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();
-        caseListMap = new HashMap();
-        wildcardMatchList = new TreeSet(new SortIt());
+        caseListMap = new HashMap<String,List<ConfigNavigationCase>>();
+        wildcardMatchList = new TreeSet<String>(new SortIt());
 
     }
     
@@ -260,17 +259,16 @@ public class ApplicationAssociate extends Object {
 
         String fromViewId = navigationCase.getFromViewId();
         synchronized (this) {
-            caseList = (List) caseListMap.get(fromViewId);
+            caseList = caseListMap.get(fromViewId);
             if (caseList == null) {
-                caseList = new ArrayList();
+                caseList = new ArrayList<ConfigNavigationCase>();
                 caseList.add(navigationCase);
                 caseListMap.put(fromViewId, caseList);
             } else {
                 String key = navigationCase.getKey();
                 boolean foundIt = false;
                 for (int i = 0; i < caseList.size(); i++) {
-                    ConfigNavigationCase navCase =
-                        (ConfigNavigationCase) caseList.get(i);
+                    ConfigNavigationCase navCase = caseList.get(i);
                     // if there already is a case existing for the
                     // fromviewid/fromaction.fromoutcome combination,
                     // replace it ...  (last one wins).
@@ -317,7 +315,7 @@ public class ApplicationAssociate extends Object {
      * @return <code>TreeSet</code> The navigation mappings sorted in
      *         descending order.
      */
-    public TreeSet getNavigationWildCardList() {
+    public TreeSet<String> getNavigationWildCardList() {
         return wildcardMatchList;
     }
     
@@ -336,7 +334,7 @@ public class ApplicationAssociate extends Object {
             }
         }
         assert(null != locale);
-        ResourceBundleBean bean = (ResourceBundleBean) resourceBundles.get(var);
+        ResourceBundleBean bean = resourceBundles.get(var);
         String baseName = null;
         ResourceBundle result = null;
         
@@ -360,13 +358,13 @@ public class ApplicationAssociate extends Object {
      * values: ResourceBundleBean instances.
      */
     
-    Map resourceBundles = new HashMap();
+    Map<String,ResourceBundleBean> resourceBundles = new HashMap<String, ResourceBundleBean>();
     
     public void addResourceBundleBean(String var, ResourceBundleBean bean) {
         resourceBundles.put(var, bean);
     }
 
-    public Map getResourceBundleBeanMap() {
+    public Map<String,ResourceBundleBean> getResourceBundleBeanMap() {
         return resourceBundles;
     }
     
@@ -388,7 +386,7 @@ public class ApplicationAssociate extends Object {
         }
     }
     
-    public Map getManagedBeanFactoryMap() {
+    public Map<String,ManagedBeanFactory> getManagedBeanFactoryMap() {
         return managedBeanFactoriesMap;
     }
 
@@ -427,7 +425,7 @@ public class ApplicationAssociate extends Object {
         if ((scopeIsApplication = (scope == Scope.APPLICATION)) || 
             (scopeIsSession = (scope == Scope.SESSION))) {
             if (scopeIsApplication) {
-                Map applicationMap = context.getExternalContext().
+                Map<String,Object> applicationMap = context.getExternalContext().
                         getApplicationMap();
                 synchronized (applicationMap) {
                     try {
@@ -448,7 +446,7 @@ public class ApplicationAssociate extends Object {
                     applicationMap.put(managedBeanName, bean);
                 } 
             } else {
-                Map sessionMap = Util.getSessionMap(context);
+                Map<String,Object> sessionMap = Util.getSessionMap(context);
                 synchronized (sessionMap) {
                     try {
                         bean = managedBean.newInstance(context);

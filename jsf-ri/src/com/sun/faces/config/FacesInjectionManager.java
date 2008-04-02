@@ -1,5 +1,5 @@
 /*
- * $Id: FacesInjectionManager.java,v 1.2 2005/08/22 22:10:10 ofung Exp $
+ * $Id: FacesInjectionManager.java,v 1.3 2005/08/26 15:27:03 rlubke Exp $
  */
 
 /*
@@ -29,6 +29,8 @@
 
 package com.sun.faces.config;
 import com.sun.faces.util.Util;
+import static com.sun.faces.RIConstants.EMPTY_CLASS_ARGS;
+import static com.sun.faces.RIConstants.EMPTY_METH_ARGS;
 
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
@@ -85,8 +87,7 @@ public class FacesInjectionManager {
             if (logger.isLoggable(Level.FINE)) {
                 logger.log(Level.FINE, "Resource Injection failed, ", 
                         e);
-            }
-            return;
+            }           
         }
     }
     
@@ -100,15 +101,18 @@ public class FacesInjectionManager {
             // look up Switch class.
             Class switchClass = Class.forName("com.sun.enterprise.Switch");
             // look up getSwitch method.
-            Method switchMethod = switchClass.getMethod("getSwitch", null);
+            Method switchMethod = switchClass.getMethod("getSwitch", 
+                                                        EMPTY_CLASS_ARGS);
             // invoke the method and get an instance of Switch
-            Object switchObj = switchMethod.invoke(null, null);
+            Object switchObj = switchMethod.invoke(null, EMPTY_METH_ARGS);
             
             // look up getInjectionManager method
             Method injectManagerMethod = 
-                        switchClass.getMethod("getInjectionManager", null);
+                        switchClass.getMethod("getInjectionManager", 
+                                              EMPTY_CLASS_ARGS);
             // invoke the method and get an instance of InjectionManager
-            injectionManager = injectManagerMethod.invoke(switchObj, null);
+            injectionManager = injectManagerMethod.invoke(switchObj, 
+                                                          EMPTY_METH_ARGS);
             // look up injectInstance method.
             injectMethod=  injectionManager.getClass().
                     getMethod("injectInstance", new Class[] {Object.class });  
@@ -117,8 +121,7 @@ public class FacesInjectionManager {
             if (logger.isLoggable(Level.FINE)) {
                 logger.log(Level.FINE, "Resource Injection APIs not available ", 
                         e);
-            }
-            return;
+            }            
         }
     }
 

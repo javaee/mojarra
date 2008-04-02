@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.50 2005/08/24 16:13:32 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.51 2005/08/26 15:27:03 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -47,6 +47,7 @@ import java.util.Set;
 
 import javax.el.CompositeELResolver;
 import javax.el.ExpressionFactory;
+import javax.el.ELResolver;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -235,7 +236,7 @@ public class ConfigureListener implements ServletContextListener {
      * <p>The set of <code>ClassLoader</code> instances that have
      * already been configured by this <code>ConfigureListener</code>.</p>
      */
-    private static Set loaders = new HashSet();
+    private static Set<ClassLoader> loaders = new HashSet<ClassLoader>();
 
 
     /**
@@ -248,7 +249,7 @@ public class ConfigureListener implements ServletContextListener {
 
     private VariableResolver legacyVRChainHead = null;
     private PropertyResolver legacyPRChainHead = null;
-    private ArrayList elResolversFromFacesConfig = null;
+    private ArrayList<ELResolver> elResolversFromFacesConfig = null;
     
     // ------------------------------------------ ServletContextListener Methods
 
@@ -264,8 +265,9 @@ public class ConfigureListener implements ServletContextListener {
      *
      */
 
-    private static ThreadLocal tlsExternalContext = new ThreadLocal() {
-            protected Object initialValue() { return (null); }
+    private static ThreadLocal<ServletContextAdapter> tlsExternalContext = 
+        new ThreadLocal<ServletContextAdapter>() {
+            protected ServletContextAdapter initialValue() { return (null); }
         };
 
     static ThreadLocal getThreadLocalExternalContext() {
@@ -354,10 +356,10 @@ public class ConfigureListener implements ServletContextListener {
         parse(digester, url, fcb);
 
         // Step 3, parse any "/META-INF/faces-config.xml" resources
-        Iterator resources;
+        Iterator<URL> resources;
         try {
-            List list = new LinkedList();
-            Enumeration items = Util.getCurrentLoader(this).
+            List<URL> list = new LinkedList<URL>();
+            Enumeration<URL> items = Util.getCurrentLoader(this).
                 getResources(META_INF_RESOURCES);
             while (items.hasMoreElements()) {
                 list.add(0, items.nextElement());
@@ -379,7 +381,7 @@ public class ConfigureListener implements ServletContextListener {
             throw new FacesException(message, e);
         }
         while (resources.hasNext()) {
-            url = (URL) resources.next();
+            url = resources.next();
             parse(digester, url, fcb);
         }
 
@@ -479,7 +481,7 @@ public class ConfigureListener implements ServletContextListener {
     protected void configure(ServletContext context, FacesConfigBean config)
     throws Exception {
         configure(config.getFactory());
-        configure(context, config.getLifecycle());
+        configure(config.getLifecycle());
 
         configure(config.getApplication());
         configure(config.getComponents());
@@ -581,7 +583,8 @@ public class ConfigureListener implements ServletContextListener {
                     logger.finer("setPropertyResolver(" + values[i] + ')');
                 }
                 instance = Util.createInstance(values[i],
-                        PropertyResolver.class, ((PropertyResolver)prevInChain));
+                                               PropertyResolver.class, 
+                                               prevInChain);
                 prevInChain = instance;
             }
             legacyPRChainHead = (PropertyResolver) instance; 
@@ -597,9 +600,10 @@ public class ConfigureListener implements ServletContextListener {
                 }
                 instance = Util.createInstance(values[i]);
                 if (elResolversFromFacesConfig == null) {
-                    elResolversFromFacesConfig = new ArrayList(values.length);
+                    elResolversFromFacesConfig = 
+                        new ArrayList<ELResolver>(values.length);
                 }
-                elResolversFromFacesConfig.add(instance);
+                elResolversFromFacesConfig.add((ELResolver) instance);
             }
             associate.setELResolversFromFacesConfig(elResolversFromFacesConfig);
         }
@@ -619,8 +623,7 @@ public class ConfigureListener implements ServletContextListener {
                 }
             }
         }
-        
-        prevInChain = null;
+                
         values = config.getVariableResolvers();
         if ((values != null) && (values.length > 0)) {
             // initialize the prevInChain to DummyVariableResolver instance 
@@ -747,12 +750,12 @@ public class ConfigureListener implements ServletContextListener {
         if (config == null) {
             return;
         }
-	Iterator iter = null;
+	Iterator<String> iter = null;
         String value;
 
 	iter = config.getApplicationFactories().iterator();
 	while (iter.hasNext()) {
-	    value = (String) iter.next();
+	    value = iter.next();
 	    if (value != null) {
 		if (logger.isLoggable(Level.FINER)) {
                     logger.finer("setApplicationFactory(" + value + ')');
@@ -764,7 +767,7 @@ public class ConfigureListener implements ServletContextListener {
 
 	iter = config.getFacesContextFactories().iterator();
 	while (iter.hasNext()) {
-	    value = (String) iter.next();
+	    value = iter.next();
 	    if (value != null) {
 		if (logger.isLoggable(Level.FINER)) {
                     logger.finer("setFacesContextFactory(" + value + ')');
@@ -776,7 +779,7 @@ public class ConfigureListener implements ServletContextListener {
 
 	iter = config.getLifecycleFactories().iterator();
 	while (iter.hasNext()) {
-	    value = (String) iter.next();
+	    value = iter.next();
 	    if (value != null) {
 		if (logger.isLoggable(Level.FINER)) {
                     logger.finer("setLifecycleFactory(" + value + ')');
@@ -788,7 +791,7 @@ public class ConfigureListener implements ServletContextListener {
 
 	iter = config.getRenderKitFactories().iterator();
 	while (iter.hasNext()) {
-	    value = (String) iter.next();
+	    value = iter.next();
 	    if (value != null) {
 		if (logger.isLoggable(Level.FINER)) {
                     logger.finer("setRenderKitFactory(" + value + ')');
@@ -805,10 +808,8 @@ public class ConfigureListener implements ServletContextListener {
      * <p>Configure the lifecycle listeners for this application.</p>
      *
      * @param config <code>LifecycleBean</code> that contains our
-     *               configuration information
      */
-    private void configure(ServletContext context, 
-			   LifecycleBean config) throws Exception {
+    private void configure(LifecycleBean config) throws Exception {
 
         if (config == null) {
             return;
@@ -816,10 +817,10 @@ public class ConfigureListener implements ServletContextListener {
         String[] listeners = config.getPhaseListeners();
         LifecycleFactory factory = (LifecycleFactory)
             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        Iterator iter = factory.getLifecycleIds();
-	String lifecycleId = null;
+        Iterator<String> iter = factory.getLifecycleIds();
+        String lifecycleId = null;
         while (iter.hasNext()) {
-            lifecycleId = (String) iter.next();
+            lifecycleId = iter.next();
             if (lifecycleId == null) {
                 lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
             }
@@ -870,7 +871,7 @@ public class ConfigureListener implements ServletContextListener {
 
         values = config.getSupportedLocales();
         if ((values != null) && (values.length > 0)) {
-            List locales = new ArrayList();
+            List<Locale> locales = new ArrayList<Locale>();
             for (int i = 0; i < values.length; i++) {
                 if (logger.isLoggable(Level.FINER)) {
                     logger.finer("addSupportedLocale(" + values[i] + ')');
@@ -1103,8 +1104,7 @@ public class ConfigureListener implements ServletContextListener {
         if (config == null) {
             return;
         }
-
-        Application application = application();
+        
         ApplicationAssociate associate =
                 ApplicationAssociate.getInstance(getExternalContextDuringInitialize());
         String baseName, var;
@@ -1113,7 +1113,7 @@ public class ConfigureListener implements ServletContextListener {
             if ((null == (baseName = config[i].getBasename())) ||
                 (null == (var = config[i].getVar()))) {
                 String message = "Application ResourceBundle: null base-name or var." +
-                              "base-name:" + config[i].getBasename() + 
+                              "base-name:" + baseName + 
                               "var:" + config[i].getVar();
                 // PENDING(edburns): I18N all levels above info
                 if (logger.isLoggable(Level.WARNING)) {
@@ -1431,7 +1431,7 @@ public class ConfigureListener implements ServletContextListener {
             }
         }
 
-        return Boolean.valueOf(paramValue).booleanValue();
+        return Boolean.valueOf(paramValue);
     }
 
 
@@ -1494,9 +1494,7 @@ public class ConfigureListener implements ServletContextListener {
                 appAssociate.setExpressionFactory(factory);
             } catch (Exception e) {
                 logger.log(Level.SEVERE, "Error Instantiating ExpressionFactory", e);
-            }
-            
-            return;
+            }                        
         
         } else {
             
@@ -1576,9 +1574,10 @@ public class ConfigureListener implements ServletContextListener {
             return null;
         }
 
-       public Map getApplicationMap() {
+       public Map<String,Object> getApplicationMap() {
             if (applicationMap == null) {
-                applicationMap = new ApplicationMap(servletContext);
+                applicationMap = 
+                    new ApplicationMap(servletContext);
             }
             return applicationMap;
         }
@@ -1615,16 +1614,16 @@ public class ConfigureListener implements ServletContextListener {
             return null;
         }
 
-        public Map getRequestCookieMap() {
+        public Map<String,Object> getRequestCookieMap() {
             return null;
         }
 
-        public Map getRequestHeaderMap() {
+        public Map<String,String> getRequestHeaderMap() {
             return null;
         }
 
 
-        public Map getRequestHeaderValuesMap() {
+        public Map<String,String[]> getRequestHeaderValuesMap() {
             return null;
         }
 
@@ -1633,28 +1632,28 @@ public class ConfigureListener implements ServletContextListener {
             return null;
         }
 
-        public Iterator getRequestLocales() {
+        public Iterator<Locale> getRequestLocales() {
             return null;
         }
 
 
 
-        public Map getRequestMap() {
+        public Map<String,Object> getRequestMap() {
             return null;
         }
 
 
-        public Map getRequestParameterMap() {
+        public Map<String,String> getRequestParameterMap() {
             return null;
         }
 
 
-        public Iterator getRequestParameterNames() {
+        public Iterator<String> getRequestParameterNames() {
             return null;
         }
 
 
-        public Map getRequestParameterValuesMap() {
+        public Map<String,String[]> getRequestParameterValuesMap() {
             return null;
         }
 
@@ -1686,7 +1685,7 @@ public class ConfigureListener implements ServletContextListener {
             return null;
         }
 
-        public Set getResourcePaths(String path) {
+        public Set<String> getResourcePaths(String path) {
             return null;
         }
 
@@ -1701,7 +1700,7 @@ public class ConfigureListener implements ServletContextListener {
             return null;
         }
 
-        public Map getSessionMap() {
+        public Map<String,Object> getSessionMap() {
             return null;
         }
 

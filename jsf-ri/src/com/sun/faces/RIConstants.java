@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.76 2005/08/22 22:10:06 ofung Exp $
+ * $Id: RIConstants.java,v 1.77 2005/08/26 15:26:56 rlubke Exp $
  */
 
 /*
@@ -143,6 +143,9 @@ public class RIConstants {
         "http://java.sun.com/jsf/html";
     public static final String JSTL_NAMESPACE = 
         "http://java.sun.com/jsp/jstl/core";
+    
+    public static final Class[] EMPTY_CLASS_ARGS = new Class[0];
+    public static final Object[] EMPTY_METH_ARGS = new Object[0];
 
     //
     // Constructors and Initializers

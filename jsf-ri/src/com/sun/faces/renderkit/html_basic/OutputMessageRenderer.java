@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.21 2005/08/22 22:10:21 ofung Exp $
+ * $Id: OutputMessageRenderer.java,v 1.22 2005/08/26 15:27:16 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,6 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import javax.faces.component.UIComponent;
@@ -138,13 +137,13 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             return;
         }
 
-        ArrayList parameterList = new ArrayList();
+        ArrayList<Object> parameterList = new ArrayList<Object>();
 
         // get UIParameter children...
 
-        Iterator kids = component.getChildren().iterator();
+        Iterator<UIComponent> kids = component.getChildren().iterator();
         while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+            UIComponent kid = kids.next();
 
             //PENDING(rogerk) ignore if child is not UIParameter?
 
@@ -193,7 +192,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
                 }
             }
         }
-        if (escape.booleanValue()) {
+        if (escape) {
             writer.writeText(message, "value");
         } else {
             writer.write(message);

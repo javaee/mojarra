@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolver.java,v 1.5 2005/08/22 22:10:12 ofung Exp $
+ * $Id: ImplicitObjectELResolver.java,v 1.6 2005/08/26 15:27:05 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -186,7 +186,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         if (base != null) {
             return null;
         }
-        ArrayList list = new ArrayList(14);
+        ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>(14);
         list.add(Util.getFeatureDescriptor("application", "application",
             "application",false, false, true, Object.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("applicationScope", "applicationScope",

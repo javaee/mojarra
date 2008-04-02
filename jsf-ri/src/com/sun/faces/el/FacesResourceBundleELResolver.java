@@ -1,5 +1,5 @@
 /*
- * $Id: FacesResourceBundleELResolver.java,v 1.2 2005/08/22 22:10:12 ofung Exp $
+ * $Id: FacesResourceBundleELResolver.java,v 1.3 2005/08/26 15:27:05 rlubke Exp $
  */
 
 /*
@@ -38,6 +38,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.beans.FeatureDescriptor;
+
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ELResolver;
@@ -166,22 +168,21 @@ public class FacesResourceBundleELResolver extends ELResolver {
             return null;
         }
 
-        ArrayList list = new ArrayList();
+        ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>();
        
         FacesContext facesContext = 
             (FacesContext) context.getContext(FacesContext.class);
         ApplicationAssociate associate = 
             ApplicationAssociate.getInstance(facesContext.getExternalContext());
-        Map rbMap = associate.getResourceBundleBeanMap();
+        Map<String,ResourceBundleBean> rbMap = associate.getResourceBundleBeanMap();
         if (rbMap == null) {
             return list.iterator();
         }
         // iterate over the list of managed beans
-        for (Iterator i = rbMap.entrySet().iterator(); i.hasNext(); ) {
-            Map.Entry entry = (Map.Entry) i.next();
-            String var = (String) entry.getKey();
-            ResourceBundleBean resourceBundleBean = (ResourceBundleBean)
-                entry.getValue();
+        for (Iterator<Map.Entry<String,ResourceBundleBean>> i = rbMap.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry<String,ResourceBundleBean> entry = i.next();
+            String var = entry.getKey();
+            ResourceBundleBean resourceBundleBean = entry.getValue();
             if ( resourceBundleBean != null) {
                 Locale curLocale = Util.getLocaleFromContextOrSystem(facesContext);
                 String locale = curLocale.toString();

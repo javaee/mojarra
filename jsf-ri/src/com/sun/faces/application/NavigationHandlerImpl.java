@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.39 2005/08/22 22:10:08 ofung Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.40 2005/08/26 15:26:59 rlubke Exp $
  */
 
 /*
@@ -29,7 +29,6 @@
 
 package com.sun.faces.application;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -176,8 +175,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @return The <code>view</code> identifier.
      */
     private CaseStruct getViewId(FacesContext context, String fromAction,
-                                 String outcome) {
-        String nextViewId = null;
+                                 String outcome) {        
         String viewId = context.getViewRoot().getViewId();
         CaseStruct caseStruct = null;
 
@@ -210,8 +208,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
     synchronized private CaseStruct findExactMatch(String viewId,
                                                    String fromAction,
-                                                   String outcome) {
-        String returnViewId = null;
+                                                   String outcome) {        
 
 	// if the user has elected to replace the Application instance
 	// entirely
@@ -265,13 +262,10 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
         Map caseListMap = associate.getNavigationCaseListMappings();
         assert (null != caseListMap);
-        TreeSet wildcardMatchList = associate.getNavigationWildCardList();
+        TreeSet<String> wildcardMatchList = associate.getNavigationWildCardList();
         assert (null != wildcardMatchList);
 
-        Iterator iter = wildcardMatchList.iterator();
-        while (iter.hasNext()) {
-            String fromViewId = (String) iter.next();
-
+        for (String fromViewId : wildcardMatchList) {
             // See if the entire wildcard string (without the trailing "*" is
             // contained in the incoming viewId.  
             // Ex: /foobar is contained with /foobarbaz
@@ -319,8 +313,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
      */
 
     synchronized private CaseStruct findDefaultMatch(String fromAction,
-                                                     String outcome) {
-        String returnViewId = null;
+                                                     String outcome) {        
 
 	// if the user has elected to replace the Application instance
 	// entirely

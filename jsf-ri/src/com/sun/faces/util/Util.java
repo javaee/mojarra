@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.172 2005/08/24 16:13:34 edburns Exp $
+ * $Id: Util.java,v 1.173 2005/08/26 15:27:20 rlubke Exp $
  */
 
 /*
@@ -64,6 +64,7 @@ import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -88,7 +89,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.172 2005/08/24 16:13:34 edburns Exp $
+ * @version $Id: Util.java,v 1.173 2005/08/26 15:27:20 rlubke Exp $
  */
 
 public class Util extends Object {
@@ -651,7 +652,7 @@ public class Util extends Object {
 
     public static void verifyRequiredClasses(FacesContext facesContext)
         throws FacesException {
-        Map applicationMap = facesContext.getExternalContext()
+        Map<String,Object> applicationMap = facesContext.getExternalContext()
             .getApplicationMap();
         Boolean result = null;
         String className = "javax.servlet.jsp.jstl.fmt.LocalizationContext";
@@ -705,10 +706,10 @@ public class Util extends Object {
     public static Iterator getSelectItems(FacesContext context,
                                           UIComponent component) {
 
-        ArrayList list = new ArrayList();
-        Iterator kids = component.getChildren().iterator();
+        ArrayList<Object> list = new ArrayList<Object>();
+        Iterator<UIComponent> kids = component.getChildren().iterator();
         while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+            UIComponent kid = kids.next();
             if (kid instanceof UISelectItem) {
                 Object value = ((UISelectItem) kid).getValue();
                 if (value == null) {
@@ -856,7 +857,7 @@ public class Util extends Object {
         }
 
         boolean result = false;
-        Map attrs = component.getAttributes();
+        Map<String,Object> attrs = component.getAttributes();
         if (null == attrs) {
             return false;
         }
@@ -1156,7 +1157,7 @@ public class Util extends Object {
      * @param context the FacesContext
      * @return Map The <code>SessionMap</code>
      */
-    public static Map getSessionMap(FacesContext context) {
+    public static Map<String,Object> getSessionMap(FacesContext context) {
         if (context == null) {
             context = FacesContext.getCurrentInstance();
         }
@@ -1607,7 +1608,7 @@ public class Util extends Object {
 	if (null == expressionString) {
 	    return Collections.EMPTY_LIST;
 	}
-	List result = new ArrayList();
+	List<String> result = new ArrayList<String>();
 	int i, j, len = expressionString.length(), cur = 0;
 	while (cur < len &&
 	       -1 != (i = expressionString.indexOf("#{", cur))) {
@@ -1686,9 +1687,10 @@ public class Util extends Object {
 	    Method method = null;
 
 	    try {
-		method = response.getClass().getMethod("getContentType", null);
+		method = response.getClass().getMethod("getContentType", 
+                                               RIConstants.EMPTY_CLASS_ARGS);
 		if (null != method) {
-		    Object obj = method.invoke(response, null);
+		    Object obj = method.invoke(response, RIConstants.EMPTY_METH_ARGS);
 		    if (null != obj) {
 			result = obj.toString();
 		    }
@@ -1718,10 +1720,10 @@ public class Util extends Object {
 					      TreeTraversalCallback action) throws FacesException {
 	boolean keepGoing = false;
 	if (keepGoing = action.takeActionOnNode(context, root)) {
-	    Iterator kids = root.getFacetsAndChildren();
+	    Iterator<UIComponent> kids = root.getFacetsAndChildren();
 	    while (kids.hasNext() && keepGoing) {
 		keepGoing = prefixViewTraversal(context, 
-						(UIComponent) kids.next(), 
+						kids.next(), 
 						action);
 	    }
 	}

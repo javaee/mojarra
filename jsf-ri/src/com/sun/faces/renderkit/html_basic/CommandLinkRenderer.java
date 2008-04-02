@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.35 2005/08/22 22:10:18 ofung Exp $
+ * $Id: CommandLinkRenderer.java,v 1.36 2005/08/26 15:27:13 rlubke Exp $
  */
 
 /*
@@ -47,7 +47,6 @@ import javax.faces.event.ActionEvent;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
@@ -125,9 +124,9 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	if (null == paramName) {
 	    return;
 	}
-        Map requestParameterMap = context.getExternalContext()
+        Map<String,String> requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
-        String value = (String) requestParameterMap.get(paramName);
+        String value = requestParameterMap.get(paramName);
         if (value == null || value.equals("") || !clientId.equals(value)) {
             return;
         }
@@ -209,9 +208,9 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             }
             return;
         }
-        Iterator kids = component.getChildren().iterator();
+        Iterator<UIComponent> kids = component.getChildren().iterator();
         while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+            UIComponent kid = kids.next();
             kid.encodeBegin(context);
             if (kid.getRendersChildren()) {
                 kid.encodeChildren(context);
@@ -453,7 +452,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
     private void writeScriptContent(FacesContext context, 
 				   ResponseWriter writer,
 				   UIComponent component) throws IOException {
-	Map requestMap = context.getExternalContext().getRequestMap();
+	Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
 	UIForm myForm = getMyForm(context, component);
 	boolean isXHTML = 
 	    requestMap.containsKey(RIConstants.CONTENT_TYPE_IS_XHTML);
@@ -524,7 +523,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 					       UIComponent component,
 					       String fieldName) throws IOException {
         //Handle hidden fields
-	Map requestMap = context.getExternalContext().getRequestMap();
+	Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
 	
 	if (null == fieldName) {
 	    return;

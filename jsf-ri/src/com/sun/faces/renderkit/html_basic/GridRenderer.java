@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.37 2005/08/22 22:10:19 ofung Exp $
+ * $Id: GridRenderer.java,v 1.38 2005/08/26 15:27:13 rlubke Exp $
  */
 
 /*
@@ -40,7 +40,6 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
@@ -207,9 +206,8 @@ public class GridRenderer extends HtmlBasicRenderer {
         String rowClasses[] = getRowClasses(component);
         int rowStyle = 0;
         int rowStyles = rowClasses.length;
-        boolean open = false;
-        UIComponent facet = null;
-        Iterator kids = null;
+        boolean open = false;        
+        Iterator<UIComponent> kids = null;
         int i = 0;
 
         // Render our children, starting a new row as needed
@@ -218,7 +216,7 @@ public class GridRenderer extends HtmlBasicRenderer {
 
         if (null != (kids = getChildren(component))) {
             while (kids.hasNext()) {
-                UIComponent child = (UIComponent) kids.next();
+                UIComponent child = kids.next();
                 if ((i % columns) == 0) {
                     if (open) {
                         writer.endElement("tr");
@@ -305,7 +303,7 @@ public class GridRenderer extends HtmlBasicRenderer {
             return (new String[0]);
         }
         values = values.trim();
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         while (values.length() > 0) {
             int comma = values.indexOf(",");
             if (comma >= 0) {
@@ -317,7 +315,7 @@ public class GridRenderer extends HtmlBasicRenderer {
             }
         }
         String results[] = new String[list.size()];
-        return ((String[]) list.toArray(results));
+        return (list.toArray(results));
     }
 
 
@@ -329,7 +327,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         int count;
         Object value = component.getAttributes().get("columns");
         if ((value != null) && (value instanceof Integer)) {
-            count = ((Integer) value).intValue();
+            count = ((Integer) value);
         } else {
             count = 2;
         }
@@ -351,7 +349,7 @@ public class GridRenderer extends HtmlBasicRenderer {
             return (new String[0]);
         }
         values = values.trim();
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         while (values.length() > 0) {
             int comma = values.indexOf(",");
             if (comma >= 0) {
@@ -363,7 +361,7 @@ public class GridRenderer extends HtmlBasicRenderer {
             }
         }
         String results[] = new String[list.size()];
-        return ((String[]) list.toArray(results));
+        return (list.toArray(results));
     }
 
 

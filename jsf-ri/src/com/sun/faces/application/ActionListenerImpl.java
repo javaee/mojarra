@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.13 2005/08/22 22:10:07 ofung Exp $
+ * $Id: ActionListenerImpl.java,v 1.14 2005/08/26 15:26:58 rlubke Exp $
  */
 
 /*
@@ -44,7 +44,6 @@ import javax.faces.event.ActionListener;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
 /**

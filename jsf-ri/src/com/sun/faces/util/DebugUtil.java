@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.30 2005/08/22 22:10:28 ofung Exp $
+ * $Id: DebugUtil.java,v 1.31 2005/08/26 15:27:19 rlubke Exp $
  */
 
 /*
@@ -185,13 +185,13 @@ public class DebugUtil {
             }
             indentPrintln(out, "value= " + value);
             
-            Iterator it = root.getAttributes().keySet().iterator();
+            Iterator<String> it = root.getAttributes().keySet().iterator();
             if (it != null) {
                 while (it.hasNext()) {
-                    String attrValue = null, attrName = (String) it.next();
+                    String attrValue = null, attrName = it.next();
                     Object attrObj = root.getAttributes().get(attrName);
                     
-                    if (!(attrValue instanceof String) && null != attrObj) {
+                    if (null != attrObj) {
                         // chop off the address since we don't want to print
                         // out anything that'll vary from invocation to
                         // invocation
@@ -220,15 +220,15 @@ public class DebugUtil {
         }
         
         curDepth++;
-        Iterator it = root.getChildren().iterator();
-        Iterator facets = root.getFacets().values().iterator();
+        Iterator<UIComponent> it = root.getChildren().iterator();
+        Iterator<UIComponent> facets = root.getFacets().values().iterator();
         // print all the facets of this component
         while(facets.hasNext()) {
-            printTree((UIComponent) facets.next(), out);
+            printTree(facets.next(), out);
         }
         // print all the children of this component
         while (it.hasNext()) {
-            printTree((UIComponent) it.next(), out);
+            printTree(it.next(), out);
         }
         curDepth--;
     }
@@ -275,9 +275,9 @@ public class DebugUtil {
         
         curDepth++;
         if (null != root.children) {
-            Iterator it = root.children.iterator();
+            Iterator<TreeStructure> it = root.children.iterator();
             while (it.hasNext()) {
-                printTree((TreeStructure) it.next(), out);
+                printTree(it.next(), out);
             }
         }
         curDepth--;

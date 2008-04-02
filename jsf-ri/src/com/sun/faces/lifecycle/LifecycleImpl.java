@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.55 2005/08/22 22:10:15 ofung Exp $
+ * $Id: LifecycleImpl.java,v 1.56 2005/08/26 15:27:08 rlubke Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ public class LifecycleImpl extends Lifecycle {
 
 
     // The set of PhaseListeners registered with this Lifecycle instance
-    private ArrayList listeners = new ArrayList();
+    private ArrayList<PhaseListener> listeners = new ArrayList<PhaseListener>();
 
 
     // The set of Phase instances that are executed by the execute() method
@@ -224,7 +224,7 @@ public class LifecycleImpl extends Lifecycle {
 	int 
 	    i = 0,
 	    maxBefore = 0;
-        List tempListeners = (ArrayList)listeners.clone();
+        List<PhaseListener> tempListeners = (ArrayList<PhaseListener>)listeners.clone();
 	try {
             // Notify the "beforePhase" method of interested listeners
 	    // (ascending)
@@ -238,7 +238,7 @@ public class LifecycleImpl extends Lifecycle {
 	    if (tempListeners.size() > 0) {
                 PhaseEvent event = new PhaseEvent(context, phaseId, this);
                 for (i = 0; i < tempListeners.size(); i++) {
-                    PhaseListener listener = (PhaseListener)tempListeners.get(i);
+                    PhaseListener listener = tempListeners.get(i);
                     if (phaseId.equals(listener.getPhaseId()) ||
                         PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
                         listener.beforePhase(event);
@@ -276,8 +276,7 @@ public class LifecycleImpl extends Lifecycle {
                 if (tempListeners.size() > 0) {
                     PhaseEvent event = new PhaseEvent(context, phaseId, this);
                     for (i = maxBefore; i >= 0; i--) {
-                        PhaseListener listener = (PhaseListener) 
-                            tempListeners.get(i);
+                        PhaseListener listener = tempListeners.get(i);
                         if (phaseId.equals(listener.getPhaseId()) ||
                             PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
                             listener.afterPhase(event);
@@ -349,7 +348,8 @@ public class LifecycleImpl extends Lifecycle {
      */
     protected void populateFacesELResolverForJsp(FacesContext context) {
         
-        Map applicationMap =  context.getExternalContext().getApplicationMap();
+        Map<String,Object> applicationMap =  
+            context.getExternalContext().getApplicationMap();
         String requestServiced = (String) 
             applicationMap.get(this.FIRST_REQUEST_SERVICED);
         if (requestServiced != null) {

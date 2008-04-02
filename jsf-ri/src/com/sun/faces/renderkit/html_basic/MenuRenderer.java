@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.60 2005/08/22 22:10:20 ofung Exp $
+ * $Id: MenuRenderer.java,v 1.61 2005/08/26 15:27:16 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -57,7 +57,6 @@ import javax.faces.model.SelectItemGroup;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
@@ -128,10 +127,10 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // currently we assume the model type to be of type string or 
         // convertible to string and localised by the application.
         if (component instanceof UISelectMany) {
-            Map requestParameterValuesMap = context.getExternalContext().
+            Map<String,String[]> requestParameterValuesMap = context.getExternalContext().
                 getRequestParameterValuesMap();
             if (requestParameterValuesMap.containsKey(clientId)) {
-                String newValues[] = (String[]) requestParameterValuesMap.
+                String newValues[] = requestParameterValuesMap.
                     get(clientId);
                 setSubmittedValue(component, newValues);
                 if (logger.isLoggable(Level.FINE)) {
@@ -149,10 +148,10 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             }
         } else {
 	    // this is a UISelectOne
-            Map requestParameterMap = context.getExternalContext().
+            Map<String,String> requestParameterMap = context.getExternalContext().
                 getRequestParameterMap();
             if (requestParameterMap.containsKey(clientId)) {
-                String newValue = (String) requestParameterMap.get(clientId);
+                String newValue = requestParameterMap.get(clientId);
                 setSubmittedValue(component, newValue);
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("submitted value for UISelectOne component " +
@@ -398,12 +397,12 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    protected Object handleListCase(FacesContext context,
+    protected ArrayList<String> handleListCase(FacesContext context,
                                     String[] newValues) {
         int
             i = 0,
             len = newValues.length;
-        ArrayList result = new ArrayList(len);
+        ArrayList<String> result = new ArrayList<String>(len);
         for (i = 0; i < len; i++) {
             result.add(newValues[i]);
         }
@@ -628,7 +627,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    boolean isSelected(Object itemValue, Object[] values) {
+    boolean isSelected(String itemValue, Object[] values) {
         if (null != values) {
             int len = values.length;
             for (int i = 0; i < len; i++) {

@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.19 2005/08/22 22:10:13 ofung Exp $
+ * $Id: PropertyResolverImpl.java,v 1.20 2005/08/26 15:27:06 rlubke Exp $
  */
 
 /*
@@ -62,7 +62,7 @@ public class PropertyResolverImpl extends PropertyResolver {
         // validates base != null and index >= 0
         assertInput(base, index);
 
-        Class type = base.getClass();
+        Class<? extends Object> type = base.getClass();
         try {
             if (type.isArray()) {
                 Array.get(base, index);
@@ -176,7 +176,7 @@ public class PropertyResolverImpl extends PropertyResolver {
         // validate input
         assertInput(base, index);
         FacesContext context = FacesContext.getCurrentInstance();
-        Class type = base.getClass();
+        Class<? extends Object> type = base.getClass();
         if (type.isArray()) {
             try {
                 Array.set(base, index, (context.getApplication().

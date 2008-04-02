@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.89 2005/08/22 22:10:18 ofung Exp $
+ * $Id: ButtonRenderer.java,v 1.90 2005/08/26 15:27:12 rlubke Exp $
  */
 
 /*
@@ -45,7 +45,6 @@ import javax.faces.event.ActionEvent;
 
 import com.sun.faces.util.Util;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
@@ -119,9 +118,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         // can get the command name by calling currentValue. This way we can 
         // get around the IE bug.
         String clientId = component.getClientId(context);
-        Map requestParameterMap = context.getExternalContext()
+        Map<String,String> requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
-        String value = (String) requestParameterMap.get(clientId);
+        String value = requestParameterMap.get(clientId);
         if (value == null) {
             if (requestParameterMap.get(clientId + ".x") == null &&
                 requestParameterMap.get(clientId + ".y") == null) {
@@ -143,8 +142,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
          if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
                     "End decoding component " + component.getId());
-        }
-        return;
+        }        
     }
 
 
@@ -279,7 +277,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
     private String getClearHiddenFieldScript(FacesContext context, 
 					     UIComponent component) {
-        Map requestMap = context.getExternalContext().getRequestMap();
+        Map<String,Object> requestMap = 
+            context.getExternalContext().getRequestMap();
 	UIComponent 
 	    myForm = component,
 	    root = context.getViewRoot();

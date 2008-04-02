@@ -1,7 +1,7 @@
 package com.sun.faces.el;
 
 /*
- * $Id: ScopedAttributeELResolver.java,v 1.3 2005/08/22 22:10:13 ofung Exp $
+ * $Id: ScopedAttributeELResolver.java,v 1.4 2005/08/26 15:27:07 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -29,7 +29,6 @@ package com.sun.faces.el;
  */
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.beans.FeatureDescriptor;
 import java.util.Map.Entry;
@@ -38,12 +37,10 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import javax.el.ELException;
-import javax.el.PropertyNotWritableException;
 import javax.el.PropertyNotFoundException;
 import javax.el.ELContext;
 import javax.el.ELResolver;
 
-import com.sun.faces.el.ELConstants;
 import com.sun.faces.util.Util;
 
 public class ScopedAttributeELResolver extends ELResolver {
@@ -152,18 +149,18 @@ public class ScopedAttributeELResolver extends ELResolver {
 
        String attrName = null;
        Object attrValue = null;
-       ArrayList list = new ArrayList();
+       ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>();
         
        FacesContext facesContext = (FacesContext) 
            context.getContext(FacesContext.class);
        ExternalContext ec = facesContext.getExternalContext();
        
        // add attributes in request scope.
-       Set attrs = ec.getRequestMap().entrySet();
-       Iterator it = attrs.iterator();
+       Set<Entry<String,Object>> attrs = ec.getRequestMap().entrySet();
+       Iterator<Entry<String,Object>> it = attrs.iterator();
        while (it.hasNext()) {
-           Entry entry = (Entry) it.next();
-           attrName = (String) entry.getKey();
+           Entry<String,Object> entry = it.next();
+           attrName = entry.getKey();
            attrValue = entry.getValue();
            list.add(Util.getFeatureDescriptor(attrName, attrName, 
            "request scope attribute", false, false, true, attrValue.getClass(), 
@@ -174,8 +171,8 @@ public class ScopedAttributeELResolver extends ELResolver {
        attrs = ec.getSessionMap().entrySet();
        it = attrs.iterator();
        while (it.hasNext()) {
-           Entry entry = (Entry) it.next();
-           attrName = (String) entry.getKey();
+           Entry<String,Object> entry = it.next();
+           attrName = entry.getKey();
            attrValue = entry.getValue();
            list.add(Util.getFeatureDescriptor(attrName, attrName, 
            "session scope attribute", false, false, true, attrValue.getClass(), 
@@ -186,8 +183,8 @@ public class ScopedAttributeELResolver extends ELResolver {
        attrs = ec.getApplicationMap().entrySet();
        it = attrs.iterator();
        while (it.hasNext()) {
-           Entry entry = (Entry) it.next();
-           attrName = (String) entry.getKey();
+           Entry<String,Object> entry = it.next();
+           attrName = entry.getKey();
            attrValue = entry.getValue();
            list.add(Util.getFeatureDescriptor(attrName, attrName, 
            "application scope attribute", false, false, true, attrValue.getClass(), 

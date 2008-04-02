@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.21 2005/08/22 22:10:17 ofung Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.22 2005/08/26 15:27:10 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
 //
     protected String renderKitId = null;
     protected String className = null;
-    protected HashMap renderKits = null;
+    protected HashMap<String,RenderKit> renderKits = null;
 
 //
 // Class Variables
@@ -64,7 +64,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
      */
     public RenderKitFactoryImpl() {
         super();
-        renderKits = new HashMap();
+        renderKits = new HashMap<String, RenderKit>();
         addRenderKit(HTML_BASIC_RENDER_KIT, new RenderKitImpl());
     }
 
@@ -101,7 +101,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
 
         synchronized (renderKits) {
             if (renderKits.containsKey(renderKitId)) {
-                renderKit = (RenderKit) renderKits.get(renderKitId);
+                renderKit = renderKits.get(renderKitId);
             }
         }
 
@@ -109,7 +109,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
     }
 
 
-    public Iterator getRenderKitIds() {
+    public Iterator<String> getRenderKitIds() {
         return (renderKits.keySet().iterator());
     }
 

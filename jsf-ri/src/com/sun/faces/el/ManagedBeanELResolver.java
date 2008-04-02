@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.9 2005/08/25 18:27:19 jayashri Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.10 2005/08/26 15:27:06 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -137,7 +137,7 @@ public class ManagedBeanELResolver extends ELResolver {
             return null;
         }
 
-        ArrayList list = new ArrayList();
+        ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>();
        
         FacesContext facesContext = 
             (FacesContext) context.getContext(FacesContext.class);

@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.37 2005/08/22 22:10:08 ofung Exp $ 
+ * $Id: StateManagerImpl.java,v 1.38 2005/08/26 15:26:59 rlubke Exp $ 
  */ 
 
 
@@ -53,14 +53,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import javax.faces.application.StateManager.SerializedView;
 import javax.faces.component.NamingContainer;
 
 /**
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.37 2005/08/22 22:10:08 ofung Exp $
+ * @version $Id: StateManagerImpl.java,v 1.38 2005/08/26 15:26:59 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -76,9 +75,7 @@ public class StateManagerImpl extends StateManager {
     private static final String NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION =
         RIConstants.FACES_PREFIX + "NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION";
     private static final int DEFAULT_NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION = 15;
-
-    private static final String FACES_VIEW_LIST =
-        RIConstants.FACES_PREFIX + "VIEW_LIST";
+    
     /**
      * Number of views in logical view to be saved in session.
      */
@@ -91,7 +88,7 @@ public class StateManagerImpl extends StateManager {
      * has non-deprecated methods.  True indicates the presence
      * of non-deprecated methods.
      */
-    private HashMap responseStateManagerInfo = null;
+    private HashMap<String,Boolean> responseStateManagerInfo = null;
     
     public Object saveView(FacesContext context) {
         return ( super.saveView(context) );
@@ -110,7 +107,7 @@ public class StateManagerImpl extends StateManager {
 	}
 	
 	// honor the requirement to check for id uniqueness
-	checkIdUniqueness(context, viewRoot, new HashSet());
+	checkIdUniqueness(context, viewRoot, new HashSet<String>());
 
 	
  	if (logger.isLoggable(Level.FINE)) {
@@ -152,7 +149,7 @@ public class StateManagerImpl extends StateManager {
                 actualMapSize = getNumberOfViewsInLogicalViewParameter(context);
             
             Object stateArray[] = { treeStructure, componentState };
-            Map sessionMap = Util.getSessionMap(context);
+            Map<String,Object> sessionMap = Util.getSessionMap(context);
             
  	    synchronized (this) {
                 if (null == (logicalMap = (LRUMap) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP))) {
@@ -194,13 +191,13 @@ public class StateManagerImpl extends StateManager {
 
 
     protected void checkIdUniqueness(FacesContext context,
-        UIComponent component, Set componentIds) throws IllegalStateException{
+        UIComponent component, Set<String> componentIds) throws IllegalStateException{
         UIComponent kid;
         // deal with children that are marked transient.
-        Iterator kids = component.getChildren().iterator();
+        Iterator<UIComponent> kids = component.getChildren().iterator();
         String id;
         while (kids.hasNext()) {
-            kid = (UIComponent) kids.next();
+            kid = kids.next();
 	    // check for id uniqueness
 	    id = kid.getClientId(context);
 	    if (id != null && !componentIds.add(id)) {
@@ -217,7 +214,7 @@ public class StateManagerImpl extends StateManager {
         // deal with facets that are marked transient.
         kids = component.getFacets().values().iterator();
         while (kids.hasNext()) {
-            kid = (UIComponent) kids.next();
+            kid = kids.next();
 	    // check for id uniqueness
 	    id = kid.getClientId(context);
 	    if (id != null && !componentIds.add(id)) {
@@ -431,21 +428,21 @@ public class StateManagerImpl extends StateManager {
     public void buildTreeStructureToSave(FacesContext context,
                                          UIComponent component,
                                          TreeStructure treeStructure,
-                                         Set componentIds) {
+                                         Set<String> componentIds) {
         // traverse the component hierarchy and save the tree structure 
         // information for every component.
         
         // Set for catching duplicate IDs
         if (null == componentIds) {
-            componentIds = new HashSet();
+            componentIds = new HashSet<String>();
         }
         
         // save the structure info of the children of the component 
         // being processed.
-        Iterator kids = component.getChildren().iterator();
+        Iterator<UIComponent> kids = component.getChildren().iterator();
         String id;
         while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+            UIComponent kid = kids.next();
 
 	    // check for id uniqueness
 	    id = kid.getClientId(context);
@@ -470,10 +467,10 @@ public class StateManagerImpl extends StateManager {
 
         // save structure info of the facets of the component currenly being 
         // processed.
-        Iterator facets = component.getFacets().keySet().iterator();
+        Iterator<String> facets = component.getFacets().keySet().iterator();
         while (facets.hasNext()) {
-            String facetName = (String) facets.next();
-            UIComponent facetComponent = (UIComponent) component.getFacets().
+            String facetName = facets.next();
+            UIComponent facetComponent = component.getFacets().
                 get(facetName);
 
 	    // check for id uniqueness
@@ -623,17 +620,17 @@ public class StateManagerImpl extends StateManager {
      * @param instance The instance of the class that will be used as the search domain.
      * @param methodName The name of the method we are looking for.
      */
-    private boolean hasDeclaredMethod(Map resultMap, Object key, Object instance, String methodName) {
+    private boolean hasDeclaredMethod(Map<String,Boolean> resultMap, String key, ResponseStateManager instance, String methodName) {
         boolean result = false;
         if (resultMap == null) {
-            resultMap = new HashMap();
+            resultMap = new HashMap<String, Boolean>();
         }
-        Boolean value = (Boolean)resultMap.get(key);
+        Boolean value = resultMap.get(key);
         if (value != null) {
-            return value.booleanValue();
+            return value;
         }
         result = Util.hasDeclaredMethod(instance, methodName);
-        resultMap.put(key, new Boolean(result));
+        resultMap.put(key, result);
         return result;
     }
 }

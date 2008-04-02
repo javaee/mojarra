@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.1 2005/08/24 16:13:33 edburns Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.2 2005/08/26 15:27:03 rlubke Exp $
  */
 
 /*
@@ -31,10 +31,12 @@ package com.sun.faces.config;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -45,18 +47,16 @@ import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.ListEntriesBean;
 import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.config.beans.ManagedPropertyBean;
 import com.sun.faces.config.beans.MapEntriesBean;
 import com.sun.faces.config.beans.MapEntryBean;
+import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.util.Util;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * <p>This class creates a managed bean instance. It has a contract with
@@ -135,7 +135,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
      *
      */
 
-    private Map managedBeanFactoryMap = null;
+    private Map<String,ManagedBeanFactory> managedBeanFactoryMap = null;
 
     //
     // Constructors and Initializers
@@ -180,7 +180,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         return this.managedBean;
     }
 
-    public Map getManagedBeanFactoryMap() {
+    public Map<String,ManagedBeanFactory> getManagedBeanFactoryMap() {
 	if (null == managedBeanFactoryMap) {
             if (logger.isLoggable(Level.INFO)) {
                 logger.info("Contract violation: ManagedBeanFactory must be initialized with managedBeanFactoryMap after instantiation.");
@@ -190,7 +190,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 	return managedBeanFactoryMap;
     }
 
-    public void setManagedBeanFactoryMap(Map newManagedBeanFactoryMap) {
+    public void setManagedBeanFactoryMap(Map<String,ManagedBeanFactory> newManagedBeanFactoryMap) {
 	managedBeanFactoryMap = newManagedBeanFactoryMap;
     }
     
@@ -225,10 +225,12 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
         // before instantiating the bean, make sure there is no cyclic 
         // references.
-        Map requestMap = context.getExternalContext().getRequestMap();
-        List beanList = (List)requestMap.get(MANAGED_BEAN_CREATED_STACK);
+        Map<String,Object> requestMap = 
+            context.getExternalContext().getRequestMap();
+        List<String> beanList = 
+            (List<String>)requestMap.get(MANAGED_BEAN_CREATED_STACK);
         if (beanList == null) {
-            beanList = new ArrayList();
+            beanList = new ArrayList<String>();
             requestMap.put(MANAGED_BEAN_CREATED_STACK, beanList);
         }
         
@@ -279,11 +281,11 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 case TYPE_IS_LIST:
                     copyListEntriesFromConfigToList(
                         managedBean.getListEntries(),
-                        (List) bean);
+                        (List<Object>) bean);
                     break;
                 case TYPE_IS_MAP:
                     copyMapEntriesFromConfigToMap(managedBean.getMapEntries(),
-                                                  (Map) bean);
+                                                  (Map<Object,Object>) bean);
                     break;
                 case TYPE_IS_UICOMPONENT:
                     // intentional fall-through
@@ -439,7 +441,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
 
     protected Class copyListEntriesFromConfigToList(ListEntriesBean listEntries,
-                                                    List valuesForBean)
+                                                    List<Object> valuesForBean)
         throws ClassNotFoundException {
         String[] valuesFromConfig = listEntries.getValues();
         Class valueClass = java.lang.String.class;
@@ -482,7 +484,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
 
     void copyMapEntriesFromConfigToMap(MapEntriesBean mapEntries,
-                                       Map result)
+                                       Map<Object,Object> result)
         throws ClassNotFoundException {
         Object
             key = null,
@@ -546,8 +548,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             propertyClass = null,
             propertyName = null,
             strValue = null;
-        int
-            propertyType = -1;
+        
         Class valueClass = null;
         ManagedPropertyBean[] properties = managedBean.getManagedProperties();
 
@@ -567,7 +568,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             try {
                 // this switch statement sets the "value" local variable
                 // and tries to set it into the bean.
-                switch (propertyType = getPropertyType(properties[i])) {
+                switch (getPropertyType(properties[i])) {
                     case TYPE_IS_LIST:
                         setArrayOrListPropertiesIntoBean(bean, properties[i]);
                         break;
@@ -678,7 +679,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         boolean
             getterIsNull = true,
             getterIsArray = false;
-        List
+        List<Object>
             valuesForBean = null;
         Class
             valueType = java.lang.String.class,
@@ -689,7 +690,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         try {
             // see if there is a getter
             result = PropertyUtils.getProperty(bean, propertyName);
-            getterIsNull = (null == result) ? true : false;
+            getterIsNull = (null == result);
 
             propertyType =
                 PropertyUtils.getPropertyType(bean, propertyName);
@@ -719,7 +720,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         if (!getterIsNull) {
             // if what it returned was an array
             if (getterIsArray) {
-                valuesForBean = new ArrayList();
+                valuesForBean = new ArrayList<Object>();
                 for (int i = 0, len = Array.getLength(result); i < len; i++) {
                     // add the existing values
                     valuesForBean.add(Array.get(result, i));
@@ -733,12 +734,12 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                     new Object[] { propertyName,
                                    managedBean.getManagedBeanName() }));
                 }
-                valuesForBean = (List) result;
+                valuesForBean = (List<Object>) result;
             }
         } else {
 
             // getter returned null
-            result = valuesForBean = new ArrayList();
+            result = valuesForBean = new ArrayList<Object>();
         }
 
         // at this point valuesForBean contains the existing values from
@@ -756,28 +757,28 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             for (int i = 0, len = valuesForBean.size(); i < len; i++) {
                 if (valueType == Boolean.TYPE) {
                     Array.setBoolean(result, i,
-                                     ((Boolean) valuesForBean.get(i)).booleanValue());
+                                     (Boolean) valuesForBean.get(i));
                 } else if (valueType == Byte.TYPE) {
                     Array.setByte(result, i,
-                                  ((Byte) valuesForBean.get(i)).byteValue());
+                                  (Byte) valuesForBean.get(i));
                 } else if (valueType == Double.TYPE) {
                     Array.setDouble(result, i,
-                                    ((Double) valuesForBean.get(i)).doubleValue());
+                                    (Double) valuesForBean.get(i));
                 } else if (valueType == Float.TYPE) {
                     Array.setFloat(result, i,
-                                   ((Float) valuesForBean.get(i)).floatValue());
+                                   (Float) valuesForBean.get(i));
                 } else if (valueType == Integer.TYPE) {
                     Array.setInt(result, i,
-                                 ((Integer) valuesForBean.get(i)).intValue());
+                                 (Integer) valuesForBean.get(i));
                 } else if (valueType == Character.TYPE) {
                     Array.setChar(result, i,
-                                  ((Character) valuesForBean.get(i)).charValue());
+                                  (Character) valuesForBean.get(i));
                 } else if (valueType == Short.TYPE) {
                     Array.setShort(result, i,
-                                   ((Short) valuesForBean.get(i)).shortValue());
+                                   (Short) valuesForBean.get(i));
                 } else if (valueType == Long.TYPE) {
                     Array.setLong(result, i,
-                                  ((Long) valuesForBean.get(i)).longValue());
+                                  (Long) valuesForBean.get(i));
                 } else {
                     Array.set(result, i, valuesForBean.get(i));
                 }
@@ -817,15 +818,16 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
     private void setMapPropertiesIntoBean(Object bean,
                                           ManagedPropertyBean property)
         throws Exception {
-        Map result = null;
+        Map<Object,Object> result = null;
         boolean getterIsNull = true;
         Class propertyType = null;
         String propertyName = property.getPropertyName();
 
         try {
             // see if there is a getter
-            result = (Map) PropertyUtils.getProperty(bean, propertyName);
-            getterIsNull = (null == result) ? true : false;
+            result = (Map<Object,Object>) 
+                        PropertyUtils.getProperty(bean, propertyName);
+            getterIsNull = (null == result);
 
             propertyType = PropertyUtils.getPropertyType(bean, propertyName);
         } catch (NoSuchMethodException nsme) {
@@ -842,7 +844,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
 
         if (getterIsNull) {
-            result = new java.util.HashMap();
+            result = new HashMap<Object,Object>();
         }
 
         // at this point result contains the existing entries from the
@@ -908,7 +910,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 value = new Integer(value.toString());
             } else if (valueType == Character.TYPE ||
                 valueType == java.lang.Character.class) {
-                value = new Character(value.toString().charAt(0));
+                value = value.toString().charAt(0);
             } else if (valueType == Short.TYPE ||
                 valueType == java.lang.Short.class) {
                 value = new Short(value.toString());
