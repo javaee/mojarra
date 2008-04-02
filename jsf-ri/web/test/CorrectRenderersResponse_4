@@ -1,8 +1,8 @@
 <table>
-<thead><tr><th colspan="2">header1 header2 </th></tr></thead>
+<thead><tr><th colspan="2"><span id="header">header1 header2 </span></th></tr></thead>
 <tbody><tr>
 <td>body1</td>
 <td>body2</td>
 </tr>
-</tbody><tfoot><tr><th colspan="2">footer1 footer2 </th></tr></tfoot>
+</tbody><tfoot><tr><th colspan="2"><span id="footer">footer1 footer2 </span></th></tr></tfoot>
 </table>

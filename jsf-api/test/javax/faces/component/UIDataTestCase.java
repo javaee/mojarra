@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.32 2004/01/12 06:56:06 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.33 2004/01/14 17:12:54 eburns Exp $
  */
 
 /*
@@ -1223,6 +1223,8 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
     // "Table" Renderer
     class TableRenderer extends Renderer {
+
+	public boolean getRendersChildren() { return true; }
 
         public void decode(FacesContext context, UIComponent component) {
 

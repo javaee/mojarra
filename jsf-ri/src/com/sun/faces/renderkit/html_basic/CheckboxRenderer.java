@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.59 2004/01/06 14:53:19 rkitain Exp $
+ * $Id: CheckboxRenderer.java,v 1.60 2004/01/14 17:13:01 eburns Exp $
  *
  */
 
@@ -42,7 +42,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.59 2004/01/06 14:53:19 rkitain Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.60 2004/01/14 17:13:01 eburns Exp $
  * 
  *
  */
@@ -154,6 +154,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
 	String styleClass = null;
 
 	writer.startElement("input", component);
+	writeIdAttributeIfNecessary(context, writer, component);
 	writer.writeAttribute("type", "checkbox", "type");
 	writer.writeAttribute("name", component.getClientId(context), "clientId"); 
 

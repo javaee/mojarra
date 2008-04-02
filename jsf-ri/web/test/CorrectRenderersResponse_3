@@ -1,9 +1,9 @@
-<select name="myMenu" multiple size="1">	<option value="Red">Red</option>
+<select id="myMenu" name="myMenu" multiple size="1">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </select>
-<select name="myListbox" multiple size="5">	<option value="Red">Red</option>
+<select id="myListbox" name="myListbox" multiple size="5">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 <optgroup label="group">	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
@@ -23,9 +23,9 @@
 	</tr>
 </table>	</tr>
 </table></span>
-<select name="myOnemenu" size="1">	<option value="Red">Red</option>
+<select id="myOnemenu" name="myOnemenu" size="1">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </select>
-<input type="hidden" name="myInputDateHidden" value="Jan 12, 1952" /><input type="hidden" name="myNumberHidden" value="47%" />
+<input id="myInputDateHidden" type="hidden" name="myInputDateHidden" value="Jan 12, 1952" /><input id="myNumberHidden" type="hidden" name="myNumberHidden" value="47%" />

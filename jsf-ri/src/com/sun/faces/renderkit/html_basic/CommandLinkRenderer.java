@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.4 2003/12/24 19:11:19 jvisvanathan Exp $
+ * $Id: CommandLinkRenderer.java,v 1.5 2004/01/14 17:13:02 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandLinkRenderer.java,v 1.4 2003/12/24 19:11:19 jvisvanathan Exp $
+ * @version $Id: CommandLinkRenderer.java,v 1.5 2004/01/14 17:13:02 eburns Exp $
  */
 
 public class CommandLinkRenderer extends HtmlBasicRenderer {
@@ -164,6 +164,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         Param paramList[] = getParamList(context, command);
 	StringBuffer sb = new StringBuffer();
 	writer.startElement("a", component);
+	writeIdAttributeIfNecessary(context, writer, component);
 	writer.writeAttribute("href", "#", "href");
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);

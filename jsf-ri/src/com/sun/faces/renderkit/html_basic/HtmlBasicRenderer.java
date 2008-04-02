@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.74 2004/01/10 03:16:38 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.75 2004/01/14 17:13:02 eburns Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIInput;
@@ -380,6 +381,34 @@ public abstract class HtmlBasicRenderer extends Renderer {
                 break;
         }
         return retComp;
+    }
+
+    /**
+     * @return true if this renderer should render an id attribute.
+     */
+    protected boolean shouldWriteIdAttribute(UIComponent component) {
+	String id;
+	return (null != (id = component.getId()) && 
+		!id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
+    }
+	
+
+    protected void writeIdAttributeIfNecessary(FacesContext context,
+					       ResponseWriter writer,
+					       UIComponent component) {
+	String id;
+	if (shouldWriteIdAttribute(component)) {
+	    try {
+		writer.writeAttribute("id", component.getClientId(context), 
+				      "id");
+	    }
+	    catch (IOException e) {
+		if (log.isDebugEnabled()) {
+		    // PENDING I18N
+		    log.debug("Can't write ID attribute" + e.getMessage());
+		}
+            }
+	}
     }
 
     protected Param[] getParamList(FacesContext context, UIComponent command) {

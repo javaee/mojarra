@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.13 2003/12/17 15:13:53 rkitain Exp $
+ * $Id: HiddenRenderer.java,v 1.14 2004/01/14 17:13:02 eburns Exp $
  */
 
 /*
@@ -85,6 +85,7 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
         Util.doAssert(writer != null );
 
 	writer.startElement("input", component);
+	writeIdAttributeIfNecessary(context, writer, component);
 	writer.writeAttribute("type", "hidden", "type");
 	writer.writeAttribute("name", component.getClientId(context), "clientId");
 

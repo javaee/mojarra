@@ -11,11 +11,11 @@
     
     
     
-        <input type="submit" name="button01" value="My Label" />
-        <input type="reset" name="button02" value="This is a String property" />
-        <input type="submit" name="button03" value="RES-BUNDLE KEY" />
-        <input type="image" src="duke.gif" name="button04" />
-        <input type="image" src="resbundle_image.gif" name="button05" />
+        <input id="button01" type="submit" name="button01" value="My Label" />
+        <input id="button02" type="reset" name="button02" value="This is a String property" />
+        <input id="button03" type="submit" name="button03" value="RES-BUNDLE KEY" />
+        <input id="button04" type="image" src="duke.gif" name="button04" />
+        <input id="button05" type="image" src="resbundle_image.gif" name="button05" />
     
 </body>
 </html>

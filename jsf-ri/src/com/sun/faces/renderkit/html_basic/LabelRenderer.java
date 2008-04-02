@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.21 2003/12/17 15:13:55 rkitain Exp $
+ * $Id: LabelRenderer.java,v 1.22 2004/01/14 17:13:03 eburns Exp $
  */
 
 /*
@@ -109,6 +109,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
         // label end element needs to be rendered.
         component.getAttributes().put(RENDER_END_ELEMENT, "yes");
 	writer.startElement("label", component);
+	writeIdAttributeIfNecessary(context, writer, component);
         String forClientId = forComponent.getClientId(context);
 	writer.writeAttribute("for", forClientId, "for");
 

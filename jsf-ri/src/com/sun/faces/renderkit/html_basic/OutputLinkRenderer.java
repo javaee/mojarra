@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.4 2004/01/08 21:21:33 eburns Exp $
+ * $Id: OutputLinkRenderer.java,v 1.5 2004/01/14 17:13:04 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.4 2004/01/08 21:21:33 eburns Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.5 2004/01/14 17:13:04 eburns Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -110,6 +110,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = context.getResponseWriter();
         Util.doAssert( writer != null );
 	writer.startElement("a", component);
+	writeIdAttributeIfNecessary(context, writer, component);
 
         // Go no further if  we have no href.
         if (null == hrefVal || 0 == hrefVal.length()) {

@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.59 2004/01/06 14:53:22 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.60 2004/01/14 17:13:04 eburns Exp $
  */
 
 /*
@@ -86,13 +86,16 @@ public class TextRenderer extends HtmlBasicInputRenderer {
         
         ResponseWriter writer = context.getResponseWriter();
         Util.doAssert(writer != null );
-	boolean isOutput = false;
+	boolean 
+	    shouldWriteIdAttribute = false,
+	    isOutput = false;
 
 	String 
 	    style = (String) component.getAttributes().get("style"),
 	    styleClass = (String) component.getAttributes().get("styleClass");
         if (component instanceof UIInput) {
 	    writer.startElement("input", component);
+	    writeIdAttributeIfNecessary(context, writer, component);
 	    writer.writeAttribute("type", "text", null);
 	    writer.writeAttribute("name", (component.getClientId(context)), "clientId");
 
@@ -111,8 +114,10 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 	    writer.endElement("input");
 
         } else if (isOutput = (component instanceof UIOutput)) {
-	    if (null != styleClass || null != style) {
+	    if (null != styleClass || null != style || 
+		(shouldWriteIdAttribute = shouldWriteIdAttribute(component))) {
 		writer.startElement("span", component);
+		writeIdAttributeIfNecessary(context, writer, component);
 		if (null != styleClass) {
 		    writer.writeAttribute("class", styleClass, "styleClass");
 		}
@@ -143,7 +148,8 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 		}
             }
         }
-	if (isOutput && (null != styleClass || null != style)) {
+	if (isOutput && (null != styleClass || null != style || 
+			 shouldWriteIdAttribute)) {
 	    writer.endElement("span");
 	}
     }

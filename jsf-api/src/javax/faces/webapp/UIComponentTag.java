@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.34 2004/01/11 21:15:03 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.35 2004/01/14 17:12:52 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.webapp;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.el.ValueBinding;
@@ -180,11 +181,22 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
-     * <p>Set the component identifier for our component.</p>
+     * <p>Set the component identifier for our component.  If the
+     * argument begins with {@link
+     * UIViewRoot.UNIQUE_ID_PREFIX} throw an
+     * <code>IllegalArgumentException</code></p>
      *
-     * @param id The new component identifier
+     * @param id The new component identifier.  This may not start with
+     * {@link UIViewRoot.UNIQUE_ID_PREFIX}.
+     *
+     * @exception IllegalArgumentException if the argument is
+     * non-<code>null</code> and starts with {@link
+     * UIViewRoot.UNIQUE_ID_PREFIX}.
      */
     public void setId(String id) {
+	if (null != id && id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
+	    throw new IllegalArgumentException();
+	}
 
         this.id = id;
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.12 2004/01/07 20:21:39 eburns Exp $
+ * $Id: TableRenderer.java,v 1.13 2004/01/14 17:13:04 eburns Exp $
  */
 
 /*
@@ -62,6 +62,9 @@ import javax.faces.context.ResponseWriter;
 
 public class TableRenderer extends HtmlBasicRenderer {
 
+    public boolean getRendersChildren() {
+	return true;
+    }
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
@@ -79,6 +82,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	// Render the beginning of the table
 	ResponseWriter writer = context.getResponseWriter();
         writer.startElement("table", data);
+	writeIdAttributeIfNecessary(context, writer, component);
 	String styleClass = (String) data.getAttributes().get("styleClass");
 	if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");

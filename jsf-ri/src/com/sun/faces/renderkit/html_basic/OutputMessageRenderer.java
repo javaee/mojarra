@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.4 2004/01/08 21:21:33 eburns Exp $
+ * $Id: OutputMessageRenderer.java,v 1.5 2004/01/14 17:13:04 eburns Exp $
  */
 
 /*
@@ -146,9 +146,13 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         } else {
             message = currentValue;
         }
+	boolean wroteSpan = false;
                 
-	if (null != styleClass || null != style) {
+	if (null != styleClass || null != style || 
+	    shouldWriteIdAttribute(component)) {
 	    writer.startElement("span", component);
+	    wroteSpan = true;
+	    
 	    if (null != styleClass) {
 		writer.writeAttribute("class", styleClass, "styleClass");
 	    }
@@ -157,7 +161,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
 	    }
 	}
         writer.writeText(message, null);
-	if (null != styleClass || null != style) {
+	if (wroteSpan) {
 	    writer.endElement("span");
 	}
     }

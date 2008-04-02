@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.49 2003/12/17 15:13:57 rkitain Exp $
+ * $Id: SecretRenderer.java,v 1.50 2004/01/14 17:13:04 eburns Exp $
  */
 
 /*
@@ -91,6 +91,7 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
         }
 
 	writer.startElement("input", component);
+	writeIdAttributeIfNecessary(context, writer, component);
 	writer.writeAttribute("type", "password", "type");
 	writer.writeAttribute("name", component.getClientId(context), "clientId"); 
 

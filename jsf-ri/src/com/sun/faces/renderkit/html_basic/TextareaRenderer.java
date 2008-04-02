@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.2 2003/12/17 15:13:57 rkitain Exp $
+ * $Id: TextareaRenderer.java,v 1.3 2004/01/14 17:13:05 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.servlet.ServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextareaRenderer.java,v 1.2 2003/12/17 15:13:57 rkitain Exp $
+ * @version $Id: TextareaRenderer.java,v 1.3 2004/01/14 17:13:05 eburns Exp $
  * 
  */
 
@@ -97,6 +97,7 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
         Util.doAssert(writer != null );	
 
 	writer.startElement("textarea", component);
+	writeIdAttributeIfNecessary(context, writer, component);
 	writer.writeAttribute("name", component.getClientId(context), "clientId");
 
         Util.renderPassThruAttributes(writer, component);

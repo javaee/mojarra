@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.23 2004/01/08 21:21:11 eburns Exp $
+ * $Id: UIPanel.java,v 1.24 2004/01/14 17:12:51 eburns Exp $
  */
 
 /*
@@ -38,17 +38,4 @@ public class UIPanel extends UIComponentBase {
 
     }
 
-
-    // -------------------------------------------------- UIComponent Properties
-
-
-    /**
-     * <p>Return <code>true</code> to indicate that this component takes
-     * responsibility for rendering its children.</p>
-     */
-    public boolean getRendersChildren() {
-
-        return (true);
-
-    }
 }

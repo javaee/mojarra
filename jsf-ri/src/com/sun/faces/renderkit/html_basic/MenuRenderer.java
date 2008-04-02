@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.38 2004/01/08 21:21:32 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.39 2004/01/14 17:13:03 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -372,6 +372,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Util.doAssert(writer != null );
 
 	writer.startElement("select", component);
+	writeIdAttributeIfNecessary(context, writer, component);
 	writer.writeAttribute("name", component.getClientId(context), "clientId");
 	if (!getMultipleText(component).equals("")) {
 	    writer.writeAttribute("multiple", Boolean.TRUE, null);

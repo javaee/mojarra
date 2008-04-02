@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.40 2003/12/17 15:13:56 rkitain Exp $
+ * $Id: MessageRenderer.java,v 1.41 2004/01/14 17:13:03 eburns Exp $
  */
 
 /*
@@ -196,13 +196,20 @@ public class MessageRenderer extends HtmlBasicRenderer {
         //present or layout is list just do the spans in a linear fashion.
         if ((layout != null) && (layout.equals("table"))) {
             writer.startElement("table", component);
+	    writeIdAttributeIfNecessary(context, writer, component);
             writer.startElement("tr", component);
             writer.startElement("td", component);
             wroteTable = true;
         }
 
-	if (styleClass != null || style != null) {
+	if (styleClass != null || style != null || 
+	    shouldWriteIdAttribute(component)) {
             writer.startElement("span", component);
+	    // don't output the id twice
+	    if (!wroteTable) {
+		writeIdAttributeIfNecessary(context, writer, component);
+	    }
+
             wroteSpan = true;
 	    if (styleClass != null) {
 		writer.writeAttribute("class", styleClass, "styleClass");

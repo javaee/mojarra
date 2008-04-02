@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.13 2003/12/24 19:11:20 jvisvanathan Exp $
+ * $Id: GroupRenderer.java,v 1.14 2004/01/14 17:13:02 eburns Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.context.ResponseWriter;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method. 
  *
- * @version $Id: GroupRenderer.java,v 1.13 2003/12/24 19:11:20 jvisvanathan Exp $
+ * @version $Id: GroupRenderer.java,v 1.14 2004/01/14 17:13:02 eburns Exp $
  *  
  */
 public class GroupRenderer extends HtmlBasicRenderer {
@@ -40,7 +40,6 @@ public class GroupRenderer extends HtmlBasicRenderer {
     //
 
     // Attribute Instance Variables
-
 
     // Relationship Instance Variables
 
@@ -64,6 +63,10 @@ public class GroupRenderer extends HtmlBasicRenderer {
     // Methods From Renderer
     //
 
+    public boolean getRendersChildren() {
+	return true;
+    }
+
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         // suppress rendering if "rendered" property on the component is
@@ -74,10 +77,21 @@ public class GroupRenderer extends HtmlBasicRenderer {
 	String 
 	    style = (String) component.getAttributes().get("style"),
 	    styleClass = (String) component.getAttributes().get("styleClass");
-	if (null != styleClass || null != style) {
-	    ResponseWriter writer = context.getResponseWriter();
-	    
+	boolean wroteSpan = false;
+	ResponseWriter writer = context.getResponseWriter();
+
+	if (shouldWriteIdAttribute(component)) {
+	    wroteSpan = true;
 	    writer.startElement("span", component);
+	    writeIdAttributeIfNecessary(context, writer, component);
+	}
+
+	if (null != styleClass || null != style) {
+	    
+	    if (!wroteSpan) {
+		wroteSpan = true;
+		writer.startElement("span", component);
+	    }
 	    if (null != styleClass) {
 		writer.writeAttribute("class", styleClass, "styleClass");
 	    }
@@ -113,12 +127,10 @@ public class GroupRenderer extends HtmlBasicRenderer {
 	String 
 	    style = (String) component.getAttributes().get("style"),
 	    styleClass = (String) component.getAttributes().get("styleClass");
-	if (null != styleClass || null != style) {
-	    ResponseWriter writer = context.getResponseWriter();
-
-	    if (null != styleClass || null != style) {
-		writer.endElement("span");
-	    }
+	ResponseWriter writer = context.getResponseWriter();
+	if (null != styleClass || null != style || 
+	    shouldWriteIdAttribute(component)) {
+	    writer.endElement("span");
 	}
 
     }

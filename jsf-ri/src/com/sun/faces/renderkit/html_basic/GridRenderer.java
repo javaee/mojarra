@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.22 2003/12/24 19:11:20 jvisvanathan Exp $
+ * $Id: GridRenderer.java,v 1.23 2004/01/14 17:13:02 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.22 2003/12/24 19:11:20 jvisvanathan Exp $
+ * @version $Id: GridRenderer.java,v 1.23 2004/01/14 17:13:02 eburns Exp $
  *  
  */
 
@@ -71,6 +71,10 @@ public class GridRenderer extends HtmlBasicRenderer {
     // Methods From Renderer
     //
 
+    public boolean getRendersChildren() {
+	return true;
+    }
+
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
 
@@ -89,6 +93,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         // Render the beginning of this panel
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement("table", component);
+	writeIdAttributeIfNecessary(context, writer, component);
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }

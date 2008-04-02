@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.21 2003/12/17 15:11:32 rkitain Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.22 2004/01/14 17:12:58 eburns Exp $
  */
 
 /*
@@ -266,6 +266,28 @@ public class UIComponentTagTestCase extends TagTestCaseBase {
         render();
         assertEquals("/b" + UIViewRoot.UNIQUE_ID_PREFIX + "1/e" + UIViewRoot.UNIQUE_ID_PREFIX + "1", text());
         assertEquals("/ROOT/" + UIViewRoot.UNIQUE_ID_PREFIX + "1-a", tree());
+
+    }
+
+    public void testUniqueId() throws Exception {
+	UIComponentTag tag = new TestTag();
+	boolean exceptionThrown = false;
+	try {
+	    tag.setId(UIViewRoot.UNIQUE_ID_PREFIX + "ha");
+	}
+	catch (IllegalArgumentException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+	
+	exceptionThrown = false;
+	try {
+	    tag.setId("ha");
+	}
+	catch (IllegalArgumentException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(!exceptionThrown);
 
     }
 

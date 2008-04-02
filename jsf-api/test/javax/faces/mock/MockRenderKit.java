@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKit.java,v 1.10 2004/01/08 21:21:27 eburns Exp $
+ * $Id: MockRenderKit.java,v 1.11 2004/01/14 17:12:57 eburns Exp $
  */
 
 /*
@@ -30,6 +30,9 @@ public class MockRenderKit extends RenderKit {
 
     public MockRenderKit() {
         addRenderer("TestRenderer", new TestRenderer());
+        addRenderer("Panel", new TestRenderer(true));
+        addRenderer("Grid", new TestRenderer(true));
+        addRenderer("Table", new TestRenderer(true));
     }
 
 
@@ -86,6 +89,14 @@ public class MockRenderKit extends RenderKit {
 
 
     class TestRenderer extends Renderer {
+
+	private boolean rendersChildren = false;
+
+	public TestRenderer() {}
+       
+	public TestRenderer(boolean rendersChildren) {
+	    this.rendersChildren = rendersChildren;
+	}
 
         public void decode(FacesContext context, UIComponent component) {
 

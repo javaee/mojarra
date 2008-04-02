@@ -202,18 +202,6 @@ public class UIData extends UIComponentBase
 
     }
 
-
-    /**
-     * <p>Return <code>true</code> to indicate that this component takes
-     * responsibility for rendering its children.</p>
-     */
-    public boolean getRendersChildren() {
-
-        return (true);
-
-    }
-
-
     /**
      * <p>Return a flag indicating whether there is <code>rowData</code>
      * available at the current <code>rowIndex</code>.  If no

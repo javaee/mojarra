@@ -1,11 +1,11 @@
-<input type="checkbox" name="myCheckbox" checked />
-<input type="checkbox" name="myCheckbox" />
-<input type="checkbox" name="myCheckbox" />
-<select name="myListbox" size="4">	<option value="100"  selected>Long1</option>
+<input id="myCheckbox" type="checkbox" name="myCheckbox" checked />
+<input id="myCheckbox" type="checkbox" name="myCheckbox" />
+<input id="myCheckbox" type="checkbox" name="myCheckbox" />
+<select id="myListbox" name="myListbox" size="4">	<option value="100"  selected>Long1</option>
 	<option value="101">Long2</option>
 	<option value="102">Long3</option>
 	<option value="103">Long4</option>
 </select>
-<input type="password" name="mySecret" value="" />
-<input type="text" name="myInputText" value="text" /><textarea name="myTextarea">TextareaRenderer</textarea>
-<img id="myGraphicImage" src="/test/nonModelReferenceImage.gif;jsessionid=CE3C052680005E352476DAD1A410AAC9" /><img id="id0" src="/test/foo/modelReferenceImage.gif;jsessionid=CE3C052680005E352476DAD1A410AAC9" />My name is Bobby Orr
+<input id="mySecret" type="password" name="mySecret" value="" />
+<input id="myInputText" type="text" name="myInputText" value="text" /><span id="myOutputText"></span><textarea id="myTextarea" name="myTextarea">TextareaRenderer</textarea>
+<img id="myGraphicImage" src="/test/nonModelReferenceImage.gif" usemap="usemap" ismap="ismap" alt="" /><img id="_id0" src="/test/foo/modelReferenceImage.gif" usemap="usemap" ismap="ismap" alt="" /><span>My name is Bobby Orr</span>
