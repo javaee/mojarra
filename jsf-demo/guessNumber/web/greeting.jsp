@@ -52,7 +52,7 @@
          </h:input_text> 
 	 <h:command_button id="submit" action="success" value="Submit" />
          <p>
-	 <h:output_errors id="errors1" for="userNo"/>
+	 <h:messages id="errors1" for="userNo"/>
 
     </h:form>
     </f:view>

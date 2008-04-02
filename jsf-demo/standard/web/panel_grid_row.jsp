@@ -37,7 +37,7 @@
                                    value="username"
                                 required="true"/>
 
-                    <h:output_errors for="form1:username1"/>
+                    <h:messages for="form1:username1"/>
 
                     <h:output_text value="Password:"/>
 
@@ -45,7 +45,7 @@
                                    value="password"
                                 required="true"/>
 
-                    <h:output_errors for="form1:password1"/>
+                    <h:messages for="form1:password1"/>
 
                     <h:command_button id="submit1"
                                actionRef="LoginForm.login"
@@ -106,7 +106,7 @@
                             componentRef="LoginForm.username"
                                 required="true"/>
 
-                    <h:output_errors for="form2:username2"/>
+                    <h:messages for="form2:username2"/>
 
                     <h:output_text value="Password:"/>
 
@@ -114,7 +114,7 @@
                             componentRef="LoginForm.password"
                                 required="true"/>
 
-                    <h:output_errors for="form2:password2"/>
+                    <h:messages for="form2:password2"/>
 
                     <h:command_button id="submit2"
                                actionRef="LoginForm.login"

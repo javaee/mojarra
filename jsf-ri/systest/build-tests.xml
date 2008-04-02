@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.35 2003/10/31 18:42:22 eburns Exp $
+ $Id: build-tests.xml,v 1.36 2003/11/11 01:22:38 eburns Exp $
 -->
 
 
@@ -438,8 +438,8 @@
           description="Test the Standard RenderKit">
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
-         request="${context.path}/faces/standard/output_errors01.jsp"
-          golden="${golden.path}/standard/output_errors01.txt"/>
+         request="${context.path}/faces/standard/messages01.jsp"
+          golden="${golden.path}/standard/messages01.txt"/>
           
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/standard/componentRef01.jsp"

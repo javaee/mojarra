@@ -1021,49 +1021,6 @@
   </component>
 
   <component>
-    <component-type>OutputErrors</component-type>
-    <component-class>javax.faces.component.html.HtmlOutputErrors</component-class>
-    &base-props;
-    <property>
-      <description></description>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>for</property-name>
-      <property-class>java.lang.String</property-class>
-    </property>
-    <property>
-      <description></description>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>styleClass</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <description></description>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>style</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>value</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>converter</property-name>
-      <property-class>javax.faces.convert.Converter</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-  </component>
-
-  <component>
     <component-type>OutputLabel</component-type>
     <component-class>javax.faces.component.html.HtmlOutputLabel</component-class>
     &base-props;
@@ -2207,42 +2164,6 @@
       </supported-component-type>
       <supported-component-class>
         <component-class>javax.faces.component.html.HtmlSelectBooleanCheckbox</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Errors</renderer-type>
-      <renderer-class>&errors-renderer-class;</renderer-class>
-      <!-- PENDING(edburns): make sure we render DIV and stuff the below
-           attrs there.  -->
-
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-
-      <!-- non-html renderer specific attributes -->
-
-      <attribute>
-        <description>the id of the component for which the errors should be displayed</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>for</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the color in which to display the error messages</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>color</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-type>
-        <component-type>OutputErrors</component-type>
-      </supported-component-type>
-      <supported-component-class>
-        <component-class>javax.faces.component.html.HtmlOutputErrors</component-class>
       </supported-component-class>
     </renderer>
 

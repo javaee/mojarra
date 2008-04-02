@@ -90,7 +90,7 @@
         <h:input_text id="middleInitial" size="1" maxlength="1" 
             valueRef="CustomerBean.middleInitial" > 
         </h:input_text>
-        <h:output_errors  for="middleInitial"/> 
+        <h:messages  for="middleInitial"/> 
         </font></td>
                               </tr>
                               <tr> 
@@ -183,7 +183,7 @@
                         size="10" required="true">
           <cd:format_validator formatPatterns="99999|99999-9999|### ###"/> 
        </h:input_text>
-      <h:output_errors  for="zip" />    
+      <h:messages  for="zip" />    
             </font></td>
                               </tr>
                               <tr> </tr>
@@ -199,7 +199,7 @@
           <cd:format_validator 
           formatPatterns="9999999999999999|9999 9999 9999 9999|9999-9999-9999-9999"/>
       </h:input_text>
-      <h:output_errors  for="ccno"/> </font></td>
+      <h:messages  for="ccno"/> </font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
@@ -234,7 +234,7 @@
                             </tbody>
                           </table>
 
-<h:output_errors for=""/>
+<h:messages for=""/>
     
 <h:command_button  value="#{carDemoBundle.finishButton}"
         action="success" />

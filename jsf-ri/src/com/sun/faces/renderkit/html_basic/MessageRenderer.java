@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.33 2003/11/10 21:28:38 horwat Exp $
+ * $Id: MessageRenderer.java,v 1.34 2003/11/11 01:22:35 eburns Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import org.mozilla.util.Assert;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIMessage;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.application.FacesMessage;
@@ -36,6 +37,20 @@ public class MessageRenderer extends HtmlBasicRenderer {
     // Private/Protected Constants
     //
     private static final Log log = LogFactory.getLog(MessageRenderer.class);
+
+    // 
+    // Ivars
+    // 
+
+    private OutputMessageRenderer omRenderer = null;
+
+    //
+    // Ctors
+    // 
+
+    public MessageRenderer() {
+	omRenderer = new OutputMessageRenderer();
+    }
    
     //
     // Methods From Renderer
@@ -46,12 +61,21 @@ public class MessageRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+	if (component instanceof UIOutput) {
+	    omRenderer.encodeBegin(context, component);
+	    return;
+	}
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+	if (component instanceof UIOutput) {
+	    omRenderer.encodeChildren(context, component);
+	    return;
+	}
+
     }
 
     public void encodeEnd(FacesContext context, UIComponent component) 
@@ -59,6 +83,11 @@ public class MessageRenderer extends HtmlBasicRenderer {
         Iterator messageIter = null;        
         FacesMessage curMessage = null;
         ResponseWriter writer = null;
+
+	if (component instanceof UIOutput) {
+	    omRenderer.encodeEnd(context, component);
+	    return;
+	}
         
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
@@ -88,8 +117,16 @@ public class MessageRenderer extends HtmlBasicRenderer {
         curMessage = (FacesMessage) messageIter.next();
 
         String
+	    summary = null,
+	    detail = null,
             severityStyle = null,
             severityStyleClass = null;
+	// make sure we have a non-null value for summary and
+	// detail.
+	summary = (null != (summary = curMessage.getSummary())) ? 
+	    summary : "";
+	detail = (null != (detail = curMessage.getDetail())) ? 
+	    detail : "";
 
         if (curMessage.getSeverity() == FacesMessage.SEVERITY_INFO) {
             severityStyle = (String) component.getAttributes().get("infoStyle");
@@ -180,18 +217,18 @@ public class MessageRenderer extends HtmlBasicRenderer {
                  writer.startElement("span", component);
                  wroteTooltip = true;
             }
-            writer.writeAttribute("title", curMessage.getSummary(), "title");
+            writer.writeAttribute("title", summary, "title");
             writer.closeStartTag(component);
 
 	    writer.writeText("\t", null);
-	    writer.writeText(curMessage.getDetail(), null);
+	    writer.writeText(detail, null);
         } else if (wroteSpan) {
             writer.closeStartTag(component);
 
 	    writer.writeText("\t", null);
-	    writer.writeText(curMessage.getSummary(), null);
+	    writer.writeText(summary, null);
 	    writer.writeText(" ", null);
-	    writer.writeText(curMessage.getDetail(), null);
+	    writer.writeText(detail, null);
         }
 
 	if (wroteSpan || wroteTooltip) {

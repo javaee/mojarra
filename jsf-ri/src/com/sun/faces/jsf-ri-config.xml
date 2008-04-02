@@ -109,11 +109,6 @@
   </component>
 
   <component>
-    <component-type>OutputErrors</component-type>
-    <component-class>javax.faces.component.html.HtmlOutputErrors</component-class>
-  </component>
-  
-  <component>
     <component-type>OutputLabel</component-type>
     <component-class>javax.faces.component.html.HtmlOutputLabel</component-class>
   </component>
@@ -291,6 +286,16 @@
     <component-type>NamingContainer</component-type>
     <component-class>javax.faces.component.UINamingContainer</component-class>
   </component>
+
+  <component>
+    <component-type>Message</component-type>
+    <component-class>javax.faces.component.html.HtmlMessage</component-class>
+  </component>
+
+  <component>
+    <component-type>Messages</component-type>
+    <component-class>javax.faces.component.html.HtmlMessages</component-class>
+  </component>  
 
   <!-- standard converters -->
   <converter>

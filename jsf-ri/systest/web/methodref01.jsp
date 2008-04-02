@@ -32,7 +32,7 @@
         <h:command_button id="validate" value="validate"/>
         <h:input_text id="validateStatus" readonly="true" 
                       value="#{methodRef.validateOutcome}"/>
-        <h:output_errors for="toValidate"/>
+        <h:messages for="toValidate"/>
 
         <hr>
 	<p>test value change</p>

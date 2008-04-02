@@ -27,7 +27,7 @@
 
 	      <td>
 
-		<h:output_errors id="inputDatetime2Errors" 
+		<h:messages id="inputDatetime2Errors" 
 		        for="inputDatetime2" />
 
 	      </td>

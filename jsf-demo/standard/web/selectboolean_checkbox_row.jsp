@@ -60,7 +60,7 @@
 
              <td>
 
-                <h:output_errors id="checkbox3Errors"
+                <h:messages id="checkbox3Errors"
                           for="checkbox3" />
 
               </td

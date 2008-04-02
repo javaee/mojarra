@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.1 2003/11/10 21:28:38 horwat Exp $
+ * $Id: MessagesRenderer.java,v 1.2 2003/11/11 01:22:36 eburns Exp $
  */
 
 /*
@@ -97,8 +97,17 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             curMessage = (FacesMessage) messageIter.next();
 
             String
+		summary = null,
+		detail = null,
                 severityStyle = null,
                 severityStyleClass = null;
+	    // make sure we have a non-null value for summary and
+	    // detail.
+	    summary = (null != (summary = curMessage.getSummary())) ? 
+		summary : "";
+	    detail = (null != (detail = curMessage.getDetail())) ? 
+		detail : "";
+	    
 
             if (curMessage.getSeverity() == FacesMessage.SEVERITY_INFO) {
                 severityStyle = (String) component.getAttributes().get("infoStyle");
@@ -183,18 +192,18 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                      writer.startElement("span", component);
                      wroteTooltip = true;
                 }
-                writer.writeAttribute("title", curMessage.getSummary(), "title");
+                writer.writeAttribute("title", summary, "title");
                 writer.closeStartTag(component);
 
 	        writer.writeText("\t", null);
-	        writer.writeText(curMessage.getDetail(), null);
+	        writer.writeText(detail, null);
             } else if (wroteSpan) {
                 writer.closeStartTag(component);
 
 	        writer.writeText("\t", null);
-	        writer.writeText(curMessage.getSummary(), null);
+	        writer.writeText(summary, null);
 	        writer.writeText(" ", null);
-	        writer.writeText(curMessage.getDetail(), null);
+	        writer.writeText(detail, null);
             }
 
 	    if (wroteSpan || wroteTooltip) {

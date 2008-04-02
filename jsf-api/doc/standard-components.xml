@@ -737,56 +737,6 @@
     </renderer>
 
     <renderer>
-      <renderer-type>Errors</renderer-type>
-      <renderer-class>&errors-renderer-class;</renderer-class>
-      <!-- PENDING(edburns): make sure we render DIV and stuff the below
-           attrs there.  -->
-
-      &core-attrs;
-
-      <!-- non-html renderer specific attributes -->
-
-      <attribute>
-        <description>the id of the component for which the errors should be displayed</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>for</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the color in which to display the error messages</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>color</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>CSS style class</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>styleClass</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>CSS style</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>style</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-type>
-        <component-type>Output</component-type>
-      </supported-component-type>
-      <supported-component-class>
-        <component-class>javax.faces.component.UIOutput</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
       <renderer-type>Form</renderer-type>
       <renderer-class>&form-renderer-class;</renderer-class>
       &core-attrs;

@@ -17,6 +17,7 @@
 <!ENTITY menu-renderer-class 'com.sun.faces.renderkit.html_basic.MenuRenderer'>
 <!ENTITY message-renderer-class 'com.sun.faces.renderkit.html_basic.MessageRenderer'>
 <!ENTITY messages-renderer-class 'com.sun.faces.renderkit.html_basic.MessagesRenderer'>
+<!ENTITY output-message-renderer-class 'com.sun.faces.renderkit.html_basic.OutputMessageRenderer'>
 <!ENTITY radio-renderer-class 'com.sun.faces.renderkit.html_basic.RadioRenderer'>
 <!ENTITY secret-renderer-class 'com.sun.faces.renderkit.html_basic.SecretRenderer'>
 <!ENTITY selectmanycheckboxlist-renderer-class 'com.sun.faces.renderkit.html_basic.SelectManyCheckboxListRenderer'>

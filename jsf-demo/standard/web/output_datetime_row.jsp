@@ -23,7 +23,7 @@
 
 	      <td>
 
-		<h:output_errors id="outputDatetime2Errors" 
+		<h:messages id="outputDatetime2Errors" 
 		        for="outputDatetime2" />
 
 	      </td>
@@ -47,7 +47,7 @@
 
 	      <td>
 
-		<h:output_errors id="outputDatetime3Errors" 
+		<h:messages id="outputDatetime3Errors" 
 		        for="outputDatetime2" />
 
 	      </td>

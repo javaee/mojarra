@@ -50,7 +50,7 @@
 
 	      <td>
 
-		<h:output_errors id="inputSecret2Errors" 
+		<h:messages id="inputSecret2Errors" 
 			  for="inputSecret2" />
 
 	      </td>
@@ -80,7 +80,7 @@
 
 	      <td>
 
-		<h:output_errors id="inputSecret3Errors" 
+		<h:messages id="inputSecret3Errors" 
 			  for="inputSecret3" />
 
 	      </td>
@@ -111,7 +111,7 @@
 
 	      <td>
 
-		<h:output_errors id="inputSecret4Errors" 
+		<h:messages id="inputSecret4Errors" 
 			  for="inputSecret4" />
 
 	      </td>

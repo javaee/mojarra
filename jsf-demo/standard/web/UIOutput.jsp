@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIOutput.jsp,v 1.5 2003/11/09 03:25:12 eburns Exp $ --%>
+<%-- $Id: UIOutput.jsp,v 1.6 2003/11/11 01:22:48 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -57,7 +57,7 @@
 </td>
 
 <td>
-		<h:output_errors id="globalErrors" />
+		<h:messages id="globalErrors" />
 </td>
 
 </tr>
