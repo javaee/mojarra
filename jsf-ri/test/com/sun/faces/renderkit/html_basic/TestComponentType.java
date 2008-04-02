@@ -1,9 +1,9 @@
 /*
- * $Id: TestComponentType.java,v 1.6 2003/10/02 00:40:18 jvisvanathan Exp $
+ * $Id: TestComponentType.java,v 1.7 2004/02/04 23:44:47 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -32,7 +32,7 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestComponentType.java,v 1.6 2003/10/02 00:40:18 jvisvanathan Exp $
+ * @version $Id: TestComponentType.java,v 1.7 2004/02/04 23:44:47 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

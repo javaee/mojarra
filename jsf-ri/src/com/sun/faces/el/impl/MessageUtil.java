@@ -1,4 +1,9 @@
 /*
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+/*
  * The Apache Software License, Version 1.1
  *
  * Copyright (c) 1999 The Apache Software Foundation.  All rights 
@@ -60,7 +65,7 @@ import java.text.MessageFormat;
 /**
  * <p>Utility class for generating parameterized messages.</p> 
  * 
- * @version $Id: MessageUtil.java,v 1.1 2003/08/13 18:09:09 rlubke Exp $
+ * @version $Id: MessageUtil.java,v 1.2 2004/02/04 23:41:08 ofung Exp $
  */
 
 public class MessageUtil {

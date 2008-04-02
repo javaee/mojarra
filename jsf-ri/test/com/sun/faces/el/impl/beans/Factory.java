@@ -1,4 +1,9 @@
 /*
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+/*
  * The Apache Software License, Version 1.1
  *
  * Copyright (c) 1999-2003 The Apache Software Foundation.  All rights 
@@ -59,7 +64,7 @@ package com.sun.faces.el.impl.beans;
  * <p>A factory for generating the various beans
  * 
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: rlubke $
+ * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author: ofung $
  **/
 
 public class Factory

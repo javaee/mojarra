@@ -1,9 +1,9 @@
 /*
- * $Id: TestConverters.java,v 1.25 2004/01/27 21:05:59 eburns Exp $
+ * $Id: TestConverters.java,v 1.26 2004/02/04 23:44:19 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.25 2004/01/27 21:05:59 eburns Exp $
+ * @version $Id: TestConverters.java,v 1.26 2004/02/04 23:44:19 ofung Exp $
  * 
  *
  */

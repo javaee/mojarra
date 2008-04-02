@@ -1,9 +1,9 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.27 2004/01/30 22:35:36 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.28 2004/02/04 23:41:00 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

@@ -1,9 +1,9 @@
 /*
- * $Id: HtmlUtils.java,v 1.3 2003/11/11 20:03:16 eburns Exp $
+ * $Id: HtmlUtils.java,v 1.4 2004/02/04 23:42:18 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

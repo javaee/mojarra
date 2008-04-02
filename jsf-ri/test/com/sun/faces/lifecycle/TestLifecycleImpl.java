@@ -1,9 +1,9 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.25 2004/01/27 21:06:03 eburns Exp $
+ * $Id: TestLifecycleImpl.java,v 1.26 2004/02/04 23:44:33 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -41,7 +41,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.25 2004/01/27 21:06:03 eburns Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.26 2004/02/04 23:44:33 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

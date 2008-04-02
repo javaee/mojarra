@@ -1,9 +1,9 @@
 /*
- * $Id: TestValidatorTags.java,v 1.23 2003/10/30 22:15:48 jvisvanathan Exp $
+ * $Id: TestValidatorTags.java,v 1.24 2004/02/04 23:44:53 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -32,7 +32,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.23 2003/10/30 22:15:48 jvisvanathan Exp $ 
+ * @version $Id: TestValidatorTags.java,v 1.24 2004/02/04 23:44:53 ofung Exp $ 
  */
 
 public class TestValidatorTags extends JspFacesTestCase

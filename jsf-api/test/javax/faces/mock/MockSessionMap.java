@@ -1,9 +1,9 @@
 /*
- * $Id: MockSessionMap.java,v 1.2 2003/07/26 17:55:35 craigmcc Exp $
+ * $Id: MockSessionMap.java,v 1.3 2004/02/04 23:39:14 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

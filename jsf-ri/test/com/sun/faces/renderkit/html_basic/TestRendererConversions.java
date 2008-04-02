@@ -1,9 +1,9 @@
 /*
- * $Id: TestRendererConversions.java,v 1.9 2003/12/17 15:15:37 rkitain Exp $
+ * $Id: TestRendererConversions.java,v 1.10 2004/02/04 23:44:48 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -33,7 +33,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.9 2003/12/17 15:15:37 rkitain Exp $
+ * @version $Id: TestRendererConversions.java,v 1.10 2004/02/04 23:44:48 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

@@ -1,9 +1,9 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.12 2004/01/27 21:04:09 eburns Exp $
+ * $Id: ManagedBeanFactory.java,v 1.13 2004/02/04 23:40:53 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

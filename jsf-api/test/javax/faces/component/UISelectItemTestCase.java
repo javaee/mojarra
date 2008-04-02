@@ -1,9 +1,9 @@
 /*
- * $Id: UISelectItemTestCase.java,v 1.11 2004/01/30 22:57:19 horwat Exp $
+ * $Id: UISelectItemTestCase.java,v 1.12 2004/02/04 23:38:49 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

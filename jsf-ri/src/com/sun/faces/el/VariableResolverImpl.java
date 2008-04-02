@@ -1,9 +1,9 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.14 2003/12/17 15:13:38 rkitain Exp $
+ * $Id: VariableResolverImpl.java,v 1.15 2004/02/04 23:41:00 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

@@ -1,10 +1,10 @@
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.31 2004/01/27 21:06:12 eburns Exp $
+ * $Id: TestRenderers_3.java,v 1.32 2004/02/04 23:44:49 ofung Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -49,7 +49,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.31 2004/01/27 21:06:12 eburns Exp $
+ * @version $Id: TestRenderers_3.java,v 1.32 2004/02/04 23:44:49 ofung Exp $
  * 
  *
  */

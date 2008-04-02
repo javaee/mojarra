@@ -1,10 +1,10 @@
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.17 2003/12/22 21:26:38 jvisvanathan Exp $
+ * $Id: ListboxRenderer.java,v 1.18 2004/02/04 23:41:49 ofung Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise

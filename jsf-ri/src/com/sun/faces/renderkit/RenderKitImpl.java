@@ -1,9 +1,9 @@
 /*
- * $Id: RenderKitImpl.java,v 1.15 2004/01/27 21:04:20 eburns Exp $
+ * $Id: RenderKitImpl.java,v 1.16 2004/02/04 23:41:43 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -48,7 +48,7 @@ import javax.faces.render.ResponseStateManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.15 2004/01/27 21:04:20 eburns Exp $
+ * @version $Id: RenderKitImpl.java,v 1.16 2004/02/04 23:41:43 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

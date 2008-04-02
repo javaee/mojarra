@@ -1,6 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!--
      This document contains test scenarios for the implementation
      of the default NavigationHandler implementation, as described
      in Section 7.4.2 of the spec.  These rules assume that an

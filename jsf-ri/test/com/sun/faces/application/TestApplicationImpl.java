@@ -1,9 +1,9 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.15 2003/12/22 23:25:58 eburns Exp $
+ * $Id: TestApplicationImpl.java,v 1.16 2004/02/04 23:44:04 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -42,7 +42,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.15 2003/12/22 23:25:58 eburns Exp $ 
+ * @version $Id: TestApplicationImpl.java,v 1.16 2004/02/04 23:44:04 ofung Exp $ 
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {

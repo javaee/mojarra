@@ -1,9 +1,9 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.19 2004/02/03 21:31:07 craigmcc Exp $
+ * $Id: UISelectOneTestCase.java,v 1.20 2004/02/04 23:38:50 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

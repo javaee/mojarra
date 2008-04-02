@@ -1,9 +1,9 @@
 /*
- * $Id: PathTestCase.java,v 1.2 2003/10/17 13:55:43 rlubke Exp $
+ * $Id: PathTestCase.java,v 1.3 2004/02/04 23:42:30 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

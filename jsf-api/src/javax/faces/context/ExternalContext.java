@@ -1,5 +1,10 @@
 /*
- * $Id: ExternalContext.java,v 1.15 2004/01/30 21:48:25 craigmcc Exp $
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+/*
+ * $Id: ExternalContext.java,v 1.16 2004/02/04 23:37:59 ofung Exp $
  */
  
 /*

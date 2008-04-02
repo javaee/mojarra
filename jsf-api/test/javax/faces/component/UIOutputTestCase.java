@@ -1,9 +1,9 @@
 /*
- * $Id: UIOutputTestCase.java,v 1.18 2004/01/27 20:30:09 craigmcc Exp $
+ * $Id: UIOutputTestCase.java,v 1.19 2004/02/04 23:38:48 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

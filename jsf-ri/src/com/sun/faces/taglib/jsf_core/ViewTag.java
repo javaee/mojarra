@@ -1,9 +1,9 @@
 /*
- * $Id: ViewTag.java,v 1.19 2004/01/27 21:04:44 eburns Exp $
+ * $Id: ViewTag.java,v 1.20 2004/02/04 23:42:10 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -45,7 +45,7 @@ import com.sun.faces.util.Util;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.19 2004/01/27 21:04:44 eburns Exp $
+ * @version $Id: ViewTag.java,v 1.20 2004/02/04 23:42:10 ofung Exp $
  * 
  *
  */

@@ -1,3 +1,8 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
 <%@ page import="javax.servlet.RequestDispatcher" %><%
 
   // Generically link to a Faces Response for a View Id

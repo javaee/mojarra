@@ -1,9 +1,9 @@
 /*
- * $Id: SelectItemTag.java,v 1.6 2004/01/30 22:58:08 horwat Exp $
+ * $Id: SelectItemTag.java,v 1.7 2004/02/04 23:42:09 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

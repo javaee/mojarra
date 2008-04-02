@@ -1,9 +1,9 @@
 /*
- * $Id: AdapterPropertyResolver.java,v 1.3 2004/01/27 21:05:46 eburns Exp $
+ * $Id: AdapterPropertyResolver.java,v 1.4 2004/02/04 23:43:50 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

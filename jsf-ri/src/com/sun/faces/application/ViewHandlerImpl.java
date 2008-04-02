@@ -1,10 +1,10 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.34 2004/01/30 21:49:17 craigmcc Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.35 2004/02/04 23:40:49 ofung Exp $ 
  */ 
 
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -46,7 +46,7 @@ import java.util.Map;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.34 2004/01/30 21:49:17 craigmcc Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.35 2004/02/04 23:40:49 ofung Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 

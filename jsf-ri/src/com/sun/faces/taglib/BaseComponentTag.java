@@ -1,9 +1,9 @@
 /*
- * $Id: BaseComponentTag.java,v 1.19 2004/01/27 21:04:38 eburns Exp $
+ * $Id: BaseComponentTag.java,v 1.20 2004/02/04 23:42:02 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

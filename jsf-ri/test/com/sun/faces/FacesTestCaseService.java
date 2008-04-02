@@ -1,9 +1,9 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.34 2004/01/27 21:05:47 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.35 2004/02/04 23:43:52 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -56,7 +56,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.34 2004/01/27 21:05:47 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.35 2004/02/04 23:43:52 ofung Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl

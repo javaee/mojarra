@@ -1,9 +1,9 @@
 /*
- * $Id: ButtonRenderer.java,v 1.72 2004/02/03 00:52:23 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.73 2004/02/04 23:41:45 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

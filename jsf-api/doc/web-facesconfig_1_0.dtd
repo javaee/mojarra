@@ -1,5 +1,5 @@
 <!--
- Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.29 2004/01/27 20:28:40 craigmcc Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.30 2004/02/04 23:37:06 ofung Exp $
 
 -->
 

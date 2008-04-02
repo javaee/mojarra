@@ -1,9 +1,9 @@
 /*
- * $Id: UIComponentTag.java,v 1.42 2004/02/03 16:07:25 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.43 2004/02/04 23:38:36 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

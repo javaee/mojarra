@@ -1,9 +1,9 @@
 /*
- * $Id: TextRenderer.java,v 1.5 2003/12/17 15:14:35 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.6 2004/02/04 23:42:43 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -32,7 +32,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.5 2003/12/17 15:14:35 rkitain Exp $
+ * @version $Id: TextRenderer.java,v 1.6 2004/02/04 23:42:43 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

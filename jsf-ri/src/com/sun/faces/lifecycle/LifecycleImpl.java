@@ -1,9 +1,9 @@
 /*
- * $Id: LifecycleImpl.java,v 1.41 2004/01/27 21:04:17 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.42 2004/02/04 23:41:37 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

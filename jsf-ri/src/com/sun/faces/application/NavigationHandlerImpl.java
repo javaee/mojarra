@@ -1,9 +1,9 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.25 2004/01/30 21:49:17 craigmcc Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.26 2004/02/04 23:40:49 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

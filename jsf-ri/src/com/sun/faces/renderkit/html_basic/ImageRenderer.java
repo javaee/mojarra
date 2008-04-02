@@ -1,9 +1,9 @@
 /*
- * $Id: ImageRenderer.java,v 1.29 2004/02/03 00:52:26 jvisvanathan Exp $
+ * $Id: ImageRenderer.java,v 1.30 2004/02/04 23:41:48 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  *  <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  *  ImageTag
- * @version $Id: ImageRenderer.java,v 1.29 2004/02/03 00:52:26 jvisvanathan Exp $
+ * @version $Id: ImageRenderer.java,v 1.30 2004/02/04 23:41:48 ofung Exp $
  * 
  */
 

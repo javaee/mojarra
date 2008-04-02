@@ -1,9 +1,9 @@
 /*
- * $Id: TestValueBindingImpl_Model.java,v 1.4 2003/12/17 15:15:19 rkitain Exp $
+ * $Id: TestValueBindingImpl_Model.java,v 1.5 2004/02/04 23:44:21 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -36,7 +36,7 @@ import com.sun.faces.application.ApplicationImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl_Model.java,v 1.4 2003/12/17 15:15:19 rkitain Exp $
+ * @version $Id: TestValueBindingImpl_Model.java,v 1.5 2004/02/04 23:44:21 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

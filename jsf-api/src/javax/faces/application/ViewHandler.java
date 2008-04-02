@@ -1,9 +1,9 @@
 /*
- * $Id: ViewHandler.java,v 1.36 2004/01/30 21:48:23 craigmcc Exp $
+ * $Id: ViewHandler.java,v 1.37 2004/02/04 23:37:38 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

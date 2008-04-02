@@ -1,9 +1,9 @@
 /*
- * $Id: JspFacesTestCase.java,v 1.9 2003/07/23 16:32:20 rkitain Exp $
+ * $Id: JspFacesTestCase.java,v 1.10 2004/02/04 23:43:52 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -31,7 +31,7 @@ import java.util.Iterator;
  *  by cactus.  This class just delegates all method calls to
  *  facesService.
  *
- * @version $Id: JspFacesTestCase.java,v 1.9 2003/07/23 16:32:20 rkitain Exp $
+ * @version $Id: JspFacesTestCase.java,v 1.10 2004/02/04 23:43:52 ofung Exp $
  * 
  * @see	#facesService
  *

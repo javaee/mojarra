@@ -1,9 +1,9 @@
 /*
- * $Id: LifecycleFactory.java,v 1.11 2003/05/13 22:47:30 eburns Exp $
+ * $Id: LifecycleFactory.java,v 1.12 2004/02/04 23:38:21 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

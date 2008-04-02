@@ -1,9 +1,9 @@
 /*
- * $Id: MessageRenderer.java,v 1.43 2004/02/03 04:17:05 jvisvanathan Exp $
+ * $Id: MessageRenderer.java,v 1.44 2004/02/04 23:41:50 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

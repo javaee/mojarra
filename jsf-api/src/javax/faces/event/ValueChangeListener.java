@@ -1,9 +1,9 @@
 /*
- * $Id: ValueChangeListener.java,v 1.1 2003/10/27 04:10:03 craigmcc Exp $
+ * $Id: ValueChangeListener.java,v 1.2 2004/02/04 23:38:17 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

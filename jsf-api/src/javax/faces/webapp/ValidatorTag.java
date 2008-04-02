@@ -1,9 +1,9 @@
 /*
- * $Id: ValidatorTag.java,v 1.14 2004/01/27 20:29:59 craigmcc Exp $
+ * $Id: ValidatorTag.java,v 1.15 2004/02/04 23:38:36 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

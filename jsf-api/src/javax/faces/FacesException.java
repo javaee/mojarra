@@ -1,9 +1,9 @@
 /*
- * $Id: FacesException.java,v 1.11 2003/02/20 22:46:08 ofung Exp $
+ * $Id: FacesException.java,v 1.12 2004/02/04 23:37:35 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

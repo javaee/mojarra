@@ -1,10 +1,10 @@
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 /*
- * $Id: CommandListenerImpl.java,v 1.11 2003/12/17 15:15:49 rkitain Exp $
+ * $Id: CommandListenerImpl.java,v 1.12 2004/02/04 23:45:04 ofung Exp $
  */
 
 // CommandListenerImpl.java
@@ -45,7 +45,7 @@ import java.io.OptionalDataException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandListenerImpl.java,v 1.11 2003/12/17 15:15:49 rkitain Exp $
+ * @version $Id: CommandListenerImpl.java,v 1.12 2004/02/04 23:45:04 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

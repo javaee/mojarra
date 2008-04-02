@@ -1,9 +1,9 @@
 /*
- * $Id: MockViewHandler.java,v 1.23 2004/01/30 21:48:26 craigmcc Exp $
+ * $Id: MockViewHandler.java,v 1.24 2004/02/04 23:39:15 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

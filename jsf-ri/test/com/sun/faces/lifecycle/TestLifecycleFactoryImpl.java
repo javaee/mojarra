@@ -1,9 +1,9 @@
 /*
- * $Id: TestLifecycleFactoryImpl.java,v 1.8 2003/12/17 15:15:25 rkitain Exp $
+ * $Id: TestLifecycleFactoryImpl.java,v 1.9 2004/02/04 23:44:33 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -29,7 +29,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleFactoryImpl.java,v 1.8 2003/12/17 15:15:25 rkitain Exp $
+ * @version $Id: TestLifecycleFactoryImpl.java,v 1.9 2004/02/04 23:44:33 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

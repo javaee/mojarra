@@ -1,9 +1,9 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.23 2004/01/27 20:30:28 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.24 2004/02/04 23:39:36 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

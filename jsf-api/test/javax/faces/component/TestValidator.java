@@ -1,9 +1,9 @@
 /*
- * $Id: TestValidator.java,v 1.10 2003/12/22 19:29:30 eburns Exp $
+ * $Id: TestValidator.java,v 1.11 2004/02/04 23:38:44 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

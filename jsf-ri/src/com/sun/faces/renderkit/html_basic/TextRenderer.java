@@ -1,9 +1,9 @@
 /*
- * $Id: TextRenderer.java,v 1.62 2004/02/02 18:31:49 eburns Exp $
+ * $Id: TextRenderer.java,v 1.63 2004/02/04 23:41:51 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

@@ -1,9 +1,9 @@
 /*
- * $Id: TestTag.java,v 1.6 2004/01/27 20:30:28 craigmcc Exp $
+ * $Id: TestTag.java,v 1.7 2004/02/04 23:39:35 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

@@ -1,9 +1,9 @@
 /*
- * $Id: MockExternalContext.java,v 1.11 2004/01/30 21:48:26 craigmcc Exp $
+ * $Id: MockExternalContext.java,v 1.12 2004/02/04 23:39:11 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

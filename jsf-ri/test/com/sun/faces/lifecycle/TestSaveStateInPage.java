@@ -1,9 +1,9 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.24 2004/01/29 03:43:39 eburns Exp $
+ * $Id: TestSaveStateInPage.java,v 1.25 2004/02/04 23:44:35 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -41,7 +41,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.24 2004/01/29 03:43:39 eburns Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.25 2004/02/04 23:44:35 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

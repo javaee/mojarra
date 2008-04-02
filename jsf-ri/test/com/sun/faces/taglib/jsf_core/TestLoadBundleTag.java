@@ -1,9 +1,9 @@
 /*
- * $Id: TestLoadBundleTag.java,v 1.5 2004/01/27 21:06:15 eburns Exp $
+ * $Id: TestLoadBundleTag.java,v 1.6 2004/02/04 23:44:53 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -20,7 +20,7 @@ import javax.faces.component.UIViewRoot;
 
 /**
  *
- * @version $Id: TestLoadBundleTag.java,v 1.5 2004/01/27 21:06:15 eburns Exp $
+ * @version $Id: TestLoadBundleTag.java,v 1.6 2004/02/04 23:44:53 ofung Exp $
  * 
  *
  */

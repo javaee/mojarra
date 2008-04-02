@@ -1,10 +1,10 @@
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 /*
- * $Id: TestELImpl.java,v 1.4 2004/01/27 21:06:02 eburns Exp $
+ * $Id: TestELImpl.java,v 1.5 2004/02/04 23:44:25 ofung Exp $
  */
 
 // TestELImpl

@@ -1,9 +1,9 @@
 /*
- * $Id: MockRenderKitFactory.java,v 1.3 2003/12/17 23:26:00 eburns Exp $
+ * $Id: MockRenderKitFactory.java,v 1.4 2004/02/04 23:39:13 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

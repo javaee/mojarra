@@ -1,9 +1,9 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.18 2004/01/27 23:10:15 craigmcc Exp $
+ * $Id: UIGraphicTestCase.java,v 1.19 2004/02/04 23:38:47 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

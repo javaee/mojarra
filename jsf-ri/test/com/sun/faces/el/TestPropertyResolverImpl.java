@@ -1,9 +1,9 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.9 2004/01/27 21:06:00 eburns Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.10 2004/02/04 23:44:20 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -38,7 +38,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.9 2004/01/27 21:06:00 eburns Exp $
+ * @version $Id: TestPropertyResolverImpl.java,v 1.10 2004/02/04 23:44:20 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

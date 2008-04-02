@@ -1,9 +1,9 @@
 /*
- * $Id: TestUtil.java,v 1.19 2004/01/27 21:06:16 eburns Exp $
+ * $Id: TestUtil.java,v 1.20 2004/02/04 23:44:57 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -38,7 +38,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.19 2004/01/27 21:06:16 eburns Exp $
+ * @version $Id: TestUtil.java,v 1.20 2004/02/04 23:44:57 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

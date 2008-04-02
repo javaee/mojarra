@@ -1,9 +1,9 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.12 2003/12/17 15:13:42 rkitain Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.13 2004/02/04 23:41:37 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.12 2003/12/17 15:13:42 rkitain Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.13 2004/02/04 23:41:37 ofung Exp $
  * 
  */
 

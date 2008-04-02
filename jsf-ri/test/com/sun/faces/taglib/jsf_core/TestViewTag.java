@@ -1,9 +1,9 @@
 /*
- * $Id: TestViewTag.java,v 1.6 2004/01/27 21:06:15 eburns Exp $
+ * $Id: TestViewTag.java,v 1.7 2004/02/04 23:44:54 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -53,7 +53,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewTag.java,v 1.6 2004/01/27 21:06:15 eburns Exp $
+ * @version $Id: TestViewTag.java,v 1.7 2004/02/04 23:44:54 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

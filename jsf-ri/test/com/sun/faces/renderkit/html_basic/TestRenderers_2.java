@@ -1,9 +1,9 @@
 /*
- * $Id: TestRenderers_2.java,v 1.78 2004/01/27 21:06:12 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.79 2004/02/04 23:44:49 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -50,7 +50,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.78 2004/01/27 21:06:12 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.79 2004/02/04 23:44:49 ofung Exp $
  * 
  *
  */

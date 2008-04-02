@@ -1,9 +1,9 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.15 2004/01/30 18:19:31 eburns Exp $
+ * $Id: TestNavigationHandler.java,v 1.16 2004/02/04 23:44:05 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -52,7 +52,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.15 2004/01/30 18:19:31 eburns Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.16 2004/02/04 23:44:05 ofung Exp $
  * 
  */
 

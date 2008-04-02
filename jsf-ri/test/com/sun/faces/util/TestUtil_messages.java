@@ -1,9 +1,9 @@
 /*
- * $Id: TestUtil_messages.java,v 1.28 2004/01/31 06:27:07 craigmcc Exp $
+ * $Id: TestUtil_messages.java,v 1.29 2004/02/04 23:44:58 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -24,7 +24,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.28 2004/01/31 06:27:07 craigmcc Exp $
+ * @version $Id: TestUtil_messages.java,v 1.29 2004/02/04 23:44:58 ofung Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {

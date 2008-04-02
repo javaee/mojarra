@@ -1,9 +1,9 @@
 /*
- * $Id: TestRenderKit.java,v 1.13 2004/01/30 16:40:16 rkitain Exp $
+ * $Id: TestRenderKit.java,v 1.14 2004/02/04 23:44:46 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -47,7 +47,7 @@ import java.io.ByteArrayOutputStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.13 2004/01/30 16:40:16 rkitain Exp $
+ * @version $Id: TestRenderKit.java,v 1.14 2004/02/04 23:44:46 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

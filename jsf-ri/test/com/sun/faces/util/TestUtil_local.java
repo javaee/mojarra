@@ -1,9 +1,9 @@
 /*
- * $Id: TestUtil_local.java,v 1.4 2003/10/14 23:44:53 eburns Exp $
+ * $Id: TestUtil_local.java,v 1.5 2004/02/04 23:44:58 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -21,7 +21,7 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_local.java,v 1.4 2003/10/14 23:44:53 eburns Exp $
+ * @version $Id: TestUtil_local.java,v 1.5 2004/02/04 23:44:58 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

@@ -1,9 +1,9 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.12 2004/01/27 21:06:01 eburns Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.13 2004/02/04 23:44:21 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -38,7 +38,7 @@ import javax.faces.component.UIViewRoot;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.12 2004/01/27 21:06:01 eburns Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.13 2004/02/04 23:44:21 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

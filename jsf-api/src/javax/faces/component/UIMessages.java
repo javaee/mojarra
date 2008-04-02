@@ -1,9 +1,9 @@
 /*
- * $Id: UIMessages.java,v 1.12 2004/01/29 03:45:49 eburns Exp $
+ * $Id: UIMessages.java,v 1.13 2004/02/04 23:37:46 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

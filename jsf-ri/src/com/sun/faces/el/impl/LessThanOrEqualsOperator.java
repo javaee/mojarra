@@ -1,4 +1,9 @@
 /*
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+/*
  * The Apache Software License, Version 1.1
  *
  * Copyright (c) 1999 The Apache Software Foundation.  All rights 
@@ -64,7 +69,7 @@ import java.math.BigInteger;
  * <p>The implementation of the less than or equals operator
  * 
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: ofung $
  **/
 
 public class LessThanOrEqualsOperator

@@ -1,9 +1,9 @@
 /*
- * $Id: SecretRenderer.java,v 1.51 2004/01/27 21:04:28 eburns Exp $
+ * $Id: SecretRenderer.java,v 1.52 2004/02/04 23:41:51 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

@@ -1,9 +1,9 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.12 2004/01/27 21:04:18 eburns Exp $
+ * $Id: RestoreViewPhase.java,v 1.13 2004/02/04 23:41:38 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -38,7 +38,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.12 2004/01/27 21:04:18 eburns Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.13 2004/02/04 23:41:38 ofung Exp $
  * 
  */
 

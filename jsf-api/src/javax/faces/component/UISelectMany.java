@@ -1,9 +1,9 @@
 /*
- * $Id: UISelectMany.java,v 1.47 2004/02/03 21:31:05 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.48 2004/02/04 23:37:48 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

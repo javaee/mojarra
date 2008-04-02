@@ -1,9 +1,9 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.6 2004/01/27 21:04:42 eburns Exp $
+ * $Id: ConvertNumberTag.java,v 1.7 2004/02/04 23:42:08 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -24,7 +24,7 @@ import com.sun.faces.util.Util;
  * javax.faces.convert.NumberConverter</p>
  *
  *
- * @version $Id: ConvertNumberTag.java,v 1.6 2004/01/27 21:04:42 eburns Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.7 2004/02/04 23:42:08 ofung Exp $
  * 
  */
 

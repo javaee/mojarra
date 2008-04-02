@@ -1,9 +1,9 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.22 2004/01/30 21:49:18 craigmcc Exp $
+ * $Id: ExternalContextImpl.java,v 1.23 2004/02/04 23:40:55 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 package com.sun.faces.context;
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.22 2004/01/30 21:49:18 craigmcc Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.23 2004/02/04 23:40:55 ofung Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {

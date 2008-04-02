@@ -1,9 +1,9 @@
 /*
- * $Id: FileOutputResponseWrapper.java,v 1.5 2003/12/17 15:14:57 rkitain Exp $
+ * $Id: FileOutputResponseWrapper.java,v 1.6 2004/02/04 23:43:52 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -31,7 +31,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWrapper.java,v 1.5 2003/12/17 15:14:57 rkitain Exp $
+ * @version $Id: FileOutputResponseWrapper.java,v 1.6 2004/02/04 23:43:52 ofung Exp $
  * 
  *
  */

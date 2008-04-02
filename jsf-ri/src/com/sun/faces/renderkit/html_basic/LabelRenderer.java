@@ -1,9 +1,9 @@
 /*
- * $Id: LabelRenderer.java,v 1.24 2004/02/03 00:52:26 jvisvanathan Exp $
+ * $Id: LabelRenderer.java,v 1.25 2004/02/04 23:41:49 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

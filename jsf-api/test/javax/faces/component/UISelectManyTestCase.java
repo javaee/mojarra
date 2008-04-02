@@ -1,9 +1,9 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.22 2004/02/03 21:31:07 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.23 2004/02/04 23:38:50 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

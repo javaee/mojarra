@@ -1,9 +1,9 @@
 /*
- * $Id: UIForm.java,v 1.42 2004/01/31 05:29:39 eburns Exp $
+ * $Id: UIForm.java,v 1.43 2004/02/04 23:37:45 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

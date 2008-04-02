@@ -1,9 +1,9 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.32 2003/12/17 15:15:27 rkitain Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.33 2004/02/04 23:44:35 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -43,7 +43,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.32 2003/12/17 15:15:27 rkitain Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.33 2004/02/04 23:44:35 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

@@ -1,9 +1,9 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.10 2003/12/17 15:14:58 rkitain Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.11 2004/02/04 23:43:52 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -34,7 +34,7 @@ import java.io.Writer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.10 2003/12/17 15:14:58 rkitain Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.11 2004/02/04 23:43:52 ofung Exp $
  * 
  *
  */

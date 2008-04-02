@@ -1,9 +1,9 @@
 /*
- * $Id: RIConstants.java,v 1.55 2004/01/31 06:27:00 craigmcc Exp $
+ * $Id: RIConstants.java,v 1.56 2004/02/04 23:40:45 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

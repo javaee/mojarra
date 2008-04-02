@@ -1,9 +1,9 @@
 /*
- * $Id: ResponseStateManager.java,v 1.11 2004/01/27 20:29:53 craigmcc Exp $
+ * $Id: ResponseStateManager.java,v 1.12 2004/02/04 23:38:29 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

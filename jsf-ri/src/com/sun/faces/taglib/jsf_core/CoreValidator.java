@@ -1,9 +1,9 @@
 /*
- * $Id: CoreValidator.java,v 1.8 2004/01/27 21:04:42 eburns Exp $
+ * $Id: CoreValidator.java,v 1.9 2004/02/04 23:42:08 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

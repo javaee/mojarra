@@ -1,10 +1,10 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.15 2004/01/29 03:43:38 eburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.16 2004/02/04 23:40:49 ofung Exp $ 
  */ 
 
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.15 2004/01/29 03:43:38 eburns Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.16 2004/02/04 23:40:49 ofung Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 

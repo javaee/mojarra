@@ -1,9 +1,9 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.30 2004/01/27 21:05:50 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.31 2004/02/04 23:44:04 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -57,7 +57,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.30 2004/01/27 21:05:50 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.31 2004/02/04 23:44:04 ofung Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {

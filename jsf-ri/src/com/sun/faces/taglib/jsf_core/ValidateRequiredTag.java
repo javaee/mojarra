@@ -1,9 +1,9 @@
 /*
- * $Id: ValidateRequiredTag.java,v 1.6 2004/01/27 21:04:44 eburns Exp $
+ * $Id: ValidateRequiredTag.java,v 1.7 2004/02/04 23:42:10 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -26,7 +26,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ValidateRequiredTag.java,v 1.6 2004/01/27 21:04:44 eburns Exp $
+ * @version $Id: ValidateRequiredTag.java,v 1.7 2004/02/04 23:42:10 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

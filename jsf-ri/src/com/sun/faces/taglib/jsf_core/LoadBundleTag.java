@@ -1,9 +1,9 @@
 /*
- * $Id: LoadBundleTag.java,v 1.5 2004/01/27 21:04:42 eburns Exp $
+ * $Id: LoadBundleTag.java,v 1.6 2004/02/04 23:42:09 ofung Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
