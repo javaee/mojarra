@@ -27,7 +27,9 @@
   <property name="src.dir"          value="${basedir}/src"/>
   <property name="dist.dir"         value="${basedir}/dist"/>
   <property name="jsf-api.dir"      value="${basedir}/../jsf-api"/>
-  <property name="jsf-ri.dir"         value="${basedir}/../jsf-ri"/>
+  <property name="standard-html-renderkit"      
+                                    value="${jsf-api.dir}/doc/standard-html-renderkit.xml"/>
+  <property name="jsf-ri.dir"       value="${basedir}/../jsf-ri"/>
 
   <!-- The locations of necessary jar files -->
   <property name="junit.jar" 
@@ -150,6 +152,18 @@ necessary to generate required classes.
       <arg line="-d ${build.generate}"/>
       <arg line="-c ${basedir}/COPYRIGHT"/>
     </java>
+
+    <java fork="yes" 
+	  classname="com.sun.faces.generate.GenerateTaglib">
+      <!-- <jvmarg line="${debug.jvm.args}"/> -->
+      <classpath refid="compile.classpath" />
+      <classpath refid="run.classpath" />
+      <arg line="-f ${standard-html-renderkit}"/>
+      <arg line="-e ${standard-html-renderkit-impl}"/>
+      <arg line="-d ${build.generate}"/>
+      <arg line="-c ${basedir}/COPYRIGHT"/>
+    </java>
+
 
     <touch file="${build.generate}/last-generation"/>
 
