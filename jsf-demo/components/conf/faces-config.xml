@@ -96,7 +96,9 @@
         <attribute-name>styleClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
-      <component-class>components.components.AreaComponent</component-class>
+      <supported-component-class>
+        <component-class>components.components.AreaComponent</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -112,7 +114,9 @@
         <attribute-name>styleClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
-      <component-class>components.components.MapComponent</component-class>
+      <supported-component-class>
+        <component-class>components.components.MapComponent</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
