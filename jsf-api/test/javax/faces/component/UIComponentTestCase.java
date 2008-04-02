@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.27 2003/03/14 01:40:02 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.28 2003/03/26 19:32:31 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,13 @@
 package javax.faces.component;
 
 
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
+import java.beans.EventSetDescriptor;
+import java.beans.Introspector;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Collections;
 import javax.faces.context.FacesContext;
@@ -465,6 +471,136 @@ public class UIComponentTestCase extends TestCase {
 
 
     /**
+     * Test <code>getFacetsAndChildren()</code> method. Make sure the 
+     * facets are returned first followed by children in the order 
+     * they are stored in the child list.
+     */
+    public void testGetFacetsAndChildren() {
+
+        UIComponent testComponent = new TestComponentNamingContainer();
+        UIComponent facet1 = new TestComponent("facet1");
+        UIComponent facet2 = new TestComponent("facet2");
+        UIComponent facet3 = new TestComponent("facet3");
+
+        UIComponent child1 = new TestComponent("child1");
+        UIComponent child2 = new TestComponent("child2");
+        UIComponent child3 = new TestComponent("child3");
+        UIComponent child = null;
+
+        // Review initial conditions.
+        // make sure the itertaor is empty before any children or facet is
+        // added.
+        Iterator kidItr = null;
+        kidItr = testComponent.getFacetsAndChildren();
+        assertTrue((kidItr.hasNext()) == false);
+
+        // Add facets and children one at a time.
+        testComponent.addFacet("facet1", facet1);
+        testComponent.addChild(child1);
+        testComponent.addFacet("facet2", facet2);
+        testComponent.addChild(child2);
+        testComponent.addFacet("facet3", facet3);
+        testComponent.addChild(child3);
+
+        // make sure the facets and children are returned in the correct order.
+        kidItr = testComponent.getFacetsAndChildren();
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(facet3) || child.equals(facet2) ||
+                child.equals(facet1));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(facet3) || child.equals(facet2) ||
+                child.equals(facet1));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(facet3) || child.equals(facet2) ||
+                child.equals(facet1));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child1));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child2));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child3));
+    }
+
+
+    /**
+     * Test results returned by introspecting the component class.
+     */
+    public void testIntrospection() throws Exception {
+
+        Class clazz = null;
+        Method method = null;
+
+        BeanInfo binfo = Introspector.getBeanInfo(component.getClass());
+        assertNotNull(binfo);
+        BeanDescriptor bdesc = binfo.getBeanDescriptor();
+        assertNotNull(bdesc);
+        System.out.println();
+        System.out.println("BeanDescriptor Contents:");
+        System.out.println("        beanClass=" +
+                           bdesc.getBeanClass().getName());
+        Enumeration anames = bdesc.attributeNames();
+        while (anames.hasMoreElements()) {
+            String name = (String) anames.nextElement();
+            System.out.println("    attributeName=" + name +
+                               ", value=" + bdesc.getValue(name));
+        }
+        System.out.println("      displayName=" + bdesc.getDisplayName());
+        System.out.println("           expert=" + bdesc.isExpert());
+        System.out.println("           hidden=" + bdesc.isHidden());
+        System.out.println("             name=" + bdesc.getName());
+        System.out.println("        preferred=" + bdesc.isPreferred());
+        System.out.println(" shortDescription=" + bdesc.getShortDescription());
+        System.out.println("------------------------");
+        EventSetDescriptor edescs[] = binfo.getEventSetDescriptors();
+        if (edescs == null) {
+            edescs = new EventSetDescriptor[0];
+        }
+        for (int i = 0; i < edescs.length; i++) {
+            EventSetDescriptor edesc = edescs[i];
+            System.out.println("EventSetDescriptor Contents:");
+            method = edesc.getAddListenerMethod();
+            if (method != null) {
+                System.out.println("    addListenerMethod=" +
+                                   method.getName());
+            }
+            System.out.println("          displayName=" +
+                               edesc.getDisplayName());
+            System.out.println("               expert=" + edesc.isExpert());
+            method = edesc.getGetListenerMethod();
+            if (method != null) {
+                System.out.println("    getListenerMethod=" +
+                                   method.getName());
+            }
+            System.out.println("               hidden=" + bdesc.isHidden());
+            System.out.println("    inDefaultEventSet=" +
+                               edesc.isInDefaultEventSet());
+            clazz = edesc.getListenerType();
+            if (clazz != null) {
+                System.out.println("         listenerType=" +
+                                   clazz.getName());
+            }
+            System.out.println("            preferred=" + bdesc.isPreferred());
+            method = edesc.getRemoveListenerMethod();
+            if (method != null) {
+                System.out.println(" removeListenerMethod=" +
+                                   method.getName());
+            }
+            System.out.println("     shortDescription=" +
+                               bdesc.getShortDescription());
+            System.out.println("              unicast=" +
+                               edesc.isUnicast());
+            System.out.println("----------------------------");
+        }
+
+    }
+
+
+    /**
      * [3.1] Invalid setter arguments.
      */
     public void testInvalidSetters() {
@@ -688,62 +824,6 @@ public class UIComponentTestCase extends TestCase {
         assertEquals("validator count", count, results);
 
     }
+
     
-    /**
-     * Test <code>getFacetsAndChildren()</code> method. Make sure the 
-     * facets are returned first followed by children in the order 
-     * they are stored in the child list.
-     */
-    public void testGetChildrenAndFacets() {
-
-        UIComponent testComponent = new TestComponentNamingContainer();
-        UIComponent facet1 = new TestComponent("facet1");
-        UIComponent facet2 = new TestComponent("facet2");
-        UIComponent facet3 = new TestComponent("facet3");
-
-        UIComponent child1 = new TestComponent("child1");
-        UIComponent child2 = new TestComponent("child2");
-        UIComponent child3 = new TestComponent("child3");
-        UIComponent child = null;
-
-        // Review initial conditions.
-        // make sure the itertaor is empty before any children or facet is
-        // added.
-        Iterator kidItr = null;
-        kidItr = testComponent.getFacetsAndChildren();
-        assertTrue((kidItr.hasNext()) == false);
-
-        // Add facets and children one at a time.
-        testComponent.addFacet("facet1", facet1);
-        testComponent.addChild(child1);
-        testComponent.addFacet("facet2", facet2);
-        testComponent.addChild(child2);
-        testComponent.addFacet("facet3", facet3);
-        testComponent.addChild(child3);
-
-        // make sure the facets and children are returned in the correct order.
-        kidItr = testComponent.getFacetsAndChildren();
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(facet3) || child.equals(facet2) ||
-                child.equals(facet1));
-
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(facet3) || child.equals(facet2) ||
-                child.equals(facet1));
-
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(facet3) || child.equals(facet2) ||
-                child.equals(facet1));
-
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(child1));
-
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(child2));
-
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(child3));
-    }
-
-
 }
