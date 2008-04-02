@@ -33,7 +33,6 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
-import javax.el.ValueExpression;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -168,8 +167,7 @@ public class StateManagerImpl extends StateManager {
                 // of the TreeNode instances.  This is a problem 
                 // for servers that persist session data since 
                 // UIComponent instances are not serializable.
-                viewRoot = restoreTree(((Object[]) stateArray[0]).clone(), 
-                                       context);
+                viewRoot = restoreTree(((Object[]) stateArray[0]).clone());
                 viewRoot.processRestoreState(context, stateArray[1]); 
 
                 if (LOGGER.isLoggable(Level.FINE)) {
@@ -504,7 +502,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    private UIComponent newInstance(TreeNode n, FacesContext ctx) 
+    private UIComponent newInstance(TreeNode n)
     throws FacesException {
 
         try {
@@ -550,7 +548,7 @@ public class StateManagerImpl extends StateManager {
             return null;
         }
 
-        return restoreTree(treeStructure, context);
+        return restoreTree(treeStructure);
     }
     
      private String createUniqueRequestId() {
@@ -584,7 +582,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    private UIViewRoot restoreTree(Object[] tree, FacesContext ctx)
+    private UIViewRoot restoreTree(Object[] tree)
     throws FacesException {
 
         UIComponent c;
@@ -593,7 +591,7 @@ public class StateManagerImpl extends StateManager {
         for (int i = 0; i < tree.length; i++) {
             if (tree[i]instanceof FacetNode) {
                 fn = (FacetNode) tree[i];
-                c = newInstance(fn, ctx);
+                c = newInstance(fn);
                 tree[i] = c;               
                 if (i != fn.parent) {
                     ((UIComponent) tree[fn.parent]).getFacets()
@@ -602,7 +600,7 @@ public class StateManagerImpl extends StateManager {
 
             } else {
                 tn = (TreeNode) tree[i];
-                c = newInstance(tn, ctx);
+                c = newInstance(tn);
                 tree[i] = c;
                 if (i != tn.parent) {
                     ((UIComponent) tree[tn.parent]).getChildren().add(c);
