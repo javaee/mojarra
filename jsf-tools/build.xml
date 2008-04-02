@@ -14,6 +14,7 @@
 <project name="JSF-TOOLS" default="main" basedir=".">
 
   <property file="build.properties"/>                <!-- Component local   -->
+  <property file="../build.properties"/>             <!-- Commons local     -->
   <property file="${user.home}/build.properties"/>   <!-- User local        -->
 
   <property name="Name"             value="JavaServer Faces Tools"/>

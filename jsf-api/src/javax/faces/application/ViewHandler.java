@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.24 2003/11/10 21:45:48 eburns Exp $
+ * $Id: ViewHandler.java,v 1.25 2003/11/12 20:37:40 eburns Exp $
  */
 
 /*
@@ -113,11 +113,15 @@ public interface ViewHandler {
      * <code>Locale</code> to be set to that of the {@link UIViewRoot}
      * during the <code>doStartTag()</code> method for the
      * <code>&lt;f:view&gt;</code> tag.  This must be done by calling
-     * the <code>setLocale()</code> method on the response.  The default
-     * implementation must also call <code>getCharacterEncoding()</code>
-     * on the <code>ServletResponse</code> and store the result in the
-     * session (if one is present already) under the key with the name
-     * equal to the default value of the constant {@link
+     * the <code>setLocale()</code> method on the response.  It must
+     * also store the <code>Locale</code> in the
+     * <code>javax.servlet.jsp.jstl.core.Config</code> under the key
+     * <code>Config.FMT_LOCALE</code>.  This makes the locale available
+     * to JSTL tags.  The default implementation must also call
+     * <code>getCharacterEncoding()</code> on the
+     * <code>ServletResponse</code> and store the result in the session
+     * (if one is present already) under the key with the name equal to
+     * the default value of the constant {@link
      * #CHARACTER_ENCODING_KEY}.  This must happen during the
      * <code>doEndTag()</code> method for the
      * <code>&lt;f:view&gt;</code> tag.</p>
