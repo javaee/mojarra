@@ -1,5 +1,5 @@
 /*
- * $Id: TestStateManagerImpl.java,v 1.3 2003/12/22 23:25:59 eburns Exp $
+ * $Id: TestStateManagerImpl.java,v 1.4 2004/01/22 20:13:44 jvisvanathan Exp $
  */
 
 /*
@@ -19,6 +19,10 @@ import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
 import javax.faces.application.ViewHandler;
 import javax.servlet.http.HttpSession;
+import javax.faces.render.RenderKitFactory;
+
+import com.sun.faces.RIConstants;
+import java.util.ArrayList;
 
 
 /**
@@ -191,6 +195,35 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
+    }
+    
+    public void testRemoveViewFromSession() {
+        ArrayList viewList = new ArrayList(10);
+        FacesContext context = getFacesContext();
+        UIViewRoot newViewRoot = new UIViewRoot();
+        newViewRoot.setViewId("viewId");
+        context.setViewRoot(newViewRoot);
+        
+        HttpSession session = 
+            (HttpSession) context.getExternalContext().getSession(false);
+        for (int i = 0; i < 21; ++i) {
+            String viewId = "viewId" + i;
+            viewList.add(viewId);
+            UIViewRoot viewRoot = new UIViewRoot();
+            viewRoot.setViewId(viewId);
+            session.setAttribute(viewId, viewRoot);
+        }
+        session.setAttribute("com.sun.faces.VIEW_LIST", viewList);
+   
+        StateManagerImpl stateManager = new StateManagerImpl();
+        stateManager.restoreView(context, "viewId2",
+                RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        
+        viewList = (ArrayList)session.getAttribute(RIConstants.FACES_PREFIX 
+                + "VIEW_LIST");
+        assertTrue(viewList.size() == 20);
+        assertTrue(!(viewList.contains("viewId0")));
+        assertTrue((session.getAttribute("viewId0")) == null);
     }
 	
 }

@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.12 2004/01/21 03:50:33 eburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.13 2004/01/22 20:13:43 jvisvanathan Exp $ 
  */ 
 
 
@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.12 2004/01/21 03:50:33 eburns Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.13 2004/01/22 20:13:43 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -43,7 +44,18 @@ import org.apache.commons.logging.LogFactory;
 public class StateManagerImpl extends StateManager  { 
     
     private static final Log log = LogFactory.getLog(StateManagerImpl.class);
+    private static final String NUMBER_OF_VIEWS_IN_SESSION = 
+            RIConstants.FACES_PREFIX + "NUMBER_OF_VIEWS_IN_SESSION";
+    private static final int DEFAULT_NUMBER_OF_VIEWS_IN_SESSION = 15;
+    
+    private static final String FACES_VIEW_LIST = 
+            RIConstants.FACES_PREFIX + "VIEW_LIST";
 
+    /**
+     * Number of views to be saved in session.
+     */
+    int noOfViews=0;
+    
     public SerializedView saveSerializedView(FacesContext context) {
 	SerializedView result = null;
         
@@ -57,15 +69,25 @@ public class StateManagerImpl extends StateManager  {
             // honor the transient property and remove children from the tree
             // that are marked transient.
             removeTransientChildrenAndFacets(context, viewRoot, new HashSet());
-           
-            Map sessionMap = Util.getSessionMap(context);
-	    synchronized (this) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Saving view in session for viewId " + 
-                            viewRoot.getViewId());
+            if (log.isDebugEnabled()) {
+                log.debug("Saving view in session for viewId " + 
+                        viewRoot.getViewId());
+            }
+            synchronized (this) {
+                Map sessionMap = Util.getSessionMap(context);
+                // viewList maintains a list of viewIds corresponding to 
+                // all the views stored in session.
+                ArrayList viewList = (ArrayList)sessionMap.get(FACES_VIEW_LIST);
+                if ( viewList == null) {
+                    viewList = new ArrayList();
                 }
-		sessionMap.put(viewRoot.getViewId(), viewRoot); 
-	    }
+                // save the viewId in the viewList, so that we can keep track how
+                // many views are stored in session. If the number exceeds the
+                // limit, restoreView will remove the oldest view upon postback.
+                viewList.add(viewRoot.getViewId());
+                sessionMap.put(viewRoot.getViewId(), viewRoot); 
+                sessionMap.put(FACES_VIEW_LIST, viewList);
+            }
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("Begin creating serialized view for " + 
@@ -83,19 +105,18 @@ public class StateManagerImpl extends StateManager  {
     
     protected void removeTransientChildrenAndFacets(FacesContext context,
 						    UIComponent component,
-                                                    Set componentIds) {
+                                                    Set componentIds) {                                      
         UIComponent kid;
         // deal with children that are marked transient.
         Iterator kids = component.getChildren().iterator();
         String id;
         while (kids.hasNext()) {
             kid = (UIComponent) kids.next();
-            
-	    if (null != kid.getId()) {
+            if (null != kid.getId()) {
 		// check for id uniqueness
 		id = kid.getClientId(context);
-		if (id != null && !componentIds.add(id)) {
-		    throw new IllegalStateException(
+                if (id != null && !componentIds.add(id)) {
+                    throw new IllegalStateException(
 		    Util.getExceptionMessage(
 					Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
 					new Object[]{id})
@@ -113,8 +134,7 @@ public class StateManagerImpl extends StateManager  {
         kids = component.getFacets().values().iterator();
         while (kids.hasNext()) {
             kid = (UIComponent) kids.next();
-            
-	    if (null != kid.getId()) {
+            if (null != kid.getId()) {
 		// check for id uniqueness
 		id = kid.getClientId(context);
 		if (id != null && !componentIds.add(id)) {
@@ -181,13 +201,65 @@ public class StateManagerImpl extends StateManager  {
 	    Map sessionMap = Util.getSessionMap(context);
 	    synchronized (this) {
 		viewRoot = (UIViewRoot) sessionMap.get(viewId);
-		sessionMap.remove(viewId);
                 if (log.isDebugEnabled()) {
                     log.debug("Restoring view from session for viewId " + viewId);
                 }
+                removeViewFromSession(context,  viewRoot);
 	    }
         }
         return viewRoot;
+    }
+    
+    /**
+     * Ensures that number of views stored in session does not exceed the 
+     * specified number. If it exceeds, removes the oldest view from session
+     * and updates the viewList that maintains a list of active viewIds.
+     * PRECONDITION:  Number of views in session need to be checked only if
+     *                viewList exists in session.
+     * POSTCONDITION: Number of views saved in session is always less than the
+     *                specified number or the default. 
+     */
+     
+    private void removeViewFromSession(FacesContext context, UIViewRoot viewRoot) {
+        Map sessionMap = Util.getSessionMap(context);
+        // viewList maintains a list of viewIds corresponding to all the views
+        // stored in session.
+        ArrayList viewList = (ArrayList)sessionMap.get(FACES_VIEW_LIST);
+        if ( viewList == null) {
+            return;
+        }
+        // If the parameter NUMBER_OF_VIEWS_IN_SESSION is specified as a servlet
+        // init parameter, use it otherwise use the default. Parse the
+        // servletInitParameter only once, since its not going to change for the
+        // lifetime of the servlet.
+        if (noOfViews == 0) {
+            noOfViews = DEFAULT_NUMBER_OF_VIEWS_IN_SESSION;
+            String noViews = context.getExternalContext().
+                getInitParameter(NUMBER_OF_VIEWS_IN_SESSION);
+            if (noViews != null ){
+                try {
+                    noOfViews = Integer.valueOf(noViews).intValue();
+                } catch (NumberFormatException nfe) {
+                    noOfViews = DEFAULT_NUMBER_OF_VIEWS_IN_SESSION;
+                    if ( log.isDebugEnabled()) {
+                        log.debug("Error parsing the servetInitParameter " + 
+                        NUMBER_OF_VIEWS_IN_SESSION + ". Using the default " + 
+                        noOfViews);
+                    }
+                }
+            }
+        }
+        
+        // if number of views in session exceeds the specified number
+        // delete the oldest view in the list.
+        if ( viewList.size() > noOfViews ) {
+            String viewToRemove = (String) viewList.remove(0);
+            sessionMap.remove(viewToRemove);
+            if (log.isDebugEnabled()) {
+                log.debug("Number of views in session exceeded specified number " +
+                        noOfViews + ".Removing view " + viewToRemove);
+            }
+        }
     }
 
     protected void restoreComponentState(FacesContext context, 
