@@ -123,7 +123,7 @@ Powered by Faces components:
     </f:facet>
 
  
-    <%@ include file="tabbedpanes3.jsp" %>
+    <jsp:include page="tabbedpanes3.jsp"/>
 
   </d:pane_tab>
 

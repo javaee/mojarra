@@ -36,9 +36,12 @@
  maintenance of any nuclear facility.
 -->
 
+<%@ taglib uri="http://java.sun.com/jsf/core"   prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jsf/html"   prefix="h" %>
+
     <h:panel_group>
       <h:output_text value="This is the third pane with the date set to: "/>
-      <h:output_text valueRef="sessionScope.date"/>
+      <h:output_text valueRef="sessionScope.date">
           <f:convert_datetime dateStyle="full"/>
       </h:output_text>
     </h:panel_group>
