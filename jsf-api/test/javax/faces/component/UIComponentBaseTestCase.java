@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.28 2005/07/28 15:35:35 edburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.29 2005/08/01 17:34:49 edburns Exp $
  */
 
 /*
@@ -8,20 +8,14 @@
  */
 
 package javax.faces.component;
-
-
-import java.io.IOException;
 import java.util.Iterator;
-import java.util.Map;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.el.ValueExpression;
-import javax.faces.event.FacesEvent;
 import javax.faces.mock.MockApplication;
 import javax.faces.mock.MockExternalContext;
 import javax.faces.mock.MockFacesContext;
@@ -30,17 +24,13 @@ import javax.faces.mock.MockHttpServletResponse;
 import javax.faces.mock.MockHttpSession;
 import javax.faces.mock.MockLifecycle;
 import javax.faces.mock.MockRenderKit;
-import javax.faces.mock.MockRenderKitFactory;
 import javax.faces.mock.MockServletConfig;
 import javax.faces.mock.MockServletContext;
 import javax.faces.mock.MockValueBinding;
-import javax.faces.TestUtil;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.faces.event.AbortProcessingException;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -963,5 +953,32 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         
     }
         
+    public void testChildrenAddAll() throws Exception {
+        TestComponent rootComponent = new TestComponent();
+        TestComponent
+                child1 = new TestComponent("child1"),
+                child2 = new TestComponent("child2"),
+                child3 = new TestComponent("child3"),
+                child4 = new TestComponent("child4"),
+                child5 = new TestComponent("child5"),
+                child6 = new TestComponent("child6");
+        
+        List children = rootComponent.getChildren();
+        children.add(child1);
+        children.add(child2);
+        children.add(child3);
+        children.add(child4);
+        children.add(child5);
+        children.add(child6);
+        
+        assertEquals(6, children.size());
+        
+        TestComponent otherRoot = new TestComponent("otherRoot");
+        otherRoot.getChildren().addAll(children);
+        
+        assertEquals(0, children.size());
+        assertEquals(6, otherRoot.getChildren().size());
+        
+    }
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.111 2005/07/28 15:35:34 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.112 2005/08/01 17:34:48 edburns Exp $
  */
 
 /*
@@ -1668,7 +1668,7 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         public boolean addAll(Collection collection) {
-            Iterator elements = collection.iterator();
+            Iterator elements = (new ArrayList(collection)).iterator();
             boolean changed = false;
             while (elements.hasNext()) {
                 UIComponent element =
@@ -1684,7 +1684,7 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         public boolean addAll(int index, Collection collection) {
-            Iterator elements = collection.iterator();
+            Iterator elements = (new ArrayList(collection)).iterator();
             boolean changed = false;
             while (elements.hasNext()) {
                 UIComponent element =
