@@ -13,6 +13,7 @@
 
   // replace mappings provided by the JSF implementation in order to 
   // customize the behavior of standard JSF features.
+  UIComponent oldForm = appl.createComponent("Form");
   appl.addComponent("Form", "com.sun.faces.systest.TestComponent");
 
   // try to retrieve our component from Application
@@ -25,5 +26,8 @@
   } else {
       out.println("/component01.jsp PASSED");
   }
+
+  // restore the old mapping
+  appl.addComponent("Form", oldForm.getClass().getName());
   
 %>
