@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.118 2005/08/22 22:07:55 ofung Exp $
+ * $Id: UIComponentBase.java,v 1.119 2005/11/28 21:45:04 rlubke Exp $
  */
 
 /*
@@ -754,10 +754,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     public Iterator<UIComponent> getFacetsAndChildren() {
-        List<String> l = new ArrayList<String>();
-        List<String> l2 = Collections.unmodifiableList(l);
-        Iterator<String> i = l2.iterator();
-        
+                
         Iterator<UIComponent> result = null;
         int childCount = this.getChildCount(), 
                 facetCount = this.getFacetCount();
