@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.11 2003/12/17 15:13:55 rkitain Exp $
+ * $Id: HtmlResponseWriter.java,v 1.12 2004/01/30 07:01:03 rkitain Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 	try { 
 	    HtmlUtils.validateEncoding(encoding);
 	} catch (UnsupportedEncodingException e) {
-	    throw new FacesException(Util.getExceptionMessage(
+	    throw new IllegalArgumentException(Util.getExceptionMessage(
 	        Util.ENCODING_ERROR_MESSAGE_ID));
 	}
     }
