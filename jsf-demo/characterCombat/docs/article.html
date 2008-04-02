@@ -9,19 +9,15 @@
 </h1>
 <p>JavaServer Faces (JSF) makes it easy to build powerful and dynamic
 web
-applications. There are many web use interface frameworks available,
-but
-what makes JSF stand out from all the rest is that it is a standard,
-ratified by the Java Community Process. As
+applications. There are many web user interface frameworks available,
+but JSF stands out for several reasons: it is a Java Community Process
+standard, it brings JavaBeans paradigms to Web UI programming, and it
+was built by taking the best ideas from many existing frameworks.&nbsp;
+As
 a standard, many tool venders can rely on well defined and consistent
-behavior to build around. JSF was designed to be toolable from the very
+behavior. JSF was designed for use inside of tools from the very
 beginning. Users can also rely on consistent and specific behavior from
 one JSF implementation to the next.
-</p>
-<p>Two of the biggest issues that JSF addresses include managing UI
-component state across requests and handling navigation in response to
-UI events. These are very common issues that web application developers
-need to address in their designs.
 </p>
 <p>There are many features available in JSF. Some of the main feature
 highlights include:
@@ -42,7 +38,9 @@ highlights include:
     <p> managed bean facility </p>
   </li>
   <li>
-    <p> navigation handling </p>
+    <p> navigation in response to specific user events</p>
+  </li>
+  <li>preserving application state across requests<br>
   </li>
   <li>
     <p> conversion model </p>
@@ -66,8 +64,11 @@ built in memory on the server, with each component tag corresponding to
 a UIComponent instance in the tree. This component tree is used by the
 framework
 to handle your application request and create a rendered response. When
-you generate an event like clicking on a command button, the JSF
-lifecycle handles that event and generates an appropriate response.
+the user generates an event, for example, by clicking on a button, the
+JSF
+lifecycle handles that event and generates an appropriate
+response.&nbsp; This is a familiar paradigm common to most forms of
+grpahical user interface programming.<br>
 </p>
 <p>The FacesServlet is the entry point into the JSF framework. It
 handles
@@ -118,7 +119,8 @@ fun way. The application is called Character Combat.
     </li>
   </ul>
 </ul>
-<p>jmh: NOTE: insert example work flow diagram here</p>
+<img src="workflow.jpg" title="" alt="Workflow Diagram"
+ style="width: 512px; height: 662px;"><br>
 <h2>Managed Beans
 </h2>
 <p>A managed bean is simply a java class with a public, no-args
