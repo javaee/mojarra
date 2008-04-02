@@ -1182,6 +1182,33 @@
          present, value takes precedence and nested ChartItem tags are ignored.
       </description>
     </attribute>
+
+    <attribute>
+      <name>title</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        The title of the chart.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>xlabel</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        The label that appears along the x axis of the chart.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>ylabel</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        The label that appears along the y axis of the chart.
+      </description>
+    </attribute>
   </tag>
   
   <tag>

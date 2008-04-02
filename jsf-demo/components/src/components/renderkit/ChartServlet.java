@@ -1,5 +1,5 @@
 /*
- * $Id: ChartServlet.java,v 1.2 2004/03/08 17:55:36 rkitain Exp $
+ * $Id: ChartServlet.java,v 1.3 2004/03/08 23:19:35 rkitain Exp $
  */
 
 /*
@@ -194,6 +194,10 @@ public final class ChartServlet extends HttpServlet {
 	    orientation = HORIZONTAL;
 	}
 
+	// label for x/y axis
+	String xLabel = request.getParameter("xlabel");
+	String yLabel = request.getParameter("ylabel");
+
 	// default image size
 	int width = 400;
 	int height = 300;
@@ -260,7 +264,7 @@ public final class ChartServlet extends HttpServlet {
                 barWidth = maxLabelWidth;
 		cx = (Math.max((barWidth + barSpacing),maxLabelWidth) * i) +
 		    barSpacing;
-		totalWidth += cx;
+		totalWidth = cx + (4 * titleFont.getSize());
 		break;
 	      case HORIZONTAL:
 		barWidth = titleFont.getSize();
@@ -271,7 +275,7 @@ public final class ChartServlet extends HttpServlet {
 
 	}
 	if (orientation == VERTICAL) {
-            totalHeight = maxDataValue + (4 * titleFont.getSize());
+            totalHeight = maxDataValue + (8 * titleFont.getSize());
 	} else {
 	    totalWidth = maxDataValue + (4 * titleFont.getSize() +
 		(Integer.toString(maxDataValue).length() * titleFont.getSize()));
@@ -304,6 +308,13 @@ public final class ChartServlet extends HttpServlet {
 	g2d.setColor(Color.black);
 	g2d.drawString(title, Math.max((totalWidth - i)/2, 0),
 	    totalHeight - titleFontMetrics.getDescent());
+
+	// draw the x axis label
+	i = titleFontMetrics.stringWidth(xLabel);
+	g2d.drawString(xLabel, Math.max((totalWidth - i)/2, 0),
+	    totalHeight - (6 * titleFontMetrics.getDescent()));
+
+	// draw the y axis label
 
 	// loop through to draw the chart items.
         for (i=0; i < columns; i++) {
@@ -364,17 +375,17 @@ public final class ChartServlet extends HttpServlet {
 		// draw the label
 		g2d.setColor(Color.black);
 		g2d.drawString((String)label, cx,
-		    totalHeight - titleFont.getSize() - titleFontMetrics.getDescent());	
+		    totalHeight - titleFont.getSize() - (8 * titleFontMetrics.getDescent()));	
 
 		// draw the shadow bar
 		if (color == Color.black) {
 		    g2d.setColor(Color.gray);
 		}
-		g2d.fillRect(cx + 5, cy - 3, barWidth,  (value));
+		g2d.fillRect(cx + 5, cy - 28, barWidth,  (value));
 		// draw the bar with the specified color
 		g2d.setColor((Color)(color));
-                g2d.fillRect(cx, cy, barWidth, (value));
-                g2d.drawString("" + value, cx, cy - titleFontMetrics.getDescent());
+                g2d.fillRect(cx, cy - 30, barWidth, (value));
+                g2d.drawString("" + value, cx, cy - 30 - titleFontMetrics.getDescent());
 		break;
 	      case HORIZONTAL:
 		barWidth = titleFont.getSize();

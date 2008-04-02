@@ -79,6 +79,21 @@ public class ChartTag extends UIComponentTag {
         this.type = type;
     }
 
+    private String title = null;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    private String xlabel = null;
+    public void setXlabel(String xlabel) {
+        this.xlabel = xlabel;
+    }
+
+    private String ylabel = null;
+    public void setYlabel(String ylabel) {
+        this.ylabel = ylabel;
+    }
+
     public String getComponentType() {
         return ("Chart");
     }
@@ -150,7 +165,35 @@ public class ChartTag extends UIComponentTag {
                 chart.setValue(value);
             }
         }
+        
+        if (title != null) {
+            if (isValueReference(title)) {
+                ValueBinding vb = FacesContext.getCurrentInstance()
+                    .getApplication().createValueBinding(title);
+                chart.setValueBinding("title", vb);
+            } else {
+                chart.setTitle(title);
+            }
+        }
+        
+        if (xlabel != null) {
+            if (isValueReference(xlabel)) {
+                ValueBinding vb = FacesContext.getCurrentInstance()
+                    .getApplication().createValueBinding(xlabel);
+                chart.setValueBinding("xlabel", vb);
+            } else {
+                chart.setXlabel(xlabel);
+            }
+        }
+        
+        if (ylabel != null) {
+            if (isValueReference(ylabel)) {
+                ValueBinding vb = FacesContext.getCurrentInstance()
+                    .getApplication().createValueBinding(ylabel);
+                chart.setValueBinding("ylabel", vb);
+            } else {
+                chart.setYlabel(ylabel);
+            }
+        }
     }
-
-
 }

@@ -79,7 +79,10 @@ public class ChartComponent extends UIOutput {
     private String width = null;
     private String height = null;
     private String orientation = null;
-    private String type= null;
+    private String type = null;
+    private String title = null;
+    private String xlabel = null;
+    private String ylabel = null;
     
     // --------------------------------------------------------------Constructors 
 
@@ -191,6 +194,77 @@ public class ChartComponent extends UIOutput {
         this.type = type;
     }
 
+    /**
+     * <p>Return the title of the chart</p>
+     */
+    public String getTitle() {
+        if (null != this.title) {
+            return this.title;
+        }
+        ValueBinding _vb = getValueBinding("title");
+        if (_vb != null) {
+            return (java.lang.String) _vb.getValue(getFacesContext());
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * <p>Set the title of the chart</p>
+     *
+     * @param title The new title of the chart
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * <p>Return the x axis label of the chart</p>
+     */
+    public String getXlabel() {
+        if (null != this.xlabel) {
+            return this.xlabel;
+        }
+        ValueBinding _vb = getValueBinding("xlabel");
+        if (_vb != null) {
+            return (java.lang.String) _vb.getValue(getFacesContext());
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * <p>Set the x axis label of the chart</p>
+     *
+     * @param xlabel The new x axis label of the chart
+     */
+    public void setXlabel(String xlabel) {
+        this.xlabel = xlabel;
+    }
+
+    /**
+     * <p>Return the y axis label of the chart</p>
+     */
+    public String getYlabel() {
+        if (null != this.ylabel) {
+            return this.ylabel;
+        }
+        ValueBinding _vb = getValueBinding("ylabel");
+        if (_vb != null) {
+            return (java.lang.String) _vb.getValue(getFacesContext());
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * <p>Set the y axis label of the chart</p>
+     *
+     * @param ylabel The new y axis label of the chart
+     */
+    public void setYlabel(String ylabel) {
+        this.ylabel = ylabel;
+    }
 
     /**
      * <p>Return the component family for this component.</p>
@@ -292,7 +366,25 @@ public class ChartComponent extends UIOutput {
         if ( type != null ) {
             result.append(type);
         }
+        result.append("&");
+
+        result.append("title=");
+        if ( title != null ) {
+            result.append(title);
+        }
+        result.append("&");
+
+        result.append("xlabel=");
+        if ( xlabel != null ) {
+            result.append(xlabel);
+        }
+        result.append("&");
       
+        result.append("ylabel=");
+        if ( ylabel != null ) {
+            result.append(ylabel);
+        }
+
         return (result.toString());
      }
     
