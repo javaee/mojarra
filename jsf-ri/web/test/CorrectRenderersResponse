@@ -21,6 +21,6 @@
 <a href="#" onmousedown="document.forms[0]['labelLink2'].value='labelLink2'; document.forms[0].submit()">model label</a><input type="hidden" name="labelLink2" />
 <a href="#" onmousedown="document.forms[0]['labelLink3'].value='labelLink3'; document.forms[0].submit()">RES-BUNDLE PASSED</a><input type="hidden" name="labelLink3" />
 <a href="#" onmousedown="document.forms[0]['labelLink4'].value='labelLink4'; document.forms[0].submit()"></a><input type="hidden" name="labelLink4" />
-<a href="#" onmousedown="document.forms[0]['hyperlinkImage'].value='hyperlinkImage'; document.forms[0].submit()"><img src="duke.gif"></a><input type="hidden" name="hyperlinkImage" />
-<a href="#" onmousedown="document.forms[0]['hyperlinkImage2'].value='hyperlinkImage2'; document.forms[0].submit()"><img src="resduke.gif"></a><input type="hidden" name="hyperlinkImage2" />
+<a href="#" onmousedown="document.forms[0]['hyperlinkImage'].value='hyperlinkImage'; document.forms[0].submit()"><img src="duke.gif" /></a><input type="hidden" name="hyperlinkImage" />
+<a href="#" onmousedown="document.forms[0]['hyperlinkImage2'].value='hyperlinkImage2'; document.forms[0].submit()"><img src="resduke.gif" /></a><input type="hidden" name="hyperlinkImage2" />
 <a href="#" onmousedown="document.forms[0]['paramLink'].value='paramLink'; document.forms[0].submit()">hyperlink with parameters</a><input type="hidden" name="paramLink" /><input type="hidden" name="parameter1" value="param_value1" /><input type="hidden" name="parameter2" value="param_value2" />

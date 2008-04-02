@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.59 2003/09/12 18:31:53 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.60 2003/09/22 21:17:24 rkitain Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.59 2003/09/12 18:31:53 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.60 2003/09/22 21:17:24 rkitain Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -212,6 +212,7 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         if (imageSrc != null) {
 	    writer.startElement("img", null);
 	    writer.writeAttribute("src", getImageText(imageSrc), "image");
+	    writer.endElement("img");
         } else {
             writer.writeText(getLabel(context, command), "value");
         }

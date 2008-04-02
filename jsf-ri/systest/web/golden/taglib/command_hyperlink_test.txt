@@ -15,8 +15,8 @@
         <a href="#" onmousedown="document.forms[0]['hyperlink01'].value='hyperlink01'; document.forms[0].submit()">My Link</a><input type="hidden" name="hyperlink01" />
         <a href="#" onmousedown="document.forms[0]['hyperlink02'].value='hyperlink02'; document.forms[0].submit()">This is a String property</a><input type="hidden" name="hyperlink02" />
         <a href="#" onmousedown="document.forms[0]['hyperlink03'].value='hyperlink03'; document.forms[0].submit()">RES-BUNDLE LINK</a><input type="hidden" name="hyperlink03" />
-        <a href="#" onmousedown="document.forms[0]['hyperlink04'].value='hyperlink04'; document.forms[0].submit()"><img src="duke.gif"></a><input type="hidden" name="hyperlink04" />
-        <a href="#" onmousedown="document.forms[0]['hyperlink05'].value='hyperlink05'; document.forms[0].submit()"><img src="resbundle_image.gif"></a><input type="hidden" name="hyperlink05" />
+        <a href="#" onmousedown="document.forms[0]['hyperlink04'].value='hyperlink04'; document.forms[0].submit()"><img src="duke.gif" /></a><input type="hidden" name="hyperlink04" />
+        <a href="#" onmousedown="document.forms[0]['hyperlink05'].value='hyperlink05'; document.forms[0].submit()"><img src="resbundle_image.gif" /></a><input type="hidden" name="hyperlink05" />
         <a href="#" onmousedown="document.forms[0]['hyperlink06'].value='hyperlink06'; document.forms[0].submit()"
             
         >Paramter Link</a><input type="hidden" name="hyperlink06" /><input type="hidden" name="param1" value="value1" />
