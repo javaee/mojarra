@@ -93,6 +93,7 @@
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-beanutils.jar}"/>
     <pathelement location="${xerces.jar}"/>
+    <pathelement location="${dom.jar}"/>
   </path>
 
   <!--
