@@ -141,6 +141,15 @@ public class AreaComponent extends UIOutput {
     public void setTargetImage(String targetImage) {
         this.targetImage = targetImage;
     }
+    
+    /**
+     * <p>Return the component family for this component.</p>
+     */
+    public String getFamily() {
+
+        return ("Area");
+
+    }
 
     // -------------------------------------------------------- UIOutput Methods
 

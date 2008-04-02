@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber1Label"
+               <h:outputText id="outputNumber1Label"
                      value="output_number number"/>
 
              </td>
@@ -15,7 +15,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber1" value="#{LoginBean.floater}"/>
+               <h:outputText id="outputNumber1" value="#{LoginBean.floater}"/>
 
              </td>
              <td>
@@ -30,7 +30,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber2Label" 
+               <h:outputText id="outputNumber2Label" 
                      value="output_number currency"/>
 
              </td>
@@ -38,9 +38,9 @@
 
              <td>
 
-               <h:output_text id="outputNumber2" value="#{LoginBean.floater}">
+               <h:outputText id="outputNumber2" value="#{LoginBean.floater}">
                    <f:convertNumber type="currency"/>
-               </h:output_text>
+               </h:outputText>
              </td>
 
 	      <td>
@@ -56,7 +56,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber3Label" 
+               <h:outputText id="outputNumber3Label" 
                      value="output_number percent"/>
 
              </td>
@@ -64,9 +64,9 @@
 
              <td>
 
-               <h:output_text id="outputNumber3" value="#{LoginBean.floater}">
+               <h:outputText id="outputNumber3" value="#{LoginBean.floater}">
                    <f:convertNumber type="percent"/>
-               </h:output_text>
+               </h:outputText>
 
              </td>
 
@@ -83,7 +83,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber4Label" 
+               <h:outputText id="outputNumber4Label" 
                      value="output_number PATTERN "/>
 
              </td>
@@ -91,9 +91,9 @@
 
              <td>
 
-               <h:output_text id="outputNumber4" value="#{LoginBean.floater}">
+               <h:outputText id="outputNumber4" value="#{LoginBean.floater}">
                    <f:convertNumber pattern="####"/>
-               </h:output_text>
+               </h:outputText>
              </td>
 
 	      <td>
@@ -109,7 +109,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber5Label"
+               <h:outputText id="outputNumber5Label"
                      value="output_number integer with valueRef"/>
 
              </td>
@@ -117,7 +117,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber5" value="#{LoginBean.char}"/>
+               <h:outputText id="outputNumber5" value="#{LoginBean.char}"/>
              </td>
 
               <td>

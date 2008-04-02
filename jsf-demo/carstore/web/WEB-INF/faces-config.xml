@@ -240,6 +240,7 @@
       <description>
         Any action on chooseLocale should cause navigation to storeFront.jsp
       </description>
+      <from-outcome>storeFront</from-outcome>
       <to-view-id>/storeFront.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>

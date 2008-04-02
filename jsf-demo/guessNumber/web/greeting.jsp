@@ -44,14 +44,14 @@
     <f:view>
     <h:form id="helloForm" >
       <h2>Hi. My name is Duke.  I'm thinking of a number from
-      <h:output_text value="#{UserNumberBean.minimum}"/> to
-      <h:output_text value="#{UserNumberBean.maximum}"/>.  Can you guess
+      <h:outputText value="#{UserNumberBean.minimum}"/> to
+      <h:outputText value="#{UserNumberBean.maximum}"/>.  Can you guess
       it?</h2>
 
-        <h:graphic_image id="waveImg" url="/wave.med.gif" />
-  	<h:input_text id="userNo" value="#{UserNumberBean.userNumber}"
+        <h:graphicImage id="waveImg" url="/wave.med.gif" />
+  	<h:inputText id="userNo" value="#{UserNumberBean.userNumber}"
                       validator="#{UserNumberBean.validate}"/>          
-	 <h:command_button id="submit" action="success" value="Submit" />
+	 <h:commandButton id="submit" action="success" value="Submit" />
          <p>
 	 <h:message style="color: red; font-family: 'New Century Schoolbook', serif; font-style: oblique; text-decoration: overline" id="errors1" for="userNo"/>
 

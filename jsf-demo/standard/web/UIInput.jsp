@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIInput.jsp,v 1.9 2004/01/19 19:38:05 craigmcc Exp $ --%>
+<%-- $Id: UIInput.jsp,v 1.10 2004/01/27 21:31:42 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -27,10 +27,10 @@
      
        <h:form id="standardRenderKitForm" >
 
-         <h:command_button id="standardRenderKitSubmit" 
+         <h:commandButton id="standardRenderKitSubmit" 
              action="#{model.postbackAction}"
              value="#{standardBundle.standardRenderKitPostbackLabel}">
-         </h:command_button>
+         </h:commandButton>
 
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
 
@@ -66,10 +66,10 @@
 
          </table>
 
-         <h:command_button id="standardRenderKitSubmit1" 
+         <h:commandButton id="standardRenderKitSubmit1" 
              action="#{model.postbackAction}"
              value="#{standardBundle.standardRenderKitPostbackLabel}">
-         </h:command_button>
+         </h:commandButton>
 
        </h:form>
 

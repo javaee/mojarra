@@ -54,8 +54,18 @@ import javax.faces.context.FacesContext;
 
 public class CalendarComponent extends UIComponentBase {
     
-    // FIXME: eventually, we'll have properties here...
+    // FIXME: eventually, we'll have more properties here...
     
+    /**
+     * <p>Return the component family for this component.</p>
+     */
+    public String getFamily() {
+
+        return ("Calendar");
+
+    }
+
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
         FacesContext facesContext = FacesContext.getCurrentInstance();

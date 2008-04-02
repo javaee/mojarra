@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataBean.java,v 1.9 2004/01/20 03:04:37 craigmcc Exp $
+ * $Id: UIDataBean.java,v 1.10 2004/01/27 21:31:38 eburns Exp $
  */
 
 /*

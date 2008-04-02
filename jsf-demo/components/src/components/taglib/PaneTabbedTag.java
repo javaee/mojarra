@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabbedTag.java,v 1.7 2004/01/17 05:20:22 craigmcc Exp $
+ * $Id: PaneTabbedTag.java,v 1.8 2004/01/27 21:31:21 eburns Exp $
  */
 
 /*

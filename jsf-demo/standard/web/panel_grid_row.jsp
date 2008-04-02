@@ -6,7 +6,7 @@
            <tr>
 
              <td>
-               <h:output_text id="foo"
+               <h:outputText id="foo"
                      value="Grid with hardcoded values"/>
              </td>
                    
@@ -15,7 +15,7 @@
 
                <h:form id="form1">
 
-                  <h:panel_grid  columns="3" 
+                  <h:panelGrid  columns="3" 
                                   border="1"
                              cellpadding="3"
                              cellspacing="3"
@@ -23,47 +23,47 @@
                                    title="Grid with hardcoded HTML styles" >
 
                     <f:facet        name="header">
-                      <h:panel_group>
-                        <h:output_text
+                      <h:panelGroup>
+                        <h:outputText
                                    value="Logon "/>
-                        <h:output_text
+                        <h:outputText
                                    value="Form"/>
-                      </h:panel_group>
+                      </h:panelGroup>
                     </f:facet>
 
-                    <h:output_text value="Username:"/>
+                    <h:outputText value="Username:"/>
 
-                    <h:input_text     id="username1"
+                    <h:inputText     id="username1"
                                    value="username"
                                 required="true"/>
 
                     <h:message for="form1:username1"/>
 
-                    <h:output_text value="Password:"/>
+                    <h:outputText value="Password:"/>
 
-                    <h:input_secret   id="password1"
+                    <h:inputSecret   id="password1"
                                    value="password"
                                 required="true"/>
 
                     <h:message for="form1:password1"/>
 
-                    <h:command_button id="submit1"
+                    <h:commandButton id="submit1"
                                action="#{LoginForm.login}"
                                     type="SUBMIT"
                                    value="Login"/>
 
-                    <h:command_button id="reset1"
+                    <h:commandButton id="reset1"
                                     type="RESET"
                                    value="Reset"/>
 
-                    <h:output_text value=""/>
+                    <h:outputText value=""/>
 
                     <f:facet         name="footer">
-                      <h:output_text
+                      <h:outputText
                                     value="Enter username and password to login"/>
                     </f:facet>
 
-                </h:panel_grid>
+                </h:panelGrid>
  
                </h:form>
 
@@ -74,7 +74,7 @@
             <tr>
 
               <td>
-                 <h:output_text id="panel4Label"
+                 <h:outputText id="panel4Label"
                        value="Grid with CSS stylesheets"/>
              </td>
 
@@ -83,7 +83,7 @@
              
                <h:form id="form2">
 
-                  <h:panel_grid  columns="3"
+                  <h:panelGrid  columns="3"
                              footerClass="form-footer"
                              headerClass="form-header"
                               styleClass="form-background"
@@ -92,51 +92,51 @@
                                    title="Grid with CSS stylesheet styles" >
 
                     <f:facet        name="header">
-                      <h:panel_group>
-                        <h:output_text
+                      <h:panelGroup>
+                        <h:outputText
                                    value="Logon "/>
-                        <h:output_text
+                        <h:outputText
                                    value="Form"/>
-                      </h:panel_group>
+                      </h:panelGroup>
                     </f:facet>
 
-                    <h:output_text value="Username:"/>
+                    <h:outputText value="Username:"/>
 
-                    <h:input_text     id="username2"
+                    <h:inputText     id="username2"
                                  binding="#{LoginForm.username}"
                                 required="true"/>
 
                     <h:message for="form2:username2"/>
 
-                    <h:output_text value="Password:"/>
+                    <h:outputText value="Password:"/>
 
-                    <h:input_secret   id="password2"
+                    <h:inputSecret   id="password2"
                                  binding="#{LoginForm.password}"
                                 required="true"/>
 
                     <h:message for="form2:password2"/>
 
-                    <h:command_button id="submit2"
+                    <h:commandButton id="submit2"
                                action="#{LoginForm.login}"
                                     type="SUBMIT"
                                    value="Login"/>
 
-                    <h:command_button id="reset2"
+                    <h:commandButton id="reset2"
                                     type="RESET"
                                    value="Reset"/>
 
-                    <h:output_text value=""/>
+                    <h:outputText value=""/>
 
                     <f:facet         name="footer">
-                      <h:panel_group   id="footerGroup">
-                        <h:output_text
+                      <h:panelGroup   id="footerGroup">
+                        <h:outputText
                                     value="Enter username and password "/>
-                        <h:output_text
+                        <h:outputText
                                     value="to login"/>
-                      </h:panel_group>
+                      </h:panelGroup>
                     </f:facet>
 
-                  </h:panel_grid>
+                  </h:panelGrid>
  
                 </h:form>
 

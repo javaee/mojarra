@@ -5,7 +5,7 @@
 
 				<tr>
 					<td>Multi-select listbox:</td>
-					<td><h:selectmany_listbox id="ManyApples2">
+					<td><h:selectmanyListbox id="ManyApples2">
 						<f:selectItem itemValue="0" itemLabel="zero" />
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
@@ -16,31 +16,31 @@
 						<f:selectItem itemValue="7" itemLabel="seven" />
 						<f:selectItem itemValue="8" itemLabel="eight" />
 						<f:selectItem itemValue="9" itemLabel="nine" />
-					</h:selectmany_listbox></td>
+					</h:selectmanyListbox></td>
 				</tr>
 				<tr>
 					<td>Multi-select listmodel:</td>
-					<td><h:selectmany_listbox id="listmodel"
+					<td><h:selectmanyListbox id="listmodel"
 						value="#{LoginBean.currentOptions}">
 						<f:selectItems id="listmodelitems"
 							value="#{LoginBean.options}" />
-					</h:selectmany_listbox></td>
+					</h:selectmanyListbox></td>
 				</tr>
 
                                 <tr>
 					<td>Multi-select listmodel with options of type java.lang.Long:</td>
-					<td><h:selectmany_listbox id="longlistmodel"
+					<td><h:selectmanyListbox id="longlistmodel"
 						value="#{LoginBean.currentLongOptions}">
 						<f:selectItems id="longlistmodelitems"
 							value="#{LoginBean.longList}" />
-					</h:selectmany_listbox></td>
+					</h:selectmanyListbox></td>
 				</tr>
 
                                 <tr>
 					<td>Multi-select listmodel Group:</td>
-					<td><h:selectmany_listbox id="listmodelGroup"
+					<td><h:selectmanyListbox id="listmodelGroup"
 						value="#{LoginBean.currentOptions}">
 						<f:selectItems id="listmodelitemsGroup"
 							value="#{LoginBean.optionsGroup}" />
-					</h:selectmany_listbox></td>
+					</h:selectmanyListbox></td>
 				</tr>

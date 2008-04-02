@@ -54,9 +54,9 @@
 
     <h:form>
 
-        <h:graphic_image  url="/images/cardemo.jpg" /> 
+        <h:graphicImage  url="/images/cardemo.jpg" /> 
 
-        <h:panel_grid columns="2" 
+        <h:panelGrid columns="2" 
                       footerClass="form-footer"
                       headerClass="form-header"
                       styleClass="top-table"
@@ -64,60 +64,60 @@
                       summary="#{bundle.chooseCar}" 
                       title="#{bundle.chooseCar}" >
 
-            <h:panel_grid columns="2"
+            <h:panelGrid columns="2"
                           styleClass="storeFrontCar">
 
                 <!-- Jalopy -->
-                <h:graphic_image binding="#{carstore.models.Jalopy.components.imageSmall}" />
-                <h:output_text styleClass="subtitlebig"
+                <h:graphicImage binding="#{carstore.models.Jalopy.components.imageSmall}" />
+                <h:outputText styleClass="subtitlebig"
                   value="#{carstore.models.Jalopy.attributes.title}" />
-                <h:output_text 
+                <h:outputText 
             value="#{carstore.models.Jalopy.attributes.description}"/> 
-                <h:command_button 
+                <h:commandButton 
                            action="#{carstore.storeFrontJalopyPressed}" 
                            value="#{bundle.moreButton}" >
-                </h:command_button>
+                </h:commandButton>
 
                 <!-- Roadster -->
-                <h:graphic_image binding="#{carstore.models.Roadster.components.imageSmall}" />
-                <h:output_text styleClass="subtitlebig"
+                <h:graphicImage binding="#{carstore.models.Roadster.components.imageSmall}" />
+                <h:outputText styleClass="subtitlebig"
                value="#{carstore.models.Roadster.attributes.title}" />
-                <h:output_text 
+                <h:outputText 
          value="#{carstore.models.Roadster.attributes.description}" /> 
-                <h:command_button 
+                <h:commandButton 
                            action="#{carstore.storeFrontRoadsterPressed}" 
                            value="#{bundle.moreButton}" >
-                </h:command_button>
+                </h:commandButton>
 
-            </h:panel_grid>
+            </h:panelGrid>
 
-            <h:panel_grid columns="2"
+            <h:panelGrid columns="2"
                           styleClass="storeFrontCar">
 
                 <!-- Luxury -->
-                <h:graphic_image binding="#{carstore.models.Luxury.components.imageSmall}" />
-                <h:output_text styleClass="subtitlebig"
+                <h:graphicImage binding="#{carstore.models.Luxury.components.imageSmall}" />
+                <h:outputText styleClass="subtitlebig"
                   value="#{carstore.models.Luxury.attributes.title}" />
-                <h:output_text 
+                <h:outputText 
            value="#{carstore.models.Luxury.attributes.description}" /> 
-                <h:command_button 
+                <h:commandButton 
                            action="#{carstore.storeFrontLuxuryPressed}" 
                            value="#{bundle.moreButton}" >
-                </h:command_button>
+                </h:commandButton>
 
                 <!-- SUV -->
-                <h:graphic_image binding="#{carstore.models.SUV.components.imageSmall}" />
-                <h:output_text styleClass="subtitlebig"
+                <h:graphicImage binding="#{carstore.models.SUV.components.imageSmall}" />
+                <h:outputText styleClass="subtitlebig"
                   value="#{carstore.models.SUV.attributes.title}" />
-                <h:output_text 
+                <h:outputText 
               value="#{carstore.models.SUV.attributes.description}" /> 
-                <h:command_button action="#{carstore.storeFrontSUVPressed}" 
+                <h:commandButton action="#{carstore.storeFrontSUVPressed}" 
                                   value="#{bundle.moreButton}" >
-                </h:command_button>
+                </h:commandButton>
 
-            </h:panel_grid>
+            </h:panelGrid>
 
-        </h:panel_grid>
+        </h:panelGrid>
 
     </h:form>
 

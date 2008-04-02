@@ -50,7 +50,7 @@
 
             <table> 
             <tr> 
-              <td> <h:output_text id="testLabel" value="JavaServer Faces custom components test page..." /> </td>
+              <td> <h:outputText id="testLabel" value="JavaServer Faces custom components test page..." /> </td>
             </tr>
 
           </TR>

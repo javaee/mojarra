@@ -45,10 +45,10 @@
     <jsp:useBean id="UserNameBean" class="helloDuke.UserNameBean" scope="session" />
     <f:view>
     <h:form id="helloForm" >
-        <h:graphic_image id="waveImg" url="/wave.med.gif" />
-  	<h:input_text id="username"
+        <h:graphicImage id="waveImg" url="/wave.med.gif" />
+  	<h:inputText id="username"
 			valueRef="UserNameBean.userName"/>
-  	<h:command_button id="submit" action="success" value="Submit" 
+  	<h:commandButton id="submit" action="success" value="Submit" 
 		          type="submit" />
     </h:form>
     </f:view>

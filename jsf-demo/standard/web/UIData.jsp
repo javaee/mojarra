@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIData.jsp,v 1.14 2004/01/20 03:04:37 craigmcc Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.15 2004/01/27 21:31:42 eburns Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -54,7 +54,7 @@
 
   <h:form id="standardRenderKitForm">
 
-  <h:data_table columnClasses="list-column-center,
+  <h:dataTable columnClasses="list-column-center,
                                list-column-center, list-column-left,
                                list-column-center, list-column-right,
                                list-column-center"
@@ -69,20 +69,20 @@
                           var="customer">
 
     <f:facet             name="header">
-      <h:output_text    value="Overall Table Header"/>
+      <h:outputText    value="Overall Table Header"/>
     </f:facet>
 
     <f:facet             name="footer">
-      <h:output_text    value="Overall Table Footer"/>
+      <h:outputText    value="Overall Table Footer"/>
     </f:facet>
 
     <h:column>
       <%-- Visible checkbox for selection --%>
-      <h:selectboolean_checkbox
+      <h:selectbooleanCheckbox
                            id="checked"
                       binding="#{UIDataBean.checked}"/>
       <%-- Invisible checkbox for "created" flag --%>
-      <h:selectboolean_checkbox
+      <h:selectbooleanCheckbox
                            id="created"
                       binding="#{UIDataBean.created}"
                      rendered="false"/>
@@ -90,47 +90,47 @@
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Account Id"/>
+        <h:outputText  value="Account Id"/>
       </f:facet>
       <f:facet           name="footer">
-        <h:output_text  value="A.I. Footer"/>
+        <h:outputText  value="A.I. Footer"/>
       </f:facet>
-      <h:input_text        id="accountId"
+      <h:inputText        id="accountId"
                       binding="#{UIDataBean.accountId}"
                      required="true"
                          size="6"
                         value="#{customer.accountId}">
         <f:valueChangeListener
                          type="standard.LogValueChangedListener"/>
-      </h:input_text>
+      </h:inputText>
       <h:message          for="accountId"/>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Customer Name"/>
+        <h:outputText  value="Customer Name"/>
       </f:facet>
       <f:facet           name="footer">
-        <h:output_text  value="C.N. Footer"/>
+        <h:outputText  value="C.N. Footer"/>
       </f:facet>
-      <h:input_text        id="name"
+      <h:inputText        id="name"
                      required="true"
                          size="50"
                         value="#{customer.name}">
         <f:valueChangeListener
                          type="standard.LogValueChangedListener"/>
-      </h:input_text>
+      </h:inputText>
       <h:message          for="name"/>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Symbol"/>
+        <h:outputText  value="Symbol"/>
       </f:facet>
       <f:facet           name="footer">
-        <h:output_text  value="S. Footer"/>
+        <h:outputText  value="S. Footer"/>
       </f:facet>
-      <h:input_text        id="symbol"
+      <h:inputText        id="symbol"
                      required="true"
                          size="6"
                         value="#{customer.symbol}">
@@ -139,106 +139,108 @@
                       minimum="2"/>
         <f:valueChangeListener
                          type="standard.LogValueChangedListener"/>
-      </h:input_text>
+      </h:inputText>
       <h:message          for="symbol"/>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Total Sales"/>
+        <h:outputText  value="Total Sales"/>
       </f:facet>
       <f:facet           name="footer">
-        <h:output_text  value="T.S. Footer"/>
+        <h:outputText  value="T.S. Footer"/>
       </f:facet>
-      <h:output_text       id="totalSales"
-                        value="#{customer.totalSales}"/>
+      <h:outputText       id="totalSales"
+                        value="#{customer.totalSales}">
+        <f:convertNumber type="currency"/>
+      </h:outputText>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
-        <h:command_button  id="headerButton"
+        <h:commandButton  id="headerButton"
                        action="#{UIDataBean.header}"
                     immediate="true"
                         value="Header"
                          type="SUBMIT"/>
       </f:facet>
       <f:facet           name="footer">
-        <h:command_button  id="footerButton"
+        <h:commandButton  id="footerButton"
                        action="#{UIDataBean.footer}"
                     immediate="true"
                         value="Footer"
                          type="SUBMIT"/>
       </f:facet>
-      <h:command_button    id="press"
+      <h:commandButton    id="press"
                     action="#{UIDataBean.press}"
                     immediate="true"
                         value="#{UIDataBean.pressLabel}"
                          type="SUBMIT"/>
-      <h:command_link id="click"
+      <h:commandLink id="click"
                     action="#{UIDataBean.click}"
                     immediate="true">
-        <h:output_text
+        <h:outputText
                         value="#{UIDataBean.clickLabel}"/>
-      </h:command_link>
+      </h:commandLink>
     </h:column>
 
-  </h:data_table>
+  </h:dataTable>
 
-  <h:command_button        id="create1"
+  <h:commandButton        id="create1"
                     action="#{UIDataBean.create}"
                     immediate="true"
                         value="Create New Row (immediate=true)"
                          type="SUBMIT"/>
 
-  <h:command_button        id="create2"
+  <h:commandButton        id="create2"
                     action="#{UIDataBean.create}"
                     immediate="false"
                         value="Create New Row (immediate=false)"
                          type="SUBMIT"/>
 
-  <h:command_button        id="delete1"
+  <h:commandButton        id="delete1"
                     action="#{UIDataBean.deleteImmediate}"
                     immediate="true"
                         value="Delete Checked (immediate=true)"
                          type="SUBMIT"/>
 
-  <h:command_button        id="delete2"
+  <h:commandButton        id="delete2"
                     action="#{UIDataBean.deleteDeferred}"
                     immediate="false"
                         value="Delete Checked (immediate=false)"
                          type="SUBMIT"/>
 
-  <h:command_button        id="first"
+  <h:commandButton        id="first"
                     action="#{UIDataBean.first}"
                     immediate="true"
                         value="First Page"
                          type="SUBMIT"/>
 
-  <h:command_button        id="last"
+  <h:commandButton        id="last"
                     action="#{UIDataBean.last}"
                     immediate="true"
                         value="Last Page"
                          type="SUBMIT"/>
 
-  <h:command_button        id="next"
+  <h:commandButton        id="next"
                     action="#{UIDataBean.next}"
                     immediate="true"
                         value="Next Page"
                          type="SUBMIT"/>
 
-  <h:command_button        id="previous"
+  <h:commandButton        id="previous"
                     action="#{UIDataBean.previous}"
                     immediate="true"
                         value="Prev Page"
                          type="SUBMIT"/>
 
-  <h:command_button        id="reset"
+  <h:commandButton        id="reset"
                     action="#{UIDataBean.reset}"
                     immediate="true"
                         value="Reset Changes"
                          type="SUBMIT"/>
 
-  <h:command_button        id="update"
+  <h:commandButton        id="update"
                     action="#{UIDataBean.update}"
                     immediate="false"
                         value="Save Changes"

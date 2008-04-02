@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: DataModel.jsp,v 1.8 2004/01/17 23:27:24 craigmcc Exp $ --%>
+<%-- $Id: DataModel.jsp,v 1.9 2004/01/27 21:31:40 eburns Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -22,43 +22,43 @@
 
   <h:form id="myform">
 
-    <h:panel_grid   columnClasses="form-prompt,form-field"
+    <h:panelGrid   columnClasses="form-prompt,form-field"
                           columns="2"
                        styleClass="form-background">
 
-      <h:output_text        value="Account Id:"/>
+      <h:outputText        value="Account Id:"/>
 
-      <h:selectone_menu        id="accountId"
+      <h:selectoneMenu        id="accountId"
                           binding="#{DataModelBean.accountId}">
            <f:selectItems   value="#{DataModelBean.accountIds}"/>
-      </h:selectone_menu>
+      </h:selectoneMenu>
 
-      <h:command_button action="#{DataModelBean.select}"
+      <h:commandButton action="#{DataModelBean.select}"
                             value="Select"/>
 
-    </h:panel_grid>
+    </h:panelGrid>
 
-    <h:panel_grid   columnClasses="form-prompt,form-field"
+    <h:panelGrid   columnClasses="form-prompt,form-field"
                           columns="2"
                        styleClass="form-background">
 
-      <h:output_text        value="Account Id:"/>
+      <h:outputText        value="Account Id:"/>
 
-      <h:output_text        value="#{DataModelBean.customers.rowData.accountId}"/>
+      <h:outputText        value="#{DataModelBean.customers.rowData.accountId}"/>
 
-      <h:output_text        value="Customer Name:"/>
+      <h:outputText        value="Customer Name:"/>
 
-      <h:output_text        value="#{DataModelBean.customers.rowData.name}"/>
+      <h:outputText        value="#{DataModelBean.customers.rowData.name}"/>
 
-      <h:output_text        value="Stock Symbol:"/>
+      <h:outputText        value="Stock Symbol:"/>
 
-      <h:output_text        value="#{DataModelBean.customers.rowData.symbol}"/>
+      <h:outputText        value="#{DataModelBean.customers.rowData.symbol}"/>
 
-      <h:output_text        value="Total Sales:"/>
+      <h:outputText        value="Total Sales:"/>
 
-      <h:output_text        value="#{DataModelBean.customers.rowData.totalSales}"/>
+      <h:outputText        value="#{DataModelBean.customers.rowData.totalSales}"/>
 
-    </h:panel_grid>
+    </h:panelGrid>
 
   </h:form>
 

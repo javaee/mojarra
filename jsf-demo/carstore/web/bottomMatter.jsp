@@ -8,8 +8,8 @@
 
 <f:subview id="bottom">
 
-  <h:output_link value="javadocs">
+  <h:outputLink value="javadocs">
      <f:verbatim>Documentation for this demo</f:verbatim>
-  </h:output_link>
+  </h:outputLink>
 
 </f:subview>

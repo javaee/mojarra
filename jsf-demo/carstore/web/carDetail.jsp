@@ -61,47 +61,47 @@
 
         <!-- non-option details -->
 
-        <h:panel_grid columns="1"
+        <h:panelGrid columns="1"
                       summary="#{bundle.carDetails}"
                       title="#{bundle.carDetails}">
 
-            <h:graphic_image  url="/images/cardemo.jpg" /> 
+            <h:graphicImage  url="/images/cardemo.jpg" /> 
 
-            <h:graphic_image 
+            <h:graphicImage 
                binding="#{carstore.currentModel.components.image}" />
 
-            <h:output_text styleClass="subtitlebig"
+            <h:outputText styleClass="subtitlebig"
                binding="#{carstore.currentModel.components.title}" />
             
-            <h:output_text 
+            <h:outputText 
                binding="#{carstore.currentModel.components.description}" />
 
-            <h:panel_grid columns="2">
+            <h:panelGrid columns="2">
 
-	      <h:output_text styleClass="subtitle"
+	      <h:outputText styleClass="subtitle"
                              value="#{bundle.basePriceLabel}" />
 
-	      <h:output_text 
+	      <h:outputText 
 		 binding="#{carstore.currentModel.components.basePrice}" />
 
-	      <h:output_text styleClass="subtitle"
+	      <h:outputText styleClass="subtitle"
                              value="#{bundle.yourPriceLabel}" />
 
-	      <h:output_text value="#{carstore.currentModel.currentPrice}" />
+	      <h:outputText value="#{carstore.currentModel.currentPrice}" />
 
-            </h:panel_grid>
+            </h:panelGrid>
 
-            <h:command_button action="#{carstore.buyCurrentCar}"
+            <h:commandButton action="#{carstore.buyCurrentCar}"
                  value="#{bundle.buy}" />
 
-        </h:panel_grid>
+        </h:panelGrid>
 
         <jsp:include page="optionsPanel.jsp"/>
 
-        <h:command_button value="#{bundle.recalculate}" 
+        <h:commandButton value="#{bundle.recalculate}" 
                       action="#{carstore.currentModel.updatePricing}" />
 
-        <h:command_button action="#{carstore.buyCurrentCar}"
+        <h:commandButton action="#{carstore.buyCurrentCar}"
                  value="#{bundle.buy}" />
 
 </h:form>

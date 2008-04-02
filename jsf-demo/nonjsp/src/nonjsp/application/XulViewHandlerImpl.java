@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.16 2004/01/21 03:50:41 eburns Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.17 2004/01/27 21:31:35 eburns Exp $ 
  */ 
 
 
@@ -83,8 +83,7 @@ import javax.servlet.ServletRequest;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.16 2004/01/21 03:50:41 eburns Exp $ 
- * 
+ * @version $Id: XulViewHandlerImpl.java,v 1.17 2004/01/27 21:31:35 eburns Exp $ * 
  * @see javax.faces.application.ViewHandler 
  * 
  */ 

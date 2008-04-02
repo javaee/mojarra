@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIGraphic.jsp,v 1.4 2003/11/09 03:25:12 eburns Exp $ --%>
+<%-- $Id: UIGraphic.jsp,v 1.5 2004/01/27 21:31:42 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -30,9 +30,9 @@
      
        <h:form id="standardRenderKitForm" >
 
-         <h:command_button id="standardRenderKitSubmit" action="success"
+         <h:commandButton id="standardRenderKitSubmit" action="success"
              value="#{standardBundle.standardRenderKitSubmitLabel}">
-         </h:command_button>
+         </h:commandButton>
 
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
 
@@ -44,10 +44,10 @@
 
          </table>
 
-         <h:command_button id="standardRenderKitSubmit1" 
+         <h:commandButton id="standardRenderKitSubmit1" 
              action="success"
              value="#{standardBundle.standardRenderKitSubmitLabel}">
-         </h:command_button>
+         </h:commandButton>
 
        </h:form>
 

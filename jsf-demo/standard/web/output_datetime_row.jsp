@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="outputDatetime2Label"
+               <h:outputText id="outputDatetime2Label"
                      value="output_datetime pattern"/>
 
              </td>
@@ -15,9 +15,9 @@
 
              <td>
 
-               <h:output_text id="outputDatetime2" value="#{LoginBean.date}">
+               <h:outputText id="outputDatetime2" value="#{LoginBean.date}">
                    <f:convertDateTime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
-              </h:output_text>
+              </h:outputText>
 
              </td>
 
@@ -34,13 +34,13 @@
 
              <td>
 
-               <h:output_text id="outputDatetime3Label" 
+               <h:outputText id="outputDatetime3Label" 
                      value="output_datetime dateStyle=short timeStyle=full"/>
              <td>
 
-               <h:output_text id="outputDatetime3" value="#{LoginBean.date}">
+               <h:outputText id="outputDatetime3" value="#{LoginBean.date}">
                    <f:convertDateTime type="both" timeStyle="full" dateStyle="short"/>
-               </h:output_text>
+               </h:outputText>
 
 
              </td>

@@ -4,65 +4,65 @@
 -->
 
             <tr>
-              <td><b><h:output_text id="dateconvertLabel"
+              <td><b><h:outputText id="dateconvertLabel"
                          value="Date [MMM DD, YYYY Format]: " /></b></td>
-              <td><h:input_hidden id="datetextHidden" value="#{LoginBean.date}">
+              <td><h:inputHidden id="datetextHidden" value="#{LoginBean.date}">
                       <f:convertDateTime type="date"/>
-                  </h:input_hidden></td>
+                  </h:inputHidden></td>
               <td><h:message id="dateErr"
                       for="datetextHidden"/> </td>
             </tr>
             <tr>
-              <td><b><h:output_text id="timeconvertLabel"
+              <td><b><h:outputText id="timeconvertLabel"
                          value="Time [HH:MI:SS (AM/PM) Format]: " /></b></td>
-              <td><h:input_hidden id="timetextHidden" 
+              <td><h:inputHidden id="timetextHidden" 
                       value="#{LoginBean.time}">
                       <f:convertDateTime type="time" /> 
-                  </h:input_hidden></td>
+                  </h:inputHidden></td>
               <td><h:message id="timeErr"
                       for="timetextHidden"/> </td>
             </tr>
             <tr>
-              <td><b><h:output_text id="datetimeconvertLabel"
+              <td><b><h:outputText id="datetimeconvertLabel"
                          value="Date/Time [MMM DD, YYYY HH:MI:SS (AM/PM) Format]: " /></b></td>
-              <td><h:input_hidden id="datetimetextHidden" 
+              <td><h:inputHidden id="datetimetextHidden" 
                       value="#{LoginBean.dateTime}">
                       <f:convertDateTime type="both"/>
-                  </h:input_hidden></td>
+                  </h:inputHidden></td>
               <td><h:message id="datetimeErr"
                       for="datetimetextHidden"/> </td>
             </tr>
             <tr>
-              <td><b><h:output_text id="boolconvertLabel"
+              <td><b><h:outputText id="boolconvertLabel"
                          value="Boolean [true/false]: " /></b></td>
-              <td><h:input_hidden id="booltextHidden" value="false"/></td>
+              <td><h:inputHidden id="booltextHidden" value="false"/></td>
             </tr>
             <tr>
-                <td><b><h:output_text id="currencylabel"
+                <td><b><h:outputText id="currencylabel"
                            value="Currency Format:"/></b></td>
                 <td>
-                    <h:input_hidden id="currencyinputHidden"
+                    <h:inputHidden id="currencyinputHidden"
                         value="#{LoginBean.double}">                        
                         <f:convertNumber type="currency"/>
-                    </h:input_hidden>
+                    </h:inputHidden>
                 </td>
             </tr>
             <tr>
-                <td><b><h:output_text id="percentlabel"
+                <td><b><h:outputText id="percentlabel"
                            value="Percent Format:"/></b></td>
                 <td>
-                    <h:input_hidden id="percentinputHidden" value="54%">
+                    <h:inputHidden id="percentinputHidden" value="54%">
                         <f:convertNumber type="percent"/>
-                    </h:input_hidden>
+                    </h:inputHidden>
                 </td>
             </tr>
             <tr>
-                <td><b><h:output_text id="patternlabel"
+                <td><b><h:outputText id="patternlabel"
                            value="Pattern Format [####]:"/></b></td>
                 <td>
-                    <h:input_hidden id="patterninputHidden"
+                    <h:inputHidden id="patterninputHidden"
                         value="1999.65">
                         <f:convertNumber pattern="####"/>
-                    </h:input_hidden>
+                    </h:inputHidden>
                 </td>
             </tr>

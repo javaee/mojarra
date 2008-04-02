@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.7 2004/01/20 04:51:58 eburns Exp $
+ * $Id: RIConstants.java,v 1.8 2004/01/27 21:31:36 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import javax.faces.render.RenderKitFactory;
  *
  * Based on com.sun.faces.RIConstants
  *
- * @version $Id: RIConstants.java,v 1.7 2004/01/20 04:51:58 eburns Exp $
+ * @version $Id: RIConstants.java,v 1.8 2004/01/27 21:31:36 eburns Exp $
  *
  * @see com.sun.faces.RIConstants
  *

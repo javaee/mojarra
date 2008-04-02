@@ -39,10 +39,10 @@
 <%@ taglib uri="http://java.sun.com/jsf/core"   prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"   prefix="h" %>
 
-    <h:panel_group>
-      <h:output_text value="This is the third pane with the date set to: "/>
-      <h:output_text value="#{sessionScope.date}">
+    <h:panelGroup>
+      <h:outputText value="This is the third pane with the date set to: "/>
+      <h:outputText value="#{sessionScope.date}">
           <f:convertDateTime dateStyle="full"/>
-      </h:output_text>
-    </h:panel_group>
+      </h:outputText>
+    </h:panelGroup>
 

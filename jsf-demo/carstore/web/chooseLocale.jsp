@@ -52,7 +52,7 @@
 <f:view>
     <h:form>
 
-        <h:panel_grid columns="1" 
+        <h:panelGrid columns="1" 
                       footerClass="form-footer"
                       headerClass="form-header"
                       styleClass="main-background"
@@ -60,12 +60,12 @@
                       summary="#{bundle.chooseLocale}" 
                       title="#{bundle.chooseLocale}" >
 
-            <h:graphic_image  url="/images/cardemo.jpg" /> 
+            <h:graphicImage  url="/images/cardemo.jpg" /> 
 
-            <h:output_text styleClass="maintitle"
+            <h:outputText styleClass="maintitle"
                            value="#{bundle.chooseLocale}" />
 
-            <h:graphic_image id="mapImage" url="/images/world.jpg" 
+            <h:graphicImage id="mapImage" url="/images/world.jpg" 
                              alt="#{bundle.chooseLocale}"
                              usemap="#worldMap" />
 
@@ -90,7 +90,7 @@
                             targetImage="mapImage" />
             </d:map>
 
-        </h:panel_grid>
+        </h:panelGrid>
 
     </h:form>
 
@@ -98,39 +98,39 @@
 
         <!-- For non graphical browsers  -->
 
-        <h:panel_grid id="links" columns="4" 
+        <h:panelGrid id="links" columns="4" 
                       summary="#{bundle.chooseLocale}" 
                       title="#{bundle.chooseLocale}" >
 
-          <h:command_link id="NAmerica" action="storeFront"
+          <h:commandLink id="NAmerica" action="storeFront"
                           actionListener="#{carstore.chooseLocaleFromLink}">
   
-            <h:output_text value="#{bundle.english}" />
+            <h:outputText value="#{bundle.english}" />
 
-          </h:command_link>
+          </h:commandLink>
 
-          <h:command_link id="Germany" action="storeFront"
+          <h:commandLink id="Germany" action="storeFront"
                           actionListener="#{carstore.chooseLocaleFromLink}">
 
-            <h:output_text value="#{bundle.german}" />
+            <h:outputText value="#{bundle.german}" />
 
-          </h:command_link>
+          </h:commandLink>
 
-          <h:command_link id="France" action="storeFront"
+          <h:commandLink id="France" action="storeFront"
                           actionListener="#{carstore.chooseLocaleFromLink}">
 
-            <h:output_text value="#{bundle.french}" />
+            <h:outputText value="#{bundle.french}" />
 
-          </h:command_link>
+          </h:commandLink>
 
-          <h:command_link id="SAmerica" action="storeFront"
+          <h:commandLink id="SAmerica" action="storeFront"
                           actionListener="#{carstore.chooseLocaleFromLink}">
 
-            <h:output_text value="#{bundle.spanish}" />
+            <h:outputText value="#{bundle.spanish}" />
 
-          </h:command_link>
+          </h:commandLink>
 
-        </h:panel_grid>
+        </h:panelGrid>
     
     </h:form>
 

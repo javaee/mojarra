@@ -1,5 +1,5 @@
 /*
- * $Id: PaneComponent.java,v 1.11 2003/12/17 15:19:01 rkitain Exp $
+ * $Id: PaneComponent.java,v 1.12 2004/01/27 21:31:17 eburns Exp $
  */
 
 /*
@@ -70,6 +70,16 @@ public class PaneComponent extends UIComponentBase {
         PaneSelectedListener listener = new PaneSelectedListener();
         addFacesListener(listener);    
     }
+
+    /**
+     * <p>Return the component family for this component.</p>
+     */
+    public String getFamily() {
+
+        return ("Pane");
+
+    }
+
 
     // Does this component render its own children?
     public boolean getRendersChildren() {

@@ -54,87 +54,87 @@
 <f:view>  
 <h:form>
  
-<h:panel_grid id="mainPanel" columns="1" footerClass="subtitle"
+<h:panelGrid id="mainPanel" columns="1" footerClass="subtitle"
    styleClass="medium" columnClasses="medium">
 
-  <h:graphic_image  url="/images/cardemo.jpg" />
-  <h:output_text binding="#{carstore.currentModel.components.title}" />
+  <h:graphicImage  url="/images/cardemo.jpg" />
+  <h:outputText binding="#{carstore.currentModel.components.title}" />
     
-<h:panel_grid columns="2"  footerClass="subtitle"
+<h:panelGrid columns="2"  footerClass="subtitle"
    headerClass="subtitlebig" styleClass="medium" columnClasses="subtitle,medium">
     
     <f:facet name="header">
-      <h:output_text  value="#{bundle.buyTitle}" />
+      <h:outputText  value="#{bundle.buyTitle}" />
     </f:facet>
 
-    <h:output_text value="#{bundle.Engine}" />
+    <h:outputText value="#{bundle.Engine}" />
 
-    <h:output_text value="#{carstore.currentModel.attributes.engine}"  />
+    <h:outputText value="#{carstore.currentModel.attributes.engine}"  />
 
-    <h:output_text value="#{bundle.Brakes}" />
+    <h:outputText value="#{bundle.Brakes}" />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.brake}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.brake}" />
 
-    <h:output_text  value="#{bundle.Suspension}" />
+    <h:outputText  value="#{bundle.Suspension}" />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.suspension}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.suspension}" />
 
-    <h:output_text  value="#{bundle.Speakers}" />
+    <h:outputText  value="#{bundle.Speakers}" />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.speaker}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.speaker}" />
 
-    <h:output_text  value="#{bundle.Audio}" />
+    <h:outputText  value="#{bundle.Audio}" />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.audio}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.audio}" />
 
-    <h:output_text  value="#{bundle.Transmission}" />
+    <h:outputText  value="#{bundle.Transmission}" />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.transmission}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.transmission}" />
 
-    <h:output_text  value="#{bundle.sunroofLabel}"  />
+    <h:outputText  value="#{bundle.sunroofLabel}"  />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.sunroof}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.sunroof}" />
 
-    <h:output_text  value="#{bundle.cruiseLabel}"  />
+    <h:outputText  value="#{bundle.cruiseLabel}"  />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.cruisecontrol}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.cruisecontrol}" />
 
-    <h:output_text value="#{bundle.keylessLabel}"  />
+    <h:outputText value="#{bundle.keylessLabel}"  />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.keylessentry}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.keylessentry}" />
 
-    <h:output_text  value="#{bundle.securityLabel}"  />
+    <h:outputText  value="#{bundle.securityLabel}"  />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.securitySystem}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.securitySystem}" />
 
-    <h:output_text  value="#{bundle.skiRackLabel}"  />
+    <h:outputText  value="#{bundle.skiRackLabel}"  />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.skiRack}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.skiRack}" />
 
-    <h:output_text  value="#{bundle.towPkgLabel}"  />
+    <h:outputText  value="#{bundle.towPkgLabel}"  />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.towPackage}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.towPackage}" />
 
-    <h:output_text  value="#{bundle.gpsLabel}"  />
+    <h:outputText  value="#{bundle.gpsLabel}"  />
 
-    <h:output_text  value="#{carstore.currentModel.attributes.gps}" />
+    <h:outputText  value="#{carstore.currentModel.attributes.gps}" />
     
   <f:facet name="footer">
-     <h:panel_group>
-        <h:output_text  value="#{bundle.yourPriceLabel}"  />
+     <h:panelGroup>
+        <h:outputText  value="#{bundle.yourPriceLabel}"  />
         &nbsp;
-        <h:output_text  value="#{carstore.currentModel.currentPrice}" />
-     </h:panel_group>
+        <h:outputText  value="#{carstore.currentModel.currentPrice}" />
+     </h:panelGroup>
   </f:facet>
 
-</h:panel_grid>
+</h:panelGrid>
 
-<h:panel_group>
-<h:command_button value="#{bundle.buy}" action="customerInfo" title="#{bundle.buy}" />
-<h:command_button value="#{bundle.back}" action="carDetail" title="#{bundle.back}"/>
-</h:panel_group>
+<h:panelGroup>
+<h:commandButton value="#{bundle.buy}" action="customerInfo" title="#{bundle.buy}" />
+<h:commandButton value="#{bundle.back}" action="carDetail" title="#{bundle.back}"/>
+</h:panelGroup>
 
-</h:panel_grid>
+</h:panelGrid>
 </h:form>
 <jsp:include page="bottomMatter.jsp"/>
 </f:view>

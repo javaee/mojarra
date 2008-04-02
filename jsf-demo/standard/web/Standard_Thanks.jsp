@@ -22,7 +22,7 @@
 
             <tr> 
               <td>The actuated component 
-                  was <h:output_text id="actuated"
+                  was <h:outputText id="actuated"
                                value="#{model.whichComponent}"/>. </td>
             </tr>
 

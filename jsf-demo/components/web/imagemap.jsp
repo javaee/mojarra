@@ -53,13 +53,13 @@
   <table>
 
     <tr><td>
-      <h:output_text  id="welcomeLabel" 
+      <h:outputText  id="welcomeLabel" 
                                     value="#{mapBundle.welcomeLabel}" />
     </td></tr>
 
     <tr><td>
 
-      <h:graphic_image id="mapImage"
+      <h:graphicImage id="mapImage"
                       url="/images/world.gif"
                    usemap="#worldMap"/>
 

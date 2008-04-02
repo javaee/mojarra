@@ -1,5 +1,5 @@
 /*
- * $Id: DataRepeaterTag.java,v 1.3 2004/01/17 05:20:21 craigmcc Exp $
+ * $Id: DataRepeaterTag.java,v 1.4 2004/01/27 21:31:21 eburns Exp $
  */
 
 /*
@@ -93,7 +93,7 @@ public class DataRepeaterTag extends UIComponentTag {
 
 
     public String getComponentType() {
-        return ("Data");
+        return ("javax.faces.Data");
     }
 
 

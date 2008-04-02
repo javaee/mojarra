@@ -1,5 +1,5 @@
 /*
- * $Id: ScrollerComponent.java,v 1.3 2003/12/24 23:44:18 jvisvanathan Exp $
+ * $Id: ScrollerComponent.java,v 1.4 2004/01/27 21:31:18 eburns Exp $
  */
 
 /*
@@ -189,6 +189,15 @@ public class ScrollerComponent extends UICommand {
 
     public boolean getRendersChildren() { 
         return true; 
+    }
+    
+    /**
+     * <p>Return the component family for this component.</p>
+     */
+    public String getFamily() {
+
+        return ("Scroller");
+
     }
      
     //

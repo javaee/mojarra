@@ -54,16 +54,16 @@
 <f:loadBundle basename="carstore.bundles.Resources" var="bundle"/>
 <f:view>  
    <h:form>
-      <h:graphic_image  url="/images/cardemo.jpg" />
+      <h:graphicImage  url="/images/cardemo.jpg" />
 
-  <h:panel_grid id="thanksPanel" columns="1" footerClass="subtitle"
+  <h:panelGrid id="thanksPanel" columns="1" footerClass="subtitle"
    headerClass="subtitlebig" styleClass="medium" columnClasses="subtitle,medium">
     <f:facet name="header">
-       <h:output_message  value="#{bundle.thanksLabel}">
+       <h:outputFormat  value="#{bundle.thanksLabel}">
           <f:param value="#{sessionScope.firstName}"/>
-       </h:output_message>
+       </h:outputFormat>
     </f:facet>
-  </h:panel_grid>
+  </h:panelGrid>
 
  </h:form>
 <jsp:include page="bottomMatter.jsp"/>

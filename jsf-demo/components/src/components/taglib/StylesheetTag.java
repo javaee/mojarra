@@ -57,7 +57,7 @@ public class StylesheetTag extends UIComponentTag {
 
 
     public String getComponentType() {
-        return ("Output");
+        return ("javax.faces.Output");
     }
 
 

@@ -8,17 +8,17 @@
 
              <td>
 
-               <h:output_text id="commandLink1Label"
-                     value="command_link with hard coded label"/>
+               <h:outputText id="commandLink1Label"
+                     value="commandLink with hard coded label"/>
 
              </td>
 
              <td>
 
-	       <h:command_link id="commandLink1" action="success">
+	       <h:commandLink id="commandLink1" action="success">
                  <f:verbatim>Submit Form</f:verbatim>
                  <f:actionListener type="standard.DefaultListener"/>
-               </h:command_link>
+               </h:commandLink>
 
              </td>
 
@@ -28,17 +28,17 @@
 
              <td>
 
-               <h:output_text id="commandLink2Label" 
-                     value="command_link using the model for the label"/>
+               <h:outputText id="commandLink2Label" 
+                     value="commandLink using the model for the label"/>
 
              </td>
 
              <td>
 
-	      <h:command_link id="valueRefLink" action="success">
-                 <h:output_text value="#{model.label}"/>
+	      <h:commandLink id="valueRefLink" action="success">
+                 <h:outputText value="#{model.label}"/>
                  <f:actionListener type="standard.DefaultListener"/>
-              </h:command_link>
+              </h:commandLink>
 
              </td>
 
@@ -48,18 +48,18 @@
 
              <td>
 
-               <h:output_text id="commandLink3Label" 
-                     value="command_link using ResourceBundle for the label"/>
+               <h:outputText id="commandLink3Label" 
+                     value="commandLink using ResourceBundle for the label"/>
 
              </td>
 
              <td>
 
-	      <h:command_link id="resBundleLableLink" action="success">
-                 <h:output_text 
+	      <h:commandLink id="resBundleLableLink" action="success">
+                 <h:outputText 
                   value="#{standardBundle.standardRenderKitSubmitLabel}"/>
                  <f:actionListener type="standard.DefaultListener"/>
-               </h:command_link>
+               </h:commandLink>
 
              </td>
 
@@ -69,17 +69,17 @@
 
              <td>
 
-               <h:output_text id="commandLink4Label" 
-                     value="command_link as an image"/>
+               <h:outputText id="commandLink4Label" 
+                     value="commandLink as an image"/>
 
              </td>
 
              <td>
 
-	      <h:command_link id="imageLink" action="success">
-                 <h:graphic_image url="duke.gif"/>
+	      <h:commandLink id="imageLink" action="success">
+                 <h:graphicImage url="/duke.gif"/>
                  <f:actionListener type="standard.DefaultListener"/>
-               </h:command_link>
+               </h:commandLink>
 
 
              </td>
@@ -90,18 +90,18 @@
 
              <td>
 
-               <h:output_text id="commandLink5Label" 
-                     value="command_link using ResourceBundle for image path"/>
+               <h:outputText id="commandLink5Label" 
+                     value="commandLink using ResourceBundle for image path"/>
 
              </td>
 
              <td>
 
-	      <h:command_link id="imageResourceBundleLink" action="success">
-                 <h:graphic_image  
+	      <h:commandLink id="imageResourceBundleLink" action="success">
+                 <h:graphicImage  
                   url="#{standardBundle.imageurl}" />
                  <f:actionListener type="standard.DefaultListener"/>
-               </h:command_link>
+               </h:commandLink>
 
 
              </td>

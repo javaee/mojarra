@@ -36,7 +36,7 @@
  maintenance of any nuclear facility.
 -->
 
-<%-- $Id: result-set.jsp,v 1.13 2003/12/17 15:19:31 rkitain Exp $ --%>
+<%-- $Id: result-set.jsp,v 1.14 2004/01/27 21:31:26 eburns Exp $ --%>
 
 
 
@@ -58,7 +58,7 @@
 
 Rendered via Faces components:
 
-  <h:data_table columnClasses="list-column-center,list-column-center,
+  <h:dataTable columnClasses="list-column-center,list-column-center,
                                list-column-center, list-column-center"
                   headerClass="list-header"
                    rowClasses="list-row-even,list-row-odd"
@@ -71,60 +71,60 @@ Rendered via Faces components:
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Account Id"/>
+        <h:outputText  value="Account Id"/>
       </f:facet>
-      <h:output_text        id="accountId"
+      <h:outputText        id="accountId"
                      value="#{customer.accountId}"/>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Customer Name"/>
+        <h:outputText  value="Customer Name"/>
       </f:facet>
-      <h:output_text        id="name" value="#{customer.name}"/>
+      <h:outputText        id="name" value="#{customer.name}"/>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Symbol"/>
+        <h:outputText  value="Symbol"/>
       </f:facet>
-      <h:output_text        id="symbol"
+      <h:outputText        id="symbol"
                      value="#{customer.symbol}"/>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Total Sales"/>
+        <h:outputText  value="Total Sales"/>
       </f:facet>
-      <h:output_text       id="totalSales"
+      <h:outputText       id="totalSales"
                      value="#{customer.totalSales}"/>
     </h:column>
 
-  </h:data_table>
+  </h:dataTable>
 
   <d:scroller navFacetOrientation="NORTH" for="table" 
           actionListener="#{ResultSetBean.processScrollEvent}">
       <f:facet name="header">
-        <h:panel_group>
-          <h:output_text value="Account Id"/>
-          <h:output_text value="Customer Name"/>
-          <h:output_text value="Symbol"/>
-          <h:output_text value="Total Sales"/>
-        </h:panel_group>
+        <h:panelGroup>
+          <h:outputText value="Account Id"/>
+          <h:outputText value="Customer Name"/>
+          <h:outputText value="Symbol"/>
+          <h:outputText value="Total Sales"/>
+        </h:panelGroup>
       </f:facet>
 
       <f:facet name="next">
-        <h:panel_group>
-          <h:output_text value="Next"/>
-          <h:graphic_image url="/images/arrow-right.gif" />
-        </h:panel_group>
+        <h:panelGroup>
+          <h:outputText value="Next"/>
+          <h:graphicImage url="/images/arrow-right.gif" />
+        </h:panelGroup>
       </f:facet>
 
       <f:facet name="previous">
-        <h:panel_group>
-          <h:output_text value="Previous"/>
-          <h:graphic_image url="/images/arrow-left.gif" />
-        </h:panel_group>
+        <h:panelGroup>
+          <h:outputText value="Previous"/>
+          <h:graphicImage url="/images/arrow-left.gif" />
+        </h:panelGroup>
       </f:facet>
 
       <f:facet name="number">
@@ -132,9 +132,9 @@ Rendered via Faces components:
       </f:facet>
 
       <f:facet name="current">
-        <h:panel_group>
-          <h:graphic_image url="/images/duke.gif" />
-        </h:panel_group>
+        <h:panelGroup>
+          <h:graphicImage url="/images/duke.gif" />
+        </h:panelGroup>
       </f:facet>
   </d:scroller>
 </h:form>

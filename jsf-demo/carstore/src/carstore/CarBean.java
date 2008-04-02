@@ -455,8 +455,8 @@ public class CarBean extends Object {
 	if (null == componentType) {
 	    return false;
 	}
-	return (componentType.startsWith("SelectMany") || 
-		componentType.startsWith("SelectOne"));
+	return (componentType.startsWith("javax.faces.SelectMany") || 
+		componentType.startsWith("javax.faces.SelectOne"));
     }
 
     /**

@@ -42,10 +42,10 @@
     <body bgcolor="white">
     <f:view>
     <h:form id="responseform">
-    <h:graphic_image id="waveImg" url="/wave.med.gif" />
-    <h2>Hi, <h:output_text id="userLabel"
+    <h:graphicImage id="waveImg" url="/wave.med.gif" />
+    <h2>Hi, <h:outputText id="userLabel"
 			   valueRef="UserNameBean.userName" /> </h2>
-	 <h:command_button id="back" value="Back" action="success" 
+	 <h:commandButton id="back" value="Back" action="success" 
                            />
          <p>
     </h:form>

@@ -55,48 +55,48 @@
 <f:view>
 <h:form >
 
-<h:panel_grid id="mainPanel" columns="1" footerClass="subtitle"
+<h:panelGrid id="mainPanel" columns="1" footerClass="subtitle"
    headerClass="subtitlebig" styleClass="medium" columnClasses="medium">
 
-  <h:graphic_image  url="/images/cardemo.jpg" />
+  <h:graphicImage  url="/images/cardemo.jpg" />
 
-  <h:output_text value="#{bundle.customerTitle}" />
+  <h:outputText value="#{bundle.customerTitle}" />
 
-  <h:panel_grid id="subPanel" columns="3" footerClass="medium"
+  <h:panelGrid id="subPanel" columns="3" footerClass="medium"
      headerClass="subtitlebig" styleClass="medium" columnClasses="medium">
 
-    <h:output_text value="#{bundle.titleLabel}" />
-    <h:selectone_menu id="title" value="#{customer.currentTitle}">
+    <h:outputText value="#{bundle.titleLabel}" />
+    <h:selectoneMenu id="title" value="#{customer.currentTitle}">
         <f:selectItems value="#{customer.titleOptions}" />
-    </h:selectone_menu>
-    <h:output_text value=""/>
+    </h:selectoneMenu>
+    <h:outputText value=""/>
 
-    <h:output_text value="#{bundle.firstLabel}" />
-    <h:input_text  id="firstName" value="#{customer.firstName}" required="true"> 
+    <h:outputText value="#{bundle.firstLabel}" />
+    <h:inputText  id="firstName" value="#{customer.firstName}" required="true"> 
         <f:valueChangeListener type="carstore.FirstNameChanged" />
-    </h:input_text>
+    </h:inputText>
     <h:message styleClass="validationMessage"  for="firstName"/>
 
-    <h:output_text value="#{bundle.middleLabel}" />
-    <h:input_text id="middleInitial" size="1" maxlength="1" 
+    <h:outputText value="#{bundle.middleLabel}" />
+    <h:inputText id="middleInitial" size="1" maxlength="1" 
             value="#{customer.middleInitial}" > 
-        </h:input_text>
+        </h:inputText>
     <h:message  styleClass="validationMessage" for="middleInitial"/>
 
-    <h:output_text value="#{bundle.lastLabel}" />
-    <h:input_text  value="#{customer.lastName}" />
-    <h:output_text value=""/>
+    <h:outputText value="#{bundle.lastLabel}" />
+    <h:inputText  value="#{customer.lastName}" />
+    <h:outputText value=""/>
 
-    <h:output_text value="#{bundle.mailingLabel}"/>
-    <h:input_text  value="#{customer.mailingAddress}" />
-    <h:output_text value=""/>
+    <h:outputText value="#{bundle.mailingLabel}"/>
+    <h:inputText  value="#{customer.mailingAddress}" />
+    <h:outputText value=""/>
 
-    <h:output_text value="#{bundle.cityLabel}" />
-    <h:input_text  value="#{customer.city}" />
-    <h:output_text value=""/>
+    <h:outputText value="#{bundle.cityLabel}" />
+    <h:inputText  value="#{customer.city}" />
+    <h:outputText value=""/>
 
-    <h:output_text value="#{bundle.stateLabel}" />
-    <h:selectone_menu  value="#{customer.state}" >
+    <h:outputText value="#{bundle.stateLabel}" />
+    <h:selectoneMenu  value="#{customer.state}" >
 
 		<f:selectItem  itemValue="AL" itemLabel="AL" />
 		<f:selectItem  itemValue="AK" itemLabel="AK"/>
@@ -151,29 +151,29 @@
 		<f:selectItem  itemValue="WV" itemLabel="WV"/>
 		<f:selectItem  itemValue="WI" itemLabel="WI"/>
 		<f:selectItem  itemValue="WY" itemLabel="WY"/>
-    </h:selectone_menu>
-    <h:output_text value=""/>
+    </h:selectoneMenu>
+    <h:outputText value=""/>
 
-    <h:output_text  value="#{bundle.zipLabel}" />
-    <h:input_text id="zip"  
+    <h:outputText  value="#{bundle.zipLabel}" />
+    <h:inputText id="zip"  
 			value="#{customer.zip}"
                         size="10" required="true">
           <cs:format_validator formatPatterns="99999|99999-9999|### ###"/> 
-    </h:input_text>
+    </h:inputText>
     <h:message  styleClass="validationMessage" for="zip" />
 
-    <h:output_text  value="#{bundle.ccNumberLabel}" />
-    <h:input_text id="ccno" size="16"
+    <h:outputText  value="#{bundle.ccNumberLabel}" />
+    <h:inputText id="ccno" size="16"
            converter="creditCardConverter" required="true">
           <cs:format_validator 
           formatPatterns="9999999999999999|9999 9999 9999 9999|9999-9999-9999-9999"/>
-     </h:input_text>
+     </h:inputText>
      <h:message styleClass="validationMessage"  for="ccno"/>  
  
-    <h:output_text  value="#{bundle.monthLabel}" />
-    <h:panel_grid id="monthYearPanel" columns="2" footerClass="medium"
+    <h:outputText  value="#{bundle.monthLabel}" />
+    <h:panelGrid id="monthYearPanel" columns="2" footerClass="medium"
             headerClass="medium" styleClass="medium" columnClasses="medium">
-      <h:selectone_menu  value="#{customer.month}">
+      <h:selectoneMenu  value="#{customer.month}">
         <f:selectItem itemValue="01" itemLabel="01"/>
         <f:selectItem itemValue="02" itemLabel="02"/>
         <f:selectItem itemValue="03" itemLabel="03"/>
@@ -186,9 +186,9 @@
         <f:selectItem itemValue="10" itemLabel="10"/>
         <f:selectItem itemValue="11" itemLabel="11"/>
         <f:selectItem itemValue="12" itemLabel="12"/>
-    </h:selectone_menu>
+    </h:selectoneMenu>
 
-      <h:selectone_menu  value="#{customer.year}" >
+      <h:selectoneMenu  value="#{customer.year}" >
         <f:selectItem itemValue="2002" itemLabel="2002"/>
         <f:selectItem itemValue="2003" itemLabel="2003"/>
         <f:selectItem itemValue="2004" itemLabel="2004"/>
@@ -196,19 +196,19 @@
         <f:selectItem itemValue="2006" itemLabel="2006"/>
         <f:selectItem itemValue="2007" itemLabel="2007"/>
         <f:selectItem itemValue="2008" itemLabel="2008"/>
-    </h:selectone_menu>
-    </h:panel_grid>
-    <h:output_text value=""/>
+    </h:selectoneMenu>
+    </h:panelGrid>
+    <h:outputText value=""/>
 
- </h:panel_grid>
+ </h:panelGrid>
 
-<h:command_button  value="#{bundle.finishButton}" action="finish" />
+<h:commandButton  value="#{bundle.finishButton}" action="finish" />
 
-<h:graphic_image id="duke" url="/images/duke.gif" />
+<h:graphicImage id="duke" url="/images/duke.gif" />
 
-<h:output_text  value="#{bundle.buyLabel}" />
+<h:outputText  value="#{bundle.buyLabel}" />
 
-</h:panel_grid>
+</h:panelGrid>
 
 </h:form>
 </f:view>

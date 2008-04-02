@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 
-<%-- $Id: UIPanel.jsp,v 1.3 2003/10/19 05:18:04 craigmcc Exp $ --%>
+<%-- $Id: UIPanel.jsp,v 1.4 2004/01/27 21:31:42 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <f:view>  
@@ -37,7 +37,7 @@
            <%@ include file="panel_grid_row.jsp" %>
 
 <%--
-           <%@ include file="panel_group_row.jsp" %>
+           <%@ include file="panelGroup_row.jsp" %>
 --%>
 
          </table>

@@ -7,15 +7,15 @@
 
              <td>
 
-               <h:output_text id="outputText1Label"
-                     value="output_text"/>
+               <h:outputText id="outputText1Label"
+                     value="outputText"/>
 
              </td>
 
 
              <td>
 
-               <h:output_text id="outputText1" 
+               <h:outputText id="outputText1" 
                        value="#{LoginBean.userName}"/>
 
 
@@ -27,16 +27,16 @@
 
              <td>
 
-               <h:output_text id="outputText0Label" 
-                     value="output_text with outputClass"/>
+               <h:outputText id="outputText0Label" 
+                     value="outputText with outputClass"/>
 
              </td>
 
 
              <td>
 
-               <h:output_text id="outputText0" 
-                       styleClass="output_text0"
+               <h:outputText id="outputText0" 
+                       styleClass="outputText0"
                        value="#{LoginBean.userName}"/>
 
 
@@ -49,15 +49,15 @@
 
              <td>
 
-               <h:output_text id="outputText2Label" 
-                     value="output_text from bundle"/>
+               <h:outputText id="outputText2Label" 
+                     value="outputText from bundle"/>
 
              </td>
 
 
              <td>
 
-               <h:output_text id="outputText2"
+               <h:outputText id="outputText2"
                                   value="#{standardBundle.linkLabel}"/>
 
 

@@ -78,12 +78,12 @@ Powered by Faces components:
       <d:pane_tablabel label="T a b 1" commandName="first" />
     </f:facet>
 
-    <h:panel_group>
-      <h:output_text value="This is the first pane with the date set to: "/>
-      <h:output_text value="#{sessionScope.date}">
+    <h:panelGroup>
+      <h:outputText value="This is the first pane with the date set to: "/>
+      <h:outputText value="#{sessionScope.date}">
           <f:convertDateTime dateStyle="medium"/>
-      </h:output_text>
-    </h:panel_group>
+      </h:outputText>
+    </h:panelGroup>
 
   </d:pane_tab>
 
@@ -93,26 +93,26 @@ Powered by Faces components:
       <d:pane_tablabel image="images/duke.gif" commandName="second"/>
     </f:facet>
 
-    <h:panel_group>
-      <h:output_text value="Hi folks!  My name is 'Duke'.  Here's a sample of some of the components you can build:"/>
-    </h:panel_group>
-    <h:panel_group>
-      <h:command_button value="button"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <h:selectboolean_checkbox checked="true" alt="checkbox"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <h:selectone_radio layout="pageDirection" border="1" value="nextMonth">
+    <h:panelGroup>
+      <h:outputText value="Hi folks!  My name is 'Duke'.  Here's a sample of some of the components you can build:"/>
+    </h:panelGroup>
+    <h:panelGroup>
+      <h:commandButton value="button"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <h:selectbooleanCheckbox value="true"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <h:selectoneRadio layout="pageDirection" border="1" value="nextMonth">
         <f:selectItem itemValue="nextDay" itemLabel="Next Day"/>
         <f:selectItem itemValue="nextWeek" itemLabel="Next Week"  />
         <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
-      </h:selectone_radio>
-      <h:selectone_listbox id="appleQuantity" title="Select Quantity"
+      </h:selectoneRadio>
+      <h:selectoneListbox id="appleQuantity" title="Select Quantity"
         tabindex="20" value="4" >
         <f:selectItem  disabled="true" itemValue="0" itemLabel="0"/>
         <f:selectItem  itemValue="1" itemLabel="One" />
         <f:selectItem  itemValue="2" itemLabel="Two" />
         <f:selectItem  itemValue="3" itemLabel="Three" />
         <f:selectItem  itemValue="4" itemLabel="Four" />
-      </h:selectone_listbox>
-    </h:panel_group>
+      </h:selectoneListbox>
+    </h:panelGroup>
 
   </d:pane_tab>
 

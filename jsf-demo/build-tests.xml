@@ -240,8 +240,8 @@
     <!-- Global test target to run all unit tests -->
     <target name="test" depends="build" 
             description="Runs all of available demo unit tests">
-        <antcall target="run.mapping-extension.tests"/>    
-        <antcall target="run.mapping-prefix.tests"/>    
+<!--        <antcall target="run.mapping-extension.tests"/>   
+            <antcall target="run.mapping-prefix.tests"/>    -->
         <antcall target="run.guessNumber.tests"/>    
         <antcall target="run.components.tests"/>    
     </target>

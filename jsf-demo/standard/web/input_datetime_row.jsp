@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="inputDatetime2Label"
+               <h:outputText id="inputDatetime2Label"
                      value="input_datetime pattern"/>
 
              </td>
@@ -15,13 +15,13 @@
 
              <td>
 
-               <h:input_text id="inputDatetime2" 
+               <h:inputText id="inputDatetime2" 
                                  value="Wed, Aug 21, 2002 AD at 10:57:00 AM" 
                                  size="30" 
                                  alt="input_datetime pattern"
                                title="input_datetime pattern">
                    <f:convertDateTime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
-              </h:input_text>
+              </h:inputText>
 
              </td>
 

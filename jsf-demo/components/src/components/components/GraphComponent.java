@@ -1,5 +1,5 @@
 /*
- * $Id: GraphComponent.java,v 1.11 2003/12/17 15:19:00 rkitain Exp $
+ * $Id: GraphComponent.java,v 1.12 2004/01/27 21:31:17 eburns Exp $
  */
 
 /*
@@ -87,5 +87,14 @@ public class GraphComponent extends UICommand{
 												 signature));
 
     }   
+    
+    /**
+     * <p>Return the component family for this component.</p>
+     */
+    public String getFamily() {
+
+        return ("Graph");
+
+    }
 
 }

@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="checkbox1Label"
+               <h:outputText id="checkbox1Label"
                      value="checkbox disabled "/>
 
              </td>
@@ -15,16 +15,13 @@
 
              <td>
 
-               <h:selectboolean_checkbox id="checkbox1" 
+               <h:selectbooleanCheckbox id="checkbox1" 
                                  value="#{LoginBean.validUser}"
-                                 checked="true" 
                                  disabled="true"
-                                 size="10"
-                                 alt="checkbox disabled"
                                  accesskey="C" 
                                title="checkbox disabled" />
 
-                                <h:output_text 
+                                <h:outputText 
                                       id="checkboxLabel1" 
                            value="checkbox disabled"/>
 
@@ -36,7 +33,7 @@
 
              <td>
 
-               <h:output_text id="checkbox3LabelModel"
+               <h:outputText id="checkbox3LabelModel"
                      value="checkbox with valueRef "/>
 
              </td>
@@ -44,15 +41,12 @@
 
              <td>
 
-               <h:selectboolean_checkbox id="checkbox3"
-                                 checked="true"
+               <h:selectbooleanCheckbox id="checkbox3"
                                  value="#{LoginBean.validUser}"
-                                 size="10"
-                                 alt="checkbox"
                                  accesskey="C" 
                                title="checkbox with valueRef " />
 
-                                <h:output_text
+                                <h:outputText
                                       id="checkboxLabelModel"
                            value="checkbox with valueRef"/>
 
@@ -71,7 +65,7 @@
 
              <td>
 
-               <h:output_text id="checkbox4Label"
+               <h:outputText id="checkbox4Label"
                      value="checkbox with label from JSP"/>
 
              </td>
@@ -79,14 +73,11 @@
 
              <td>
 
-               <h:selectboolean_checkbox id="checkbox4"
-                                 checked="false"
-                                 size="10"
-                                 alt="checkbox"
+               <h:selectbooleanCheckbox id="checkbox4"
                                  accesskey="C" 
                                title="checkbox with label from JSP" />
 
-                   <h:output_text id="checkboxLabelJsp" 
+                   <h:outputText id="checkboxLabelJsp" 
                                value="checkbox with label from JSP " />
 
              </td>

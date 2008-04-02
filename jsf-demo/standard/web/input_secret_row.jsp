@@ -7,21 +7,21 @@
 
              <td>
 
-               <h:output_text id="inputSecret1Label"
-                     value="input_secret readonly"/>
+               <h:outputText id="inputSecret1Label"
+                     value="inputSecret readonly"/>
 
              </td>
 
 
              <td>
 
-               <h:input_secret id="inputSecret1" 
+               <h:inputSecret id="inputSecret1" 
                                  value="Text Value 1" 
                                  readonly="true"
                                  size="12" maxlength="20"
-                                 alt="input_secret readonly"
+                                 alt="inputSecret readonly"
                                  accesskey="D" 
-                                 title="input_secret readonly"/>
+                                 title="inputSecret readonly"/>
 
 
              </td>
@@ -32,7 +32,7 @@
 
              <td>
 
-               <h:output_text id="inputSecret2Label" 
+               <h:outputText id="inputSecret2Label" 
                      value="inputSecret"/>
 
              </td>
@@ -40,10 +40,10 @@
 
              <td>
 
-               <h:input_secret id="inputSecret2"
+               <h:inputSecret id="inputSecret2"
                                  value="Text Value 2" 
-                                 alt="input_secret"
-                                  title="input_secret"/>
+                                 alt="inputSecret"
+                                  title="inputSecret"/>
 
 
              </td>
@@ -61,19 +61,19 @@
 
              <td>
 
-               <h:output_text id="inputSecret3Label" 
-                     value="input_secret"/>
+               <h:outputText id="inputSecret3Label" 
+                     value="inputSecret"/>
 
              </td>
 
 
              <td>
 
-               <h:input_secret id="inputSecret3"
+               <h:inputSecret id="inputSecret3"
                                  value="Text Value 3" 
                                  size="12"
-                                 alt="input_secret"
-                                  title="input_secret"/>
+                                 alt="inputSecret"
+                                  title="inputSecret"/>
 
 
              </td>
@@ -91,20 +91,20 @@
 
              <td>
 
-               <h:output_text id="inputSecret4Label" 
-                     value="input_secret"/>
+               <h:outputText id="inputSecret4Label" 
+                     value="inputSecret"/>
 
              </td>
 
 
              <td>
 
-               <h:input_secret id="inputSecret4" 
+               <h:inputSecret id="inputSecret4" 
                                  value="Text Value 4" 
                                  size="20" maxlength="40"
-                                 alt="input_secret"
+                                 alt="inputSecret"
                                  accesskey="d"
-                               title="input_secret"/>
+                               title="inputSecret"/>
 
 
              </td>

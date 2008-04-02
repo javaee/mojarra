@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="outputDate3Label"
+               <h:outputText id="outputDate3Label"
                      value="output_date short"/>
 
              </td>
@@ -15,9 +15,9 @@
 
              <td>
 
-               <h:output_text id="outputDate3" value="#{LoginBean.date}">
+               <h:outputText id="outputDate3" value="#{LoginBean.date}">
                    <f:convertDateTime dateStyle="short" type="date"/>
-               </h:output_text>
+               </h:outputText>
 
 
              </td>
@@ -34,19 +34,19 @@
            <tr>
 
              <td>
-               <h:output_label id="date1id" for="output_date1">
-               <h:output_text id="outputDate1Label" 
+               <h:outputLabel id="date1id" for="output_date1">
+               <h:outputText id="outputDate1Label" 
                      value="output_date medium"/>
-               </h:output_label>
+               </h:outputLabel>
 
              </td>
 
 
              <td>
 
-               <h:output_text id="outputDate1" value="#{LoginBean.date}">
+               <h:outputText id="outputDate1" value="#{LoginBean.date}">
                    <f:convertDateTime dateStyle="medium" type="date"/>
-               </h:output_text>
+               </h:outputText>
 
 
              </td>
@@ -57,7 +57,7 @@
 
              <td>
 
-               <h:output_text id="outputDate4Label" 
+               <h:outputText id="outputDate4Label" 
                      value="output_date long"/>
 
              </td>
@@ -65,9 +65,9 @@
 
              <td>
 
-               <h:output_text id="outputDate4" value="#{LoginBean.date}">
+               <h:outputText id="outputDate4" value="#{LoginBean.date}">
                   <f:convertDateTime type="date" dateStyle="long"/>
-               </h:output_text>
+               </h:outputText>
 
 
              </td>
@@ -85,7 +85,7 @@
 
              <td>
 
-               <h:output_text id="outputDate2Label" 
+               <h:outputText id="outputDate2Label" 
                      value="output_date FULL"/>
 
              </td>
@@ -93,9 +93,9 @@
 
              <td>
 
-               <h:output_text id="outputDate2" value="#{LoginBean.date}">
+               <h:outputText id="outputDate2" value="#{LoginBean.date}">
                    <f:convertDateTime type="date" dateStyle="full"/>
-               </h:output_text>
+               </h:outputText>
 
 
              </td>

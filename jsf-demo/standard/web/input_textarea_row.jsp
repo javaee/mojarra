@@ -7,21 +7,20 @@
 
              <td>
 
-               <h:output_text id="inputTextarea1Label"
-                     value="input_textarea readonly "/>
+               <h:outputText id="inputTextarea1Label"
+                     value="inputTextarea readonly "/>
 
              </td>
 
 
              <td>
 
-               <h:input_textarea id="inputTextarea1" 
+               <h:inputTextarea id="inputTextarea1" 
                                  value="initial text"
                                  readonly="true"
                                  rows="5" cols="20"
-                                 alt="input_textarea readonly"
                                  accesskey="D" 
-                                 title="input_textarea readonly"/>
+                                 title="inputTextarea readonly"/>
 
 
              </td>
@@ -32,18 +31,17 @@
 
              <td>
 
-               <h:output_text id="inputTextarea2Label" 
-                     value="input_textarea"/>
+               <h:outputText id="inputTextarea2Label" 
+                     value="inputTextarea"/>
 
              </td>
 
 
              <td>
 
-               <h:input_textarea id="inputTextarea2"
+               <h:inputTextarea id="inputTextarea2"
                                  rows="5" cols="20"
-                                 alt="input_textarea"
-                                  title="input_textarea"/>
+                                  title="inputTextarea"/>
 
 
              </td>
@@ -61,7 +59,7 @@
 
              <td>
 
-               <h:output_text id="inputTextarea3Label" 
+               <h:outputText id="inputTextarea3Label" 
                      value="inputTextarea"/>
 
              </td>
@@ -69,10 +67,9 @@
 
              <td>
 
-               <h:input_textarea id="inputTextarea3"
+               <h:inputTextarea id="inputTextarea3"
                                  rows="5" cols="20"
-                                 alt="input_textarea"
-                                  title="input_textarea"/>
+                                  title="inputTextarea"/>
 
 
              </td>
@@ -90,19 +87,18 @@
 
              <td>
 
-               <h:output_text id="inputTextarea4_label" 
-                     value="input_textarea"/>
+               <h:outputText id="inputTextarea4_label" 
+                     value="inputTextarea"/>
 
              </td>
 
 
              <td>
 
-               <h:input_textarea id="inputTextarea4" 
+               <h:inputTextarea id="inputTextarea4" 
                                  rows="5" cols="20"
-                                 alt="input_textarea"
                                  accesskey="d"
-                               title="input_textarea"/>
+                               title="inputTextarea"/>
 
 
              </td>

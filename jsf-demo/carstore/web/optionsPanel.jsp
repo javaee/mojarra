@@ -8,127 +8,122 @@
 
 <f:subview id="optionsPanel">
 
-  <h:panel_grid>
+  <h:panelGrid>
 
-    <h:output_text value="#{bundle.OptionsPackages}" />
+    <h:outputText value="#{bundle.OptionsPackages}" />
 
     <!-- options package chooser -->
 
-    <h:panel_grid columns="4">    
+    <h:panelGrid columns="4">    
 
-      <h:command_button id="Custom" value="#{bundle.Custom}"
+      <h:commandButton id="Custom" value="#{bundle.Custom}"
           styleClass="#{carstore.customizers.Custom.buttonStyle}"
           actionListener="#{carstore.choosePackage}" />
 
-      <h:command_button id="Standard" value="#{bundle.Standard}"
+      <h:commandButton id="Standard" value="#{bundle.Standard}"
           styleClass="#{carstore.customizers.Standard.buttonStyle}"
           actionListener="#{carstore.choosePackage}" />
 
-      <h:command_button id="Performance" value="#{bundle.Performance}"
+      <h:commandButton id="Performance" value="#{bundle.Performance}"
           styleClass="#{carstore.customizers.Performance.buttonStyle}"
           actionListener="#{carstore.choosePackage}" />
 
-      <h:command_button id="Deluxe" value="#{bundle.Deluxe}"
+      <h:commandButton id="Deluxe" value="#{bundle.Deluxe}"
           styleClass="#{carstore.customizers.Deluxe.buttonStyle}"
           actionListener="#{carstore.choosePackage}" />
 
-    </h:panel_grid>
+    </h:panelGrid>
 
-  </h:panel_grid>
+  </h:panelGrid>
 
-  <h:panel_grid columns="2">
+  <h:panelGrid columns="2">
 
-        <h:output_text value="#{bundle.Engine}" 
+        <h:outputText value="#{bundle.Engine}" 
                        styleClass="optionLabel"/>
 
-         <h:selectone_menu styleClass="optionValue"
+         <h:selectoneMenu styleClass="optionValue"
                binding="#{carstore.currentModel.components.engine}"/>
 
-          <h:output_text value="#{bundle.Brakes}" 
+          <h:outputText value="#{bundle.Brakes}" 
                styleClass="optionLabel" />
 
-          <h:selectone_radio styleClass="optionValue"
+          <h:selectoneRadio styleClass="optionValue"
                binding="#{carstore.currentModel.components.brake}"/>
 
-         <h:output_text value="#{bundle.Suspension}" 
+         <h:outputText value="#{bundle.Suspension}" 
                        styleClass="optionLabel"/>
 
-        <h:selectone_menu  styleClass="optionValue"
+        <h:selectoneMenu  styleClass="optionValue"
                    binding="#{carstore.currentModel.components.suspension}"/>
 
-        <h:output_text value="#{bundle.Speakers}" 
+        <h:outputText value="#{bundle.Speakers}" 
                        styleClass="optionLabel"/>
 
-        <h:selectone_radio  styleClass="optionValue"
+        <h:selectoneRadio  styleClass="optionValue"
            binding="#{carstore.currentModel.components.speaker}"/>
 
-        <h:output_text value="#{bundle.Audio}" 
+        <h:outputText value="#{bundle.Audio}" 
                        styleClass="optionLabel"/>
 
-        <h:selectone_radio styleClass="optionValue"
+        <h:selectoneRadio styleClass="optionValue"
                binding="#{carstore.currentModel.components.audio}"/>
 
-        <h:output_text value="#{bundle.Transmission}" 
+        <h:outputText value="#{bundle.Transmission}" 
                        styleClass="optionLabel"/>
 
-        <h:selectone_menu  styleClass="optionValue"
+        <h:selectoneMenu  styleClass="optionValue"
                binding="#{carstore.currentModel.components.transmission}"/>
 
-      </h:panel_grid>
+      </h:panelGrid>
 
-   <h:output_text value="#{bundle.OtherOptions}" 
+   <h:outputText value="#{bundle.OtherOptions}" 
                    styleClass="optionLabel"/>
 
-   <h:panel_grid columns="6">
+   <h:panelGrid columns="6">
 
-     <h:selectboolean_checkbox title="#{bundle.sunroofLabel}" 
-         alt="#{bundle.sunroofLabel}" 
+     <h:selectbooleanCheckbox title="#{bundle.sunroofLabel}" 
          binding="#{carstore.currentModel.components.sunroof}">
-     </h:selectboolean_checkbox>    
+     </h:selectbooleanCheckbox>    
 
-     <h:output_text value="#{bundle.sunroofLabel}" /> 
+     <h:outputText value="#{bundle.sunroofLabel}" /> 
 
-     <h:selectboolean_checkbox  title="#{bundle.cruiseLabel}"  
+     <h:selectbooleanCheckbox  title="#{bundle.cruiseLabel}"  
          binding="#{carstore.currentModel.components.cruisecontrol}" >
-     </h:selectboolean_checkbox>
+     </h:selectbooleanCheckbox>
 
-     <h:output_text value="#{bundle.cruiseLabel}" /> 
+     <h:outputText value="#{bundle.cruiseLabel}" /> 
 
-     <h:selectboolean_checkbox title="#{bundle.keylessLabel}"  
-          alt="#{bundle.keylessLabel}"
+     <h:selectbooleanCheckbox title="#{bundle.keylessLabel}"  
           binding="#{carstore.currentModel.components.keylessentry}" >
-     </h:selectboolean_checkbox>
+     </h:selectbooleanCheckbox>
 
-     <h:output_text value="#{bundle.keylessLabel}" /> 
+     <h:outputText value="#{bundle.keylessLabel}" /> 
 
-     <h:selectboolean_checkbox 
-        title="#{bundle.securityLabel}"  alt="#{bundle.securityLabel}"
+     <h:selectbooleanCheckbox 
+        title="#{bundle.securityLabel}" 
         binding="#{carstore.currentModel.components.securitySystem}" >
-     </h:selectboolean_checkbox>
+     </h:selectbooleanCheckbox>
 
-     <h:output_text value="#{bundle.securityLabel}" />  
+     <h:outputText value="#{bundle.securityLabel}" />  
 
-     <h:selectboolean_checkbox  title="#{bundle.skiRackLabel}"  
-         alt="#{bundle.skiRackLabel}" 
+     <h:selectbooleanCheckbox  title="#{bundle.skiRackLabel}"  
          binding="#{carstore.currentModel.components.skiRack}" >
-     </h:selectboolean_checkbox>
+     </h:selectbooleanCheckbox>
 
-     <h:output_text value="#{bundle.skiRackLabel}" /> 
+     <h:outputText value="#{bundle.skiRackLabel}" /> 
 
-     <h:selectboolean_checkbox  title="#{bundle.towPkgLabel}"  
-           alt="#{bundle.towPkgLabel}" 
+     <h:selectbooleanCheckbox  title="#{bundle.towPkgLabel}"  
            binding="#{carstore.currentModel.components.towPackage}" >
-     </h:selectboolean_checkbox>
+     </h:selectbooleanCheckbox>
 
-     <h:output_text value="#{bundle.towPkgLabel}" /> 
+     <h:outputText value="#{bundle.towPkgLabel}" /> 
 
-     <h:selectboolean_checkbox  title="#{bundle.gpsLabel}" 
-         alt="#{bundle.gpsLabel}"
+     <h:selectbooleanCheckbox  title="#{bundle.gpsLabel}" 
          binding="#{carstore.currentModel.components.gps}" >
-     </h:selectboolean_checkbox>
+     </h:selectbooleanCheckbox>
 
-     <h:output_text value="#{bundle.gpsLabel}" /> 
+     <h:outputText value="#{bundle.gpsLabel}" /> 
 
-   </h:panel_grid>
+   </h:panelGrid>
 
 </f:subview>

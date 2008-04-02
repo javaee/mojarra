@@ -6,18 +6,18 @@
            <tr>
 
              <td>
-                 <h:output_text id="quantityLabel" value="Option list from JSP" />
+                 <h:outputText id="quantityLabel" value="Option list from JSP" />
 
              </td>
 
 
              <td>
 <%-- PENDING: accesskey not recognized
-                 <h:selectone_listbox id="appleQuantity" 
+                 <h:selectoneListbox id="appleQuantity" 
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 --%>
-                 <h:selectone_listbox id="appleQuantity" 
+                 <h:selectoneListbox id="appleQuantity" 
                      title="Select Quantity"
                      tabindex="20" >
 
@@ -32,7 +32,7 @@
                 <f:selectItem  itemValue="8" itemLabel="8" />
                 <f:selectItem  itemValue="9" itemLabel="9" />
 
-              </h:selectone_listbox>
+              </h:selectoneListbox>
 
              </td>
 
@@ -41,20 +41,20 @@
             <tr>
 
              <td>
-                 <h:output_text id="optionLabel"
+                 <h:outputText id="optionLabel"
                    value="Listbox with Kinds of Beans from Model Object" />
 
              </td>
 
 
              <td>
-                <h:selectone_listbox id="Listbox"
+                <h:selectoneListbox id="Listbox"
                              value="#{LoginBean.currentOption}">
 
                 <f:selectItems id="listboxOptions"
                                    value="#{LoginBean.options}"/>
 
-              </h:selectone_listbox>
+              </h:selectoneListbox>
 
              </td>
 
@@ -63,20 +63,20 @@
             <tr>
 
              <td>
-                 <h:output_text id="longoptionLabel"
+                 <h:outputText id="longoptionLabel"
                    value="Listbox with options of the type java.lang.Long" />
 
              </td>
 
 
              <td>
-                <h:selectone_listbox id="longListbox" 
+                <h:selectoneListbox id="longListbox" 
                              value="#{LoginBean.currentLongOption}">
                     
                 <f:selectItems id="listboxLongOptions"
                                    value="#{LoginBean.longList}"/>
 
-              </h:selectone_listbox>
+              </h:selectoneListbox>
 
              </td>
 

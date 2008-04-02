@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UICommand.jsp,v 1.8 2003/12/17 15:20:00 rkitain Exp $ --%>
+<%-- $Id: UICommand.jsp,v 1.9 2004/01/27 21:31:41 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -27,10 +27,10 @@
        <h:form id="standardRenderKitForm" 
                   >
 
-         <h:command_button id="standardRenderKitSubmit" 
+         <h:commandButton id="standardRenderKitSubmit" 
              action="#{model.defaultAction}"
              value="#{standardBundle.standardRenderKitSubmitLabel}">
-         </h:command_button>
+         </h:commandButton>
 
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
 
@@ -39,13 +39,14 @@
            <%@ include file="table_header.jsp" %>
 
            <%@ include file="command_link_row.jsp" %>
+           <%@ include file="command_button_row.jsp" %>
 
          </table>
 
-         <h:command_button id="standardRenderKitSubmit1"
+         <h:commandButton id="standardRenderKitSubmit1"
              action="#{model.defaultAction}"
              value="#{standardBundle.standardRenderKitSubmitLabel}">
-         </h:command_button>
+         </h:commandButton>
 
        </h:form>
 

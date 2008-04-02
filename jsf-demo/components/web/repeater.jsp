@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: repeater.jsp,v 1.6 2004/01/19 19:38:02 craigmcc Exp $ --%>
+<%-- $Id: repeater.jsp,v 1.7 2004/01/27 21:31:26 eburns Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
@@ -27,16 +27,16 @@
                           var="customer">
 
     <f:facet             name="header">
-      <h:output_text    value="Customer List"/>
+      <h:outputText    value="Customer List"/>
     </f:facet>
 
     <h:column>
       <%-- Visible checkbox for selection --%>
-      <h:selectboolean_checkbox
+      <h:selectbooleanCheckbox
                            id="checked"
                       binding="#{RepeaterBean.checked}"/>
       <%-- Invisible checkbox for "created" flag --%>
-      <h:selectboolean_checkbox
+      <h:selectbooleanCheckbox
                            id="created"
                       binding="#{RepeaterBean.created}"
                      rendered="false"/>
@@ -44,117 +44,117 @@
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Account Id"/>
+        <h:outputText  value="Account Id"/>
       </f:facet>
-      <h:input_text        id="accountId"
+      <h:inputText        id="accountId"
                       binding="#{RepeaterBean.accountId}"
                      required="true"
                          size="6"
                         value="#{customer.accountId}">
-      </h:input_text>
+      </h:inputText>
       <h:message          for="accountId"/>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Customer Name"/>
+        <h:outputText  value="Customer Name"/>
       </f:facet>
-      <h:input_text        id="name"
+      <h:inputText        id="name"
                      required="true"
                          size="50"
                         value="#{customer.name}">
-      </h:input_text>
+      </h:inputText>
       <h:message          for="name"/>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Symbol"/>
+        <h:outputText  value="Symbol"/>
       </f:facet>
-      <h:input_text        id="symbol"
+      <h:inputText        id="symbol"
                      required="true"
                          size="6"
                         value="#{customer.symbol}">
         <f:validateLength
                       maximum="6"
                       minimum="2"/>
-      </h:input_text>
+      </h:inputText>
       <h:message          for="symbol"/>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Total Sales"/>
+        <h:outputText  value="Total Sales"/>
       </f:facet>
-      <h:output_text       id="totalSales"
+      <h:outputText       id="totalSales"
                         value="#{customer.totalSales}">
         <f:convertNumber
                          type="currency"/>
-      </h:output_text>
+      </h:outputText>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
-        <h:output_text  value="Commands"/>
+        <h:outputText  value="Commands"/>
       </f:facet>
-      <h:command_button    id="press"
+      <h:commandButton    id="press"
                     action="#{RepeaterBean.press}"
                     immediate="true"
                         value="#{RepeaterBean.pressLabel}"
                          type="SUBMIT"/>
-      <h:command_link id="click"
+      <h:commandLink id="click"
                     action="#{RepeaterBean.click}"
                     immediate="true">
-        <h:output_text
+        <h:outputText
                         value="Click"/>
-      </h:command_link>
+      </h:commandLink>
     </h:column>
 
   </d:data_repeater>
 
-  <h:command_button        id="create"
+  <h:commandButton        id="create"
                     action="#{RepeaterBean.create}"
                     immediate="false"
                         value="Create New Row"
                          type="SUBMIT"/>
 
-  <h:command_button        id="delete"
+  <h:commandButton        id="delete"
                     action="#{RepeaterBean.delete}"
                     immediate="false"
                         value="Delete Checked"
                          type="SUBMIT"/>
 
-  <h:command_button        id="first"
+  <h:commandButton        id="first"
                     action="#{RepeaterBean.first}"
                     immediate="true"
                         value="First Page"
                          type="SUBMIT"/>
 
-  <h:command_button        id="last"
+  <h:commandButton        id="last"
                     action="#{RepeaterBean.last}"
                     immediate="true"
                         value="Last Page"
                          type="SUBMIT"/>
 
-  <h:command_button        id="next"
+  <h:commandButton        id="next"
                     action="#{RepeaterBean.next}"
                     immediate="true"
                         value="Next Page"
                          type="SUBMIT"/>
 
-  <h:command_button        id="previous"
+  <h:commandButton        id="previous"
                     action="#{RepeaterBean.previous}"
                     immediate="true"
                         value="Prev Page"
                          type="SUBMIT"/>
 
-  <h:command_button        id="reset"
+  <h:commandButton        id="reset"
                     action="#{RepeaterBean.reset}"
                     immediate="true"
                         value="Reset Changes"
                          type="SUBMIT"/>
 
-  <h:command_button        id="update"
+  <h:commandButton        id="update"
                     action="#{RepeaterBean.update}"
                     immediate="false"
                         value="Save Changes"

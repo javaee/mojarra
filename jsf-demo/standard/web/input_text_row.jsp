@@ -7,21 +7,21 @@
 
              <td>
 
-               <h:output_text id="inputText1Label"
-                     value="input_text readonly"/>
+               <h:outputText id="inputText1Label"
+                     value="inputText readonly"/>
 
              </td>
 
 
              <td>
 
-               <h:input_text id="inputText1" 
+               <h:inputText id="inputText1" 
                                  value="Text Value 1" 
                                  readonly="true"
                                  size="12" maxlength="20"
-                                 alt="input_text readonly"
+                                 alt="inputText readonly"
                                  accesskey="D" 
-                                 title="input_text readonly"/>
+                                 title="inputText readonly"/>
 
 
              </td>
@@ -32,7 +32,7 @@
 
              <td>
 
-               <h:output_text id="inputText2Label" 
+               <h:outputText id="inputText2Label" 
                      value="inputText"/>
 
              </td>
@@ -40,10 +40,10 @@
 
              <td>
 
-               <h:input_text id="inputText2"
+               <h:inputText id="inputText2"
                                  value="Text Value 2" 
-                                 alt="input_text"
-                                  title="input_text"/>
+                                 alt="inputText"
+                                  title="inputText"/>
 
 
              </td>
@@ -61,7 +61,7 @@
 
              <td>
 
-               <h:output_text id="inputText3Label" 
+               <h:outputText id="inputText3Label" 
                      value="inputText"/>
 
              </td>
@@ -69,11 +69,11 @@
 
              <td>
 
-               <h:input_text id="inputText3"
+               <h:inputText id="inputText3"
                                  value="Text Value 3" 
                                  size="12"
-                                 alt="input_text"
-                                  title="input_text"/>
+                                 alt="inputText"
+                                  title="inputText"/>
 
 
              </td>
@@ -91,7 +91,7 @@
 
              <td>
 
-               <h:output_text id="inputText4Label" 
+               <h:outputText id="inputText4Label" 
                      value="inputText"/>
 
              </td>
@@ -99,12 +99,12 @@
 
              <td>
 
-               <h:input_text id="inputText4" 
+               <h:inputText id="inputText4" 
                                  value="Text Value 4" 
                                  size="20" maxlength="40"
-                                 alt="input_text"
+                                 alt="inputText"
                                  accesskey="d"
-                               title="input_text"/>
+                               title="inputText"/>
 
 
              </td>

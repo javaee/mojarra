@@ -127,6 +127,17 @@ public class MapComponent extends UIComponentBase
 
     }
 
+
+    /**
+     * <p>Return the component family for this component.</p>
+     */
+    public String getFamily() {
+
+        return ("Map");
+
+    }
+
+
     // -------------------------------------------------- Action Source Methods
 
     public MethodBinding getAction() {

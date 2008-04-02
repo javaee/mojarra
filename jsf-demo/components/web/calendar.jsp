@@ -65,15 +65,15 @@
 <h:form>
 
   <p>
-  <h:command_link 
+  <h:commandLink 
     id="en" action="#{CalendarBean.selectLocaleEN}" immediate="true">
-    <h:output_text value="English"/>
-  </h:command_link>
+    <h:outputText value="English"/>
+  </h:commandLink>
   &nbsp;&nbsp;
-  <h:command_link 
+  <h:commandLink 
     id="fr" action="#{CalendarBean.selectLocaleFR}" immediate="true">
-    <h:output_text value="Francais"/>
-  </h:command_link>
+    <h:outputText value="Francais"/>
+  </h:commandLink>
   </p>
 
   <table>
@@ -92,7 +92,7 @@
       </td>
     </tr>
       <td>
-	<h:command_button id="submit" action="#{CalendarBean.process}" value='#{rb["calendar.submit"]}' type="SUBMIT"/>
+	<h:commandButton id="submit" action="#{CalendarBean.process}" value='#{rb["calendar.submit"]}' type="SUBMIT"/>
       </td>
     </tr>
     <tr>

@@ -7,18 +7,18 @@
 
              <td>
 
-                 <h:output_text id="shipmentLabel" 
+                 <h:outputText id="shipmentLabel" 
                      value="Radio with hard-coded options laid out horizontally" />
              </td>
 
 
              <td>
-                 <h:selectone_radio id="shipType" layout="LINE_DIRECTION" 
+                 <h:selectoneRadio id="shipType" layout="LINE_DIRECTION" 
                     value="nextDay" tabindex="30" title="shipType">
                 <f:selectItem itemValue="nextDay" itemLabel="Next Day"/>
                 <f:selectItem itemValue="nextWeek" itemLabel="Next Week" />
                 <f:selectItem itemValue="nextMonth" itemLabel="Next Month"/>
-                </h:selectone_radio>
+                </h:selectoneRadio>
 
              </td>
 
@@ -27,19 +27,19 @@
             <tr>
 
              <td>
-                 <h:output_text id="verticalLabel" 
+                 <h:outputText id="verticalLabel" 
                      value="Radio with hard-coded options laid out vertically" />
 
              </td>
 
 
              <td>
-                <h:selectone_radio id="verticalRadio" layout="pageDirection" border="1" >
+                <h:selectoneRadio id="verticalRadio" layout="pageDirection" border="1" >
                   <f:selectItem itemValue="nextDay" itemLabel="Next Day"/>
                   <f:selectItem itemValue="nextWeek" itemLabel="Next Week"  />
                   <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
 
-                </h:selectone_radio>
+                </h:selectoneRadio>
 
              </td>
 
@@ -48,19 +48,19 @@
              <tr>
 
              <td>
-                 <h:output_text id="modelLabel" value="Radio with options from model " />
+                 <h:outputText id="modelLabel" value="Radio with options from model " />
 
              </td>
 
 
              <td>
-                 <h:selectone_radio id="radioFromModel"
+                 <h:selectoneRadio id="radioFromModel"
                        value="#{LoginBean.currentOption}"
                        title="options come from model"
                        layout="LINE_DIRECTION" >
 
                  <f:selectItems id="radioOptions" value="#{LoginBean.options}"/>
-                </h:selectone_radio>
+                </h:selectoneRadio>
 
              </td>
 
@@ -69,20 +69,20 @@
              <tr>
 
              <td>
-                 <h:output_text id="modelLongLabel" value="Radio with options 
+                 <h:outputText id="modelLongLabel" value="Radio with options 
                      from model of type java.lang.Long" />
 
              </td>
 
 
              <td>
-                 <h:selectone_radio id="radioLongOptions"
+                 <h:selectoneRadio id="radioLongOptions"
                        value="#{LoginBean.currentLongOption}"
                        title="options come from model"
                        layout="LINE_DIRECTION">
                  
                 <f:selectItems id="longItemOptions" value="#{LoginBean.longList}"/>
-                </h:selectone_radio>
+                </h:selectoneRadio>
 
              </td>
 
@@ -90,30 +90,30 @@
 
             <tr>
 	         <td>Single-select radiomodel - modelType Boolean:</td>
-	         <td><h:selectone_radio id="oneLongradiomodel"
+	         <td><h:selectoneRadio id="oneLongradiomodel"
                             value="#{LoginBean.currentBooleanOption}">
                            
 		         <f:selectItems id="oneRadiomodelitems"
 				value="#{LoginBean.booleanList}" />
-		    </h:selectone_radio></td>
+		    </h:selectoneRadio></td>
 	   </tr>
 
            <tr>
 
              <td>
-                 <h:output_text value="Radio with optionGroups from model " />
+                 <h:outputText value="Radio with optionGroups from model " />
 
              </td>
 
 
              <td>
-                 <h:selectone_radio id="radioFromModelGroup"
+                 <h:selectoneRadio id="radioFromModelGroup"
                        value="#{LoginBean.currentOption}"
                        title="options come from model"
                        layout="LINE_DIRECTION" >
 
                  <f:selectItems id="radioOptionsGroup" value="#{LoginBean.optionsGroup}"/>
-                </h:selectone_radio>
+                </h:selectoneRadio>
 
              </td>
 
