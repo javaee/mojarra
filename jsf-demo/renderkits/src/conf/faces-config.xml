@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
+ 
+ Redistribution and use in source and binary forms, with or
+ without modification, are permitted provided that the following
+ conditions are met:
+ 
+ - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ 
+ - Redistribution in binary form must reproduce the above
+   copyright notice, this list of conditions and the following
+   disclaimer in the documentation and/or other materials
+   provided with the distribution.
+    
+ Neither the name of Sun Microsystems, Inc. or the names of
+ contributors may be used to endorse or promote products derived
+ from this software without specific prior written permission.
+  
+ This software is provided "AS IS," without a warranty of any
+ kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+ WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+ EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+ DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+ RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+ ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+ FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+ SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+ CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+ THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+ BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  
+ You acknowledge that this software is not designed, licensed or
+ intended for use in the design, construction, operation or
+ maintenance of any nuclear facility.
+-->
+
+<faces-config xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-facesconfig_1_2.xsd"
+    version="1.2">
+
+  <application>
+    <locale-config>
+      <default-locale>en</default-locale>
+      <supported-locale>de</supported-locale>
+      <supported-locale>fr</supported-locale>
+      <supported-locale>es</supported-locale>
+    </locale-config>
+  </application>
+
+  <render-kit>
+    <render-kit-id>SVG</render-kit-id>
+    <render-kit-class>renderkits.renderkit.svg.SVGRenderKit</render-kit-class>
+    <renderer>
+      <component-family>javax.faces.Form</component-family>
+      <renderer-type>renderkit.svg.Form</renderer-type>
+      <renderer-class>renderkits.renderkit.svg.FormRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>javax.faces.Command</component-family>
+      <renderer-type>renderkit.svg.Button</renderer-type>
+      <renderer-class>renderkits.renderkit.svg.ButtonRenderer</renderer-class>
+    </renderer>
+  </render-kit>
+
+  <navigation-rule>
+    <description>
+        The decision rule used by the NavigationHandler to
+        determine which view must be displayed after the
+        current view, greeting.jsp is processed.
+    </description>
+    <from-view-id>/html.jsp</from-view-id>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the response.jsp
+            view must be displayed if the Action referenced by a 
+            UICommand component on the greeting.jsp view returns 
+            the outcome "success".
+        </description>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/svg.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <description>
+        The decision rule used by the NavigationHandler to
+        determine which view must be displayed after the
+        current view, greeting.jsp is processed.
+    </description>
+    <from-view-id>/svg.jsp</from-view-id>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the response.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the greeting.jsp view returns
+            the outcome "success".
+        </description>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/html.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+</faces-config>
