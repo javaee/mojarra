@@ -1,5 +1,5 @@
 /*
- * $Id: UIValueChangeTextEntry.java,v 1.3 2002/09/12 17:10:49 rogerk Exp $
+ * $Id: UIValueChangeTextEntry.java,v 1.4 2002/10/07 20:39:54 jvisvanathan Exp $
  */
 
 /*
@@ -11,7 +11,7 @@
 
 package basic;
 
-import javax.faces.event.FacesEvent;
+import javax.faces.event.RequestEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIInput;
 
@@ -23,7 +23,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: UIValueChangeTextEntry.java,v 1.3 2002/09/12 17:10:49 rogerk Exp $
+ * @version $Id: UIValueChangeTextEntry.java,v 1.4 2002/10/07 20:39:54 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -83,7 +83,7 @@ public UIValueChangeTextEntry()
         if (context == null) {
             throw new NullPointerException();
         }
-	FacesEvent valueChangeEvent = null;
+	RequestEvent valueChangeEvent = null;
 	String newText, curText = (String) this.getValue();
 	super.decode(context);
 	newText = (String) this.getValue();
@@ -93,7 +93,7 @@ public UIValueChangeTextEntry()
 	    (curText == null && newText != null) ||
 	    ((curText != null && !curText.equals(newText))) ||
 	    ((newText != null && !newText.equals(curText)))) {
-	    valueChangeEvent = new FacesEvent(this);
+	    valueChangeEvent = new RequestEvent(this);
 	    context.addRequestEvent(this, valueChangeEvent);
 	}
         return true;

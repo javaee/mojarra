@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteRequestTreePhase.java,v 1.6 2002/08/29 19:37:59 eburns Exp $
+ * $Id: ReconstituteRequestTreePhase.java,v 1.7 2002/10/07 20:39:50 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.util.DebugUtil;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteRequestTreePhase.java,v 1.6 2002/08/29 19:37:59 eburns Exp $
+ * @version $Id: ReconstituteRequestTreePhase.java,v 1.7 2002/10/07 20:39:50 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
@@ -143,8 +143,7 @@ public void restoreTreeFromPage(FacesContext facesContext) {
     
     String treeRootString = request.getParameter(RIConstants.FACES_TREE);
     if ( treeRootString == null ) {
-        requestTree = treeFactory.getTree(facesContext.getServletContext(),
-                                          treeId);
+        requestTree = treeFactory.getTree(facesContext, treeId);
     } else {    
         byte[] bytes  = Base64.decode(treeRootString.getBytes());
         try {
@@ -186,16 +185,14 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
     // If there is nothing in the session, 
     if (requestTree == null) {
 	// create the tree from the pathInfo
-        requestTree = treeFactory.getTree(facesContext.getServletContext(),
-            treeId);
+        requestTree = treeFactory.getTree(facesContext, treeId);
     } 
     else {
 	// There is something in the session.  Make sure its TreeId,
 	// matches the treeId from the pathInfo.
 	if ((null != treeId) && !treeId.equals(requestTree.getTreeId())) {
 	    // If it doesn't match, use the pathInfo
-	    requestTree = treeFactory.getTree(facesContext.getServletContext(),
-					      treeId);
+	    requestTree = treeFactory.getTree(facesContext,treeId);
 	}
 	// If it does match, use the tree from the Session
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeFactoryImpl.java,v 1.6 2002/06/21 00:31:24 eburns Exp $
+ * $Id: XmlTreeFactoryImpl.java,v 1.7 2002/10/07 20:39:52 jvisvanathan Exp $
  */
 
 /*
@@ -18,8 +18,8 @@ import javax.faces.tree.TreeFactory;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponentBase;
-
 import javax.servlet.ServletContext;
+import javax.faces.context.FacesContext;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -39,7 +39,7 @@ import org.apache.commons.logging.impl.SimpleLog;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeFactoryImpl.java,v 1.6 2002/06/21 00:31:24 eburns Exp $
+ * @version $Id: XmlTreeFactoryImpl.java,v 1.7 2002/10/07 20:39:52 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,7 +119,7 @@ protected void setXmlDialectProvider(XmlDialectProvider provider)
 
 */
 
-protected Iterator getTreeIdsFromSuffix(ServletContext servletContext,
+protected Iterator getTreeIdsFromSuffix(FacesContext facesContext,
 					String suffix)
 {
     ParameterCheck.nonNull(suffix);
@@ -128,7 +128,7 @@ protected Iterator getTreeIdsFromSuffix(ServletContext servletContext,
     Set resourceSet = null;
     String curResource = null;
     ArrayList resources = new ArrayList();
-
+    ServletContext servletContext = facesContext.getServletContext();
     resourceSet = servletContext.getResourcePaths("/");
     resourcePaths = resourceSet.iterator();
     while (resourcePaths.hasNext()) {
@@ -150,7 +150,7 @@ protected Iterator getTreeIdsFromSuffix(ServletContext servletContext,
 // Methods from TreeFactory
 //
 
-public Tree getTree(ServletContext servletContext,
+public Tree getTree(FacesContext facesContext,
 		    String treeId) throws FacesException
 {
     Tree result = null;
@@ -167,11 +167,12 @@ public Tree getTree(ServletContext servletContext,
 	// PENDING(edburns): need name for default tree
         // PENDING(rogerk) : what to specify for page url
         // (last parameter)????
-	result = new XmlTreeImpl(servletContext, root, "default", "");
+	result = new XmlTreeImpl(facesContext, root, "default", "");
 	return result;
     }
 
     try {
+        ServletContext servletContext = facesContext.getServletContext();
 	treeInput = 
 	    servletContext.getResourceAsStream(treeId);
 	if (null == treeInput) {
@@ -232,7 +233,7 @@ public Tree getTree(ServletContext servletContext,
     root = xmlTreeConfig.getRoot();
     String pageUrl = xmlTreeConfig.getPageUrl();
 
-    result = new XmlTreeImpl(servletContext, root, treeId, pageUrl);
+    result = new XmlTreeImpl(facesContext, root, treeId, pageUrl);
 
     return result;
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.24 2002/09/18 23:53:18 rkitain Exp $
+ * $Id: FacesContextImpl.java,v 1.25 2002/10/07 20:39:48 jvisvanathan Exp $
  */
 
 /*
@@ -33,7 +33,8 @@ import javax.faces.component.UIComponentBase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.FactoryFinder;
-import javax.faces.event.FacesEvent;
+import javax.faces.event.RequestEvent;
+import javax.faces.event.ApplicationEvent;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.lifecycle.ViewHandler;
@@ -374,7 +375,7 @@ public class FacesContextImpl extends FacesContext
     }
 
 
-    public void addApplicationEvent(FacesEvent event) {
+    public void addApplicationEvent(ApplicationEvent event) {
         if (event == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_EVENT_ERROR_MESSAGE_ID));
@@ -419,7 +420,7 @@ public class FacesContextImpl extends FacesContext
         list.add(message);
     }
 
-    public void addRequestEvent(UIComponent component, FacesEvent event) {
+    public void addRequestEvent(UIComponent component, RequestEvent event) {
         ArrayList list = null;
 
 	if (null == component || null == event) {
@@ -531,6 +532,7 @@ public class FacesContextImpl extends FacesContext
     public ApplicationHandler getApplicationHandler() {
         return this.applicationHandler;
     }
+    
     
     // The testcase for this class is TestFacesContextImpl.java 
     // The testcase for this class is TestFacesContextImpl_Model.java

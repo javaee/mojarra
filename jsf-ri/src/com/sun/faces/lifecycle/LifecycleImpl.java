@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.12 2002/08/01 22:59:57 rkitain Exp $
+ * $Id: LifecycleImpl.java,v 1.13 2002/10/07 20:39:50 jvisvanathan Exp $
  */
 
 /*
@@ -12,7 +12,7 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.util.Util;
-
+import com.sun.faces.RIConstants;
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
@@ -34,7 +34,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.12 2002/08/01 22:59:57 rkitain Exp $
+ * @version $Id: LifecycleImpl.java,v 1.13 2002/10/07 20:39:50 jvisvanathan Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -45,7 +45,7 @@ public class LifecycleImpl extends Lifecycle
 //
 // Protected Constants
 //
-
+    
 //
 // Class Variables
 //
@@ -96,19 +96,19 @@ public LifecycleImpl()
 protected void initPhases()
 {
     phaseWrappers.add(new PhaseWrapper(new ReconstituteRequestTreePhase(this, 
-					Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE)));
+            RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new ApplyRequestValuesPhase(this, 
-                                       Lifecycle.APPLY_REQUEST_VALUES_PHASE)));
+            RIConstants.APPLY_REQUEST_VALUES_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new HandleRequestEventsPhase(this, 
-                                      Lifecycle.HANDLE_REQUEST_EVENTS_PHASE)));
+            RIConstants.HANDLE_REQUEST_EVENTS_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new ProcessValidationsPhase(this, 
-  				        Lifecycle.PROCESS_VALIDATIONS_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new UpdateModelValuesPhase(this, 
-				        Lifecycle.UPDATE_MODEL_VALUES_PHASE)));
+            RIConstants.PROCESS_VALIDATIONS_PHASE)));
+    phaseWrappers.add(new PhaseWrapper(new UpdateModelValuesPhase(this,
+            RIConstants.UPDATE_MODEL_VALUES_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new InvokeApplicationPhase(this, 
-					 Lifecycle.INVOKE_APPLICATION_PHASE)));
+	    RIConstants.INVOKE_APPLICATION_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new JspRenderResponsePhase(this, 
-					    Lifecycle.RENDER_RESPONSE_PHASE)));
+	    RIConstants.RENDER_RESPONSE_PHASE)));
 }
 
 /**
@@ -181,7 +181,7 @@ protected int executeRender(FacesContext context) throws FacesException
         renderPhase = wrapper.instance;
         Assert.assert_it(renderPhase != null);
         if ( (((GenericPhaseImpl)renderPhase).getId()) == 
-                Lifecycle.RENDER_RESPONSE_PHASE) {
+                RIConstants.RENDER_RESPONSE_PHASE) {
             break;
         }
     }

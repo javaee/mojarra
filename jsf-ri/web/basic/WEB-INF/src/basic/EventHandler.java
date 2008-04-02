@@ -1,5 +1,5 @@
 /*
- * $Id: EventHandler.java,v 1.10 2002/07/23 19:37:29 eburns Exp $
+ * $Id: EventHandler.java,v 1.11 2002/10/07 20:39:54 jvisvanathan Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package basic;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.RequestEventHandler;
-import javax.faces.event.FacesEvent;
+import javax.faces.event.RequestEvent;
 
 /**
  * The listener interface for handling request events.
@@ -26,7 +26,7 @@ public class EventHandler extends RequestEventHandler {
 
     public boolean processEvent(FacesContext context,
 				UIComponent component,
-				FacesEvent event) {
+				RequestEvent event) {
 	System.out.println("Received Event: " + event + " component: " + 
 			   component);
 	return false;

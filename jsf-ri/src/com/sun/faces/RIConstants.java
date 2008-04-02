@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.18 2002/09/18 23:52:01 rkitain Exp $
+ * $Id: RIConstants.java,v 1.19 2002/10/07 20:39:48 jvisvanathan Exp $
  */
 
 /*
@@ -61,5 +61,45 @@ public class RIConstants {
     public static final String FORMAT_POOL = "com.sun.faces.renderkit.FormatPool";
     public static final String FACES_LOCALE = "FacesLocale";
 
+    /**
+     * <p>Phase identifier for <em>Reconstitute Request Tree</em>.</p>
+     */
+    public static final int RECONSTITUTE_REQUEST_TREE_PHASE = 0;
+
+
+    /**
+     * <p>Phase identifier for <em>Apply Request Values</em>.</p>
+     */
+    public static final int APPLY_REQUEST_VALUES_PHASE = 10;
+
+
+    /**
+     * <p>Phase identifier for <em>Handle Request Events</em>.</p>
+     */
+    public static final int HANDLE_REQUEST_EVENTS_PHASE = 20;
+
+
+    /**
+     * <p>Phase identifier for <em>Process Validations</em>.</p>
+     */
+    public static final int PROCESS_VALIDATIONS_PHASE = 30;
+
+
+    /**
+     * <p>Phase identifier for <em>Update Model Values</em>.</p>
+     */
+    public static final int UPDATE_MODEL_VALUES_PHASE = 40;
+
+
+    /**
+     * <p>Phase identifier for <em>Invoke Application</em>.</p>
+     */
+    public static final int INVOKE_APPLICATION_PHASE = 50;
+
+
+    /**
+     * <p>Phase identifier for <em>Render Response</em>.</p>
+     */
+    public static final int RENDER_RESPONSE_PHASE = 60;    
 
 }

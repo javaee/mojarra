@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeImpl.java,v 1.7 2002/08/01 21:18:42 jvisvanathan Exp $
+ * $Id: XmlTreeImpl.java,v 1.8 2002/10/07 20:39:52 jvisvanathan Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.tree.Tree;
 import javax.faces.FactoryFinder;
 
 import javax.servlet.ServletContext;
+import javax.faces.context.FacesContext;
 
 import com.sun.faces.RIConstants;
 
@@ -30,7 +31,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeImpl.java,v 1.7 2002/08/01 21:18:42 jvisvanathan Exp $
+ * @version $Id: XmlTreeImpl.java,v 1.8 2002/10/07 20:39:52 jvisvanathan Exp $
  * 
  * @see	javax.faces.tree.Tree
  *
@@ -67,7 +68,7 @@ protected String pageUrl = null;
 
 */ 
 
-public XmlTreeImpl(ServletContext context, UIComponent newRoot, 
+public XmlTreeImpl(FacesContext context, UIComponent newRoot, 
 		   String newTreeId, String pageUrl)
 {
     super(context, newRoot, newTreeId);

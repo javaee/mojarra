@@ -1,5 +1,5 @@
 /*
- * $Id: GenericPhaseImpl.java,v 1.4 2002/06/21 00:31:21 eburns Exp $
+ * $Id: GenericPhaseImpl.java,v 1.5 2002/10/07 20:39:49 jvisvanathan Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.tree.TreeNavigator;
 import com.sun.faces.tree.TreeNavigatorImpl;
 
@@ -31,7 +32,7 @@ import com.sun.faces.tree.TreeNavigatorImpl;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: GenericPhaseImpl.java,v 1.4 2002/06/21 00:31:21 eburns Exp $
+ * @version $Id: GenericPhaseImpl.java,v 1.5 2002/10/07 20:39:49 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Phase
@@ -138,7 +139,7 @@ public int traverseTreeInvokingCallback(FacesContext facesContext) throws FacesE
     int result = Phase.GOTO_NEXT;
 
     // PENDING(edburns): use a factory for the TreeNavigator instance
-    if (Lifecycle.RENDER_RESPONSE_PHASE == id) {
+    if (RIConstants.RENDER_RESPONSE_PHASE == id) {
 	treeNav = 
 	    new TreeNavigatorImpl(facesContext.getResponseTree().getRoot());
     }

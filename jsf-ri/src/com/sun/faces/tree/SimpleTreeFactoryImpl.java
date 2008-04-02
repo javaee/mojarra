@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleTreeFactoryImpl.java,v 1.1 2002/07/11 20:33:22 jvisvanathan Exp $
+ * $Id: SimpleTreeFactoryImpl.java,v 1.2 2002/10/07 20:39:52 jvisvanathan Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.FacesException;
 import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
-import javax.servlet.ServletContext;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -25,7 +25,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SimpleTreeFactoryImpl.java,v 1.1 2002/07/11 20:33:22 jvisvanathan Exp $
+ * @version $Id: SimpleTreeFactoryImpl.java,v 1.2 2002/10/07 20:39:52 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -69,12 +69,12 @@ public class SimpleTreeFactoryImpl extends TreeFactory
     //
     // Methods from TreeFactory
     //
-    public Tree getTree(ServletContext servletContext,
+    public Tree getTree(FacesContext facesContext,
                         String treeId) throws FacesException {
-        if ((servletContext == null) || (treeId == null)) {
+        if ((facesContext == null) || (treeId == null)) {
             throw new NullPointerException();
         }
-        return (new SimpleTreeImpl(servletContext, treeId));
+        return (new SimpleTreeImpl(facesContext, treeId));
     }
 
 } // end of class SimpleTreeFactoryImpl

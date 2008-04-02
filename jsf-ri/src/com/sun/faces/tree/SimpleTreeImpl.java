@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleTreeImpl.java,v 1.4 2002/08/01 00:30:37 jvisvanathan Exp $
+ * $Id: SimpleTreeImpl.java,v 1.5 2002/10/07 20:39:52 jvisvanathan Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.faces.component.UIComponentBase;
 import javax.faces.tree.Tree;
 import javax.faces.FactoryFinder;
 import javax.faces.render.RenderKitFactory;
-import javax.servlet.ServletContext;
+import javax.faces.context.FacesContext;
 
 import com.sun.faces.RIConstants;
 
@@ -29,7 +29,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SimpleTreeImpl.java,v 1.4 2002/08/01 00:30:37 jvisvanathan Exp $
+ * @version $Id: SimpleTreeImpl.java,v 1.5 2002/10/07 20:39:52 jvisvanathan Exp $
  * 
  * @see	javax.faces.tree.Tree
  *
@@ -72,11 +72,11 @@ public SimpleTreeImpl() {
 
 */ 
 
-public SimpleTreeImpl(ServletContext servletContext, String newTreeId) {
-    this(servletContext, null, newTreeId);
+public SimpleTreeImpl(FacesContext facesContext, String newTreeId) {
+    this(facesContext, null, newTreeId);
 }    
 
-public SimpleTreeImpl(ServletContext context, UIComponent newRoot, 
+public SimpleTreeImpl(FacesContext context, UIComponent newRoot, 
 		   String newTreeId)
 {
     super();
