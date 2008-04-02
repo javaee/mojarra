@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.24 2004/01/16 17:51:10 horwat Exp $
+ * $Id: UICommandTestCase.java,v 1.25 2004/01/20 03:22:26 eburns Exp $
  */
 
 /*
@@ -453,10 +453,10 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 
 
     protected boolean listenersAreEqual(FacesContext context,
-					UICommandSub comp1,
-					UICommandSub comp2) {
-	List list1 = comp1.getListeners();
-	List list2 = comp2.getListeners();
+					UICommand comp1,
+					UICommand comp2) {
+	ActionListener [] list1 = comp1.getActionListeners();
+	ActionListener [] list2 = comp2.getActionListeners();
 	// make sure they're either both null or both non-null
 	if ((null == list1 && null != list2) ||
 	    (null != list1 && null == list2)) {
@@ -465,24 +465,18 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 	if (null == list1) {
 	    return true;
 	}
-	int j = 0, outerLen = list1.size();
+	int j = 0, outerLen = list1.length;
 	boolean result = true;
-	if (outerLen != list2.size()) {
+	if (outerLen != list2.length) {
 	    return false;
 	}
 	for (j = 0; j < outerLen; j++) {
-	    result = list1.get(j).equals(list2.get(j));
+	    result = list1[j].equals(list2[j]);
 	    if (!result) {
 		return false;
 	    }
 	}
 	return true;
-    }
-
-    public static class UICommandSub extends UICommand {
-	public List getListeners() { 
-	    return listeners;
-	}
     }
 
     // --------------------------------------------------------- Private Classes

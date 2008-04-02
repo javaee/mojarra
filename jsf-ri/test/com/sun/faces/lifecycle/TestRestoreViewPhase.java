@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.11 2004/01/10 18:52:16 eburns Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.12 2004/01/20 03:22:28 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.11 2004/01/10 18:52:16 eburns Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.12 2004/01/20 03:22:28 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -205,8 +205,8 @@ public void testRegisterListeners() {
     basicForm.getChildren().add(panel);
     UIPanel commandPanel = new UIPanel();
     commandPanel.setId("commandPanel");
-    TestCommand command1 = new TestCommand();
-    TestCommand command2 = new TestCommand();
+    UICommand command1 = new UICommand();
+    UICommand command2 = new UICommand();
     commandPanel.getChildren().add(command1);
     commandPanel.getChildren().add(command2);
     panel.getFacets().put("commandPanel", commandPanel);
@@ -227,8 +227,6 @@ public void testRegisterListeners() {
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
     assertTrue(getFacesContext().getViewRoot() != null);
-    assertTrue(command1.getDefaultListenerCount() == 0); 
-    assertTrue(command2.getDefaultListenerCount() == 0); 
 
     // Now test with no facets... Listeners should still be registered on UICommand
     // components....
@@ -241,8 +239,8 @@ public void testRegisterListeners() {
     basicForm = new UIForm();
     basicForm.setId("basicForm");
     root.getChildren().add(basicForm);
-    command1 = new TestCommand();
-    command2 = new TestCommand();
+    command1 = new UICommand();
+    command2 = new UICommand();
     basicForm.getChildren().add(command1);
     basicForm.getChildren().add(command2);
     
@@ -261,19 +259,9 @@ public void testRegisterListeners() {
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
 
-    assertTrue(command1.getDefaultListenerCount() == 0); 
-    assertTrue(command2.getDefaultListenerCount() == 0); 
     getFacesContext().setViewRoot(null);
 }
 
-public static class TestCommand extends UICommand {
-    public int getDefaultListenerCount() {
-	if (listeners != null) {
-            return listeners.size();
-	} 
-	return 0;
-    }
-}
 
 } // end of class TestRestoreViewPhase
 

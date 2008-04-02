@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.93 2004/01/20 00:50:47 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.94 2004/01/20 03:22:21 eburns Exp $
  */
 
 /*
@@ -1053,7 +1053,7 @@ public abstract class UIComponentBase extends UIComponent {
      * <p>Our {@link javax.faces.event.FacesListener}s.  This data
      * structure is lazily instantiated as necessary.</p>
      */
-    protected List listeners;
+    private List listeners;
 
 
     /**

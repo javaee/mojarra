@@ -1,5 +1,5 @@
 /*
- * $Id: ScalarDataModel.java,v 1.8 2003/12/17 15:10:59 rkitain Exp $
+ * $Id: ScalarDataModel.java,v 1.9 2004/01/20 03:22:24 eburns Exp $
  */
 
 /*
@@ -87,7 +87,7 @@ public class ScalarDataModel extends DataModel {
 
 
     // The currently selected row index (zero-relative)
-    protected int index;
+    private int index;
 
 
     // The scalar we are wrapping
@@ -167,6 +167,7 @@ public class ScalarDataModel extends DataModel {
 	if (scalar == null) {
 	    return;
 	}
+	DataModelListener [] listeners = getDataModelListeners();
         if ((old != index) && (listeners != null)) {
             Object rowData = null;
             if (isRowAvailable()) {
@@ -174,9 +175,11 @@ public class ScalarDataModel extends DataModel {
             }
             DataModelEvent event =
                 new DataModelEvent(this, index, rowData);
-            int n = listeners.size();
+            int n = listeners.length;
             for (int i = 0; i < n; i++) {
-                ((DataModelListener) listeners.get(i)).rowSelected(event);
+		if (null != listeners[i]) {
+		    listeners[i].rowSelected(event);
+		}
             }
         }
 

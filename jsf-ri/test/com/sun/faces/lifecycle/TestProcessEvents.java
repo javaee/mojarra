@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.12 2003/12/17 15:15:26 rkitain Exp $
+ * $Id: TestProcessEvents.java,v 1.13 2004/01/20 03:22:28 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.12 2003/12/17 15:15:26 rkitain Exp $
+ * @version $Id: TestProcessEvents.java,v 1.13 2004/01/20 03:22:28 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -352,11 +352,5 @@ public class ActionRecursion implements ActionListener {
 }
 
 *****************/
-
-public static class UICommandSub extends UICommand {
-    public List getListeners() { 
-	return listeners;
-    }
-} 
 
 } // end of class TestProcessEvents

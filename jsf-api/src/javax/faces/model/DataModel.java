@@ -1,5 +1,5 @@
 /*
- * $Id: DataModel.java,v 1.9 2003/11/05 01:01:12 craigmcc Exp $
+ * $Id: DataModel.java,v 1.10 2004/01/20 03:22:22 eburns Exp $
  */
 
 /*
@@ -184,7 +184,7 @@ public abstract class DataModel {
      * {@link DataModel}.  This variable will be <code>null</code> unless
      * there is at least one registered listener.</p>
      */
-    protected List listeners = null;
+    private List listeners = null;
 
 
     // --------------------------------------------- Event Listener Registration

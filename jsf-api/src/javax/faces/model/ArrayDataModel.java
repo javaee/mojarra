@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.9 2003/12/17 15:10:57 rkitain Exp $
+ * $Id: ArrayDataModel.java,v 1.10 2004/01/20 03:22:22 eburns Exp $
  */
 
 /*
@@ -166,6 +166,7 @@ public class ArrayDataModel extends DataModel {
 	if (array == null) {
 	    return;
 	}
+	DataModelListener [] listeners = getDataModelListeners();
         if ((old != index) && (listeners != null)) {
             Object rowData = null;
             if (isRowAvailable()) {
@@ -173,9 +174,11 @@ public class ArrayDataModel extends DataModel {
             }
             DataModelEvent event =
                 new DataModelEvent(this, index, rowData);
-            int n = listeners.size();
+            int n = listeners.length;
             for (int i = 0; i < n; i++) {
-                ((DataModelListener) listeners.get(i)).rowSelected(event);
+		if (null != listeners[i]) {
+		    listeners[i].rowSelected(event);
+		}
             }
         }
 

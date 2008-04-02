@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.15 2003/12/17 15:10:59 rkitain Exp $
+ * $Id: ResultSetDataModel.java,v 1.16 2004/01/20 03:22:23 eburns Exp $
  */
 
 /*
@@ -222,6 +222,7 @@ public class ResultSetDataModel extends DataModel {
 	if (resultSet == null) {
 	    return;
 	}
+	DataModelListener [] listeners = getDataModelListeners();
         if ((old != index) && (listeners != null)) {
             Object rowData = null;
             if (isRowAvailable()) {
@@ -229,9 +230,11 @@ public class ResultSetDataModel extends DataModel {
             }
             DataModelEvent event =
                 new DataModelEvent(this, index, rowData);
-            int n = listeners.size();
+            int n = listeners.length;
             for (int i = 0; i < n; i++) {
-                ((DataModelListener) listeners.get(i)).rowSelected(event);
+		if (null != listeners[i]) {
+		    listeners[i].rowSelected(event);
+		}
             }
         }
 
