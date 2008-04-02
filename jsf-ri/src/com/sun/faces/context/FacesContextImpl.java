@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.51 2003/09/22 21:25:49 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.52 2003/09/24 18:25:17 rlubke Exp $
  */
 
 /*
@@ -36,6 +36,8 @@ import javax.faces.context.ResponseStream;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.RepeaterEvent;
 import javax.faces.lifecycle.Lifecycle;
+import javax.servlet.jsp.jstl.core.Config;
+import javax.servlet.ServletRequest;
 
 import org.apache.commons.collections.CursorableLinkedList;
 import org.apache.commons.logging.Log;
@@ -142,16 +144,11 @@ public class FacesContextImpl extends FacesContext
 
     public Iterator getComponentsWithMessages() {
         assertNotReleased();
-	Iterator result = null;
-
-	if (null == componentMessageLists) {
-	    result = Collections.EMPTY_LIST.iterator();
-	}
-	else {
-	    result = componentMessageLists.keySet().iterator();
-	}
-
-        return result;
+        if (null == componentMessageLists) {
+            return Collections.EMPTY_LIST.iterator();
+        } else {
+            return componentMessageLists.keySet().iterator();
+        }
     }
 
 
@@ -176,15 +173,12 @@ public class FacesContextImpl extends FacesContext
         // update the JSTL configuration parameter with the new locale instance,
         // so that the new LocalizationContext that gets created when the setBundle
         // tag is processed is based on the modified locale.
-        javax.servlet.jsp.jstl.core.Config.set((javax.servlet.ServletRequest) externalContext.getRequest(),
-                javax.servlet.jsp.jstl.core.Config.FMT_LOCALE, locale);
+        Config.set((ServletRequest) externalContext.getRequest(), Config.FMT_LOCALE, locale);
     }
 
     public int getMaximumSeverity() {
-        assertNotReleased();
-        Iterator outerIter = null, innerIter = null;
-        int max = 0;
-        ArrayList list = new ArrayList();
+        assertNotReleased();        
+        int max = 0;       
         
         if (null == componentMessageLists && null == globalMessages) {
              return max;
@@ -205,10 +199,7 @@ public class FacesContextImpl extends FacesContext
     }    
 
     public Iterator getMessages() {
-        assertNotReleased();
-        Iterator listsIter = null, result = null;
-        ArrayList list = new ArrayList();
-
+        assertNotReleased();        
         if (null == componentMessageLists && null == globalMessages) {
             return (Collections.EMPTY_LIST.iterator());
         }
@@ -216,11 +207,10 @@ public class FacesContextImpl extends FacesContext
         // Get an Iterator over the ArrayList instances
         List messages = getMergedMessageLists();
         if (messages.size() > 0) {
-            result = messages.iterator();
+            return messages.iterator();
         } else {
-            result = Collections.EMPTY_LIST.iterator();
-        }
-            return result;
+            return Collections.EMPTY_LIST.iterator();
+        }           
     }
 
     public Iterator getMessages(UIComponent component) {
