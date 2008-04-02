@@ -1,5 +1,5 @@
 /*
- * $Id: EvaluationContext.java,v 1.4 2003/02/20 22:48:34 ofung Exp $
+ * $Id: EvaluationContext.java,v 1.5 2003/03/21 23:19:17 rkitain Exp $
  */
 
 /*
@@ -48,17 +48,18 @@ public class EvaluationContext {
 
     private ELEvaluator elEvaluator = null;
 
+    private FacesContext facesContext = null;
+
 
     public EvaluationContext(FacesContext facesContext) {
         this.facesContext = facesContext;
 	
 	// Lazily create elEvaluator
-	if (null == (elEvaluator = (ELEvaluator)
-		     facesContext.getServletContext().
-		     getAttribute(RIConstants.ELEVALUATOR))) {
-	    facesContext.getServletContext().
-		setAttribute(RIConstants.ELEVALUATOR,
-			     elEvaluator = new ELEvaluator(new ECResolver()));
+        Map applicationMap = facesContext.getExternalContext().getApplicationMap();
+        ELEvaluator elEvaluator = (ELEvaluator)applicationMap.get(RIConstants.ELEVALUATOR);
+	if (null == elEvaluator) {
+            applicationMap.put(RIConstants.ELEVALUATOR, 
+                elEvaluator = new ELEvaluator(new ECResolver()));
 	}
 	Assert.assert_it(null != elEvaluator);
     }
@@ -97,7 +98,7 @@ public class EvaluationContext {
     public Map getApplicationScope() {
         if (applicationScope == null) {
             applicationScope =
-                new ApplicationScopeMap(facesContext.getServletContext());
+                new ApplicationScopeMap(facesContext);
         }
         return (applicationScope);
     }
@@ -158,7 +159,6 @@ public class EvaluationContext {
     }
 
 
-    private FacesContext facesContext = null;
     public FacesContext getFacesContext() {
         return (this.facesContext);
     }
@@ -168,7 +168,7 @@ public class EvaluationContext {
     public Map getRequestScope() {
         if (requestScope == null) {
             requestScope =
-                new RequestScopeMap(facesContext.getServletRequest());
+                new RequestScopeMap(facesContext);
         }
         return (requestScope);
     }
@@ -178,7 +178,7 @@ public class EvaluationContext {
     public Map getSessionScope() {
         if (sessionScope == null) {
             sessionScope =
-                new SessionScopeMap(facesContext.getHttpSession());
+                new SessionScopeMap(facesContext);
         }
         return (sessionScope);
     }
@@ -365,14 +365,16 @@ public class EvaluationContext {
     Object lookup(String name) {
         Object value = null;
         if (value == null) {
-            value = facesContext.getServletRequest().getAttribute(name);
+            Map requestMap = facesContext.getExternalContext().getRequestMap();
+            value = requestMap.get(name);
         }
-        if ((value == null) &&
-            (facesContext.getHttpSession() != null)) {
-             value = facesContext.getHttpSession().getAttribute(name);
+        if ((value == null) && (facesContext.getExternalContext().getSession(false) != null)) {
+            Map sessionMap = facesContext.getExternalContext().getSessionMap();
+            value = sessionMap.get(name);
         }
         if (value == null) {
-            value = facesContext.getServletContext().getAttribute(name);
+            Map applicationMap = facesContext.getExternalContext().getApplicationMap();
+            value = applicationMap.get(name);
         } 
         return (value);
     }
@@ -464,8 +466,10 @@ class ECResolver extends Object implements VariableResolver {
 class ApplicationScopeMap implements Map {
 
 
-    public ApplicationScopeMap(ServletContext application) {
-        this.application = application;
+    private FacesContext facesContext = null;
+
+    public ApplicationScopeMap(FacesContext facesContext) {
+        this.facesContext = facesContext;
         ; // FIXME - initialize contents
     }
 
@@ -497,7 +501,8 @@ class ApplicationScopeMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        return (application.getAttribute(key.toString()));
+        Map applicationMap = facesContext.getExternalContext().getApplicationMap();
+        return applicationMap.get(keyString);
     }
 
 
@@ -516,8 +521,9 @@ class ApplicationScopeMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        Object result = application.getAttribute(keyString);
-        application.setAttribute(keyString, value);
+        Map applicationMap = facesContext.getExternalContext().getApplicationMap(); 
+        Object result = applicationMap.get(keyString);
+        applicationMap.put(keyString, value);
         return (result);
     }
 
@@ -532,8 +538,9 @@ class ApplicationScopeMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        Object result = application.getAttribute(keyString);
-        application.removeAttribute(keyString);
+        Map applicationMap = facesContext.getExternalContext().getApplicationMap();
+        Object result = applicationMap.get(keyString);
+        applicationMap.remove(keyString);
         return (result);
     }
 
@@ -556,14 +563,12 @@ class ApplicationScopeMap implements Map {
 
 class RequestScopeMap implements Map {
 
+    private FacesContext facesContext = null;
 
-    public RequestScopeMap(ServletRequest request) {
-        this.request = request;
+    public RequestScopeMap(FacesContext facesContext) {
+        this.facesContext = facesContext;
         ; // FIXME - initialize contents
     }
-
-
-    ServletRequest request = null;
 
 
     public void clear() {
@@ -591,7 +596,8 @@ class RequestScopeMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        return (request.getAttribute(key.toString()));
+        Map requestMap = facesContext.getExternalContext().getRequestMap();
+        return requestMap.get(key.toString());
     }
 
 
@@ -610,8 +616,9 @@ class RequestScopeMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        Object result = request.getAttribute(keyString);
-        request.setAttribute(keyString, value);
+        Map requestMap = facesContext.getExternalContext().getRequestMap();
+        Object result = requestMap.get(keyString);
+        requestMap.put(keyString, value);
         return (result);
     }
 
@@ -626,8 +633,9 @@ class RequestScopeMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        Object result = request.getAttribute(keyString);
-        request.removeAttribute(keyString);
+        Map requestMap = facesContext.getExternalContext().getRequestMap();
+        Object result = requestMap.get(keyString);
+        requestMap.remove(keyString);
         return (result);
     }
 
@@ -651,13 +659,13 @@ class RequestScopeMap implements Map {
 class SessionScopeMap implements Map {
 
 
-    public SessionScopeMap(HttpSession session) {
-        this.session = session;
+    public SessionScopeMap(FacesContext facesContext) {
+        this.facesContext = facesContext;
         ; // FIXME - initialize contents
     }
 
 
-    HttpSession session = null;
+    private FacesContext facesContext = null;
 
 
     public void clear() {
@@ -685,7 +693,8 @@ class SessionScopeMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        return (session.getAttribute(key.toString()));
+        Map sessionMap = facesContext.getExternalContext().getSessionMap();
+        return sessionMap.get(key.toString());
     }
 
 
@@ -704,8 +713,9 @@ class SessionScopeMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        Object result = session.getAttribute(keyString);
-        session.setAttribute(keyString, value);
+        Map sessionMap = facesContext.getExternalContext().getSessionMap();
+        Object result = sessionMap.get(keyString);
+        sessionMap.put(keyString, value);
         return (result);
     }
 
@@ -720,8 +730,9 @@ class SessionScopeMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        Object result = session.getAttribute(keyString);
-        session.removeAttribute(keyString);
+        Map sessionMap = facesContext.getExternalContext().getSessionMap();
+        Object result = sessionMap.get(keyString);
+        sessionMap.remove(keyString);
         return (result);
     }
 
@@ -770,8 +781,8 @@ class HeaderMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        return (((HttpServletRequest)facesContext.getServletRequest()).
-		getHeader(keyString));
+        Map requestHeaderMap = facesContext.getExternalContext().getRequestHeaderMap();
+        return requestHeaderMap.get(keyString);
     }
 
 
@@ -848,9 +859,9 @@ class HeaderValuesMap implements Map {
 	ArrayList headerArray = null;
 	Object result = null;
 
-	if (null != (headerValues = 
-		     ((HttpServletRequest)facesContext.getServletRequest()).
-		     getHeaders(keyString))) {
+        Map requestHeaderValuesMap = facesContext.getExternalContext().getRequestHeaderValuesMap();
+        headerValues = (Enumeration)requestHeaderValuesMap.get(keyString); 
+        if (null != (headerValues)) {
 	    headerArray = new ArrayList();
 	    while (headerValues.hasMoreElements()) {
 		headerArray.add(headerValues.nextElement());
@@ -932,8 +943,8 @@ class ParamMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        return (((HttpServletRequest)facesContext.getServletRequest()).
-		getParameter(keyString));
+        Map requestParameterMap = facesContext.getExternalContext().getRequestParameterMap();
+        return requestParameterMap.get(keyString);
     }
 
 
@@ -1007,8 +1018,8 @@ class ParamValuesMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        return (((HttpServletRequest)facesContext.getServletRequest()).
-		getParameterValues(keyString));
+        Map requestParameterValuesMap = facesContext.getExternalContext().getRequestParameterValuesMap();
+        return requestParameterValuesMap.get(keyString);
     }
 
 
@@ -1050,10 +1061,10 @@ class ParamValuesMap implements Map {
 }
 
 class InitParamMap implements Map {
-    protected ServletContext servletContext = null;
+    protected FacesContext facesContext = null;
 
     public InitParamMap(FacesContext newFacesContext) {
-	servletContext = newFacesContext.getServletContext();
+	facesContext = newFacesContext;
     }
 
     public void clear() {
@@ -1081,7 +1092,8 @@ class InitParamMap implements Map {
             throw new NullPointerException();
         }
         String keyString = key.toString();
-        return servletContext.getInitParameter(keyString);
+        return ((ExternalContextImpl)facesContext.getExternalContext()).
+            getInitParameter(keyString);
     }
 
 
@@ -1127,8 +1139,8 @@ class CookieMap implements Map {
     protected final int cookieLen;
 
     public CookieMap(FacesContext newFacesContext) {
-	cookies = ((HttpServletRequest)newFacesContext.getServletRequest()).
-	    getCookies();
+        cookies = ((ExternalContextImpl)newFacesContext.getExternalContext()).
+            getRequestCookies();
 	if (null != cookies) {
 	    cookieLen = cookies.length;
 	}

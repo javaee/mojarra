@@ -1,23 +1,21 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.6 2003/02/20 22:48:35 ofung Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.7 2003/03/21 23:19:17 rkitain Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 package com.sun.faces.context;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.LifecycleFactory;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import org.mozilla.util.ParameterCheck;
 
@@ -62,9 +60,9 @@ public class FacesContextFactoryImpl extends FacesContextFactory
     //
     // Methods from FacesContextFactory
     //
-    public FacesContext getFacesContext(ServletContext sc,
-					ServletRequest request,
-					ServletResponse response,
+    public FacesContext getFacesContext(Object sc,
+					Object request,
+					Object response,
 					Lifecycle lifecycle)
         throws FacesException {
 
@@ -77,13 +75,14 @@ public class FacesContextFactoryImpl extends FacesContextFactory
             throw new NullPointerException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }    
 	
-        return (new FacesContextImpl(sc, request,
-                                     response, lifecycle));
+		
+        return (new FacesContextImpl(new ExternalContextImpl((ServletContext)sc, 
+            (ServletRequest)request, (ServletResponse)response), lifecycle));
 
     }
 
 
-// The testcase for this class is TestFacesContextFactory.java 
+// The testcase for this class is TestSerlvetFacesContextFactory.java 
 
 
 } // end of class FacesContextFactoryImpl

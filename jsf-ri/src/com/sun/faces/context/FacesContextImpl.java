@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.33 2003/02/22 03:54:36 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.34 2003/03/21 23:19:18 rkitain Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package com.sun.faces.context;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 
 import javax.faces.FacesException;     
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
@@ -38,9 +40,6 @@ import javax.faces.event.ApplicationEvent;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.lifecycle.ViewHandler;
-
-import javax.faces.context.MessageResourcesFactory;
-import javax.faces.context.MessageResources;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.BeanUtils;
@@ -80,6 +79,7 @@ public class FacesContextImpl extends FacesContext
     private ArrayList applicationEvents = null;
     private CursorableLinkedList facesEvents = null;
     private EvaluationContext evaluationContext = null;
+    private ExternalContext externalContext = null;
 
     /**
 
@@ -106,38 +106,19 @@ public class FacesContextImpl extends FacesContext
     public FacesContextImpl() {
     }
 
-    public FacesContextImpl(ServletContext sc, ServletRequest request,
-			    ServletResponse response, Lifecycle lifecycle)
+    public FacesContextImpl(ExternalContext ec, Lifecycle lifecycle)
         throws FacesException {
         
         try {
-            ParameterCheck.nonNull(sc);
-            ParameterCheck.nonNull(request);
-            ParameterCheck.nonNull(response);
+            ParameterCheck.nonNull(ec);
             ParameterCheck.nonNull(lifecycle);
         } catch (Exception e ) {
             throw new FacesException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
         
-        this.servletContext = sc;
-        this.request = request;
-        this.response = response;
+        this.externalContext = ec;
         this.locale = request.getLocale();
 
-        if (this.request instanceof HttpServletRequest) {
-	    // If saveStateInPage is false, we need to create the
-	    // session at this point.
-	    boolean createSession = true;
-	    String paramValue = null;
-	    
-	    if (null != (paramValue = 
-			sc.getInitParameter(RIConstants.SAVESTATE_INITPARAM))){
-		createSession = !paramValue.equalsIgnoreCase("true");
-	    }
-
-            this.session =
-                ((HttpServletRequest) request).getSession(createSession);
-        }
         this.viewHandler = lifecycle.getViewHandler();
         this.applicationHandler = lifecycle.getApplicationHandler();
 
@@ -147,9 +128,9 @@ public class FacesContextImpl extends FacesContext
 	// remove this from the ServletContext.
 	FormatPool formatPool = null;
 	if (null == (formatPool = (FormatPool)
-		  getServletContext().getAttribute(RIConstants.FORMAT_POOL))){
-	    getServletContext().setAttribute(RIConstants.FORMAT_POOL,
-			         new com.sun.faces.renderkit.FormatPoolImpl());
+            getExternalContext().getApplicationMap().get(RIConstants.FORMAT_POOL))) {
+            getExternalContext().getApplicationMap().put(RIConstants.FORMAT_POOL,
+            new com.sun.faces.renderkit.FormatPoolImpl());
 	}
 
         setCurrentInstance(this);
@@ -167,6 +148,11 @@ public class FacesContextImpl extends FacesContext
     //
     // Methods from FacesContext
     //
+
+    public ExternalContext getExternalContext() {
+        return externalContext;
+    }
+
     public Iterator getApplicationEvents() {
         if (applicationEvents != null) {
             return (applicationEvents.iterator());
@@ -190,14 +176,6 @@ public class FacesContextImpl extends FacesContext
         }
     }
 
-    public HttpSession getHttpSession() {
-	HttpSession result = null;
-	if (null != request) {
-	    result = ((HttpServletRequest) request).getSession(false);
-	}
-        return result;
-    }
-    
     public Locale getLocale() {
         return (this.locale);
     }
@@ -455,10 +433,7 @@ public class FacesContextImpl extends FacesContext
     }
     
     public void release() {
-        request = null;
-        response = null;
-        servletContext = null;
-        session = null;
+        externalContext = null;
         locale = null;
         tree = null;
         responseStream = null;
@@ -496,7 +471,6 @@ public class FacesContextImpl extends FacesContext
     public ApplicationHandler getApplicationHandler() {
         return this.applicationHandler;
     }
-    
     
     // The testcase for this class is TestFacesContextImpl.java 
     // The testcase for this class is TestFacesContextImpl_Model.java
