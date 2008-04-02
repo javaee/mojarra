@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.5 2003/08/28 08:22:17 rkitain Exp $
+ * $Id: CustomerBean.java,v 1.6 2003/08/29 16:40:05 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -49,10 +49,6 @@ import javax.faces.context.FacesContext;
 public class CustomerBean extends Object {
     
     
-    String title = null;
-    SelectItem mr = null;
-    SelectItem mrs = null;
-    SelectItem ms = null;
     String firstName = null;
     String middleInitial = null;
     String lastName = null;
@@ -67,36 +63,38 @@ public class CustomerBean extends Object {
         super();
     }
 
-    public void setMr(SelectItem mR) {
+    protected Collection titleOptions = null;
 
-        this.mr = mR;
+    public Collection getTitleOptions() {
+	if (null == titleOptions) {
+	    titleOptions = new ArrayList();
+	    ResourceBundle rb = ResourceBundle.getBundle("cardemo/Resources", (FacesContext.getCurrentInstance().getLocale()));
+	    String titleStr = (String)rb.getObject("mrLabel");
+	    titleOptions.add(new SelectItem(titleStr, titleStr, 
+					    titleStr));
+	    titleStr = (String)rb.getObject("mrsLabel");
+	    titleOptions.add(new SelectItem(titleStr, titleStr, 
+					    titleStr));
+	    titleStr = (String)rb.getObject("msLabel");
+	    titleOptions.add(new SelectItem(titleStr, titleStr, 
+					    titleStr));
+	    
+	}
+	    
+	return titleOptions;
     }
 
-    public SelectItem getMr() {
-
-	ResourceBundle rb = ResourceBundle.getBundle("cardemo/Resources", (FacesContext.getCurrentInstance().getLocale()));
-	String mRTitle = (String)rb.getObject("mrLabel");
-	return new SelectItem(mRTitle, mRTitle, mRTitle);
-    }
-    
-    public void setMrs(SelectItem mRs) {
-        this.mrs = mRs;
+    public void setTitleOptions(Collection newOptions) {
+	titleOptions = new ArrayList(newOptions);
     }
 
-    public SelectItem getMrs() {
-	ResourceBundle rb = ResourceBundle.getBundle("cardemo/Resources", (FacesContext.getCurrentInstance().getLocale()));
-	String mRsTitle = (String)rb.getObject("mrsLabel");
-	return new SelectItem(mRsTitle, mRsTitle, mRsTitle);
+    String title = null;
+    public void setCurrentTitle(String newTitle) {
+	title = newTitle;
     }
 
-    public void setMs(SelectItem mS) {
-        this.ms = mS;
-    }
-
-    public SelectItem getMs() {
-	ResourceBundle rb = ResourceBundle.getBundle("cardemo/Resources", (FacesContext.getCurrentInstance().getLocale()));
-	String mSTitle = (String)rb.getObject("msLabel");
-	return new SelectItem(mSTitle, mSTitle, mSTitle);
+    public String getCurrentTitle() {
+	return title;
     }
 
     public void setFirstName(String first) {

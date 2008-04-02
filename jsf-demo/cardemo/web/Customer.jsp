@@ -75,10 +75,8 @@
                                 <h:output_text  key="titleLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
                                     <h:selectone_menu id="title" 
-                                                       valueRef="CustomerBean.mr">
-                                        <h:selectitem  itemValue="mr" valueRef="CustomerBean.mr" />
-                        		<h:selectitem  itemValue="mrs" valueRef="CustomerBean.mrs" />
-                        		<h:selectitem  itemValue="ms" valueRef="CustomerBean.ms" />
+                                                       valueRef="CustomerBean.currentTitle">
+                                        <h:selectitems valueRef="CustomerBean.titleOptions" />
                                     </h:selectone_menu></font></td>
                               </tr>
                               <tr> 
