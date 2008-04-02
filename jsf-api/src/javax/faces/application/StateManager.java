@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.25 2004/01/05 18:45:21 rlubke Exp $
+ * $Id: StateManager.java,v 1.26 2004/01/07 20:47:54 eburns Exp $
  */
 
 /*
@@ -139,8 +139,9 @@ public abstract class StateManager {
      * @return a SerializedView instance which encapsulates the state of this
      * view, or null if no state needs to be written to the response.
      *
-     * @exception IllegalStateException if more than one component in
-     * the view has the same non-<code>null</code> component id.
+     * @exception IllegalStateException if more than one component or
+     * facet in the view has the same non-<code>null</code> component
+     * id.
      *
      */
 
