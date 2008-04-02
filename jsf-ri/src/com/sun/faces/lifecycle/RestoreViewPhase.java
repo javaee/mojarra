@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.36 2006/07/31 23:05:03 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.37 2006/08/15 16:50:36 rlubke Exp $
  */
 
 /*
@@ -38,7 +38,6 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
 import javax.faces.event.PhaseId;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +47,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.IOException;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.JSFVersionTracker;
@@ -61,20 +59,45 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.36 2006/07/31 23:05:03 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.37 2006/08/15 16:50:36 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
-    
+
+    //
+    // Protected Constants
+    //
     private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
             + Util.LIFECYCLE_LOGGER);
-    
-    /**
-     * <p>Store the value of <code>DEFAULT_SUFFIX_PARAM_NAME</code>
-     * or, if that isn't defined, the value of <code>DEFAULT_SUFFIX</code>
-     */
-    private String contextDefaultSuffix;
-   
+
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //    
+
+    // Attribute Instance Variables
+
+    // Relationship Instance Variables
+
+    //
+    // Constructors and Genericializers    
+    //
+
+    //
+    // Class methods
+    //
+
+    //
+    // General Methods
+    //
+
+    // 
+    // Methods from Phase
+    //
+
 
     public PhaseId getId() {
         return PhaseId.RESTORE_VIEW;
@@ -101,87 +124,102 @@ public class RestoreViewPhase extends Phase {
 
         // If an app had explicitely set the tree in the context, use that;
         //
-        UIViewRoot viewRoot = facesContext.getViewRoot();       
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+        Locale locale = null;
         if (viewRoot != null) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Found a pre created view in FacesContext");
             }
-            Locale locale = facesContext.getExternalContext().getRequestLocale();
+            locale = facesContext.getExternalContext().getRequestLocale();
             facesContext.getViewRoot().setLocale(locale);
             doPerComponentActions(facesContext, viewRoot);
             return;
         }
 
-        // Reconstitute or create the request tree              
-        String viewId = getViewId(facesContext);
+        // Reconstitute or create the request tree
+        Map requestMap = facesContext.getExternalContext().getRequestMap();
+        String viewId = (String)
+            requestMap.get("javax.servlet.include.path_info");
+        if (viewId == null) {
+            viewId = facesContext.getExternalContext().getRequestPathInfo();
+        }
+        
+        // It could be that this request was mapped using
+        // a prefix mapping in which case there would be no
+        // path_info.  Query the servlet path.
+        if (viewId == null) {
+            viewId = (String)
+                requestMap.get("javax.servlet.include.servlet_path");
+        }
+
+        if (viewId == null) {
+            Object request = facesContext.getExternalContext().getRequest();
+            if (request instanceof HttpServletRequest) {
+                viewId = ((HttpServletRequest) request).getServletPath();
+            }
+        }
 
         if (viewId == null) {
             if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("requestPath is null");
+                logger.warning("viewId is null");
             }
             throw new FacesException(MessageUtils.getExceptionMessageString(
                 MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
-        }                
+        }
 
-        if (isPostback(facesContext)) {
-            // try to restore the view
+	if (isPostback(facesContext)) {
+	    // try to restore the view
             ViewHandler viewHandler = Util.getViewHandler(facesContext);
-            if (null == (viewRoot =
-                  viewHandler.restoreView(facesContext, viewId))) {
-                JSFVersionTracker tracker =
-                      ApplicationAssociate
-                            .getInstance(facesContext.getExternalContext())
-                            .getJSFVersionTracker();
+	    if (null == (viewRoot = viewHandler.restoreView(facesContext, viewId))) {
+                JSFVersionTracker tracker = 
+                        ApplicationAssociate.getInstance(facesContext.getExternalContext()).getJSFVersionTracker();
 
-                // The tracker will be null if the user turned off the 
-                // version tracking feature.  
+		// The tracker will be null if the user turned off the 
+		// version tracking feature.  
                 if (null != tracker) {
-                    // Get the versions of the current ViewHandler and
-                    // StateManager.  If they are older than the current
-                    // version of the implementation, fall back to the
-                    // JSF 1.1 behavior.
+		    // Get the versions of the current ViewHandler and
+		    // StateManager.  If they are older than the current
+		    // version of the implementation, fall back to the
+		    // JSF 1.1 behavior.
                     Version toTest = tracker.
-                          getVersionForTrackedClassName(viewHandler
-                                .getClass().getName());
+                            getVersionForTrackedClassName(viewHandler.getClass().getName());
                     Version currentVersion = tracker.getCurrentVersion();
-                    boolean viewHandlerIsOld;
-                    boolean stateManagerIsOld;
-
-                    viewHandlerIsOld = (toTest.compareTo(currentVersion) < 0);
-                    toTest = tracker.
-                          getVersionForTrackedClassName(facesContext
-                                .getApplication().getStateManager()
-                                .getClass().getName());
-                    stateManagerIsOld = (toTest.compareTo(currentVersion) < 0);
+		    boolean viewHandlerIsOld = false,
+			stateManagerIsOld = false;
+		    
+		    viewHandlerIsOld = (toTest.compareTo(currentVersion) < 0);
+		    toTest = tracker.
+			getVersionForTrackedClassName(facesContext.getApplication().getStateManager().getClass().getName());
+		    stateManagerIsOld = (toTest.compareTo(currentVersion) < 0);
 
                     if (viewHandlerIsOld || stateManagerIsOld) {
-                        viewRoot = viewHandler.createView(facesContext,
-                                                          viewId);
+                        viewRoot = viewHandler.createView(facesContext, viewId);
                         if (null != viewRoot) {
                             facesContext.renderResponse();
                         }
                     }
                 }
-
-                if (null == viewRoot) {                    
+                
+                if (null == viewRoot) {
+                    Object[] params = {viewId};
                     throw new ViewExpiredException(MessageUtils.getExceptionMessageString(
-                          MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID, viewId),
-                                                   viewId);
+                            MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID, params), viewId);
                 }
-            }
+	    }
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Postback: Restored view for " + viewId);
             }
-        } else {
+	}
+	else {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("New request: creating a view for " + viewId);
             }
             // if that fails, create one
             viewRoot = (Util.getViewHandler(facesContext)).
-                  createView(facesContext, viewId);
+                createView(facesContext, viewId);
             facesContext.renderResponse();
-        }
-        assert(null != viewRoot);
+        } 
+        assert (null != viewRoot);
 
         facesContext.setViewRoot(viewRoot);
         doPerComponentActions(facesContext, viewRoot);
@@ -192,7 +230,7 @@ public class RestoreViewPhase extends Phase {
     }
 
     /**
-     * @param context the <code>FacesContext</code> for the current request
+     *
      * @return true if the request method is POST or PUT, or the method
      * is GET but there are query parameters, or the request is not an
      * instance of HttpServletRequest.
@@ -211,13 +249,11 @@ public class RestoreViewPhase extends Phase {
 
     /**
      * <p>Do any per-component actions necessary during reconstitute</p>
-     * @param context the <code>FacesContext</code> for the current request
-     * @param uic top level <code>UIComponent</code>
      */
     protected void doPerComponentActions(FacesContext context, UIComponent uic) {
         // if this component has a component value reference expression,
         // make sure to populate the ValueExpression for it.
-        ValueExpression valueExpression;
+        ValueExpression valueExpression = null;
         if (null != (valueExpression = uic.getValueExpression("binding"))) {
             valueExpression.setValue(context.getELContext(), uic);
         }
@@ -228,145 +264,8 @@ public class RestoreViewPhase extends Phase {
         }
       
     }
-    
-    /**
-     * <p>Adjust the viewID per the requirements of Section 2.2.1.</p>
-     *
-     * @param context current {@link FacesContext}
-     * @param viewId  incoming view ID
-     * @return the view ID with an altered suffix mapping (if necessary)
-     */
-    private String convertViewId(FacesContext context, String viewId) {
 
-        if (viewId == null) {
-            return null;
-        }
-                
-        initDefaultSuffix(context);
-               
-        String mapping = Util.getFacesMapping(context);
-        
-        // if the FacesServlet is mapped to /* throw an 
-        // Exception in order to prevent an endless 
-        // RequestDispatcher loop
-        if ("/*".equals(mapping)) {
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
-        }
-        
-        boolean isPrefixMapped = Util.isPrefixMapped(mapping);
-        ExternalContext extContext = context.getExternalContext();
-        
-         // maping could be null if a non-faces request triggered
-        // this response.
-        if (extContext.getRequestPathInfo() == null && mapping != null &&
-            Util.isPrefixMapped(mapping)) {
-            // this was probably an initial request
-            // send them off to the root of the web application
-            try {
-                context.responseComplete();
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE, "Response Complete for" + viewId);
-                }
-                extContext.redirect(extContext.getRequestContextPath());
-            } catch (IOException ioe) {
-                throw new FacesException(ioe);
-            }
-        }
-        
-        String convertedViewId = null;
-        if (mapping != null && !isPrefixMapped) {
-            // if the viewId doesn't already use the above suffix,
-            // replace or append.
-            if (!viewId.endsWith(contextDefaultSuffix)) {
-                StringBuffer buffer = new StringBuffer(viewId);
-                int extIdx = viewId.lastIndexOf('.');
-                if (extIdx != -1) {
-                    buffer.replace(extIdx, viewId.length(),
-                                   contextDefaultSuffix);
-                } else {
-                    // no extension in the provided viewId, append the suffix
-                    buffer.append(contextDefaultSuffix);
-                }
-                convertedViewId = buffer.toString();
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("viewId after appending the context suffix " +
-                                convertedViewId);
-                }
+    // The testcase for this class is TestRestoreViewPhase.java
 
-            }
-        } else {
-            // if using relative URLs and prefix mapping,
-            // there is a chance of having multiple instances
-            // of the mapping in the URI.  This attempts to 
-            // normalize the URI to prevent a request dispatcher
-            // loop
-            convertedViewId = viewId;            
-            int length = mapping != null ? mapping.length() : 0;
-            while (convertedViewId.startsWith(mapping)) {
-                convertedViewId = convertedViewId.substring(length);                
-            }          
-        }
-                      
-        return convertedViewId;
-    }
-
-    /**
-     * <p>Initialize the default extension suffix that will be used
-     * in view ID adjustments.</p>
-     * @param context the <code>FacesContext</code> for the current request
-     */
-    private void initDefaultSuffix(FacesContext context) {
-        if (contextDefaultSuffix == null) {
-            synchronized (this) {
-                if (contextDefaultSuffix == null) {
-                    contextDefaultSuffix =
-                          context.getExternalContext().
-                                getInitParameter(ViewHandler.DEFAULT_SUFFIX_PARAM_NAME);
-                    if (contextDefaultSuffix == null) {
-                        contextDefaultSuffix = ViewHandler.DEFAULT_SUFFIX;
-                    }
-                    if (logger.isLoggable(Level.FINE)) {
-                        logger.fine("contextDefaultSuffix "
-                                    + contextDefaultSuffix);
-                    }
-                }
-            }
-        }
-    }
-
-
-    /**
-     * <p>Obtain the View ID for this request per section 2.2.1.</p>
-     * @param context the <code>FacesContext</code> for the current request
-     * @return the view ID for this request
-     */
-    private String getViewId(FacesContext context) {
-        // Reconstitute or create the request tree
-        Map requestMap = context.getExternalContext().getRequestMap();
-        String requestPath = (String)
-            requestMap.get("javax.servlet.include.path_info");
-        if (requestPath == null) {
-            requestPath = context.getExternalContext().getRequestPathInfo();
-        }
-        
-        // It could be that this request was mapped using
-        // a prefix mapping in which case there would be no
-        // path_info.  Query the servlet path.
-        if (requestPath == null) {
-            requestPath = (String)
-                requestMap.get("javax.servlet.include.servlet_path");
-        }
-
-        if (requestPath == null) {
-            Object request = context.getExternalContext().getRequest();
-            if (request instanceof HttpServletRequest) {
-                requestPath = ((HttpServletRequest) request).getServletPath();
-            }
-        }
-        
-        return convertViewId(context, requestPath);
-    }
-    
 
 } // end of class RestoreViewPhase

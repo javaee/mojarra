@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.77 2006/06/20 17:07:12 edburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.78 2006/08/15 16:50:36 rlubke Exp $ 
  */ 
 
 
@@ -46,6 +46,7 @@ import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
@@ -68,7 +69,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.77 2006/06/20 17:07:12 edburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.78 2006/08/15 16:50:36 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -77,11 +78,26 @@ public class ViewHandlerImpl extends ViewHandler {
     private static Logger logger = Util.getLogger(Util.FACES_LOGGER
                                                   + Util.APPLICATION_LOGGER);
 
-    // Attribute KEY for context found after <f:view>
     private static final String AFTER_VIEW_CONTENT = RIConstants.FACES_PREFIX+
                                                      "AFTER_VIEW_CONTENT";
-    
-    // Size of the buffer used to process the response   
+
+    /**
+     * <p>The <code>request</code> scoped attribute to store the
+     * {@link javax.faces.webapp.FacesServlet} path of the original
+     * request.</p>
+     */
+    private static final String INVOCATION_PATH =
+        RIConstants.FACES_PREFIX + "INVOCATION_PATH";
+
+    //
+    // Relationship Instance Variables
+    //
+
+    /**
+     * <p>Store the value of <code>DEFAULT_SUFFIX_PARAM_NAME</code>
+     * or, if that isn't defined, the value of <code>DEFAULT_SUFFIX</code>
+     */
+    private String contextDefaultSuffix;
     private int bufSize = -1;
 
     public ViewHandlerImpl() {
@@ -91,9 +107,6 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
 
-    /**
-     * @see ViewHandler#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)     
-     */
     public void renderView(FacesContext context,
             UIViewRoot viewToRender) throws IOException,
             FacesException {
@@ -132,11 +145,27 @@ public class ViewHandlerImpl extends ViewHandler {
         RenderKitFactory renderFactory = (RenderKitFactory)
         FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit =
-                renderFactory.getRenderKit(context, viewToRender.getRenderKitId());        
+                renderFactory.getRenderKit(context, viewToRender.getRenderKitId());
                 
         ResponseWriter oldWriter = context.getResponseWriter();
-        initBuffSize(context);
-
+        if (bufSize == -1) {
+            synchronized (this) {
+                if (bufSize == -1) {
+                    WebConfiguration webConfig =
+                          WebConfiguration
+                                .getInstance(context.getExternalContext());
+                    try {
+                        bufSize = Integer
+                              .parseInt(webConfig.getContextInitParameter(
+                                    WebContextInitParameter.ResponseBufferSize));
+                    } catch (NumberFormatException nfe) {
+                        bufSize = Integer
+                              .parseInt(WebContextInitParameter.ResponseBufferSize.getDefaultValue());
+                    }
+                }
+            }
+        }
+              
         WriteBehindStringWriter strWriter = 
               new WriteBehindStringWriter(context, bufSize);
         ResponseWriter newWriter;
@@ -175,30 +204,31 @@ public class ViewHandlerImpl extends ViewHandler {
         }
         
         // write any AFTER_VIEW_CONTENT to the response
-        writeAfterViewContent(extContext, response);
-
-    }
-
-    private void initBuffSize(FacesContext context) {
-        if (bufSize == -1) {
-            synchronized (this) {
-                if (bufSize == -1) {
-                    WebConfiguration webConfig =
-                          WebConfiguration
-                                .getInstance(context.getExternalContext());
-                    try {
-                        bufSize = Integer
-                              .parseInt(webConfig.getContextInitParameter(
-                                    WebContextInitParameter.ResponseBufferSize));
-                    } catch (NumberFormatException nfe) {
-                        bufSize = Integer
-                              .parseInt(WebContextInitParameter.ResponseBufferSize.getDefaultValue());
-                    }
-                }
-            }
+        Object content = extContext.getRequestMap().get(AFTER_VIEW_CONTENT);
+        assert(null != content);
+        if (content instanceof byte []) {
+            response.getWriter().write(new String((byte[]) content));
+        } else if (content instanceof char []) {
+            response.getWriter().write((char []) content);
+        } else {
+            assert(false);
         }
+        
+        response.flushBuffer(); // PENDING(edburns): necessary?
+        
+        // remove the AFTER_VIEW_CONTENT from the view root
+        extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
+        
+        // PENDING (visvan) do we need this any more since we save the tree
+        // after encode ??
+       /* if (!context.getExternalContext().getRequestMap().containsKey(RIConstants.SAVED_STATE)) {
+            // if we didn't serialize the state, or we didn't save it in
+            // the client, we need to manually remove the transient
+            // children and facets.
+            removeTransientChildrenAndFacets(context, viewToRender,
+                    new HashSet());
+        } */
     }
-
 
     /**
      * <p>This is a separate method to account for handling the content
@@ -221,56 +251,78 @@ public class ViewHandlerImpl extends ViewHandler {
      * @param viewToRender the view to render
      * @throws IOException if an error occurs rendering the view to the client
      */
-    private void doRenderView(FacesContext context,
-                              UIViewRoot viewToRender) 
-    throws IOException, FacesException {
-        ExternalContext extContext = context.getExternalContext();
 
-        ApplicationAssociate associate =
-              ApplicationAssociate.getInstance(extContext);
+    private void doRenderView(FacesContext context,
+                              UIViewRoot viewToRender) throws IOException,
+            FacesException {
+    ExternalContext extContext = context.getExternalContext();
+
+    ApplicationAssociate associate =
+        ApplicationAssociate.getInstance(extContext);
 
         if (null != associate) {
             associate.responseRendered();
         }
 
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE,
-                       "About to render view " + viewToRender.getViewId());
+            logger.log(Level.FINE, "About to render view " + viewToRender.getViewId());
         }
 
         viewToRender.encodeAll(context);
     }
 
 
-    /**
-     * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)     
-     */
     public UIViewRoot restoreView(FacesContext context, String viewId) {
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
-        }              
-
-        String renderKitId = getRenderkitId(context);
-        UIViewRoot viewRoot = Util.getStateManager(context).restoreView(context,
-                                                             viewId,
-                                                             renderKitId);
-        
-        if (logger.isLoggable(Level.FINEST)) {
-            logger.log(Level.FINEST,
-                       "+=+=+=+=+=+= Restored View Printout for " + viewId);
-            DebugUtil.printTree(viewRoot, logger, Level.FINEST);
         }
 
+        ExternalContext extContext = context.getExternalContext();
+
+        String mapping = getFacesMapping(context);
+        UIViewRoot viewRoot = null;
+
+        if (mapping != null && !isPrefixMapped(mapping)) {
+            viewId = convertViewId(context, viewId);
+        }
+
+        // maping could be null if a non-faces request triggered
+        // this response.
+        if (extContext.getRequestPathInfo() == null && mapping != null &&
+            isPrefixMapped(mapping)) {
+            // this was probably an initial request
+            // send them off to the root of the web application
+            try {
+                context.responseComplete();
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE, "Response Complete for" + viewId);
+                }
+                extContext.redirect(extContext.getRequestContextPath());
+            } catch (IOException ioe) {
+                throw new FacesException(ioe);
+            }
+        } else {
+            // this is necessary to allow decorated impls.
+            ViewHandler outerViewHandler =
+                    context.getApplication().getViewHandler();
+            String renderKitId =
+                    outerViewHandler.calculateRenderKitId(context);
+            viewRoot = Util.getStateManager(context).restoreView(context,
+                                                                 viewId,
+                                                                 renderKitId);
+            if (logger.isLoggable(Level.FINEST)) {
+                logger.log(Level.FINEST, "+=+=+=+=+=+= Restored View Printout for " + viewId);
+                DebugUtil.printTree(viewRoot, logger, Level.FINEST);
+            }
+
+        }
 
         return viewRoot;
     }
 
 
-    /**
-     * @see ViewHandler#createView(javax.faces.context.FacesContext, String)     
-     */
     public UIViewRoot createView(FacesContext context, String viewId) {
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
@@ -295,7 +347,9 @@ public class ViewHandlerImpl extends ViewHandler {
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created new view for " + viewId);
         }
-        
+        // PENDING(): not sure if we should set the RenderKitId here.
+        // The UIViewRoot ctor sets the renderKitId to the default
+        // one.
         // if there was no locale from the previous view, calculate the locale 
         // for this view.
         if (locale == null) {
@@ -361,7 +415,7 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(message);
         }
 
-        String mapping = Util.getFacesMapping(context);
+        String mapping = getFacesMapping(context);
         String requestURI = 
               updateRequestURI(viewToExecute.getViewId(), mapping);
         
@@ -378,7 +432,24 @@ public class ViewHandlerImpl extends ViewHandler {
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("About to execute view " + requestURI);
         }
-                       
+        
+        String newViewId = requestURI;
+        // If we have a valid mapping (meaning we were invoked via the
+        // FacesServlet) and we're extension mapped, do the replacement.
+        if (!isPrefixMapped(mapping)) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine( "Found URL pattern mapping to FacesServlet "
+                             + mapping);
+            }
+            newViewId = convertViewId(context, requestURI);
+        } else {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Found no URL patterns mapping to FacesServlet ");
+            }
+        }
+
+
+        viewToExecute.setViewId(newViewId);
         ExternalContext extContext = context.getExternalContext();
 
         // update the JSTL locale attribute in request scope so that JSTL
@@ -393,8 +464,7 @@ public class ViewHandlerImpl extends ViewHandler {
                        Config.FMT_LOCALE, context.getViewRoot().getLocale());
         }
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Before dispacthMessage to newViewId " 
-                        + viewToExecute.getViewId());
+            logger.fine("Before dispacthMessage to newViewId " + newViewId);
         }
 
         // save the original response
@@ -407,11 +477,10 @@ public class ViewHandlerImpl extends ViewHandler {
         extContext.setResponse(wrapped);
 
         // build the view by executing the page
-        extContext.dispatch(requestURI);        
+        extContext.dispatch(newViewId);        
         
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("After dispacthMessage to newViewId " 
-                        + viewToExecute.getViewId());
+            logger.fine("After dispacthMessage to newViewId " + newViewId);
         }
         
         // replace the original response
@@ -561,7 +630,7 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Begin writing marker for viewId " +
+            logger.fine("Begin writing market for viewId " +
                         context.getViewRoot().getViewId());
         }
 
@@ -596,7 +665,7 @@ public class ViewHandlerImpl extends ViewHandler {
             if (logger.isLoggable(Level.SEVERE)) {
                 logger.log(Level.SEVERE, "jsf.illegal_view_id_error", viewId);
             }
-            throw new IllegalArgumentException(message);
+        throw new IllegalArgumentException(message);
         }
 
         // Acquire the context path, which we will prefix on all results
@@ -604,7 +673,7 @@ public class ViewHandlerImpl extends ViewHandler {
             context.getExternalContext().getRequestContextPath();
 
         // Acquire the mapping used to execute this request (if any)
-        String mapping = Util.getFacesMapping(context);
+        String mapping = getFacesMapping(context);
 
         // If no mapping can be identified, just return a server-relative path
         if (mapping == null) {
@@ -612,7 +681,7 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         // Deal with prefix mapping
-        if (Util.isPrefixMapped(mapping)) {
+        if (isPrefixMapped(mapping)) {
             if (mapping.equals("/*")) {
                 return contextPath + viewId;
             } else {
@@ -641,8 +710,126 @@ public class ViewHandlerImpl extends ViewHandler {
             return (path);
         }
 
-    }    
-    
+    }
+
+
+    /**
+     * <p>Returns the URL pattern of the
+     * {@link javax.faces.webapp.FacesServlet} that
+     * is executing the current request.  If there are multiple
+     * URL patterns, the value returned by
+     * <code>HttpServletRequest.getServletPath()</code> and
+     * <code>HttpServletRequest.getPathInfo()</code> is
+     * used to determine which mapping to return.</p>
+     * If no mapping can be determined, it most likely means
+     * that this particular request wasn't dispatched through
+     * the {@link javax.faces.webapp.FacesServlet}.
+     *
+     * @param context the {@link FacesContext} of the current request
+     * @return the URL pattern of the {@link javax.faces.webapp.FacesServlet}
+     *         or <code>null</code> if no mapping can be determined
+     * @throws NullPointerException if <code>context</code> is null
+     */
+    private String getFacesMapping(FacesContext context) {
+       
+        if (context == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+            throw new NullPointerException(message);
+        }
+
+        // Check for a previously stored mapping   
+        ExternalContext extContext = context.getExternalContext();
+        String mapping =
+            (String) extContext.getRequestMap().get(INVOCATION_PATH);
+
+        if (mapping == null) {
+
+            Object request = extContext.getRequest();
+            String servletPath = null;
+            String pathInfo = null;
+
+            // first check for javax.servlet.forward.servlet_path
+            // and javax.servlet.forward.path_info for non-null
+            // values.  if either is non-null, use this
+            // information to generate determine the mapping.
+
+            if (request instanceof HttpServletRequest) {
+                servletPath = extContext.getRequestServletPath();
+                pathInfo = extContext.getRequestPathInfo();
+            }
+
+
+            mapping = getMappingForRequest(servletPath, pathInfo);
+            if (mapping == null) {
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE,
+                               "jsf.faces_servlet_mapping_cannot_be_determined_error",
+                               new Object[]{servletPath});
+                }
+            }         
+        }
+
+        // if the FacesServlet is mapped to /* throw an 
+        // Exception in order to prevent an endless 
+        // RequestDispatcher loop
+        if ("/*".equals(mapping)) {
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                  MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
+        }
+
+        if (mapping != null) {
+            extContext.getRequestMap().put(INVOCATION_PATH, mapping);
+        }
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE,
+                       "URL pattern of the FacesServlet executing the current request "
+                       + mapping);
+        }
+        return mapping;
+    }
+
+
+    /**
+     * <p>Return the appropriate {@link javax.faces.webapp.FacesServlet} mapping
+     * based on the servlet path of the current request.</p>
+     *
+     * @param servletPath the servlet path of the request
+     * @param pathInfo    the path info of the request
+     * @see HttpServletRequest#getServletPath()
+     * @return the appropriate mapping based on the current request
+     */
+    private String getMappingForRequest(String servletPath, String pathInfo) {
+
+        if (servletPath == null) {
+            return null;
+        }
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "servletPath " + servletPath);
+            logger.log(Level.FINE, "pathInfo " + pathInfo);
+        }
+        // If the path returned by HttpServletRequest.getServletPath()
+        // returns a zero-length String, then the FacesServlet has
+        // been mapped to '/*'.
+        if (servletPath.length() == 0) {
+                return "/*";
+        }
+
+        // presence of path info means we were invoked
+        // using a prefix path mapping
+        if (pathInfo != null) {
+            return servletPath;
+        } else if (servletPath.indexOf('.') < 0) {
+            // if pathInfo is null and no '.' is present, assume the
+            // FacesServlet was invoked using prefix path but without
+            // any pathInfo - i.e. GET /contextroot/faces or
+            // GET /contextroot/faces/
+            return servletPath;
+        } else {
+           // Servlet invoked using extension mapping
+            return servletPath.substring(servletPath.lastIndexOf('.'));
+        }
+    }
 
     /**
      * <p>if the specified mapping is a prefix mapping, and the provided 
@@ -656,7 +843,7 @@ public class ViewHandlerImpl extends ViewHandler {
      */
     private String updateRequestURI(String uri, String mapping) {
         
-        if (!Util.isPrefixMapped(mapping)) {
+        if (!isPrefixMapped(mapping)) {
             return uri;
         } else {
             int length = mapping.length() + 1;
@@ -675,41 +862,64 @@ public class ViewHandlerImpl extends ViewHandler {
             }
             return uri;
         }
-    }    
+    }
 
-    
+
     /**
-     * <p>Special handling of getRenderKitId for decorated
-     * implementations.</p>
-     * @param context the <code>FacesContext</code> for the current request
-     * @return the calculated RenderKit ID
+     * <p>Returns true if the provided <code>url-mapping</code> is
+     * a prefix path mapping (starts with <code>/</code>).</p>
+     *
+     * @param mapping a <code>url-pattern</code>
+     * @return true if the mapping starts with <code>/</code>
      */
-    private String getRenderkitId(FacesContext context) {
-        // this is necessary to allow decorated impls.        
-        return context.getApplication().getViewHandler()
-              .calculateRenderKitId(context);
+    private static boolean isPrefixMapped(String mapping) {
+        return (mapping.charAt(0) == '/');
     }
-    
-    
-     private void writeAfterViewContent(ExternalContext extContext,
-                                       ServletResponse response)
-    throws IOException {
-        Object content = extContext.getRequestMap().get(AFTER_VIEW_CONTENT);
-        assert(null != content);
-        if (content instanceof char []) {
-            response.getWriter().write((char []) content);
-        } else if (content instanceof byte []) {
-            response.getWriter().write(new String((byte[]) content));
-        } else {
-            assert(false);
+
+
+    /**
+     * <p>Adjust the viewID per the requirements of {@link #renderView}.</p>
+     *
+     * @param context current {@link FacesContext}
+     * @param viewId  incoming view ID
+     * @return the view ID with an altered suffix mapping (if necessary)
+     */
+    private String convertViewId(FacesContext context, String viewId) {
+        synchronized (this) {
+            if (contextDefaultSuffix == null) {
+                contextDefaultSuffix =
+                    context.getExternalContext().
+                    getInitParameter(ViewHandler.DEFAULT_SUFFIX_PARAM_NAME);
+                if (contextDefaultSuffix == null) {
+                    contextDefaultSuffix = ViewHandler.DEFAULT_SUFFIX;
+                }
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("contextDefaultSuffix " + contextDefaultSuffix);
+                }
+            }
         }
+        String convertedViewId = viewId;
+        // if the viewId doesn't already use the above suffix,
+        // replace or append.
+        if (!convertedViewId.endsWith(contextDefaultSuffix)) {
+            StringBuffer buffer = new StringBuffer(convertedViewId);
+            int extIdx = convertedViewId.lastIndexOf('.');
+            if (extIdx != -1) {
+                buffer.replace(extIdx, convertedViewId.length(),
+                               contextDefaultSuffix);
+            } else {
+                // no extension in the provided viewId, append the suffix
+                buffer.append(contextDefaultSuffix);
+            }
+            convertedViewId = buffer.toString();
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine( "viewId after appending the context suffix " +
+                             convertedViewId);
+            }
 
-        response.flushBuffer();
-
-        // remove the AFTER_VIEW_CONTENT from the view root
-        extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
-    }
-   
+        }
+        return convertedViewId;
+    }    
     
     // ----------------------------------------------------------- Inner Classes
 
