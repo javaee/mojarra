@@ -59,17 +59,18 @@
   <!-- The locations of necessary jar files -->
   <property name="jstl_el.jar" value="${lib.home}/jstl_el.jar"/>
   <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
-  <property name="servlet.jar" value="${lib.home}/servlet.jar"/>
-  <property name="xerces.jar" value="${lib.home}/xerces.jar"/>
-  <property name="commons.beanutils.jar"
-            value="${lib.home}/commons-beanutils.jar"/>
-  <property name="commons.collections.jar" 
-            value="${lib.home}/commons-collections.jar"/>
-  <property name="commons.logging.jar" 
-            value="${lib.home}/commons-logging.jar"/>
-  <property name="commons.digester.jar" 
-            value="${lib.home}/commons-digester.jar"/>
+  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
+  <property name="xerces.jar" value="${tomcat.home}/jaxp-1.2.2/lib/endorsed/xercesImpl.jar"/>
+  <property name="commons-beanutils.jar"
+            value="${tomcat.home}/server/lib/commons-beanutils.jar"/>
+  <property name="commons-collections.jar" 
+            value="${tomcat.home}/common/lib/commons-collections.jar"/>
+  <property name="commons-logging.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
+  <property name="commons-digester.jar" 
+            value="{tomcat.home}/server/lib/commons-digester.jar"/>
   <property name="jsf-api.jar" value="${jsf.api.home}/build/lib/jsf-api.jar"/>
+  <property name="jsp.jar" value="" />
 
 <!-- ************ Compiler Defaults *************************************** -->
 
@@ -85,12 +86,13 @@
   <!-- Construct compile classpath -->
   <path id="compile.classpath">
     <pathelement location="${build.home}/classes"/>
-    <pathelement location="${commons.beanutils.jar}"/>
-    <pathelement location="${commons.collections.jar}"/>
-    <pathelement location="${commons.digester.jar}"/>
-    <pathelement location="${commons.logging.jar}"/>
+    <pathelement location="${commons-beanutils.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-digester.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
     <pathelement location="${jsf-api.jar}"/>
     <pathelement location="${servlet.jar}"/>
+    <pathelement location="${jsp.jar}"/> 
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${jstl.jar}"/>
     <pathelement location="${jstl_el.jar}"/>
@@ -179,6 +181,7 @@
     </delete>
     <delete file="jsf-${version}.zip"/>
     <delete file="jsf-${version}_src.zip"/>
+    <delete  dir="${tomcat.home}/jsf-${version}/lib" />
   </target>
 
   <target name="create.source.bundle" depends="clean">
@@ -202,7 +205,6 @@
   <target name="prepare.dist" depends="jars">
     <mkdir dir="${dist.home}"/>
     <mkdir dir="${dist.home}/example"/>
-    <mkdir dir="${dist.home}/lib"/>
 
     <echo> Handle the top level files </echo>
     <copy file="README" todir="${dist.home}"/>
@@ -218,11 +220,15 @@
     <copy todir="${dist.home}/javadocs">
       <fileset dir="${jsf.api.home}/build/javadocs"/>
     </copy>
+   </target>
 
+   
+    <target name="copyJars" depends="prepare.dist" if="build.standalone">
     <echo> copy the necessary libs </echo>
-    <copy todir="${dist.home}/lib">
-      <fileset dir="${lib.home}" includes="commons*.jar"/>
-    </copy>
+    <copy file="${commons-beanutils.jar}" todir="${dist.home}/lib"/>
+    <copy file="${commons-collections.jar}" todir="${dist.home}/lib"/>
+    <copy file="${commons-digester.jar}" todir="${dist.home}/lib"/>
+    <copy file="${commons-logging.jar}" todir="${dist.home}/lib"/>
     <copy file="${jstl_el.jar}" todir="${dist.home}/lib"/>
     <copy file="${jstl.jar}" todir="${dist.home}/lib"/>
     <copy file="${standard.jar}" todir="${dist.home}/lib"/>
@@ -232,34 +238,51 @@
     <copy file="${conf.share.dir}/jsf_core.tld" todir="${dist.home}/lib"/>
   </target>
 
-  <target name="dist.binary" depends="dist.source">
+  <target name="wspack.copyJars" depends="prepare.dist" if="build.wspack">
+    <echo> copy the necessary libs </echo>
+    <copy file="${jstl_el.jar}" todir="${dist.home}/lib"/>
+    <copy file="${jsf-api.jar}" todir="${dist.home}/lib"/>
+    <copy file="${build.home}/lib/${name}.jar" todir="${dist.home}/lib"/>
+    <copy file="${conf.share.dir}/html_basic.tld" todir="${dist.home}/lib"/>
+    <copy file="${conf.share.dir}/jsf_core.tld" todir="${dist.home}/lib"/>
+  </target>
+
+  <target name="dist.binary" depends="dist.source, wspack.dist.source" >
     <echo> Build the demos from the jsf-demo repository </echo>
     <ant dir="${jsf.demo.home}" inheritAll="false" target="build-all"
          antfile="${jsf.demo.home}/build.xml" />
-
     <echo> copy the example war files to the zip area </echo>
     <copy todir="${dist.home}/example" 
           file="${jsf.demo.home}/components/build/components.war"/>
+    <copy todir="${dist.home}/example"
+          file="${jsf.demo.home}/cardemo/build/cardemo.war"/>
     <copy todir="${dist.home}/example" 
           file="${jsf.demo.home}/guessNumber/build/guessNumber.war"/>
     <copy todir="${dist.home}/example" 
-          file="${jsf.demo.home}/cardemo/build/cardemo.war"/>
-    <copy todir="${dist.home}/example" 
-          file="${jsf.demo.home}/nonjsp/dist/nonjsp.war"/>
+          file="${jsf.demo.home}/nonjsp/dist/nonjsp.war"/> 
     <echo> copy the demo-components.jar </echo>
     <copy todir="${dist.home}/example" 
      file="${jsf.demo.home}/components/build/demo/WEB-INF/lib/demo-components.jar"/>
   </target>
 
-  <target name="dist.source" depends="prepare.dist">
-
+  <target name="dist.source" depends="copyJars" if="build.standalone">
     <echo> prepare to copy the demo source </echo>
     <ant dir="${jsf.demo.home}" inheritAll="false"
          antfile="${jsf.demo.home}/build.xml" target="clean"/>
     <ant dir="${jsf.demo.home}" inheritAll="false"
-         antfile="${jsf.demo.home}/build.xml" target="copyJarsToDemos"/>
-    <echo> copy the demo-components.jar to the webapps that need it </echo>
+         antfile="${jsf.demo.home}/build.xml" target="copyJars"/>
+    <ant target="copyDemoSource" />
+  </target>
 
+  <target name="wspack.dist.source" depends="wspack.copyJars" if="build.wspack">
+
+    <echo> prepare to copy the demo source </echo>
+    <ant dir="${jsf.demo.home}" inheritAll="false"
+         antfile="${jsf.demo.home}/build.xml" target="clean"/>
+    <ant target="copyDemoSource" />
+  </target>
+
+  <target name="copyDemoSource">
     <echo> copy the necessary examples </echo>
 
     <copy todir="${dist.home}/example/guessNumber" includeEmptyDirs="false">
@@ -281,19 +304,24 @@
   </target>
 
   <target name="dist" depends="dist.binary">
-
     <echo> create the zip file </echo>
     <move todir="${basedir}/jsf-${version}">
       <fileset dir="dist"/>
     </move>
     <zip zipfile="jsf-${version}.zip">
-      <fileset dir="${basedir}" 
+      <fileset dir="${basedir}"
                includes="jsf-${version}/**"/>
     </zip>
     <move todir="dist">
       <fileset dir="${basedir}/jsf-${version}"/>
     </move>
 
+  </target>
+
+  <target name="wspack" depends="dist.binary" >
+    <copy todir="${wspack.home}/jsf-${version}">
+      <fileset dir="${dist.home}"/>
+    </copy>
   </target>
 
   <target name="javadocs" 
@@ -354,10 +382,10 @@
     </copy>
 
     <!-- copy dependent libs -->
-    <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-    <copy  file="${commons.collections.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-    <copy  file="${commons.digester.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-    <copy  file="${commons.logging.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy  file="${commons-beanutils.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy  file="${commons-collections.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy  file="${commons-digester.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy  file="${commons-logging.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${standard.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${jstl.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${jstl_el.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
@@ -400,6 +428,22 @@
 
   </target>
 
+  <!--
+       ===================================================================
+        This target copies the JSF libraries under ${jwsdp.home}. This 
+        target simulates JWSDP 1.2 distribution environment.
+       ===================================================================
+  -->
+  <target name="wspack.jars" depends="jars">
+    <mkdir dir="${tomcat.home}/jsf-${version}"/>
+    <mkdir dir="${tomcat.home}/jsf-${version}/lib"/>
+
+    <copy file="${jstl_el.jar}" todir="${tomcat.home}/jsf-${version}/lib"/>
+    <copy file="${build.home}/lib/${name}.jar" todir="${tomcat.home}/jsf-${version}/lib"/>
+    <copy file="${jsf-api.jar}" todir="${tomcat.home}/jsf-${version}/lib"/>
+
+  </target>
+
 
 <!--
        ===================================================================
@@ -437,40 +481,6 @@
        toDir="${tomcat.home}/webapps"/>
 
   </target>
-
-
-
-  <!-- 
-       =================================================================== 
-         Issues list
-       =================================================================== 
-  -->
-  <target name="issues"
-   description="Generate outstanding issues list">
-    <style basedir="docs"
-           destdir="${build.home}"
-         extension=".html"
-             style="docs/ri-issues-summary.xsl"
-          includes="ri-issues.xml"/>
-    <move     file="${build.home}/ri-issues.html"
-            tofile="${build.home}/ri-issues-summary.html"/>
-    <style basedir="docs"
-           destdir="${build.home}"
-         extension=".html"
-             style="docs/ri-issues-detail.xsl"
-          includes="ri-issues.xml"/>
-    <move     file="${build.home}/ri-issues.html"
-            tofile="${build.home}/ri-issues-detail.html"/>
-     <style basedir="${jsf.api.head.home}/doc"
-           destdir="${build.home}"
-         extension=".html"
-             style="docs/api-issues-owners.xsl"
-          includes="OutstandingIssues.xml"/>
-     <move     file="${build.home}/OutstandingIssues.html"
-            tofile="${build.home}/api-issues-owners.html"/>
-  </target>
-
-
 
   <target name="main" depends="prepare,compile,jars"/>
 
