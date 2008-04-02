@@ -116,9 +116,7 @@ public class TestELImpl extends ServletFacesTestCase
         /* testing values that end with or contain "#" */
         evaluateTest("#", "#");
         
-        // JSF1.2 BI: This expression used to evaulate to "/#" but now
-        // returns "#".
-        evaluateTest("\\#", "#");
+        evaluateTest("\\#", "\\#");
         evaluateTest("#  ", "#  ");
         evaluateTest("test#", "test#");
         evaluateTest("#test", "#test");
