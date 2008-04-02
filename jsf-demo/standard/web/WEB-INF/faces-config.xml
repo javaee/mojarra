@@ -85,7 +85,7 @@
   <managed-bean>
     <managed-bean-name>UIDataBean</managed-bean-name>
     <managed-bean-class>standard.UIDataBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
+    <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
 
   <managed-bean>
@@ -119,6 +119,14 @@
       <display-name>The Generic Rule</display-name>
       <from-outcome>success</from-outcome>
       <to-view-id>/UIInput.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/UIData.jsp</from-view-id>
+    <navigation-case>
+      <from-outcome>click</from-outcome>
+      <to-view-id>/UIDataClick.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataBean.java,v 1.11 2004/02/05 16:25:05 rlubke Exp $
+ * $Id: UIDataBean.java,v 1.12 2004/10/20 19:18:59 edburns Exp $
  */
 
 /*
@@ -178,8 +178,11 @@ public class UIDataBean {
         append("click(rowIndex=" + data.getRowIndex() +
                ",accountId=" +
                accountId.getValue() + ")");
+	CustomerBean customer = (CustomerBean) context.getExternalContext().getRequestMap().get("customer");
+	System.out.println("accountId: " + customer.getAccountId());
+	context.getExternalContext().getSessionMap().put("customer", customer);
         clear();
-        return (null);
+        return ("click");
 
     }
 
