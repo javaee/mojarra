@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTagTestCase.java,v 1.2 2003/03/14 01:16:03 craigmcc Exp $
+ * $Id: FacesTagTestCase.java,v 1.3 2003/03/14 02:37:42 craigmcc Exp $
  */
 
 /*
@@ -22,6 +22,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.Tag;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -56,9 +57,7 @@ public class FacesTagTestCase extends TestCase {
     protected MockServletContext      servletContext = null;
     protected MockHttpSession         session = null;
 
-
-    protected boolean                 detail = false;
-    protected FacesTag                root = null;
+    protected Tag                     root = null;
     protected Map                     tags = new HashMap();
 
 
@@ -71,7 +70,9 @@ public class FacesTagTestCase extends TestCase {
      * @param name Name of the test case
      */
     public FacesTagTestCase(String name) {
+
         super(name);
+
     }
 
 
@@ -138,122 +139,81 @@ public class FacesTagTestCase extends TestCase {
     // ------------------------------------------------ Individual Test Methods
 
 
-    // Test double single tag rendering
-    public void testDoubleSingleTag() throws Exception {
+    // Test multiple tag rendering with ids
+    public void testMultipleTagWithId() throws Exception {
 
-        add(null, new TestTag("A", "a"));
-
-        render();
-        reset();
-        render(); // Should not create components twice
-        assertEquals("/bA/eA", text());
-        assertEquals("//A-a", ids());
-
-    }
-
-
-    // Test double single tag rendering with missing ids
-    public void testDoubleSingleTagNoIds() throws Exception {
-
-        add(null, new TestTag(null, "a"));
+        configure("C1", "C2", true, false);
 
         render();
-        assertEquals("//-a", ids());
-        reset();
-        render(); // Should not create components twice
-        assertEquals("/b/e", text());
-        assertEquals("//-a", ids());
-
-    }
-
-
-    // Test double multiple tag rendering
-    public void testDoubleMultipleTag() throws Exception {
-
-        FacesTag a = new TestTag("A", "a");
-        FacesTag b2 = new TestTag("B2", "b2");
-        add(null, a);
-        add(a, new TestTag("B1", "b1"));
-        add(a, b2);
-        add(a, new TestTag("B3", "b3"));
-        add(b2, new TestTag("C1", "c1"));
-        add(b2, new TestTag("C2", "c2"));
-
-        render();
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", ids());
-        reset();
-        render(); // Should not create components twice
         assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", ids());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        verifyB2();
+
+        reset();
+        render();
+        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        verifyB2();
 
     }
 
 
-    // Test double multiple tag rendering with missing ids
+    // Test multiple tag rendering with missing id
     // Scenario 1 -- both ids missing
-    public void testDoubleMultipleTagNoIds1() throws Exception {
+    public void testMultipleTagWithoutId1() throws Exception {
 
-        FacesTag a = new TestTag("A", "a");
-        FacesTag b2 = new TestTag("B2", "b2");
-        add(null, a);
-        add(a, new TestTag("B1", "b1"));
-        add(a, b2);
-        add(a, new TestTag("B3", "b3"));
-        add(b2, new TestTag(null, "c1"));
-        add(b2, new TestTag(null, "c2"));
+        configure(null, null, true, false);
 
         render();
-        assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", ids());
-        reset();
-        render(); // Should not create components twice
         assertEquals("/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", ids());
+        assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
+        verifyB2();
+
+        reset();
+        render();
+        assertEquals("/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
+        verifyB2();
 
     }
 
 
-    // Test double multiple tag rendering with missing ids
+    // Test multiple tag rendering with missing id
     // Scenario 2 -- first id missing
-    public void testDoubleMultipleTagNoIds2() throws Exception {
+    public void testMultipleTagWithoutId2() throws Exception {
 
-        FacesTag a = new TestTag("A", "a");
-        FacesTag b2 = new TestTag("B2", "b2");
-        add(null, a);
-        add(a, new TestTag("B1", "b1"));
-        add(a, b2);
-        add(a, new TestTag("B3", "b3"));
-        add(b2, new TestTag(null, "c1"));
-        add(b2, new TestTag("C2", "c2"));
+        configure(null, "C2", true, false);
 
         render();
-        assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", ids());
-        reset();
-        render(); // Should not create components twice
         assertEquals("/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", ids());
+        assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
+        verifyB2();
+
+        reset();
+        render();
+        assertEquals("/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
+        verifyB2();
 
     }
 
 
-    // Test double multiple tag rendering with missing ids
+    // Test multiple tag rendering with missing id
     // Scenario 3 -- second id missing
-    public void testDoubleMultipleTagNoIds3() throws Exception {
+    public void testMultipleTagWithoutId3() throws Exception {
 
-        FacesTag a = new TestTag("A", "a");
-        FacesTag b2 = new TestTag("B2", "b2");
-        add(null, a);
-        add(a, new TestTag("B1", "b1"));
-        add(a, b2);
-        add(a, new TestTag("B3", "b3"));
-        add(b2, new TestTag("C1", "c1"));
-        add(b2, new TestTag(null, "c2"));
+        configure("C1", null, true, false);
 
         render();
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", ids());
-        reset();
-        render(); // Should not create components twice
         assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", ids());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
+        verifyB2();
+
+        reset();
+        render();
+        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
+        verifyB2();
 
     }
 
@@ -279,19 +239,18 @@ public class FacesTagTestCase extends TestCase {
     // Test suppressing rendering with rendered=false
     public void testRenderedFalse() throws Exception {
 
-        FacesTag a = new TestTag("A", "a");
-        FacesTag b2 = new TestTag("B2", "b2");
-        b2.setRendered(false);
-        add(null, a);
-        add(a, new TestTag("B1", "b1"));
-        add(a, b2);
-        add(a, new TestTag("B3", "b3"));
-        add(b2, new TestTag("C1", "c1"));
-        add(b2, new TestTag("C2", "c2"));
+        configure("C1", "C2", false, false);
 
         render();
         assertEquals("/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", ids());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        verifyB2();
+
+        reset();
+        render();
+        assertEquals("/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        verifyB2();
 
     }
 
@@ -299,91 +258,62 @@ public class FacesTagTestCase extends TestCase {
     // Test a component that takes responsibility for rendering children
     public void testRendersChildren() throws Exception {
 
-        FacesTag a = new TestTag("A", "a");
-        FacesTag b2 = new TestTag("B2", "b2");
-        ((TestTag) b2).setRendersChildren(true);
-        add(null, a);
-        add(a, new TestTag("B1", "b1"));
-        add(a, b2);
-        add(a, new TestTag("B3", "b3"));
-        add(b2, new TestTag("C1", "c1"));
-        add(b2, new TestTag("C2", "c2"));
+        configure("C1", "C2", true, true);
 
         render();
         assertEquals("/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", ids());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        verifyB2();
 
-    }
-
-
-    // Test simple multiple tag rendering
-    public void testSimpleMultipleTag() throws Exception {
-
-        FacesTag a = new TestTag("A", "a");
-        FacesTag b2 = new TestTag("B2", "b2");
-        add(null, a);
-        add(a, new TestTag("B1", "b1"));
-        add(a, b2);
-        add(a, new TestTag("B3", "b3"));
-        add(b2, new TestTag("C1", "c1"));
-        add(b2, new TestTag("C2", "c2"));
-
+        reset();
         render();
-        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", ids());
+        assertEquals("/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        verifyB2();
 
     }
 
 
-    // Test simple multiple tag rendering with missing ids
-    public void testSimpleMultipleTagNoIds() throws Exception {
-
-        FacesTag a = new TestTag("A", "a");
-        FacesTag b2 = new TestTag("B2", "b2");
-        add(null, a);
-        add(a, new TestTag("B1", "b1"));
-        add(a, b2);
-        add(a, new TestTag("B3", "b3"));
-        add(b2, new TestTag(null, "c1"));
-        add(b2, new TestTag(null, "c2"));
-
-        render();
-        assertEquals("/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", ids());
-
-    }
-
-
-    // Test simple single tag rendering
-    public void testSimpleSingleTag() throws Exception {
+    // Test single tag rendering with id
+    public void testSingleTagWithId() throws Exception {
 
         add(null, new TestTag("A", "a"));
 
         render();
         assertEquals("/bA/eA", text());
-        assertEquals("//A-a", ids());
+        assertEquals("//A-a", tree());
+
+        reset();
+        render();
+        assertEquals("/bA/eA", text());
+        assertEquals("//A-a", tree());
 
     }
 
 
-    // Test simple single tag rendering with missing id
-    public void testSimpleSingleTagNoIds() throws Exception {
+    // Test single tag rendering without id
+    public void testSingleTagWithoutId() throws Exception {
 
-        add(null, new TestTag());
+        add(null, new TestTag(null, "a"));
 
         render();
         assertEquals("/b/e", text());
-        assertEquals("//", ids());
+        assertEquals("//-a", tree());
+
+        reset();
+        render();
+        assertEquals("/b/e", text());
+        assertEquals("//-a", tree());
 
     }
-
 
 
     // ------------------------------------------------------ Protected Methods
 
 
     // Add a new child tag with the specified parent (null==root tag)
-    protected void add(FacesTag parent, FacesTag child) {
+    protected void add(Tag parent, Tag child) {
+
         if (parent == null) {
             if (root != null) {
                 throw new IllegalStateException("Root tag already set");
@@ -399,27 +329,108 @@ public class FacesTagTestCase extends TestCase {
             child.setParent(parent);
         }
         child.setPageContext(this.pageContext);
+
+    }
+
+
+    // Configure the tree of tags, with specified ids for C1 and C2
+    protected void configure(String id1, String id2,
+                             boolean rendered, boolean children) {
+
+        FacesTag a = new TestTag("A", "a");
+        FacesTag b2 = new TestTag("B2", "b2");
+        b2.setRendered(rendered);
+        ((TestTag) b2).setRendersChildren(children);
+        FacetTag f1 = new FacetTag();
+        f1.setName("header");
+        FacetTag f2 = new FacetTag();
+        f2.setName("footer");
+
+        add(null, a);
+        add(a, new TestTag("B1", "b1"));
+        add(a, b2);
+        add(a, new TestTag("B3", "b3"));
+        add(b2, f1);
+        add(f1, new TestTag("H", "h"));
+        add(b2, new TestTag(id1, "c1"));
+        add(b2, new TestTag(id2, "c2"));
+        add(b2, f2);
+        add(f2, new TestTag("F", "f"));
+
+    }
+
+
+    // Release all tags on the current page
+    protected void release() {
+
+        if (root != null) {
+            release(root);
+            root = null;
+        }
+
+    }
+
+    protected void release(Tag tag) {
+
+        List children = (List) tags.get(tag);
+        if (children != null) {
+            Iterator kids = children.iterator();
+            while (kids.hasNext()) {
+                release((Tag) kids.next());
+            }
+            tags.remove(tag);
+        }
+        tag.setParent(null);
+        tag.setPageContext(null);
+
+    }
+
+
+    // Render the current page by recursively processing all of the tags
+    protected void render() throws JspException {
+
+        if (root != null) {
+            render(root);
+        }
+
+    }
+
+    protected void render(Tag tag) throws JspException {
+
+        tag.doStartTag();
+        List children = (List) tags.get(tag);
+        if (children != null) {
+            Iterator kids = children.iterator();
+            while (kids.hasNext()) {
+                render((Tag) kids.next());
+            }
+        }
+        tag.doEndTag();
+
+    }
+
+
+    // Reset the output buffer in our fake writer
+    protected void reset() throws IOException {
+
+        MockJspWriter writer = (MockJspWriter) pageContext.getOut();
+        writer.clearBuffer();
+
     }
 
 
     // Return a String of all the component ids in treewalk order
-    protected String ids() {
+    protected String tree() {
+
         UIComponent component = facesContext.getTree().getRoot();
         StringBuffer sb = new StringBuffer();
-        if (detail) {
-            System.err.println("vvvvvvvvvv");
-        }
-        ids(component, sb);
-        if (detail) {
-            System.err.println("^^^^^^^^^^");
-        }
+        tree(component, sb);
         return (sb.toString());
+
     }
 
-    protected void ids(UIComponent component, StringBuffer sb) {
-        if (detail) {
-            System.err.println("component=" + component.getComponentId());
-        }
+    protected void tree(UIComponent component, StringBuffer sb) {
+
         sb.append("/");
         if (component.getComponentId() != null) {
             sb.append(component.getComponentId());
@@ -433,64 +444,31 @@ public class FacesTagTestCase extends TestCase {
         }
         Iterator kids = component.getChildren();
         while (kids.hasNext()) {
-            ids((UIComponent) kids.next(), sb);
+            tree((UIComponent) kids.next(), sb);
         }
-    }
 
-
-    // Release all tags on the current page
-    protected void release() {
-        if (root != null) {
-            release(root);
-            root = null;
-        }
-    }
-
-    protected void release(FacesTag tag) {
-        List children = (List) tags.get(tag);
-        if (children != null) {
-            Iterator kids = children.iterator();
-            while (kids.hasNext()) {
-                release((FacesTag) kids.next());
-            }
-            tags.remove(tag);
-        }
-        tag.setParent(null);
-        tag.setPageContext(null);
-    }
-
-
-    // Render the current page by recursively processing all of the tags
-    protected void render() throws JspException {
-        if (root != null) {
-            render(root);
-        }
-    }
-
-    protected void render(FacesTag tag) throws JspException {
-        tag.doStartTag();
-        List children = (List) tags.get(tag);
-        if (children != null) {
-            Iterator kids = children.iterator();
-            while (kids.hasNext()) {
-                render((FacesTag) kids.next());
-            }
-        }
-        tag.doEndTag();
-    }
-
-
-    // Reset the output buffer in our fake writer
-    protected void reset() throws IOException {
-        MockJspWriter writer = (MockJspWriter) pageContext.getOut();
-        writer.clearBuffer();
     }
 
 
     // Return the rendered text
     protected String text() {
+
         MockJspWriter writer = (MockJspWriter) pageContext.getOut();
         return (writer.getBuffer());
+
+    }
+
+
+    // Verify the characteristics of a component with id "B2"
+    protected void verifyB2() {
+
+        UIComponent b2c = facesContext.getTree().getRoot().findComponent("B2");
+        assertNotNull("B2 component exists", b2c);
+        assertEquals("B2 component id", "B2", b2c.getComponentId());
+        assertEquals("B2 child count", 2, b2c.getChildCount());
+        assertNotNull("B2 header facet", b2c.getFacet("header"));
+        assertNotNull("B2 footer facet", b2c.getFacet("footer"));
+
     }
 
 

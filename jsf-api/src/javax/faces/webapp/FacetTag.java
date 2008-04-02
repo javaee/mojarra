@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTag.java,v 1.6 2003/02/20 22:46:45 ofung Exp $
+ * $Id: FacetTag.java,v 1.7 2003/03/14 02:37:41 craigmcc Exp $
  */
 
 /*
@@ -79,19 +79,5 @@ public class FacetTag extends TagSupport {
 
     }
 
-    // ----------------------------------------------------- General Methods
-
-    /**
-     * Cause a JspException to be thrown if we have more than one {@link
-     * FacesTag} child.
-     *
-     * @exception JspException if we have more than one {@link FacesTag}
-     * child.
-     */
-    public void verifySingleChild() throws JspException {
-	if (++children > 1) {
-	    throw new JspException("Facet may have only one child");
-	}
-    }
 
 }

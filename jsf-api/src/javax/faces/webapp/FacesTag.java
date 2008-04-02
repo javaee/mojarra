@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.35 2003/03/14 01:16:01 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.36 2003/03/14 02:37:41 craigmcc Exp $
  */
 
 /*
@@ -563,11 +563,14 @@ public abstract class FacesTag implements Tag {
 
     /**
      * <p>Return <code>true</code> if rendering should be suppressed because
-     * some parent component has been configured with
-     * <code>getRendersChildren()</code> as true.</p>
+     * our component is a facet, or some parent component has been configured
+     * with <code>getRendersChildren()</code> as true.</p>
      */
     protected boolean isSuppressed() {
 
+        if (getFacetName() != null) {
+            return (true);
+        }
         UIComponent component = this.component.getParent();
         while (component != null) {
             if (component.getRendersChildren()) {
