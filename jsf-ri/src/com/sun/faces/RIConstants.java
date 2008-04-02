@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.87 2006/05/22 17:16:01 rlubke Exp $
+ * $Id: RIConstants.java,v 1.88 2006/06/19 19:38:50 youngm Exp $
  */
 
 /*
@@ -70,6 +70,13 @@ public class RIConstants {
 
     public static final String ONE_TIME_INITIALIZATION_ATTR =
         FACES_PREFIX + "OneTimeInitialization";    
+
+    /**
+     * Request attribute containing a Set of clientIds that have messages pending
+     * display when rendering response.
+     */
+    public static final String CLIENT_ID_MESSAGES_NOT_DISPLAYED = FACES_PREFIX +
+    	"clientIdMessagesNotDisplayed";
 
     public static final String APPLICATION = "application";
     public static final String APPLICATION_SCOPE = "applicationScope";

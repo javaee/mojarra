@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.81 2006/05/17 19:00:45 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.82 2006/06/19 19:38:51 youngm Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -223,6 +224,13 @@ import com.sun.faces.util.MessageUtils;
              return (Collections.EMPTY_LIST.iterator());
          }
 
+         //Clear set of clientIds from pending display messages list.
+         Map requestMap = getExternalContext().getRequestMap();
+         if (requestMap.containsKey(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
+        	 Set pendingClientIds = (Set)requestMap.get(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
+        	 pendingClientIds.clear();
+         }
+
          // Get an Iterator over the ArrayList instances
          List messages = getMergedMessageLists();
          if (messages.size() > 0) {
@@ -235,6 +243,14 @@ import com.sun.faces.util.MessageUtils;
 
      public Iterator getMessages(String clientId) {
          assertNotReleased();
+
+         //remove client id from pending display messages list.
+         Map requestMap = getExternalContext().getRequestMap();
+         if (requestMap.containsKey(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
+        	 Set pendingClientIds = (Set)requestMap.get(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
+        	 pendingClientIds.remove(clientId);
+         }
+
          // If no messages have been enqueued at all,
          // return an empty List Iterator
          if (null == componentMessageLists) {
@@ -353,6 +369,7 @@ import com.sun.faces.util.MessageUtils;
      public void release() {
          
          this.externalContext.getRequestMap().remove(FACESCONTEXT_IMPL_ATTR_NAME);
+         this.externalContext.getRequestMap().remove(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
          
          released = true;
          externalContext = null;
