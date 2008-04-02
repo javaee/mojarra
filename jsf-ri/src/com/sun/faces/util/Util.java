@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.105 2003/10/16 15:57:27 rlubke Exp $
+ * $Id: Util.java,v 1.106 2003/10/17 15:59:03 eburns Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.105 2003/10/16 15:57:27 rlubke Exp $ 
+ * @version $Id: Util.java,v 1.106 2003/10/17 15:59:03 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -953,6 +953,34 @@ private Util()
         }
 
         return expression;
+    }
+
+    /*
+     * Evaluate the EL expression for the given attribute.
+     * @throws JspException if an error occurs during evaluation
+     */
+    public static Object evaluateElExpression(String expression, PageContext pageContext, Class expectedType) 
+	throws JspException {
+	Object result = null;
+        if (expression != null) {
+            //PENDING: horwat: put in quick and dirty expression check.
+            //this method will be called often so it needs to be efficient!
+            if (isElExpression(expression)) {
+
+                ExpressionInfo exprInfo = new ExpressionInfo();
+                exprInfo.setExpressionString(expression);
+                exprInfo.setExpectedType(expectedType);
+                exprInfo.setVariableResolver(new JspVariableResolver(pageContext));
+                try {
+                    result = 
+                        getExpressionEvaluator(RIConstants.JSP_EL_PARSER).evaluate(exprInfo);
+                } catch (ElException ele) {
+                    throw new JspException(ele.getMessage(), ele);
+                }
+            }
+        }
+
+        return result;
     }
 
     /*
