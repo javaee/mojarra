@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.27 2006/02/24 18:05:04 edburns Exp $
+ * $Id: ExternalContext.java,v 1.28 2006/05/02 19:17:58 edburns Exp $
  */
  
 /*
@@ -798,11 +798,11 @@ public abstract class ExternalContext {
      *
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.ServletContext</code> method
-     * <code>getResourcePaths(path).</p>
+     * <code>getResourcePaths(path).</code></p>
      *
      * <p><em>Portlet:</em> This must be the value returned by the
      * <code>javax.portlet.PortletContext</code> method
-     * <code>getResourcePaths(path).</p>
+     * <code>getResourcePaths(path).</code></p>
      *
      * @param path Partial path used to match resources, which must
      *  start with a slash ("/") character
