@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.22 2007/01/24 18:58:33 jdlee Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.23 2007/01/25 20:28:02 rlubke Exp $
  */
 
 /*
@@ -7,23 +7,23 @@
  * of the Common Development and Distribution License
  * (the License). You may not use this file except in
  * compliance with the License.
- * 
+ *
  * You can obtain a copy of the License at
  * https://javaserverfaces.dev.java.net/CDDL.html or
- * legal/CDDLv1.0.txt. 
+ * legal/CDDLv1.0.txt.
  * See the License for the specific language governing
  * permission and limitations under the License.
- * 
+ *
  * When distributing Covered Code, include this CDDL
  * Header Notice in each file and include the License file
- * at legal/CDDLv1.0.txt.    
+ * at legal/CDDLv1.0.txt.
  * If applicable, add the following below the CDDL Header,
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
- * 
+ *
  * [Name of File] [ver.__] [Date]
- * 
+ *
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
@@ -69,7 +69,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
 
     private static final Logger logger = Logger.getLogger(ToolsUtil.FACES_LOGGER +
-            ToolsUtil.GENERATE_LOGGER, ToolsUtil.TOOLS_LOG_STRINGS);    
+            ToolsUtil.GENERATE_LOGGER, ToolsUtil.TOOLS_LOG_STRINGS);
 
     // The component configuration bean for the component class to be generated
     private ComponentBean cb;
@@ -85,7 +85,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
     private CodeWriter writer;
 
     private PropertyManager propManager;
-    
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -232,11 +232,11 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                                            null, false, false);
 
         writer.write("\n\n");
-        
-        writer.indent();       
+
+        writer.indent();
 
         // Generate the constructor
-        
+
         writer.fwrite("public ");
         writer.write(shortName(cb.getComponentClass()));
         writer.write("() {\n");
@@ -246,8 +246,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.fwrite("setRendererType(\"");
             writer.write(rendererType);
             writer.write("\");\n");
-        }      
-       
+        }
+
         writer.outdent();
         writer.fwrite("}\n\n\n");
 
@@ -293,7 +293,10 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(type);
             writer.write(' ');
             writer.write(var);
-            if (primitive(type)) {
+            if (pb.getDefaultValue() != null) {
+                writer.write(" = ");
+                writer.write(pb.getDefaultValue());
+            } else if (primitive(type)) {
                 writer.write(" = ");
                 writer.write(TYPE_DEFAULTS.get(type));
             }
@@ -381,13 +384,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.write(var);
                 writer.write(";\n");
             } else {
-                writer.fwrite("return ");
-                if (pb.getDefaultValue() != null) {
-                    writer.write(pb.getDefaultValue());
-                } else  {
-                    writer.write("null");
-                }
-                writer.write(";\n");
+                writer.fwrite("return null;\n");
             }
             writer.outdent();
             writer.fwrite("}\n");
@@ -418,7 +415,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.write(var);
                 writer.write("_set = true;\n");
             }
-           
+
             writer.outdent();
             writer.fwrite("}\n\n");
 
@@ -530,7 +527,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         }
         writer.outdent();
         writer.fwrite("}\n\n\n");
-               
+
         // Generate the ending of this class
         writer.outdent();
         writer.write("}\n");
