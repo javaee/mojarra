@@ -13,6 +13,7 @@ public class YuiConstants {
     public static final String YUI_ROOT = "yui/";
     public static final String CSS_CALENDAR = YUI_ROOT + "assets/calendar.css";
     public static final String CSS_MENU = YUI_ROOT + "assets/menu.css";
+    public static final String CSS_SANDBOX = YUI_ROOT + "sandbox.css";
     public static final String CSS_TREEVIEW = YUI_ROOT + "assets/tree.css";
 
     public static final String JS_AUTOCOMPLETE = YUI_ROOT + "autocomplete-min.js";

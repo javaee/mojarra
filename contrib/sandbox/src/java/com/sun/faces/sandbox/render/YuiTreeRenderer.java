@@ -32,7 +32,8 @@ public class YuiTreeRenderer extends Renderer {
     };
 
     private static final String cssIds[] = { 
-        YuiConstants.CSS_TREEVIEW 
+        YuiConstants.CSS_TREEVIEW,
+        YuiConstants.CSS_SANDBOX
     };
 
     public void encodeBegin(FacesContext context, UIComponent component)

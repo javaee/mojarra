@@ -1,0 +1,16 @@
+/*
+ * This stylesheet is for overriding YUI defaults, specifically, to point images
+ * to those bundled in the package.
+ */
+.ygtvtn {background: url(%%%BASE_URL%%%/yui/assets/tn.gif) 0 0 no-repeat;}
+.ygtvtm {background: url(%%%BASE_URL%%%/yui/assets/tm.gif) 0 0 no-repeat;}
+.ygtvtmh {background: url(%%%BASE_URL%%%/yui/assets/tmh.gif) 0 0 no-repeat;}
+.ygtvtp {background: url(%%%BASE_URL%%%/yui/assets/tp.gif) 0 0 no-repeat;}
+.ygtvtph {background: url(%%%BASE_URL%%%/yui/assets/tph.gif) 0 0 no-repeat;}
+.ygtvln {background: url(%%%BASE_URL%%%/yui/assets/ln.gif) 0 0 no-repeat;}
+.ygtvlm {background: url(%%%BASE_URL%%%/yui/assets/lm.gif) 0 0 no-repeat;}
+.ygtvlmh {background: url(%%%BASE_URL%%%/yui/assets/lmh.gif) 0 0 no-repeat;}
+.ygtvlp {background: url(%%%BASE_URL%%%/yui/assets/lp.gif) 0 0 no-repeat;}
+.ygtvlph {background: url(%%%BASE_URL%%%/yui/assets/lph.gif) 0 0 no-repeat;}
+.ygtvloading {background: url(%%%BASE_URL%%%/yui/assets/loading.gif) 0 0 no-repeat;}
+.ygtvdepthcell {background: url(%%%BASE_URL%%%/yui/assets/vline.gif) 0 0 no-repeat;}

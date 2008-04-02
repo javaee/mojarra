@@ -2,6 +2,10 @@ if (typeof RISANDBOX == "undefined") {
     RISANDBOX = YAHOO.namespace("RISANDBOX");
 }
 
+YAHOO.widget.Calendar.prototype.IMG_ROOT = '%%%BASE_URL%%%/yui/assets';
+YAHOO.widget.Calendar.prototype.NAV_ARROW_LEFT = '%%%BASE_URL%%%/yui/assets/callt.gif';
+YAHOO.widget.Calendar.prototype.NAV_ARROW_RIGHT = '%%%BASE_URL%%%/yui/assets/calrt.gif';
+
 RISANDBOX.calendar = function(divId, trigger, clientId, startMonth, selectedDate, multiSelect, showWeekdays,
         startWeekday, showWeekHeader, showWeekFooter, hideBlankWeeks) {
     this.divId = divId;
@@ -25,7 +29,9 @@ RISANDBOX.calendar = function(divId, trigger, clientId, startMonth, selectedDate
             START_WEEKDAY: startWeekday,
             SHOW_WEEK_HEADER: showWeekHeader,
             SHOW_WEEK_FOOTER: showWeekFooter,
-            HIDE_BLANK_WEEKS: hideBlankWeeks
+            HIDE_BLANK_WEEKS: hideBlankWeeks,
+			NAV_ARROW_RIGHT: '%%%BASE_URL%%%/yui/assets/calrt.gif',
+			NAV_ARROW_LEFT: '%%%BASE_URL%%%/yui/assets/callt.gif'
         });
     this.calendar.render();
     this.calendar.clientId = clientId;

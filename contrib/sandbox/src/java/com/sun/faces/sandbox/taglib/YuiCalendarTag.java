@@ -386,4 +386,79 @@ public class YuiCalendarTag extends UIComponentTag {
         }
 
     }
+    public String getAccesskey() {
+        return accesskey;
+    }
+    public String getConverter() {
+        return converter;
+    }
+    public String getConverterMessage() {
+        return converterMessage;
+    }
+    public String getDir() {
+        return dir;
+    }
+    public String getDisabled() {
+        return disabled;
+    }
+    public String getHideBlankWeeks() {
+        return hideBlankWeeks;
+    }
+    public String getImmediate() {
+        return immediate;
+    }
+    public String getLabel() {
+        return label;
+    }
+    public String getLang() {
+        return lang;
+    }
+    public String getMultiSelect() {
+        return multiSelect;
+    }
+    public String getOnchange() {
+        return onchange;
+    }
+    public String getRequired() {
+        return required;
+    }
+    public String getRequiredMessage() {
+        return requiredMessage;
+    }
+    public String getShowWeekdays() {
+        return showWeekdays;
+    }
+    public String getShowWeekFooter() {
+        return showWeekFooter;
+    }
+    public String getShowWeekHeader() {
+        return showWeekHeader;
+    }
+    public String getStartWeekday() {
+        return startWeekday;
+    }
+    public String getStyle() {
+        return style;
+    }
+    public String getStyleClass() {
+        return styleClass;
+    }
+    public String getTabindex() {
+        return tabindex;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public String getValidator() {
+        return validator;
+    }
+    public String getValidatorMessage() {
+        return validatorMessage;
+    }
+    public String getValue() {
+        return value;
+    }
+    public String getValueChangeListener() {
+        return valueChangeListener;
+    }
 }
