@@ -399,6 +399,9 @@
                       name="com.sun.faces.util.TestLRUMap_local"/>
                  <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.util.TestHtmlUtils"/>
+                 <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.HtmlResponseWriterTest"/>
+
 
             </suite>    
         </jsf.junit>

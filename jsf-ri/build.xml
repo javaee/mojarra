@@ -86,9 +86,14 @@
         <mkdir dir="${build.dir}/javadocs"/>
         <mkdir dir="${build.dir}/tlddocs"/>
         <mkdir dir="${build.dir}/lib"/>
+        <antcall target="delete.and.remkdir.build.generate.dir" />
+    </target>        
+
+    <target name="delete.and.remkdir.build.generate.dir" 
+            unless="skip.delete.generate">
         <delete dir="${build.generate.dir}"/>
         <mkdir dir="${build.generate.dir}"/>
-    </target>        
+    </target>
 
     <target name="copy.template.sources" depends="prepare"
             description="Copy template sources from ${tools.dir}/template-source">

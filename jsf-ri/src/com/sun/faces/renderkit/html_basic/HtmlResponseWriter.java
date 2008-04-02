@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.41 2006/11/13 19:01:51 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.42 2006/11/17 22:31:28 edburns Exp $
  */
 
 /*
@@ -33,9 +33,12 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.MessageUtils;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -102,6 +105,34 @@ public class HtmlResponseWriter extends ResponseWriter {
     //
     private char[] buffer = new char[1028];
     private char[] charHolder = new char[1];
+    
+    static final Pattern CDATA_START_SLASH_SLASH;
+    
+    static final Pattern CDATA_END_SLASH_SLASH;
+
+    static final Pattern CDATA_START_SLASH_STAR;
+    
+    static final Pattern CDATA_END_SLASH_STAR;
+    
+    static {
+        // At the beginning of a line, match // followed by any amount of 
+        // whitespace, followed by <![CDATA[
+        CDATA_START_SLASH_SLASH = Pattern.compile("^//\\s*\\Q<![CDATA[\\E");
+        
+        // At the end of a line, match // followed by any amout of whitespace,
+        // followed by ]]>
+        CDATA_END_SLASH_SLASH = Pattern.compile("//\\s*\\Q]]>\\E$");
+
+        // At the beginning of a line, match /* followed by any amout of
+        // whitespace, followed by <![CDATA[, followed by any amount of whitespace,
+        // followed by */
+        CDATA_START_SLASH_STAR = Pattern.compile("^/\\*\\s*\\Q<![CDATA[\\E\\s*\\*/");
+        
+        // At the end of a line, match /* followed by any amount of whitespace,
+        // followed by ]]> followed by any amount of whitespace, followed by */
+        CDATA_END_SLASH_STAR = Pattern.compile("/\\*\\s*\\Q]]>\\E\\s*\\*/$");
+        
+    }
 
     // ------------------------------------------------------------ Constructors
 
@@ -257,49 +288,97 @@ public class HtmlResponseWriter extends ResponseWriter {
         dontEscape = false;
         isXhtml = getContentType().equals(
             RIConstants.XHTML_CONTENT_TYPE);
+        // Ensure we have a writer to which we can write.  Make sure
+        // to honor decoration.
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResponseWriter writerFromContext = (null != context) ?
+            context.getResponseWriter() :
+            this;
+        writerFromContext = (null == writerFromContext) ? this : writerFromContext;
+        
         if (isScriptOrStyle(name) && !scriptOrStyleSrc) {
             String result = ((FastStringWriter) writer).getBuffer().toString();
             writer = origWriter;
+            
             if (result != null) {
                 String trim = result.trim();
                 if (isXhtml) {
+                    
+                    
                     if (isScript) {
-                        if (trim.startsWith("//<![CDATA[") && trim.endsWith("//]]>")) {
-                            writer.write(trim.substring(11, trim.length() - 5));
-                        } else {
-                            writer.write(result);
+                        Matcher
+                            cdataStartSlashSlash = 
+                              CDATA_START_SLASH_SLASH.matcher(trim),
+                            cdataEndSlashSlash = 
+                              CDATA_END_SLASH_SLASH.matcher(trim),
+                            cdataStartSlashStar =
+                              CDATA_START_SLASH_STAR.matcher(trim),
+                            cdataEndSlashStar = 
+                              CDATA_END_SLASH_STAR.matcher(trim);
+                        int trimLen = trim.length(), start, end;
+                        // case 1 start is // end is //
+                        if (cdataStartSlashSlash.find() && 
+                            cdataEndSlashSlash.find()) {
+                            start = cdataStartSlashSlash.end() - cdataStartSlashSlash.start();
+                            end = trimLen - (cdataEndSlashSlash.end() - cdataEndSlashSlash.start());
+                            writerFromContext.write(trim.substring(start, end));
+                        }                        
+                        // case 2 start is // end is /* */
+                        else if ((null != cdataStartSlashSlash.reset() && cdataStartSlashSlash.find()) && 
+                                 cdataEndSlashStar.find()) {
+                            start = cdataStartSlashSlash.end() - cdataStartSlashSlash.start();
+                            end = trimLen - (cdataEndSlashStar.end() - cdataEndSlashStar.start());
+                            writerFromContext.write(trim.substring(start, end));
+                        }                        
+                        // case 3 start is /* */ end is /* */
+                        else if (cdataStartSlashStar.find() && 
+                                 (null != cdataEndSlashStar.reset() && cdataEndSlashStar.find())) {
+                            start = cdataStartSlashStar.end() - cdataStartSlashStar.start();
+                            end = trimLen - (cdataEndSlashStar.end() - cdataEndSlashStar.start());
+                            writerFromContext.write(trim.substring(start, end));
+                        }                        
+                        // case 4 start is /* */ end is //
+                        else if ((null != cdataStartSlashStar.reset() && cdataStartSlashStar.find()) && 
+                                 (null != cdataEndSlashStar.reset() && cdataEndSlashSlash.find())) {
+                            start = cdataStartSlashStar.end() - cdataStartSlashStar.start();
+                            end = trimLen - (cdataEndSlashSlash.end() - cdataEndSlashSlash.start());
+                            writerFromContext.write(trim.substring(start, end));
+                        }                        
+                        // case 5 no commented out cdata present.
+                        else {
+                            writerFromContext.write(result);
                         }
                     } else {
                         if (trim.startsWith("<![CDATA[") && trim.endsWith("]]>")) {
-                            writer.write(trim.substring(9, trim.length() - 3));
+                            writerFromContext.write(trim.substring(9, trim.length() - 3));
                         } else {
-                            writer.write(result);
+                            writerFromContext.write(result);
                         }
                     }
                 } else {
                     if (trim.startsWith("<!--") && trim.endsWith("//-->")) {
-                        writer.write(trim.substring(4, trim.length() - 5));
+                        writerFromContext.write(trim.substring(4, trim.length() - 5));
                     } else {
-                        writer.write(result);
+                        writerFromContext.write(result);
                     }
                 }
             }
             if (isXhtml) {
                 if (isScript) {
-                    writer.write("\n//]]>\n");
+                    writerFromContext.write("\n//]]>\n");
                 } else {
-                    writer.write("\n]]>\n");
+                    writerFromContext.write("\n]]>\n");
                 }
             } else {
                 if (isScriptHidingEnabled) {
-                    writer.write("\n//-->\n");
+                    writerFromContext.write("\n//-->\n");
                 }                
             }
         }
         isScript = false;
         isStyle = false;
         if ("cdata".equalsIgnoreCase(name)) {
-            writer.write("]]>");
+            writerFromContext.write("]]>");
             writingCdata = false;
             return;
         }
@@ -307,6 +386,9 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (closeStart) {
             boolean isEmptyElement = HtmlUtils.isEmptyElement(name);
 
+            // Tricky: we need to use the writer ivar here, rather than the 
+            // one from the FacesContext because we don't want
+            // spurious /> characters to appear in the output.
             if (isEmptyElement) {
                 writer.write(" />");
                 closeStart = false;
@@ -317,9 +399,9 @@ public class HtmlResponseWriter extends ResponseWriter {
             closeStart = false;
         }
 
-        writer.write("</");
-        writer.write(name);
-        writer.write('>');
+        writerFromContext.write("</");
+        writerFromContext.write(name);
+        writerFromContext.write('>');
 
     }
 
