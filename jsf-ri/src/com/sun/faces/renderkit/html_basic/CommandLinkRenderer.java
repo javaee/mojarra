@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.33 2005/07/18 22:49:03 jayashri Exp $
+ * $Id: CommandLinkRenderer.java,v 1.34 2005/07/29 19:12:50 rogerk Exp $
  */
 
 /*
@@ -153,6 +153,130 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             }
             return;
         }
+
+        boolean componentDisabled = false;
+        if (command.getAttributes().get("disabled") != null) {
+            if ((command.getAttributes().get("disabled")).equals(Boolean.TRUE)) {
+                componentDisabled = true;
+            }
+        }
+        if (componentDisabled) {
+            renderAsDisabled(context, command);
+        } else {
+            renderAsActive(context, command);
+        }
+
+    }
+
+    public void encodeChildren(FacesContext context, UIComponent component)
+        throws IOException {
+                                                                                                                        
+        if (context == null || component == null) {
+            throw new NullPointerException(
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,
+                    "Begin encoding children " + component.getId());
+        }
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " + component.getId() +
+                          " since " +
+                          "rendered attribute is set to false ");
+            }
+            return;
+        }
+        Iterator kids = component.getChildren().iterator();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            kid.encodeBegin(context);
+            if (kid.getRendersChildren()) {
+                kid.encodeChildren(context);
+            }
+            kid.encodeEnd(context);
+        }
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,
+                    "End encoding children " + component.getId());
+        }
+    }
+
+    public void encodeEnd(FacesContext context, UIComponent component)
+        throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        UICommand command = (UICommand) component;
+                                                                                                                        
+        // suppress rendering if "rendered" property on the command is
+        // false.
+        if (!command.isRendered()) {
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " + component.getId() +
+                          " since " +
+                          "rendered attribute is set to false ");
+            }
+            return;
+        }
+        ResponseWriter writer = context.getResponseWriter();
+        assert (writer != null);
+
+        //Write Anchor inline elements
+                                                                                                                        
+        String fieldName = getHiddenFieldName(context, component);
+        if (null == fieldName) {
+            return;
+        }
+                                                                                                                        
+        boolean componentDisabled = false;
+        if (component.getAttributes().get("disabled") != null) {
+            if ((component.getAttributes().get("disabled")).equals(Boolean.TRUE)) {
+                componentDisabled = true;
+            }
+        }
+                                                                                                                         
+        if (componentDisabled) {
+            if (shouldWriteIdAttribute(component) ||
+                Util.hasPassThruAttributes(component) ||
+                (component.getAttributes().get("style") != null) ||
+                (component.getAttributes().get("styleClass") != null)) {
+                writer.endElement("span");
+            }
+            return;
+        }
+
+        //Done writing Anchor element
+        writer.endElement("a");
+                                                                                                                        
+        renderHiddenFieldsAndScriptIfNecessary(context, writer, component, fieldName);
+                                                                                                                        
+        UIForm uiform = getMyForm(context, command);
+        if ( uiform == null ) {
+            if (logger.isLoggable(Level.WARNING)) {
+                 logger.warning("component " + component.getId() +
+                          " must be enclosed inside a form ");
+            }
+            return;
+        }
+        // DID_RENDER_SCRIPT needs to be reset, otherwise this attribute
+        // will also be persisted which will cause the script to be not rendered
+        // during postback.
+        uiform.getAttributes().remove(DID_RENDER_SCRIPT);
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,
+                    "End encoding component " + component.getId());
+        }
+                                                                                                                        
+        return;
+    }
+
+    private void renderAsActive(FacesContext context, UICommand command) 
+        throws IOException {
+
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
 
@@ -161,7 +285,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         UIForm uiform = getMyForm(context, command);
         if ( uiform == null ) {
             if (logger.isLoggable(Level.WARNING)) {
-                 logger.warning("component " + component.getId() +
+                 logger.warning("component " + command.getId() +
                           " must be enclosed inside a form ");
             }
             return;
@@ -172,12 +296,12 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         //make link act as if it's a button using javascript
         Param paramList[] = getParamList(context, command);
 
-        writer.startElement("a", component);
-        writeIdAttributeIfNecessary(context, writer, component);
+        writer.startElement("a", command);
+        writeIdAttributeIfNecessary(context, writer, command);
         writer.writeAttribute("href", "#", "href");
-        Util.renderPassThruAttributes(context, writer, component,
+        Util.renderPassThruAttributes(context, writer, command,
                                       new String[]{"onclick", "target"});
-        Util.renderBooleanPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer, command);
 
         // render onclick
         String userOnclick = (String)command.getAttributes().get("onclick");
@@ -226,7 +350,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         // Because we treat commandLink as a button,setting target on it,
         // will not have the desired effect since we "return false" for 
         // onclick which would essentially cancel the click.
-        String target = (String) component.getAttributes().get("target");
+        String target = (String) command.getAttributes().get("target");
         if (target != null && target.trim().length() > 0) {
             sb.append(" document.forms[");
             sb.append("'");
@@ -260,7 +384,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         
         // render the current value as link text.
         String label = null;
-        Object value = ((UICommand) component).getValue();
+        Object value = ((UICommand) command).getValue();
         if (value != null) {
             label = value.toString();
         }
@@ -274,98 +398,39 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 
     }
 
-
-    public void encodeChildren(FacesContext context, UIComponent component)
+    private void renderAsDisabled(FacesContext context, UICommand command)
         throws IOException {
-
-        if (context == null || component == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, 
-                    "Begin encoding children " + component.getId());
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " + component.getId() +
-                          " since " +
-                          "rendered attribute is set to false ");
-            }
-            return;
-        }
-        Iterator kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            kid.encodeBegin(context);
-            if (kid.getRendersChildren()) {
-                kid.encodeChildren(context);
-            }
-            kid.encodeEnd(context);
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, 
-                    "End encoding children " + component.getId());
-        }
-    }
-
-
-    public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        UICommand command = (UICommand) component;
-
-        // suppress rendering if "rendered" property on the command is
-        // false.
-        if (!command.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " + component.getId() +
-                          " since " +
-                          "rendered attribute is set to false ");
-            }
-            return;
-        }
+                                                                                                                        
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
-
-        //Write Anchor inline elements
-
-	String fieldName = getHiddenFieldName(context, component);
-	if (null == fieldName) {
-	    return;
-	}
-
-        //Done writing Anchor element
-        writer.endElement("a");
-
-	renderHiddenFieldsAndScriptIfNecessary(context, writer, component, fieldName);
-
-        UIForm uiform = getMyForm(context, command);
-        if ( uiform == null ) {
-            if (logger.isLoggable(Level.WARNING)) {
-                 logger.warning("component " + component.getId() +
-                          " must be enclosed inside a form ");
-            }
-            return;
+                                                                                                                        
+        if (shouldWriteIdAttribute(command) ||
+            Util.hasPassThruAttributes(command) ||
+            (command.getAttributes().get("style") != null) ||
+            (command.getAttributes().get("styleClass") != null)) {
+            writer.startElement("span", command);
         }
-        // DID_RENDER_SCRIPT needs to be reset, otherwise this attribute 
-        // will also be persisted which will cause the script to be not rendered 
-        // during postback.
-        uiform.getAttributes().remove(DID_RENDER_SCRIPT);
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, 
-                    "End encoding component " + component.getId());
+        String writtenId = writeIdAttributeIfNecessary(context, writer, command);
+        if (null != writtenId) {
+            writer.writeAttribute("name", writtenId, "name");
         }
-
-        return;
+                                                                                                                        
+        Util.renderPassThruAttributes(context, writer, command);
+        String[] exclude = {"disabled"};
+        Util.renderBooleanPassThruAttributes(writer, command, exclude);
+                                                                                                                        
+                                                                                                                        
+        // style if present, rendered as passthru..
+        //handle css style class
+        String styleClass = (String)
+            command.getAttributes().get("styleClass");
+        if (styleClass != null) {
+            writer.writeAttribute("class", styleClass, "styleClass");
+        }
+        writer.flush();
     }
 
-    public void writeScriptContent(FacesContext context, 
+    private void writeScriptContent(FacesContext context, 
 				   ResponseWriter writer,
 				   UIComponent component) throws IOException {
 	Map requestMap = context.getExternalContext().getRequestMap();
@@ -478,7 +543,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
     }
 
     
-    protected String getHiddenFieldName(FacesContext context, 
+    private String getHiddenFieldName(FacesContext context, 
 					UIComponent component) {
 	UIForm uiform = getMyForm(context, component);
 	if (null == uiform) {
@@ -489,7 +554,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 		UIViewRoot.UNIQUE_ID_PREFIX + "cl");
     }
     
-    protected UIForm getMyForm(FacesContext context, UIComponent component) {
+    private UIForm getMyForm(FacesContext context, UIComponent component) {
         UIComponent parent = component.getParent();
         while (parent != null) {
             if (parent instanceof UIForm) {

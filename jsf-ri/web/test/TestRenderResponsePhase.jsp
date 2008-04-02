@@ -865,6 +865,12 @@ see the <i>angle brackets</i> on this text"></h:outputText>
   <h:outputLink disabled="true" styleClass="myClass">
       Link Disabled With Class
   </h:outputLink> 
+  <h:commandLink disabled="true">
+      Command Link Disabled
+  </h:commandLink> 
+  <h:commandLink disabled="true" styleClass="myClass">
+      Command Link Disabled with Class
+  </h:commandLink> 
 </h:form>
 
 </f:view>
