@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.41 2004/01/29 03:45:49 eburns Exp $
+ * $Id: UIForm.java,v 1.42 2004/01/31 05:29:39 eburns Exp $
  */
 
 /*
@@ -126,6 +126,11 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 	
         // Process this component itself
         decode(context);
+
+	// if we're not the submitted form, don't process children.
+	if (!isSubmitted()) {
+	    return;
+	}
 
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();

@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRefTestCase.java,v 1.4 2003/12/17 15:14:30 rkitain Exp $
+ * $Id: MethodRefTestCase.java,v 1.5 2004/01/31 05:29:41 eburns Exp $
  */
 
 /*
@@ -107,7 +107,7 @@ public class MethodRefTestCase extends AbstractTestCase {
 	
 	// press button2
 	// page = (HtmlPage) link.click(); // htmlunit 1.2.3 bug
-	page = getPage("/faces/methodref01.jsp?form:button2=form:button2");
+	page = getPage("/faces/methodref01.jsp?form:button2=form:button2&form=form");
 	assertNotNull(page);
 	form = getFormById(page, "form");
 	input = (HtmlTextInput) 

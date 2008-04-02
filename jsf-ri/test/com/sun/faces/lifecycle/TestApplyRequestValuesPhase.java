@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.22 2004/01/27 21:06:03 eburns Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.23 2004/01/31 05:29:43 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.22 2004/01/27 21:06:03 eburns Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.23 2004/01/31 05:29:43 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,6 +85,8 @@ public void beginCallback(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
     theRequest.addParameter("basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
+    theRequest.addParameter("basicForm", "basicForm");
+
 }
 
 public void testCallback()
