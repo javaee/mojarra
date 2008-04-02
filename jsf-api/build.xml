@@ -30,10 +30,14 @@
   <property name="tools.dir"        value="${basedir}/tools"/>
   <property name="test.dir"         value="${basedir}/test"/>
   <property name="dist.dir"         value="${basedir}/dist"/>
+  <property name="jcov.javac.args"         value=""/>
+  <property name="jcov.jvm.args"         value=""/>
 
   <!-- The locations of necessary jar files -->
   <property name="junit.jar" 
             value="${tomcat.home}/../junit3.8.1/junit.jar"/>
+  <property name="jcov.jar" 
+            value="${tomcat.home}/../jcov/lib/jcov.jar"/>
   <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
   <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
   <property name="commons-logging.jar" 
@@ -50,6 +54,7 @@
 
   <property name="build.dir"        value="build"/>
   <property name="build.classes"    value="${build.dir}/classes"/>
+  <property name="build.classes.instr"    value="${build.dir}/classes_instr"/>
   <property name="build.lib"        value="${build.dir}/lib"/>
   <property name="build.temp"       value="${build.dir}/temp"/>
   <property name="build.test"       value="${build.dir}/test"/>
@@ -87,6 +92,7 @@
     <pathelement location="${commons-beanutils.jar}"/>
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${jaxp-api.jar}"/>
+    <pathelement location="${jcov.jar}"/>
   </path>
 
   <property name="test.factory"
@@ -174,6 +180,7 @@ jsf-api.jar.
            debug="${debug}"
            deprecation="${deprecation}"
            optimize="${optimize}" >
+      <compilerarg line="${jcov.javac.args}" />
       <src path="${src.dir}"/>
       <src path="${build.generate}"/>
       <classpath refid="compile.classpath" />
@@ -350,6 +357,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.FactoryFinderTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -361,6 +369,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.FactoryFinderTestCase2"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -371,6 +380,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.NamingContainerTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -381,6 +391,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UIColumnTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -391,6 +402,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UICommandTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -401,6 +413,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UIComponentTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -411,6 +424,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UIComponentBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -421,6 +435,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UIDataTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -431,6 +446,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UIFormTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -441,6 +457,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UIGraphicTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -451,6 +468,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UIInputTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -461,6 +479,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UIOutputTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -471,6 +490,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UIPanelTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -481,6 +501,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UIParameterTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -491,6 +512,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UISelectBooleanTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -501,6 +523,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UISelectItemTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -511,6 +534,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UISelectItemsTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -521,6 +545,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UISelectManyTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -531,6 +556,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UISelectOneTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -541,6 +567,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.UIViewRootTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -552,6 +579,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <sysproperty key="base.dir" value="${basedir}"/>
       <sysproperty key="org.apache.commons.logging.LogFactory"
                  value="${test.factory}"/>
@@ -569,6 +597,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.event.PhaseIdTest"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -579,6 +608,7 @@ jsf-api.jar.
     <junit printSummary="no" fork="yes"
           haltonfailure="yes" haltonerror="yes">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <classpath  refid="test.classpath"/>
       <formatter   type="plain"      usefile="false"/>
       <batchtest>
@@ -619,6 +649,7 @@ jsf-api.jar.
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <arg value="javax.faces.component.StateHolderSaverTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -630,6 +661,8 @@ jsf-api.jar.
     <echo message="Running javax.faces.webapp tests ..."/>
     <junit printSummary="no" fork="no"
           haltonfailure="yes" haltonerror="yes">
+      <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
       <classpath  refid="test.classpath"/>
       <formatter   type="plain"      usefile="false"/>
       <batchtest>
@@ -778,6 +811,64 @@ jsf-api.jar.
   -->
   <target name="main" depends="jars,copy.to.tck"
    description="Compile API classes and build JAR file"/>
+
+  <target name="main.jcov">
+    <mkdir dir="${build.classes.instr}" />
+    <antcall target="main">
+      <param name="jcov.javac.args" value="-Xjcov" />
+    </antcall>
+    <exec executable="perl" output="${build.dir}/jcov.properties">
+      <arg line="${test.dir}/generate-savebegin.pl -o ${test.dir}/output-methods.pl -j ${build.lib}/jsf-api.jar" />
+    </exec>
+    <property file="${build.dir}/jcov.properties" />
+    <java classname="com.sun.tdk.jcov.InstrMain" classpath="${jcov.jar}"
+          fork="true">
+      <arg line="-output=${build.classes.instr} ${jcov.savepoints} ${build.classes}" />
+    </java>
+    <java classname="com.sun.tdk.jcov.TmplGenMain" classpath="${jcov.jar}">
+      <arg line="-dtype=A -classpath=${build.classes.instr} -output=${build.dir}/jsf-template.jcov" />
+    </java>
+  </target>
+
+  <target name="test.jcov">
+    <antcall target="build.test" />
+    <antcall target="copy.template.sources" />
+    <antcall target="test.FactoryFinder">
+      <param name="build.classes" value="${build.classes.instr}/classes" />
+      <param name="jcov.jvm.args" 
+             value="-Djcov.file=${build.dir}/test-FactoryFinder.jcov" />
+    </antcall>
+    <antcall target="test.FactoryFinder2">
+      <param name="build.classes" value="${build.classes.instr}/classes" />
+      <param name="jcov.jvm.args" 
+             value="-Djcov.file=${build.dir}/test-FactoryFinder2.jcov" />
+    </antcall>
+    <antcall target="test.PhaseId">
+      <param name="build.classes" value="${build.classes.instr}/classes" />
+      <param name="jcov.jvm.args" 
+             value="-Djcov.file=${build.dir}/test-PhaseId.jcov" />
+    </antcall>
+    <antcall target="test.component">
+      <param name="build.classes" value="${build.classes.instr}/classes" />
+      <param name="jcov.jvm.args" 
+             value="-Djcov.file=${build.dir}/test-component.jcov" />
+    </antcall>
+    <antcall target="test.mock">
+      <param name="build.classes" value="${build.classes.instr}/classes" />
+      <param name="jcov.jvm.args" 
+             value="-Djcov.file=${build.dir}/test-mock.jcov" />
+    </antcall>
+    <antcall target="test.model">
+      <param name="build.classes" value="${build.classes.instr}/classes" />
+      <param name="jcov.jvm.args" 
+             value="-Djcov.file=${build.dir}/test-model.jcov" />
+    </antcall>
+    <antcall target="test.webapp">
+      <param name="build.classes" value="${build.classes.instr}/classes" />
+      <param name="jcov.jvm.args" 
+             value="-Djcov.file=${build.dir}/test-webapp.jcov" />
+    </antcall>
+  </target>
 
 
   <!--
