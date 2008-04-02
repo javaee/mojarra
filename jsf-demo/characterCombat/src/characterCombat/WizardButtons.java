@@ -26,14 +26,14 @@ public class WizardButtons {
      */
 
     public boolean isHasBack() {
-	FacesContext context = 
-	    createShadowFacesContext(FacesContext.getCurrentInstance());
+	FacesContext 
+	    realContext = FacesContext.getCurrentInstance(),
+	    copyContext = createShadowFacesContext(realContext);
 	NavigationHandler nav = 
-	    context.getApplication().getNavigationHandler();
-	System.out.println("nav: " + nav);
-	nav.handleNavigaton(context, null, "back");
-	
-	return false;
+	    copyContext.getApplication().getNavigationHandler();
+	nav.handleNavigation(copyContext, null, "back");
+	return compareUIViewRoots(realContext.getViewRoot(),
+				  copyContext.getViewRoot());
     }
 
     /** 
@@ -41,13 +41,31 @@ public class WizardButtons {
      */
 
     public boolean isHasNext() {
-	FacesContext context = 
-	    createShadowFacesContext(FacesContext.getCurrentInstance());
+	FacesContext 
+	    realContext = FacesContext.getCurrentInstance(),
+	    copyContext = createShadowFacesContext(realContext);
 	NavigationHandler nav = 
-	    context.getApplication().getNavigationHandler();
-	//	nav.handleNavigaton(context, null, "next");
+	    copyContext.getApplication().getNavigationHandler();
+	nav.handleNavigation(copyContext, null, "next");
+	return compareUIViewRoots(realContext.getViewRoot(),
+				  copyContext.getViewRoot());
+    }
 
-
+    public boolean compareUIViewRoots(UIViewRoot one, UIViewRoot two) {
+	if (null == one && null == two) {
+	    return true;
+	}
+	if (null != one && null != two) {
+	    if (null == one.getViewId() && null == two.getViewId()) {
+		return true;
+	    }
+	    if (null != one.getViewId() && null != two.getViewId()) {
+		return one.getViewId().equals(two.getViewId());
+	    }
+	    else {
+		return false;
+	    }
+	}
 	return false;
     }
 

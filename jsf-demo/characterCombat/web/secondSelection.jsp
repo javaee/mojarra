@@ -18,9 +18,11 @@
      does not include the user's first combat choice so that character
      will not be picked twice.</p>
 
+ <p>The first combatant is 
+    <h:outputText value="#{modelBean.firstSelection}" /></p>
+
   <p>You may now choose your second character that will be waging a
   magical combat with the first.</p>
-
 
   <h:form>
 
@@ -28,16 +30,18 @@
 
       <h:selectOneRadio
         layout="pageDirection" 
-        value="#{modelBean.currentSelection}">
+        required="true"
+        value="#{modelBean.secondSelection}">
         <f:selectItems
           value="#{modelBean.charactersToSelect}" />
       </h:selectOneRadio>
 
+      <h:messages />
+
     </h:panelGrid>
 
-    <h:commandButton
-      action="#{modelBean.addSecondSelection}"
-      value="Submit Second Character Selection"/>
+    <jsp:include page="wizard-buttons.jsp"/>
+
 
   </h:form>
 

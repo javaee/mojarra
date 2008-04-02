@@ -28,6 +28,10 @@
 
   <h:form>
     <h:commandButton action="#{modelBean.select}" value="Home Page"/>
+
+    <jsp:include page="wizard-buttons.jsp"/>
+
+
   </h:form>
 
 

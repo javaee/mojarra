@@ -138,9 +138,9 @@ public class ModelBean {
      * @return current character name String
      */
     public String getCurrentSelection() {
-        if (currentSelection == null) {
-            currentSelection = initCurrentSelection();
-        }
+	//        if (currentSelection == null) {
+	//            currentSelection = initCurrentSelection();
+	//        }
         return currentSelection;
     }
 
@@ -225,11 +225,34 @@ public class ModelBean {
             CharacterBean item = (CharacterBean) iter.next();
 
             //If a character has been selected, do not include it
-            if (!item.getName().equals(firstSelection)) {
+            if (!item.getName().equals(firstSelection) &&
+		!item.getName().equals(secondSelection)) {
                 selectItem = new SelectItem(item.getName());
                 selectItemList.add(selectItem);
             }
         }
+
+        return selectItemList;
+    }
+
+    /**
+     * <p>Get the list of all characters, regardless of whether or not
+     * they are selected</p>
+     *
+     * @return List of all SelectItem characters
+     */
+
+    public List getAllCharactersToSelect() {
+        List selectItemList = new ArrayList();
+        Iterator iter = dataList.iterator();
+        SelectItem selectItem = null;
+
+        while (iter.hasNext()) {
+            CharacterBean item = (CharacterBean) iter.next();
+	    
+	    selectItem = new SelectItem(item.getName());
+	    selectItemList.add(selectItem);
+	}
 
         return selectItemList;
     }
@@ -294,7 +317,7 @@ public class ModelBean {
                 speciesPropertyMap.get(customSpecies));
             dataList.add(item);
         }
-        return select();
+        return null;
     }
 
     /**

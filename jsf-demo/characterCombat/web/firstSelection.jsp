@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
-
 <f:view>
 <html>
 <head>
@@ -27,16 +26,17 @@
 
       <h:selectOneRadio 
         layout="pageDirection" 
-        value="#{modelBean.currentSelection}">
+        required="true"
+        value="#{modelBean.firstSelection}">
         <f:selectItems 
-          value="#{modelBean.charactersToSelect}" />
+          value="#{modelBean.allCharactersToSelect}" />
       </h:selectOneRadio>
+
+      <h:messages />
 
     </h:panelGrid>
 
-    <h:commandButton
-      action="#{modelBean.addFirstSelection}"
-      value="Submit First Character Selection"/>
+    <jsp:include page="wizard-buttons.jsp"/>
 
   </h:form>
 

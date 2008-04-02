@@ -91,8 +91,7 @@
       </h:selectOneListbox>
     </h:panelGrid>
 <br>
-    <h:panelGrid columns="2">
-      <h:commandButton action="#{modelBean.select}" value="Next Page"/>
+    <h:panelGrid columns="1">
       <h:commandButton action="#{modelBean.addCustomName}" value="Add Name"/>
     </h:panelGrid>
 
