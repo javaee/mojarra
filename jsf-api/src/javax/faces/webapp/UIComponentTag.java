@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.17 2003/09/20 00:48:13 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.18 2003/10/03 17:38:12 rlubke Exp $
  */
 
 /*
@@ -10,26 +10,26 @@
 package javax.faces.webapp;
 
 
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.el.ValueBinding;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+import javax.servlet.ServletResponse;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.HashMap;
 import java.util.List;
-import javax.faces.FactoryFinder;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.component.NamingContainer;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.RenderKitFactory;
-import javax.faces.render.RenderKit;
-import javax.faces.el.ValueBinding;
-import javax.faces.application.Application;
-import javax.servlet.jsp.JspException;
-import javax.servlet.ServletResponse;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.Tag;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -78,8 +78,22 @@ public abstract class UIComponentTag implements Tag {
      */
     private static final String JSP_CREATED_FACET_NAMES =
         "javax.faces.webapp.FACET_NAMES";
+    
+    /**
+     * <p>The attribute name under which we will store all {@link UIComponent}
+     * IDs of the current translation unit.</p>
+     */ 
+    private static final String GLOBAL_ID_VIEW = 
+        "javax.faces.webapp.GLOBAL_ID_VIEW";
 
-
+    /**
+     * <p>The attribute name under which we will store the {@link FacesContext}
+     * for this request.</p>
+     */ 
+    private static final String CURRENT_FACES_CONTEXT =
+        "javax.faces.webapp.CURRENT_FACES_CONTEXT";
+    
+    
     // ------------------------------------------------------ Instance Variables
 
 
@@ -129,8 +143,8 @@ public abstract class UIComponentTag implements Tag {
      * <p>The JSP <code>Tag</code> that is the parent of this tag.</p>
      */
     private Tag parent = null;
-
-
+    
+    
     // ------------------------------------------------------------- Attributes
 
 
@@ -339,27 +353,58 @@ public abstract class UIComponentTag implements Tag {
      * @exception JspException if an error occurs
      */
     public int doStartTag() throws JspException {
-
-        // Look up the FacesContext instance for this request
-        // PENDING(craigmcc) - Make this more efficient by doing so
-        // only in the outermost tag
-        context = FacesContext.getCurrentInstance();
-        if (context == null) { // PENDING - i18n
-            throw new JspException("Cannot find FacesContext");
-        }
+        
+        context = 
+           (FacesContext) pageContext.getAttribute(CURRENT_FACES_CONTEXT);
+        
+        if (context == null) {
+            context = FacesContext.getCurrentInstance();
+            
+            if (context == null) { // PENDING - i18n
+                throw new JspException("Cannot find FacesContext");
+            }
+            
+            // store the current FacesContext for use by other
+            // UIComponentTags in the same page
+            pageContext.setAttribute(CURRENT_FACES_CONTEXT, context);
+        }        
 
         // Set up the ResponseWriter as needed
         setupResponseWriter();
+        
+        UIComponentTag parentTag = getParentUIComponentTag(pageContext);
+        
+        Map componentIds = null;
+        if (parentTag == null) {
+            // create the map if we're the top level UIComponentTag
+            componentIds = new HashMap();
+            pageContext.setAttribute(GLOBAL_ID_VIEW, componentIds);                        
+        } else {
+            componentIds = (Map) pageContext.getAttribute(GLOBAL_ID_VIEW);
+        }
+        
+        // assert component ID uniqueness
+        if (this.id != null) {
+            if (componentIds.containsKey(this.id)) {
+                // PENDING i18n                        
+                throw new JspException(
+                    new IllegalStateException("Duplicate component id: '" +
+                        this.id + "', first used in tag: '" +
+                        componentIds.get(this.id) + "'"));
+            } else {
+                componentIds.put(this.id, this.getClass().getName());
+            }
+        }
 
         // Locate the UIComponent associated with this UIComponentTag,
         // creating one if necessary
         component = findComponent(context);
 
         // Add to parent's list of created components or facets if needed
-        UIComponentTag parentTag = getParentUIComponentTag(pageContext);
+        
         if (parentTag != null) {
             if (getFacetName() == null) {
-                parentTag.addChild(component);
+                parentTag.addChild(component);                
             } else {
                 parentTag.addFacet(getFacetName());
             }
