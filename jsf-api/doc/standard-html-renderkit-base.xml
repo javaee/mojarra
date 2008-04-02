@@ -516,7 +516,7 @@
 
         <xi:include href="uimessages-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="message-message-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="messages-messages-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
