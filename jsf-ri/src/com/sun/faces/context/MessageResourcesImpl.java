@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.8 2003/02/20 22:48:36 ofung Exp $
+ * $Id: MessageResourcesImpl.java,v 1.9 2003/03/15 05:39:33 rkitain Exp $
  */
 
 /*
@@ -206,13 +206,8 @@ public class MessageResourcesImpl extends MessageResources
     */
 
     public Message getMessage(String messageId, Object params[]) {
-        //PENDING(rogerk) attempt to get the Locale from the system property
-        //possibly set in FacesContext..
         Locale locale = null;
-        Properties properties = System.getProperties();
-        synchronized(properties) {
-            locale = (Locale)properties.get(RIConstants.FACES_LOCALE);
-        }
+        locale = FacesContext.getCurrentInstance().getLocale();
         if (locale == null) {
             locale = Locale.getDefault();
         }

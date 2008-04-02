@@ -56,7 +56,7 @@
   </message>
 
   <message messageId="com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR" severity="1" summary="Expression Error." >
-      <detail>Named Object: '{0}' not found.</detail>
+      <detail>Named Object: ''{0}'' not found.</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_RESPONSE_STREAM_ERROR" severity="1" summary="Argument Error." >
@@ -84,55 +84,55 @@
   </message>
 
   <message messageId="com.sun.faces.SUPPORTS_COMPONENT_ERROR" severity="1" summary="Argument Error." >
-      <detail>Component Type: '{0}' is not supported for this renderer.</detail>
+      <detail>Component Type: ''{0}'' is not supported for this renderer.</detail>
   </message>
 
    <message messageId="com.sun.faces.MISSING_RESOURCE_ERROR" severity="3" summary="Missing Resource." >
-      <detail>Can't get ResourceBundle.</detail>
+      <detail>Can''t get ResourceBundle.</detail>
   </message>
 
   <message messageId="com.sun.faces.MISSING_CLASS_ERROR" severity="1" summary="Missing Class." >
-      <detail>Can't load class '{0}'.</detail>
+      <detail>Can''t load class ''{0}''.</detail>
   </message>
 
   <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" severity="3" summary="Component Not Found.">
-      <detail>Can't find component for identifier: '{0}'.</detail>
+      <detail>Can''t find component for identifier: ''{0}''.</detail>
   </message>
 
   <message messageId="com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED" severity="3" summary="LifecycleId already added.">
-      <detail>Lifecylce id '{0}' has already been added.</detail>
+      <detail>Lifecylce id ''{0}'' has already been added.</detail>
   </message>
 
   <message messageId="com.sun.faces.LIFECYCLE_ID_NOT_FOUND" severity="3" summary="LifecycleId id not found.">
-      <detail>Lifecylce id '{0}' not found.</detail>
+      <detail>Lifecylce id ''{0}'' not found.</detail>
   </message>
 
   <message messageId="com.sun.faces.PHASE_ID_OUT_OF_BOUNDS" severity="3" summary="Phase id out of bounds.">
-      <detail>PhaseId '{0}' out of bounds.</detail>
+      <detail>PhaseId ''{0}'' out of bounds.</detail>
   </message>
 
-  <message messageId="com.sun.faces.CANT_CREATE_LIFECYCLE" severity="3" summary="Can't create Lifecycle.">
-      <detail>Can't create lifecycle for id '{0}'.</detail>
+  <message messageId="com.sun.faces.CANT_CREATE_LIFECYCLE_ERROR" severity="3" summary="Can''t create Lifecycle.">
+      <detail>Can''t create lifecycle for id ''{0}''.</detail>
   </message>
 
   <message messageId="com.sun.faces.ILLEGAL_MODEL_REFERENCE" severity="3" summary="Illegal Model Reference.">
-      <detail>ModelReference expression '{0}' is illegal in this context.</detail>
+      <detail>ModelReference expression ''{0}'' is illegal in this context.</detail>
   </message>
 
   <message messageId="com.sun.faces.ATTRIBUTE_NOT_SUPORTED" severity="3" summary="Attribute not supported">
-      <detail>Attribute '{0}' is not supported for the component type '{1}'.</detail>
+      <detail>Attribute ''{0}'' is not supported for the component type ''{1}''.</detail>
   </message>
 
   <message messageId="com.sun.faces.FILE_NOT_FOUND" severity="3" summary="File Not Found">
-      <detail>File '{0}' not found.</detail>
+      <detail>File ''{0}'' not found.</detail>
   </message>
 
-  <message messageId="com.sun.faces.CANT_PARSE_FILE" severity="3" summary="Can't parse file">
-      <detail>Can't parse file '{0}'.</detail>
+  <message messageId="com.sun.faces.CANT_PARSE_FILE" severity="3" summary="Can''t parse file">
+      <detail>Can''t parse file ''{0}''.</detail>
   </message>
 
-  <message messageId="com.sun.faces.CANT_INSTANTIATE_CLASS" severity="3" summary="Can't instantiate class">
-      <detail>Can't instantiate class '{0}'.</detail>
+  <message messageId="com.sun.faces.CANT_INSTANTIATE_CLASS" severity="3" summary="Can''t instantiate class">
+      <detail>Can''t instantiate class ''{0}''.</detail>
   </message>
 
   <message messageId="com.sun.faces.ILLEGAL_CHARACTERS_ERROR" severity="3" summary="Characters not allowed">
@@ -140,27 +140,27 @@
   </message>
 
   <message messageId="com.sun.faces.NOT_NESTED_IN_FACES_TAG_ERROR" severity="3" summary="Not nested in a FacesTag">
-      <detail>Tag with handler class '{0}' not nested in a FacesTag.</detail>
+      <detail>Tag with handler class ''{0}'' not nested in a FacesTag.</detail>
   </message>
 
   <message messageId="com.sun.faces.NULL_BODY_CONTENT_ERROR" severity="3" summary="BodyContent is null">
-      <detail>BodyContent of tag with handler class '{0}' is null.</detail>
+      <detail>BodyContent of tag with handler class ''{0}'' is null.</detail>
   </message>
 
   <message messageId="com.sun.faces.SAVING_STATE_ERROR" severity="3" summary="Error while saving state">
-      <detail>Error while saving state in '{0}': '{1}'.</detail>
+      <detail>Error while saving state in ''{0}'': ''{1}''.</detail>
   </message>
 
   <message messageId="com.sun.faces.RENDERER_ALREADY_EXISTS" severity="3" summary="Renderer for type already exists">
-      <detail>Renderer for type '{0}': already exists.</detail>
+      <detail>Renderer for type ''{0}'': already exists.</detail>
   </message>
 
   <message messageId="com.sun.faces.RENDERER_NOT_FOUND" severity="3" summary="Renderer not found for Renderer type">
-      <detail>Renderer for type '{0}': not found.</detail>
+      <detail>Renderer for type ''{0}'': not found.</detail>
   </message>
 
   <message messageId="com.sun.faces.MAXIMUM_EVENTS_REACHED" severity="3" summary="Maximum number of events reached">
-      <detail>Maximum number of events '{0}' processed.</detail>
+      <detail>Maximum number of events ''{0}'' processed.</detail>
   </message>
 
 </messages>
