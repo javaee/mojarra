@@ -97,8 +97,7 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>The first row number (one-relative) to be displayed, or zero to
-     * start from the very beginning.</p>
+     * <p>The first row number (zero-relative) to be displayed.</p>
      */
     private int first = 0;
 
@@ -144,8 +143,8 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Return the one-relative row number of the first row to be
-     * displayed, or zero for starting at the beginning of the data.</p>
+     * <p>Return the zero-relative row number of the first row to be
+     * displayed.</p>
      */
     public int getFirst() {
 
@@ -155,8 +154,8 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Set the one-relative row number of the first row to be
-     * displayed, or zero for starting at the beginning of the data.</p>
+     * <p>Set the zero-relative row number of the first row to be
+     * displayed.</p>
      *
      * @param first New first row number
      *
@@ -366,7 +365,7 @@ public class UIData extends UIComponentBase
      * @param index The new index value
      *
      * @exception IllegalArgumentException if <code>index</code>
-     *  is <code>negative</code>
+     *  is less than -1
      */
     public void setRowIndex(int index) {
 
@@ -376,7 +375,7 @@ public class UIData extends UIComponentBase
             Map requestMap =
                 FacesContext.getCurrentInstance().getExternalContext().
                 getRequestMap();
-            if (index == 0) {
+            if (index == -1) {
                 requestMap.remove(var);
             } else {
                 requestMap.put(var, getRowData());
@@ -438,7 +437,6 @@ public class UIData extends UIComponentBase
      * <p>Override the default {@link UIComponentBase#queueEvent} processing
      * to wrap any queued events in a {@link RepeaterEvent} so that the current
      * row index can be restored.
-     *
      *
      * @param event {@link FacesEvent} to be queued
      *
@@ -624,7 +622,7 @@ public class UIData extends UIComponentBase
     private void iterate(FacesContext context, PhaseId phaseId) {
 
 	// Process each facet exactly once
-	setRowIndex(0);
+	setRowIndex(-1);
 	Iterator facets = getFacets().keySet().iterator();
 	while (facets.hasNext()) {
 	    UIComponent facet = (UIComponent)
@@ -641,10 +639,7 @@ public class UIData extends UIComponentBase
 	}
 
 	// Iterate over our children, once per row
-	int first = getFirst();                  // One relative
-	if (first < 1) {
-	    first = 1;
-	}
+	int first = getFirst();                  // Zero relative
 	int rowCount = getRowCount();
 	int processed = 0;
 	int rows = getRows();
@@ -679,7 +674,7 @@ public class UIData extends UIComponentBase
 	}
 
 	// Clean up after ourselves
-	setRowIndex(0);
+	setRowIndex(-1);
 
     }
 

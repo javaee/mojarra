@@ -142,16 +142,22 @@ public interface Repeater {
 
 
     /**
-     * <p>Return the one-relative index of the current row being iterated
-     * over, or zero to indicate we are not iterating over any particular
+     * Return the number of rows of data in a source.
+     */
+    public int getRowCount();
+
+
+    /**
+     * <p>Return the zero-relative index of the current row being iterated
+     * over, or -1 to indicate we are not iterating over any particular
      * row.</p>
      */
     public int getRowIndex();
 
 
     /**
-     * <p>Set the one-relative row index of the current row being iterated
-     * over, or zero to indicate that we are not iterating over any
+     * <p>Set the zero-relative row index of the current row being iterated
+     * over, or -1 to indicate that we are not iterating over any
      * particular row.
      *
      * @param index The new index value
@@ -161,10 +167,5 @@ public interface Repeater {
      */
     public void setRowIndex(int index);
     
-    /**
-     * Return the number of rows of data in a source.
-     */
-    public int getRowCount();
-
 
 }

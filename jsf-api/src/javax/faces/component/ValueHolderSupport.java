@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderSupport.java,v 1.9 2003/10/09 19:18:13 craigmcc Exp $
+ * $Id: ValueHolderSupport.java,v 1.10 2003/10/16 01:05:33 craigmcc Exp $
  */
 
 /*
@@ -99,7 +99,7 @@ public class ValueHolderSupport
 
         Repeater repeater = RepeaterSupport.findParentRepeater(component);
         if (repeater != null) {
-            if (repeater.getRowIndex() > 0) {
+            if (repeater.getRowIndex() >= 0) {
                 return (repeater.getChildValue(component));
             } else {
                 return (this.value);
@@ -115,7 +115,7 @@ public class ValueHolderSupport
 
         Repeater repeater = RepeaterSupport.findParentRepeater(component);
         if (repeater != null) {
-            if (repeater.getRowIndex() > 0) {
+            if (repeater.getRowIndex() >= 0) {
                 repeater.setChildValue(component, value);
             } else {
                 this.value = value;
@@ -142,6 +142,7 @@ public class ValueHolderSupport
 
 
     // ----------------------------------------------------- ValueHolder Methods
+
 
     /**
      * @exception EvaluationException {@inheritDoc}
@@ -195,11 +196,11 @@ public class ValueHolderSupport
         Object values[] = new Object[2];
         int rowCount = 0;
         Repeater repeater = RepeaterSupport.findParentRepeater(component);
-        if (repeater != null && repeater.getRowIndex() > 0) {
+        if (repeater != null && repeater.getRowIndex() >= 0) {
             rowCount = repeater.getRowCount();
             Object[] currentValues = new Object[rowCount];
             for (int i = 0; i < rowCount; ++i ) {
-                repeater.setRowIndex(i+1);
+                repeater.setRowIndex(i);
                 currentValues[i] = repeater.getChildValue(component);
             }
             values[0] = currentValues;
@@ -239,11 +240,11 @@ public class ValueHolderSupport
         Object values[] = (Object[]) stateToRestore;
 
         Repeater repeater = RepeaterSupport.findParentRepeater(component);
-        if (repeater != null && repeater.getRowIndex() > 0) {
+        if (repeater != null && repeater.getRowIndex() >= 0) {
             Object[] currentValues = (Object[])values[0];
             if ( currentValues != null ) {
                 for (int i = 0; i < currentValues.length; ++i ) {
-                    repeater.setRowIndex(i+1);
+                    repeater.setRowIndex(i);
                     repeater.setChildValue(component, currentValues[i]);
                 }
             }

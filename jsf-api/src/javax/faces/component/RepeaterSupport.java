@@ -117,17 +117,17 @@ public class RepeaterSupport implements Serializable {
 
 
     /**
-     * <p>The current one-relative row subscript.  A zero value indicates
+     * <p>The current zero-relative row subscript.  A -1 value indicates
      * that no row has currently been selected.</p>
      */
-    private int row = 0;
+    private int row = -1;
 
 
     // -------------------------------------------------------------- Properties
 
 
     /**
-     * <p>Return the one-relative subscript of the current row.  A zero value
+     * <p>Return the zero-relative subscript of the current row.  A -1 value
      * indicates that no row has currently been selected.</p>
      */
     public int getRowIndex() {
@@ -138,18 +138,18 @@ public class RepeaterSupport implements Serializable {
 
 
     /**
-     * <p>Set the one-relative subscript of the current row.  A zero value
+     * <p>Set the zero-relative subscript of the current row.  A -1 value
      * indicates that no row has currently been selected (which will
      * be the case when a new instance of this class is instantiated).</p>
      *
      * @param row The new subscript
      *
      * @exception IllegalArgumentException if <code>row</code>
-     *  is negative
+     *  is less than -1
      */
     public void setRowIndex(int row) {
 
-	if (row < 0) {
+	if (row < -1) {
 	    throw new IllegalArgumentException();
 	}
 	this.row = row;
