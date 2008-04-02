@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationTestCase.java,v 1.5 2004/05/01 00:48:43 rkitain Exp $
+ * $Id: NavigationTestCase.java,v 1.6 2004/07/22 17:40:44 rogerk Exp $
  */
 
 /*
@@ -120,4 +120,58 @@ public class NavigationTestCase extends AbstractTestCase {
 	    assertTrue(false);
 	}
     }
+
+    public void testNavigateWithVerbatim_One() throws Exception {
+        HtmlForm form;
+        HtmlSubmitInput submit;
+        HtmlPage page, page1;
+                                                                                
+        page = getPage("/faces/jsp/verbatim-one-test.jsp");
+        form = getFormById(page, "form");
+        assertNotNull("form exists", form);
+        submit = (HtmlSubmitInput)
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "submit");
+                                                                                
+        // press the link, return to the same page, and check that
+        // output text (header) is still present...
+ 
+        try {
+            page1 = (HtmlPage) submit.click();
+            assertTrue(-1 != page1.asText().indexOf("this is the header"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+    public void testNavigateWithVerbatim_Two() throws Exception {
+        HtmlForm form;
+        HtmlSubmitInput submit;
+        HtmlPage page, page1;
+                                                                               
+                                                                               
+        page = getPage("/faces/jsp/verbatim-two-test.jsp");
+        form = getFormById(page, "form");
+        assertNotNull("form exists", form);
+        submit = (HtmlSubmitInput)
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "submit");
+                                                                               
+                                                                               
+        // submit the form, return to the same page, and check that
+        // output text (header) is still present...
+        // and verbatim text is still present...
+                                                                               
+        try {
+            page1 = (HtmlPage) submit.click();
+            assertTrue(-1 != page1.asText().indexOf("verbatim one text here"));
+            assertTrue(-1 != page1.asText().indexOf("this is the header"));
+            assertTrue(-1 != page1.asText().indexOf("verbatim two text here"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
 }

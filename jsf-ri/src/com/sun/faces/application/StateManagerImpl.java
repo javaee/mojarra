@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.22 2004/06/01 17:06:26 eburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.23 2004/07/22 17:40:44 rogerk Exp $ 
  */ 
 
 
@@ -35,7 +35,7 @@ import java.util.Set;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.22 2004/06/01 17:06:26 eburns Exp $
+ * @version $Id: StateManagerImpl.java,v 1.23 2004/07/22 17:40:44 rogerk Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -64,10 +64,12 @@ public class StateManagerImpl extends StateManager {
         if (viewRoot.isTransient()) {
             return result;
         }
+
+        // honor the transient property and remove children from the tree
+        // that are marked transient.
+        removeTransientChildrenAndFacets(context, viewRoot, new HashSet());
+
         if (!isSavingStateInClient(context)) {
-            // honor the transient property and remove children from the tree
-            // that are marked transient.
-            removeTransientChildrenAndFacets(context, viewRoot, new HashSet());
             if (log.isDebugEnabled()) {
                 log.debug("Saving view in session for viewId " +
                           viewRoot.getViewId());
