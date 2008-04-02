@@ -99,7 +99,7 @@ Powered by Faces components:
     <h:panel_group>
       <h:command_button value="button"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
       <h:selectboolean_checkbox checked="true" alt="checkbox"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <h:selectone_radio layout="PAGE_DIRECTION" border="1" value="nextMonth">
+      <h:selectone_radio layout="pageDirection" border="1" value="nextMonth">
         <f:selectItem itemValue="nextDay" itemLabel="Next Day"/>
         <f:selectItem itemValue="nextWeek" itemLabel="Next Week"  />
         <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />

@@ -34,7 +34,7 @@
 
 
              <td>
-                <h:selectone_radio id="verticalRadio" layout="PAGE_DIRECTION" border="1" >
+                <h:selectone_radio id="verticalRadio" layout="pageDirection" border="1" >
                   <f:selectItem itemValue="nextDay" itemLabel="Next Day"/>
                   <f:selectItem itemValue="nextWeek" itemLabel="Next Week"  />
                   <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />

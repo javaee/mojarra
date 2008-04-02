@@ -277,7 +277,7 @@
 
 	<TD>
             <h:selectone_radio id="verticalRadio" 
-                                            layout="PAGE_DIRECTION" border="1" >
+                                            layout="pageDirection" border="1" >
 
                 <f:selectItem itemValue="nextDay" itemLabel="Next Day"
                                    disabled="true" />

@@ -22,7 +22,7 @@
 					<tr>
 						<td>Multi-select checkbox [Vertical]:</td>
 						<td><h:selectmany_checkboxlist id="ManyApples4" 
-						  layout="PAGE_DIRECTION">
+						  layout="pageDirection">
 							<f:selectItem itemValue="0" itemLabel="zero" />
 							<f:selectItem itemValue="1" itemLabel="one" />
 							<f:selectItem itemValue="2" itemLabel="two" />
