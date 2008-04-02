@@ -209,8 +209,7 @@
   <target name="build" unless="skip.build" depends="copyJars" 
      description="Compile Java files for components, not webapp." >
       <touch file="${build}/last-build"/>
- 	<echo message="jsf-api.jar is ${jsf-api.jar}"/>
-		<echo message="jsf-ri.jar is ${jsf-impl.jar}" />     
+
     <javac debug="on" srcdir="src" destdir="${build}/classes/components">
 	
         <include name="components/**" />
