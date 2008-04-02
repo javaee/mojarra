@@ -521,13 +521,6 @@ public class StateManagerImpl extends StateManager {
             UIComponent c = (UIComponent) t.newInstance();
             c.setId(n.id);
 
-            if (ctx.getExternalContext().getRequestMap()
-                  .get(RIConstants.DEFAULT_LIFECYCLE) != null) {
-                ValueExpression ve = c.getValueExpression("binding");
-                if (ve != null) {
-                    ve.setValue(ctx.getELContext(), c);
-                }
-            }
             return c;
         } catch (Exception e) {
             throw new FacesException(e);
@@ -596,9 +589,7 @@ public class StateManagerImpl extends StateManager {
 
         UIComponent c;
         FacetNode fn;
-        TreeNode tn;
-        ctx.getExternalContext().getRequestMap().put(RIConstants.DEFAULT_STATEMANAGER,
-                                                     Boolean.TRUE);
+        TreeNode tn;      
         for (int i = 0; i < tree.length; i++) {
             if (tree[i]instanceof FacetNode) {
                 fn = (FacetNode) tree[i];
