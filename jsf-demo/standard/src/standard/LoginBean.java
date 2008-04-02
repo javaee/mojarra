@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.3 2003/08/25 21:25:17 eburns Exp $
+ * $Id: LoginBean.java,v 1.4 2003/10/01 17:14:10 jvisvanathan Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ public class LoginBean {
     ArrayList longList = new ArrayList(3);
     ArrayList booleanList = new ArrayList(3);
     ArrayList stringList = new ArrayList(3);
-    ArrayList currentLongOptions = null;
+    Long[] currentLongOptions = null;
     Boolean currentBooleanOption = null;
     Long currentLongOption = null;
     
@@ -83,9 +83,9 @@ public class LoginBean {
 	    booleanList.add(new SelectItem(booleanOptions[i], 
                     ("booleanOption" + i), "booleanOption"));
 	}
-	currentLongOptions = new ArrayList(2);
-	currentLongOptions.add(longOptions[0]);
-	currentLongOptions.add(longOptions[1]);
+	currentLongOptions = new Long[2];
+	currentLongOptions[0] = longOptions[0];
+	currentLongOptions[1] = longOptions[1];
         currentLongOption = longOptions[1];
         currentBooleanOption = booleanOptions[0];
         
@@ -264,22 +264,13 @@ public class LoginBean {
         System.out.println("set current options");
     }
     
-    public Object[] getCurrentLongOptions() {
+    public Long[] getCurrentLongOptions() {
         System.out.println("get currentLongOptions");
-        return currentLongOptions.toArray();
+        return currentLongOptions;
     }
 
     public void setCurrentLongOptions(Long[] newCurrentOptions) {
-        int len = 0;
-        if (null == newCurrentOptions ||
-            (len = newCurrentOptions.length) == 0) {
-            return;
-        }
-        currentOptions.clear();
-        currentOptions = new ArrayList(len);
-        for (int i = 0; i < len; i++) {
-            currentOptions.add(newCurrentOptions[i]);
-        }
+        currentLongOptions = newCurrentOptions;
         System.out.println("set currentLongOptions");
     }
 
