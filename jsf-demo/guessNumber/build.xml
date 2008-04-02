@@ -156,13 +156,10 @@
 
   <target name="copyJars" depends="prepare" if="build.standalone">
     <copy todir="${build}/WEB-INF/lib" file="${commons-beanutils.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${commons-collections.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${commons-logging.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${commons-digester.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${jsf-api.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${jsf-ri.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${jstl.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${standard.jar}" />
   </target>
  
   <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">

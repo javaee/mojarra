@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoServletContextListener.java,v 1.9 2003/04/15 17:08:58 jvisvanathan Exp $
+ * $Id: CarDemoServletContextListener.java,v 1.10 2003/05/01 20:52:58 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -50,10 +50,8 @@ import javax.servlet.ServletContextEvent;
 import javax.faces.FactoryFinder;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.convert.ConverterFactory;
 
 import com.sun.faces.context.MessageResourcesImpl;
-import javax.faces.context.MessageResourcesFactory;
 import javax.faces.context.MessageResources;
 
 import javax.faces.FactoryFinder;
@@ -115,6 +113,8 @@ public class CarDemoServletContextListener implements ServletContextListener
 
     public void contextInitialized(ServletContextEvent e) 
     {
+	/***********
+// PENDING(edburns): this stuff is replaced by the faces-config.xml file
         RenderKitFactory rkFactory = 
 		(RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	RenderKit defaultRenderKit =
@@ -154,6 +154,7 @@ public class CarDemoServletContextListener implements ServletContextListener
         e.getServletContext().setAttribute("gerA", new ImageArea("poly", "Germany", "324,163,323,170,322,172,320,173,320,175,321,176,321,177,321,179,321,180,319,180,318,180,317,182,316,183,315,181,314,181,313,181,312,181,311,180,310,177,310,177,307,176,307,173,307,172,308,170,309,169,309,167,309,166,311,165,311,163,311,161,312,159,314,159,316,160,316,162,318,162,319,162"));
 
         e.getServletContext().setAttribute("fraA", new ImageArea("poly", "France", "312,178,308,182,310,184,310,187,310,189,309,191,307,192,305,192,304,192,304,193,303,195,302,195,300,194,299,194,297,194,295,193,295,191,295,189,294,186,293,184,292,182,291,181,289,180,288,178,288,176,289,175,292,175,293,176,294,174,296,174,297,174,299,174,299,172,300,170,302,170,304,172,306,173,308,173,310,174"));
+	********/
     }
 
     public void contextDestroyed(ServletContextEvent e)

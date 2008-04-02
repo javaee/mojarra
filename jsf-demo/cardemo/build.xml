@@ -179,7 +179,6 @@
   <target name="copyJars" depends="prepare" if="build.standalone">
     <copy todir="${build}/WEB-INF/lib" file="${demo-components.jar}"/>
     <copy todir="${build}/WEB-INF/lib" file="${commons-beanutils.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${commons-collections.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${commons-logging.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${commons-digester.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${jsf-api.jar}" />

@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.3 2003/03/27 19:44:08 jvisvanathan Exp $
+ * $Id: XmlXulRuleSet.java,v 1.4 2003/05/01 20:53:01 eburns Exp $
  */
 
 /*
@@ -297,9 +297,9 @@ final class ActionRule extends Rule {
                 ActionListener handler =
                     createActionListener(attributes.getValue(qName));
                     if (log.isTraceEnabled()) {
-                        log.trace("componentType: " + uic.getComponentType());
+                        log.trace("component: " + uic.toString());
                     }
-	        if (uic.getComponentType().equals(UICommand.TYPE)) {
+	        if (uic instanceof UICommand) {
                     if (log.isTraceEnabled()) {
                         log.trace("addingActionListener: " + handler);
                     }

@@ -1,5 +1,5 @@
 /*
- * $Id: CreditCardValidator.java,v 1.3 2003/03/27 19:43:28 jvisvanathan Exp $
+ * $Id: CreditCardValidator.java,v 1.4 2003/05/01 20:52:58 eburns Exp $
  */
 
 /*
@@ -43,14 +43,16 @@
 package cardemo;
 
 import javax.faces.FactoryFinder;
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
-import javax.faces.context.Message;
-import javax.faces.context.MessageResourcesFactory;
+import javax.faces.application.Message;
 import javax.faces.context.MessageResources;
 import javax.faces.validator.Validator;
+
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Application;
+
 
 /**
  * <p><strong>CreditCardValidator</strong> is a Validator that checks
@@ -212,10 +214,11 @@ public class CreditCardValidator implements Validator {
      */
     public synchronized MessageResources getMessageResources() {
         MessageResources carResources = null;
-	MessageResourcesFactory factory = (MessageResourcesFactory)
-	    FactoryFinder.getFactory
-	    (FactoryFinder.MESSAGE_RESOURCES_FACTORY);
-	carResources = factory.getMessageResources("carResources");
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application application = aFactory.getApplication();
+	
+	carResources = application.getMessageResources("carResources");
         return (carResources);
     }
 }
