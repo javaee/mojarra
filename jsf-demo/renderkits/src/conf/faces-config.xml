@@ -52,6 +52,15 @@
     </locale-config>
   </application>
 
+   <component>
+      <component-type>Rectangle</component-type>
+      <component-class>renderkits.components.svg.Rectangle</component-class>
+   </component>
+   <component>
+      <component-type>Line</component-type>
+      <component-class>renderkits.components.svg.Line</component-class>
+   </component>
+
   <render-kit>
     <render-kit-id>SVG</render-kit-id>
     <render-kit-class>renderkits.renderkit.svg.SVGRenderKit</render-kit-class>
@@ -69,6 +78,16 @@
       <component-family>javax.faces.Output</component-family>
       <renderer-type>renderkit.svg.Text</renderer-type>
       <renderer-class>renderkits.renderkit.svg.TextRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>Rectangle</component-family>
+      <renderer-type>renderkit.svg.Rectangle</renderer-type>
+      <renderer-class>renderkits.renderkit.svg.RectangleRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>Line</component-family>
+      <renderer-type>renderkit.svg.Line</renderer-type>
+      <renderer-class>renderkits.renderkit.svg.LineRenderer</renderer-class>
     </renderer>
   </render-kit>
 
