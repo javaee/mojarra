@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterException.java,v 1.8 2004/02/26 20:30:48 eburns Exp $
+ * $Id: ConverterException.java,v 1.9 2005/05/06 14:03:58 edburns Exp $
  */
 
 /*
@@ -108,8 +108,9 @@ public class ConverterException extends FacesException {
     }
 
     /**
-     * <p>Returns the FacesMessage associated with this exception;  this
-     * will only be available if one of the Faces
+     * <p>Returns the FacesMessage associated with this exception; this
+     * will only be available if the converter that thew this exception
+     * instance placed it there.
      */
     public FacesMessage getFacesMessage() {
         return facesMessage;
