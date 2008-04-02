@@ -1,5 +1,5 @@
 /*
- * $Id: MockExternalContext.java,v 1.6 2003/09/29 21:09:03 eburns Exp $
+ * $Id: MockExternalContext.java,v 1.7 2003/10/22 20:43:34 eburns Exp $
  */
 
 /*
@@ -132,6 +132,10 @@ public class MockExternalContext extends ExternalContext {
 
 
     public String getRequestContextPath() {
+        throw new UnsupportedOperationException();
+    }
+
+    public String getRequestServletPath() {
         throw new UnsupportedOperationException();
     }
 

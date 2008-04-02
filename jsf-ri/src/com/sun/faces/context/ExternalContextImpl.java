@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.16 2003/09/18 15:02:06 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.17 2003/10/22 20:43:47 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.16 2003/09/18 15:02:06 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.17 2003/10/22 20:43:47 eburns Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {
@@ -218,6 +218,11 @@ public class ExternalContextImpl extends ExternalContext {
     public String getRequestContextPath() {
         return (((HttpServletRequest) request).getContextPath());
     }
+
+    public String getRequestServletPath() {
+        return (((HttpServletRequest) request).getServletPath());
+    }
+
 
     /**
      * <p>Manage attributes associated with the <code>ServletContext</code>
