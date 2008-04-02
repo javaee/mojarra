@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelListener.java,v 1.2 2003/09/11 15:26:12 craigmcc Exp $
+ * $Id: DataModelListener.java,v 1.3 2003/10/15 01:45:54 craigmcc Exp $
  */
 
 /*
@@ -56,30 +56,12 @@ public interface DataModelListener extends EventListener {
 
 
     /**
-     * <p>Notification that the <code>close()</code> method on the specified
-     * {@link DataModel} has occurred.</p>
-     *
-     * @param event The {@link DataModelEvent} we are processing
-     */
-    public void modelClosed(DataModelEvent event);
-
-
-    /**
-     * <p>Notification that the <code>open()</code> method on the specified
-     * {@link DataModel} has occurred.</p>
-     *
-     * @param event The {@link DataModelEvent} we are processing
-     */
-    public void modelOpened(DataModelEvent event);
-
-
-    /**
      * <p>Notification that a particular row index, with the associated
      * row data, has been selected for processing.</p>
      *
      * @param event The {@link DataModelEvent} we are processing
      */
-    public void modelSelected(DataModelEvent event);
+    public void rowSelected(DataModelEvent event);
 
 
 }

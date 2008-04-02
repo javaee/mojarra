@@ -1,5 +1,5 @@
 /*
- * $Id: DataModel.java,v 1.2 2003/09/11 15:26:11 craigmcc Exp $
+ * $Id: DataModel.java,v 1.3 2003/10/15 01:45:53 craigmcc Exp $
  */
 
 /*
@@ -43,6 +43,8 @@
 package javax.faces.model;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.component.Repeater;
 
@@ -64,69 +66,28 @@ import javax.faces.component.Repeater;
  * as when a new row index is selected.</p>
  */
 
-public interface DataModel {
-
-
-    // ------------------------------------------------------- Lifecycle Methods
-
-
-    /**
-     * <p>Terminate access to the underlying data represented by this
-     * {@link DataModel}.  Send a {@link DataModelEvent} to the
-     * <code>modelClosed()</code> method of all registered
-     * {@link DataModelListener}s.  Any further attempt
-     * to navigate to new rows, or to access the current row data,
-     * will throw <code>IllegalStateException</code>.</p>
-     *
-     * @exception FacesException if any error occurs
-     * @exception IllegalStateException if this {@link DataModel} is not open
-     */
-    public void close();
-
-
-    /**
-     * <p>Initiate access to the underlying data represented by this
-     * {@link DataModel}.  Set the current <code>rowIndex</code>
-     * property to zero, indicating that no row is currently selected.
-     * Send a {@link DataModelEvent} to the <code>modelOpened</code>
-     * method of all registered {@link DataModelListener}s.  This method must
-     * be called before row navigation, or access to the current row
-     * data, can be performed.</p>
-     *
-     * @exception FacesException if any error occurs
-     * @exception IllegalStateException if this {@link DataModel} is
-     *  currently open
-     */
-    public void open() throws FacesException;
+public abstract class DataModel {
 
 
     // -------------------------------------------------------------- Properties
 
 
     /**
-     * <p>Return <code>true</code> if this data model is currently open.</p>
-     */
-    public boolean isOpen();
-
-
-    /**
      * <p>Return the number of rows of data objects represented by this
      * {@link DataModel}.</p>
      *
-     * @exception IllegalStateException if this {@link DataModel} is not open
+     * @exception FacesException if an error occurs getting the row count
      */
-    public int getRowCount();
+    public abstract int getRowCount();
 
 
     /**
      * <p>Return an object representing the data for the currenty selected
      * row index.  If row index is zero, <code>null</code> is returned.</p>
      *
-     * @exception IllegalArgumentException if the current row index is zero or
-     *  exceeds the number of available rows
-     * @exception IllegalStateException if this {@link DataModel} is not open
+     * @exception FacesException if an error occurs getting the data
      */
-    public Object getRowData();
+    public abstract Object getRowData();
 
 
     /**
@@ -135,26 +96,36 @@ public interface DataModel {
      * If we are positioned after the last row, the value
      * <code>getRowCount() + 1</code> will be returned.</p>.
      *
-     * @exception IllegalStateException if this {@link DataModel} is not open
+     * @exception FacesException if an error occurs getting the row index
      */
-    public int getRowIndex();
+    public abstract int getRowIndex();
 
 
     /**
      * <p>Set the one-relative index of the currently selected row.  Setting
      * the index to zero indicates that no row is currently selected.  If
      * the current index is changed by this method, send a
-     * {@link DataModelEvent} to the <code>modelSelected()</code> method of each
+     * {@link DataModelEvent} to the <code>rowSelected()</code> method of each
      * registered {@link DataModelListener}.</p>
      *
      * @param rowIndex The new one-relative index, or zero to select no row
      *
+     * @exception FacesException if an error occurs setting the row index
      * @exception IllegalArgumentException if <code>rowIndex</code>
-     *  is negative
-     * @exception IllegalStateException if this {@link DataModel} is not open
-     * @exception FacesException if any error occurs
+     *  is negative or exceeds the number of available rows
      */
-    public void setRowIndex(int rowIndex);
+    public abstract void setRowIndex(int rowIndex);
+
+
+    // ------------------------------------------------------ Instance Variables
+
+
+    /**
+     * <p>The list of registered {@link DataModelListener}s for this
+     * {@link DataModel}.  This variable will be <code>null</code> unless
+     * there is at least one registered listener.</p>
+     */
+    protected List listeners = null;
 
 
     // --------------------------------------------- Event Listener Registration
@@ -169,7 +140,17 @@ public interface DataModel {
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
-    public void addDataModelListener(DataModelListener listener);
+    public void addDataModelListener(DataModelListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException();
+        }
+        if (listeners == null) {
+            listeners = new ArrayList();
+        }
+        listeners.add(listener);
+
+    }
 
 
     /**
@@ -181,7 +162,19 @@ public interface DataModel {
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
-    public void removeDataModelListener(DataModelListener listener);
+    public void removeDataModelListener(DataModelListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException();
+        }
+        if (listeners != null) {
+            listeners.remove(listener);
+            if (listeners.size() == 0) {
+                listeners = null;
+            }
+        }
+
+    }
 
 
 }

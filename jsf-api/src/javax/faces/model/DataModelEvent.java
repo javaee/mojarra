@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelEvent.java,v 1.2 2003/09/11 15:26:12 craigmcc Exp $
+ * $Id: DataModelEvent.java,v 1.3 2003/10/15 01:45:54 craigmcc Exp $
  */
 
 /*
@@ -55,19 +55,6 @@ public class DataModelEvent extends EventObject {
 
 
     // ------------------------------------------------------------ Constructors
-
-
-    /**
-     * <p>Construct an event object that is not associated with any
-     * particular row index or associated data.</p>
-     *
-     * @param model The {@link DataModel} on which this event occurred
-     */
-    public DataModelEvent(DataModel model) {
-
-	this(model, 0, null);
-
-    }
 
 
     /**

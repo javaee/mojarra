@@ -1,5 +1,5 @@
 /*
- * $Id: TestListener.java,v 1.1 2003/10/12 05:07:25 craigmcc Exp $
+ * $Id: TestListener.java,v 1.2 2003/10/15 01:45:58 craigmcc Exp $
  */
 
 /*
@@ -20,17 +20,7 @@ public class TestListener implements DataModelListener {
     // ----------------------------------------------- DataModelListener Methods
 
 
-    public void modelClosed(DataModelEvent event) {
-        trace("c");
-    }
-
-
-    public void modelOpened(DataModelEvent event) {
-        trace("o");
-    }
-
-
-    public void modelSelected(DataModelEvent event) {
+    public void rowSelected(DataModelEvent event) {
         Object rowData = event.getRowData();
         int rowIndex = event.getRowIndex();
         trace("" + rowIndex);

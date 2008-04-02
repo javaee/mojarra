@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.3 2003/10/12 05:07:21 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.4 2003/10/15 01:45:55 craigmcc Exp $
  */
 
 /*
@@ -47,8 +47,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.el.PropertyNotFoundException;
 
@@ -62,7 +60,7 @@ import javax.faces.el.PropertyNotFoundException;
  * specified <code>ResultSet</code> <strong>MUST</strong> be updatable.</p>
  */
 
-public class ResultSetDataModel implements DataModel {
+public class ResultSetDataModel extends DataModel {
 
 
     // ------------------------------------------------------------ Constructors
@@ -107,16 +105,8 @@ public class ResultSetDataModel implements DataModel {
     private int index = 0;
 
 
-    // The DataModelListeners interested in our events
-    private List listeners = null;
-
-
     // The metadata for the ResultSet we are wrapping (lazily instantiated)
     private ResultSetMetaData metadata = null;
-
-
-    // The open flag
-    private boolean open = false;
 
 
     // The ResultSet we are wrapping
@@ -127,65 +117,14 @@ public class ResultSetDataModel implements DataModel {
     private int size = Integer.MIN_VALUE;
 
 
-    // ------------------------------------------------------- Lifecycle Methods
-
-
-    public void close() {
-
-        if (!open) {
-            throw new IllegalStateException();
-        }
-        if (listeners != null) {
-            DataModelEvent event = new DataModelEvent(this);
-            int n = listeners.size();
-            for (int i = 0; i < n; i++) {
-                ((DataModelListener) listeners.get(i)).modelClosed(event);
-            }
-        }
-        // PENDING(craigmcc) - Delegate close() call to resultSet?
-        index = 0;
-        metadata = null;
-        open = false;
-        resultSet = null;
-        size = Integer.MIN_VALUE;
-
-    }
-
-
-    public void open() throws FacesException {
-
-        if (open) {
-            throw new IllegalStateException();
-        }
-        index = 0;
-        open = true;
-        size = Integer.MIN_VALUE;
-        if (listeners != null) {
-            DataModelEvent event = new DataModelEvent(this);
-            int n = listeners.size();
-            for (int i = 0; i < n; i++) {
-                ((DataModelListener) listeners.get(i)).modelOpened(event);
-            }
-        }
-
-    }
-
-
     // -------------------------------------------------------------- Properties
 
 
-    public boolean isOpen() {
-
-        return (open);
-
-    }
-
-
+    /**
+     * @exception FacesException {@inheritDoc}     
+     */ 
     public int getRowCount() {
 
-        if (!open) {
-            throw new IllegalStateException();
-        }
         if (size == Integer.MIN_VALUE) {
             try {
                 size = 0;
@@ -201,14 +140,11 @@ public class ResultSetDataModel implements DataModel {
     }
 
 
+    /**
+     * @exception FacesException {@inheritDoc}     
+     */ 
     public Object getRowData() {
 
-        if (!open) {
-            throw new IllegalStateException();
-        }
-        if ((index < 0) || (index > getRowCount())) {
-            throw new IllegalArgumentException();
-        }
         if (index == 0) {
             return (null);
         } else {
@@ -219,66 +155,41 @@ public class ResultSetDataModel implements DataModel {
     }
 
 
+    /**
+     * @exception FacesException {@inheritDoc}     
+     */ 
     public int getRowIndex() {
 
-        if (!open) {
-            throw new IllegalStateException();
-        }
         return (index);
 
     }
 
 
+    /**
+     * @exception FacesException {@inheritDoc}
+     * @exception IllegalArgumentException {@inheritDoc}
+     */ 
     public void setRowIndex(int rowIndex) {
 
-        if (!open) {
-            throw new IllegalStateException();
-        }
-        if (rowIndex < 0) {
+        if ((rowIndex < 0) || (rowIndex > getRowCount())) {
             throw new IllegalArgumentException();
+        }
+        try {
+            if ((rowIndex > 0) && (!resultSet.absolute(rowIndex))) {
+                throw new IllegalArgumentException();
+            }
+        } catch (SQLException e) {
+            throw new FacesException(e);
         }
         int old = index;
         index = rowIndex;
-        try {
-            resultSet.absolute(rowIndex);
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
         if ((old != index) && (listeners != null)) {
             DataModelEvent event =
                 event = new DataModelEvent(this, index, getRowData());
             int n = listeners.size();
             for (int i = 0; i < n; i++) {
-                ((DataModelListener) listeners.get(i)).modelSelected(event);
+                ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
-        }
-
-    }
-
-
-    // --------------------------------------------- Event Listener Registration
-
-
-    public void addDataModelListener(DataModelListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            listeners = new ArrayList();
-        }
-        listeners.add(listener);
-
-    }
-
-
-    public void removeDataModelListener(DataModelListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners != null) {
-            listeners.remove(listener);
         }
 
     }

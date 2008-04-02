@@ -161,34 +161,6 @@ public class RepeaterSupport implements Serializable {
 
 
     /**
-     * <p>Erase all valid flags, previous values, and local values for all
-     * {@link UIInput} components.</p>
-     */
-    public void erase() {
-
-	int n = list.size();
-	for (int i = 0; i < n; i++) {
-	    Map map = (Map) list.get(i);
-	    if (map == null) {
-		continue;
-	    }
-	    Iterator components = map.keySet().iterator();
-	    while (components.hasNext()) {
-		UIComponent component = (UIComponent) components.next();
-		if (component instanceof UIInput) {
-		    RepeaterSupportData data = (RepeaterSupportData)
-			map.get(component);
-		    data.setPrevious(null);
-		    data.setValid(true);
-		    data.setValue(null);
-		}
-	    }
-	}
-
-    }
-
-
-    /**
      * <p>Generate and return a unique client identifier for the currently
      * selected row of the child component with the specified identifier.</p>
      *

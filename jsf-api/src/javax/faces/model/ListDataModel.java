@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.1 2003/10/11 22:59:42 craigmcc Exp $
+ * $Id: ListDataModel.java,v 1.2 2003/10/15 01:45:54 craigmcc Exp $
  */
 
 /*
@@ -43,7 +43,6 @@
 package javax.faces.model;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.faces.FacesException;
 
@@ -53,7 +52,7 @@ import javax.faces.FacesException;
  * {@link DataModel} that wraps a <code>List</code> of Java objects.</p>
  */
 
-public class ListDataModel implements DataModel {
+public class ListDataModel extends DataModel {
 
 
     // ------------------------------------------------------------ Constructors
@@ -89,81 +88,24 @@ public class ListDataModel implements DataModel {
     private List list = null;
 
 
-    // The DataModelListeners interested in our events
-    private List listeners = null;
-
-
-    // The open flag
-    private boolean open = false;
-
-
-    // ------------------------------------------------------- Lifecycle Methods
-
-
-    public void close() {
-
-        if (!open) {
-            throw new IllegalStateException();
-        }
-        if (listeners != null) {
-            DataModelEvent event = new DataModelEvent(this);
-            int n = listeners.size();
-            for (int i = 0; i < n; i++) {
-                ((DataModelListener) listeners.get(i)).modelClosed(event);
-            }
-        }
-        this.list = null;
-        this.open = false;
-
-    }
-
-
-    public void open() throws FacesException {
-
-        if (open) {
-            throw new IllegalStateException();
-        }
-        index = 0;
-        open = true;
-        if (listeners != null) {
-            DataModelEvent event = new DataModelEvent(this);
-            int n = listeners.size();
-            for (int i = 0; i < n; i++) {
-                ((DataModelListener) listeners.get(i)).modelOpened(event);
-            }
-        }
-
-    }
-
-
     // -------------------------------------------------------------- Properties
 
 
-    public boolean isOpen() {
-
-        return (open);
-
-    }
-
-
+    /**
+     * @exception FacesException {@inheritDoc}     
+     */ 
     public int getRowCount() {
 
-        if (!open) {
-            throw new IllegalStateException();
-        }
         return (list.size());
 
     }
 
 
+    /**
+     * @exception FacesException {@inheritDoc}     
+     */ 
     public Object getRowData() {
 
-        if (!open) {
-            throw new IllegalStateException();
-        }
-        if ((index < 0) || (index > getRowCount())) {
-            throw new IllegalArgumentException();
-        }
         if (index == 0) {
             return (null);
         } else {
@@ -173,22 +115,23 @@ public class ListDataModel implements DataModel {
     }
 
 
+    /**
+     * @exception FacesException {@inheritDoc}     
+     */ 
     public int getRowIndex() {
 
-        if (!open) {
-            throw new IllegalStateException();
-        }
         return (index);
 
     }
 
 
+    /**
+     * @exception FacesException {@inheritDoc}
+     * @exception IllegalArgumentException {@inheritDoc}
+     */ 
     public void setRowIndex(int rowIndex) {
 
-        if (!open) {
-            throw new IllegalStateException();
-        }
-        if (rowIndex < 0) {
+        if ((rowIndex < 0) || (rowIndex > getRowCount())) {
             throw new IllegalArgumentException();
         }
         int old = index;
@@ -198,36 +141,8 @@ public class ListDataModel implements DataModel {
                 event = new DataModelEvent(this, index, getRowData());
             int n = listeners.size();
             for (int i = 0; i < n; i++) {
-                ((DataModelListener) listeners.get(i)).modelSelected(event);
+                ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
-        }
-
-    }
-
-
-    // --------------------------------------------- Event Listener Registration
-
-
-    public void addDataModelListener(DataModelListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            listeners = new ArrayList();
-        }
-        listeners.add(listener);
-
-    }
-
-
-    public void removeDataModelListener(DataModelListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners != null) {
-            listeners.remove(listener);
         }
 
     }

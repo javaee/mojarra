@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelTestCaseBase.java,v 1.1 2003/10/12 05:07:23 craigmcc Exp $
+ * $Id: DataModelTestCaseBase.java,v 1.2 2003/10/15 01:45:58 craigmcc Exp $
  */
 
 /*
@@ -124,54 +124,6 @@ public abstract class DataModelTestCaseBase extends TestCase {
     }
 
 
-    // Test a opened then closed instance for IllegalStateExceptions
-    public void testOpenClose() throws Exception {
-
-        model.open();
-        model.close();
-
-        try {
-            model.getRowCount();
-            fail("Should have thrown IllegalStateException");
-        } catch (IllegalStateException e) {
-            ; // Expected result
-        }
-        try {
-            model.getRowData();
-            fail("Should have thrown IllegalStateException");
-        } catch (IllegalStateException e) {
-            ; // Expected result
-        }
-        try {
-            model.getRowIndex();
-            fail("Should have thrown IllegalStateException");
-        } catch (IllegalStateException e) {
-            ; // Expected result
-        }
-        try {
-            model.setRowIndex(1);
-            fail("Should have thrown IllegalStateException");
-        } catch (IllegalStateException e) {
-            ; // Expected result
-        }
-
-    }
-
-
-    // Test double open
-    public void testOpenOpenClose() throws Exception {
-
-        model.open();
-        try {
-            model.open();
-            fail("Should have thrown IllegalStateException");
-        } catch (IllegalStateException e) {
-            ; // Expected result
-        }
-
-    }
-
-
     // Test positioning to all rows in ascending order
     public void testPositionAscending() throws Exception {
 
@@ -179,15 +131,11 @@ public abstract class DataModelTestCaseBase extends TestCase {
         model.addDataModelListener(new TestListener());
         TestListener.trace(null);
 
-        model.open();
-        sb.append("/o");
         int n = model.getRowCount();
         for (int i = 1; i <= n; i++) {
             checkRow(i);
             sb.append("/" + i);
         }
-        model.close();
-        sb.append("/c");
         assertEquals(sb.toString(), TestListener.trace());
 
     }
@@ -200,15 +148,11 @@ public abstract class DataModelTestCaseBase extends TestCase {
         model.addDataModelListener(new TestListener());
         TestListener.trace(null);
 
-        model.open();
-        sb.append("/o");
         int n = model.getRowCount();
         for (int i = n; i > 0; i--) {
             checkRow(i);
             sb.append("/" + i);
         }
-        model.close();
-        sb.append("/c");
         assertEquals(sb.toString(), TestListener.trace());
 
     }
@@ -220,38 +164,9 @@ public abstract class DataModelTestCaseBase extends TestCase {
         // Unopened instance
         assertNotNull("beans exists", beans);
         assertNotNull("model exists", model);
-        assertTrue(!model.isOpen());
-
-        // Check for IllegalStateException on all calls
-        try {
-            model.getRowCount();
-            fail("Should have thrown IllegalStateException");
-        } catch (IllegalStateException e) {
-            ; // Expected result
-        }
-        try {
-            model.getRowData();
-            fail("Should have thrown IllegalStateException");
-        } catch (IllegalStateException e) {
-            ; // Expected result
-        }
-        try {
-            model.getRowIndex();
-            fail("Should have thrown IllegalStateException");
-        } catch (IllegalStateException e) {
-            ; // Expected result
-        }
-        try {
-            model.setRowIndex(1);
-            fail("Should have thrown IllegalStateException");
-        } catch (IllegalStateException e) {
-            ; // Expected result
-        }
 
         // Correct row count
-        model.open();
         assertEquals("correct row count", beans.length, model.getRowCount());
-        model.close();
 
     }
 
@@ -261,13 +176,12 @@ public abstract class DataModelTestCaseBase extends TestCase {
 
         TestListener listener = new TestListener();
         TestListener.trace(null);
-        model.open();
         model.addDataModelListener(listener);
         model.setRowIndex(1);
+        model.setRowIndex(1); // No movement so no event
         model.setRowIndex(0);
         model.removeDataModelListener(listener);
         model.setRowIndex(1);
-        model.close();
         assertEquals("/1/0", TestListener.trace());
 
     }
@@ -276,7 +190,6 @@ public abstract class DataModelTestCaseBase extends TestCase {
     // Test row index manipulations
     public void testRowIndex() throws Exception {
 
-        model.open();
         assertEquals("correct row index", 0, model.getRowIndex());
 
         // Positive setRowIndex() tests
@@ -290,8 +203,12 @@ public abstract class DataModelTestCaseBase extends TestCase {
         } catch (IllegalArgumentException e) {
             ; // Expected result
         }
-
-        model.close();
+        try {
+            model.setRowIndex(model.getRowCount() + 1);
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
 
     }
 

@@ -287,34 +287,6 @@ public class UIData extends UIComponentBase
     }
 
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    // PENDING(craigmcc) - erase() needs to be exposed publicly because there
-    // is no other way to bypass an unwanted execution of Update Model Values
-    // when (for example) a row-specific ActionEvent is processed.  Once we have
-    // a way to bypass Update Model Values in a controlled way, the need for
-    // this method to be public can be re-evaluated
-    /**
-     * <p>Erase the previous and local values of all child input components
-     * that are of type {@link UIInput} for this {@link UIData} component.</p>
-     *
-     * @param context {@link FacesContext} for the current request
-     *
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void erase(FacesContext context) {
-
-	if (context == null) {
-	    throw new NullPointerException();
-	}
-
-	repeater.erase();
-
-    }
-
-
     // -------------------------------------------------------- Repeater Methods
 
     /**
@@ -617,12 +589,6 @@ public class UIData extends UIComponentBase
         } else {
             this.model = new ScalarDataModel(current);
         }
-
-        // Open the model if it is not already open
-	if ((model != null) && !model.isOpen()) {
-	    // PENDING(craigmcc) - So who closes it when all is said and done?
-	    model.open();
-	}
 	return (model);
 
     }
