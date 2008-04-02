@@ -117,6 +117,7 @@
             <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="3" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text key="Package" bundle="carDemoBundle" />
             </FONT></B>
+            <BR>
             <h:command_button id="custom" commandName="custom"
                 commandClass="package-selected"
                 key="Custom" bundle="carDemoBundle">
