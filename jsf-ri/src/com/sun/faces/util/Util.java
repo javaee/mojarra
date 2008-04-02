@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.194 2006/06/06 19:59:47 rlubke Exp $
+ * $Id: Util.java,v 1.195 2006/08/29 06:13:01 tony_robertson Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.194 2006/06/06 19:59:47 rlubke Exp $
+ * @version $Id: Util.java,v 1.195 2006/08/29 06:13:01 tony_robertson Exp $
  */
 
 public class Util {
@@ -380,7 +380,7 @@ public class Util {
 
     }
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public static ValueBinding getValueBinding(String valueRef) {
         ValueBinding vb = null;
         // Must parse the value to see if it contains more than
@@ -693,7 +693,7 @@ public class Util {
         return result;
     }
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public static String stripBracketsIfNecessary(String expression)
         throws ReferenceSyntaxException {
         assert (null != expression);
@@ -753,7 +753,7 @@ public class Util {
      *
      * @return the scope of the expression
      */
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public static Scope getScope(String valueBinding,
 				  String [] outString) throws ReferenceSyntaxException {
         if (valueBinding == null || 0 == valueBinding.length()) {
@@ -839,7 +839,7 @@ public class Util {
      *
      * @return a List of expressions from the expressionString
      */
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public static List getExpressionsFromString(String expressionString) throws ReferenceSyntaxException {
 	if (null == expressionString) {
 	    return Collections.EMPTY_LIST;

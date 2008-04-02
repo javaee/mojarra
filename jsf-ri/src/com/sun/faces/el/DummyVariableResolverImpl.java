@@ -1,5 +1,5 @@
 /*
- * $Id: DummyVariableResolverImpl.java,v 1.5 2006/05/17 17:31:29 rlubke Exp $
+ * $Id: DummyVariableResolverImpl.java,v 1.6 2006/08/29 06:13:00 tony_robertson Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import javax.faces.el.VariableResolver;
  * provided to ensure that the legacy variable resolvers continue to work with
  * unfied EL API
  */
-@SuppressWarnings("Deprecation")
+@SuppressWarnings("deprecation")
 public class DummyVariableResolverImpl extends VariableResolver{
    
     // Specified by javax.faces.el.VariableResolver.resolveVariable()

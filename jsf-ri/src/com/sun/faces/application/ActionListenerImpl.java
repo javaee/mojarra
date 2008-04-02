@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.18 2006/05/16 19:21:05 rlubke Exp $
+ * $Id: ActionListenerImpl.java,v 1.19 2006/08/29 06:12:57 tony_robertson Exp $
  */
 
 /*
@@ -75,7 +75,7 @@ public class ActionListenerImpl implements ActionListener {
     // General Methods
     //
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public void processAction(ActionEvent event) {
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("processAction(" + event.getComponent().getId() + ")");

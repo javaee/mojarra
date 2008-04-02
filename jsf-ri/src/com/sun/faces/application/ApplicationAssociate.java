@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.32 2006/05/22 22:38:07 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.33 2006/08/29 06:12:58 tony_robertson Exp $
  */
 
 /*
@@ -117,17 +117,17 @@ public class ApplicationAssociate {
 
     private List<ELResolver> elResolversFromFacesConfig = null;
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     private VariableResolver legacyVRChainHead = null;
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     private PropertyResolver legacyPRChainHead = null;
     private ExpressionFactory expressionFactory = null;
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     private PropertyResolver legacyPropertyResolver = null;
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     private VariableResolver legacyVariableResolver = null;
     private CompositeELResolver facesELResolverForJsp = null;
 
@@ -183,22 +183,22 @@ public class ApplicationAssociate {
     applicationMap.remove(ASSOCIATE_KEY);
     }
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public void setLegacyVRChainHead(VariableResolver resolver) {
         this.legacyVRChainHead = resolver;
     }
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public VariableResolver getLegacyVRChainHead() {
         return legacyVRChainHead;
     }
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public void setLegacyPRChainHead(PropertyResolver resolver) {
         this.legacyPRChainHead = resolver;
     }
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public PropertyResolver getLegacyPRChainHead() {
         return legacyPRChainHead;
     }
@@ -247,7 +247,7 @@ public class ApplicationAssociate {
      * Maintains the PropertyResolver called through 
      * Application.setPropertyResolver()
      */
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public void setLegacyPropertyResolver(PropertyResolver resolver){
         this.legacyPropertyResolver = resolver;
     }
@@ -256,7 +256,7 @@ public class ApplicationAssociate {
      * Returns the PropertyResolver called through 
      * Application.getPropertyResolver()
      */
-     @SuppressWarnings("Deprecation")
+     @SuppressWarnings("deprecation")
     public PropertyResolver getLegacyPropertyResolver(){
         return legacyPropertyResolver;
     }
@@ -265,7 +265,7 @@ public class ApplicationAssociate {
      * Maintains the PropertyResolver called through 
      * Application.setVariableResolver()
      */
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public void setLegacyVariableResolver(VariableResolver resolver){
         this.legacyVariableResolver = resolver;
     }
@@ -274,7 +274,7 @@ public class ApplicationAssociate {
      * Returns the VariableResolver called through 
      * Application.getVariableResolver()
      */
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public VariableResolver getLegacyVariableResolver(){
         return legacyVariableResolver;
     }

@@ -79,7 +79,7 @@ public class StateManagerImpl extends StateManager {
 
     // ---------------------------------------------------------- Public Methods
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public UIViewRoot restoreView(FacesContext context, String viewId,
                                   String renderKitId) {
 
@@ -185,7 +185,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     @Override
     public SerializedView saveSerializedView(FacesContext context) {
 
@@ -289,7 +289,7 @@ public class StateManagerImpl extends StateManager {
     }
     
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     @Override
     public void writeState(FacesContext context, SerializedView state)
           throws IOException {
@@ -539,7 +539,7 @@ public class StateManagerImpl extends StateManager {
 
     }
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     private void restoreState(FacesContext context,
                               UIViewRoot root,
                               String renderKitId) {
@@ -559,7 +559,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     private UIViewRoot restoreTree(FacesContext context,
                                    String viewId,
                                    String renderKitId) {

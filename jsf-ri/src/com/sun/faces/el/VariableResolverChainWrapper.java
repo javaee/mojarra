@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.11 2006/06/09 13:11:42 rogerk Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.12 2006/08/29 06:13:00 tony_robertson Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -44,10 +44,10 @@ import com.sun.faces.util.MessageUtils;
 
 public class VariableResolverChainWrapper extends ELResolver {
     
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     private VariableResolver legacyVR = null;
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public VariableResolverChainWrapper(VariableResolver variableResolver) {
         this.legacyVR = variableResolver;
     }
@@ -61,7 +61,7 @@ public class VariableResolverChainWrapper extends ELResolver {
     private static final String REENTRANT_GUARD = "com.sun.faces.LegacyVariableResolver";
 
     @Override
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public Object getValue(ELContext context, Object base, Object property)
         throws ELException {
 

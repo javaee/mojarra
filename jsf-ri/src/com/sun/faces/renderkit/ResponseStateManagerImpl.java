@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.36 2006/06/29 21:01:51 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.37 2006/08/29 06:13:00 tony_robertson Exp $
  */
 
 /*
@@ -101,7 +101,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     
     /** @see {@link ResponseStateManager#getComponentStateToRestore(javax.faces.context.FacesContext)} */
     @Override
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public Object getComponentStateToRestore(FacesContext context) {
 
         // requestMap is a local variable so we don't need to synchronize        
@@ -123,7 +123,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     /** @see {@link ResponseStateManager#getTreeStructureToRestore(javax.faces.context.FacesContext,String)} */
     @Override
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public Object getTreeStructureToRestore(FacesContext context,
                                             String treeId) {
 
@@ -195,7 +195,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     /** @see {@link ResponseStateManager#writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView)} */
     @Override
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public void writeState(FacesContext context, SerializedView view)
     throws IOException {
 

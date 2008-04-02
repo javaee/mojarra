@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverChainWrapper.java,v 1.11 2006/06/02 17:21:34 rlubke Exp $
+ * $Id: PropertyResolverChainWrapper.java,v 1.12 2006/08/29 06:13:00 tony_robertson Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -41,16 +41,16 @@ import java.util.List;
 
 public class PropertyResolverChainWrapper extends ELResolver {
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     private PropertyResolver legacyPR = null;
     
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public PropertyResolverChainWrapper(PropertyResolver propertyResolver) {
         this.legacyPR = propertyResolver;
     }
 
     @Override
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public Object getValue(ELContext context, Object base, Object property) 
         throws ELException {
         if (base == null || property == null) {
@@ -83,7 +83,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
     }
 
     @Override
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public Class getType(ELContext context, Object base, Object property) 
         throws ELException {
         if (base == null || property == null) {
@@ -117,7 +117,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
     }
 
     @Override
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public void  setValue(ELContext context, Object base, Object property,
         Object val) throws ELException {
         if (base == null || property == null) {
@@ -149,7 +149,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
     }
 
     @Override
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     public boolean isReadOnly(ELContext context, Object base, Object property) 
         throws ELException {
         if (base == null || property == null) {

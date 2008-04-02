@@ -44,7 +44,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * This test case will validate  the various adapter classes
  * found in jsf-api/template-src
  */
- @SuppressWarnings("Deprecation")
+ @SuppressWarnings("deprecation")
 public class TestAdapters extends ServletFacesTestCase {
 
     ExpressionFactory factory;

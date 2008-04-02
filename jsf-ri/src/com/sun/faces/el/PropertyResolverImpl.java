@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.25 2006/05/17 19:00:45 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.26 2006/08/29 06:13:00 tony_robertson Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.MessageUtils;
  * Concrete implementation of <code>PropertyResolver</code>.
  * </p>
  */
-@SuppressWarnings("Deprecation")
+@SuppressWarnings("deprecation")
 public class PropertyResolverImpl extends PropertyResolver {
 
     private ELResolver elResolver = null;

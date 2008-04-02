@@ -1,5 +1,5 @@
 /*
- * $Id: DummyPropertyResolverImpl.java,v 1.6 2006/05/17 17:31:29 rlubke Exp $
+ * $Id: DummyPropertyResolverImpl.java,v 1.7 2006/08/29 06:12:59 tony_robertson Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import javax.faces.context.FacesContext;
  * provided to ensure that the legacy property resolvers continue to work with
  * unfied EL API
  */
-@SuppressWarnings("Deprecation")
+@SuppressWarnings("deprecation")
 public class DummyPropertyResolverImpl extends PropertyResolver {
     
     public Object getValue(Object base, Object property)

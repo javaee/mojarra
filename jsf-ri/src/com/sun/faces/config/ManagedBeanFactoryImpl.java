@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.11 2006/05/17 17:31:29 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.12 2006/08/29 06:12:59 tony_robertson Exp $
  */
 
 /*
@@ -1005,7 +1005,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         return result;
     }
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     private boolean hasValidLifespan(String value) throws EvaluationException, ReferenceSyntaxException {
 	Scope valueScope = null;
 
@@ -1048,7 +1048,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         return false;
     }
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     private Scope getScopeForSingleExpression(String value) throws ReferenceSyntaxException, EvaluationException {
 	String [] firstSegment = new String[1];
         Scope valueScope = Util.getScope(value, firstSegment);
@@ -1071,7 +1071,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 	return valueScope;
     }
 
-    @SuppressWarnings("Deprecation")
+    @SuppressWarnings("deprecation")
     private Scope getNarrowestScopeFromExpression(String expression) throws ReferenceSyntaxException {
 	// break the argument expression up into its component
 	// expressions, ignoring literals.

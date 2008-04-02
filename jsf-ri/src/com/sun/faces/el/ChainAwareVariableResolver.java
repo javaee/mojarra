@@ -1,5 +1,5 @@
 /*
- * $Id: ChainAwareVariableResolver.java,v 1.2 2006/05/17 17:31:29 rlubke Exp $
+ * $Id: ChainAwareVariableResolver.java,v 1.3 2006/08/29 06:12:59 tony_robertson Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import com.sun.faces.el.FacesCompositeELResolver.ELResolverChainType;
  * be used.</p>
  */
 
-@SuppressWarnings("Deprecation")
+@SuppressWarnings("deprecation")
 public class ChainAwareVariableResolver extends VariableResolver {
 
     public ChainAwareVariableResolver() {
