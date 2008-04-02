@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.26 2004/02/26 20:34:28 eburns Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.27 2004/07/27 19:36:42 jayashri Exp $
  */
 
 /*
@@ -18,13 +18,14 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
+import javax.faces.component.UICommand;
 
 /**
  * <B>TestApplyRequestValuesPhase</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.26 2004/02/26 20:34:28 eburns Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.27 2004/07/27 19:36:42 jayashri Exp $
  */
 
 public class TestApplyRequestValuesPhase extends ServletFacesTestCase {
@@ -72,6 +73,10 @@ public class TestApplyRequestValuesPhase extends ServletFacesTestCase {
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
         theRequest.addParameter(
             "basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
+         theRequest.addParameter(
+            "basicForm" + NamingContainer.SEPARATOR_CHAR + "testCmd", "submit");
+          theRequest.addParameter(
+            "basicForm" + NamingContainer.SEPARATOR_CHAR + "testInt", "10");
         theRequest.addParameter("basicForm", "basicForm");
 
     }
@@ -122,6 +127,97 @@ public class TestApplyRequestValuesPhase extends ServletFacesTestCase {
         assertTrue(null != userName);
         assertTrue(null != (value = (String) userName.getSubmittedValue()));
         assertTrue(value.equals("jerry"));
+        
+        testImmediate(basicForm);
+    }
+    
+    public void testImmediate(UIForm basicForm) {
+        
+        Phase
+            restoreView = new RestoreViewPhase(),
+            applyValues = new ApplyRequestValuesPhase();
+
+        
+         // add a UICommand with "immediate" attribute set
+        UICommand testCmd = new UICommand();
+        testCmd.setId("testCmd");
+        testCmd.setImmediate(true);
+        basicForm.getChildren().add(testCmd);
+        
+        //verify immediate attribute works correctly.
+        System.out.println("Testing 'immediate' attribute on UIInput and UICommand");
+        UIInput testInt = new UIInput();
+        testInt.setConverter(new javax.faces.convert.IntegerConverter());
+        testInt.setRequired(true);
+        testInt.setId("testInt");
+        testInt.setImmediate(true);
+        basicForm.getChildren().add(testInt); 
+        
+        // 3. Apply values
+        //
+        Integer testNumber = new Integer(10);
+        applyValues.execute(getFacesContext());
+        assertTrue((getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
+
+        UIComponent root = getFacesContext().getViewRoot();
+        try {
+            testInt = (UIInput) basicForm.findComponent("testInt");
+        } catch (Throwable e) {
+            System.out.println(e.getMessage());
+            assertTrue("Can't find testInt in tree", false);
+        }
+        
+        //make sure the value is converted and validated after Apply request 
+        // values phase.
+        assertTrue(null != testInt);
+        assertTrue(null != testInt.getLocalValue());
+        assertTrue(testInt.isValid());
+        assertTrue(testNumber.equals((Integer) testInt.getValue()));
+        testInt.setValue(null);
+        
+        // immediate "false" on command button but set on UIInput
+        testCmd.setImmediate(false);
+        applyValues.execute(getFacesContext());
+        assertTrue((getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
+
+        root = getFacesContext().getViewRoot();
+        try {
+            testInt = (UIInput) basicForm.findComponent("testInt");
+        } catch (Throwable e) {
+            System.out.println(e.getMessage());
+            assertTrue("Can't find testInt in tree", false);
+        }
+        
+        //make sure the value is converted and validated after Apply request 
+        // values phase.
+        assertTrue(null != testInt);
+        assertTrue(null != testInt.getLocalValue());
+        assertTrue(testInt.isValid());
+        assertTrue(testNumber.equals((Integer) testInt.getValue()));
+        testInt.setValue(null);
+        
+        // immediate "true" on command and not set on UIInput.
+        testInt.setImmediate(false);
+        testCmd.setImmediate(true);
+        applyValues.execute(getFacesContext());
+        assertTrue((getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
+
+        root = getFacesContext().getViewRoot();
+        try {
+            testInt = (UIInput) basicForm.findComponent("testInt");
+        } catch (Throwable e) {
+            System.out.println(e.getMessage());
+            assertTrue("Can't find testInt in tree", false);
+        }
+        
+        //make sure the value is converted and validated after Apply request 
+        // values phase.
+        assertTrue(null != testInt);
+        assertTrue(null == testInt.getValue());
+        assertTrue(testInt.isValid());
     }
 
 
