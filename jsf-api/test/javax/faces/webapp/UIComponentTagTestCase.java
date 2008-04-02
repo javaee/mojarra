@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.1 2003/05/02 05:05:00 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.2 2003/07/14 23:28:02 craigmcc Exp $
  */
 
 /*
@@ -145,13 +145,13 @@ public class UIComponentTagTestCase extends TestCase {
         configure("C1", "C2", true, false);
 
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
         reset();
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -164,14 +164,14 @@ public class UIComponentTagTestCase extends TestCase {
         configure(null, null, true, false);
 
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -184,14 +184,14 @@ public class UIComponentTagTestCase extends TestCase {
         configure(null, "C2", true, false);
 
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -204,14 +204,14 @@ public class UIComponentTagTestCase extends TestCase {
         configure("C1", null, true, false);
 
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -241,14 +241,14 @@ public class UIComponentTagTestCase extends TestCase {
         configure("C1", "C2", false, false);
 
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -260,14 +260,14 @@ public class UIComponentTagTestCase extends TestCase {
         configure("C1", "C2", true, true);
 
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/BROOT/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA/EROOT", text());
-        assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/B/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -279,13 +279,13 @@ public class UIComponentTagTestCase extends TestCase {
         add(null, new TestTag("A", "a"));
 
         render();
-        assertEquals("/BROOT/bA/eA/EROOT", text());
-        assertEquals("/ROOT/A-a", tree());
+        assertEquals("/B/bA/eA/E", text());
+        assertEquals("//A-a", tree());
 
         reset();
         render();
-        assertEquals("/BROOT/bA/eA/EROOT", text());
-        assertEquals("/ROOT/A-a", tree());
+        assertEquals("/B/bA/eA/E", text());
+        assertEquals("//A-a", tree());
 
     }
 
@@ -296,13 +296,13 @@ public class UIComponentTagTestCase extends TestCase {
         add(null, new TestTag(null, "a"));
 
         render();
-        assertEquals("/BROOT/b/e/EROOT", text());
-        assertEquals("/ROOT/-a", tree());
+        assertEquals("/B/b/e/E", text());
+        assertEquals("//-a", tree());
 
         reset();
         render();
-        assertEquals("/BROOT/b/e/EROOT", text());
-        assertEquals("/ROOT/-a", tree());
+        assertEquals("/B/b/e/E", text());
+        assertEquals("//-a", tree());
 
     }
 

@@ -217,10 +217,8 @@
                 test.UISelectOne,
                 test.UINamingContainer,
                 test.ConfigFile,
-                test.PhaseId">
-<!-- non running
-                test.UIComponentTag,
---> 
+                test.PhaseId,
+                test.UIComponentTag">
   </target>
 
   <target name="test.UIComponent" depends="build.test">
