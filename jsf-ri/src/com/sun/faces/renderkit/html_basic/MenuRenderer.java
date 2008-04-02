@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.67 2006/02/02 16:53:20 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.68 2006/03/01 19:04:19 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -484,12 +484,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
              logger.fine("Rendering " + itemCount + " options");
         }
         // If "size" is *not* set explicitly, we have to default it correctly
-        Object size = component.getAttributes().get("size");
-        if ((null == size) ||
-            ((size instanceof Integer) &&
-            ((Integer) size).intValue() == Integer.MIN_VALUE)) {
-            writeDefaultSize(writer, itemCount);
+        Integer size = (Integer) component.getAttributes().get("size");
+        if (null == size || size == Integer.MIN_VALUE) {
+            size = itemCount;
         }
+        writeDefaultSize(writer, size);
 
         RenderKitUtils.renderPassThruAttributes(context, 
                                                 writer, 
