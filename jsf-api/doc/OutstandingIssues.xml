@@ -1823,5 +1823,31 @@ because it added support for the standard HTML attributes.</p>
   <effort>Large</effort>
 </issue>
 
+<issue>
+  <id>Re-OrganizingSpec-71</id>
+  <originator>Ed Burns</originator>
+  <summary>Re-organize spec.</summary>
+  <description>
+    <p> </p>
+  </description>
+  <status>OPEN</status>
+  <status-date>8 January 2003</status-date>
+  <priority>2</priority>
+  <effort>Medium</effort>
+</issue>
+
+<issue>
+  <id>Iterator_Support-72</id>
+  <originator>JSF-Forum, C1</originator>
+  <summary>Will JSF support Iterator tag ?</summary>
+  <description>
+    <p> Currently JSF doesn't have an iterator tag. List Pages are very common in any application.  Richard from C1 has made some suggestions in the forum discussions on how it can be possibly implemented</p>
+  </description>
+  <status>OPEN</status>
+  <status-date>8 January 2003</status-date>
+  <priority>2</priority>
+  <effort>Medium</effort>
+</issue>
+
 
 </issues>
