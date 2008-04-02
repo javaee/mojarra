@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.103 2006/02/14 19:59:43 rlubke Exp $
+ $Id: build-tests.xml,v 1.104 2006/02/14 22:18:42 rlubke Exp $
 -->
 
 <!--
@@ -890,13 +890,11 @@
               request="${context.path}/faces/interweaving06.jsp"  
               recordGolden="${local.golden.path}/interweaving06.txt"
               golden="${golden.path}/interweaving06.txt"/>
-         
-         <!-- Commented out until JSTL fix is publically available
+                  
          <jsf.tester
               request="${context.path}/faces/interweaving07.jsp"  
               recordGolden="${local.golden.path}/interweaving07.txt"
-              golden="${golden.path}/interweaving07.txt"/>
-         -->
+              golden="${golden.path}/interweaving07.txt"/>        
         
         <jsf.tester
               request="${context.path}/faces/include-import-interweaving.jsp"
