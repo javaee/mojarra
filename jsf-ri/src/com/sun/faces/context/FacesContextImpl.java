@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.56 2003/10/21 16:41:47 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.57 2003/10/22 19:37:21 rlubke Exp $
  */
 
 /*
@@ -131,6 +131,7 @@ public class FacesContextImpl extends FacesContext
     }
 
     public Iterator getClientIdsWithMessages() {
+        assertNotReleased();
 	Iterator result = null;
 	if (null == componentMessageLists) {
 	    result = Collections.EMPTY_LIST.iterator();
