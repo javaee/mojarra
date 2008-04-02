@@ -19,7 +19,7 @@ function processResponse() {
     var request = getXMLHttpRequest();
     if (request.readyState == 4) {
         if (request.status == 200) {
-            var action = request.getResponseHeader("VIEW_URI");
+            var action = request.getResponseHeader("VIEW-URI");
             window.location.href = action;
             return;
         }
@@ -64,7 +64,7 @@ function getForm(control) {
     var parent = control.parentNode;
     while (parent != null && parent.nodeType == 1) {
         if (parent.namespaceURI == namespaceURI &&
-            parent.localName == "g" &&
+            parent.localName == "window" &&
             parent.getAttribute("action") != null) {
             form = parent;
             break;
@@ -85,15 +85,16 @@ function getPostData(form, control) {
      */
     var formValues = new Array();
     formValues[0] = new Object();
-    formValues[0].id = control.parentNode.id;
-    formValues[0].value = control.parentNode.id;
+    formValues[0].id = control.id;
+    formValues[0].value = control.id;
     formValues[1] = new Object();
     formValues[1].id = form.id;
     formValues[1].value = form.id;
 
     var child = form.firstChild;
     while (child != null) {
-        if (child.nodeType == 1 && child.localName == "text" &&
+        if (child.nodeType == 1 && 
+            child.localName == "textbox" &&
             child.getAttribute("value") != null) {
             var len = formValues.length;
             formValues[len] = new Object();
@@ -109,4 +110,5 @@ function getPostData(form, control) {
             postData += "&";
         }
     }
+    return postData;
 }

@@ -250,7 +250,11 @@
     <copy todir="${build}/${webapp}/src/java/renderkits">
       <fileset dir="src/java/renderkits"/>
     </copy>
+    <copy todir="${build}/${webapp}/src/java/demo">
+      <fileset dir="src/java/demo"/>
+    </copy>
     <copy todir="${build}/${webapp}/WEB-INF" file="web/WEB-INF/tlds/svg.tld"/>
+    <copy todir="${build}/${webapp}/WEB-INF" file="web/WEB-INF/tlds/xul.tld"/>
 
     <!-- copy the script files to the webapp for viewing by the user -->
     <copy todir="${build}/${webapp}/src/script">

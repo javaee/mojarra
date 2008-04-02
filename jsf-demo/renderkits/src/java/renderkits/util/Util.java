@@ -11,12 +11,22 @@ import java.io.Writer;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.component.ValueHolder;
+import javax.faces.component.UIComponent;
+import javax.faces.convert.Converter;
+
 public class Util extends Object {
                                                                                                                
     //
     // Private/Protected Constants
     //
     public static final String FACES_LOGGER = "javax.enterprise.resource.jsf.";
+    public static final String RENDERKIT_LOGGER = "renderkit";
+    public static final String TAGLIB_LOGGER = "taglib";
+
                                                                                                                
     public static final String FACES_LOG_STRINGS =
             "com.sun.faces.LogStrings";
@@ -31,6 +41,49 @@ public class Util extends Object {
         return Logger.getLogger(loggerName, FACES_LOG_STRINGS );
     }
     
+    /**
+     * Utility method for determining if a component is 'disabled' or 'readonly'
+     */
+    public static boolean componentIsDisabledOnReadonly(UIComponent component) {
+        Object disabledOrReadonly = null;
+        boolean result = false;
+        if (null !=
+            (disabledOrReadonly = component.getAttributes().get("disabled"))) {
+            if (disabledOrReadonly instanceof String) {
+                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
+            } else {
+                result = disabledOrReadonly.equals(Boolean.TRUE);
+            }
+        }
+        if ((result == false) &&
+            null !=
+            (disabledOrReadonly = component.getAttributes().get("readonly"))) {
+            if (disabledOrReadonly instanceof String) {
+                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
+            } else {
+                result = disabledOrReadonly.equals(Boolean.TRUE);
+            }
+        }
+                                                                                                                    
+        return result;
+    }
+
+    public static Converter getConverterForClass(Class converterClass) {
+        if (converterClass == null) {
+            return null;
+        }
+        try {
+            ApplicationFactory aFactory =
+                (ApplicationFactory) FactoryFinder.getFactory(
+                    FactoryFinder.APPLICATION_FACTORY);
+            Application application = aFactory.getApplication();
+            return (application.createConverter(converterClass));
+        } catch (Exception e) {
+            return (null);
+        }
+    }
+
+
     //----------------------------------------------------------
     // The following is used to verify encodings
     //----------------------------------------------------------

@@ -1,0 +1,8 @@
+box.header { border:2px solid red; }
+label.header {font-size:24pt;color:blue;text-align:center;}
+
+.groupboxClass {border:2px solid blue}
+.groupboxDetailClass {height:350px; overflow:auto;}
+.captionClass {font-size:14pt;}
+.info {font-size:12pt;}
+

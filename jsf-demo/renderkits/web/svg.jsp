@@ -51,38 +51,69 @@
       rect:hover {fill-opacity:0.3;}
     </style>
 
-    <script xlink:href="../src/script/http.es"/>
+    <script xlink:href="../src/script/http-svg.es"/>
     <script xlink:href="../src/script/lifecycle.es"/>
     <f:view renderKitId="SVG" >  
         <g:form id="form">
            <g:outputText x="100" y="50" textAnchor="middle" value="JSF Request Processing Lifecycle"
                          style="stroke:black; stroke-width:0.5; fill:none; font-size:32pt;" />
+
+           <!-- Restore View Graphic -->
+
            <g:line id="toRestore" x1="25" y1="125" x2="100" y2="125" style="stroke:black; fill:none;" />
-           <g:rectangle width="120" height="50" x="100" y="100" style="stroke:black; fill:#8470ff;" />
-           <g:outputText x="130" y="120" textAnchor="middle" value="Restore" />
-           <g:outputText x="135" y="140" textAnchor="middle" value="View" />
+           <g:commandButton id="restore" width="120" height="50" x="100" y="100" type="submit"
+              action="xul-restore" style="stroke:black; fill:#8470ff;" >
+              <g:outputText x="130" y="120" textAnchor="middle" value="Restore" />
+              <g:outputText x="135" y="140" textAnchor="middle" value="View" />
+           </g:commandButton>
+
+           <!-- Apply Request Values Graphic -->
+
            <g:line id="toApply" x1="220" y1="125" x2="350" y2="125" style="stroke:black; fill:none;" />
-           <g:rectangle width="120" height="50" x="350" y="100" style="stroke:black; fill:#8470ff;"/>
-           <g:outputText x="360" y="120" textAnchor="middle" value="Apply Request" />
-           <g:outputText x="385" y="140" textAnchor="middle" value="Values" />
+           <g:commandButton id="apply" width="120" height="50" x="350" y="100" type="submit"
+              action="xul-apply" style="stroke:black; fill:#8470ff;" >
+              <g:outputText x="360" y="120" textAnchor="middle" value="Apply Request" />
+              <g:outputText x="385" y="140" textAnchor="middle" value="Values" />
+           </g:commandButton>
+
+           <!-- Process Validation Graphic -->
+
            <g:line id="toVal" x1="470" y1="125" x2="600" y2="125" style="stroke: black; fill:none;" />
-           <g:rectangle width="120" height="50" x="600" y="100" style="stroke:black; fill:#8470ff;"/>
-           <g:outputText x="630" y="120" textAnchor="middle" value="Process" />
-           <g:outputText x="625" y="140" textAnchor="middle" value="Validations" />
+           <g:commandButton id="validation" width="120" height="50" x="600" y="100" type="submit"
+              action="xul-valid" style="stroke:black; fill:#8470ff;" >
+              <g:outputText x="630" y="120" textAnchor="middle" value="Process" />
+              <g:outputText x="625" y="140" textAnchor="middle" value="Validations" />
+           </g:commandButton>
+
+           <!-- Update Model Values Graphic -->
+
            <g:line id="toUpdate1" x1="720" y1="125" x2="785" y2="125" style="stroke: black; fill: none;" />
            <g:line id="toUpdate2" x1="785" y1="125" x2="785" y2="275" style="stroke: black; fill: none;" />
            <g:line id="toUpdate3" x1="785" y1="275" x2="720" y2="275" style="stroke: black; fill: none;" />
-           <g:rectangle width="120" height="50" x="600" y="250" style="stroke:black; fill:#8470ff;"/>
-           <g:outputText x="610" y="270" textAnchor="middle" value="Update Model" />
-           <g:outputText x="635" y="290" textAnchor="middle" value="Values" />
+           <g:commandButton id="update" width="120" height="50" x="600" y="250" type="submit"
+              action="xul-update" style="stroke:black; fill:#8470ff;" >
+              <g:outputText x="610" y="270" textAnchor="middle" value="Update Model" />
+              <g:outputText x="635" y="290" textAnchor="middle" value="Values" />
+           </g:commandButton>
+
+           <!-- Invoke Applications Graphic -->
+
            <g:line id="toApp" x1="600" y1="275" x2="470" y2="275" style="stroke: black; fill: none;" />
-           <g:rectangle width="120" height="50" x="350" y="250" style="stroke:black; fill:#8470ff;"/>
-           <g:outputText x="380" y="270" textAnchor="middle" value="Invoke" />
-           <g:outputText x="370" y="290" textAnchor="middle" value="Applications" />
+           <g:commandButton id="invoke" width="120" height="50" x="350" y="250" type="submit"
+              action="xul-invoke" style="stroke:black; fill:#8470ff;" >
+              <g:outputText x="380" y="270" textAnchor="middle" value="Invoke" />
+              <g:outputText x="370" y="290" textAnchor="middle" value="Applications" />
+           </g:commandButton>
+
+           <!-- Render Response Graphic -->
+
            <g:line id="toRender" x1="350" y1="275" x2="220" y2="275" style="stroke: black; fill: none;" />
-           <g:rectangle width="120" height="50" x="100" y="250" style="stroke:black; fill:#8470ff;"/>
-           <g:outputText x="130" y="270" textAnchor="middle" value="Render" />
-           <g:outputText x="125" y="290" textAnchor="middle" value="Response" />
+           <g:commandButton id="render" width="120" height="50" x="100" y="250" type="submit"
+              action="xul-render" style="stroke:black; fill:#8470ff;" >
+              <g:outputText x="130" y="270" textAnchor="middle" value="Render" />
+              <g:outputText x="125" y="290" textAnchor="middle" value="Response" />
+           </g:commandButton>
+
            <g:line id="toResponse" x1="100" y1="275" x2="25" y2="275" style="stroke: black; fill: none;" />
            <g:line id="toRender1" x1="160" y1="150" x2="160" y2="250" style="stroke: black; fill: none;" />
            <g:line id="convalError1" x1="660" y1="150" x2="660" y2="200" 
@@ -91,6 +122,8 @@
                    style="stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden" />
            <g:line id="convalError3" x1="170" y1="200" x2="170" y2="250" 
                    style="stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden" />
+
+           <!-- The small "request" symbol -->
 
            <g:rectangle id="request" x="25" y="120" rx="5" ry="5" width="15" height="10" style="fill: #8470ff;"/>
 

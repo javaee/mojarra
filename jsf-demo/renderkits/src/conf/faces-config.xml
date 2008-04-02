@@ -91,18 +91,53 @@
     </renderer>
   </render-kit>
 
+  <render-kit>
+    <render-kit-id>XUL</render-kit-id>
+    <render-kit-class>renderkits.renderkit.xul.XULRenderKit</render-kit-class>
+    <renderer>
+      <component-family>javax.faces.Form</component-family>
+      <renderer-type>renderkit.xul.Form</renderer-type>
+      <renderer-class>renderkits.renderkit.xul.FormRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>javax.faces.Command</component-family>
+      <renderer-type>renderkit.xul.Button</renderer-type>
+      <renderer-class>renderkits.renderkit.xul.ButtonRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>renderkit.xul.Label</renderer-type>
+      <renderer-class>renderkits.renderkit.xul.LabelRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>renderkit.xul.Text</renderer-type>
+      <renderer-class>renderkits.renderkit.xul.TextRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>javax.faces.Panel</component-family>
+      <renderer-type>renderkit.xul.Grid</renderer-type>
+      <renderer-class>renderkits.renderkit.xul.GridRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>javax.faces.Panel</component-family>
+      <renderer-type>renderkit.xul.Group</renderer-type>
+      <renderer-class>renderkits.renderkit.xul.GroupRenderer</renderer-class>
+    </renderer>
+  </render-kit>
+
   <navigation-rule>
     <description>
         The decision rule used by the NavigationHandler to
         determine which view must be displayed after the
-        current view, greeting.jsp is processed.
+        current view, html.jsp is processed.
     </description>
     <from-view-id>/html.jsp</from-view-id>
     <navigation-case>
         <description>
-            Indicates to the NavigationHandler that the response.jsp
+            Indicates to the NavigationHandler that the svg.jsp
             view must be displayed if the Action referenced by a 
-            UICommand component on the greeting.jsp view returns 
+            UICommand component on the html.jsp view returns 
             the outcome "success".
         </description>
       <from-outcome>success</from-outcome>
@@ -114,19 +149,186 @@
     <description>
         The decision rule used by the NavigationHandler to
         determine which view must be displayed after the
-        current view, greeting.jsp is processed.
+        current view, svg.jsp is processed.
     </description>
     <from-view-id>/svg.jsp</from-view-id>
     <navigation-case>
         <description>
-            Indicates to the NavigationHandler that the response.jsp
+            Indicates to the NavigationHandler that the html.jsp
             view must be displayed if the Action referenced by a
-            UICommand component on the greeting.jsp view returns
+            UICommand component on the svg.jsp view returns
             the outcome "success".
         </description>
       <from-outcome>success</from-outcome>
       <to-view-id>/html.jsp</to-view-id>
     </navigation-case>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the xul-restore.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the svg.jsp view returns
+            the outcome "xul-restore".
+        </description>
+      <from-outcome>xul-restore</from-outcome>
+      <to-view-id>/xul-restore.jsp</to-view-id>
+    </navigation-case>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the xul-apply.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the svg.jsp view returns
+            the outcome "xul-apply".
+        </description>
+      <from-outcome>xul-apply</from-outcome>
+      <to-view-id>/xul-apply.jsp</to-view-id>
+    </navigation-case>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the xul-valid.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the svg.jsp view returns
+            the outcome "xul-valid".
+        </description>
+      <from-outcome>xul-valid</from-outcome>
+      <to-view-id>/xul-valid.jsp</to-view-id>
+    </navigation-case>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the xul-update.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the svg.jsp view returns
+            the outcome "xul-update".
+        </description>
+      <from-outcome>xul-update</from-outcome>
+      <to-view-id>/xul-update.jsp</to-view-id>
+    </navigation-case>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the xul-invoke.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the svg.jsp view returns
+            the outcome "xul-invoke".
+        </description>
+      <from-outcome>xul-invoke</from-outcome>
+      <to-view-id>/xul-invoke.jsp</to-view-id>
+    </navigation-case>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the xul-render.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the svg.jsp view returns
+            the outcome "xul-render".
+        </description>
+      <from-outcome>xul-render</from-outcome>
+      <to-view-id>/xul-render.jsp</to-view-id>
+    </navigation-case>
   </navigation-rule>
-
+  <navigation-rule>
+    <description>
+        The decision rule used by the NavigationHandler to
+        determine which view must be displayed after the
+        current view, xul-restore.jsp is processed.
+    </description>
+    <from-view-id>/xul-restore.jsp</from-view-id>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the svg.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the xul-restore.jsp view returns
+            the outcome "xul-back".
+        </description>
+      <from-outcome>xul-back</from-outcome>
+      <to-view-id>/svg.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+  <navigation-rule>
+    <description>
+        The decision rule used by the NavigationHandler to
+        determine which view must be displayed after the
+        current view, xul-apply.jsp is processed.
+    </description>
+    <from-view-id>/xul-apply.jsp</from-view-id>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the svg.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the xul-apply.jsp view returns
+            the outcome "xul-back".
+        </description>
+      <from-outcome>xul-back</from-outcome>
+      <to-view-id>/svg.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+  <navigation-rule>
+    <description>
+        The decision rule used by the NavigationHandler to
+        determine which view must be displayed after the
+        current view, xul-valid.jsp is processed.
+    </description>
+    <from-view-id>/xul-valid.jsp</from-view-id>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the svg.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the xul-valid.jsp view returns
+            the outcome "xul-back".
+        </description>
+      <from-outcome>xul-back</from-outcome>
+      <to-view-id>/svg.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+  <navigation-rule>
+    <description>
+        The decision rule used by the NavigationHandler to
+        determine which view must be displayed after the
+        current view, xul-update.jsp is processed.
+    </description>
+    <from-view-id>/xul-update.jsp</from-view-id>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the svg.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the xul-update.jsp view returns
+            the outcome "xul-back".
+        </description>
+      <from-outcome>xul-back</from-outcome>
+      <to-view-id>/svg.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+  <navigation-rule>
+    <description>
+        The decision rule used by the NavigationHandler to
+        determine which view must be displayed after the
+        current view, xul-invoke.jsp is processed.
+    </description>
+    <from-view-id>/xul-invoke.jsp</from-view-id>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the svg.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the xul-invoke.jsp view returns
+            the outcome "xul-back".
+        </description>
+      <from-outcome>xul-back</from-outcome>
+      <to-view-id>/svg.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+  <navigation-rule>
+    <description>
+        The decision rule used by the NavigationHandler to
+        determine which view must be displayed after the
+        current view, xul-render.jsp is processed.
+    </description>
+    <from-view-id>/xul-render.jsp</from-view-id>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the svg.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the xul-render.jsp view returns
+            the outcome "xul-back".
+        </description>
+      <from-outcome>xul-back</from-outcome>
+      <to-view-id>/svg.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
 </faces-config>
