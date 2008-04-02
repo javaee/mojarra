@@ -646,7 +646,7 @@
         <display-name></display-name>
         <icon></icon>
         <attribute-name>height</attribute-name>
-        <attribute-class>int</attribute-class>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <attribute>
@@ -654,7 +654,7 @@
         <display-name></display-name>
         <icon></icon>
         <attribute-name>width</attribute-name>
-        <attribute-class>int</attribute-class>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <component-type>GraphicImage</component-type>
@@ -757,7 +757,7 @@
         <display-name></display-name>
         <icon></icon>
         <attribute-name>cellspacing</attribute-name>
-        <attribute-class>int</attribute-class>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <attribute>
@@ -765,7 +765,7 @@
         <display-name></display-name>
         <icon></icon>
         <attribute-name>cellpadding</attribute-name>
-        <attribute-class>int</attribute-class>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <attribute>
@@ -773,7 +773,7 @@
         <display-name></display-name>
         <icon></icon>
         <attribute-name>width</attribute-name>
-        <attribute-class>int</attribute-class>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <component-type>PanelList</component-type>
