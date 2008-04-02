@@ -213,7 +213,7 @@ necessary to generate required classes.
            destdir="${build.classes}"
            debug="${debug}"
            deprecation="${deprecation}"
-           source="1.4"
+           source="1.5"
            optimize="${optimize}" >
       <classpath refid="compile.classpath" />
       <classpath refid="run.classpath" />

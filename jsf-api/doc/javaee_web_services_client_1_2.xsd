@@ -1,23 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ The contents of this file are subject to the terms
+ of the Common Development and Distribution License
+ (the "License").  You may not use this file except
+ in compliance with the License.
+
+ You can obtain a copy of the license at
+ glassfish/bootstrap/legal/CDDLv1.0.txt or
+ https://glassfish.dev.java.net/public/CDDLv1.0.html.
+ See the License for the specific language governing
+ permissions and limitations under the License.
+
+ When distributing Covered Code, include this CDDL
+ HEADER in each file and include the License file at
+ glassfish/bootstrap/legal/CDDLv1.0.txt.  If applicable,
+ add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your
+ own identifying information: Portions Copyright [yyyy]
+ [name of copyright owner]
+-->
+
 <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema"
-	    targetNamespace="http://java.sun.com/xml/ns/j2ee"
-	    xmlns:j2ee="http://java.sun.com/xml/ns/j2ee"
+	    targetNamespace="http://java.sun.com/xml/ns/javaee"
+	    xmlns:javaee="http://java.sun.com/xml/ns/javaee"
 	    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	    elementFormDefault="qualified"
 	    attributeFormDefault="unqualified"
-	    version="1.1">
+	    version="1.2">
   <xsd:annotation>
     <xsd:documentation>
-      @(#)j2ee_web_services_client_1_1.xsds	1.10 02/11/03
+      @(#)javaee_web_services_client_1_2.xsds	1.11 08/05/05
     </xsd:documentation>
   </xsd:annotation>
 
   <xsd:annotation>
     <xsd:documentation>
 
-      Copyright 2002 Sun Microsystems, Inc., 901 San Antonio
-      Road, Palo Alto, California 94303, U.S.A. All rights
-      reserved.
+      Copyright 2003-2005 Sun Microsystems, Inc.
+      4150 Network Circle
+      Santa Clara, California 95054
+      U.S.A
+      All rights reserved.
 
       Sun Microsystems, Inc. has intellectual property rights
       relating to technology described in this document. In
@@ -46,6 +70,7 @@
 
     </xsd:documentation>
   </xsd:annotation>
+
   <xsd:annotation>
     <xsd:documentation>
 
@@ -72,7 +97,7 @@
 
     <xsd:sequence>
       <xsd:element name="service-endpoint-interface"
-		   type="j2ee:fully-qualified-classType">
+		   type="javaee:fully-qualified-classType">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -85,7 +110,7 @@
       </xsd:element>
 
       <xsd:element name="port-component-link"
-		   type="j2ee:string"
+		   type="javaee:string"
 		   minOccurs="0" maxOccurs="1">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -112,7 +137,7 @@
   <xsd:group name="service-refGroup">
     <xsd:sequence>
       <xsd:element name="service-ref"
-		   type="j2ee:service-refType"
+		   type="javaee:service-refType"
 		   minOccurs="0" maxOccurs="unbounded">
 	<xsd:key name="service-ref_handler-name-key">
 	  <xsd:annotation>
@@ -123,8 +148,8 @@
 
 	    </xsd:documentation>
 	  </xsd:annotation>
-	  <xsd:selector xpath="j2ee:handler"/>
-	  <xsd:field xpath="j2ee:handler-name"/>
+	  <xsd:selector xpath="javaee:handler"/>
+	  <xsd:field xpath="javaee:handler-name"/>
 	</xsd:key>
       </xsd:element>
     </xsd:sequence>
@@ -148,9 +173,9 @@
     </xsd:annotation>
 
     <xsd:sequence>
-      <xsd:group ref="j2ee:descriptionGroup"/>
+      <xsd:group ref="javaee:descriptionGroup"/>
       <xsd:element name="service-ref-name"
-		   type="j2ee:jndi-nameType">
+		   type="javaee:jndi-nameType">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -164,7 +189,7 @@
       </xsd:element>
 
       <xsd:element name="service-interface"
-		   type="j2ee:fully-qualified-classType">
+		   type="javaee:fully-qualified-classType">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -178,7 +203,7 @@
       </xsd:element>
 
       <xsd:element name="wsdl-file"
-		   type="j2ee:xsdAnyURIType"
+		   type="javaee:xsdAnyURIType"
 		   minOccurs="0" maxOccurs="1">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -191,7 +216,7 @@
       </xsd:element>
 
       <xsd:element name="jaxrpc-mapping-file"
-		   type="j2ee:pathType"
+		   type="javaee:pathType"
 		   minOccurs="0" maxOccurs="1">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -206,7 +231,7 @@
       </xsd:element>
 
       <xsd:element name="service-qname"
-		   type="j2ee:xsdQNameType"
+		   type="javaee:xsdQNameType"
 		   minOccurs="0" maxOccurs="1">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -220,7 +245,7 @@
       </xsd:element>
 
       <xsd:element name="port-component-ref"
-		   type="j2ee:port-component-refType"
+		   type="javaee:port-component-refType"
 		   minOccurs="0" maxOccurs="unbounded">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -236,7 +261,7 @@
       </xsd:element>
 
       <xsd:element name="handler"
-		   type="j2ee:service-ref_handlerType"
+		   type="javaee:service-ref_handlerType"
 		   minOccurs="0" maxOccurs="unbounded">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -270,9 +295,9 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:group ref="j2ee:descriptionGroup"/>
+      <xsd:group ref="javaee:descriptionGroup"/>
       <xsd:element name="handler-name"
-		   type="j2ee:string">
+		   type="javaee:string">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -283,7 +308,7 @@
 	</xsd:annotation>
       </xsd:element>
       <xsd:element name="handler-class"
-		   type="j2ee:fully-qualified-classType">
+		   type="javaee:fully-qualified-classType">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -294,11 +319,11 @@
 	</xsd:annotation>
       </xsd:element>
       <xsd:element name="init-param"
-		   type="j2ee:param-valueType"
+		   type="javaee:param-valueType"
 		   minOccurs="0" maxOccurs="unbounded"/>
 
       <xsd:element name="soap-header"
-		   type="j2ee:xsdQNameType"
+		   type="javaee:xsdQNameType"
 		   minOccurs="0" maxOccurs="unbounded">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -311,7 +336,7 @@
       </xsd:element>
 
       <xsd:element name="soap-role"
-		   type="j2ee:string"
+		   type="javaee:string"
 		   minOccurs="0" maxOccurs="unbounded">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -324,7 +349,7 @@
       </xsd:element>
 
       <xsd:element name="port-name"
-		   type="j2ee:string"
+		   type="javaee:string"
 		   minOccurs="0" maxOccurs="unbounded">
 	<xsd:annotation>
 	  <xsd:documentation>

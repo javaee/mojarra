@@ -4,11 +4,11 @@
    Copyright 2004 Sun Microsystems, Inc. All rights reserved.
    SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
   
-   $Id: merge-config.xsl,v 1.2 2004/11/08 19:23:08 rlubke Exp $
+   $Id: merge-config.xsl,v 1.3 2005/08/15 23:36:53 rlubke Exp $
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-                xmlns:jsf="http://java.sun.com/xml/ns/j2ee"
+                xmlns:jsf="http://java.sun.com/xml/ns/javaee"
                 version="1.0">
     <xsl:output method="xml" indent="yes"/>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD21Generator.java,v 1.3 2005/05/18 17:57:10 rlubke Exp $
+ * $Id: JspTLD21Generator.java,v 1.4 2005/08/15 23:37:02 rlubke Exp $
  */
 
 /*
@@ -35,11 +35,11 @@ public class JspTLD21Generator extends JspTLDGenerator {
     private static Map TAG_LIB_SCHEMA_ATTRIBUTES = new HashMap();
     static {
         TAG_LIB_SCHEMA_ATTRIBUTES.put("xmlns",
-            "http://java.sun.com/xml/ns/j2ee");
+            "http://java.sun.com/xml/ns/javaee");
         TAG_LIB_SCHEMA_ATTRIBUTES.put("xmlns:xsi",
             "http://www.w3.org/2001/XMLSchema-instance");
         TAG_LIB_SCHEMA_ATTRIBUTES.put("xsi:schemaLocation",
-            "http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_1.xsd");
+            "http://java.sun.com/xml/ns/javaee web-jsptaglibrary_2_1.xsd");
         TAG_LIB_SCHEMA_ATTRIBUTES.put("version", JSP_VERSION);
     }
 

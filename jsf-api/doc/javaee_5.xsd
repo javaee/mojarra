@@ -1,29 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ The contents of this file are subject to the terms
+ of the Common Development and Distribution License
+ (the "License").  You may not use this file except
+ in compliance with the License.
+
+ You can obtain a copy of the license at
+ glassfish/bootstrap/legal/CDDLv1.0.txt or
+ https://glassfish.dev.java.net/public/CDDLv1.0.html.
+ See the License for the specific language governing
+ permissions and limitations under the License.
+
+ When distributing Covered Code, include this CDDL
+ HEADER in each file and include the License file at
+ glassfish/bootstrap/legal/CDDLv1.0.txt.  If applicable,
+ add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your
+ own identifying information: Portions Copyright [yyyy]
+ [name of copyright owner]
 -->
 
 <xsd:schema
-     targetNamespace="http://java.sun.com/xml/ns/j2ee"
-     xmlns:j2ee="http://java.sun.com/xml/ns/j2ee"
+     targetNamespace="http://java.sun.com/xml/ns/javaee"
+     xmlns:javaee="http://java.sun.com/xml/ns/javaee"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
      elementFormDefault="qualified"
      attributeFormDefault="unqualified"
-     version="1.4">
+     version="5">
   <xsd:annotation>
     <xsd:documentation>
-      @(#)j2ee_1_4.xsds	1.43 03/09/16
+      @(#)javaee_5.xsds	1.54 05/08/05
     </xsd:documentation>
   </xsd:annotation>
 
   <xsd:annotation>
     <xsd:documentation>
 
-      Copyright 2003 Sun Microsystems, Inc., 901 San Antonio
-      Road, Palo Alto, California 94303, U.S.A. All rights
-      reserved.
+      Copyright 2003-2005 Sun Microsystems, Inc.
+      4150 Network Circle
+      Santa Clara, California 95054
+      U.S.A
+      All rights reserved.
 
       Sun Microsystems, Inc. has intellectual property rights
       relating to technology described in this document. In
@@ -79,8 +97,7 @@ Deployment File may indicate one of the following:
   <xsd:import namespace="http://www.w3.org/XML/1998/namespace"
 	      schemaLocation="http://www.w3.org/2001/xml.xsd"/>
 
-  <xsd:include schemaLocation=
-	"http://www.ibm.com/webservices/xsd/j2ee_web_services_client_1_1.xsd"/>
+  <xsd:include schemaLocation="javaee_web_services_client_1_2.xsd"/>
 
 
 <!-- **************************************************** -->
@@ -90,7 +107,7 @@ Deployment File may indicate one of the following:
       <xsd:documentation>
 
 	This group keeps the usage of the contained description related
-	elements consistent across J2EE deployment descriptors.
+	elements consistent across Java EE deployment descriptors.
 
 	All elements may occur multiple times with different languages,
 	to support localization of the content.
@@ -99,15 +116,15 @@ Deployment File may indicate one of the following:
     </xsd:annotation>
     <xsd:sequence>
       <xsd:element name="description"
-		   type="j2ee:descriptionType"
+		   type="javaee:descriptionType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="display-name"
-		   type="j2ee:display-nameType"
+		   type="javaee:display-nameType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="icon"
-		   type="j2ee:iconType"
+		   type="javaee:iconType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
     </xsd:sequence>
@@ -135,7 +152,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:extension base="j2ee:xsdStringType">
+      <xsd:extension base="javaee:xsdStringType">
 	<xsd:attribute ref="xml:lang"/>
       </xsd:extension>
     </xsd:simpleContent>
@@ -147,16 +164,15 @@ Deployment File may indicate one of the following:
     <xsd:annotation>
       <xsd:documentation>
 
-	This type defines a dewey decimal which is used
+	This type defines a dewey decimal that is used
 	to describe versions of documents.
 
       </xsd:documentation>
     </xsd:annotation>
 
-    <xsd:restriction base="xsd:decimal">
-      <xsd:whiteSpace value="collapse"/>
+    <xsd:restriction base="xsd:token">
+      <xsd:pattern value="\.?[0-9]+(\.[0-9]+)*"/>
     </xsd:restriction>
-
   </xsd:simpleType>
 
 <!-- **************************************************** -->
@@ -173,7 +189,9 @@ Deployment File may indicate one of the following:
 	  Example:
 
 	  ...
-	     <display-name xml:lang="en">Employee Self Service</display-name>
+	     <display-name xml:lang="en">
+	       Employee Self Service
+	     </display-name>
 
 	  The value of the xml:lang attribute is "en" (English) by default.
 
@@ -181,7 +199,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:extension base="j2ee:string">
+      <xsd:extension base="javaee:string">
 	<xsd:attribute ref="xml:lang"/>
       </xsd:extension>
     </xsd:simpleContent>
@@ -200,7 +218,7 @@ Deployment File may indicate one of the following:
 
 	  The value of the ejb-link element must be the ejb-name of an
 	  enterprise bean in the same ejb-jar file or in another ejb-jar
-	  file in the same J2EE application unit.
+	  file in the same Java EE application unit.
 
 	  Alternatively, the name in the ejb-link element may be
 	  composed of a path name specifying the ejb-jar containing the
@@ -221,7 +239,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string"/>
+      <xsd:restriction base="javaee:string"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -237,32 +255,43 @@ Deployment File may indicate one of the following:
 
 	    - an optional description
 	    - the EJB reference name used in the code of the Deployment
-	      Component that's referencing the enterprise bean
-	    - the expected type of the referenced enterprise bean
-	    - the expected local home and local interfaces of the
-	      referenced enterprise bean
+	      Component that's referencing the enterprise bean.
+	    - the optional expected type of the referenced enterprise bean
+	    - the optional expected local interface of the referenced
+              enterprise bean
+	    - the optional expected local home interface of the referenced
+              enterprise bean
 	    - optional ejb-link information, used to specify the
 	      referenced enterprise bean
+            - optional elements to define injection of the named enterprise
+              bean into a component field or property.
 
       </xsd:documentation>
     </xsd:annotation>
 
     <xsd:sequence>
       <xsd:element name="description"
-		   type="j2ee:descriptionType"
+		   type="javaee:descriptionType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="ejb-ref-name"
-		   type="j2ee:ejb-ref-nameType"/>
+		   type="javaee:ejb-ref-nameType"/>
       <xsd:element name="ejb-ref-type"
-		   type="j2ee:ejb-ref-typeType"/>
+		   type="javaee:ejb-ref-typeType"
+                   minOccurs="0"/>
       <xsd:element name="local-home"
-		   type="j2ee:local-homeType"/>
+		   type="javaee:local-homeType"
+                   minOccurs="0"/>
       <xsd:element name="local"
-		   type="j2ee:localType"/>
+		   type="javaee:localType"
+                   minOccurs="0"/>
       <xsd:element name="ejb-link"
-		   type="j2ee:ejb-linkType"
+		   type="javaee:ejb-linkType"
 		   minOccurs="0"/>
+      <xsd:element name="injection-target"
+		   type="javaee:injection-targetType"
+		   minOccurs="0"
+		   maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="id" type="xsd:ID"/>
   </xsd:complexType>
@@ -290,7 +319,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:jndi-nameType"/>
+      <xsd:restriction base="javaee:jndi-nameType"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -312,7 +341,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string">
+      <xsd:restriction base="javaee:string">
 	<xsd:enumeration value="Entity"/>
 	<xsd:enumeration value="Session"/>
       </xsd:restriction>
@@ -332,33 +361,42 @@ Deployment File may indicate one of the following:
 	    - an optional description
 	    - the EJB reference name used in the code of
 	      the Deployment Component that's referencing the enterprise
-	      bean
-	    - the expected type of the referenced enterprise bean
-	    - the expected home and remote interfaces of the referenced
-	      enterprise bean
+	      bean.
+	    - the optional expected type of the referenced enterprise bean
+            - the optional remote interface of the referenced enterprise bean
+	    - the optional expected home interface of the referenced
+              enterprise bean
 	    - optional ejb-link information, used to specify the
 	      referenced enterprise bean
+            - optional elements to define injection of the named enterprise
+              bean into a component field or property
 
       </xsd:documentation>
     </xsd:annotation>
 
     <xsd:sequence>
       <xsd:element name="description"
-		   type="j2ee:descriptionType"
+		   type="javaee:descriptionType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="ejb-ref-name"
-		   type="j2ee:ejb-ref-nameType"/>
+		   type="javaee:ejb-ref-nameType"/>
       <xsd:element name="ejb-ref-type"
-		   type="j2ee:ejb-ref-typeType"/>
-
-      <xsd:element name="home"
-		   type="j2ee:homeType"/>
-      <xsd:element name="remote"
-		   type="j2ee:remoteType"/>
-      <xsd:element name="ejb-link"
-		   type="j2ee:ejb-linkType"
+		   type="javaee:ejb-ref-typeType"
 		   minOccurs="0"/>
+      <xsd:element name="home"
+		   type="javaee:homeType"
+		   minOccurs="0"/>
+      <xsd:element name="remote"
+		   type="javaee:remoteType"
+                   minOccurs="0"/>
+      <xsd:element name="ejb-link"
+		   type="javaee:ejb-linkType"
+		   minOccurs="0"/>
+      <xsd:element name="injection-target"
+		   type="javaee:injection-targetType"
+		   minOccurs="0"
+		   maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="id" type="xsd:ID"/>
   </xsd:complexType>
@@ -408,7 +446,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string">
+      <xsd:restriction base="javaee:string">
 	<xsd:enumeration value="java.lang.Boolean"/>
 	<xsd:enumeration value="java.lang.Byte"/>
 	<xsd:enumeration value="java.lang.Character"/>
@@ -430,22 +468,34 @@ Deployment File may indicate one of the following:
 
 	The env-entryType is used to declare an application's
 	environment entry. The declaration consists of an optional
-	description, the name of the environment entry, and an
-	optional value.  If a value is not specified, one must be
-	supplied during deployment.
+	description, the name of the environment entry, a type
+	(optional if the value is injected, otherwise required), and
+	an optional value.
 
-	It is used by env-entry elements.
+	It also includes optional elements to define injection of
+	the named resource into fields or JavaBeans properties.
+
+	If a value is not specified and injection is requested,
+	no injection will occur and no entry of the specified name
+	will be created.  This allows an initial value to be
+	specified in the source code without being incorrectly
+	changed when no override has been specified.
+
+	If a value is not specified and no injection is requested,
+	a value must be supplied during deployment.
+
+	This type is used by env-entry elements.
 
       </xsd:documentation>
     </xsd:annotation>
 
     <xsd:sequence>
       <xsd:element name="description"
-		   type="j2ee:descriptionType"
+		   type="javaee:descriptionType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="env-entry-name"
-		   type="j2ee:jndi-nameType">
+		   type="javaee:jndi-nameType">
 	<xsd:annotation>
 	  <xsd:documentation>
 	    <![CDATA[
@@ -468,10 +518,30 @@ Deployment File may indicate one of the following:
       </xsd:element>
 
       <xsd:element name="env-entry-type"
-		   type="j2ee:env-entry-type-valuesType"/>
+		   type="javaee:env-entry-type-valuesType"
+		   minOccurs="0">
+	<xsd:annotation>
+	  <xsd:documentation>
+	    <![CDATA[
+
+	      The env-entry-type element contains the Java language
+	      type of the environment entry.  If an injection target
+	      is specified for the environment entry, the type may
+	      be omitted, or must match the type of the injection
+	      target.  If no injection target is specified, the type
+	      is required.
+
+	      Example:
+
+	      <env-entry-type>java.lang.Integer</env-entry-type>
+
+	      ]]>
+	  </xsd:documentation>
+	</xsd:annotation>
+      </xsd:element>
 
       <xsd:element name="env-entry-value"
-		   type="j2ee:xsdStringType"
+		   type="javaee:xsdStringType"
 		   minOccurs="0">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -493,6 +563,11 @@ Deployment File may indicate one of the following:
 	</xsd:annotation>
       </xsd:element>
 
+      <xsd:element name="injection-target"
+		   type="javaee:injection-targetType"
+		   minOccurs="0"
+		   maxOccurs="unbounded"/>
+
     </xsd:sequence>
     <xsd:attribute name="id" type="xsd:ID"/>
   </xsd:complexType>
@@ -513,7 +588,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string"/>
+      <xsd:restriction base="javaee:string"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -530,7 +605,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string">
+      <xsd:restriction base="javaee:string">
 	<xsd:enumeration value="true"/>
 	<xsd:enumeration value="false"/>
 	<xsd:enumeration value="yes"/>
@@ -557,7 +632,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:fully-qualified-classType"/>
+      <xsd:restriction base="javaee:fully-qualified-classType"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -568,8 +643,8 @@ Deployment File may indicate one of the following:
       <xsd:documentation>
 
 	The icon type contains small-icon and large-icon elements
-	that specify the file names for small and large GIF or
-	JPEG icon images used to represent the parent element in a
+	that specify the file names for small and large GIF, JPEG,
+	or PNG icon images used to represent the parent element in a
 	GUI tool.
 
 	The xml:lang attribute defines the language that the
@@ -580,7 +655,7 @@ Deployment File may indicate one of the following:
     </xsd:annotation>
 
     <xsd:sequence>
-      <xsd:element name="small-icon" type="j2ee:pathType"
+      <xsd:element name="small-icon" type="javaee:pathType"
 		   minOccurs="0">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -591,7 +666,7 @@ Deployment File may indicate one of the following:
 	      name is a relative path within the Deployment
 	      Component's Deployment File.
 
-	      The image may be either in the JPEG or GIF format.
+	      The image may be in the GIF, JPEG, or PNG format.
 	      The icon can be used by tools.
 
 	      Example:
@@ -602,7 +677,7 @@ Deployment File may indicate one of the following:
 	  </xsd:documentation>
 	</xsd:annotation>
       </xsd:element>
-      <xsd:element name="large-icon" type="j2ee:pathType"
+      <xsd:element name="large-icon" type="javaee:pathType"
 		   minOccurs="0">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -614,7 +689,7 @@ Deployment File may indicate one of the following:
 	      path within the Deployment Component's Deployment
 	      File.
 
-	      The image may be either in the JPEG or GIF format.
+	      The image may be in the GIF, JPEG, or PNG format.
 	      The icon can be used by tools.
 
 	      Example:
@@ -635,6 +710,40 @@ Deployment File may indicate one of the following:
 
 <!-- **************************************************** -->
 
+  <xsd:complexType name="injection-targetType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+	An injection target specifies a class and a name within
+	that class into which a resource should be injected.
+
+	The injection target class specifies the fully qualified
+	class name that is the target of the injection.  The
+	Java EE specifications describe which classes can be an
+	injection target.
+
+	The injection target name specifies the target within
+	the specified class.  The target is first looked for as a
+	JavaBeans property name.  If not found, the target is
+	looked for as a field name.
+
+	The specified resource will be injected into the target
+	during initialization of the class by either calling the
+	set method for the target property or by setting a value
+	into the named field.
+
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="injection-target-class"
+		   type="javaee:fully-qualified-classType"/>
+      <xsd:element name="injection-target-name"
+		   type="javaee:java-identifierType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
   <xsd:complexType name="java-identifierType">
     <xsd:annotation>
       <xsd:documentation>
@@ -646,7 +755,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string">
+      <xsd:restriction base="javaee:string">
 	<xsd:pattern value="($|_|\p{L})(\p{L}|\p{Nd}|_|$)*"/>
       </xsd:restriction>
     </xsd:simpleContent>
@@ -665,7 +774,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string">
+      <xsd:restriction base="javaee:string">
 	<xsd:pattern value="[^\p{Z}]*"/>
       </xsd:restriction>
     </xsd:simpleContent>
@@ -685,7 +794,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string"/>
+      <xsd:restriction base="javaee:string"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -696,29 +805,29 @@ Deployment File may indicate one of the following:
       <xsd:documentation>
 
 	This group keeps the usage of the contained JNDI environment
-	reference elements consistent across J2EE deployment descriptors.
+	reference elements consistent across Java EE deployment descriptors.
 
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
       <xsd:element name="env-entry"
-		   type="j2ee:env-entryType"
+		   type="javaee:env-entryType"
 		   minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="ejb-ref"
-		   type="j2ee:ejb-refType"
+		   type="javaee:ejb-refType"
 		   minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="ejb-local-ref"
-		   type="j2ee:ejb-local-refType"
+		   type="javaee:ejb-local-refType"
 		   minOccurs="0" maxOccurs="unbounded"/>
-      <xsd:group ref="j2ee:service-refGroup"/>
+      <xsd:group ref="javaee:service-refGroup"/>
       <xsd:element name="resource-ref"
-		   type="j2ee:resource-refType"
+		   type="javaee:resource-refType"
 		   minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="resource-env-ref"
-		   type="j2ee:resource-env-refType"
+		   type="javaee:resource-env-refType"
 		   minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="message-destination-ref"
-		   type="j2ee:message-destination-refType"
+		   type="javaee:message-destination-refType"
 		   minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:group>
@@ -736,9 +845,9 @@ Deployment File may indicate one of the following:
     </xsd:annotation>
 
     <xsd:sequence>
-      <xsd:group ref="j2ee:descriptionGroup"/>
+      <xsd:group ref="javaee:descriptionGroup"/>
       <xsd:element name="listener-class"
-		   type="j2ee:fully-qualified-classType">
+		   type="javaee:fully-qualified-classType">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -766,7 +875,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:fully-qualified-classType"/>
+      <xsd:restriction base="javaee:fully-qualified-classType"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -782,7 +891,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:fully-qualified-classType"/>
+      <xsd:restriction base="javaee:fully-qualified-classType"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -801,7 +910,7 @@ Deployment File may indicate one of the following:
 
 	The value must be the message-destination-name of a message
 	destination in the same Deployment File or in another
-	Deployment File in the same J2EE application unit.
+	Deployment File in the same Java EE application unit.
 
 	Alternatively, the value may be composed of a path name
 	specifying a Deployment File containing the referenced
@@ -815,7 +924,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string"/>
+      <xsd:restriction base="javaee:string"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -833,11 +942,19 @@ Deployment File may indicate one of the following:
 
 		  - an optional description
 		  - the message destination reference name
-		  - the message destination type
-		  - a specification as to whether the
-		    destination is used for
-		    consuming or producing messages, or both
-		  - a link to the message destination
+		  - an optional message destination type
+		  - an optional specification as to whether
+		    the destination is used for
+		    consuming or producing messages, or both.
+		    if not specified, "both" is assumed.
+		  - an optional link to the message destination
+		  - optional injection targets
+
+	  The message destination type must be supplied unless an
+	  injection target is specified, in which case the type
+	  of the target is used.  If both are specified, the type
+	  must be assignment compatible with the type of the injection
+	  target.
 
 	  Examples:
 
@@ -857,11 +974,11 @@ Deployment File may indicate one of the following:
     </xsd:annotation>
     <xsd:sequence>
       <xsd:element name="description"
-		   type="j2ee:descriptionType"
+		   type="javaee:descriptionType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="message-destination-ref-name"
-		   type="j2ee:jndi-nameType">
+		   type="javaee:jndi-nameType">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -877,12 +994,18 @@ Deployment File may indicate one of the following:
 	</xsd:annotation>
       </xsd:element>
       <xsd:element name="message-destination-type"
-		   type="j2ee:message-destination-typeType"/>
-      <xsd:element name="message-destination-usage"
-		   type="j2ee:message-destination-usageType"/>
-      <xsd:element name="message-destination-link"
-		   type="j2ee:message-destination-linkType"
+		   type="javaee:message-destination-typeType"
 		   minOccurs="0"/>
+      <xsd:element name="message-destination-usage"
+		   type="javaee:message-destination-usageType"
+		   minOccurs="0"/>
+      <xsd:element name="message-destination-link"
+		   type="javaee:message-destination-linkType"
+		   minOccurs="0"/>
+      <xsd:element name="injection-target"
+		   type="javaee:injection-targetType"
+		   minOccurs="0"
+		   maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="id" type="xsd:ID"/>
 
@@ -908,7 +1031,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:fully-qualified-classType"/>
+      <xsd:restriction base="javaee:fully-qualified-classType"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -934,7 +1057,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string">
+      <xsd:restriction base="javaee:string">
 	<xsd:enumeration value="Consumes"/>
 	<xsd:enumeration value="Produces"/>
 	<xsd:enumeration value="ConsumesProduces"/>
@@ -973,9 +1096,9 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:group ref="j2ee:descriptionGroup"/>
+      <xsd:group ref="javaee:descriptionGroup"/>
       <xsd:element name="message-destination-name"
-		   type="j2ee:string">
+		   type="javaee:string">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -1005,11 +1128,11 @@ Deployment File may indicate one of the following:
 
     <xsd:sequence>
       <xsd:element name="description"
-		   type="j2ee:descriptionType"
+		   type="javaee:descriptionType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="param-name"
-		   type="j2ee:string">
+		   type="javaee:string">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -1021,7 +1144,7 @@ Deployment File may indicate one of the following:
       </xsd:element>
 
       <xsd:element name="param-value"
-		   type="j2ee:xsdStringType">
+		   type="javaee:xsdStringType">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -1056,7 +1179,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string"/>
+      <xsd:restriction base="javaee:string"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -1078,7 +1201,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:fully-qualified-classType"/>
+      <xsd:restriction base="javaee:fully-qualified-classType"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -1103,7 +1226,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string">
+      <xsd:restriction base="javaee:string">
 	<xsd:enumeration value="Application"/>
 	<xsd:enumeration value="Container"/>
       </xsd:restriction>
@@ -1129,7 +1252,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string">
+      <xsd:restriction base="javaee:string">
 	<xsd:enumeration value="Shareable"/>
 	<xsd:enumeration value="Unshareable"/>
       </xsd:restriction>
@@ -1148,9 +1271,18 @@ Deployment File may indicate one of the following:
 	  Deployment Component's reference to an administered object
 	  associated with a resource in the Deployment Component's
 	  environment.  It consists of an optional description, the
-	  resource environment reference name, and an indication of
-	  the resource environment reference type expected by the
-	  Deployment Component code.
+	  resource environment reference name, and an optional
+	  indication of the resource environment reference type
+	  expected by the Deployment Component code.
+
+	  It also includes optional elements to define injection of
+	  the named resource into fields or JavaBeans properties.
+
+	  The resource environment type must be supplied unless an
+	  injection target is specified, in which case the type
+	  of the target is used.  If both are specified, the type
+	  must be assignment compatible with the type of the injection
+	  target.
 
 	  Example:
 
@@ -1167,11 +1299,11 @@ Deployment File may indicate one of the following:
 
     <xsd:sequence>
       <xsd:element name="description"
-		   type="j2ee:descriptionType"
+		   type="javaee:descriptionType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="resource-env-ref-name"
-		   type="j2ee:jndi-nameType">
+		   type="javaee:jndi-nameType">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -1187,7 +1319,8 @@ Deployment File may indicate one of the following:
       </xsd:element>
 
       <xsd:element name="resource-env-ref-type"
-		   type="j2ee:fully-qualified-classType">
+		   type="javaee:fully-qualified-classType"
+		   minOccurs="0">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -1199,6 +1332,11 @@ Deployment File may indicate one of the following:
 	  </xsd:documentation>
 	</xsd:annotation>
       </xsd:element>
+
+      <xsd:element name="injection-target"
+		   type="javaee:injection-targetType"
+		   minOccurs="0"
+		   maxOccurs="unbounded"/>
 
     </xsd:sequence>
     <xsd:attribute name="id" type="xsd:ID"/>
@@ -1214,12 +1352,21 @@ Deployment File may indicate one of the following:
 	  The resource-refType contains a declaration of a
 	  Deployment Component's reference to an external resource. It
 	  consists of an optional description, the resource manager
-	  connection factory reference name, the indication of the
-	  resource manager connection factory type expected by the
-	  Deployment Component code, the type of authentication
+	  connection factory reference name, an optional indication of
+	  the resource manager connection factory type expected by the
+	  Deployment Component code, an optional type of authentication
 	  (Application or Container), and an optional specification of
 	  the shareability of connections obtained from the resource
 	  (Shareable or Unshareable).
+
+	  It also includes optional elements to define injection of
+	  the named resource into fields or JavaBeans properties.
+
+	  The connection factory type must be supplied unless an
+	  injection target is specified, in which case the type
+	  of the target is used.  If both are specified, the type
+	  must be assignment compatible with the type of the injection
+	  target.
 
 	  Example:
 
@@ -1236,11 +1383,11 @@ Deployment File may indicate one of the following:
 
     <xsd:sequence>
       <xsd:element name="description"
-		   type="j2ee:descriptionType"
+		   type="javaee:descriptionType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="res-ref-name"
-		   type="j2ee:jndi-nameType">
+		   type="javaee:jndi-nameType">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -1255,7 +1402,8 @@ Deployment File may indicate one of the following:
       </xsd:element>
 
       <xsd:element name="res-type"
-		   type="j2ee:fully-qualified-classType">
+		   type="javaee:fully-qualified-classType"
+		   minOccurs="0">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -1269,11 +1417,17 @@ Deployment File may indicate one of the following:
       </xsd:element>
 
       <xsd:element name="res-auth"
-		   type="j2ee:res-authType"/>
+		   type="javaee:res-authType"
+		   minOccurs="0"/>
 
       <xsd:element name="res-sharing-scope"
-		   type="j2ee:res-sharing-scopeType"
+		   type="javaee:res-sharing-scopeType"
 		   minOccurs="0"/>
+
+      <xsd:element name="injection-target"
+		   type="javaee:injection-targetType"
+		   minOccurs="0"
+		   maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="id" type="xsd:ID"/>
   </xsd:complexType>
@@ -1292,7 +1446,7 @@ Deployment File may indicate one of the following:
     </xsd:annotation>
 
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:string"/>
+      <xsd:restriction base="javaee:string"/>
     </xsd:simpleContent>
   </xsd:complexType>
 
@@ -1311,11 +1465,11 @@ Deployment File may indicate one of the following:
 
     <xsd:sequence>
       <xsd:element name="description"
-		   type="j2ee:descriptionType"
+		   type="javaee:descriptionType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="role-name"
-		   type="j2ee:role-nameType"/>
+		   type="javaee:role-nameType"/>
     </xsd:sequence>
     <xsd:attribute name="id" type="xsd:ID"/>
   </xsd:complexType>
@@ -1339,11 +1493,11 @@ Deployment File may indicate one of the following:
 
     <xsd:sequence>
       <xsd:element name="description"
-		   type="j2ee:descriptionType"
+		   type="javaee:descriptionType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="role-name"
-		   type="j2ee:role-nameType">
+		   type="javaee:role-nameType">
 	<xsd:annotation>
 	  <xsd:documentation>
 
@@ -1357,7 +1511,7 @@ Deployment File may indicate one of the following:
       </xsd:element>
 
       <xsd:element name="role-link"
-		   type="j2ee:role-nameType"
+		   type="javaee:role-nameType"
 		   minOccurs="0">
 	<xsd:annotation>
 	  <xsd:documentation>
@@ -1382,8 +1536,8 @@ Deployment File may indicate one of the following:
 	<![CDATA[
 
 	  The security-roleType contains the definition of a security
-	  role. The definition consists of an optional description of the
-	  security role, and the security role name.
+	  role. The definition consists of an optional description of
+	  the security role, and the security role name.
 
 	  Example:
 
@@ -1401,11 +1555,11 @@ Deployment File may indicate one of the following:
 
     <xsd:sequence>
       <xsd:element name="description"
-		   type="j2ee:descriptionType"
+		   type="javaee:descriptionType"
 		   minOccurs="0"
 		   maxOccurs="unbounded"/>
       <xsd:element name="role-name"
-		   type="j2ee:role-nameType"/>
+		   type="javaee:role-nameType"/>
     </xsd:sequence>
     <xsd:attribute name="id" type="xsd:ID"/>
   </xsd:complexType>
@@ -1416,7 +1570,7 @@ Deployment File may indicate one of the following:
     <xsd:annotation>
       <xsd:documentation>
 
-	This is a special string datatype that is defined by J2EE as
+	This is a special string datatype that is defined by Java EE as
 	a base type for defining collapsed strings. When schemas
 	require trailing/leading space elimination as well as
 	collapsing the existing whitespace, this base type may be
@@ -1446,7 +1600,7 @@ Deployment File may indicate one of the following:
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
-      <xsd:restriction base="j2ee:xsdBooleanType">
+      <xsd:restriction base="javaee:xsdBooleanType">
 	<xsd:pattern value="(true|false)"/>
       </xsd:restriction>
     </xsd:simpleContent>

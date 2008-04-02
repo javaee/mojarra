@@ -86,6 +86,7 @@
     <pathelement location="${junit.jar}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${el-api.jar}"/>
+    <pathelement location="${el-ri.jar}"/>
     <pathelement location="${jsp.jar}"/>
     <pathelement location="${jstl.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
@@ -768,7 +769,7 @@ jsf-api.jar.
        ===================================================================
   -->
 
-  <target name="create.standard.xml">
+  <target name="create.standard.xml" depends="attributes">
     <copy file="${basedir}/../jsf-ri/src/com/sun/faces/standard-html-renderkit-impl.xml"
       todir="${basedir}/doc"/>
     <exec executable="xmllint" dir="${basedir}/doc" failonerror="true">

@@ -1,7 +1,7 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <xsd:schema
-     targetNamespace="http://java.sun.com/xml/ns/j2ee"
-     xmlns:j2ee="http://java.sun.com/xml/ns/j2ee"
+     targetNamespace="http://java.sun.com/xml/ns/javaee"
+     xmlns:javaee="http://java.sun.com/xml/ns/javaee"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      elementFormDefault="qualified"
@@ -10,14 +10,14 @@
 
     <xsd:annotation>
         <xsd:documentation>
-            $Id: web-facesconfig_1_2.xsd,v 1.7 2005/07/19 19:33:16 edburns Exp $
+            $Id: web-facesconfig_1_2.xsd,v 1.8 2005/08/15 23:36:50 rlubke Exp $
         </xsd:documentation>
     </xsd:annotation>
 
     <xsd:annotation>
         <xsd:documentation>
 
-            Copyright 2004 Sun Microsystems, Inc., 901 San Antonio
+            Copyright 2005 Sun Microsystems, Inc., 901 San Antonio
             Road, Palo Alto, California 94303, U.S.A. All rights
             reserved.
 
@@ -38,7 +38,7 @@
             Third-party software, including font technology, is
             copyrighted and licensed from Sun suppliers.
 
-            Sun, Sun Microsystems, the Sun logo, Solaris, Java, J2EE,
+            Sun, Sun Microsystems, the Sun logo, Solaris, Java, Java EE,
             JavaServer Pages, Enterprise JavaBeans and the Java Coffee
             Cup logo are trademarks or registered trademarks of Sun
             Microsystems, Inc. in the U.S. and other countries.
@@ -61,12 +61,12 @@
             the JavaServer Faces schema by indicating the JavaServer
             Faces namespace:
 
-            http://java.sun.com/xml/ns/j2ee
+            http://java.sun.com/xml/ns/javaee
 
             and by indicating the version of the schema by
             using the version element as shown below:
 
-            <faces-config xmlns="http://java.sun.com/xml/ns/j2ee"
+            <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xsi:schemaLocation="..."
                     version="1.2">
@@ -75,20 +75,20 @@
 
             The instance documents may indicate the published
             version of the schema using xsi:schemaLocation attribute
-            for J2EE namespace with the following location:
+            for javaee namespace with the following location:
 
-            http://java.sun.com/xml/ns/j2ee/web-facesconfig_1_2.xsd
+            http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd
 
             ]]>
 
         </xsd:documentation>
     </xsd:annotation>
 
-    <xsd:include schemaLocation="j2ee_1_4.xsd"/>   
+    <xsd:include schemaLocation="javaee_5.xsd"/>
 
     <!-- **************************************************** -->
 
-    <xsd:element name = "faces-config" type="j2ee:faces-configType">
+    <xsd:element name = "faces-config" type="javaee:faces-configType">
         <xsd:annotation>
             <xsd:documentation>
 
@@ -108,8 +108,8 @@
                 </xsd:documentation>
             </xsd:annotation>
 
-            <xsd:selector xpath="j2ee:converter"/>
-            <xsd:field    xpath="j2ee:converter-id"/>
+            <xsd:selector xpath="javaee:converter"/>
+            <xsd:field    xpath="javaee:converter-id"/>
         </xsd:unique>
 
         <xsd:unique name="faces-config-converter-for-class-uniqueness">
@@ -122,8 +122,8 @@
                 </xsd:documentation>
             </xsd:annotation>
 
-            <xsd:selector xpath="j2ee:converter"/>
-            <xsd:field    xpath="j2ee:converter-for-class"/>
+            <xsd:selector xpath="javaee:converter"/>
+            <xsd:field    xpath="javaee:converter-for-class"/>
         </xsd:unique>
 
         <xsd:unique name="faces-config-validator-ID-uniqueness">
@@ -135,8 +135,8 @@
                 </xsd:documentation>
             </xsd:annotation>
 
-            <xsd:selector xpath="j2ee:validator"/>
-            <xsd:field    xpath="j2ee:validator-id"/>
+            <xsd:selector xpath="javaee:validator"/>
+            <xsd:field    xpath="javaee:validator-id"/>
         </xsd:unique>
 
         <xsd:unique name="faces-config-managed-bean-name-uniqueness">
@@ -148,8 +148,8 @@
                 </xsd:documentation>
             </xsd:annotation>
 
-            <xsd:selector xpath="j2ee:managed-bean"/>
-            <xsd:field    xpath="j2ee:managed-bean-name"/>
+            <xsd:selector xpath="javaee:managed-bean"/>
+            <xsd:field    xpath="javaee:managed-bean-name"/>
         </xsd:unique>
     </xsd:element>
 
@@ -167,33 +167,33 @@
         </xsd:annotation>
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
             <xsd:element name="application"
-                         type="j2ee:faces-config-applicationType"/>
+                         type="javaee:faces-config-applicationType"/>
             <xsd:element name="factory"
-                         type="j2ee:faces-config-factoryType"/>
+                         type="javaee:faces-config-factoryType"/>
             <xsd:element name="component"
-                         type="j2ee:faces-config-componentType"/>
+                         type="javaee:faces-config-componentType"/>
             <xsd:element name="converter"
-                         type="j2ee:faces-config-converterType"/>
+                         type="javaee:faces-config-converterType"/>
             <xsd:element name="managed-bean"
-                         type="j2ee:faces-config-managed-beanType"/>
+                         type="javaee:faces-config-managed-beanType"/>
             <xsd:element name="navigation-rule"
-                         type="j2ee:faces-config-navigation-ruleType"/>
+                         type="javaee:faces-config-navigation-ruleType"/>
             <xsd:element name="referenced-bean"
-                         type="j2ee:faces-config-referenced-beanType"/>
+                         type="javaee:faces-config-referenced-beanType"/>
             <xsd:element name="render-kit"
-                         type="j2ee:faces-config-render-kitType"/>
+                         type="javaee:faces-config-render-kitType"/>
             <xsd:element name="lifecycle"
-                         type="j2ee:faces-config-lifecycleType"/>
+                         type="javaee:faces-config-lifecycleType"/>
             <xsd:element name="validator"
-                         type="j2ee:faces-config-validatorType"/>
+                         type="javaee:faces-config-validatorType"/>
             <xsd:element name="faces-config-extension"
-                         type="j2ee:faces-config-extensionType"
+                         type="javaee:faces-config-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:choice>
             <xsd:attribute name = "id" type = "xsd:ID"/>
             <xsd:attribute name="version"
-                type="j2ee:faces-config-versionType"
+                type="javaee:faces-config-versionType"
                 use="required"/>
     </xsd:complexType>
 
@@ -236,7 +236,7 @@
 
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
             <xsd:element name="action-listener"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                             
@@ -250,7 +250,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="default-render-kit-id"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
                             
@@ -262,7 +262,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="message-bundle"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
                             
@@ -275,7 +275,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="navigation-handler"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                             
@@ -290,7 +290,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="view-handler"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                             
@@ -305,7 +305,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="state-manager"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                             
@@ -321,7 +321,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="el-resolver"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                             
@@ -335,7 +335,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="property-resolver"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                             
@@ -348,7 +348,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="variable-resolver"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -361,11 +361,11 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="locale-config"
-                         type="j2ee:faces-config-locale-configType"/>
+                         type="javaee:faces-config-locale-configType"/>
             <xsd:element name="resource-bundle"
-                         type="j2ee:faces-config-application-resource-bundleType"/>
+                         type="javaee:faces-config-application-resource-bundleType"/>
             <xsd:element name="application-extension"
-                         type="j2ee:faces-config-application-extensionType"
+                         type="javaee:faces-config-application-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
             </xsd:choice>
@@ -388,9 +388,9 @@
         </xsd:annotation>
 
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="base-name"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -401,7 +401,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="var"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -454,7 +454,7 @@
 
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
             <xsd:element name="application-factory"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                             
@@ -468,7 +468,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="faces-context-factory"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                             
@@ -481,7 +481,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="lifecycle-factory"
-                        type="j2ee:fully-qualified-classType">
+                        type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                             
@@ -494,7 +494,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="render-kit-factory"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -507,7 +507,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="factory-extension"
-                         type="j2ee:faces-config-factory-extensionType"
+                         type="javaee:faces-config-factory-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:choice>
@@ -553,9 +553,9 @@
         </xsd:annotation>
 
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="attribute-name"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -567,7 +567,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="attribute-class"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -578,13 +578,13 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="default-value"
-                         type="j2ee:faces-config-default-valueType"
+                         type="javaee:faces-config-default-valueType"
                          minOccurs="0"/>
             <xsd:element name="suggested-value"
-                         type="j2ee:faces-config-suggested-valueType"
+                         type="javaee:faces-config-suggested-valueType"
                          minOccurs="0"/>
             <xsd:element name="attribute-extension"
-                         type="j2ee:faces-config-attribute-extensionType"
+                         type="javaee:faces-config-attribute-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
@@ -633,9 +633,9 @@
         </xsd:annotation>
 
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="component-type"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -647,7 +647,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="component-class"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -659,19 +659,19 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="facet"
-                         type="j2ee:faces-config-facetType"
+                         type="javaee:faces-config-facetType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
             <xsd:element name="attribute"
-                         type="j2ee:faces-config-attributeType"
+                         type="javaee:faces-config-attributeType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
             <xsd:element name="property"
-                         type="j2ee:faces-config-propertyType"
+                         type="javaee:faces-config-propertyType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
             <xsd:element name="component-extension"
-                         type="j2ee:faces-config-component-extensionType"
+                         type="javaee:faces-config-component-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
@@ -713,7 +713,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:simpleContent>
-            <xsd:extension base="j2ee:faces-config-localeType">
+            <xsd:extension base="javaee:faces-config-localeType">
                 <xsd:attribute name="id" type="xsd:ID"/>                
             </xsd:extension>
         </xsd:simpleContent>
@@ -735,7 +735,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:simpleContent>
-            <xsd:restriction base="j2ee:string"/>
+            <xsd:restriction base="javaee:string"/>
         </xsd:simpleContent>
     </xsd:complexType>
 
@@ -769,9 +769,9 @@
         </xsd:annotation>
 
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="facet-name"
-                         type="j2ee:java-identifierType">
+                         type="javaee:java-identifierType">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -783,7 +783,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="facet-extension"
-                         type="j2ee:faces-config-facet-extensionType"
+                         type="javaee:faces-config-facet-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
@@ -835,7 +835,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:simpleContent>
-            <xsd:restriction base="j2ee:string"/>
+            <xsd:restriction base="javaee:string"/>
         </xsd:simpleContent>
     </xsd:complexType>
 
@@ -855,7 +855,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:simpleContent>
-            <xsd:extension base="j2ee:faces-config-el-expressionType">
+            <xsd:extension base="javaee:faces-config-el-expressionType">
                 <xsd:attribute name="id" type="xsd:ID"/>
             </xsd:extension>
         </xsd:simpleContent>
@@ -886,10 +886,10 @@
         </xsd:annotation>
 
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:choice>
                 <xsd:element name="converter-id"
-                             type="j2ee:string">
+                             type="javaee:string">
                     <xsd:annotation>
                         <xsd:documentation>
 
@@ -902,7 +902,7 @@
                 </xsd:element>
                 
                 <xsd:element name="converter-for-class"
-                             type="j2ee:fully-qualified-classType">
+                             type="javaee:fully-qualified-classType">
                     <xsd:annotation>
                         <xsd:documentation>
 
@@ -916,7 +916,7 @@
             </xsd:choice>
             
             <xsd:element name="converter-class"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -928,7 +928,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="attribute"
-                         type="j2ee:faces-config-attributeType"
+                         type="javaee:faces-config-attributeType"
                          minOccurs="0"
                          maxOccurs="unbounded">
                 <xsd:annotation>
@@ -945,7 +945,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="property"
-                         type="j2ee:faces-config-propertyType"
+                         type="javaee:faces-config-propertyType"
                          minOccurs="0"
                          maxOccurs="unbounded">
                 <xsd:annotation>
@@ -962,7 +962,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="converter-extension"
-                         type="j2ee:faces-config-converter-extensionType"
+                         type="javaee:faces-config-converter-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
@@ -1007,7 +1007,7 @@
 
         <xsd:sequence>
             <xsd:element name="phase-listener"
-                         type="j2ee:fully-qualified-classType"
+                         type="javaee:fully-qualified-classType"
                          minOccurs="0" 
                          maxOccurs="unbounded">
                 
@@ -1022,7 +1022,7 @@
             </xsd:annotation>                
             </xsd:element>
             <xsd:element name="lifecycle-extension"
-                         type="j2ee:faces-config-lifecycle-extensionType"
+                         type="javaee:faces-config-lifecycle-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
 
@@ -1084,11 +1084,11 @@
         
         <xsd:sequence>
             <xsd:element name="default-locale"
-                         type="j2ee:faces-config-default-localeType"
+                         type="javaee:faces-config-default-localeType"
                          minOccurs="0">
             </xsd:element>
             <xsd:element name="supported-locale"
-                         type="j2ee:faces-config-supported-localeType"
+                         type="javaee:faces-config-supported-localeType"
                          minOccurs="0" 
                          maxOccurs="unbounded">                
             </xsd:element>
@@ -1116,9 +1116,9 @@
         </xsd:annotation>
 
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="managed-bean-name"
-                         type="j2ee:java-identifierType">
+                         type="javaee:java-identifierType">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -1131,7 +1131,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="managed-bean-class"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -1149,7 +1149,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="managed-bean-scope"
-                         type="j2ee:faces-config-managed-bean-scopeOrNoneType">
+                         type="javaee:faces-config-managed-bean-scopeOrNoneType">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -1162,16 +1162,16 @@
             </xsd:element>
             <xsd:choice>
                 <xsd:element name="managed-property"
-                             type="j2ee:faces-config-managed-propertyType"
+                             type="javaee:faces-config-managed-propertyType"
                              minOccurs="0"
                              maxOccurs="unbounded"/>
                 <xsd:element name="map-entries"
-                             type="j2ee:faces-config-map-entriesType"/>
+                             type="javaee:faces-config-map-entriesType"/>
                 <xsd:element name="list-entries"
-                             type="j2ee:faces-config-list-entriesType"/>
+                             type="javaee:faces-config-list-entriesType"/>
             </xsd:choice>
             <xsd:element name="managed-bean-extension"
-                         type="j2ee:faces-config-managed-bean-extensionType"
+                         type="javaee:faces-config-managed-bean-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
@@ -1218,7 +1218,7 @@
         </xsd:annotation>
 
         <xsd:simpleContent>
-            <xsd:restriction base="j2ee:string">
+            <xsd:restriction base="javaee:string">
                 <xsd:enumeration value="request"/>
                 <xsd:enumeration value="session"/>
                 <xsd:enumeration value="application"/>
@@ -1241,9 +1241,9 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="property-name"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -1255,7 +1255,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="property-class"
-                         type="j2ee:java-typeType"
+                         type="javaee:java-typeType"
                          minOccurs="0">
                 <xsd:annotation>
                     <xsd:documentation>
@@ -1272,14 +1272,14 @@
             </xsd:element>
             <xsd:choice>
                 <xsd:element name="map-entries"
-                             type="j2ee:faces-config-map-entriesType"/>
+                             type="javaee:faces-config-map-entriesType"/>
                 <xsd:element name="null-value"
-                             type="j2ee:faces-config-null-valueType">
+                             type="javaee:faces-config-null-valueType">
                 </xsd:element>
                 <xsd:element name="value"
-                             type="j2ee:faces-config-valueType"/>
+                             type="javaee:faces-config-valueType"/>
                 <xsd:element name="list-entries"
-                             type="j2ee:faces-config-list-entriesType"/>
+                             type="javaee:faces-config-list-entriesType"/>
             </xsd:choice>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
@@ -1299,7 +1299,7 @@
         </xsd:annotation>
         <xsd:sequence>
             <xsd:element name="key"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -1312,9 +1312,9 @@
             </xsd:element>
             <xsd:choice>
                 <xsd:element name="null-value"
-                             type="j2ee:faces-config-null-valueType"/>
+                             type="javaee:faces-config-null-valueType"/>
                 <xsd:element name="value"
-                             type="j2ee:faces-config-valueType"/>
+                             type="javaee:faces-config-valueType"/>
             </xsd:choice>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
@@ -1336,7 +1336,7 @@
 
         <xsd:sequence>
             <xsd:element name="key-class"
-                         type="j2ee:fully-qualified-classType"
+                         type="javaee:fully-qualified-classType"
                          minOccurs="0">
                 <xsd:annotation>
                     <xsd:documentation>
@@ -1350,10 +1350,10 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="value-class"
-                         type="j2ee:faces-config-value-classType"
+                         type="javaee:faces-config-value-classType"
                          minOccurs="0"/>                
             <xsd:element name="map-entry"
-                         type="j2ee:faces-config-map-entryType"
+                         type="javaee:faces-config-map-entryType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
@@ -1373,13 +1373,13 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="from-action"
-                         type="j2ee:faces-config-from-actionType"
+                         type="javaee:faces-config-from-actionType"
                          minOccurs="0">
             </xsd:element>
             <xsd:element name="from-outcome"
-                         type="j2ee:string" minOccurs="0">
+                         type="javaee:string" minOccurs="0">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -1396,7 +1396,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="to-view-id"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -1408,7 +1408,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="redirect"
-                         type="j2ee:faces-config-redirectType" minOccurs="0"/>
+                         type="javaee:faces-config-redirectType" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
@@ -1427,16 +1427,16 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="from-view-id"
-                         type="j2ee:faces-config-from-view-idType"
+                         type="javaee:faces-config-from-view-idType"
                          minOccurs="0"/>
             <xsd:element name="navigation-case"
-                         type="j2ee:faces-config-navigation-caseType"
+                         type="javaee:faces-config-navigation-caseType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
             <xsd:element name="navigation-rule-extension"
-                         type="j2ee:faces-config-navigation-rule-extensionType"
+                         type="javaee:faces-config-navigation-rule-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
@@ -1504,9 +1504,9 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="property-name"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -1517,7 +1517,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="property-class"
-                         type="j2ee:java-typeType">
+                         type="javaee:java-typeType">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -1532,13 +1532,13 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="default-value"
-                         type="j2ee:faces-config-default-valueType"
+                         type="javaee:faces-config-default-valueType"
                          minOccurs="0"/>               
             <xsd:element name="suggested-value"
-                         type="j2ee:faces-config-suggested-valueType"
+                         type="javaee:faces-config-suggested-valueType"
                          minOccurs="0"/>
             <xsd:element name="property-extension"
-                         type="j2ee:faces-config-property-extensionType"
+                         type="javaee:faces-config-property-extensionType"
                          minOccurs="0" 
                          maxOccurs="unbounded"/>
         </xsd:sequence>
@@ -1599,9 +1599,9 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="referenced-bean-name"
-                         type="j2ee:java-identifierType">
+                         type="javaee:java-identifierType">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -1614,7 +1614,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="referenced-bean-class"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -1646,9 +1646,9 @@
         </xsd:annotation>
         
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="render-kit-id"
-                         type="j2ee:string"
+                         type="javaee:string"
                          minOccurs="0">
                 <xsd:annotation>
                     <xsd:documentation>
@@ -1661,7 +1661,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="render-kit-class"
-                         type="j2ee:fully-qualified-classType"
+                         type="javaee:fully-qualified-classType"
                          minOccurs="0">
                 <xsd:annotation>
                     <xsd:documentation>
@@ -1674,11 +1674,11 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="renderer"
-                         type="j2ee:faces-config-rendererType"
+                         type="javaee:faces-config-rendererType"
                          minOccurs="0" 
                          maxOccurs="unbounded"/>
             <xsd:element name="render-kit-extension"
-                         type="j2ee:faces-config-render-kit-extensionType"
+                         type="javaee:faces-config-render-kit-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
@@ -1706,9 +1706,9 @@
         </xsd:annotation>
         
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="component-family"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -1720,7 +1720,7 @@
                 </xsd:annotation>                    
             </xsd:element>
             <xsd:element name="renderer-type"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -1732,7 +1732,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="renderer-class"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -1744,15 +1744,15 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="facet"
-                         type="j2ee:faces-config-facetType"
+                         type="javaee:faces-config-facetType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
             <xsd:element name="attribute"
-                         type="j2ee:faces-config-attributeType"
+                         type="javaee:faces-config-attributeType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
             <xsd:element name="renderer-extension"
-                         type="j2ee:faces-config-renderer-extensionType"
+                         type="javaee:faces-config-renderer-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
@@ -1815,7 +1815,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:simpleContent>
-            <xsd:restriction base="j2ee:string"/>
+            <xsd:restriction base="javaee:string"/>
         </xsd:simpleContent>
     </xsd:complexType>
 
@@ -1835,7 +1835,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:simpleContent>
-            <xsd:extension base="j2ee:faces-config-localeType">
+            <xsd:extension base="javaee:faces-config-localeType">
                 <xsd:attribute name="id" type="xsd:ID"/> 
             </xsd:extension>
         </xsd:simpleContent>
@@ -1865,9 +1865,9 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="validator-id"
-                         type="j2ee:string">
+                         type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -1879,7 +1879,7 @@
                 </xsd:annotation>                
             </xsd:element>
             <xsd:element name="validator-class"
-                         type="j2ee:fully-qualified-classType">
+                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                         
@@ -1891,7 +1891,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="attribute"
-                         type="j2ee:faces-config-attributeType"
+                         type="javaee:faces-config-attributeType"
                          minOccurs="0" 
                          maxOccurs="unbounded">
                 <xsd:annotation>
@@ -1909,7 +1909,7 @@
 
             </xsd:element>
             <xsd:element name="property"
-                         type="j2ee:faces-config-propertyType"
+                         type="javaee:faces-config-propertyType"
                          minOccurs="0" 
                          maxOccurs="unbounded">
                 <xsd:annotation>
@@ -1926,7 +1926,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="validator-extension"
-                         type="j2ee:faces-config-validator-extensionType"
+                         type="javaee:faces-config-validator-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
@@ -1969,7 +1969,7 @@
 
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:union memberTypes="j2ee:faces-config-el-expressionType xsd:string"/>
+        <xsd:union memberTypes="javaee:faces-config-el-expressionType xsd:string"/>
     </xsd:simpleType>
     
     <!-- **************************************************** -->
@@ -1987,7 +1987,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:simpleContent>
-            <xsd:restriction base="j2ee:fully-qualified-classType"/>
+            <xsd:restriction base="javaee:fully-qualified-classType"/>
         </xsd:simpleContent>
     </xsd:complexType>
 
@@ -2007,13 +2007,13 @@
         </xsd:annotation>
         <xsd:sequence>
             <xsd:element name="value-class"
-                         type="j2ee:faces-config-value-classType"
+                         type="javaee:faces-config-value-classType"
                          minOccurs="0"/>
             <xsd:choice minOccurs="0" maxOccurs="unbounded">
                 <xsd:element name="null-value"
-                             type="j2ee:faces-config-null-valueType"/>
+                             type="javaee:faces-config-null-valueType"/>
                 <xsd:element name="value"
-                             type="j2ee:faces-config-valueType"/>
+                             type="javaee:faces-config-valueType"/>
             </xsd:choice>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>

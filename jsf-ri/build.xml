@@ -335,7 +335,7 @@ must exist.  This is necessary for the MessageFactory class.
            destdir="${build.classes}"
              debug="${compile.debug}"
        deprecation="${compile.deprecation}"
-            source="1.4"
+            source="1.5"
           optimize="${compile.optimize}">
       <classpath refid="compile.classpath"/>
     </javac>
@@ -637,7 +637,7 @@ must exist.  This is necessary for the MessageFactory class.
             style="conf/xslt/prune-tool-data.xsl">
       </xslt>
       <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml">
-          <replacetoken><![CDATA[xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"]]></replacetoken>
+          <replacetoken><![CDATA[xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"]]></replacetoken>
       </replace>
       <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml">
           <replacetoken><![CDATA[ >]]></replacetoken>
@@ -646,9 +646,9 @@ must exist.  This is necessary for the MessageFactory class.
       <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml">
           <replacetoken><![CDATA[<faces-config>]]></replacetoken>
           <replacevalue><![CDATA[
-<faces-config xmlns="http://java.sun.com/xml/ns/j2ee"
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-facesconfig_1_2.xsd"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
     version="1.2">]]>
           </replacevalue>
       </replace>
@@ -671,7 +671,7 @@ must exist.  This is necessary for the MessageFactory class.
                      destdir="${basedir}/build/test"
                        debug="${compile.debug}"
                     optimize="${compile.optimize}"
-                      source="1.4"
+                      source="1.5"
                  deprecation="${compile.deprecation}">
 
         <classpath     refid="test.classpath"/>

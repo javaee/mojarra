@@ -2,7 +2,7 @@
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- * $Id: DigesterFactory.java,v 1.5 2005/07/27 21:59:13 edburns Exp $
+ * $Id: DigesterFactory.java,v 1.6 2005/08/15 23:37:01 rlubke Exp $
  */
 
 
@@ -89,7 +89,6 @@ public class DigesterFactory {
     /**
      * <p>Returns a new <code>DigesterFactory</code> instance that will create
      * a non-validating <code>Digester</code> instance.</p>
-     * @return
      */
     public static DigesterFactory newInstance() {
 
@@ -119,7 +118,6 @@ public class DigesterFactory {
     /**
      * <p>Creates a new <code>Digester</code> instance configured for use
      * with JSF.</p>
-     * @return
      */
     public Digester createDigester() {
 
@@ -222,12 +220,12 @@ public class DigesterFactory {
                 "/com/sun/faces/web-facesconfig_1_2.xsd"
             },
             {
-                "j2ee_1_4.xsd",
-                "/com/sun/faces/j2ee_1_4.xsd"
+                "javaee_5.xsd",
+                "/com/sun/faces/javaee_5.xsd"
             },
             {
-                "j2ee_web_services_client_1_1.xsd",
-                "/com/sun/faces/j2ee_web_services_client_1_1.xsd"
+                "javaee_web_services_client_1_2.xsd",
+                "/com/sun/faces/javaee_web_services_client_1_2.xsd"
             },
             {
                 "xml.xsd",
@@ -239,7 +237,7 @@ public class DigesterFactory {
          * <p>Contains mapping between grammar name and the local URL to the
          * physical resource.</p>
          */
-        private HashMap entities = new HashMap();
+        private HashMap<String,String> entities = new HashMap<String, String>();
 
 
         // -------------------------------------------------------- Constructors
@@ -252,17 +250,20 @@ public class DigesterFactory {
             // cannot be found, then rely on default entity resolution
             // and hope a firewall isn't in the way or a proxy has
             // been configured
-            for (int i = 0; i < DTD_SCHEMA_INFO.length; i++) {
-                URL url = this.getClass().getResource(DTD_SCHEMA_INFO[i][1]);
+            for (String[] aDTD_SCHEMA_INFO : DTD_SCHEMA_INFO) {
+                URL url = this.getClass().getResource(aDTD_SCHEMA_INFO[1]);
                 if (url == null) {
                     if (logger.isLoggable(Level.WARNING)) {
-                        logger.log(Level.WARNING, "Unable to locate local resource '" +
-                            DTD_SCHEMA_INFO[i][1] + "'.  Standard entity " +
-                            "resolution will be used when request are present" +
-                            " for '" + DTD_SCHEMA_INFO[i][0] + '\'');
+                        logger.log(Level.WARNING,
+                                   "nable to locate local resource '"
+                                   + aDTD_SCHEMA_INFO[1]
+                                   + "'.  Standard entity "
+                                   + "resolution will be used when request "
+                                   + "is present for '"
+                                   + aDTD_SCHEMA_INFO[0] + '\'');
                     }
                 } else {
-                    entities.put(DTD_SCHEMA_INFO[i][0], url.toString());
+                    entities.put(aDTD_SCHEMA_INFO[0], url.toString());
                 }
             }
 
@@ -288,22 +289,22 @@ public class DigesterFactory {
 
             // If no system ID, defer to superclass
             if (systemId == null) {
-		InputSource result = null;
-		try {
-		    result = super.resolveEntity(publicId, systemId);
-		}
-		catch (Exception e) {
-		    throw new SAXException(e);
-		}
+                InputSource result;
+                try {
+                    result = super.resolveEntity(publicId, systemId);
+                }
+                catch (Exception e) {
+                    throw new SAXException(e);
+                }
                 return result;
             }
 
             String grammarName =
                 systemId.substring(systemId.lastIndexOf('/') + 1);
 
-            String entityURL = (String) entities.get(grammarName);
+            String entityURL = entities.get(grammarName);
 
-            InputSource source = null;
+            InputSource source;
             if (entityURL == null) {
                 // we don't have a registered mapping, so defer to our
                 // superclass for resolution
@@ -311,12 +312,12 @@ public class DigesterFactory {
                 if (logger.isLoggable(Level.FINE)) {
                     logger.log(Level.FINE, "Unknown entity, deferring to superclass.");
                 }
-		try {
-		    source = super.resolveEntity(publicId, systemId);
-		}
-		catch (Exception e) {
-		    throw new SAXException(e);
-		}
+                try {
+                    source = super.resolveEntity(publicId, systemId);
+                }
+                catch (Exception e) {
+                    throw new SAXException(e);
+                }
 
             } else {
 
