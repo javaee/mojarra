@@ -116,7 +116,7 @@ public class TestUnifiedELImpl extends ServletFacesTestCase
 
         /* testing values that end with or contain "$" */
         evaluateTest("$", "$");
-        evaluateTest("\\$", "\\$");
+        evaluateTest("\\$", "$");
         evaluateTest("$  ", "$  ");
         evaluateTest("test$", "test$");
         evaluateTest("$test", "$test");
