@@ -1,5 +1,5 @@
 /*
- * $Id: FormatPoolImpl.java,v 1.8 2002/08/23 18:42:33 jvisvanathan Exp $
+ * $Id: FormatPoolImpl.java,v 1.9 2002/09/10 21:47:51 edburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormatPoolImpl.java,v 1.8 2002/08/23 18:42:33 jvisvanathan Exp $
+ * @version $Id: FormatPoolImpl.java,v 1.9 2002/09/10 21:47:51 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,7 +134,6 @@ public FormatPoolImpl()
 
 	// get the dateStyle
 	if (null ==(dateStyle =(String) component.getAttribute("dateStyle"))) {
-	    dateStyle = DEFAULT_DATE_STYLE;
 	    dateStyleInt = DEFAULT_DATE_STYLE_INT;
 	}
 	else {
@@ -157,7 +156,6 @@ public FormatPoolImpl()
 	}
 	// get the timeStyle
 	if (null ==(timeStyle =(String) component.getAttribute("timeStyle"))) {
-	    timeStyle = DEFAULT_DATE_STYLE;
 	    timeStyleInt = DEFAULT_DATE_STYLE_INT;
 	}
 	else {

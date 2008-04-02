@@ -8,7 +8,7 @@
 
     <h1>UIInput</h1>
 
-    <h3>$Id: UIInput.jsp,v 1.1 2002/09/10 20:18:40 edburns Exp $</h3>
+    <h3>$Id: UIInput.jsp,v 1.2 2002/09/10 21:47:51 edburns Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
@@ -56,8 +56,7 @@
 </td>
 
 <td>
-		<faces:output_errors id="globalErrors" 
-			  compoundId="" />
+		<faces:output_errors id="globalErrors" />
 </td>
 
 </tr>

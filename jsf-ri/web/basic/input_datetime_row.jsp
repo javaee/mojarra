@@ -2,33 +2,6 @@
 
              <td>
 
-               <faces:output_text id="input_datetime1_label" 
-                     value="input_datetime MEDIUM readonly"/>
-
-             </td>
-
-
-             <td>
-
-               <faces:input_datetime id="input_datetime1" dateStyle="MEDIUM"
-                                 timeStyle="MEDIUM"
-                                 value="10:00:01 PM" 
-                                 readonly="true"
-
-                                 size="10" maxlength="20"
-                                 alt="input_datetime MEDIUM readonly"
-                                 accesskey="D"
-                               title="input_datetime MEDIUM readonly"/>
-
-
-             </td>
-
-            </tr>
-
-           <tr>
-
-             <td>
-
                <faces:output_text id="input_datetime2_label" 
                      value="input_datetime pattern"/>
 
