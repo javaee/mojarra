@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.54 2004/12/16 17:56:37 edburns Exp $
+ * $Id: MenuRenderer.java,v 1.55 2005/03/18 20:10:16 jayashri Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -475,10 +475,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
 
         Util.renderPassThruAttributes(context, writer, component);
-	// don't render disabled here, because it is dealt with in a
-	// special fashin further down the callstack.
-        Util.renderBooleanPassThruAttributes(writer, component, 
-					     new String [] {"disabled"});
+        Util.renderBooleanPassThruAttributes(writer, component);
 
         // Now, render the "options" portion...
         renderOptions(context, component);
@@ -514,10 +511,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         while (items.hasNext()) {
             curItem = (SelectItem) items.next();
             if (curItem instanceof SelectItemGroup) {
-// render OPTGROUP
+                // render OPTGROUP
                 writer.startElement("optgroup", component);
                 writer.writeAttribute("label", curItem.getLabel(), "label");
-// render options of this group.
+                
+                // render options of this group.
                 SelectItem[] itemsArray =
                     ((SelectItemGroup) curItem).getSelectItems();
                 for (int i = 0; i < itemsArray.length; ++i) {
@@ -557,9 +555,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         if (isSelected) {
             writer.writeAttribute("selected", "selected", "selected");
         }
-        if (curItem.isDisabled()) {
-            writer.writeAttribute("disabled", "disabled", "disabled");
-        }
 
 	String labelClass = null;
 	Boolean disabledAttr = (Boolean)component.getAttributes().get("disabled") ;
@@ -569,6 +564,13 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	        componentDisabled = true;
 	    }
 	}
+        
+        // if the component is disabled, "disabled" attribute would be rendered 
+        // on "select" tag, so don't render "disabled" on every option.
+        if ((!componentDisabled) && curItem.isDisabled()) {
+            writer.writeAttribute("disabled", "disabled", "disabled");
+        }
+        
         if (componentDisabled || curItem.isDisabled()) {
             labelClass = (String) component.
                 getAttributes().get("disabledClass");

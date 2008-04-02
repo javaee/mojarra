@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.26 2005/03/15 20:37:37 edburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.27 2005/03/18 20:10:15 jayashri Exp $ 
  */ 
 
 
@@ -36,7 +36,7 @@ import java.util.Set;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.26 2005/03/15 20:37:37 edburns Exp $
+ * @version $Id: StateManagerImpl.java,v 1.27 2005/03/18 20:10:15 jayashri Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -48,28 +48,11 @@ public class StateManagerImpl extends StateManager {
 
     private static final String FACES_VIEW_LIST =
         RIConstants.FACES_PREFIX + "VIEW_LIST";
-    
-    private static final String ENABLE_HA_PARAM = "enableHighAvailability";
-    
-    private static final String JSF_ENABLE_HA_PARAM = 
-        RIConstants.FACES_PREFIX + ENABLE_HA_PARAM;
-    
-    private static final String APPSERVER_ENABLE_HA_PARAM = 
-        "com.sun.appserver." + ENABLE_HA_PARAM;
-    
-
     /**
      * Number of views to be saved in session.
      */
     int noOfViews = 0;
     
-    /**
-     * value of <code>com.sun.faces.enableHighAvailability</code>
-     * <code>com.sun.appserver.enableHighAvailability</code>
-     * parameter
-     */
-    private Boolean haStateSavingSet = null;
-
     public SerializedView saveSerializedView(FacesContext context) 
         throws IllegalStateException{
         SerializedView result = null;
@@ -84,8 +67,7 @@ public class StateManagerImpl extends StateManager {
 	
 	// honor the transient property and remove children from the tree
 	// that are marked transient.
-	removeTransientChildrenAndFacets(context, viewRoot, new HashSet());
-	
+	removeTransientChildrenAndFacets(context, viewRoot, new HashSet());	
 	
  	if (log.isDebugEnabled()) {
  	    log.debug("Begin creating serialized view for " +
@@ -107,12 +89,10 @@ public class StateManagerImpl extends StateManager {
  		LRUMap lruMap = null;
  		Map sessionMap = Util.getSessionMap(context);
 		Object stateArray[] = { treeStructure, componentState };
- 		
+ 
  		if (null == (lruMap = (LRUMap) 
- 			     sessionMap.get(RIConstants.STATE_MAP))) {
-		    lruMap = new LRUMap(15); // PENDING(edburns):
-		    // configurable
-		    
+                        sessionMap.get(RIConstants.STATE_MAP))) {
+		    lruMap = new LRUMap(getNumberOfViewsParameter(context)); 
  		    sessionMap.put(RIConstants.STATE_MAP, lruMap);
  		}
 		result = new SerializedView(id, null);
@@ -130,7 +110,6 @@ public class StateManagerImpl extends StateManager {
 	if (requestIdSerial++ == Character.MAX_VALUE) {
 	    requestIdSerial = 0;
 	}
-	
 	return UIViewRoot.UNIQUE_ID_PREFIX + ((int) requestIdSerial);
     }
 
@@ -225,8 +204,6 @@ public class StateManagerImpl extends StateManager {
             }
         } else {
             // restore tree from session.
-            // if high available state saving option is chosen, restore
-            // the SerializedView from session instead of UIViewRoot.
 	    Object id = ((Util.getResponseStateManager(context, renderKitId)).
 			 getTreeStructureToRestore(context, viewId));
 
@@ -401,31 +378,6 @@ public class StateManagerImpl extends StateManager {
     }
     
     /**
-     * Returns true one of <code>com.sun.faces.enableHighAvailability</code>
-     * or <code>com.sun.appserver.enableHighAvailability</code>
-     * servlet context parameter is set.
-     */
-    protected boolean isHAStateSavingSet(FacesContext context) {
-	if (null != haStateSavingSet) {
-	    return haStateSavingSet.booleanValue();
-	}
-	haStateSavingSet = Boolean.FALSE;
-
-        String haStateSavingParam = context.getExternalContext().
-            getInitParameter(JSF_ENABLE_HA_PARAM);
-        if (haStateSavingParam != null){
-	    haStateSavingSet = Boolean.valueOf(haStateSavingParam);
-        } else {
-            haStateSavingParam = context.getExternalContext().
-            getInitParameter(APPSERVER_ENABLE_HA_PARAM);   
-            if (haStateSavingParam != null){
-	        haStateSavingSet = Boolean.valueOf(haStateSavingParam);
-            }
-        }
-        return haStateSavingSet.booleanValue();
-    }
-    
-    /**
      * Returns the <code> UIViewRoot</code> corresponding the 
      * <code> viewId </code> by restoring the view structure and state.
      */
@@ -449,5 +401,31 @@ public class StateManagerImpl extends StateManager {
              viewRoot.processRestoreState(context, state);
         }
         return ((UIViewRoot)viewRoot);
+    }
+    
+    /**
+     * Returns the value of ServletContextInitParameter that specifies the
+     * maximum number of views to be saved in session. If none is specified
+     * returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_SESSION</code>.
+     */
+    protected int getNumberOfViewsParameter(FacesContext context) {
+        if (noOfViews != 0) { 
+            return noOfViews;
+        }
+        noOfViews = DEFAULT_NUMBER_OF_VIEWS_IN_SESSION;
+        String noOfViewsStr = context.getExternalContext().
+                getInitParameter(NUMBER_OF_VIEWS_IN_SESSION);
+        if (noOfViewsStr != null) {
+            try {
+                noOfViews = Integer.valueOf(noOfViewsStr).intValue();
+            } catch (NumberFormatException nfe) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Error parsing the servetInitParameter " +
+                            NUMBER_OF_VIEWS_IN_SESSION + ". Using default " + 
+                            noOfViews);
+                }
+            }
+        } 
+        return noOfViews;
     }
 }

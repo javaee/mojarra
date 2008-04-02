@@ -345,7 +345,7 @@
 
         <TD>
 
-             <h:selectOneMenu styleClass="selectoneClass"
+             <h:selectOneMenu styleClass="selectoneClass" disabled="true"
                      title="Select Quantity" style="someStyle"
                      tabindex="20" enabledClass="eclass" disabledClass="dclass">
 
@@ -388,7 +388,7 @@
       <TR>
 
 	<TD>
-            <h:selectOneRadio id="verticalRadio" 
+            <h:selectOneRadio id="verticalRadio" disabled="true"
                                             layout="pageDirection" border="1" >
 
                 <f:selectItem itemValue="nextDay" itemLabel="Next Day"
@@ -620,7 +620,7 @@
 <tr>
 					<TD>Multi-select listbox:</TD>
 					<TD><h:selectManyListbox style="someStyle" enabledClass="eclass"
-                                              disabledClass="dclass">
+                                              disabledClass="dclass" disabled="true">
 						<f:selectItem itemValue="0" itemLabel="zero" />
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
