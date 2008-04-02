@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.47 2003/09/25 16:36:32 rlubke Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.48 2003/10/06 19:06:48 horwat Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ public class SelectBoolean_CheckboxTag extends BaseComponentTag
         return "Checkbox"; 
     }
     public String getComponentType() { 
-        return "SelectBoolean"; 
+        return "SelectBooleanCheckbox"; 
     }
 
     protected void overrideProperties(UIComponent component) {

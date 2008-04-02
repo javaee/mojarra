@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.50 2003/09/25 16:36:31 rlubke Exp $
+ * $Id: Output_TextTag.java,v 1.51 2003/10/06 19:06:47 horwat Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ public class Output_TextTag extends BaseComponentTag
         return "Text"; 
     }
     public String getComponentType() { 
-        return "Output"; 
+        return "OutputText"; 
     }
 
     //

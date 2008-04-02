@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LabelTag.java,v 1.12 2003/09/25 16:36:30 rlubke Exp $
+ * $Id: Output_LabelTag.java,v 1.13 2003/10/06 19:06:47 horwat Exp $
  */
 
 /*
@@ -65,8 +65,12 @@ public class Output_LabelTag extends BaseComponentTag
     // General Methods
     //
 
-    public String getRendererType() { return "Label"; }
-    public String getComponentType() { return "Output"; }
+    public String getRendererType() { 
+        return "Label"; 
+    }
+    public String getComponentType() { 
+        return "OutputLabel"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);

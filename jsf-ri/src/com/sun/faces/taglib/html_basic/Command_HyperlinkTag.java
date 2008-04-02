@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.38 2003/09/25 16:36:28 rlubke Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.39 2003/10/06 19:06:46 horwat Exp $
  */
 
 /*
@@ -83,7 +83,7 @@ public class Command_HyperlinkTag extends BaseComponentTag
         return "Hyperlink"; 
     }
     public String getComponentType() { 
-        return "Command"; 
+        return "CommandHyperlink"; 
     }
 
 

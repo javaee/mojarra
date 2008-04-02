@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.12 2003/09/24 23:17:16 horwat Exp $
+ * $Id: Input_SecretTag.java,v 1.13 2003/10/06 19:06:47 horwat Exp $
  */
 
 /*
@@ -65,6 +65,9 @@ public class Input_SecretTag extends Input_TextTag
 
     public String getRendererType() { 
         return "Secret"; 
+    }
+    public String getComponentType() {
+	return "InputSecret";
     }
 
     protected void overrideProperties(UIComponent component) {

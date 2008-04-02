@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_MenuTag.java,v 1.13 2003/09/25 16:36:32 rlubke Exp $
+ * $Id: SelectMany_MenuTag.java,v 1.14 2003/10/06 19:06:49 horwat Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -68,7 +68,7 @@ public class SelectMany_MenuTag extends BaseComponentTag
         return "Menu"; 
     } 
     public String getComponentType() { 
-        return "SelectMany"; 
+        return "SelectManyMenu"; 
     }
 
     //

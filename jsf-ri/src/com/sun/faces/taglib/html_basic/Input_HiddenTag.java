@@ -1,5 +1,5 @@
 /*
- * $Id: Input_HiddenTag.java,v 1.16 2003/09/25 16:36:30 rlubke Exp $
+ * $Id: Input_HiddenTag.java,v 1.17 2003/10/06 19:06:47 horwat Exp $
  */
 
 /*
@@ -69,7 +69,7 @@ public class Input_HiddenTag extends BaseComponentTag
         return "Hidden"; 
     }
     public String getComponentType() { 
-        return "Input"; 
+        return "InputHidden"; 
     }
 
     protected void overrideProperties(UIComponent component) {

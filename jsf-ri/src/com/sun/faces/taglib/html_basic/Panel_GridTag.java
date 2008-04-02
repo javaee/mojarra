@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GridTag.java,v 1.14 2003/09/25 16:36:31 rlubke Exp $
+ * $Id: Panel_GridTag.java,v 1.15 2003/10/06 19:06:48 horwat Exp $
  */
 
 /*
@@ -147,7 +147,7 @@ public class Panel_GridTag extends BaseComponentTag {
         return ("Grid");
     }
     public String getComponentType() { 
-        return ("Panel"); 
+        return ("PanelGrid"); 
     }    
     
 

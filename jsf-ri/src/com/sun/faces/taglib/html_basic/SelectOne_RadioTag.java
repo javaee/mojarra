@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.31 2003/09/26 23:13:32 eburns Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.32 2003/10/06 19:06:49 horwat Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
         return "RadioButtonList"; 
     }
     public String getComponentType() { 
-        return "SelectOne"; 
+        return "SelectOneRadioButtonList"; 
     }
 
     protected void overrideProperties(UIComponent component) {

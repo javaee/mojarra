@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.45 2003/09/25 16:36:28 rlubke Exp $
+ * $Id: Command_ButtonTag.java,v 1.46 2003/10/06 19:06:45 horwat Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ public class Command_ButtonTag extends BaseComponentTag
     //
 
     public String getRendererType() { return "Button"; }
-    public String getComponentType() { return "Command"; }
+    public String getComponentType() { return "CommandButton"; }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);

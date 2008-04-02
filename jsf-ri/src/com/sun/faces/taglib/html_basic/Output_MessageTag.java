@@ -1,5 +1,5 @@
 /*
- * $Id: Output_MessageTag.java,v 1.13 2003/09/25 16:36:31 rlubke Exp $
+ * $Id: Output_MessageTag.java,v 1.14 2003/10/06 19:06:47 horwat Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ public class Output_MessageTag extends BaseComponentTag
     }
     
     public String getComponentType() { 
-        return "Output"; 
+        return "OutputMessage"; 
     }
 
     //

@@ -2124,7 +2124,7 @@
 
  <tag>
       <name>input_textarea</name>
-      <tag-class>com.sun.faces.taglib.html_basic.Input_TextAreaTag</tag-class>
+      <tag-class>com.sun.faces.taglib.html_basic.Input_TextareaTag</tag-class>
      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>

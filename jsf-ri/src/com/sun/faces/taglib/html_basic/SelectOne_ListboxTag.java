@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_ListboxTag.java,v 1.10 2003/09/25 16:36:33 rlubke Exp $
+ * $Id: SelectOne_ListboxTag.java,v 1.11 2003/10/06 19:06:49 horwat Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ public class SelectOne_ListboxTag extends BaseComponentTag
         return "Listbox"; 
     }
     public String getComponentType() { 
-        return "SelectOne"; 
+        return "SelectOneListbox"; 
     }
 
     //

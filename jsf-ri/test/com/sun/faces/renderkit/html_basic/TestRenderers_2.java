@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.60 2003/10/02 06:50:21 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.61 2003/10/06 19:06:58 horwat Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.60 2003/10/02 06:50:21 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.61 2003/10/06 19:06:58 horwat Exp $
  * 
  *
  */
@@ -140,7 +140,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         theRequest.addParameter("myOutputText", "text");
 
-        theRequest.addParameter("myTextarea", "TextAreaRenderer");
+        theRequest.addParameter("myTextarea", "TextareaRenderer");
 
         theRequest.addParameter("myGraphicImage", "graphicimage");
 
@@ -165,7 +165,7 @@ public class TestRenderers_2 extends JspFacesTestCase
             testSecretRenderer(root);
             testInputTextRenderer(root);
             testOutputTextRenderer(root);
-            testTextAreaRenderer(root);
+            testTextareaRenderer(root);
             testGraphicImageRenderer(root);            
             testOutputErrorsRenderer(root);
             testOutputMessageRenderer(root);
@@ -711,20 +711,20 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer.encodeEnd(getFacesContext(), output);
     }
 
-    public void testTextAreaRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing TextAreaRenderer");
+    public void testTextareaRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing TextareaRenderer");
         UIInput textEntry = new UIInput();
         textEntry.setValue(null);
         textEntry.setId("myTextarea");
         root.getChildren().add(textEntry);
 
-        TextAreaRenderer textAreaRenderer = new TextAreaRenderer();
+        TextareaRenderer textAreaRenderer = new TextareaRenderer();
 
         // test decode method
 
         System.out.println("    Testing decode method...");
         textAreaRenderer.decode(getFacesContext(), textEntry);
-        assertTrue(((String)textEntry.getValue()).equals("TextAreaRenderer"));
+        assertTrue(((String)textEntry.getValue()).equals("TextareaRenderer"));
 
         // test encode method
 

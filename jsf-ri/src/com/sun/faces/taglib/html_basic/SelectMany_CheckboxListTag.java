@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_CheckboxListTag.java,v 1.12 2003/09/26 23:13:32 eburns Exp $
+ * $Id: SelectMany_CheckboxListTag.java,v 1.13 2003/10/06 19:06:49 horwat Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -75,7 +75,7 @@ public class SelectMany_CheckboxListTag extends BaseComponentTag
         return "CheckboxList"; 
     } 
     public String getComponentType() {
-        return "SelectMany"; 
+        return "SelectManyCheckboxList"; 
     }
 
     protected void overrideProperties(UIComponent component) {

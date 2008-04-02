@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextTag.java,v 1.13 2003/08/29 16:03:27 rlubke Exp $
+ * $Id: Input_TextTag.java,v 1.14 2003/10/06 19:06:47 horwat Exp $
  */
 
 /*
@@ -60,7 +60,13 @@ public class Input_TextTag extends InputTag
     // General Methods
     //
 
-    public String getRendererType() { return "Text"; }
+    public String getRendererType() { 
+        return "Text"; 
+    }
+    public String getComponentType() {
+	return "InputText";
+    }
+
 
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);

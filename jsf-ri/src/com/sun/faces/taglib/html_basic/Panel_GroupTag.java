@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GroupTag.java,v 1.10 2003/09/25 16:36:31 rlubke Exp $
+ * $Id: Panel_GroupTag.java,v 1.11 2003/10/06 19:06:48 horwat Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ public class Panel_GroupTag extends BaseComponentTag {
     }
 
     public String getComponentType() { 
-        return ("Panel"); 
+        return ("PanelGroup"); 
     }    
 
 }

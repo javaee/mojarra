@@ -22,6 +22,6 @@
 <!ENTITY secret-renderer-class 'com.sun.faces.renderkit.html_basic.SecretRenderer'>
 <!ENTITY selectmanycheckboxlist-renderer-class 'com.sun.faces.renderkit.html_basic.SelectManyCheckboxListRenderer'>
 <!ENTITY table-renderer-class 'com.sun.faces.renderkit.html_basic.TableRenderer'>
-<!ENTITY textarea-renderer-class 'com.sun.faces.renderkit.html_basic.TextAreaRenderer'>
+<!ENTITY textarea-renderer-class 'com.sun.faces.renderkit.html_basic.TextareaRenderer'>
 <!ENTITY text-renderer-class 'com.sun.faces.renderkit.html_basic.TextRenderer'>
 

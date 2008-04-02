@@ -1,5 +1,5 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.13 2003/09/26 21:56:08 rkitain Exp $
+ * $Id: Graphic_ImageTag.java,v 1.14 2003/10/06 19:06:46 horwat Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ public class Graphic_ImageTag extends BaseComponentTag
         return "Image"; 
     }
     public String getComponentType() { 
-        return "Graphic"; 
+        return "GraphicImage"; 
     }
 
     protected void overrideProperties(UIComponent component) {

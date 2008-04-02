@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_DataTag.java,v 1.12 2003/09/25 16:36:31 rlubke Exp $
+ * $Id: Panel_DataTag.java,v 1.13 2003/10/06 19:06:48 horwat Exp $
  */
 
 /*
@@ -75,7 +75,7 @@ public class Panel_DataTag extends BaseComponentTag {
     }    
 
     public String getComponentType() { 
-        return ("Panel"); 
+        return ("PanelData"); 
     }    
 
 }
