@@ -9,7 +9,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.webapp.UIComponentTag;
 
 import com.sun.faces.sandbox.component.YuiCalendar;
-import com.sun.faces.sandbox.component.YuiTree;
 import com.sun.faces.sandbox.util.Util;
 
 public class YuiCalendarTag extends UIComponentTag {
@@ -149,7 +148,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (accesskey != null) {
             if (isValueReference(accesskey)) {
                 ValueBinding vb = Util.getValueBinding(accesskey);
-                cal.setValueBinding(accesskey, vb);
+                cal.setValueBinding("accesskey", vb);
             } else {
                 // TODO:  implement or remove
 //                cal.setAccesskey(accesskey);
@@ -159,7 +158,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (converter != null) {
             if (isValueReference(converter)) {
                 ValueBinding vb = Util.getValueBinding(converter);
-                cal.setValueBinding(converter, vb);
+                cal.setValueBinding("converter", vb);
             } else {
                 Converter _converter = FacesContext.getCurrentInstance().  
                     getApplication().createConverter(converter);  
@@ -170,7 +169,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (converterMessage != null) {
             if (isValueReference(converterMessage)) {
                 ValueBinding vb = Util.getValueBinding(converterMessage);
-                cal.setValueBinding(converterMessage, vb);
+                cal.setValueBinding("converterMessage", vb);
             } else {
                 cal.setConverterMessage(converterMessage);
             }
@@ -179,7 +178,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (dir != null) {
             if (isValueReference(dir)) {
                 ValueBinding vb = Util.getValueBinding(dir);
-                cal.setValueBinding(dir, vb);
+                cal.setValueBinding("dir", vb);
             } else {
 //                cal.setDir(dir);
             }
@@ -188,7 +187,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (disabled != null) {
             if (isValueReference(disabled)) {
                 ValueBinding vb = Util.getValueBinding(disabled);
-                cal.setValueBinding(disabled, vb);
+                cal.setValueBinding("disabled", vb);
             } else {
 //              TODO:  implement or remove
 //                cal.setDisabled(Boolean.parseBoolean(disabled));
@@ -198,7 +197,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (hideBlankWeeks != null) {
             if (isValueReference(hideBlankWeeks)) {
                 ValueBinding vb = Util.getValueBinding(hideBlankWeeks);
-                cal.setValueBinding(hideBlankWeeks, vb);
+                cal.setValueBinding("hideBlankWeeks", vb);
             } else {
                 cal.setHideBlankWeeks(Boolean.parseBoolean(hideBlankWeeks));
             }
@@ -207,7 +206,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (immediate != null) {
             if (isValueReference(immediate)) {
                 ValueBinding vb = Util.getValueBinding(immediate);
-                cal.setValueBinding(immediate, vb);
+                cal.setValueBinding("immediate", vb);
             } else {
                 cal.setImmediate(Boolean.parseBoolean(immediate));
             }
@@ -216,7 +215,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (label != null) {
             if (isValueReference(label)) {
                 ValueBinding vb = Util.getValueBinding(label);
-                cal.setValueBinding(label, vb);
+                cal.setValueBinding("label", vb);
             } else {
 //              TODO:  implement or remove
 //                cal.setLabel(label);
@@ -226,7 +225,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (lang != null) {
             if (isValueReference(lang)) {
                 ValueBinding vb = Util.getValueBinding(lang);
-                cal.setValueBinding(lang, vb);
+                cal.setValueBinding("lang", vb);
             } else {
 //              TODO:  implement or remove
 //                cal.setLang(lang);
@@ -236,7 +235,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (multiSelect != null) {
             if (isValueReference(multiSelect)) {
                 ValueBinding vb = Util.getValueBinding(multiSelect);
-                cal.setValueBinding(multiSelect, vb);
+                cal.setValueBinding("multiSelect", vb);
             } else {
                 cal.setMultiSelect(Boolean.parseBoolean(multiSelect));
             }
@@ -245,7 +244,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (onchange != null) {
             if (isValueReference(onchange)) {
                 ValueBinding vb = Util.getValueBinding(onchange);
-                cal.setValueBinding(onchange, vb);
+                cal.setValueBinding("onchange", vb);
             } else {
                 cal.setOnchange(onchange);
             }
@@ -254,7 +253,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (required != null) {
             if (isValueReference(required)) {
                 ValueBinding vb = Util.getValueBinding(required);
-                cal.setValueBinding(required, vb);
+                cal.setValueBinding("required", vb);
             } else {
                 cal.setRequired(Boolean.parseBoolean(required));
             }
@@ -263,7 +262,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (requiredMessage != null) {
             if (isValueReference(requiredMessage)) {
                 ValueBinding vb = Util.getValueBinding(requiredMessage);
-                cal.setValueBinding(requiredMessage, vb);
+                cal.setValueBinding("requiredMessage", vb);
             } else {
                 cal.setRequiredMessage(requiredMessage);
             }
@@ -272,7 +271,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (showWeekdays != null) {
             if (isValueReference(showWeekdays)) {
                 ValueBinding vb = Util.getValueBinding(showWeekdays);
-                cal.setValueBinding(showWeekdays, vb);
+                cal.setValueBinding("showWeekdays", vb);
             } else {
                 cal.setShowWeekdays(Boolean.parseBoolean(showWeekdays));
             }
@@ -281,7 +280,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (showWeekFooter != null) {
             if (isValueReference(showWeekFooter)) {
                 ValueBinding vb = Util.getValueBinding(showWeekFooter);
-                cal.setValueBinding(showWeekFooter, vb);
+                cal.setValueBinding("showWeekFooter", vb);
             } else {
                 cal.setShowWeekFooter(Boolean.parseBoolean(showWeekFooter));
             }
@@ -290,7 +289,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (showWeekHeader != null) {
             if (isValueReference(showWeekHeader)) {
                 ValueBinding vb = Util.getValueBinding(showWeekHeader);
-                cal.setValueBinding(showWeekHeader, vb);
+                cal.setValueBinding("showWeekHeader", vb);
             } else {
                 cal.setShowWeekHeader(Boolean.parseBoolean(showWeekHeader));
             }
@@ -299,7 +298,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (startWeekday != null) {
             if (isValueReference(startWeekday)) {
                 ValueBinding vb = Util.getValueBinding(startWeekday);
-                cal.setValueBinding(startWeekday, vb);
+                cal.setValueBinding("startWeekday", vb);
             } else {
                 cal.setStartWeekday(Integer.parseInt(startWeekday));
             }
@@ -308,7 +307,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (style != null) {
             if (isValueReference(style)) {
                 ValueBinding vb = Util.getValueBinding(style);
-                cal.setValueBinding(style, vb);
+                cal.setValueBinding("style", vb);
             } else {
 //              TODO:  implement or remove
 //                cal.setStyle(style);
@@ -318,7 +317,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (styleClass != null) {
             if (isValueReference(styleClass)) {
                 ValueBinding vb = Util.getValueBinding(styleClass);
-                cal.setValueBinding(styleClass, vb);
+                cal.setValueBinding("styleClass", vb);
             } else {
 //              TODO:  implement or remove
 //                cal.setStyleClass(styleClass);
@@ -328,7 +327,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (tabindex != null) {
             if (isValueReference(tabindex)) {
                 ValueBinding vb = Util.getValueBinding(tabindex);
-                cal.setValueBinding(tabindex, vb);
+                cal.setValueBinding("tabindex", vb);
             } else {
 //              TODO:  implement or remove
 //                cal.setTabIndex(tabindex);
@@ -338,7 +337,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (title != null) {
             if (isValueReference(title)) {
                 ValueBinding vb = Util.getValueBinding(title);
-                cal.setValueBinding(title, vb);
+                cal.setValueBinding("title", vb);
             } else {
 //              TODO:  implement or remove
 //                cal.setTitle(title);
@@ -359,7 +358,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (validatorMessage != null) {
             if (isValueReference(validatorMessage)) {
                 ValueBinding vb = Util.getValueBinding(validatorMessage);
-                cal.setValueBinding(validatorMessage, vb);
+                cal.setValueBinding("validatorMessage", vb);
             } else {
                 cal.setValidatorMessage(validatorMessage);
             }
@@ -368,7 +367,7 @@ public class YuiCalendarTag extends UIComponentTag {
         if (value != null) {
             if (isValueReference(value)) {
                 ValueBinding vb = Util.getValueBinding(value);
-                cal.setValueBinding(value, vb);
+                cal.setValueBinding("value", vb);
             } else {
                 cal.setValue(value);
             }
@@ -385,80 +384,5 @@ public class YuiCalendarTag extends UIComponentTag {
             }
         }
 
-    }
-    public String getAccesskey() {
-        return accesskey;
-    }
-    public String getConverter() {
-        return converter;
-    }
-    public String getConverterMessage() {
-        return converterMessage;
-    }
-    public String getDir() {
-        return dir;
-    }
-    public String getDisabled() {
-        return disabled;
-    }
-    public String getHideBlankWeeks() {
-        return hideBlankWeeks;
-    }
-    public String getImmediate() {
-        return immediate;
-    }
-    public String getLabel() {
-        return label;
-    }
-    public String getLang() {
-        return lang;
-    }
-    public String getMultiSelect() {
-        return multiSelect;
-    }
-    public String getOnchange() {
-        return onchange;
-    }
-    public String getRequired() {
-        return required;
-    }
-    public String getRequiredMessage() {
-        return requiredMessage;
-    }
-    public String getShowWeekdays() {
-        return showWeekdays;
-    }
-    public String getShowWeekFooter() {
-        return showWeekFooter;
-    }
-    public String getShowWeekHeader() {
-        return showWeekHeader;
-    }
-    public String getStartWeekday() {
-        return startWeekday;
-    }
-    public String getStyle() {
-        return style;
-    }
-    public String getStyleClass() {
-        return styleClass;
-    }
-    public String getTabindex() {
-        return tabindex;
-    }
-    public String getTitle() {
-        return title;
-    }
-    public String getValidator() {
-        return validator;
-    }
-    public String getValidatorMessage() {
-        return validatorMessage;
-    }
-    public String getValue() {
-        return value;
-    }
-    public String getValueChangeListener() {
-        return valueChangeListener;
     }
 }
