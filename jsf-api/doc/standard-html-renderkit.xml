@@ -604,6 +604,46 @@
         <attribute-name>onblur</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
+      
+      <attribute>
+        <description>for use with client-side image maps</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>shape</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+      <attribute>
+        <description>for use with client-side image maps</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>coords</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+      <attribute>
+        <description>forward link types</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>rel</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+      <attribute>
+        <description>reverse link types</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>rev</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+       <attribute>
+        <description>language code</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>hreflang</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute> 
 
       <!-- non-html renderer specific attributes -->
 
@@ -655,6 +695,22 @@
         <icon></icon>
         <attribute-name>width</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>use client-side image map</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>usemap</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+      <attribute>
+        <description>use server-side image map</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>ismap</attribute-name>
+        <attribute-class>boolean</attribute-class>
       </attribute>
 
       <component-type>GraphicImage</component-type>
