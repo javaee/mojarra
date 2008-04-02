@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.24 2003/02/14 14:42:26 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.25 2003/02/18 18:03:56 craigmcc Exp $
  */
 
 /*
@@ -299,16 +299,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
         setPreviousValue(component, curValue);
 
         String newValue = context.getServletRequest().getParameter(clientId);
-        
-        //PENDING(rogerk) FIXME this will most likely be changed in the 
-        // API later, in which case we could remove this..
-        //
-        if (newValue != null && newValue.equals("")) {
-            newValue = null;
-            component.setValue(newValue);
-            component.setValid(true);
-            return;
-        }
         try {
             convertedValue = getConvertedValue(context, component, newValue);   
         } catch (IOException ioe) {
