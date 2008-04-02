@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.10 2003/08/22 14:03:07 eburns Exp $
+ * $Id: Application.java,v 1.11 2003/08/26 21:50:01 craigmcc Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.util.Iterator;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.PropertyResolver;
@@ -53,36 +54,75 @@ public abstract class Application {
 
 
     /**
-     * <p>Return the {@link ActionListener} that will be the default
-     * {@link ActionListener} to be registered with relevant components
-     * during the <em>Restore View</em> phase of the request processing
-     * lifecycle.  The default implementation will perform the following
-     * functions:</p>
-     *
+     * <p>Return the default {@link ActionListener} to be registered for all
+     * {@link UICommand} components whose <code>immediate</code> property is
+     * <code>true</code>.  The default implementation must perform the
+     * following functions:</p>
      * <ul>
      * <li>The <code>getPhaseId()</code> method of this listener instance
-     *     must return <code>PhaseId.INVOKE_APPLICATION</code>.</li>
-     * <li>If the source component has a non-null <code>action</code>
-     *     property, return that value.</li>
-     * <li>If the source component has a non-null <code>actionRef</code>
-     *     property, evaluate this value reference to retrieve the
-     *     corresponding object.</li>
-     * <li>If there is no such corresponding object, or if this object
-     *     does not implement {@link Action}, throw an
-     *     <code>IllegalArgumentException</code>.</li>
-     * <li>Call the <code>invoke()</code> method of the returned object,
-     *     and return the return value from that method call.</li>
+     *     must return <code>PhaseId.APPLY_REQUEST_VALUES</code>.</li>
+     * <li>The <code>processAction()</code> method must first call
+     *     <code>FacesContext.renderResponse()</code> in order to bypass
+     *     any intervening lifecycle phases, once the method returns.</li>
+     * <li>The <code>processAction()</code> method must next determine
+     *     the logical outcome of this event, as follows:
+     *     <ul>
+     *     <li>If the originating component has a non-<code>null</code>
+     *         <code>action</code> property, its value is used as the
+     *         logical outcome.</li>
+     *     <li>If the originating component has a non-<code>null</code>
+     *         <code>actionRef</code> property, create a {@link ValueBinding}
+     *         for this reference expression, call <code>getValue()</code>
+     *         to retrieve an <code>Action</code> instance.  Call the
+     *         <code>invoke()</code> method on this instance, and use the
+     *         returned value as the logical outcome.</li>
+     *     <li>Otherwise, the logical outcome is <code>null</code>.</li>
+     *     </ul></li>
+     * <li>The <code>processAction()</code> method must finally retrieve
+     *     the <code>NavigationHandler()</code> instance for this
+     *     application, and pass the {@link FacesContext} for the
+     *     current request, the <code>actionRef</code> value of the
+     *     originating component (if any), and the logical outcome
+     *     as determined above to the <code>handleNavigation()</code>
+     *     method.</li>
      * </ul>
      */
     public abstract ActionListener getActionListener();
 
 
     /**
-     * <p>Replace the default {@link ActionListener} that will be
-     * registered with relevant components during the <em>Restore
-     * View</em> phase of the request processing lifecycle.  This
-     * listener must return <code>PhaseId.INVOKE_APPLICATION</code> from
-     * its <code>getPhaseId()</code> method.</p>
+     * <p>Replace the default {@link ActionListener} to be registered for all
+     * {@link UICommand} components whose <code>immediate</code> property is
+     * <code>true</code>.</p>
+     *
+     * @param listener The new {@link ActionListener}
+     *
+     * @exception IllegalArgumentException if the specified
+     *  <code>listener</code> does not return
+     *  <code>PhaseId.APPLY_REQUEST_VALUES</code> from its
+     *  <code>getPhaseId()</code> method
+     * @exception NullPointerException if <code>listener</code>
+     *  is <code>null</code>
+     */
+    public abstract void setActionListener(ActionListener listener);
+
+
+    /**
+     * <p>Return the default {@link ActionListener} to be registered for all
+     * {@link UICommand} components whose <code>immediate</code> property is
+     * <code>false</code>.  The default implementation must behave identically
+     * to the default listener returned by <code>getActionListener</code>,
+     * except that the <code>getPhaseId()</code> method must return
+     * <code>PhaseId.INVOKE_APPLICATION</code> instead of
+     * <code>PhaseId.APPLY_REQUEST_VALUES</code>.</p>
+     */
+    public abstract ActionListener getApplicationListener();
+
+
+    /**
+     * <p>Replace the default {@link ActionListener} to be registered for all
+     * {@link UICommand} components whose <code>immediate</code> property is
+     * <code>false</code>.</p>
      *
      * @param listener The new {@link ActionListener}
      *
@@ -93,7 +133,7 @@ public abstract class Application {
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
-    public abstract void setActionListener(ActionListener listener);
+    public abstract void setApplicationListener(ActionListener listener);
 
 
     /**

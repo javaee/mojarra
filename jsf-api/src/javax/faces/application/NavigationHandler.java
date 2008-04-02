@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandler.java,v 1.5 2003/08/22 14:03:07 eburns Exp $
+ * $Id: NavigationHandler.java,v 1.6 2003/08/26 21:50:01 craigmcc Exp $
  */
 
 /*
@@ -19,9 +19,16 @@ import javax.faces.context.FacesContext;
  * use this (along with related state information) to choose the view to
  * be displayed next.</p>
  *
- * <p>The behavior requirements for the default implementation have not
- * yet been defined by the JSR-127 expert group, but will be documented here
- * when completed.</p>
+ * <p>A default implementation of <code>NavigationHandler</code> must be
+ * provided by the JSF implementation, which will be utilized unless
+ * <code>setNavigationHandler()</code> is called to establish a different one.
+ * This default instance will compare the view identifier of the current
+ * view, the specified action reference, and the specified outcome against
+ * any navigation rules provided in <code>faces-config.xml</code> file(s).
+ * If a navigation case matches, the current view will be changed by a call
+ * to <code>FacesContext.setViewRoot()</code>.  Note that a <code>null</code>
+ * outcome value will never match any navigation rule, so it can be used as an
+ * indicator that the current view should be redisplayed.</p>
  */
 
 public abstract class NavigationHandler {
@@ -37,9 +44,10 @@ public abstract class NavigationHandler {
      *  to retrieve the specified outcome, or <code>null</code> if the
      *  outcome was acquired by some other means
      * @param outcome The logical outcome returned by a previous {@link Action}
+     *  (which may be <code>null</code>)
      *
-     * @exception NullPointerException if <code>context</code> or
-     *  <code>outcome</code> is <code>null</code>
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
     public abstract void handleNavigation(FacesContext context,
                                           String actionRef,

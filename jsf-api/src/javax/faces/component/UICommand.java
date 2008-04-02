@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.39 2003/07/27 00:48:20 craigmcc Exp $
+ * $Id: UICommand.java,v 1.40 2003/08/26 21:50:03 craigmcc Exp $
  */
 
 /*
@@ -61,8 +61,10 @@ public interface UICommand extends UIOutput {
     /**
      * <p>Return the <em>action reference expression</em> pointing at the
      * {@link javax.faces.application.Action} to be invoked, if this component
-     * is activated by the user, during <em>Invoke Application</em> phase
-     * of the request processing lifecycle.</p>
+     * is activated by the user, during the <em>Apply Request Values</em>
+     * or <em>Invoke Application</em> phase of the request processing
+     * lifecycle, depending on the value of the <code>immediate</code>
+     * property.</p>
      */
     public String getActionRef();
 
@@ -70,12 +72,33 @@ public interface UICommand extends UIOutput {
     /**
      * <p>Set the <em>action reference expression</em> pointing at the
      * {@link javax.faces.application.Action} to be invoked, if this component
-     * is activated by the user, during <em>Invoke Application</em> phase
-     * of the request processing lifecycle.</p>
+     * is activated by the user, during the <em>Apply Request Values</em>
+     * or <em>Invoke Application</em> phase of the request processing
+     * lifecycle, depending on the value of the <code>immediate</code>
+     * property.</p>
      *
      * @param actionRef The new action reference
      */
     public void setActionRef(String actionRef);
+
+
+    /**
+     * <p>Return a flag indicating that the default {@link ActionListener}
+     * provided by the JavaServer Faces implementation should be executed
+     * immediately (that is, during <em>Apply Request Values</em> phase
+     * of the request processing lifecycle), rather than waiting until the
+     * <em>Invoke Application</em> phase.  The default value for this
+     * property must be <code>false</code>.</p>
+     */
+    public boolean isImmediate();
+
+
+    /**
+     * <p>Set the "immediate execution" flag for this {@link UICommand}.</p>
+     *
+     * @param immediate The new immediate execution flag
+     */
+    public void setImmediate(boolean immediate);
 
 
     // ------------------------------------------------ Event Processing Methods

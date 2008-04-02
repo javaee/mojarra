@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBase.java,v 1.5 2003/08/03 22:54:55 eburns Exp $
+ * $Id: UICommandBase.java,v 1.6 2003/08/26 21:50:04 craigmcc Exp $
  */
 
 /*
@@ -80,6 +80,28 @@ public class UICommandBase extends UIOutputBase implements UICommand {
     public void setActionRef(String actionRef) {
 
         this.actionRef = actionRef;
+
+    }
+
+
+    /**
+     * <p>The immediate flag.</p>
+     */
+    // PENDING(craigmcc) - not saved as part of the state yet,
+    // will be picked up when that mechanism is remodelled
+    private boolean immediate = false;
+
+
+    public boolean isImmediate() {
+
+        return (this.immediate);
+
+    }
+
+
+    public void setImmediate(boolean immediate) {
+
+        this.immediate = immediate;
 
     }
 

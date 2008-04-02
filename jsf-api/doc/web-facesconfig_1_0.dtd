@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.6 2003/08/22 14:03:05 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.7 2003/08/26 21:50:00 craigmcc Exp $
 
 -->
 
@@ -139,7 +139,7 @@
     that are not specified, the JSF implementation must provide a suitable
     default.
 -->
-<!ELEMENT application     ((action-listener|navigation-handler|view-handler|property-resolver|variable-resolver)*)>
+<!ELEMENT application     ((action-listener|application-listener|navigation-handler|view-handler|property-resolver|variable-resolver)*)>
 
 
 <!--
@@ -348,10 +348,19 @@
 <!--
     The "action-listener" element contains the fully qualified class name
     of the concrete ActionListener implementation class that will be called
-    during the Invoke Application phase of the request processing lifecycle.
+    during the Apply Request Values phase of the request processing lifecycle.
     It must be of type "ClassName".
 -->
 <!ELEMENT action-listener (#PCDATA)>
+
+
+<!--
+    The "application-listener" element contains the fully qualified class name
+    of the concrete ActionListener implementation class that will be called
+    during the Invoke Application phase of the request processing lifecycle.
+    It must be of type "ClassName".
+-->
+<!ELEMENT application-listener (#PCDATA)>
 
 
 <!--
