@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.6 2003/10/15 04:17:35 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.7 2003/10/15 19:36:24 craigmcc Exp $
  */
 
 /*
@@ -47,6 +47,13 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.AbstractCollection;
+import java.util.AbstractSet;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import javax.faces.FacesException;
 import javax.faces.el.PropertyNotFoundException;
@@ -156,6 +163,7 @@ public class ResultSetDataModel extends DataModel {
         if (index == -1) {
             return (null);
         } else {
+            // PENDING(craigmcc) - Spec required behavior of the Map we create
             try {
                 resultSet.absolute(index + 1);
                 TreeMap map = new TreeMap(String.CASE_INSENSITIVE_ORDER);
@@ -208,6 +216,329 @@ public class ResultSetDataModel extends DataModel {
             for (int i = 0; i < n; i++) {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
+        }
+
+    }
+
+
+    // --------------------------------------------------------- Private Classes
+
+
+    // Private implementation of Map that delegates column get and put
+    // operations to the underlying ResultSet, after setting the required
+    // row index
+    private class ResultSetMap extends TreeMap {
+
+        public ResultSetMap(Comparator comparator) {
+            super(comparator);
+            index = ResultSetDataModel.this.index;
+            try {
+                resultSet.absolute(index + 1);
+                int n = metadata.getColumnCount();
+                for (int i = 1; i <= n; i++) {
+                    super.put(metadata.getColumnName(i), null);
+                }
+            } catch (SQLException e) {
+                throw new FacesException(e);
+            }
+        }
+
+        // The zero-relative row index of our row
+        private int index;
+
+        // Removing entries is not allowed
+        public void clear() {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean containsValue(Object value) {
+            Iterator keys = keySet().iterator();
+            while (keys.hasNext()) {
+                Object key = keys.next();
+                Object contained = get(key);
+                if (value == null) {
+                    if (contained == null) {
+                        return (true);
+                    }
+                } else {
+                    if (value.equals(contained)) {
+                        return (true);
+                    }
+                }
+            }
+            return (false);
+        }
+
+        public Set entrySet() {
+            return (new ResultSetEntries(this));
+        }
+
+        public Object get(Object key) {
+            if (!containsKey(key)) {
+                return (null);
+            }
+            if (!(key instanceof String)) {
+                throw new IllegalArgumentException();
+            }
+            try {
+                resultSet.absolute(index + 1);
+                return (resultSet.getObject((String) key));
+            } catch (SQLException e) {
+                throw new FacesException(e);
+            }
+        }
+
+        public Object put(Object key, Object value) {
+            if (!containsKey(key)) {
+                throw new IllegalArgumentException();
+            }
+            if (!(key instanceof String)) {
+                throw new IllegalArgumentException();
+            }
+            try {
+                resultSet.absolute(index + 1);
+                Object previous = resultSet.getObject((String) key);
+                resultSet.updateObject((String) key, value);
+                return (previous);
+            } catch (SQLException e) {
+                throw new FacesException(e);
+            }
+        }
+
+        public void putAll(Map map) {
+            Iterator keys = map.keySet().iterator();
+            while (keys.hasNext()) {
+                Object key = keys.next();
+                put(key, map.get(key));
+            }
+        }
+
+        // Removing entries is not allowed
+        public Object remove(Object key) {
+            throw new UnsupportedOperationException();
+        }
+
+        public Collection values() {
+            return (new ResultSetValues(this));
+        }
+
+    }
+
+
+    // Private implementation of Set that implements the entrySet() behavior
+    // for ResultSetMap
+    private class ResultSetEntries extends AbstractSet {
+
+        public ResultSetEntries(ResultSetMap map) {
+            this.map = map;
+        }
+
+        private ResultSetMap map;
+
+        // Adding entries is not allowed
+        public boolean add(Object o) {
+            throw new UnsupportedOperationException();
+        }
+
+        // Adding entries is not allowed
+        public boolean addAll(Collection c) {
+            throw new UnsupportedOperationException();
+        }
+
+        // Removing entries is not allowed
+        public void clear() {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean contains(Object o) {
+            if (o == null) {
+                throw new NullPointerException();
+            }
+            Map.Entry e = (Map.Entry) o;
+            Object k = e.getKey();
+            Object v = e.getValue();
+            if (!map.containsKey(k)) {
+                return (false);
+            }
+            if (v == null) {
+                return (map.get(k) == null);
+            } else {
+                return (v.equals(map.get(k)));
+            }
+        }
+
+        public boolean isEmpty() {
+            return (map.isEmpty());
+        }
+
+        public Iterator iterator() {
+            return (new ResultSetEntriesIterator(map));
+        }
+
+        // Removing entries is not allowed
+        public boolean remove(Object o) {
+            throw new UnsupportedOperationException();
+        }
+
+        // Removing entries is not allowed
+        public boolean removeAll(Collection c) {
+            throw new UnsupportedOperationException();
+        }
+
+        // Removing entries is not allowed
+        public boolean retainAll(Collection c) {
+            throw new UnsupportedOperationException();
+        }
+
+        public int size() {
+            return (map.size());
+        }
+
+    }
+
+
+    // Private implementation of Iterator that implements the iterator()
+    // behavior for the Set returned by entrySet() from ResultSetMap
+    private class ResultSetEntriesIterator implements Iterator {
+
+        public ResultSetEntriesIterator(ResultSetMap map) {
+            this.map = map;
+            this.keys = map.keySet().iterator();
+        }
+
+        private ResultSetMap map = null;
+        private Iterator keys = null;
+
+        public boolean hasNext() {
+            return (keys.hasNext());
+        }
+
+        public Object next() {
+            Object key = keys.next();
+            return (new ResultSetEntry(map, key));
+        }
+
+        // Removing entries is not allowed
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+
+    // Private implementation of Map.Entry that implements the behavior for
+    // a single entry from the Set returned by entrySet() from ResultSetMap
+    private class ResultSetEntry implements Map.Entry {
+
+        public ResultSetEntry(ResultSetMap map, Object key) {
+            this.map = map;
+            this.key = key;
+        }
+
+        private ResultSetMap map;
+        private Object key;
+
+        public boolean equals(Object o) {
+            if (o == null) {
+                return (false);
+            }
+            if (!(o instanceof Map.Entry)) {
+                return (false);
+            }
+            Map.Entry e = (Map.Entry) o;
+            if (key == null) {
+                if (e.getKey() != null) {
+                    return (false);
+                }
+            } else {
+                if (!key.equals(e.getKey())) {
+                    return (false);
+                }
+            }
+            Object v = map.get(key);
+            if (v == null) {
+                if (e.getValue() != null) {
+                    return (false);
+                }
+            } else {
+                if (!v.equals(e.getValue())) {
+                    return (false);
+                }
+            }
+            return (true);
+        }
+
+        public Object getKey() {
+            return (key);
+        }
+
+        public Object getValue() {
+            return (map.get(key));
+        }
+
+        public int hashCode() {
+            Object value = map.get(key);
+            return (((key == null) ? 0 : key.hashCode()) ^
+                    ((value == null) ? 0 : value.hashCode()));
+        }
+
+        public Object setValue(Object value) {
+            Object previous = map.get(key);
+            map.put(key, value);
+            return (previous);
+        }
+
+    }
+
+
+    // Private implementation of Collection that implements the behavior
+    // for the Collection returned by values() from ResultSetMap
+    private class ResultSetValues extends AbstractCollection {
+
+        public ResultSetValues(ResultSetMap map) {
+            this.map = map;
+        }
+
+        private ResultSetMap map;
+
+        public boolean contains(Object value) {
+            return (map.containsValue(value));
+        }
+
+        public Iterator iterator() {
+            return (new ResultSetValuesIterator(map));
+        }
+
+
+        public int size() {
+            return (map.size());
+        }
+
+    }
+
+
+    // Private implementation of Iterator that implements the behavior
+    // for the Iterator returned by values().iterator() from ResultSetMap
+    private class ResultSetValuesIterator implements Iterator {
+
+        public ResultSetValuesIterator(ResultSetMap map) {
+            this.map = map;
+            this.keys = map.keySet().iterator();
+        }
+
+        private ResultSetMap map;
+        private Iterator keys;
+
+        public boolean hasNext() {
+            return (keys.hasNext());
+        }
+
+        public Object next() {
+            return (map.get(keys.next()));
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
         }
 
     }
