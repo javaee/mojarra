@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.3 2004/02/05 16:21:09 rlubke Exp $
+ * $Id: CustomerBean.java,v 1.4 2004/05/06 21:20:09 rkitain Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
@@ -71,22 +71,19 @@ public class CustomerBean extends Object {
 
 
     public Collection getTitleOptions() {
-        if (null == titleOptions) {
-            titleOptions = new ArrayList();
-            ResourceBundle rb = ResourceBundle.getBundle(
-                "carstore.bundles.Resources",
-                (FacesContext.getCurrentInstance().getViewRoot().getLocale()));
-            String titleStr = (String) rb.getObject("mrLabel");
-            titleOptions.add(new SelectItem(titleStr, titleStr,
-                                            titleStr));
-            titleStr = (String) rb.getObject("mrsLabel");
-            titleOptions.add(new SelectItem(titleStr, titleStr,
-                                            titleStr));
-            titleStr = (String) rb.getObject("msLabel");
-            titleOptions.add(new SelectItem(titleStr, titleStr,
-                                            titleStr));
-
-        }
+        titleOptions = new ArrayList();
+        ResourceBundle rb = ResourceBundle.getBundle(
+            "carstore.bundles.Resources",
+            (FacesContext.getCurrentInstance().getViewRoot().getLocale()));
+        String titleStr = (String) rb.getObject("mrLabel");
+        titleOptions.add(new SelectItem(titleStr, titleStr,
+                                        titleStr));
+        titleStr = (String) rb.getObject("mrsLabel");
+        titleOptions.add(new SelectItem(titleStr, titleStr,
+                                        titleStr));
+        titleStr = (String) rb.getObject("msLabel");
+        titleOptions.add(new SelectItem(titleStr, titleStr,
+                                        titleStr));
 
         return titleOptions;
     }
