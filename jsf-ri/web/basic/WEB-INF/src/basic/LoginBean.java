@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.16 2002/10/11 00:58:42 jvisvanathan Exp $
+ * $Id: LoginBean.java,v 1.17 2002/10/14 21:29:36 jvisvanathan Exp $
  */
 
 /*
@@ -91,7 +91,7 @@ public class LoginBean {
         System.out.println("Set validUser " + validUser);
     }
 
-    public Boolean getvalidUser() {
+    public Boolean getValidUser() {
         System.out.println("get validUser " + validUser);
         return validUser;
     }
@@ -203,12 +203,14 @@ public class LoginBean {
     }
 
     public Object getCurrentOption() {
+        System.out.println("get current option " + currentOption.toString());
 	return currentOption;
     }
 
     public void setCurrentOption(Object newCurrentOption)
     {
 	currentOption = newCurrentOption;
+        System.out.println("set current option " + currentOption.toString());
     }
 
     public Object[] getCurrentOptions()

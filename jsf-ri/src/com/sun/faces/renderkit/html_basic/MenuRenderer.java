@@ -1,5 +1,5 @@
 /*
- * $Id: MenuRenderer.java,v 1.3 2002/10/11 17:54:12 rkitain Exp $
+ * $Id: MenuRenderer.java,v 1.4 2002/10/14 21:29:35 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.3 2002/10/11 17:54:12 rkitain Exp $
+ * @version $Id: MenuRenderer.java,v 1.4 2002/10/14 21:29:35 jvisvanathan Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -252,7 +252,7 @@ public class MenuRenderer extends HtmlBasicRenderer {
         } 
         UISelectOne select = (UISelectOne) component;
 	Object returnObjects[] = new Object[1];
-	if (null != (returnObjects[0] = select.getSelectedValue())) {
+	if (null != (returnObjects[0] = select.currentValue(context))) {
             return returnObjects;
         }    
 	return null;
