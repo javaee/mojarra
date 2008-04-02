@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.17 2002/08/29 19:37:59 eburns Exp $
+ * $Id: RIConstants.java,v 1.18 2002/09/18 23:52:01 rkitain Exp $
  */
 
 /*
@@ -59,6 +59,7 @@ public class RIConstants {
     public static final String SAVESTATE_INITPARAM = "saveStateInClient";
 
     public static final String FORMAT_POOL = "com.sun.faces.renderkit.FormatPool";
+    public static final String FACES_LOCALE = "FacesLocale";
 
 
 }
