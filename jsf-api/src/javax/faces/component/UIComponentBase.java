@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.110 2005/05/19 19:14:17 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.111 2005/07/28 15:35:34 edburns Exp $
  */
 
 /*
@@ -530,12 +530,15 @@ public abstract class UIComponentBase extends UIComponent {
         if (parent == null) {
             return;
         }
-        List children = parent.getChildren();
-        int index = children.indexOf(component);
-        if (index >= 0) {
-            children.remove(index);
-            return;
-        } else {
+        if (parent.getChildCount() > 0) {
+            List children = parent.getChildren();
+            int index = children.indexOf(component);
+            if (index >= 0) {
+                children.remove(index);
+                return;
+            }
+        }
+        if (parent.getFacetCount() > 0) {
             Map facets = parent.getFacets();
             Iterator entries = facets.entrySet().iterator();
             while (entries.hasNext()) {
@@ -705,6 +708,17 @@ public abstract class UIComponentBase extends UIComponent {
         return (facets);
 
     }
+    
+    // Do not allocate the children List to answer this question
+    public int getFacetCount() {
+
+        if (facets != null) {
+            return (facets.size());
+        } else {
+            return (0);
+        }
+
+    }
 
 
     // Do not allocate the facets Map to answer this question
@@ -720,22 +734,11 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     public Iterator getFacetsAndChildren() {
-
-        List combined = new ArrayList();
-        if (this.facets != null) {
-            Iterator facets = getFacets().values().iterator();
-            while (facets.hasNext()) {
-                combined.add(facets.next());
-            }
+        
+        if (this.getChildCount() == 0 && this.getFacetCount() == 0) {
+            return EMPTY_ITERATOR;
         }
-        if (this.children != null) {
-            Iterator kids = getChildren().iterator();
-            while (kids.hasNext()) {
-                combined.add(kids.next());
-            }
-        }
-        return (new FacetsAndChildrenIterator(combined));
-
+        return new FacetsAndChildrenIterator(this);
     }
 
 
@@ -851,11 +854,11 @@ public abstract class UIComponentBase extends UIComponent {
 	if (getRendersChildren()) {
 	    encodeChildren(context);
 	}
-	else {
+	else if (this.getChildCount() > 0) {
 	    Iterator kids = getChildren().iterator();
 	    while (kids.hasNext()) {
-		UIComponent kid = (UIComponent) kids.next();
-		kid.encodeAll(context);
+    		UIComponent kid = (UIComponent) kids.next();
+    		kid.encodeAll(context);
 	    }
 	}
 	
@@ -1091,75 +1094,57 @@ public abstract class UIComponentBase extends UIComponent {
             return null;
         }
         Object [] stateStruct = new Object[2];
-        Object [] childState = null;
+        Object [] childState = EMPTY_ARRAY;
         
         // Process this component itself
         stateStruct[MY_STATE] = saveState(context);
         
-        // Process all the children of this component
-        int i = 0, len = getNonTransientChildLength() +
-                getNonTransientFacetLength();
+        // determine if we have any children to store
+        int count = this.getChildCount() + this.getFacetCount();
+        if (count > 0) {
+            
+            // this arraylist will store state
+            List stateList = new ArrayList(count);
+            
+            // if we have children, add them to the stateList
+            if (this.getChildCount() > 0) {
+                Iterator kids = getChildren().iterator();
+                UIComponent kid;
+                while (kids.hasNext()) {
+                    kid = (UIComponent) kids.next();
+                    if (!kid.isTransient()) {
+                        stateList.add(kid.processSaveState(context));
+                    }
+                }
+            }
+            
+            // if we have facets, add them to the stateList
+            if (this.getFacetCount() > 0) {
+                Iterator myFacets = getFacets().entrySet().iterator();
+                UIComponent facet = null;
+                Object facetState = null;
+                Object[] facetSaveState = null;
+                Map.Entry entry = null;
+                while (myFacets.hasNext()) {
+                    entry = (Map.Entry) myFacets.next();
+                    facet = (UIComponent) entry.getValue();
+                    if (!facet.isTransient()) {
+                        facetState = facet.processSaveState(context);
+                        facetSaveState = new Object[2];
+                        facetSaveState[0] = entry.getKey();
+                        facetSaveState[1] = facetState;
+                        stateList.add(facetSaveState);
+                    }
+                }
+            }
+            
+            // finally, capture the stateList and replace the original,
+            // empty Object array
+            childState = stateList.toArray();
+        }
         
-        childState = new Object[len];
         stateStruct[CHILD_STATE] = childState;
-        Iterator kids = getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            if (!kid.isTransient()) {
-                childState[i++] = kid.processSaveState(context);
-            }
-        }
-        
-        Iterator myFacets = getFacets().keySet().iterator();
-        String facetName = null;
-        UIComponent facet = null;
-        Object facetState = null;
-        Object[][] facetSaveState = null;
-        while (myFacets.hasNext()) {
-            facetName = (String) myFacets.next();
-            facet = (UIComponent) getFacets().get(facetName);
-            if (!facet.isTransient()) {
-                facetState = facet.processSaveState(context);
-                facetSaveState = new Object[1][2];
-                facetSaveState[0][0] = facetName;
-                facetSaveState[0][1] = facetState;
-                childState[i] = facetSaveState;
-		i++;
-            }
-        }
         return stateStruct;
-    }
-    
-
-    /**
-     * @return the number of non-transient children in our child list.
-     */
-    
-    private int getNonTransientChildLength() {
-        int i, result = 0;
-        Iterator kids = getChildren().iterator();
-        UIComponent kid = null;
-        while (kids.hasNext()) {
-            kid = (UIComponent) kids.next();
-            i = kid.isTransient() ? result : result++;
-        }
-        return result;
-    }
-    
-    /**
-     * @return the number of non-transient facet children in our facet
-     * children list.
-     */
-    
-    private int getNonTransientFacetLength() {
-        int i, result = 0;
-        Iterator kids = getFacets().keySet().iterator();
-        UIComponent kid = null;
-        while (kids.hasNext()) {
-            kid = (UIComponent) getFacets().get(kids.next().toString());
-            i = kid.isTransient() ? result : result++;
-        }
-        return result;
     }
     
     /**
@@ -1175,35 +1160,40 @@ public abstract class UIComponentBase extends UIComponent {
         Object [] childState = (Object []) stateStruct[CHILD_STATE];
         
         // Process this component itself
-	restoreState(context, stateStruct[MY_STATE]);
+        restoreState(context, stateStruct[MY_STATE]);
         
         int i = 0;
         
         // Process all the children of this component
-        Iterator kids = getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-	    Object currentState = childState[i++];
-	    if (currentState == null) {
-	        continue;
-	    }
-            kid.processRestoreState(context, currentState);
+        if (this.getChildCount() > 0) {
+            Iterator kids = getChildren().iterator();
+            while (kids.hasNext()) {
+                UIComponent kid = (UIComponent) kids.next();
+    	    Object currentState = childState[i++];
+    	    if (currentState == null) {
+    	        continue;
+    	    }
+                kid.processRestoreState(context, currentState);
+            }
         }
         
-        int facetsSize = getFacets().size();
-        int j = 0;
-        Object[][] facetSaveState = null;
-        String facetName = null;
-        UIComponent facet = null;
-        Object facetState = null;
-        while (j < facetsSize) {
-            if (null != (facetSaveState = (Object[][])childState[i++])) {
-                facetName = (String) facetSaveState[0][0];
-                facetState = facetSaveState[0][1];
-                facet = (UIComponent) getFacets().get(facetName);
-                facet.processRestoreState(context, facetState);
+        // process all of the facets of this component
+        if (this.getFacetCount() > 0) {
+            int facetsSize = getFacets().size();
+            int j = 0;
+            Object[] facetSaveState = null;
+            String facetName = null;
+            UIComponent facet = null;
+            Object facetState = null;
+            while (j < facetsSize) {
+                if (null != (facetSaveState = (Object[])childState[i++])) {
+                    facetName = (String) facetSaveState[0];
+                    facetState = facetSaveState[1];
+                    facet = (UIComponent) getFacets().get(facetName);
+                    facet.processRestoreState(context, facetState);
+                }
+                ++j;
             }
-            ++j;
         }
     }
     
@@ -1268,11 +1258,11 @@ public abstract class UIComponentBase extends UIComponent {
             HashMap attributesCopy = new HashMap(attributes);
             values[0] = attributesCopy;
         }
-	values[1] = saveBindingsState(context);
+        values[1] = saveBindingsState(context);
         values[2] = clientId;
         values[3] = id;
         values[4] = rendered ? Boolean.TRUE : Boolean.FALSE;
-	values[5] = renderedSet ? Boolean.TRUE : Boolean.FALSE;
+        values[5] = renderedSet ? Boolean.TRUE : Boolean.FALSE;
         values[6] = rendererType;
         values[7] = saveAttachedState(context, listeners);
         assert(!transientFlag);
@@ -1506,6 +1496,24 @@ public abstract class UIComponentBase extends UIComponent {
 
     // --------------------------------------------------------- Private Classes
 
+    // For state saving
+    private final static Object[] EMPTY_ARRAY = new Object[0];
+    
+    // Empty iterator for short circuiting operations
+    private final static Iterator EMPTY_ITERATOR = new Iterator() {
+    
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    
+        public Object next() {
+            throw new NoSuchElementException("Empty Iterator");
+        }
+    
+        public boolean hasNext() {
+            return false;
+        }
+    };
 
     // Private implementation of Map that supports the functionality
     // required by UIComponent.getFacets()
@@ -1875,20 +1883,46 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Iterator for getFacetsAndChildren()
-    private static class FacetsAndChildrenIterator implements Iterator {
+    private final static class FacetsAndChildrenIterator implements Iterator {
+        
+        private Iterator iterator;
+        private boolean childMode;
+        private UIComponent c;
 
-        public FacetsAndChildrenIterator(List list) {
-            this.iterator = list.iterator();
+        public FacetsAndChildrenIterator(UIComponent c) {
+            this.c = c;
+            this.childMode = false;
+        }
+        
+        private void update() {
+            if (this.iterator == null) {
+                // we must guarantee that 'iterator' is never null
+                if (this.c.getFacetCount() != 0) {
+                    this.iterator = this.c.getFacets().values().iterator();
+                    this.childMode = false;
+                } else if (this.c.getChildCount() != 0) {
+                    this.iterator = this.c.getChildren().iterator();
+                    this.childMode = true;
+                } else {
+                    this.iterator = EMPTY_ITERATOR;
+                    this.childMode = true;
+                }
+            } else if (!this.childMode
+                    && !this.iterator.hasNext()
+                    && this.c.getChildCount() != 0) {
+                this.iterator = this.c.getChildren().iterator();
+                this.childMode = true;
+            }
         }
 
-        private Iterator iterator;
-
         public boolean hasNext() {
-            return (iterator.hasNext());
+            this.update();
+            return this.iterator.hasNext();
         }
 
         public Object next() {
-            return (iterator.next());
+            this.update();
+            return this.iterator.next();
         }
 
         public void remove() {

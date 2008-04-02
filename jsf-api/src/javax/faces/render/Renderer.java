@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.34 2005/04/21 18:55:30 edburns Exp $
+ * $Id: Renderer.java,v 1.35 2005/07/28 15:35:34 edburns Exp $
  */
 
 /*
@@ -110,11 +110,13 @@ public abstract class Renderer {
         if (context == null || component == null) {
             throw new NullPointerException();
         }
-	Iterator kids = component.getChildren().iterator();
-	while (kids.hasNext()) {
-	    UIComponent kid = (UIComponent) kids.next();
-	    kid.encodeAll(context);
-	}
+        if (component.getChildCount() > 0) {
+        	Iterator kids = component.getChildren().iterator();
+        	while (kids.hasNext()) {
+        	    UIComponent kid = (UIComponent) kids.next();
+        	    kid.encodeAll(context);
+        	}
+        }
     }
 
 

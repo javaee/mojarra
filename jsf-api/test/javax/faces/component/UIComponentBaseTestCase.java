@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.27 2005/06/02 00:00:34 edburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.28 2005/07/28 15:35:35 edburns Exp $
  */
 
 /*
@@ -922,5 +922,46 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     }
 
+    public void testGetFacetsAndChildren() {
+
+        UIComponent testComponent = new TestComponent();
+        UIComponent child1 = new TestComponent("child1");
+        UIComponent child2 = new TestComponent("child2");
+        UIComponent child3 = new TestComponent("child3");
+        UIComponent facet1 = new TestComponent("facet1");
+        UIComponent facet2 = new TestComponent("facet2");
+        UIComponent facet3 = new TestComponent("facet3");
+
+	testComponent.getChildren().add(child1);
+        testComponent.getChildren().add(child2);
+        testComponent.getChildren().add(child3);
+        testComponent.getFacets().put("facet1", facet1);
+        testComponent.getFacets().put("facet2", facet2);
+        testComponent.getFacets().put("facet3", facet3);        
+
+        Iterator iter = testComponent.getFacetsAndChildren();
+        Object cur = null;
+        assertTrue(iter.hasNext());
+
+        // facets are returned in an undefined order.
+        cur = iter.next();
+        assertTrue(cur == facet1 || cur == facet2 || cur == facet3);
+        cur = iter.next();
+        assertTrue(cur == facet1 || cur == facet2 || cur == facet3);
+        cur = iter.next();
+        assertTrue(cur == facet1 || cur == facet2 || cur == facet3);
+        
+        // followed by components, in the order added
+        cur = iter.next();
+        assertTrue(cur == child1);
+        cur = iter.next();
+        assertTrue(cur == child2);
+        cur = iter.next();
+        assertTrue(cur == child3);
+        
+        assertTrue(!iter.hasNext());
+        
+    }
+        
 
 }

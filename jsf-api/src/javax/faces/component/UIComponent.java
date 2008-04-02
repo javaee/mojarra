@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.130 2005/05/05 20:51:03 edburns Exp $
+ * $Id: UIComponent.java,v 1.131 2005/07/28 15:35:34 edburns Exp $
  */
 
 /*
@@ -488,6 +488,14 @@ public abstract class UIComponent implements StateHolder {
      * </ul>
      */
     public abstract Map getFacets();
+    
+    /**
+     * <p>Return the number of facet {@link UIComponent}s that are
+     * associated with this {@link UIComponent}.  If there are no
+     * facets, this method must return 0.  The method must not cause
+     * the creation of a facet component map.</p>
+     */
+    public abstract int getFacetCount();
 
 
     /**
