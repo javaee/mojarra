@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.4 2004/10/12 14:39:48 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.5 2004/11/09 17:36:16 rlubke Exp $
  */
 
 /*
@@ -9,27 +9,24 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.util.InstancePool;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigureListener;
-
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.Comparator;
-import java.util.Collections;
-
-import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
-import javax.faces.FacesException;
-
 import com.sun.faces.config.ManagedBeanFactory;
-
+import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -87,12 +84,6 @@ public class ApplicationAssociate extends Object {
 	"ApplicationAssociate";
 
 
-    /**
-     * <p>Used by the EL system to pool instances of ExpressionInfo.
-     * </p>
-     */
-    private InstancePool expressionInfoInstancePool;
-
     public ApplicationAssociate(ApplicationImpl appImpl) {
 	app = appImpl;
 	ExternalContext externalContext = null;
@@ -109,8 +100,7 @@ public class ApplicationAssociate extends Object {
         managedBeanFactoriesMap = new HashMap();
         caseListMap = new HashMap();
         wildcardMatchList = new TreeSet(new SortIt());
-	
-	expressionInfoInstancePool = new InstancePool();
+
     }
     
     public static ApplicationAssociate getInstance(ExternalContext 
@@ -315,19 +305,6 @@ public class ApplicationAssociate extends Object {
 
         String viewId;
         ConfigNavigationCase navCase;
-    }
-
-    /**
-     * <p>@return the {@link InstancePool} that is allocated for the
-     * purposes of holding {@link com.sun.faces.el.impl.ExpressionInfo}
-     * instances.  The ApplicationAssociate does nothing but serve as
-     * the owning reference of the <code>InstancePool</code>.  Actual
-     * usage of the <code>InstancePool</code> happens in the EL
-     * package.</p>
-     */ 
-
-    public InstancePool getExpressionInfoInstancePool() {
-	return expressionInfoInstancePool;
     }
 
 }

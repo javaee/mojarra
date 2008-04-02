@@ -389,8 +389,7 @@
             <formatter type="plain" usefile="false"/>
             <formatter type="xml" usefile="true"/>
             <jvmarg line="-Djcov.file=${out.test.dir}/jsf-impl-junit.jcov"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.util.TestUtil_local"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.util.TestInstancePool_local"/>
+            <test todir="${test.results.dir}"  name="com.sun.faces.util.TestUtil_local"/>            
         </junit>
 
     </target>

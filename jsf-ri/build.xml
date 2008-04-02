@@ -673,7 +673,7 @@ must exist.  This is necessary for the MessageFactory class.
     version="1.2">]]>
           </replacevalue>
       </replace>
-      <!--<delete file="${basedir}/merged.xml"/> -->
+      <delete file="${basedir}/merged.xml"/>
   </target>
 
   <!--
