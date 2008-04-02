@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.77 2006/06/05 18:33:54 rogerk Exp $
+ * $Id: MenuRenderer.java,v 1.78 2006/06/29 15:30:11 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -49,10 +49,10 @@ import javax.faces.model.SelectItemGroup;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 import com.sun.faces.RIConstants;
@@ -218,13 +218,14 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     public Object convertSelectManyValue(FacesContext context,
                                          UISelectMany uiSelectMany,
                                          String[] newValues)
-        throws ConverterException {
+          throws ConverterException {
         // if we have no local value, try to get the valueExpression.
-        ValueExpression valueExpression = uiSelectMany.getValueExpression("value");
+        ValueExpression valueExpression =
+              uiSelectMany.getValueExpression("value");
 
         Object result = newValues; // default case, set local value
         Class modelType = null;
-	boolean throwException = false;
+        boolean throwException = false;
 
         // If we have a ValueExpression
         if (null != valueExpression) {
@@ -233,64 +234,66 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             // a type?
             if (null != modelType) {
                 if (modelType.isArray()) {
-                    result = handleArrayCase(context, uiSelectMany,
-                                             modelType, newValues);
-                } else if (List.class.isAssignableFrom(modelType)) {
-                    result = handleListCase(context, newValues);
+                    result = convertSelectManyValues(context,
+                                                     uiSelectMany,
+                                                     modelType,
+                                                     newValues);                    
+                } else if (List.class.isAssignableFrom(modelType)) {                    
+                    result = Arrays.asList((Object[]) convertSelectManyValues(context,
+                                                                              uiSelectMany,
+                                                                              Object[].class,
+                                                                              newValues));
                 } else {
-		    throwException = true;
+                    throwException = true;
                 }
             } else {
-		throwException = true;
+                throwException = true;
             }
         } else {
-            // No ValueExpression, just use Object array.
-            Object[] convertedValues = new Object[1];
-            result = handleArrayCase(context, uiSelectMany,
-                                     convertedValues.getClass(),
-                                     newValues);
+            // No ValueExpression, just use Object array.           
+            result = convertSelectManyValues(context, uiSelectMany,
+                                             Object[].class,
+                                             newValues);
         }
-	if (throwException) {
-	    StringBuffer values = new StringBuffer();
-	    if (null != newValues) {
-		for (int i = 0; i < newValues.length; i++) {
-            if (i == 0) {
-                values.append(newValues[i]);
-            } else {
-                values.append(' ').append(newValues[i]);
+        if (throwException) {
+            StringBuffer values = new StringBuffer();
+            if (null != newValues) {
+                for (int i = 0; i < newValues.length; i++) {
+                    if (i == 0) {
+                        values.append(newValues[i]);
+                    } else {
+                        values.append(' ').append(newValues[i]);
+                    }
+                }
             }
-		}
-	    }
-	    Object [] params = {
-		values.toString(),
-		valueExpression.getExpressionString()
-	    };
-	    throw new ConverterException
-		(MessageUtils.getExceptionMessage(MessageUtils.CONVERSION_ERROR_MESSAGE_ID,
-					  params));
-	}
-
+            Object[] params = {
+                  values.toString(),
+                  valueExpression.getExpressionString()
+            };
+            throw new ConverterException
+                  (MessageUtils.getExceptionMessage(MessageUtils.CONVERSION_ERROR_MESSAGE_ID,
+                                                    params));
+        }
 
         // At this point, result is ready to be set as the value
         if (logger.isLoggable(Level.FINE)) {
-             logger.fine("SelectMany Component  " + uiSelectMany.getId() +
-                      " convertedValues " + result);
+            logger.fine("SelectMany Component  " + uiSelectMany.getId() +
+                        " convertedValues " + result);
         }
         return result;
     }
 
 
-    protected Object handleArrayCase(FacesContext context,
-                                     UISelectMany uiSelectMany,
-                                     Class arrayClass,
-                                     String[] newValues)
+    protected Object convertSelectManyValues(FacesContext context,
+                                               UISelectMany uiSelectMany,
+                                               Class arrayClass,
+                                               String[] newValues)
         throws ConverterException {
-        Object result = null;
-        Class elementType = null;
+        Object result = null;       
         Converter converter = null;
         int len = (null != newValues ? newValues.length : 0);
 
-        elementType = arrayClass.getComponentType();
+        Class elementType = arrayClass.getComponentType();
 
         // Optimization: If the elementType is String, we don't need
         // conversion.  Just return newValues.
@@ -317,72 +320,72 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             // Otherwise, look for a by-type converter
             if (null == (converter = Util.getConverterForClass(elementType,
                                                                context))) {
-               // if that fails, and the attached values are of Object type,
-               // we don't need conversion.
+                // if that fails, and the attached values are of Object type,
+                // we don't need conversion.
                 if (elementType.equals(Object.class)) {
                     return newValues;
                 }
-		StringBuffer valueStr = new StringBuffer();
-		for (int i = 0; i < len; i++) {
-            if (i == 0) {
-                valueStr.append(newValues[i]);
-            } else {
-                valueStr.append(' ').append(newValues[i]);
-            }
-		}
-		Object [] params = {
-		    valueStr.toString(),
-		    "null Converter"
-		};
+                StringBuffer valueStr = new StringBuffer();
+                for (int i = 0; i < len; i++) {
+                    if (i == 0) {
+                        valueStr.append(newValues[i]);
+                    } else {
+                        valueStr.append(' ').append(newValues[i]);
+                    }
+                }
+                Object[] params = {
+                      valueStr.toString(),
+                      "null Converter"
+                };
 
-		throw new ConverterException(MessageUtils.getExceptionMessage(
-                  MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
+                throw new ConverterException(MessageUtils.getExceptionMessage(
+                      MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
             }
         }
 
-        assert (null != result);
+        assert(null != result);
         if (elementType.isPrimitive()) {
             for (int i = 0; i < len; i++) {
                 if (elementType.equals(Boolean.TYPE)) {
                     Array.setBoolean(result, i,
                                      ((Boolean) converter.getAsObject(context,
                                                                       uiSelectMany,
-                                                                      newValues[i])).booleanValue());
+                                                                      newValues[i])));
                 } else if (elementType.equals(Byte.TYPE)) {
                     Array.setByte(result, i,
                                   ((Byte) converter.getAsObject(context,
                                                                 uiSelectMany,
-                                                                newValues[i])).byteValue());
+                                                                newValues[i])));
                 } else if (elementType.equals(Double.TYPE)) {
                     Array.setDouble(result, i,
                                     ((Double) converter.getAsObject(context,
                                                                     uiSelectMany,
-                                                                    newValues[i])).doubleValue());
+                                                                    newValues[i])));
                 } else if (elementType.equals(Float.TYPE)) {
                     Array.setFloat(result, i,
                                    ((Float) converter.getAsObject(context,
                                                                   uiSelectMany,
-                                                                  newValues[i])).floatValue());
+                                                                  newValues[i])));
                 } else if (elementType.equals(Integer.TYPE)) {
                     Array.setInt(result, i,
                                  ((Integer) converter.getAsObject(context,
                                                                   uiSelectMany,
-                                                                  newValues[i])).intValue());
+                                                                  newValues[i])));
                 } else if (elementType.equals(Character.TYPE)) {
                     Array.setChar(result, i,
                                   ((Character) converter.getAsObject(context,
                                                                      uiSelectMany,
-                                                                     newValues[i])).charValue());
+                                                                     newValues[i])));
                 } else if (elementType.equals(Short.TYPE)) {
                     Array.setShort(result, i,
                                    ((Short) converter.getAsObject(context,
                                                                   uiSelectMany,
-                                                                  newValues[i])).shortValue());
+                                                                  newValues[i])));
                 } else if (elementType.equals(Long.TYPE)) {
                     Array.setLong(result, i,
                                   ((Long) converter.getAsObject(context,
                                                                 uiSelectMany,
-                                                                newValues[i])).longValue());
+                                                                newValues[i])));
                 }
             }
         } else {
@@ -392,27 +395,13 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                                              uiSelectMany,
                                                              newValues[i]);
                     logger.fine("String value: " + newValues[i] +
-                              " converts to : " + converted.toString());
+                                " converts to : " + converted.toString());
                 }
                 Array.set(result, i, converter.getAsObject(context,
                                                            uiSelectMany,
                                                            newValues[i]));
             }
         }
-        return result;
-    }
-
-
-    protected ArrayList<String> handleListCase(FacesContext context,
-                                    String[] newValues) {
-        int
-            i = 0,
-            len = newValues.length;
-        ArrayList<String> result = new ArrayList<String>(len);
-        for (i = 0; i < len; i++) {
-            result.add(newValues[i]);
-        }
-
         return result;
     }
 
@@ -577,7 +566,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Object valuesArray = null;
         Object itemValue = null;
         
-        boolean isSelected = false;;
+        boolean isSelected = false;
         boolean containsValue = false;
         if (submittedValues != null) {
             containsValue = containsaValue(submittedValues);
