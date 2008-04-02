@@ -24,7 +24,7 @@
 -->
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- $Id: index.jsp,v 1.7 2005/08/22 22:09:46 ofung Exp $ -->
+<!-- $Id: index.jsp,v 1.8 2005/09/13 17:28:40 rogerk Exp $ -->
 <html>
   <head>
     <title>JavaServer Faces 1.0 Standard RenderKit Demo</title>
@@ -70,6 +70,8 @@
 	  <li><p><a href="faces/DataModel.jsp">DataModel</a>
 	  </p></li>
 
+	  <li><p><a href="faces/156.jsp">156</a>
+	  </p></li>
 	</ul>
 
   </body>

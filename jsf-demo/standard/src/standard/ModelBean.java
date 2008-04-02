@@ -1,5 +1,5 @@
 /*
- * $Id: ModelBean.java,v 1.8 2005/08/22 22:09:42 ofung Exp $
+ * $Id: ModelBean.java,v 1.9 2005/09/13 17:28:39 rogerk Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Date;
 /**
  * Simple bean for Model value demonstration.
  *
- * @version $Id: ModelBean.java,v 1.8 2005/08/22 22:09:42 ofung Exp $
+ * @version $Id: ModelBean.java,v 1.9 2005/09/13 17:28:39 rogerk Exp $
  */
 
 public class ModelBean {
@@ -181,5 +181,12 @@ public class ModelBean {
 
     }
 
-
+private boolean initialized = false;
+	public void setInitialized(boolean initialized) {
+System.out.println("SETTING INIT...");
+		this.initialized = initialized;
+	}
+        public boolean getInitialized() {
+            return initialized;
+        }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.12 2005/08/22 22:09:42 ofung Exp $
+ * $Id: LoginBean.java,v 1.13 2005/09/13 17:28:39 rogerk Exp $
  */
 
 /*
@@ -493,5 +493,41 @@ public class LoginBean {
 
     public void setBooleanList(Collection newBooleanOptions) {
         booleanList = new ArrayList(newBooleanOptions);
+    }
+
+    private Integer selectedValue = null;
+
+    public Integer getSelectedValue() {
+        return selectedValue;
+    }
+
+    public void setSelectedValue(Integer selectedValue) {
+        this.selectedValue = selectedValue;
+    }
+
+    public SelectItem[] getMySelectItems(){
+        return new SelectItem[]{
+            new SelectItem(new Integer(1),"1"),
+            new SelectItem(new Integer(2),"2"),
+            new SelectItem(new Integer(3),"3")
+        };
+    }
+
+    private int[] intsProperty = {5, 6, 7};
+                                                                                                                       
+    public int[] getIntsProperty() {
+        return (this.intsProperty);
+    }
+                                                                                                                       
+    public void setIntsProperty(int[] intsProperty) {
+        this.intsProperty = intsProperty;
+    }
+
+    public SelectItem[] getStringItems(){
+        return new SelectItem[]{
+            new SelectItem("1001", "1001", "1001"),
+            new SelectItem("1002", "1002", "1002"),
+            new SelectItem("1003", "1003", "1003")
+        };
     }
 }

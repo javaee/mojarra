@@ -46,7 +46,23 @@
     <managed-bean-name>model</managed-bean-name>
     <managed-bean-class>standard.ModelBean</managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
+<managed-property>
+            <property-name>initialized</property-name>
+            <value>false</value>
+        </managed-property>
   </managed-bean>
+  <managed-bean>
+    <managed-bean-name>TestActionListener01</managed-bean-name>
+    <managed-bean-class>
+      standard.TestActionListener01
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+            <property-name>initialized</property-name>
+            <value>true</value>
+    </managed-property>
+  </managed-bean>
+
 
   <managed-bean>
     <managed-bean-name>DataModelBean</managed-bean-name>
