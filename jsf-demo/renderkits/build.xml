@@ -84,21 +84,12 @@
             description="Compile Java files for components, not webapp.">
         <touch file="${build}/last-build"/>
 
-       <jsf.javac srcdir="src"
+       <jsf.javac srcdir="src/java"
                    destdir="${build}/${example}/WEB-INF/classes">
             <classpath>
                 <path refid="classpath"/>
             </classpath>
-        </jsf.javac>
-
-        <javac debug="true" srcdir="src/java" fork="true"
-               destdir="${build}/${webapp}/WEB-INF/classes">
-            <include name="demo/**"/>
-            <classpath refid="classpath"/>
-        </javac>
-
-        <!-- strip out the components -->
-        <delete dir="${build}/${webapp}/WEB-INF/classes/renderkits"/>
+        </jsf.javac>        
 
         <copy todir="${build}/${webapp}/WEB-INF">
             <fileset dir="web/WEB-INF">
@@ -110,13 +101,10 @@
         <copy todir="${build}/${webapp}/WEB-INF/classes/">
             <fileset dir="src/java">
                 <include name="**/*.properties"/>
-            </fileset>
-        </copy>
-
-
-        <!-- copy over the application configuration resource -->
-        <mkdir dir="${build}/classes/renderkits/META-INF"/>
-        <copy todir="${build}/classes/renderkits/META-INF"
+            </fileset>         
+        </copy>  
+        
+        <copy todir="${build}/${webapp}/WEB-INF" 
               file="src/conf/faces-config.xml"/>
 
         <!-- copy the java source to the webapp for viewing by the user -->
@@ -149,10 +137,7 @@
                 <include name="**/*.xml"/>
                 <include name="**/*.es"/>
             </fileset>
-        </copy>
-
-        <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-renderkits.jar"
-             basedir="${build}/classes/renderkits"/>
+        </copy>     
 
        <jsf.war basedir="${build}"
                  archive-name="${example}"
