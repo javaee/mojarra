@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.27 2002/09/07 16:36:04 eburns Exp $
+ * $Id: FacesTag.java,v 1.28 2002/11/25 19:56:37 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.27 2002/09/07 16:36:04 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.28 2002/11/25 19:56:37 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -79,6 +79,7 @@ protected String commandClass = null;
 protected String graphicClass = null;
 protected String inputClass = null;
 protected String outputClass = null;
+protected String formClass = null;
 protected String selectbooleanClass = null;
 protected String selectmanyClass = null;
 protected String selectoneClass = null;
@@ -387,10 +388,20 @@ public FacesTag()
     {
         return selectmanyClass;
     }
-
+    
     public void setSelectmanyClass(String newSelectmanyClass) 
     {
         selectmanyClass = newSelectmanyClass;
+    }
+    
+    public void setFormClass(String newFormClass) 
+    {
+        formClass = newFormClass;
+    }
+
+    public String getFormClass()
+    {
+        return formClass;
     }
 
     public String getSelectoneClass()

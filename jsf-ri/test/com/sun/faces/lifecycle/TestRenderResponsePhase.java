@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.38 2002/11/13 20:08:59 jvisvanathan Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.39 2002/11/25 19:56:42 jvisvanathan Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.38 2002/11/13 20:08:59 jvisvanathan Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.39 2002/11/25 19:56:42 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -71,10 +71,10 @@ public String getExpectedOutputFilename() {
 }
 
 public static final String ignore[] = {
-    "<FORM METHOD=\"post\" ACTION=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=43E2D1C210F60310C19348F5A5A19918\">",
-    "                 <input type=\"image\" src=\"duke.gif;jsessionid=43E2D1C210F60310C19348F5A5A19918\" name=\"/basicForm/pushButton\" disabled >",
-    "                 <input type=\"image\" src=\"duke.gif;jsessionid=43E2D1C210F60310C19348F5A5A19918\" name=\"/basicForm/imageOnlyButton\">",
-    "            <img src=\"/test/duke.gif;jsessionid=43E2D1C210F60310C19348F5A5A19918\" usemap=\"#map1\"  ismap >" 
+    "<form method=\"post\" action=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=B46E694CF9CC4129B5073DF1926D3FA2\" class=\"formClass\"  title=\"basicForm\" accept=\"html,wml\" >",
+    "                 <input type=\"image\" src=\"duke.gif;jsessionid=B46E694CF9CC4129B5073DF1926D3FA2\" name=\"/basicForm/pushButton\" disabled >",
+    "                 <input type=\"image\" src=\"duke.gif;jsessionid=B46E694CF9CC4129B5073DF1926D3FA2\" name=\"/basicForm/imageOnlyButton\">",
+    "            <img id=\"/basicForm/graphicImage\" src=\"/test/duke.gif;jsessionid=B46E694CF9CC4129B5073DF1926D3FA2\" usemap=\"#map1\"  ismap >" 
 
 
 };

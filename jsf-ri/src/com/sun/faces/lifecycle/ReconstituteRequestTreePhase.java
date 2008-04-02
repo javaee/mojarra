@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteRequestTreePhase.java,v 1.7 2002/10/07 20:39:50 jvisvanathan Exp $
+ * $Id: ReconstituteRequestTreePhase.java,v 1.8 2002/11/25 19:56:34 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.util.DebugUtil;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteRequestTreePhase.java,v 1.7 2002/10/07 20:39:50 jvisvanathan Exp $
+ * @version $Id: ReconstituteRequestTreePhase.java,v 1.8 2002/11/25 19:56:34 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
@@ -130,6 +130,8 @@ public int execute(FacesContext facesContext) throws FacesException
         
 public void restoreTreeFromPage(FacesContext facesContext) {
     Tree requestTree = null;
+    Locale locale = null;
+
     //long beginTime = System.currentTimeMillis();
    
     // reconstitute tree from page. 
@@ -149,6 +151,7 @@ public void restoreTreeFromPage(FacesContext facesContext) {
         try {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
             requestTree = (Tree) ois.readObject();
+            locale = (Locale) ois.readObject();
             ois.close();
             // DebugUtil.printTree(root, System.out);
         } catch (java.io.OptionalDataException ode) {
@@ -161,6 +164,9 @@ public void restoreTreeFromPage(FacesContext facesContext) {
         }
     }
     facesContext.setRequestTree(requestTree);
+    if ( locale != null ) {
+        facesContext.setLocale(locale);
+    }
     // PENDING(visvan): If we wanted to track time, here is where we'd do it
     // long endTime = System.currentTimeMillis();
     // System.out.println("Time to reconstitute tree " + (endTime-beginTime));

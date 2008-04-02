@@ -1,5 +1,5 @@
-<FORM METHOD="post" ACTION="/test/facestreeId;jsessionid=714A95ACD9C25E7FC4818BBFE5206E85">
-</FORM>
+<form method="post" action="/test/facestreeId;jsessionid=24B278ACCA9F795C78E4F80903111C29">
+</form>
 <table border="0">
 	<tr>
 <td><input type="radio" name="/radio_renderer" value="One"> One</td>

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.36 2002/09/11 20:02:22 edburns Exp $
+ * $Id: FormRenderer.java,v 1.37 2002/11/25 19:56:35 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.36 2002/09/11 20:02:22 edburns Exp $
+ * @version $Id: FormRenderer.java,v 1.37 2002/11/25 19:56:35 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,16 +102,27 @@ public class FormRenderer extends HtmlBasicRenderer {
     
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException{
+        String formClass = null;         
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+                   Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-      
+        
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
-        
-        writer.write("<FORM METHOD=\"post\" ACTION=\"");
+        // since method and action are rendered here they are not added
+        // to the pass through attributes in Util class.
+        writer.write("<form method=\"post\" action=\"");
         writer.write(getActionStr(context, component));
-        writer.write("\">");
+        writer.write("\"");
+        if (null != (formClass = (String) 
+		     component.getAttribute("formClass"))) {
+	    writer.write(" class=\"" + formClass + "\" ");
+	}
+        writer.write(Util.renderPassthruAttributes(context, component));
+        writer.write(Util.renderBooleanPassthruAttributes(context, 
+                component));
+        writer.write(">");
     }
     
     /**
@@ -159,7 +170,7 @@ public class FormRenderer extends HtmlBasicRenderer {
         if ( saveStateParam != null && saveStateParam.equalsIgnoreCase("true")){
             writer.write(RIConstants.SAVESTATE_MARKER);
         }    
-        writer.write("</FORM>");
+        writer.write("</form>");
     }
 
 } // end of class FormRenderer

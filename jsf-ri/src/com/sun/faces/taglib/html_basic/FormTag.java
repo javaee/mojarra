@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.32 2002/10/22 21:26:58 jvisvanathan Exp $
+ * $Id: FormTag.java,v 1.33 2002/11/25 19:56:38 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FormTag.java,v 1.32 2002/10/22 21:26:58 jvisvanathan Exp $
+ * @version $Id: FormTag.java,v 1.33 2002/11/25 19:56:38 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,6 +97,36 @@ public FormTag()
 	if (null == form.getFormName()) {
 	    form.setFormName(getFormName());
 	}
+        // action, method, enctype, accept-charset, accept, target, onsubmit, onreset
+        if (null == component.getAttribute("onsubmit") && getOnsubmit() != null ) {
+            component.setAttribute("onsubmit", getOnsubmit()); 
+        }
+        if (null == component.getAttribute("onreset") && getOnreset() != null ) {
+            component.setAttribute("onreset", getOnreset()); 
+        }
+        if (null == component.getAttribute("action") && getAction() != null ) {
+            component.setAttribute("action", getAction()); 
+        }
+        if (null == component.getAttribute("method") && getMethod() != null ) {
+            component.setAttribute("method", getMethod()); 
+        }
+        if (null == component.getAttribute("enctype") && getEnctype() != null ) {
+            component.setAttribute("enctype", getEnctype()); 
+        }
+        if (null == component.getAttribute("accept") && getAccept() != null ) {
+            component.setAttribute("accept", getAccept()); 
+        }
+        if (null == component.getAttribute("target") && getTarget() != null ) {
+            component.setAttribute("target", getTarget()); 
+        }
+        if (null == component.getAttribute("accept-charset") && 
+                getAcceptcharset() != null ) {
+            component.setAttribute("accept-charset", getAcceptcharset()); 
+        }
+        if (null == component.getAttribute("form") && 
+                getFormClass() != null ) {
+            component.setAttribute("formClass", getFormClass()); 
+        }
     }
     
 //

@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.1 2002/09/20 00:59:46 eburns Exp $
+ * $Id: UseFacesTag.java,v 1.2 2002/11/25 19:56:40 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.1 2002/09/20 00:59:46 eburns Exp $
+ * @version $Id: UseFacesTag.java,v 1.2 2002/11/25 19:56:40 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -158,10 +158,12 @@ public class UseFacesTag extends FacesBodyTag
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutput out = new ObjectOutputStream(bos);
             out.writeObject(facesContext.getResponseTree());
+            //write out the locale.
+            out.writeObject(facesContext.getLocale());
             out.close();
             
-            String facesTree = " <INPUT TYPE=\"HIDDEN\" name=\"" 
-                   + RIConstants.FACES_TREE +  "\"" + " VALUE=\"" +
+            String facesTree = " <input type=\"hidden\" name=\"" 
+                   + RIConstants.FACES_TREE +  "\"" + " value=\"" +
             new String(Base64.encode(bos.toByteArray()), "ISO-8859-1")  + "\" />";
             
             StringBuffer sb = new StringBuffer(content);
