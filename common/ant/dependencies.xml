@@ -228,7 +228,7 @@
                 <get src="${download.java.net}/com-sun-commons-collections/jars/com-sun-commons-collections-2.1.jar"
                      dest="${sun-commons-collections.jar}"
                      usetimestamp="true"/>
-
+                <unjar src="${sun-commons-collections.jar}" dest="${dependency.jar.dir}"/>
             </then>
         </if>
 
@@ -240,7 +240,7 @@
                 <get src="${download.java.net}/com-sun-commons-digester/jars/com-sun-commons-digester-1.5.jar"
                      dest="${sun-commons-digester.jar}"
                      usetimestamp="true"/>
-
+                <unjar src="${sun-commons-digester.jar}" dest="${dependency.jar.dir}"/>
             </then>
         </if>
 
@@ -252,7 +252,7 @@
                 <get src="${download.java.net}/com-sun-commons-beanutils/jars/com-sun-commons-beanutils-1.6.1.jar"
                      dest="${sun-commons-beanutils.jar}"
                      usetimestamp="true"/>
-
+                <unjar src="${sun-commons-beanutils.jar}" dest="${dependency.jar.dir}"/>
             </then>
         </if>
 
@@ -264,7 +264,7 @@
                 <get src="${download.java.net}/com-sun-commons-logging/jars/com-sun-commons-logging-1.0.4.jar"
                      dest="${sun-commons-logging.jar}"
                      usetimestamp="true"/>
-
+                <unjar src="${sun-commons-logging.jar}" dest="${dependency.jar.dir}"/>
             </then>
         </if>
 
