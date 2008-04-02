@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainerBaseTestCase.java,v 1.4 2003/09/04 03:56:43 eburns Exp $
+ * $Id: UINamingContainerTestCase.java,v 1.6 2003/09/25 07:46:09 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
@@ -22,10 +22,10 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link UINamingContainerBase}.</p>
+ * <p>Unit tests for {@link UINamingContainer}.</p>
  */
 
-public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
+public class UINamingContainerTestCase extends UIComponentBaseTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -36,7 +36,7 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
      *
      * @param name Name of the test case
      */
-    public UINamingContainerBaseTestCase(String name) {
+    public UINamingContainerTestCase(String name) {
         super(name);
     }
 
@@ -47,7 +47,7 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UINamingContainerBase();
+        component = new UINamingContainer();
         expectedId = null;
         expectedRendererType = null;
     }
@@ -55,7 +55,7 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
 
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UINamingContainerBaseTestCase.class));
+        return (new TestSuite(UINamingContainerTestCase.class));
     }
 
 
@@ -71,10 +71,10 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
     // Negative tests for findComponent()
     public void testFindComponentNegative() {
 
-	UINamingContainerBase
-	    containerOne = new UINamingContainerBase(),
-	    containerTwo = new UINamingContainerBase(),
-	    containerThree = new UINamingContainerBase();
+	UINamingContainer
+	    containerOne = new UINamingContainer(),
+	    containerTwo = new UINamingContainer(),
+	    containerThree = new UINamingContainer();
 	UIComponent 
 	    leafOne = new TestComponent(),
 	    leafTwo = new TestComponent(),
@@ -172,10 +172,10 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
     // Positive tests for findComponent()
     public void testFindComponentPositive() {
 
-	UINamingContainerBase
-	    containerOne = new UINamingContainerBase(),
-	    containerTwo = new UINamingContainerBase(),
-	    containerThree = new UINamingContainerBase();
+	UINamingContainer
+	    containerOne = new UINamingContainer(),
+	    containerTwo = new UINamingContainer(),
+	    containerThree = new UINamingContainer();
 	UIComponent 
 	    leafOne = new TestComponent(),
 	    leafTwo = new TestComponent(),
@@ -222,12 +222,12 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
     }
 
 
-    // Test a pristine UINamingContainerBase instance
+    // Test a pristine UINamingContainer instance
     public void testPristine() {
 
         super.testPristine();
-        UINamingContainerBase namingContainer =
-            (UINamingContainerBase) component;
+        UINamingContainer namingContainer =
+            (UINamingContainer) component;
 
     }
 
@@ -236,8 +236,8 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
     public void testPropertiesInvalid() throws Exception {
 
         super.testPropertiesInvalid();
-        UINamingContainerBase namingContainer =
-            (UINamingContainerBase) component;
+        UINamingContainer namingContainer =
+            (UINamingContainer) component;
 
     }
 
@@ -246,8 +246,8 @@ public class UINamingContainerBaseTestCase extends UIComponentBaseTestCase {
     public void testPropertiesValid() throws Exception {
 
         super.testPropertiesValid();
-        UINamingContainerBase namingContainer =
-            (UINamingContainerBase) component;
+        UINamingContainer namingContainer =
+            (UINamingContainer) component;
 
     }
 }

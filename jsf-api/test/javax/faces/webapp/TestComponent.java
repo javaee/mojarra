@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.3 2003/07/26 17:55:37 craigmcc Exp $
+ * $Id: TestComponent.java,v 1.4 2003/09/25 07:46:52 craigmcc Exp $
  */
 
 /*
@@ -11,7 +11,7 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
-import javax.faces.component.base.UIComponentBase;
+import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 

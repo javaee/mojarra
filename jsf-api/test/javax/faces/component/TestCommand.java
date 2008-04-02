@@ -1,5 +1,5 @@
 /*
- * $Id: TestCommandBase.java,v 1.3 2003/07/27 00:48:29 craigmcc Exp $
+ * $Id: TestCommand.java,v 1.1 2003/09/25 07:46:03 craigmcc Exp $
  */
 
 /*
@@ -7,24 +7,24 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.util.List;
 
 
 /**
- * <p>Test {@link UICommandBase} subclass.</p>
+ * <p>Test {@link UICommand} subclass.</p>
  */
 
-public class TestCommandBase extends UICommandBase {
+public class TestCommand extends UICommand {
 
 
-    public TestCommandBase() {
+    public TestCommand() {
         super();
     }
 
-    public TestCommandBase(String id) {
+    public TestCommand(String id) {
         setId(id);
     }
 

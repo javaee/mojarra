@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.17 2003/09/23 21:33:47 jvisvanathan Exp $
+ * $Id: UICommandTestCase.java,v 1.10 2003/09/25 07:46:06 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
@@ -27,10 +27,10 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link UICommandBase}.</p>
+ * <p>Unit tests for {@link UICommand}.</p>
  */
 
-public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
+public class UICommandTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -41,7 +41,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
      *
      * @param name Name of the test case
      */
-    public UICommandBaseTestCase(String name) {
+    public UICommandTestCase(String name) {
         super(name);
     }
 
@@ -52,14 +52,14 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UICommandBase();
+        component = new UICommand();
         expectedRendererType = "Button";
     }
 
     
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UICommandBaseTestCase.class));
+        return (new TestSuite(UICommandTestCase.class));
     }
 
 
@@ -187,7 +187,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
     // Test listener registration and deregistration
     public void testListeners() {
 
-        TestCommandBase command = new TestCommandBase();
+        TestCommand command = new TestCommand();
         TestActionListener listener = null;
         List lists[] = null;
 
@@ -252,7 +252,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
     }
 
 
-    // Test a pristine UICommandBase instance
+    // Test a pristine UICommand instance
     public void testPristine() {
 
         super.testPristine();
@@ -500,7 +500,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 	return true;
     }
 
-    public static class UICommandSub extends UICommandBase {
+    public static class UICommandSub extends UICommand {
 	public List[] getListeners() { 
 	    return listeners;
 	}

@@ -1,5 +1,5 @@
 /*
- * $Id: TestEvent.java,v 1.1 2003/07/27 00:48:29 craigmcc Exp $
+ * $Id: TestEvent.java,v 1.1 2003/09/25 07:46:04 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;

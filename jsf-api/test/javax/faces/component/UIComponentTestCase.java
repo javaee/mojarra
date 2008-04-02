@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.36 2003/09/20 00:48:14 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.37 2003/09/25 07:46:07 craigmcc Exp $
  */
 
 /*
@@ -22,7 +22,6 @@ import javax.faces.validator.Validator;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import javax.faces.component.base.TestComponent;
 import javax.faces.mock.MockFacesContext;
 import javax.faces.mock.MockHttpServletRequest;
 import javax.faces.mock.MockServletContext;

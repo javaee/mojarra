@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBaseTestCase.java,v 1.11 2003/09/23 21:33:47 jvisvanathan Exp $
+ * $Id: UIInputTestCase.java,v 1.13 2003/09/25 07:46:09 craigmcc Exp $
  */
 
 /*
@@ -7,15 +7,12 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangedEvent;
@@ -32,10 +29,10 @@ import javax.faces.TestUtil;
 
 
 /**
- * <p>Unit tests for {@link UIInputBase}.</p>
+ * <p>Unit tests for {@link UIInput}.</p>
  */
 
-public class UIInputBaseTestCase extends UIOutputBaseTestCase {
+public class UIInputTestCase extends UIOutputTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -46,7 +43,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
      *
      * @param name Name of the test case
      */
-    public UIInputBaseTestCase(String name) {
+    public UIInputTestCase(String name) {
         super(name);
     }
 
@@ -57,14 +54,14 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UIInputBase();
+        component = new UIInput();
         expectedRendererType = "Text";
     }
 
     
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UIInputBaseTestCase.class));
+        return (new TestSuite(UIInputTestCase.class));
     }
 
 
@@ -122,7 +119,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
     // Test the compareValues() method
     public void testCompareValues() {
 
-        TestInputBase input = new TestInputBase();
+        TestInput input = new TestInput();
         Object value1a = "foo";
         Object value1b = "foo";
         Object value2 = "bar";
@@ -226,7 +223,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
     // Test listener registration and deregistration
     public void testListeners() {
 
-        TestInputBase input = new TestInputBase();
+        TestInput input = new TestInput();
         TestValueChangedListener listener = null;
         List lists[] = null;
 
@@ -291,7 +288,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
     }
 
 
-    // Test a pristine UIInputBase instance
+    // Test a pristine UIInput instance
     public void testPristine() {
 
         super.testPristine();
@@ -489,7 +486,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
 
     protected ValueHolder createValueHolder() {
 
-        UIComponent component = new UIInputBase();
+        UIComponent component = new UIInput();
         component.setRendererType(null);
         return ((ValueHolder) component);
 
@@ -585,7 +582,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
 	return true;
     }
 
-    public static class UIInputSub extends UIInputBase {
+    public static class UIInputSub extends UIInput {
 	public List[] getListeners() { 
 	    return listeners;
 	}

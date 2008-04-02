@@ -1,5 +1,5 @@
 /*
- * $Id: TestSelectManyBase.java,v 1.2 2003/07/26 17:55:20 craigmcc Exp $
+ * $Id: TestSelectMany.java,v 1.1 2003/09/25 07:46:05 craigmcc Exp $
  */
 
 /*
@@ -7,17 +7,17 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.util.List;
 
 
 /**
- * <p>Test {@link UISelectManyBase} subclass.</p>
+ * <p>Test {@link UISelectMany} subclass.</p>
  */
 
-public class TestSelectManyBase extends UISelectManyBase {
+public class TestSelectMany extends UISelectMany {
 
 
     public boolean compareValues(Object previous, Object value) {

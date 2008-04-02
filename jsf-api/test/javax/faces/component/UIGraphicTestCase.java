@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelBaseTestCase.java,v 1.6 2003/09/23 21:33:48 jvisvanathan Exp $
+ * $Id: UIGraphicTestCase.java,v 1.8 2003/09/25 07:46:08 craigmcc Exp $
  */
 
 /*
@@ -7,24 +7,21 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
 import java.util.Iterator;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIPanel;
-import javax.faces.component.ValueHolder;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link UIPanelBase}.</p>
+ * <p>Unit tests for {@link UIGraphic}.</p>
  */
 
-public class UIPanelBaseTestCase extends ValueHolderTestCaseBase {
+public class UIGraphicTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -35,7 +32,7 @@ public class UIPanelBaseTestCase extends ValueHolderTestCaseBase {
      *
      * @param name Name of the test case
      */
-    public UIPanelBaseTestCase(String name) {
+    public UIGraphicTestCase(String name) {
         super(name);
     }
 
@@ -46,16 +43,14 @@ public class UIPanelBaseTestCase extends ValueHolderTestCaseBase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UIPanelBase();
-        expectedId = null;
-        expectedRendererType = null;
-        expectedRendersChildren = true;
+        component = new UIGraphic();
+        expectedRendererType = "Image";
     }
 
 
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UIPanelBaseTestCase.class));
+        return (new TestSuite(UIGraphicTestCase.class));
     }
 
 
@@ -68,11 +63,33 @@ public class UIPanelBaseTestCase extends ValueHolderTestCaseBase {
     // ------------------------------------------------- Individual Test Methods
 
 
-    // Test a pristine UIPanelBase instance
+    // Test attribute-property transparency
+    public void testAttributesTransparency() {
+
+        super.testAttributesTransparency();
+        UIGraphic graphic = (UIGraphic) component;
+
+        assertEquals(graphic.getURL(),
+                     (String) graphic.getAttributes().get("URL"));
+        graphic.setURL("foo");
+        assertEquals("foo", (String) graphic.getAttributes().get("URL"));
+        graphic.setURL(null);
+        assertNull((String) graphic.getAttributes().get("URL"));
+        graphic.getAttributes().put("URL", "bar");
+        assertEquals("bar", graphic.getURL());
+        graphic.getAttributes().put("URL", null);
+        assertNull(graphic.getURL());
+
+    }
+
+
+    // Test a pristine UIGraphic instance
     public void testPristine() {
 
         super.testPristine();
-        UIPanel panel = (UIPanel) component;
+        UIGraphic graphic = (UIGraphic) component;
+
+        assertNull("no url", graphic.getURL());
 
     }
 
@@ -81,7 +98,7 @@ public class UIPanelBaseTestCase extends ValueHolderTestCaseBase {
     public void testPropertiesInvalid() throws Exception {
 
         super.testPropertiesInvalid();
-        UIPanel panel = (UIPanel) component;
+        UIGraphic graphic = (UIGraphic) component;
 
     }
 
@@ -90,7 +107,17 @@ public class UIPanelBaseTestCase extends ValueHolderTestCaseBase {
     public void testPropertiesValid() throws Exception {
 
         super.testPropertiesValid();
-        UIPanel panel = (UIPanel) component;
+        UIGraphic graphic = (UIGraphic) component;
+
+        // Test transparency between "value" and "URL" properties
+        graphic.setURL("foo");
+        assertEquals("foo", (String) graphic.getValue());
+        graphic.setURL(null);
+        assertNull(graphic.getValue());
+        graphic.setValue("bar");
+        assertEquals("bar", graphic.getURL());
+        graphic.setValue(null);
+        assertNull(graphic.getURL());
 
     }
 
@@ -99,15 +126,15 @@ public class UIPanelBaseTestCase extends ValueHolderTestCaseBase {
     public void testStateHolder() throws Exception {
 
         UIComponent testParent = new TestComponentNamingContainer("root");
-	UIPanel
+	UIGraphic
 	    preSave = null,
 	    postSave = null;
 	Object state = null;
 
 	// test component with no properties
 	testParent.getChildren().clear();
-	preSave = new UIPanelBase();
-	preSave.setId("panel");
+	preSave = new UIGraphic();
+	preSave.setId("graphic");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
         preSave.getClientId(facesContext);
@@ -115,15 +142,15 @@ public class UIPanelBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIPanelBase();
+	postSave = new UIGraphic();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with valueRef
 	testParent.getChildren().clear();
-	preSave = new UIPanelBase();
-	preSave.setId("panel");
+	preSave = new UIGraphic();
+	preSave.setId("graphic");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
 	testParent.getChildren().add(preSave);
@@ -132,15 +159,15 @@ public class UIPanelBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIPanelBase();
+	postSave = new UIGraphic();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with valueRef and converter
 	testParent.getChildren().clear();
-	preSave = new UIPanelBase();
-	preSave.setId("panel");
+	preSave = new UIGraphic();
+	preSave.setId("graphic");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
 	preSave.setConverter(new StateSavingConverter("testCase State"));
@@ -150,7 +177,7 @@ public class UIPanelBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIPanelBase();
+	postSave = new UIGraphic();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
@@ -160,7 +187,7 @@ public class UIPanelBaseTestCase extends ValueHolderTestCaseBase {
 
     protected ValueHolder createValueHolder() {
 
-        UIComponent component = new UIPanelBase();
+        UIComponent component = new UIGraphic();
         component.setRendererType(null);
         return ((ValueHolder) component);
 

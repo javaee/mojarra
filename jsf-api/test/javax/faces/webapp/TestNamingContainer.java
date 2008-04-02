@@ -1,5 +1,5 @@
 /*
- * $Id: TestNamingContainer.java,v 1.2 2003/07/26 17:55:38 craigmcc Exp $
+ * $Id: TestNamingContainer.java,v 1.3 2003/09/25 07:46:52 craigmcc Exp $
  */
 
 /*
@@ -11,13 +11,13 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 
 // Test UINamingContainer Class
-public class TestNamingContainer
-    extends javax.faces.component.base.UINamingContainerBase {
+public class TestNamingContainer extends UINamingContainer {
 
 
     public TestNamingContainer() {

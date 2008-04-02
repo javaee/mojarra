@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidator.java,v 1.6 2003/09/24 22:41:12 eburns Exp $
+ * $Id: TestValidator.java,v 1.9 2003/09/25 07:46:05 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.util.Collections;

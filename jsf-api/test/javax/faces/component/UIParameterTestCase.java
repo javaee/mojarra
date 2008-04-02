@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemsBaseTestCase.java,v 1.6 2003/09/23 21:33:49 jvisvanathan Exp $
+ * $Id: UIParameterTestCase.java,v 1.7 2003/09/25 07:46:11 craigmcc Exp $
  */
 
 /*
@@ -7,25 +7,23 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectItems;
-import javax.faces.component.ValueHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.TestUtil;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link UISelectItemsBase}.</p>
+ * <p>Unit tests for {@link UIParameter}.</p>
  */
 
-public class UISelectItemsBaseTestCase extends ValueHolderTestCaseBase {
+public class UIParameterTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -36,7 +34,7 @@ public class UISelectItemsBaseTestCase extends ValueHolderTestCaseBase {
      *
      * @param name Name of the test case
      */
-    public UISelectItemsBaseTestCase(String name) {
+    public UIParameterTestCase(String name) {
         super(name);
     }
 
@@ -47,14 +45,15 @@ public class UISelectItemsBaseTestCase extends ValueHolderTestCaseBase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UISelectItemsBase();
+        component = new UIParameter();
+        expectedId = null;
         expectedRendererType = null;
     }
 
-    
+
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UISelectItemsBaseTestCase.class));
+        return (new TestSuite(UIParameterTestCase.class));
     }
 
 
@@ -67,11 +66,33 @@ public class UISelectItemsBaseTestCase extends ValueHolderTestCaseBase {
     // ------------------------------------------------- Individual Test Methods
 
 
-    // Test a pristine UISelectItemsBase instance
+    // Test attribute-property transparency
+    public void testAttributesTransparency() {
+
+        super.testAttributesTransparency();
+        UIParameter parameter = (UIParameter) component;
+
+        assertEquals(parameter.getName(),
+                     (String) parameter.getAttributes().get("name"));
+        parameter.setName("foo");
+        assertEquals("foo", (String) parameter.getAttributes().get("name"));
+        parameter.setName(null);
+        assertNull((String) parameter.getAttributes().get("name"));
+        parameter.getAttributes().put("name", "bar");
+        assertEquals("bar", parameter.getName());
+        parameter.getAttributes().put("name", null);
+        assertNull(parameter.getName());
+
+    }
+
+
+    // Test a pristine UIParameter instance
     public void testPristine() {
 
         super.testPristine();
-        UISelectItems selectItems = (UISelectItems) component;
+        UIParameter parameter = (UIParameter) component;
+
+        assertNull("no name", parameter.getName());
 
     }
 
@@ -80,7 +101,7 @@ public class UISelectItemsBaseTestCase extends ValueHolderTestCaseBase {
     public void testPropertiesInvalid() throws Exception {
 
         super.testPropertiesInvalid();
-        UISelectItems selectItems = (UISelectItems) component;
+        UIParameter parameter = (UIParameter) component;
 
     }
 
@@ -89,8 +110,12 @@ public class UISelectItemsBaseTestCase extends ValueHolderTestCaseBase {
     public void testPropertiesValid() throws Exception {
 
         super.testPropertiesValid();
-        UISelectItems selectItems = (UISelectItems) component;
+        UIParameter parameter = (UIParameter) component;
 
+        parameter.setName("foo");
+        assertEquals("foo", parameter.getName());
+        parameter.setName(null);
+        assertNull(parameter.getName());
 
     }
 
@@ -99,15 +124,15 @@ public class UISelectItemsBaseTestCase extends ValueHolderTestCaseBase {
     public void testStateHolder() throws Exception {
 
         UIComponent testParent = new TestComponentNamingContainer("root");
-	UISelectItems
+	UIParameter
 	    preSave = null,
 	    postSave = null;
 	Object state = null;
 
 	// test component with no properties
 	testParent.getChildren().clear();
-	preSave = new UISelectItemsBase();
-	preSave.setId("selectItems");
+	preSave = new UIParameter();
+	preSave.setId("parameter");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
         preSave.getClientId(facesContext);
@@ -115,15 +140,15 @@ public class UISelectItemsBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UISelectItemsBase();
+	postSave = new UIParameter();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with valueRef
 	testParent.getChildren().clear();
-	preSave = new UISelectItemsBase();
-	preSave.setId("selectItems");
+	preSave = new UIParameter();
+	preSave.setId("parameter");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
 	testParent.getChildren().add(preSave);
@@ -132,15 +157,15 @@ public class UISelectItemsBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UISelectItemsBase();
+	postSave = new UIParameter();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with valueRef and converter
 	testParent.getChildren().clear();
-	preSave = new UISelectItemsBase();
-	preSave.setId("selectItems");
+	preSave = new UIParameter();
+	preSave.setId("parameter");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
 	preSave.setConverter(new StateSavingConverter("testCase State"));
@@ -150,7 +175,7 @@ public class UISelectItemsBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UISelectItemsBase();
+	postSave = new UIParameter();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
@@ -160,13 +185,30 @@ public class UISelectItemsBaseTestCase extends ValueHolderTestCaseBase {
 
     protected ValueHolder createValueHolder() {
 
-        UIComponent component = new UISelectItemsBase();
+        UIComponent component = new UIParameter();
         component.setRendererType(null);
         return ((ValueHolder) component);
 
     }
 
 
+    boolean propertiesAreEqual(FacesContext context,
+			       UIComponent comp1,
+			       UIComponent comp2) {
+
+	UIParameter
+	    param1 = (UIParameter) comp1,
+	    param2 = (UIParameter) comp2;
+	if (super.propertiesAreEqual(context, comp1, comp2)) {
+	    // if their not both null, or not the same string
+	    if (!TestUtil.equalsWithNulls(param1.getName(),
+					  param2.getName())) {
+		return false;
+	    }
+	}
+	return true;
+
+    }
 
 
 }

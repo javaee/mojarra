@@ -1,5 +1,5 @@
 /*
- * $Id: TestInputBase.java,v 1.3 2003/07/27 00:48:30 craigmcc Exp $
+ * $Id: TestInput.java,v 1.1 2003/09/25 07:46:04 craigmcc Exp $
  */
 
 /*
@@ -7,24 +7,24 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.util.List;
 
 
 /**
- * <p>Test {@link UIInputBase} subclass.</p>
+ * <p>Test {@link UIInput} subclass.</p>
  */
 
-public class TestInputBase extends UIInputBase {
+public class TestInput extends UIInput {
 
 
-    public TestInputBase() {
+    public TestInput() {
         super();
     }
 
-    public TestInputBase(String id) {
+    public TestInput(String id) {
         setId(id);
     }
 

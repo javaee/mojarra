@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneBaseTestCase.java,v 1.5 2003/09/19 00:57:17 craigmcc Exp $
+ * $Id: UISelectOneTestCase.java,v 1.9 2003/09/25 07:46:13 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
@@ -22,10 +22,10 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link UISelectOneBase}.</p>
+ * <p>Unit tests for {@link UISelectOne}.</p>
  */
 
-public class UISelectOneBaseTestCase extends UIInputBaseTestCase {
+public class UISelectOneTestCase extends UIInputTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -36,7 +36,7 @@ public class UISelectOneBaseTestCase extends UIInputBaseTestCase {
      *
      * @param name Name of the test case
      */
-    public UISelectOneBaseTestCase(String name) {
+    public UISelectOneTestCase(String name) {
         super(name);
     }
 
@@ -47,14 +47,14 @@ public class UISelectOneBaseTestCase extends UIInputBaseTestCase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UISelectOneBase();
+        component = new UISelectOne();
         expectedRendererType = "Menu";
     }
 
     
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UISelectOneBaseTestCase.class));
+        return (new TestSuite(UISelectOneTestCase.class));
     }
 
 
@@ -67,7 +67,7 @@ public class UISelectOneBaseTestCase extends UIInputBaseTestCase {
     // ------------------------------------------------- Individual Test Methods
 
 
-    // Test a pristine UISelectOneBase instance
+    // Test a pristine UISelectOne instance
     public void testPristine() {
 
         super.testPristine();
@@ -120,7 +120,7 @@ public class UISelectOneBaseTestCase extends UIInputBaseTestCase {
 
     protected ValueHolder createValueHolder() {
 
-        UIComponent component = new UISelectOneBase();
+        UIComponent component = new UISelectOne();
         component.setRendererType(null);
         return ((ValueHolder) component);
 

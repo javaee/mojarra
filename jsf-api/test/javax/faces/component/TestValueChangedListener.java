@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangedListener.java,v 1.8 2003/09/24 22:41:12 eburns Exp $
+ * $Id: TestValueChangedListener.java,v 1.5 2003/09/25 07:46:06 craigmcc Exp $
  */
 
 /*
@@ -7,15 +7,13 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import javax.faces.event.ValueChangedEvent;
 import javax.faces.event.ValueChangedListener;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
-import javax.faces.component.StateHolder;
-import javax.faces.component.UIComponent;
 
 /**
  * <p>Test {@link ValueChangedListener} implementation.</p>

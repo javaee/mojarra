@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.8 2003/09/24 22:41:11 eburns Exp $
+ * $Id: UIDataTestCase.java,v 1.9 2003/09/25 07:46:08 craigmcc Exp $
  */
 
 /*
@@ -12,8 +12,6 @@ package javax.faces.component;
 
 import java.io.IOException;
 import java.util.Iterator;
-import javax.faces.component.base.TestComponentNamingContainer;
-import javax.faces.component.base.ValueHolderTestCaseBase;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;

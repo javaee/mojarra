@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBaseTestCase.java,v 1.9 2003/09/23 21:33:49 jvisvanathan Exp $
+ * $Id: UISelectItemTestCase.java,v 1.2 2003/09/25 07:46:12 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
@@ -24,10 +24,10 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link UISelectItemBase}.</p>
+ * <p>Unit tests for {@link UISelectItem}.</p>
  */
 
-public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
+public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -38,7 +38,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
      *
      * @param name Name of the test case
      */
-    public UISelectItemBaseTestCase(String name) {
+    public UISelectItemTestCase(String name) {
         super(name);
     }
 
@@ -49,14 +49,14 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UISelectItemBase();
+        component = new UISelectItem();
         expectedRendererType = null;
     }
 
     
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UISelectItemBaseTestCase.class));
+        return (new TestSuite(UISelectItemTestCase.class));
     }
 
 
@@ -111,7 +111,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
     }
 
 
-    // Test a pristine UISelectItemBase instance
+    // Test a pristine UISelectItem instance
     public void testPristine() {
 
         super.testPristine();
@@ -166,7 +166,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 
 	// test selectItem with nothing
 	testParent.getChildren().clear();
-	preSave = new UISelectItemBase();
+	preSave = new UISelectItem();
 	preSave.setId("selectItem");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
@@ -175,7 +175,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UISelectItemBase();
+	postSave = new UISelectItem();
 	postSave.setId("selectItem");
 	testParent.getChildren().add(postSave);
         try {
@@ -188,7 +188,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 
 	// test selectItem with value only
 	testParent.getChildren().clear();
-	preSave = new UISelectItemBase();
+	preSave = new UISelectItem();
 	preSave.setId("selectItem");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setItemValue("value");
@@ -198,7 +198,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UISelectItemBase();
+	postSave = new UISelectItem();
 	postSave.setId("selectItem");
 	testParent.getChildren().add(postSave);
 	try {
@@ -211,7 +211,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 
 	// test selectItem with the works
 	testParent.getChildren().clear();
-	preSave = new UISelectItemBase();
+	preSave = new UISelectItem();
 	preSave.setId("selectItem");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setItemDescription("description");
@@ -223,7 +223,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UISelectItemBase();
+	postSave = new UISelectItem();
 	postSave.setId("selectItem");
 	testParent.getChildren().add(postSave);
 	try {
@@ -240,7 +240,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 
     protected ValueHolder createValueHolder() {
 
-        UIComponent component = new UISelectItemBase();
+        UIComponent component = new UISelectItem();
         component.setRendererType(null);
         return ((ValueHolder) component);
 

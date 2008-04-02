@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.7 2003/09/22 19:03:46 eburns Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.1 2003/09/25 07:46:13 craigmcc Exp $
  */
 
 /*
@@ -7,16 +7,12 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.component.StateHolder;
-import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.LongConverter;
@@ -55,7 +51,7 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UIOutputBase();
+        component = new UIOutput();
         expectedId = null;
         expectedRendererType = "Text";
     }
@@ -230,14 +226,14 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     public void testStateHolder() throws Exception {
 
         UIComponent testParent = new TestComponentNamingContainer("root");
-	UIOutputBase
+	UIOutput
 	    preSave = null,
 	    postSave = null;
 	Object state = null;
 
 	// test component with no properties
 	testParent.getChildren().clear();
-	preSave = new UIOutputBase();
+	preSave = new UIOutput();
 	preSave.setId("valueHolder");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
@@ -245,14 +241,14 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIOutputBase();
+	postSave = new UIOutput();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with valueRef
 	testParent.getChildren().clear();
-	preSave = new UIOutputBase();
+	preSave = new UIOutput();
 	preSave.setId("valueHolder");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
@@ -261,14 +257,14 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIOutputBase();
+	postSave = new UIOutput();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with valueRef and converter
 	testParent.getChildren().clear();
-	preSave = new UIOutputBase();
+	preSave = new UIOutput();
 	preSave.setId("valueHolder");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
@@ -278,7 +274,7 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIOutputBase();
+	postSave = new UIOutput();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
@@ -340,7 +336,7 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     // null for rendererType)
     protected ValueHolder createValueHolder() {
 
-        UIComponent component = new UIOutputBase();
+        UIComponent component = new UIOutput();
         component.setRendererType(null);
         return ((ValueHolder) component);
 

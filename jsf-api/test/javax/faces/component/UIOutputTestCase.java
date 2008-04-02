@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBaseTestCase.java,v 1.14 2003/09/24 22:41:13 eburns Exp $
+ * $Id: UIOutputTestCase.java,v 1.8 2003/09/25 07:46:10 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
@@ -28,10 +28,10 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link UIOutputBase}.</p>
+ * <p>Unit tests for {@link UIOutput}.</p>
  */
 
-public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
+public class UIOutputTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -42,7 +42,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
      *
      * @param name Name of the test case
      */
-    public UIOutputBaseTestCase(String name) {
+    public UIOutputTestCase(String name) {
         super(name);
     }
 
@@ -53,7 +53,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UIOutputBase();
+        component = new UIOutput();
         expectedId = null;
         expectedRendererType = "Text";
     }
@@ -61,7 +61,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UIOutputBaseTestCase.class));
+        return (new TestSuite(UIOutputTestCase.class));
     }
 
 
@@ -88,7 +88,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
     }
 
 
-    // Test a pristine UIOutputBase instance
+    // Test a pristine UIOutput instance
     public void testPristine() {
 
         super.testPristine();
@@ -126,7 +126,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 
 	// test component with no properties
 	testParent.getChildren().clear();
-	preSave = new UIOutputBase();
+	preSave = new UIOutput();
 	preSave.setId("output");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
@@ -135,14 +135,14 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIOutputBase();
+	postSave = new UIOutput();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with valueRef and value
 	testParent.getChildren().clear();
-	preSave = new UIOutputBase();
+	preSave = new UIOutput();
 	preSave.setId("output");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
@@ -153,14 +153,14 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIOutputBase();
+	postSave = new UIOutput();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with valueRef and converter
 	testParent.getChildren().clear();
-	preSave = new UIOutputBase();
+	preSave = new UIOutput();
 	preSave.setId("output");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
@@ -171,7 +171,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
         assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIOutputBase();
+	postSave = new UIOutput();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
@@ -182,7 +182,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 
     protected ValueHolder createValueHolder() {
 
-        UIComponent component = new UIOutputBase();
+        UIComponent component = new UIOutput();
         component.setRendererType(null);
         return ((ValueHolder) component);
 

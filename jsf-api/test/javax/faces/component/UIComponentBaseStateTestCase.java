@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseStateTestCase.java,v 1.10 2003/09/24 22:41:13 eburns Exp $
+ * $Id: UIComponentBaseStateTestCase.java,v 1.1 2003/09/25 07:46:07 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
@@ -15,9 +15,6 @@ import java.util.Iterator;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIComponentTestCase;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.LongConverter;
 import javax.faces.event.FacesEvent;
@@ -76,8 +73,8 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 
     public void testProcessState() throws Exception {
 
-	UIViewRootBase root1 = createTestView();
-	UIViewRootBase root2 = createTestView();
+	UIViewRoot root1 = createTestView();
+	UIViewRoot root2 = createTestView();
 	assertTrue(verifyTestViewsAreEqual(root1, root2));
 	applyAttributesToTestView(root1);
         Object componentState = root1.processSaveState(facesContext);
@@ -94,24 +91,24 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
      * UIViewRoot(UIForm(UIInput,UIInput,UIOutput,UICommand))
      */
 
-    protected UIViewRootBase createTestView() {
-	UIViewRootBase root = new UIViewRootBase();
+    protected UIViewRoot createTestView() {
+	UIViewRoot root = new UIViewRoot();
 	root.setRendererType(null);
-	UIFormBase form = new UIFormBase();
+	UIForm form = new UIForm();
 	form.setRendererType(null);
-	UIInputBase input1 = new UIInputBaseTestCase.UIInputSub();
+	UIInput input1 = new UIInputTestCase.UIInputSub();
 	input1.setRendererType(null);
-	UIInputBase input2 = new UIInputBaseTestCase.UIInputSub();
+	UIInput input2 = new UIInputTestCase.UIInputSub();
 	input2.setRendererType(null);
-	UIPanelBase header = new UIPanelBase();
+	UIPanel header = new UIPanel();
 	header.setRendererType(null);
-	UIPanelBase footer = new UIPanelBase();
+	UIPanel footer = new UIPanel();
 	footer.setRendererType(null);
-	UIOutputBase output1 = new UIOutputBase();
+	UIOutput output1 = new UIOutput();
 	output1.setRendererType(null);
-	UICommandBase command = new UICommandBaseTestCase.UICommandSub();
+	UICommand command = new UICommandTestCase.UICommandSub();
 	command.setRendererType(null);
-	UISelectItemBase selectItem = new UISelectItemBase();
+	UISelectItem selectItem = new UISelectItem();
 	selectItem.setRendererType(null);
 
 	root.getChildren().add(form);
@@ -125,12 +122,12 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	return root;
     }
 
-    protected void applyAttributesToTestView(UIViewRootBase root) {
+    protected void applyAttributesToTestView(UIViewRoot root) {
 	root.setViewId("viewId");
 	root.setId("page");
 	root.setRenderKitId("renderKitId");
-	UIFormBase form = (UIFormBase) root.getChildren().get(0);
-	UIInputBase input = (UIInputBase) form.getChildren().get(0);
+	UIForm form = (UIForm) root.getChildren().get(0);
+	UIInput input = (UIInput) form.getChildren().get(0);
 	input.setId("input1");
 	input.setPrevious("previous1");
 	input.setValid(false);
@@ -145,7 +142,7 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	doubleVal.setMaximum(6.02);
 	input.addValidator(doubleVal);
 
-	input = (UIInputBase) form.getChildren().get(1);
+	input = (UIInput) form.getChildren().get(1);
 	input.setId("input2");
 	input.setPrevious("previous2");
 	input.setValid(true);
@@ -157,71 +154,71 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	input.addValueChangedListener(new TestValueChangedListener("ANY2",
 								   PhaseId.ANY_PHASE));
 	
-	((UIPanelBase)input.getFacets().get("header")).setId("header");
-	((UIPanelBase)input.getFacets().get("footer")).setId("footer");
+	((UIPanel)input.getFacets().get("header")).setId("header");
+	((UIPanel)input.getFacets().get("footer")).setId("footer");
 
 	doubleVal = new DoubleRangeValidator();
 	doubleVal.setMinimum(1);
 	doubleVal.setMaximum(3);
 	input.addValidator(doubleVal);
 
-	UIOutputBase output = (UIOutputBase) form.getChildren().get(2);
+	UIOutput output = (UIOutput) form.getChildren().get(2);
 	output.setId("output");
 	output.setValueRef("valueRef");
 	output.setConverter(new LongConverter());
 	
-	UICommandBase command = (UICommandBase) form.getChildren().get(3);
+	UICommand command = (UICommand) form.getChildren().get(3);
 	command.setId("command");
 	command.setAction("action");
 	command.setActionRef("actionRef");
 	command.addActionListener(new TestActionListener("ANY",
 							 PhaseId.ANY_PHASE));
 
-	UISelectItemBase selectItem = (UISelectItemBase) form.getChildren().get(4);
+	UISelectItem selectItem = (UISelectItem) form.getChildren().get(4);
 	selectItem.setId("selectItem");
 	selectItem.setItemLabel("label");
 	selectItem.setItemValue("value");
 	selectItem.setItemDescription("description");
     }
 
-    protected boolean verifyTestViewsAreEqual(UIViewRootBase root1, 
-					      UIViewRootBase root2) {
-	UIViewRootBaseTestCase pageBaseTester = new UIViewRootBaseTestCase("temp");
-	UIInputBaseTestCase inputBaseTester = new UIInputBaseTestCase("temp");
-	UIOutputBaseTestCase outputBaseTester = new UIOutputBaseTestCase("temp");
-	UICommandBaseTestCase commandBaseTester = new UICommandBaseTestCase("temp");
-	UISelectItemBaseTestCase selectItemBaseTester = new UISelectItemBaseTestCase("temp");
+    protected boolean verifyTestViewsAreEqual(UIViewRoot root1, 
+					      UIViewRoot root2) {
+	UIViewRootTestCase pageBaseTester = new UIViewRootTestCase("temp");
+	UIInputTestCase inputBaseTester = new UIInputTestCase("temp");
+	UIOutputTestCase outputBaseTester = new UIOutputTestCase("temp");
+	UICommandTestCase commandBaseTester = new UICommandTestCase("temp");
+	UISelectItemTestCase selectItemBaseTester = new UISelectItemTestCase("temp");
 	assertTrue(pageBaseTester.propertiesAreEqual(facesContext, 
 						     root1, root2));
-	UIFormBase form1 = (UIFormBase) root1.getChildren().get(0);
-	UIFormBase form2 = (UIFormBase) root2.getChildren().get(0);
-	UIInputBaseTestCase.UIInputSub input1 = (UIInputBaseTestCase.UIInputSub) form1.getChildren().get(0);
-	UIInputBaseTestCase.UIInputSub input2 = (UIInputBaseTestCase.UIInputSub) form2.getChildren().get(0);
+	UIForm form1 = (UIForm) root1.getChildren().get(0);
+	UIForm form2 = (UIForm) root2.getChildren().get(0);
+	UIInputTestCase.UIInputSub input1 = (UIInputTestCase.UIInputSub) form1.getChildren().get(0);
+	UIInputTestCase.UIInputSub input2 = (UIInputTestCase.UIInputSub) form2.getChildren().get(0);
 	assertTrue(inputBaseTester.propertiesAreEqual(facesContext, 
 						      input1, input2));
 	assertTrue(this.propertiesAreEqual(facesContext, input1, input1));
 
-	input1 = (UIInputBaseTestCase.UIInputSub) form1.getChildren().get(1);
-	input2 = (UIInputBaseTestCase.UIInputSub) form2.getChildren().get(1);
+	input1 = (UIInputTestCase.UIInputSub) form1.getChildren().get(1);
+	input2 = (UIInputTestCase.UIInputSub) form2.getChildren().get(1);
 	assertTrue(inputBaseTester.propertiesAreEqual(facesContext, 
 						      input1, input2));
 	assertTrue(inputBaseTester.listenersAreEqual(facesContext, 
 						      input1, input2));
 
-	UIOutputBase output1 = (UIOutputBase) form1.getChildren().get(2);
-	UIOutputBase output2 = (UIOutputBase) form2.getChildren().get(2);
+	UIOutput output1 = (UIOutput) form1.getChildren().get(2);
+	UIOutput output2 = (UIOutput) form2.getChildren().get(2);
 	assertTrue(outputBaseTester.propertiesAreEqual(facesContext, 
 						       output1, output2));
 
-	UICommandBase command1 = (UICommandBase) form1.getChildren().get(3);
-	UICommandBase command2 = (UICommandBase) form2.getChildren().get(3);
+	UICommand command1 = (UICommand) form1.getChildren().get(3);
+	UICommand command2 = (UICommand) form2.getChildren().get(3);
 	assertTrue(commandBaseTester.propertiesAreEqual(facesContext, 
 							command1, command2));
 
-	UISelectItemBase selectItem1 = 
-	    (UISelectItemBase) form1.getChildren().get(4);
-	UISelectItemBase selectItem2 = 
-	    (UISelectItemBase) form2.getChildren().get(4);
+	UISelectItem selectItem1 = 
+	    (UISelectItem) form1.getChildren().get(4);
+	UISelectItem selectItem2 = 
+	    (UISelectItem) form2.getChildren().get(4);
 	assertTrue(selectItemBaseTester.propertiesAreEqual(facesContext,
 							   selectItem1,
 							   selectItem2));

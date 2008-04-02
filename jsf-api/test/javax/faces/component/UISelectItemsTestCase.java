@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicBaseTestCase.java,v 1.7 2003/09/23 21:33:47 jvisvanathan Exp $
+ * $Id: UISelectItemsTestCase.java,v 1.1 2003/09/25 07:46:12 craigmcc Exp $
  */
 
 /*
@@ -7,13 +7,14 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIGraphic;
+import javax.faces.component.UISelectItems;
 import javax.faces.component.ValueHolder;
 import junit.framework.TestCase;
 import junit.framework.Test;
@@ -21,10 +22,10 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link UIGraphicBase}.</p>
+ * <p>Unit tests for {@link UISelectItems}.</p>
  */
 
-public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
+public class UISelectItemsTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -35,7 +36,7 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
      *
      * @param name Name of the test case
      */
-    public UIGraphicBaseTestCase(String name) {
+    public UISelectItemsTestCase(String name) {
         super(name);
     }
 
@@ -46,14 +47,14 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UIGraphicBase();
-        expectedRendererType = "Image";
+        component = new UISelectItems();
+        expectedRendererType = null;
     }
 
-
+    
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UIGraphicBaseTestCase.class));
+        return (new TestSuite(UISelectItemsTestCase.class));
     }
 
 
@@ -66,33 +67,11 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
     // ------------------------------------------------- Individual Test Methods
 
 
-    // Test attribute-property transparency
-    public void testAttributesTransparency() {
-
-        super.testAttributesTransparency();
-        UIGraphic graphic = (UIGraphic) component;
-
-        assertEquals(graphic.getURL(),
-                     (String) graphic.getAttributes().get("URL"));
-        graphic.setURL("foo");
-        assertEquals("foo", (String) graphic.getAttributes().get("URL"));
-        graphic.setURL(null);
-        assertNull((String) graphic.getAttributes().get("URL"));
-        graphic.getAttributes().put("URL", "bar");
-        assertEquals("bar", graphic.getURL());
-        graphic.getAttributes().put("URL", null);
-        assertNull(graphic.getURL());
-
-    }
-
-
-    // Test a pristine UIGraphicBase instance
+    // Test a pristine UISelectItems instance
     public void testPristine() {
 
         super.testPristine();
-        UIGraphic graphic = (UIGraphic) component;
-
-        assertNull("no url", graphic.getURL());
+        UISelectItems selectItems = (UISelectItems) component;
 
     }
 
@@ -101,7 +80,7 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
     public void testPropertiesInvalid() throws Exception {
 
         super.testPropertiesInvalid();
-        UIGraphic graphic = (UIGraphic) component;
+        UISelectItems selectItems = (UISelectItems) component;
 
     }
 
@@ -110,17 +89,8 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
     public void testPropertiesValid() throws Exception {
 
         super.testPropertiesValid();
-        UIGraphic graphic = (UIGraphic) component;
+        UISelectItems selectItems = (UISelectItems) component;
 
-        // Test transparency between "value" and "URL" properties
-        graphic.setURL("foo");
-        assertEquals("foo", (String) graphic.getValue());
-        graphic.setURL(null);
-        assertNull(graphic.getValue());
-        graphic.setValue("bar");
-        assertEquals("bar", graphic.getURL());
-        graphic.setValue(null);
-        assertNull(graphic.getURL());
 
     }
 
@@ -129,15 +99,15 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
     public void testStateHolder() throws Exception {
 
         UIComponent testParent = new TestComponentNamingContainer("root");
-	UIGraphic
+	UISelectItems
 	    preSave = null,
 	    postSave = null;
 	Object state = null;
 
 	// test component with no properties
 	testParent.getChildren().clear();
-	preSave = new UIGraphicBase();
-	preSave.setId("graphic");
+	preSave = new UISelectItems();
+	preSave.setId("selectItems");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
         preSave.getClientId(facesContext);
@@ -145,15 +115,15 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIGraphicBase();
+	postSave = new UISelectItems();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with valueRef
 	testParent.getChildren().clear();
-	preSave = new UIGraphicBase();
-	preSave.setId("graphic");
+	preSave = new UISelectItems();
+	preSave.setId("selectItems");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
 	testParent.getChildren().add(preSave);
@@ -162,15 +132,15 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIGraphicBase();
+	postSave = new UISelectItems();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with valueRef and converter
 	testParent.getChildren().clear();
-	preSave = new UIGraphicBase();
-	preSave.setId("graphic");
+	preSave = new UISelectItems();
+	preSave.setId("selectItems");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
 	preSave.setConverter(new StateSavingConverter("testCase State"));
@@ -180,7 +150,7 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIGraphicBase();
+	postSave = new UISelectItems();
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
@@ -190,11 +160,13 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
 
     protected ValueHolder createValueHolder() {
 
-        UIComponent component = new UIGraphicBase();
+        UIComponent component = new UISelectItems();
         component.setRendererType(null);
         return ((ValueHolder) component);
 
     }
+
+
 
 
 }

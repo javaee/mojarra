@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.12 2003/09/12 16:25:26 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.13 2003/09/25 07:46:53 craigmcc Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
-import javax.faces.component.base.UIViewRootBase;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.render.RenderKit;
@@ -121,7 +121,7 @@ public class UIComponentTagTestCase extends TestCase {
             new MockExternalContext(servletContext, request, response);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
-	UIViewRootBase root = new UIViewRootBase();
+	UIViewRoot root = new UIViewRoot();
 	root.setViewId("/root");
         facesContext.setViewRoot(root);
         ApplicationFactory applicationFactory = (ApplicationFactory)

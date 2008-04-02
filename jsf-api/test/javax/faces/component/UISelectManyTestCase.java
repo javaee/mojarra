@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyBaseTestCase.java,v 1.4 2003/09/19 00:57:17 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.11 2003/09/25 07:46:12 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
@@ -22,10 +22,10 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link UISelectManyBase}.</p>
+ * <p>Unit tests for {@link UISelectMany}.</p>
  */
 
-public class UISelectManyBaseTestCase extends UIInputBaseTestCase {
+public class UISelectManyTestCase extends UIInputTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -36,7 +36,7 @@ public class UISelectManyBaseTestCase extends UIInputBaseTestCase {
      *
      * @param name Name of the test case
      */
-    public UISelectManyBaseTestCase(String name) {
+    public UISelectManyTestCase(String name) {
         super(name);
     }
 
@@ -47,14 +47,14 @@ public class UISelectManyBaseTestCase extends UIInputBaseTestCase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UISelectManyBase();
+        component = new UISelectMany();
         expectedRendererType = "Listbox";
     }
 
     
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UISelectManyBaseTestCase.class));
+        return (new TestSuite(UISelectManyTestCase.class));
     }
 
 
@@ -70,7 +70,7 @@ public class UISelectManyBaseTestCase extends UIInputBaseTestCase {
     // Test the compareValues() method
     public void testCompareValues() {
 
-        TestSelectManyBase selectMany = new TestSelectManyBase();
+        TestSelectMany selectMany = new TestSelectMany();
         Object values1a[] = new Object[] { "foo", "bar", "baz" };
         Object values1b[] = new Object[] { "foo", "baz", "bar" };
         Object values1c[] = new Object[] { "baz", "foo", "bar" };
@@ -97,7 +97,7 @@ public class UISelectManyBaseTestCase extends UIInputBaseTestCase {
     }
 
 
-    // Test a pristine UISelectManyBase instance
+    // Test a pristine UISelectMany instance
     public void testPristine() {
 
         super.testPristine();
@@ -170,7 +170,7 @@ public class UISelectManyBaseTestCase extends UIInputBaseTestCase {
 
     protected ValueHolder createValueHolder() {
 
-        UIComponent component = new UISelectManyBase();
+        UIComponent component = new UISelectMany();
         component.setRendererType(null);
         return ((ValueHolder) component);
 

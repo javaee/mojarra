@@ -1,5 +1,5 @@
 /*
- * $Id: UIColumnTestCase.java,v 1.4 2003/09/23 21:33:45 jvisvanathan Exp $
+ * $Id: UIColumnTestCase.java,v 1.5 2003/09/25 07:46:06 craigmcc Exp $
  */
 
 /*
@@ -12,8 +12,6 @@ package javax.faces.component;
 
 import java.io.IOException;
 import java.util.Iterator;
-import javax.faces.component.base.TestComponentNamingContainer;
-import javax.faces.component.base.UIComponentBaseTestCase;
 import javax.faces.context.FacesContext;
 import junit.framework.TestCase;
 import junit.framework.Test;

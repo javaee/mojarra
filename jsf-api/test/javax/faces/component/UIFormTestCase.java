@@ -1,5 +1,5 @@
 /*
- * $Id: UIFormBaseTestCase.java,v 1.2 2003/07/26 17:55:22 craigmcc Exp $
+ * $Id: UIFormTestCase.java,v 1.7 2003/09/25 07:46:08 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
@@ -20,10 +20,10 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link UIFormBase}.</p>
+ * <p>Unit tests for {@link UIForm}.</p>
  */
 
-public class UIFormBaseTestCase extends UIComponentBaseTestCase {
+public class UIFormTestCase extends UIComponentBaseTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -34,7 +34,7 @@ public class UIFormBaseTestCase extends UIComponentBaseTestCase {
      *
      * @param name Name of the test case
      */
-    public UIFormBaseTestCase(String name) {
+    public UIFormTestCase(String name) {
         super(name);
     }
 
@@ -45,7 +45,7 @@ public class UIFormBaseTestCase extends UIComponentBaseTestCase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UIFormBase();
+        component = new UIForm();
         expectedId = null;
         expectedRendererType = "Form";
     }
@@ -53,7 +53,7 @@ public class UIFormBaseTestCase extends UIComponentBaseTestCase {
 
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UIFormBaseTestCase.class));
+        return (new TestSuite(UIFormTestCase.class));
     }
 
 
@@ -71,7 +71,7 @@ public class UIFormBaseTestCase extends UIComponentBaseTestCase {
     }
 
 
-    // Test a pristine UIOutputBase instance
+    // Test a pristine UIForm instance
     public void testPristine() {
 
         super.testPristine();

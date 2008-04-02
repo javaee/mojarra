@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.13 2003/09/15 22:09:40 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.14 2003/09/25 07:46:51 craigmcc Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ import java.io.Reader;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.StateManager;
 
@@ -31,7 +30,7 @@ public class MockViewHandler extends Object implements ViewHandler {
     }
 
     public UIViewRoot createView(FacesContext context, String viewId) {
-	UIViewRoot result = new UIViewRootBase();
+	UIViewRoot result = new UIViewRoot();
 	result.setViewId(viewId);
 	return result;
     }

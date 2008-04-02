@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.3 2003/09/23 20:35:53 eburns Exp $
+ * $Id: TestComponent.java,v 1.12 2003/09/25 07:46:03 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;

@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootBaseTestCase.java,v 1.3 2003/09/15 20:17:40 eburns Exp $
+ * $Id: UIViewRootTestCase.java,v 1.1 2003/09/25 07:46:13 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.util.Iterator;
@@ -29,11 +29,11 @@ import javax.faces.mock.MockServletContext;
 import javax.faces.TestUtil;
 
 /**
- * <p>Test case for the <strong>javax.faces.base.UIViewRootBase</strong>
+ * <p>Test case for the <strong>javax.faces.UIViewRoot</strong>
  * concrete class.</p>
  */
 
-public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
+public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
 
     // ----------------------------------------------------- Instance Variables
@@ -48,7 +48,7 @@ public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
      *
      * @param name Name of the test case
      */
-    public UIViewRootBaseTestCase(String name) {
+    public UIViewRootTestCase(String name) {
         super(name);
     }
 
@@ -60,7 +60,7 @@ public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
      */
     public static Test suite() {
 
-        return (new TestSuite(UIViewRootBaseTestCase.class));
+        return (new TestSuite(UIViewRootTestCase.class));
 
     }
 
@@ -78,14 +78,14 @@ public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
 
     public void testStateHolder() {
         UIComponent testParent = new TestComponentNamingContainer("root");
-	UIViewRootBase
+	UIViewRoot
 	    preSave = null,
 	    postSave = null;
 	Object state = null;
 
 	// test page with viewId and no renderKitId
 	testParent.getChildren().clear();
-	preSave = new UIViewRootBase();
+	preSave = new UIViewRoot();
 	preSave.setViewId("viewId");
 	preSave.setId("page");
 	preSave.setRendererType(null); // necessary: we have no renderkit
@@ -94,7 +94,7 @@ public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIViewRootBase();
+	postSave = new UIViewRoot();
 	postSave.setId("newViewId");
 	testParent.getChildren().add(postSave);
 	try {
@@ -107,7 +107,7 @@ public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
 
 	// test page with viewId and renderKitId
 	testParent.getChildren().clear();
-	preSave = new UIViewRootBase();
+	preSave = new UIViewRoot();
 	preSave.setViewId("viewId");
 	preSave.setId("page");
 	preSave.setRenderKitId("renderKitId");
@@ -117,7 +117,7 @@ public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIViewRootBase();
+	postSave = new UIViewRoot();
 	postSave.setId("newViewId1");
 	testParent.getChildren().add(postSave);
 	try {
@@ -136,9 +136,9 @@ public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
 			       UIComponent comp1,
 			       UIComponent comp2) {
 	if (super.propertiesAreEqual(context, comp1, comp2)) {
-	    UIViewRootBase 
-		page1 = (UIViewRootBase) comp1,
-		page2 = (UIViewRootBase) comp2;
+	    UIViewRoot 
+		page1 = (UIViewRoot) comp1,
+		page2 = (UIViewRoot) comp2;
 	    // if their not both null, or not the same string
 	    if (!TestUtil.equalsWithNulls(page1.getViewId(),
 					  page2.getViewId())) {

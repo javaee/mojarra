@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.18 2003/09/23 21:33:47 jvisvanathan Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.10 2003/09/25 07:46:07 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
@@ -15,9 +15,6 @@ import java.util.Iterator;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIComponentTestCase;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.mock.MockExternalContext;
@@ -103,7 +100,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
             new MockExternalContext(servletContext, request, response);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
-	UIViewRootBase root = new UIViewRootBase();
+	UIViewRoot root = new UIViewRoot();
 	root.setViewId("/viewId");
         facesContext.setViewRoot(root);
         ApplicationFactory applicationFactory = (ApplicationFactory)

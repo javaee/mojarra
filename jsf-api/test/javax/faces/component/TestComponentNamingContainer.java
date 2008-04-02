@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentNamingContainer.java,v 1.3 2003/09/23 20:35:54 eburns Exp $
+ * $Id: TestComponentNamingContainer.java,v 1.11 2003/09/25 07:46:04 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ import javax.faces.event.FacesEvent;
  * <p>Test <code>UIComponent</code> for unit tests.</p>
  */
 
-public class TestComponentNamingContainer extends UINamingContainerBase {
+public class TestComponentNamingContainer extends UINamingContainer {
 
 
     public TestComponentNamingContainer() {

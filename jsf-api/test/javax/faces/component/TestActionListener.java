@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListener.java,v 1.6 2003/09/24 22:41:11 eburns Exp $
+ * $Id: TestActionListener.java,v 1.5 2003/09/25 07:46:02 craigmcc Exp $
  */
 
 /*
@@ -7,11 +7,9 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;

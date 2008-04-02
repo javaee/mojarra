@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBooleanBaseTestCase.java,v 1.4 2003/09/20 00:48:18 craigmcc Exp $
+ * $Id: UISelectBooleanTestCase.java,v 1.10 2003/09/25 07:46:11 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import java.io.IOException;
@@ -22,10 +22,10 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link UISelectBooleanBase}.</p>
+ * <p>Unit tests for {@link UISelectBoolean}.</p>
  */
 
-public class UISelectBooleanBaseTestCase extends UIInputBaseTestCase {
+public class UISelectBooleanTestCase extends UIInputTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -36,7 +36,7 @@ public class UISelectBooleanBaseTestCase extends UIInputBaseTestCase {
      *
      * @param name Name of the test case
      */
-    public UISelectBooleanBaseTestCase(String name) {
+    public UISelectBooleanTestCase(String name) {
         super(name);
     }
 
@@ -47,14 +47,14 @@ public class UISelectBooleanBaseTestCase extends UIInputBaseTestCase {
     // Set up instance variables required by this test case.
     public void setUp() {
         super.setUp();
-        component = new UISelectBooleanBase();
+        component = new UISelectBoolean();
         expectedRendererType = "Checkbox";
     }
 
     
     // Return the tests included in this test case.
     public static Test suite() {
-        return (new TestSuite(UISelectBooleanBaseTestCase.class));
+        return (new TestSuite(UISelectBooleanTestCase.class));
     }
 
 
@@ -87,7 +87,7 @@ public class UISelectBooleanBaseTestCase extends UIInputBaseTestCase {
     }
 
 
-    // Test a pristine UISelectBooleanBase instance
+    // Test a pristine UISelectBoolean instance
     public void testPristine() {
 
         super.testPristine();
@@ -135,7 +135,7 @@ public class UISelectBooleanBaseTestCase extends UIInputBaseTestCase {
 
     protected ValueHolder createValueHolder() {
 
-        UIComponent component = new UISelectBooleanBase();
+        UIComponent component = new UISelectBoolean();
         component.setRendererType(null);
         return ((ValueHolder) component);
 

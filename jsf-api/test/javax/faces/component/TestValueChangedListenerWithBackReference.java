@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangedListenerWithBackReference.java,v 1.2 2003/09/22 19:03:46 eburns Exp $
+ * $Id: TestValueChangedListenerWithBackReference.java,v 1.1 2003/09/25 07:46:06 craigmcc Exp $
  */
 
 /*
@@ -7,13 +7,11 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component.base;
+package javax.faces.component;
 
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
-import javax.faces.component.StateHolder;
-import javax.faces.component.UIComponent;
 import javax.faces.TestUtil;
 
 /**
