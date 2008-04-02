@@ -41,7 +41,7 @@
     <HEAD> <TITLE> Welcome to JavaServer Faces </TITLE> 
     </HEAD>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html_basic" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <%@ taglib uri="/WEB-INF/imageMap.tld" prefix="imageMap" %>
 
@@ -53,14 +53,13 @@
 	<table> 
              <tr> 
               <td> <h:output_text id="welcomeLabel" key="welcomeLabel" 
-                                      bundle="imageMapBundle" >
-			<f:eventhandler type="imageMap.ImageMapEventHandler"/>			 
-		   </h:output_text></td>
+                                      bundle="imageMapBundle" /> </td>
 	     </tr>
              <tr>
               <TD>
 		<imageMap:image id="mapImage" url="/world.gif" usemap="#worldMap" />	
-		<imageMap:map id="worldMap" currentArea="NAmericas" >	
+		<imageMap:map id="worldMap" currentArea="NAmericas" >
+                    <f:action_listener type="imageMap.ImageMapEventHandler"/> 	
        			<imageMap:area id="NAmericas" modelReference="NA" onmouseover="/imageMap/world_namer.gif" onmouseout="/imageMap/world.gif" />
 			<imageMap:area id="SAmericas" modelReference="SA" onmouseover="/imageMap/world_samer.gif" onmouseout="/imageMap/world.gif" />
 			<imageMap:area id="Finland" modelReference="finA" onmouseover="/imageMap/world_finland.gif" onmouseout="/imageMap/world.gif"  />

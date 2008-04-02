@@ -68,6 +68,16 @@
       <param name="demoDir" value="cardemo"/>
     </antcall>
 
+    <ant target="clean" dir="imageMap"/>
+    <antcall target="deleteJarsFromDemo">
+      <param name="demoDir" value="imageMap"/>
+    </antcall>
+ 
+    <ant target="clean" dir="imageMapRender"/>
+    <antcall target="deleteJarsFromDemo">
+      <param name="demoDir" value="imageMapRender"/>
+    </antcall>
+
 
     <delete> 
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
@@ -94,6 +104,13 @@
       <param name="demoDir" value="cardemo"/>
     </antcall>
 
+    <antcall target="copyJarsToDemo">
+      <param name="demoDir" value="imageMap"/>
+    </antcall>
+
+    <antcall target="copyJarsToDemo">
+      <param name="demoDir" value="imageMapRender"/>
+    </antcall>
   </target>
 
   <target name="copyJarsToDemo">
@@ -132,6 +149,8 @@
     <ant inheritAll="false" dir="${basedir}/helloDuke"/>
     <ant inheritAll="false" dir="${basedir}/guessNumber"/>
     <ant inheritAll="false" dir="${basedir}/cardemo"/>
+    <ant inheritAll="false" dir="${basedir}/imageMap"/>
+    <ant inheritAll="false" dir="${basedir}/imageMapRender"/>
 
   </target>
 

@@ -105,6 +105,10 @@ public class AreaRenderer extends HtmlBasicRenderer {
         }
      
 	ImageArea ia = (ImageArea) context.getHttpSession().getAttribute(component.getModelReference());
+        if ( ia == null) {
+            System.out.println("ImageArea bean is null");
+            return;
+        }
 
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<area shape=\"");
@@ -130,10 +134,8 @@ public class AreaRenderer extends HtmlBasicRenderer {
 
     }
 
-    public boolean decode(FacesContext context, UIComponent component) 
+    public void decode(FacesContext context, UIComponent component) 
         throws IOException {
-	
-	return true;
     }
 
 } // end of class AreaRenderer

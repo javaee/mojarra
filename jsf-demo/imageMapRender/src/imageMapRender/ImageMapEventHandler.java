@@ -41,44 +41,52 @@
 
 package imageMapRender;
 
-import java.util.*;
+import java.util.Locale;
+import java.util.Hashtable;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
-import javax.faces.event.RequestEventHandler;
-import javax.faces.event.RequestEvent;
+import javax.faces.event.ActionListener;
+import javax.faces.event.ActionEvent;
 import com.sun.faces.RIConstants;
 
 /**
- * The listener interface for handling the request event generated
- * by the map component and received by the output_text component.
+ * The listener interface for handling the ActionEvent generated
+ * by the map component. 
  */
-public class ImageMapEventHandler extends RequestEventHandler {
+public class ImageMapEventHandler implements ActionListener {
 
     Hashtable localeTable = new Hashtable();
 
     public ImageMapEventHandler ( ) {
 
     	localeTable.put("NAmericas", Locale.ENGLISH);
-	localeTable.put("SAmericas", new Locale("es"));
+	localeTable.put("SAmericas", new Locale("es","es"));
 	localeTable.put("Germany", Locale.GERMAN);
-	localeTable.put("Finland", new Locale("fi"));
+	localeTable.put("Finland", new Locale("sv","fi"));
 	localeTable.put("France", Locale.FRENCH); 	
 
     }
 
+    // This listener will handle events after the phase specified
+    // as the return value;
+
+    public PhaseId getPhaseId() {
+        return PhaseId.ANY_PHASE;
+    }
+
 // Processes the event queued on the specified component.
-    public boolean processEvent(FacesContext context,
-				UIComponent component,
-				RequestEvent event) {
+    public void processAction(ActionEvent event) {
 
 	UIMap map = (UIMap)event.getSource();
 	String value = (String) map.getAttribute("currentArea");
-	UIOutput welcome = (UIOutput) component;
+	UIOutput welcome = (UIOutput) map.findComponent("welcomeLabel");
 	Locale curLocale = (Locale) localeTable.get(value);
+       
+        FacesContext context = FacesContext.getCurrentInstance();
 	context.setLocale(curLocale);
-	context.getHttpSession().setAttribute(RIConstants.REQUEST_LOCALE, curLocale);
-	return true;
+        context.renderResponse();
     }
     
 }

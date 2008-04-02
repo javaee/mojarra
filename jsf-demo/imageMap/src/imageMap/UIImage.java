@@ -46,6 +46,10 @@ import javax.faces.context.ResponseWriter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseId;
+
 /**
  * This class represents the <code>UIImage</code> component, which corresponds
  * to the <code>image</code> tag. 
@@ -91,4 +95,13 @@ public void encodeEnd(FacesContext context) throws IOException {
         writer.write(">");
 
     }
+
+    public boolean broadcast(FacesEvent event, PhaseId phaseId)
+        throws AbortProcessingException {
+
+        if ((event == null) || (phaseId == null)) {
+            throw new NullPointerException();
+        }
+        return false;
+    } 
 }

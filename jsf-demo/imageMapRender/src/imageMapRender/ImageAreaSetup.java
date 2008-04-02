@@ -55,8 +55,13 @@ import javax.servlet.http.HttpSessionListener;
 public class ImageAreaSetup implements HttpSessionListener {
 
 
+    public ImageAreaSetup() {
+         System.out.println("Created Listener");
+    }
+
     public void sessionCreated(HttpSessionEvent event) {
 
+        System.out.println("session created");
         HttpSession session = event.getSession();
         session.setAttribute("NA", new ImageArea("poly", "NAmericas", "6,15,6,28,2,30,6,34,13,28,17,28,25,35,25,44,37,45,45,46,45,48,48,49,48,44,60,35,55,21,48,16,6,15"));
         session.setAttribute("SA", new ImageArea("poly", "SAmericas", "29,44,49,71,49,91,54,91,73,63,57,52,46,51,39,45"));

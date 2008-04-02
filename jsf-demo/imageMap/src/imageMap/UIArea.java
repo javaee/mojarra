@@ -48,6 +48,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.context.ResponseWriter;
 
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseId;
+
 /**
  * This class represents the <code>UIArea</code> component, which corresponds
  * to the <code>area</code> tag.  An <code>area</code> tag specifies the
@@ -79,6 +83,10 @@ public class UIArea extends UIComponentBase {
         }
 
 	ImageArea ia = (ImageArea) context.getHttpSession().getAttribute(this.getModelReference());
+        if ( ia == null) {
+            System.out.println("ImageArea bean is null");
+            return;  
+        }
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<area shape=\"");
         writer.write(ia.getShape());
@@ -102,4 +110,14 @@ public class UIArea extends UIComponentBase {
         writer.write("\">");
 
     }
+
+    public boolean broadcast(FacesEvent event, PhaseId phaseId)
+        throws AbortProcessingException {
+
+        if ((event == null) || (phaseId == null)) {
+            throw new NullPointerException();
+        }
+        return false;
+    } 
+  
 }
