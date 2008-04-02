@@ -55,4 +55,23 @@ public class Bean {
         return callMethodsOnVariableResolver(context, vr);
     }
     
+    public String getInvokeVariableResolverThruChain1() throws EvaluationException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        VariableResolver vr = context.getApplication().getVariableResolver();
+        Object result = vr.resolveVariable(context, "nonmanaged");
+        if (!(result instanceof TestBean)) {
+            throw new IllegalStateException("Bean not of correct type");
+        }
+        return "success";
+    }
+    
+    public String getInvokeVariableResolverDirectly1() throws EvaluationException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        VariableResolver vr = (VariableResolver) context.getExternalContext().getApplicationMap().get("newVR");
+        Object result = vr.resolveVariable(context, "nonmanaged");
+        if (!(result instanceof TestBean)) {
+            throw new IllegalStateException("Bean not of correct type");
+        }
+        return "success";
+    }
 }

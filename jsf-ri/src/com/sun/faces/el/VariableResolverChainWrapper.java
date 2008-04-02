@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.10 2006/05/30 20:46:41 rlubke Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.11 2006/06/09 13:11:42 rogerk Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -99,6 +99,9 @@ public class VariableResolverChainWrapper extends ELResolver {
 	finally {
 	    // Make sure to remove the guard after the call returns
             requestMap.remove(REENTRANT_GUARD);
+            // Make sure that the ELContext "resolved" indicator is set 
+            // in accordance wth the result of the resolution.
+            context.setPropertyResolved(result != null);
 	}
         return result;
     }
