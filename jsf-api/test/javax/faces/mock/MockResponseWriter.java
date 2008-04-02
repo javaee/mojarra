@@ -1,5 +1,5 @@
 /*
- * $Id: MockResponseWriter.java,v 1.1 2003/07/20 00:41:46 craigmcc Exp $
+ * $Id: MockResponseWriter.java,v 1.2 2003/08/18 16:38:28 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.mock;
 import java.io.IOException;
 import java.io.Writer;
 import javax.faces.context.ResponseWriter;
+import javax.faces.component.UIComponent;
 
 
 public class MockResponseWriter extends ResponseWriter {
@@ -84,7 +85,8 @@ public class MockResponseWriter extends ResponseWriter {
     }
 
 
-    public void startElement(String name) throws IOException {
+    public void startElement(String name, 
+			     UIComponent component) throws IOException {
         throw new UnsupportedOperationException();
     }
 
@@ -94,12 +96,13 @@ public class MockResponseWriter extends ResponseWriter {
     }
 
 
-    public void writeAttribute(String name, Object value) throws IOException {
+    public void writeAttribute(String name, Object value, 
+			       String componentPropertyName) throws IOException {
         throw new UnsupportedOperationException();
     }
 
 
-    public void writeURIAttribute(String name, Object value) throws IOException {
+    public void writeURIAttribute(String name, Object value, String componentPropertyName) throws IOException {
         throw new UnsupportedOperationException();
     }
 

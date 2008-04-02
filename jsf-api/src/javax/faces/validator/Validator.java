@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.11 2003/08/15 17:23:48 craigmcc Exp $
+ * $Id: Validator.java,v 1.12 2003/08/18 16:38:27 eburns Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.validator;
 
 
-import java.io.Serializable;
 import java.util.Iterator;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
@@ -37,10 +36,7 @@ import javax.faces.application.Message;
  * <p>For maximum generality, {@link Validator} instances may be
  * configurable based on properties of the {@link Validator} implementation
  * class.  For example, a range check {@link Validator} might support
- * configuration of the minimum and maximum values to be used.  In
- * addition, because {@link Validator}s are part of the saved and restored
- * state of a component tree, classes that implement this interface must also
- * be serializable.</p>
+ * configuration of the minimum and maximum values to be used.</p>
  *
  * <p>{@link Validator} implementations must have a zero-arguments public
  * constructor.  In addition, if the {@link Validator} class wishes to have
@@ -48,7 +44,7 @@ import javax.faces.application.Message;
  * the implementation must also implement {@link StateHolder}.</p>
  */
 
-public interface Validator extends Serializable {
+public interface Validator {
 
 
     /**

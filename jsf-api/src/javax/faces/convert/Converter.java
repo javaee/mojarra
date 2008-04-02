@@ -1,5 +1,5 @@
 /*
- * $Id: Converter.java,v 1.6 2003/08/15 17:23:45 craigmcc Exp $
+ * $Id: Converter.java,v 1.7 2003/08/18 16:38:26 eburns Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.convert;
 
 
-import java.io.Serializable;
 import javax.faces.FacesException;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
@@ -20,12 +19,8 @@ import javax.faces.context.FacesContext;
 /**
  * <p><strong>Converter</strong> is an interface describing a Java class
  * that can perform Object-to-String and String-to-Object conversions
- * between model data objects and a String representation of those objects
- * that is suitable for rendering.  {@link Converter} instances are
- * shared, so they must be programmed in a thread-safe manner.  In addition,
- * because {@link Converter}s are part of the saved and restored state of a
- * component tree, classes that implement this interface must also
- * be serializable.</p>
+ * between model data objects and a String representation of those
+ * objects that is suitable for rendering.</p>
  *
  * <p>{@link Converter} implementations must have a zero-arguments public
  * constructor.  In addition, if the {@link Converter} class wishes to have
@@ -33,7 +28,7 @@ import javax.faces.context.FacesContext;
  * the implementation must also implement {@link StateHolder}.</p>
  */
 
-public interface Converter extends Serializable {
+public interface Converter {
 
 
     /**

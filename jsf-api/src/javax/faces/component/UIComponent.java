@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.88 2003/07/28 22:18:42 eburns Exp $
+ * $Id: UIComponent.java,v 1.89 2003/08/18 16:38:21 eburns Exp $
  */
 
 /*
@@ -11,7 +11,6 @@ package javax.faces.component;
 
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +39,7 @@ import javax.faces.render.Renderer;
  * to the method signatures of this interface.</p>
  */
 
-public interface UIComponent extends Serializable, StateHolder {
+public interface UIComponent extends StateHolder {
 
 
     // ----------------------------------------------------- Manifest Constants

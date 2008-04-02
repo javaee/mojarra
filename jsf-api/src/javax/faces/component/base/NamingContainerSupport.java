@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerSupport.java,v 1.4 2003/07/31 12:22:20 eburns Exp $
+ * $Id: NamingContainerSupport.java,v 1.5 2003/08/18 16:38:23 eburns Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ import javax.faces.context.FacesContext;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.io.Serializable;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.StateHolder;
@@ -56,7 +55,7 @@ import java.util.Iterator;
  * </pre>
  */
 
-public class NamingContainerSupport implements NamingContainer, StateHolder, Serializable {
+public class NamingContainerSupport implements NamingContainer, StateHolder {
 
 
     // ------------------------------------------------------ Instance Variables

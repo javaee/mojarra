@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.7 2003/07/31 12:22:22 eburns Exp $
+ * $Id: ResponseWriter.java,v 1.8 2003/08/18 16:38:24 eburns Exp $
  */
 
 /*
@@ -12,6 +12,8 @@ package javax.faces.context;
 
 import java.io.IOException;
 import java.io.Writer;
+
+import javax.faces.component.UIComponent;
 
 
 /**
@@ -75,11 +77,16 @@ public abstract class ResponseWriter extends Writer {
      *
      * @param name Name of the element to be started
      *
+     * @param componentForElement May be <code>null</code>.  If
+     * non-<code>null</code>, must be the UIComponent instance to which
+     * this element corresponds.  
+     *
      * @exception IOException if an input/output error occurs
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
-    public abstract void startElement(String name) throws IOException;
+    public abstract void startElement(String name, 
+				      UIComponent componentForElement) throws IOException;
 
 
     /**
@@ -103,7 +110,13 @@ public abstract class ResponseWriter extends Writer {
      * closed.</p>
      *
      * @param name Attribute name to be added
+     *
      * @param value Attribute value to be added
+     *
+     * @param componentPropertyName May be <code>null</code>.  If
+     * non-<code>null</code>, this must be the name of the property on
+     * the {@link UIComponent} passed in to a previous call to {@link
+     * #startElement} to which this attribute corresponds.  
      *
      * @exception IllegalStateException if this method is called when there
      *  is no currently open element
@@ -111,7 +124,8 @@ public abstract class ResponseWriter extends Writer {
      * @exception NullPointerException if <code>name</code> or
      *  <code>value</code> is <code>null</code>
      */
-    public abstract void writeAttribute(String name, Object value)
+    public abstract void writeAttribute(String name, Object value, 
+					String componentPropertyName)
         throws IOException;
 
 
@@ -124,7 +138,13 @@ public abstract class ResponseWriter extends Writer {
      * closed.</p>
      *
      * @param name Attribute name to be added
+     *
      * @param value Attribute value to be added
+     *
+     * @param componentPropertyName May be <code>null</code>.  If
+     * non-<code>null</code>, this must be the name of the property on
+     * the {@link UIComponent} passed in to a previous call to {@link
+     * #startElement} to which this attribute corresponds.  
      *
      * @exception IllegalStateException if this method is called when there
      *  is no currently open element
@@ -132,7 +152,8 @@ public abstract class ResponseWriter extends Writer {
      * @exception NullPointerException if <code>name</code> or
      *  <code>value</code> is <code>null</code>
      */
-    public abstract void writeURIAttribute(String name, Object value)
+    public abstract void writeURIAttribute(String name, Object value, 
+					   String componentPropertyName)
         throws IOException;
 
 
