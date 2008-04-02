@@ -17,7 +17,7 @@
 
 <BODY BGCOLOR="white">
 
-<f:usefaces>
+<f:use_faces>
 <h:form id="carStoreForm" formName="carStoreForm" modelReference="CurrentOptionServer" >
 
 <P>
@@ -258,7 +258,7 @@
 	</TR>
 </TABLE>
 </h:form>
-</f:usefaces>
+</f:use_faces>
 </BODY>
 
 </HTML>

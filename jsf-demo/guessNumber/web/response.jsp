@@ -1,6 +1,5 @@
 <!--
- 
-  Copyright 2002 Sun Microsystems, Inc. All Rights Reserved.
+   Copyright 2002 Sun Microsystems, Inc. All Rights Reserved.
   
   Redistribution and use in source and binary forms, with or
   without modification, are permitted provided that the following
@@ -36,18 +35,19 @@
   intended for use in the design, construction, operation or
   maintenance of any nuclear facility.
 -->
+
 <HTML>
-    <HEAD> <title>Hello</title> </HEAD>
+    <HEAD> <title>Guess The Number</title> </HEAD>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <body bgcolor="white">
-    <img src="/helloDuke/wave.med.gif">
-    <f:usefaces>
-    <h:form id="responseform" formName="responseform">
-    <h2>Hi, <h:output_text id="userLabel"
-			   modelReference="UserNameBean.userName" /> </h2>
-	 <h:command_button id="back" label="Back" commandName="back" />
-         <p>
+    <h:graphic_image id="wave_img" url="/wave.med.gif" />
+    <f:use_faces>
+    <h:form id="responseForm" formName="responseForm" >
+    <h2><h:output_text id="result" 
+    			modelReference="UserNumberBean.response"/></h2>   
+    <h:command_button id="back" label="Back" commandName="back" /><p>
+
     </h:form>
-    </f:usefaces>
-</HTML>  
+    </f:use_faces>
+ </HTML>

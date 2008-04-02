@@ -10,10 +10,10 @@
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <H3> JSF Basic Components Test Page </H3>
     <hr>
-    <f:usefaces>
+    <f:use_faces>
     <h:form id="errorForm" formName="errorForm" >
 	<faces:output_text id="hello_label" value="An Error Happened!"/>
              <P></P>
     </h:Form>
-    </f:usefaces>
+    </f:use_faces>
 </HTML>

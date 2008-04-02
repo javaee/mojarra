@@ -37,17 +37,16 @@
 -->
 
 <HTML>
-    <HEAD> <title>Guess The Number</title> </HEAD>
+    <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
-    <body bgcolor="white">
-    <img src="/guessNumber/wave.med.gif">
-    <f:usefaces>
-    <h:form id="responseForm" formName="responseForm" >
-    <h2><h:output_text id="result" 
-    			modelReference="UserNumberBean.response"/></h2>   
-    <h:command_button id="back" label="Back" commandName="back" /><p>
+    <H3> Error Page </H3>
+    <hr>
+      <f:use_faces>
+        <h:form id="errorForm" formName="errorForm">
 
-    </h:form>
-    </f:usefaces>
- </HTML>
+            <h:output_text id="hello_label" value="Login Failed" />
+             <P></P>
+        </h:form>
+       </f:use_faces>
+</HTML>

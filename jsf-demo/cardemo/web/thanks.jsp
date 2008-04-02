@@ -11,7 +11,7 @@
 
 <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
-<f:usefaces>
+<f:use_faces>
 <h:form id="thanksForm" formName="thanksForm" >
 
 <body bgcolor="#FFFFFF">
@@ -62,5 +62,5 @@
 </table>
 </body>
 </h:form>
-</f:usefaces>
+</f:use_faces>
 </html>

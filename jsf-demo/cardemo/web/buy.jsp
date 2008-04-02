@@ -15,7 +15,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
 
 <body bgcolor="#FFFFFF">
-<f:usefaces>  
+<f:use_faces>  
 
 <h:form id="carStoreForm" formName="carStoreForm" modelReference="CurrentOptionServer" >
 
@@ -163,6 +163,6 @@
 </tr>
 </table>
 </h:form>
-</f:usefaces>
+</f:use_faces>
 </body>
 </html>

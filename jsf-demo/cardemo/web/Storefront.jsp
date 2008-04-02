@@ -24,7 +24,7 @@
 			value="current.gif"/>
 	</jsp:useBean>
 
-<f:usefaces>  
+<f:use_faces>  
 
 <h:form id="carStoreForm" formName="carStoreForm" modelReference="CurrentOptionServer" >
   
@@ -133,7 +133,7 @@
 	</TR>
 </TABLE>
 </h:form>
-</f:usefaces>
+</f:use_faces>
 
 </BODY>
 

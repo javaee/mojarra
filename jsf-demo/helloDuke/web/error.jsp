@@ -1,5 +1,6 @@
 <!--
-   Copyright 2002 Sun Microsystems, Inc. All Rights Reserved.
+ 
+  Copyright 2002 Sun Microsystems, Inc. All Rights Reserved.
   
   Redistribution and use in source and binary forms, with or
   without modification, are permitted provided that the following
@@ -40,13 +41,12 @@
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
-    <H3> Error Page </H3>
+    <H3> JSF Basic Components Test Page </H3>
     <hr>
-      <f:usefaces>
+      <f:use_faces>
         <h:form id="errorForm" formName="errorForm">
-
-            <h:output_text id="hello_label" value="Login Failed" />
+            <h:output_text id="hello_label" text="Login Failed" />
              <P></P>
         </h:form>
-       </f:usefaces>
+       </f:use_faces>
 </HTML>

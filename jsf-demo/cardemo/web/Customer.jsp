@@ -20,7 +20,7 @@
 	    scope="session" var="cardemoBundle"/>
 
 <jsp:useBean id="CustomerBean" class="cardemo.CustomerBean" scope="session" />
-<f:usefaces>
+<f:use_faces>
 <h:form id="CustomerForm" formName="CustomerForm" modelReference="CustomerBean" >
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
 <tr>
@@ -250,7 +250,7 @@ align=BOTTOM></td>
 for stopping by.
 <br>
 </h:form>
-</f:usefaces>
+</f:use_faces>
 </body>
 </html>
 

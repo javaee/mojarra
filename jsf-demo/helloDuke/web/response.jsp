@@ -36,20 +36,18 @@
   intended for use in the design, construction, operation or
   maintenance of any nuclear facility.
 -->
-
 <HTML>
     <HEAD> <title>Hello</title> </HEAD>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <body bgcolor="white">
-    <img src="/helloDuke/wave.med.gif">
-    <h2>My name is Duke.  What is yours?</h2>
-    <jsp:useBean id="UserNameBean" class="helloDuke.UserNameBean" scope="session" />
-    <f:usefaces>
-    <h:form id="helloForm" formName="helloForm" >
-  	<h:input_text id="username"
-			modelReference="UserNameBean.userName"/>
-  	<h:command_button id="submit" label="Submit" commandName="submit" />
+    <h:graphic_image id="wave_img" url="/wave.med.gif" />
+    <f:use_faces>
+    <h:form id="responseform" formName="responseform">
+    <h2>Hi, <h:output_text id="userLabel"
+			   modelReference="UserNameBean.userName" /> </h2>
+	 <h:command_button id="back" label="Back" commandName="back" />
+         <p>
     </h:form>
-    </f:usefaces>
+    </f:use_faces>
 </HTML>  

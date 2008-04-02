@@ -1,6 +1,5 @@
 <!--
- 
-  Copyright 2002 Sun Microsystems, Inc. All Rights Reserved.
+   Copyright 2002 Sun Microsystems, Inc. All Rights Reserved.
   
   Redistribution and use in source and binary forms, with or
   without modification, are permitted provided that the following
@@ -38,15 +37,24 @@
 -->
 
 <HTML>
-    <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+    <HEAD> <title>Hello</title> </HEAD>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
-    <H3> JSF Basic Components Test Page </H3>
-    <hr>
-      <f:usefaces>
-        <h:form id="errorForm" formName="errorForm">
-            <h:output_text id="hello_label" text="Login Failed" />
-             <P></P>
-        </h:form>
-       </f:usefaces>
-</HTML>
+    <body bgcolor="white">
+    <h:graphic_image id="wave_img" url="/wave.med.gif" />
+    <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
+    Can you guess it?</h2>
+    <jsp:useBean id="UserNumberBean" class="guessNumber.UserNumberBean" scope="session" />
+    <f:use_faces>
+    <h:form id="helloForm" formName="helloForm" >
+  	<h:input_number id="userNo" numberStyle="NUMBER"
+   				modelReference="UserNumberBean.userNumber">
+	        <f:validate_longrange minimum="0" maximum="10" />
+
+         </h:input_number> 
+	 <h:command_button id="submit" label="Submit" commandName="submit" />
+         <p>
+	 <h:output_errors id="errors1" compoundId="/helloForm/userNo"/>
+    </h:form>
+    </f:use_faces>
+</HTML>  

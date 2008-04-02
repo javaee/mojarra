@@ -1,5 +1,6 @@
 <!--
-   Copyright 2002 Sun Microsystems, Inc. All Rights Reserved.
+ 
+  Copyright 2002 Sun Microsystems, Inc. All Rights Reserved.
   
   Redistribution and use in source and binary forms, with or
   without modification, are permitted provided that the following
@@ -41,20 +42,14 @@
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <body bgcolor="white">
-    <img src="/guessNumber/wave.med.gif">
-    <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
-    Can you guess it?</h2>
-    <jsp:useBean id="UserNumberBean" class="guessNumber.UserNumberBean" scope="session" />
-    <f:usefaces>
+    <h:graphic_image id="wave_img" url="/wave.med.gif" />
+    <h2>My name is Duke.  What is yours?</h2>
+    <jsp:useBean id="UserNameBean" class="helloDuke.UserNameBean" scope="session" />
+    <f:use_faces>
     <h:form id="helloForm" formName="helloForm" >
-  	<h:input_number id="userNo" numberStyle="NUMBER"
-   				modelReference="UserNumberBean.userNumber">
-	        <f:validate_longrange minimum="0" maximum="10" />
-
-         </h:input_number> 
-	 <h:command_button id="submit" label="Submit" commandName="submit" />
-         <p>
-	 <h:output_errors id="errors1" compoundId="/helloForm/userNo"/>
+  	<h:input_text id="username"
+			modelReference="UserNameBean.userName"/>
+  	<h:command_button id="submit" label="Submit" commandName="submit" />
     </h:form>
-    </f:usefaces>
+    </f:use_faces>
 </HTML>  

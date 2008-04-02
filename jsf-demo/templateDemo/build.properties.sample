@@ -1,0 +1,10 @@
+# Make these values be correct on your system, then rename to
+# build.properties.  On win32, make sure to preserve the \\ syntax
+# for escaping backslashes.    
+
+jsf.home = <your_JSF_workspace_directory>
+tomcat.home = <your_directory>/<your_deployment_environment>
+standard.jar=<location of your JSTL standard.jar>
+jstl.jar=<location of your JSTL jstl.jar>
+username=<your management tool username>
+password=<your management tool password>
