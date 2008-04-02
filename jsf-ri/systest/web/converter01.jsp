@@ -16,7 +16,7 @@
   appl.addConverter("number", "com.sun.faces.systest.TestConverter");
 
   // try to retrieve our component from Application
-  Converter result = appl.getConverter("number");
+  Converter result = appl.createConverter("number");
   // report the result
   if (result == null || 
       !(result instanceof com.sun.faces.systest.TestConverter)) {

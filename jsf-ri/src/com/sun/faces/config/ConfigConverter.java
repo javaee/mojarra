@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigConverter.java,v 1.2 2003/04/29 20:51:32 eburns Exp $
+ * $Id: ConfigConverter.java,v 1.3 2003/08/25 05:39:43 eburns Exp $
  */
 
 /*
@@ -30,5 +30,11 @@ public class ConfigConverter extends ConfigFeature {
     public void setConverterClass(String converterClass) {
         this.converterClass = converterClass;
     }
-
+    private String converterForClass;
+    public String getConverterForClass() {
+	return converterForClass;
+    }
+    public void setConverterForClass(String converterForClass) {
+	this.converterForClass = converterForClass;
+    }
 }

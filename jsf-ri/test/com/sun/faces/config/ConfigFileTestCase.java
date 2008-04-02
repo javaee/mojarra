@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.31 2003/08/22 22:30:06 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.32 2003/08/25 05:39:56 eburns Exp $
  */
 
 /*
@@ -174,7 +174,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         Converter first = application.createConverter("First");
         assertNotNull(first);
         conv = null;
-        application.addConverter("fooId", "com.sun.faces.convert.DateConverter");
+        application.addConverter("fooId", "javax.faces.convert.DateTimeConverter");
         conv = application.createConverter("fooId");
         assertNotNull(conv);
 

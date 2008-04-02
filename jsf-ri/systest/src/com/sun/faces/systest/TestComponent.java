@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.2 2003/07/07 20:53:13 eburns Exp $
+ * $Id: TestComponent.java,v 1.3 2003/08/25 05:39:49 eburns Exp $
  */
 
 /*
@@ -13,13 +13,13 @@ package com.sun.faces.systest;
 import java.io.IOException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
-import javax.faces.component.UIInput;
+import javax.faces.component.base.UIInputBase;
 
 /**
  * <p>Test <code>UIComponent</code> for sys tests.</p>
  */
 
-public class TestComponent extends UIInput {
+public class TestComponent extends UIInputBase {
 
 
     public TestComponent() {
@@ -28,7 +28,7 @@ public class TestComponent extends UIInput {
 
     public TestComponent(String componentId) {
         super();
-        setComponentId(componentId);
+        setId(componentId);
     }
 
     public String getComponentType() {
@@ -40,55 +40,55 @@ public class TestComponent extends UIInput {
 
 
     public void decode(FacesContext context) throws IOException {
-        trace("d-" + getComponentId());
+        trace("d-" + getId());
         super.decode(context);
     }
 
 
     public void encodeBegin(FacesContext context) throws IOException {
-        trace("eB-" + getComponentId());
+        trace("eB-" + getId());
         super.encodeBegin(context);
     }
 
 
     public void encodeChildren(FacesContext context) throws IOException {
-        trace("eC-" + getComponentId());
+        trace("eC-" + getId());
         super.encodeChildren(context);
     }
 
 
     public void encodeEnd(FacesContext context) throws IOException {
-        trace("eE-" + getComponentId());
+        trace("eE-" + getId());
         super.encodeEnd(context);
     }
 
 
     public void updateModel(FacesContext context) {
-        trace("u-" + getComponentId());
+        trace("u-" + getId());
         super.updateModel(context);
     }
 
 
     public void validate(FacesContext context) {
-        trace("v-" + getComponentId());
+        trace("v-" + getId());
         super.validate(context);
     }
 
 
     public void processDecodes(FacesContext context) throws IOException {
-        trace("pD-" + getComponentId());
+        trace("pD-" + getId());
         super.processDecodes(context);
     }
 
 
     public void processValidators(FacesContext context) {
-        trace("pV-" + getComponentId());
+        trace("pV-" + getId());
         super.processValidators(context);
     }
 
 
     public void processUpdates(FacesContext context) {
-        trace("pU-" + getComponentId());
+        trace("pU-" + getId());
         super.processUpdates(context);
     }
 

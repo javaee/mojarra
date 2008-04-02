@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.78 2003/08/23 00:39:14 jvisvanathan Exp $
+ * $Id: Util.java,v 1.79 2003/08/25 05:39:48 eburns Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.78 2003/08/23 00:39:14 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.79 2003/08/25 05:39:48 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -327,7 +327,7 @@ public class Util extends Object
         "rows",
 	"size",
         "tabindex",
-        "class",
+	//        "class", // PENDING(edburns): revisit this for JSFA105
         "title",
         "style",
         "width",
@@ -879,7 +879,7 @@ private Util()
         // PENDING (visvan) can root be null on postback ? If not, then we don't
         // need this check.
 	if (context.getViewRoot() == null || 
-                context.getViewRoot().getRenderKitId() == null ) {
+	    (renderKitId = context.getViewRoot().getRenderKitId()) == null) {
             renderKitId = RIConstants.DEFAULT_RENDER_KIT;
 	}
 	Assert.assert_it(null != renderKitId);

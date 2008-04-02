@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.1 2003/08/18 22:11:31 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.2 2003/08/25 05:39:50 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.1 2003/08/18 22:11:31 rkitain Exp $
+ * @version $Id: TextRenderer.java,v 1.2 2003/08/25 05:39:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -118,7 +118,7 @@ public class TextRenderer extends Renderer {
             return;
         }    
           
-        writer.writeText("This IS TEXT FROM THE CUSTOM RENDERER");
+        writer.writeText("This IS TEXT FROM THE CUSTOM RENDERER", null);
     }
 
     public String getClientId(FacesContext context, UIComponent component){
@@ -143,12 +143,12 @@ public class TextRenderer extends Renderer {
         if (null != closestContainer) {
 
             // If there is no componentId, generate one and store it
-            if (component.getComponentId() == null) {
-                // Don't call setComponentId() because it checks for
+            if (component.getId() == null) {
+                // Don't call setId() because it checks for
                 // uniqueness.  No need.
                 clientId = closestContainer.generateClientId();
             } else {
-                clientId = component.getComponentId();
+                clientId = component.getId();
             }
 
             // build the client side id

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.8 2003/08/19 19:31:17 rlubke Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.9 2003/08/25 05:39:44 eburns Exp $
  */
 
 /*
@@ -11,12 +11,15 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIInput;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.context.FacesContext;
+import javax.faces.FactoryFinder;
 
 import com.sun.faces.util.Util;
 
@@ -76,9 +79,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
         
-        // PENDING (rlubke) CORRECT IMPLEMENTATION
-        //String converterId = component.getConverter();
-       // converter = getConverter(converterId);
+        converter = uiOutput.getConverter();
         
 	if (converter == null && valueRef != null) {
             Class converterType = 
@@ -90,11 +91,15 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             // if getType returns a type for which we support a default
             // conversion, acquire an appropriate converter instance.
         
-        // PENDING (rlubke) CORRECT IMPLEMENTATION
-//            converterId = Util.getDefaultConverterForType(
-//                     (converterType.getName()));
-//            converter = getConverter(converterId);
-        
+            try {
+                ApplicationFactory aFactory =
+                    (ApplicationFactory)FactoryFinder.getFactory
+                     (FactoryFinder.APPLICATION_FACTORY);
+                Application application = aFactory.getApplication();
+                converter = application.createConverter(converterType);
+            } catch (Exception e) {
+                return (null);
+            }
 	} else if ( converter == null && valueRef == null ) {
             // if there is no valueRef and converter attribute set, assume the 
             // modelType as "String" since we have no way of figuring out the

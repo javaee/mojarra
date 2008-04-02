@@ -12,7 +12,7 @@
   Application appl = afactory.getApplication();
 
   // try to retrieve the converter id from Application
-  Converter result = appl.getConverter("TestConverter");
+  Converter result = appl.createConverter("TestConverter");
   // report the result
   if (result == null || 
       !(result instanceof com.sun.faces.systest.TestConverter)) {

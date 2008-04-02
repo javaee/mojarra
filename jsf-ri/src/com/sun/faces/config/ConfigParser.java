@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.28 2003/08/22 22:30:01 eburns Exp $
+ * $Id: ConfigParser.java,v 1.29 2003/08/25 05:39:43 eburns Exp $
  */
 
 /*
@@ -325,6 +325,8 @@ public class ConfigParser {
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigConverter");
         digester.addCallMethod(prefix + "/converter-id",
                                "setConverterId", 0);
+        digester.addCallMethod(prefix + "/converter-for-class",
+                               "setConverterForClass", 0);
         digester.addCallMethod(prefix + "/converter-class",
                                "setConverterClass", 0);
 
@@ -686,7 +688,38 @@ final class ConvertersRule extends Rule {
            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application =
            (ApplicationImpl)aFactory.getApplication();
-       application.addConverter(cc.getConverterId(), cc.getConverterClass());
+	String idOrClassName = null;
+	// the DTD states that converter-id and converter-for-class are
+	// mutually exclusive, so we're safe here.
+
+	// If we have a converter-id
+	if (null != (idOrClassName = cc.getConverterId())) {
+	    // store by id
+	    application.addConverter(cc.getConverterId(), cc.getConverterClass());
+	}
+	else {
+	    // do we have a converter-for-class?
+	    if (null == (idOrClassName = cc.getConverterForClass())) {
+		Object[] obj = new Object[1];
+		obj[0] = "converter: " + cc.getConverterClass();
+		throw new RuntimeException(Util.getExceptionMessage(
+								    Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj));
+	    }
+	    Class theClass = null;
+	    // is it valid?
+	    try {
+		theClass = Util.loadClass(idOrClassName, this);
+	    }
+	    catch (ClassNotFoundException c) {
+		Object[] obj = new Object[1];
+		obj[0] = "converter: " + cc.getConverterClass() + " " + 
+		    idOrClassName;
+		throw new RuntimeException(Util.getExceptionMessage(
+								    Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj), c);
+	    }
+	    // store by class
+	    application.addConverter(theClass, cc.getConverterClass());
+	}
     }
 }
 

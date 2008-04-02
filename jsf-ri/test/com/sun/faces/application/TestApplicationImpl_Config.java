@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.17 2003/08/22 22:30:03 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.18 2003/08/25 05:39:54 eburns Exp $
  */
 
 /*
@@ -29,11 +29,10 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
 import javax.faces.FactoryFinder;
 import javax.faces.component.*;
-import javax.faces.convert.Converter;
+import javax.faces.convert.*;
 import javax.faces.validator.Validator;
 import javax.faces.validator.LengthValidator;
 import javax.faces.application.Message;
-import com.sun.faces.convert.*;
 
 import org.mozilla.util.Assert;
 import com.sun.faces.ServletFacesTestCase;
@@ -53,7 +52,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.17 2003/08/22 22:30:03 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.18 2003/08/25 05:39:54 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -226,26 +225,35 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(newTestConverter != testConverter);
 
 	// built-in components
-	assertTrue(null != (conv = application.createConverter("Date")));
-	assertTrue(conv instanceof DateConverter);
-
-	assertTrue(null != (conv = application.createConverter("DateFormat")));
-	assertTrue(conv instanceof DateConverter);
-
 	assertTrue(null != (conv = application.createConverter("DateTime")));
 	assertTrue(conv instanceof DateTimeConverter);
 
 	assertTrue(null != (conv = application.createConverter("Number")));
 	assertTrue(conv instanceof NumberConverter);
 
-	assertTrue(null != (conv = application.createConverter("NumberFormat")));
-	assertTrue(conv instanceof NumberConverter);
-
-	assertTrue(null != (conv = application.createConverter("Time")));
-	assertTrue(conv instanceof TimeConverter);
-
-	assertTrue(null != (conv = application.createConverter("Boolean")));
+	assertTrue(null != (conv = application.createConverter(java.lang.Boolean.class)));
 	assertTrue(conv instanceof BooleanConverter);
+	
+	assertTrue(null != (conv = application.createConverter(java.lang.Byte.class)));
+	assertTrue(conv instanceof ByteConverter);
+	
+	assertTrue(null != (conv = application.createConverter(java.lang.Character.class)));
+	assertTrue(conv instanceof CharacterConverter);
+	
+	assertTrue(null != (conv = application.createConverter(java.lang.Double.class)));
+	assertTrue(conv instanceof DoubleConverter);
+	
+	assertTrue(null != (conv = application.createConverter(java.lang.Float.class)));
+	assertTrue(conv instanceof FloatConverter);
+	
+	assertTrue(null != (conv = application.createConverter(java.lang.Integer.class)));
+	assertTrue(conv instanceof IntegerConverter);
+	
+	assertTrue(null != (conv = application.createConverter(java.lang.Long.class)));
+	assertTrue(conv instanceof LongConverter);
+	
+	assertTrue(null != (conv = application.createConverter(java.lang.Short.class)));
+	assertTrue(conv instanceof ShortConverter);
 	
     }
 	
@@ -279,13 +287,8 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	Iterator iter = application.getConverterIds();
 	assertTrue(null != iter);
 	String standardConverterIds[] = {
-	    "Date",
-	    "DateFormat",
 	    "DateTime",
-	    "Number",
-	    "NumberFormat",
-	    "Time",
-	    "Boolean"
+	    "Number"
 	};
 
 	assertTrue(isSubset(standardConverterIds, iter));

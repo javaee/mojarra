@@ -94,32 +94,44 @@
 
   <!-- standard converters -->
   <converter>
-      <converter-id>Date</converter-id>
-      <converter-class>com.sun.faces.convert.DateConverter</converter-class>
-  </converter>
-  <converter>
-      <converter-id>DateFormat</converter-id>
-      <converter-class>com.sun.faces.convert.DateConverter</converter-class>
-  </converter>
-  <converter>
       <converter-id>DateTime</converter-id>
-      <converter-class>com.sun.faces.convert.DateTimeConverter</converter-class>
+      <converter-class>javax.faces.convert.DateTimeConverter</converter-class>
   </converter>
   <converter>
       <converter-id>Number</converter-id>
-      <converter-class>com.sun.faces.convert.NumberConverter</converter-class>
+      <converter-class>javax.faces.convert.NumberConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>NumberFormat</converter-id>
-      <converter-class>com.sun.faces.convert.NumberConverter</converter-class>
+      <converter-for-class>java.lang.Boolean</converter-for-class>
+      <converter-class>javax.faces.convert.BooleanConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>Time</converter-id>
-      <converter-class>com.sun.faces.convert.TimeConverter</converter-class>
+      <converter-for-class>java.lang.Byte</converter-for-class>
+      <converter-class>javax.faces.convert.ByteConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>Boolean</converter-id>
-      <converter-class>com.sun.faces.convert.BooleanConverter</converter-class>
+      <converter-for-class>java.lang.Double</converter-for-class>
+      <converter-class>javax.faces.convert.DoubleConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-for-class>java.lang.Float</converter-for-class>
+      <converter-class>javax.faces.convert.FloatConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-for-class>java.lang.Integer</converter-for-class>
+      <converter-class>javax.faces.convert.IntegerConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-for-class>java.lang.Character</converter-for-class>
+      <converter-class>javax.faces.convert.CharacterConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-for-class>java.lang.Long</converter-for-class>
+      <converter-class>javax.faces.convert.LongConverter</converter-class>
+  </converter>
+  <converter>
+      <converter-for-class>java.lang.Short</converter-for-class>
+      <converter-class>javax.faces.convert.ShortConverter</converter-class>
   </converter>
 
   <!-- standard message-resources --> 

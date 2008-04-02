@@ -1,5 +1,5 @@
 /*
- * $Id: TestSecondConverter.java,v 1.1 2003/06/13 22:16:52 eburns Exp $
+ * $Id: TestSecondConverter.java,v 1.2 2003/08/25 05:39:53 eburns Exp $
  */
 
 /*
@@ -11,7 +11,7 @@
 
 package com.sun.faces;
 
-import com.sun.faces.convert.NumberConverter;
+import javax.faces.convert.NumberConverter;
 
 public class TestSecondConverter extends NumberConverter {
 }

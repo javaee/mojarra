@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.50 2003/08/22 16:50:23 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.51 2003/08/25 05:39:45 eburns Exp $
  */
 
 /*
@@ -340,15 +340,15 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * This method gets a converter instance.  This method only applies to
      * input and output renderers.
      */
-    protected Converter getConverter(String converterId) {
-        if (converterId == null) {
+    protected Converter getConverter(Class converterType) {
+        if (converterType == null) {
             return null;
         }
         try {
 	    ApplicationFactory aFactory = 
 		(ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
 	    Application application = aFactory.getApplication();
-            return (application.createConverter(converterId));
+            return (application.createConverter(converterType));
         } catch (Exception e) {
             return (null);
         }
@@ -433,7 +433,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             Object currentValue ) throws ConverterException {
          String result = null;
         // formatting is supported only for components that support value and 
-         // valueRef attributes.
+        // valueRef attributes.
         if ( !(component instanceof UIOutput) ){
              if ( currentValue != null) {
                  result= currentValue.toString();
@@ -448,39 +448,24 @@ public abstract class HtmlBasicRenderer extends Renderer {
          
         String valueRef = ((UIOutput)component).getValueRef();
         Converter converter = null;
+
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
        
-       // PENDING (rlubke) CORRECT IMPLEMENTATION
-       // String converterId = component.getConverter();
-       // converter = getConverter(converterId);
+        converter = ((UIOutput)component).getConverter();
        
         // if value is null and no converter attribute is specified, then
         // return a zero length String.
         if ( converter == null && currentValue == null) {
             return "";
         }
-        // if the value is a non-null, non-String and no converter is
-        // specified, try to use one of the standard converters
-	if (converter == null && valueRef != null) {
-            Class converterType = 
-                (Util.getValueBinding(valueRef)).getType(context);
 
-            // if getType returns a type for which we support a default
-            // conversion, acquire an appropriate converter instance.
+	if ( converter == null ) {
+            // if there is no valueRef and converter attribute set, 
+            // try to acquire a converter using its class type.
         
-            // PENDING (rlubke) CORRECT IMPLEMENTATION
-//            converterId = Util.getDefaultConverterForType(
-//                     (converterType.getName()));
-//            converter = getConverter(converterId);
-            
-	} else if ( converter == null && valueRef == null ) {
-            // if there is no valueRef and converter attribute set, try to acquire
-            // a converter using its class type.
-        
-            // PENDING (rlubke) CORRECT IMPLEMENTATION
-            //converterId = currentValue.getClass().getName();
-            //converter = getConverter(converterId);
+            Class converterType = currentValue.getClass();
+            converter = getConverter(converterType);
         
             // if there is no default converter available for this identifier,
             // assume the model type to be String.
