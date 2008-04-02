@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.8 2002/12/19 03:09:28 rkitain Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.9 2003/01/17 18:07:16 rkitain Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ProcessValidationsPhase.java,v 1.8 2002/12/19 03:09:28 rkitain Exp $
+ * @version $Id: ProcessValidationsPhase.java,v 1.9 2003/01/17 18:07:16 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#PROCESS_VALIDATIONS_PHASE
@@ -81,7 +81,7 @@ public int execute(FacesContext facesContext) throws FacesException
     Iterator messageIter = null;
 
     UIComponent component = 
-        (UIComponent)facesContext.getRequestTree().getRoot();
+        (UIComponent)facesContext.getTree().getRoot();
     Assert.assert_it(null != component);
 
     component.processValidators(facesContext);

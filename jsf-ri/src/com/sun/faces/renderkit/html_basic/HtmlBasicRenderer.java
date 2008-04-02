@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.16 2002/12/19 00:05:37 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.17 2003/01/17 18:07:20 rkitain Exp $
  */
 
 /*
@@ -254,7 +254,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	return bundle.getString(key);
     }
     
-    public boolean decode(FacesContext context, UIComponent component) 
+    public void decode(FacesContext context, UIComponent component) 
             throws IOException {
         Object convertedValue = null;
        
@@ -265,7 +265,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         
         if (component.getComponentType() == UIOutput.TYPE) {
             // do nothing in output case
-            return true;
+            component.setValid(true);
         }
 
         String clientId = component.getClientId(context);
@@ -279,17 +279,17 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (newValue != null && newValue.equals("")) {
             newValue = null;
             component.setValue(newValue);
-            return true;
+            component.setValid(true);
         }
         try {
             convertedValue = getConvertedValue(context, component, newValue);   
         } catch (IOException ioe) {
             component.setValue(newValue);
             addConversionErrorMessage(context, component, ioe.getMessage());
-            return false;
+            component.setValid(false);
         }    
         component.setValue(convertedValue);
-        return true;
+        component.setValid(true);
     }
     
     /**

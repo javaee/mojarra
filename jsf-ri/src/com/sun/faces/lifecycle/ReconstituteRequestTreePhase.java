@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteRequestTreePhase.java,v 1.8 2002/11/25 19:56:34 jvisvanathan Exp $
+ * $Id: ReconstituteRequestTreePhase.java,v 1.9 2003/01/17 18:07:16 rkitain Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.util.DebugUtil;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteRequestTreePhase.java,v 1.8 2002/11/25 19:56:34 jvisvanathan Exp $
+ * @version $Id: ReconstituteRequestTreePhase.java,v 1.9 2003/01/17 18:07:16 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
@@ -163,7 +163,7 @@ public void restoreTreeFromPage(FacesContext facesContext) {
             System.err.println(iox.getMessage());
         }
     }
-    facesContext.setRequestTree(requestTree);
+    facesContext.setTree(requestTree);
     if ( locale != null ) {
         facesContext.setLocale(locale);
     }
@@ -203,7 +203,7 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
 	// If it does match, use the tree from the Session
     }
 	
-    facesContext.setRequestTree(requestTree);
+    facesContext.setTree(requestTree);
     session.removeAttribute(RIConstants.FACES_TREE);
 
     // Set up the request locale if needed

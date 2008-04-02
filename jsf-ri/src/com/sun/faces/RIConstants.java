@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.20 2002/10/16 22:22:48 eburns Exp $
+ * $Id: RIConstants.java,v 1.21 2003/01/17 18:07:12 rkitain Exp $
  */
 
 /*
@@ -74,33 +74,27 @@ public class RIConstants {
 
 
     /**
-     * <p>Phase identifier for <em>Handle Request Events</em>.</p>
-     */
-    public static final int HANDLE_REQUEST_EVENTS_PHASE = 20;
-
-
-    /**
      * <p>Phase identifier for <em>Process Validations</em>.</p>
      */
-    public static final int PROCESS_VALIDATIONS_PHASE = 30;
+    public static final int PROCESS_VALIDATIONS_PHASE = 20;
 
 
     /**
      * <p>Phase identifier for <em>Update Model Values</em>.</p>
      */
-    public static final int UPDATE_MODEL_VALUES_PHASE = 40;
+    public static final int UPDATE_MODEL_VALUES_PHASE = 30;
 
 
     /**
      * <p>Phase identifier for <em>Invoke Application</em>.</p>
      */
-    public static final int INVOKE_APPLICATION_PHASE = 50;
+    public static final int INVOKE_APPLICATION_PHASE = 40;
 
     public static final String ELEVALUATOR = "org.apache.taglibs.standard.jstl_el.jstl.ELEvaluator";
 
     /**
      * <p>Phase identifier for <em>Render Response</em>.</p>
      */
-    public static final int RENDER_RESPONSE_PHASE = 60;    
+    public static final int RENDER_RESPONSE_PHASE = 50;    
 
 }

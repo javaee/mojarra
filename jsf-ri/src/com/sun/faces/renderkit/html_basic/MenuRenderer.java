@@ -1,5 +1,5 @@
 /*
- * $Id: MenuRenderer.java,v 1.5 2002/12/18 20:55:00 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.6 2003/01/17 18:07:20 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.5 2002/12/18 20:55:00 eburns Exp $
+ * @version $Id: MenuRenderer.java,v 1.6 2003/01/17 18:07:20 rkitain Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -86,7 +86,7 @@ public class MenuRenderer extends HtmlBasicRenderer {
                 componentType.equals(UISelectOne.TYPE));
     }
 
-    public boolean decode(FacesContext context, UIComponent component)
+    public void decode(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
@@ -107,7 +107,8 @@ public class MenuRenderer extends HtmlBasicRenderer {
                 context.getServletRequest().getParameter(clientId);
             component.setValue(newValue);
         }    
-	return true;
+        component.setValid(true);
+	return;
     }
 
     public void encodeBegin(FacesContext context, UIComponent component)

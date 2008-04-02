@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.3 2002/12/23 23:01:43 jvisvanathan Exp $
+ * $Id: UseFacesTag.java,v 1.4 2003/01/17 18:07:23 rkitain Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.3 2002/12/23 23:01:43 jvisvanathan Exp $
+ * @version $Id: UseFacesTag.java,v 1.4 2003/01/17 18:07:23 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -126,7 +126,7 @@ public class UseFacesTag extends FacesBodyTag
             throws JspException {
         HttpSession session = facesContext.getHttpSession();
         session.setAttribute(RIConstants.REQUEST_LOCALE, facesContext.getLocale());
-        session.setAttribute(RIConstants.FACES_TREE, facesContext.getResponseTree() ); 
+        session.setAttribute(RIConstants.FACES_TREE, facesContext.getTree() ); 
         // write buffered response to output. Since we are saving tree in session
         // no manipulation is necessary.
         try {
@@ -157,7 +157,7 @@ public class UseFacesTag extends FacesBodyTag
           
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutput out = new ObjectOutputStream(bos);
-            out.writeObject(facesContext.getResponseTree());
+            out.writeObject(facesContext.getTree());
             //write out the locale.
             out.writeObject(facesContext.getLocale());
             out.close();

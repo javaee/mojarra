@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.14 2002/10/08 00:26:30 jvisvanathan Exp $
+ * $Id: LifecycleImpl.java,v 1.15 2003/01/17 18:07:16 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.14 2002/10/08 00:26:30 jvisvanathan Exp $
+ * @version $Id: LifecycleImpl.java,v 1.15 2003/01/17 18:07:16 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -99,8 +99,6 @@ protected void initPhases()
             RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new ApplyRequestValuesPhase(this, 
             RIConstants.APPLY_REQUEST_VALUES_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new HandleRequestEventsPhase(this, 
-            RIConstants.HANDLE_REQUEST_EVENTS_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new ProcessValidationsPhase(this, 
             RIConstants.PROCESS_VALIDATIONS_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new UpdateModelValuesPhase(this,

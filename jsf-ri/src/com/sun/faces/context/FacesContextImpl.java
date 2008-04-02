@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.27 2002/12/19 00:05:35 jvisvanathan Exp $
+ * $Id: FacesContextImpl.java,v 1.28 2003/01/17 18:07:13 rkitain Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.faces.component.UIComponentBase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.FactoryFinder;
-import javax.faces.event.RequestEvent;
+import javax.faces.event.FacesEvent;
 import javax.faces.event.ApplicationEvent;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.ApplicationHandler;
@@ -44,6 +44,7 @@ import javax.faces.context.MessageResources;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CursorableLinkedList;
 
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
@@ -70,16 +71,18 @@ public class FacesContextImpl extends FacesContext
     private ServletContext servletContext = null;
     private Locale locale = null;
     private ServletRequest request = null;
-    private Tree requestTree = null;
+    private Tree tree = null;
     private ServletResponse response = null;
     private Tree responseTree = null;
     private ResponseStream responseStream = null;
     private ResponseWriter responseWriter = null;
     private HttpSession session = null;
     private ArrayList applicationEvents = null;
+    private CursorableLinkedList facesEvents = null;
     private HashMap requestEvents = null;
     private int requestEventsCount = 0;
     private EvaluationContext evaluationContext = null;
+
     /**
 
     * Store mapping of UIComponent instance to ArrayList of Message
@@ -92,6 +95,9 @@ public class FacesContextImpl extends FacesContext
     private ViewHandler viewHandler = null;
     private ApplicationHandler applicationHandler = null;
     
+    private boolean renderResponse = false;
+    private boolean renderComplete = false;
+
     // Attribute Instance Variables
 
     // Relationship Instance Variables
@@ -164,6 +170,13 @@ public class FacesContextImpl extends FacesContext
 	return applicationEvents.size();
     }
 
+    public Iterator getFacesEvents() {
+        if (facesEvents != null) {
+            return (facesEvents.cursor());
+        } else {
+            return (Collections.EMPTY_LIST.iterator());
+        }
+    }
 
     public HttpSession getHttpSession() {
         return (this.session);
@@ -298,8 +311,8 @@ public class FacesContextImpl extends FacesContext
 	return result;
     }
 
-    public Tree getRequestTree() {
-        return (this.requestTree);
+    public Tree getTree() {
+        return (this.tree);
     }
 
     public ResponseStream getResponseStream() {
@@ -313,29 +326,14 @@ public class FacesContextImpl extends FacesContext
 	responseStream = newResponseStream;
     }
 
-    public void setRequestTree(Tree requestTree) {
-        if (requestTree == null) {
+    public void setTree(Tree tree) {
+        if (tree == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_REQUEST_TREE_ERROR_MESSAGE_ID));
         }
-        if (this.requestTree != null) {
+        if (this.tree != null) {
             throw new IllegalStateException(Util.getExceptionMessage(Util.REQUEST_TREE_ALREADY_SET_ERROR_MESSAGE_ID));
         }
-        this.requestTree = requestTree;
-        if (this.responseTree == null) {
-            this.responseTree = this.requestTree;
-        }
-    }
-
-    public Tree getResponseTree() {
-        return (this.responseTree);
-    }
-
-
-    public void setResponseTree(Tree responseTree) {
-        if (responseTree == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_RESPONSE_TREE_ERROR_MESSAGE_ID));
-        }
-        this.responseTree = responseTree;
+        this.tree = tree;
     }
 
     public ResponseWriter getResponseWriter() {
@@ -375,6 +373,17 @@ public class FacesContextImpl extends FacesContext
         applicationEvents.add(event);
     }
 
+    public void addFacesEvent(FacesEvent event) {
+        if (event == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_EVENT_ERROR_MESSAGE_ID));
+        }
+        if (facesEvents == null) {
+            facesEvents = new CursorableLinkedList();
+        }
+        facesEvents.add(event);
+    }
+
     public void addMessage(Message message) {
         ArrayList list = null;
         if ( message == null ) {
@@ -409,26 +418,6 @@ public class FacesContextImpl extends FacesContext
         list.add(message);
     }
 
-    public void addRequestEvent(UIComponent component, RequestEvent event) {
-        ArrayList list = null;
-
-	if (null == component || null == event) {
-	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-	}
-
-        if (null == requestEvents) {
-            requestEvents = new HashMap();
-        }
-
-        list = (ArrayList) requestEvents.get(component);
-        if (list == null) {
-            list = new ArrayList();
-            requestEvents.put(component, list);
-        }
-        list.add(event);
-        requestEventsCount++;
-    } 
-    
     private EvaluationContext getEvaluationContext() {
         if (evaluationContext == null) {
             evaluationContext = new EvaluationContext(this);
@@ -503,8 +492,7 @@ public class FacesContextImpl extends FacesContext
         servletContext = null;
         session = null;
         locale = null;
-        requestTree = null;
-        responseTree = null;
+        tree = null;
         responseStream = null;
         responseWriter = null;
         applicationEvents = null;
@@ -513,7 +501,23 @@ public class FacesContextImpl extends FacesContext
         viewHandler = null;
         applicationHandler = null;
     }
-    
+
+    public void renderResponse() {
+        renderResponse = true;
+    }
+
+    public void responseComplete() {
+        renderComplete = true;
+    }
+
+    public boolean getRenderResponse() {
+        return renderResponse;
+    }
+
+    public boolean getRenderComplete() {
+        return renderComplete;
+    }
+
     public ViewHandler getViewHandler() {
         return this.viewHandler;
     }

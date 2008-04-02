@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.5 2002/12/19 00:05:37 jvisvanathan Exp $
+ * $Id: ErrorsRenderer.java,v 1.6 2003/01/17 18:07:19 rkitain Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsRenderer.java,v 1.5 2002/12/19 00:05:37 jvisvanathan Exp $
+ * @version $Id: ErrorsRenderer.java,v 1.6 2003/01/17 18:07:19 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,9 +88,8 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UIOutput.TYPE));
     }
 
-    public boolean decode(FacesContext context, UIComponent component) 
+    public void decode(FacesContext context, UIComponent component) 
             throws IOException {
-	return true;
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
@@ -139,7 +138,7 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
             if (clientId.length() == 0) {
                 messageIter = context.getMessages(null);
             } else {
-                UIComponent root = context.getResponseTree().getRoot();
+                UIComponent root = context.getTree().getRoot();
                 Assert.assert_it(null != root);
                 UIComponent comp = null;
                 try {

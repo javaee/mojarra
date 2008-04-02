@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.4 2002/12/19 03:09:27 rkitain Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.5 2003/01/17 18:07:14 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // ApplyRequestValuesPhase.java
 
 package com.sun.faces.lifecycle;
+
+import com.sun.faces.context.FacesContextImpl;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
@@ -30,7 +32,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ApplyRequestValuesPhase.java,v 1.4 2002/12/19 03:09:27 rkitain Exp $
+ * @version $Id: ApplyRequestValuesPhase.java,v 1.5 2003/01/17 18:07:14 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#APPLY_REQUEST_VALUES_PHASE
@@ -75,11 +77,12 @@ public class ApplyRequestValuesPhase extends GenericPhaseImpl {
     public int execute(FacesContext facesContext) throws FacesException {
 
         UIComponent component = 
-            (UIComponent)facesContext.getRequestTree().getRoot();
+            (UIComponent)facesContext.getTree().getRoot();
         Assert.assert_it(null != component);
 
         try {
-            if (!component.processDecodes(facesContext)) {
+            component.processDecodes(facesContext);
+            if (((FacesContextImpl)facesContext).getRenderResponse()) {
                 return Phase.GOTO_RENDER;
             }
         } catch (IOException e) {

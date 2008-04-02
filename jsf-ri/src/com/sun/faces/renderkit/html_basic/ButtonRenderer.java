@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.40 2002/12/19 00:05:36 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.41 2003/01/17 18:07:18 rkitain Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.40 2002/12/19 00:05:36 jvisvanathan Exp $
+ * @version $Id: ButtonRenderer.java,v 1.41 2003/01/17 18:07:18 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -172,9 +172,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UICommand.TYPE));
     }
 
-    public boolean decode(FacesContext context, UIComponent component) 
+    public void decode(FacesContext context, UIComponent component) 
             throws IOException {
-	boolean result = true;
 	if (context == null || component == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -190,13 +189,13 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (value == null) {
             if (context.getServletRequest().getParameter(clientId+".x") == null &&
                 context.getServletRequest().getParameter(clientId+".y") == null) {
-                return result;
+                return;
             }
         }
 
         String type = (String) component.getAttribute("type");
         if ((type == null) || (type.toLowerCase().equals("reset")) ) {
-            return result;
+            return;
         }
 
         // Construct and enqueue a FormEvent for the application
@@ -214,12 +213,13 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             // PENDING (visvan) log error
             //log.error("Button[" + component.getClientId() +
             //          "] not nested in a form");
-            return false;
+            return;
         }
         FormEvent formEvent =
             new FormEvent(component, formName, commandName);
         context.addApplicationEvent(formEvent);
-	return result;
+
+	return;
     }
     
      public void encodeBegin(FacesContext context, UIComponent component) 
