@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.37 2003/08/22 17:27:43 rlubke Exp $
+ * $Id: TestRenderers_1.java,v 1.38 2003/08/25 15:37:47 rkitain Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.37 2003/08/22 17:27:43 rlubke Exp $
+ * @version $Id: TestRenderers_1.java,v 1.38 2003/08/25 15:37:47 rkitain Exp $
  * 
  *
  */
@@ -184,7 +184,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from local value...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         // No value this round, ensure the valueRef for the button label
         // is pulled from the model
@@ -197,7 +197,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from model...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         // No valueRef or explicit label.  Pull value from the
         // specified ResourceBundle using the key
@@ -209,7 +209,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from ResourceBundle...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         // All lookup methods fail, test of hyperlink should be empty
         uiCommand = new UICommandBase();
@@ -221,7 +221,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing empty label...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         // Test hyperlink as image
         uiCommand = new UICommandBase();
@@ -232,7 +232,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing hyperlink as image");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         // Test hyperlink as image with image specified in resource bundle
         uiCommand = new UICommandBase();
@@ -243,7 +243,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing hyperlink image via resource lookup");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         // Test hyperlink with parameters
         uiCommand = new UICommandBase();
@@ -263,7 +263,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing hyperlink with UIParameters...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
     }
 
     public void verifyFormRenderer(UIComponent root,
@@ -289,12 +289,12 @@ public class TestRenderers_1 extends JspFacesTestCase
         // test encode method
         System.out.println("Testing encode method");
         formRenderer.encodeBegin(getFacesContext(), uiForm);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
         
         // test encode method
         System.out.println("Testing encodeEnd method");
         formRenderer.encodeEnd(getFacesContext(), uiForm);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
         
 	// test that our form number is correct.
 	Integer formNumber = (Integer)
@@ -319,10 +319,10 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand.setValue("SHOUD NOT BE HERE");
         root.getChildren().add(uiCommand);
         System.out.println("Testing encode (<button> rendering) method");
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         // Test button as image with image specified in resource bundle
         uiCommand = new UICommandBase();
@@ -333,7 +333,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing hyperlink image via resource lookup");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
 // ------------------  Test label determination ------------------------------
         // Provide attributes for all possible lookups
@@ -349,7 +349,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from local value...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         // No value this round, ensure the valueRef for the button label
         // is pulled from the model
@@ -363,7 +363,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from model...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         // No valueRef or explicit label.  Pull value from the
         // specified ResourceBundle using the key
@@ -376,7 +376,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from ResourceBundle...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         // All lookup methods fail, the value attribute should be empty
         uiCommand = new UICommandBase();
@@ -389,7 +389,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing empty label...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
     }
     
     public void verifyRadioRenderer(UIComponent root) throws IOException {

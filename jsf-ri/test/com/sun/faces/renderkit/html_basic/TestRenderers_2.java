@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.52 2003/08/22 17:27:44 rlubke Exp $
+ * $Id: TestRenderers_2.java,v 1.53 2003/08/25 15:37:48 rkitain Exp $
  */
 
 /*
@@ -23,6 +23,10 @@ import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
 
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.MessageImpl;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
@@ -43,11 +47,10 @@ import javax.faces.component.base.UIGraphicBase;
 import javax.faces.component.base.UIParameterBase;
 import javax.faces.component.base.UINamingContainerBase;
 import javax.faces.component.base.UIViewRootBase;
-import javax.faces.FactoryFinder;
-import javax.faces.model.SelectItem;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.application.MessageImpl;
+import javax.faces.convert.Converter;
+import javax.faces.model.SelectItem;
 
 import org.apache.cactus.WebRequest;
 
@@ -60,13 +63,18 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.52 2003/08/22 17:27:44 rlubke Exp $
+ * @version $Id: TestRenderers_2.java,v 1.53 2003/08/25 15:37:48 rkitain Exp $
  * 
  *
  */
 
 public class TestRenderers_2 extends JspFacesTestCase
 {
+    //
+    // Instance Variables
+    //
+    private Application application;
+
     //
     // Protected Constants
     //
@@ -75,8 +83,8 @@ public class TestRenderers_2 extends JspFacesTestCase
     public static String DATE_STR_LONG = "Sat, Jan 12, 1952 AD at 12:31:31 PM";
     
     public static String TIME_STR = "12:31:31 PM";
-   public static String NUMBER_STR = "47%";
-   public static String NUMBER_STR_PATTERN = "1999.8765432";
+    public static String NUMBER_STR = "47%";
+    public static String NUMBER_STR_PATTERN = "1999.8765432";
         
     public boolean sendWriterToFile() {
         return true;
@@ -120,6 +128,9 @@ public class TestRenderers_2 extends JspFacesTestCase
     //
     public void setUp() {
 	super.setUp();
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        application = aFactory.getApplication();
         UIViewRoot page = new UIViewRootBase();
         page.setViewId("viewId");       
         getFacesContext().setViewRoot(page);
@@ -287,18 +298,18 @@ public class TestRenderers_2 extends JspFacesTestCase
         selectBoolean.setSelected(true);
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         System.out.println("    Testing encode method - rendering unchecked");
         selectBoolean.setSelected(false);
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
 
         System.out.println("    Testing encode method - rendering unchecked with label");
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
     }
 
     public void testHyperlinkRenderer(UIComponent root) throws IOException {
@@ -323,7 +334,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), command);
         hyperlinkRenderer.encodeEnd(getFacesContext(), command);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
     }
 
     public void testListboxRenderer(UIComponent root) throws IOException {
@@ -339,7 +350,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         SelectItem[] selectItems = {item1, item2, item3, item4};
         uiSelectItems.setValue(selectItems);
 	uiSelectItems.setId("items");
-        selectOne.setConverter("Number");
+	Converter converter = application.createConverter("Number");
+	selectOne.setConverter(converter);
         selectOne.getChildren().add(uiSelectItems);
         root.getChildren().add(selectOne);
 
@@ -356,7 +368,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         //selectOne.setId("my_listbox");
         listboxRenderer.encodeBegin(getFacesContext(), selectOne);
         listboxRenderer.encodeEnd(getFacesContext(), selectOne);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
     }
 
     public void testSecretRenderer(UIComponent root) throws IOException {
@@ -379,7 +391,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         secretRenderer.encodeBegin(getFacesContext(), textEntry);
         secretRenderer.encodeEnd(getFacesContext(), textEntry);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
     }
 
     public void testInputTextRenderer(UIComponent root) throws IOException {
@@ -620,7 +632,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         textAreaRenderer.encodeBegin(getFacesContext(), textEntry);
         textAreaRenderer.encodeEnd(getFacesContext(), textEntry);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
     }
     
     public void testInputNumberRenderer(UIComponent root) throws IOException {
@@ -680,7 +692,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         numberRenderer.encodeBegin(getFacesContext(), input);
         numberRenderer.encodeEnd(getFacesContext(), input);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
     }    
 
     public void testOutputNumberRenderer(UIComponent root) throws IOException {
@@ -700,7 +712,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         numberRenderer.encodeBegin(getFacesContext(), output);
         numberRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
     }
     
     public void testOutputNumberRendererWithPattern(UIComponent root) throws IOException {
@@ -720,7 +732,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         numberRenderer.encodeBegin(getFacesContext(), output);
         numberRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
     }  
 
 
@@ -808,7 +820,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         dateRenderer.encodeBegin(getFacesContext(), output);
         dateRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().writeText("\n");
+        getFacesContext().getResponseWriter().writeText("\n", null);
         // decode() simply sets valid to true for UIOutput components. 
         // So valid will never be false.	
     }
