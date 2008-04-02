@@ -64,9 +64,7 @@ public class GlassFishInjectionProvider implements InjectionProvider {
      * steps:
      * <ul>
      * <li>Inject the supported resources per the Servlet 2.5
-     * specification into the provided object</li>
-     * <li>Inoke any method marked with the <code>@PreDestroy</code>
-     * annotation (per the Common Annotations Specification)</li>
+     * specification into the provided object</li>    
      * </ul>
      * </p>
      *
