@@ -880,14 +880,6 @@
       <renderer-class>com.sun.faces.renderkit.html_basic.DataRenderer</renderer-class>
     </renderer>
     <renderer>
-      <renderer-type>Date</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.DateRenderer</renderer-class>
-    </renderer>
-    <renderer>
-      <renderer-type>DateTime</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.DateTimeRenderer</renderer-class>
-    </renderer>
-    <renderer>
       <renderer-type>Errors</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.ErrorsRenderer</renderer-class>
     </renderer>
@@ -936,10 +928,6 @@
       <renderer-class>com.sun.faces.renderkit.html_basic.MessageRenderer</renderer-class>
     </renderer>
     <renderer>
-      <renderer-type>Number</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.NumberRenderer</renderer-class>
-    </renderer>
-    <renderer>
       <renderer-type>Radio</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.RadioRenderer</renderer-class>
     </renderer>
@@ -958,10 +946,6 @@
     <renderer>
       <renderer-type>Text</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.TextRenderer</renderer-class>
-    </renderer>
-    <renderer>
-      <renderer-type>Time</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.TimeRenderer</renderer-class>
     </renderer>
   </render-kit>
 

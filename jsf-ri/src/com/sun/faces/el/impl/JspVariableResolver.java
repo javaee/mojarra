@@ -56,7 +56,6 @@
 package com.sun.faces.el.impl;
 
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.el.ELException;
 
 
 /**
@@ -66,7 +65,7 @@ import javax.servlet.jsp.el.ELException;
  * recognizes references to implicit objects.
  * 
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
  **/
 
 public class JspVariableResolver extends
@@ -88,11 +87,11 @@ public class JspVariableResolver extends
   
     //-------------------------------------
     
-    public Object resolveVariable(String pName) throws ELException {
+    public Object resolveVariable(String pName) throws ElException {
         try {
             return resolve(pName);
         } catch (ElException e) {
-            throw new ELException(e.getMessage());
+            throw new ElException(e.getMessage());
         }
     }
 

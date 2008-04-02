@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.32 2003/08/25 05:39:56 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.33 2003/08/25 21:04:59 eburns Exp $
  */
 
 /*
@@ -274,8 +274,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    "Button",
 	    "Checkbox",
 	    "Data",
-	    "Date",
-	    "DateTime",
 	    "Errors",
 	    "Form",
 	    "Grid",
@@ -288,13 +286,11 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    "Listbox",
 	    "Menu",
 	    "Message",
-	    "Number",
 	    "Radio",
 	    "Secret",
 	    "SelectManyCheckbox",
 	    "Textarea",
-	    "Text",
-	    "Time"
+	    "Text"
 	};
 	Iterator rendererIter = null;
 
