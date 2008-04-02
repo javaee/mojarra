@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.82 2006/03/29 23:04:56 rlubke Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.83 2007/01/30 02:32:15 rlubke Exp $
  */
 
 /*
@@ -38,13 +38,14 @@ import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
+import java.util.Locale;
 
 /**
  * <B>TestRenderResponsePhase</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.82 2006/03/29 23:04:56 rlubke Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.83 2007/01/30 02:32:15 rlubke Exp $
  */
 
 public class TestRenderResponsePhase extends JspFacesTestCase {
@@ -124,6 +125,7 @@ public class TestRenderResponsePhase extends JspFacesTestCase {
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
         page.setViewId(TEST_URI);
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
 
         try {

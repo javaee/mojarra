@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.76 2006/11/21 08:19:34 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.77 2007/01/30 02:32:51 rlubke Exp $
  */
 
 /*
@@ -55,10 +55,7 @@ import javax.servlet.ServletContext;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -536,6 +533,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         NavigationHandler navHandler = application.getNavigationHandler();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("/login.jsp");
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
         navHandler.handleNavigation(getFacesContext(), "#{UserBean.login}",
                                     "success");

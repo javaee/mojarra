@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.28 2006/03/29 23:04:55 rlubke Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.29 2007/01/30 02:32:13 rlubke Exp $
  */
 
 /*
@@ -37,13 +37,14 @@ import org.apache.cactus.WebRequest;
 
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
+import java.util.Locale;
 
 /**
  * <B>TestInvokeApplicationPhase</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.28 2006/03/29 23:04:55 rlubke Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.29 2007/01/30 02:32:13 rlubke Exp $
  */
 
 public class TestInvokeApplicationPhase extends ServletFacesTestCase {
@@ -96,6 +97,7 @@ public class TestInvokeApplicationPhase extends ServletFacesTestCase {
         UIInput root = new UIInput();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("default.xul");
+        page.setLocale(Locale.US);
         Phase invokeApplicationPhase = new InvokeApplicationPhase();
         getFacesContext().setViewRoot(page);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.31 2006/03/29 23:04:39 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.32 2007/01/30 02:32:33 rlubke Exp $
  */
 
 /*
@@ -64,7 +64,7 @@ import javax.el.ValueExpression;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.31 2006/03/29 23:04:39 rlubke Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.32 2007/01/30 02:32:33 rlubke Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -473,6 +473,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setViewId("/view");
         root.setId("id");
+        root.setLocale(Locale.US);
         getFacesContext().setViewRoot(root);
 
         boolean exceptionThrown = false;

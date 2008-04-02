@@ -24,7 +24,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.40 2006/03/29 23:05:01 rlubke Exp $
+ * $Id: TestRenderers_3.java,v 1.41 2007/01/30 02:32:38 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -62,13 +62,14 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.Locale;
 
 /**
  * Test encode and decode methods in Renderer classes.
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.40 2006/03/29 23:05:01 rlubke Exp $
+ * @version $Id: TestRenderers_3.java,v 1.41 2007/01/30 02:32:38 rlubke Exp $
  */
 
 public class TestRenderers_3 extends JspFacesTestCase {
@@ -134,6 +135,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         application = aFactory.getApplication();
         UIViewRoot xmlTree = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         xmlTree.setViewId("viewId");
+        xmlTree.setLocale(Locale.US);
         xmlTree.getChildren().add(new UICommand());
         getFacesContext().setViewRoot(xmlTree);
         Object view =

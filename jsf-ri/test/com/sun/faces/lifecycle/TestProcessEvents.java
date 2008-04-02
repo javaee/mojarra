@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.23 2006/03/29 23:04:56 rlubke Exp $
+ * $Id: TestProcessEvents.java,v 1.24 2007/01/30 02:32:10 rlubke Exp $
  */
 
 /*
@@ -44,13 +44,14 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * <B>TestProcessEvents</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.23 2006/03/29 23:04:56 rlubke Exp $
+ * @version $Id: TestProcessEvents.java,v 1.24 2007/01/30 02:32:10 rlubke Exp $
  */
 
 public class TestProcessEvents extends ServletFacesTestCase {
@@ -106,6 +107,7 @@ public class TestProcessEvents extends ServletFacesTestCase {
     public void setUp() {
         super.setUp();
         UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        root.setLocale(Locale.US);
         getFacesContext().setViewRoot(root);
     }
 

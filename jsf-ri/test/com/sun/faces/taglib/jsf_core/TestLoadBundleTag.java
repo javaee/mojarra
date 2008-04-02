@@ -1,5 +1,5 @@
 /*
- * $Id: TestLoadBundleTag.java,v 1.14 2006/03/29 23:05:02 rlubke Exp $
+ * $Id: TestLoadBundleTag.java,v 1.15 2007/01/30 02:32:45 rlubke Exp $
  */
 
 /*
@@ -40,10 +40,11 @@ import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 
 import java.util.Map;
+import java.util.Locale;
 
 
 /**
- * @version $Id: TestLoadBundleTag.java,v 1.14 2006/03/29 23:05:02 rlubke Exp $
+ * @version $Id: TestLoadBundleTag.java,v 1.15 2007/01/30 02:32:45 rlubke Exp $
  */
 
 public class TestLoadBundleTag extends ServletFacesTestCase {
@@ -86,6 +87,7 @@ public class TestLoadBundleTag extends ServletFacesTestCase {
 
     public void testLoadBundle() throws Exception {
         getFacesContext().setViewRoot(Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null));
+        getFacesContext().getViewRoot().setLocale(Locale.US);
         LoadBundleTag tag = new LoadBundleTag();
         ExpressionFactory factory =
             getFacesContext().getApplication().getExpressionFactory();
@@ -126,7 +128,7 @@ public class TestLoadBundleTag extends ServletFacesTestCase {
                 "com.sun.faces.TestMessages",String.class);
                                           
         getFacesContext().setViewRoot(Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null));
-
+        getFacesContext().getViewRoot().setLocale(Locale.US);
         LoadBundleTag tag = new LoadBundleTag();
         tag.setBasename(expr);
         tag.setVar("messages");

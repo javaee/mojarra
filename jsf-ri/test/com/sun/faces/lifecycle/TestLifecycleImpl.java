@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.40 2006/03/29 23:04:55 rlubke Exp $
+ * $Id: TestLifecycleImpl.java,v 1.41 2007/01/30 02:32:09 rlubke Exp $
  */
 
 /*
@@ -44,12 +44,14 @@ import com.sun.faces.util.Util;
 
 import org.apache.cactus.WebRequest;
 
+import java.util.Locale;
+
 /**
  * <B>TestLifecycleImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.40 2006/03/29 23:04:55 rlubke Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.41 2007/01/30 02:32:09 rlubke Exp $
  */
 
 public class TestLifecycleImpl extends JspFacesTestCase {
@@ -121,6 +123,7 @@ public class TestLifecycleImpl extends JspFacesTestCase {
         super.setUp();
 	FacesContext context = getFacesContext();
         UIViewRoot root = Util.getViewHandler(context).createView(context, null);
+        root.setLocale(Locale.US);
         root.setViewId(TEST_URI);
 	context.setViewRoot(root);
 	

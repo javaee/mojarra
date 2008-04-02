@@ -1,8 +1,8 @@
 /*
 <<<<<<< TestValueExpressionImpl.java
- * $Id: TestValueExpressionImpl.java,v 1.8 2006/03/29 23:04:54 rlubke Exp $
+ * $Id: TestValueExpressionImpl.java,v 1.9 2007/01/30 02:32:26 rlubke Exp $
 =======
- * $Id: TestValueExpressionImpl.java,v 1.8 2006/03/29 23:04:54 rlubke Exp $
+ * $Id: TestValueExpressionImpl.java,v 1.9 2007/01/30 02:32:26 rlubke Exp $
 >>>>>>> 1.32.18.5
  */
 
@@ -56,6 +56,7 @@ import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Locale;
 
 /**
  * <B>TestValueExpressionImpl </B> is a class ... <p/><B>Lifetime And Scope </B>
@@ -468,6 +469,7 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
                 getFacesContext(), null);
         page.setId("root");
         page.setViewId("newTree");
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
         valueExpression = this.create("view.childCount");
         assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
@@ -574,6 +576,7 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
                 getFacesContext(), null);
         page.setId("root");
         page.setViewId("newTree");
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
         valueExpression = this.create("view");
         Class c = valueExpression.getType(getFacesContext().getELContext());

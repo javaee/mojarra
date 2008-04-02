@@ -1,8 +1,8 @@
 /*
 <<<<<<< TestValueBindingImpl.java
- * $Id: TestValueBindingImpl.java,v 1.42 2006/03/29 23:04:53 rlubke Exp $
+ * $Id: TestValueBindingImpl.java,v 1.43 2007/01/30 02:32:27 rlubke Exp $
 =======
- * $Id: TestValueBindingImpl.java,v 1.42 2006/03/29 23:04:53 rlubke Exp $
+ * $Id: TestValueBindingImpl.java,v 1.43 2007/01/30 02:32:27 rlubke Exp $
 >>>>>>> 1.32.18.5
  */
 
@@ -59,6 +59,7 @@ import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Locale;
 
 /**
  * <B>TestValueBindingImpl </B> is a class ... <p/><B>Lifetime And Scope </B>
@@ -466,6 +467,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
                 getFacesContext(), null);
         page.setId("root");
         page.setViewId("newTree");
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
         valueBinding = this.create("view.childCount");
         assertTrue(valueBinding.isReadOnly(getFacesContext()));
@@ -572,6 +574,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
                 getFacesContext(), null);
         page.setId("root");
         page.setViewId("newTree");
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
         valueBinding = this.create("view");
         Class c = valueBinding.getType(getFacesContext());
@@ -1010,6 +1013,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         getFacesContext().setViewRoot(
                 root = Util.getViewHandler(getFacesContext()).createView(
                         getFacesContext(), null));
+        getFacesContext().getViewRoot().setLocale(Locale.US);
         root.getChildren().add(form = new UIForm());
         form.getChildren().add(input = new UIInput());
         input.setValueBinding("buckaroo", getFacesContext().getApplication()
@@ -1020,6 +1024,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         getFacesContext().setViewRoot(
                 root = Util.getViewHandler(getFacesContext()).createView(
                         getFacesContext(), null));
+        getFacesContext().getViewRoot().setLocale(Locale.US);
         root.getChildren().add(form = new UIForm());
         form.getChildren().add(input = new UIInput());
         root.processRestoreState(getFacesContext(), state);

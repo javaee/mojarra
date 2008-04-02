@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.17 2006/03/29 23:05:01 rlubke Exp $
+ * $Id: TestRendererConversions.java,v 1.18 2007/01/30 02:32:41 rlubke Exp $
  */
 
 /*
@@ -38,6 +38,7 @@ import org.apache.cactus.WebRequest;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
+import java.util.Locale;
 
 
 /**
@@ -45,7 +46,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.17 2006/03/29 23:05:01 rlubke Exp $
+ * @version $Id: TestRendererConversions.java,v 1.18 2007/01/30 02:32:41 rlubke Exp $
  */
 
 public class TestRendererConversions extends ServletFacesTestCase {
@@ -102,6 +103,7 @@ public class TestRendererConversions extends ServletFacesTestCase {
         super.setUp();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
     }
 
@@ -112,6 +114,7 @@ public class TestRendererConversions extends ServletFacesTestCase {
 
     public void testEmptyStrings() {
         UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        root.setLocale(Locale.US);
         UIInput
             text = new UIInput(),
             hidden = new UIInput(),

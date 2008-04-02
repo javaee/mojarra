@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.30 2006/03/29 23:04:56 rlubke Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.31 2007/01/30 02:32:18 rlubke Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.30 2006/03/29 23:04:56 rlubke Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.31 2007/01/30 02:32:18 rlubke Exp $
  */
 
 public class TestRestoreViewPhase extends ServletFacesTestCase {
@@ -119,7 +119,8 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         UIViewRoot root = Util.getViewHandler(context).createView(context, 
 								  null);
         root.setViewId(TEST_URI);
-	context.setViewRoot(root);
+        root.setLocale(Locale.US);
+    context.setViewRoot(root);
 	
 
         UIForm basicForm = new UIForm();
@@ -180,6 +181,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 
         UIViewRoot root = Util.getViewHandler(context).createView(context, 
 								  null);
+        root.setLocale(Locale.US);
         root.setViewId(TEST_URI);
 	context.setViewRoot(root);
 
@@ -220,7 +222,8 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 
         root = Util.getViewHandler(context).createView(context, null);
         root.setViewId(TEST_URI);
-	context.setViewRoot(root);
+        root.setLocale(Locale.US);
+    context.setViewRoot(root);
 
         basicForm = new UIForm();
         basicForm.setId("basicForm");
@@ -262,6 +265,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         FacesContext context = getFacesContext();
         UIViewRoot root = Util.getViewHandler(context).createView(context,
                                                                   null);
+        root.setLocale(Locale.US);
         root.setViewId(TEST_URI);
         context.setViewRoot(root);
                                                                                                                         

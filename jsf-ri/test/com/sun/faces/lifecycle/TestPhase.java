@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.20 2006/03/29 23:04:56 rlubke Exp $
+ * $Id: TestPhase.java,v 1.21 2007/01/30 02:32:12 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
+import java.util.Locale;
 
 
 /**
@@ -47,7 +48,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.20 2006/03/29 23:04:56 rlubke Exp $
+ * @version $Id: TestPhase.java,v 1.21 2007/01/30 02:32:12 rlubke Exp $
  */
 
 public class TestPhase extends ServletFacesTestCase {
@@ -129,6 +130,7 @@ public class TestPhase extends ServletFacesTestCase {
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.getChildren().add(basicForm);
         page.setViewId("root");
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
 
         Phase applyValues = new ApplyRequestValuesPhase();

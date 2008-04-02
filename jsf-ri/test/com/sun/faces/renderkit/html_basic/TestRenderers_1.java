@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.71 2006/03/29 23:05:01 rlubke Exp $
+ * $Id: TestRenderers_1.java,v 1.72 2007/01/30 02:32:39 rlubke Exp $
  */
 
 /*
@@ -52,18 +52,14 @@ import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.ListResourceBundle;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Test encode and decode methods in Renderer classes.
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.71 2006/03/29 23:05:01 rlubke Exp $
+ * @version $Id: TestRenderers_1.java,v 1.72 2007/01/30 02:32:39 rlubke Exp $
  */
 
 public class TestRenderers_1 extends JspFacesTestCase {
@@ -110,6 +106,7 @@ public class TestRenderers_1 extends JspFacesTestCase {
 
         UIViewRoot xmlView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         xmlView.setViewId("viewId");
+        xmlView.setLocale(Locale.US);
         getFacesContext().setViewRoot(xmlView);
         assertTrue(getFacesContext().getResponseWriter() != null);
         
@@ -171,9 +168,10 @@ public class TestRenderers_1 extends JspFacesTestCase {
         Map sessionMap = getFacesContext().getExternalContext().getSessionMap();
        
         // create a dummy root for the tree.
-        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);       
         root.setId("root");
         root.setViewId("/root");
+        root.setLocale(Locale.US);
         ViewHandlerImpl viewHandler = new ViewHandlerImpl();
         
         getFacesContext().getApplication().setViewHandler(viewHandler);

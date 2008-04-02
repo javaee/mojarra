@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.26 2006/03/29 23:04:37 rlubke Exp $
+ * $Id: TestActionListenerImpl.java,v 1.27 2007/01/30 02:32:31 rlubke Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.MethodNotFoundException;
 import javax.faces.event.ActionEvent;
-
+import java.util.Locale;
 
 /**
  *
@@ -48,7 +48,7 @@ import javax.faces.event.ActionEvent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.26 2006/03/29 23:04:37 rlubke Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.27 2007/01/30 02:32:31 rlubke Exp $
  */
 
 /**
@@ -110,6 +110,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase {
                 "#{newCustomer.loginRequired}", null));
         UIViewRoot page = Util.getViewHandler(context).createView(context, null);
         page.setViewId("/login.jsp");
+        page.setLocale(Locale.US);
         context.setViewRoot(page);
 
         ActionListenerImpl actionListener = new ActionListenerImpl();
@@ -136,6 +137,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase {
 
         page = Util.getViewHandler(context).createView(context, null);
         page.setViewId("/login.jsp");
+        page.setLocale(Locale.US);
         context.setViewRoot(page);
 
         actionEvent = new ActionEvent(command);

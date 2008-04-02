@@ -1,5 +1,5 @@
 /*
- * $Id: TestHASDeprStateManagerImpl.java,v 1.5 2006/03/29 23:04:40 rlubke Exp $
+ * $Id: TestHASDeprStateManagerImpl.java,v 1.6 2007/01/30 02:32:32 rlubke Exp $
  */
 
 /*
@@ -55,6 +55,7 @@ import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 /**
@@ -117,6 +118,7 @@ public class TestHASDeprStateManagerImpl extends ServletFacesTestCase {
     public void testRender() {
         UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         newView.setViewId(TEST_URI);
+        newView.setLocale(Locale.US);
         getFacesContext().setViewRoot(newView);
                                                                                                                       
         try {

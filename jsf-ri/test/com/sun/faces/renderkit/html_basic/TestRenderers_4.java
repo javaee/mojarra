@@ -24,7 +24,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.21 2006/03/29 23:05:01 rlubke Exp $
+ * $Id: TestRenderers_4.java,v 1.22 2007/01/30 02:32:42 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -48,13 +48,14 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContextFactory;
 
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Test encode and decode methods in Renderer classes.
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.21 2006/03/29 23:05:01 rlubke Exp $
+ * @version $Id: TestRenderers_4.java,v 1.22 2007/01/30 02:32:42 rlubke Exp $
  */
 
 public class TestRenderers_4 extends JspFacesTestCase {
@@ -107,6 +108,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
         super.setUp();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
         Object view = 
 	    Util.getStateManager(getFacesContext()).saveSerializedView(getFacesContext());
@@ -125,12 +127,14 @@ public class TestRenderers_4 extends JspFacesTestCase {
         try {
             // create a dummy root for the tree.
             UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+            root.setLocale(Locale.US);
             root.setId("root");
 
             testGridRenderer(root);
 
             root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
             root.setId("root");
+            root.setLocale(Locale.US);
             testGridRendererWithNonRenderedChildren(root);
 
             getFacesContext().getResponseWriter().close();

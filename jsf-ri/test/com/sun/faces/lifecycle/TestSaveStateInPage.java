@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.34 2006/05/18 20:55:16 rlubke Exp $
+ * $Id: TestSaveStateInPage.java,v 1.35 2007/01/30 02:32:07 rlubke Exp $
  */
 
 /*
@@ -41,6 +41,7 @@ import javax.faces.component.UIViewRoot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 import org.apache.cactus.WebRequest;
 
@@ -56,7 +57,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.34 2006/05/18 20:55:16 rlubke Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.35 2007/01/30 02:32:07 rlubke Exp $
  */
 
 public class TestSaveStateInPage extends JspFacesTestCase {
@@ -134,6 +135,7 @@ public class TestSaveStateInPage extends JspFacesTestCase {
         Phase renderResponse = new RenderResponsePhase();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
+        page.setLocale(Locale.US);
         page.setViewId(TEST_URI);
         getFacesContext().setViewRoot(page);
 
@@ -152,6 +154,7 @@ public class TestSaveStateInPage extends JspFacesTestCase {
         // restored from session.
         //getFacesContext().setViewRoot(null);
         UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        root.setLocale(Locale.US);
         root.setViewId(TEST_URI);
 
         UIForm basicForm = new UIForm();

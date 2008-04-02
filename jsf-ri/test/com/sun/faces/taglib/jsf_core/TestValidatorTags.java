@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.32 2006/03/29 23:05:02 rlubke Exp $
+ * $Id: TestValidatorTags.java,v 1.33 2007/01/30 02:32:48 rlubke Exp $
  */
 
 /*
@@ -32,6 +32,7 @@
 package com.sun.faces.taglib.jsf_core;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
@@ -51,7 +52,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.32 2006/03/29 23:05:02 rlubke Exp $
+ * @version $Id: TestValidatorTags.java,v 1.33 2007/01/30 02:32:48 rlubke Exp $
  */
 
 public class TestValidatorTags extends JspFacesTestCase {
@@ -169,6 +170,7 @@ public class TestValidatorTags extends JspFacesTestCase {
             applyRequestValues = new ApplyRequestValuesPhase();
 
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        page.setLocale(Locale.US);
         page.setViewId(TEST_URI);
         getFacesContext().setViewRoot(page);
 

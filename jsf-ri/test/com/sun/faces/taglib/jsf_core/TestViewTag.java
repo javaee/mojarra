@@ -1,5 +1,5 @@
 /*
- * $Id: TestViewTag.java,v 1.16 2006/03/29 23:05:02 rlubke Exp $
+ * $Id: TestViewTag.java,v 1.17 2007/01/30 02:32:49 rlubke Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewTag.java,v 1.16 2006/03/29 23:05:02 rlubke Exp $
+ * @version $Id: TestViewTag.java,v 1.17 2007/01/30 02:32:49 rlubke Exp $
  */
 
 public class TestViewTag extends JspFacesTestCase {
@@ -109,6 +109,7 @@ public class TestViewTag extends JspFacesTestCase {
         Phase renderResponse = new RenderResponsePhase();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
+        page.setLocale(Locale.US);
         page.setViewId(TEST_URI);
         page.setLocale(Locale.CANADA_FRENCH);
         getFacesContext().setViewRoot(page);
@@ -150,6 +151,7 @@ public class TestViewTag extends JspFacesTestCase {
         Phase renderResponse = new RenderResponsePhase();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
+        page.setLocale(Locale.US);
         page.setViewId(TEST_URI2);
         getFacesContext().setViewRoot(page);
 

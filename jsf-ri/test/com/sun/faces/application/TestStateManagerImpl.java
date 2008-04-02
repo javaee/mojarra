@@ -1,6 +1,6 @@
 
 /*
- * $Id: TestStateManagerImpl.java,v 1.18 2006/03/29 23:04:41 rlubke Exp $
+ * $Id: TestStateManagerImpl.java,v 1.19 2007/01/30 02:32:35 rlubke Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.cactus.TestingUtil;
 import com.sun.faces.util.Util;
 import java.util.Map;
+import java.util.Locale;
 import javax.faces.application.StateManager.SerializedView;
 
 import javax.faces.component.UIComponent;
@@ -92,6 +93,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         root = Util.getViewHandler(getFacesContext()).createView(context, null); 
         root.setViewId("/test");
         root.setId("root");
+        root.setLocale(Locale.US);
 
         comp1 = new UIInput();
         comp1.setId("comp1");
@@ -140,6 +142,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         root = Util.getViewHandler(getFacesContext()).createView(context, null); 
         root.setViewId("/test");
         root.setId("root");
+        root.setLocale(Locale.US);
 
         comp1 = new UIInput();
         comp1.setId("comp1");
@@ -181,6 +184,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         root = Util.getViewHandler(getFacesContext()).createView(context, null); 
         root.setViewId("/test");
         root.setId("root");
+        root.setLocale(Locale.US);
 
         comp1 = new UIInput();
         comp1.setId("comp1");
@@ -274,6 +278,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null); 
         root.setViewId("/test");
         root.setId("root");
+        root.setLocale(Locale.US);
 
         comp1 = new UIInput();
         comp1.setId("comp1");

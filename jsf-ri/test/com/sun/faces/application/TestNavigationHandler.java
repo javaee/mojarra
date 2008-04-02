@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.26 2006/03/29 23:04:40 rlubke Exp $
+ * $Id: TestNavigationHandler.java,v 1.27 2007/01/30 02:32:29 rlubke Exp $
  */
 
 /*
@@ -44,10 +44,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class test the <code>NavigationHandlerImpl</code> functionality.
@@ -59,7 +56,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.26 2006/03/29 23:04:40 rlubke Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.27 2007/01/30 02:32:29 rlubke Exp $
  */
 
 public class TestNavigationHandler extends ServletFacesTestCase {
@@ -190,6 +187,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
                                " from-outcome=" + testResult.fromOutcome);
             page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
             page.setViewId(testResult.fromViewId);
+            page.setLocale(Locale.US);
             context.setViewRoot(page);
             try {
                 navHandler.handleNavigation(context, testResult.fromAction,

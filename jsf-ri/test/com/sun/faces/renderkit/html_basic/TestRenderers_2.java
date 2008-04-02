@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.95 2006/10/09 17:28:30 rlubke Exp $
+ * $Id: TestRenderers_2.java,v 1.96 2007/01/30 02:32:36 rlubke Exp $
  */
 
 /*
@@ -60,13 +60,14 @@ import javax.faces.model.SelectItem;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Locale;
 
 /**
  * Test encode and decode methods in Renderer classes.
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.95 2006/10/09 17:28:30 rlubke Exp $
+ * @version $Id: TestRenderers_2.java,v 1.96 2007/01/30 02:32:36 rlubke Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -140,6 +141,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         application = aFactory.getApplication();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
         Object view = 
 	    Util.getStateManager(getFacesContext()).saveSerializedView(getFacesContext());
@@ -179,7 +181,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         // create a dummy root for the tree.
         UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setId("root");
-
+        root.setLocale(Locale.US);
         testCheckboxRenderer(root);
         // PENDING (visvan) revisit this test case once HyperLinkRenderer
         // is fixed.

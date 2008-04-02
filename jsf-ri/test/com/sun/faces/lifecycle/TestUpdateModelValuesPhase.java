@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.42 2006/03/29 23:04:57 rlubke Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.43 2007/01/30 02:32:16 rlubke Exp $
  */
 
 /*
@@ -39,13 +39,14 @@ import org.apache.cactus.WebRequest;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
+import java.util.Locale;
 
 /**
  * <B>TestUpdateModelValuesPhase</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.42 2006/03/29 23:04:57 rlubke Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.43 2007/01/30 02:32:16 rlubke Exp $
  */
 
 public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
@@ -124,6 +125,7 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         form.getChildren().add(userName2);
 
         UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        viewRoot.setLocale(Locale.US);
         viewRoot.getChildren().add(form);
         viewRoot.setViewId("updateModel.xul");
         getFacesContext().setViewRoot(viewRoot);
@@ -185,6 +187,7 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         form.getChildren().add(userName3);
 
         UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        viewRoot.setLocale(Locale.US);
         viewRoot.getChildren().add(form);
         viewRoot.setViewId("updateModel.xul");
         getFacesContext().setViewRoot(viewRoot);

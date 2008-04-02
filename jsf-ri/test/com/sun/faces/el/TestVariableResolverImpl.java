@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.25 2006/03/29 23:04:54 rlubke Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.26 2007/01/30 02:32:24 rlubke Exp $
  */
 
 /*
@@ -44,6 +44,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIViewRoot;
 import javax.faces.el.VariableResolver;
+import java.util.Locale;
 
 
 /**
@@ -51,7 +52,7 @@ import javax.faces.el.VariableResolver;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.25 2006/03/29 23:04:54 rlubke Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.26 2007/01/30 02:32:24 rlubke Exp $
  */
 
 public class TestVariableResolverImpl extends ServletFacesTestCase {
@@ -218,6 +219,7 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
         page.setViewId("newTree");
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
 
         assertTrue(variableResolver.resolveVariable(getFacesContext(),

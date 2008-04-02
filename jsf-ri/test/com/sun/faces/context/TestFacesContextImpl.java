@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.54 2006/11/08 16:48:51 rlubke Exp $
+ * $Id: TestFacesContextImpl.java,v 1.55 2007/01/30 02:32:20 rlubke Exp $
  */
 
 /*
@@ -54,13 +54,14 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * <B>TestFacesContextImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.54 2006/11/08 16:48:51 rlubke Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.55 2007/01/30 02:32:20 rlubke Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase {
@@ -104,6 +105,7 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         super.setUp();
         UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.setViewId("viewId");
+        viewRoot.setLocale(Locale.US);
         getFacesContext().setViewRoot(viewRoot);
     }
 
@@ -152,6 +154,7 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
 
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
+        page.setLocale(Locale.US);
         getFacesContext().setViewRoot(page);
         UIViewRoot root = getFacesContext().getViewRoot();
         result = null != root;

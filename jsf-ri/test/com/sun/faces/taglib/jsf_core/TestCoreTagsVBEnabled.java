@@ -1,5 +1,5 @@
 /*
- * $Id: TestCoreTagsVBEnabled.java,v 1.11 2006/03/29 23:05:02 rlubke Exp $
+ * $Id: TestCoreTagsVBEnabled.java,v 1.12 2007/01/30 02:32:44 rlubke Exp $
  */
 
 /*
@@ -30,6 +30,7 @@
 package com.sun.faces.taglib.jsf_core;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
@@ -49,7 +50,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestCoreTagsVBEnabled.java,v 1.11 2006/03/29 23:05:02 rlubke Exp $
+ * @version $Id: TestCoreTagsVBEnabled.java,v 1.12 2007/01/30 02:32:44 rlubke Exp $
  */
 
 public class TestCoreTagsVBEnabled extends JspFacesTestCase {
@@ -167,6 +168,7 @@ public class TestCoreTagsVBEnabled extends JspFacesTestCase {
             applyRequestValues = new ApplyRequestValuesPhase();
 
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        page.setLocale(Locale.US);
         page.setViewId(TEST_URI);
         getFacesContext().setViewRoot(page);
 
