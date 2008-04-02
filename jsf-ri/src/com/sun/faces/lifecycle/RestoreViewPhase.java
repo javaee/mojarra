@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.18 2005/03/15 20:37:37 edburns Exp $
+ * $Id: RestoreViewPhase.java,v 1.19 2005/03/22 20:07:45 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.18 2005/03/15 20:37:37 edburns Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.19 2005/03/22 20:07:45 edburns Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -224,17 +224,18 @@ public class RestoreViewPhase extends Phase {
      * <p>Do any per-component actions necessary during reconstitute</p>
      */
     protected void doPerComponentActions(FacesContext context, UIComponent uic) {
-        Iterator kids = uic.getFacetsAndChildren();
-        while (kids.hasNext()) {
-            doPerComponentActions(context, (UIComponent) kids.next());
-        }
-      
         // if this component has a component value reference expression,
         // make sure to populate the ValueBinding for it.
         ValueBinding valueBinding = null;
         if (null != (valueBinding = uic.getValueBinding("binding"))) {
             valueBinding.setValue(context, uic);
         }
+
+        Iterator kids = uic.getFacetsAndChildren();
+        while (kids.hasNext()) {
+            doPerComponentActions(context, (UIComponent) kids.next());
+        }
+      
     }
 
     // The testcase for this class is TestRestoreViewPhase.java
