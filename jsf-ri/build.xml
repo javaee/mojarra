@@ -432,6 +432,10 @@
     <copy file="${jsf.api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 
+    <!-- create dummy JAR containing only a configuration resource -->
+    <jar jarfile="${dist.home}/${basic.name}/WEB-INF/lib/basic-dummy.jar"
+         basedir="conf/basic"/>
+
     <!-- create a war file for distribution -->
     <jar jarfile="${dist.home}/${dist.war}"
          basedir="${dist.home}/${basic.name}"/> 

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.13 2003/05/03 18:48:17 craigmcc Exp $
+ * $Id: ConfigParser.java,v 1.14 2003/05/05 19:57:55 craigmcc Exp $
  */
 
 /*
@@ -35,6 +35,7 @@ import org.apache.commons.logging.LogFactory;
 import org.mozilla.util.Assert;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 
 /**
  * <p>Configuration File processing.</p>
@@ -147,7 +148,6 @@ public class ConfigParser {
     * config information at the specified InputStream.</p>
 
     */
-
     protected ConfigBase parseConfig(InputStream input, ConfigBase base) {
         try {
             digester.clear();
@@ -162,6 +162,32 @@ public class ConfigParser {
 	
         try {
             input.close();
+        } catch(Throwable t) {
+        }
+	
+        return base;
+    }
+
+    /*
+*
+    * <p>Add to the configuration of the specified ConfigBase with the
+    * config information at the specified InputSource.</p>
+
+    */
+    protected ConfigBase parseConfig(InputSource input, ConfigBase base) {
+        try {
+            digester.clear();
+            digester.push(base);
+            base = (ConfigBase) digester.parse(input);
+        } catch (Throwable t) {
+            Object[] obj = new Object[1];
+            obj[0] = input.toString(); 
+            throw new RuntimeException(Util.getExceptionMessage(
+                Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj)+t.getMessage());
+        }
+	
+        try {
+            input.getByteStream().close();
         } catch(Throwable t) {
         }
 	

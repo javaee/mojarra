@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.9 2003/05/04 03:08:09 eburns Exp $
+ * $Id: ConfigListener.java,v 1.10 2003/05/05 19:57:55 craigmcc Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -48,12 +48,18 @@ import com.sun.faces.application.ApplicationImpl;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
-import java.util.StringTokenizer;
 import org.mozilla.util.Assert;
 import java.io.InputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.xml.sax.InputSource;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -120,7 +126,7 @@ public class ConfigListener implements ServletContextListener
 
 	// Step 1: scan the META-INF directory of all jar files in
 	// "/WEB-INF/lib" for "faces-config.xml" files.
-	scanJarsForConfigFiles(servletContext, configParser, configBase);
+	scanJarsForConfigFile(servletContext, configParser, configBase);
 
 	// Step 2. If the init parameter exists, load the config from
 	// there
@@ -195,8 +201,97 @@ public class ConfigListener implements ServletContextListener
      *
      */
 
-    protected void scanJarsForConfigFiles(ServletContext servletContext, 
-					  ConfigParser configParser, 
-					  ConfigBase configBase) {
+    protected void scanJarsForConfigFile(ServletContext servletContext, 
+                                         ConfigParser configParser, 
+                                         ConfigBase configBase) {
+
+        Set jarSet = servletContext.getResourcePaths("/WEB-INF/lib/");
+        if (jarSet == null) {
+            return;
+        }
+        Iterator jarPaths = jarSet.iterator();
+        while (jarPaths.hasNext()) {
+            String jarPath = (String) jarPaths.next();
+            if (!jarPath.endsWith(".jar")) {
+                continue;
+            }
+            scanJarForConfigFile(servletContext, configParser,
+                                 configBase, jarPath);
+        }
+
     }
+
+
+    /**
+     * <p>Scan the specified JAR file for a "/META-INF/faces-config.xml"
+     * resource.  If such a resource is found, parse it into the
+     * specified <code>configBase</code>.</p>
+     *
+     * @param servletContext The <code>ServletContext</code> for the
+     *  current web application
+     * @param configParser Parser for processing configuration resources
+     * @param configBase Base configuration object for storing parsed data
+     * @param jarPath Context-relative resource path to the JAR file to check
+     */
+    protected void scanJarForConfigFile(ServletContext servletContext,
+                                        ConfigParser configParser,
+                                        ConfigBase configBase,
+                                        String jarPath) {
+
+        // Calculate a URL for the config resource (if it exists) in this JAR
+        URL resourceURL = null;
+        try {
+            URL jarURL = servletContext.getResource(jarPath);
+            // PENDING(craigmcc) - This technique is unlikely to succeed
+            // on a servlet container that provides a custom URLStreamHandler
+            // in the URL returned by getResource(), because creating a new
+            // URL object loses access to it.  We can copy the JAR to a
+            // temporary file and open it manually, but that's pretty nasty
+            // on app startup performance
+            resourceURL =
+                new URL("jar:" +
+                        Util.replaceOccurrences(jarURL.toExternalForm(),
+                                                " ", "%20") +
+                        "!/META-INF/faces-config.xml");
+        } catch (MalformedURLException e) {
+            resourceURL = null;
+        }
+        if (resourceURL == null) {
+            return;
+        }
+
+        // Create an InputSource for this resource (if it exists)
+        InputStream stream = null;
+        InputSource source = null;
+        try {
+            stream = resourceURL.openStream();
+            source = new InputSource(resourceURL.toExternalForm());
+            source.setByteStream(stream);
+        } catch (IOException e) {
+            source = null;
+            stream = null;
+        }
+        if (source == null) {
+            return;
+        }
+
+        // The resource exists, so parse it
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("Parsing application configuration resource " +
+                          resourceURL.toExternalForm());
+            }
+            configBase = configParser.parseConfig(source, configBase);
+        } catch (Exception e) {
+            // PENDING(craigmcc) - We need to do a very thorough review
+            // of our exception handling strategies throughout the RI
+            // this kind of thing should really be handled at a higher level
+            log.warn("Exception parsing application configuration resource " +
+                     resourceURL.toExternalForm(), e);
+            throw new FacesException(e);
+        }
+
+    }
+
+
 } 
