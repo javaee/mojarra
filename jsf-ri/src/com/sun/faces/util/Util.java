@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.176 2005/11/02 17:47:25 rlubke Exp $
+ * $Id: Util.java,v 1.177 2005/11/02 17:55:43 rlubke Exp $
  */
 
 /*
@@ -88,7 +88,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.176 2005/11/02 17:47:25 rlubke Exp $
+ * @version $Id: Util.java,v 1.177 2005/11/02 17:55:43 rlubke Exp $
  */
 
 public class Util {
@@ -773,7 +773,7 @@ public class Util {
                           Util.getExceptionMessageString(
                             Util.CHILD_NOT_OF_EXPECTED_TYPE_ID,
                             new Object[] {
-                                  "UISelectItem or UISelectItems",
+                                  "UISelectItem/UISelectItems",
                                   component.getFamily(),
                                   component.getId()}));
                 }
