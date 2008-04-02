@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.7 2003/08/25 21:39:35 craigmcc Exp $
+ * $Id: MenuBarRenderer.java,v 1.8 2003/09/12 18:00:02 craigmcc Exp $
  */
 
 /*
@@ -255,8 +255,8 @@ public class MenuBarRenderer extends BaseRenderer {
          int formNumber = 0;
          formNumber = getMyFormNumber(getMyForm());
          StringBuffer sb = new StringBuffer();
-         sb.append("#\" onmousedown=\"document.forms[" + formNumber + "]." + 
-		     clientId + ".value='" + path + 
+         sb.append("#\" onmousedown=\"document.forms[" + formNumber + "]['" + 
+		     clientId + "'].value='" + path + 
 		     "';document.forms[" + formNumber + "].submit()\"");
          return sb.toString();
     }     

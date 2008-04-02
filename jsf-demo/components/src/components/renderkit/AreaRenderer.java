@@ -135,19 +135,19 @@ public class AreaRenderer extends BaseRenderer {
         writer.writeAttribute("coords", iarea.getCoords(), "coords");
         writer.writeAttribute("shape", iarea.getShape(), "shape");
         // PENDING(craigmcc) - onmouseout only works on first form of a page
-        sb = new StringBuffer("document.forms[0].").append(targetImageId).append(".src='");
+        sb = new StringBuffer("document.forms[0]['").append(targetImageId).append("'].src='");
         sb.append(getURI(context, (String) area.getAttribute("onmouseout")));
         sb.append("'");
         writer.writeAttribute("onmouseout", sb.toString(), "onmouseout");
         // PENDING(craigmcc) - onmouseover only works on first form of a page
-        sb = new StringBuffer("document.forms[0].").append(targetImageId).append(".src='");
+        sb = new StringBuffer("document.forms[0]['").append(targetImageId).append("'].src='");
         sb.append(getURI(context, (String) area.getAttribute("onmouseover")));
         sb.append("'");
         writer.writeAttribute("onmouseover", sb.toString(), "onmouseover");
         // PENDING(craigmcc) - onclick only works on first form of a page
-        sb = new StringBuffer("document.forms[0].");
+        sb = new StringBuffer("document.forms[0]['");
         sb.append(getName(context, area));
-        sb.append(".value='");
+        sb.append("'].value='");
         sb.append(iarea.getAlt());
         sb.append("'; document.forms[0].submit()");
         writer.writeAttribute("onclick", sb.toString(), "value");

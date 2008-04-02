@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.8 2003/08/25 21:39:36 craigmcc Exp $
+ * $Id: ResultSetControls.java,v 1.9 2003/09/12 18:00:02 craigmcc Exp $
  */
 
 /*
@@ -64,7 +64,7 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.8 2003/08/25 21:39:36 craigmcc Exp $
+ * @version $Id: ResultSetControls.java,v 1.9 2003/09/12 18:00:02 craigmcc Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -406,8 +406,8 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 	String result = 
 	    "href=\"#\" " + 
 	    "onmousedown=\"" + 
-	    "document.forms[" + formNumber + "]." + clientId + "_action.value='" + action + "'; " + 
-	    "document.forms[" + formNumber + "]." + clientId + "_curPage.value='" + getCurrentPage() + "'; " +
+	    "document.forms[" + formNumber + "]['" + clientId + "_action'].value='" + action + "'; " + 
+	    "document.forms[" + formNumber + "]['" + clientId + "_curPage'].value='" + getCurrentPage() + "'; " +
 	    "document.forms[" + formNumber + "].submit()\"";
 
 	return result;
