@@ -233,6 +233,10 @@
             <fileset dir="${tools.dir}/src"
                      includes="**/*.properties"/>
         </copy>
+        <copy todir="${tools.dir}/build/classes">
+            <fileset dir="${impl.dir}/src"
+                     includes="**/LogStrings.properties"/>
+        </copy>
         <copy todir="${tools.dir}/build/classes/com/sun/faces"
               flatten="true">
             <fileset dir="${api.dir}/doc"
