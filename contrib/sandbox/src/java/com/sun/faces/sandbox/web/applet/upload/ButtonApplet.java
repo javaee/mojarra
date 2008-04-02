@@ -6,6 +6,7 @@ package com.sun.faces.sandbox.web.applet.upload;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -22,9 +23,9 @@ public class ButtonApplet extends BaseApplet implements ActionListener {
         int returnVal = dialog.display();
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File files[] = dialog.getFiles();
+            File[] files = dialog.getFiles();
             if (files != null) {
-                uploadFiles(files);
+                uploadFiles(Arrays.asList(files));
             }
         } else { //if (returnVal == JFileChooser.CANCEL_OPTION) {
             this.destroy();

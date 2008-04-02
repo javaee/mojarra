@@ -18,15 +18,15 @@ public class MultiFileUpload extends UIOutput {
     public static final String COMPONENT_TYPE = "com.sun.faces.sandbox.MultiFileUpload";
     public static final String RENDERER_TYPE = "com.sun.faces.sandbox.MultiFileUploadRenderer";
     public static final String[] DEP_JARS = {
-        "jsf-ri-sandbox-Upload-Applet.jar",
-        "commons-httpclient-3.1-beta1.jar",
-        "commons-codec-1.3.jar",
-        "commons-logging-1.1.jar"
+        "jars/jsf-ri-sandbox-upload-applet.jar",
+        "jars/commons-httpclient-3.0.1.jar",
+        "jars/commons-codec-1.3.jar",
+        "jars/commons-logging-1.1.jar"
     };
     public static final String JARS_URI = "/Sandbox___MultiFileUpload__jars/";
     public static final String REQUEST_PARAM = "componentId";
     public static final String TEMPLATE_FILE = "/META-INF/MultiFileUpload.template.txt";
-    public static final String UPLOAD_URI = "Sandbox___MultiFileUpload";
+    public static final String UPLOAD_URI = "/Sandbox___MultiFileUpload__fileupload";
 
     private Object[] _state = null;
     protected String buttonText = "Upload Files";

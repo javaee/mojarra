@@ -71,8 +71,11 @@ public class FullApplet extends BaseApplet {
     }
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {
+        debugDialog("Upload clicked");
         List<File> files = model.getFiles();
-        uploadFiles(files.toArray(new File[]{}));
+        debugDialog("Files = " + files.toString());
+        uploadFiles(files);
+        debugDialog("Files uploaded");
         setVisible(false);
         result = UPLOAD;
     }

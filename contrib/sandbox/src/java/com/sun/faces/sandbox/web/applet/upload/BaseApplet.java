@@ -4,17 +4,17 @@
 package com.sun.faces.sandbox.web.applet.upload;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JApplet;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
@@ -36,6 +36,8 @@ public abstract class BaseApplet extends JApplet {
     protected String uploadUrl;
     protected String buttonText;
     protected String fileFilter;
+    private static Logger logger = Logger.getLogger("");
+    private static FileHandler fh;
 
     @Override
     public String[][] getParameterInfo() {
@@ -54,6 +56,13 @@ public abstract class BaseApplet extends JApplet {
     @Override
     public void init() {
         super.init();
+        try {
+            fh = new FileHandler("c:\\temp\\applet.debug.txt");
+            Logger.getLogger("").setLevel(Level.FINEST);
+        } catch (Exception e) {
+            debugDialog(e.getMessage());
+            e.printStackTrace();
+        }
         getParameters();
     }
 
@@ -66,9 +75,12 @@ public abstract class BaseApplet extends JApplet {
         fileFilter = getParameter("fileFilter") != null ? getParameter("fileFilter") : "";
     }
 
-    protected void uploadFiles(File... files)  {
+    protected void uploadFiles(List<File> files)  {
         try {
+            debugDialog(this.getCodeBase().toExternalForm());
+            debugDialog ("Getting client");
             HttpClient client = new HttpClient();
+            debugDialog("Uploading to " + uploadUrl);
             PostMethod postMethod = new PostMethod(uploadUrl);
             postMethod.setRequestHeader("Cookie", "JSESSIONID=" + sessionId);
             List<Part> parts = new ArrayList(); 
@@ -76,23 +88,40 @@ public abstract class BaseApplet extends JApplet {
                 parts.add(new FilePart(file.getName(), file));
             }
             Part[] partArray = (Part[]) parts.toArray(new Part[] {});
+            debugDialog(partArray.toString());
             postMethod.setRequestEntity( new MultipartRequestEntity(partArray, 
-                    postMethod.getParams()) ); 
+                    postMethod.getParams()) );
+            debugDialog("Sending request");
             int status = client.executeMethod(postMethod);
+            debugDialog("Response received"); 
             String response = postMethod.getResponseBodyAsString();
+            postMethod.releaseConnection();
+            postMethod = null;
+            client = null;
             if (status == 200) {
                 getAppletContext().showDocument(new URL(response));
             } else {
+                StringBuffer sb = new StringBuffer(response.trim());
+                for (int i = 0; i < response.length(); i++) {
+                    int index = 128 * (i + 1);
+                    if (index > sb.length()) {
+                        index = sb.length();
+                    }
+                    sb.insert(index, "\n");
+                }
                 JOptionPane.showMessageDialog(this, status + ":  " + 
-                        ((response.length() < 128) ? response : "<truncated>"),
+                        //((response.length() < 128) ? response : "<truncated>"),
+                        sb.toString(),
                         "Server Response", JOptionPane.INFORMATION_MESSAGE);
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
+            debugDialog(e.getMessage());
             e.printStackTrace();
-        } catch (HttpException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
+    }
+
+    protected void debugDialog(String message) {
+//        JOptionPane.showMessageDialog(this, message, "Debug", JOptionPane.INFORMATION_MESSAGE);
     }
 }

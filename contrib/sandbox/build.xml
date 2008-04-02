@@ -44,7 +44,7 @@
     <property name="build.dir" value="build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.applet.dir" value="${build.dir}/applet"/>
-    <property name="dep.jar.dir" value="${build.classes.dir}/META-INF/jars/" />
+    <property name="dep.jar.dir" value="${build.classes.dir}/META-INF/static/jars/" />
 
     <!-- The base directory for distribution targets -->
     <property name="dist.dir" value="${basedir}/dist"/>
@@ -57,12 +57,11 @@
 
     <!-- Dependencies -->
     <property name="sandbox.dependency.base.dir" value="${basedir}/dependencies"/>
-    <property name="httpclient.version" value="3.1-beta1" />
+    <property name="httpclient.version" value="3.0.1" />
     <property name="fileupload.version" value="1.1.1" />
     <property name="codec.version" value="1.3" />
     <property name="io.version" value="1.2" />
     <property name="logging.version" value="1.1" />
-
     <property name="httpclient.home" value="${sandbox.dependency.base.dir}/commons-httpclient-${httpclient.version}"/>
     <property name="fileupload.home" value="${sandbox.dependency.base.dir}/commons-fileupload-${fileupload.version}"/>
     <property name="codec.home" value="${sandbox.dependency.base.dir}/commons-codec-${codec.version}"/>
@@ -72,6 +71,7 @@
     <property name="name" value="jsf-ri-sandbox"/>
     <property name="sb.impl.version" value="0.1"/>
     <property name="impl.name" value="JSF RI Sandbox"/>
+    <property name="applet.archive.name" value="${name}-upload-applet" />
 
     <path id="impl.compile.classpath">
         <pathelement location="${jsf-api.jar}"/>
@@ -199,8 +199,8 @@
                    source="1.5"
                    target="1.5">
             <classpath>
-                <path refid="impl.compile.classpath"/>
                 <path refid="sandbox.compile.classpath"/>
+                <path refid="impl.compile.classpath"/>
             </classpath>
         </jsf.javac>
 
@@ -210,8 +210,8 @@
                    source="1.5"
                    target="1.5">
             <classpath>
-                <path refid="impl.compile.classpath"/>
                 <path refid="sandbox.compile.classpath"/>
+                <path refid="impl.compile.classpath"/>
             </classpath>
         </jsf.javac>
 
@@ -312,13 +312,37 @@
         </javadoc>
     </target>
 
+    <target name="getpassword" unless="keystore.pass">
+        <input message="Please enter the keystore password:" addproperty="keystore.pass" />
+    </target>
+
     <!--
          ===================================================================
            Create the jars
          ===================================================================
     -->
 
-    <target name="jars" depends="compile">
+    <target name="jars" depends="compile,getpassword">
+        <jar destfile="${dep.jar.dir}/${applet.archive.name}.jar">
+            <fileset dir="${build.applet.dir}">
+                <exclude name="**/.svn" />
+            </fileset>
+        </jar>
+        <copy file="${httpclient.home}/commons-httpclient-${httpclient.version}.jar" todir="${dep.jar.dir}" />
+        <copy file="${codec.home}/commons-codec-${codec.version}.jar" todir="${dep.jar.dir}" />
+        <copy file="${logging.home}/commons-logging-${logging.version}.jar" todir="${dep.jar.dir}" />
+
+        <if>
+            <available file="keystore.ks" property="ignored" />
+            <then>
+                <signjar keystore="keystore.ks" alias="mykey" storepass="${keystore.pass}" lazy="yes">
+                    <fileset dir="${dep.jar.dir}">
+                        <include name="*.jar" />
+                    </fileset>
+                </signjar>
+            </then>
+        </if>
+
         <jsf.manifested.jar jarfile="${build.dir}/lib/${name}-${sb.impl.version}.jar"
                             basedir="${build.classes.dir}"
                             extension-name=""/>       

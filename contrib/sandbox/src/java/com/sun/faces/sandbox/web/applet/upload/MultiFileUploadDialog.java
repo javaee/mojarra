@@ -7,6 +7,7 @@ import java.io.File;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 class MultiFileUploadDialog extends JDialog implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -47,7 +48,10 @@ class MultiFileUploadDialog extends JDialog implements ActionListener {
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fc.addActionListener(this);
 
-        fc.setFileFilter(createFilter(fileFilter));
+        FileFilter filter = createFilter(fileFilter);
+        if (filter != null) {
+            fc.setFileFilter(filter);
+        }
 
         add(fc);
         this.setPreferredSize(new Dimension(600,500));
@@ -55,9 +59,10 @@ class MultiFileUploadDialog extends JDialog implements ActionListener {
     }
 
     protected MultiFileUploadFileFilter createFilter(String fileFilter) {
-        MultiFileUploadFileFilter filter = new MultiFileUploadFileFilter();
+        MultiFileUploadFileFilter filter = null;
         String[] parts = fileFilter.split("\\|");
         if (parts.length == 2) {
+            filter = new MultiFileUploadFileFilter();
             for (String ext : parts[1].split(",")) {
                 filter.addExtension(ext);
             }

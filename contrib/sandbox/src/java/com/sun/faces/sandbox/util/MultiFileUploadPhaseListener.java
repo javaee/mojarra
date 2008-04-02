@@ -30,6 +30,7 @@ import com.sun.faces.sandbox.model.FileHolder;
 public class MultiFileUploadPhaseListener implements PhaseListener {
     private static final long serialVersionUID = 1L;
 
+    // TODO:  let the StaticResourcePhaseListener handle these 
     public void beforePhase(PhaseEvent e) {
         PhaseId phase = e.getPhaseId();
         if (phase == PhaseId.RESTORE_VIEW) {
@@ -41,7 +42,7 @@ public class MultiFileUploadPhaseListener implements PhaseListener {
                     String fileName = uri.substring(uri.lastIndexOf(MultiFileUpload.JARS_URI))
                         .substring(MultiFileUpload.JARS_URI.length());
                     int index = fileName.indexOf(".jar");
-                    fileName = "/META-INF/jars/" + fileName.substring(0, index+4);
+                    fileName = "/META-INF/static/" + fileName.substring(0, index+4);
                     HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
                     InputStream is = getClass().getResourceAsStream(fileName);
                     OutputStream os = response.getOutputStream();
@@ -56,7 +57,9 @@ public class MultiFileUploadPhaseListener implements PhaseListener {
                             os.write(buffer, 0, count);
                         }
                     }
+                    is.close();
                     context.responseComplete();
+                    os.flush();
                 } catch (IOException ioe) {
                     System.err.println(ioe.getMessage());
                 }

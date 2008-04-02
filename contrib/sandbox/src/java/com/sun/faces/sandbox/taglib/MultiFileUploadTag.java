@@ -63,7 +63,7 @@ public class MultiFileUploadTag extends UIComponentTag{
         if (destinationUrl  != null) {
             if (isValueReference(destinationUrl )) {
                 ValueBinding vb = Util.getValueBinding(destinationUrl );
-                upload.setValueBinding("destinationUrl ", vb);
+                upload.setValueBinding("destinationUrl", vb);
             } else {
                 upload.setDestinationUrl(destinationUrl );
             }
