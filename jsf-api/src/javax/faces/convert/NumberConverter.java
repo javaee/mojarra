@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.22 2005/08/22 22:08:02 ofung Exp $
+ * $Id: NumberConverter.java,v 1.23 2005/09/26 22:47:51 jayashri Exp $
  */
 
 /*
@@ -549,6 +549,10 @@ public class NumberConverter implements Converter, StateHolder {
 
             // Create and configure the parser to be used
             parser = getNumberFormat(locale);
+            if (((pattern != null) && !pattern.equals(""))
+                || "currency".equals(type)) {
+                configureCurrency(parser);
+            }
             parser.setParseIntegerOnly(isIntegerOnly());
 
             // Perform the requested parsing
@@ -574,8 +578,10 @@ public class NumberConverter implements Converter, StateHolder {
                         parser.format(.75),  
                             MessageFactory.getLabel(context, component)}));
             }
-        } catch (ConverterException e) {
-            throw e;
+        } catch (ConverterException ce) {
+            throw ce;
+        } catch (Exception e) {
+            throw new ConverterException(e.getCause());
         }
         return returnValue;
     }
