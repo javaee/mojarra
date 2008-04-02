@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.2 2003/04/29 20:51:33 eburns Exp $
+ * $Id: ConfigListener.java,v 1.3 2003/04/30 17:15:14 rkitain Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -46,11 +46,17 @@ import com.sun.faces.RIConstants;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class ConfigListener implements ServletContextListener
 {
     //
     // Protected Constants
     //
+
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(ConfigListener.class);
 
     //
     // Class Variables
@@ -85,19 +91,20 @@ public class ConfigListener implements ServletContextListener
     // Methods from ServletContextListener
     //
 
-    public void contextInitialized(ServletContextEvent e) 
-    {
+    public void contextInitialized(ServletContextEvent e) {
         configParser = new ConfigParser(e.getServletContext());
         ConfigBase configBase = configParser.getConfigBase();
         e.getServletContext().setAttribute(RIConstants.CONFIG_ATTR, configBase);
-System.out.println("CONFIG BASE SET IN CONTEXT...");
+        if (log.isTraceEnabled()) {
+            log.trace("CONFIG BASE SET IN CONTEXT...");
+        }
     }
 
-    public void contextDestroyed(ServletContextEvent e)
-    {  
+    public void contextDestroyed(ServletContextEvent e) {  
         e.getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
         configParser = null;
-System.out.println("CONFIG BASE REMOVED FROM CONTEXT...");
+        if (log.isTraceEnabled()) {
+            log.trace("CONFIG BASE REMOVED FROM CONTEXT...");
+        }
     }
-
 } 
