@@ -5,7 +5,7 @@
 # javaserverfaces-sources for your local environment.  It defines the location
 # of all external modules that the javaserverfaces-source project relies on.
 #
-# $Id: build.properties.jwsdp,v 1.1 2004/10/05 21:36:44 jayashri Exp $
+# $Id: build.properties.jwsdp,v 1.2 2005/02/08 19:25:05 rlubke Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
@@ -68,7 +68,7 @@ build.standalone = true
 # Base Path for dependent library JARs not included with JWSDP.
 # For simplicity, install these libraries in your home directory.
 #  JUnit 3.8.1
-#  HtmlUnit 1.2.3 or later
+#  HtmlUnit 1.4 or later
 #  MIF Doclet (http://developer.java.sun.com/developer/earlyAccess/mifdoclet)
 #  Portlet API 1.0
 #  Jakarta Cactus version 13-1.4.1 or later.
@@ -82,7 +82,7 @@ mifdoclet.jar=${mifdoclet.home}/lib/mifdoclet.jar
 junit.home=${base.library.path}/junit3.8.1
 junit.jar=${junit.home}/junit.jar
 
-htmlunit.home=${base.library.path}/htmlunit-1.2.3
+htmlunit.home=${base.library.path}/htmlunit-1.4
 
 cactus.home=${base.library.path}/jakarta-cactus-13-1.4.1
 cactus.lib=${cactus.home}/lib
