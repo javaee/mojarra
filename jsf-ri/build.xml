@@ -213,7 +213,7 @@
     <copy file="LICENSE.html" todir="${dist.home}"/>
     <copy file="LICENSE-APACHE.txt" todir="${dist.home}"/>
     <copy file="LICENSE-MOZILLA.txt" todir="${dist.home}"/>
-    <copy file="${spec.pdf}" tofile="${dist.home}/JSF_${version}.pdf"/>
+    <copy file="${spec.pdf}" tofile="${dist.home}/JSF_SPEC_PRD.pdf"/>
 
     <echo> Build the API Javadocs </echo>
     <ant dir="${jsf.api.home}" 
