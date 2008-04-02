@@ -1,5 +1,5 @@
 /**
- * $Id: SelectMany_ListboxTag.java,v 1.1 2002/09/04 22:32:38 eburns Exp $
+ * $Id: SelectMany_ListboxTag.java,v 1.2 2002/09/19 00:38:25 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -24,7 +24,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectMany_ListboxTag.java,v 1.1 2002/09/04 22:32:38 eburns Exp $
+ * @version $Id: SelectMany_ListboxTag.java,v 1.2 2002/09/19 00:38:25 jvisvanathan Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -71,7 +71,7 @@ public SelectMany_ListboxTag()
 // General Methods
 //
 
-    public String getLocalRendererType() { return "SelectManyListboxRenderer"; }
+    public String getLocalRendererType() { return "ListboxRenderer"; }
     
     public UIComponent createComponent() {
         return (new UISelectMany());

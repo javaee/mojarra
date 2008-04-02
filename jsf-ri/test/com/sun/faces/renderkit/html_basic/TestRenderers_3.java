@@ -1,5 +1,5 @@
 /**
- * $Id: TestRenderers_3.java,v 1.2 2002/09/06 22:12:13 rkitain Exp $
+ * $Id: TestRenderers_3.java,v 1.3 2002/09/19 00:38:28 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import com.sun.faces.tree.XmlTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.2 2002/09/06 22:12:13 rkitain Exp $
+ * @version $Id: TestRenderers_3.java,v 1.3 2002/09/19 00:38:28 jvisvanathan Exp $
  * 
  *
  */
@@ -142,8 +142,8 @@ public class TestRenderers_3 extends JspFacesTestCase {
         selectMany.addChild(uiSelectItems);
         root.addChild(selectMany);
 
-        SelectManyListboxRenderer selectManyListboxRenderer =
-            new SelectManyListboxRenderer();
+        ListboxRenderer selectManyListboxRenderer =
+            new ListboxRenderer();
 
         // test decode method
         System.out.println("    Testing decode method... ");
@@ -242,8 +242,8 @@ public class TestRenderers_3 extends JspFacesTestCase {
         selectMany.addChild(uiSelectItems);
         root.addChild(selectMany);
 
-        SelectManyMenuRenderer selectManyMenuRenderer =
-            new SelectManyMenuRenderer();
+        MenuRenderer selectManyMenuRenderer =
+            new MenuRenderer();
 
         // test decode method
         System.out.println("    Testing decode method... ");
@@ -289,8 +289,8 @@ public class TestRenderers_3 extends JspFacesTestCase {
         selectOne.addChild(uiSelectItems);
         root.addChild(selectOne);
 
-        SelectOneMenuRenderer selectOneMenuRenderer =
-            new SelectOneMenuRenderer();
+        MenuRenderer selectOneMenuRenderer =
+            new MenuRenderer();
 
         // test decode method
         System.out.println("    Testing decode method... ");

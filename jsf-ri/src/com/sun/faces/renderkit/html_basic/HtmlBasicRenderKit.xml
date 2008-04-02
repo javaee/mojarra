@@ -862,144 +862,30 @@
 
 	</renderer>
         <renderer>
-        <type>SelectManyMenuRenderer</type>
-			<class>com.sun.faces.renderkit.html_basic.SelectManyMenuRenderer</class>
+        <type>MenuRenderer</type>
+			<class>com.sun.faces.renderkit.html_basic.MenuRenderer</class>
 			<attribute>
 				<name>selectmanyClass</name>
 				<display-name>SelectMany Class</display-name>
 				<description>Class name for this element</description>
 				<type>java.lang.String</type>
 			</attribute>
-			<attribute>
-				<name>dir</name>
-				<display-name>Directionality</display-name>
-				<description>Direction of the text - LTR or RTL</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>disabled</name>
-				<display-name>Disabled</display-name>
-				<description>If true, this component should be rendered as disabled.</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>lang</name>
-				<display-name>Language</display-name>
-				<description>Component language</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>modelreference</name>
-				<display-name>Model Reference</display-name>
-				<description>Reference to the model</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>name</name>
-				<display-name>Name</display-name>
-				<description>Control name</description>
-				<type>java.lang.String</type>
-			</attribute>
-                        &event-attrs;
-			<attribute>
-				<name>size</name>
-				<display-name>Size</display-name>
-				<description>Number of rows displayed</description>
-				<type>java.lang.Integer</type>
-			</attribute>
-			<attribute>
-				<name>style</name>
-				<display-name>Style</display-name>
-				<description>Style-sheet information</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>tabindex</name>
-				<display-name>Tab Index</display-name>
-				<description>The sequence of this component when tabbing through the page</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>title</name>
-				<display-name>Title</display-name>
-				<description>Displayed text hint for this component</description>
-				<type>java.lang.String</type>
-			</attribute>
-            <attribute>
-                <name>onselect</name>
-                <display-name>On Select</display-name>
-                <description>Execute this when the component is selected.
-                </description>
-                <type>java.lang.String</type>
-            </attribute>
+			 <!-- The attributes come from the MenuRenderer declaration in
+                               UISelectOne -->
 		</renderer>
 
 		<renderer>
-			<type>SelectManyListboxRenderer</type>
-			<class>com.sun.faces.renderkit.html_basic.SelectManyListboxRenderer</class>
+			<type>ListboxRenderer</type>
+			<class>com.sun.faces.renderkit.html_basic.ListboxRenderer</class>
 			<attribute>
 				<name>selectmanyClass</name>
 				<display-name>SelectMany Class</display-name>
 				<description>Class name for this element</description>
 				<type>java.lang.String</type>
 			</attribute>
-			<attribute>
-				<name>dir</name>
-				<display-name>Directionality</display-name>
-				<description>Direction of the text - LTR or RTL</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>disabled</name>
-				<display-name>Disabled</display-name>
-				<description>If true, this component should be rendered as disabled.</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>lang</name>
-				<display-name>Language</display-name>
-				<description>Component language</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>modelreference</name>
-				<display-name>Model Reference</display-name>
-				<description>Reference to the model</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>name</name>
-				<display-name>Name</display-name>
-				<description>Control name</description>
-				<type>java.lang.String</type>
-			</attribute>
-                        &event-attrs;
-			<attribute>
-				<name>style</name>
-				<display-name>Style</display-name>
-				<description>Style-sheet information</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>tabindex</name>
-				<display-name>Tab Index</display-name>
-				<description>The sequence of this component when tabbing through the page</description>
-				<type>java.lang.String</type>
-			</attribute>
-			<attribute>
-				<name>title</name>
-				<display-name>Title</display-name>
-				<description>Displayed text hint for this component</description>
-				<type>java.lang.String</type>
-			</attribute>
-            <attribute>
-                <name>onselect</name>
-                <display-name>On Select</display-name>
-                <description>Execute this when the component is selected.
-                </description>
-                <type>java.lang.String</type>
-            </attribute>
-	</renderer>
+                        <!-- The attributes come from the ListboxRenderer declaration in
+                               UISelectOne -->
+	       </renderer>
     </component>
     <component>
         <type>javax.faces.component.UISelectOne</type>
@@ -1008,7 +894,7 @@
             <class>com.sun.faces.renderkit.html_basic.ListboxRenderer</class>
              <!-- HTML 4.0 attributes -->
             <attribute>
-                <name>inputClass</name>
+                <name>selectoneClass</name>
                 <display-name>CSS Class Name</display-name>
                 <description>CSS Class Name for this element
                 </description>
@@ -1071,8 +957,8 @@
             &event-attrs;
         </renderer>
         <renderer>
-            <type>SelectOneMenuRenderer</type>
-            <class>com.sun.faces.renderkit.html_basic.SelectOneMenuRenderer</class>
+            <type>MenuRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.MenuRenderer</class>
             <attribute>
                 <name>layout</name>
                 <display-name>Layout</display-name>
@@ -1089,7 +975,7 @@
             </attribute>
              <!-- HTML 4.0 attributes -->
             <attribute>
-                <name>inputClass</name>
+                <name>selectoneClass</name>
                 <display-name>CSS Class Name</display-name>
                 <description>CSS Class Name for this element
                 </description>

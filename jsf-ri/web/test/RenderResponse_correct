@@ -15,7 +15,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=94F03541F37336E57725E52024E2E4B8">
+<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=8242F14523B603327898376554996591">
   <TABLE BORDER="1">
 
       <tr>
@@ -117,7 +117,7 @@
 
             <button id="/basicForm/pushButton" name="/basicForm/pushButton" type="button" value="button" disabled >
                  This is a push button 
-                 <img src="/test/duke.gif;jsessionid=94F03541F37336E57725E52024E2E4B8">
+                 <img src="/test/duke.gif;jsessionid=8242F14523B603327898376554996591">
                  <!-- this isn't valid HTML, but it works for our label case -->
                  <label for="/basicForm/pushButton"  accesskey="Z" lang="en_US" lang="en_US" style="12pt"  class="outputClass" >
 
@@ -135,7 +135,7 @@
 	<TD>
 
             <button id="/basicForm/imageOnlyButton" name="/basicForm/imageOnlyButton" type="submit" value="submit">
-                 <img src="/test/duke.gif;jsessionid=94F03541F37336E57725E52024E2E4B8" class="buttonImage1">
+                 <img src="/test/duke.gif;jsessionid=8242F14523B603327898376554996591" class="buttonImage1">
              </button>
 
 	</TD>
@@ -198,7 +198,7 @@
                 
                 
 
-              <select name="/basicForm/appleQuantity" accesskey="N" size="10" tabindex="20" title="Select Quantity" 	<option value="0" disabled >0</option>
+              <span class="selectoneClass"><select name="/basicForm/appleQuantity" accesskey="N" size="10" tabindex="20" title="Select Quantity" 	<option value="0" disabled >0</option>
 	<option value="1" title="One" >1</option>
 	<option value="2" title="Two" >2</option>
 	<option value="3" title="Three" >3</option>
@@ -208,7 +208,7 @@
 	<option value="7" title="Seven" >7</option>
 	<option value="8" title="Eight" >8</option>
 	<option value="9" title="nine" >9</option>
-</select>
+</select></span>
 
 	</TD>
 
@@ -403,7 +403,7 @@
 						
 						
 						
-					<select name="/basicForm/ManyApples" multiple  size="1" 	<option value="0">zero</option>
+					<span class="selectmanyClass"><select name="/basicForm/ManyApples" multiple  size="1" 	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
@@ -413,7 +413,7 @@
 	<option value="7" selected>seven</option>
 	<option value="8">eight</option>
 	<option value="9">nine</option>
-</select></TD>
+</select></span></TD>
 
 </tr>
 
@@ -455,7 +455,7 @@
 						
 						
 						
-					
+					<span class="selectmanyClass">
 <label for="/basicForm/ManyApples3/0">zero<input name="/basicForm/ManyApples3/0" id="/basicForm/ManyApples3/0" value="0" type="checkbox"></label>
 <label for="/basicForm/ManyApples3/1">one<input name="/basicForm/ManyApples3/1" id="/basicForm/ManyApples3/1" value="1" type="checkbox"></label>
 <label for="/basicForm/ManyApples3/2">two<input name="/basicForm/ManyApples3/2" id="/basicForm/ManyApples3/2" value="2" type="checkbox"></label>
@@ -465,7 +465,7 @@
 <label for="/basicForm/ManyApples3/6">six<input name="/basicForm/ManyApples3/6" id="/basicForm/ManyApples3/6" value="6" type="checkbox"></label>
 <label for="/basicForm/ManyApples3/7">seven<input name="/basicForm/ManyApples3/7" id="/basicForm/ManyApples3/7" value="7" type="checkbox" checked></label>
 <label for="/basicForm/ManyApples3/8">eight<input name="/basicForm/ManyApples3/8" id="/basicForm/ManyApples3/8" value="8" type="checkbox"></label>
-<label for="/basicForm/ManyApples3/9">nine<input name="/basicForm/ManyApples3/9" id="/basicForm/ManyApples3/9" value="9" type="checkbox"></label></TD>
+<label for="/basicForm/ManyApples3/9">nine<input name="/basicForm/ManyApples3/9" id="/basicForm/ManyApples3/9" value="9" type="checkbox"></label></span></TD>
 </tr>
 
 

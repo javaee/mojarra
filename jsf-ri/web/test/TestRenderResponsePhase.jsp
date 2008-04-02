@@ -174,7 +174,7 @@
 
 	<TD>
 
-	     <faces:selectone_listbox id="appleQuantity" 
+	     <faces:selectone_listbox id="appleQuantity" selectoneClass="selectoneClass"
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 
@@ -396,7 +396,7 @@
 
 <tr>
 					<TD>Multi-select menu:</TD>
-					<TD><faces:selectmany_menu id="ManyApples">
+					<TD><faces:selectmany_menu id="ManyApples" selectmanyClass="selectmanyClass">
 						<faces:selectitem itemValue="0" itemLabel="zero" />
 						<faces:selectitem itemValue="1" itemLabel="one" />
 						<faces:selectitem itemValue="2" itemLabel="two" />
@@ -428,7 +428,8 @@
 </tr>
 
 <tr>
-					<TD><faces:selectmany_checkboxlist id="ManyApples3">
+					<TD><faces:selectmany_checkboxlist id="ManyApples3" 
+                                                selectmanyClass="selectmanyClass">
 						<faces:selectitem itemValue="0" itemLabel="zero" />
 						<faces:selectitem itemValue="1" itemLabel="one" />
 						<faces:selectitem itemValue="2" itemLabel="two" />

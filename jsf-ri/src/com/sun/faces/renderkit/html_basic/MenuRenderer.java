@@ -1,5 +1,5 @@
-/**
- * $Id: SelectManyMenuRenderer.java,v 1.6 2002/09/14 17:22:17 edburns Exp $
+/*
+ * $Id: MenuRenderer.java,v 1.1 2002/09/19 00:38:22 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -7,7 +7,7 @@
  * deposited with the U. S. Copyright Office.   
  */
 
-// SelectManyMenuRenderer.java
+// MenuRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
 
@@ -28,18 +28,18 @@ import com.sun.faces.util.Util;
 
 /**
  *
- *  <B>SelectManyMenuRenderer</B> is a class ...
+ *  <B>MenuRenderer</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyMenuRenderer.java,v 1.6 2002/09/14 17:22:17 edburns Exp $
+ * @version $Id: MenuRenderer.java,v 1.1 2002/09/19 00:38:22 jvisvanathan Exp $
  * 
  * @see Blah
  * @see Bloo
  *
  */
 
-public class SelectManyMenuRenderer extends HtmlBasicRenderer {
+public class MenuRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
@@ -60,7 +60,7 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
     // Constructors and Initializers    
     //
 
-    public SelectManyMenuRenderer() {
+    public MenuRenderer() {
         super();
     }
 
@@ -82,7 +82,8 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
                 Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        return (componentType.equals(UISelectMany.TYPE));
+        return (componentType.equals(UISelectMany.TYPE) || 
+                componentType.equals(UISelectOne.TYPE));
     }
 
     public boolean decode(FacesContext context, UIComponent component)
@@ -122,49 +123,18 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
         }
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
-        String currentValue = null;
-	String selectmanyClass = null;
-
-        if (context == null || component == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        Object currentObj = component.currentValue(context);
-        if (currentObj != null) {
-            if (currentObj instanceof String) {
-                currentValue = (String) currentObj;
-            } else {
-                currentValue = currentObj.toString();
-            }
-        }
-        if (currentValue == null) {
-            currentValue = "";
-        }
-
-        StringBuffer buffer = new StringBuffer();
-
+    protected void getEndTextToRender(FacesContext context, UIComponent component,
+            String currentValue, StringBuffer buffer ) {
+      
+	String styleString = null;
+        styleString = getStyleString(component);
+        if (styleString != null ) {
+	    buffer.append("<span class=\"" + styleString + "\">");
+	}
         getSelectBuffer(context, component, currentValue, buffer);
-
-        currentValue = buffer.toString();
-
-        ResponseWriter writer = null;
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null);
-	if (null != (selectmanyClass = (String) 
-		     component.getAttribute("selectmanyClass"))) {
-	    writer.write("<span class=\"" + selectmanyClass + "\">");
+        if (null != styleString) {
+	    buffer.append("</span>");
 	}
-
-        writer.write(currentValue);
-
-	if (null != selectmanyClass) {
-	    writer.write("</span>");
-	}
-
     }
 
     void getSelectBuffer(
@@ -175,16 +145,17 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
         buff.append("<select name=\"");
         buff.append(component.getCompoundId());
         buff.append("\"");
-        buff.append(getMultipleText());
-
-        String classStr;
+        buff.append(getMultipleText(component));
+        // PENDING (visvan) commenting it for now, in case we don't want to use
+        // span
+       /* String classStr;
         if (null != (classStr = (String) component.getAttribute("selectClass"))) {
             buff.append(" class=\"");
             buff.append(classStr);
             buff.append("\" ");
-        }
+        } */
 
-        StringBuffer optionsBuffer = new StringBuffer();
+        StringBuffer optionsBuffer = new StringBuffer(1000);
         int itemCount =
             getOptionBuffer(context, component, curValue, optionsBuffer);
 
@@ -259,15 +230,40 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
 	
     // To derive a selectOne type component from this, override
     // these methods.
-    String getMultipleText() {
-        return " multiple ";
+    String getMultipleText(UIComponent component) {
+        // PENDING (visvan) not sure if this is the best way to check for
+        // component type.
+        if ( component.getComponentType().equals(UISelectMany.TYPE)) {
+            return " multiple ";
+        } 
+        return "";
     }
 
     Object[] getCurrentSelectedValues(FacesContext context,
 				      UIComponent component) {
-        UISelectMany select = (UISelectMany) component;
-        return (Object []) select.currentValue(context);
+         if ( component.getComponentType().equals(UISelectMany.TYPE)) {                              
+            UISelectMany select = (UISelectMany) component;
+            return (Object []) select.currentValue(context);
+        } 
+        UISelectOne select = (UISelectOne) component;
+	Object returnObjects[] = new Object[1];
+	if (null != (returnObjects[0] = select.getSelectedValue())) {
+            return returnObjects;
+        }    
+	return null;
     }
-
-
-} // end of class SelectManyMenuRenderer
+    
+    
+    protected String getStyleString(UIComponent component ) {
+        String styleString = null;
+        // PENDING (visvan) not sure if this is the best way to check for
+        // component type.
+        if ( (component.getComponentType()).equals(UISelectMany.TYPE)) {
+            styleString = (String) component.getAttribute("selectmanyClass");
+        } else {
+            styleString = (String) component.getAttribute("selectoneClass");
+        }    
+        return styleString;     
+    }
+  
+} // end of class MenuRenderer

@@ -1,6 +1,6 @@
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.3 2002/09/14 17:22:17 edburns Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.4 2002/09/19 00:38:22 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -27,14 +27,14 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyCheckboxListRenderer.java,v 1.3 2002/09/14 17:22:17 edburns Exp $
+ * @version $Id: SelectManyCheckboxListRenderer.java,v 1.4 2002/09/19 00:38:22 jvisvanathan Exp $
  * 
  * @see Blah
  * @see Bloo
  *
  */
 
-public class SelectManyCheckboxListRenderer extends SelectManyMenuRenderer {
+public class SelectManyCheckboxListRenderer extends MenuRenderer {
     //
     // Protected Constants
     //
@@ -88,11 +88,11 @@ public class SelectManyCheckboxListRenderer extends SelectManyMenuRenderer {
             layoutVertical = layoutStr.equalsIgnoreCase(PAGE_DIRECTION) ? true : false;
         }
 
-        if (null != (classStr = (String) component.getAttribute("selectClass"))) {
+      /*  if (null != (classStr = (String) component.getAttribute("selectClass"))) {
             buff.append("<span class=\"");
             buff.append(classStr);
             buff.append("\">");
-        }
+        } */
 
         buff.append(Util.renderPassthruAttributes(context, component));
         buff.append(Util.renderBooleanPassthruAttributes(context, component));
@@ -125,10 +125,6 @@ public class SelectManyCheckboxListRenderer extends SelectManyMenuRenderer {
             buff.append("></label>");
             if (layoutVertical)
                 buff.append("<br>");
-        }
-
-        if (null != classStr) {
-            buff.append("</span>");
         }
     }
 	
