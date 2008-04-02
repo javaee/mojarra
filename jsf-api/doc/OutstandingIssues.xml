@@ -1299,4 +1299,72 @@
 </issue>
 
 
+<issue>
+  <id>URLs-56</id>
+  <originator>Adam</originator>
+  <summary>Should JSF perform context-path prefixing on "/" URLs?</summary>
+  <description>
+    <p>The current description of UIGraphic states that JSF will add a
+    context path prefix in front of URLs that begin with a "/" character.
+    This feature is replicated in other places where URLs are specified.</p>
+
+    <p>Struts developers have found the automatic prefixing functionality
+    to be very useful, but Adam is concerned because it changes semantics
+    that webapp developers might be expecting (i.e. '/' URLs are server
+    relative).  Do we want to keep this behavior?</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>20 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>RendererDelegation-57</id>
+  <originator>Adam</originator>
+  <summary>Should UIComponent delegate more methods to Renderer?</summary>
+  <description>
+    <p>Currently, UIComponent delegates decode(), encodeBegin(),
+    encodeChildren(), and encodeEnd() methods to a Renderer if the
+    rendererType property is set.  It may make sense to delegate some
+    additional methods as well, including</p>
+    <ul>
+    <li>getRendersChildren() - if a Renderer wants to override the value
+        normally returned by a component for this property.</li>
+    <li>updateModel() - if a Renderer wants to add a "readonly" attribute
+        to a UIInput component.</li>
+    </ul>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>20 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>FacesContext-58</id>
+  <originator>Adam</originator>
+  <summary>Should FacesContext be factored out into APIs for related
+           sets of methods?</summary>
+  <description>
+    <p>Recently, we have been moving towards a lot of functionality
+    added to FacesContext, to the degree where it might be too confusing.
+    Example:  MessageList used to be a separate object that had all the
+    message queue related methods.  Do we want to continue this trend,
+    or reverse it?</p>
+
+    <p>For the FacesContext user, it makes calling simpler
+    (<code>context.addMessage()</code> instead of
+    <code>context.getMessageList().addMessage()</code>), at the cost
+    of lots of methods on FacesContext.</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>20 Sep 2002</status-date>
+</issue>
+
+
 </issues>

@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.17 2002/09/20 00:24:09 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.18 2002/09/21 23:46:00 craigmcc Exp $
  */
 
 /*
@@ -18,27 +18,15 @@ import javax.faces.context.FacesContext;
  * <p><strong>Lifecycle</strong> is a state machine that manages the
  * processing of the entire lifecycle of a particular JavaServer Faces
  * request.  It is responsible for executing all {@link Phase}s that have
- * been registered, in ascending order of phase identifiers, unless otherwise
- * directed by the value returned by execution of each {@link Phase}.</p>
+ * been defined by the JavaServer Faces Specification, in the specified
+ * order, unless otherwise directed by the value returned by execution
+ * of each {@link Phase}.</p>
  *
  * <p>An instance of <code>Lifecycle</code> is created by calling the
  * <code>getLifecycle()</code> method of {@link LifecycleFactory}, for
  * a specified lifecycle identifier.  Because this instance is
  * shared across multiple simultaneous requests, it must be implemented
  * in a thread-safe manner.</p>
- *
- * <p>The set of {@link Phase} instances associated with a particular
- * <code>Lifecycle</code> instance, as well as the order that they are
- * executed in, must be configured prior to, or during, execution of the
- * <code>getLifecycle()</code> method in {@link LifecycleFactory}.  For
- * each standard phase identifier, a JavaServer Faces implementation will
- * provide a default {@link Phase} instance that implements the
- * required behavior of that phase.  A particular instance of
- * <code>Lifecycle</code> may execute additional, implementation-defined,
- * {@link Phase}s in between the execution of the standard phases, as long
- * as the ordering of standard phases is maintained, and the state change
- * indicator values returned by the <code>execute()</code> method of
- * standard {@link Phase}s is respected.</p>
  *
  * <p><strong>FIXME</strong> - Ongoing EG discussion about whether a
  * JSF implementation must use the execute() method defined here, or may
@@ -52,51 +40,6 @@ import javax.faces.context.FacesContext;
  */
 
 public abstract class Lifecycle {
-
-
-    // ------------------------------------------------------ Phase Identifiers
-
-
-    /**
-     * <p>Phase identifier for <em>Reconstitute Request Tree</em>.</p>
-     */
-    public static final int RECONSTITUTE_REQUEST_TREE_PHASE = 0;
-
-
-    /**
-     * <p>Phase identifier for <em>Apply Request Values</em>.</p>
-     */
-    public static final int APPLY_REQUEST_VALUES_PHASE = 10;
-
-
-    /**
-     * <p>Phase identifier for <em>Handle Request Events</em>.</p>
-     */
-    public static final int HANDLE_REQUEST_EVENTS_PHASE = 20;
-
-
-    /**
-     * <p>Phase identifier for <em>Process Validations</em>.</p>
-     */
-    public static final int PROCESS_VALIDATIONS_PHASE = 30;
-
-
-    /**
-     * <p>Phase identifier for <em>Update Model Values</em>.</p>
-     */
-    public static final int UPDATE_MODEL_VALUES_PHASE = 40;
-
-
-    /**
-     * <p>Phase identifier for <em>Invoke Application</em>.</p>
-     */
-    public static final int INVOKE_APPLICATION_PHASE = 50;
-
-
-    /**
-     * <p>Phase identifier for <em>Render Response</em>.</p>
-     */
-    public static final int RENDER_RESPONSE_PHASE = 60;
 
 
     // ------------------------------------------------------------- Properties
