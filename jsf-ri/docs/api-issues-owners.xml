@@ -34,7 +34,7 @@
 <issue>
   <id>NamedChild-4</id>
   <ri-effort>Medium</ri-effort>
-  <ri-owner>edburns </ri-owner>
+  <ri-owner>rogerk </ri-owner>
 </issue>
 
 
@@ -306,7 +306,7 @@
 <issue>
   <id>TraversalOrder-43</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> edburns</ri-owner>
+  <ri-owner> visvan</ri-owner>
 </issue>
 
 
@@ -404,7 +404,7 @@
 <issue>
   <id>RendererDelegation-57</id>
   <ri-effort>Small</ri-effort>
-  <ri-owner> edburns</ri-owner>
+  <ri-owner> rogerk</ri-owner>
 </issue>
 
 
