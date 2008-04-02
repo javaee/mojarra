@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.51 2003/12/20 02:58:46 craigmcc Exp $
+ * $Id: UIInput.java,v 1.52 2003/12/22 19:29:23 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
@@ -25,6 +26,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -232,7 +234,7 @@ public class UIInput extends UIOutput {
      *
      * <p>Any method referenced by such an expression must be public, with
      * a return type of <code>void</code>, and accept parameters of type
-     * {@link FacesContext} and {@link UIInput}.</p>
+     * {@link FacesContext}, {@link UIComponent}, and <code>Object</code>.</p>
      *
      * @param validatorBinding The new <code>MethodBinding</code> instance
      */
@@ -399,7 +401,11 @@ public class UIInput extends UIOutput {
      *     <code>true</code>, and the local value is not empty, call the
      *     <code>validate()</code> method of each {@link Validator}
      *     registered for this {@link UIInput}, followed by the method
-     *     pointed at by the <code>validatorBinding</code> property (if any).</li>
+     *     pointed at by the <code>validatorBinding</code> property (if any).
+     *     If any of these validators or the method throws a
+     *     {@link ValidatorException}, catch the exception, add
+     *     its message (if any) to the {@link FacesContext}, and set
+     *     the <code>valid</code> property of this component to false.</li>
      * <li>If the <code>valid</code> property of this component is still
      *     <code>true</code>, and if the local value is different from
      *     the previous value of this component, fire a
@@ -443,12 +449,44 @@ public class UIInput extends UIOutput {
 		Iterator validators = this.validators.iterator();
 		while (validators.hasNext()) {
 		    Validator validator = (Validator) validators.next();
-		    validator.validate(context, this);
+                    try { 
+                        validator.validate(context, this, getValue());
+                    }
+                    catch (ValidatorException ve) {
+                        // If the validator throws an exception, we're
+                        // invalid, and we need to add a message
+                        setValid(false);
+                        FacesMessage message = ve.getFacesMessage();
+                        if (message != null) {
+			    message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                            context.addMessage(getClientId(context), message);
+                        }
+                    }
 		}
 	    }
             if (validatorBinding != null) {
-                validatorBinding.invoke(context,
-                          new Object[] { context, this });
+                try {
+                    validatorBinding.invoke(context,
+                              new Object[] { context, this, getValue()});
+                }
+                catch (EvaluationException ee) {
+                    if (ee.getCause() instanceof ValidatorException) {
+                        ValidatorException ve =
+                            (ValidatorException) ee.getCause();
+
+                        // If the validator throws an exception, we're
+                        // invalid, and we need to add a message
+                        setValid(false);
+                        FacesMessage message = ve.getFacesMessage();
+                        if (message != null) {
+			    message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                            context.addMessage(getClientId(context), message);
+                        }
+                    } else {
+                        // Otherwise, rethrow the EvaluationException
+                        throw ee;
+                    }
+                }
             }
 	}
 

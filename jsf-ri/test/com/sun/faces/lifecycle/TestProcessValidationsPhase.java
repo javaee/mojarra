@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.26 2003/12/17 15:15:26 rkitain Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.27 2003/12/22 19:29:34 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.26 2003/12/17 15:15:26 rkitain Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.27 2003/12/22 19:29:34 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -141,7 +141,7 @@ public void testCallback()
             return null;
         }
 
-        public void validate(FacesContext context, UIInput component){
+        public void validate(FacesContext context, UIComponent component, Object value){
             assertTrue(component == userName);
             System.setProperty(DID_VALIDATE, DID_VALIDATE);
 	    return;

@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRef.java,v 1.4 2003/12/17 15:14:34 rkitain Exp $
+ * $Id: MethodRef.java,v 1.5 2003/12/22 19:29:33 eburns Exp $
  */
 
 /*
@@ -12,7 +12,8 @@ package com.sun.faces.systest.model;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIInput;
+import javax.faces.component.UIComponent;
+import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 
 
@@ -54,17 +55,14 @@ public class MethodRef extends Object {
     }
 
 
-    public void validateInput(FacesContext context, UIInput toValidate) {
-	String value = (String) toValidate.getValue();
+    public void validateInput(FacesContext context, UIComponent toValidate, Object valueObj) {
+	String value = (String) valueObj;
 	if (!value.equals("batman")) {
-	    toValidate.setValid(false);
-	    context.addMessage(toValidate.getClientId(context),
+          throw new ValidatorException(
 			       new FacesMessage("You didn't enter batman",
 						"You must enter batman"));
 	}
-	else {
-	    toValidate.setValid(true);
-	}
+
     }
 
     protected String changeOutcome;

@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.33 2003/12/17 15:11:03 rkitain Exp $
+ * $Id: DoubleRangeValidator.java,v 1.34 2003/12/22 19:29:25 eburns Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package javax.faces.validator;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
-import javax.faces.component.UIInput;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 
@@ -21,22 +21,26 @@ import javax.faces.context.FacesContext;
  * the value of the corresponding component against specified minimum and
  * maximum values.  The following algorithm is implemented:</p>
  * <ul>
- * <li>Call getValue() to retrieve the current value of the component.
- *     If it is <code>null</code>, exit immediately.</li>
+ * <li>If the passed value is <code>null</code>, exit immediately.</li>
  * <li>If the current component value is not a floating point type, or
- *     a String that is convertible to double,
- *     add a TYPE_MESSAGE_ID message to the {@link FacesContext} for this
- *     request, and skip subsequent checks.</li>
+ *     a String that is convertible to double, throw a 
+ *     {@link ValidatorException} containing a
+ *     TYPE_MESSAGE_ID message.</li>
+ * <li>If both a <code>maximum</code> and <code>minimum</code> property
+ *     has been configured on this {@link Validator}, check the component
+ *     value against both limits.  If the component value is not within
+ *     this specified range, throw a {@link ValidatorException} containing a
+ *     {@link Validator#NOT_IN_RANGE_MESSAGE_ID} message.</li>
  * <li>If a <code>maximum</code> property has been configured on this
  *     {@link Validator}, check the component value against
  *     this limit.  If the component value is greater than the
- *     specified minimum, add a MAXIMUM_MESSAGE_ID message to the
- *     {@link FacesContext} for this request.</li>
+ *     specified maximum, throw a {@link ValidatorException} containing a
+ *     MAXIMUM_MESSAGE_ID message.</li>
  * <li>If a <code>minimum</code> property has been configured on this
  *     {@link Validator}, check the component value against
  *     this limit.  If the component value is less than the
- *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
- *     {@link FacesContext} for this request.</li>
+ *     specified minimum, throw a {@link ValidatorException} containing a
+ *     MINIMUM_MESSAGE_ID message.</li>
  * </ul>
  */
 
@@ -183,21 +187,21 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 
     /**
      * @exception NullPointerException {@inheritDoc}     
+     * @exception ValidatorException {@inheritDoc}     
      */ 
-    public void validate(FacesContext context, UIInput component) {
-
+    public void validate(FacesContext context,
+                         UIComponent  component,
+                         Object       value) throws ValidatorException {
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
-        Object value = component.getValue();
         if (value != null) {
             try {
                 double converted = doubleValue(value);
                 if (maximumSet &&
                     (converted > maximum)) {
 		    if (minimumSet) {
-			context.addMessage(component.getClientId(context),
-					   MessageFactory.getMessage
+                        throw new ValidatorException(MessageFactory.getMessage
 					   (context,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
@@ -206,20 +210,17 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 			
 		    }
 		    else {
-			context.addMessage(component.getClientId(context),
-					   MessageFactory.getMessage
+                        throw new ValidatorException(MessageFactory.getMessage
 					   (context,
 					    MAXIMUM_MESSAGE_ID,
 					    new Object[] {
 						new Double(maximum) }));
 		    }
-                    component.setValid(false);
                 }
                 if (minimumSet &&
                     (converted < minimum)) {
 		    if (maximumSet) {
-			context.addMessage(component.getClientId(context),
-					   MessageFactory.getMessage
+                        throw new ValidatorException(MessageFactory.getMessage
 					   (context,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
@@ -228,20 +229,16 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 			
 		    }
 		    else {
-			context.addMessage(component.getClientId(context),
-					   MessageFactory.getMessage
+                        throw new ValidatorException(MessageFactory.getMessage
 					   (context,
 					    MINIMUM_MESSAGE_ID,
 					    new Object[] {
 						new Double(minimum) }));
 		    }
-                    component.setValid(false);
                 }
             } catch (NumberFormatException e) {
-                context.addMessage(component.getClientId(context),
-                                   MessageFactory.getMessage
+                throw new ValidatorException(MessageFactory.getMessage
                                    (context, TYPE_MESSAGE_ID));
-                component.setValid(false);
             }
         }
 

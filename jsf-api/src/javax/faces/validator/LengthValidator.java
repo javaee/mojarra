@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.33 2003/12/17 15:11:03 rkitain Exp $
+ * $Id: LengthValidator.java,v 1.34 2003/12/22 19:29:25 eburns Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package javax.faces.validator;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
-import javax.faces.component.UIInput;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 
@@ -21,19 +21,18 @@ import javax.faces.context.FacesContext;
  * the number of characters in the String representation of the value of the
  * associated component.  The following algorithm is implemented:</p>
  * <ul>
- * <li>Call getValue() to retrieve the current value of the component.</li>
- * <li>Convert the value to a String, if necessary, by calling its
+ * <li>Convert the passed value to a String, if necessary, by calling its
  *     <code>toString()</code> method.</li>
  * <li>If a <code>maximum</code> property has been configured on this
  *     {@link Validator}, check the length of the converted
  *     String against this limit.  If the String length is larger than the
- *     specified minimum, add a MAXIMUM_MESSAGE_ID message to the
- *     {@link FacesContext} for this request.</li>
+ *     specified maximum, throw a {@link ValidatorException} containing a
+ *     a MAXIMUM_MESSAGE_ID message.</li>
  * <li>If a <code>minimum</code> property has been configured on this
  *     {@link Validator}, check the length of the converted
  *     String against this limit.  If the String length is less than the
- *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
- *     {@link FacesContext} for this request.</li>
+ *     specified minimum, throw a {@link ValidatorException} containing a
+ *     a MINIMUM_MESSAGE_ID message.</li>
  * </ul>
  */
 
@@ -173,34 +172,32 @@ public class LengthValidator implements Validator, StateHolder {
 
     /**
      * @exception NullPointerException {@inheritDoc}     
+     * @exception ValidatorException {@inheritDoc}     
      */ 
-    public void validate(FacesContext context, UIInput component) {
+    public void validate(FacesContext context,
+                         UIComponent  component,
+                         Object       value) throws ValidatorException {
 
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
-        Object value = component.getValue();
         if (value != null) {
             String converted = stringValue(value);
             if (maximumSet &&
                 (converted.length() > maximum)) {
-                context.addMessage(component.getClientId(context),
-                                   MessageFactory.getMessage
+                throw new ValidatorException(MessageFactory.getMessage
                                    (context,
                                     MAXIMUM_MESSAGE_ID,
                                     new Object[] {
                                         new Integer(maximum) } ));
-                component.setValid(false);
             }
             if (minimumSet &&
                 (converted.length() < minimum)) {
-                context.addMessage(component.getClientId(context),
-                                   MessageFactory.getMessage
+                throw new ValidatorException(MessageFactory.getMessage
                                    (context,
                                     MINIMUM_MESSAGE_ID,
                                     new Object[] {
                                         new Integer(minimum) } ));
-                component.setValid(false);
             }
         }
 

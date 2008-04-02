@@ -1,5 +1,5 @@
 /*
- * $Id: TestInputValidator.java,v 1.1 2003/10/27 04:10:07 craigmcc Exp $
+ * $Id: TestInputValidator.java,v 1.2 2003/12/22 19:29:29 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ public class TestInputValidator implements Validator {
 	this.validatorId = validatorId;
     }
     
-    public void validate(FacesContext context, UIInput component) {
+    public void validate(FacesContext context, UIComponent component, Object value) {
         trace(validatorId);
     }
 

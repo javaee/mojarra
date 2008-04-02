@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.2 2003/12/17 15:17:51 rkitain Exp $
+ * $Id: FormatValidator.java,v 1.3 2003/12/22 19:29:35 eburns Exp $
  */
 
 /*
@@ -43,11 +43,12 @@
 package carstore;
 
 import javax.faces.FactoryFinder;
-import javax.faces.component.UIInput;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
 import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
 import javax.faces.component.StateHolder;
 
 import java.util.ArrayList;
@@ -181,7 +182,8 @@ public class FormatValidator implements Validator, StateHolder {
     // 
     // Methods from Validator
     //
-    public void validate(FacesContext context, UIInput component) {
+    public void validate(FacesContext context, UIComponent component, 
+			 Object toValidate) {
         boolean valid = false;
         String value = null;
         if ((context == null) || (component == null)) {
@@ -191,33 +193,25 @@ public class FormatValidator implements Validator, StateHolder {
             return;
         }    
         
-        if ( formatPatternsList == null ) {
-            // no patterns to match
-            component.setValid(true);
-            return;
-        }
+        if ( null == formatPatternsList || null == toValidate) {
+	    return;
+	}
         
-        Object input = ((UIOutput)component).getValue();
-        if ( input != null ) {
-            value = input.toString();
-            // validate the value against the list of valid patterns.
-            Iterator patternIt = formatPatternsList.iterator();
-            while (patternIt.hasNext()) {
-                valid = isFormatValid(((String)patternIt.next()), value);
-                if (valid) {
-                    break;
-                }
-            }
-            if ( valid ) {
-                component.setValid(true);
-            } else {
-                component.setValid(false);
-                FacesMessage errMsg = MessageFactory.getMessage(context, 
-                        FORMAT_INVALID_MESSAGE_ID, 
-                        (new Object[] {formatPatterns}));
-                context.addMessage((component.getClientId(context)), errMsg);
-            }
-        }
+	value = toValidate.toString();
+	// validate the value against the list of valid patterns.
+	Iterator patternIt = formatPatternsList.iterator();
+	while (patternIt.hasNext()) {
+	    valid = isFormatValid(((String)patternIt.next()), value);
+	    if (valid) {
+		break;
+	    }
+	}
+	if ( !valid ) {
+	    FacesMessage errMsg = MessageFactory.getMessage(context, 
+							    FORMAT_INVALID_MESSAGE_ID, 
+							    (new Object[] {formatPatterns}));
+	    throw new ValidatorException(errMsg);
+	}
     }
     
     /**

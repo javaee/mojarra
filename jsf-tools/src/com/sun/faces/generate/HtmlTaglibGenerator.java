@@ -749,7 +749,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    signatureMap.put("actionListener",
 			     "Class args[] = { ActionEvent.class };");
 	    signatureMap.put("validator",
-			     "Class args[] = { FacesContext.class, UIInput.class };");
+			     "Class args[] = { FacesContext.class, UIComponent.class, Object.class };");
 	    signatureMap.put("valueChangeListener",
 			     "Class args[] = { ValueChangeEvent.class };");
 	    result.append("        if ("+ivar+" != null) {\n");

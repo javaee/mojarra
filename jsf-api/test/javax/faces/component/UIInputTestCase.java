@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.25 2003/12/20 02:58:50 craigmcc Exp $
+ * $Id: UIInputTestCase.java,v 1.26 2003/12/22 19:29:30 eburns Exp $
  */
 
 /*
@@ -336,7 +336,8 @@ public class UIInputTestCase extends UIOutputTestCase {
     // Test order of validator calls with validator also
     public void testValidateOrder() throws Exception {
 
-        Class validateParams[] = {FacesContext.class, UIInput.class };
+        Class validateParams[] = {FacesContext.class, UIComponent.class,
+                                  Object.class};
     
         UIViewRoot root = new UIViewRoot();
         root.getChildren().add(component);

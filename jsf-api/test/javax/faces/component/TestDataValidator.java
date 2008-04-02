@@ -1,5 +1,5 @@
 /*
- * $Id: TestDataValidator.java,v 1.2 2003/10/30 20:30:20 eburns Exp $
+ * $Id: TestDataValidator.java,v 1.3 2003/12/22 19:29:29 eburns Exp $
  */
 
 /*
@@ -11,8 +11,10 @@ package javax.faces.component;
 
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
 
 
 /**
@@ -32,21 +34,19 @@ public class TestDataValidator implements Validator {
     // ---------------------------------------------------------- Public Methods
 
 
-    public void validate(FacesContext context, UIInput component) {
-
+    public void validate(FacesContext context, UIComponent component, Object valueObj) {
         trace(component.getClientId(context));
-        String value = (String) component.getValue();
+        String value = (String) valueObj;
         if (value == null) {
             value = "";
         }
         trace(value);
         if ("bad".equals(value)) {
             trace("ERROR");
-            context.addMessage(component.getClientId(context),
+            throw new ValidatorException(
                                new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						component.getClientId(context),
 						null));
-            component.setValid(false);
         }
 
     }

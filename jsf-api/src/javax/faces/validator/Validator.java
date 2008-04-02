@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.16 2003/11/05 02:22:51 craigmcc Exp $
+ * $Id: Validator.java,v 1.17 2003/12/22 19:29:26 eburns Exp $
  */
 
 /*
@@ -11,9 +11,8 @@ package javax.faces.validator;
 
 
 import java.util.EventListener;
-import java.util.Iterator;
 import javax.faces.component.StateHolder;
-import javax.faces.component.UIInput;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
 
@@ -25,14 +24,10 @@ import javax.faces.application.FacesMessage;
  * UIInput} in the view, and are called during the <em>Process
  * Validations</em> phase of the request processing lifecycle.</p>
  *
- * <p>Individual {@link Validator}s should examine the component that
- * they are passed, and add {@link FacesMessage} instances to the
- * {@link FacesContext} for the current request, documenting
- * any failures to conform to the required rules.  In general, such
- * messages should be associated with the {@link UIInput} on which
- * the validation failure occurred.  In addition, the <code>valid</code>
- * property of the corresponding {@link UIInput} should be set to
- * <code>false</code> on validation failures.</p>
+ * <p>Individual {@link Validator}s should examine the value and
+ * component that they are passed, and throw a {@link ValidatorException}
+ * containing a {@link FacesMessage}, documenting
+ * any failures to conform to the required rules.
  *
  * <p>For maximum generality, {@link Validator} instances may be
  * configurable based on properties of the {@link Validator} implementation
@@ -62,24 +57,22 @@ public interface Validator extends EventListener {
 
     /**
      * <p>Perform the correctness checks implemented by this
-     * {@link Validator} against the specified {@link UIInput}.
-     * If any violations are found:</p>
-     * <ul>
-     * <li>Add zero or more {@link FacesMessage}s to the specified
-     *     {@link FacesContext}, specifying this {@link UIInput} as
-     *     associated with the message, describing the nature of the
-     *     violation(s) encountered.</li>
-     * <li>Set the <code>valid</code> property on the specified
-     *     {@link UIInput} to <code>false</code>.</li>
-     * </ul>
+     * {@link Validator} against the specified {@link UIComponent}.
+     * If any violations are found, a {@link ValidatorException}
+     * will be thrown containing the {@link FacesMessage} describing
+     * the failure.
      *
      * @param context FacesContext for the request we are processing
-     * @param component UIInput we are checking for correctness
+     * @param component UIComponent we are checking for correctness
+     * @param value     the value to validate
      *
+     * @exception ValidatorException if validation fails
      * @exception NullPointerException if <code>context</code>
      *  or <code>component</code> is <code>null</code>
      */
-    public void validate(FacesContext context, UIInput component);
+    public void validate(FacesContext context,
+                         UIComponent  component,
+                         Object       value) throws ValidatorException;
 
 
 }

@@ -40,10 +40,12 @@ package guessNumber;
 
 import java.util.Random;
 
-import javax.faces.component.UIInput;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
 import javax.faces.validator.LongRangeValidator;
+
 
 public class UserNumberBean {
 
@@ -111,20 +113,20 @@ public class UserNumberBean {
         this.minimumSet = true;
     }
 
-    public void validate(FacesContext context, UIInput component) {
+    public void validate(FacesContext context,
+                         UIComponent  component,
+                         Object       value) throws ValidatorException {
 
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
-        Object value = component.getValue();
         if (value != null) {
             try {
                 int converted = intValue(value);
                 if (maximumSet &&
                     (converted > maximum)) {
 		    if (minimumSet) {
-			context.addMessage(component.getClientId(context),
-					   MessageFactory.getMessage
+                        throw new ValidatorException(MessageFactory.getMessage
 					   (context,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
@@ -133,20 +135,17 @@ public class UserNumberBean {
 			
 		    }
 		    else {
-			context.addMessage(component.getClientId(context),
-					   MessageFactory.getMessage
+                        throw new ValidatorException(MessageFactory.getMessage
 					   (context,
 					    LongRangeValidator.MAXIMUM_MESSAGE_ID,
 					    new Object[] {
 						new Integer(maximum) }));
 		    }
-		    component.setValid(false);
                 }
                 if (minimumSet &&
                     (converted < minimum)) {
 		    if (maximumSet) {
-			context.addMessage(component.getClientId(context),
-					   MessageFactory.getMessage
+                        throw new ValidatorException(MessageFactory.getMessage
 					   (context,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
@@ -155,20 +154,16 @@ public class UserNumberBean {
 			
 		    }
 		    else {
-			context.addMessage(component.getClientId(context),
-					   MessageFactory.getMessage
+                        throw new ValidatorException(MessageFactory.getMessage
 					   (context,
 					    LongRangeValidator.MINIMUM_MESSAGE_ID,
 					    new Object[] {
 						new Integer(minimum) }));
 		    }
-		    component.setValid(false);
                 }
             } catch (NumberFormatException e) {
-                context.addMessage(component.getClientId(context),
-                                   MessageFactory.getMessage
-                                   (context, LongRangeValidator.TYPE_MESSAGE_ID));
-                component.setValid(false);
+                throw new ValidatorException(MessageFactory.getMessage
+                                     (context, LongRangeValidator.TYPE_MESSAGE_ID));
             }
         }
 

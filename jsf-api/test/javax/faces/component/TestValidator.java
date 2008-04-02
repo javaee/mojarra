@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidator.java,v 1.9 2003/09/25 07:46:05 craigmcc Exp $
+ * $Id: TestValidator.java,v 1.10 2003/12/22 19:29:30 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ public class TestValidator implements Validator, StateHolder {
     
     public TestValidator() {}
 
-    public void validate(FacesContext context, UIInput component) {
+    public void validate(FacesContext context, UIComponent component, Object value) {
         ;  // No action taken
     }
 
