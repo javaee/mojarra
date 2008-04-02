@@ -1,5 +1,5 @@
 /*
- * $Id: FloatConverter.java,v 1.3 2003/08/12 19:05:30 craigmcc Exp $
+ * $Id: FloatConverter.java,v 1.4 2003/08/13 18:42:47 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.convert;
 
 
-import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -20,7 +19,7 @@ import javax.faces.context.FacesContext;
  * (and float primitive) values.</p>
  */
 
-public class FloatConverter implements Converter, StateHolder {
+public class FloatConverter implements Converter {
 
 
     // ------------------------------------------------------- Converter Methods
@@ -48,31 +47,6 @@ public class FloatConverter implements Converter, StateHolder {
             throw new ConverterException(e);
         }
 
-    }
-
-
-    // ----------------------------------------------------- StateHolder Methods
-
-
-    public Object getState(FacesContext context) {
-        return ("");
-    }
-
-
-    public void restoreState(FacesContext context, Object state) {
-    }
-
-
-    private boolean transientFlag = false;
-
-
-    public boolean isTransient() {
-        return (transientFlag);
-    }
-
-
-    public void setTransient(boolean transientFlag) {
-        this.transientFlag = transientFlag;
     }
 
 
