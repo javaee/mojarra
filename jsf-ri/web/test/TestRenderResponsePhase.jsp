@@ -797,6 +797,34 @@ see the <i>angle brackets</i> on this text"></h:outputText>
    <f:param value="my param"/>
 </h:outputFormat>
 
+<h:dataTable headerClass="table-header" footerClass="table-footer"
+   rows="1">
+   <f:facet             name="header">
+     <h:outputText    value="Overall Table Header"/>
+   </f:facet>
+                                                                               
+   <f:facet             name="footer">
+     <h:outputText    value="Overall Table Footer"/>
+   </f:facet>
+
+   <h:column headerClass="column-header" footerClass="column-footer">
+      <f:facet           name="header">
+        <h:outputText  value="Account Id"/>
+      </f:facet>
+      <f:facet           name="footer">
+        <h:outputText  value="A.I. Footer"/>
+      </f:facet>
+   </h:column>
+
+   <h:column>
+      <f:facet           name="header">
+        <h:outputText  value="Customer Name"/>
+      </f:facet>
+      <f:facet           name="footer">
+        <h:outputText  value="C.N. Footer"/>
+      </f:facet>
+   </h:column>
+</h:dataTable>
 
 </h:form>
 </f:view>

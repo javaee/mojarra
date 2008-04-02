@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.24 2004/12/16 17:56:38 edburns Exp $
+ * $Id: TableRenderer.java,v 1.25 2005/02/22 15:56:17 rogerk Exp $
  */
 
 /*
@@ -103,8 +103,13 @@ public class TableRenderer extends HtmlBasicRenderer {
             Iterator columns = getColumns(data);
             while (columns.hasNext()) {
                 UIColumn column = (UIColumn) columns.next();
+                String columnHeaderClass = 
+                    (String) column.getAttributes().get("headerClass");
                 writer.startElement("th", column);
-                if (headerClass != null) {
+                if (columnHeaderClass != null) {
+                    writer.writeAttribute("class", columnHeaderClass, 
+                        "columnHeaderClass");
+                } else if (headerClass != null) {
                     writer.writeAttribute("class", headerClass, "headerClass");
                 }
                 writer.writeAttribute("scope", "col", null);
@@ -149,8 +154,13 @@ public class TableRenderer extends HtmlBasicRenderer {
             Iterator columns = getColumns(data);
             while (columns.hasNext()) {
                 UIColumn column = (UIColumn) columns.next();
+                String columnFooterClass = 
+                    (String) column.getAttributes().get("footerClass");
                 writer.startElement("td", column);
-                if (footerClass != null) {
+                if (columnFooterClass != null) {
+                    writer.writeAttribute("class", columnFooterClass, 
+                        "columnFooterClass");
+                } else if (footerClass != null) {
                     writer.writeAttribute("class", footerClass, "footerClass");
                 }
                 UIComponent facet = getFacet(column, "footer");

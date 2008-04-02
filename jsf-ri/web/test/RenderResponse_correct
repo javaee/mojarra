@@ -15,7 +15,7 @@
 
 
   
-<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" target="_self" title="basicForm">
+<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=37C1D3C7AE588366085757C1E7074DA2" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" target="_self" title="basicForm">
 
 
   <TABLE BORDER="1">
@@ -130,12 +130,12 @@
 
 	      
                 
-              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C" /></a>
+              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=37C1D3C7AE588366085757C1E7074DA2" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C" style="someStyle" usemap="#map1" ismap="ismap" /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=37C1D3C7AE588366085757C1E7074DA2" style="someStyle" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
@@ -169,7 +169,7 @@
               
               
               
-            <a id="basicForm:hrefParamLink" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].target='_top'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].target='_top'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=37C1D3C7AE588366085757C1E7074DA2" /></a>
         </TD>
       </TR>
 
@@ -177,7 +177,7 @@
 
 	<TD>
 
-	      <a id="basicForm:outputLink" href="test.html;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C" class="hyperlinkClass">output link text</a>
+	      <a id="basicForm:outputLink" href="test.html;jsessionid=37C1D3C7AE588366085757C1E7074DA2" class="hyperlinkClass">output link text</a>
 
 	</TD>
 
@@ -189,12 +189,12 @@
 
 	      
                 
-              <a id="basicForm:output_imageLink" href="test.html;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C" /></a>
+              <a id="basicForm:output_imageLink" href="test.html;jsessionid=37C1D3C7AE588366085757C1E7074DA2" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=37C1D3C7AE588366085757C1E7074DA2" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C" usemap="#map1" ismap="ismap" /> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=37C1D3C7AE588366085757C1E7074DA2" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
@@ -202,7 +202,7 @@
       <TR>
         <TD>
             
-            <a id="basicForm:output_commandLink" href="test.html;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandLink" href="test.html;jsessionid=37C1D3C7AE588366085757C1E7074DA2" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
@@ -212,13 +212,13 @@
               
               
               
-            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C?name=horwat&value=password" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=37C1D3C7AE588366085757C1E7074DA2?name=horwat&value=password" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C"><img src="duke.gif"></a>
+            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=37C1D3C7AE588366085757C1E7074DA2"><img src="duke.gif"></a>
         </TD>
       </TR>
 
@@ -228,7 +228,7 @@
               
               
               
-            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C?name=horwat&value=password"><img src="duke.gif;jsessionid=A12DCFE1689DC35610E2C994C3D05E2C" /></a>
+            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=37C1D3C7AE588366085757C1E7074DA2?name=horwat&value=password"><img src="duke.gif;jsessionid=37C1D3C7AE588366085757C1E7074DA2" /></a>
         </TD>
       </TR>
 
@@ -865,6 +865,51 @@ see the <i>angle brackets</i> on this text
 
    
 <span id="basicForm:userMsg">Param 0: my param</span>
+
+
+   
+     
+   
+                                                                               
+   
+     
+   
+
+   
+      
+        
+      
+      
+        
+      
+   
+
+   
+      
+        
+      
+      
+        
+      
+   
+<table>
+<thead>
+<tr><th class="table-header" colspan="2" scope="colgroup">Overall Table Header</th></tr>
+<tr>
+<th class="column-header" scope="col">Account Id</th>
+<th class="table-header" scope="col">Customer Name</th>
+</tr>
+</thead>
+<tfoot>
+<tr><td class="table-footer" colspan="2">Overall Table Footer</td></tr>
+<tr>
+<td class="column-footer">A.I. Footer</td>
+<td class="table-footer">C.N. Footer</td>
+</tr>
+</tfoot>
+<tbody>
+</tbody>
+</table>
 
 
 <input type="hidden" name="basicForm" value="basicForm" /><input type="hidden" name="value" /><input type="hidden" name="basicForm:_idcl" /><input type="hidden" name="name" />

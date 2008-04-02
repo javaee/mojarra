@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.8 2004/02/26 20:33:14 eburns Exp $
+ * $Id: ColumnTag.java,v 1.9 2005/02/22 15:56:17 rogerk Exp $
  */
 
 /*
@@ -10,11 +10,14 @@
 
 package com.sun.faces.taglib.html_basic;
 
+import com.sun.faces.util.Util;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
+import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 
@@ -33,6 +36,18 @@ public class ColumnTag extends UIComponentTag {
     //
     // Setter Methods
     //
+    // PROPERTY: footerClass
+    private java.lang.String footerClass;
+    public void setFooterClass(java.lang.String footerClass) {
+        this.footerClass = footerClass;
+    }
+
+    // PROPERTY: headerClass
+    private java.lang.String headerClass;
+    public void setHeaderClass(java.lang.String headerClass) {
+        this.headerClass = headerClass;
+    }
+
     //
     // General Methods
     //
@@ -48,8 +63,30 @@ public class ColumnTag extends UIComponentTag {
 
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
-        UIColumn column = (UIColumn) component;
+        UIColumn column = null;
 
+        try {
+            column = (UIColumn) component;
+        } catch (ClassCastException cce) {
+            throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: UIColumn.  Perhaps you're missing a tag?");
+        }
+
+        if (footerClass != null) {
+            if (isValueReference(footerClass)) {
+                ValueBinding vb = Util.getValueBinding(footerClass);
+                column.setValueBinding("footerClass", vb);
+            } else {
+                column.getAttributes().put("footerClass", footerClass);
+            }
+        }
+        if (headerClass != null) {
+            if (isValueReference(headerClass)) {
+                ValueBinding vb = Util.getValueBinding(headerClass);
+                column.setValueBinding("headerClass", vb);
+            } else {
+                column.getAttributes().put("headerClass", headerClass);
+            }
+        }
     }
 
     //
