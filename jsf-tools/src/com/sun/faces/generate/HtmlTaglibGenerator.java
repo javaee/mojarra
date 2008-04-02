@@ -50,6 +50,8 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	valueHolderComponents.add("UIOutput");
 	valueHolderComponents.add("UIPanel");
 	valueHolderComponents.add("UIInput");
+	valueHolderComponents.add("UISelectMany");
+	valueHolderComponents.add("UISelectOne");
 	convertibleValueHolderComponents = new ArrayList();
 	convertibleValueHolderComponents.add("UIOutput");
 
