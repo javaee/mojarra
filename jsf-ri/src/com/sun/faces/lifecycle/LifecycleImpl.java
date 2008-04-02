@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.63 2006/05/17 19:00:46 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.64 2006/05/26 16:35:51 rlubke Exp $
  */
 
 /*
@@ -73,7 +73,7 @@ public class LifecycleImpl extends Lifecycle {
 
     // The set of Phase instances that are executed by the execute() method
     // in order by the ordinal property of each phase
-    private Phase phases[] = {
+    private Phase[] phases = {
         null, // ANY_PHASE placeholder, not a real Phase
         new RestoreViewPhase(),
         new ApplyRequestValuesPhase(),
@@ -85,11 +85,7 @@ public class LifecycleImpl extends Lifecycle {
 
     // The Phase instance for the render() method
     private Phase response = new RenderResponsePhase();
-    
-    // used to track if the first request has been serviced.
-    protected static final String FIRST_REQUEST_SERVICED = 
-            "com.sun.faces.FIRST_REQUEST_SERVICED";
-
+        
 
     // ------------------------------------------------------- Lifecycle Methods
 
@@ -197,62 +193,74 @@ public class LifecycleImpl extends Lifecycle {
 
     // Execute the specified phase, calling all listeners as well
     private void phase(PhaseId phaseId, Phase phase, FacesContext context)
-        throws FacesException {
+          throws FacesException {
         boolean exceptionThrown = false;
         Throwable ex = null;
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("phase(" + phaseId.toString() + "," + context + ")");
         }
 
-	
+
         int size = listeners.size();
         int revStartIndex = 0;
-    try {
+        try {
             // Notify the "beforePhase" method of interested listeners
-	    // (ascending)
-           
-	    if (size > 0) {
+            // (ascending)
+
+            if (size > 0) {
                 PhaseEvent event = new PhaseEvent(context, phaseId, this);
-            for (PhaseListener listener : listeners) {
-                if (phaseId.equals(listener.getPhaseId()) ||
-                    PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
-                    listener.beforePhase(event);  
-                    revStartIndex++;
+                for (PhaseListener listener : listeners) {
+                    if (phaseId.equals(listener.getPhaseId()) ||
+                        PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
+                        listener.beforePhase(event);
+                        revStartIndex++;
+                    }
+
                 }
-                
             }
-            }
-	}
-	catch (Exception e) {
-	    if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.warning("phase(" + phaseId.toString() + "," + context + 
-			  ") threw exception: " + e + " " + e.getMessage() +
-			  "\n" + Util.getStackTraceString(e));
-	    }        
         }
-	    
-	try {   
-	    // Execute this phase itself (if still needed)
-	    if (!skipping(phaseId, context)) {
-		phase.execute(context);
-	    }
-	} catch (Exception e) {
+        catch (Exception e) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning("phase("
+                               + phaseId.toString()
+                               + ","
+                               + context
+                               +
+                               ") threw exception: "
+                               + e
+                               + " "
+                               + e.getMessage()
+                               +
+                               "\n"
+                               + Util.getStackTraceString(e));
+            }
+        }
+
+        try {
+            // Execute this phase itself (if still needed)
+            if (!skipping(phaseId, context)) {
+                phase.execute(context);
+            }
+        } catch (Exception e) {
             // Log the problem, but continue
             if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING, "executePhase(" + phaseId.toString() + "," 
-                        + context + ") threw exception", e);
+                LOGGER.log(Level.WARNING,
+                           "executePhase(" + phaseId.toString() + ","
+                           + context + ") threw exception",
+                           e);
             }
             ex = e;
             exceptionThrown = true;
-        } 
-	finally {
+        }
+        finally {
             try {
                 // Notify the "afterPhase" method of interested listeners
                 // (descending)
                 if (size > 0) {
                     PhaseEvent event = new PhaseEvent(context, phaseId, this);
-                    for (ListIterator<PhaseListener> iter = listeners.listIterator(revStartIndex);
-                          iter.hasPrevious(); ) {                    
+                    for (ListIterator<PhaseListener> iter =
+                          listeners.listIterator(revStartIndex);
+                         iter.hasPrevious();) {
                         PhaseListener listener = iter.previous();
                         if (phaseId.equals(listener.getPhaseId()) ||
                             PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
@@ -263,9 +271,18 @@ public class LifecycleImpl extends Lifecycle {
             }
             catch (Throwable e) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.warning("phase(" + phaseId.toString() + "," + context + 
-                              ") threw exception: " + e + " " + e.getMessage() +
-                              "\n" + Util.getStackTraceString(e));
+                    LOGGER.warning("phase("
+                                   + phaseId.toString()
+                                   + ","
+                                   + context
+                                   +
+                                   ") threw exception: "
+                                   + e
+                                   + " "
+                                   + e.getMessage()
+                                   +
+                                   "\n"
+                                   + Util.getStackTraceString(e));
                 }
             }
         }
@@ -281,7 +298,7 @@ public class LifecycleImpl extends Lifecycle {
                 ex = new FacesException(ex);
             }
 
-            throw (FacesException) ex;
+            throw(FacesException) ex;
         }
     }
 
@@ -293,21 +310,22 @@ public class LifecycleImpl extends Lifecycle {
         if (!phaseId.equals(PhaseId.RESTORE_VIEW)) {
             return (false);
         }
-        if (!(context.getExternalContext().getRequest() instanceof
-            HttpServletRequest)) {
+        if (!(context.getExternalContext().getRequest()instanceof
+              HttpServletRequest)) {
             return (false);
         }
-        String renderkitId = 
-                context.getApplication().getViewHandler().
-                calculateRenderKitId(context);
-        ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context,
-                renderkitId);
-        boolean postback = rsm.isPostback(context); 
+        String renderkitId =
+              context.getApplication().getViewHandler().
+                    calculateRenderKitId(context);
+        ResponseStateManager rsm =
+              RenderKitUtils.getResponseStateManager(context,
+                                                     renderkitId);
+        boolean postback = rsm.isPostback(context);
         if (postback) {
             return false;
         }
         // assume it is reload.
-        return true;        
+        return true;
     }
 
 
@@ -317,7 +335,7 @@ public class LifecycleImpl extends Lifecycle {
         if (context.getResponseComplete()) {
             return (true);
         } else if (context.getRenderResponse() &&
-            !phaseId.equals(PhaseId.RENDER_RESPONSE)) {
+                   !phaseId.equals(PhaseId.RENDER_RESPONSE)) {
             return (true);
         } else {
             return (false);
