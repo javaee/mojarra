@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.31 2007/02/01 22:18:10 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.32 2007/02/05 15:18:33 rlubke Exp $
  */
 
 /*
@@ -34,7 +34,6 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -55,6 +54,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
 
@@ -203,11 +203,22 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 	"javax.faces.webapp.PREVIOUS_JSP_ID_SET";
 
     /**
-     * Used to store information about dynamic include
-     * sources.
+     * This is a <code>Page</code> scoped marker to help us
+     * keep track of the different execution context we could
+     * be operating within, e.g. an include, or a tag file.
+     * The value of the attribute is an Integer that is unqiue
+     * to this page context.
      */
-    private static final String JAVAX_FACES_INCLUDE_LIST =
-          "javax.faces.webapp.INCLUDE_LIST";
+    private static final String JAVAX_FACES_PAGECONTEXT_MARKER =
+         "javax.faces.webapp.PAGECONTEXT_MARKER";
+
+    /**
+     * This is a <code>request</code> scoped attribute which contains
+     * an AtomicInteger which we use to increment the PageContext
+     * count.
+     */
+    private static final String JAVAX_FACES_PAGECONTEXT_COUNTER =
+         "javax.faces.webapp.PAGECONTEXT_COUNTER";
     
     // ------------------------------------------------------ Instance Variables
     /**
@@ -1600,31 +1611,29 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
 
     public void setJspId(String id) {
-        if (isIncluded()) {
+        Map<String,Object> reqMap =
+             getFacesContext().getExternalContext().getRequestMap();
+        AtomicInteger aInt = (AtomicInteger) reqMap.get(JAVAX_FACES_PAGECONTEXT_COUNTER);
+        if (aInt == null) {
+            aInt = new AtomicInteger();
+            reqMap.put(JAVAX_FACES_PAGECONTEXT_COUNTER, aInt);
+        }
+
+        Integer pcId = (Integer)
+             pageContext.getAttribute(JAVAX_FACES_PAGECONTEXT_MARKER,
+                                      PageContext.PAGE_SCOPE);
+        if (pcId == null) {
+            pcId = aInt.incrementAndGet();
+            pageContext.setAttribute(JAVAX_FACES_PAGECONTEXT_MARKER, pcId);
+        }
+        if (pcId.intValue() > 1) {
             StringBuilder builder = new StringBuilder(id.length() + 3);
-            builder.append(id);
-            ExternalContext extContext = context.getExternalContext();
-            Map<String,Object> reqMap = extContext.getRequestMap();
-            List<String> includeList = 
-                  TypedCollections.dynamicallyCastList(
-                        ((List) reqMap.get(JAVAX_FACES_INCLUDE_LIST)), 
-                        String.class);
-            if (includeList == null) {
-                includeList = new IdentityArrayList<String>(6);
-                reqMap.put(JAVAX_FACES_INCLUDE_LIST, includeList);
-            }            
-            String key = (String) reqMap.get("javax.servlet.include.request_uri");
-            int idx = includeList.indexOf(key);
-            if (idx != -1) {
-                builder.append('i').append(idx);               
-            } else {
-                includeList.add(key);
-                builder.append('i').append(includeList.size() - 1);             
-            }
+            builder.append(id).append("pc").append(pcId);
             jspId = builder.toString();
         } else {
             jspId = id;
         }
+
         facesJspId = null;
         updatePreviousJspIdAndIteratorStatus(jspId);        
     }
@@ -1671,11 +1680,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             previousJspIdSet.add(id);
         }
     }
-    
-    private boolean isIncluded() {
-        return (getFacesContext().getExternalContext().getRequestMap().
-                containsKey("javax.servlet.include.request_uri"));
-    }
+        
 
     public String getJspId() {
 	return jspId;
@@ -1897,41 +1902,5 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         }
         return null;
     }
-
-    
-    // ----------------------------------------------------------- Inner Classes
-    
-    
-    private static class IdentityArrayList<E> extends ArrayList<E> {
         
-        IdentityArrayList() {
-            super(16);
-        }
-        
-        IdentityArrayList(int initialcapacity) {
-            super(initialcapacity);
-        }
-
-
-        /**
-         * Searches for the first occurence of the given argument, testing
-         * for identity equality using the <tt>==</tt>.
-         *
-         * @param elem an object.
-         *
-         * @return the index of the first occurrence of the argument in this
-         *         list; returns <tt>-1</tt> if the object is not found.        
-         */
-        @Override public int indexOf(Object elem) {
-            int idx = 0;
-            for (Object o : this) {
-                //noinspection ObjectEquality
-                if (o == elem) {
-                    return idx;
-                }
-                idx++;
-            }
-            return -1;
-        }
-    }
 }
