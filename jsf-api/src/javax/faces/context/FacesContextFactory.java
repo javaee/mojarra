@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactory.java,v 1.12 2003/03/19 23:40:04 eburns Exp $
+ * $Id: FacesContextFactory.java,v 1.13 2004/01/21 01:51:12 craigmcc Exp $
  */
 
 /*
@@ -40,13 +40,19 @@ public abstract class FacesContextFactory {
      * and response objects, utilizing the specified {@link Lifecycle}
      * instance, for this web application.</p>
      *
+     * <p>The implementation of this method must ensure that calls to the
+     * <code>getCurrentInstance()</code> method of {@link FacesContext},
+     * from the same thread that called this method, will return the same
+     * {@link FacesContext} instance until the <code>release()</code>
+     * method is called on that instance.</p>
+     *
      * @param context In servlet environments, the
      * <code>ServletContext</code> that is associated with this web
      * application
      * @param request In servlet environments, the
      * <code>ServletRequest</code> that is to be processed
-     * @param response In servlet environments, the <code>ServletResponse</code> that is to be
-     *  created
+     * @param response In servlet environments, the
+     * <code>ServletResponse</code> that is to be processed
      * @param lifecycle The {@link Lifecycle} instance being used
      *  to process this request
      *
