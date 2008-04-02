@@ -140,6 +140,9 @@
     <target name="generate"
             depends="check.taglib.generation.necessity"
             unless="skip.taglib.generation">        
+	<path id="ant.classpath">
+	    <pathelement location="${myenv.ANT_HOME}/lib/ant.jar"/>
+	</path>
 
         <copy todir="${build.dir}">
             <fileset dir="${tools.dir}/conf">
@@ -155,6 +158,7 @@
                destdir="${tools.dir}/build/classes">
             <classpath>
                 <path refid="impl.compile.classpath"/>
+                <path refid="ant.classpath"/>
             </classpath>
         </javac>
         <copy todir="${tools.dir}/build/classes">
