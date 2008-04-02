@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.11 2005/05/16 20:16:14 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.12 2005/06/09 22:37:45 jayashri Exp $
  */
 
 /*
@@ -45,10 +45,8 @@ import com.sun.faces.util.Util;
 public class ApplicationAssociate extends Object {
 
     // Log instance for this class
-    private static Logger logger;
-    static {
-        logger = Util.getLogger(Util.FACES_LOGGER);
-    }
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.APPLICATION_LOGGER);
 
     private ApplicationImpl app = null;
     

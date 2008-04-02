@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.31 2005/06/06 18:04:45 edburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.32 2005/06/09 22:37:45 jayashri Exp $ 
  */ 
 
 
@@ -37,16 +37,14 @@ import javax.faces.component.NamingContainer;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.31 2005/06/06 18:04:45 edburns Exp $
+ * @version $Id: StateManagerImpl.java,v 1.32 2005/06/09 22:37:45 jayashri Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
 
     // Log instance for this class
-    private static Logger logger;
-    static {
-        logger = Util.getLogger(Util.FACES_LOGGER);
-    }
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.APPLICATION_LOGGER);
     
     private static final String NUMBER_OF_VIEWS_IN_SESSION =
         RIConstants.FACES_PREFIX + "NUMBER_OF_VIEWS_IN_SESSION";

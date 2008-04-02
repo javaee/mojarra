@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.72 2005/05/16 20:16:25 rlubke Exp $
+ * $Id: CheckboxRenderer.java,v 1.73 2005/06/09 22:37:46 jayashri Exp $
  *
  */
 
@@ -22,8 +22,9 @@ import javax.faces.convert.ConverterException;
 
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 
 /**
  * <B>CheckboxRenderer</B> is a class that renders the current value of
@@ -35,8 +36,6 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
     //
     // Protected Constants
     //
-    // Log instance for this class
-    private static final Log log = LogFactory.getLog(CheckboxRenderer.class);
 
     //
     // Class Variables
@@ -79,8 +78,9 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, 
+                    "Begin decoding component " + component.getId());
         }
 
         // If the checkbox disabled, nothing would be sent in the
@@ -88,8 +88,8 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         // value of the checkbox, if it is disabled since its state
         // cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
-            if (log.isTraceEnabled()) {
-                log.trace("No decoding necessary since the component " +
+             if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("No decoding necessary since the component " +
                           component.getId() + " is disabled");
             }
             return;
@@ -115,11 +115,12 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         }
 
         setSubmittedValue(component, newValue);
-        if (log.isTraceEnabled()) {
-            log.trace("new value after decoding" + newValue);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("new value after decoding" + newValue);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, 
+                    "End decoding component " + component.getId());
         }
     }
 

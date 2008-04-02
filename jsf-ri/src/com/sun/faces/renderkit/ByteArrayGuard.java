@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayGuard.java,v 1.1 2005/04/20 23:01:37 jayashri Exp $
+ * $Id: ByteArrayGuard.java,v 1.2 2005/06/09 22:37:46 jayashri Exp $
  */
 
 /*
@@ -45,10 +45,8 @@ public class ByteArrayGuard {
     public static final int DEFAULT_PASSWORD_LENGTH = 24;
     
     // Log instance for this class
-    private static Logger logger;
-    static {
-        logger = Util.getLogger(Util.FACES_LOGGER);
-    }
+    protected static Logger logger = 
+            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
     
     /** 
      * @param ps the password strategy to create password for encryption and decryption

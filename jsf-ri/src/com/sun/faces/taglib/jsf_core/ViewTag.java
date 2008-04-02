@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.36 2005/05/16 20:16:33 rlubke Exp $
+ * $Id: ViewTag.java,v 1.37 2005/06/09 22:37:49 jayashri Exp $
  */
 
 /*
@@ -34,8 +34,8 @@ import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.sun.faces.application.ViewHandlerResponseWrapper;
 import com.sun.faces.util.Util;
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.36 2005/05/16 20:16:33 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.37 2005/06/09 22:37:49 jayashri Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -59,7 +59,8 @@ public class ViewTag extends UIComponentELTag {
     // Class Variables
     //
 
-    private static final Log log = LogFactory.getLog(ViewTag.class);
+    protected static Logger logger = 
+            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
 
     //
     // Instance Variables
@@ -157,15 +158,13 @@ public class ViewTag extends UIComponentELTag {
         try {
             rc = super.doStartTag();
         } catch (JspException e) {
-            if (log.isDebugEnabled()) {
-                log.debug("Can't leverage base class",
-                          e);
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, "Can't leverage base class", e);
             }
             throw e;
         } catch (Throwable t) {
-            if (log.isDebugEnabled()) {
-                log.debug("Can't leverage base class",
-                          t);
+             if (logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, "Can't leverage base class", t);
             }
             throw new JspException(t);
         }

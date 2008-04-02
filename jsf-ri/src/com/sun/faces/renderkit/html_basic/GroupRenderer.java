@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.24 2005/05/16 20:16:26 rlubke Exp $
+ * $Id: GroupRenderer.java,v 1.25 2005/06/09 22:37:47 jayashri Exp $
  */
 
 /*
@@ -10,8 +10,8 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -24,16 +24,14 @@ import java.util.Iterator;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method.
  *
- * @version $Id: GroupRenderer.java,v 1.24 2005/05/16 20:16:26 rlubke Exp $
+ * @version $Id: GroupRenderer.java,v 1.25 2005/06/09 22:37:47 jayashri Exp $
  */
 public class GroupRenderer extends HtmlBasicRenderer {
 
     //
     // Protected Constants
     //
-    // Log instance for this class
-    private static final Log log = LogFactory.getLog(GroupRenderer.class);
-
+  
     //
     // Class Variables
     //
@@ -73,15 +71,15 @@ public class GroupRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " +
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding component " +
                       component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -115,14 +113,14 @@ public class GroupRenderer extends HtmlBasicRenderer {
 
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding children " + component.getId());
+       if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, "Begin encoding children " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -134,8 +132,8 @@ public class GroupRenderer extends HtmlBasicRenderer {
         while (kids.hasNext()) {
             encodeRecursive(context, (UIComponent) kids.next());
         }
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding children " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding children " + component.getId());
         }
 
     }
@@ -150,8 +148,8 @@ public class GroupRenderer extends HtmlBasicRenderer {
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -168,8 +166,8 @@ public class GroupRenderer extends HtmlBasicRenderer {
                 writer.endElement("span");
             }
         }
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " +
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding component " +
                       component.getId());
         }
 

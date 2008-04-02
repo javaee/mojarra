@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.21 2005/04/21 18:55:37 edburns Exp $
+ * $Id: MessagesRenderer.java,v 1.22 2005/06/09 22:37:48 jayashri Exp $
  */
 
 /*
@@ -12,8 +12,8 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -35,7 +35,6 @@ public class MessagesRenderer extends HtmlBasicRenderer {
     //
     // Prviate/Protected Constants
     //
-    private static final Log log = LogFactory.getLog(MessagesRenderer.class);
    
     //
     // Methods From Renderer
@@ -61,14 +60,14 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding component " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component "
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component "
                           + component.getId() + " since " +
                           "rendered attribute is set to false ");
             }

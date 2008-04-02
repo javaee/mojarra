@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationFactoryImpl.java,v 1.8 2005/04/05 20:25:13 jayashri Exp $
+ * $Id: ApplicationFactoryImpl.java,v 1.9 2005/06/09 22:37:45 jayashri Exp $
  */
 
 /*
@@ -31,10 +31,8 @@ import javax.faces.application.ApplicationFactory;
 public class ApplicationFactoryImpl extends ApplicationFactory {
 
    // Log instance for this class
-    private static Logger logger;
-    static {
-        logger = Util.getLogger(Util.FACES_LOGGER);
-    }
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.APPLICATION_LOGGER);
     //
     // Protected Constants
     //

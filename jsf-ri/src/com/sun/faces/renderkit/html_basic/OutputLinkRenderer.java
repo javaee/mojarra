@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.19 2005/06/08 19:45:05 edburns Exp $
+ * $Id: OutputLinkRenderer.java,v 1.20 2005/06/09 22:37:48 jayashri Exp $
  */
 
 /*
@@ -21,8 +21,8 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 /**
@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.19 2005/06/08 19:45:05 edburns Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.20 2005/06/09 22:37:48 jayashri Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -38,8 +38,6 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
-    // Log instance for this class
-    private static final Log log = LogFactory.getLog(OutputLinkRenderer.class);
 
     // Separator character
 
@@ -79,8 +77,8 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         }
 
         // take no action, this is an Output component.
-        if (log.isTraceEnabled()) {
-            log.trace("No decoding necessary since the component "
+        if (logger.isLoggable(Level.FINE)) {
+             logger.fine("No decoding necessary since the component "
                       + component.getId() +
                       " is not an instance or a sub class of UIInput");
         }
@@ -104,21 +102,21 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(
                 Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding component " + component.getId());
         }
 
         UIOutput output = (UIOutput) component;
         String hrefVal = getCurrentValue(context, component);
-        if (log.isTraceEnabled()) {
-            log.trace("Value to be rendered " + hrefVal);
+        if (logger.isLoggable(Level.FINE)) {
+             logger.fine("Value to be rendered " + hrefVal);
         }
 
         // suppress rendering if "rendered" property on the output is
         // false
         if (!output.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component "
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component "
                           + component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -179,14 +177,14 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(
                 Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding children " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding children " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component "
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component "
                           + component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -211,14 +209,14 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
                 Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component "
+           if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component "
                           + component.getId() + " since " +
                           "rendered attribute is set to false ");
             }

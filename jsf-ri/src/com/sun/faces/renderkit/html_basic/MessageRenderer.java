@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.52 2005/04/21 18:55:36 edburns Exp $
+ * $Id: MessageRenderer.java,v 1.53 2005/06/09 22:37:48 jayashri Exp $
  */
 
 /*
@@ -12,8 +12,8 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -36,7 +36,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
     //
     // Private/Protected Constants
     //
-    private static final Log log = LogFactory.getLog(MessageRenderer.class);
 
     // 
     // Ivars
@@ -97,14 +96,14 @@ public class MessageRenderer extends HtmlBasicRenderer {
             omRenderer.encodeEnd(context, component);
             return;
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding component " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -117,9 +116,8 @@ public class MessageRenderer extends HtmlBasicRenderer {
         //"for" attribute required for Message. Should be taken care of
         //by TLD in JSP case, but need to cover non-JSP case.
         if (clientId == null) {
-            if (log.isInfoEnabled()) {
-                log.info(Util.getExceptionMessageString(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("'for' attribute cannot be null");
             }
             return;
         }
@@ -251,8 +249,8 @@ public class MessageRenderer extends HtmlBasicRenderer {
             writer.endElement("span");
         }
 
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding component " + component.getId());
         }
     }
 

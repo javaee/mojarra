@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.37 2005/05/16 20:16:15 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.38 2005/06/09 22:37:45 jayashri Exp $
  */
 
 /*
@@ -41,10 +41,8 @@ public class NavigationHandlerImpl extends NavigationHandler {
     //
 
     // Log instance for this class
-    private static Logger logger;
-    static {
-        logger = Util.getLogger(Util.FACES_LOGGER);
-    }
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.APPLICATION_LOGGER);
 
     //
     // Class Variables

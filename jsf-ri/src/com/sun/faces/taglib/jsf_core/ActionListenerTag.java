@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.21 2005/05/19 13:26:59 rlubke Exp $
+ * $Id: ActionListenerTag.java,v 1.22 2005/06/09 22:37:49 jayashri Exp $
  */
 
 /*
@@ -23,8 +23,8 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 /**
@@ -58,8 +58,8 @@ public class ActionListenerTag extends TagSupport {
     // ------------------------------------------------------------- Attributes
 
     private static final long serialVersionUID = -5222351612904952740L;
-    private static final Log log = LogFactory.getLog(ActionListenerTag.class);
-
+    protected static Logger logger = 
+            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
     /**
      * <p>The fully qualified class name of the {@link ActionListener}
      * instance to be created.</p>
@@ -176,11 +176,11 @@ public class ActionListenerTag extends TagSupport {
         if (handler != null) {
             ((ActionSource)component).addActionListener(handler);
         } else {
-            if (log.isDebugEnabled()) {
+            if (logger.isLoggable(Level.FINE)) {
                 if (binding == null && type == null) {
-                    log.debug("'handler' was not created because both 'binding' and 'type' were null.");
+                    logger.fine("'handler' was not created because both 'binding' and 'type' were null.");
                 } else {
-                    log.debug("'handler' was not created.");
+                    logger.fine("'handler' was not created.");
                 }
             }
         }

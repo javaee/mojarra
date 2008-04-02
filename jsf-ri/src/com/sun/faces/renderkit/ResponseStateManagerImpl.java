@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.20 2005/05/16 20:16:23 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.21 2005/06/09 22:37:46 jayashri Exp $
  */
 
 /*
@@ -29,8 +29,8 @@ import javax.faces.render.ResponseStateManager;
 import com.sun.faces.util.Base64;
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 /**
@@ -42,8 +42,9 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     //
     // Protected Constants
     //
-    private static final Log log =
-        LogFactory.getLog(ResponseStateManagerImpl.class);
+    // Log instance for this class
+    protected static Logger logger = 
+            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
     private static final String FACES_VIEW_STATE =
         "com.sun.faces.FACES_VIEW_STATE";
     
@@ -130,8 +131,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                     (Base64.decode(viewString.getBytes())));
 		bis = new ByteArrayInputStream(bytes);
 		if (isCompressStateSet(context)) {
-		    if (log.isDebugEnabled()) {
-			log.debug("Deflating state before restoring..");
+		    if (logger.isLoggable(Level.FINE)) {
+                        logger.fine("Deflating state before restoring..");
 		    }
 		    gis = new GZIPInputStream(bis);
 		    ois = new ObjectInputStream(gis);
@@ -151,11 +152,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 		}
 		ois.close();
 	    } catch (java.io.OptionalDataException ode) {
-		log.error(ode.getMessage(), ode);
+		logger.log(Level.SEVERE, ode.getMessage(), ode);
 	    } catch (java.lang.ClassNotFoundException cnfe) {
-            log.error(cnfe.getMessage(), cnfe);
+                logger.log(Level.SEVERE,cnfe.getMessage(), cnfe);
 	    } catch (java.io.IOException iox) {
-		log.error(iox.getMessage(), iox);
+		logger.log(Level.SEVERE,iox.getMessage(), iox);
 	    }
 	}
 	else {
@@ -183,8 +184,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	    
 	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	    if (compress) {
-		if (log.isDebugEnabled()) {
-		    log.debug("Compressing state before saving..");
+		if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Compressing state before saving..");
 		}
 		zos = new GZIPOutputStream(bos);
 		oos = new ObjectOutputStream(zos);

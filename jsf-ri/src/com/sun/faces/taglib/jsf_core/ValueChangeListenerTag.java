@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.15 2005/05/20 14:50:00 rlubke Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.16 2005/06/09 22:37:49 jayashri Exp $
  */
 
 /*
@@ -23,8 +23,8 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <p>Tag implementation that creates a {@link ValueChangeListener} instance
@@ -57,8 +57,8 @@ public class ValueChangeListenerTag extends TagSupport {
     // ------------------------------------------------------------- Attributes
 
     private static final long serialVersionUID = -212845116876281363L;
-    private static final Log log =
-        LogFactory.getLog(ValueChangeListenerTag.class);
+    protected static Logger logger = 
+            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
 
 
     /**
@@ -177,11 +177,11 @@ public class ValueChangeListenerTag extends TagSupport {
         if (handler != null) {
             ((EditableValueHolder) component).addValueChangeListener(handler);
         } else {
-            if (log.isDebugEnabled()) {
+             if (logger.isLoggable(Level.FINE)) {
                 if (binding == null && type == null) {
-                    log.debug("'handler' was not created because both 'binding' and 'type' were null.");
+                    logger.fine("'handler' was not created because both 'binding' and 'type' were null.");
                 } else {
-                    log.debug("'handler' was not created.");
+                    logger.fine("'handler' was not created.");
                 }
             }
         }

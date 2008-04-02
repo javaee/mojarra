@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.87 2005/06/01 14:03:34 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.88 2005/06/09 22:37:46 jayashri Exp $
  */
 
 /*
@@ -25,8 +25,8 @@ import javax.faces.event.ActionEvent;
 
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <B>ButtonRenderer</B> is a class that renders the current value of
@@ -38,9 +38,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
-    // Log instance for this class
-    private static final Log log = LogFactory.getLog(ButtonRenderer.class);
-
     //
     // Class Variables
     //
@@ -80,15 +77,16 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, 
+                    "Begin decoding component " + component.getId());
         }
         
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
-            if (log.isTraceEnabled()) {
-                log.trace("No decoding necessary since the component " +
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("No decoding necessary since the component " +
                           component.getId() + " is disabled");
             }
             return;
@@ -118,12 +116,13 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         ActionEvent actionEvent = new ActionEvent(component);
         component.queueEvent(actionEvent);
 
-        if (log.isDebugEnabled()) {
-            log.debug("This command resulted in form submission " +
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("This command resulted in form submission " +
                       " ActionEvent queued " + actionEvent);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + component.getId());
+         if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,
+                    "End decoding component " + component.getId());
         }
         return;
     }
@@ -135,14 +134,15 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + component.getId());
+         if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, 
+                    "Begin encoding component " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + component.getId() +
+           if (logger.isLoggable(Level.FINE)) {
+               logger.fine("End encoding component " + component.getId() +
                           " since rendered attribute is set to false ");
             }
             return;
@@ -207,8 +207,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         writer.endElement("input");
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
+         if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, 
+                    "End encoding component " + component.getId());
         }
     }
 

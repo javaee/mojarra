@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.37 2005/05/16 20:16:27 rlubke Exp $
+ * $Id: LabelRenderer.java,v 1.38 2005/06/09 22:37:48 jayashri Exp $
  */
 
 /*
@@ -20,8 +20,8 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <p><B>LabelRenderer</B> renders Label element.<p>.
@@ -31,7 +31,6 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
     //
     // Protected Constants
     //
-    private static final Log log = LogFactory.getLog(LabelRenderer.class);
     //
     // Class Variables
     //
@@ -73,8 +72,8 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
                 Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin decoding component " + component.getId());
         }
         ResponseWriter writer = null;
         String forValue = null;
@@ -84,8 +83,8 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -126,8 +125,8 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         
         // render the curentValue as label text if specified.
         String value = getCurrentValue(context, component);
-        if (log.isTraceEnabled()) {
-            log.trace("Value to be rendered " + value);
+        if (logger.isLoggable(Level.FINE)) {
+             logger.fine("Value to be rendered " + value);
         }
         if (value != null && value.length() != 0) {
 	    boolean escape = true;
@@ -171,8 +170,8 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             assert (writer != null);
             writer.endElement("label");
         }
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding component " + component.getId());
         }
     }
     
@@ -201,8 +200,8 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             parent = parent.getParent();
         }
         if (parent == null) {
-            if (log.isErrorEnabled()) {
-                log.error("component " + component.getId() +
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("component " + component.getId() +
                           " must be enclosed inside a form ");
             }
             return result;

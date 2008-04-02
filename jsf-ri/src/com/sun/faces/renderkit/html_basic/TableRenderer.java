@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.26 2005/05/16 20:16:29 rlubke Exp $
+ * $Id: TableRenderer.java,v 1.27 2005/06/09 22:37:48 jayashri Exp $
  */
 
 /*
@@ -11,8 +11,8 @@ package com.sun.faces.renderkit.html_basic;
 
 
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
@@ -30,11 +30,7 @@ import java.util.List;
  */
 
 public class TableRenderer extends HtmlBasicRenderer {
-
-    // Log instance for this class
-    private static final Log log = LogFactory.getLog(ButtonRenderer.class);
-
-
+  
     public boolean getRendersChildren() {
         return true;
     }
@@ -47,15 +43,15 @@ public class TableRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding component " + component.getId());
         }
 
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("No encoding necessary " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("No encoding necessary " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -188,12 +184,12 @@ public class TableRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding children " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding children " + component.getId());
         }
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("No encoding necessary " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("No encoding necessary " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -283,8 +279,8 @@ public class TableRenderer extends HtmlBasicRenderer {
 
         // Clean up after ourselves
         data.setRowIndex(-1);
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding children " +
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding children " +
                       component.getId());
         }
     }
@@ -298,8 +294,8 @@ public class TableRenderer extends HtmlBasicRenderer {
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("No encoding necessary " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("No encoding necessary " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -312,8 +308,8 @@ public class TableRenderer extends HtmlBasicRenderer {
         // Render the ending of this table
         writer.endElement("table");
         writer.writeText("\n", null);
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding component " + component.getId());
         }
 
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.35 2005/05/16 20:16:26 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.36 2005/06/09 22:37:47 jayashri Exp $
  */
 
 /*
@@ -20,8 +20,8 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <B>GridRenderer</B> is a class that renders <code>UIPanel</code> component
@@ -33,8 +33,6 @@ public class GridRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
-    // Log instance for this class
-    private static final Log log = LogFactory.getLog(GridRenderer.class);
     
     //
     // Class Variables
@@ -82,16 +80,16 @@ public class GridRenderer extends HtmlBasicRenderer {
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " +
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, "Begin encoding component " +
                       component.getId());
         }
         
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component "
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component "
                           + component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -165,15 +163,15 @@ public class GridRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding children " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding children " + component.getId());
         }
 
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -243,8 +241,8 @@ public class GridRenderer extends HtmlBasicRenderer {
         }
         writer.endElement("tbody");
         writer.writeText("\n", null);
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding children " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding children " + component.getId());
         }
     }
 
@@ -259,8 +257,8 @@ public class GridRenderer extends HtmlBasicRenderer {
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -270,8 +268,8 @@ public class GridRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = context.getResponseWriter();
         writer.endElement("table");
         writer.writeText("\n", null);
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding component " + component.getId());
         }
     }
 

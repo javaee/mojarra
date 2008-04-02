@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.19 2005/04/21 18:55:37 edburns Exp $
+ * $Id: OutputMessageRenderer.java,v 1.20 2005/06/09 22:37:48 jayashri Exp $
  */
 
 /*
@@ -12,8 +12,8 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
@@ -32,10 +32,6 @@ import java.util.Iterator;
  */
 
 public class OutputMessageRenderer extends HtmlBasicRenderer {
-
-    // Log instance for this class
-    protected static final Log log = LogFactory.getLog(
-        OutputMessageRenderer.class);
 
     //
     // Protected Constants
@@ -89,9 +85,10 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding component " + component.getId());
         }
+        
         String
             currentValue = null,
             style = (String) component.getAttributes().get("style"),
@@ -103,8 +100,8 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + component.getId() +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " + component.getId() +
                           " since rendered attribute is set to false");
             }
             return;
@@ -183,6 +180,10 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         }
         if (wroteSpan) {
             writer.endElement("span");
+        }
+        
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding component " + component.getId());
         }
     }
 

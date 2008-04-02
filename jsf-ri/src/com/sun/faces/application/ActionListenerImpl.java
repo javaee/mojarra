@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.11 2005/04/05 20:25:13 jayashri Exp $
+ * $Id: ActionListenerImpl.java,v 1.12 2005/06/09 22:37:45 jayashri Exp $
  */
 
 /*
@@ -39,10 +39,8 @@ import com.sun.faces.util.Util;
 public class ActionListenerImpl implements ActionListener {
 
     // Log instance for this class
-    private static Logger logger;
-    static {
-        logger = Util.getLogger(Util.FACES_LOGGER);
-    }
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.APPLICATION_LOGGER);
 
     //
     // Constructors and Initializers

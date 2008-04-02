@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.162 2005/06/01 14:03:38 rlubke Exp $
+ * $Id: Util.java,v 1.163 2005/06/09 22:37:50 jayashri Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import java.text.MessageFormat;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.162 2005/06/01 14:03:38 rlubke Exp $
+ * @version $Id: Util.java,v 1.163 2005/06/09 22:37:50 jayashri Exp $
  */
 
 public class Util extends Object {
@@ -77,15 +77,17 @@ public class Util extends Object {
             "com.sun.faces.LogStrings";
     
     // Log instance for this class
-    private static Logger logger;
-    static {
-        logger = getLogger(FACES_LOGGER);
-    }
+    private static Logger logger = getLogger(FACES_LOGGER);
     
     // README - make sure to add the message identifier constant
     // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
     // parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
  
+    // Loggers
+    public static final String RENDERKIT_LOGGER = "renderkit";
+    public static final String TAGLIB_LOGGER = "taglib";
+    public static final String APPLICATION_LOGGER = "application";
+    
     /**
      * The message identifier of the {@link FacesMessage} to be created as
      * a result of type conversion error.

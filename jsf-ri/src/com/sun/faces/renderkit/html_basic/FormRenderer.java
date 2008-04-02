@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.87 2005/05/16 20:16:26 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.88 2005/06/09 22:37:47 jayashri Exp $
  */
 
 /*
@@ -21,8 +21,8 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form.
@@ -33,8 +33,7 @@ public class FormRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
-    // Log instance for this class
-    private static final Log log = LogFactory.getLog(FormRenderer.class);
+    
     //
     // Class Variables
     //
@@ -73,8 +72,9 @@ public class FormRenderer extends HtmlBasicRenderer {
         // the indicator accordingly..
         //
         String clientId = component.getClientId(context);
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, 
+                    "Begin decoding component " + component.getId());
         }
         Map requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
@@ -83,8 +83,9 @@ public class FormRenderer extends HtmlBasicRenderer {
         } else {
             ((UIForm) component).setSubmitted(false);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + component.getId());
+       if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, 
+                    "End decoding component " + component.getId());
         }
     }
 
@@ -97,15 +98,15 @@ public class FormRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " +
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, "Begin encoding component " +
                       component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -160,8 +161,8 @@ public class FormRenderer extends HtmlBasicRenderer {
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -185,8 +186,8 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.endElement("input");
 
         writer.endElement("form");
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, "End encoding component " + component.getId());
         }
     }
 

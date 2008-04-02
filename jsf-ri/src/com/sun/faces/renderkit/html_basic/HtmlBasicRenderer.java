@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.93 2005/06/08 19:45:05 edburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.94 2005/06/09 22:37:47 jayashri Exp $
  */
 
 /*
@@ -13,8 +13,6 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
@@ -36,6 +34,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 /**
  * <B>HtmlBasicRenderer</B> is a base class for implementing renderers
  * for HtmlBasicRenderKit.
@@ -50,9 +51,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
     //
     // Class Variables
     //
-    private static final Log log = LogFactory.getLog(HtmlBasicRenderer.class);
+    // Log instance for this class
+    protected static Logger logger = 
+            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
    
-
     //
     // Instance Variables
     //
@@ -72,7 +74,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     public static final String CLEAR_HIDDEN_FIELD_FN_NAME = 
          "clearFormHiddenParams";
-    
+   
     public HtmlBasicRenderer() {
         super();
     }
@@ -101,15 +103,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, 
+                    "Begin decoding component " + component.getId());
         }
 
         if (!(component instanceof UIInput)) {
             // decode needs to be invoked only for components that are
             // instances or subclasses of UIInput.
-            if (log.isTraceEnabled()) {
-                log.trace("No decoding necessary since the component "
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("No decoding necessary since the component "
                           + component.getId() +
                           " is not an instance or a sub class of UIInput");
             }
@@ -119,8 +122,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
-            if (log.isTraceEnabled()) {
-                log.trace("No decoding necessary since the component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("No decoding necessary since the component " +
                           component.getId() + " is disabled");
             }
             return;
@@ -133,12 +136,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (requestMap.containsKey(clientId)) {
             String newValue = (String) requestMap.get(clientId);
             setSubmittedValue(component, newValue);
-            if (log.isTraceEnabled()) {
-                log.trace("new value after decoding" + newValue);
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("new value after decoding" + newValue);
             }
         }
-        if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, 
+                    "End decoding component " + component.getId());
         }
     }
 
@@ -158,15 +162,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER, 
+                    "Begin encoding component " + component.getId());
         } 
         
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + component.getId() +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " + component.getId() +
                           " since " +
                           "rendered attribute is set to false ");
             }
@@ -177,8 +182,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         assert (writer != null);
 
         currentValue = getCurrentValue(context, component);
-        if (log.isTraceEnabled()) {
-            log.trace("Value to be rendered " + currentValue);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Value to be rendered " + currentValue);
         }
         getEndTextToRender(context, component, currentValue);
     }
@@ -419,8 +424,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // log a message if we were unable to find the specified
         // component (probably a misconfigured 'for' attribute
         if (result == null) {
-            if (log.isWarnEnabled()) {
-                log.warn(Util.getExceptionMessageString(
+            if (logger.isLoggable(Level.WARNING)) {
+                 logger.warning(Util.getExceptionMessageString(
                     Util.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID,
                     new Object[]{forComponent}));
             }
@@ -499,9 +504,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
                 writer.writeAttribute("id", id = component.getClientId(context),
                                       "id");
             } catch (IOException e) {
-                if (log.isDebugEnabled()) {
+                if (logger.isLoggable(Level.WARNING)) {
                     // PENDING I18N
-                    log.debug("Can't write ID attribute" + e.getMessage());
+                    logger.warning("Can't write ID attribute" + e.getMessage());
                 }
             }
         }

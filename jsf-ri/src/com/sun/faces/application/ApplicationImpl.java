@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.61 2005/05/16 20:16:15 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.62 2005/06/09 22:37:45 jayashri Exp $
  */
 
 /*
@@ -68,10 +68,8 @@ import java.util.logging.Level;
 public class ApplicationImpl extends Application {
 
     // Log instance for this class
-    private static Logger logger;
-    static {
-        logger = Util.getLogger(Util.FACES_LOGGER);
-    }
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.APPLICATION_LOGGER);
 
     private static final ELContextListener[] EMPTY_EL_CTX_LIST_ARRAY = { };
 
@@ -386,6 +384,13 @@ public class ApplicationImpl extends Application {
 
 
     public void setPropertyResolver(PropertyResolver resolver) {
+        // Throw Illegal State Exception if  a PropertyResolver is set after 
+        // application initialization has completed. 
+        if (FacesContext.getCurrentInstance() != null) {
+            throw new IllegalStateException(
+                    Util.getExceptionMessageString(
+                    Util.APPLICATION_INIT_COMPLETE_ERROR_ID));
+        }
         if (resolver == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
@@ -466,6 +471,13 @@ public class ApplicationImpl extends Application {
 
 
     public void setVariableResolver(VariableResolver resolver) {
+        // Throw Illegal State Exception if VariableResolver is set after 
+        // application initialization has completed. 
+        if (FacesContext.getCurrentInstance() != null) {
+            throw new IllegalStateException(
+                    Util.getExceptionMessageString(
+                    Util.APPLICATION_INIT_COMPLETE_ERROR_ID));
+        }
         if (resolver == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);

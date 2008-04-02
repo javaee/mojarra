@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.58 2005/05/16 20:16:28 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.59 2005/06/09 22:37:48 jayashri Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -37,8 +37,8 @@ import javax.faces.model.SelectItemGroup;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of
@@ -55,9 +55,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     //
     // Class Variables
     //
-
-    private static final Log log = LogFactory.getLog(MenuRenderer.class);
-
+    
     //
     // Instance Variables
     //
@@ -91,15 +89,15 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin decoding component " + component.getId());
         }
 
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
-            if (log.isTraceEnabled()) {
-                log.trace("No decoding necessary since the component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("No decoding necessary since the component " +
                           component.getId() + " is disabled");
             }
             return;
@@ -116,16 +114,16 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 String newValues[] = (String[]) requestParameterValuesMap.
                     get(clientId);
                 setSubmittedValue(component, newValues);
-                if (log.isTraceEnabled()) {
-                    log.trace("submitted values for UISelectMany component " +
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("submitted values for UISelectMany component " +
                               component.getId() + " after decoding " + newValues);
                 }
             } else {
-// Use the empty array, not null, to distinguish
-// between an deselected UISelectMany and a disabled one
+                // Use the empty array, not null, to distinguish
+                // between an deselected UISelectMany and a disabled one
                 setSubmittedValue(component, new String[0]);
-                if (log.isTraceEnabled()) {
-                    log.trace("Set empty array for UISelectMany component " +
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Set empty array for UISelectMany component " +
                               component.getId() + " after decoding ");
                 }
             }
@@ -136,8 +134,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             if (requestParameterMap.containsKey(clientId)) {
                 String newValue = (String) requestParameterMap.get(clientId);
                 setSubmittedValue(component, newValue);
-                if (log.isTraceEnabled()) {
-                    log.trace("submitted value for UISelectOne component " +
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("submitted value for UISelectOne component " +
                               component.getId() + " after decoding " + newValue);
                 }
 
@@ -176,8 +174,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	    return null;
 	}
         if (newValue == null) {
-            if (log.isTraceEnabled()) {
-                log.trace("No conversion necessary for SelectOne Component  "
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("No conversion necessary for SelectOne Component  "
                           + uiSelectOne.getId() + " since the new value is null ");
             }
             return null;
@@ -185,8 +183,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         convertedValue =
             super.getConvertedValue(context, uiSelectOne, newValue);
-        if (log.isTraceEnabled()) {
-            log.trace("SelectOne Component  " + uiSelectOne.getId() +
+        if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("SelectOne Component  " + uiSelectOne.getId() +
                       " convertedValue " + convertedValue);
         }
         return convertedValue;
@@ -250,8 +248,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
 
         // At this point, result is ready to be set as the value
-        if (log.isTraceEnabled()) {
-            log.trace("SelectMany Component  " + uiSelectMany.getId() +
+        if (logger.isLoggable(Level.FINE)) {
+             logger.fine("SelectMany Component  " + uiSelectMany.getId() +
                       " convertedValues " + result);
         }
         return result;
@@ -292,10 +290,10 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         // attached converter takes priority
         if (null == (converter = uiSelectMany.getConverter())) {
-// Otherwise, look for a by-type converter
+            // Otherwise, look for a by-type converter
             if (null == (converter = Util.getConverterForClass(elementType))) {
-// if that fails, and the attached values are of Object type,
-// we don't need conversion.
+               // if that fails, and the attached values are of Object type,
+               // we don't need conversion.
                 if (elementType.equals(Object.class)) {
                     return newValues;
                 }
@@ -364,11 +362,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             }
         } else {
             for (int i = 0; i < len; i++) {
-                if (log.isDebugEnabled()) {
+                if (logger.isLoggable(Level.FINE)) {
                     Object converted = converter.getAsObject(context,
                                                              uiSelectMany,
                                                              newValues[i]);
-                    log.debug("String value: " + newValues[i] +
+                    logger.fine("String value: " + newValues[i] +
                               " converts to : " + converted.toString());
                 }
                 Array.set(result, i, converter.getAsObject(context,
@@ -410,14 +408,14 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding component " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component " +
                           component.getId() + " since " +
                           "rendered attribute is set to false ");
             }
@@ -425,8 +423,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
 
         renderSelect(context, component);
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding component " + component.getId());
         }
     }
 
@@ -439,8 +437,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
 
-        if (log.isTraceEnabled()) {
-            log.trace("Rendering 'select'");
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Rendering 'select'");
         }
         writer.startElement("select", component);
         writeIdAttributeIfNecessary(context, writer, component);
@@ -460,8 +458,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // the component's "size" attribute accordingly;  The "size"
         // attribute will be rendered as one of the "pass thru" attributes
         int itemCount = getOptionNumber(context, component);
-        if (log.isTraceEnabled()) {
-            log.trace("Rendering " + itemCount + " options");
+        if (logger.isLoggable(Level.FINE)) {
+             logger.fine("Rendering " + itemCount + " options");
         }
         // If "size" is *not* set explicitly, we have to default it correctly
         Object size = component.getAttributes().get("size");

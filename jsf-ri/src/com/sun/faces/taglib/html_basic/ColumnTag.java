@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.10 2005/05/16 20:16:31 rlubke Exp $
+ * $Id: ColumnTag.java,v 1.11 2005/06/09 22:37:49 jayashri Exp $
  */
 
 /*
@@ -18,15 +18,14 @@ import javax.servlet.jsp.JspException;
 
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class ColumnTag extends UIComponentTag {
 
-    private static final Log log = LogFactory.getLog(ColumnTag.class);
-
-
+    // Log instance for this class
+    protected static Logger logger = 
+            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
 
     //
     // Instance Variables
@@ -98,13 +97,13 @@ public class ColumnTag extends UIComponentTag {
         try {
             rc = super.doStartTag();
         } catch (JspException e) {
-            if (log.isDebugEnabled()) {
-                log.debug(getDebugString(), e);
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, getDebugString(), e);
             }
             throw e;
         } catch (Throwable t) {
-            if (log.isDebugEnabled()) {
-                log.debug(getDebugString(), t);
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, getDebugString(), t);
             }
             throw new JspException(t);
         }
@@ -117,13 +116,13 @@ public class ColumnTag extends UIComponentTag {
         try {
             rc = super.doEndTag();
         } catch (JspException e) {
-            if (log.isDebugEnabled()) {
-                log.debug(getDebugString(), e);
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, getDebugString(), e);
             }
             throw e;
         } catch (Throwable t) {
-            if (log.isDebugEnabled()) {
-                log.debug(getDebugString(), t);
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, getDebugString(), t);
             }
             throw new JspException(t);
         }
