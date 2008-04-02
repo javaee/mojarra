@@ -36,6 +36,17 @@
 
       <property>
         <description>
+          Flag indicating that the selection item represented by this component
+          must be rendered as disabled.
+        </description>
+        <display-name>Item Disabled</display-name>
+        <icon></icon>
+        <property-name>itemDisabled</property-name>
+        <property-class>boolean</property-class>
+      </property>
+
+      <property>
+        <description>
           Label of the selection item represented by this component.  This
           property is displayed to the user when the containing input
           component is rendered.
