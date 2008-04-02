@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.1 2006/04/05 17:53:43 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.2 2006/04/20 23:49:06 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -111,7 +111,8 @@ public class WebConfiguration {
 
             if ((value == null || value.length() == 0) && !param.isDeprecated()) {
                 value = param.getDefaultValue();
-            } else {
+            } 
+            if (value == null || value.length() == 0) {
                 continue;
             }
 
@@ -166,7 +167,7 @@ public class WebConfiguration {
                                 ? "jsf.config.webconfig.configinfo.reset.enabled"
                                 : "jsf.config.webconfig.configinfo.reset.disabled"),
                                new Object[]{contextName,
-                                            param.getQualifiedName()});
+                                            alternate.getQualifiedName()});
                 }
 
                 booleanContextParameters.put(alternate, value);
@@ -422,25 +423,25 @@ public class WebConfiguration {
         // its place.  The reporting logic depends on this
 
         ManagedBeanFactoryDecorator(
-              "managedBeanFactoryDecoratorClass",
+              "com.sun.faces.managedBeanFactoryDecoratorClass",
               ""),
         StateSavingMethod(
-              "STATE_SAVING_METHOD",
+              "javax.faces.STATE_SAVING_METHOD",
               "server"),
         JspDefaultSuffix(
-              "DEFAULT_SUFFIX",
+              "javax.faces.DEFAULT_SUFFIX",
               ".jsp"),
         JavaxFacesConfigFiles(
-              "CONFIG_FILES",
+              "javax.faces.CONFIG_FILES",
               ""),
         AlternateLifecycleId(
-              "LIFECYCLE_ID",
+              "javax.faces.LIFECYCLE_ID",
               ""),
         NumberOfViews(
-              "numberOfViewsInSession",
+              "com.sun.faces.numberOfViewsInSession",
               "15"),
         NumberOfViewsDeprecated(
-              "NUMBER_OF_VIEWS_IN_SESSION",
+              "com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION",
               "15",
               true,
               NumberOfViews
@@ -478,7 +479,7 @@ public class WebConfiguration {
                                 boolean deprecated,
                                 WebContextInitParameter alternate) {
 
-            this.qualifiedName = RIConstants.FACES_PREFIX + qualifiedName;
+            this.qualifiedName = qualifiedName;
             this.defaultValue = defaultValue;
             this.deprecated = deprecated;
             this.alternate = alternate;
@@ -534,37 +535,37 @@ public class WebConfiguration {
         // its place.  The reporting logic depends on this
 
         ValidateFacesConfigFiles(
-              "validateXml",
+              "com.sun.faces.validateXml",
               false),
         VerifyFacesConfigObjects(
-              "verifyObjects",
+              "com.sun.faces.verifyObjects",
               false),
         ForceLoadFacesConfigFiles(
-              "forceLoadConfiguration",
+              "com.sun.faces.forceLoadConfiguration",
               false),
         DisableArtifactVersioning(
-              "disableVersionTracking",
+              "com.sun.faces.disableVersionTracking",
               false),
         EnableHtmlTagLibraryValidator(
-              "enableHtmlTagLibValidator",
+              "com.sun.faces.enableHtmlTagLibValidator",
               false),
 
         PreferXHTMLContentType(
-              "preferXHTML",
+              "com.sun.faces.preferXHTML",
               false
         ),
         PreferXHTMLContextTypeDeprecated(
-              "PreferXHTML",
+              "com.sun.faces.PreferXHTML",
               false,
               true,
               PreferXHTMLContentType
         ),
         CompressViewState(
-              "compressViewState",
+              "com.sun.faces.compressViewState",
               true
         ),
         CompressViewStateDeprecated(
-              "COMPRESS_STATE",
+              "com.sun.faces.COMPRESS_STATE",
               true,
               true,
               CompressViewState
@@ -592,7 +593,7 @@ public class WebConfiguration {
                                        boolean deprecated,
                                        BooleanWebContextInitParameter alternate) {
 
-            this.qualifiedName = RIConstants.FACES_PREFIX + qualifiedName;
+            this.qualifiedName = qualifiedName;
             this.defaultValue = defaultValue;
             this.deprecated = deprecated;
             this.alternate = alternate;
