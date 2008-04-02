@@ -78,8 +78,6 @@
     <!-- Output directory for tests -->
     <property name="out.test.dir" value="${basedir}/build/test"/>
 
-    <property name="jcov.jvm.args"         value=""/>
-
     <!-- all of these properties must have valid values -->
     <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
     <property name="cactus.home" 
@@ -92,7 +90,6 @@
               value="${cactus.home}/lib/aspectjrt-1.0.5.jar"/>
     <property name="httpclient.jar" 
               value="${cactus.home}/lib/commons-httpclient-2.0alpha1-20020606.jar"/>
-    <property name="jcov.jar" value=""/>
 
     <property name="junit.jar" 
               value="${tomcat.home}/../junit3.8.1/junit.jar"/>
@@ -119,7 +116,6 @@
       <pathelement location="${commons-digester.jar}"/>
       <pathelement location="${commons-logging.jar}"/>      
       <pathelement location="${build.classes}"/>
-      <pathelement location="${jcov.jar}"/>
       <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
       <!-- For cactus.properties -->
       <pathelement location="${conf.test.dir}"/>
@@ -239,8 +235,6 @@
         <!-- copy the all important web.xml -->
         <echo message="out.test.dir ${out.test.dir}" />
         <filter token="test.root.dir" value="${out.test.dir}"/>
-        <filter token="test.jcov.file" 
-                value="${out.test.dir}/jsf-impl-cactus.jcov"/>
         <copy file="${conf.test.dir}/web.xml" todir="${out.test.dir}/WEB-INF"
               filtering="on"/>
 
@@ -389,7 +383,6 @@
 
             <formatter type="plain" usefile="false"/>
             <formatter type="xml" usefile="true"/>
-            <jvmarg line="-Djcov.file=${out.test.dir}/jsf-impl-junit.jcov"/>
             <test todir="${test.results.dir}"  name="com.sun.faces.util.TestUtil_local"/>            
         </junit>
 

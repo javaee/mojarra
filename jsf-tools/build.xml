@@ -26,7 +26,6 @@
   <property name="optimize"         value="false" />
 
   <property name="src.dir"          value="${basedir}/src"/>
-  <property name="jcov.src.dir"     value="${basedir}/jcov-src"/>
   <property name="dist.dir"         value="${basedir}/dist"/>
   <property name="jsf-api.dir"      value="${basedir}/../jsf-api"/>
   <property name="standard-html-renderkit"      
@@ -48,13 +47,9 @@
             value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
   <property name="xerces.jar" value="${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar"/>
   <property name="dom.jar.dir" value="${tomcat.home}/jaxp/lib/endorsed"/>
-  <property name="jcov.jar" 
-            value="${tomcat.home}/../jcov/lib/jcov.jar"/>
 
   <property name="build.dir"        value="${basedir}/build"/>
   <property name="build.classes"    value="${build.dir}/classes"/>
-  <property name="build.classes.jcov"    
-            value="${build.dir}/classes_jcov"/>
   <property name="build.lib"        value="${build.dir}/lib"/>
   <property name="build.temp"       value="${build.dir}/temp"/>
   <property name="build.test"       value="${build.dir}/test"/>
@@ -250,18 +245,6 @@ necessary to generate required classes.
     <jar destfile="${build.dir}/${name}.jar" basedir="${build.classes}" />
 
   </target>
-
-  <target name="jcov.tools" >
-    <mkdir dir="${build.classes.jcov}" />
-    <javac srcdir="${jcov.src.dir}"
-           destdir="${build.classes.jcov}"
-           debug="${debug}"
-           deprecation="${deprecation}"
-           optimize="${optimize}" >
-      <classpath path="${jcov.jar}" />
-      <classpath refid="run.classpath" />
-    </javac>
-  </target>          
 
   <target name="check.generation.necessity" if="standard-html-renderkit-impl">
     <uptodate property="skip.generation"
