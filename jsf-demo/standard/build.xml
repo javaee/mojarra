@@ -199,6 +199,7 @@
 
         <copy todir="${build}/${example}/">
             <fileset dir="web">
+                <include name="*.css"/>
                 <include name="*.html"/>
                 <include name="*.gif"/>
                 <include name="*.jpg"/>
