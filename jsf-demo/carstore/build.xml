@@ -129,7 +129,7 @@
             </fileset>
         </copy>
         <copy todir="${build}/${example}/WEB-INF">
-            <fileset dir="web/WEB-INF/tlds">
+            <fileset dir="web/WEB-INF">
                 <include name="*.tld"/>
             </fileset>
         </copy>
