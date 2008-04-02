@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.35 2003/02/20 22:49:16 ofung Exp $
+ * $Id: FormTag.java,v 1.36 2003/03/26 21:37:12 horwat Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FormTag.java,v 1.35 2003/02/20 22:49:16 ofung Exp $
+ * @version $Id: FormTag.java,v 1.36 2003/03/26 21:37:12 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -112,7 +112,7 @@ public FormTag()
                 root.setAttribute(RIConstants.BUNDLE_ATTR, getBundle());
             }
 	}
-        // action, method, enctype, accept-charset, accept, target, onsubmit, onreset
+        // action, method, enctype, acceptcharset, accept, target, onsubmit, onreset
         if (null == component.getAttribute("onsubmit") && getOnsubmit() != null ) {
             component.setAttribute("onsubmit", getOnsubmit()); 
         }
@@ -134,9 +134,9 @@ public FormTag()
         if (null == component.getAttribute("target") && getTarget() != null ) {
             component.setAttribute("target", getTarget()); 
         }
-        if (null == component.getAttribute("accept-charset") && 
+        if (null == component.getAttribute("acceptcharset") && 
                 getAcceptcharset() != null ) {
-            component.setAttribute("accept-charset", getAcceptcharset()); 
+            component.setAttribute("acceptcharset", getAcceptcharset()); 
         }
         if (null == component.getAttribute("form") && 
                 getFormClass() != null ) {

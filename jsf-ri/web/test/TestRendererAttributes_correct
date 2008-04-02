@@ -333,18 +333,6 @@ Form
 
 		class java.lang.String
 
-	accept-charset
-
-		Space and/or Comma separated list of character 
-                encodings for input data that must be accepted by the server
-                processing this form.
-
-		Accept Character Encoding
-
-		accept-charset
-
-		class java.lang.String
-
 	onmouseup
 
 		Mouse was released over this element.
@@ -362,6 +350,18 @@ Form
 		Direction
 
 		dir
+
+		class java.lang.String
+
+	acceptcharset
+
+		Space and/or Comma separated list of character 
+                encodings for input data that must be accepted by the server
+                processing this form.
+
+		Accept Character Encoding
+
+		acceptcharset
 
 		class java.lang.String
 

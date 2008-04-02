@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.49 2003/03/21 23:25:47 rkitain Exp $
+ * $Id: Util.java,v 1.50 2003/03/26 21:37:15 horwat Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.49 2003/03/21 23:25:47 rkitain Exp $
+ * @version $Id: Util.java,v 1.50 2003/03/26 21:37:15 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -265,7 +265,7 @@ public class Util extends Object
         "bgcolor",
         "usemap",
         "enctype", 
-        "accept-charset", 
+        "acceptcharset", 
         "accept", 
         "target", 
         "onsubmit", 

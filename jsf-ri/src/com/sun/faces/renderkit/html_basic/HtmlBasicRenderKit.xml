@@ -135,7 +135,7 @@
                 <type>java.lang.String</type>
             </attribute>
             <attribute>
-                <name>accept-charset</name>
+                <name>acceptcharset</name>
                 <display-name>Accept Character Encoding</display-name>
                 <description>Space and/or Comma separated list of character 
                 encodings for input data that must be accepted by the server
