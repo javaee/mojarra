@@ -311,15 +311,13 @@
             <test name="com.sun.faces.application.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.application.TestNavigationHandler"/>
             <test name="com.sun.faces.application.TestStateManagerImpl"/>
-<!--
             <test name="com.sun.faces.application.TestViewHandlerImpl"/>
--->
             <test name="com.sun.faces.config.ConfigFileTestCase"/>
             <test name="com.sun.faces.config.TestConfigListener"/>
             <test name="com.sun.faces.config.TestManagedBeanFactory"/>
             <test name="com.sun.faces.context.TestExternalContextImpl"/>
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
-            <test name="com.sun.faces.context.TestFacesContextImpl"/>
+            <test name="com.sun.faces.context.TestFacesContextImpl"/> 
             <test name="com.sun.faces.convert.TestConverters"/>
             <test name="com.sun.faces.el.impl.TestELImpl"/>
             <test name="com.sun.faces.el.TestPropertyResolverImpl"/>

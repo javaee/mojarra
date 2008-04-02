@@ -1021,6 +1021,24 @@
         <summary xml:lang="de">Duplicate component ID ''{0}'' found in view.</summary>
         <summary xml:lang="fr">Duplicate component ID ''{0}'' found in view.</summary>
         <summary xml:lang="es">Duplicate component ID ''{0}'' found in view.</summary>
+    </message>          
+      
+    <message>
+        <message-id>com.sun.faces.FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED</message-id>
+        <message-class>javax.faces.application.MessageImpl</message-class>
+        <summary xml:lang="en">Unable to determine FaceServlet mapping for servlet path ''{0}''.</summary>
+        <summary xml:lang="de">Unable to determine FaceServlet mapping for servlet path ''{0}''.</summary>
+        <summary xml:lang="fr">Unable to determine FaceServlet mapping for servlet path ''{0}''.</summary>
+        <summary xml:lang="es">Unable to determine FaceServlet mapping for servlet path ''{0}''.</summary>       
+    </message>
+      
+    <message>
+        <message-id>com.sun.faces.ILLEGAL_VIEW_ID</message-id>
+        <message-class>javax.faces.application.MessageImpl</message-class>
+        <summary xml:lang="en">Illegal view ID ''{0}''.  The ID must begin with ''/''</summary>
+        <summary xml:lang="de">Illegal view ID ''{0}''.  The ID must begin with ''/''</summary>
+        <summary xml:lang="fr">Illegal view ID ''{0}''.  The ID must begin with ''/''</summary>        
+        <summary xml:lang="es">Illegal view ID ''{0}''.  The ID must begin with ''/''</summary>
     </message>
   </message-resources>
 
