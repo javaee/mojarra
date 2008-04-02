@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.6 2003/05/15 22:38:30 rkitain Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.7 2003/07/29 23:38:44 horwat Exp $ 
  */ 
 
 
@@ -56,12 +56,14 @@ import nonjsp.util.Util;
 import nonjsp.tree.XmlTreeFactoryImpl;
 
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext; 
 import javax.faces.lifecycle.ViewHandler; 
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import javax.faces.tree.Tree; 
-import javax.faces.webapp.ServletResponseWriter;
 
 import javax.servlet.http.HttpServletRequest; 
 import javax.servlet.http.HttpServletResponse; 
@@ -75,7 +77,7 @@ import org.apache.commons.logging.LogFactory;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.6 2003/05/15 22:38:30 rkitain Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.7 2003/07/29 23:38:44 horwat Exp $ 
  * 
  * @see javax.faces.lifecycle.ViewHandler 
  * 
@@ -84,6 +86,8 @@ public class XulViewHandlerImpl implements ViewHandler {
 
     // Log instance for this class
     protected static Log log = LogFactory.getLog(XulViewHandlerImpl.class);
+    protected static final String CHAR_ENCODING = "ISO-8859-1";
+
 
     // Render the components
     public void renderView(FacesContext context) throws IOException, 
@@ -103,8 +107,13 @@ public class XulViewHandlerImpl implements ViewHandler {
         HttpServletResponse response = (HttpServletResponse)
         (context.getExternalContext().getResponse());
 	log.trace("Set ResponseWriter in FacesContext");
-        context.setResponseWriter
-            (new ServletResponseWriter(response.getWriter()));
+
+        RenderKitFactory factory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = factory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
+
+        context.setResponseWriter(
+            renderKit.getResponseWriter(response.getWriter(), CHAR_ENCODING));
         response.setContentType("text/html");
 
 	log.trace("Call encode methods on components");
