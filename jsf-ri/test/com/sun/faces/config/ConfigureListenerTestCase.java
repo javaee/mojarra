@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListenerTestCase.java,v 1.2 2004/01/27 21:05:55 eburns Exp $
+ * $Id: ConfigureListenerTestCase.java,v 1.3 2004/01/29 01:11:09 rkitain Exp $
  */
 
 /*
@@ -367,37 +367,71 @@ public class ConfigureListenerTestCase extends TestCase {
 	assertTrue(application.createComponent
 		   ("javax.faces.Column") instanceof UIColumn);
 	assertTrue(application.createComponent
+		   (UIColumn.COMPONENT_TYPE) instanceof UIColumn);
+	assertTrue(application.createComponent
 		   ("javax.faces.Command") instanceof UICommand);
+	assertTrue(application.createComponent
+		   (UICommand.COMPONENT_TYPE) instanceof UICommand);
 	assertTrue(application.createComponent
 		   ("javax.faces.Data") instanceof UIData);
 	assertTrue(application.createComponent
+		   (UIData.COMPONENT_TYPE) instanceof UIData);
+	assertTrue(application.createComponent
 		   ("javax.faces.Form") instanceof UIForm);
+	assertTrue(application.createComponent
+		   (UIForm.COMPONENT_TYPE) instanceof UIForm);
 	assertTrue(application.createComponent
 		   ("javax.faces.Graphic") instanceof UIGraphic);
 	assertTrue(application.createComponent
+		   (UIGraphic.COMPONENT_TYPE) instanceof UIGraphic);
+	assertTrue(application.createComponent
 		   ("javax.faces.Input") instanceof UIInput);
+	assertTrue(application.createComponent
+		   (UIInput.COMPONENT_TYPE) instanceof UIInput);
 	assertTrue(application.createComponent
 		   ("javax.faces.Message") instanceof UIMessage);
 	assertTrue(application.createComponent
+		   (UIMessage.COMPONENT_TYPE) instanceof UIMessage);
+	assertTrue(application.createComponent
 		   ("javax.faces.Messages") instanceof UIMessages);
+	assertTrue(application.createComponent
+		   (UIMessages.COMPONENT_TYPE) instanceof UIMessages);
 	assertTrue(application.createComponent
 		   ("javax.faces.NamingContainer") instanceof UINamingContainer);
 	assertTrue(application.createComponent
+		   (UINamingContainer.COMPONENT_TYPE) instanceof UINamingContainer);
+	assertTrue(application.createComponent
 		   ("javax.faces.Output") instanceof UIOutput);
+	assertTrue(application.createComponent
+		   (UIOutput.COMPONENT_TYPE) instanceof UIOutput);
 	assertTrue(application.createComponent
 		   ("javax.faces.Panel") instanceof UIPanel);
 	assertTrue(application.createComponent
+		   (UIPanel.COMPONENT_TYPE) instanceof UIPanel);
+	assertTrue(application.createComponent
 		   ("javax.faces.Parameter") instanceof UIParameter);
+	assertTrue(application.createComponent
+		   (UIParameter.COMPONENT_TYPE) instanceof UIParameter);
 	assertTrue(application.createComponent
 		   ("javax.faces.SelectBoolean") instanceof UISelectBoolean);
 	assertTrue(application.createComponent
+		   (UISelectBoolean.COMPONENT_TYPE) instanceof UISelectBoolean);
+	assertTrue(application.createComponent
 		   ("javax.faces.SelectItem") instanceof UISelectItem);
+	assertTrue(application.createComponent
+		   (UISelectItem.COMPONENT_TYPE) instanceof UISelectItem);
 	assertTrue(application.createComponent
 		   ("javax.faces.SelectItems") instanceof UISelectItems);
 	assertTrue(application.createComponent
+		   (UISelectItems.COMPONENT_TYPE) instanceof UISelectItems);
+	assertTrue(application.createComponent
 		   ("javax.faces.SelectMany") instanceof UISelectMany);
 	assertTrue(application.createComponent
+		   (UISelectMany.COMPONENT_TYPE) instanceof UISelectMany);
+	assertTrue(application.createComponent
 		   ("javax.faces.SelectOne") instanceof UISelectOne);
+	assertTrue(application.createComponent
+		   (UISelectOne.COMPONENT_TYPE) instanceof UISelectOne);
 
     }
 
