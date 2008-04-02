@@ -249,6 +249,19 @@
       </map-entries>
     </managed-property>
   </managed-bean>
+    
+    <message-resources>
+        <description>Test Messages</description>
+        <display-name>TestMessages</display-name>
+        <message-resources-id>TestMessages</message-resources-id>
+        <message>
+            <message-id>testMessage</message-id>
+            <message-class>javax.faces.application.MessageImpl</message-class>
+            <severity>info</severity>
+            <summary>message summary</summary>
+            <detail>message detail</detail>
+        </message>
+    </message-resources>
 
   <managed-bean>
     <managed-bean-name>SimpleBean</managed-bean-name>

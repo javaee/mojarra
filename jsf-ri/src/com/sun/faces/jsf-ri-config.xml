@@ -849,6 +849,15 @@
         <summary xml:lang="es">Illegal attempt to set ViewHandler after a response has been generated.</summary>
         <summary xml:lang="fr">Illegal attempt to set ViewHandler after a response has been generated.</summary>
     </message>
+      
+    <message>
+        <message-id>com.sun.faces.INVALID_MESSAGE_SEVERITY_IN_CONFIG</message-id>
+        <message-class>javax.faces.application.MessageImpl</message-class>
+        <summary xml:lang="en">Invalid Message severity ''{0}'' defined in configuration.</summary>
+        <summary xml:lang="de">Invalid Message severity ''{0}'' defined in configuration.</summary>
+        <summary xml:lang="fr">Invalid Message severity ''{0}'' defined in configuration.</summary>
+        <summary xml:lang="es">Invalid Message severity ''{0}'' defined in configuration.</summary>
+    </message>
   </message-resources>
 
   <!-- Standard Validators -->

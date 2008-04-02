@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.82 2003/08/29 17:46:44 eburns Exp $
+ * $Id: Util.java,v 1.83 2003/09/03 18:53:40 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.82 2003/08/29 17:46:44 eburns Exp $
+ * @version $Id: Util.java,v 1.83 2003/09/03 18:53:40 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -268,6 +268,9 @@ public class Util extends Object
     
    public static final String ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID = 
          "com.sun.faces.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER";
+    
+   public static final String INVALID_MESSAGE_SEVERITY_IN_CONFIG_ID =
+         "com.sun.faces.INVALID_MESSAGE_SEVERITY_IN_CONFIG";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

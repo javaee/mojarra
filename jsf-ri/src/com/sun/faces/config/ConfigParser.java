@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.31 2003/08/28 15:52:28 rlubke Exp $
+ * $Id: ConfigParser.java,v 1.32 2003/09/03 18:53:39 rlubke Exp $
  */
 
 /*
@@ -389,6 +389,7 @@ public class ConfigParser {
 	digester.addCallParam(prefix + "/detail", 0, "xml:lang"); 
 	// From this element body
 	digester.addCallParam(prefix + "/detail", 1); 
+       digester.addCallMethod(prefix + "/severity", "setSeverity", 0);
     }
 
     // Configure the rules for a <managed-bean> element

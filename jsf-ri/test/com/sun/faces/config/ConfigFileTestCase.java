@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.33 2003/08/25 21:04:59 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.34 2003/09/03 18:53:41 rlubke Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.base.UIViewRootBase;
 import javax.faces.application.MessageResources;
+import javax.faces.application.Message;
 import javax.faces.convert.Converter;
 import javax.faces.validator.Validator;
 import javax.faces.render.RenderKit;
@@ -195,6 +196,13 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         application.addValidator("fooId", "javax.faces.validator.DoubleRangeValidator");
         val = application.createValidator("fooId");
         assertNotNull(val);
+        
+        MessageResources resources = application.getMessageResources("TestMessages");
+        assertNotNull(resources);
+        
+        Message message = resources.getMessage(getFacesContext(), "testMessage");
+        assertNotNull(message);
+        assertTrue(message.getSeverity() == Message.SEVERITY_INFO);
     }
 
     public void testEmpty() throws Exception {
@@ -337,11 +345,21 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    assertTrue(-1 != re.getMessage().indexOf("convert"));
 	}
 	assertTrue(exceptionThrown);
-
-	// PENDING(edburns): Don't deregister once we've made the
-	// exception throwing the default.
-	org.apache.commons.beanutils.ConvertUtils.deregister();   // Wrapper class
+	
     }
 
-
+    public void testInvalidMessageSeverityDuringParse() throws Exception {
+        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ApplicationFactory factory = 
+            (ApplicationFactory) FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        boolean exceptionThrown = false;
+        try {
+            parseConfig(cp, "config-with-invalid-message-severity.xml", config.getServletContext());
+        } catch (RuntimeException re) {
+            exceptionThrown = true;
+            assertTrue(re.getMessage().indexOf("Invalid Message severity") != -1);
+            assertTrue(re.getMessage().indexOf("infoo") != -1);
+        }
+        assertTrue(exceptionThrown);
+    }
 }

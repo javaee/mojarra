@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigMessage.java,v 1.3 2003/07/22 19:44:39 rkitain Exp $
+ * $Id: ConfigMessage.java,v 1.4 2003/09/03 18:53:38 rlubke Exp $
  */
 
 /*
@@ -9,6 +9,8 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.util.Util;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -16,6 +18,7 @@ import java.util.Collections;
 
 import javax.faces.application.Message;
 import javax.faces.context.FacesContext;
+import javax.faces.FacesException;
 
 /**
  * <p>Config Bean for a Message.</p>
@@ -42,6 +45,22 @@ public class ConfigMessage extends ConfigFeature {
     public int getSeverity() {
         return (this.severity);
     }
+    public void setSeverity(String severity) {
+        // if not info, warn, or fatal, leave the default of error
+        if ("info".equals(severity)) 
+            this.severity = Message.SEVERITY_INFO;
+        else if ("warn".equals(severity)) 
+            this.severity = Message.SEVERITY_WARN;            
+        else if ("fatal".equals(severity))
+            this.severity = Message.SEVERITY_FATAL;
+        else if ("error".equals(severity)) 
+            this.severity = Message.SEVERITY_ERROR;
+        else
+            throw new FacesException(
+                Util.getExceptionMessage(Util.INVALID_MESSAGE_SEVERITY_IN_CONFIG_ID,
+                    new Object[] { severity }));                            
+    }
+    
     public void setSeverity(int severity) {
         this.severity = severity;
     }
