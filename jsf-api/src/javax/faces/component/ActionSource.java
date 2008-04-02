@@ -1,5 +1,5 @@
 /*
- * $Id: ActionSource.java,v 1.1 2003/08/30 00:31:30 craigmcc Exp $
+ * $Id: ActionSource.java,v 1.2 2003/09/16 23:23:44 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.event.ActionListener;
  * {@link Action}s via the default {@link ActionListener} mechanim.</p>
  */
 
-public interface ActionSource extends UIComponent {
+public interface ActionSource {
 
 
     // -------------------------------------------------------------- Properties

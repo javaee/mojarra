@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBase.java,v 1.9 2003/09/15 23:19:01 jvisvanathan Exp $
+ * $Id: UISelectItemBase.java,v 1.10 2003/09/16 23:23:46 craigmcc Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import javax.faces.component.Repeater;
 import javax.faces.component.RepeaterSupport;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
@@ -29,7 +30,8 @@ import javax.faces.el.ValueBinding;
  * {@link UISelectItem}.</p>
  */
 
-public class UISelectItemBase extends UIOutputBase implements UISelectItem {
+public class UISelectItemBase extends UIComponentBase
+    implements UISelectItem, ValueHolder {
 
 
     // ------------------------------------------------------------ Constructors

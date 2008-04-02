@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.1 2003/08/30 00:31:32 craigmcc Exp $
+ * $Id: ValueHolder.java,v 1.2 2003/09/16 23:23:44 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.el.ValueBinding;
  * reference expression</em>.</p>
  */
 
-public interface ValueHolder extends UIComponent {
+public interface ValueHolder {
 
 
     // -------------------------------------------------------------- Properties

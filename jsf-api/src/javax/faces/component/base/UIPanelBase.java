@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelBase.java,v 1.7 2003/09/15 23:19:00 jvisvanathan Exp $
+ * $Id: UIPanelBase.java,v 1.8 2003/09/16 23:23:46 craigmcc Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import javax.faces.component.Repeater;
 import javax.faces.component.RepeaterSupport;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
@@ -29,7 +30,8 @@ import javax.faces.el.ValueBinding;
  * {@link UIPanel}.</p>
  */
 
-public class UIPanelBase extends UIOutputBase implements UIPanel {
+public class UIPanelBase extends UIComponentBase
+    implements UIPanel, ValueHolder {
 
 
     // ------------------------------------------------------------ Constructors

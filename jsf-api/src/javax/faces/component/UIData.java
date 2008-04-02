@@ -284,7 +284,7 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>The value reference expression for this {@link UIOutput} component
+     * <p>The value reference expression for this {@link UIComponent}
      * (if any).</p>
      */
     private String valueRef = null;

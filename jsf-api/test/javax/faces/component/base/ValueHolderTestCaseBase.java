@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.3 2003/09/15 20:17:40 eburns Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.4 2003/09/16 23:23:47 craigmcc Exp $
  */
 
 /*
@@ -82,39 +82,39 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         ValueHolder valueHolder = (ValueHolder) component;
 
         assertEquals(valueHolder.getConverter(),
-                     (String) valueHolder.getAttribute("converter"));
+                     (String) component.getAttribute("converter"));
         valueHolder.setConverter(new LongConverter());
-        assertNotNull((Converter) valueHolder.getAttribute("converter"));
+        assertNotNull((Converter) component.getAttribute("converter"));
         assertTrue
-            (valueHolder.getAttribute("converter") instanceof LongConverter);
+            (component.getAttribute("converter") instanceof LongConverter);
         valueHolder.setConverter(null);
-        assertNull(valueHolder.getAttribute("converter"));
-        valueHolder.setAttribute("converter", new ShortConverter());
+        assertNull(component.getAttribute("converter"));
+        component.setAttribute("converter", new ShortConverter());
         assertNotNull(valueHolder.getConverter());
         assertTrue(valueHolder.getConverter() instanceof ShortConverter);
-        valueHolder.setAttribute("converter", null);
+        component.setAttribute("converter", null);
         assertNull(valueHolder.getConverter());
 
         assertEquals(valueHolder.getValue(),
-                     (String) valueHolder.getAttribute("value"));
+                     (String) component.getAttribute("value"));
         valueHolder.setValue("foo");
-        assertEquals("foo", (String) valueHolder.getAttribute("value"));
+        assertEquals("foo", (String) component.getAttribute("value"));
         valueHolder.setValue(null);
-        assertNull((String) valueHolder.getAttribute("value"));
-        valueHolder.setAttribute("value", "bar");
+        assertNull((String) component.getAttribute("value"));
+        component.setAttribute("value", "bar");
         assertEquals("bar", valueHolder.getValue());
-        valueHolder.setAttribute("value", null);
+        component.setAttribute("value", null);
         assertNull(valueHolder.getValue());
 
         assertEquals(valueHolder.getValueRef(),
-                     (String) valueHolder.getAttribute("valueRef"));
+                     (String) component.getAttribute("valueRef"));
         valueHolder.setValueRef("foo");
-        assertEquals("foo", (String) valueHolder.getAttribute("valueRef"));
+        assertEquals("foo", (String) component.getAttribute("valueRef"));
         valueHolder.setValueRef(null);
-        assertNull((String) valueHolder.getAttribute("valueRef"));
-        valueHolder.setAttribute("valueRef", "bar");
+        assertNull((String) component.getAttribute("valueRef"));
+        component.setAttribute("valueRef", "bar");
         assertEquals("bar", valueHolder.getValueRef());
-        valueHolder.setAttribute("valueRef", null);
+        component.setAttribute("valueRef", null);
         assertNull(valueHolder.getValueRef());
 
     }
