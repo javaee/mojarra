@@ -83,12 +83,12 @@
               value="${api.dir}/doc/standard-html-renderkit.xml"/>
 
     <!-- Version -->
-    <property name="spec.version" value="1.2"/>
+    <property name="spec.version" value="1.2MR1"/>
     <property name="impl.name"
               value="Sun Microsystems JavaServer Faces Implementation"/>
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="NIGHTLY"/>
-    <property name="impl.version.number" value="1.2_02" />
+    <property name="impl.version.number" value="1.2_03" />
     <property name="impl.version" value="${impl.version.number}-${build.number}-${build.type}"/>
     <property name="snapshot.version" value="${impl.version.number}-SNAPSHOT"/>
 
