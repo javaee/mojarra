@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.113 2003/11/01 00:46:05 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.114 2003/11/06 22:29:55 rlubke Exp $
  */
 
 /*
@@ -698,7 +698,8 @@ public abstract class UIComponent implements StateHolder {
      * <li>Call the <code>processUpdates()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>Call the <code>updateModel()</code> method of this component,
+     * <li>If the current component is an {@link UIInput}, call its
+     *     <code>updateModel()</code> method of this component,
      *     if this component's <code>rendered</code> property is
      *     <code>true</code> and it is not nested in a parent component
      *     whose <code>rendersChildren</code> property is <code>true</code>
