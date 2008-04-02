@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolver.java,v 1.10 2006/05/17 19:00:45 rlubke Exp $
+ * $Id: ImplicitObjectELResolver.java,v 1.11 2006/09/01 01:22:43 tony_robertson Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -161,7 +161,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         return false;
     }
 
-    public Class getType(ELContext context, Object base, Object property)
+    public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
             return null;
@@ -179,7 +179,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         return null;
     }
 
-    public Iterator getFeatureDescriptors(ELContext context, Object base) {
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         if (base != null) {
             return null;
         }
@@ -217,7 +217,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
 
     }
 
-    public Class getCommonPropertyType(ELContext context, Object base) {
+    public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;
         }

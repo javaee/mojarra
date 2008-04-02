@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.16 2006/03/29 23:03:50 rlubke Exp $
+ * $Id: ColumnTag.java,v 1.17 2006/09/01 01:23:02 tony_robertson Exp $
  */
 
 /*
@@ -30,7 +30,6 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import javax.el.ValueExpression;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentELTag;

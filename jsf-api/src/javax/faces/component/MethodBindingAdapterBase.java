@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBindingAdapterBase.java,v 1.2 2005/08/22 22:07:53 ofung Exp $
+ * $Id: MethodBindingAdapterBase.java,v 1.3 2006/09/01 01:22:15 tony_robertson Exp $
  */
 
 /*
@@ -29,7 +29,6 @@
 
 package javax.faces.component;
 
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * <p>Base class for classes that wrap a <code>MethodBinding</code> and

@@ -1,5 +1,5 @@
 /*
- * $Id: ValueExpressionValueBindingAdapter.java,v 1.5 2006/08/09 18:26:04 rlubke Exp $
+ * $Id: ValueExpressionValueBindingAdapter.java,v 1.6 2006/09/01 01:22:29 tony_robertson Exp $
  */
 
 /*
@@ -113,7 +113,7 @@ import java.io.Serializable;
 	return result;
     }
 
-    public Class getType(ELContext context) throws ELException {
+    public Class<?> getType(ELContext context) throws ELException {
 	assert(null != binding);
 	if (context == null) {
 	    throw new NullPointerException("ELContext -> null");
@@ -140,7 +140,7 @@ import java.io.Serializable;
 	return false;
     }
     
-    public Class getExpectedType() {
+    public Class<?> getExpectedType() {
 	assert(null != binding);
 	Class result = null;
 	FacesContext context = FacesContext.getCurrentInstance();

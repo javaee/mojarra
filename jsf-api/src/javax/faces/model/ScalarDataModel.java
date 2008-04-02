@@ -1,5 +1,5 @@
 /*
- * $Id: ScalarDataModel.java,v 1.18 2005/12/05 16:42:59 edburns Exp $
+ * $Id: ScalarDataModel.java,v 1.19 2006/09/01 01:22:23 tony_robertson Exp $
  */
 
 /*
@@ -30,7 +30,6 @@
 package javax.faces.model;
 
 
-import java.util.List;
 import javax.faces.FacesException;
 
 

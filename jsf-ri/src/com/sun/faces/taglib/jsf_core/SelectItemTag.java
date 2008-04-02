@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.15 2006/03/29 23:03:52 rlubke Exp $
+ * $Id: SelectItemTag.java,v 1.16 2006/09/01 01:23:05 tony_robertson Exp $
  */
 
 /*
@@ -33,7 +33,6 @@ import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.webapp.UIComponentELTag;
-import javax.servlet.jsp.JspException;
 
 
 /**

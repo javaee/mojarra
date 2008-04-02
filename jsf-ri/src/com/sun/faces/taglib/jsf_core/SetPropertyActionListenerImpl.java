@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyActionListenerImpl.java,v 1.5 2006/05/17 19:00:50 rlubke Exp $
+ * $Id: SetPropertyActionListenerImpl.java,v 1.6 2006/09/01 01:23:08 tony_robertson Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -31,7 +31,6 @@ package com.sun.faces.taglib.jsf_core;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ValueExpression;
-import javax.faces.component.ActionSource;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;

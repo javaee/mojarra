@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.80 2006/08/29 06:12:58 tony_robertson Exp $
+ * $Id: ApplicationImpl.java,v 1.81 2006/09/01 01:22:31 tony_robertson Exp $
  */
 
 /*
@@ -997,9 +997,8 @@ public class ApplicationImpl extends Application {
      * @param map The <code>Map</code> that will be searched.
      * @return The new object instance.
      */
-    protected Object newThing(Object key, Map map) {
+    protected Object newThing(String key, Map<String, Object> map) {
         assert (key != null && map != null);
-        assert (key instanceof String || key instanceof Class);
 
         Object result = null;
         Class clazz = null;
@@ -1053,9 +1052,8 @@ public class ApplicationImpl extends Application {
      * @param map The <code>Map</code> that will be searched.
      * @return The new object instance.
      */
-    protected Object newConverter(Object key, Map map, Class targetClass) {
+    protected Object newConverter(Class key, Map<Class,Object> map, Class targetClass) {
         assert (key != null && map != null);
-        assert (key instanceof String || key instanceof Class);
 
         Object result = null;
         Class clazz = null;

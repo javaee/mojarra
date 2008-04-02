@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.14 2006/08/25 09:50:15 tony_robertson Exp $
+ * $Id: SelectItemsIterator.java,v 1.15 2006/09/01 01:22:16 tony_robertson Exp $
  */
 
 /*
@@ -37,8 +37,6 @@ import java.util.NoSuchElementException;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.ListIterator;
-import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
 
 import javax.faces.model.SelectItem;
 

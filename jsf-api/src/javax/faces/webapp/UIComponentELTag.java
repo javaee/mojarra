@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentELTag.java,v 1.5 2006/08/24 11:58:40 rogerk Exp $
+ * $Id: UIComponentELTag.java,v 1.6 2006/09/01 01:22:26 tony_robertson Exp $
  */
 
 /*
@@ -30,8 +30,6 @@
 package javax.faces.webapp;
 
 
-import java.io.IOException;
-
 import javax.el.ELException;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
@@ -40,7 +38,6 @@ import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 
 

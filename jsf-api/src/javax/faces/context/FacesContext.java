@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.69 2006/08/25 09:50:17 tony_robertson Exp $
+ * $Id: FacesContext.java,v 1.70 2006/09/01 01:22:19 tony_robertson Exp $
  */
 
 /*
@@ -31,8 +31,6 @@ package javax.faces.context;
 
 
 import java.util.Iterator;
-import java.util.Locale;
-import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;

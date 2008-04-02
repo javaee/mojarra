@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.31 2005/08/22 22:07:57 ofung Exp $
+ * $Id: UIPanel.java,v 1.32 2006/09/01 01:22:17 tony_robertson Exp $
  */
 
 /*
@@ -28,11 +28,6 @@
  */
 
 package javax.faces.component;
-
-
-import java.io.IOException;
-import javax.faces.application.Application;
-import javax.faces.context.FacesContext;
 
 
 /**

@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.49 2006/05/18 21:20:58 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.50 2006/09/01 01:22:38 tony_robertson Exp $
  */
 
 /*
@@ -68,6 +68,7 @@ import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
 
 /**
@@ -75,7 +76,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.49 2006/05/18 21:20:58 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.50 2006/09/01 01:22:38 tony_robertson Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -273,14 +274,14 @@ public class ExternalContextImpl extends ExternalContext {
     public Iterator<String> getRequestParameterNames() {
         final Enumeration namEnum = request.getParameterNames();
 
-        return new Iterator() {
+        return new Iterator<String>() {
             public boolean hasNext() {
                 return namEnum.hasMoreElements();
             }
 
 
-            public Object next() {
-                return namEnum.nextElement();
+            public String next() {
+                return (String) namEnum.nextElement();
             }
 
 
@@ -347,7 +348,7 @@ public class ExternalContextImpl extends ExternalContext {
 
 
     public Set<String> getResourcePaths(String path) {
-        return servletContext.getResourcePaths(path);
+        return TypedCollections.dynamicallyCastSet(servletContext.getResourcePaths(path), String.class);
     }
 
 
@@ -456,7 +457,7 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
 
-    private static class LocalesIterator implements Iterator {
+    private static class LocalesIterator implements Iterator<Locale> {
 
         public LocalesIterator(Enumeration locales) {
             this.locales = locales;
@@ -471,8 +472,8 @@ public class ExternalContextImpl extends ExternalContext {
         }
 
 
-        public Object next() {
-            return locales.nextElement();
+        public Locale next() {
+            return (Locale) locales.nextElement();
         }
 
 
@@ -483,24 +484,27 @@ public class ExternalContextImpl extends ExternalContext {
     }
 }
 
-abstract class BaseContextMap extends AbstractMap {
+abstract class BaseContextMap<V> extends AbstractMap<String,V> {
 
-    private Set<? extends Object> entrySet;
-    private Set<? extends Object> keySet;
-    private Collection<? extends Object> values;
-
+    private Set<Map.Entry<String, V>> entrySet;
+    private Set<String> keySet;
+    private Collection<V> values;
+    
     // Supported by maps if overridden
+    @Override
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
 
     // Supported by maps if overridden
+    @Override
     public void putAll(Map t) {
         throw new UnsupportedOperationException();
     }
 
-    public Set<? extends Object> entrySet() {
+    @Override
+    public Set<Map.Entry<String, V>> entrySet() {
         if (entrySet == null) {
             entrySet = new EntrySet();
         }
@@ -508,7 +512,8 @@ abstract class BaseContextMap extends AbstractMap {
         return entrySet;
     }
 
-    public Set<? extends Object> keySet() {
+    @Override
+    public Set<String> keySet() {
         if (keySet == null) {
             keySet = new KeySet();
         }
@@ -516,7 +521,8 @@ abstract class BaseContextMap extends AbstractMap {
         return keySet;
     }
 
-    public Collection<? extends Object> values() {
+    @Override
+    public Collection<V> values() {
         if (values == null) {
             values = new ValueCollection();
         }
@@ -526,11 +532,12 @@ abstract class BaseContextMap extends AbstractMap {
 
 
     // Supported by maps if overridden
-    public Object remove(Object key) {
+    @Override
+    public V remove(Object key) {
         throw new UnsupportedOperationException();
     }
 
-    protected boolean removeKey(String key) {
+    protected boolean removeKey(Object key) {
         return (this.remove(key) != null);
     }
 
@@ -550,15 +557,16 @@ abstract class BaseContextMap extends AbstractMap {
         return valueRemoved;
     }
 
-    protected abstract Iterator getEntryIterator();
-    protected abstract Iterator getKeyIterator();
-    protected abstract Iterator getValueIterator();
+    protected abstract Iterator<Map.Entry<String, V>> getEntryIterator();
+    protected abstract Iterator<String> getKeyIterator();
+    protected abstract Iterator<V> getValueIterator();
 
-    abstract class BaseSet extends AbstractSet {
+    abstract class BaseSet<E> extends AbstractSet<E> {
 
+	@Override
         public int size() {
             int size = 0;
-            for (Iterator i = iterator(); i.hasNext(); size++) {
+            for (Iterator<E> i = iterator(); i.hasNext(); size++) {
                 i.next();
             }
             return size;
@@ -566,27 +574,31 @@ abstract class BaseContextMap extends AbstractMap {
 
     }
 
-    class EntrySet extends BaseSet {
+    class EntrySet extends BaseSet<Map.Entry<String, V>> {
 
-        public Iterator iterator() {
+	@Override
+        public Iterator<Map.Entry<String, V>> iterator() {
             return getEntryIterator();
         }
 
+	@Override
         public boolean remove(Object o) {
             if (!(o instanceof Map.Entry)) {
                 return false;
             }
-            return removeKey((String) ((Map.Entry) o).getKey());
+            return removeKey(((Map.Entry) o).getKey());
         }
 
     }
 
-    class KeySet extends BaseSet {
+    class KeySet extends BaseSet<String> {
 
-        public Iterator iterator() {
+	@Override
+        public Iterator<String> iterator() {
             return getKeyIterator();
         }
 
+	@Override
         public boolean remove(Object o) {
             if (!(o instanceof String)) {
                 return false;
@@ -595,8 +607,9 @@ abstract class BaseContextMap extends AbstractMap {
         }
     }
 
-    class ValueCollection extends AbstractCollection {
+    class ValueCollection extends AbstractCollection<V> {
 
+	@Override
         public int size() {
             int size = 0;
             for (Iterator i = iterator(); i.hasNext(); size++) {
@@ -605,16 +618,18 @@ abstract class BaseContextMap extends AbstractMap {
             return size;
         }
 
-        public Iterator iterator() {
+	@Override
+        public Iterator<V> iterator() {
             return getValueIterator();
         }
 
+	@Override
         public boolean remove(Object o) {
             return removeValue(o);
         }
     }
 
-    abstract class BaseIterator implements Iterator {
+    abstract class BaseIterator<E> implements Iterator<E> {
 
         protected Enumeration e;
         protected String currentKey;
@@ -627,9 +642,15 @@ abstract class BaseContextMap extends AbstractMap {
         public boolean hasNext() {
             return e.hasMoreElements();
         }
+
+        public String nextKey() {
+            removeCalled = false;
+            currentKey = (String) e.nextElement();
+            return currentKey;
+        }
     }
 
-    class EntryIterator extends BaseIterator {
+    class EntryIterator extends BaseIterator<Map.Entry<String,V>> {
 
         EntryIterator(Enumeration e) {
             super(e);
@@ -644,14 +665,13 @@ abstract class BaseContextMap extends AbstractMap {
             }
         }
 
-        public Object next() {
-            removeCalled = false;
-            currentKey = (String) e.nextElement();
-            return new Entry(currentKey, get(currentKey));
+        public Map.Entry<String,V> next() {
+            nextKey();
+            return new Entry<V>(currentKey, get(currentKey));
         }
     }
 
-     class KeyIterator extends BaseIterator {
+     class KeyIterator extends BaseIterator<String> {
 
         KeyIterator(Enumeration e) {
             super(e);
@@ -666,14 +686,12 @@ abstract class BaseContextMap extends AbstractMap {
             }
         }
 
-        public Object next() {
-            removeCalled = false;
-            currentKey = (String) e.nextElement();
-            return currentKey;
+        public String next() {
+            return nextKey();
         }
     }
 
-    class ValueIterator extends BaseIterator {
+    class ValueIterator extends BaseIterator<V> {
 
         ValueIterator(Enumeration e) {
             super(e);
@@ -688,39 +706,38 @@ abstract class BaseContextMap extends AbstractMap {
             }
         }
 
-        public Object next() {
-            removeCalled = false;
-            currentKey = (String) e.nextElement();
+        public V next() {
+            nextKey();
             return get(currentKey);
         }
     }
 
 
-    static class Entry implements Map.Entry {
+    static class Entry<V> implements Map.Entry<String,V> {
 
         // immutable Entry
-        private final Object key;
-        private final Object value;
+        private final String key;
+        private final V value;
 
 
-        Entry(Object key, Object value) {
+        Entry(String key, V value) {
             this.key = key;
             this.value = value;
         }
 
 
-        public Object getKey() {
+        public String getKey() {
             return key;
         }
 
 
-        public Object getValue() {
+        public V getValue() {
             return value;
         }
 
 
         // No support of setting the value
-        public Object setValue(Object value) {
+        public V setValue(V value) {
             throw new UnsupportedOperationException();
         }
 
@@ -752,8 +769,8 @@ abstract class BaseContextMap extends AbstractMap {
     }
 }
 
-abstract class StringArrayValuesMap extends BaseContextMap {
-    
+abstract class StringArrayValuesMap extends BaseContextMap<String[]> {
+
     public boolean equals(Object obj) {
         
         if (obj == null || 
@@ -766,8 +783,7 @@ abstract class StringArrayValuesMap extends BaseContextMap {
             return false;
         }
         String[] thisKeys = keySet().toArray(new String[this.size()]);
-        String[] objKeys = 
-              (String[]) objMap.keySet().toArray(new String[objMap.size()]);
+        Object[] objKeys = objMap.keySet().toArray();
         
         Arrays.sort(thisKeys);
         Arrays.sort(objKeys);
@@ -817,7 +833,7 @@ abstract class StringArrayValuesMap extends BaseContextMap {
     }
 }
 
-class ApplicationMap extends BaseContextMap {
+class ApplicationMap extends BaseContextMap<Object> {
 
     private final ServletContext servletContext;
 
@@ -851,7 +867,7 @@ class ApplicationMap extends BaseContextMap {
     }
 
 
-    public Object put(Object key, Object value) {
+    public Object put(String key, Object value) {
         if (key == null) {
             throw new NullPointerException();
         }
@@ -897,21 +913,21 @@ class ApplicationMap extends BaseContextMap {
 
 
 
-    protected Iterator getEntryIterator() {
+    protected Iterator<Map.Entry<String, Object>> getEntryIterator() {
         return new EntryIterator(servletContext.getAttributeNames());
     }
 
-    protected Iterator getKeyIterator() {
+    protected Iterator<String> getKeyIterator() {
         return new KeyIterator(servletContext.getAttributeNames());
     }
 
-    protected Iterator getValueIterator() {
+    protected Iterator<Object> getValueIterator() {
         return new ValueIterator(servletContext.getAttributeNames());
     }
 
 } // END ApplicationMap
 
-class SessionMap extends BaseContextMap {
+class SessionMap extends BaseContextMap<Object> {
 
     private final HttpServletRequest request;
 
@@ -947,7 +963,7 @@ class SessionMap extends BaseContextMap {
     }
 
 
-    public Object put(Object key, Object value) {
+    public Object put(String key, Object value) {
         if (key == null) {
             throw new NullPointerException();
         }
@@ -997,21 +1013,21 @@ class SessionMap extends BaseContextMap {
 
     // --------------------------------------------- Methods from BaseContextMap
 
-    protected Iterator getEntryIterator() {
+    protected Iterator<Map.Entry<String,Object>> getEntryIterator() {
         return new EntryIterator(getSession().getAttributeNames());
     }
 
-    protected Iterator getKeyIterator() {
+    protected Iterator<String> getKeyIterator() {
         return new KeyIterator(getSession().getAttributeNames());
     }
 
-    protected Iterator getValueIterator() {
+    protected Iterator<Object> getValueIterator() {
         return new ValueIterator(getSession().getAttributeNames());
     }
 
 } // END SessionMap
 
-class RequestMap extends BaseContextMap {
+class RequestMap extends BaseContextMap<Object> {
 
     private final ServletRequest request;    
 
@@ -1046,7 +1062,7 @@ class RequestMap extends BaseContextMap {
     }
 
 
-    public Object put(Object key, Object value) {
+    public Object put(String key, Object value) {
         if (key == null) {
             throw new NullPointerException();
         }
@@ -1089,21 +1105,21 @@ class RequestMap extends BaseContextMap {
 
     // --------------------------------------------- Methods from BaseContextMap
 
-    protected Iterator getEntryIterator() {
+    protected Iterator<Map.Entry<String,Object>> getEntryIterator() {
         return new EntryIterator(request.getAttributeNames());
     }
 
-    protected Iterator getKeyIterator() {
+    protected Iterator<String> getKeyIterator() {
         return new KeyIterator(request.getAttributeNames());
     }
 
-    protected Iterator getValueIterator() {
+    protected Iterator<Object> getValueIterator() {
         return new ValueIterator(request.getAttributeNames());
     }
 
 } // END RequestMap
 
-class RequestParameterMap extends BaseContextMap {
+class RequestParameterMap extends BaseContextMap<String> {
 
     private final ServletRequest request;
 
@@ -1113,7 +1129,7 @@ class RequestParameterMap extends BaseContextMap {
     }
 
 
-    public Object get(Object key) {
+    public String get(Object key) {
         if (key == null) {
             throw new NullPointerException();
         }
@@ -1121,15 +1137,15 @@ class RequestParameterMap extends BaseContextMap {
         return request.getParameter(key.toString());
     }
 
-    public Set entrySet() {
+    public Set<Map.Entry<String,String>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
-    public Set keySet() {
+    public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
-    public Collection values() {
+    public Collection<String> values() {
         return Collections.unmodifiableCollection(super.values());
     }
 
@@ -1156,15 +1172,15 @@ class RequestParameterMap extends BaseContextMap {
 
     // --------------------------------------------- Methods from BaseContextMap
 
-    protected Iterator getEntryIterator() {
+    protected Iterator<Map.Entry<String,String>> getEntryIterator() {
         return new EntryIterator(request.getParameterNames());
     }
 
-    protected Iterator getKeyIterator() {
+    protected Iterator<String> getKeyIterator() {
         return new KeyIterator(request.getParameterNames());
     }
 
-    protected Iterator getValueIterator() {
+    protected Iterator<String> getValueIterator() {
         return new ValueIterator(request.getParameterNames());
     }
 
@@ -1180,7 +1196,7 @@ class RequestParameterValuesMap extends StringArrayValuesMap {
     }
 
 
-    public Object get(Object key) {
+    @Override public String[] get(Object key) {
         if (key == null) {
             throw new NullPointerException();
         }
@@ -1193,15 +1209,15 @@ class RequestParameterValuesMap extends StringArrayValuesMap {
         return (request.getParameterValues(key.toString()) != null);
     }
 
-    public Set entrySet() {
+    public Set<Map.Entry<String,String[]>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
-    public Set keySet() {
+    public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
-    public Collection values() {
+    public Collection<String[]> values() {
         return Collections.unmodifiableCollection(super.values());
     }
 
@@ -1212,21 +1228,21 @@ class RequestParameterValuesMap extends StringArrayValuesMap {
 
     // --------------------------------------------- Methods from BaseContextMap
 
-    protected Iterator getEntryIterator() {
+    protected Iterator<Map.Entry<String, String[]>> getEntryIterator() {
         return new EntryIterator(request.getParameterNames());
     }
 
-    protected Iterator getKeyIterator() {
+    protected Iterator<String> getKeyIterator() {
         return new KeyIterator(request.getParameterNames());
     }
 
-    protected Iterator getValueIterator() {
+    protected Iterator<String[]> getValueIterator() {
         return new ValueIterator(request.getParameterNames());
     }
 
 } // END RequestParameterValuesMap
 
-class RequestHeaderMap extends BaseContextMap {
+class RequestHeaderMap extends BaseContextMap<String> {
 
     private final HttpServletRequest request;
 
@@ -1236,7 +1252,7 @@ class RequestHeaderMap extends BaseContextMap {
     }
 
 
-    public Object get(Object key) {
+    public String get(Object key) {
         if (key == null) {
             throw new NullPointerException();
         }
@@ -1244,15 +1260,15 @@ class RequestHeaderMap extends BaseContextMap {
         return (request.getHeader(key.toString()));
     }
 
-    public Set entrySet() {
+    public Set<Map.Entry<String,String>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
-    public Set keySet() {
+    public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
-    public Collection values() {
+    public Collection<String> values() {
         return Collections.unmodifiableCollection(super.values());
     }
 
@@ -1279,15 +1295,15 @@ class RequestHeaderMap extends BaseContextMap {
 
     // --------------------------------------------- Methods from BaseContextMap
 
-    protected Iterator getEntryIterator() {
+    protected Iterator<Map.Entry<String,String>> getEntryIterator() {
         return new EntryIterator(request.getHeaderNames());
     }
 
-    protected Iterator getKeyIterator() {
+    protected Iterator<String> getKeyIterator() {
         return new KeyIterator(request.getHeaderNames());
     }
 
-    protected Iterator getValueIterator() {
+    protected Iterator<String> getValueIterator() {
         return new ValueIterator(request.getHeaderNames());
     }
 
@@ -1303,29 +1319,29 @@ class RequestHeaderValuesMap extends StringArrayValuesMap {
     }
 
 
-    public Object get(Object key) {
+    public String[] get(Object key) {
         if (key == null) {
             throw new NullPointerException();
         }
       
         List<String> valuesList = new ArrayList<String>();
-        Enumeration<String> valuesEnum = this.request.getHeaders(key.toString());
+        Enumeration valuesEnum = this.request.getHeaders(key.toString());
         while (valuesEnum.hasMoreElements()) {
-            valuesList.add(valuesEnum.nextElement());
+            valuesList.add((String) valuesEnum.nextElement());
         } 
 
         return valuesList.toArray(new String[valuesList.size()]); 
     }
 
-    public Set entrySet() {
+    public Set<Map.Entry<String,String[]>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
-    public Set keySet() {
+    public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
-    public Collection values() {
+    public Collection<String[]> values() {
         return Collections.unmodifiableCollection(super.values());
     }        
 
@@ -1335,21 +1351,21 @@ class RequestHeaderValuesMap extends StringArrayValuesMap {
 
     // --------------------------------------------- Methods from BaseContextMap
 
-    protected Iterator getEntryIterator() {
+    protected Iterator<Map.Entry<String,String[]>> getEntryIterator() {
         return new EntryIterator(request.getHeaderNames());
     }
 
-    protected Iterator getKeyIterator() {
+    protected Iterator<String> getKeyIterator() {
         return new KeyIterator(request.getHeaderNames());
     }
 
-    protected Iterator getValueIterator() {
+    protected Iterator<String[]> getValueIterator() {
         return new ValueIterator(request.getHeaderNames());
     }
 
 } // END RequestHeaderValuesMap
 
-class RequestCookieMap extends BaseContextMap {
+class RequestCookieMap extends BaseContextMap<Object> {
 
     private final HttpServletRequest request;
 
@@ -1381,15 +1397,15 @@ class RequestCookieMap extends BaseContextMap {
         return result;
     }
 
-    public Set entrySet() {
+    public Set<Map.Entry<String,Object>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
-    public Set keySet() {
+    public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
-    public Collection values() {
+    public Collection<Object> values() {
         return Collections.unmodifiableCollection(super.values());
     }
 
@@ -1412,17 +1428,17 @@ class RequestCookieMap extends BaseContextMap {
     // --------------------------------------------- Methods from BaseContextMap
 
 
-    protected Iterator getEntryIterator() {
+    protected Iterator<Map.Entry<String,Object>> getEntryIterator() {
         return new EntryIterator(
                 new CookieArrayEnumerator(request.getCookies()));
     }
 
-    protected Iterator getKeyIterator() {
+    protected Iterator<String> getKeyIterator() {
         return new KeyIterator(
                 new CookieArrayEnumerator(request.getCookies()));
     }
 
-    protected Iterator getValueIterator() {
+    protected Iterator<Object> getValueIterator() {
         return new ValueIterator(
             new CookieArrayEnumerator(request.getCookies()));
     }
@@ -1454,7 +1470,7 @@ class RequestCookieMap extends BaseContextMap {
 
 } // END RequestCookiesMap
 
-class InitParameterMap extends BaseContextMap {
+class InitParameterMap extends BaseContextMap<String> {
 
     private final ServletContext servletContext;
 
@@ -1464,7 +1480,7 @@ class InitParameterMap extends BaseContextMap {
     }
 
 
-    public Object get(Object key) {
+    public String get(Object key) {
         if (key == null) {
             throw new NullPointerException();
         }        
@@ -1472,15 +1488,15 @@ class InitParameterMap extends BaseContextMap {
         return servletContext.getInitParameter(keyString);
     }
 
-    public Set entrySet() {
+    public Set<Map.Entry<String,String>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
-    public Set keySet() {
+    public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
-    public Collection values() {
+    public Collection<String> values() {
         return Collections.unmodifiableCollection(super.values());
     }
 
@@ -1507,15 +1523,15 @@ class InitParameterMap extends BaseContextMap {
 
     // --------------------------------------------- Methods from BaseContextMap
 
-    protected Iterator getEntryIterator() {
+    protected Iterator<Map.Entry<String,String>> getEntryIterator() {
         return new EntryIterator(servletContext.getInitParameterNames());
     }
 
-    protected Iterator getKeyIterator() {
+    protected Iterator<String> getKeyIterator() {
         return new KeyIterator(servletContext.getInitParameterNames());
     }
 
-    protected Iterator getValueIterator() {
+    protected Iterator<String> getValueIterator() {
         return new ValueIterator(servletContext.getInitParameterNames());
     }
 

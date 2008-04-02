@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.57 2005/12/05 16:43:05 edburns Exp $
+ * $Id: UIComponentTag.java,v 1.58 2006/09/01 01:22:27 tony_robertson Exp $
  */
 
 /*
@@ -38,7 +38,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 
-import java.util.List;
 
 /**
  * <p>{@link UIComponentTag} is the base class for all JSP custom

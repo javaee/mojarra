@@ -1,5 +1,5 @@
 /*
- * $Id: ResultDataModel.java,v 1.19 2005/12/05 16:42:58 edburns Exp $
+ * $Id: ResultDataModel.java,v 1.20 2006/09/01 01:22:22 tony_robertson Exp $
  */
 
 /*
@@ -30,8 +30,6 @@
 package javax.faces.model;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.SortedMap;
 import javax.faces.FacesException;
 import javax.servlet.jsp.jstl.sql.Result;

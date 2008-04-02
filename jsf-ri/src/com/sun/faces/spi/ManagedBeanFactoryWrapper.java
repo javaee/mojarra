@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryWrapper.java,v 1.5 2006/05/17 17:31:31 rlubke Exp $
+ * $Id: ManagedBeanFactoryWrapper.java,v 1.6 2006/09/01 01:23:00 tony_robertson Exp $
  */
 
 /*
@@ -31,7 +31,6 @@ package com.sun.faces.spi;
 
 import com.sun.faces.config.beans.ManagedBeanBean;
 import java.util.Map;
-import java.lang.reflect.Method;
 
 import javax.faces.context.FacesContext;
 

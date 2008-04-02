@@ -1,5 +1,5 @@
 /*
- * $Id: FacesCompositeELResolver.java,v 1.5 2006/05/03 14:49:22 edburns Exp $
+ * $Id: FacesCompositeELResolver.java,v 1.6 2006/09/01 01:22:40 tony_robertson Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -29,6 +29,8 @@
 package com.sun.faces.el;
 
 import com.sun.faces.RIConstants;
+
+import java.beans.FeatureDescriptor;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -65,7 +67,7 @@ public class FacesCompositeELResolver extends CompositeELResolver {
         return result;
     }
 
-    public Class getType(ELContext context, Object base, Object property) 
+    public Class<?> getType(ELContext context, Object base, Object property) 
         throws ELException {
         Class result = null;
         
@@ -107,15 +109,15 @@ public class FacesCompositeELResolver extends CompositeELResolver {
     }
 
     
-    public Iterator getFeatureDescriptors(ELContext context, Object base) {
-        Iterator result = null;
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
+        Iterator<FeatureDescriptor> result = null;
         setChainType();
         result = super.getFeatureDescriptors(context, base);
         clearChainType();
         return result;
     }
     
-    public Class getCommonPropertyType(ELContext context, Object base) {
+    public Class<?> getCommonPropertyType(ELContext context, Object base) {
         return null;
     }
 

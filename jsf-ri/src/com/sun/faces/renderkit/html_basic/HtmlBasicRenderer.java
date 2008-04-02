@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.113 2006/08/28 14:17:32 rogerk Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.114 2006/09/01 01:22:56 tony_robertson Exp $
  */
 
 /*
@@ -248,13 +248,14 @@ public abstract class HtmlBasicRenderer extends Renderer {
      *
      * @param component <code>UIComponent</code> for which to extract children
      */
-    protected Iterator getChildren(UIComponent component) {
+    protected Iterator<UIComponent> getChildren(UIComponent component) {
         int childCount = component.getChildCount();
         if (childCount > 0) {
             return new RenderedChildIterator(component
                   .getChildren().iterator());
         } else {
-            return Collections.EMPTY_LIST.iterator();
+        	List<UIComponent> empty = Collections.emptyList();
+            return empty.iterator();
         }
     }
 
@@ -623,16 +624,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * <p>This <code>Iterator</code> is used to Iterator over
      * children components that are set to be rendered.</p>
      */
-    private static class RenderedChildIterator implements Iterator {
+    private static class RenderedChildIterator implements Iterator<UIComponent> {
         
-        Iterator childIterator;
+        Iterator<UIComponent> childIterator;
         boolean hasNext;
-        Object child;
+        UIComponent child;
         
         // -------------------------------------------------------- Constructors
         
         
-        private RenderedChildIterator(Iterator childIterator) {
+        private RenderedChildIterator(Iterator<UIComponent> childIterator) {
             
             this.childIterator = childIterator;
             update();
@@ -655,12 +656,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
             
         }
 
-        public Object next() {
+        public UIComponent next() {
             
             if (!hasNext) {
                 throw new NoSuchElementException();
             }
-            Object temp = child;
+            UIComponent temp = child;
             update();                         
             return temp;
             

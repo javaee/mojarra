@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationObjectInputStream.java,v 1.4 2006/03/29 23:03:46 rlubke Exp $
+ * $Id: ApplicationObjectInputStream.java,v 1.5 2006/09/01 01:22:55 tony_robertson Exp $
  */
 
 /*
@@ -29,13 +29,10 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.RIConstants;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
-import java.util.Map;
-import javax.faces.context.FacesContext;
 
 
 /**
@@ -55,7 +52,7 @@ public class ApplicationObjectInputStream extends ObjectInputStream {
         super(in);
     } 
 
-    protected Class resolveClass(ObjectStreamClass desc) throws IOException, 
+    protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, 
             ClassNotFoundException {
         // When the container is about to call code associated with a 
         // particular web application, it sets the context classloader to the 

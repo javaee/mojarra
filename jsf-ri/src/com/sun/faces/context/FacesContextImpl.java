@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.83 2006/08/02 21:06:23 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.84 2006/09/01 01:22:39 tony_robertson Exp $
  */
 
 /*
@@ -97,7 +97,7 @@ import com.sun.faces.util.Util;
       * instances.  The null key is used to represent FacesMessage instances
       * that are not associated with a clientId instance.
       */
-     private Map componentMessageLists;
+     private Map<String,List<FacesMessage>> componentMessageLists;
 
 
 
@@ -181,11 +181,11 @@ import com.sun.faces.util.Util;
          return elContext;
      }
 
-     public Iterator getClientIdsWithMessages() {
+     public Iterator<String> getClientIdsWithMessages() {
          assertNotReleased();
-         Iterator result = null;
+         Iterator<String> result = null;
          if (null == componentMessageLists) {
-             result = Collections.EMPTY_LIST.iterator();
+             result = Collections.<String>emptyList().iterator();
          } else {
              result = componentMessageLists.keySet().iterator();
 
@@ -217,30 +217,32 @@ import com.sun.faces.util.Util;
      }
 
 
-     public Iterator getMessages() {
+     public Iterator<FacesMessage> getMessages() {
          assertNotReleased();
          if (null == componentMessageLists) {
-             return (Collections.EMPTY_LIST.iterator());
+             List<FacesMessage> emptyList = Collections.emptyList();
+             return (emptyList.iterator());
          }
 
          //Clear set of clientIds from pending display messages list.
-         Map requestMap = getExternalContext().getRequestMap();
+         Map<String,Object> requestMap = getExternalContext().getRequestMap();
          if (requestMap.containsKey(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
         	 Set pendingClientIds = (Set)requestMap.get(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
         	 pendingClientIds.clear();
          }
 
          // Get an Iterator over the ArrayList instances
-         List messages = getMergedMessageLists();
+         List<FacesMessage> messages = getMergedMessageLists();
          if (messages.size() > 0) {
              return messages.iterator();
          } else {
-             return Collections.EMPTY_LIST.iterator();
+             List<FacesMessage> emptyList = Collections.emptyList();
+             return (emptyList.iterator());
          }
      }
 
 
-     public Iterator getMessages(String clientId) {
+     public Iterator<FacesMessage> getMessages(String clientId) {
          assertNotReleased();
 
          //remove client id from pending display messages list.
@@ -253,12 +255,14 @@ import com.sun.faces.util.Util;
          // If no messages have been enqueued at all,
          // return an empty List Iterator
          if (null == componentMessageLists) {
-             return (Collections.EMPTY_LIST.iterator());
+             List<FacesMessage> emptyList = Collections.emptyList();
+             return (emptyList.iterator());
          }
 
-         List list = (List) componentMessageLists.get(clientId);
+         List<FacesMessage> list = componentMessageLists.get(clientId);
          if (list == null) {
-             return (Collections.EMPTY_LIST.iterator());
+             List<FacesMessage> emptyList = Collections.emptyList();
+             return (emptyList.iterator());
          }
          return (list.iterator());
      }
@@ -350,13 +354,13 @@ import com.sun.faces.util.Util;
          }
 
          if (componentMessageLists == null) {
-             componentMessageLists = new LinkedHashMap();
+             componentMessageLists = new LinkedHashMap<String,List<FacesMessage>>();
          }
 
          // Add this message to our internal queue
-         List list = (List) componentMessageLists.get(clientId);
+         List<FacesMessage> list = componentMessageLists.get(clientId);
          if (list == null) {
-             list = new ArrayList();
+             list = new ArrayList<FacesMessage>();
              componentMessageLists.put(clientId, list);
          }
          list.add(message);
@@ -426,11 +430,11 @@ import com.sun.faces.util.Util;
      }
 
 
-     private List getMergedMessageLists() {
-         List mergedList = new ArrayList();
+     private List<FacesMessage> getMergedMessageLists() {
+         List<FacesMessage> mergedList = new ArrayList<FacesMessage>();
          if (componentMessageLists != null) {
-             for (Iterator i = componentMessageLists.values().iterator(); i.hasNext();) {
-                 for (Iterator ii = ((ArrayList) i.next()).iterator(); ii.hasNext();)
+             for (Iterator<List<FacesMessage>> i = componentMessageLists.values().iterator(); i.hasNext();) {
+                 for (Iterator<FacesMessage> ii = i.next().iterator(); ii.hasNext();)
                      mergedList.add(ii.next());
              }
          }

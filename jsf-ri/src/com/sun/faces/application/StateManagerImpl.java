@@ -57,6 +57,7 @@ import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.LRUMap;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.DebugUtil;
 
@@ -241,12 +242,10 @@ public class StateManagerImpl extends StateManager {
 
 
             synchronized (sessionObj) {
-                LRUMap<String, LRUMap<String, Object[]>> logicalMap =
-                      (LRUMap<String, LRUMap<String, Object[]>>) sessionMap
-                            .get(RIConstants.LOGICAL_VIEW_MAP);
+                Map<String, Map> logicalMap = TypedCollections.dynamicallyCastMap(
+                      (Map) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP), String.class, Map.class);
                 if (logicalMap == null) {
-                    logicalMap = new LRUMap<String, LRUMap<String, Object[]>>(
-                          logicalMapSize);
+                    logicalMap = new LRUMap<String, Map>(logicalMapSize);
                     sessionMap.put(RIConstants.LOGICAL_VIEW_MAP, logicalMap);
                 }
 
@@ -261,8 +260,8 @@ public class StateManagerImpl extends StateManager {
                 
                 String idInActualMap = createUniqueRequestId();
                
-                LRUMap<String, Object[]> actualMap =
-                      logicalMap.get(idInLogicalMap);
+                Map<String, Object[]> actualMap = TypedCollections.dynamicallyCastMap(
+                      logicalMap.get(idInLogicalMap), String.class, Object[].class);
                 if (actualMap == null) {
                     actualMap = new LRUMap<String, Object[]>(actualMapSize);
                     logicalMap.put(idInLogicalMap, actualMap);

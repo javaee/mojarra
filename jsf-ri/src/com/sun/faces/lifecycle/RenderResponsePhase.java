@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.20 2006/06/19 19:38:51 youngm Exp $
+ * $Id: RenderResponsePhase.java,v 1.21 2006/09/01 01:22:52 tony_robertson Exp $
  */
 
 /*
@@ -46,6 +46,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
 
 
@@ -53,7 +54,7 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.20 2006/06/19 19:38:51 youngm Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.21 2006/09/01 01:22:52 tony_robertson Exp $
  */
 
 public class RenderResponsePhase extends Phase {
@@ -138,7 +139,8 @@ public class RenderResponsePhase extends Phase {
             		requestMap.containsKey(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
             	
             	//remove so Set does not get modified when displaying messages.
-            	Set<String> clientIds = (Set)requestMap.remove(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
+            	Set<String> clientIds = TypedCollections.dynamicallyCastSet( 
+            		(Set) requestMap.remove(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED), String.class);
             	if (!clientIds.isEmpty()) {
             		
             		//Display each message possibly not displayed.

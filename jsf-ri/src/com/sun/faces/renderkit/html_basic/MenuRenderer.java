@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.78 2006/06/29 15:30:11 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.79 2006/09/01 01:22:58 tony_robertson Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -714,7 +714,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             Object value = select.getValue();            
             if (value instanceof List) {
                 
-                List list = (List) value;
+                List<?> list = (List) value;
                 int size = list.size();
                 if (size > 0) {
                     // get the type of the first element - Should

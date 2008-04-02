@@ -1,7 +1,7 @@
 package com.sun.faces.el;
 
 /*
- * $Id: ScopedAttributeELResolver.java,v 1.9 2006/05/22 14:58:01 rlubke Exp $
+ * $Id: ScopedAttributeELResolver.java,v 1.10 2006/09/01 01:22:50 tony_robertson Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -77,7 +77,7 @@ public class ScopedAttributeELResolver extends ELResolver {
     }
 
 
-    public Class getType(ELContext context, Object base, Object property)
+    public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
             return null;
@@ -139,7 +139,7 @@ public class ScopedAttributeELResolver extends ELResolver {
         return false;
     }
 
-    public Iterator getFeatureDescriptors(ELContext context, Object base) {
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
 
        String attrName = null;
        Object attrValue = null;
@@ -188,7 +188,7 @@ public class ScopedAttributeELResolver extends ELResolver {
        return list.iterator();
     }
 
-    public Class getCommonPropertyType(ELContext context, Object base) {
+    public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;
         }

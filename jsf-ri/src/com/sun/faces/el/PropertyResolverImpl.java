@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.26 2006/08/29 06:13:00 tony_robertson Exp $
+ * $Id: PropertyResolverImpl.java,v 1.27 2006/09/01 01:22:48 tony_robertson Exp $
  */
 
 /*
@@ -191,6 +191,7 @@ public class PropertyResolverImpl extends PropertyResolver {
             }
         } else if (base instanceof List) {
             try {
+            	// Inherently not type safe, but nothing can be done about it.
                 ((List) base).set(index, value);
             } catch (IndexOutOfBoundsException ioobe) {
                 throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(

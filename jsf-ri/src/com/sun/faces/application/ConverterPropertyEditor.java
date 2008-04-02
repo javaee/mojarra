@@ -97,8 +97,7 @@ public class ConverterPropertyEditor extends PropertyEditorSupport {
         
         if (null == targetClass) {
             // PENDING(edburns): I18N
-            throw new FacesException("Cannot discover target class for value " +
-                    textValue + ".");
+            throw new FacesException("Cannot discover target class for value " + textValue + ".");
         }
         
         Converter converter = context.getApplication().createConverter(targetClass);

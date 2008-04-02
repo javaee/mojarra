@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.27 2006/01/26 16:31:35 edburns Exp $
+ * $Id: ResponseStateManager.java,v 1.28 2006/09/01 01:22:24 tony_robertson Exp $
  */
 
 /*
@@ -29,15 +29,12 @@
 
 package javax.faces.render;
 
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.application.StateManager;
 import javax.faces.application.StateManager.SerializedView;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

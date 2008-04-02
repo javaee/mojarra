@@ -1,5 +1,5 @@
 /*
- * $Id: ParameterTag.java,v 1.19 2006/03/29 23:03:51 rlubke Exp $
+ * $Id: ParameterTag.java,v 1.20 2006/09/01 01:23:04 tony_robertson Exp $
  */
 
 /*
@@ -35,7 +35,6 @@ import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.webapp.UIComponentELTag;
-import javax.servlet.jsp.JspException;
 
 public class ParameterTag extends UIComponentELTag {
 

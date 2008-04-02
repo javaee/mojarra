@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.12 2006/08/29 06:13:00 tony_robertson Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.13 2006/09/01 01:22:51 tony_robertson Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -107,7 +107,7 @@ public class VariableResolverChainWrapper extends ELResolver {
     }
 
     @Override
-    public Class getType(ELContext context, Object base, Object property)
+    public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
 
         Object result = null;
@@ -143,7 +143,7 @@ public class VariableResolverChainWrapper extends ELResolver {
     }
 
     @Override
-    public Class getCommonPropertyType(ELContext context, Object base) {
+    public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if ( base == null ) {
             return String.class;
         }

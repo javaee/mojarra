@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.12 2006/08/29 06:12:59 tony_robertson Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.13 2006/09/01 01:22:36 tony_robertson Exp $
  */
 
 /*
@@ -59,6 +59,7 @@ import com.sun.faces.config.beans.MapEntryBean;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
 import com.sun.org.apache.commons.beanutils.PropertyUtils;
 
@@ -238,8 +239,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         // references.
         Map<String,Object> requestMap = 
             context.getExternalContext().getRequestMap();
-        List<String> beanList = 
-            (List<String>)requestMap.get(MANAGED_BEAN_CREATED_STACK);
+        List<String> beanList = TypedCollections.dynamicallyCastList(
+            (List) requestMap.get(MANAGED_BEAN_CREATED_STACK), String.class);
         if (beanList == null) {
             beanList = new ArrayList<String>();
             requestMap.put(MANAGED_BEAN_CREATED_STACK, beanList);
@@ -287,11 +288,11 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 case TYPE_IS_LIST:
                     copyListEntriesFromConfigToList(
                         managedBean.getListEntries(),
-                        (List<Object>) bean);
+                        (List) bean);
                     break;
                 case TYPE_IS_MAP:
                     copyMapEntriesFromConfigToMap(managedBean.getMapEntries(),
-                                                  (Map<Object,Object>) bean);
+                                                  (Map) bean);
                     break;
                 case TYPE_IS_UICOMPONENT:
                     // intentional fall-through
@@ -458,7 +459,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
 
     protected Class copyListEntriesFromConfigToList(ListEntriesBean listEntries,
-                                                    List<Object> valuesForBean)
+                                                    List<?> valuesForBean)
         throws ClassNotFoundException {
         String[] valuesFromConfig = listEntries.getValues();
         Class valueClass = java.lang.String.class;
@@ -494,14 +495,14 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             // convert the value if necessary
             value = getConvertedValueConsideringPrimitives(value, valueClass);
 
-            valuesForBean.add(value);
+            TypedCollections.dynamicallyCastList(valuesForBean, valueClass).add(value);
         }
         return valueClass;
     }
 
 
     void copyMapEntriesFromConfigToMap(MapEntriesBean mapEntries,
-                                       Map<Object,Object> result)
+                                       Map<?,?> result)
         throws ClassNotFoundException {
         Object
             key = null,
@@ -551,7 +552,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 value = getConvertedValueConsideringPrimitives(strValue,
                                                                valueClass);
             }
-            result.put(key, value);
+            TypedCollections.dynamicallyCastMap(result, keyClass, valueClass).put(key, value);
         }
     }
 
@@ -696,7 +697,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         boolean
             getterIsNull = true,
             getterIsArray = false;
-        List<Object>
+        List<?>
             valuesForBean = null;
         Class
             valueType = java.lang.String.class,
@@ -737,11 +738,12 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         if (!getterIsNull) {
             // if what it returned was an array
             if (getterIsArray) {
-                valuesForBean = new ArrayList<Object>();
+            	List<Object> existingValuesForBean = new ArrayList<Object>();
                 for (int i = 0, len = Array.getLength(result); i < len; i++) {
                     // add the existing values
-                    valuesForBean.add(Array.get(result, i));
+                	existingValuesForBean.add(Array.get(result, i));
                 }
+                valuesForBean = existingValuesForBean;
             } else {
                 // if what it returned was not a List
                 if (!(result instanceof List)) {
@@ -751,7 +753,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                         propertyName,
                         managedBean.getManagedBeanName()));
                 }
-                valuesForBean = (List<Object>) result;
+                valuesForBean = (List) result;
             }
         } else {
 
@@ -835,15 +837,14 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
     private void setMapPropertiesIntoBean(Object bean,
                                           ManagedPropertyBean property)
         throws Exception {
-        Map<Object,Object> result = null;
+        Map<?,?> result = null;
         boolean getterIsNull = true;
         Class propertyType = null;
         String propertyName = property.getPropertyName();
 
         try {
             // see if there is a getter
-            result = (Map<Object,Object>) 
-                        PropertyUtils.getProperty(bean, propertyName);
+            result = (Map) PropertyUtils.getProperty(bean, propertyName);
             getterIsNull = (null == result);
 
             propertyType = PropertyUtils.getPropertyType(bean, propertyName);
@@ -852,7 +853,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         }
 
         if (null != propertyType &&
-            !java.util.Map.class.isAssignableFrom(propertyType)) {
+            !Map.class.isAssignableFrom(propertyType)) {
             throw new FacesException(MessageUtils.getExceptionMessageString(
                     MessageUtils.MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY_ID,
                     propertyName,
@@ -906,12 +907,12 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
 
     private Object getConvertedValueConsideringPrimitives(Object value,
-                                                          Class valueType)
+                                                          Class<?> valueType)
         throws FacesException {        
         if (null != value && null != valueType) {
             String valueString = value.toString();
             if (valueType.isEnum()) {
-                value = Enum.valueOf(valueType, valueString);
+                value = Enum.valueOf((Class<? extends Enum>) valueType, valueString);
             }
             else if (valueType == Boolean.TYPE ||
                 valueType == java.lang.Boolean.class) {

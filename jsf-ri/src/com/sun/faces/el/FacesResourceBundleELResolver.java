@@ -1,5 +1,5 @@
 /*
- * $Id: FacesResourceBundleELResolver.java,v 1.8 2006/05/22 14:57:59 rlubke Exp $
+ * $Id: FacesResourceBundleELResolver.java,v 1.9 2006/09/01 01:22:42 tony_robertson Exp $
  */
 
 /*
@@ -83,7 +83,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
     
     
 
-    public Class getType(ELContext context, Object base, Object property) 
+    public Class<?> getType(ELContext context, Object base, Object property) 
         throws ELException {
         
         if (null != base) {
@@ -162,7 +162,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
         return false;
     }
 
-    public Iterator getFeatureDescriptors(ELContext context, Object base) {
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         
         if (base != null) {
             return null;
@@ -212,7 +212,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
         return list.iterator();
     }
     
-    public Class getCommonPropertyType(ELContext context, Object base) {
+    public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolverForJsp.java,v 1.11 2006/05/17 19:00:45 rlubke Exp $
+ * $Id: ImplicitObjectELResolverForJsp.java,v 1.12 2006/09/01 01:22:44 tony_robertson Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -81,7 +81,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
 
     }
 
-    public Class getType(ELContext context, Object base, Object property)
+    public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
             return null;
@@ -160,7 +160,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         }
     }
 
-    public Iterator getFeatureDescriptors(ELContext context, Object base) {
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
         if (base != null) {
             return null;
         }
@@ -174,7 +174,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
 
     }
 
-    public Class getCommonPropertyType(ELContext context, Object base) {
+    public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;
         }

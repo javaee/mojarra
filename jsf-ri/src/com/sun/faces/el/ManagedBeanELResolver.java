@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.14 2006/05/17 19:00:45 rlubke Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.15 2006/09/01 01:22:46 tony_robertson Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -89,7 +89,7 @@ public class ManagedBeanELResolver extends ELResolver {
     }
 
 
-    public Class getType(ELContext context, Object base, Object property)
+    public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
 
         if (base == null && property == null) {
@@ -127,7 +127,7 @@ public class ManagedBeanELResolver extends ELResolver {
         return false;
     }
 
-    public Iterator getFeatureDescriptors(ELContext context, Object base) {
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
 
         if (base != null) {
             return null;
@@ -171,7 +171,7 @@ public class ManagedBeanELResolver extends ELResolver {
         return list.iterator();
     }
 
-    public Class getCommonPropertyType(ELContext context, Object base) {
+    public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;
         }

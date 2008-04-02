@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.5 2006/05/22 14:57:57 rlubke Exp $
+ * $Id: JSFVersionTracker.java,v 1.6 2006/09/01 01:22:35 tony_robertson Exp $
  */
 
 /*
@@ -38,7 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 import javax.faces.context.ExternalContext;
 
 /**

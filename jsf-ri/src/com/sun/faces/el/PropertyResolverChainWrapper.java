@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverChainWrapper.java,v 1.12 2006/08/29 06:13:00 tony_robertson Exp $
+ * $Id: PropertyResolverChainWrapper.java,v 1.13 2006/09/01 01:22:47 tony_robertson Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -84,7 +84,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
 
     @Override
     @SuppressWarnings("deprecation")
-    public Class getType(ELContext context, Object base, Object property) 
+    public Class<?> getType(ELContext context, Object base, Object property) 
         throws ELException {
         if (base == null || property == null) {
             return null;
@@ -188,7 +188,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
     }
 
     @Override
-    public Class getCommonPropertyType(ELContext context, Object base) {
+    public Class<?> getCommonPropertyType(ELContext context, Object base) {
         if ( base == null ) {
             return Object.class;
         }

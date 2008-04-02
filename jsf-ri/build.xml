@@ -97,6 +97,9 @@
         <copy file="${tools.dir}/template-src/MessageFactory.java"
               todir="${build.generate.dir}/com/sun/faces/util"
               filtering="true"/>
+        <copy file="${tools.dir}/template-src/TypedCollections.java"
+              todir="${build.generate.dir}/com/sun/faces/util"
+              filtering="true"/>
 
         <filter token="protection" value="public"/>
 

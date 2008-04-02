@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.12 2005/12/05 16:42:54 edburns Exp $
+ * $Id: FacesEvent.java,v 1.13 2006/09/01 01:22:20 tony_robertson Exp $
  */
 
 /*
@@ -31,11 +31,8 @@ package javax.faces.event;
 
 
 import java.util.EventObject;
-import java.util.Iterator;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
 
 
 /**

@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.43 2006/03/29 23:03:46 rlubke Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.44 2006/09/01 01:22:54 tony_robertson Exp $
  */
 
 /*
@@ -29,7 +29,6 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.Util;
 import java.util.logging.Logger;
 import java.util.logging.Level;
