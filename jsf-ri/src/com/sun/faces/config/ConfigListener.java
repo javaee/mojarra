@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.7 2003/05/02 06:03:59 eburns Exp $
+ * $Id: ConfigListener.java,v 1.8 2003/05/03 06:57:08 rkitain Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -135,14 +135,16 @@ public class ConfigListener implements ServletContextListener
 		cur = toker.nextToken();
 		if (null != cur && 0 < cur.length()) {
 		    cur = cur.trim();
+
 		    try {
 			configBase = configParser.parseConfig(cur,
 							      servletContext,
 							      configBase);
 		    } catch (Throwable t) {
+                        Object[] obj = new Object[1];
+                        obj[0] = cur;
 			throw new FacesException(Util.getExceptionMessage(
-                                       Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID),
-						 t);
+                                       Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj), t);
 		    }
 		}
 	    }
