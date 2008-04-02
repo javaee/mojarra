@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.89 2003/09/13 12:58:52 eburns Exp $
+ * $Id: Util.java,v 1.90 2003/09/16 18:11:09 rkitain Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.89 2003/09/13 12:58:52 eburns Exp $
+ * @version $Id: Util.java,v 1.90 2003/09/16 18:11:09 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -382,12 +382,17 @@ private Util()
 //
     public static Class loadClass(String name, 
 				  Object fallbackClass) throws ClassNotFoundException {
-	ClassLoader loader =
+	ClassLoader loader = Util.getCurrentLoader(fallbackClass);
+	return loader.loadClass(name);
+    }
+
+    public static ClassLoader getCurrentLoader(Object fallbackClass) {
+        ClassLoader loader =
 	    Thread.currentThread().getContextClassLoader();
 	if (loader == null) {
 	    loader = fallbackClass.getClass().getClassLoader();
 	}
-	return loader.loadClass(name);
+	return loader;
     }
 
     /**
