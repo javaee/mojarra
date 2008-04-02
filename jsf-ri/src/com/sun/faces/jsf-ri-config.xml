@@ -812,6 +812,15 @@
       <summary xml:lang="es">Validation error. ''{0}'' must have either key, label, image, imageKey, or valueRef attributes.</summary>
       <summary xml:lang="fr">Validation error. ''{0}'' must have either key, label, image, imageKey, or valueRef attributes.</summary>
     </message>
+
+    <message>
+      <message-id>com.sun.faces.CONTENT_TYPE_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Unrecognized Content Type.</summary>
+      <summary xml:lang="de">Unrecognized Content Type.</summary>
+      <summary xml:lang="es">Unrecognized Content Type.</summary>
+      <summary xml:lang="fr">Unrecognized Content Type.</summary>
+    </message>
   </message-resources>
 
   <!-- Standard Validators -->
