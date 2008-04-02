@@ -44,6 +44,13 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <managed-bean-name>SelectItemsData</managed-bean-name>
+    <managed-bean-class>standard.SelectItemsData</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+
   <navigation-rule>
     <from-view-id> * </from-view-id>
     <navigation-case>

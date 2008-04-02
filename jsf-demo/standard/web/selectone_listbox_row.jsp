@@ -82,3 +82,36 @@
 
             </tr>
 
+
+<tr>
+
+  <td>
+    <h:outputText             id="disabledsLabel"
+                           value="Listbox with even numbered options disabled"/>
+  </td>
+
+  <td>
+    <h:selectOneListbox       id="disabledsListbox"
+                           value="#{SelectItemsData.disabled}">
+      <f:selectItems       value="#{SelectItemsData.disableds}"/>
+    </h:selectOneListbox>
+  </td>
+
+</tr>
+
+
+<tr>
+
+  <td>
+    <h:outputText             id="nestedsLabel"
+                           value="Listbox with nested options"/>
+  </td>
+
+  <td>
+    <h:selectOneListbox       id="nestedsListbox"
+                           value="#{SelectItemsData.nested}">
+      <f:selectItems       value="#{SelectItemsData.nesteds}"/>
+    </h:selectOneListbox>
+  </td>
+
+</tr>
