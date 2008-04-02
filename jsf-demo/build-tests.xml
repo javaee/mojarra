@@ -55,6 +55,7 @@
     <property name="debug.jvm.args" value=""/>
     <property name="logger" value="org.apache.commons.logging.impl.SimpleLog" />
     <property name="level" value="trace" />
+    <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.2.3"/>
     
     <!-- Demo WAR files -->
     <property name="components.war" value="${basedir}/components/build/jsf-components.war"/>
@@ -65,15 +66,16 @@
     <property name="test.results.dir" value="${basedir}/testresults"/>
 
     <path id="classpath">
-        <pathelement location="${htmlunit.jar}"/>
-        <pathelement location="${jsf-api.jar}"/>
-        <pathelement location="${commons-httpclient.jar}"/>
-        <pathelement location="${js.jar}"/>
-        <pathelement location="${commons-logging.jar}"/>
-        <pathelement location="${nekohtml.jar}"/>
-        <pathelement location="${xercesImpl.jar}"/>
-        <pathelement location="${xmlapis.jar}"/>
-        <pathelement location="${build}/classes"/>
+      <pathelement location="${jsf-api.jar}"/>
+      <pathelement location="${build}/classes"/>
+      <fileset dir="${htmlunit.home}/lib">
+        <include name="htmlunit-1.2.3.jar"/>
+        <include name="commons-httpclient-2.0-beta2.jar"/>
+        <include name="xmlParserAPIs-2.2.1.jar"/>
+        <include name="commons-logging-1.0.2.jar"/>
+        <include name="xercesImpl-2.4.0.jar"/>
+        <include name="nekohtml-0.7.7.jar"/>
+      </fileset>
     </path>
 
     <path id="run.classpath">
@@ -86,7 +88,7 @@
         <pathelement location="${catalina-ant.jar}"/>
     </path>   
     
-    <target name="init" depends="check.changes,verifyPreconditions">
+    <target name="init" depends="check.changes">
         <tstamp/>       
     </target>
     
@@ -97,45 +99,6 @@
                 <include name="test/**/*.*"/>               
             </srcfiles>
         </uptodate>
-    </target>
-
-    <target unless="skip.build" name="verifyPreconditions">
-
-        <antcall target="checkRequiredFile">
-            <param name="file" value="${htmlunit.jar}"/>
-            <param name="fail.message" value="${htmlunit.jar} must exist."/>
-        </antcall>
-
-        <antcall target="checkRequiredFile">
-            <param name="file" value="${commons-httpclient.jar}"/>
-            <param name="fail.message" value="${commons-httpclient.jar} must exist."/>
-        </antcall>
-
-        <antcall target="checkRequiredFile">
-            <param name="file" value="${js.jar}"/>
-            <param name="fail.message" value="${js.jar} must exist."/>
-        </antcall>
-
-        <antcall target="checkRequiredFile">
-            <param name="file" value="${nekohtml.jar}"/>
-            <param name="fail.message" value="${nekohtml.jar} must exist."/>
-        </antcall>
-
-        <antcall target="checkRequiredFile">
-            <param name="file" value="${xercesImpl.jar}"/>
-            <param name="fail.message" value="${xercesImpl.jar} must exist."/>
-        </antcall>
-
-        <antcall target="checkRequiredFile">
-            <param name="file" value="${xmlapis.jar}"/>
-            <param name="fail.message" value="${xmlapis.jar} must exist."/>
-        </antcall>
-
-        <antcall target="checkRequiredFile">
-            <param name="file" value="${commons-logging.jar}"/>
-            <param name="fail.message" value="${commons-logging.jar} must exist."/>
-        </antcall>
-
     </target>
 
     <target name="prepare" depends="init"
