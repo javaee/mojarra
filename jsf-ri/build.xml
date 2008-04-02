@@ -230,6 +230,28 @@
                prefix="jsf-ri-${version}"/>
     </zip>
 
+    <!-- Create a buildable source distribution -->
+    <zip     destfile="${dist.home}/jsf-ri-src-${version}.zip">
+      <zipfileset dir="${basedir}"
+             includes="build.xml build-tests.xml README COPYRIGHT LICENSE*.*"
+               prefix="jsf-ri-src-${version}"/>
+      <zipfileset dir="${source.home}"
+             excludes="**/CVS/**"
+               prefix="jsf-ri-src-${version}/src"/>
+      <zipfileset dir="${lib.home}"
+             excludes="**/CVS/**"
+               prefix="jsf-ri-src-${version}/lib"/>
+      <zipfileset dir="${test.home}"
+             excludes="**/CVS/**"
+               prefix="jsf-ri-src-${version}/test"/>
+      <zipfileset dir="${basedir}/systest"
+             excludes="**/CVS/**"
+               prefix="jsf-ri-src-${version}/systest"/>
+      <zipfileset dir="${basedir}"
+             includes="conf/** web/**"
+	     excludes="**/fruitstand/**"
+               prefix="jsf-ri-src-${version}"/>
+    </zip>
     <antcall target="ri.source"/>
     
   </target>
