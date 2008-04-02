@@ -4,7 +4,7 @@
 
 <window id="HelloDuke">
 
-<image id="duke" URL="/images/wave.med.gif" />
+<image id="duke" url="/images/wave.med.gif" />
 
 <button id="hello" action="success" value="Submit"/>
 
