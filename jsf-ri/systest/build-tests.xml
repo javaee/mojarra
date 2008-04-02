@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.15 2003/08/14 22:40:10 jvisvanathan Exp $
+ $Id: build-tests.xml,v 1.16 2003/08/18 22:11:30 rkitain Exp $
 -->
 
 
@@ -48,7 +48,8 @@
 
   <target name="test"
    description="Execute all tests against installed application"
-       depends="test.hello,
+       depends="test.renderkit,
+                test.hello,
                 test.external,
                 test.managed,
                 test.message,
@@ -268,6 +269,19 @@
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/command_hyperlink_test.jsp"
               golden="${golden.path}/taglib/command_hyperlink_test.txt"/>
+  </target>
+
+  <target name="test.renderkit"
+   description="Test renderkit processing">
+   <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/renderkit01.jsp"
+      outContent="/renderkit01.jsp PASSED"/>
+   <tester host="${host}" port="${port}" protocol="${protocol}"
+        request="${context.path}/renderkit02.jsp"
+	golden="${golden.path}/renderkit02A.txt"/>
+   <tester host="${host}" port="${port}" protocol="${protocol}"
+        request="${context.path}/renderkit03.jsp"
+	golden="${golden.path}/renderkit03A.txt"/>
   </target>
 
 </project>
