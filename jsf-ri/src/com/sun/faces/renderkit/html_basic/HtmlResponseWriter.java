@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.45 2007/03/07 21:00:33 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.46 2007/03/13 19:26:55 rogerk Exp $
  */
 
 /*
@@ -82,9 +82,6 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // flag to indicate that we're writing a 'style' element
     private boolean isStyle;
-
-   // flag to indicate that we're writing an 'option' element
-    private boolean isOption;
 
     // flag to indicate that we're writing a 'src' attribute as part of
     // 'script' or 'style' element 
@@ -299,6 +296,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             this;
         writerFromContext = (null == writerFromContext) ? this : writerFromContext;
         
+
         if (isScriptOrStyle(name)
              && !scriptOrStyleSrc
              && writer instanceof FastStringWriter) {
@@ -459,7 +457,6 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
         closeStartIfNecessary();
         isScriptOrStyle(name);
-        isOption(name);
         scriptOrStyleSrc = false;
         if ("cdata".equalsIgnoreCase(name)) {
             writingCdata = true;
@@ -571,19 +568,12 @@ public class HtmlResponseWriter extends ResponseWriter {
                 writer.write('"');
             }
         } else {
-            if ("type".equals(name) && "radio".equals(value)) {
-                isOption = true;
-            }
             writer.write(' ');
             writer.write(name);
             writer.write("=\"");
 
             // write the attribute value
-            if (isOption && "value".equals(name)) {
-                writer.write(value.toString());
-            } else {
-                HtmlUtils.writeAttribute(writer, buffer, value.toString());
-            }
+            HtmlUtils.writeAttribute(writer, buffer, value.toString());
             writer.write('"');
         }
 
@@ -865,14 +855,6 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
         return (isScript || isStyle);
-    }
-
-    private void isOption(String name) {
-        if ("option".equalsIgnoreCase(name)) {
-            isOption = true;
-        } else {
-            isOption = false;
-        }
     }
 
     private boolean isScriptOrStyle() {
