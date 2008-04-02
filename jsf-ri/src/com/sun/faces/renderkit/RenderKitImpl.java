@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.29 2005/08/26 15:27:11 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.30 2005/10/07 17:04:27 rogerk Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.29 2005/08/26 15:27:11 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.30 2005/10/07 17:04:27 rogerk Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -74,6 +74,7 @@ public class RenderKitImpl extends RenderKit {
     private static String XHTML_CONTENT_TYPE = "application/xhtml+xml";
     private static String APPLICATION_XML_CONTENT_TYPE = "application/xml";
     private static String TEXT_XML_CONTENT_TYPE = "text/xml";
+    private static String ALL_MEDIA = "*/*";
     private static String CHAR_ENCODING = "ISO-8859-1";
 //
 // Ivars used during actual client lifetime
@@ -192,11 +193,12 @@ public class RenderKitImpl extends RenderKit {
             desiredContentTypeList = (String)
 	      context.getExternalContext().getRequestHeaderMap().get("Accept");
         }
-        // fourth, default to text/html
-        if (null == desiredContentTypeList) {
-            desiredContentTypeList = "text/html";
-        }
 
+        // fourth, default to text/html
+        if (null == desiredContentTypeList ||
+            desiredContentTypeList.equals(ALL_MEDIA)) {
+            desiredContentTypeList = HTML_CONTENT_TYPE;
+        }
 	if (null != desiredContentTypeList) {
 	    Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
 	    

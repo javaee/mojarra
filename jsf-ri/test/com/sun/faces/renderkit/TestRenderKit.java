@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.18 2005/08/22 22:11:22 ofung Exp $
+ * $Id: TestRenderKit.java,v 1.19 2005/10/07 17:04:27 rogerk Exp $
  */
 
 /*
@@ -48,12 +48,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.apache.cactus.WebRequest;
+
 /**
  * <B>TestRenderKit</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.18 2005/08/22 22:11:22 ofung Exp $
+ * @version $Id: TestRenderKit.java,v 1.19 2005/10/07 17:04:27 rogerk Exp $
  */
 
 public class TestRenderKit extends ServletFacesTestCase {
@@ -271,5 +273,44 @@ public class TestRenderKit extends ServletFacesTestCase {
         }
 
     }
+
+    public void beginCreateResponseWriterAllMedia(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "*/*");
+    }
+
+    public void testCreateResponseWriterAllMedia() throws Exception {
+System.out.println("ACCEPT:"+getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept"));
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+                                                            RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        Writer wrappedWriter = new Writer() {
+                public void close() throws IOException {
+                }
+                public void flush() throws IOException {
+                }
+                public void write(char cbuf) throws IOException {
+                }
+                public void write(char[] cbuf, int off,
+                                  int len) throws IOException {
+                }
+                public void write(int c) throws IOException {
+                }
+                public void write(String str) throws IOException {
+                }
+                public void write(String str, int off,
+                                  int len) throws IOException {
+                }
+            };
+
+        ResponseWriter writer = null;
+                                                                                                                          
+        // see that the proper content type is picked up based on the
+        // accept header  
+            writer = renderKit.createResponseWriter(wrappedWriter, null, "ISO-8859-1");
+            assertEquals(writer.getContentType(), "text/html");
+
+    }
+
 
 } // end of class TestRenderKit
