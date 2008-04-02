@@ -1,5 +1,5 @@
 /*
- * $Id: ListboxRenderer.java,v 1.3 2002/09/13 19:23:12 visvan Exp $
+ * $Id: ListboxRenderer.java,v 1.4 2002/09/14 17:22:17 edburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
+import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
 
@@ -22,7 +23,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListboxRenderer.java,v 1.3 2002/09/13 19:23:12 visvan Exp $
+ * @version $Id: ListboxRenderer.java,v 1.4 2002/09/14 17:22:17 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -80,7 +81,8 @@ public class ListboxRenderer extends SelectManyListboxRenderer {
         return "";
     }
 	
-    protected Object[] getCurrentSelectedValues(UIComponent component) {
+    protected Object[] getCurrentSelectedValues(FacesContext context, 
+						UIComponent component) {
         UISelectOne select = (UISelectOne) component;
         Object returnObjects[] = new Object[1];
         if (null != (returnObjects[0] = select.getSelectedValue()))

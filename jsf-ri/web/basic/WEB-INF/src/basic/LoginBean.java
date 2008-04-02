@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.11 2002/09/13 19:54:04 edburns Exp $
+ * $Id: LoginBean.java,v 1.12 2002/09/14 17:22:18 edburns Exp $
  */
 
 /*
@@ -41,6 +41,9 @@ public class LoginBean {
 	    options.add(new SelectItem(defaultOptions[i], defaultOptions[i], 
 				       defaultOptions[i]));
 	}
+	currentOptions = new ArrayList(2);
+	currentOptions.add(defaultOptions[3]);
+	currentOptions.add(defaultOptions[4]);
     }
   
     public void setUserName(String user_name) {
@@ -189,6 +192,7 @@ public class LoginBean {
 
     protected ArrayList options = null;
     protected Object currentOption = defaultOptions[4];
+    protected ArrayList currentOptions = null;
     
     public Collection getOptions() {
 	return options;
@@ -206,6 +210,26 @@ public class LoginBean {
     {
 	currentOption = newCurrentOption;
     }
+
+    public Object[] getCurrentOptions()
+    {
+	return currentOptions.toArray();
+    }
+    
+    public void setCurrentOptions(Object []newCurrentOptions)
+    {
+	int len = 0;
+	if (null == newCurrentOptions && 
+	    (len = newCurrentOptions.length) > 0) {
+	    return;
+	}
+	currentOptions.clear();
+	currentOptions = new ArrayList(len);
+	for (int i = 0; i < len; i++) {
+	    currentOptions.add(newCurrentOptions[i]);
+	}
+    }
+
 
     protected Date date = new Date(System.currentTimeMillis());
 

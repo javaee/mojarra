@@ -433,7 +433,7 @@
 				<TR>
 					<TD>Multi-select listbox with model:</TD>
 					<TD><faces:selectmany_listbox id="listmodel"
-						modelReference="LoginBean.currentOption">
+						modelReference="LoginBean.currentOptions">
 						<faces:selectitems id="listmodelitems"
 							modelReference="LoginBean.options" />
 					</faces:selectmany_listbox></TD>
@@ -456,7 +456,7 @@
 				<TR>
 					<TD>Multi-select checkbox with model:</TD>
 					<TD><faces:selectmany_checkboxlist id="checklistmodel"
-						modelReference="LoginBean.currentOption">
+						modelReference="LoginBean.currentOptions">
 						<faces:selectitems id="checklistmodelitems"
 							modelReference="LoginBean.options" />
 					</faces:selectmany_checkboxlist></TD>

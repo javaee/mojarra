@@ -1,5 +1,5 @@
 /**
- * $Id: SelectManyMenuRenderer.java,v 1.5 2002/09/13 19:23:13 visvan Exp $
+ * $Id: SelectManyMenuRenderer.java,v 1.6 2002/09/14 17:22:17 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyMenuRenderer.java,v 1.5 2002/09/13 19:23:13 visvan Exp $
+ * @version $Id: SelectManyMenuRenderer.java,v 1.6 2002/09/14 17:22:17 edburns Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -203,7 +203,7 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
         String curValue,
         StringBuffer buff) {
 
-        Object selectedValues[] = getCurrentSelectedValues(component);
+        Object selectedValues[] = getCurrentSelectedValues(context, component);
         int itemCount = 0;
         Iterator items = Util.getSelectItemWrappers(context, component);
 
@@ -263,9 +263,10 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
         return " multiple ";
     }
 
-    Object[] getCurrentSelectedValues(UIComponent component) {
+    Object[] getCurrentSelectedValues(FacesContext context,
+				      UIComponent component) {
         UISelectMany select = (UISelectMany) component;
-        return select.getSelectedValues();
+        return (Object []) select.currentValue(context);
     }
 
 

@@ -1,5 +1,5 @@
 /**
- * $Id: SelectManyListboxRenderer.java,v 1.3 2002/09/13 19:23:13 visvan Exp $
+ * $Id: SelectManyListboxRenderer.java,v 1.4 2002/09/14 17:22:17 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -26,7 +26,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyListboxRenderer.java,v 1.3 2002/09/13 19:23:13 visvan Exp $
+ * @version $Id: SelectManyListboxRenderer.java,v 1.4 2002/09/14 17:22:17 edburns Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -77,7 +77,8 @@ public class SelectManyListboxRenderer extends SelectManyMenuRenderer {
         StringBuffer buff) {
             Iterator items = Util.getSelectItemWrappers(context, component);
             int itemCount = 0;
-            Object selectedValues[] = getCurrentSelectedValues(component);
+            Object selectedValues[] = getCurrentSelectedValues(context, 
+							       component);
 
             UIComponent curComponent;
             SelectItem curItem = null;

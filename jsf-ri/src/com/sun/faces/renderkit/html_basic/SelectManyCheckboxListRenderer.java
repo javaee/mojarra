@@ -1,6 +1,6 @@
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.2 2002/09/06 22:10:27 rkitain Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.3 2002/09/14 17:22:17 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -27,7 +27,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyCheckboxListRenderer.java,v 1.2 2002/09/06 22:10:27 rkitain Exp $
+ * @version $Id: SelectManyCheckboxListRenderer.java,v 1.3 2002/09/14 17:22:17 edburns Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -101,7 +101,7 @@ public class SelectManyCheckboxListRenderer extends SelectManyMenuRenderer {
         SelectItem curItem = null;
         SelectItemWrapper curItemWrapper = null;
         UIComponent curComponent;
-        Object selectedValues[] = getCurrentSelectedValues(component);
+        Object selectedValues[] = getCurrentSelectedValues(context, component);
 
         while (items.hasNext()) {
             curItemWrapper = (SelectItemWrapper) items.next();

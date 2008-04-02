@@ -1,5 +1,5 @@
 /**
- * $Id: SelectOneMenuRenderer.java,v 1.1 2002/09/06 22:10:28 rkitain Exp $
+ * $Id: SelectOneMenuRenderer.java,v 1.2 2002/09/14 17:22:17 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -13,6 +13,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
+import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
 
@@ -22,7 +23,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOneMenuRenderer.java,v 1.1 2002/09/06 22:10:28 rkitain Exp $
+ * @version $Id: SelectOneMenuRenderer.java,v 1.2 2002/09/14 17:22:17 edburns Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -80,7 +81,8 @@ public class SelectOneMenuRenderer extends SelectManyMenuRenderer {
 		return "";
 	}
 	
-	Object[] getCurrentSelectedValues(UIComponent component) {
+	Object[] getCurrentSelectedValues(FacesContext context,
+					  UIComponent component) {
 		UISelectOne select = (UISelectOne) component;
 		Object returnObjects[] = new Object[1];
 		if (null != (returnObjects[0] = select.getSelectedValue()))
