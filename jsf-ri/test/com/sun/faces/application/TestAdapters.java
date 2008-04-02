@@ -125,7 +125,7 @@ public class TestAdapters extends ServletFacesTestCase {
         
         Object obj = meAdapter.invoke(fContext.getELContext(), new Object[] { "1.3" });
         assertTrue (obj instanceof Double);
-        assertTrue ("1.3".equals(obj.toString()));
+        assertTrue ("1.5".equals(obj.toString()));
         
         // Phase 3
         //   - validate the equals() method
