@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.146 2007/01/29 22:18:34 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.147 2007/01/30 22:00:50 rlubke Exp $
  */
 
 /*
@@ -44,6 +44,9 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.io.Serializable;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
@@ -107,7 +110,7 @@ public abstract class UIComponentBase extends UIComponent {
      * Reference to the map of <code>PropertyDescriptor</code>s for this class
      * in the <code>descriptors<code> <code>Map<code>.
      */
-    private Map<String,PropertyDescriptor> pdMap = null; 
+    private Map<String,PropertyDescriptor> pdMap = null;
 
     /**
      * <p>An EMPTY_OBJECT_ARRAY argument list to be passed to reflection methods.</p>
@@ -148,22 +151,6 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
 
-    }
-
-    /**
-     * <p>Return the <code>PropertyDescriptor</code> for the specified
-     * property name for this {@link UIComponent}'s implementation class,
-     * if any; otherwise, return <code>null</code>.</p>
-     *
-     * @param name Name of the property to return a descriptor for
-     *
-     * @throws FacesException if an introspection exception occurs
-     */
-    PropertyDescriptor getPropertyDescriptor(String name) {
-        if (pdMap != null) {
-            return (pdMap.get(name));
-        }
-        return (null);
     }
 
 
@@ -1262,9 +1249,9 @@ public abstract class UIComponentBase extends UIComponent {
         // transparency before we restore its values.        
         if (values[0] != null) {
             attributes = new AttributesMap(this,
-                                           TypedCollections.dynamicallyCastMap((Map) values[0],
-                                                                               String.class,
-                                                                               Object.class));
+                                          (HashMap) TypedCollections.dynamicallyCastMap((Map) values[0],
+                                                                                        String.class,
+                                                                                        Object.class));
         }
         bindings = restoreBindingsState(context, values[1]);
         clientId = (String) values[2];
@@ -1461,6 +1448,11 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
+    Map<String,PropertyDescriptor> getDescriptorMap() {
+        return pdMap;
+    }
+
+
     // --------------------------------------------------------- Private Classes
 
     // For state saving
@@ -1495,21 +1487,24 @@ public abstract class UIComponentBase extends UIComponent {
     //     has a nice side effect in state saving since we no
     //     longer need to duplicate the map, we just provide the
     //     private 'attributes' map directly to the state saving process.
-    private class AttributesMap implements Map<String, Object> {
+    private static class AttributesMap implements Map<String, Object>, Serializable {
         
-        private Map<String, Object> attributes;
-        private UIComponent component;
-        
+        private HashMap<String, Object> attributes;
+        private transient Map<String,PropertyDescriptor> pdMap;
+        private transient UIComponent component;
+        private static final long serialVersionUID = -6773035086539772945L;
+
         // -------------------------------------------------------- Constructors
         
         private AttributesMap(UIComponent component) {
             this.component = component;
+            this.pdMap = ((UIComponentBase) component).getDescriptorMap();
         }
         
         private AttributesMap(UIComponent component,
-                              Map<String,Object> attributes) {
+                              HashMap<String,Object> attributes) {
             this(component);
-            this.attributes = attributes;            
+            this.attributes = attributes;
         }
 
         public boolean containsKey(Object keyObj) {
@@ -1554,10 +1549,10 @@ public abstract class UIComponentBase extends UIComponent {
                     return (attributes.get(key));
                 }
             }
-            ValueExpression ve = getValueExpression(key);
+            ValueExpression ve = component.getValueExpression(key);
             if (ve != null) {              
                 try {
-                    return ve.getValue(getFacesContext().getELContext());                  
+                    return ve.getValue(component.getFacesContext().getELContext());
                 }
                 catch (ELException e) {
                     throw new FacesException(e);
@@ -1725,6 +1720,53 @@ public abstract class UIComponentBase extends UIComponent {
         
         private void initMap() {
             attributes = new HashMap<String,Object>(8);
+        }
+
+        /**
+         * <p>Return the <code>PropertyDescriptor</code> for the specified
+         * property name for this {@link UIComponent}'s implementation class,
+         * if any; otherwise, return <code>null</code>.</p>
+         *
+         * @param name Name of the property to return a descriptor for
+         * @throws FacesException if an introspection exception occurs
+         */
+        PropertyDescriptor getPropertyDescriptor(String name) {
+            if (pdMap != null) {
+                return (pdMap.get(name));
+            }
+            return (null);
+         }
+
+        // ----------------------------------------------- Serialization Methods
+
+        // This is dependent on serialization occuring with in a
+        // a Faces request, however, since UIComponentBase.{save,restore}State()
+        // don't actually serialize the AttributesMap, these methods are here
+        // purely to be good citizens.
+        private void writeObject(ObjectOutputStream out) throws IOException {
+            if (attributes == null) {
+                out.writeObject(new HashMap(1, 1.0f));
+            } else {
+                out.writeObject(attributes);
+            }
+            out.writeObject(component.getClass());
+             //noinspection NonSerializableObjectPassedToObjectStream
+             out.writeObject(component.saveState(FacesContext.getCurrentInstance()));
+         }
+
+        private void readObject(ObjectInputStream in)
+             throws IOException, ClassNotFoundException {
+            attributes = null;
+            pdMap = null;
+            component = null;
+            attributes = (HashMap) in.readObject();
+            Class clazz = (Class) in.readObject();
+            try {
+                component = (UIComponent) clazz.newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            component.restoreState(FacesContext.getCurrentInstance(), in.readObject());
         }
     }
 
