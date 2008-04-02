@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.8 2005/08/24 16:13:33 edburns Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.9 2005/08/25 18:27:19 jayashri Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -158,10 +158,8 @@ public class ManagedBeanELResolver extends ELResolver {
             if ( managedBean != null) {
                 Locale curLocale = Util.getLocaleFromContextOrSystem(facesContext);
                 String locale = curLocale.toString();
-                DescriptionBean descBean = managedBean.getDescription(locale);
-                DisplayNameBean displayNameBean = managedBean.getDisplayName(locale);
-                String desc = "",
-                        displayName = "";
+                DescriptionBean descBean = managedBean.getDescription(locale);                
+                String desc = "";
                 descBean = (null != descBean) ? descBean :
                     managedBean.getDescription("");
                 if (null != descBean) {
@@ -169,14 +167,9 @@ public class ManagedBeanELResolver extends ELResolver {
                     // are not specified on the description
                     desc = descBean.getDescription();
                 }
-                displayNameBean = (null != displayNameBean) ? displayNameBean :
-                    managedBean.getDisplayName("");
-                if (null != displayNameBean) {
-                    displayName = displayNameBean.getDisplayName();
-                }
                 list.add(Util.getFeatureDescriptor(managedBeanName, 
-                    displayName, desc, false, false, true,
-                    managedBean.getManagedBeanClass(), Boolean.TRUE));
+                    managedBeanName, desc, false, false, true,
+                    managedBeanFactory.getManagedBeanClass(), Boolean.TRUE));
             }
         }
         return list.iterator();
