@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.3 2003/01/16 20:48:03 craigmcc Exp $
+ * $Id: MockFacesContext.java,v 1.4 2003/01/16 23:27:38 craigmcc Exp $
  */
 
 /*
@@ -198,6 +198,14 @@ public class MockFacesContext extends FacesContext {
         servletRequest = null;
         servletResponse = null;
         tree = null;
+    }
+
+    public void renderResponse() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void responseComplete() {
+        throw new UnsupportedOperationException();
     }
 
 }

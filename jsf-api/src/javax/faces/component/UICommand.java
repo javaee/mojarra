@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.28 2003/01/16 20:47:56 craigmcc Exp $
+ * $Id: UICommand.java,v 1.29 2003/01/16 23:27:34 craigmcc Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
@@ -259,6 +260,9 @@ public class UICommand extends UIComponentBase {
      * @param phaseId The {@link PhaseId} of the current phase of the
      *  request processing lifecycle
      *
+     * @exception AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
      * @exception IllegalArgumentException if the implementation class
      *  of this {@link FacesEvent} is not supported by this component
      * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
@@ -266,7 +270,8 @@ public class UICommand extends UIComponentBase {
      * @exception NullPointerException if <code>event</code> or
      *  <code>phaseId</code> is <code>null</code>
      */
-    public boolean broadcast(FacesEvent event, PhaseId phaseId) {
+    public boolean broadcast(FacesEvent event, PhaseId phaseId)
+        throws AbortProcessingException {
 
         if ((event == null) || (phaseId == null)) {
             throw new NullPointerException();

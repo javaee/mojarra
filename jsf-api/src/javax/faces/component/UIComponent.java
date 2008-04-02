@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.63 2003/01/16 20:47:56 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.64 2003/01/16 23:27:35 craigmcc Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
@@ -527,6 +528,9 @@ public interface UIComponent extends Serializable {
      * @param phaseId The {@link PhaseId} of the current phase of the
      *  request processing lifecycle
      *
+     * @exception AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
      * @exception IllegalArgumentException if the implementation class
      *  of this {@link FacesEvent} is not supported by this component
      * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
@@ -534,7 +538,8 @@ public interface UIComponent extends Serializable {
      * @exception NullPointerException if <code>event</code> or
      *  <code>phaseId</code> is <code>null</code>
      */
-    public abstract boolean broadcast(FacesEvent event, PhaseId phaseId);
+    public abstract boolean broadcast(FacesEvent event, PhaseId phaseId)
+        throws AbortProcessingException;
 
 
     /**

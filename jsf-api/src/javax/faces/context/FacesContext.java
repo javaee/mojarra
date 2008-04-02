@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.34 2003/01/16 20:47:59 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.35 2003/01/16 23:27:36 craigmcc Exp $
  */
 
 /*
@@ -366,6 +366,24 @@ public abstract class FacesContext {
      * and garbage collection.</p>
      */
     public abstract void release();
+
+
+    /**
+     * <p>Signal the JavaSerer faces implementation that, as soon as the
+     * current phase of the request processing lifecycle has been completed,
+     * control should be passed to the <em>Render Response</em> phase,
+     * bypassing any phases that have not been executed yet.</p>
+     */
+    public abstract void renderResponse();
+
+
+    /**
+     * <p>Signal the JavaServer Faces implementation that the HTTP response
+     * for this request has already been generated (such as an HTTP redirect),
+     * and that the request processing lifecycle should be terminated as soon
+     * as the current phase is completed.</p>
+     */
+    public abstract void responseComplete();
 
 
     // --------------------------------------------------------- Static Methods
