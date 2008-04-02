@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.67 2003/11/11 05:29:07 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.68 2003/11/11 06:30:46 eburns Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 import java.util.NoSuchElementException;
 
 import javax.faces.FactoryFinder;
@@ -443,8 +444,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
                                Util.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID, 
                                new Object[]{ forComponent }));
                     }
+		    messageIter = Collections.EMPTY_LIST.iterator();
                 }
-                messageIter = context.getMessages(comp.getClientId(context));
+		else {
+		    messageIter = 
+			context.getMessages(comp.getClientId(context));
+		}
             }
         }
 	else {

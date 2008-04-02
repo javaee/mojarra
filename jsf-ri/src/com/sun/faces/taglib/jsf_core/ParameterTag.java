@@ -1,5 +1,5 @@
 /*
- * $Id: ParameterTag.java,v 1.9 2003/09/25 16:36:42 rlubke Exp $
+ * $Id: ParameterTag.java,v 1.10 2003/11/11 06:30:47 eburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.util.Util;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
@@ -63,11 +64,23 @@ public class ParameterTag extends BaseComponentTag {
         UIParameter parameter = (UIParameter)component;
 
         if (name != null) {
-            parameter.setName(name);
+	    if (isValueReference(name)) {
+		component.setValueBinding("name",
+					  Util.getValueBinding(name));
+	    }
+	    else {
+		parameter.setName(name);
+	    }
         }
         // if component has non null value, do not call setValue().
         if (value != null) {
-            parameter.setValue(value);
+	    if (isValueReference(value)) {
+		component.setValueBinding("value",
+					  Util.getValueBinding(value));
+	    }
+	    else {
+		parameter.setValue(value);
+	    }
         }
     }
 }
