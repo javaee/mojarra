@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.21 2004/07/29 18:50:37 edburns Exp $
+ * $Id: RenderKitImpl.java,v 1.22 2004/07/30 16:11:57 edburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.HashMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.21 2004/07/29 18:50:37 edburns Exp $
+ * @version $Id: RenderKitImpl.java,v 1.22 2004/07/30 16:11:57 edburns Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -110,7 +110,7 @@ public class RenderKitImpl extends RenderKit {
 
     public Renderer getRenderer(String family, String rendererType) {
 
-        if (rendererType == null) {
+        if (rendererType == null || family == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " family " + family + " rendererType " +
