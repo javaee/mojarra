@@ -60,6 +60,10 @@
       <detail>ResponseStream Argument ist null.</detail>
   </message>
 
+  <message messageId="com.sun.faces.NULL_RESPONSE_WRITER_ERROR" severity="1" summary="Argument Error." >
+      <detail>ResponseWriter Argument ist null.</detail>
+  </message>
+
   <message messageId="com.sun.faces.NULL_EVENT_ERROR" severity="1" summary="Argument Error." >
       <detail>Event Argument ist null.</detail>
   </message>
