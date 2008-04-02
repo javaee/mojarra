@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.8 2003/10/17 03:47:14 eburns Exp $
+ * $Id: BaseComponentTag.java,v 1.9 2003/10/26 04:09:43 craigmcc Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.ConvertableValueHolder;
+import javax.faces.component.ConvertibleValueHolder;
 import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
 import javax.faces.webapp.UIComponentTag;
@@ -32,7 +32,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.8 2003/10/17 03:47:14 eburns Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.9 2003/10/26 04:09:43 craigmcc Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -975,9 +975,9 @@ public abstract class BaseComponentTag extends UIComponentTag
 	    }
         }	
 
-        if (component instanceof ConvertableValueHolder) {
+        if (component instanceof ConvertibleValueHolder) {
             if (null != converter) {
-                ((ConvertableValueHolder) component).setConverter(converter);
+                ((ConvertibleValueHolder) component).setConverter(converter);
             }
         }
 

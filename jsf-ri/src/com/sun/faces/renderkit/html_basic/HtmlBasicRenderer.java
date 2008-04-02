@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.60 2003/10/21 16:41:50 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.61 2003/10/26 04:09:42 craigmcc Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.ConvertableValueHolder;
+import javax.faces.component.ConvertibleValueHolder;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.UIInput;
@@ -349,8 +349,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
        
-        if (component instanceof ConvertableValueHolder) {
-            converter = ((ConvertableValueHolder)component).getConverter();
+        if (component instanceof ConvertibleValueHolder) {
+            converter = ((ConvertibleValueHolder)component).getConverter();
         }
        
         // if value is null and no converter attribute is specified, then
