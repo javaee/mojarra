@@ -46,6 +46,20 @@
 
   <tag>
 
+    <name>dynamic</name>
+    <tag-class>com.sun.faces.systest.DynamicComponentTag</tag-class>
+
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+
+  </tag>
+
+
+  <tag>
+
     <name>facets</name>
     <tag-class>com.sun.faces.systest.FacetComponentTag</tag-class>
 

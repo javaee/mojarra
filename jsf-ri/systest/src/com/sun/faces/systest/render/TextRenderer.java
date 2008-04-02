@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.2 2003/08/25 05:39:50 eburns Exp $
+ * $Id: TextRenderer.java,v 1.3 2003/09/24 23:58:57 craigmcc Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.2 2003/08/25 05:39:50 eburns Exp $
+ * @version $Id: TextRenderer.java,v 1.3 2003/09/24 23:58:57 craigmcc Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -77,8 +77,7 @@ public class TextRenderer extends Renderer {
     // Methods From Renderer
     //
 
-    public void decode(FacesContext context, UIComponent component) 
-            throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));

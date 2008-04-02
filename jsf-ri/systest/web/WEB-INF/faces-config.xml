@@ -203,5 +203,10 @@
     <component-class>com.sun.faces.systest.ChildrenComponent</component-class>
   </component>
 
+  <!-- Component that dynamically adds and removes children -->
+  <component>
+    <component-type>DynamicComponent</component-type>
+    <component-class>com.sun.faces.systest.DynamicComponent</component-class>
+  </component>
 
 </faces-config>
