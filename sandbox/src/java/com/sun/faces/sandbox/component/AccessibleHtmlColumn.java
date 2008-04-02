@@ -1,7 +1,7 @@
 package com.sun.faces.sandbox.component;
 
-import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 /**
  * <p>Represents a column that will be rendered
@@ -19,7 +19,8 @@ public class AccessibleHtmlColumn extends javax.faces.component.UIColumn {
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "com.sun.faces.sandbox.AccessibleHtmlColumn";
+    public static final String COMPONENT_TYPE =
+         "com.sun.faces.sandbox.AccessibleHtmlColumn";
 
 
     private String footerClass;
@@ -33,9 +34,9 @@ public class AccessibleHtmlColumn extends javax.faces.component.UIColumn {
         if (null != this.footerClass) {
             return this.footerClass;
         }
-        ValueExpression _ve = getValueExpression("footerClass");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("footerClass");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -60,9 +61,9 @@ public class AccessibleHtmlColumn extends javax.faces.component.UIColumn {
         if (null != this.headerClass) {
             return this.headerClass;
         }
-        ValueExpression _ve = getValueExpression("headerClass");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("headerClass");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -89,9 +90,9 @@ public class AccessibleHtmlColumn extends javax.faces.component.UIColumn {
         if (rowHeader_set) {
             return rowHeader;
         } else {
-            ValueExpression _ve = getValueExpression("rowHeader");
-            return (_ve != null
-                 && (Boolean) _ve.getValue(getFacesContext().getELContext()));
+            ValueBinding _vb = getValueBinding("rowHeader");
+            return (_vb != null
+                 && ((Boolean) _vb.getValue(getFacesContext())).booleanValue());
         }
     }
 

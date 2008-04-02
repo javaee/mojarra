@@ -1,28 +1,31 @@
 package com.sun.faces.sandbox.taglib;
 
-import javax.faces.webapp.UIComponentELTag;
+import com.sun.faces.sandbox.util.Util;
+
 import javax.faces.component.UIComponent;
+import javax.faces.el.ValueBinding;
+import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 
-public final class AccessibleDataTableTag extends UIComponentELTag {
+public final class AccessibleDataTableTag extends UIComponentTag {
 
 
     // Setter Methods
     // PROPERTY: first
-    private javax.el.ValueExpression first;
-    public void setFirst(javax.el.ValueExpression first) {
+    private String first;
+    public void setFirst(String first) {
         this.first = first;
     }
 
     // PROPERTY: rows
-    private javax.el.ValueExpression rows;
-    public void setRows(javax.el.ValueExpression rows) {
+    private String rows;
+    public void setRows(String rows) {
         this.rows = rows;
     }
 
     // PROPERTY: value
-    private javax.el.ValueExpression value;
-    public void setValue(javax.el.ValueExpression value) {
+    private String value;
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -33,182 +36,182 @@ public final class AccessibleDataTableTag extends UIComponentELTag {
     }
 
     // PROPERTY: bgcolor
-    private javax.el.ValueExpression bgcolor;
-    public void setBgcolor(javax.el.ValueExpression bgcolor) {
+    private String bgcolor;
+    public void setBgcolor(String bgcolor) {
         this.bgcolor = bgcolor;
     }
 
     // PROPERTY: border
-    private javax.el.ValueExpression border;
-    public void setBorder(javax.el.ValueExpression border) {
+    private String border;
+    public void setBorder(String border) {
         this.border = border;
     }
 
     // PROPERTY: bodyrows
-    private javax.el.ValueExpression bodyrows;
-    public void setBodyrows(javax.el.ValueExpression bodyrows) {
+    private String bodyrows;
+    public void setBodyrows(String bodyrows) {
         this.bodyrows = bodyrows;
     }
 
     // PROPERTY: captionClass
-    private javax.el.ValueExpression captionClass;
-    public void setCaptionClass(javax.el.ValueExpression captionClass) {
+    private String captionClass;
+    public void setCaptionClass(String captionClass) {
         this.captionClass = captionClass;
     }
 
     // PROPERTY: captionStyle
-    private javax.el.ValueExpression captionStyle;
-    public void setCaptionStyle(javax.el.ValueExpression captionStyle) {
+    private String captionStyle;
+    public void setCaptionStyle(String captionStyle) {
         this.captionStyle = captionStyle;
     }
 
     // PROPERTY: cellpadding
-    private javax.el.ValueExpression cellpadding;
-    public void setCellpadding(javax.el.ValueExpression cellpadding) {
+    private String cellpadding;
+    public void setCellpadding(String cellpadding) {
         this.cellpadding = cellpadding;
     }
 
     // PROPERTY: cellspacing
-    private javax.el.ValueExpression cellspacing;
-    public void setCellspacing(javax.el.ValueExpression cellspacing) {
+    private String cellspacing;
+    public void setCellspacing(String cellspacing) {
         this.cellspacing = cellspacing;
     }
 
     // PROPERTY: columnClasses
-    private javax.el.ValueExpression columnClasses;
-    public void setColumnClasses(javax.el.ValueExpression columnClasses) {
+    private String columnClasses;
+    public void setColumnClasses(String columnClasses) {
         this.columnClasses = columnClasses;
     }
 
     // PROPERTY: dir
-    private javax.el.ValueExpression dir;
-    public void setDir(javax.el.ValueExpression dir) {
+    private String dir;
+    public void setDir(String dir) {
         this.dir = dir;
     }
 
     // PROPERTY: footerClass
-    private javax.el.ValueExpression footerClass;
-    public void setFooterClass(javax.el.ValueExpression footerClass) {
+    private String footerClass;
+    public void setFooterClass(String footerClass) {
         this.footerClass = footerClass;
     }
 
     // PROPERTY: frame
-    private javax.el.ValueExpression frame;
-    public void setFrame(javax.el.ValueExpression frame) {
+    private String frame;
+    public void setFrame(String frame) {
         this.frame = frame;
     }
 
     // PROPERTY: headerClass
-    private javax.el.ValueExpression headerClass;
-    public void setHeaderClass(javax.el.ValueExpression headerClass) {
+    private String headerClass;
+    public void setHeaderClass(String headerClass) {
         this.headerClass = headerClass;
     }
 
     // PROPERTY: lang
-    private javax.el.ValueExpression lang;
-    public void setLang(javax.el.ValueExpression lang) {
+    private String lang;
+    public void setLang(String lang) {
         this.lang = lang;
     }
 
     // PROPERTY: onclick
-    private javax.el.ValueExpression onclick;
-    public void setOnclick(javax.el.ValueExpression onclick) {
+    private String onclick;
+    public void setOnclick(String onclick) {
         this.onclick = onclick;
     }
 
     // PROPERTY: ondblclick
-    private javax.el.ValueExpression ondblclick;
-    public void setOndblclick(javax.el.ValueExpression ondblclick) {
+    private String ondblclick;
+    public void setOndblclick(String ondblclick) {
         this.ondblclick = ondblclick;
     }
 
     // PROPERTY: onkeydown
-    private javax.el.ValueExpression onkeydown;
-    public void setOnkeydown(javax.el.ValueExpression onkeydown) {
+    private String onkeydown;
+    public void setOnkeydown(String onkeydown) {
         this.onkeydown = onkeydown;
     }
 
     // PROPERTY: onkeypress
-    private javax.el.ValueExpression onkeypress;
-    public void setOnkeypress(javax.el.ValueExpression onkeypress) {
+    private String onkeypress;
+    public void setOnkeypress(String onkeypress) {
         this.onkeypress = onkeypress;
     }
 
     // PROPERTY: onkeyup
-    private javax.el.ValueExpression onkeyup;
-    public void setOnkeyup(javax.el.ValueExpression onkeyup) {
+    private String onkeyup;
+    public void setOnkeyup(String onkeyup) {
         this.onkeyup = onkeyup;
     }
 
     // PROPERTY: onmousedown
-    private javax.el.ValueExpression onmousedown;
-    public void setOnmousedown(javax.el.ValueExpression onmousedown) {
+    private String onmousedown;
+    public void setOnmousedown(String onmousedown) {
         this.onmousedown = onmousedown;
     }
 
     // PROPERTY: onmousemove
-    private javax.el.ValueExpression onmousemove;
-    public void setOnmousemove(javax.el.ValueExpression onmousemove) {
+    private String onmousemove;
+    public void setOnmousemove(String onmousemove) {
         this.onmousemove = onmousemove;
     }
 
     // PROPERTY: onmouseout
-    private javax.el.ValueExpression onmouseout;
-    public void setOnmouseout(javax.el.ValueExpression onmouseout) {
+    private String onmouseout;
+    public void setOnmouseout(String onmouseout) {
         this.onmouseout = onmouseout;
     }
 
     // PROPERTY: onmouseover
-    private javax.el.ValueExpression onmouseover;
-    public void setOnmouseover(javax.el.ValueExpression onmouseover) {
+    private String onmouseover;
+    public void setOnmouseover(String onmouseover) {
         this.onmouseover = onmouseover;
     }
 
     // PROPERTY: onmouseup
-    private javax.el.ValueExpression onmouseup;
-    public void setOnmouseup(javax.el.ValueExpression onmouseup) {
+    private String onmouseup;
+    public void setOnmouseup(String onmouseup) {
         this.onmouseup = onmouseup;
     }
 
     // PROPERTY: rowClasses
-    private javax.el.ValueExpression rowClasses;
-    public void setRowClasses(javax.el.ValueExpression rowClasses) {
+    private String rowClasses;
+    public void setRowClasses(String rowClasses) {
         this.rowClasses = rowClasses;
     }
 
     // PROPERTY: rules
-    private javax.el.ValueExpression rules;
-    public void setRules(javax.el.ValueExpression rules) {
+    private String rules;
+    public void setRules(String rules) {
         this.rules = rules;
     }
 
     // PROPERTY: style
-    private javax.el.ValueExpression style;
-    public void setStyle(javax.el.ValueExpression style) {
+    private String style;
+    public void setStyle(String style) {
         this.style = style;
     }
 
     // PROPERTY: styleClass
-    private javax.el.ValueExpression styleClass;
-    public void setStyleClass(javax.el.ValueExpression styleClass) {
+    private String styleClass;
+    public void setStyleClass(String styleClass) {
         this.styleClass = styleClass;
     }
 
     // PROPERTY: summary
-    private javax.el.ValueExpression summary;
-    public void setSummary(javax.el.ValueExpression summary) {
+    private String summary;
+    public void setSummary(String summary) {
         this.summary = summary;
     }
 
     // PROPERTY: title
-    private javax.el.ValueExpression title;
-    public void setTitle(javax.el.ValueExpression title) {
+    private String title;
+    public void setTitle(String title) {
         this.title = title;
     }
 
     // PROPERTY: width
-    private javax.el.ValueExpression width;
-    public void setWidth(javax.el.ValueExpression width) {
+    private String width;
+    public void setWidth(String width) {
         this.width = width;
     }
 
@@ -232,107 +235,279 @@ public final class AccessibleDataTableTag extends UIComponentELTag {
         }
 
         if (first != null) {
-            data.setValueExpression("first", first);
+            if (isValueReference(first)) {
+                ValueBinding vb = Util.getValueBinding(first);
+                data.setValueBinding("first", vb);
+            } else {
+                int _first = Integer.parseInt(first);
+                data.setFirst(_first);
+            }
         }
 
         if (rows != null) {
-            data.setValueExpression("rows", rows);
+            if (isValueReference(rows)) {
+                ValueBinding vb = Util.getValueBinding(rows);
+                data.setValueBinding("rows", vb);
+            } else {
+                int _rows = Integer.parseInt(rows);
+                data.setRows(_rows);
+            }
         }
 
         if (value != null) {
-            data.setValueExpression("value", value);
+            if (isValueReference(value)) {
+                ValueBinding vb = Util.getValueBinding(value);
+                data.setValueBinding("value", vb);
+            } else {
+                data.setValue(value);
+            }
         }
 
         data.setVar(_var);
+
         if (bgcolor != null) {
-            data.setValueExpression("bgcolor", bgcolor);
+            if (isValueReference(bgcolor)) {
+                ValueBinding vb = Util.getValueBinding(bgcolor);
+                data.setValueBinding("bgcolor", vb);
+            } else {
+                data.getAttributes().put("bgcolor", bgcolor);
+            }
         }
+
         if (border != null) {
-            data.setValueExpression("border", border);
+            if (isValueReference(border)) {
+                ValueBinding vb = Util.getValueBinding(border);
+                data.setValueBinding("border", vb);
+            } else {
+                int _border = Integer.parseInt(border);
+                if (_border != Integer.MIN_VALUE) {
+                    data.getAttributes().put("border", Integer.valueOf(_border));
+                }
+            }
         }
         if (bodyrows != null) {
-            data.setValueExpression("bodyrows", bodyrows);
+            if (isValueReference(bodyrows)) {
+                ValueBinding vb = Util.getValueBinding(bodyrows);
+                data.setValueBinding("bodyrows", vb);
+            } else {
+                data.getAttributes().put("bodyrows", bodyrows);
+            }
         }
         if (captionClass != null) {
-            data.setValueExpression("captionClass", captionClass);
+            if (isValueReference(captionClass)) {
+                ValueBinding vb = Util.getValueBinding(captionClass);
+                data.setValueBinding("captionClass", vb);
+            } else {
+                data.getAttributes().put("captionClass", bgcolor);
+            }
         }
         if (captionStyle != null) {
-            data.setValueExpression("captionStyle", captionStyle);
+            if (isValueReference(captionStyle)) {
+                ValueBinding vb = Util.getValueBinding(captionStyle);
+                data.setValueBinding("captionStyle", vb);
+            } else {
+                data.getAttributes().put("captionStyle", bgcolor);
+            }
         }
         if (cellpadding != null) {
-            data.setValueExpression("cellpadding", cellpadding);
+            if (isValueReference(cellpadding)) {
+                ValueBinding vb = Util.getValueBinding(cellpadding);
+                data.setValueBinding("cellpadding", vb);
+            } else {
+                data.getAttributes().put("cellpadding", cellpadding);
+            }
         }
         if (cellspacing != null) {
-            data.setValueExpression("cellspacing", cellspacing);
+            if (isValueReference(cellspacing)) {
+                ValueBinding vb = Util.getValueBinding(cellspacing);
+                data.setValueBinding("cellspacing", vb);
+            } else {
+                data.getAttributes().put("cellspacing", cellspacing);
+            }
         }
         if (columnClasses != null) {
-            data.setValueExpression("columnClasses", columnClasses);
+            if (isValueReference(columnClasses)) {
+                ValueBinding vb = Util.getValueBinding(columnClasses);
+                data.setValueBinding("columnClasses", vb);
+            } else {
+                data.getAttributes().put("columnClasses", columnClasses);
+            }
         }
         if (dir != null) {
-            data.setValueExpression("dir", dir);
+            if (isValueReference(dir)) {
+                ValueBinding vb = Util.getValueBinding(dir);
+                data.setValueBinding("dir", vb);
+            } else {
+                data.getAttributes().put("dir", dir);
+            }
         }
         if (footerClass != null) {
-            data.setValueExpression("footerClass", footerClass);
+            if (isValueReference(footerClass)) {
+                ValueBinding vb = Util.getValueBinding(footerClass);
+                data.setValueBinding("footerClass", vb);
+            } else {
+                data.getAttributes().put("footerClass", footerClass);
+            }
         }
         if (frame != null) {
-            data.setValueExpression("frame", frame);
+            if (isValueReference(frame)) {
+                ValueBinding vb = Util.getValueBinding(frame);
+                data.setValueBinding("frame", vb);
+            } else {
+                data.getAttributes().put("frame", frame);
+            }
         }
         if (headerClass != null) {
-            data.setValueExpression("headerClass", headerClass);
+            if (isValueReference(headerClass)) {
+                ValueBinding vb = Util.getValueBinding(headerClass);
+                data.setValueBinding("headerClass", vb);
+            } else {
+                data.getAttributes().put("headerClass", headerClass);
+            }
         }
         if (lang != null) {
-            data.setValueExpression("lang", lang);
+            if (isValueReference(lang)) {
+                ValueBinding vb = Util.getValueBinding(lang);
+                data.setValueBinding("lang", vb);
+            } else {
+                data.getAttributes().put("lang", lang);
+            }
         }
         if (onclick != null) {
-            data.setValueExpression("onclick", onclick);
+            if (isValueReference(onclick)) {
+                ValueBinding vb = Util.getValueBinding(onclick);
+                data.setValueBinding("onclick", vb);
+            } else {
+                data.getAttributes().put("onclick", onclick);
+            }
         }
         if (ondblclick != null) {
-            data.setValueExpression("ondblclick", ondblclick);
+            if (isValueReference(ondblclick)) {
+                ValueBinding vb = Util.getValueBinding(ondblclick);
+                data.setValueBinding("ondblclick", vb);
+            } else {
+                data.getAttributes().put("ondblclick", ondblclick);
+            }
         }
         if (onkeydown != null) {
-            data.setValueExpression("onkeydown", onkeydown);
+            if (isValueReference(onkeydown)) {
+                ValueBinding vb = Util.getValueBinding(onkeydown);
+                data.setValueBinding("onkeydown", vb);
+            } else {
+                data.getAttributes().put("onkeydown", onkeydown);
+            }
         }
         if (onkeypress != null) {
-            data.setValueExpression("onkeypress", onkeypress);
+            if (isValueReference(onkeypress)) {
+                ValueBinding vb = Util.getValueBinding(onkeypress);
+                data.setValueBinding("onkeypress", vb);
+            } else {
+                data.getAttributes().put("onkeypress", onkeypress);
+            }
         }
         if (onkeyup != null) {
-            data.setValueExpression("onkeyup", onkeyup);
+            if (isValueReference(onkeyup)) {
+                ValueBinding vb = Util.getValueBinding(onkeyup);
+                data.setValueBinding("onkeyup", vb);
+            } else {
+                data.getAttributes().put("onkeyup", onkeyup);
+            }
         }
         if (onmousedown != null) {
-            data.setValueExpression("onmousedown", onmousedown);
+            if (isValueReference(onmousedown)) {
+                ValueBinding vb = Util.getValueBinding(onmousedown);
+                data.setValueBinding("onmousedown", vb);
+            } else {
+                data.getAttributes().put("onmousedown", onmousedown);
+            }
         }
         if (onmousemove != null) {
-            data.setValueExpression("onmousemove", onmousemove);
+            if (isValueReference(onmousemove)) {
+                ValueBinding vb = Util.getValueBinding(onmousemove);
+                data.setValueBinding("onmousemove", vb);
+            } else {
+                data.getAttributes().put("onmousemove", onmousemove);
+            }
         }
         if (onmouseout != null) {
-            data.setValueExpression("onmouseout", onmouseout);
+            if (isValueReference(onmouseout)) {
+                ValueBinding vb = Util.getValueBinding(onmouseout);
+                data.setValueBinding("onmouseout", vb);
+            } else {
+                data.getAttributes().put("onmouseout", onmouseout);
+            }
         }
         if (onmouseover != null) {
-            data.setValueExpression("onmouseover", onmouseover);
+            if (isValueReference(onmouseover)) {
+                ValueBinding vb = Util.getValueBinding(onmouseover);
+                data.setValueBinding("onmouseover", vb);
+            } else {
+                data.getAttributes().put("onmouseover", onmouseover);
+            }
         }
         if (onmouseup != null) {
-            data.setValueExpression("onmouseup", onmouseup);
+            if (isValueReference(onmouseup)) {
+                ValueBinding vb = Util.getValueBinding(onmouseup);
+                data.setValueBinding("onmouseup", vb);
+            } else {
+                data.getAttributes().put("onmouseup", onmouseup);
+            }
         }
         if (rowClasses != null) {
-            data.setValueExpression("rowClasses", rowClasses);
+            if (isValueReference(rowClasses)) {
+                ValueBinding vb = Util.getValueBinding(rowClasses);
+                data.setValueBinding("rowClasses", vb);
+            } else {
+                data.getAttributes().put("rowClasses", rowClasses);
+            }
         }
         if (rules != null) {
-            data.setValueExpression("rules", rules);
+            if (isValueReference(rules)) {
+                ValueBinding vb = Util.getValueBinding(rules);
+                data.setValueBinding("rules", vb);
+            } else {
+                data.getAttributes().put("rules", rules);
+            }
         }
         if (style != null) {
-            data.setValueExpression("style", style);
+            if (isValueReference(style)) {
+                ValueBinding vb = Util.getValueBinding(style);
+                data.setValueBinding("style", vb);
+            } else {
+                data.getAttributes().put("style", style);
+            }
         }
         if (styleClass != null) {
-            data.setValueExpression("styleClass", styleClass);
+            if (isValueReference(styleClass)) {
+                ValueBinding vb = Util.getValueBinding(styleClass);
+                data.setValueBinding("styleClass", vb);
+            } else {
+                data.getAttributes().put("styleClass", styleClass);
+            }
         }
         if (summary != null) {
-            data.setValueExpression("summary", summary);
+            if (isValueReference(summary)) {
+                ValueBinding vb = Util.getValueBinding(summary);
+                data.setValueBinding("summary", vb);
+            } else {
+                data.getAttributes().put("summary", summary);
+            }
         }
         if (title != null) {
-            data.setValueExpression("title", title);
+            if (isValueReference(title)) {
+                ValueBinding vb = Util.getValueBinding(title);
+                data.setValueBinding("title", vb);
+            } else {
+                data.getAttributes().put("title", title);
+            }
         }
         if (width != null) {
-            data.setValueExpression("width", width);
+            if (isValueReference(width)) {
+                ValueBinding vb = Util.getValueBinding(width);
+                data.setValueBinding("width", vb);
+            } else {
+                data.getAttributes().put("width", width);
+            }
         }
     }
     // Methods From TagSupport

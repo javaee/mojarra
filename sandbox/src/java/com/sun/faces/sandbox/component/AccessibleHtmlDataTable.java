@@ -1,7 +1,7 @@
 package com.sun.faces.sandbox.component;
 
-import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 /**
  * <p>Represents a set of repeating data (segregated into
@@ -23,7 +23,8 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "com.sun.faces.sandbox.AccessibleHtmlDataTable";
+    public static final String COMPONENT_TYPE =
+         "com.sun.faces.sandbox.AccessibleHtmlDataTable";
 
 
     private String bgcolor;
@@ -36,9 +37,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.bgcolor) {
             return this.bgcolor;
         }
-        ValueExpression _ve = getValueExpression("bgcolor");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("bgcolor");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -64,9 +65,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (this.border_set) {
             return this.border;
         }
-        ValueExpression _ve = getValueExpression("border");
-        if (_ve != null) {
-            Object _result = _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("border");
+        if (_vb != null) {
+            Object _result = _vb.getValue(getFacesContext());
             if (_result == null) {
                 return Integer.MIN_VALUE;
             } else {
@@ -99,9 +100,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
          if (this.bodyrows_set) {
             return this.bodyrows;
         }
-        ValueExpression _ve = getValueExpression("bodyrows");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("bodyrows");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -128,9 +129,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.captionClass) {
             return this.captionClass;
         }
-        ValueExpression _ve = getValueExpression("captionClass");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("captionClass");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -154,9 +155,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.captionStyle) {
             return this.captionStyle;
         }
-        ValueExpression _ve = getValueExpression("captionStyle");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("captionStyle");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -181,9 +182,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.cellpadding) {
             return this.cellpadding;
         }
-        ValueExpression _ve = getValueExpression("cellpadding");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("cellpadding");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -212,9 +213,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.cellspacing) {
             return this.cellspacing;
         }
-        ValueExpression _ve = getValueExpression("cellspacing");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("cellspacing");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -247,9 +248,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.columnClasses) {
             return this.columnClasses;
         }
-        ValueExpression _ve = getValueExpression("columnClasses");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("columnClasses");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -274,9 +275,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.dir) {
             return this.dir;
         }
-        ValueExpression _ve = getValueExpression("dir");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("dir");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -301,9 +302,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.footerClass) {
             return this.footerClass;
         }
-        ValueExpression _ve = getValueExpression("footerClass");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("footerClass");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -333,9 +334,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.frame) {
             return this.frame;
         }
-        ValueExpression _ve = getValueExpression("frame");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("frame");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -360,9 +361,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.headerClass) {
             return this.headerClass;
         }
-        ValueExpression _ve = getValueExpression("headerClass");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("headerClass");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -387,9 +388,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.lang) {
             return this.lang;
         }
-        ValueExpression _ve = getValueExpression("lang");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("lang");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -414,9 +415,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.onclick) {
             return this.onclick;
         }
-        ValueExpression _ve = getValueExpression("onclick");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("onclick");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -441,9 +442,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.ondblclick) {
             return this.ondblclick;
         }
-        ValueExpression _ve = getValueExpression("ondblclick");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("ondblclick");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -468,9 +469,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.onkeydown) {
             return this.onkeydown;
         }
-        ValueExpression _ve = getValueExpression("onkeydown");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("onkeydown");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -495,9 +496,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.onkeypress) {
             return this.onkeypress;
         }
-        ValueExpression _ve = getValueExpression("onkeypress");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("onkeypress");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -522,9 +523,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.onkeyup) {
             return this.onkeyup;
         }
-        ValueExpression _ve = getValueExpression("onkeyup");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("onkeyup");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -549,9 +550,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.onmousedown) {
             return this.onmousedown;
         }
-        ValueExpression _ve = getValueExpression("onmousedown");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("onmousedown");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -576,9 +577,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.onmousemove) {
             return this.onmousemove;
         }
-        ValueExpression _ve = getValueExpression("onmousemove");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("onmousemove");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -603,9 +604,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.onmouseout) {
             return this.onmouseout;
         }
-        ValueExpression _ve = getValueExpression("onmouseout");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("onmouseout");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -630,9 +631,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.onmouseover) {
             return this.onmouseover;
         }
-        ValueExpression _ve = getValueExpression("onmouseover");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("onmouseover");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -657,9 +658,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.onmouseup) {
             return this.onmouseup;
         }
-        ValueExpression _ve = getValueExpression("onmouseup");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("onmouseup");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -691,9 +692,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.rowClasses) {
             return this.rowClasses;
         }
-        ValueExpression _ve = getValueExpression("rowClasses");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("rowClasses");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -720,9 +721,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.rules) {
             return this.rules;
         }
-        ValueExpression _ve = getValueExpression("rules");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("rules");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -746,9 +747,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.style) {
             return this.style;
         }
-        ValueExpression _ve = getValueExpression("style");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("style");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -773,9 +774,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.styleClass) {
             return this.styleClass;
         }
-        ValueExpression _ve = getValueExpression("styleClass");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("styleClass");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -801,9 +802,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.summary) {
             return this.summary;
         }
-        ValueExpression _ve = getValueExpression("summary");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("summary");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -828,9 +829,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.title) {
             return this.title;
         }
-        ValueExpression _ve = getValueExpression("title");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("title");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
@@ -854,9 +855,9 @@ public class AccessibleHtmlDataTable extends javax.faces.component.UIData {
         if (null != this.width) {
             return this.width;
         }
-        ValueExpression _ve = getValueExpression("width");
-        if (_ve != null) {
-            return (String) _ve.getValue(getFacesContext().getELContext());
+        ValueBinding _vb = getValueBinding("width");
+        if (_vb != null) {
+            return (String) _vb.getValue(getFacesContext());
         } else {
             return null;
         }

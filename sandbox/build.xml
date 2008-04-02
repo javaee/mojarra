@@ -99,7 +99,9 @@
         <!-- Run javac through everything -->
         <jsf.javac srcdir="${source.dir}"
                    destdir="${build.classes.dir}"
-                   excludes="${exclude.path}">
+                   excludes="${exclude.path}"
+                   source="1.4"
+                   target="1.4">
             <classpath>
                 <path refid="impl.compile.classpath"/>
             </classpath>

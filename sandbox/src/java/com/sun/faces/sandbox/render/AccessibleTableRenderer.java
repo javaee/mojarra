@@ -1,5 +1,5 @@
 /*
- * $Id: AccessibleTableRenderer.java,v 1.1 2006/12/07 03:05:35 rlubke Exp $
+ * $Id: AccessibleTableRenderer.java,v 1.2 2006/12/09 20:41:25 rlubke Exp $
  */
 
 /*
@@ -31,27 +31,21 @@ package com.sun.faces.sandbox.render;
 
 
 import com.sun.faces.RIConstants;
-import javax.faces.component.NamingContainer;
+import com.sun.faces.sandbox.util.Util;
+
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer;
-import com.sun.faces.util.MessageUtils;
 
 /** <p>Render a {@link UIData} component as a two-dimensional table.</p> */
 
-public class AccessibleTableRenderer extends HtmlBasicRenderer {
+public class AccessibleTableRenderer extends HtmlBasicRenderer{
 
     // ---------------------------------------------------------- Public Methods
 
@@ -62,28 +56,15 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
           throws IOException {
 
         if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
+            throw new NullPointerException("param 'context' is null");
         }
         if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin encoding component " + component.getId());
+            throw new NullPointerException("param 'component' is null");
         }
 
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("No encoding necessary " +
-                            component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
             return;
         }
         UIData data = (UIData) component;
@@ -97,11 +78,10 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        RenderKitUtils.renderPassThruAttributes(context,
-                                                writer,
-                                                component,
-                                                new String[]{"rows"});
-        writer.writeText("\n", component, null);
+        Util.renderPassThruAttributes(writer,
+                                      component,
+                                      new String[]{"rows"});
+        writer.writeText("\n", null);
 
         UIComponent caption = getFacet(data, "caption");
         if (caption != null) {
@@ -131,7 +111,7 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
         if ((header != null) || (headerFacets > 0)) {
             // WCAG 5.2
             writer.startElement("thead", data);
-            writer.writeText("\n", component, null);
+            writer.writeText("\n", null);
         }
         if (header != null) {
             writer.startElement("tr", header);
@@ -145,14 +125,14 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
             encodeRecursive(context, header);
             writer.endElement("th");
             writer.endElement("tr");
-            writer.writeText("\n", component, null);
+            writer.writeText("\n", null);
         }
         if (headerFacets > 0) {
             writer.startElement("tr", data);
-            writer.writeText("\n", component, null);
-            Iterator<UIColumn> columns = getColumns(data);
+            writer.writeText("\n", null);
+            Iterator columns = getColumns(data);
             while (columns.hasNext()) {
-                UIColumn column = columns.next();
+                UIColumn column = (UIColumn) columns.next();
                 String columnHeaderClass =
                       (String) column.getAttributes().get("headerClass");
                 // WCAG 5.1
@@ -169,14 +149,14 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
                     encodeRecursive(context, facet);
                 }
                 writer.endElement("th");
-                writer.writeText("\n", component, null);
+                writer.writeText("\n", null);
             }
             writer.endElement("tr");
-            writer.writeText("\n", component, null);
+            writer.writeText("\n", null);
         }
         if ((header != null) || (headerFacets > 0)) {
             writer.endElement("thead");
-            writer.writeText("\n", component, null);
+            writer.writeText("\n", null);
         }
 
         // Render the footer facets (if any)
@@ -186,7 +166,7 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
         if ((footer != null) || (footerFacets > 0)) {
             // WCAG 5.2
             writer.startElement("tfoot", data);
-            writer.writeText("\n", component, null);
+            writer.writeText("\n", null);
         }
         if (footer != null) {
             writer.startElement("tr", footer);
@@ -198,14 +178,14 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
             encodeRecursive(context, footer);
             writer.endElement("td");
             writer.endElement("tr");
-            writer.writeText("\n", component, null);
+            writer.writeText("\n", null);
         }
         if (footerFacets > 0) {
             writer.startElement("tr", data);
-            writer.writeText("\n", component, null);
-            Iterator<UIColumn> columns = getColumns(data);
+            writer.writeText("\n", null);
+            Iterator columns = getColumns(data);
             while (columns.hasNext()) {
-                UIColumn column = columns.next();
+                UIColumn column = (UIColumn) columns.next();
                 String columnFooterClass =
                       (String) column.getAttributes().get("footerClass");
                 writer.startElement("td", column);
@@ -220,14 +200,14 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
                     encodeRecursive(context, facet);
                 }
                 writer.endElement("td");
-                writer.writeText("\n", component, null);
+                writer.writeText("\n", null);
             }
             writer.endElement("tr");
-            writer.writeText("\n", component, null);
+            writer.writeText("\n", null);
         }
         if ((footer != null) || (footerFacets > 0)) {
             writer.endElement("tfoot");
-            writer.writeText("\n", component, null);
+            writer.writeText("\n", null);
         }
 
     }
@@ -237,25 +217,13 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
           throws IOException {
 
         if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
+            throw new NullPointerException("param 'context' is null");
         }
         if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
+            throw new NullPointerException("param 'component' is null");
         }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin encoding children " + component.getId());
-        }
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("No encoding necessary " +
-                            component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
+
+        if (!component.isRendered()) {           
             return;
         }
         UIData data = (UIData) component;
@@ -268,14 +236,14 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
         int rowStyles = rowClasses.length;
         ResponseWriter writer = context.getResponseWriter();
         Iterator kids = null;
-        Iterator<UIComponent> grandkids = null;
+        Iterator grandkids = null;
 
         // Iterate over the rows of data that are provided
         int processed = 0;
         int rowIndex = data.getFirst() - 1;
         int rows = data.getRows();
         int rowStyle = 0;
-        List<Integer> bodyRows = getBodyRows(context, data);
+        List bodyRows = getBodyRows(data);
         boolean wroteTbody = false;
 
         // WCAG 5.2
@@ -285,7 +253,7 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
             wroteTbody = true;
             writer.startElement("tbody", component);
         }
-        writer.writeText("\n", component, null);
+        writer.writeText("\n", null);
         while (true) {
 
             // Have we displayed the requested number of rows?
@@ -297,7 +265,7 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
             if (!data.isRowAvailable()) {
                 break; // Scrolled past the last row
             }
-            if (null != bodyRows && bodyRows.contains(data.getRowIndex())) {
+            if (null != bodyRows && bodyRows.contains(Integer.valueOf(data.getRowIndex()))) {
                 // close out the previous tbody.
                 if (wroteTbody) {
                     writer.endElement("tbody");
@@ -315,7 +283,7 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
                     rowStyle = 0;
                 }
             }
-            writer.writeText("\n", component, null);
+            writer.writeText("\n", null);
 
             // Iterate over the child UIColumn components for each row
             columnStyle = 0;
@@ -342,7 +310,7 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
                 }
                 // WCAG 5.2 render the "headers" attribute with data
                 // from the headers facet, if present.
-                List<String> headerIds = (List<String>) context.
+                List headerIds = (List) context.
                         getExternalContext().getRequestMap().
                         get(HEADER_ID_LIST_ATTR_NAME);
                 if (null != headerIds) {
@@ -361,7 +329,7 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
                 // the kids of our kids
                 grandkids = getChildren(column);
                 while (grandkids.hasNext()) {
-                    encodeRecursive(context, grandkids.next());
+                    encodeRecursive(context, (UIComponent) grandkids.next());
                 }
 
                 // Render the ending of this cell
@@ -371,40 +339,36 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
                 else {
                     writer.endElement("td");
                 }
-                writer.writeText("\n", component, null);
+                writer.writeText("\n", null);
 
             }
 
             // Render the ending of this row
             writer.endElement("tr");
-            writer.writeText("\n", component, null);
+            writer.writeText("\n", null);
 
         }
         // If there was no bodyrows attribute, or it was empty.
         if (wroteTbody) {
             writer.endElement("tbody");
         }
-        writer.writeText("\n", component, null);
+        writer.writeText("\n", null);
 
         // Clean up after ourselves
         data.setRowIndex(-1);
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, "End encoding children " +
-                                    component.getId());
-        }
 
     }
 
-    private List<Integer> getBodyRows(FacesContext context, UIData data) throws NumberFormatException {
-        List<Integer> result = null;
+    private List getBodyRows(UIData data) throws NumberFormatException {
+        List result = null;
         String bodyRows = (String) data.getAttributes().get("bodyrows");
         if (null != bodyRows) {
             String [] rows = bodyRows.split(",");
             if (null != rows) {
-                result = new ArrayList<Integer>(rows.length);
-                for (String curRow : rows) {
-                    result.add(Integer.valueOf(curRow));
-                }
+                result = new ArrayList(rows.length);
+                for (int i = 0; i < rows.length; i++) {
+                    result.add(Integer.valueOf(rows[i]));
+                }                
             }
         }
 
@@ -416,21 +380,12 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
           throws IOException {
 
         if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
+            throw new NullPointerException("param 'context' is null");
         }
         if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
+            throw new NullPointerException("param 'component' is null");
         }
         if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("No encoding necessary " +
-                            component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
             return;
         }
         UIData data = (UIData) component;
@@ -439,11 +394,7 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
 
         // Render the ending of this table
         writer.endElement("table");
-        writer.writeText("\n", component, null);
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End encoding component " + component.getId());
-        }
+        writer.writeText("\n", null);
 
     }
 
@@ -471,7 +422,7 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
             return (new String[0]);
         }
         values = values.trim();
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList list = new ArrayList();
         while (values.length() > 0) {
             int comma = values.indexOf(",");
             if (comma >= 0) {
@@ -482,8 +433,8 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
                 values = "";
             }
         }
-        String results[] = new String[list.size()];
-        return (list.toArray(results));
+
+        return ((String[]) list.toArray(new String[list.size()]));
 
     }
 
@@ -514,12 +465,12 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
      *
      * @param data <code>UIData</code> for which to extract children
      */
-    private Iterator<UIColumn> getColumns(UIData data) {
+    private Iterator getColumns(UIData data) {
 
-        List<UIColumn> results = new ArrayList<UIColumn>();
-        Iterator<UIComponent> kids = data.getChildren().iterator();
+        List results = new ArrayList();
+        Iterator kids = data.getChildren().iterator();
         while (kids.hasNext()) {
-            UIComponent kid = kids.next();
+            UIComponent kid = (UIComponent) kids.next();
             if ((kid instanceof UIColumn) && kid.isRendered()) {
                 results.add((UIColumn) kid);
             }
@@ -566,7 +517,7 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
             return (new String[0]);
         }
         values = values.trim();
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList list = new ArrayList();
         while (values.length() > 0) {
             int comma = values.indexOf(",");
             if (comma >= 0) {
@@ -577,8 +528,8 @@ public class AccessibleTableRenderer extends HtmlBasicRenderer {
                 values = "";
             }
         }
-        String results[] = new String[list.size()];
-        return (list.toArray(results));
+       
+        return ((String[]) list.toArray(new String[list.size()]));
 
     }
 

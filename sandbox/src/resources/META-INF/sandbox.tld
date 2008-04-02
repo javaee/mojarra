@@ -26,21 +26,33 @@
 -->
 
 
-<taglib xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
-    version="2.1">
+<!DOCTYPE taglib
+PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+"http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>1.2</jsp-version>
+    <short-name>risb</short-name>
+    <uri>http://java.sun.com/jsf/ri/sandbox</uri>
     <description>
         This taglib is for components being developed within the
         JSF RI sandbox.
     </description>
-    <tlib-version>1.0</tlib-version>
-    <short-name>risb</short-name>
-    <uri>http://java.sun.com/jsf/ri/sandbox</uri>
 
     <!-- ==================== Tag Definitions ============================= -->
 
     <tag>
+
+        <name>
+            dataTable
+        </name>
+        <tag-class>
+            com.sun.faces.sandbox.taglib.AccessibleDataTableTag
+        </tag-class>
+        <body-content>
+            JSP
+        </body-content>
         <description>
             <![CDATA[<p>Renders an HTML "table" element compliant with the HTML 401
             specification.  Render the "caption" facet, if present, inside a
@@ -157,39 +169,21 @@
             the <code>UIData</code> to -1, and close out the "table"
             element.</p>]]>
         </description>
-        <name>
-            dataTable
-        </name>
-        <tag-class>
-            com.sun.faces.sandbox.taglib.AccessibleDataTableTag
-        </tag-class>
-        <body-content>
-            JSP
-        </body-content>
         <attribute>
-            <description>
-                <![CDATA[Zero-relative row number of the first row to be displayed.  If this
-                property is set to zero, rendering will begin with the first row of
-                the underlying data.]]>
-            </description>
             <name>
                 first
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    int
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Zero-relative row number of the first row to be displayed.  If this
+                property is set to zero, rendering will begin with the first row of
+                the underlying data.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[The component identifier for this component.  This value must be
-                unique within the closest parent component that is a naming
-                container.]]>
-            </description>
             <name>
                 id
             </name>
@@ -199,156 +193,137 @@
             <rtexprvalue>
                 true
             </rtexprvalue>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming
+                container.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Flag indicating whether or not this component should be rendered
-                (during Render Response Phase), or processed on any subsequent
-                form submit.  The default value for this property is true.]]>
-            </description>
             <name>
                 rendered
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    boolean
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Flag indicating whether or not this component should be rendered
+                (during Render Response Phase), or processed on any subsequent
+                form submit.  The default value for this property is true.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[The number of rows to display, starting with the one identified by the
-                "first" property.  If this value is set to zero, all available rows in
-                the underlying data model will be displayed.]]>
-            </description>
             <name>
                 rows
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    int
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The number of rows to display, starting with the one identified by the
+                "first" property.  If this value is set to zero, all available rows in
+                the underlying data model will be displayed.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[The current value of this component.]]>
-            </description>
             <name>
                 value
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.Object
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+             <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Name of a request-scope attribute under which the model data for the
-                row selected by the current value of the "rowIndex" property (i.e.
-                also the current value of the "rowData" property) will be exposed.]]>
-            </description>
             <name>
                 var
             </name>
             <required>
                 false
-            </required>           
+            </required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Name of a request-scope attribute under which the model data for the
+                row selected by the current value of the "rowIndex" property (i.e.
+                also the current value of the "rowData" property) will be exposed.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Name or code of the background color for this table.]]>
-            </description>
             <name>
                 bgcolor
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Name or code of the background color for this table.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Width (in pixels) of the border to be drawn
-                around this table.]]>
-            </description>
             <name>
                 border
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    int
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Width (in pixels) of the border to be drawn
+                around this table.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Space-separated list of CSS style class(es) that will be
-                applied to any caption generated for this table.]]>
-            </description>
             <name>
                 captionClass
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) that will be
+                applied to any caption generated for this table.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[CSS style(s) to be applied when this caption is rendered.]]>
-            </description>
             <name>
                 captionStyle
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[CSS style(s) to be applied when this caption is rendered.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Definition of how much space the user agent should
-                leave between the border of each cell and its contents.]]>
-            </description>
             <name>
                 cellpadding
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Definition of how much space the user agent should
+                leave between the border of each cell and its contents.]]>
+            </description>
         </attribute>
         <attribute>
+            <name>
+                cellspacing
+            </name>
+            <required>
+                false
+            </required>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Definition of how much space the user agent should
                 leave between the left side of the table and the
@@ -357,19 +332,16 @@
                 right and bottom of the table.  It also specifies
                 the amount of space to leave between cells.]]>
             </description>
+        </attribute>
+        <attribute>
+
             <name>
-                cellspacing
+                columnClasses
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Comma-delimited list of CSS style classes that will be applied
                 to the columns of this table.  A space separated list of
@@ -382,53 +354,41 @@
                 "columns" attribute, the elements at the posisiton in the list
                 after the value of the "columns" attribute are ignored.]]>
             </description>
-            <name>
-                columnClasses
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Direction indication for text that does not inherit directionality.
-                Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).]]>
-            </description>
             <name>
                 dir
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Direction indication for text that does not inherit directionality.
+                Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Space-separated list of CSS style class(es) that will be
-                applied to any footer generated for this table.]]>
-            </description>
             <name>
                 footerClass
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) that will be
+                applied to any footer generated for this table.]]>
+            </description>
         </attribute>
         <attribute>
+            <name>
+                frame
+            </name>
+            <required>
+                false
+            </required>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Code specifying which sides of the frame surrounding
                 this table will be visible.  Valid values are:
@@ -438,223 +398,171 @@
                 hand side only); rhs (right hand side only); box
                 (all four sides); and border (all four sides).]]>
             </description>
-            <name>
-                frame
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Space-separated list of CSS style class(es) that will be
-                applied to any header generated for this table.]]>
-            </description>
             <name>
                 headerClass
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) that will be
+                applied to any header generated for this table.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Code describing the language used in the generated markup
-                for this component.]]>
-            </description>
             <name>
                 lang
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Code describing the language used in the generated markup
+                for this component.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Javascript code executed when a pointer button is
-                clicked over this element.]]>
-            </description>
             <name>
                 onclick
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Javascript code executed when a pointer button is
-                double clicked over this element.]]>
+                clicked over this element.]]>
             </description>
+        </attribute>
+        <attribute>
             <name>
                 ondblclick
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                double clicked over this element.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Javascript code executed when a key is
-                pressed down over this element.]]>
-            </description>
             <name>
                 onkeydown
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Javascript code executed when a key is
-                pressed and released over this element.]]>
+                pressed down over this element.]]>
             </description>
+        </attribute>
+        <attribute>
             <name>
                 onkeypress
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Javascript code executed when a key is
-                released over this element.]]>
+                pressed and released over this element.]]>
             </description>
+        </attribute>
+        <attribute>
             <name>
                 onkeyup
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Javascript code executed when a key is
+                released over this element.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Javascript code executed when a pointer button is
-                pressed down over this element.]]>
-            </description>
             <name>
                 onmousedown
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Javascript code executed when a pointer button is
-                moved within this element.]]>
+                pressed down over this element.]]>
             </description>
+        </attribute>
+        <attribute>
             <name>
                 onmousemove
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Javascript code executed when a pointer button is
-                moved away from this element.]]>
+                moved within this element.]]>
             </description>
+        </attribute>
+        <attribute>
             <name>
                 onmouseout
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Javascript code executed when a pointer button is
-                moved onto this element.]]>
+                moved away from this element.]]>
             </description>
+        </attribute>
+        <attribute>
             <name>
                 onmouseover
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Javascript code executed when a pointer button is
-                released over this element.]]>
+                moved onto this element.]]>
             </description>
+        </attribute>
+        <attribute>
             <name>
                 onmouseup
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                released over this element.]]>
+            </description>
         </attribute>
         <attribute>
+            <name>
+                rowClasses
+            </name>
+            <required>
+                false
+            </required>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Comma-delimited list of CSS style classes that will be applied
                 to the rows of this table.  A space separated list of classes
@@ -666,19 +574,15 @@
                 other words, we keep iterating through the list until we reach
                 the end, and then we start at the beginning again.]]>
             </description>
+        </attribute>
+        <attribute>
             <name>
-                rowClasses
+                rules
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Code specifying which rules will appear between cells
                 within this table.  Valid values are:  none (no rules,
@@ -686,143 +590,101 @@
                 (between rows only); cols (between columns only); and
                 all (between all rows and columns).]]>
             </description>
-            <name>
-                rules
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[CSS style(s) to be applied when this component is rendered.]]>
-            </description>
             <name>
                 style
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[CSS style(s) to be applied when this component is rendered.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Space-separated list of CSS style class(es) to be applied when
-                this element is rendered.  This value must be passed through
-                as the "class" attribute on generated markup.]]>
-            </description>
             <name>
                 styleClass
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) to be applied when
+                this element is rendered.  This value must be passed through
+                as the "class" attribute on generated markup.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Summary of this table's purpose and structure, for
-                user agents rendering to non-visual media such as
-                speech and Braille.]]>
-            </description>
             <name>
                 summary
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Summary of this table's purpose and structure, for
+                user agents rendering to non-visual media such as
+                speech and Braille.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Advisory title information about markup elements generated
-                for this component.]]>
-            </description>
             <name>
                 title
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Advisory title information about markup elements generated
+                for this component.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Width of the entire table, for visual user agents.]]>
-            </description>
             <name>
                 width
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Width of the entire table, for visual user agents.]]>
+            </description>
         </attribute>
         <attribute>
-            <description>
-                The ValueExpression linking this component to a property in a backing bean
-            </description>
             <name>
                 binding
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    javax.faces.component.UIComponent
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                The ValueExpression linking this component to a property in a backing bean
+            </description>
         </attribute>
         <attribute>
-            <description>
-                Comma separated list of row indices for which a new
-                "tbody" element should be started (and any
-                previously opened one should be ended).
-            </description>
             <name>
                 bodyrows
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                Comma separated list of row indices for which a new
+                "tbody" element should be started (and any
+                previously opened one should be ended).
+            </description>
         </attribute>
     </tag>
 
     <tag>
-        <description>
-            <![CDATA[<p>Renders a UIComponent that represents a single column of data within a parent <code>UIData</code> component.</p>]]>
-        </description>
         <name>
             column
         </name>
@@ -832,40 +694,36 @@
         <body-content>
             JSP
         </body-content>
+        <description>
+            <![CDATA[<p>Renders a UIComponent that represents a single column of data within a parent <code>UIData</code> component.</p>]]>
+        </description>
         <attribute>
-            <description>
-                Flag indicating whether or not this component should be rendered
-                (during Render Response Phase), or processed on any subsequent
-                form submit.
-            </description>
             <name>
                 rendered
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>java.lang.Boolean</type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                Flag indicating whether or not this component should be rendered
+                (during Render Response Phase), or processed on any subsequent
+                form submit.
+            </description>
         </attribute>
         <attribute>
-            <description>
-                The value binding expression linking this component to a property in a backing bean
-            </description>
             <name>
                 binding
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>javax.faces.component.UIComponent</type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                The value binding expression linking this component to a property in a backing bean
+            </description>
         </attribute>
         <attribute>
-            <description>
-                The component identifier for the associated component
-            </description>
             <name>
                 id
             </name>
@@ -878,56 +736,47 @@
             <type>
                 java.lang.String
             </type>
+            <description>
+                The component identifier for the associated component
+            </description>
         </attribute>
         <attribute>
-            <description>
-                <![CDATA[Space-separated list of CSS style class(es) that will be
-                applied to any column footer generated for this table.]]>
-            </description>
             <name>
                 footerClass
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[Space-separated list of CSS style class(es) that will be
-                applied to any column header generated for this table.]]>
+                applied to any column footer generated for this table.]]>
             </description>
+        </attribute>
+        <attribute>
             <name>
                 headerClass
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) that will be
+                applied to any column header generated for this table.]]>
+            </description>
         </attribute>
          <attribute>
-            <description>
-                <![CDATA[Flag indicating that this column is a row header column and therefore cells in this column should be rendered with "th" instead of "td" and must have the 'scope="row"' attribute.]]>
-            </description>
             <name>
                 rowHeader
             </name>
             <required>
                 false
             </required>
-            <deferred-value>
-                <type>
-                    boolean
-                </type>
-            </deferred-value>
+            <rtexprvalue>false</rtexprvalue>
+             <description>
+                <![CDATA[Flag indicating that this column is a row header column and therefore cells in this column should be rendered with "th" instead of "td" and must have the 'scope="row"' attribute.]]>
+            </description>
         </attribute>
     </tag>
 </taglib>
