@@ -1,5 +1,5 @@
 /*
- * $Id: TestViewTag.java,v 1.2 2003/10/30 22:15:48 jvisvanathan Exp $
+ * $Id: TestViewTag.java,v 1.3 2003/11/10 22:18:39 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewTag.java,v 1.2 2003/10/30 22:15:48 jvisvanathan Exp $
+ * @version $Id: TestViewTag.java,v 1.3 2003/11/10 22:18:39 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -67,6 +67,7 @@ public class TestViewTag extends JspFacesTestCase
 //
 
 public static final String TEST_URI = "/TestViewTag.jsp";
+public static final String TEST_URI2 = "/TestViewTag2.jsp";
 
 //
 // Class Variables
@@ -139,6 +140,38 @@ public void testViewTag()
 			    getFacesContext().getExternalContext().
 			    getRequest(), 
 			    Config.FMT_LOCALE));
+}
+
+public void beginViewTagVB(WebRequest theRequest)
+{
+    theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI2, null);
+}
+
+public void testViewTagVB()
+{    
+    boolean result = false;    
+    String value = null;
+    Locale expectedLocale = new Locale("ps", "PS", "Traditional");
+    request.setAttribute("locale", expectedLocale);
+    Phase renderResponse = new RenderResponsePhase();    
+    UIViewRoot page = new UIViewRoot();
+    page.setId("root");
+    page.setViewId(TEST_URI2);
+    getFacesContext().setViewRoot(page);
+    
+    try {
+	renderResponse.execute(getFacesContext());
+    }
+    catch (FacesException fe) {
+	System.out.println(fe.getMessage());
+	if (null != fe.getCause()) {
+	    fe.getCause().printStackTrace();
+	}
+	else {
+	    fe.printStackTrace();
+	}
+    }
+    assertEquals("locale not as expected", expectedLocale, page.getLocale());
 }
 
 } // end of class TestViewTag

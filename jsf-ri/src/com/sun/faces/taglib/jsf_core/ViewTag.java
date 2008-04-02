@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.11 2003/10/22 04:43:35 eburns Exp $
+ * $Id: ViewTag.java,v 1.12 2003/11/10 22:18:39 eburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.application.StateManager.SerializedView;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
+import javax.faces.el.ValueBinding;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
@@ -44,7 +45,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.11 2003/10/22 04:43:35 eburns Exp $
+ * @version $Id: ViewTag.java,v 1.12 2003/11/10 22:18:39 eburns Exp $
  * 
  *
  */
@@ -67,11 +68,9 @@ public class ViewTag extends UIComponentBodyTag
 
     // Attribute Instance Variables
 
-    protected String locale_ = null; // store the un-evaluated expr
-    protected String locale = null; // store the evaluated expr
-
+    protected String locale = null;
     public void setLocale(String newLocale) {
-	locale_ = newLocale;
+	locale = newLocale;
     }
 
 
@@ -109,19 +108,18 @@ public class ViewTag extends UIComponentBodyTag
     public int doStartTag() throws JspException {
         int rc = 0;
         try {        
-            evaluateExpressions();
 	    rc = super.doStartTag();
         }
         catch (JspException e) {
 	    if (log.isDebugEnabled()) {
-	        log.debug("Can't evaluate expression or leverage base class", 
+	        log.debug("Can't leverage base class", 
 			  e);
 	    }
 	    throw e;
         }
         catch (Throwable t) {
 	    if (log.isDebugEnabled()) {
-	        log.debug("Can't evaluate expression or leverage base class", 
+	        log.debug("Can't leverage base class", 
 			  t);
 	    }
 	    throw new JspException(t);
@@ -266,24 +264,27 @@ public class ViewTag extends UIComponentBodyTag
     // 
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
+	Locale viewLocale = null;
+	ValueBinding vb = null;
 	if (null != locale) {
-            Locale viewLocale = Util.getLocaleFromString(locale);
-           ((UIViewRoot)component).setLocale(viewLocale);
-           // update the JSTL locale attribute in request scope so that JSTL
-           // picks up the locale from viewRoot. This attribute must be updated
-           // before the JSTL setBundle tag is called because that is when the
-           // new LocalizationContext object is created based on the locale.
-           Config.set((ServletRequest) context.getExternalContext().getRequest(), 
-                Config.FMT_LOCALE, viewLocale);
+	    if (isValueReference(locale)) {
+		component.setValueBinding("locale",
+					  vb = Util.getValueBinding(locale));
+		viewLocale = 
+		    (Locale) vb.getValue(FacesContext.getCurrentInstance());
+	    }
+	    else {
+		viewLocale = Util.getLocaleFromString(locale);
+	    }
+	    ((UIViewRoot)component).setLocale(viewLocale);
+	    // update the JSTL locale attribute in request scope so that
+	    // JSTL picks up the locale from viewRoot. This attribute
+	    // must be updated before the JSTL setBundle tag is called
+	    // because that is when the new LocalizationContext object
+	    // is created based on the locale.
+	    Config.set((ServletRequest) context.getExternalContext().getRequest(), 
+		       Config.FMT_LOCALE, viewLocale);
         }
     }
-
-
-    private void evaluateExpressions() throws JspException {
-        if (locale_ != null) {
-            locale = Util.evaluateElExpression(locale_, pageContext);
-        }
-    }
-
     
 } // end of class UseFacesTag
