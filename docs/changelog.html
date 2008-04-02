@@ -22,8 +22,8 @@
 <h2>New Features Added In This Release</h2>
 
 <p>
-    We've added four new context initialization parameters since
-    the release of 1.2"
+    We've added five new context initialization parameters since
+    the release of 1.2
 </p>
 <table width="100%" cellpadding="5" style="font-size:small;border:1px solid; border-width:1px;">
     <tr style=background-color:silver>
@@ -68,6 +68,21 @@
     </tr>
     <tr class="rb">
         <td>
+            com.sun.faces.serializationProvider
+        </td>
+        <td>
+            This parameter specifies a class that implements the <a href="#serialization">SerializationProvider</a>
+            SPI.  This implementation represents a hook the JSF implementation will use in order
+            to allow the use of alternate Serialization implementations.  See 
+            the documentation of the <a href="#serialization">SerializationProvider</a> interface
+            for more details
+        </td>
+        <td>
+            NONE
+        </td>
+    </tr>
+    <tr class="ra">
+        <td>
             com.sun.faces.responseBufferSize
         </td>
         <td>
@@ -78,7 +93,7 @@
             4096
         </td>
     </tr>
-    <tr class="ra">
+    <tr class="rb">
         <td>
             com.sun.faces.clientStateWriteBufferSize
         </td>
@@ -677,6 +692,51 @@
 
     </td>
 </tr>
+<tr class="ra">
+    <td>
+        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=350">350</a>
+
+    </td>
+    <td class="red">DEFECT
+    </td>
+    <td class="red">P3
+    </td>
+    <td class="red">ALL
+    </td>
+
+    <td class="red">rlubke
+    </td>
+    <td class="red">RESOLVED
+    </td>
+    <td class="red">FIXED
+    </td>
+    <td class="red">Listbox value is not converted when the target type is a List
+
+    </td>
+</tr>
+<tr class="rb">
+    <td>
+        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=321">321</a>
+
+    </td>
+    <td class="red">DEFECT
+    </td>
+    <td class="red">P3
+    </td>
+    <td class="red">ALL
+    </td>
+
+    <td class="red">rlubke
+    </td>
+    <td class="red">RESOLVED
+    </td>
+    <td class="red">FIXED
+    </td>
+    <td class="red">DataTable var attribute incorrect in TLD
+
+    </td>
+</tr>
+
 
 <!-- END DEFECTS -->
 
@@ -951,52 +1011,169 @@
     <tr>
        <td>        
 <pre style="font-size:medium;">
-
-<a name="l1"><span class="ln">1    </span></a><span class="s0">package </span><span class="s1">com.sun.faces.spi; 
-<a name="l2"><span class="ln">2    </span></a> 
-<a name="l3"><span class="ln">3    </span></a></span><span class="s2">/** 
-<a name="l4"><span class="ln">4    </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s2">This interface defines an integration point for Java EE vendors. 
-<a name="l5"><span class="ln">5    </span></a> * Each vendor will need to provide an implementation of this interface 
-<a name="l6"><span class="ln">6    </span></a> * which will provide the JSF implementation the necessary hooks to  
-<a name="l7"><span class="ln">7    </span></a> * perform resource injection.</span><span class="s3">&lt;/p&gt;  </span><span class="s2"> 
-<a name="l8"><span class="ln">8    </span></a> *  
-<a name="l9"><span class="ln">9    </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implementation of this interface *must* be thread-safe and must 
-<a name="l10"><span class="ln">10   </span></a> * have a no-arg constructor.</span><span class="s3">&lt;/p&gt;</span><span class="s2"> 
-<a name="l11"><span class="ln">11   </span></a> */</span><span class="s1"> 
-<a name="l12"><span class="ln">12   </span></a></span><span class="s0">public interface </span><span class="s1">InjectionProvider { 
-<a name="l13"><span class="ln">13   </span></a> 
-<a name="l14"><span class="ln">14   </span></a>    </span><span class="s2">/** 
-<a name="l15"><span class="ln">15   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implementation of this method must perform the following 
-<a name="l16"><span class="ln">16   </span></a>     * steps: 
-<a name="l17"><span class="ln">17   </span></a>     *    </span><span class="s3">&lt;ul&gt;</span><span class="s2"> 
-<a name="l18"><span class="ln">18   </span></a>     *        </span><span class="s3">&lt;li&gt;</span><span class="s2">Inject the supported resources per the Servlet 2.5 
-<a name="l19"><span class="ln">19   </span></a>     *           specification into the provided object</span><span class="s3">&lt;/li&gt;</span><span class="s2"> 
-<a name="l20"><span class="ln">20   </span></a>     *        </span><span class="s3">&lt;li&gt;</span><span class="s2">Inoke any method marked with the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PostConstruct</span><span class="s3">&lt;/code&gt;</span><span class="s2"> 
-<a name="l21"><span class="ln">21   </span></a>     *          annotation (per the Common Annotations Specification)</span><span class="s3">&lt;/li&gt;</span><span class="s2"> 
-<a name="l22"><span class="ln">22   </span></a>     *    </span><span class="s3">&lt;/ul&gt;</span><span class="s2"> 
-<a name="l23"><span class="ln">23   </span></a>     * </span><span class="s3">&lt;/p&gt;</span><span class="s2"> 
-<a name="l24"><span class="ln">24   </span></a>     * </span><span class="s4">@param </span><span class="s2">managedBean the target managed bean 
-<a name="l25"><span class="ln">25   </span></a>     * </span><span class="s4">@throws </span><span class="s2">InjectionProviderException if an error occurs during  
-<a name="l26"><span class="ln">26   </span></a>     *  resource injection 
-<a name="l27"><span class="ln">27   </span></a>     */</span><span class="s1"> 
-<a name="l28"><span class="ln">28   </span></a>    </span><span class="s0">public void </span><span class="s1">inject(Object managedBean) </span><span class="s0">throws </span><span class="s1">InjectionProviderException; 
-<a name="l29"><span class="ln">29   </span></a> 
-<a name="l30"><span class="ln">30   </span></a>     
-<a name="l31"><span class="ln">31   </span></a>    </span><span class="s2">/** 
-<a name="l32"><span class="ln">32   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implemenation of this method must invoke any 
-<a name="l33"><span class="ln">33   </span></a>     * method marked with the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PreDestroy</span><span class="s3">&lt;/code&gt; </span><span class="s2">annotation 
-<a name="l34"><span class="ln">34   </span></a>     * (per the Common Annotations Specification). 
-<a name="l35"><span class="ln">35   </span></a>     * </span><span class="s4">@param </span><span class="s2">managedBean the target managed bean 
-<a name="l36"><span class="ln">36   </span></a>     * </span><span class="s4">@throws </span><span class="s2">InjectionProviderException if an error occurs when invoking 
-<a name="l37"><span class="ln">37   </span></a>     *  the method annotated by the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PreDestroy</span><span class="s3">&lt;/code&gt; </span><span class="s2">annotation 
-<a name="l38"><span class="ln">38   </span></a>     */</span><span class="s1"> 
-<a name="l39"><span class="ln">39   </span></a>    </span><span class="s0">public void </span><span class="s1">invokePreDestroy(Object managedBean)  
-<a name="l40"><span class="ln">40   </span></a>    </span><span class="s0">throws </span><span class="s1">InjectionProviderException; 
-<a name="l41"><span class="ln">41   </span></a>} 
-<a name="l42"><span class="ln">42   </span></a></span></pre>
+<a name="l1"><span class="ln">1    </span></a><span class="s0">/* 
+<a name="l2"><span class="ln">2    </span></a> * The contents of this file are subject to the terms 
+<a name="l3"><span class="ln">3    </span></a> * of the Common Development and Distribution License 
+<a name="l4"><span class="ln">4    </span></a> * (the License). You may not use this file except in 
+<a name="l5"><span class="ln">5    </span></a> * compliance with the License. 
+<a name="l6"><span class="ln">6    </span></a> * 
+<a name="l7"><span class="ln">7    </span></a> * You can obtain a copy of the License at 
+<a name="l8"><span class="ln">8    </span></a> * https://javaserverfaces.dev.java.net/CDDL.html or 
+<a name="l9"><span class="ln">9    </span></a> * legal/CDDLv1.0.txt. 
+<a name="l10"><span class="ln">10   </span></a> * See the License for the specific language governing 
+<a name="l11"><span class="ln">11   </span></a> * permission and limitations under the License. 
+<a name="l12"><span class="ln">12   </span></a> * 
+<a name="l13"><span class="ln">13   </span></a> * When distributing Covered Code, include this CDDL 
+<a name="l14"><span class="ln">14   </span></a> * Header Notice in each file and include the License file 
+<a name="l15"><span class="ln">15   </span></a> * at legal/CDDLv1.0.txt. 
+<a name="l16"><span class="ln">16   </span></a> * If applicable, add the following below the CDDL Header, 
+<a name="l17"><span class="ln">17   </span></a> * with the fields enclosed by brackets [] replaced by 
+<a name="l18"><span class="ln">18   </span></a> * your own identifying information: 
+<a name="l19"><span class="ln">19   </span></a> * &quot;Portions Copyrighted [year] [name of copyright owner]&quot; 
+<a name="l20"><span class="ln">20   </span></a> * 
+<a name="l21"><span class="ln">21   </span></a> * [Name of File] [ver.__] [Date] 
+<a name="l22"><span class="ln">22   </span></a> * 
+<a name="l23"><span class="ln">23   </span></a> * Copyright 2006 Sun Microsystems Inc. All Rights Reserved 
+<a name="l24"><span class="ln">24   </span></a> */</span>
+<a name="l25"><span class="ln">25   </span></a> 
+<a name="l26"><span class="ln">26    </span></a><span class="s0">package </span><span class="s1">com.sun.faces.spi; 
+<a name="l27"><span class="ln">27   </span></a> 
+<a name="l28"><span class="ln">28    </span></a></span><span class="s2">/** 
+<a name="l29"><span class="ln">29   </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s2">This interface defines an integration point for Java EE vendors. 
+<a name="l30"><span class="ln">30   </span></a> * Each vendor will need to provide an implementation of this interface 
+<a name="l31"><span class="ln">31   </span></a> * which will provide the JSF implementation the necessary hooks to  
+<a name="l32"><span class="ln">32   </span></a> * perform resource injection.</span><span class="s3">&lt;/p&gt;  </span><span class="s2"> 
+<a name="l33"><span class="ln">33   </span></a> *  
+<a name="l34"><span class="ln">34   </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implementation of this interface *must* be thread-safe and must 
+<a name="l35"><span class="ln">35   </span></a> * have a no-arg constructor.</span><span class="s3">&lt;/p&gt;</span><span class="s2"> 
+<a name="l36"><span class="ln">36   </span></a> */</span><span class="s1"> 
+<a name="l37"><span class="ln">37   </span></a></span><span class="s0">public interface </span><span class="s1">InjectionProvider { 
+<a name="l38"><span class="ln">38   </span></a> 
+<a name="l39"><span class="ln">39   </span></a>    </span><span class="s2">/** 
+<a name="l40"><span class="ln">40   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implementation of this method must perform the following 
+<a name="l41"><span class="ln">41   </span></a>     * steps: 
+<a name="l42"><span class="ln">42   </span></a>     *    </span><span class="s3">&lt;ul&gt;</span><span class="s2"> 
+<a name="l43"><span class="ln">43   </span></a>     *        </span><span class="s3">&lt;li&gt;</span><span class="s2">Inject the supported resources per the Servlet 2.5 
+<a name="l44"><span class="ln">44   </span></a>     *           specification into the provided object</span><span class="s3">&lt;/li&gt;</span><span class="s2"> 
+<a name="l45"><span class="ln">45   </span></a>     *        </span><span class="s3">&lt;li&gt;</span><span class="s2">Inoke any method marked with the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PostConstruct</span><span class="s3">&lt;/code&gt;</span><span class="s2"> 
+<a name="l46"><span class="ln">46   </span></a>     *          annotation (per the Common Annotations Specification)</span><span class="s3">&lt;/li&gt;</span><span class="s2"> 
+<a name="l47"><span class="ln">47   </span></a>     *    </span><span class="s3">&lt;/ul&gt;</span><span class="s2"> 
+<a name="l48"><span class="ln">48   </span></a>     * </span><span class="s3">&lt;/p&gt;</span><span class="s2"> 
+<a name="l49"><span class="ln">49   </span></a>     * </span><span class="s4">@param </span><span class="s2">managedBean the target managed bean 
+<a name="l50"><span class="ln">50   </span></a>     * </span><span class="s4">@throws </span><span class="s2">InjectionProviderException if an error occurs during  
+<a name="l51"><span class="ln">51   </span></a>     *  resource injection 
+<a name="l52"><span class="ln">52   </span></a>     */</span><span class="s1"> 
+<a name="l53"><span class="ln">53   </span></a>    </span><span class="s0">public void </span><span class="s1">inject(Object managedBean) </span><span class="s0">throws </span><span class="s1">InjectionProviderException; 
+<a name="l54"><span class="ln">54   </span></a> 
+<a name="l55"><span class="ln">55   </span></a>     
+<a name="l56"><span class="ln">56   </span></a>    </span><span class="s2">/** 
+<a name="l57"><span class="ln">57   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implemenation of this method must invoke any 
+<a name="l58"><span class="ln">58   </span></a>     * method marked with the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PreDestroy</span><span class="s3">&lt;/code&gt; </span><span class="s2">annotation 
+<a name="l59"><span class="ln">59   </span></a>     * (per the Common Annotations Specification). 
+<a name="l60"><span class="ln">60   </span></a>     * </span><span class="s4">@param </span><span class="s2">managedBean the target managed bean 
+<a name="l61"><span class="ln">61   </span></a>     * </span><span class="s4">@throws </span><span class="s2">InjectionProviderException if an error occurs when invoking 
+<a name="l62"><span class="ln">62   </span></a>     *  the method annotated by the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PreDestroy</span><span class="s3">&lt;/code&gt; </span><span class="s2">annotation 
+<a name="l63"><span class="ln">63   </span></a>     */</span><span class="s1"> 
+<a name="l64"><span class="ln">64   </span></a>    </span><span class="s0">public void </span><span class="s1">invokePreDestroy(Object managedBean)  
+<a name="l65"><span class="ln">65   </span></a>    </span><span class="s0">throws </span><span class="s1">InjectionProviderException; 
+<a name="l66"><span class="ln">66   </span></a>} 
+<a name="l67"><span class="ln">67   </span></a></span></pre>
 </td>
 </tr>
-    </table>
+</table>
+
+<a name="serialization"/>
+
+<table width="100%" style="font-size:small;border:1px solid; border-width:1px;">
+    <tr style=background-color:silver>
+       <th>SerializationProvider.java</th>
+    </tr>
+    <tr>
+       <td>        
+<pre style="font-size:medium;">
+<a name="ll1"><span class="ln">1    </span></a><span class="s0">/* 
+<a name="ll2"><span class="ln">2    </span></a> * The contents of this file are subject to the terms 
+<a name="ll3"><span class="ln">3    </span></a> * of the Common Development and Distribution License 
+<a name="ll4"><span class="ln">4    </span></a> * (the License). You may not use this file except in 
+<a name="ll5"><span class="ln">5    </span></a> * compliance with the License. 
+<a name="ll6"><span class="ln">6    </span></a> * 
+<a name="ll7"><span class="ln">7    </span></a> * You can obtain a copy of the License at 
+<a name="ll8"><span class="ln">8    </span></a> * https://javaserverfaces.dev.java.net/CDDL.html or 
+<a name="ll9"><span class="ln">9    </span></a> * legal/CDDLv1.0.txt. 
+<a name="ll10"><span class="ln">10   </span></a> * See the License for the specific language governing 
+<a name="ll11"><span class="ln">11   </span></a> * permission and limitations under the License. 
+<a name="ll12"><span class="ln">12   </span></a> * 
+<a name="ll13"><span class="ln">13   </span></a> * When distributing Covered Code, include this CDDL 
+<a name="ll14"><span class="ln">14   </span></a> * Header Notice in each file and include the License file 
+<a name="ll15"><span class="ln">15   </span></a> * at legal/CDDLv1.0.txt. 
+<a name="ll16"><span class="ln">16   </span></a> * If applicable, add the following below the CDDL Header, 
+<a name="ll17"><span class="ln">17   </span></a> * with the fields enclosed by brackets [] replaced by 
+<a name="ll18"><span class="ln">18   </span></a> * your own identifying information: 
+<a name="ll19"><span class="ln">19   </span></a> * &quot;Portions Copyrighted [year] [name of copyright owner]&quot; 
+<a name="ll20"><span class="ln">20   </span></a> * 
+<a name="ll21"><span class="ln">21   </span></a> * [Name of File] [ver.__] [Date] 
+<a name="ll22"><span class="ln">22   </span></a> * 
+<a name="ll23"><span class="ln">23   </span></a> * Copyright 2006 Sun Microsystems Inc. All Rights Reserved 
+<a name="ll24"><span class="ln">24   </span></a> */</span><span class="s1"> 
+<a name="ll25"><span class="ln">25   </span></a> 
+<a name="ll26"><span class="ln">26   </span></a></span><span class="s2">package </span><span class="s1">com.sun.faces.spi; 
+<a name="ll27"><span class="ln">27   </span></a> 
+<a name="ll28"><span class="ln">28   </span></a></span><span class="s2">import </span><span class="s1">java.io.ObjectInputStream; 
+<a name="ll29"><span class="ln">29   </span></a></span><span class="s2">import </span><span class="s1">java.io.InputStream; 
+<a name="ll30"><span class="ln">30   </span></a></span><span class="s2">import </span><span class="s1">java.io.ObjectOutputStream; 
+<a name="ll31"><span class="ln">31   </span></a></span><span class="s2">import </span><span class="s1">java.io.OutputStream; 
+<a name="ll32"><span class="ln">32   </span></a></span><span class="s2">import </span><span class="s1">java.io.IOException; 
+<a name="ll33"><span class="ln">33   </span></a> 
+<a name="ll34"><span class="ln">34   </span></a> 
+<a name="ll35"><span class="ln">35   </span></a></span><span class="s0">/** 
+<a name="ll36"><span class="ln">36   </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s0">This interface provides a mechanism to allow the use 
+<a name="ll37"><span class="ln">37   </span></a> * of alternate Java Serialization implementations.</span><span class="s3">&lt;/p&gt;</span><span class="s0"> 
+<a name="ll38"><span class="ln">38   </span></a> *  
+<a name="ll39"><span class="ln">39   </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s0">The implementation of this interface *must* be thread-safe and must 
+<a name="ll40"><span class="ln">40   </span></a> * have a no-arg constructor.</span><span class="s3">&lt;/p&gt;</span><span class="s0"> 
+<a name="ll41"><span class="ln">41   </span></a> */</span><span class="s1"> 
+<a name="ll42"><span class="ln">42   </span></a></span><span class="s2">public interface </span><span class="s1">SerializationProvider { 
+<a name="ll43"><span class="ln">43   </span></a> 
+<a name="ll44"><span class="ln">44   </span></a>    </span><span class="s0">/** 
+<a name="ll45"><span class="ln">45   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s0">Creates a new </span><span class="s3">&lt;code&gt;</span><span class="s0">ObjectInputStream</span><span class="s3">&lt;/code&gt; </span><span class="s0">wrapping the specified 
+<a name="ll46"><span class="ln">46   </span></a>     * </span><span class="s3">&lt;code&gt;</span><span class="s0">source</span><span class="s3">&lt;/code&gt;</span><span class="s0">.</span><span class="s3">&lt;/p&gt;</span><span class="s0"> 
+<a name="ll47"><span class="ln">47   </span></a>     *  
+<a name="ll48"><span class="ln">48   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s0">It's </span><span class="s3">&lt;em&gt;</span><span class="s0">extremely important</span><span class="s3">&lt;/em&gt; </span><span class="s0">that the ObjectInputStream 
+<a name="ll49"><span class="ln">49   </span></a>     * returned by this method extends the serialization implementation's ObjectInputStream  
+<a name="ll50"><span class="ln">50   </span></a>     * and overrides the {</span><span class="s4">@link </span><span class="s0">ObjectInputStream#resolveClass(java.io.ObjectStreamClass)} 
+<a name="ll51"><span class="ln">51   </span></a>     * of  to perform the following or the equivalent thereof:  
+<a name="ll52"><span class="ln">52   </span></a>     * </span><span class="s3">&lt;br&gt;</span><span class="s0"> 
+<a name="ll53"><span class="ln">53   </span></a>     * </span><span class="s3">&lt;pre&gt;</span><span class="s0"> 
+<a name="ll54"><span class="ln">54   </span></a>     *     return Class.forName(desc.getName(),true,  
+<a name="ll55"><span class="ln">55   </span></a>                Thread.currentThread().getContextClassLoader()); 
+<a name="ll56"><span class="ln">56   </span></a>     * </span><span class="s3">&lt;/pre&gt;</span><span class="s0"> 
+<a name="ll57"><span class="ln">57   </span></a>     * </span><span class="s3">&lt;br&gt;</span><span class="s0"> 
+<a name="ll58"><span class="ln">58   </span></a>     *  
+<a name="ll59"><span class="ln">59   </span></a>     * If this step isn't done, there may be problems when deserializing.</span><span class="s3">&lt;/p&gt;</span><span class="s0"> 
+<a name="ll60"><span class="ln">60   </span></a>     *  
+<a name="ll61"><span class="ln">61   </span></a>     * </span><span class="s4">@param </span><span class="s0">source the source stream from which to read the Object(s) 
+<a name="ll62"><span class="ln">62   </span></a>     *  from 
+<a name="ll63"><span class="ln">63   </span></a>     * </span><span class="s4">@return </span><span class="s0">an </span><span class="s3">&lt;code&gt;</span><span class="s0">ObjectInputStream</span><span class="s3">&lt;/code&gt;</span><span class="s0"> 
+<a name="ll64"><span class="ln">64   </span></a>     */</span><span class="s1"> 
+<a name="ll65"><span class="ln">65   </span></a>    </span><span class="s2">public </span><span class="s1">ObjectInputStream createObjectInputStream(InputStream source) 
+<a name="ll66"><span class="ln">66   </span></a>    </span><span class="s2">throws </span><span class="s1">IOException; 
+<a name="ll67"><span class="ln">67   </span></a> 
+<a name="ll68"><span class="ln">68   </span></a> 
+<a name="ll69"><span class="ln">69   </span></a>    </span><span class="s0">/** 
+<a name="ll70"><span class="ln">70   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s0">Creates a new </span><span class="s3">&lt;code&gt;</span><span class="s0">ObjectOutputStream</span><span class="s3">&lt;/code&gt; </span><span class="s0">wrapping the 
+<a name="ll71"><span class="ln">71   </span></a>     * specified </span><span class="s3">&lt;code&gt;</span><span class="s0">destination</span><span class="s3">&lt;/code&gt;</span><span class="s0">.</span><span class="s3">&lt;/p&gt;</span><span class="s0"> 
+<a name="ll72"><span class="ln">72   </span></a>     * </span><span class="s4">@param </span><span class="s0">destination the destination of the serialized Object(s) 
+<a name="ll73"><span class="ln">73   </span></a>     * </span><span class="s4">@return </span><span class="s0">an </span><span class="s3">&lt;code&gt;</span><span class="s0">ObjectOutputStream</span><span class="s3">&lt;/code&gt;</span><span class="s0"> 
+<a name="ll74"><span class="ln">74   </span></a>     */</span><span class="s1"> 
+<a name="ll75"><span class="ln">75   </span></a>    </span><span class="s2">public </span><span class="s1">ObjectOutputStream createObjectOutputStream(OutputStream destination) 
+<a name="ll76"><span class="ln">76   </span></a>    </span><span class="s2">throws </span><span class="s1">IOException; 
+<a name="ll77"><span class="ln">77   </span></a> 
+<a name="ll78"><span class="ln">78   </span></a> 
+<a name="ll79"><span class="ln">79   </span></a>} </span><span class="s0">// END SerializationProvider</span></pre>     
+
+</td>
+</tr>
+</table>
 
 </body>
 </html>
