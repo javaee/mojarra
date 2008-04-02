@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.21 2004/05/07 13:53:23 eburns Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.22 2004/05/10 19:56:15 jvisvanathan Exp $
  */
 
 /*
@@ -577,6 +577,22 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
     }
 
 
+    public void testConstructorException() {
+        // constructor of this bean throws ann exception. Make sure the
+        // exception is not swallowed.
+        ValueBinding valueBinding1 = 
+        getFacesContext().getApplication().createValueBinding("#{exceptionBean.one}");
+        boolean exceptionThrown = false;
+        try {
+            valueBinding1.getValue(getFacesContext());
+        } catch (FacesException ex) {
+            exceptionThrown = true;
+            assertTrue((ex.getMessage().
+                indexOf("TestConstructorException Passed")) != -1);
+        }   
+        assertTrue(exceptionThrown);
+        
+    }
 	
     /************* PENDING(edburns): rewrite to exercise new edge case
      * detection.

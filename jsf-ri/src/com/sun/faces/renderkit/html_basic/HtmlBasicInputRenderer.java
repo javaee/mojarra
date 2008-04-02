@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.24 2004/04/02 21:35:53 eburns Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.25 2004/05/10 19:56:06 jvisvanathan Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -108,7 +109,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
 
         if (null == converter && null != valueBinding) {
             Class converterType = valueBinding.getType(context);
-// if converterType is null, assume the modelType is "String".
+           // if converterType is null, assume the modelType is "String".
             if (converterType == null ||
                 converterType == String.class ||
                 converterType == Object.class) {
@@ -119,8 +120,8 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
                 }
                 return newValue;
             }
-// if getType returns a type for which we support a default
-// conversion, acquire an appropriate converter instance.
+            // if getType returns a type for which we support a default
+            // conversion, acquire an appropriate converter instance.
 
             try {
                 Application application = context.getApplication();
@@ -141,11 +142,11 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
                 return (null);
             }
         } else if (converter == null && valueBinding == null) {
-// if there is no valueBinding and converter attribute set,
-// assume the modelType as "String" since we have no way of
-// figuring out the type. So for the selectOne and
-// selectMany, converter has to be set if there is no
-// valueBinding attribute set on the component.
+        // if there is no valueBinding and converter attribute set,
+        // assume the modelType as "String" since we have no way of
+        // figuring out the type. So for the selectOne and
+        // selectMany, converter has to be set if there is no
+        // valueBinding attribute set on the component.
             if (log.isDebugEnabled()) {
                 log.debug("No conversion necessary for " + submittedValue +
                           " while decoding component " + component.getId() +
@@ -169,8 +170,8 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
 		"null Converter"
 	    };
 
-            throw new ConverterException(Util.getExceptionMessage(
-                Util.CONVERSION_ERROR_MESSAGE_ID, params));
+            throw new ConverterException(MessageFactory.getMessage(
+                context, component, Util.CONVERSION_ERROR_MESSAGE_ID, params));
         }
     }
 } // end of class HtmlBasicInputRenderer

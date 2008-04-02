@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.31 2004/05/07 13:53:10 eburns Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.32 2004/05/10 19:56:00 jvisvanathan Exp $
  */
 
 /*
@@ -90,8 +90,10 @@ public class NavigationHandlerImpl extends NavigationHandler {
     public void handleNavigation(FacesContext context, String fromAction,
                                  String outcome) {
         if (context == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " context " + context;
+            throw new NullPointerException(message);
         }
         if (outcome == null) {
             if (log.isDebugEnabled()) {

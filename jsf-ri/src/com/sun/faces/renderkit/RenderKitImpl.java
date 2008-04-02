@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.19 2004/03/31 18:48:32 eburns Exp $
+ * $Id: RenderKitImpl.java,v 1.20 2004/05/10 19:56:05 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.HashMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.19 2004/03/31 18:48:32 eburns Exp $
+ * @version $Id: RenderKitImpl.java,v 1.20 2004/05/10 19:56:05 jvisvanathan Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -86,8 +86,12 @@ public class RenderKitImpl extends RenderKit {
     public void addRenderer(String family, String rendererType,
                             Renderer renderer) {
         if (family == null || rendererType == null || renderer == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " family " + family + " rendererType " +
+                rendererType + " renderer " + renderer;
+            throw new NullPointerException(message);
+                
         }
 
         synchronized (renderers) {
@@ -99,8 +103,11 @@ public class RenderKitImpl extends RenderKit {
     public Renderer getRenderer(String family, String rendererType) {
 
         if (rendererType == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " family " + family + " rendererType " +
+                rendererType;
+            throw new NullPointerException(message);
         }
 
         Util.doAssert(renderers != null);

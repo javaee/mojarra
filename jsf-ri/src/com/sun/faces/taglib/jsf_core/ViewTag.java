@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.24 2004/04/19 23:48:49 jvisvanathan Exp $
+ * $Id: ViewTag.java,v 1.25 2004/05/10 19:56:08 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Locale;
  * any renderers or attributes. It exists mainly to save the state of
  * the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.24 2004/04/19 23:48:49 jvisvanathan Exp $
+ * @version $Id: ViewTag.java,v 1.25 2004/05/10 19:56:08 jvisvanathan Exp $
  */
 
 public class ViewTag extends UIComponentBodyTag {
@@ -157,20 +157,25 @@ public class ViewTag extends UIComponentBodyTag {
         }
         context.setResponseWriter(responseWriter);
 
+        
+        if (null == (bodyContent = getBodyContent())) {
+            Object params [] = {this.getClass().getName()};
+            throw new JspException(Util.getExceptionMessageString(
+                Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, params));
+        }
+        content = bodyContent.getString();
+
         try {
-            if (null == (bodyContent = getBodyContent())) {
-                Object params [] = {this.getClass().getName()};
-                throw new JspException(Util.getExceptionMessageString(
-                    Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, params));
-            }
-            content = bodyContent.getString();
-
-            try {
-                view = stateManager.saveSerializedView(context);
-            } catch (IllegalStateException ise) {
-                throw new JspException(ise);
-            }
-
+            view = stateManager.saveSerializedView(context);
+        } catch (IllegalStateException ise) {
+            throw new JspException(ise);
+        } catch (Exception ie) {
+            // catch any exception thrown while saving the view in session.
+            Object[] params = {"session", ie.getMessage()};
+            throw new JspException(Util.getExceptionMessageString(
+                Util.SAVING_STATE_ERROR_MESSAGE_ID, params), ie);    
+        }
+        try {
             if (view == null) {
                 getPreviousOut().write(content);
             } else {
@@ -192,9 +197,10 @@ public class ViewTag extends UIComponentBodyTag {
                 } while (-1 != markerIndex && beginIndex < contentLen);
             }
         } catch (IOException iox) {
-            Object[] params = {"session", iox.getMessage()};
+            // catch any thrown while saving state in response.
+            Object[] params = {"client", iox.getMessage()};
             throw new JspException(Util.getExceptionMessageString(
-                Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
+                Util.SAVING_STATE_ERROR_MESSAGE_ID, params), iox);
         }
         return EVAL_PAGE;
     }

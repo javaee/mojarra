@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.22 2004/05/04 21:48:34 rkitain Exp $
+ * $Id: ManagedBeanFactory.java,v 1.23 2004/05/10 19:56:04 jvisvanathan Exp $
  */
 
 /*
@@ -204,12 +204,13 @@ public class ManagedBeanFactory extends Object {
             bean = java.beans.Beans.instantiate(loader,
                                                 managedBean.getManagedBeanClass());
         } catch (Exception ex) {
-            Object[] obj = new Object[1];
+            Object[] obj = new Object[2];
             obj[0] = managedBean.getManagedBeanClass();
+            obj[1] = managedBean.getManagedBeanName();
             throw new FacesException(
-                Util.getExceptionMessageString(
-                    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj),
-                ex);
+                (Util.getExceptionMessageString(
+                    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  obj) + ". " + 
+                    ex.getMessage()), ex);
         }
         // add the bean to the managed bean stack.
         beanList.add(managedBean.getManagedBeanName());

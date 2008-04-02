@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.40 2004/05/07 13:53:11 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.41 2004/05/10 19:56:00 jvisvanathan Exp $ 
  */ 
 
 
@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.40 2004/05/07 13:53:11 eburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.41 2004/05/10 19:56:00 jvisvanathan Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -94,8 +94,11 @@ public class ViewHandlerImpl extends ViewHandler {
         FacesException {
 
         if (null == context || null == viewToRender) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " context " + context + " viewToRender " + 
+                viewToRender;
+            throw new NullPointerException(message);
         }
 	
 	ApplicationAssociate associate = ApplicationAssociate.getInstance(context.getExternalContext().getContext());
@@ -151,8 +154,10 @@ public class ViewHandlerImpl extends ViewHandler {
 
     public UIViewRoot restoreView(FacesContext context, String viewId) {
         if (context == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" context " + context;
+            throw new NullPointerException(message);
         }
 
         ExternalContext extContext = context.getExternalContext();
@@ -249,8 +254,10 @@ public class ViewHandlerImpl extends ViewHandler {
 
     public UIViewRoot createView(FacesContext context, String viewId) {
         if (context == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +"context " + context;
+            throw new NullPointerException(message);
         }
         Locale locale = null;
         String renderKitId = null;
@@ -312,8 +319,10 @@ public class ViewHandlerImpl extends ViewHandler {
     public Locale calculateLocale(FacesContext context) {
 
         if (context == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +"context " + context;
+            throw new NullPointerException(message);
         }
 
         Locale result = null;
@@ -343,8 +352,10 @@ public class ViewHandlerImpl extends ViewHandler {
     public String calculateRenderKitId(FacesContext context) {
 
         if (context == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +"context " + context;
+            throw new NullPointerException(message);
         }
         String result = null;
 
@@ -408,8 +419,10 @@ public class ViewHandlerImpl extends ViewHandler {
 
     public void writeState(FacesContext context) throws IOException {
         if (context == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+           String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +"context " + context;
+            throw new NullPointerException(message);
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin writing state to response for viewId" +
@@ -429,8 +442,10 @@ public class ViewHandlerImpl extends ViewHandler {
     public String getActionURL(FacesContext context, String viewId) {
 
         if (context == null || viewId == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +"context " + context + " viewId " + viewId;
+            throw new NullPointerException(message);
         }
 
         if (viewId.charAt(0) != '/') {
@@ -499,8 +514,10 @@ public class ViewHandlerImpl extends ViewHandler {
     public void setFacesMapping(List mappings) {
 
         if (mappings == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +"mappings " + mappings;
+            throw new NullPointerException(message);
         }
 
         if (log.isTraceEnabled()) {
@@ -545,8 +562,10 @@ public class ViewHandlerImpl extends ViewHandler {
         // PENDING (rlubke) Need to handle the Portlet case
         
         if (context == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +"context " + context;
+            throw new NullPointerException(message);
         }                
         
         // Check for a previously stored mapping   

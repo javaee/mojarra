@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.20 2004/05/04 19:19:17 eburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.21 2004/05/10 19:56:00 jvisvanathan Exp $ 
  */ 
 
 
@@ -35,7 +35,7 @@ import java.util.Set;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.20 2004/05/04 19:19:17 eburns Exp $
+ * @version $Id: StateManagerImpl.java,v 1.21 2004/05/10 19:56:00 jvisvanathan Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -54,7 +54,8 @@ public class StateManagerImpl extends StateManager {
     int noOfViews = 0;
 
 
-    public SerializedView saveSerializedView(FacesContext context) {
+    public SerializedView saveSerializedView(FacesContext context) 
+        throws IllegalStateException{
         SerializedView result = null;
         
         // irrespective of method to save the tree, if the root is transient
@@ -104,8 +105,7 @@ public class StateManagerImpl extends StateManager {
 
 
     protected void removeTransientChildrenAndFacets(FacesContext context,
-                                                    UIComponent component,
-                                                    Set componentIds) {
+        UIComponent component, Set componentIds) throws IllegalStateException{
         UIComponent kid;
         // deal with children that are marked transient.
         Iterator kids = component.getChildren().iterator();
@@ -168,8 +168,10 @@ public class StateManagerImpl extends StateManager {
     public UIViewRoot restoreView(FacesContext context, String viewId,
                                   String renderKitId) {
         if (null == renderKitId) {
-            // PENDING(edburns): i18n
-            throw new IllegalArgumentException();
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " renderKitId " + renderKitId;
+            throw new IllegalArgumentException(message);
         }
 
         UIViewRoot viewRoot = null;
@@ -261,8 +263,10 @@ public class StateManagerImpl extends StateManager {
     protected void restoreComponentState(FacesContext context,
                                          UIViewRoot root, String renderKitId) {
         if (null == renderKitId) {
-            // PENDING(edburns): i18n
-            throw new IllegalArgumentException();
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " renderKitId " + renderKitId;
+            throw new IllegalArgumentException(message);
         }
         Object state = (Util.getResponseStateManager(context, renderKitId)).
             getComponentStateToRestore(context);
@@ -273,8 +277,10 @@ public class StateManagerImpl extends StateManager {
     protected UIViewRoot restoreTreeStructure(FacesContext context,
                                               String viewId, String renderKitId) {
         if (null == renderKitId) {
-            // PENDING(edburns): i18n
-            throw new IllegalArgumentException();
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " renderKitId " + renderKitId;
+            throw new IllegalArgumentException(message);
         }
         UIComponent viewRoot = null;
         TreeStructure structRoot = null;
@@ -295,8 +301,7 @@ public class StateManagerImpl extends StateManager {
         // only call thru on client case.
         if (isSavingStateInClient(context)) {
             Util.getResponseStateManager(context,
-                                         context.getViewRoot().getRenderKitId()).writeState(
-                                             context, state);
+            context.getViewRoot().getRenderKitId()).writeState(context, state);
         }
     }
 

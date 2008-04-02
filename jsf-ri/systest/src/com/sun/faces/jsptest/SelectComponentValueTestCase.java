@@ -1,5 +1,5 @@
 /*
- * $Id: SelectComponentValueTestCase.java,v 1.1 2004/04/02 21:35:56 eburns Exp $
+ * $Id: SelectComponentValueTestCase.java,v 1.2 2004/05/10 19:56:12 jvisvanathan Exp $
  */
 
 /*
@@ -162,7 +162,7 @@ public class SelectComponentValueTestCase extends AbstractTestCase {
             "javax.faces.Messages");
         String message = messages.getString("javax.faces.component.UISelectMany.INVALID");
 	// it does have a validation message
-        assertTrue(-1 != page.asText().indexOf(message));
+        assertTrue(-1 != page.asText().indexOf("Validation Error"));
 	// it does not have a value change message
 	assertTrue(-1 == page.asText().indexOf("value changed"));
     }

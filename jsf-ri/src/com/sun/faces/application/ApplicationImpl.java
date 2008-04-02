@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.49 2004/05/07 13:53:10 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.50 2004/05/10 19:55:59 jvisvanathan Exp $
  */
 
 /*
@@ -120,8 +120,10 @@ public class ApplicationImpl extends Application {
 
     public void setViewHandler(ViewHandler handler) {
         if (handler == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" ViewHandler " + handler;
+            throw new NullPointerException(message);
         }
         synchronized (this) {
             if (associate.isResponseRendered()) {
@@ -148,8 +150,10 @@ public class ApplicationImpl extends Application {
 
     public void setStateManager(StateManager manager) {
         if (manager == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " StateManager " + manager;
+            throw new NullPointerException(message);
         }
         synchronized (this) {
             if (associate.isResponseRendered()) {
@@ -171,8 +175,10 @@ public class ApplicationImpl extends Application {
 
     public void setActionListener(ActionListener listener) {
         if (listener == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" ActionListener " + listener;
+            throw new NullPointerException(message);
         }
         synchronized (this) {
             this.actionListener = listener;
@@ -206,8 +212,10 @@ public class ApplicationImpl extends Application {
      */
     public void setNavigationHandler(NavigationHandler handler) {
         if (handler == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" NavigationHandler " + handler;
+            throw new NullPointerException(message);
         }
         synchronized (this) {
             this.navigationHandler = handler;
@@ -230,8 +238,10 @@ public class ApplicationImpl extends Application {
 
     public void setPropertyResolver(PropertyResolver resolver) {
         if (resolver == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" PropertyResolver " + resolver;
+            throw new NullPointerException(message);
         }
         synchronized (this) {
             this.propertyResolver = resolver;
@@ -245,9 +255,10 @@ public class ApplicationImpl extends Application {
     public MethodBinding createMethodBinding(String ref, Class params[]) {
 
         if (ref == null) {
-            throw new NullPointerException
-                (Util.getExceptionMessageString
-                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" ref " + ref;
+            throw new NullPointerException(message);
 
         } else {
             return (new MethodBindingImpl(this, ref, params));
@@ -260,8 +271,10 @@ public class ApplicationImpl extends Application {
         throws ReferenceSyntaxException {
         ValueBinding valueBinding = null;
         if (ref == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" ref " + ref;
+            throw new NullPointerException(message);
         } else {
             if (!Util.isVBExpression(ref)) {
                 if (log.isErrorEnabled()) {
@@ -299,8 +312,10 @@ public class ApplicationImpl extends Application {
 
     public void setVariableResolver(VariableResolver resolver) {
         if (resolver == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" VariableResolver " + resolver;
+            throw new NullPointerException(message);
         }
         synchronized (this) {
             this.variableResolver = resolver;
@@ -313,8 +328,11 @@ public class ApplicationImpl extends Application {
 
     public void addComponent(String componentType, String componentClass) {
         if (componentType == null || componentClass == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" componentType " + componentType +
+                " componentClass " + componentClass;
+            throw new NullPointerException(message);
         }
         synchronized (this) {
             componentMap.put(componentType, componentClass);
@@ -329,8 +347,10 @@ public class ApplicationImpl extends Application {
     public UIComponent createComponent(String componentType)
         throws FacesException {
         if (componentType == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" componentType " + componentType;
+            throw new NullPointerException(message);
         }
         UIComponent returnVal = (UIComponent) newThing(componentType,
                                                        componentMap);
@@ -356,8 +376,11 @@ public class ApplicationImpl extends Application {
         throws FacesException {
         if (null == componentBinding || null == context ||
             null == componentType) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" componentBinding " + componentBinding +
+                " context " + context + " componentType " + componentType;
+            throw new NullPointerException(message);
         }
 
         Object result = null;
@@ -389,8 +412,11 @@ public class ApplicationImpl extends Application {
 
     public void addConverter(String converterId, String converterClass) {
         if (converterId == null || converterClass == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " converterId " + converterId +
+                " converterClass " + converterClass;
+            throw new NullPointerException(message);
         }
         synchronized (this) {
             converterIdMap.put(converterId, converterClass);
@@ -404,8 +430,11 @@ public class ApplicationImpl extends Application {
 
     public void addConverter(Class targetClass, String converterClass) {
         if (targetClass == null || converterClass == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" targetClass " + targetClass +
+                " converterClass " + converterClass;
+            throw new NullPointerException(message);
         }
         synchronized (this) {
             converterTypeMap.put(targetClass, converterClass);
@@ -418,8 +447,10 @@ public class ApplicationImpl extends Application {
 
     public Converter createConverter(String converterId) {
         if (converterId == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" converterId " + converterId;
+            throw new NullPointerException(message);
         }
         Converter returnVal = (Converter) newThing(converterId, converterIdMap);
         if (returnVal == null) {
@@ -440,8 +471,10 @@ public class ApplicationImpl extends Application {
 
     public Converter createConverter(Class targetClass) {
         if (targetClass == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" targetClass " + targetClass;
+            throw new NullPointerException(message);
         }
         Converter returnVal = (Converter) newThing(targetClass,
                                                    converterTypeMap);
@@ -523,7 +556,10 @@ public class ApplicationImpl extends Application {
 
     public void setSupportedLocales(Collection newLocales) {
         if (null == newLocales) {
-            throw new NullPointerException();
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" newLocales " + newLocales;
+            throw new NullPointerException(message);
         }
         synchronized (this) {
             supportedLocales = new ArrayList(newLocales);
@@ -576,8 +612,11 @@ public class ApplicationImpl extends Application {
 
     public void addValidator(String validatorId, String validatorClass) {
         if (validatorId == null || validatorClass == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " validatorId " + validatorId + 
+                " validatorClass " + validatorClass;
+            throw new NullPointerException(message);
         }
         synchronized (this) {
             validatorMap.put(validatorId, validatorClass);
@@ -591,8 +630,10 @@ public class ApplicationImpl extends Application {
 
     public Validator createValidator(String validatorId) throws FacesException {
         if (validatorId == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" validatorId " + validatorId;
+            throw new NullPointerException(message);
         }
         Validator returnVal = (Validator) newThing(validatorId, validatorMap);
         if (returnVal == null) {
