@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.20 2003/12/17 15:13:57 rkitain Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.21 2004/01/06 14:53:21 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -132,9 +132,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                 
         ResponseWriter writer = context.getResponseWriter();
         Util.doAssert(writer != null );
-        
-        Object selectedValues[] = getCurrentSelectedValues(context, component);
-        
+                
         // disable the radio button if the attribute is set.
         String labelClass = null;
         if ( curItem.isDisabled()){
@@ -159,12 +157,22 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                "clientId");
         writer.writeAttribute("id", component.getClientId(context), 
                 "clientId");
-        writer.writeAttribute("value",
-            getFormattedValue(context, component, curItem.getValue()), "value");
-        writer.writeAttribute("type", "checkbox", "type");
-        String selectText = getSelectedText(curItem, selectedValues);
-        if (!selectText.equals("")) {
-            writer.writeAttribute(selectText, new Boolean("true"), null);
+        String valueString = getFormattedValue(context, component,
+                                               curItem.getValue());
+        writer.writeAttribute("value", valueString, "value");
+        writer.writeAttribute("type", "checkbox", null);
+        boolean isSelected;
+        Object submittedValues[] = getSubmittedSelectedValues(context, component);
+        if (submittedValues != null) {
+            isSelected = isSelected(valueString, submittedValues);
+        } else {
+            Object selectedValues = getCurrentSelectedValues(context,
+                                                             component);
+            isSelected = isSelected(curItem.getValue(), selectedValues);
+        }
+
+        if (isSelected) {
+            writer.writeAttribute(getSelectedTextString(), Boolean.TRUE, null);
         }
         if ( curItem.isDisabled()) {
             writer.writeAttribute("disabled", "disabled", "disabled");

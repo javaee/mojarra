@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.23 2003/11/09 05:11:12 eburns Exp $
+ * $Id: TestConverters.java,v 1.24 2004/01/06 14:53:25 rkitain Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
+import javax.faces.component.UISelectItem;
 
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
@@ -45,7 +46,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.23 2003/11/09 05:11:12 eburns Exp $
+ * @version $Id: TestConverters.java,v 1.24 2004/01/06 14:53:25 rkitain Exp $
  * 
  *
  */
@@ -295,7 +296,10 @@ public class TestConverters extends JspFacesTestCase
 	booleanv.setRendererType("CheckboxList");
 	booleanv.setValueBinding("value", Util.getValueBinding("#{bean.booleans}"));
 	root.getChildren().add(booleanv);
+        booleanv.getChildren().add(newUISelectItem(Boolean.TRUE)); 
+        booleanv.getChildren().add(newUISelectItem(Boolean.FALSE)); 
 	booleanv.decode(getFacesContext());
+	booleanv.validate(getFacesContext());
 	booleanv.updateModel(getFacesContext());
 	assertNotNull(bean.getBooleans());
 	assertTrue(bean.getBooleans()[0] == false);
@@ -308,7 +312,10 @@ public class TestConverters extends JspFacesTestCase
 	booleanv.setRendererType("CheckboxList");
 	booleanv.setValueBinding("value", Util.getValueBinding("#{bean.booleans}"));
 	root.getChildren().add(booleanv);
+        booleanv.getChildren().add(newUISelectItem(Boolean.TRUE)); 
+        booleanv.getChildren().add(newUISelectItem(Boolean.FALSE)); 
 	booleanv.decode(getFacesContext());
+	booleanv.validate(getFacesContext());
 	booleanv.updateModel(getFacesContext());
 	assertNotNull(bean.getBooleans());
 	assertTrue(bean.getBooleans()[0] == false);
@@ -319,8 +326,13 @@ public class TestConverters extends JspFacesTestCase
 	bytev.setId("byte");
 	bytev.setRendererType("CheckboxList");
 	bytev.setValueBinding("value", Util.getValueBinding("#{bean.bytes}"));
+        bytev.getChildren().add(newUISelectItem(new Byte(Byte.MIN_VALUE))); 
+        bytev.getChildren().add(newUISelectItem(new Byte(Byte.MAX_VALUE))); 
+        bytev.getChildren().add(newUISelectItem(new Byte((byte) 1))); 
+        bytev.getChildren().add(newUISelectItem(new Byte((byte) -1))); 
 	root.getChildren().add(bytev);
 	bytev.decode(getFacesContext());
+	bytev.validate(getFacesContext());
 	bytev.updateModel(getFacesContext());
 	assertNotNull(bean.getBytes());
 	assertTrue(bean.getBytes()[0] == Byte.MIN_VALUE);
@@ -333,7 +345,12 @@ public class TestConverters extends JspFacesTestCase
 	charv.setRendererType("CheckboxList");
 	charv.setValueBinding("value", Util.getValueBinding("#{bean.chars}"));
 	root.getChildren().add(charv);
+        charv.getChildren().add(newUISelectItem(new Character('Q'))); 
+        charv.getChildren().add(newUISelectItem(new Character('A'))); 
+        charv.getChildren().add(newUISelectItem(new Character('Z'))); 
+        charv.getChildren().add(newUISelectItem(new Character('z'))); 
 	charv.decode(getFacesContext());
+	charv.validate(getFacesContext());
 	charv.updateModel(getFacesContext());
 	assertNotNull(bean.getChars());
 	assertTrue(bean.getChars()[0] == 'Q');
@@ -346,7 +363,12 @@ public class TestConverters extends JspFacesTestCase
 	shortv.setRendererType("CheckboxList");
 	shortv.setValueBinding("value", Util.getValueBinding("#{bean.shorts}"));
 	root.getChildren().add(shortv);
+        shortv.getChildren().add(newUISelectItem(new Short((short) (Byte.MAX_VALUE + 1)))); 
+        shortv.getChildren().add(newUISelectItem(new Short((short) 100))); 
+        shortv.getChildren().add(newUISelectItem(new Short(Short.MIN_VALUE))); 
+        shortv.getChildren().add(newUISelectItem(new Short(Short.MAX_VALUE))); 
 	shortv.decode(getFacesContext());
+	shortv.validate(getFacesContext());
 	shortv.updateModel(getFacesContext());
 	assertNotNull(bean.getShorts());
 	assertTrue(bean.getShorts()[0] == Short.MIN_VALUE);
@@ -359,7 +381,12 @@ public class TestConverters extends JspFacesTestCase
 	intv.setRendererType("CheckboxList");
 	intv.setValueBinding("value", Util.getValueBinding("#{bean.ints}"));
 	root.getChildren().add(intv);
+        intv.getChildren().add(newUISelectItem(new Integer(Short.MAX_VALUE + 1))); 
+        intv.getChildren().add(newUISelectItem(new Integer(100))); 
+        intv.getChildren().add(newUISelectItem(new Integer(Integer.MIN_VALUE))); 
+        intv.getChildren().add(newUISelectItem(new Integer(Integer.MAX_VALUE))); 
 	intv.decode(getFacesContext());
+	intv.validate(getFacesContext());
 	intv.updateModel(getFacesContext());
 	assertNotNull(bean.getInts());
 	assertTrue(bean.getInts()[0] == Integer.MIN_VALUE);
@@ -372,7 +399,12 @@ public class TestConverters extends JspFacesTestCase
 	floatv.setRendererType("CheckboxList");
 	floatv.setValueBinding("value", Util.getValueBinding("#{bean.floats}"));
 	root.getChildren().add(floatv);
+        floatv.getChildren().add(newUISelectItem(new Float(Integer.MAX_VALUE + 1))); 
+        floatv.getChildren().add(newUISelectItem(new Float(100))); 
+        floatv.getChildren().add(newUISelectItem(new Float(Float.MIN_VALUE))); 
+        floatv.getChildren().add(newUISelectItem(new Float(Float.MAX_VALUE))); 
 	floatv.decode(getFacesContext());
+	floatv.validate(getFacesContext());
 	floatv.updateModel(getFacesContext());
 	assertNotNull(bean.getFloats());
 	assertTrue(bean.getFloats()[0] == Float.MIN_VALUE);
@@ -385,7 +417,12 @@ public class TestConverters extends JspFacesTestCase
 	longv.setRendererType("CheckboxList");
 	longv.setValueBinding("value", Util.getValueBinding("#{bean.longs}"));
 	root.getChildren().add(longv);
+        longv.getChildren().add(newUISelectItem(new Long(Integer.MAX_VALUE + 1))); 
+        longv.getChildren().add(newUISelectItem(new Long(100))); 
+        longv.getChildren().add(newUISelectItem(new Long(Long.MIN_VALUE))); 
+        longv.getChildren().add(newUISelectItem(new Long(Long.MAX_VALUE))); 
 	longv.decode(getFacesContext());
+	longv.validate(getFacesContext());
 	longv.updateModel(getFacesContext());
 	assertNotNull(bean.getLongs());
 	assertTrue(bean.getLongs()[0] == Long.MIN_VALUE);
@@ -398,7 +435,12 @@ public class TestConverters extends JspFacesTestCase
 	doublev.setRendererType("CheckboxList");
 	doublev.setValueBinding("value", Util.getValueBinding("#{bean.doubles}"));
 	root.getChildren().add(doublev);
+        doublev.getChildren().add(newUISelectItem(new Double(Long.MAX_VALUE + 1))); 
+        doublev.getChildren().add(newUISelectItem(new Double(100))); 
+        doublev.getChildren().add(newUISelectItem(new Double(Double.MIN_VALUE))); 
+        doublev.getChildren().add(newUISelectItem(new Double(Double.MAX_VALUE))); 
 	doublev.decode(getFacesContext());
+	doublev.validate(getFacesContext());
 	doublev.updateModel(getFacesContext());
 	assertNotNull(bean.getDoubles());
 	assertTrue(bean.getDoubles()[0] == Double.MIN_VALUE);
@@ -411,7 +453,12 @@ public class TestConverters extends JspFacesTestCase
 	str.setRendererType("CheckboxList");
 	str.setValueBinding("value", Util.getValueBinding("#{bean.strings}"));
 	root.getChildren().add(str);
+        str.getChildren().add(newUISelectItem("value1")); 
+        str.getChildren().add(newUISelectItem("value2")); 
+        str.getChildren().add(newUISelectItem("value3")); 
+        str.getChildren().add(newUISelectItem("value4")); 
 	str.decode(getFacesContext());
+	str.validate(getFacesContext());
 	str.updateModel(getFacesContext());
 	assertNotNull(bean.getStrings());
 	assertTrue("value1".equals(bean.getStrings()[0]));
@@ -425,7 +472,21 @@ public class TestConverters extends JspFacesTestCase
 	date.setRendererType("CheckboxList");
 	date.setValueBinding("value", Util.getValueBinding("#{bean.dates}"));
 	root.getChildren().add(date);
+
+	try {
+	    SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+            df.setTimeZone(TimeZone.getTimeZone("GMT")); 
+	    date.getChildren().add(newUISelectItem(df.parse("19670101")));
+	    date.getChildren().add(newUISelectItem(df.parse("20030526")));
+	    date.getChildren().add(newUISelectItem(df.parse("19460819")));
+	    date.getChildren().add(newUISelectItem(df.parse("17760704")));
+	}
+	catch (ParseException e) {
+	    assertTrue(e.getMessage(), false);
+	}
+
 	date.decode(getFacesContext());
+	date.validate(getFacesContext());
 	date.updateModel(getFacesContext());
 	assertNotNull(bean.getDates());
 	Object expected = null;
@@ -449,7 +510,12 @@ public class TestConverters extends JspFacesTestCase
 	number.setRendererType("CheckboxList");
 	number.setValueBinding("value", Util.getValueBinding("#{bean.numbers}"));
 	root.getChildren().add(number);
+        number.getChildren().add(newUISelectItem(new Double(3.14)));
+        number.getChildren().add(newUISelectItem(new Double(49.99)));
+        number.getChildren().add(newUISelectItem(new Long(12)));
+        number.getChildren().add(newUISelectItem(new Double(-145.5)));
 	number.decode(getFacesContext());
+	number.validate(getFacesContext());
 	number.updateModel(getFacesContext());
 	assertNotNull(bean.getNumbers());
 	try {
@@ -467,7 +533,12 @@ public class TestConverters extends JspFacesTestCase
 	stringList.setRendererType("CheckboxList");
 	stringList.setValueBinding("value", Util.getValueBinding("#{bean.stringList}"));
 	root.getChildren().add(stringList);
+        stringList.getChildren().add(newUISelectItem("value1")); 
+        stringList.getChildren().add(newUISelectItem("value2")); 
+        stringList.getChildren().add(newUISelectItem("value3")); 
+        stringList.getChildren().add(newUISelectItem("value4")); 
 	stringList.decode(getFacesContext());
+	stringList.validate(getFacesContext());
 	stringList.updateModel(getFacesContext());
 	assertNotNull(bean.getStringList());
 	assertTrue(bean.getStringList().get(0).equals("value1"));
@@ -623,5 +694,11 @@ public class TestConverters extends JspFacesTestCase
         assertTrue(converter!=null);
     }
 
+    static private UISelectItem newUISelectItem(Object value) {
+        UISelectItem item = new UISelectItem();
+        item.setItemValue(value);
+        item.setItemLabel(value.toString());
+        return item;
+    }
 
 } // end of class TestConverters

@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.10 2003/12/17 15:13:44 rkitain Exp $
+ * $Id: RestoreViewPhase.java,v 1.11 2004/01/06 14:53:18 rkitain Exp $
  */
 
 /*
@@ -20,7 +20,6 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -39,7 +38,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.10 2003/12/17 15:13:44 rkitain Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.11 2004/01/06 14:53:18 rkitain Exp $
  * 
  */
 
@@ -192,9 +191,6 @@ public class RestoreViewPhase extends Phase {
         Iterator kids = uic.getFacetsAndChildren();
         while (kids.hasNext()) {
             doPerComponentActions(context, (UIComponent) kids.next());
-        }
-        if (uic instanceof UIInput) {
-            ((UIInput)uic).setValid(true);
         }
       
         // if this component has a component value reference expression,

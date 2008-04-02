@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.15 2003/12/17 15:13:53 rkitain Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.16 2004/01/06 14:53:20 rkitain Exp $
  */
 
 /*
@@ -64,15 +64,16 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
     // General Methods
     //
 
-    public void setPreviousValue(UIComponent component, Object value) {
+    public void setSubmittedValue(UIComponent component, Object value) {
         if (component instanceof UIInput) {
-            ((UIInput)component).setPrevious(value);
+            ((UIInput)component).setSubmittedValue(value);
         }
     }
 
     public Object getConvertedValue(FacesContext context, UIComponent component,
-            String newValue) throws ConverterException {
+            Object submittedValue) throws ConverterException {
         
+        String newValue = (String) submittedValue;
         ValueHolder valueHolder = (ValueHolder) component;
 	// if we have no local value, try to get the valueBinding.
 	ValueBinding valueBinding = component.getValueBinding("value");
@@ -89,7 +90,9 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
 	if (null == converter && null != valueBinding) {
             Class converterType = valueBinding.getType(context);
             // if converterType is null, assume the modelType is "String".
-            if ( converterType == null || converterType == String.class) {
+            if ( converterType == null || 
+                 converterType == String.class ||
+                 converterType == Object.class) {
                 return newValue;
             }
             // if getType returns a type for which we support a default

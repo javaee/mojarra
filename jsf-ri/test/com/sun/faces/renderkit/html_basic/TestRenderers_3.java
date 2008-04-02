@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.29 2003/11/01 02:52:56 jvisvanathan Exp $
+ * $Id: TestRenderers_3.java,v 1.30 2004/01/06 14:53:28 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -49,7 +49,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.29 2003/11/01 02:52:56 jvisvanathan Exp $
+ * @version $Id: TestRenderers_3.java,v 1.30 2004/01/06 14:53:28 rkitain Exp $
  * 
  *
  */
@@ -176,9 +176,20 @@ public class TestRenderers_3 extends JspFacesTestCase {
         // test decode method
         System.out.println("    Testing decode method... ");
         selectManyListboxRenderer.decode(getFacesContext(), selectMany);
-	assertTrue(null != (selectedValues = selectMany.getSelectedValues()));
+        selectedValues = (Object[]) selectMany.getSubmittedValue();
+	assertTrue(null != selectedValues);
 	assertTrue(1 == selectedValues.length);
         assertTrue(((String)selectedValues[0]).equals("Blue"));
+
+        // test convert method
+        Object[] convertedValues =
+            (Object[]) selectManyListboxRenderer.getConvertedValue(
+                getFacesContext(),
+                selectMany,
+                selectMany.getSubmittedValue());
+	assertTrue(null != convertedValues);
+	assertTrue(1 == convertedValues.length);
+        assertTrue(((String)convertedValues[0]).equals("Blue"));
 
         // test encode method
 
@@ -225,9 +236,20 @@ public class TestRenderers_3 extends JspFacesTestCase {
 
         System.out.println("    Testing decode method... ");
         selectManyCheckboxListRenderer.decode(getFacesContext(), selectMany);
-	assertTrue(null != (selectedValues = selectMany.getSelectedValues()));
+        selectedValues = (Object[]) selectMany.getSubmittedValue();
+	assertTrue(null != selectedValues);
 	assertTrue(1 == selectedValues.length);
         assertTrue(((String)selectedValues[0]).equals("Blue"));
+
+        // test convert method
+        Object[] convertedValues =
+            (Object[]) selectManyCheckboxListRenderer.getConvertedValue(
+                getFacesContext(),
+                selectMany,
+                selectMany.getSubmittedValue());
+	assertTrue(null != convertedValues);
+	assertTrue(1 == convertedValues.length);
+        assertTrue(((String)convertedValues[0]).equals("Blue"));
 
 
         // test encode method
@@ -266,9 +288,20 @@ public class TestRenderers_3 extends JspFacesTestCase {
         // test decode method
         System.out.println("    Testing decode method... ");
         selectManyMenuRenderer.decode(getFacesContext(), selectMany);
-	assertTrue(null != (selectedValues = selectMany.getSelectedValues()));
+        selectedValues = (Object[]) selectMany.getSubmittedValue();
+	assertTrue(null != selectedValues);
 	assertTrue(1 == selectedValues.length);
         assertTrue(((String)selectedValues[0]).equals("Blue"));
+
+        // test convert method
+        Object[] convertedValues =
+            (Object[]) selectManyMenuRenderer.getConvertedValue(
+                getFacesContext(),
+                selectMany,
+                selectMany.getSubmittedValue());
+	assertTrue(null != convertedValues);
+	assertTrue(1 == convertedValues.length);
+        assertTrue(((String)convertedValues[0]).equals("Blue"));
 
         // test encode method
         System.out.println("    Testing encode method... ");
@@ -303,8 +336,14 @@ public class TestRenderers_3 extends JspFacesTestCase {
         // test decode method
         System.out.println("    Testing decode method... ");
         selectOneMenuRenderer.decode(getFacesContext(), selectOne); 
-        selectedValue = (String)selectOne.getValue();
-        assertTrue(selectedValue.equals("Blue"));
+        assertTrue("Blue".equals(selectOne.getSubmittedValue()));
+
+        // test convert method
+        Object value = selectOneMenuRenderer.getConvertedValue(
+          getFacesContext(),
+          selectOne,
+          selectOne.getSubmittedValue());
+        assertTrue("Blue".equals(value));
 
         // test encode method
         System.out.println("    Testing encode method... ");
@@ -334,7 +373,10 @@ public class TestRenderers_3 extends JspFacesTestCase {
         // test decode method
 	System.out.println("    Testing decode method...");
         hiddenRenderer.decode(getFacesContext(), input1);
-	Date date = (Date) input1.getValue();
+        Date date = (Date) hiddenRenderer.getConvertedValue(
+          getFacesContext(),
+          input1,
+          input1.getSubmittedValue());
 	assertTrue(null != date);
 	assertTrue(DATE_STR.equals(dateformatter.format(date)));
         
@@ -359,7 +401,11 @@ public class TestRenderers_3 extends JspFacesTestCase {
         // test decode method
         System.out.println("    Testing decode method...");
         hiddenRenderer.decode(getFacesContext(), input2);
-	Number number = (Number) input2.getValue();
+        Number number = (Number) hiddenRenderer.getConvertedValue(
+          getFacesContext(),
+          input2,
+          input2.getSubmittedValue());
+
 	assertTrue(null != number);
 	System.out.println("NUMBER_STR:"+NUMBER_STR);
 	System.out.println("NUMBERFORMATTER:"+numberformatter.format(number));

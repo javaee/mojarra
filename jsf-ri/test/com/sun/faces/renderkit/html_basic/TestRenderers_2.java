@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.74 2003/12/17 15:15:39 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.75 2004/01/06 14:53:27 rkitain Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.74 2003/12/17 15:15:39 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.75 2004/01/06 14:53:27 rkitain Exp $
  * 
  *
  */
@@ -193,8 +193,12 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         System.out.println("    Testing decode method - no parameter");
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
-        Boolean val = (Boolean)selectBoolean.getValue();
-        assertTrue(!val.booleanValue());
+        assertEquals("false", selectBoolean.getSubmittedValue());
+        Object value = checkboxRenderer.getConvertedValue(
+           getFacesContext(),
+           selectBoolean,
+           selectBoolean.getSubmittedValue());
+        assertEquals(Boolean.FALSE, value);
 
         // Test parameter coming in - (the checkbox has been checked)
 
@@ -205,8 +209,12 @@ public class TestRenderers_2 extends JspFacesTestCase
         selectBoolean.setId("myCheckboxOn");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean); 
-        val = (Boolean)selectBoolean.getValue();
-        assertTrue(val.booleanValue());
+        assertEquals("true", selectBoolean.getSubmittedValue());
+        value = checkboxRenderer.getConvertedValue(
+           getFacesContext(),
+           selectBoolean,
+           selectBoolean.getSubmittedValue());
+        assertEquals(Boolean.TRUE, value);
         
 
         // test decode method
@@ -216,8 +224,12 @@ public class TestRenderers_2 extends JspFacesTestCase
         selectBoolean.setId("myCheckboxYes");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
-        val = (Boolean)selectBoolean.getValue();
-        assertTrue(val.booleanValue());
+        assertEquals("true", selectBoolean.getSubmittedValue());
+        value = checkboxRenderer.getConvertedValue(
+           getFacesContext(),
+           selectBoolean,
+           selectBoolean.getSubmittedValue());
+        assertEquals(Boolean.TRUE, value);
        
         // test decode method
 
@@ -226,8 +238,12 @@ public class TestRenderers_2 extends JspFacesTestCase
         selectBoolean.setId("myCheckboxTrue");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
-        val = (Boolean)selectBoolean.getValue();
-        assertTrue(val.booleanValue());
+        assertEquals("true", selectBoolean.getSubmittedValue());
+        value = checkboxRenderer.getConvertedValue(
+           getFacesContext(),
+           selectBoolean,
+           selectBoolean.getSubmittedValue());
+        assertEquals(Boolean.TRUE, value);
         
         // test decode method
         
@@ -236,8 +252,12 @@ public class TestRenderers_2 extends JspFacesTestCase
         selectBoolean.setId("myCheckboxTrue");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
-        val = (Boolean)selectBoolean.getValue();
-        assertTrue(val.booleanValue());
+        assertEquals("true", selectBoolean.getSubmittedValue());
+        value = checkboxRenderer.getConvertedValue(
+           getFacesContext(),
+           selectBoolean,
+           selectBoolean.getSubmittedValue());
+        assertEquals(Boolean.TRUE, value);
         
          
         // test decode method with checkbox disabled.
@@ -247,9 +267,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         selectBoolean.getAttributes().put("disabled", "true");
         selectBoolean.setValue(Boolean.TRUE);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
-        val = (Boolean)selectBoolean.getValue();
         // make sure the value wasn't set to false. Bug id  4883159
-        assertTrue(val.booleanValue());
+        assertTrue(!"false".equals(selectBoolean.getSubmittedValue()));
         selectBoolean.getAttributes().remove("disabled");
         
         // test encode method
@@ -322,7 +341,13 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
         System.out.println("    Testing decode method... ");
         listboxRenderer.decode(getFacesContext(), selectOne);
-        Object value = selectOne.getValue();
+        assertTrue("100".equals(selectOne.getSubmittedValue()));
+                   
+        // test convert method
+        Object value = listboxRenderer.getConvertedValue(
+          getFacesContext(),
+          selectOne,
+          selectOne.getSubmittedValue());
         assertTrue(value.equals(new Long(100)));
 
         // test encode method
@@ -346,7 +371,14 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         System.out.println("    Testing decode method...");
         secretRenderer.decode(getFacesContext(), textEntry);
-        assertTrue(((String)textEntry.getValue()).equals("secret"));
+        assertTrue("secret".equals(textEntry.getSubmittedValue()));
+
+        // test convert method
+        Object value = secretRenderer.getConvertedValue(
+          getFacesContext(),
+          textEntry,
+          textEntry.getSubmittedValue());
+        assertTrue("secret".equals(value));
 
         // test encode method
 
@@ -369,7 +401,14 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         System.out.println("    Testing decode method...");
         textRenderer.decode(getFacesContext(), text);
-        assertTrue(((String)text.getValue()).equals("text"));
+        assertTrue("text".equals(text.getSubmittedValue()));
+
+        // test convert method
+        Object value = textRenderer.getConvertedValue(
+          getFacesContext(),
+          text,
+          text.getSubmittedValue());
+        assertTrue("text".equals(value));
 
         // test encode method
 
@@ -1254,7 +1293,14 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         System.out.println("    Testing decode method...");
         textAreaRenderer.decode(getFacesContext(), textEntry);
-        assertTrue(((String)textEntry.getValue()).equals("TextareaRenderer"));
+        assertTrue("TextareaRenderer".equals(textEntry.getSubmittedValue()));
+
+        // test convert method
+        Object value = textAreaRenderer.getConvertedValue(
+          getFacesContext(),
+          textEntry,
+          textEntry.getSubmittedValue());
+        assertTrue("TextareaRenderer".equals(value));
 
         // test encode method
 

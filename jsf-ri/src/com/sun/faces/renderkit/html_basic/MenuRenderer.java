@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.36 2003/12/22 21:26:38 jvisvanathan Exp $
+ * $Id: MenuRenderer.java,v 1.37 2004/01/06 14:53:21 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -100,8 +100,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             return;
         } 
 
-        setPreviousValue(component, ((UIInput)component).getValue());
-
         String clientId = component.getClientId(context);
         Util.doAssert(clientId != null);
         // currently we assume the model type to be of type string or 
@@ -112,38 +110,51 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	    if (requestParameterValuesMap.containsKey(clientId)) {
 		String newValues[] = (String[])requestParameterValuesMap.
 		    get(clientId);
-		setSelectManyValue(context, ((UISelectMany)component), newValues);
-	    }
+                setSubmittedValue(component, newValues);
+	    } else {
+                // Use the empty array, not null, to distinguish
+                // between an deselected UISelectMany and a disabled one
+                setSubmittedValue(component, new String[0]);
+            }
         } else {
             Map requestParameterMap = context.getExternalContext().
                 getRequestParameterMap();
 	    if (requestParameterMap.containsKey(clientId)) {
 		String newValue = (String)requestParameterMap.get(clientId);
-		setSelectOneValue(context, ((UISelectOne)component), newValue);
+                setSubmittedValue(component, newValue);
 	    }
         }    
         return;
     }
 
-    public void setSelectOneValue(FacesContext context, UISelectOne uiSelectOne,
+
+    public Object getConvertedValue(FacesContext context, UIComponent component,
+            Object submittedValue) throws ConverterException {
+        if (component instanceof UISelectMany) {
+            return convertSelectManyValue(context,
+                                          ((UISelectMany) component),
+                                          (String[]) submittedValue);
+        } else {
+            return convertSelectOneValue(context,
+                                         ((UISelectOne) component),
+                                         (String) submittedValue);
+        }
+    }
+
+
+    public Object convertSelectOneValue(FacesContext context,
+            UISelectOne uiSelectOne, 
             String newValue) throws ConverterException {
         Object convertedValue = null;
         if ( newValue == null ) {
-            uiSelectOne.setValue(null);
-            return;
+            return null;
         }
-        try {
-            convertedValue = getConvertedValue(context, uiSelectOne, newValue);   
-            uiSelectOne.setValue(convertedValue);
-        } catch (ConverterException ce) {
-            uiSelectOne.setValue(newValue);
-            addConversionErrorMessage(context, uiSelectOne, ce.getMessage());
-            uiSelectOne.setValid(false);
-            return;
-        }
+
+        return super.getConvertedValue(context, uiSelectOne, newValue);   
     }
     
-    public void setSelectManyValue(FacesContext context, UISelectMany uiSelectMany,
+    public Object convertSelectManyValue(FacesContext context,
+            UISelectMany uiSelectMany,
             String[] newValues) throws ConverterException {
 	// if we have no local value, try to get the valueBinding.
 	ValueBinding valueBinding = uiSelectMany.getValueBinding("value");
@@ -158,50 +169,29 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	    // a type?
 	    if (null != modelType) {
 		if (modelType.isArray()) {
-		    try {
-			result = handleArrayCase(context, uiSelectMany, 
+                    result = handleArrayCase(context, uiSelectMany, 
 						 modelType, newValues);
-			uiSelectMany.setValid(true);
-		    }
-		    catch (ConverterException e) {
-			addConversionErrorMessage(context, uiSelectMany,
-						  e.getMessage());
-			uiSelectMany.setValid(false);
-		    }
 		}
 		else if (List.class.isAssignableFrom(modelType)) {
 		    result = handleListCase(context, newValues);
 		}
 		else {
-		    // the model type must be an array.
-		    addConversionErrorMessage(context, uiSelectMany,
-					      Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
-		    uiSelectMany.setValid(false);
+                    throw new ConverterException(Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
 		}
 	    } else {
-		// We have a ValueBinding, but no modelType.  Error.
-		addConversionErrorMessage(context, uiSelectMany,
-					  Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
-		uiSelectMany.setValid(false);
+                throw new ConverterException(Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
 	    }
 	}
 	else {
 	    // No ValueBinding, just use Object array.
 	    Object [] convertedValues = new Object[1];
-	    try {
-		result = handleArrayCase(context, uiSelectMany, 
-					 convertedValues.getClass(), 
-					 newValues);
-	    }
-	    catch (ConverterException e) {
-		addConversionErrorMessage(context, uiSelectMany,
-					  e.getMessage());
-		uiSelectMany.setValid(false);
-	    }
+            result = handleArrayCase(context, uiSelectMany, 
+                                     convertedValues.getClass(), 
+                                     newValues);
 	}
 	
 	// At this point, result is ready to be set as the value
-	uiSelectMany.setValue(result);
+	return result;
     }
     
     protected Object handleArrayCase(FacesContext context, 
@@ -217,7 +207,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	
 	elementType = arrayClass.getComponentType();
 
-	// Optimization: If the elemntType is String, we don't need
+	// Optimization: If the elementType is String, we don't need
 	// conversion.  Just return newValues.
 	if (elementType.equals(String.class)) {
 	    return newValues;
@@ -240,8 +230,14 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
 	// attached converter takes priority
 	if (null == (converter = uiSelectMany.getConverter())) {
-	    // if that fails, look for a by-type converter
+            // Otherwise, look for a by-type converter
 	    if (null == (converter = Util.getConverterForClass(elementType))) {
+                // if that fails, and the attached values are of Object type,
+                // we don't need conversion.
+                if (elementType.equals(Object.class)) {
+                    return newValues;
+                }
+
 		throw new ConverterException("null Converter");
 	    }
 	}
@@ -453,13 +449,23 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         
         writer.writeText("\t", null);
         writer.startElement("option", component);
-        writer.writeAttribute("value", 
-            getFormattedValue(context, component, curItem.getValue()), "value");
 
-        Object selectedValues[] = getCurrentSelectedValues(context, component);
-        String selectText = getSelectedText(curItem, selectedValues);
-        if (!selectText.equals("")) {
-            writer.writeAttribute(selectText, Boolean.TRUE, null);
+        String valueString = getFormattedValue(context, component,
+                                               curItem.getValue());
+        writer.writeAttribute("value", valueString, "value");
+
+        Object submittedValues[] = getSubmittedSelectedValues(context, component);
+        boolean isSelected;
+        if (submittedValues != null) {
+            isSelected = isSelected(valueString, submittedValues);
+        } else {
+            Object selectedValues = getCurrentSelectedValues(context,
+                                                             component);
+            isSelected = isSelected(curItem.getValue(), selectedValues);
+        }
+
+        if (isSelected) {
+            writer.writeAttribute(getSelectedTextString(), Boolean.TRUE, null);
         }
         if ( curItem.isDisabled()) {
             writer.writeAttribute("disabled", "disabled", "disabled");
@@ -471,16 +477,34 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         
     }
 
-    String getSelectedText(SelectItem item, Object[] values) {
-        if (null != values) {
-            int len = values.length;
+    boolean isSelected(Object itemValue, Object valueArray) {
+        if (null != valueArray) {
+            int len = Array.getLength(valueArray);
             for (int i = 0; i < len; i++) {
-                if (values[i].equals(item.getValue())) {
-                    return getSelectedTextString();
+                Object value = Array.get(valueArray, i);
+                if (value == null) {
+                    if (itemValue == null) {
+                        return true;
+                    }
+                }
+                else if (value.equals(itemValue)) {
+                    return true;
                 }
             }
         }
-        return "";
+        return false;
+    }
+
+    boolean isSelected(Object itemValue, Object[] values) {
+        if (null != values) {
+            int len = values.length;
+            for (int i = 0; i < len; i++) {
+                if (values[i].equals(itemValue)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     protected void writeDefaultSize(ResponseWriter writer, int itemCount)
@@ -504,16 +528,36 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         return "";
     }
 
-    Object[] getCurrentSelectedValues(FacesContext context,
-				      UIComponent component) {
+    Object[] getSubmittedSelectedValues(FacesContext context,
+                                        UIComponent component) {
         if (component instanceof UISelectMany) {
             UISelectMany select = (UISelectMany) component;
-            return (Object []) select.getValue();
+            return (Object[]) select.getSubmittedValue();
         } 
+
         UISelectOne select = (UISelectOne) component;
-	Object returnObjects[] = new Object[1];
-	if (null != (returnObjects[0] = select.getValue())) {
-            return returnObjects;
+	Object returnObject;
+	if (null != (returnObject = select.getSubmittedValue())) {
+            return new Object[]{returnObject};
+        }    
+	return null;
+    }
+
+    Object getCurrentSelectedValues(FacesContext context,
+                                      UIComponent component) {
+        if (component instanceof UISelectMany) {
+            UISelectMany select = (UISelectMany) component;
+            Object value = select.getValue();
+            if (value instanceof List)
+                return ((List) value).toArray();
+
+            return value;
+        } 
+
+        UISelectOne select = (UISelectOne) component;
+	Object returnObject;
+	if (null != (returnObject = select.getValue())) {
+            return new Object[]{returnObject};
         }    
 	return null;
     }

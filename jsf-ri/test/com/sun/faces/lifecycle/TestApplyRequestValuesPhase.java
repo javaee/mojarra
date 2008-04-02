@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.20 2003/12/17 15:15:23 rkitain Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.21 2004/01/06 14:53:26 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.20 2003/12/17 15:15:23 rkitain Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.21 2004/01/06 14:53:26 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,7 +133,7 @@ public void testCallback()
 	assertTrue("Can't find userName in tree", false);
     }
     assertTrue(null != userName);
-    assertTrue(null != (value = (String) userName.getValue()));
+    assertTrue(null != (value = (String) userName.getSubmittedValue()));
     assertTrue(value.equals("jerry"));
 }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.58 2003/12/17 15:13:57 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.59 2004/01/06 14:53:22 rkitain Exp $
  */
 
 /*
@@ -93,7 +93,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 	    styleClass = (String) component.getAttributes().get("styleClass");
         if (component instanceof UIInput) {
 	    writer.startElement("input", component);
-	    writer.writeAttribute("type", "text", "type");
+	    writer.writeAttribute("type", "text", null);
 	    writer.writeAttribute("name", (component.getClientId(context)), "clientId");
 
             // render default text specified

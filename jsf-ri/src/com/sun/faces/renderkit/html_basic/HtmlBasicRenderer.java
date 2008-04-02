@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.70 2003/12/17 15:13:53 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.71 2004/01/06 14:53:20 rkitain Exp $
  */
 
 /*
@@ -170,8 +170,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
     
     public void decode(FacesContext context, UIComponent component) {
 
-        Object convertedValue = null;
-       
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -195,47 +193,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
         String clientId = component.getClientId(context);
         Util.doAssert(clientId != null );
         
-        // set previous value = current value (converted if necessary)
-        // we should convert because we want to compare the converted
-        // previous (current) value with the converted new value;
-        // ex: we don't want to compare "48%" with 0.48;
-        
-        Object curValue = uiInput.getValue();
-        if (curValue instanceof String) {
-            try {
-                Object convertedCurrentValue = 
-                    getConvertedValue(context, component,
-                    (String)curValue);
-                curValue = convertedCurrentValue;
-            } catch (ConverterException ce) {
-            }
-        }
-        setPreviousValue(component, curValue);
-
         Map requestMap = context.getExternalContext().getRequestParameterMap();
 	// Don't overwrite the value unless you have to!
 	if (requestMap.containsKey(clientId)) {
 	    String newValue = (String)requestMap.get(clientId);
-	    try {
-		convertedValue = getConvertedValue(context, component, newValue);   
-	    } catch (ConverterException ce) {
-		uiInput.setValue(newValue);
-		addConversionErrorMessage(context, component, ce.getMessage());
-		uiInput.setValid(false);
-		return;
-	    }   
-	    uiInput.setValue(convertedValue);
+            setSubmittedValue(component, newValue);
 	}
      }
-    
-    /**
-     * Simply returns the value. This method needs to be overridden by
-     * renderers that need to peform type conversion.
-     */
-    public Object getConvertedValue(FacesContext context, UIComponent component,
-            String newValue) throws ConverterException {
-       return newValue;            
-    }         
     
     public void encodeEnd(FacesContext context, UIComponent component) 
             throws IOException {
@@ -269,6 +233,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
      */
     protected String getCurrentValue(FacesContext context,UIComponent component) {
         
+        if (component instanceof UIInput) {
+            Object submittedValue = ((UIInput) component).getSubmittedValue();
+            if (submittedValue != null) {
+                return (String) submittedValue;
+            }
+        }
+
         ValueHolder valueHolder = null;
         if ( component instanceof ValueHolder) {
             valueHolder= (ValueHolder) component;
@@ -294,7 +265,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * Renderers override this method to store the previous value
      * of the associated component.
      */
-    protected void setPreviousValue(UIComponent component, Object value) {
+    protected void setSubmittedValue(UIComponent component, Object value) {
     }
     
    /**

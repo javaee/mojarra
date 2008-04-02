@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.58 2003/12/17 15:13:50 rkitain Exp $
+ * $Id: CheckboxRenderer.java,v 1.59 2004/01/06 14:53:19 rkitain Exp $
  *
  */
 
@@ -42,7 +42,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.58 2003/12/17 15:13:50 rkitain Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.59 2004/01/06 14:53:19 rkitain Exp $
  * 
  *
  */
@@ -104,45 +104,10 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
 
         String clientId = component.getClientId(context);
         Util.doAssert(clientId != null );
-
-        Object curValue = ((UIInput)component).getValue();
-        if (curValue == null) {
-            setPreviousValue(component, Boolean.FALSE);
-        }
-
-        // Convert the old (current value)
-
-        if (curValue instanceof String) {
-            try {
-                Object convertedCurrentValue = 
-                    getConvertedValue(context, component, (String)curValue);
-                setPreviousValue(component, convertedCurrentValue);
-            } catch (ConverterException e) {
-                setPreviousValue(component, Boolean.FALSE);
-            }
-        } else {
-            // current value is already of the type Boolean.
-            setPreviousValue(component, curValue);
-        }    
-
         // Convert the new value
         UIInput uiInput = (UIInput) component;
         Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
         String newValue = (String)requestParameterMap.get(clientId);
-        try {
-            convertedValue = getConvertedValue(context, component, newValue);
-        } catch (ConverterException ce) {
-            ((UIInput)component).setValue(newValue);
-            addConversionErrorMessage(context, component, ce.getMessage());
-            uiInput.setValid(false);
-            return;
-        }
-        uiInput.setValue(convertedValue);
-    }
-
-    public Object getConvertedValue(FacesContext context, UIComponent component,
-            String newValue) throws ConverterException {
-     
         //if there was nothing sent in the request the checkbox wasn't checked
         // if the checkbox is not disabled. 
         if (newValue == null) {
@@ -154,6 +119,14 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
             newValue.equalsIgnoreCase("true")) {
             newValue = "true";
         }
+
+        setSubmittedValue(component, newValue);
+    }
+
+    public Object getConvertedValue(FacesContext context, UIComponent component,
+            Object submittedValue) throws ConverterException {
+     
+        String newValue = (String) submittedValue;
         Object convertedValue = Boolean.valueOf(newValue);
 	return convertedValue;
     }
