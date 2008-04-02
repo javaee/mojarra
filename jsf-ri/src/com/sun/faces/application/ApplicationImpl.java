@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.29 2003/10/14 23:44:48 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.30 2003/10/17 20:49:37 rlubke Exp $
  */
 
 /*
@@ -531,11 +531,8 @@ public class ApplicationImpl extends Application {
 	return result;
     }
     
-    public void setDefaultLocale(Locale newLocale) {
-	if (null == newLocale) {
-	    throw new NullPointerException();
-	}
-	defaultLocale = newLocale;
+    public void setDefaultLocale(Locale newLocale) {	
+	    defaultLocale = newLocale;
     }
     
     /**

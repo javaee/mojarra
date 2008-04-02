@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.20 2003/10/17 20:33:10 jvisvanathan Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.21 2003/10/17 20:49:37 rlubke Exp $ 
  */ 
 
 
@@ -39,7 +39,7 @@ import java.util.Enumeration;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.20 2003/10/17 20:33:10 jvisvanathan Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.21 2003/10/17 20:49:37 rlubke Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -211,6 +211,12 @@ public class ViewHandlerImpl extends Object
     }
     
     public Locale calculateLocale(FacesContext context) {
+        
+        if (context == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+        }
+        
         Locale result = null;
         // determine the locales that are acceptable to the client based on the 
         // Accept-Language header and the find the best match among the 
