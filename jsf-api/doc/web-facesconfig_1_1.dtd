@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
 
-    $Id: web-facesconfig_1_1.dtd,v 1.1 2004/04/08 22:54:07 eburns Exp $
+    $Id: web-facesconfig_1_1.dtd,v 1.2 2004/04/09 18:11:35 eburns Exp $
 
 -->
 
@@ -183,7 +183,13 @@
    associated with a renderer or a component.
 -->
 
-<!ELEMENT facet       (description*, display-name*, icon*, facet-name)>
+<!ELEMENT facet       (description*, display-name*, icon*, facet-name, facet-extension*)>
+
+<!-- 
+    Extension element for facet.  May contain implementation
+    specific content.
+-->
+<!ELEMENT facet-extension ANY>
 
 <!--
     The "facet-name" element represents the facet name under which a
@@ -835,6 +841,7 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!ATTLIST faces-config                      id ID #IMPLIED>
 <!ATTLIST faces-context-factory             id ID #IMPLIED>
 <!ATTLIST facet                             id ID #IMPLIED>
+<!ATTLIST facet-extension                   id ID #IMPLIED>
 <!ATTLIST facet-name                        id ID #IMPLIED>
 <!ATTLIST factory                           id ID #IMPLIED>
 <!ATTLIST from-action                       id ID #IMPLIED>
