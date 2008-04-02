@@ -146,8 +146,9 @@
                 <h:output_text key="Engine" bundle="carDemoBundle" />
                 </FONT></B></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_menu  
+                <h:selectone_menu  id="currentEngine"
                      modelReference="CurrentOptionServer.currentEngineOption">
+                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
                     <h:selectitems  
                         modelReference="CurrentOptionServer.engineOption"/>
                 </h:selectone_menu>    
@@ -158,8 +159,9 @@
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_radio  
+                <h:selectone_radio  id="currentBrake"
                     modelReference="CurrentOptionServer.currentBrakeOption">
+                    <f:valuechanged_listener type="cardemo.PackageValueChanged" />
                     <h:selectitems  
                         modelReference="CurrentOptionServer.brakeOption"/>
                 </h:selectone_radio>
@@ -174,8 +176,9 @@
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_menu  
+                <h:selectone_menu  id="currentSuspension"
                     modelReference="CurrentOptionServer.currentSuspensionOption">
+                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
                     <h:selectitems  
                         modelReference="CurrentOptionServer.suspensionOption"/>
                 </h:selectone_menu>
@@ -188,9 +191,10 @@
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_radio  
+                <h:selectone_radio  id="currentSpeaker"
                     modelReference="CurrentOptionServer.currentSpeakerOption" >
-                    <h:selectitems  
+                    <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                   <h:selectitems  
                         modelReference="CurrentOptionServer.speakerOption"/>
                 </h:selectone_radio>
                 </FONT></P> </BLOCKQUOTE>
@@ -203,8 +207,9 @@
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
-                <h:selectone_radio  
+                <h:selectone_radio  id="currentAudio"
                     modelReference="CurrentOptionServer.currentAudioOption">
+                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
                     <h:selectitems  
                         modelReference="CurrentOptionServer.audioOption"/>
                 </h:selectone_radio>
@@ -218,8 +223,9 @@
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
-                <h:selectone_menu  
+                <h:selectone_menu  id="currentTransmission"
                     modelReference="CurrentOptionServer.currentTransmissionOption">
+                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
                     <h:selectitems  
                         modelReference="CurrentOptionServer.transmissionOption"/>
                 </h:selectone_menu>
@@ -243,7 +249,9 @@
             <TR>
                 <TD> 
                 <h:selectboolean_checkbox id="sunroof" title="Sunroof" 
-                    alt="Sunroof" modelReference="CurrentOptionServer.sunRoofSelected"/>
+                    alt="Sunroof" modelReference="CurrentOptionServer.sunRoofSelected">
+                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                 </h:selectboolean_checkbox>    
                 </TD>																		
                 <TD>
                 <h:output_text key="sunroofLabel" bundle="carDemoBundle" /> 
@@ -251,7 +259,9 @@
                 <TD>
                 <h:selectboolean_checkbox id="cruisecontrol" 
                     title="Cruise Control"  
-                    modelReference="CurrentOptionServer.cruiseControlSelected" />
+                    modelReference="CurrentOptionServer.cruiseControlSelected" >
+                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                 </h:selectboolean_checkbox>
 
                 </TD>
                 <TD>
@@ -260,7 +270,9 @@
                 <TD>
                 <h:selectboolean_checkbox id="keylessentry" 
                     title="Keyless Entry"  alt="Keyless Entry"
-                    modelReference="CurrentOptionServer.keylessEntrySelected" />
+                    modelReference="CurrentOptionServer.keylessEntrySelected" >
+                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                 </h:selectboolean_checkbox>
 
                 </TD>
                 <TD>
@@ -271,7 +283,9 @@
                 <TD> 
                 <h:selectboolean_checkbox id="securitySystem"
                     title="Security System"  alt="Security System"
-                    modelReference="CurrentOptionServer.securitySystemSelected" />
+                    modelReference="CurrentOptionServer.securitySystemSelected" >
+                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                 </h:selectboolean_checkbox>
 
                 </TD>
                 <TD>
@@ -280,7 +294,9 @@
                 <TD>
                 <h:selectboolean_checkbox id="skirack" title="Ski Rack"  
                     alt="Ski Rack" modelReference="CurrentOptionServer.skiRackSelected"
-                     />
+                     >
+                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                 </h:selectboolean_checkbox>
                 </TD>
                 <TD>
                 <h:output_text key="skiRackLabel" bundle="carDemoBundle" /> 
@@ -288,7 +304,9 @@
                 <TD>
                 <h:selectboolean_checkbox id="towPackage" title="Tow Package"  
                     alt="Tow Package" 
-                    modelReference="CurrentOptionServer.towPackageSelected" />
+                    modelReference="CurrentOptionServer.towPackageSelected" >
+                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                 </h:selectboolean_checkbox>
 
                 </TD>
                 <TD>
@@ -298,7 +316,9 @@
             <TR>
                 <TD>
                 <h:selectboolean_checkbox id="gps" title="GPS" alt="GPS"
-                    modelReference="CurrentOptionServer.gpsSelected"  />
+                    modelReference="CurrentOptionServer.gpsSelected"  >
+                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                 </h:selectboolean_checkbox>
                 </FONT> 
                 </TD>
                 <TD>
@@ -313,6 +333,7 @@
                 </TD>
                 <TD>
                 <P>
+                <h:command_button id="recalculate" key="recalculate" bundle="carDemoBundle" commandName="recalculate"/>
                 <h:command_button id="buy2" key="buy" bundle="carDemoBundle" commandName="buy"/>
 
                 </TD>

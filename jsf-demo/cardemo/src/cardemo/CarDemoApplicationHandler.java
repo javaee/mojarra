@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoApplicationHandler.java,v 1.3 2003/02/05 00:45:19 jenball Exp $
+ * $Id: CarDemoApplicationHandler.java,v 1.4 2003/02/11 04:04:50 rajprem Exp $
  */
 /*
  *
@@ -126,6 +126,11 @@ public class CarDemoApplicationHandler implements ApplicationHandler{
             }
             
             else if (formEvent.getCommandName().equals("more")) {
+                treeId = "/more.jsp";
+            }
+            
+            else if (formEvent.getCommandName().equals("recalculate")) {
+                System.out.println("recalc button hit");
                 treeId = "/more.jsp";
             }
             

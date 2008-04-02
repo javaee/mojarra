@@ -1,5 +1,5 @@
 /*
- * $Id: PackageAction.java,v 1.4 2003/02/10 18:20:07 rkitain Exp $
+ * $Id: PackageAction.java,v 1.5 2003/02/11 04:04:50 rajprem Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: PackageAction.java,v 1.4 2003/02/10 18:20:07 rkitain Exp $
+ * @version $Id: PackageAction.java,v 1.5 2003/02/11 04:04:50 rajprem Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -198,7 +198,7 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", Boolean.valueOf("true"));
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.sunRoof", Boolean.TRUE);
 
@@ -212,19 +212,19 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("cruisecontrol");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.cruiseControl", Boolean.TRUE);
 
         foundComponent = component.findComponent("skirack");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.skiRack", Boolean.TRUE);
 
         foundComponent = component.findComponent("keylessentry");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.keylessEntry", Boolean.TRUE);
 
@@ -246,8 +246,8 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("deluxe");
         foundComponent.setAttribute("commandClass", "package-unselected");
-        
-        context.renderResponse();
+        //PENDING(rajprem): uncomment this?
+        //context.renderResponse();
     }
 
     // helper method to set UI values for "performance" package selection
@@ -274,7 +274,7 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.sunRoof", Boolean.TRUE);
 
@@ -288,25 +288,25 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("cruisecontrol");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.cruiseControl", Boolean.TRUE);
 
         foundComponent = component.findComponent("skirack");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.skiRack", Boolean.TRUE);
 
         foundComponent = component.findComponent("keylessentry");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.keylessEntry", Boolean.TRUE);
 
         foundComponent = component.findComponent("towPackage");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.towPackage", Boolean.TRUE);
 
@@ -357,43 +357,43 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.sunRoof", Boolean.TRUE);
 
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.securitySystem", Boolean.TRUE);
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.gps", Boolean.TRUE);
 
         foundComponent = component.findComponent("cruisecontrol");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.cruiseControl", Boolean.TRUE);
 
         foundComponent = component.findComponent("skirack");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.skiRack", Boolean.TRUE);
 
         foundComponent = component.findComponent("keylessentry");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.keylessEntry", Boolean.TRUE);
 
         foundComponent = component.findComponent("towPackage");
         foundComponent.setAttribute("disabled", "true");
-        foundComponent.setAttribute("value", "true");
+        foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
         context.setModelValue("CurrentOptionServer.towPackage", Boolean.TRUE);
 

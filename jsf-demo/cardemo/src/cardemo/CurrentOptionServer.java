@@ -1,5 +1,5 @@
 /*
- * $Id: CurrentOptionServer.java,v 1.3 2003/02/10 18:20:06 rkitain Exp $
+ * $Id: CurrentOptionServer.java,v 1.4 2003/02/11 04:04:50 rajprem Exp $
  */
 /*
  *
@@ -62,8 +62,8 @@ public class CurrentOptionServer extends Object {
     protected int carId = 1;
     protected String carTitle = "You shouldn't see this title";
     protected String carDesc = "This description should never be seen. If it is, your properties files aren't being read.";
-    protected String basePrice = "$300";
-    protected String currentPrice = "$250";
+    protected String basePrice = "300";
+    protected String currentPrice = "250";
     protected String engines[] = {
         "V4", "V6", "V8"
     };
