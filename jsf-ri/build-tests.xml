@@ -311,15 +311,16 @@
 
             <formatter type="plain" usefile="false"/>
             <!-- Suite of tests -->
-            <test name="com.sun.faces.context.TestExternalContextImpl"/>
-            <test name="com.sun.faces.context.TestFacesContextImpl"/>
-            <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
+            <test name="com.sun.faces.el.TestValueBindingImpl_Model"/>
+            <test name="com.sun.faces.el.TestValueBindingImpl"/>
             <test name="com.sun.faces.el.TestVariableResolverImpl"/>
             <test name="com.sun.faces.el.TestPropertyResolverImpl"/>
+            <test name="com.sun.faces.context.TestExternalContextImpl"/>
+<!--
+            <test name="com.sun.faces.context.TestFacesContextImpl"/>
+            <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.util.TestUtil"/>
             <test name="com.sun.faces.util.TestUtil_messages"/>
-<!--
-            <test name="com.sun.faces.el.TestValueBindingImpl"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
 
             <test name="com.sun.faces.lifecycle.TestPhase"/> 
