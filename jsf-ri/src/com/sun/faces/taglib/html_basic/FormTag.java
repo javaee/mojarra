@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.49 2003/09/25 16:36:29 rlubke Exp $
+ * $Id: FormTag.java,v 1.50 2003/10/07 20:15:52 horwat Exp $
  */
 
 /*
@@ -11,9 +11,11 @@ package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.servlet.jsp.JspException;
 
 import com.sun.faces.taglib.BaseComponentTag;
 import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -37,6 +39,7 @@ public class FormTag extends BaseComponentTag
     // Attribute Instance Variables
 
     public String formName = null;
+    public String formName_ = null;
 
     // Relationship Instance Variables
 
@@ -58,7 +61,7 @@ public class FormTag extends BaseComponentTag
     //
 
     public void setFormName(String newFormName) { 
-	formName = newFormName;
+	formName_ = newFormName;
     }
 
     //
@@ -120,5 +123,26 @@ public class FormTag extends BaseComponentTag
             component.getAttributes().put("acceptcharset", acceptcharset); 
         }        
     }
+
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (formName_ != null) {
+            formName = Util.evaluateElExpression(formName_, pageContext);
+   	}
+    }
+
+
+    //
+    // Methods from TagSupport
+    //
+
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
+
 
 } // end of class FormTag

@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.7 2003/09/12 16:30:20 craigmcc Exp $
+ * $Id: ActionListenerTag.java,v 1.8 2003/10/07 20:16:03 horwat Exp $
  */
 
 /*
@@ -56,6 +56,7 @@ public class ActionListenerTag extends TagSupport {
      * instance to be created.</p>
      */
     private String type = null;
+    private String type_ = null;
 
 
     /**
@@ -66,7 +67,7 @@ public class ActionListenerTag extends TagSupport {
      */
     public void setType(String type) {
 
-        this.type = type;
+        this.type_ = type;
 
     }
 
@@ -84,6 +85,9 @@ public class ActionListenerTag extends TagSupport {
      * @exception JspException if a JSP error occurs
      */
     public int doStartTag() throws JspException {
+       	// evaluate any expressions that we were passed
+        evaluateExpressions();
+
 
         // Locate our parent UIComponentTag
         UIComponentTag tag =
@@ -147,4 +151,12 @@ public class ActionListenerTag extends TagSupport {
         }
 
     }
+
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (type_ != null) {
+            type = Util.evaluateElExpression(type_, pageContext);
+        }
+    }
+
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.39 2003/10/06 19:06:46 horwat Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.40 2003/10/07 20:15:51 horwat Exp $
  */
 
 /*
@@ -14,8 +14,10 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
+import javax.servlet.jsp.JspException;
 
 import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -39,8 +41,11 @@ public class Command_HyperlinkTag extends BaseComponentTag
 
     // Attribute Instance Variables
     protected String commandname = null;
+    protected String commandname_ = null;
     protected String image = null;
+    protected String image_ = null;
     protected String actionRef = null;
+    protected String actionRef_ = null;
     protected boolean immediate = false;
 
     
@@ -60,15 +65,15 @@ public class Command_HyperlinkTag extends BaseComponentTag
 
     public void setCommandName(String newCommandname) {
         ParameterCheck.nonNull(newCommandname);
-        commandname = newCommandname;
+        commandname_ = newCommandname;
     }
  
     public void setImage(String newImage) {
-        image = newImage;
+        image_ = newImage;
     }
     
     public void setActionRef(String newActionRef) {
-        actionRef = newActionRef;
+        actionRef_ = newActionRef;
     }
 
     public void setImmediate(boolean newImmediate) {
@@ -97,19 +102,38 @@ public class Command_HyperlinkTag extends BaseComponentTag
         if (action != null ) {
 	    link.setAction(action);
 	}
-        if (null != value) {
+        if (value != null) {
             link.setValue(value);
         }
-        if (null != image) {
+        if (image != null) {
             link.getAttributes().put("image", image);
         }
 	link.setImmediate(immediate);
     }
 
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (commandname_ != null) {
+            commandname = Util.evaluateElExpression(commandname_, pageContext);
+        }
+        if (image != null) {
+            image = Util.evaluateElExpression(image_, pageContext);
+        }
+        if (actionRef != null) {
+            actionRef = Util.evaluateElExpression(actionRef_, pageContext);
+        }
+    }
     
     //
     // Methods from TagSupport
     // 
 
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
 
 } // end of class Command_HyperlinkTag

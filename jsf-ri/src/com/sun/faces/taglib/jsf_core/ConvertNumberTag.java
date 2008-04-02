@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.1 2003/08/25 05:39:47 eburns Exp $
+ * $Id: ConvertNumberTag.java,v 1.2 2003/10/07 20:16:04 horwat Exp $
  */
 
 /*
@@ -17,13 +17,14 @@ import javax.faces.webapp.ConverterTag;
 
 import javax.servlet.jsp.JspException;
 import org.mozilla.util.Assert;
+import com.sun.faces.util.Util;
 
 /**
  * <p>ConvertNumberTag is a ConverterTag implementation for
  * javax.faces.convert.NumberConverter</p>
  *
  *
- * @version $Id: ConvertNumberTag.java,v 1.1 2003/08/25 05:39:47 eburns Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.2 2003/10/07 20:16:04 horwat Exp $
  * 
  */
 
@@ -40,7 +41,9 @@ public class ConvertNumberTag extends ConverterTag {
     // Instance Variables
     //
     private String currencyCode;
+    private String currencyCode_;
     private String currencySymbol;
+    private String currencySymbol_;
     private boolean groupingUsed;
     private boolean integerOnly;
     private int maxFractionDigits;
@@ -53,7 +56,9 @@ public class ConvertNumberTag extends ConverterTag {
     private boolean minIntegerDigitsSpecified;
     private Locale parseLocale;
     private String pattern;
+    private String pattern_;
     private String type;
+    private String type_;
 
 
     // Attribute Instance Variables
@@ -76,7 +81,9 @@ public class ConvertNumberTag extends ConverterTag {
 
     private void init() {
         currencyCode = null;
+        currencyCode_ = null;
         currencySymbol = null;
+        currencySymbol_ = null;
         groupingUsed = true;
         integerOnly = false;
         maxFractionDigits = 0;
@@ -89,7 +96,9 @@ public class ConvertNumberTag extends ConverterTag {
         minIntegerDigitsSpecified = false;
         parseLocale = null;
         pattern = null;
+        pattern_ = null;
         type = "number";
+        type_ = "number";
     }
 
 
@@ -114,7 +123,7 @@ public class ConvertNumberTag extends ConverterTag {
     }
 
     public void setCurrencySymbol(String currencySymbol) {
-        this.currencySymbol = currencySymbol;
+        this.currencySymbol_ = currencySymbol;
     }
 
     public boolean isGroupingUsed() {
@@ -182,7 +191,7 @@ public class ConvertNumberTag extends ConverterTag {
     }
 
     public void setPattern(String pattern) {
-        this.pattern = pattern;
+        this.pattern_ = pattern;
     }
 
     public String getType() {
@@ -190,7 +199,7 @@ public class ConvertNumberTag extends ConverterTag {
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type_ = type;
     }
 
 
@@ -227,6 +236,35 @@ public class ConvertNumberTag extends ConverterTag {
 
         return result;
     }
+
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (currencyCode_ != null) {
+            currencyCode = Util.evaluateElExpression(currencyCode_, pageContext);
+        }
+        if (currencySymbol_ != null) {
+            currencySymbol = Util.evaluateElExpression(currencySymbol_, pageContext);
+        }
+        if (pattern_ != null) {
+            pattern = Util.evaluateElExpression(pattern_, pageContext);
+        }
+        if (type_ != null) {
+            type = Util.evaluateElExpression(type_, pageContext);
+        }
+    }
+
+    //
+    // Methods from TagSupport
+    //
+
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
+
 
 
 

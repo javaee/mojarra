@@ -1,5 +1,5 @@
 /*
- * $Id: DataTableTag.java,v 1.4 2003/09/25 16:36:29 rlubke Exp $
+ * $Id: DataTableTag.java,v 1.5 2003/10/07 20:15:52 horwat Exp $
  */
 
 /*
@@ -44,8 +44,11 @@ package com.sun.faces.taglib.html_basic;
 
 
 import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.util.Util;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
+import javax.servlet.jsp.JspException;
+
 
 
 /**
@@ -68,8 +71,9 @@ public class DataTableTag extends BaseComponentTag {
 
 
     private String columnClasses = null;
+    private String columnClasses_ = null;
     public void setColumnClasses(String columnClasses) {
-        this.columnClasses = columnClasses;
+        this.columnClasses_ = columnClasses;
     }
 
 
@@ -80,20 +84,23 @@ public class DataTableTag extends BaseComponentTag {
 
 
     private String footerClass = null;
+    private String footerClass_ = null;
     public void setFooterClass(String footerClass) {
-        this.footerClass = footerClass;
+        this.footerClass_ = footerClass;
     }
 
 
     private String headerClass = null;
+    private String headerClass_ = null;
     public void setHeaderClass(String headerClass) {
-        this.headerClass = headerClass;
+        this.headerClass_ = headerClass;
     }
 
 
     private String rowClasses = null;
+    private String rowClasses_ = null;
     public void setRowClasses(String rowClasses) {
-        this.rowClasses = rowClasses;
+        this.rowClasses_ = rowClasses;
     }
 
 
@@ -104,23 +111,27 @@ public class DataTableTag extends BaseComponentTag {
 
 
     private String styleClass = null;
+    private String styleClass_ = null;
     public void setDataClass(String styleClass) {
-        this.styleClass = styleClass;
+        this.styleClass_ = styleClass;
     }
 
 
     private String value = null;
+    private String value_ = null;
     public void setValue(String value) {
-	this.value = value;
+	this.value_ = value;
     }
 
 
     private String valueRef = null;
+    private String valueRef_ = null;
     public void setValueRef(String valueRef) {
-	this.valueRef = valueRef;
+	this.valueRef_ = valueRef;
     }
 
 
+    // var is not expression enabled
     private String var = null;
     public void setVar(String var) {
 	this.var = var;
@@ -188,5 +199,41 @@ public class DataTableTag extends BaseComponentTag {
 
     }
 
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (columnClasses_ != null) {
+            columnClasses = Util.evaluateElExpression(columnClasses_, pageContext);
+        }
+        if (footerClass_ != null) {
+            footerClass = Util.evaluateElExpression(footerClass_, pageContext);
+        }
+        if (headerClass_ != null) {
+            headerClass = Util.evaluateElExpression(headerClass_, pageContext);
+        }
+        if (rowClasses_ != null) {
+            rowClasses = Util.evaluateElExpression(rowClasses_, pageContext);
+        }
+        if (styleClass_ != null) {
+            styleClass = Util.evaluateElExpression(styleClass_, pageContext);
+        }
+        if (value_ != null) {
+            value = Util.evaluateElExpression(value_, pageContext);
+        }
+        if (valueRef_ != null) {
+            valueRef = Util.evaluateElExpression(valueRef_, pageContext);
+        }
+    }
 
+
+    //
+    // Methods from TagSupport
+    //
+
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
 }

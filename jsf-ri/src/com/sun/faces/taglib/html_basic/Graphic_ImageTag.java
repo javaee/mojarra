@@ -1,5 +1,5 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.14 2003/10/06 19:06:46 horwat Exp $
+ * $Id: Graphic_ImageTag.java,v 1.15 2003/10/07 20:15:52 horwat Exp $
  */
 
 /*
@@ -10,9 +10,12 @@
 package com.sun.faces.taglib.html_basic;
 
 import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.util.Util;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
+import javax.servlet.jsp.JspException;
+
 
 
 /**
@@ -37,6 +40,7 @@ public class Graphic_ImageTag extends BaseComponentTag
     // Attribute Instance Variables
 
     protected String url = null;
+    protected String url_ = null;
 
 
     // Relationship Instance Variables
@@ -55,7 +59,7 @@ public class Graphic_ImageTag extends BaseComponentTag
     //
 
     public void setUrl(String newUrl) {
-        url = newUrl;
+        url_ = newUrl;
     }
 
     // 
@@ -94,6 +98,25 @@ public class Graphic_ImageTag extends BaseComponentTag
     //
     // Methods from TagSupport
     // 
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (url_ != null) {
+            url = Util.evaluateElExpression(url_, pageContext);
+   	}
+    }
+
+    //
+    // Methods from TagSupport
+    //
+
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
+
 
 
 } // end of class Graphic_ImageTag

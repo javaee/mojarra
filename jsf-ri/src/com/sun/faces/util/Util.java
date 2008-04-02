@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.99 2003/10/07 19:53:14 rlubke Exp $
+ * $Id: Util.java,v 1.100 2003/10/07 20:16:08 horwat Exp $
  */
 
 /*
@@ -49,11 +49,17 @@ import javax.faces.render.ResponseStateManager;
 import javax.faces.application.StateManager;
 
 import javax.servlet.ServletContext;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
+
+import com.sun.faces.el.impl.ElException;
+import com.sun.faces.el.impl.ExpressionInfo;
+import com.sun.faces.el.impl.JspVariableResolver;
 
 /**
  *
@@ -61,7 +67,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.99 2003/10/07 19:53:14 rlubke Exp $ 
+ * @version $Id: Util.java,v 1.100 2003/10/07 20:16:08 horwat Exp $ 
  */
 
 public class Util extends Object
@@ -914,6 +920,35 @@ private Util()
             return JSP_EXPRESSION_EVALUATOR;
         else 
             return null;                      
+    }
+
+
+    /*
+     * Evaluate the EL expression for the given attribute.
+     * @throws JspException if an error occurs during evaluation
+     */
+    public static String evaluateElExpression(String expression, PageContext pageContext) 
+                                              throws JspException {
+        if (expression != null) {
+            //PENDING: horwat: put in quick and dirty expression check.
+            //this method will be called often so it needs to be efficient!
+            if ((expression.indexOf("${") != -1) && 
+                (expression.indexOf('}') != -1)) {
+
+                ExpressionInfo exprInfo = new ExpressionInfo();
+                exprInfo.setExpressionString(expression);
+                exprInfo.setExpectedType(String.class);
+                exprInfo.setVariableResolver(new JspVariableResolver(pageContext));
+                try {
+                    expression = (String)
+                        getExpressionEvaluator(RIConstants.JSP_EL_PARSER).evaluate(exprInfo);
+                } catch (ElException ele) {
+                    throw new JspException(ele.getMessage(), ele);
+                }
+            }
+        }
+
+        return expression;
     }
     
     public static StateManager getStateManager(FacesContext context) 

@@ -48,12 +48,12 @@
       <attribute>
 	<name>name</name>
 	<required>true</required>
-	<rtexprvalue>false</rtexprvalue>
+	<rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
 	<name>value</name>
 	<required>true</required>
-	<rtexprvalue>false</rtexprvalue>
+	<rtexprvalue>true</rtexprvalue>
       </attribute>
    </tag>
 
@@ -65,22 +65,22 @@
     <attribute>
       <name>id</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>valueRef</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>name</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>value</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -99,12 +99,12 @@
     <attribute>
       <name>maximum</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>minimum</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -116,12 +116,12 @@
     <attribute>
       <name>maximum</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>minimum</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -133,12 +133,12 @@
     <attribute>
       <name>maximum</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>minimum</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -150,12 +150,12 @@
     <attribute>
       <name>maximum</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
       <name>minimum</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -167,7 +167,7 @@
     <attribute>
       <name>id</name>
       <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -179,7 +179,7 @@
     <attribute>
       <name>name</name>
       <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -191,7 +191,7 @@
       <attribute>
           <name>type</name>
           <required>true</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
   </tag>
 
@@ -203,7 +203,7 @@
       <attribute>
           <name>type</name>
           <required>true</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
   </tag>
 
@@ -215,32 +215,32 @@
       <attribute>
           <name>dateStyle</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>parseLocale</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>pattern</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>timeStyle</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>timeZone</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>type</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
   </tag>
 
@@ -252,57 +252,57 @@
       <attribute>
           <name>currencyCode</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>currencySymbol</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>groupingUsed</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>integerOnly</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>maxFractionDigits</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>maxIntegerDigits</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>minFractionDigits</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>minIntegerDigits</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>parseLocale</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>pattern</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
           <name>type</name>
           <required>false</required>
-          <rtexprvalue>false</rtexprvalue>
+          <rtexprvalue>true</rtexprvalue>
       </attribute>
   </tag>
 
@@ -314,7 +314,7 @@
       <attribute>
 	<name>escape</name>
 	<required>false</required>
-	<rtexprvalue>false</rtexprvalue>
+	<rtexprvalue>true</rtexprvalue>
       </attribute>
    </tag>
 

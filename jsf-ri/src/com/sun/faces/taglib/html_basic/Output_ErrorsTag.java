@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.15 2003/09/25 16:36:30 rlubke Exp $
+ * $Id: Output_ErrorsTag.java,v 1.16 2003/10/07 20:15:53 horwat Exp $
  */
 
 /*
@@ -10,9 +10,12 @@
 package com.sun.faces.taglib.html_basic;
 
 import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.util.Util;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.servlet.jsp.JspException;
+
 
 /**
  *  <B>Output_ErrorsTag</B> is a convenience tag allowing content
@@ -37,7 +40,9 @@ public class Output_ErrorsTag extends BaseComponentTag {
     // Attribute Instance Variables
 
     protected String forValue = null;
+    protected String forValue_ = null;
     protected String color = null;
+    protected String color_ = null;
 
     // Relationship Instance Variables
 
@@ -59,11 +64,11 @@ public class Output_ErrorsTag extends BaseComponentTag {
 
     public void setFor(String newForValue)
     {
-        forValue = newForValue;
+        forValue_ = newForValue;
     }
 
     public void setColor(String newColor) {
-        color = newColor;
+        color_ = newColor;
     }
 
     //
@@ -86,9 +91,29 @@ public class Output_ErrorsTag extends BaseComponentTag {
             component.getAttributes().put("color", color);
         }
     }
+
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (forValue_ != null) {
+            forValue = Util.evaluateElExpression(forValue_, pageContext);
+   	}
+        if (color_ != null) {
+            color = Util.evaluateElExpression(color_, pageContext);
+   	}
+    }
+
     //
     // Methods from TagSupport
     //
+
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
+
 
 
 } // end of class Output_ErrorsTag

@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_MenuTag.java,v 1.15 2003/10/07 13:05:36 eburns Exp $
+ * $Id: SelectMany_MenuTag.java,v 1.16 2003/10/07 20:15:55 horwat Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -86,10 +86,10 @@ public class SelectMany_MenuTag extends BaseComponentTag
         if (size != Integer.MIN_VALUE) {
             component.getAttributes().put("size", new Integer(size));
         }
-        if (null != onselect) {
+        if (onselect != null) {
             component.getAttributes().put("onselect", onselect);
         }
-        if (null != onchange) {
+        if (onchange != null) {
             component.getAttributes().put("onchange", onchange);
         }
     }

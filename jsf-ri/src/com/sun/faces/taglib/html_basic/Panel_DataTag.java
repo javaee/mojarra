@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_DataTag.java,v 1.13 2003/10/06 19:06:48 horwat Exp $
+ * $Id: Panel_DataTag.java,v 1.14 2003/10/07 20:15:53 horwat Exp $
  */
 
 /*
@@ -53,6 +53,8 @@ public class Panel_DataTag extends BaseComponentTag {
     // 
     // Accessors
     //
+
+    // var is not expression enabled
     public void setVar(String var) {
         this.var = var;
     }

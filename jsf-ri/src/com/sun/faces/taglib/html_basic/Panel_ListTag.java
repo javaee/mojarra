@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_ListTag.java,v 1.15 2003/10/07 13:05:35 eburns Exp $
+ * $Id: Panel_ListTag.java,v 1.16 2003/10/07 20:15:53 horwat Exp $
  */
 
 /*
@@ -10,7 +10,11 @@
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
+import javax.servlet.jsp.JspException;
+
 import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.util.Util;
+
 
 /**
  * This class is the tag handler that evaluates the 
@@ -31,10 +35,15 @@ public class Panel_ListTag extends BaseComponentTag {
     // Instance Variables
     //
     private String columnClasses = null;
+    private String columnClasses_ = null;
     private String footerClass = null;
+    private String footerClass_ = null;
     private String headerClass = null;
+    private String headerClass_ = null;
     private String panelClass = null;
+    private String panelClass_ = null;
     private String rowClasses = null;
+    private String rowClasses_ = null;
      
     // Attribute Instance Variables
 
@@ -58,23 +67,23 @@ public class Panel_ListTag extends BaseComponentTag {
     //
     
     public void setColumnClasses(String newColumnClasses) {
-        this.columnClasses = newColumnClasses;
+        this.columnClasses_ = newColumnClasses;
     }
     
     public void setFooterClass(String newFooterClass) {
-        this.footerClass = newFooterClass;
+        this.footerClass_ = newFooterClass;
     }
     
     public void setHeaderClass(String newHeaderClass) {
-        this.headerClass = newHeaderClass;
+        this.headerClass_ = newHeaderClass;
     }
     
     public void setPanelClass(String newPanelClass) {
-        this.panelClass = newPanelClass;
+        this.panelClass_ = newPanelClass;
     }
     
     public void setRowClasses(String newRowClasses) {
-        this.rowClasses = newRowClasses;
+        this.rowClasses_ = newRowClasses;
     }
     
     public void release() {
@@ -143,4 +152,37 @@ public class Panel_ListTag extends BaseComponentTag {
     public String getComponentType() { 
         return ("PanelList"); 
     }    
+
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (columnClasses_ != null) {
+            columnClasses = Util.evaluateElExpression(columnClasses_, pageContext);
+   	}
+        if (footerClass_ != null) {
+            footerClass = Util.evaluateElExpression(footerClass_, pageContext);
+        }
+        if (headerClass_ != null) {
+            headerClass = Util.evaluateElExpression(headerClass_, pageContext);
+        }
+     	if (panelClass_ != null) {
+            panelClass = Util.evaluateElExpression(panelClass_, pageContext);
+        }
+        if (rowClasses_ != null) {
+            rowClasses = Util.evaluateElExpression(rowClasses_, pageContext);
+        }
+    }
+
+    //
+    // Methods from TagSupport
+    //
+
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
+
+
 }

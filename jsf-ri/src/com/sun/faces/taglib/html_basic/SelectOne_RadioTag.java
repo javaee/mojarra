@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.33 2003/10/07 13:05:36 eburns Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.34 2003/10/07 20:15:55 horwat Exp $
  */
 
 /*
@@ -11,6 +11,9 @@ package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
+import javax.servlet.jsp.JspException;
+
+import com.sun.faces.util.Util;
 
 /**
  * This class is the tag handler that evaluates the 
@@ -34,6 +37,7 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
     // Attribute Instance Variables
 
     protected String layout = null;
+    protected String layout_ = null;
 
 
     // Relationship Instance Variables
@@ -56,7 +60,7 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
     //
 
     public void setLayout(String newLayout) {
-	layout = newLayout;
+	layout_ = newLayout;
     }
 
     //
@@ -81,9 +85,26 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
 	    uiSelectOne.getAttributes().put("border", new Integer(border));
 	}
     }
+
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (layout_ != null) {
+            layout = Util.evaluateElExpression(layout_, pageContext);
+        }
+    }
+
     //
     // Methods from TagSupport
     // 
+
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
+
 
 
 } // end of class SelectOne_RadioTag

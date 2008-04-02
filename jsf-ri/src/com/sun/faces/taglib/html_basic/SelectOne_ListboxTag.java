@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_ListboxTag.java,v 1.12 2003/10/07 13:05:36 eburns Exp $
+ * $Id: SelectOne_ListboxTag.java,v 1.13 2003/10/07 20:15:55 horwat Exp $
  */
 
 /*
@@ -89,10 +89,10 @@ public class SelectOne_ListboxTag extends BaseComponentTag
         if (size != Integer.MIN_VALUE) {
 	    component.getAttributes().put("size", new Integer(size));
 	}
-        if (null != onselect) {
+        if (onselect != null) {
 	    component.getAttributes().put("onselect", onselect);
 	}
-        if (null != onchange) {
+        if (onchange != null) {
 	    component.getAttributes().put("onchange", onchange);
 	}
     }

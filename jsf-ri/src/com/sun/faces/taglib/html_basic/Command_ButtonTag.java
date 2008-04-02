@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.46 2003/10/06 19:06:45 horwat Exp $
+ * $Id: Command_ButtonTag.java,v 1.47 2003/10/07 20:15:51 horwat Exp $
  */
 
 /*
@@ -11,8 +11,10 @@ package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
+import javax.servlet.jsp.JspException;
 
 import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.util.Util;
 
 /**
  * This class is the tag handler that evaluates the <code>command_button</code>
@@ -35,7 +37,9 @@ public class Command_ButtonTag extends BaseComponentTag
 
     // Attribute Instance Variables
     protected String image = null;
+    protected String image_ = null;
     protected String actionRef = null;
+    protected String actionRef_ = null;
     protected boolean immediate = false;
 
     // Relationship Instance Variables
@@ -54,11 +58,11 @@ public class Command_ButtonTag extends BaseComponentTag
     //
 
     public void setActionRef(String newActionRef) {
-        actionRef = newActionRef;
+        actionRef_ = newActionRef;
     }
 
     public void setImage(String newImage) {
-        image = newImage;
+        image_ = newImage;
     }
 
     public void setImmediate(boolean newImmediate) {
@@ -83,25 +87,43 @@ public class Command_ButtonTag extends BaseComponentTag
 	    button.setAction(action);
 	}
 
-        if (null != type) {
+        if (type != null) {
             button.getAttributes().put("type", type);
         }
 
-        if (null != value) {
+        if (value != null) {
             button.setValue(value);
         }
 
-        if (null != image) {
+        if (image != null) {
             button.getAttributes().put("image", image);
         }
 
 	button.setImmediate(immediate);
     }
 
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (image_ != null) {
+            image = Util.evaluateElExpression(image_, pageContext);
+        }
+        if (actionRef_ != null) {
+            actionRef = Util.evaluateElExpression(actionRef_, pageContext);
+        }
+    }
+
 
     //
     // Methods from TagSupport
     // 
+
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+        
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
 
 
 } // end of class Command_ButtonTag

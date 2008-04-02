@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.15 2003/10/07 13:57:25 rlubke Exp $
+ * $Id: Input_SecretTag.java,v 1.16 2003/10/07 20:15:53 horwat Exp $
  */
 
 /*
@@ -78,10 +78,5 @@ public class Input_SecretTag extends Input_TextTag
             input.getAttributes().put("redisplay", new Boolean(redisplay));
         }
     }
-
-
-    //
-    // Methods from TagSupport
-    // 
 
 } // end of class Input_SecretTag

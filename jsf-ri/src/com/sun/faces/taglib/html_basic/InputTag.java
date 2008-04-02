@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.15 2003/10/07 13:57:25 rlubke Exp $
+ * $Id: InputTag.java,v 1.16 2003/10/07 20:15:52 horwat Exp $
  */
 
 /*
@@ -11,8 +11,11 @@ package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.servlet.jsp.JspException;
+
 
 import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -35,6 +38,7 @@ public abstract class InputTag extends BaseComponentTag
 
     // Attribute Instance Variables
     protected String label = null;
+    protected String label_ = null;
     protected boolean required = false;
     // Relationship Instance Variables
 
@@ -57,7 +61,7 @@ public abstract class InputTag extends BaseComponentTag
 
     public void setLabel(String newLabel)
     {
-        label = newLabel;
+        label_ = newLabel;
     }
 
     //
@@ -92,8 +96,25 @@ public abstract class InputTag extends BaseComponentTag
 
     public String getComponentType() { return "Input"; }
     
+
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (label_ != null) {
+            label = Util.evaluateElExpression(label_, pageContext);
+   	}
+    }
+
     //
     // Methods from TagSupport
     //
+
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
+
     
 } // end of class Input_DateTag

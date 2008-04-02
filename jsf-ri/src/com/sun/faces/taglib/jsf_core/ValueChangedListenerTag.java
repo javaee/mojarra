@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangedListenerTag.java,v 1.6 2003/09/12 16:30:20 craigmcc Exp $
+ * $Id: ValueChangedListenerTag.java,v 1.7 2003/10/07 20:16:05 horwat Exp $
  */
 
 /*
@@ -60,6 +60,7 @@ public class ValueChangedListenerTag extends TagSupport {
      * instance to be created.</p>
      */
     private String type = null;
+    private String type_ = null;
 
 
     /**
@@ -88,6 +89,8 @@ public class ValueChangedListenerTag extends TagSupport {
      * @exception JspException if a JSP error occurs
      */
     public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
 
         // Locate our parent UIComponentTag
         UIComponentTag tag =
@@ -150,4 +153,12 @@ public class ValueChangedListenerTag extends TagSupport {
         }
 
     }
+
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (type_ != null) {
+            type = Util.evaluateElExpression(type_, pageContext);
+ 	}
+    }
+
 }

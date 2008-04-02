@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.3 2003/10/07 13:57:24 rlubke Exp $
+ * $Id: BaseComponentTag.java,v 1.4 2003/10/07 20:15:50 horwat Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.3 2003/10/07 13:57:24 rlubke Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.4 2003/10/07 20:15:50 horwat Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -52,27 +52,46 @@ public abstract class BaseComponentTag extends UIComponentTag
     //
 
     // Attribute Instance Variables
+    // each attribute instance variable has a matching <name>_ variable to
+    // store the original value. The set method may not be called in a container
+    // that supports tag pooling. Must be able to get original value in order
+    // to re-evaluate the same expression if present.
 
     // core attrs
-    protected String styleClass = null;    
+    protected String styleClass = null;
+    protected String styleClass_ = null;
     protected String title = null;
+    protected String title_ = null;
 
     // events attrs
     protected String onclick = null;
+    protected String onclick_ = null;
     protected String ondblclick = null;
+    protected String ondblclick_ = null;
     protected String onmousedown = null;
+    protected String onmousedown_ = null;
     protected String onmouseover = null;
+    protected String onmouseover_ = null;
     protected String onmousemove = null;
+    protected String onmousemove_ = null;
     protected String onmouseout = null;
+    protected String onmouseout_ = null;
     protected String onkeypress = null;
+    protected String onkeypress_ = null;
     protected String onkeydown = null;
+    protected String onkeydown_ = null;
     protected String onkeyup = null;
-    
+    protected String onkeyup_ = null;
+
     // i18n attrs
     protected String lang = null;
+    protected String lang_ = null;
     protected String dir = null;
+    protected String dir_ = null;
     protected String key = null;
+    protected String key_ = null;
     protected String bundle = null;
+    protected String bundle_ = null;
 
 
     // non-String attrs
@@ -81,12 +100,12 @@ public abstract class BaseComponentTag extends UIComponentTag
     protected int tabindex = Integer.MIN_VALUE;
     protected boolean checked = false;
     protected int height = Integer.MIN_VALUE; // PENDING(edburns): never
-					      // pushed to component.
-					      // PENDING(edburns): this
-					      // should really be a
-					      // String, so it can
-					      // handle the percentage
-					      // case.
+                                              // pushed to component.
+                                              // PENDING(edburns): this
+                                              // should really be a
+                                              // String, so it can
+                                              // handle the percentage
+                                              // case.
     protected int width = Integer.MIN_VALUE;
     protected int border = Integer.MIN_VALUE;
     protected int cellspacing = Integer.MIN_VALUE;
@@ -97,57 +116,106 @@ public abstract class BaseComponentTag extends UIComponentTag
     protected int cols = Integer.MIN_VALUE;
 
     protected String imageKey = null;
+    protected String imageKey_ = null;
     protected String formatStyle = null;
+    protected String formatStyle_ = null;
     protected String dateStyle = null;
+    protected String dateStyle_ = null;
     protected String timeStyle = null;
+    protected String timeStyle_ = null;
     protected String timezone = null;
+    protected String timezone_ = null;
     protected String formatPattern = null;
+    protected String formatPattern_ = null;
 
     protected String accept = null;
+    protected String accept_ = null;
     protected String acceptcharset = null;
+    protected String acceptcharset_ = null;
     protected String accesskey = null;
+    protected String accesskey_ = null;
     protected String action = null;
+    protected String action_ = null;
     protected String alt = null;
+    protected String alt_ = null;
     protected String charset = null;
+    protected String charset_ = null;
     protected String coords = null;
+    protected String coords_ = null;
     protected String enctype = null;
+    protected String enctype_ = null;
     protected String htmlFor = null;
+    protected String htmlFor_ = null;
     protected String href = null;
+    protected String href_ = null;
     protected String hreflang = null;
+    protected String hreflang_ = null;
     protected String hspace = null;
+    protected String hspace_ = null;
     protected String ismap = null;
+    protected String ismap_ = null;
     protected String label = null;
+    protected String label_ = null;
     protected String longdesc = null;
+    protected String longdesc_ = null;
     protected String method = null;
+    protected String method_ = null;
     protected String multiple = null;
+    protected String multiple_ = null;
     protected String name = null;
+    protected String name_ = null;
     protected String onblur = null;
+    protected String onblur_ = null;
     protected String onchange = null;
+    protected String onchange_ = null;
     protected String onfocus = null;
+    protected String onfocus_ = null;
     protected String onmouseup = null;
+    protected String onmouseup_ = null;
     protected String onreset = null;
+    protected String onreset_ = null;
     protected String onselect = null;
+    protected String onselect_ = null;
     protected String onsubmit = null;
+    protected String onsubmit_ = null;
     protected String rel = null;
+    protected String rel_ = null;
     protected String rev = null;
+    protected String rev_ = null;
     protected String selected = null;
+    protected String selected_ = null;
     protected String shape = null;
+    protected String shape_ = null;
     protected String src = null;
+    protected String src_ = null;
     protected String style = null;
+    protected String style_ = null;
     protected String target = null;
+    protected String target_ = null;
     protected String type = null;
+    protected String type_ = null;
     protected String usemap = null;
+    protected String usemap_ = null;
     protected String value = null;
+    protected String value_ = null;
 
     // HTML 4.0 table attributes
     protected String summary = null;
+    protected String summary_ = null;
     protected String bgcolor = null;
+    protected String bgcolor_ = null;
     protected String frame = null;
+    protected String frame_ = null;
     protected String rules = null;
+    protected String rules_ = null;
 
     protected String valueRef = null;
+    protected String valueRef_ = null;
     protected Converter converter = null;
-     // Relationship Instance Variables
+
+    protected String id_ = null;
+
+    // Relationship Instance Variables
 
     //
     // Constructors and Initializers    
@@ -167,7 +235,7 @@ public abstract class BaseComponentTag extends UIComponentTag
     //
     public void setValueRef(String newValueRef)
     {
-	valueRef = newValueRef;
+	valueRef_ = newValueRef;
     }
     
     public void setConverter(Converter converter) {
@@ -177,42 +245,42 @@ public abstract class BaseComponentTag extends UIComponentTag
   
     public void setKey(String newKey)
     {
-	key = newKey;
+	key_ = newKey;
     }
 
     public void setImageKey(String newImageKey)
     {
-	imageKey = newImageKey;
+	imageKey_ = newImageKey;
     }
 
     public void setBundle(String newBundle)
     {
-	bundle = newBundle;
+	bundle_ = newBundle;
     }
 
     public void setFormatStyle(String newFormatStyle)
     {
-	formatStyle = newFormatStyle;
+	formatStyle_ = newFormatStyle;
     }
     
     public void setDateStyle(String newDateStyle)
     {
-	dateStyle = newDateStyle;
+	dateStyle_ = newDateStyle;
     }
     
     public void setTimeStyle(String newTimeStyle)
     {
-	timeStyle = newTimeStyle;
+	timeStyle_ = newTimeStyle;
     }
 
     public void setTimezone(String newTimezone)
     {
-	timezone = newTimezone;
+	timezone_ = newTimezone;
     }
     
     public void setFormatPattern(String newFormatPattern)
     {
-	formatPattern = newFormatPattern;
+	formatPattern_ = newFormatPattern;
     }
 
     // List of MIME types for file upload - 
@@ -220,14 +288,14 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setAccept(String newAccept) 
     {
-        accept = newAccept;
+        accept_ = newAccept;
     }
 
     // List of supported char sets - For FORM HTML element
 
     public void setAcceptcharset(String newAcceptcharset) 
     {
-        acceptcharset = newAcceptcharset;
+        acceptcharset_ = newAcceptcharset;
     }
     
     // Accessibility key char -
@@ -235,21 +303,21 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setAccesskey(String newAccesskey) 
     {
-        accesskey = newAccesskey;
+        accesskey_ = newAccesskey;
     }
 
     // Server-side form handler - For FORM HTML element
 
     public void setAction(String newAction) 
     {
-        action = newAction;
+        action_ = newAction;
     }
 
     // Short description - For INPUT HTML element
 
     public void setAlt(String newAlt)
     {
-        alt = newAlt;
+        alt_ = newAlt;
     }
 
     // Char encoding for linked resource -
@@ -257,7 +325,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setCharset(String newCharset) 
     {
-        charset = newCharset;
+        charset_ = newCharset;
     }
 
     // For radio buttons and checkboxes - For INPUT element
@@ -282,7 +350,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setCoords(String newCoords)
     {
-        coords = newCoords;
+        coords_ = newCoords;
     }
   
     // Direction for weak/neutral text - For all HTML elements 
@@ -290,7 +358,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setDir(String newDir) 
     {
-        dir = newDir;
+        dir_ = newDir;
     }
 
     // Means "unavailable" in this context -
@@ -305,14 +373,14 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setEnctype(String newEnctype)
     {
-        enctype = newEnctype;
+        enctype_ = newEnctype;
     }
 
     // Matches field "id" value - For LABEL HTML element
 
     public void setHtmlFor(String newHtmlFor)
     {
-        htmlFor = newHtmlFor;
+        htmlFor_ = newHtmlFor;
     }
 
     // Override height - For IMG HTML element
@@ -326,49 +394,49 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setHref(String newHref)
     {
-        href = newHref;
+        href_ = newHref;
     }
 
     // Language Code - For "A" (Hyperlink) HTML element
 
     public void setHreflang(String newHreflang)
     {
-        hreflang = newHreflang;
+        hreflang_ = newHreflang;
     }
 
     // Horizontal space - For IMG HTML element
 
     public void setHspace(String newHspace)
     {
-        hspace = newHspace;
+        hspace_ = newHspace;
     }
 
     // Use server side image map - For IMG/INPUT HTML elements
 
     public void setIsmap(String newIsmap)
     {
-        ismap = newIsmap;
+        ismap_ = newIsmap;
     }
 
     // For OPTION/OPTGROUP HTML elements
 
     public void setLabel(String newLabel)
     {
-        label = newLabel;
+        label_ = newLabel;
     }
 
     // Language Code - For all HTML elements pertaining to Faces
 
     public void setLang(String newLang)
     {
-        lang = newLang;
+        lang_ = newLang;
     }
 
     // Link to long description - For IMG HTML element
 
     public void setLongdesc(String newLongdesc)
     {
-        longdesc = newLongdesc;
+        longdesc_ = newLongdesc;
     }
 
     // Maximum chars for text fields - For INPUT HTML elements
@@ -383,14 +451,14 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setMethod(String newMethod)
     {
-        method = newMethod;
+        method_ = newMethod;
     }
 
     // Default is single selection - For SELECT HTML element
 
     public void setMultiple(String newMultiple)
     {
-        multiple = newMultiple;
+        multiple_ = newMultiple;
     }
  
     // Element name - For BUTTON/TEXTAREA/SELECT/FORM/
@@ -398,7 +466,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setName(String newName)
     {
-        name = newName;
+        name_ = newName;
     }
 
     // Element lost focus - For "A" (Hyperlink)/BUTTON/INPUT/
@@ -406,14 +474,14 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnblur(String newOnblur)
     {
-        onblur = newOnblur;
+        onblur_ = newOnblur;
     }
 
     // Element value was changed - For INPUT/SELECT/TEXTAREA HTML elements
 
     public void setOnchange(String newOnchange)
     {
-        onchange = newOnchange;
+        onchange_ = newOnchange;
     }
 
     // A pointer button was clicked - For all HTML elements pertaining
@@ -421,7 +489,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnclick(String newOnclick)
     {
-        onclick = newOnclick;
+        onclick_ = newOnclick;
     }
 
     // A pointer button was double clicked - For all HTML 
@@ -429,7 +497,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOndblclick(String newOndblclick)
     {
-        ondblclick = newOndblclick;
+        ondblclick_ = newOndblclick;
     }
     
     // Element got the focus - For "A" (Hyperlink)/BUTTON/
@@ -437,7 +505,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnfocus(String newOnfocus)
     {
-        onfocus = newOnfocus;
+        onfocus_ = newOnfocus;
     }
 
     // A key was pressed down - For all HTML elements pertaining
@@ -445,7 +513,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnkeydown(String newOnkeydown)
     {
-        onkeydown = newOnkeydown;
+        onkeydown_ = newOnkeydown;
     }
     
     // A key was pressed and released - For all HTML elements
@@ -453,7 +521,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnkeypress(String newOnkeypress)
     {
-        onkeypress = newOnkeypress;
+        onkeypress_ = newOnkeypress;
     }
 
     // A key was released - For all HTML elements pertaining
@@ -461,7 +529,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnkeyup(String newOnkeyup)
     {
-        onkeyup = newOnkeyup;
+        onkeyup_ = newOnkeyup;
     }
 
     // A pointer button was pressed down - For all HTML
@@ -469,7 +537,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnmousedown(String newOnmousedown)
     {
-        onmousedown = newOnmousedown;
+        onmousedown_ = newOnmousedown;
     }
 
     // A pointer was moved within - For all HTML elements
@@ -477,7 +545,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnmousemove(String newOnmousemove)
     {
-        onmousemove = newOnmousemove;
+        onmousemove_ = newOnmousemove;
     }
 
     // A pointer was moved away - For all HTML elements
@@ -485,7 +553,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnmouseout(String newOnmouseout)
     {
-        onmouseout = newOnmouseout;
+        onmouseout_ = newOnmouseout;
     }
 
     // A pointer was moved onto - For all HTML elements
@@ -493,7 +561,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnmouseover(String newOnmouseover)
     {
-        onmouseover = newOnmouseover;
+        onmouseover_ = newOnmouseover;
     }
 
     // A pointer button was released - For all HTML elements
@@ -501,7 +569,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnmouseup(String newOnmouseup)
     {
-        onmouseup = newOnmouseup;
+        onmouseup_ = newOnmouseup;
     }
 
     // The form was reset - For FORM HTML element
@@ -515,14 +583,14 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setOnselect(String newOnselect)
     {
-        onselect = newOnselect;
+        onselect_ = newOnselect;
     }
 
     // The form was submitted - For FORM HTML element
 
     public void setOnsubmit(String newOnsubmit)
     {
-        onsubmit = newOnsubmit;
+        onsubmit_ = newOnsubmit;
     }
 
     // For TEXTAREA/INPUT HTML elements
@@ -536,14 +604,14 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setRel(String newRel)
     {
-        rel = newRel;
+        rel_ = newRel;
     }
 
     // Reverse link types - For "A" (Hyperlink) HTML element
 
     public void setRev(String newRev)
     {
-        rev = newRev;
+        rev_ = newRev;
     }
 
     // For TEXTAREA HTML element
@@ -557,7 +625,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setSelected(String newSelected)
     {
-        selected = newSelected;
+        selected_ = newSelected;
     }
 
     // For use with client-side image maps -
@@ -565,7 +633,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setShape(String newShape)
     {
-        shape = newShape;
+        shape_ = newShape;
     }
 
     // For INPUT/SELECT HTML elements - (means rows visible
@@ -580,15 +648,15 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setSrc(String newSrc)
     {
-        src = newSrc;
+        src_ = newSrc;
     }
 
     public void setStyle(String style) {
-        this.style = style;
+        this.style_ = style;
     }
     
     public void setStyleClass(String styleClass) {
-        this.styleClass = styleClass;
+        this.styleClass_ = styleClass;
     }
 
     // Position in tabbing order - For "A" (Hyperlink)/
@@ -604,7 +672,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setTarget(String newTarget)
     {
-        target = newTarget;
+        target_ = newTarget;
     }
 
     // Advisory title - For all HTML elements pertaining
@@ -612,21 +680,21 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setTitle(String newTitle)
     {
-        title = newTitle;
+        title_ = newTitle;
     }
     
     // For "A" (Hyperlink)/INPUT/BUTTON HTML elements
 
     public void setType(String newType)
     {
-        type = newType;
+        type_ = newType;
     }
 
     // Use client-side image map - For IMG/INPUT HTML elements.
 
     public void setUsemap(String newUsemap)
     {
-        usemap = newUsemap;
+        usemap_ = newUsemap;
     }
 
     // For INPUT/OPTION/BUTTON HTML elements.
@@ -634,13 +702,13 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     public void setValue(String newValue)
     {
-        value = newValue;
+        value_ = newValue;
     }
     
     // HTML 4.0 table attributes
     
    public  void setSummary(String newSummary) {
-       this.summary = newSummary;
+       this.summary_ = newSummary;
    } 
 
    public  void setWidth(int newWidth) {
@@ -648,15 +716,15 @@ public abstract class BaseComponentTag extends UIComponentTag
    } 
    
    public  void setBgcolor(String newColor) {
-       this.bgcolor = newColor;
+       this.bgcolor_ = newColor;
    }
    
    public  void setFrame(String newFrame) {
-       this.frame = newFrame;
+       this.frame_ = newFrame;
    }
    
    public  void setRules(String newRules) {
-       this.rules = newRules;
+       this.rules_ = newRules;
    }
    
    public  void setBorder(int newBorder) {
@@ -681,10 +749,10 @@ public abstract class BaseComponentTag extends UIComponentTag
     public void setId(String newId) { 	
 
 	if (-1 != newId.indexOf("\"")) {
-	    id = newId.substring(1, newId.length() - 1);
+	    id_ = newId.substring(1, newId.length() - 1);
 	}
 	else {
-	    id = newId;
+	    id_ = newId;
 	}
     }
     
@@ -694,203 +762,362 @@ public abstract class BaseComponentTag extends UIComponentTag
 
 
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-    /**
-     * <p>Evaluate the ID attribute as an EL expression if
-     * the value is surrounded by the standard EL delimiters.</p>
-     * @throws JspException if an error occurs during evaluation.
-     */
-    private void evaluateId() throws JspException {        
-        if (id != null) {
-            String expression = id;
-            ExpressionInfo exprInfo = new ExpressionInfo();
-            exprInfo.setExpressionString(expression);
-            exprInfo.setExpectedType(String.class);
-            exprInfo.setVariableResolver(new JspVariableResolver(pageContext));
-            try {
-                id = (String)
-                    Util.getExpressionEvaluator(RIConstants.JSP_EL_PARSER).evaluate(exprInfo);
-            } catch (ElException ele) {
-                throw new JspException(ele.getMessage(), ele);
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (id_ != null) {
+            id = Util.evaluateElExpression(id_, pageContext);
+        }
+        if (key_ != null) {
+            key = Util.evaluateElExpression(key_, pageContext);
+        }
+        if (imageKey_ != null) {
+            imageKey = Util.evaluateElExpression(imageKey_, pageContext);
+        }
+        if (bundle_ != null) {
+            bundle = Util.evaluateElExpression(bundle_, pageContext);
+        }
+        if (formatStyle_ != null) {
+            formatStyle = Util.evaluateElExpression(formatStyle_, pageContext);
+        }
+        if (dateStyle_ != null) {
+            dateStyle = Util.evaluateElExpression(dateStyle_, pageContext);
+        }
+        if (timeStyle_ != null) {
+            timeStyle = Util.evaluateElExpression(timeStyle_, pageContext);
+        }
+        if (timezone_ != null) {
+            timezone = Util.evaluateElExpression(timezone_, pageContext);
+        }
+        if (formatPattern_ != null) {
+            formatPattern = Util.evaluateElExpression(formatPattern_, pageContext);
+        }
+        if (accept_ != null) {
+            accept = Util.evaluateElExpression(accept_, pageContext);
+        }
+        if (acceptcharset_ != null) {
+            acceptcharset = Util.evaluateElExpression(acceptcharset_, pageContext);
+        }
+        if (accesskey_ != null) {
+            accesskey = Util.evaluateElExpression(accesskey_, pageContext);
+        }
+        if (action_ != null) {
+            action = Util.evaluateElExpression(action_, pageContext);
+        }
+        if (alt_ != null) {
+            alt = Util.evaluateElExpression(alt_, pageContext);
+        }
+        if (charset_ != null) {
+            charset = Util.evaluateElExpression(charset_, pageContext);
+        }
+        if (coords_ != null) {
+            coords = Util.evaluateElExpression(coords_, pageContext);
+        }
+        if (dir_ != null) {
+            dir = Util.evaluateElExpression(dir_, pageContext);
+        }
+        if (enctype_ != null) {
+            enctype = Util.evaluateElExpression(enctype_, pageContext);
+        }
+        if (htmlFor_ != null) {
+            htmlFor = Util.evaluateElExpression(htmlFor_, pageContext);
+        }
+        if (href_ != null) {
+            href = Util.evaluateElExpression(href_, pageContext);
+        }
+        if (hreflang_ != null) {
+            hreflang = Util.evaluateElExpression(hreflang_, pageContext);
+        }
+        if (hspace_ != null) {
+            hspace = Util.evaluateElExpression(hspace_, pageContext);
+        }
+        if (ismap_ != null) {
+            ismap = Util.evaluateElExpression(ismap_, pageContext);
+        }
+        if (label_ != null) {
+            label = Util.evaluateElExpression(label_, pageContext);
+        }
+        if (lang_ != null) {
+            lang = Util.evaluateElExpression(lang_, pageContext);
+        }
+        if (longdesc_ != null) {
+            longdesc = Util.evaluateElExpression(longdesc_, pageContext);
+        }
+        if (method_ != null) {
+            method = Util.evaluateElExpression(method_, pageContext);
+        }
+        if (multiple_ != null) {
+            multiple = Util.evaluateElExpression(multiple_, pageContext);
+        }
+        if (name_ != null) {
+            name = Util.evaluateElExpression(name_, pageContext);
+        }
+        if (onblur_ != null) {
+            onblur = Util.evaluateElExpression(onblur_, pageContext);
+        }
+        if (onchange_ != null) {
+            onchange = Util.evaluateElExpression(onchange_, pageContext);
+        }
+        if (onclick_ != null) {
+            onclick = Util.evaluateElExpression(onclick_, pageContext);
+        }
+        if (ondblclick_ != null) {
+            ondblclick = Util.evaluateElExpression(ondblclick_, pageContext);
+        }
+        if (onfocus_ != null) {
+            onfocus = Util.evaluateElExpression(onfocus_, pageContext);
+        }
+        if (onkeydown_ != null) {
+            onkeydown = Util.evaluateElExpression(onkeydown_, pageContext);
+        }
+        if (onkeypress_ != null) {
+            onkeypress = Util.evaluateElExpression(onkeypress_, pageContext);
+        }
+        if (onkeyup_ != null) {
+            onkeyup = Util.evaluateElExpression(onkeyup_, pageContext);
+        }
+        if (onmousedown_ != null) {
+            onmousedown = Util.evaluateElExpression(onmousedown_, pageContext);
+        }
+        if (onmouseover_ != null) {
+            onmouseover = Util.evaluateElExpression(onmouseover_, pageContext);
+        }
+        if (onmouseup_ != null) {
+            onmouseup = Util.evaluateElExpression(onmouseup_, pageContext);
+        }
+        if (onreset_ != null) {
+            onreset = Util.evaluateElExpression(onreset_, pageContext);
+        }
+        if (onselect_ != null) {
+            onselect = Util.evaluateElExpression(onselect_, pageContext);
+        }
+        if (onsubmit_ != null) {
+            onsubmit = Util.evaluateElExpression(onsubmit_, pageContext);
+        }
+        if (rel_ != null) {
+            rel = Util.evaluateElExpression(rel_, pageContext);
+        }
+        if (rev_ != null) {
+            rev = Util.evaluateElExpression(rev_, pageContext);
+        }
+        if (selected_ != null) {
+            selected = Util.evaluateElExpression(selected_, pageContext);
+        }
+        if (shape_ != null) {
+            shape = Util.evaluateElExpression(shape_, pageContext);
+        }
+        if (src_ != null) {
+            src = Util.evaluateElExpression(src_, pageContext);
+        }
+        if (style_ != null) {
+            style = Util.evaluateElExpression(style_, pageContext);
+        }
+        if (styleClass_ != null) {
+            styleClass = Util.evaluateElExpression(styleClass_, pageContext);
+        }
+        if (target_ != null) {
+            target = Util.evaluateElExpression(target_, pageContext);
+        }
+        if (title_ != null) {
+            title = Util.evaluateElExpression(title_, pageContext);
+        }
+        if (type_ != null) {
+            type = Util.evaluateElExpression(type_, pageContext);
+        }
+        if (usemap_ != null) {
+            usemap = Util.evaluateElExpression(usemap_, pageContext);
+        }
+        if (value_ != null) {
+            value = Util.evaluateElExpression(value_, pageContext);
+        }
+        if (summary_ != null) {
+            summary = Util.evaluateElExpression(summary_, pageContext);
+        }
+        if (bgcolor_ != null) {
+            bgcolor = Util.evaluateElExpression(bgcolor_, pageContext);
+        }
+        if (frame_ != null) {
+            frame = Util.evaluateElExpression(frame_, pageContext);
+        }
+        if (rules_ != null) {
+            rules = Util.evaluateElExpression(rules_, pageContext);
+        }
+        if (valueRef_ != null) {
+            valueRef = Util.evaluateElExpression(valueRef_, pageContext);
+        }
+    }
+
+
+    //
+    // Methods from Superclass
+    // 
+    protected void overrideProperties(UIComponent component) {
+        super.overrideProperties(component);
+
+        if ( component instanceof ValueHolder ) {
+            ValueHolder valueHolder = (ValueHolder)component;
+            if (null != valueRef) {
+                valueHolder.setValueRef(valueRef);
             }
+            if (null != value) {
+                valueHolder.setValue(value);
+	    }
+            if (null != converter) {
+                valueHolder.setConverter(converter);
+            }
+        }	
+
+        if (null != key) {
+            component.getAttributes().put("key", key);
         }
-    }
-
-
-//
-// Methods from Superclass
-// 
-
-
-protected void overrideProperties(UIComponent component) 
-{
-    super.overrideProperties(component);    
-
-    if ( component instanceof ValueHolder ) {
-        ValueHolder valueHolder = (ValueHolder)component;
-        if (null != valueRef) {
-            valueHolder.setValueRef(valueRef);
-        }    
-	if (null != value) {
-	    valueHolder.setValue(value);
-	}
-        if (null != converter) {           
-            valueHolder.setConverter(converter);
+        if (null != imageKey) {
+            component.getAttributes().put("imageKey", imageKey);
         }
-    }    
+        if (null != bundle) {
+            component.getAttributes().put(RIConstants.BUNDLE_ATTR, bundle);
+        }
+        if (null != formatPattern) {
+            component.getAttributes().put("formatPattern", formatPattern);
+        }
+        if (null != dateStyle) {
+            component.getAttributes().put("dateStyle", dateStyle);
+        }
+        if (null != timeStyle) {
+            component.getAttributes().put("timeStyle", timeStyle);
+        }
+        if (null != timezone) {
+            component.getAttributes().put("timezone", timezone);
+        }
 
-    if (null != key) {
-	component.getAttributes().put("key", key);
-    }
-    if (null != imageKey) {
-	component.getAttributes().put("imageKey", imageKey);
-    }
-    if (null != bundle) {
-	component.getAttributes().put(RIConstants.BUNDLE_ATTR, bundle);
-    }
-    if (null != formatPattern) {
-	component.getAttributes().put("formatPattern", formatPattern);
-    }
-    if (null != dateStyle) {
-	component.getAttributes().put("dateStyle", dateStyle);
-    }
-    if (null != timeStyle) {
-	component.getAttributes().put("timeStyle", timeStyle);
-    }
-    if (null != timezone) {
-	component.getAttributes().put("timezone", timezone);
+        // HTML 4.0 event handlers common to most BODY-content elements.
+        if (null != onclick) {
+            component.getAttributes().put("onclick", onclick);
+        }
+        if (null != ondblclick) {
+            component.getAttributes().put("ondblclick", ondblclick);
+        }
+
+        if (null != onkeydown) {
+            component.getAttributes().put("onkeydown", onkeydown);
+        }
+        if (null != onkeypress) {
+            component.getAttributes().put("onkeypress", onkeypress);
+        }
+        if (null != onkeyup) {
+            component.getAttributes().put("onkeyup", onkeyup);
+        }
+        if (null != onmousedown) {
+            component.getAttributes().put("onmousedown", onmousedown);
+        }
+        if (null != onmousemove) {
+            component.getAttributes().put("onmousemove", onmousemove);
+        }
+        if (null != onmouseout) {
+            component.getAttributes().put("onmouseout", onmouseout);
+        }
+        if (null != onmouseover) {
+            component.getAttributes().put("onmouseover", onmouseover);
+        }
+        if (null != onmouseup) {
+            component.getAttributes().put("onmouseup", onmouseup);
+        }
+        if (null != onfocus) {
+            component.getAttributes().put("onfocus", onfocus);
+        }
+        if (null != onblur) {
+            component.getAttributes().put("onblur", onblur);
+        }
+
+        // common HTML 4.0 attributes.
+        // PENDING (visvan) id attribute clashes with faces id attribute
+        if (null != title) {
+            component.getAttributes().put("title", title);
+        }
+        if (disabled) {
+            component.getAttributes().put("disabled",
+                                         new Boolean(disabled));
+        }
+        if (tabindex != Integer.MIN_VALUE) {
+            component.getAttributes().put("tabindex", new Integer(tabindex));
+        }
+        if (null != accesskey) {
+            component.getAttributes().put("accesskey", accesskey);
+        }
+        if (null != lang) {
+            component.getAttributes().put("lang", lang);
+        }
+        if (null != dir) {
+            component.getAttributes().put("dir", dir);
+        }
+        if (null != style) {
+            component.getAttributes().put("style", style);
+        }
+        if (null != styleClass) {
+            component.getAttributes().put("styleClass", styleClass);
+        }
+        if (null != dateStyle) {
+            component.getAttributes().put("dateStyle", dateStyle);
+        }
+        if (null != timeStyle) {
+            component.getAttributes().put("timeStyle", timeStyle);
+        }
+
     }
 
-    // HTML 4.0 event handlers common to most BODY-content elements.
-    if (null != onclick) {
-	component.getAttributes().put("onclick", onclick);
-    }
-    if (null != ondblclick) {
-	component.getAttributes().put("ondblclick", ondblclick);
+    protected String getDebugString() {
+        String result = 
+	    "id: " + this.getId() + "\n " +
+	    "class: " + this.getClass().getName() + "\n ";
+        return result;
     }
 
-    if (null != onkeydown) {
-	component.getAttributes().put("onkeydown", onkeydown);
-    }
-    if (null != onkeypress) {
-	component.getAttributes().put("onkeypress", onkeypress);
-    }
-    if (null != onkeyup) {
-	component.getAttributes().put("onkeyup", onkeyup);
-    }
-    if (null != onmousedown) {
-	component.getAttributes().put("onmousedown", onmousedown);
-    }
-    if (null != onmousemove) {
-	component.getAttributes().put("onmousemove", onmousemove);
-    }
-    if (null != onmouseout) {
-	component.getAttributes().put("onmouseout", onmouseout);
-    }
-    if (null != onmouseover) {
-	component.getAttributes().put("onmouseover", onmouseover);
-    }
-    if (null != onmouseup) {
-	component.getAttributes().put("onmouseup", onmouseup);
-    }
-    if (null != onfocus) {
-        component.getAttributes().put("onfocus", onfocus); 
-    }
-    if (null != onblur) {
-        component.getAttributes().put("onblur", onblur);
-    }
-    
-    // common HTML 4.0 attributes.
-    // PENDING (visvan) id attribute clashes with faces id attribute
-    if (null != title) {
-        component.getAttributes().put("title", title);
-    }
-    if (disabled) {
-	component.getAttributes().put("disabled", 
-				     new Boolean(disabled));
-    }
-    if (tabindex != Integer.MIN_VALUE) {
-	component.getAttributes().put("tabindex", new Integer(tabindex));
-    }
-    if (null != accesskey) {
-	component.getAttributes().put("accesskey", accesskey);
-    }
-    if (null != lang) {
-	component.getAttributes().put("lang", lang);
-    }
-    if (null != dir) {
-	component.getAttributes().put("dir", dir);
-    }
-    if (null != style) {
-        component.getAttributes().put("style", style);
-    }
-    if (null != styleClass) {
-        component.getAttributes().put("styleClass", styleClass);
-    }   
-    if (null != dateStyle) {
-	component.getAttributes().put("dateStyle", dateStyle);
-    }
-    if (null != timeStyle) {
-	component.getAttributes().put("timeStyle", timeStyle);
-    }
-  
-}
+    // 
+    // Methods From TagSupport
+    //
 
-protected String getDebugString() {
-    String result = 
-	"id: " + this.getId() + "\n " +
-	"class: " + this.getClass().getName() + "\n ";
-    return result;
-}
+    public int doStartTag() throws JspException {
+        int rc = 0;
+        try {        
+            evaluateExpressions();
+	    rc = super.doStartTag();
+        }
+        catch (JspException e) {
+	    if (log.isDebugEnabled()) {
+	        log.debug(getDebugString(), e);
+	    }
+	    throw e;
+        }
+        catch (Throwable t) {
+	    if (log.isDebugEnabled()) {
+	        log.debug(getDebugString(), t);
+	    }
+	    throw new JspException(t);
+        }
+        return rc;
+    }
 
-// 
-// Methods From TagSupport
-//
+    public int doEndTag() throws JspException {
+        int rc = 0;
+        try {
+	    rc = super.doEndTag();
+        }
+        catch (JspException e) {
+	    if (log.isDebugEnabled()) {
+	        log.debug(getDebugString(), e);
+	    }
+	    throw e;
+        }
+        catch (Throwable t) {
+	    if (log.isDebugEnabled()) {
+	        log.debug(getDebugString(), t);
+	    }
+	    throw new JspException(t);
+        }
+        return rc;
+    }
 
-public int doStartTag() throws JspException {
-    int rc = 0;
-    try {        
-        evaluateId();
-	rc = super.doStartTag();
-    }
-    catch (JspException e) {
-	if (log.isDebugEnabled()) {
-	    log.debug(getDebugString());
-	}
-	throw e;
-    }
-    catch (Throwable t) {
-	if (log.isDebugEnabled()) {
-	    log.debug(getDebugString());
-	}
-	throw new JspException(t);
-    }
-    return rc;
-}
-
-public int doEndTag() throws JspException {
-    int rc = 0;
-    try {
-	rc = super.doEndTag();
-    }
-    catch (JspException e) {
-	if (log.isDebugEnabled()) {
-	    log.debug(getDebugString());
-	}
-	throw e;
-    }
-    catch (Throwable t) {
-	if (log.isDebugEnabled()) {
-	    log.debug(getDebugString());
-	}
-	throw new JspException(t);
-    }
-    return rc;
-}
-
-	
 
 } // end of class BaseComponentTag

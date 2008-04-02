@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_CheckboxListTag.java,v 1.13 2003/10/06 19:06:49 horwat Exp $
+ * $Id: SelectMany_CheckboxListTag.java,v 1.14 2003/10/07 20:15:55 horwat Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -15,11 +15,13 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import javax.servlet.jsp.JspException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
+import javax.servlet.jsp.JspException;
 
 import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.util.Util;
+
 
 /**
  * This class is the tag handler that evaluates the 
@@ -43,6 +45,7 @@ public class SelectMany_CheckboxListTag extends BaseComponentTag
     // Attribute Instance Variables
 
     protected String layout = null;
+    protected String layout_ = null;
 
     // Relationship Instance Variables
 
@@ -64,7 +67,7 @@ public class SelectMany_CheckboxListTag extends BaseComponentTag
     //
 
     public void setLayout(String newLayout) {
-	layout = newLayout;
+	layout_ = newLayout;
     }
 
     //
@@ -87,10 +90,24 @@ public class SelectMany_CheckboxListTag extends BaseComponentTag
 	}
     }
     
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (layout_ != null) {
+            layout = Util.evaluateElExpression(layout_, pageContext);
+        }
+    }
 
     //
     // Methods from TagSupport
     // 
+
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
 
     public int doEndTag() throws JspException {
         int rc = super.doEndTag();

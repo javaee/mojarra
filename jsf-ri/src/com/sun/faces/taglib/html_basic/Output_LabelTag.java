@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LabelTag.java,v 1.13 2003/10/06 19:06:47 horwat Exp $
+ * $Id: Output_LabelTag.java,v 1.14 2003/10/07 20:15:53 horwat Exp $
  */
 
 /*
@@ -10,8 +10,11 @@
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
+import javax.servlet.jsp.JspException;
 
 import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.util.Util;
+
 
 /**
  * This class is the tag handler that evaluates the 
@@ -35,6 +38,7 @@ public class Output_LabelTag extends BaseComponentTag
     // Attribute Instance Variables
 
     protected String forValue = null;
+    protected String forValue_ = null;
 
 
     // Relationship Instance Variables
@@ -58,7 +62,7 @@ public class Output_LabelTag extends BaseComponentTag
 
     public void setFor(String newForValue)
     {
-        forValue = newForValue;
+        forValue_ = newForValue;
     }
 
     //
@@ -83,9 +87,25 @@ public class Output_LabelTag extends BaseComponentTag
 	}
     }
     
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        if (forValue_ != null) {
+            forValue = Util.evaluateElExpression(forValue_, pageContext);
+   	}
+    }
+
     //
     // Methods from TagSupport
     // 
+
+    public int doStartTag() throws JspException {
+        // evaluate any expressions that we were passed
+        evaluateExpressions();
+
+        // chain to the parent implementation
+        return super.doStartTag();
+    }
+
 
 
 } // end of class Output_LabelTag
