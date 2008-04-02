@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.11 2003/10/15 23:05:10 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.12 2003/10/16 00:42:24 craigmcc Exp $
  */
 
 /*
@@ -261,16 +261,21 @@ public class ResultSetDataModel extends DataModel {
             if (ResultSet.TYPE_FORWARD_ONLY == data.getType()) {
                 throw new IllegalArgumentException();
             }
+            if (data.absolute(1)) {
+                index = 0;
+            } else {
+                index = -1;
+            }
         } catch (SQLException e) {
             throw new IllegalArgumentException();
         }
-        this.resultSet = data;
+        resultSet = data;
         try {
-            this.metadata = data.getMetaData();
+            metadata = data.getMetaData();
         } catch (SQLException e) {
             throw new FacesException(e);
         }
-        this.updated = false;
+        updated = false;
 
     }
 

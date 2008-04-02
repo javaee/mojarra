@@ -1,5 +1,5 @@
 /*
- * $Id: ScalarDataModel.java,v 1.4 2003/10/15 22:32:37 craigmcc Exp $
+ * $Id: ScalarDataModel.java,v 1.5 2003/10/16 00:42:24 craigmcc Exp $
  */
 
 /*
@@ -177,7 +177,11 @@ public class ScalarDataModel extends DataModel {
      */
     public void setWrappedData(Object data) {
 
-        this.instance = data;
+        if (data == null) {
+            throw new NullPointerException();
+        }
+        instance = data;
+        index = 0; // By definition we have exactly one row
 
     }
 

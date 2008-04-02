@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.5 2003/10/15 22:32:37 craigmcc Exp $
+ * $Id: ListDataModel.java,v 1.6 2003/10/16 00:42:24 craigmcc Exp $
  */
 
 /*
@@ -177,7 +177,15 @@ public class ListDataModel extends DataModel {
      */
     public void setWrappedData(List data) {
 
-        this.list = data;
+        if (data == null) {
+            throw new NullPointerException();
+        }
+        list = data;
+        if (list.size() > 0) {
+            index = 0;
+        } else {
+            index = -1;
+        }
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ResultDataModel.java,v 1.5 2003/10/15 22:32:37 craigmcc Exp $
+ * $Id: ResultDataModel.java,v 1.6 2003/10/16 00:42:24 craigmcc Exp $
  */
 
 /*
@@ -186,8 +186,16 @@ public class ResultDataModel extends DataModel {
      */
     public void setWrappedData(Result data) {
 
-        this.result = data;
-        this.rows = data.getRows();
+        if (data == null) {
+            throw new NullPointerException();
+        }
+        result = data;
+        rows = data.getRows();
+        if (rows.length > 0) {
+            index = 0;
+        } else {
+            index = -1;
+        }
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelTestCaseBase.java,v 1.4 2003/10/15 20:16:02 craigmcc Exp $
+ * $Id: DataModelTestCaseBase.java,v 1.5 2003/10/16 00:42:27 craigmcc Exp $
  */
 
 /*
@@ -130,6 +130,7 @@ public abstract class DataModelTestCaseBase extends TestCase {
     public void testPositionAscending() throws Exception {
 
         StringBuffer sb = new StringBuffer();
+        model.setRowIndex(-1);
         model.addDataModelListener(new TestListener());
         TestListener.trace(null);
 
@@ -147,6 +148,7 @@ public abstract class DataModelTestCaseBase extends TestCase {
     public void testPositionDescending() throws Exception {
 
         StringBuffer sb = new StringBuffer();
+        model.setRowIndex(-1);
         model.addDataModelListener(new TestListener());
         TestListener.trace(null);
 
@@ -170,6 +172,9 @@ public abstract class DataModelTestCaseBase extends TestCase {
         // Correct row count
         assertEquals("correct row count", beans.length, model.getRowCount());
 
+        // Correct row index
+        assertEquals("correct row index", 0, model.getRowIndex());
+
     }
 
 
@@ -179,12 +184,13 @@ public abstract class DataModelTestCaseBase extends TestCase {
         TestListener listener = new TestListener();
         TestListener.trace(null);
         model.addDataModelListener(listener);
+        model.setRowIndex(-1);
         model.setRowIndex(0);
         model.setRowIndex(0); // No movement so no event
         model.setRowIndex(-1);
         model.removeDataModelListener(listener);
         model.setRowIndex(0);
-        assertEquals("/0/-1", TestListener.trace());
+        assertEquals("/-1/0/-1", TestListener.trace());
 
     }
 
@@ -250,7 +256,7 @@ public abstract class DataModelTestCaseBase extends TestCase {
     // Test row index manipulations
     public void testRowIndex() throws Exception {
 
-        assertEquals("correct row index", -1, model.getRowIndex());
+        assertEquals("correct row index", 0, model.getRowIndex());
 
         // Positive setRowIndex() tests
         model.setRowIndex(0);

@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.5 2003/10/15 22:32:37 craigmcc Exp $
+ * $Id: ArrayDataModel.java,v 1.6 2003/10/16 00:42:23 craigmcc Exp $
  */
 
 /*
@@ -176,7 +176,15 @@ public class ArrayDataModel extends DataModel {
      */
     public void setWrappedData(Object data[]) {
 
-        this.array = data;
+        if (data == null) {
+            throw new NullPointerException();
+        }
+        array = data;
+        if (array.length > 0) {
+            index = 0;
+        } else {
+            index = -1;
+        }
 
     }
 

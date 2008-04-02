@@ -1,5 +1,5 @@
 /*
- * $Id: DataModel.java,v 1.4 2003/10/15 02:02:14 craigmcc Exp $
+ * $Id: DataModel.java,v 1.5 2003/10/16 00:42:23 craigmcc Exp $
  */
 
 /*
@@ -91,8 +91,10 @@ public abstract class DataModel {
 
     /**
      * <p>Return the zero-relative index of the currently selected row.
-     * If we are positioned before the first row (as will be the case
-     * when a {@link DataModel} instance is first created), -1 will be returned.
+     * If we are positioned before the first row, -1 will be returned.
+     * When a {@link DataModel} instance is initialized, the
+     * <code>rowIndex</code> will be zero if the underlying data has at least
+     * one row, or -1 otherwise.</p>
      * </p>
      *
      * @exception FacesException if an error occurs getting the row index
