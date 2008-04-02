@@ -40,6 +40,20 @@
         </component>
     </tag>
     <tag>
+        <tag-name>contextMenu</tag-name>
+        <component>
+            <component-type>com.sun.faces.sandbox.YuiContextMenu</component-type>
+            <renderer-type>com.sun.faces.sandbox.YuiContextMenuRenderer</renderer-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>menuBar</tag-name>
+        <component>
+            <component-type>com.sun.faces.sandbox.YuiMenuBar</component-type>
+            <renderer-type>com.sun.faces.sandbox.YuiMenuBarRenderer</renderer-type>
+        </component>
+    </tag>
+    <tag>
         <tag-name>multiFileUpload</tag-name>
         <component>
             <component-type>com.sun.faces.sandbox.MultiFileUpload</component-type>
