@@ -541,6 +541,13 @@
           includes="ri-issues.xml"/>
     <move     file="${build.home}/ri-issues.html"
             tofile="${build.home}/ri-issues-detail.html"/>
+     <style basedir="${jsf.api.head.home}/jsf-api/doc"
+           destdir="${build.home}"
+         extension=".html"
+             style="docs/api-issues-owners.xsl"
+          includes="OutstandingIssues.xml"/>
+     <move     file="${build.home}/OutstandingIssues.html"
+            tofile="${build.home}/api-issues-owners.html"/>
   </target>
 
 
