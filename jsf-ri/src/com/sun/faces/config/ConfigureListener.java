@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.16 2004/05/07 13:53:13 eburns Exp $
+ * $Id: ConfigureListener.java,v 1.17 2004/05/11 19:28:41 rkitain Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
@@ -1046,7 +1046,7 @@ public class ConfigureListener implements ServletContextListener {
         URL url = this.getClass().getResource
             ("/com/sun/faces/web-facesconfig_1_1.dtd");
         digester.register
-            ("-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN",
+            ("-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN",
              url.toString());
 
         // Push an initial FacesConfigBean onto the stack
