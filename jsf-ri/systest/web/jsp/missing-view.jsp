@@ -11,6 +11,8 @@
 
   <h:form>
 
+    <h:panelGrid columns="1">
+
       <h:outputText value="Hello" />
 
     </h:panelGrid>
