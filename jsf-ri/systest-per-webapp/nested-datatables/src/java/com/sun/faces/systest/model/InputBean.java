@@ -1,5 +1,5 @@
 /*
- * $Id: InputBean.java,v 1.1 2004/06/16 20:24:25 eburns Exp $
+ * $Id: InputBean.java,v 1.2 2004/06/17 16:50:38 eburns Exp $
  */
 
 /*
@@ -82,8 +82,10 @@ public class InputBean extends Object {
 	    innerData = (UIData) root.findComponent(list.getInnerDataName());
 	
 	int 
-	    index = outerData.getRowCount() * outerData.getRowIndex() + 
-	    innerData.getRowIndex();
+	    outerIndex = outerData.getRowIndex(),
+	    innerIndex = innerData.getRowIndex(),
+	    innerRowCount = innerData.getRowCount(),
+	    index = innerRowCount * outerIndex + innerIndex;
 
 	return index;
     }

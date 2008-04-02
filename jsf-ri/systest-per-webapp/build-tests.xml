@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.5 2004/06/16 19:48:07 rlubke Exp $
+ $Id: build-tests.xml,v 1.6 2004/06/17 16:50:37 eburns Exp $
 -->
 
 <!--
@@ -78,6 +78,18 @@
              value="${basedir}/unique-view-id/src/java" />
       <param name="context.path" value="/jsf-unique-view-id"/>
       <param name="testcase" value="com/sun/faces/systest/UniqueViewIdTestCase.class"/>
+
+    </antcall>
+
+    <antcall target="test.webapp">
+      <param name="webapp.build.home" 
+             value="${basedir}/nested-datatables/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/nested-datatables/web" />
+      <param name="source.home" 
+             value="${basedir}/nested-datatables/src/java" />
+      <param name="context.path" value="/jsf-nested-datatables"/>
+      <param name="testcase" value="com/sun/faces/systest/NestedDatatablesTestCase.class"/>
 
     </antcall>
 

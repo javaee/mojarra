@@ -52,6 +52,7 @@
   <property name="jstl.jar"
             value="${tomcat.home}/jstl/lib/jstl.jar"/>
   <property name="xerces.jar" value="${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar"/>
+  <property name="dom.jar" value="${tomcat.home}/jaxp/lib/endorsed/dom.jar"/>
 
   <property name="build.dir"        value="build"/>
   <property name="build.classes"    value="${build.dir}/classes"/>
@@ -96,6 +97,7 @@
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-beanutils.jar}"/>
     <pathelement location="${xerces.jar}"/>
+    <pathelement location="${dom.jar}"/>
     <pathelement location="${jaxp-api.jar}"/>
     <pathelement location="${jcov.jar}"/>
   </path>

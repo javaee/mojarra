@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.33 2004/05/11 21:35:24 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.34 2004/06/17 16:50:37 eburns Exp $
  */
 
 /*
@@ -258,7 +258,14 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
                 // Just rethrow it to keep detailed message
 		checkinExpressionInfo(info);
                 throw (PropertyNotFoundException) e;
-            } else {
+            } else if (e instanceof EvaluationException) {
+                if (log.isDebugEnabled()) {
+                    log.debug("setValue Evaluation threw exception:", e);
+                }
+		checkinExpressionInfo(info);
+		throw ((EvaluationException)e);
+	    }
+	    else {
                 if (log.isDebugEnabled()) {
                     log.debug("setValue Evaluation threw exception:", e);
                 }

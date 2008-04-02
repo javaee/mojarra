@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.74 2004/06/11 14:56:14 rogerk Exp $
+ * $Id: UIInput.java,v 1.75 2004/06/17 16:50:35 eburns Exp $
  */
 
 /*
@@ -545,7 +545,21 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 		setValue(null);
 		setLocalValueSet(false);
 		return;
-	    } catch (FacesException e) {
+	    } catch (EvaluationException e) {
+		String messageStr = e.getMessage();
+		FacesMessage message = null;
+		if (null == messageStr) {
+		    message =
+			MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID);
+		}
+		else {
+		    message = new FacesMessage(messageStr);
+		}
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                context.addMessage(getClientId(context), message);
+		setValid(false);
+	    }
+	    catch (FacesException e) {
                 FacesMessage message =
                     MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID);
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);

@@ -730,7 +730,9 @@ public class UIData extends UIComponentBase
         }
 
         model = null; // Re-evaluate even with server-side state saving
-        saved = new HashMap(); // We don't need saved state here
+	if (null == saved || !keepSaved(context)) {
+	    saved = new HashMap(); // We don't need saved state here
+	}
 
 	iterate(context, PhaseId.APPLY_REQUEST_VALUES);
 	decode(context);
@@ -984,8 +986,19 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Return <code>true</code> if we need to keep the saved per-child state
-     * information in order to display error messages.</p>
+     * <p>Return <code>true</code> if we need to keep the saved
+     * per-child state information.  This will be the case if any of the
+     * following are true:</p>
+     *
+     * <ul>
+     *
+     * <li>any of the saved state corresponds to components that have
+     * messages that must be displayed</li>
+     *
+     * <li>this <code>UIData</code> instance is nested inside of another
+     * <code>UIData</code> instance</li>
+     *
+     * </ul>
      *
      * @param context {@link FacesContext} for the current request
      */
@@ -1003,6 +1016,12 @@ public class UIData extends UIComponentBase
                 }
             }
         }
+	UIComponent parent = this;
+	while (null != (parent = parent.getParent())) {
+	    if (parent instanceof UIData) {
+		return true;
+	    }
+	}
         return (false);
 
     }
@@ -1157,6 +1176,12 @@ class SavedState implements Serializable {
     }
     public void setLocalValueSet(boolean localValueSet) {
 	this.localValueSet = localValueSet;
+    }
+
+    public String toString() {
+	return ("submittedValue: " + submittedValue + 
+		" value: " + value + 
+		" localValueSet: " + localValueSet);
     }
 
 }

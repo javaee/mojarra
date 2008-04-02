@@ -47,8 +47,4 @@
     </managed-property>
   </managed-bean>
 
-  <lifecycle>
-    <phase-listener>com.sun.faces.systest.model.PrintTreePhaseListener</phase-listener>
-  </lifecycle>
-
 </faces-config>
