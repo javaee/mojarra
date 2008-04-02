@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.4 2003/12/17 15:14:12 rkitain Exp $
+ * $Id: ConvertNumberTag.java,v 1.5 2004/01/21 01:13:09 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import com.sun.faces.util.Util;
  * javax.faces.convert.NumberConverter</p>
  *
  *
- * @version $Id: ConvertNumberTag.java,v 1.4 2003/12/17 15:14:12 rkitain Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.5 2004/01/21 01:13:09 craigmcc Exp $
  * 
  */
 
@@ -282,7 +282,7 @@ public class ConvertNumberTag extends ConverterTag {
             if (Util.isVBExpression(locale_)) {  
                 locale = (Locale)Util.evaluateVBExpression(locale_);
             } else {
-                locale = new Locale(locale_);
+                locale = new Locale(locale_, "");
             }
         }
     }

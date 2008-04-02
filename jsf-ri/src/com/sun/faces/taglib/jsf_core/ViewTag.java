@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.16 2004/01/17 05:20:55 craigmcc Exp $
+ * $Id: ViewTag.java,v 1.17 2004/01/21 01:13:09 craigmcc Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import com.sun.faces.util.Util;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.16 2004/01/17 05:20:55 craigmcc Exp $
+ * @version $Id: ViewTag.java,v 1.17 2004/01/21 01:13:09 craigmcc Exp $
  * 
  *
  */
@@ -327,7 +327,7 @@ public class ViewTag extends UIComponentBodyTag
             // expression has just language code in it. make sure the 
             // expression contains exactly 2 characters.
             if (localeExpr.length() == 2) {
-                result = new Locale(localeExpr);
+                result = new Locale(localeExpr, "");
             }
         } else {
             // expression has country code in it. make sure the expression 
