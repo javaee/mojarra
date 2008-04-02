@@ -88,8 +88,8 @@
   </component>
 
   <component>
-    <component-type>InputTextArea</component-type>
-    <component-class>javax.faces.component.html.HtmlInputTextArea</component-class>
+    <component-type>InputTextarea</component-type>
+    <component-class>javax.faces.component.html.HtmlInputTextarea</component-class>
   </component>
 
   <component>
@@ -314,6 +314,7 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <component-type>CommandButton</component-type>
       <component-class>javax.faces.component.html.HtmlCommandButton</component-class>
     </renderer>
 
@@ -395,12 +396,14 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <component-type>SelectBooleanCheckbox</component-type>
       <component-class>javax.faces.component.html.HtmlSelectBooleanCheckbox</component-class>
     </renderer>
 
     <renderer>
       <renderer-type>Data</renderer-type>
       <renderer-class>&data-renderer-class;</renderer-class>
+      <component-type>PanelData</component-type>
       <component-class>javax.faces.component.html.HtmlPanelData</component-class>
     </renderer>
 
@@ -432,6 +435,7 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <component-type>OutputErrors</component-type>
       <component-class>javax.faces.component.html.HtmlOutputErrors</component-class>
     </renderer>
 
@@ -515,6 +519,7 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <component-type>Form</component-type>
       <component-class>javax.faces.component.html.HtmlForm</component-class>
     </renderer>
 
@@ -523,18 +528,21 @@
       <renderer-class>&grid-renderer-class;</renderer-class>
       &table-attrs;
 
+      <component-type>PanelGrid</component-type>
       <component-class>javax.faces.component.html.HtmlPanelGrid</component-class>
     </renderer>
 
     <renderer>
       <renderer-type>Group</renderer-type>
       <renderer-class>&group-renderer-class;</renderer-class>
+      <component-type>PanelGroup</component-type>
       <component-class>javax.faces.component.html.HtmlPanelGroup</component-class>
     </renderer>
 
     <renderer>
       <renderer-type>Hidden</renderer-type>
       <renderer-class>&hidden-renderer-class;</renderer-class>
+      <component-type>InputHidden</component-type>
       <component-class>javax.faces.component.html.HtmlInputHidden</component-class>
     </renderer>
 
@@ -602,6 +610,7 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <component-type>CommandHyperlink</component-type>
       <component-class>javax.faces.component.html.HtmlCommandHyperlink</component-class>
     </renderer>
 
@@ -643,6 +652,7 @@
         <attribute-class>int</attribute-class>
       </attribute>
 
+      <component-type>GraphicImage</component-type>
       <component-class>javax.faces.component.html.HtmlGraphicImage</component-class>
     </renderer>
 
@@ -685,6 +695,7 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <component-type>OutputLabel</component-type>
       <component-class>javax.faces.component.html.HtmlOutputLabel</component-class>
     </renderer>
 
@@ -760,6 +771,7 @@
         <attribute-class>int</attribute-class>
       </attribute>
 
+      <component-type>PanelList</component-type>
       <component-class>javax.faces.component.html.HtmlPanelList</component-class>
     </renderer>
 
@@ -817,6 +829,8 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <component-type>SelectOneListbox</component-type>
+      <component-type>SelectManyListbox</component-type>
       <component-class>javax.faces.component.html.HtmlSelectOneListbox</component-class>
       <component-class>javax.faces.component.html.HtmlSelectManyListbox</component-class>
     </renderer>
@@ -885,6 +899,8 @@
         <attribute-class>int</attribute-class>
       </attribute>
 
+      <component-type>SelectOneMenu</component-type>
+      <component-type>SelectManyMenu</component-type>
       <component-class>javax.faces.component.html.HtmlSelectOneMenu</component-class>
       <component-class>javax.faces.component.html.HtmlSelectManyMenu</component-class>
     </renderer>
@@ -898,6 +914,7 @@
       &events-attrs;
       &i18n-attrs;
 
+      <component-type>OutputMessage</component-type>
       <component-class>javax.faces.component.html.HtmlOutputMessage</component-class>
     </renderer>
 
@@ -975,6 +992,7 @@
         <attribute-class>boolean</attribute-class>
       </attribute>
 
+      <component-type>SelectOneRadioButtonList</component-type>
       <component-class>javax.faces.component.html.HtmlSelectOneRadioButtonList</component-class>
     </renderer>
 
@@ -1066,6 +1084,7 @@
         <attribute-class>boolean</attribute-class>
       </attribute>
 
+      <component-type>InputSecret</component-type>
       <component-class>javax.faces.component.html.HtmlInputSecret</component-class>
     </renderer>
 
@@ -1094,6 +1113,7 @@
         <attribute-class>boolean</attribute-class>
       </attribute>
 
+      <component-type>SelectManyCheckboxList</component-type>
       <component-class>javax.faces.component.html.HtmlSelectManyCheckboxList</component-class>
     </renderer>
 
@@ -1105,6 +1125,7 @@
       &i18n-attrs;
       &table-attrs;
 
+      <component-type>DataTable</component-type>
       <component-class>javax.faces.component.html.HtmlDataTable</component-class>
     </renderer>
 
@@ -1194,6 +1215,7 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <component-type>InputTextarea</component-type>
       <component-class>javax.faces.component.html.HtmlInputTextarea</component-class>
     </renderer>
 
@@ -1275,6 +1297,8 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <component-type>InputText</component-type>
+      <component-type>OutputText</component-type>
       <component-class>javax.faces.component.html.HtmlInputText</component-class>
       <component-class>javax.faces.component.html.HtmlOutputText</component-class>
     </renderer>
