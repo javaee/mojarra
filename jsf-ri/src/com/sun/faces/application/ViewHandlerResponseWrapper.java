@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerResponseWrapper.java,v 1.4 2005/11/10 20:06:43 edburns Exp $ 
+ * $Id: ViewHandlerResponseWrapper.java,v 1.5 2006/03/14 22:18:25 rlubke Exp $ 
  */ 
 
 
@@ -51,45 +51,56 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper
 {
-//
-// Protected Constants
-//
 
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-    ByteArrayServletOutputStream basos = null;
-
-    PrintWriter pw = null;
-    CharArrayWriter caw = null;
+    private ByteArrayServletOutputStream basos = null;
+    private PrintWriter pw = null;
+    private CharArrayWriter caw = null;
+    private int status = HttpServletResponse.SC_OK;
 
 //
 // Constructors and Initializers    
 //
 
     public ViewHandlerResponseWrapper(HttpServletResponse wrapped) {
-	super(wrapped);
-
-
+        super(wrapped);
     }
 
-//
-// Class methods
-//
+
+    // --------------------------------- Methods from HttpServletResponseWrapper
+
+
+    @Override
+    public void sendError(int sc, String msg) throws IOException {
+        super.sendError(sc, msg);
+        status = sc;
+    }              
+
+    @Override
+    public void sendError(int sc) throws IOException {
+        super.sendError(sc);
+        status = sc;
+    }
+
+    @Override
+    public void setStatus(int sc) {
+        super.setStatus(sc);
+        status = sc;
+    }
+
+    @Override
+    public void setStatus(int sc, String sm) {
+        super.setStatus(sc, sm);
+        status = sc;
+    }
 
 //
 // General methods
 // 
 
+    public int getStatus() {
+        return status;
+    }
+    
     public boolean isBytes() {
 	return (null != basos);
     }

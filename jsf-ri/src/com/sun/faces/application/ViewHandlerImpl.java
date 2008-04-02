@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.66 2006/02/21 20:37:50 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.67 2006/03/14 22:18:24 rlubke Exp $ 
  */ 
 
 
@@ -67,7 +67,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.66 2006/02/21 20:37:50 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.67 2006/03/14 22:18:24 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -130,8 +130,16 @@ public class ViewHandlerImpl extends ViewHandler {
             return;
         }
         
+        ExternalContext extContext = context.getExternalContext();
+        ServletRequest request = (ServletRequest) extContext.getRequest();
+        ServletResponse response = (ServletResponse) extContext.getResponse();
+        
         try {
-            executePageToBuildView(context, viewToRender);
+            if (executePageToBuildView(context, viewToRender)) {
+                response.flushBuffer(); 
+                ApplicationAssociate.getInstance(extContext).responseRendered();
+                return;
+            }
         } catch (IOException e) {
             throw new FacesException(e);
         }
@@ -147,10 +155,7 @@ public class ViewHandlerImpl extends ViewHandler {
         FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit =
                 renderFactory.getRenderKit(context, viewToRender.getRenderKitId());
-        ExternalContext extContext = context.getExternalContext();
-        ServletRequest request = (ServletRequest) extContext.getRequest();
-        ServletResponse response = (ServletResponse) extContext.getResponse();
-        
+                
         ResponseWriter oldWriter = context.getResponseWriter();
         Writer strWriter = new FastStringWriter(2048);
         ResponseWriter newWriter = null;
@@ -364,7 +369,15 @@ public class ViewHandlerImpl extends ViewHandler {
         return result;
     }
 
-    private void executePageToBuildView(FacesContext context,
+    /**
+     * Execute the target view.  If the HTTP status code range is
+     * not 2xx, then return true to indicate the response should be
+     * immediately flushed by the caller so that conditions such as 404
+     * are properly handled.
+     * @return <code>true</code> if the response should be immediately flushed 
+     *  to the client, otherwise <code>false</code>     
+     */
+    private boolean executePageToBuildView(FacesContext context,
                                         UIViewRoot viewToExecute) throws IOException, FacesException {
 
         if (null == context || null == viewToExecute) {
@@ -387,7 +400,7 @@ public class ViewHandlerImpl extends ViewHandler {
             HttpServletResponse response = (HttpServletResponse) 
                   context.getExternalContext().getResponse();
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
+            return true;
         }
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("About to execute view " + requestURI);
@@ -435,11 +448,21 @@ public class ViewHandlerImpl extends ViewHandler {
         extContext.setResponse(wrapped = new ViewHandlerResponseWrapper((HttpServletResponse)extContext.getResponse()));
 
         // build the view by executing the page
-        extContext.dispatch(newViewId);
+        extContext.dispatch(newViewId);        
+        
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("After dispacthMessage to newViewId " + newViewId);
         }
-
+        
+        // replace the original response
+        extContext.setResponse(originalResponse);
+        
+        // Follow the JSTL 1.2 spec, section 7.4,  
+        // on handling status codes on a forward
+        if (wrapped.getStatus() < 200 || wrapped.getStatus() > 299) {
+            return true;            
+        }
+        
         // Put the AFTER_VIEW_CONTENT into request scope
         // temporarily
         if (wrapped.isBytes()) {
@@ -450,8 +473,8 @@ public class ViewHandlerImpl extends ViewHandler {
                                            wrapped.getChars());
         }
 
-        // replace the original response
-        extContext.setResponse(originalResponse);
+        return false;
+        
     }
 
 

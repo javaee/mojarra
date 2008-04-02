@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.71 2006/03/07 21:02:46 edburns Exp $
+ * $Id: ApplicationImpl.java,v 1.72 2006/03/14 22:18:23 rlubke Exp $
  */
 
 /*
@@ -29,18 +29,6 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.el.FacesResourceBundleELResolver;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.List;
-
 import javax.el.ArrayELResolver;
 import javax.el.BeanELResolver;
 import javax.el.CompositeELResolver;
@@ -49,9 +37,9 @@ import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.el.ListELResolver;
-import javax.el.ResourceBundleELResolver;
 import javax.el.MapELResolver;
 import javax.el.MethodExpression;
+import javax.el.ResourceBundleELResolver;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -69,7 +57,22 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.el.FacesResourceBundleELResolver;
 import com.sun.faces.el.ImplicitObjectELResolver;
 import com.sun.faces.el.ManagedBeanELResolver;
 import com.sun.faces.el.PropertyResolverChainWrapper;
@@ -77,12 +80,8 @@ import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.ScopedAttributeELResolver;
 import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.el.VariableResolverImpl;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
-import java.lang.reflect.Constructor;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -134,11 +133,11 @@ public class ApplicationImpl extends Application {
      */
     public ApplicationImpl() {
         super();
-	associate = new ApplicationAssociate(this);
-        componentMap = new HashMap<String,Object>();
-        converterIdMap = new HashMap<String,Object>();
-        converterTypeMap = new HashMap<Class,Object>();
-        validatorMap = new HashMap<String,Object>();
+        associate = new ApplicationAssociate(this);
+        componentMap = new ConcurrentHashMap<String, Object>();
+        converterIdMap = new ConcurrentHashMap<String, Object>();
+        converterTypeMap = new ConcurrentHashMap<Class, Object>();
+        validatorMap = new ConcurrentHashMap<String, Object>();
 
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created Application instance ");
@@ -543,9 +542,9 @@ public class ApplicationImpl extends Application {
                 " componentClass " + componentClass;
             throw new NullPointerException(message);
         }
-        synchronized (this) {
-            componentMap.put(componentType, componentClass);
-        }
+        
+        componentMap.put(componentType, componentClass);
+        
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("added component of type " + componentType +
                       " class " + componentClass);
@@ -622,13 +621,9 @@ public class ApplicationImpl extends Application {
 
 
     public Iterator<String> getComponentTypes() {
-        List<String> list = Collections.emptyList();
-        Iterator<String> result = list.iterator();                
-        synchronized (this) {
-            result = componentMap.keySet().iterator();
-        }
 
-        return result;
+        return componentMap.keySet().iterator();
+
     }
 
 
@@ -640,9 +635,9 @@ public class ApplicationImpl extends Application {
                 " converterClass " + converterClass;
             throw new NullPointerException(message);
         }
-        synchronized (this) {
-            converterIdMap.put(converterId, converterClass);
-        }
+        
+        converterIdMap.put(converterId, converterClass);
+        
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("added converter of type " + converterId +
                       " and class " + converterClass);
@@ -658,9 +653,9 @@ public class ApplicationImpl extends Application {
                 " converterClass " + converterClass;
             throw new NullPointerException(message);
         }
-        synchronized (this) {
-            converterTypeMap.put(targetClass, converterClass);
-        }
+        
+        converterTypeMap.put(targetClass, converterClass);
+        
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("added converter of class type " + converterClass);
         }
@@ -784,23 +779,16 @@ public class ApplicationImpl extends Application {
     }
 
     public Iterator<String> getConverterIds() {
-        List<String> list = Collections.emptyList();
-        Iterator<String> result = list.iterator();
-        synchronized (this) {
-            result = converterIdMap.keySet().iterator();
-        }
-
-        return result;
+       
+        return converterIdMap.keySet().iterator();
+        
     }
 
 
     public Iterator<Class> getConverterTypes() {
-        List<Class> list = Collections.emptyList();
-        Iterator<Class> result = list.iterator();
-        synchronized (this) {
-            result = converterTypeMap.keySet().iterator();
-        }
-        return result;
+                
+        return converterTypeMap.keySet().iterator();
+        
     }
 
 
@@ -883,9 +871,9 @@ public class ApplicationImpl extends Application {
                 " validatorClass " + validatorClass;
             throw new NullPointerException(message);
         }
-        synchronized (this) {
-            validatorMap.put(validatorId, validatorClass);
-        }
+        
+        validatorMap.put(validatorId, validatorClass);
+        
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("added validator of type " + validatorId +
                       " class " + validatorClass);
@@ -917,13 +905,10 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public Iterator<String> getValidatorIds() {
-        List<String> list = Collections.emptyList();
-        Iterator<String> result = list.iterator();
-        synchronized (this) {
-            result = validatorMap.keySet().iterator();
-        }
-        return result;
+    public Iterator<String> getValidatorIds() {        
+        
+        return validatorMap.keySet().iterator();
+               
     }
 
 
@@ -966,25 +951,24 @@ public class ApplicationImpl extends Application {
         Object result = null;
         Class clazz = null;
         Object value = null;
-        synchronized (this) {
-            value = map.get(key);
-            if (value == null) {
-                return null;
-            }
-            assert (value instanceof String || value instanceof Class);
-            if (value instanceof String) {
-                try {
-                    clazz = Util.loadClass((String) value, value);
-                    assert (clazz != null);
-                    map.put(key, clazz);
-                } catch (Throwable t) {
-                    throw new FacesException(t.getMessage(), t);
-                }
-            } else {
-                clazz = (Class) value;
-            }
-        }
 
+        value = map.get(key);
+        if (value == null) {
+            return null;
+        }
+        assert (value instanceof String || value instanceof Class);
+        if (value instanceof String) {
+            try {
+                clazz = Util.loadClass((String) value, value);
+                assert (clazz != null);
+                map.put(key, clazz);
+            } catch (Throwable t) {
+                throw new FacesException(t.getMessage(), t);
+            }
+        } else {
+            clazz = (Class) value;
+        }
+        
         try {
             result = clazz.newInstance();
         } catch (Throwable t) {
@@ -1023,24 +1007,24 @@ public class ApplicationImpl extends Application {
         Object result = null;
         Class clazz = null;
         Object value = null;
-        synchronized (this) {
-            value = map.get(key);
-            if (value == null) {
-                return null;
-            }
-            assert (value instanceof String || value instanceof Class);
-            if (value instanceof String) {
-                try {
-                    clazz = Util.loadClass((String) value, value);
-                    assert (clazz != null);
-                    map.put(key, clazz);
-                } catch (Throwable t) {
-                    throw new FacesException(t.getMessage(), t);
-                }
-            } else {
-                clazz = (Class) value;
-            }
+
+        value = map.get(key);
+        if (value == null) {
+            return null;
         }
+        assert (value instanceof String || value instanceof Class);
+        if (value instanceof String) {
+            try {
+                clazz = Util.loadClass((String) value, value);
+                assert (clazz != null);
+                map.put(key, clazz);
+            } catch (Throwable t) {
+                throw new FacesException(t.getMessage(), t);
+            }
+        } else {
+            clazz = (Class) value;
+        }
+        
         Constructor ctor = null;
         Throwable cause = null;
         try {
