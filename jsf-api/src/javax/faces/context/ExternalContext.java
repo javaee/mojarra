@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContext.java,v 1.9 2003/10/22 20:43:33 eburns Exp $
+ * $Id: ExternalContext.java,v 1.10 2003/10/22 23:34:48 craigmcc Exp $
  */
  
 /*
@@ -335,7 +335,7 @@ public abstract class ExternalContext {
     public abstract String getRequestContextPath();
 
     /**
-     * <p>A wrapper for <code>HttpServletRequest.getServletPath()</code></p>
+     * <p>A wrapper for <code>HttpServletRequest.getServletPath()</code>.</p>
      *
      */
     public abstract String getRequestServletPath();
