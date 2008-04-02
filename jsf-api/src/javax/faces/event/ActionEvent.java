@@ -1,5 +1,5 @@
 /*
- * $Id: ActionEvent.java,v 1.7 2003/09/30 14:35:09 rlubke Exp $
+ * $Id: ActionEvent.java,v 1.8 2003/09/30 17:37:44 rlubke Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ public class ActionEvent extends FacesEvent {
     }
 
     /**
-     * @throws AbortProcessingException {@inheritDoc}
+     * @exception AbortProcessingException {@inheritDoc}
      */ 
     public void processListener(FacesListener listener) {
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderSupport.java,v 1.6 2003/09/30 14:35:02 rlubke Exp $
+ * $Id: ValueHolderSupport.java,v 1.7 2003/09/30 17:37:39 rlubke Exp $
  */
 
 /*
@@ -155,8 +155,8 @@ public class ValueHolderSupport
     // ----------------------------------------------------- ValueHolder Methods
 
     /**
-     * @throws EvaluationException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}  
+     * @exception EvaluationException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}  
      */
     public Object currentValue(FacesContext context) {
 

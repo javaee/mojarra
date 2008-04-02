@@ -1,5 +1,5 @@
 /*
- * $Id: ShortConverter.java,v 1.6 2003/09/26 21:32:41 rlubke Exp $
+ * $Id: ShortConverter.java,v 1.7 2003/09/30 17:37:40 rlubke Exp $
  */
 
 /*
@@ -25,8 +25,8 @@ public class ShortConverter implements Converter {
     // ------------------------------------------------------- Converter Methods
 
     /**
-     * @throws ConverterException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}
+     * @exception ConverterException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
      */ 
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
@@ -54,8 +54,8 @@ public class ShortConverter implements Converter {
     }
 
     /**
-     * @throws ConverterException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}
+     * @exception ConverterException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
      */ 
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {

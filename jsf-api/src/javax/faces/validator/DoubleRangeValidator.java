@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.24 2003/09/30 14:35:11 rlubke Exp $
+ * $Id: DoubleRangeValidator.java,v 1.25 2003/09/30 17:37:46 rlubke Exp $
  */
 
 /*
@@ -192,7 +192,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
     // ------------------------------------------------------- Validator Methods
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void validate(FacesContext context, UIInput component) {
 

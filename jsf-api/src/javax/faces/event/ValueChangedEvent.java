@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangedEvent.java,v 1.6 2003/09/30 14:35:10 rlubke Exp $
+ * $Id: ValueChangedEvent.java,v 1.7 2003/09/30 17:37:45 rlubke Exp $
  */
 
 /*
@@ -94,7 +94,7 @@ public class ValueChangedEvent extends FacesEvent {
     }
 
     /**
-     * @throws AbortProcessingException {@inheritDoc}
+     * @exception AbortProcessingException {@inheritDoc}
      */ 
     public void processListener(FacesListener listener) {
 

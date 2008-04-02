@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.22 2003/09/30 14:35:12 rlubke Exp $
+ * $Id: StringRangeValidator.java,v 1.23 2003/09/30 17:37:47 rlubke Exp $
  */
 
 /*
@@ -195,7 +195,7 @@ public class StringRangeValidator implements Validator, StateHolder {
     // ------------------------------------------------------- Validator Methods
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void validate(FacesContext context, UIInput component) {
 

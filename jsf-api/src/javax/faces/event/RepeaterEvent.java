@@ -124,7 +124,7 @@ public class RepeaterEvent extends FacesEvent {
     }
 
     /**
-     * @throws AbortProcessingException {@inheritDoc}
+     * @exception AbortProcessingException {@inheritDoc}
      */ 
     public void processListener(FacesListener listener) {
 
