@@ -121,7 +121,7 @@ Powered by Faces components:
       <d:pane_tablabel label="T a b 3" commandName="third"/>
     </f:facet>
 
-    <!-- PENDING (visvan) need to get this working with jsp:include -->
+ 
     <%@ include file="tabbedpanes3.jsp" %>
 
   </d:pane_tab>

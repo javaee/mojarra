@@ -45,8 +45,8 @@
   <property file="${user.home}/build.properties"/>  <!-- User local        -->
   <property file="build.properties"/>               <!-- Component local   -->
   <property file="../build.properties"/>            <!-- Commons local     -->
-  <property name="context.path" value="/components"/>
-  <property name="example" value="components" />
+  <property name="context.path" value="/jsf-components"/>
+  <property name="example" value="jsf-components" />
   <property name="webapp" value="demo" />
   <property name="build"   value="${basedir}/build" />
 
@@ -156,8 +156,8 @@
     <mkdir dir="${build}/${webapp}" />
     <mkdir dir="${build}/classes" />
     <mkdir dir="${build}/classes/${webapp}" />
-    <mkdir dir="${build}/classes/${example}" />
-    <mkdir dir="${build}/classes/${example}/META-INF" />
+    <mkdir dir="${build}/classes/components" />
+    <mkdir dir="${build}/classes/components/META-INF" />
     <mkdir dir="${build}/${webapp}/src/components" />
     <mkdir dir="${build}/${webapp}/WEB-INF/lib" />
     <mkdir dir="${build}/${webapp}/WEB-INF/classes" />
@@ -212,11 +212,11 @@
 
   <target name="build" depends="copyJars" 
      description="Compile Java files for components, not webapp." >
-    <javac debug="on" srcdir="src" destdir="${build}/classes/${example}">
+    <javac debug="on" srcdir="src" destdir="${build}/classes/components">
         <include name="components/**" />
      <classpath refid="classpath"/>
     </javac>
-    <copy todir="${build}/classes/${example}/META-INF" 
+    <copy todir="${build}/classes/components/META-INF" 
             file="src/components/taglib/components.tld"/>
 
     <javac debug="on" srcdir="src" destdir="${build}/${webapp}/WEB-INF/classes">
@@ -251,17 +251,12 @@
       <fileset dir="web" />
     </copy>
 
-    <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-${example}.jar" 
-	 basedir="${build}/classes/${example}"/>
+    <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-components.jar" 
+	 basedir="${build}/classes/components"/>
 
     <jar jarfile="${build}/${example}.war" 
 	 basedir="${build}/${webapp}"/>
 
-    <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-${example}.jar"
-         basedir="${build}/classes/${example}"/>
-
-    <jar jarfile="${build}/${example}.war"
-         basedir="${build}/${webapp}"/>
   </target>
 
   <target name="checkRequiredFile">

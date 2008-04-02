@@ -45,8 +45,8 @@
   <property file="${user.home}/build.properties"/>  <!-- User local        -->
   <property file="build.properties"/>               <!-- Component local   -->
   <property file="../build.properties"/>            <!-- Commons local     -->
-  <property name="context.path" value="/guessNumber"/>
-  <property name="example" value="guessNumber" />
+  <property name="context.path" value="/jsf-guessNumber"/>
+  <property name="example" value="jsf-guessNumber" />
   <property name="build"   value="${basedir}/build" />
 
   <!-- Configure properties to access the Manager application -->
@@ -84,7 +84,7 @@
     <pathelement location="${jsf-api.jar}"/>
     <pathelement location="${jsf-ri.jar}"/>
     <pathelement location="${jstl.jar}"/>
-    <pathelement location="${build}/WEB-INF/classes"/>
+    <pathelement location="${build}/${example}/WEB-INF/classes"/>
     <pathelement location="${servlet.jar}"/>
   </path>
 
@@ -148,18 +148,20 @@
 
   <target name="prepare" depends="init"
         description="Create build directories.">
-    <mkdir dir="${build}" />
-    <mkdir dir="${build}/WEB-INF" />
-    <mkdir dir="${build}/WEB-INF/classes" />
-    <mkdir dir="${build}/WEB-INF/lib" />
+    <mkdir dir="${build}/${example}" />
+    <mkdir dir="${build}/${example}/WEB-INF" />
+    <mkdir dir="${build}/${example}/WEB-INF/classes" />
+    <mkdir dir="${build}/${example}/WEB-INF/lib" />
   </target>
 
   <target name="copyJars" depends="prepare" if="build.standalone">
-    <copy todir="${build}/WEB-INF/lib" file="${commons-beanutils.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${commons-logging.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${commons-digester.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${jsf-api.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${jsf-ri.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-logging.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-digester.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-api.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-ri.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jstl.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${standard.jar}" />
   </target>
  
   <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
@@ -184,7 +186,7 @@
   <target name="install" description="Install web application"
           depends="build">
     <install url="${url}" username="${username}" password="${password}"
-          path="${context.path}"  war="file:${build}" />
+          path="${context.path}"  war="file:${build}/${example}/" />
   </target>
 
 
@@ -201,17 +203,17 @@
 
   <target name="build" depends="copyJars" 
      description="Compile Java files and copy static files." >
-    <javac srcdir="src" destdir="${build}/WEB-INF/classes">
+    <javac srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
     	<include name="**/*.java" />
      <classpath refid="classpath"/>
     </javac>
-    <copy todir="${build}/WEB-INF">
+    <copy todir="${build}/${example}/WEB-INF">
         <fileset dir="web/WEB-INF">
         <include name="*.xml" />
       </fileset>
     </copy>
 
-     <copy todir="${build}">
+     <copy todir="${build}/${example}/">
       <fileset dir="web">
         <include name="*.html" />
         <include name="*.gif" />
@@ -220,13 +222,13 @@
         <include name="*.xml" />
       </fileset>
     </copy>
-    <copy todir="${build}/WEB-INF/classes/${example}" >
+    <copy todir="${build}/${example}/WEB-INF/classes/${example}" >
       <fileset dir="web" >
          <include name="*properties"/>
       </fileset>
     </copy>
 
-    <jar jarfile="${example}.war" basedir="${build}"/>
+    <jar jarfile="${example}.war" basedir="${build}/${example}"/>
     <copy todir="${build}" file="${example}.war" />
     <delete file="${example}.war" />
   </target>	 
