@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolder.java,v 1.8 2003/11/03 21:00:31 rlubke Exp $
+ * $Id: StateHolder.java,v 1.9 2003/11/03 22:00:54 rlubke Exp $
  */
 
 /*
@@ -42,7 +42,8 @@ public interface StateHolder {
      * instances as well.</p>
      *
      * <p>The return from this method must be <code>Serializable</code></p>
-     *
+     * 
+     * @exception NullPointerException if <code>context</code> is null
      */
 
     public Object saveState(FacesContext context);
@@ -57,7 +58,9 @@ public interface StateHolder {
      * <code>UIComponent</code> with event handlers, validators, etc.)
      * this method must call the {@link #restoreState} method on all those
      * instances as well. </p>
-     *
+     * 
+     * @exception NullPointerException if either <code>context</code> or
+     *  <code>state</code> are <code>null</code>
      */
 
     public void restoreState(FacesContext context, Object state) throws IOException;
