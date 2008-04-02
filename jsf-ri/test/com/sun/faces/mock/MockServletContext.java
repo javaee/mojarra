@@ -1,5 +1,5 @@
 /*
- * $Id: MockServletContext.java,v 1.7 2006/02/15 22:33:27 rlubke Exp $
+ * $Id: MockServletContext.java,v 1.8 2006/02/15 22:35:29 rlubke Exp $
  */
 
 /*
@@ -153,7 +153,7 @@ public class MockServletContext implements ServletContext {
 
 
     public int getMinorVersion() {
-        return (3);
+        return (5);
     }
 
 
