@@ -29,7 +29,7 @@
 # This build.properties allows for the building of 
 # javaserverfaces-sources against Glassfish.
 #
-# $Id: build.properties.glassfish,v 1.4 2005/12/14 22:27:05 rlubke Exp $
+# $Id: build.properties.glassfish,v 1.5 2005/12/14 22:57:49 rlubke Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
@@ -55,7 +55,7 @@ container.name=glassfish
 # --------------------------------------------------
 #    Path to the web container installation
 # --------------------------------------------------
-container.home=
+container.home=<SET TO CONTAINER HOME>
 container.host=localhost
 container.port=8080
 
@@ -77,8 +77,8 @@ container.port=8080
 #    glassfish.domain - the default Glassfish domain.
 # --------------------------------------------------
 glassfish.admin.user=admin
-glassfish.password.file=
-glassfish.admin.host=localhost
+glassfish.password.file=<SET TO ASADMIN PASSWORD FILE>
+glassfish.admin.host=${container.host}
 glassfish.admin.port=4848
 glassfish.domain=domain1
 
@@ -106,7 +106,7 @@ endorsed.dirs=
 #     referenced by dependency.base.dir and the build will 
 #     pick up the libraries automatically.
 # --------------------------------------------------
-dependency.base.dir=
+dependency.base.dir=<SET TO BASE DIRECTORY>
 junit.home=${dependency.base.dir}/junit3.8.1
 htmlunit.home=${dependency.base.dir}/htmlunit-1.4
 cactus.home=${dependency.base.dir}/jakarta-cactus-13-1.7.1
