@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.32 2003/11/10 01:08:54 jvisvanathan Exp $
+ * $Id: MessageRenderer.java,v 1.33 2003/11/10 21:28:38 horwat Exp $
  */
 
 /*
@@ -12,159 +12,199 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.mozilla.util.Assert;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
-import javax.faces.component.UIParameter;
-import javax.faces.context.ResponseWriter;
+import javax.faces.component.UIMessage;
 import javax.faces.context.FacesContext;
-
-import org.mozilla.util.Assert;
+import javax.faces.context.ResponseWriter;
+import javax.faces.application.FacesMessage;
+import java.io.IOException;
+import java.util.Iterator;
 
 /**
  *
- *  <B>MessageRenderer</B> is a class ...
+ * <p><B>MessageRenderer</B> handles rendering for the Message<p>. 
  *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: MessageRenderer.java,v 1.32 2003/11/10 01:08:54 jvisvanathan Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id
  */
 
 public class MessageRenderer extends HtmlBasicRenderer {
     //
-    // Protected Constants
+    // Private/Protected Constants
     //
-
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    public MessageRenderer() {
-        super();
-    }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
+    private static final Log log = LogFactory.getLog(MessageRenderer.class);
+   
     //
     // Methods From Renderer
     //
 
     public void encodeBegin(FacesContext context, UIComponent component) 
-        throws IOException {
+            throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
-    public void encodeChildren(FacesContext context, UIComponent component) 
-        throws IOException {
+    public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
     public void encodeEnd(FacesContext context, UIComponent component) 
-        throws IOException {
+            throws IOException {
+        Iterator messageIter = null;        
+        FacesMessage curMessage = null;
+        ResponseWriter writer = null;
+        
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        String 
-	    currentValue = null,
-	    style = (String) component.getAttributes().get("style"),
-	    styleClass = (String) component.getAttributes().get("styleClass");
-
-        ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-
+       
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             return;
         }
-        Object currentObj = ((ValueHolder)component).getValue();
-        if ( currentObj != null) {
-            if (currentObj instanceof String) {
-                currentValue = (String)currentObj;
-            } else {
-                currentValue = currentObj.toString();
-            }
+        writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+
+        String clientId = (String)component.getAttributes().get("for");
+        //"for" attribute required for Message. Should be taken care of
+        //by TLD in JSP case, but need to cover non-JSP case.
+        Assert.assert_it(clientId != null);
+
+        messageIter = context.getMessages(clientId);
+
+        Assert.assert_it(messageIter != null);
+        if (!messageIter.hasNext()) {
+            //no messages to render
+            return;
+        }
+        curMessage = (FacesMessage) messageIter.next();
+
+        String
+            severityStyle = null,
+            severityStyleClass = null;
+
+        if (curMessage.getSeverity() == FacesMessage.SEVERITY_INFO) {
+            severityStyle = (String) component.getAttributes().get("infoStyle");
+            severityStyleClass = (String)
+                component.getAttributes().get("infoStyleClass");
+        }
+        else if (curMessage.getSeverity() == FacesMessage.SEVERITY_WARN) {
+            severityStyle = (String) component.getAttributes().get("warnStyle");
+            severityStyleClass = (String)
+                component.getAttributes().get("warnStyleClass");
+        }
+        else if (curMessage.getSeverity() == FacesMessage.SEVERITY_ERROR) {
+            severityStyle = (String) component.getAttributes().get("errorStyle");
+            severityStyleClass = (String)
+                component.getAttributes().get("errorStyleClass");
+        }
+        else if (curMessage.getSeverity() == FacesMessage.SEVERITY_FATAL) {
+            severityStyle = (String) component.getAttributes().get("fatalStyle");
+            severityStyleClass = (String)
+                component.getAttributes().get("fatalStyleClass");
         }
 
-        ArrayList parameterList = new ArrayList();
+	String 
+	    style = (String) component.getAttributes().get("style"),
+	    styleClass = (String) component.getAttributes().get("styleClass"),
+	    layout = (String) component.getAttributes().get("layout");
 
-        // get UIParameter children...
-
-        Iterator kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-
-            //PENDING(rogerk) ignore if child is not UIParameter?
-
-            if (!(kid instanceof UIParameter)) {
-                continue;
-            }
-
-            parameterList.add(((ValueHolder)kid).getValue());
+        // if we have style and severityStyle
+        if ((style != null) && (severityStyle != null)) {
+            // severityStyle wins
+            style = severityStyle;
+        }
+        // if we have no style, but do have severityStyle
+        else if ((style == null) && (severityStyle != null)) {
+            // severityStyle wins
+            style = severityStyle;
         }
 
-        String message = null;
-
-        //PENDING(rogerk) if string contains "{" char and enclosing "}"
-        // two char positions later (ex: "{0}") assume it has
-        // something like "{0}", in which case do the message format.
-
-        int i = 0;
-        if ((-1 != (i = currentValue.indexOf('{'))) && 
-            (currentValue.charAt(i + 2) == '}') && 
-            (parameterList.size() > 0)) {
-            Object[] params = parameterList.toArray();
-            message = MessageFormat.format(currentValue, params);
-        } else {
-            message = currentValue;
+        // if we have styleClass and severityStyleClass
+        if ((styleClass != null) && (severityStyleClass != null)) {
+            // severityStyleClass wins
+            styleClass = severityStyleClass;
         }
-                
-	if (null != styleClass || null != style) {
-	    writer.startElement("span", component);
-	    if (null != styleClass) {
+        // if we have no styleClass, but do have severityStyleClass
+        else if ((styleClass == null) && (severityStyleClass != null)) {
+            // severityStyleClass wins
+            styleClass = severityStyleClass;
+        }
+
+        //Done intializing local variables. Move on to rendering.
+
+        boolean wroteSpan = false;
+        boolean wroteTable = false;
+
+        //Add style and class attributes to table. If layout attribute is not
+        //present or layout is list just do the spans in a linear fashion.
+        if ((layout != null) && (layout.equals("table"))) {
+            writer.startElement("table", component);
+            writer.startElement("tr", component);
+            writer.startElement("td", component);
+            wroteTable = true;
+        }
+
+	if (styleClass != null || style != null) {
+            writer.startElement("span", component);
+            wroteSpan = true;
+	    if (styleClass != null) {
 		writer.writeAttribute("class", styleClass, "styleClass");
 	    }
-	    if (null != style) {
+	    if (style != null) {
 		writer.writeAttribute("style", style, "style");
 	    }
-	}
-        writer.writeText(message, null);
-	if (null != styleClass) {
-	    writer.endElement("span");
-	}
-    }
+        } 
 
+        Object tooltip = component.getAttributes().get("tooltip");
+        boolean isTooltip = false;
+        if (tooltip instanceof Boolean) {
+            //if it's not a boolean can ignore it
+            isTooltip = ((Boolean)tooltip).booleanValue();
+        }
+
+        boolean wroteTooltip = false;
+        if (((UIMessage)component).isShowDetail() && 
+            ((UIMessage)component).isShowSummary() &&
+            isTooltip) {
+
+            if (!wroteSpan) {
+                 writer.startElement("span", component);
+                 wroteTooltip = true;
+            }
+            writer.writeAttribute("title", curMessage.getSummary(), "title");
+            writer.closeStartTag(component);
+
+	    writer.writeText("\t", null);
+	    writer.writeText(curMessage.getDetail(), null);
+        } else if (wroteSpan) {
+            writer.closeStartTag(component);
+
+	    writer.writeText("\t", null);
+	    writer.writeText(curMessage.getSummary(), null);
+	    writer.writeText(" ", null);
+	    writer.writeText(curMessage.getDetail(), null);
+        }
+
+	if (wroteSpan || wroteTooltip) {
+            writer.endElement("span");
+	}
+
+        if (wroteTable) {
+            writer.endElement("td");
+            writer.endElement("tr");
+            writer.endElement("table");
+        }
+    }
+    
 } // end of class MessageRenderer
+
+

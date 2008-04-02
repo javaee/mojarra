@@ -962,8 +962,36 @@
       &i18n-attrs;
 
       <supported-component-class>
-        <component-class>javax.faces.component.UIOutput</component-class>
+        <component-class>javax.faces.component.UIMessage</component-class>
       </supported-component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Messages</renderer-type>
+      <renderer-class>com.sun.faces.renderkit.html_basic.MessagesRenderer</renderer-class>
+      <!-- PENDING(edburns): make sure we render DIV and stuff the below
+           attrs there.  -->
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
+
+      <supported-component-class>
+        <component-class>javax.faces.component.UIMessages</component-class>
+      </supported-component-class>
+    </renderer>
+
+    <renderer>
+	<renderer-type>OutputMessage</renderer-type>
+	<renderer-class>com.sun.faces.renderkit.html_basic.OutputMessageRenderer</renderer-class>
+      <!-- PENDING(edburns): make sure we render DIV and stuff the below
+	   attrs there.	 -->
+	&core-attrs;
+	&events-attrs;
+	&i18n-attrs;
+
+	<supported-component-class>
+	<component-class>javax.faces.component.UIOutput</component-class>
+	</supported-component-class>
     </renderer>
 
     <renderer>

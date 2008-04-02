@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.68 2003/11/09 05:11:14 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.69 2003/11/10 21:28:40 horwat Exp $
  */
 
 /*
@@ -25,6 +25,8 @@ import javax.faces.component.UISelectItems;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UIMessage;
+import javax.faces.component.UIMessages;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.component.UISelectOne;
@@ -48,7 +50,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.68 2003/11/09 05:11:14 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.69 2003/11/10 21:28:40 horwat Exp $
  * 
  *
  */
@@ -169,6 +171,8 @@ public class TestRenderers_2 extends JspFacesTestCase
             testGraphicImageRenderer(root);            
             testOutputErrorsRenderer(root);
             testOutputMessageRenderer(root);
+            testMessageRenderer(root);
+            testMessagesRenderer(root);
             getFacesContext().getResponseWriter().endDocument();
             assertTrue(verifyExpectedOutput());
         } catch (Throwable t) {
@@ -698,31 +702,584 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().setViewRoot(originalRoot);
     }
 
-    public void testOutputMessageRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing OutputMessageRenderer");
-        UIOutput output = new UIOutput();
-        output.setId("myOutputMessage");
-        output.setValue("My name is {0} {1}");
-        UIParameter param1, param2 = null;
-        param1 = new UIParameter();
-        param1.setId("p1");
-        param2 = new UIParameter();
-        param2.setId("p2");
-        param1.setValue("Bobby");
-        param2.setValue("Orr");
-        output.getChildren().add(param1);
-        output.getChildren().add(param2);
-        root.getChildren().add(output);
+    public void testOutputMessageRenderer(UIComponent root) throws IOException {	System.out.println("Testing OutputMessageRenderer");
+	UIOutput output = new UIOutput();
+	output.setId("myOutputMessage");
+	output.setValue("My name is {0} {1}");
+	UIParameter param1, param2 = null;
+	param1 = new UIParameter();
+	param1.setId("p1");
+	param2 = new UIParameter();
+	param2.setId("p2");
+		param1.setValue("Bobby");
+	param2.setValue("Orr");
+	output.getChildren().add(param1);
+	output.getChildren().add(param2);
+	root.getChildren().add(output);
+
+	OutputMessageRenderer outputMessageRenderer = new OutputMessageRenderer();
+	// test encode method
+
+	System.out.println("	Testing encode method...");
+
+	outputMessageRenderer.encodeBegin(getFacesContext(), output);
+	outputMessageRenderer.encodeEnd(getFacesContext(), output);
+    }
+
+
+    public void testMessageRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing MessageRenderer");
+        UIMessage message = new UIMessage();
+        message.setId("myMessage_0");
+        message.setFor("myForMessage_0");
+        root.getChildren().add(message);
+
+        ResponseWriter originalWriter = getFacesContext().getResponseWriter();
+        UIViewRoot originalRoot = getFacesContext().getViewRoot();
+
+        getFacesContext().setViewRoot((UIViewRoot) root);
+
+        // setup a new HtmlResponseWriter using a StringWriter.
+        // This allows us to capture the output and check for
+        // correctness without using a goldenfile.
+        StringWriter writer = new StringWriter();
+        HtmlResponseWriter htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
 
         MessageRenderer messageRenderer = new MessageRenderer();
 
+        // populate facescontext with some errors
+        getFacesContext().addMessage(message.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_INFO,
+            "global message summary_0", "global message detail_0"));
+
         // test encode method
 
-        System.out.println("    Testing encode method...");
+        messageRenderer.encodeBegin(getFacesContext(), message);
+        messageRenderer.encodeEnd(getFacesContext(), message);
 
-        messageRenderer.encodeBegin(getFacesContext(), output);
-        messageRenderer.encodeEnd(getFacesContext(), output);
+        String result = writer.toString();
+
+        //no span should be rendered since none of the criteria was met
+        assertTrue(result.indexOf("span") == -1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        root.getChildren().remove(message);
+        message = new UIMessage();
+        message.setId("myMessage_1");
+        message.setFor("myForMessage_1");
+        root.getChildren().add(message);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messageRenderer = new MessageRenderer();
+
+        //add a styleClass so span is rendered
+	message.getAttributes().put("styleClass", "styleClass");
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(message.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_WARN,
+            "global message summary_1", "global message detail_1"));
+
+        // test encode method
+
+        messageRenderer.encodeBegin(getFacesContext(), message);
+        messageRenderer.encodeEnd(getFacesContext(), message);
+
+        result = writer.toString();
+
+        //Span should have class attribute for styleClass
+        //Summary and detail should be in body of span separated by space
+        assertTrue(result.indexOf("<span class=\"styleClass\">	global message summary_1 global message detail_1</span>") != -1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        root.getChildren().remove(message);
+        message = new UIMessage();
+        message.setId("myMessage_2");
+        message.setFor("myForMessage_2");
+        root.getChildren().add(message);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messageRenderer = new MessageRenderer();
+
+        //add a styleClass so span is rendered
+	message.getAttributes().put("style", "style");
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(message.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            "global message summary_2", "global message detail_2"));
+
+        // test encode method
+
+        messageRenderer.encodeBegin(getFacesContext(), message);
+        messageRenderer.encodeEnd(getFacesContext(), message);
+
+        result = writer.toString();
+
+        //Span should have style attribute
+        //Summary and detail should be in body of span separated by space
+        assertTrue(result.indexOf("<span style=\"style\">	global message summary_2 global message detail_2</span>") != -1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        root.getChildren().remove(message);
+        message = new UIMessage();
+        message.setId("myMessage_3");
+        message.setFor("myForMessage_3");
+        root.getChildren().add(message);
+
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messageRenderer = new MessageRenderer();
+
+        //add a styleClass so span is rendered
+	message.getAttributes().put("styleClass", "styleClass");
+	message.getAttributes().put("style", "style");
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(message.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_3", "global message detail_3"));
+
+        // test encode method
+
+        messageRenderer.encodeBegin(getFacesContext(), message);
+        messageRenderer.encodeEnd(getFacesContext(), message);
+
+        result = writer.toString();
+
+        //Span should have class attribute for styleClass and style attribute
+        //Summary and detail should be in body of span separated by space
+        assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\">	global message summary_3 global message detail_3</span>") != -1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        root.getChildren().remove(message);
+        message = new UIMessage();
+        message.setId("myMessage_4");
+        message.setFor("myForMessage_4");
+        root.getChildren().add(message);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messageRenderer = new MessageRenderer();
+
+        //add a styleClass so span is rendered
+	message.getAttributes().put("styleClass", "styleClass");
+	message.getAttributes().put("style", "style");
+
+        //set tooltip criteria to true
+	message.getAttributes().put("tooltip", new Boolean(true));
+        message.setShowDetail(true);
+        message.setShowSummary(true);
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(message.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_4", "global message detail_4"));
+
+        // test encode method
+
+        messageRenderer.encodeBegin(getFacesContext(), message);
+        messageRenderer.encodeEnd(getFacesContext(), message);
+
+        result = writer.toString();
+
+        //Span should containt class for styleClass, style, 
+        //  and title for tooltip attributes
+        //Summary should go in the title attribute and only the 
+        //  detail displayed in the body of the span
+        assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\" title=\"global message summary_4\">	global message detail_4</span>") != -1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        root.getChildren().remove(message);
+        message = new UIMessage();
+        message.setId("myMessage_5");
+        message.setFor("myForMessage_5");
+        root.getChildren().add(message);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messageRenderer = new MessageRenderer();
+
+        //add a styleClass so span is rendered
+	message.getAttributes().put("styleClass", "styleClass");
+	message.getAttributes().put("style", "style");
+
+        //set tooltip criteria to true
+	message.getAttributes().put("tooltip", new Boolean(true));
+        message.setShowDetail(true);
+        message.setShowSummary(true);
+
+        //Set layout to table
+	message.getAttributes().put("layout", "table");
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(message.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_5", "global message detail_5"));
+
+        // test encode method
+
+        messageRenderer.encodeBegin(getFacesContext(), message);
+        messageRenderer.encodeEnd(getFacesContext(), message);
+
+        result = writer.toString();
+
+        //Span should containt class for styleClass, style, 
+        //  and title for tooltip attributes
+        //Summary should go in the title attribute and only the 
+        //  detail displayed in the body of the span
+        //Should be wrapped in a table
+        assertTrue(result.indexOf("<table><tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5\">	global message detail_5</span></td></tr></table>") != -1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        // restore the original ResponseWriter
+        getFacesContext().setResponseWriter(originalWriter);
+        getFacesContext().setViewRoot(originalRoot);
     }
+
+    public void testMessagesRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing MessagesRenderer");
+        UIMessages messages = new UIMessages();
+        messages.setId("myMessage_0");
+        messages.setFor("myForMessage_0");
+        root.getChildren().add(messages);
+
+        ResponseWriter originalWriter = getFacesContext().getResponseWriter();
+        UIViewRoot originalRoot = getFacesContext().getViewRoot();
+
+        getFacesContext().setViewRoot((UIViewRoot) root);
+
+        // setup a new HtmlResponseWriter using a StringWriter.
+        // This allows us to capture the output and check for
+        // correctness without using a goldenfile.
+        StringWriter writer = new StringWriter();
+        HtmlResponseWriter htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        MessagesRenderer messagesRenderer = new MessagesRenderer();
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_INFO,
+            "global message summary_0.0", "global message detail_0.0"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_INFO,
+            "global message summary_0.1", "global message detail_0.1"));
+
+        // test encode method
+
+        messagesRenderer.encodeBegin(getFacesContext(), messages);
+        messagesRenderer.encodeEnd(getFacesContext(), messages);
+
+        String result = writer.toString();
+
+        //no span should be rendered since none of the criteria was met
+        assertTrue(result.indexOf("span") == -1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        root.getChildren().remove(messages);
+        messages = new UIMessages();
+        messages.setId("myMessage_1");
+        messages.setFor("myForMessage_1");
+        root.getChildren().add(messages);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messagesRenderer = new MessagesRenderer();
+
+        //add a styleClass so span is rendered
+	messages.getAttributes().put("styleClass", "styleClass");
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_WARN,
+            "global message summary_1.0", "global message detail_1.0"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_WARN,
+            "global message summary_1.1", "global message detail_1.1"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_WARN,
+            "global message summary_1.1", "global message detail_1.1"));
+
+        // test encode method
+
+        messagesRenderer.encodeBegin(getFacesContext(), messages);
+        messagesRenderer.encodeEnd(getFacesContext(), messages);
+
+        result = writer.toString();
+
+        //Span should have class attribute for styleClass
+        //Summary and detail should be in body of span separated by space
+        //Verify that both messages are included
+        assertTrue(result.indexOf("<span class=\"styleClass\">	global message summary_1.0 global message detail_1.0</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"styleClass\">	global message summary_1.1 global message detail_1.1</span>") != -1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        root.getChildren().remove(messages);
+        messages = new UIMessages();
+        messages.setId("myMessage_2");
+        messages.setFor("myForMessage_2");
+        root.getChildren().add(messages);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messagesRenderer = new MessagesRenderer();
+
+        //add a styleClass so span is rendered
+	messages.getAttributes().put("style", "style");
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            "global message summary_2.0", "global message detail_2.0"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            "global message summary_2.1", "global message detail_2.1"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            "global message summary_2.2", "global message detail_2.2"));
+
+        // test encode method
+
+        messagesRenderer.encodeBegin(getFacesContext(), messages);
+        messagesRenderer.encodeEnd(getFacesContext(), messages);
+
+        result = writer.toString();
+
+        //Span should have style attribute
+        //Summary and detail should be in body of span separated by space
+        //Verify that three messages are included
+        assertTrue(result.indexOf("<span style=\"style\">	global message summary_2.0 global message detail_2.0</span>") != -1);
+        assertTrue(result.indexOf("<span style=\"style\">	global message summary_2.1 global message detail_2.1</span>") != -1);
+        assertTrue(result.indexOf("<span style=\"style\">	global message summary_2.2 global message detail_2.2</span>") != -1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        root.getChildren().remove(messages);
+        messages = new UIMessages();
+        messages.setId("myMessage_3");
+        messages.setFor("myForMessage_3");
+        root.getChildren().add(messages);
+
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messagesRenderer = new MessagesRenderer();
+
+        //add a styleClass so span is rendered
+	messages.getAttributes().put("styleClass", "styleClass");
+	messages.getAttributes().put("style", "style");
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_3.0", "global message detail_3.0"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_3.1", "global message detail_3.1"));
+
+        // test encode method
+
+        messagesRenderer.encodeBegin(getFacesContext(), messages);
+        messagesRenderer.encodeEnd(getFacesContext(), messages);
+
+        result = writer.toString();
+
+        //Span should have class attribute for styleClass and style attribute
+        //Summary and detail should be in body of span separated by space
+        //Verify that both messages are included
+        assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\">	global message summary_3.0 global message detail_3.0</span>") != -1);
+        assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\">	global message summary_3.1 global message detail_3.1</span>") != -1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        root.getChildren().remove(messages);
+        messages = new UIMessages();
+        messages.setId("myMessage_4");
+        messages.setFor("myForMessage_4");
+        root.getChildren().add(messages);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messagesRenderer = new MessagesRenderer();
+
+        //add a styleClass so span is rendered
+	messages.getAttributes().put("styleClass", "styleClass");
+	messages.getAttributes().put("style", "style");
+
+        //set tooltip criteria to true
+	messages.getAttributes().put("tooltip", new Boolean(true));
+        messages.setShowDetail(true);
+        messages.setShowSummary(true);
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_4.0", "global message detail_4.0"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_4.1", "global message detail_4.1"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_4.2", "global message detail_4.2"));
+
+        // test encode method
+
+        messagesRenderer.encodeBegin(getFacesContext(), messages);
+        messagesRenderer.encodeEnd(getFacesContext(), messages);
+
+        result = writer.toString();
+
+        //Span should containt class for styleClass, style, 
+        //  and title for tooltip attributes
+        //Summary should go in the title attribute and only the 
+        //  detail displayed in the body of the span
+        //Verify that three messages are included
+       assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\" title=\"global message summary_4.0\">	global message detail_4.0</span>") != -1);
+       assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\" title=\"global message summary_4.1\">	global message detail_4.1</span>") != -1);
+       assertTrue(result.indexOf("<span class=\"styleClass\" style=\"style\" title=\"global message summary_4.2\">	global message detail_4.2</span>") != -1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        root.getChildren().remove(messages);
+        messages = new UIMessages();
+        messages.setId("myMessage_5");
+        messages.setFor("myForMessage_5");
+        root.getChildren().add(messages);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messagesRenderer = new MessagesRenderer();
+
+        //add a styleClass so span is rendered
+	messages.getAttributes().put("styleClass", "styleClass");
+	messages.getAttributes().put("style", "style");
+
+        //set tooltip criteria to true
+	messages.getAttributes().put("tooltip", new Boolean(true));
+        messages.setShowDetail(true);
+        messages.setShowSummary(true);
+
+        //Set layout to table
+	messages.getAttributes().put("layout", "table");
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_5.0", "global message detail_5.0"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_5.1", "global message detail_5.1"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_5.2", "global message detail_5.2"));
+
+        // test encode method
+
+        messagesRenderer.encodeBegin(getFacesContext(), messages);
+        messagesRenderer.encodeEnd(getFacesContext(), messages);
+
+        result = writer.toString();
+
+        //Span should containt class for styleClass, style, 
+        //  and title for tooltip attributes
+        //Summary should go in the title attribute and only the 
+        //  detail displayed in the body of the span
+        //Verify that three messages are included
+        //Should be wrapped in a table
+        assertTrue(result.indexOf("<table><tr><td><span") == 0);
+        assertTrue(result.indexOf("<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.0\">	global message detail_5.0</span></tr></td>") != -1);
+        assertTrue(result.indexOf("<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.1\">	global message detail_5.1</span></tr></td>") != -1);
+        assertTrue(result.indexOf("<tr><td><span class=\"styleClass\" style=\"style\" title=\"global message summary_5.2\">	global message detail_5.2</span></tr></td>") != -1);
+        assertTrue(result.endsWith("</span></tr></td></table>"));
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+        // restore the original ResponseWriter
+        getFacesContext().setResponseWriter(originalWriter);
+        getFacesContext().setViewRoot(originalRoot);
+    }
+
 
     public void testTextareaRenderer(UIComponent root) throws IOException {
         System.out.println("Testing TextareaRenderer");
