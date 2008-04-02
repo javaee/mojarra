@@ -85,7 +85,6 @@ public class ImageMapEventHandler implements ActionListener {
        
         FacesContext context = FacesContext.getCurrentInstance();
 	context.setLocale(curLocale);
-        context.renderResponse();
     }
     
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: CarActionListener.java,v 1.2 2003/02/21 23:44:20 ofung Exp $
+ * $Id: CarActionListener.java,v 1.3 2003/03/12 19:55:36 rkitain Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CarActionListener.java,v 1.2 2003/02/21 23:44:20 ofung Exp $
+ * @version $Id: CarActionListener.java,v 1.3 2003/03/12 19:55:36 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -259,7 +259,6 @@ public class CarActionListener implements ActionListener {
         foundComponent = component.findComponent("deluxe");
         foundComponent.setAttribute("commandClass", "package-unselected");
 
-        context.renderResponse();
     }
 
     // helper method to set UI values for "standard" package selection
@@ -371,7 +370,6 @@ public class CarActionListener implements ActionListener {
         foundComponent = component.findComponent("deluxe");
         foundComponent.setAttribute("commandClass", "package-unselected");
 
-        context.renderResponse();
     }
 
     // helper method to set UI values for "performance" package selection
@@ -479,7 +477,6 @@ public class CarActionListener implements ActionListener {
         foundComponent = component.findComponent("deluxe");
         foundComponent.setAttribute("commandClass", "package-unselected");
 
-        context.renderResponse();
     }
 
     // helper method to set UI values for "deluxe" package selection
@@ -592,7 +589,6 @@ public class CarActionListener implements ActionListener {
         foundComponent = component.findComponent("deluxe");
         foundComponent.setAttribute("commandClass", "package-selected");
 
-        context.renderResponse();
     }
 
 } // end of class CarActionListener
