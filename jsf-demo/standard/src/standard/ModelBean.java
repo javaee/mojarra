@@ -1,5 +1,5 @@
 /*
- * $Id: ModelBean.java,v 1.3 2003/08/25 21:25:17 eburns Exp $
+ * $Id: ModelBean.java,v 1.4 2003/10/27 04:15:58 craigmcc Exp $
  */
 
 /*
@@ -9,15 +9,13 @@
 
 package standard;
 
-import javax.faces.application.Action;
-
 import java.util.Date;
 
 
 /**
  * Simple bean for Model value demonstration. 
  *
- * @version $Id: ModelBean.java,v 1.3 2003/08/25 21:25:17 eburns Exp $
+ * @version $Id: ModelBean.java,v 1.4 2003/10/27 04:15:58 craigmcc Exp $
  */
 
 public class ModelBean {
@@ -113,22 +111,19 @@ public class ModelBean {
     // Actions
     // 
 
-    public Action getDefaultAction() {
-	return new Action() {
-		public String invoke() {
-		    // back end application logic goes here.
-		    return "success";
-		}
-	    };
+    public String defaultAction() {
+
+        // back end application logic goes here.
+        return "success";
+
     }
 
-    public Action getPostbackAction() {
-	return new Action() {
-		public String invoke() {
-		    // back end application logic goes here.
-		    return null;
-		}
-	    };
+    public String postbackAction() {
+
+        // back end application logic goes here.
+        return null;
+
     }
+
 
 }

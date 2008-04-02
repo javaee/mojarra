@@ -1,5 +1,5 @@
 /*
- * $Id: LogValueChangedListener.java,v 1.2 2003/09/11 21:39:58 craigmcc Exp $
+ * $Id: LogValueChangedListener.java,v 1.3 2003/10/27 04:15:55 craigmcc Exp $
  */
 
 /*
@@ -45,18 +45,18 @@ package standard;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
-import javax.faces.event.ValueChangedEvent;
-import javax.faces.event.ValueChangedListener;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 
 
 /**
  * <p>Log the occurrence of this event.</p>
  */
 
-public class LogValueChangedListener implements ValueChangedListener {
+public class LogValueChangedListener implements ValueChangeListener {
 
 
-    // -------------------------------------------- ValueChangedListener Methods
+    // --------------------------------------------- ValueChangeListener Methods
 
 
     /**
@@ -72,12 +72,12 @@ public class LogValueChangedListener implements ValueChangedListener {
     /**
      * <p>Log the event.</p>
      *
-     * @param event {@link ValueChangedEvent} that is being processed
+     * @param event {@link ValueChangeEvent} that is being processed
      */
-    public void processValueChanged(ValueChangedEvent event) {
+    public void processValueChange(ValueChangeEvent event) {
 
 	FacesContext context = FacesContext.getCurrentInstance();
-	append(context, "ValueChangedEvent(" +
+	append(context, "ValueChangeEvent(" +
 	       event.getComponent().getClientId(context) + "," +
 	       event.getOldValue() + "," + event.getNewValue() + ")");
 

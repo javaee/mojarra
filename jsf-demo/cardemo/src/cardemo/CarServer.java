@@ -1,5 +1,5 @@
 /*
- * $Id: CarServer.java,v 1.6 2003/10/15 16:59:57 jvisvanathan Exp $
+ * $Id: CarServer.java,v 1.7 2003/10/27 04:15:50 craigmcc Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -54,7 +54,6 @@ import java.io.IOException;
 
 import javax.faces.model.SelectItem;
 import javax.faces.context.FacesContext;
-import javax.faces.application.Action;
 
 /**
  * CarServer is central to the CarDemo application. It serves as the model object
@@ -97,7 +96,6 @@ public class CarServer extends Object {
     
     public static String CARDEMO_PREFIX = "cardemo/";
     protected HashMap optionValues = null;
-    protected CarBuyAction carBuyAction = null;
     
     public CarServer() {
         super();
@@ -422,11 +420,8 @@ public class CarServer extends Object {
         return currentPackage;
     }
     
-    public Action getCarBuyAction() {
-        if (carBuyAction == null) {
-            carBuyAction = new CarBuyAction();
-        }
-        return carBuyAction;
+    public String carBuyAction() {
+        return (getOutOfStockOption());
     }
     
     public String getOutOfStockOption() {
@@ -444,9 +439,4 @@ public class CarServer extends Object {
         }  
     }
     
-    class CarBuyAction extends Action {
-        public String invoke() {
-            return (getOutOfStockOption());
-        }
-    }
 }

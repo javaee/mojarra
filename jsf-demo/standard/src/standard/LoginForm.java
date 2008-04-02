@@ -1,5 +1,5 @@
 /*
- * $Id: LoginForm.java,v 1.2 2003/10/22 00:34:58 jvisvanathan Exp $
+ * $Id: LoginForm.java,v 1.3 2003/10/27 04:15:57 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package standard;
 
 
-import javax.faces.application.Action;
 import javax.faces.application.Message;
 import javax.faces.application.MessageImpl;
 import javax.faces.component.UIInput;
@@ -49,7 +48,7 @@ public class LoginForm {
 
 
     // Validate the attempted login
-    private String login() {
+    public String login() {
 
         String username = (String) this.username.getValue();
         String password = (String) this.password.getValue();
@@ -65,18 +64,6 @@ public class LoginForm {
             return (null);
         }
 
-    }
-
-
-    // ----------------------------------------------------------------- Actions
-
-
-    public Action getLogin() {
-	return new Action() {
-		public String invoke() {
-		    return (login());
-		}
-	    };
     }
 
 

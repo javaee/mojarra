@@ -40,8 +40,8 @@ package cardemo;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
-import javax.faces.event.ValueChangedEvent;
-import javax.faces.event.ValueChangedListener;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -55,7 +55,7 @@ import com.sun.faces.util.Util;
  * PackageValueChanged gets called when any of the package options for a
  * car in the more.jsp page changes
  */
-public class PackageValueChanged implements ValueChangedListener {
+public class PackageValueChanged implements ValueChangeListener {
     
     private static Log log = LogFactory.getLog(PackageValueChanged.class);
 
@@ -71,11 +71,11 @@ public class PackageValueChanged implements ValueChangedListener {
     }
     
     
-    public void processValueChanged(ValueChangedEvent vEvent) {
+    public void processValueChange(ValueChangeEvent vEvent) {
         try {
-            log.debug("ValueChangedEvent processEvent");
+            log.debug("ValueChangeEvent processEvent");
             String componentId = vEvent.getComponent().getId();
-            // handle each valuechangedevent here
+            // handle each valuechangeevent here
             FacesContext context = FacesContext.getCurrentInstance();
             String currentPrice;
             int cPrice = 0;
@@ -118,7 +118,7 @@ public class PackageValueChanged implements ValueChangedListener {
      * Updates the price of the Car based for a particular option being
      * selected or deselected.
      */
-    public int calculatePrice(String optionKey,ValueChangedEvent vEvent, 
+    public int calculatePrice(String optionKey,ValueChangeEvent vEvent, 
             int cPrice, FacesContext context) {
         Boolean optionSet = (Boolean)vEvent.getNewValue();   
         Boolean oldValue = (Boolean)vEvent.getOldValue(); 

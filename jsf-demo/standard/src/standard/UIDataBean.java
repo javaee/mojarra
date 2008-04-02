@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataBean.java,v 1.4 2003/10/23 05:20:08 eburns Exp $
+ * $Id: UIDataBean.java,v 1.5 2003/10/27 04:15:59 craigmcc Exp $
  */
 
 /*
@@ -46,7 +46,6 @@ package standard;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.faces.application.Action;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
@@ -138,13 +137,13 @@ public class UIDataBean {
     }
 
 
-    // ---------------------------------------------------------- Event Handlers
+    // --------------------------------------------------------- Action Handlers
 
 
     /**
      * <p>Acknowledge that a row-specific link was clicked.</p>
      */
-    private String click() {
+    public String click() {
 
         FacesContext context = FacesContext.getCurrentInstance();
         append("click(rowIndex=" + data.getRowIndex() +
@@ -160,7 +159,7 @@ public class UIDataBean {
      * <p>Create a new empty row to be filled in for a new record
      * in the database.</p>
      */
-    private String create() {
+    public String create() {
 
         append("create()");
 	clear();
@@ -186,7 +185,7 @@ public class UIDataBean {
     /**
      * <p>Delete any customers who have been checked from the list.</p>
      */
-    private String delete() {
+    public String delete() {
 
         append("delete()");
 
@@ -218,7 +217,7 @@ public class UIDataBean {
     /**
      * <p>Scroll directly to the first page.</p>
      */
-    private String first() {
+    public String first() {
 
         append("first()");
 	scroll(0);
@@ -230,7 +229,7 @@ public class UIDataBean {
     /**
      * <p>Scroll directly to the last page.</p>
      */
-    private String last() {
+    public String last() {
 
         append("last()");
 	scroll(data.getRowCount() - 1);
@@ -242,7 +241,7 @@ public class UIDataBean {
     /**
      * <p>Scroll forwards to the next page.</p>
      */
-    private String next() {
+    public String next() {
 
         append("next()");
 	int first = data.getFirst();
@@ -255,7 +254,7 @@ public class UIDataBean {
     /**
      * <p>Acknowledge that a row-specific button was pressed.</p>
      */
-    private String press() {
+    public String press() {
 
         FacesContext context = FacesContext.getCurrentInstance();
         append("press(rowIndex=" + data.getRowIndex() +
@@ -270,7 +269,7 @@ public class UIDataBean {
     /**
      * <p>Scroll backwards to the previous page.</p>
      */
-    private String previous() {
+    public String previous() {
 
         append("previous()");
 	int first = data.getFirst();
@@ -283,7 +282,7 @@ public class UIDataBean {
     /**
      * <p>Handle a "reset" button by clearing local component values.</p>
      */
-    private String reset() {
+    public String reset() {
 
         append("reset()");
 	clear();
@@ -297,7 +296,7 @@ public class UIDataBean {
      * this would need to distinguish between inserts and updates, based on
      * the state of the "created" property.</p>
      */
-    private String update() {
+    public String update() {
 
         append("update()");
 	; // Save to database as necessary
@@ -413,99 +412,6 @@ public class UIDataBean {
         }
         append("scroll(" + row + "), first=" + data.getFirst());
 
-    }
-
-
-    // ------------------------------------------------------- Action Properties
-
-
-    public Action getClick() {
-	return new Action() {
-		public String invoke() {
-		    return (click());
-		}
-	    };
-    }
-
-
-    public Action getCreate() {
-	return new Action() {
-		public String invoke() {
-		    return (create());
-		}
-	    };
-    }
-
-
-    public Action getDelete() {
-	return new Action() {
-		public String invoke() {
-		    return (delete());
-		}
-	    };
-    }
-
-
-    public Action getFirst() {
-	return new Action() {
-		public String invoke() {
-		    return (first());
-		}
-	    };
-    }
-
-
-    public Action getLast() {
-	return new Action() {
-		public String invoke() {
-		    return (last());
-		}
-	    };
-    }
-
-
-    public Action getNext() {
-	return new Action() {
-		public String invoke() {
-		    return (next());
-		}
-	    };
-    }
-
-
-    public Action getPress() {
-	return new Action() {
-		public String invoke() {
-		    return (press());
-		}
-	    };
-    }
-
-
-    public Action getPrevious() {
-	return new Action() {
-		public String invoke() {
-		    return (previous());
-		}
-	    };
-    }
-
-
-    public Action getReset() {
-	return new Action() {
-		public String invoke() {
-		    return (reset());
-		}
-	    };
-    }
-
-
-    public Action getUpdate() {
-	return new Action() {
-		public String invoke() {
-		    return (update());
-		}
-	    };
     }
 
 

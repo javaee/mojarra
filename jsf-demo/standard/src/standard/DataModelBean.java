@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelBean.java,v 1.2 2003/10/17 03:53:46 eburns Exp $
+ * $Id: DataModelBean.java,v 1.3 2003/10/27 04:15:53 craigmcc Exp $
  */
 
 /*
@@ -45,7 +45,6 @@ package standard;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.application.Action;
 import javax.faces.component.UISelectOne;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -156,35 +155,25 @@ public class DataModelBean {
     }
 
 
-    // ---------------------------------------------------------- Event Handlers
+    // --------------------------------------------------------- Action Handlers
 
 
     /**
      * <p>Select the customer whose account id was specified.</p>
      */
-    private String select() {
+    public String select() {
+
         String value = (String) getAccountId().getValue();
         // System.err.println("select(" + value + ")");
         int rowIndex = Integer.parseInt(value);
         // System.err.println("setting rowIndex to " + rowIndex);
         getCustomers().setRowIndex(rowIndex);
         return (null); // Stay on the same page
+
     }
 
 
     // --------------------------------------------------------- Private Methods
-
-
-    // ------------------------------------------------------- Action Properties
-
-
-    public Action getSelect() {
-	return new Action() {
-		public String invoke() {
-		    return (select());
-		}
-	    };
-    }
 
 
 }
