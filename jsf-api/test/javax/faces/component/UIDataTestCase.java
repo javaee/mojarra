@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.23 2003/12/17 23:25:57 eburns Exp $
+ * $Id: UIDataTestCase.java,v 1.24 2003/12/19 00:52:38 craigmcc Exp $
  */
 
 /*
@@ -356,12 +356,15 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
             { "input3", "input4", "input5", "input6", "input7" };
         String after[] =
             { "input3", "input4A", "input5", "input6B", "input7" };
+        String nulls[] =
+            { null, null, null, null, null };
 
         // Set up for this test
         setupModel();
         setupRenderers();
         UICommand command = setupTree();
         UIData data = (UIData) component;
+        checkLocalValues(nulls);
 
         // Set up our fake request parameters (two command invocations)
         Map params = new HashMap();
@@ -392,6 +395,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         assertEquals("", TestDataValidator.trace());
         assertEquals("", TestDataValueChangeListener.trace());
         checkMessages(0);
+        checkLocalValues(after);
 
         //   PERFORM VALIDATIONS
         root.processValidators(facesContext);
@@ -426,6 +430,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
                      TestDataValueChangeListener.trace());
         checkModelInputs(after);
         checkMessages(0);
+        checkLocalValues(nulls);
 
         //   RENDER RESPONSE
         renderResponse();
@@ -632,6 +637,29 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 
 
     // --------------------------------------------------------- Support Methods
+
+
+    // Check that the per-row local values of the input component are correct
+    protected void checkLocalValues(String values[]) {
+
+        UIData data = (UIData) component;
+        int first = data.getFirst();
+        for (int i = 0; i < values.length; i++) {
+            data.setRowIndex(i + first);
+            assertTrue("Row " + (i + first) + " available",
+                       data.isRowAvailable());
+            UIInput input = (UIInput) data.findComponent("input");
+            assertNotNull("Row " + (i + first) + " input exists", input);
+            assertEquals("Row " + (i + first) + " input clientId",
+                         "data:" + (i + first) + ":input",
+                         input.getClientId(facesContext));
+            assertEquals("Row " + (i + first) + " input localValue",
+                         values[i],
+                         (String) input.getLocalValue());
+        }
+        data.setRowIndex(-1);
+
+    }
 
 
     // Check that the number of queued messages equals the expected count
