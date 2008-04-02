@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.60 2003/09/24 23:16:34 horwat Exp $
+ * $Id: FormRenderer.java,v 1.61 2003/09/24 23:28:51 craigmcc Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.60 2003/09/24 23:16:34 horwat Exp $
+ * @version $Id: FormRenderer.java,v 1.61 2003/09/24 23:28:51 craigmcc Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -75,8 +75,7 @@ public class FormRenderer extends HtmlBasicRenderer {
     // Methods From Renderer
     //
 
-    public void decode(FacesContext context, UIComponent component) 
-            throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
 	// Was our form the one that was submitted?  If so, we need to set
 	// the indicator accordingly..
 	// 
