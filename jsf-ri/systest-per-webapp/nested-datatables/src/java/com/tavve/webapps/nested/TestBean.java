@@ -81,6 +81,29 @@ public class TestBean implements Serializable {
         
         return "OK";
     }
+    
+    public String getCurrentStateTable() {
+        StringBuffer out = new StringBuffer();
+	Iterator inner, outer = _services.iterator();
+	Service curService;
+	Port curPort;
+        
+        out.append("<table border=\"1\">\n");
+	while (outer.hasNext()) {
+	    curService = (Service) outer.next();
+            out.append("  <tr>\n");
+	    inner = curService.getPorts().iterator();
+            out.append("<td>service: " + curService.getName() + "</td>");
+	    while (inner.hasNext()) {
+		curPort = (Port) inner.next();
+		out.append(" <td>port: " + curPort.getPortNumber() + "</td>\n");
+	    }
+            out.append("</tr>\n");
+	}
+        out.append("</table>\n");
+        return out.toString();
+        
+    }
 
     public String printTree() {
 	Iterator inner, outer = _services.iterator();

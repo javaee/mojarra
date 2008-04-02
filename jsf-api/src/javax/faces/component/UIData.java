@@ -702,6 +702,9 @@ public class UIData extends UIComponentBase
 
 	// Set up the correct context and fire our wrapped event
 	WrapperEvent revent = (WrapperEvent) event;
+	if (isNestedWithinUIData()) {
+	    setDataModel(null);
+	}
         int oldRowIndex = getRowIndex();
 	setRowIndex(revent.getRowIndex());
 	FacesEvent rowEvent = revent.getFacesEvent();
