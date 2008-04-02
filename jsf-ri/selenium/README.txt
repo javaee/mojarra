@@ -1,5 +1,5 @@
 #
-# $Id: README.txt,v 1.3 2006/03/30 23:23:16 rlubke Exp $
+# $Id: README.txt,v 1.4 2006/04/21 21:02:20 edburns Exp $
 #
 
 What is Selenium?  Here is a direct quote from the Selenium web site [1]:
@@ -60,8 +60,7 @@ TODO:
      * shale-sql-browser
      * shale-use-cases
      * SEAM
-     * ADF Faces demo application
-     
+
   - Create a testsuite for continuous 
     integration testing with our Luntbuild
     server
