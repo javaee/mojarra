@@ -1,5 +1,5 @@
 /*
- * $Id: EnumConverter.java,v 1.3 2006/05/10 19:38:51 rlubke Exp $
+ * $Id: EnumConverter.java,v 1.4 2006/08/17 21:23:42 rogerk Exp $
  */
 
 /*
@@ -98,21 +98,18 @@ public class EnumConverter implements Converter, StateHolder {
 
 
     /**
-     * <p>Convert the argument <code>value</code> to one of the enum
-     * constants of the class provided in our constructor.  If a target
-     * class argument has been provided to the constructor for this
-     * instance, call its <code>getEnumConstants()</code> method.  For
-     * each element in the list of constants, call
-     * <code>toString()</code> and compare the string with the argument
-     * <code>value</code>.  If they are equal, return the current
-     * element as the <code>Object</code> value.  If none of the
-     * elements yield a match in this manner, or the length of the list
-     * returned from <code>getEnumConstants()</code> is zero,
-     * throw a {@link ConverterException} containing the {@link
-     * #ENUM_ID} message with proper parameters.  If no target class
-     * argument has been provided to the constructor of this instance,
-     * throw a <code>ConverterException</code> containing the {@link
-     * #ENUM_NO_CLASS_ID} message with proper parameters.</p>
+     * <p>Convert the <code>value</code> argument to one of the enum
+     * constants of the class provided in our constructor.  If no 
+     * target class argument has been provided to the constructor of 
+     * this instance, throw a <code>ConverterException</code> 
+     * containing the {@link #ENUM_NO_CLASS_ID} message with proper 
+     * parameters.  If the <code>value</code> argument is <code>null</code> 
+     * or it  has a length of zero, return <code>null</code>.  
+     * Otherwise, call <code>Enum.valueOf</code> using target class
+     * and <code>value</code> as arguments and return the <code>Object</code>.
+     * If the conversion fails, throw a <code>ConverterException</code> 
+     * containing the {@link #ENUM_ID} message with proper parameters. 
+     * </p>
      *
      * @param context the <code>FacesContext</code> for this request.
      *
@@ -132,6 +129,15 @@ public class EnumConverter implements Converter, StateHolder {
             throw new NullPointerException();
         }
 
+        if (targetClass == null) {
+            throw new ConverterException(
+                MessageFactory.getMessage(context,
+                    ENUM_NO_CLASS_ID,
+                    value,
+                    MessageFactory.getLabel(context,
+                    component)));
+        }
+
         // If the specified value is null or zero-length, return null
         if (value == null) {
             return (null);
@@ -145,29 +151,28 @@ public class EnumConverter implements Converter, StateHolder {
             return Enum.valueOf(targetClass, value);
         } catch (IllegalArgumentException iae) {
             throw new ConverterException(
-                  MessageFactory.getMessage(context,
-                                            ENUM_ID,
-                                            value,
-                                            value,
-                                            MessageFactory.getLabel(context,
-                                                                    component)));
+                MessageFactory.getMessage(context,
+                    ENUM_ID,
+                    value,
+                    value,
+                    MessageFactory.getLabel(context,
+                    component)));
         }
 
     }
 
     /**
      * <p>Convert the enum constant given by the <code>value</code>
-     * argument into a String.  If a target class argument has been
-     * provided to the constructor for this instance, call its
-     * <code>getEnumConstants()</code> method.  For each element in the
-     * list of constants, test for equality between the current element
-     * and the argument <code>value</code>.  If they are equal, call
-     * <code>toString()</code> on the current element and return it.  If
-     * none of the elements yield a match in this manner, or the length
-     * of the list returned from <code>getEnumConstants()</code> is
-     * zero, simply call <code>toString()</code> on the argument
-     * <code>value</code> and return it.</p>
-     *
+     * argument into a String.  If no target class argument has been 
+     * provided to the constructor of this instance, throw a 
+     * <code>ConverterException</code> containing the 
+     * {@link #ENUM_NO_CLASS_ID} message with proper parameters. If the 
+     * <code>value,/code> argument is <code>null</code>, return <code>null</code>.
+     * If the value is an instance of the provided target class, return its 
+     * string value (<code>value.toString()</code>).  Otherwise, throw a 
+     * {@link ConverterException} containing the {@link #ENUM_ID} message with 
+     * proper parameters.</p> 
+     * 
      * @throws ConverterException {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */ 
@@ -178,11 +183,31 @@ public class EnumConverter implements Converter, StateHolder {
             throw new NullPointerException();
         }
         
-        // If the specified value is null, return a zero-length String
-        // Also, given that we will return value.toString() no matter the outcome,
-        // just do it without any logic
-        return ((value == null) ? "" : value.toString());                                             
-                
+        if (targetClass == null) {
+            throw new ConverterException(
+                MessageFactory.getMessage(context,
+                    ENUM_NO_CLASS_ID,
+                    value,
+                    MessageFactory.getLabel(context,
+                    component)));
+        }
+
+        // If the specified value is null, return null
+        if (value == null) {
+            return (null);
+        }
+        
+        if (targetClass.isInstance(value)) {
+            return value.toString();
+        }
+      
+        throw new ConverterException(
+            MessageFactory.getMessage(context,
+                ENUM_ID,
+                value,
+                value,
+                MessageFactory.getLabel(context,
+                component)));
     }
     
     // ----------------------------------------------------------- StateHolder
