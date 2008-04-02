@@ -65,6 +65,7 @@ foreach $_ (@javaplines) {
       }
     }
   }
+
   # if the line contains "(", it is a method or a ctor
   if (/\(/) {
     # strip of the protection qualifier, if present
@@ -73,9 +74,20 @@ foreach $_ (@javaplines) {
       shift(@line);
       $_ = "@line";
     }
-    # strip the cardinality qualifier, if present
+    # strip the static qualifier, if present
     @line = split(' ', $_);
-    if ($line[0] eq "static" || $line[0] eq "abstract") {
+    if ($line[0] eq "static"){
+      shift(@line);
+      $_ = "@line";
+    }
+    # strip the abstract or final, if present
+    @line = split(' ', $_);
+    if ($line[0] eq "abstract" || $line[0] eq "final"){
+      shift(@line);
+      $_ = "@line";
+    }
+    # strip the synchronized quantifier, if present
+    if ($line[0] eq "synchronized") {
       shift(@line);
       $_ = "@line";
     }

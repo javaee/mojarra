@@ -25,6 +25,10 @@
         <param-value>@test.root.dir@</param-value>
     </context-param>
     <context-param>
+        <param-name>jcovFile</param-name>
+        <param-value>@test.jcov.file@</param-value>
+    </context-param>
+    <context-param>
         <param-name>testInitParam</param-name>
         <param-value>testInitParam</param-value>
     </context-param>

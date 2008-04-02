@@ -3,13 +3,15 @@ $tempName = "$appName" . "file";
 
 require "getopts.pl";
 
-&Getopts('o:j:h');
+&Getopts('o:j:lh');
 
 if ((!$opt_j) || (!$opt_o) || $opt_h) {
     print "Usage: \n";
-    print "$appName -o outputMethods-script -j jarfile \n";
+    print "$appName -o outputMethods-script -j jarfile [-l]\n";
     print "\t For each method in each class in jarfile, generate \n";
-    print "\t JCov -savebegin=.  Use outputMethods-script to do so.\n\n";
+    print "\t JCov -savebegin=.  Use outputMethods-script to do so.\n";
+    print "\t options:\n";
+    print "\t          -l means output each option on a line by itself.\n\n";
 
     exit(0);
 }
@@ -20,13 +22,20 @@ close(METHODS);
 $line = "";
 
 foreach $_ (@methods) {
-  chop;
-  if (/</) {
-    $line = "$line" . "\"-savebegin=$_\" ";
+  if ($opt_l) {
+    print "-savebegin=$_";
   }
   else {
-    $line = "$line" . "-savebegin=$_ ";
+    chop;
+    if (/</) {
+      $line = "$line" . "\"-savebegin=$_\" ";
+    }
+    else {
+      $line = "$line" . "-savebegin=$_ ";
+    }
   }
 }
 
-print "jcov.savepoints=$line\n";
+if (!($opt_l)) {
+  print "jcov.savepoints=$line\n";
+}

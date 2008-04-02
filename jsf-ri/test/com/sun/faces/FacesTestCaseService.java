@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.37 2004/02/26 20:33:59 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.38 2004/04/12 22:04:25 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.37 2004/02/26 20:33:59 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.38 2004/04/12 22:04:25 eburns Exp $
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
  */
@@ -144,6 +144,13 @@ public class FacesTestCaseService extends Object {
 
         Util.doAssert(null != testRootDir);
         System.setProperty("testRootDir", testRootDir);
+
+        String jcovFile =
+            facesTestCase.getConfig().getServletContext().getInitParameter(
+                "jcovFile");
+
+        Util.doAssert(null != jcovFile);
+        System.setProperty("jcovFile", jcovFile);
 
         // See if the testcase wants to have its output sent to a file.
         if (facesTestCase.sendResponseToFile()) {
