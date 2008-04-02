@@ -255,6 +255,10 @@
       <fileset dir="${jsf.demo.home}/cardemo"/>
     </copy>
 
+    <copy todir="${dist.home}/example/nonjsp" includeEmptyDirs="false">
+      <fileset dir="${jsf.demo.home}/nonjsp"/>
+    </copy>
+
     <!-- create the zip file -->
     <move todir="${basedir}/jsf-${version}">
       <fileset dir="dist"/>

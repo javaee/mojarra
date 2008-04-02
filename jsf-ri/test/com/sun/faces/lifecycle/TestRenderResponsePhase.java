@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.44 2003/02/04 19:57:32 rogerk Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.45 2003/02/14 00:52:14 horwat Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.44 2003/02/04 19:57:32 rogerk Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.45 2003/02/14 00:52:14 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -122,7 +122,6 @@ public boolean sendResponseToFile()
 public void beginHtmlBasicRenderKit(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-   // theRequest.addParameter("tree", TEST_URI_XUL);
 }
 
 public void testHtmlBasicRenderKit()

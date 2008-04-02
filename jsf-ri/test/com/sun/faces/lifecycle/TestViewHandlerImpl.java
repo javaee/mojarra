@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.11 2003/01/21 23:23:25 rkitain Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.12 2003/02/14 00:52:15 horwat Exp $ 
  */ 
 
 
@@ -63,7 +63,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.11 2003/01/21 23:23:25 rkitain Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.12 2003/02/14 00:52:15 horwat Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -146,7 +146,6 @@ public boolean sendResponseToFile()
 public void beginRender(WebRequest theRequest) 
 { 
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null); 
-   // theRequest.addParameter("tree", TEST_URI_XUL); 
 } 
 
 

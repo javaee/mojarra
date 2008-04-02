@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.7 2003/02/04 19:57:32 rogerk Exp $
+ * $Id: TestSaveStateInPage.java,v 1.8 2003/02/14 00:52:14 horwat Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.faces.tree.TreeFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.7 2003/02/04 19:57:32 rogerk Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.8 2003/02/14 00:52:14 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,7 +101,6 @@ public boolean sendResponseToFile()
 public void beginSaveStateInPage(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-   // theRequest.addParameter("tree", TEST_URI_XUL);
 }
 
 public void testSaveStateInPage()
