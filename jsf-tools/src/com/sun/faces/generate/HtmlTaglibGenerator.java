@@ -68,6 +68,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	valueBindingEnabledProperties.add("showSummary");
 	valueBindingEnabledProperties.add("globalOnly");
 	valueBindingEnabledProperties.add("converter");
+	valueBindingEnabledProperties.add("url");
     }
 
     // Not that the following methods simply return a global default value now.  When we
@@ -497,7 +498,10 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    }
 	    String ivar = generateIvar(attributeName);
 	    String componentType = determineComponentType(componentRendererType, rendererType);
-
+            String vbKey = ivar;
+	    if (ivar.equals("url")) {
+	        vbKey = "value";
+	    }
 	    if (metaType.equals("renderer")) {
 	        result.append("        if ("+ivar+" != null) {\n");
 		result.append("            if (isValueReference("+ivar+")) {\n");
@@ -505,9 +509,9 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		result.append("getApplication().getValueBinding("+ivar+");\n");
                 result.append("                "+componentType.toLowerCase());
 		if (ivar.equals("_for")) {
-	    result.append(".setValueBinding(\""+"_"+ivar+"\", vb);\n");
+	            result.append(".setValueBinding(\""+"_"+vbKey+"\", vb);\n");
 		} else {
-		    result.append(".setValueBinding(\""+ivar+"\", vb);\n");
+		    result.append(".setValueBinding(\""+vbKey+"\", vb);\n");
 		}
 		result.append("            } else {\n");
 		if (isPrimitive(attributeClass)) {
@@ -556,7 +560,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		    result.append("                ValueBinding vb = FacesContext.getCurrentInstance().");
 		    result.append("getApplication().getValueBinding("+ivar+");\n");
                     result.append("                "+componentType.toLowerCase());
-		    result.append(".setValueBinding(\""+ivar+"\", vb);\n");
+		    result.append(".setValueBinding(\""+vbKey+"\", vb);\n");
 		    result.append("            } else {\n");
 		    if (isPrimitive(attributeClass)) {
 		        result.append("                "+attributeClass+" _"+ivar+" ");
@@ -596,6 +600,10 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    attributeName = (String)attributeNames.get(i);
 	    attributeClass = getParser().getComponentPropertyClass(componentType, attributeName);
 	    String ivar = generateIvar(attributeName);
+	    String vbKey = ivar;
+	    if (ivar.equals("url")) {
+	        vbKey = "value";
+	    }
 
 	    if (attributeName.equals("componentRef") ||
 	        attributeName.equals("rendered") || attributeName.equals("converter") ||
@@ -608,7 +616,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		result.append("                ValueBinding vb = FacesContext.getCurrentInstance().");
 		result.append("getApplication().getValueBinding("+ivar+");\n");
                 result.append("                "+componentType.toLowerCase());
-		result.append(".setValueBinding(\""+ivar+"\", vb);\n");
+		result.append(".setValueBinding(\""+vbKey+"\", vb);\n");
 		result.append("            } else {\n");
 		if (isPrimitive(attributeClass)) {
 		    result.append("                "+attributeClass+" _"+ivar+" ");
