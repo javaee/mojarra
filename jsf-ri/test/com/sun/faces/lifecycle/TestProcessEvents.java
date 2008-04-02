@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.6 2003/08/21 14:18:16 rlubke Exp $
+ * $Id: TestProcessEvents.java,v 1.7 2003/09/05 17:25:25 eburns Exp $
  */
 
 /*
@@ -38,6 +38,7 @@ import java.io.IOException;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -45,7 +46,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.6 2003/08/21 14:18:16 rlubke Exp $
+ * @version $Id: TestProcessEvents.java,v 1.7 2003/09/05 17:25:25 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -232,7 +233,15 @@ public void testActionRecursion()
     //
     eventsProcessed = new HashMap();
 
-    UICommand button = new UICommandBase();
+    UICommandSub button = new UICommandSub();
+    // make sure we have no listeners.
+    List[] listeners = button.getListeners();
+    for (int i = 0, len = listeners.length; i < len; i++) {
+	if (null != listeners[i]) {
+	    listeners[i].clear();
+	}
+    }
+
     // add actionListener to the component
     ActionRecursion action = new ActionRecursion();
     button.addActionListener(action);
@@ -342,4 +351,11 @@ public class ActionRecursion implements ActionListener {
         event.getComponent()));
     }
 }
+
+public static class UICommandSub extends UICommandBase {
+    public List[] getListeners() { 
+	return listeners;
+    }
+}
+
 } // end of class TestProcessEvents
