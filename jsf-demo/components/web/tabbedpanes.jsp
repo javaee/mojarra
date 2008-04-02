@@ -81,7 +81,7 @@ Powered by Faces components:
     <h:panel_group>
       <h:output_text value="This is the first pane with the date set to: "/>
       <h:output_text valueRef="sessionScope.date">
-          <c:convert_datetime dateStyle="MEDIUM"/>
+          <f:convert_datetime dateStyle="medium"/>
       </h:output_text>
     </h:panel_group>
 
