@@ -15,6 +15,7 @@
 
   <property file="build.properties"/>                <!-- Component local   -->
   <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property file="../build.properties"/>             <!-- Commons local     -->
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
@@ -172,11 +173,9 @@ jsf-api.jar.
       jsf-tools is ${jsf-tools.dir}
     </echo>
 
-    <ant antfile="${jsf-tools.dir}/build.xml" inheritall="false"
-         target="clean.generated"/>
+    <ant dir="${jsf-tools.dir}" inheritall="false" target="clean.generated"/>
 
-    <ant antfile="${jsf-tools.dir}/build.xml" inheritall="false"
-         target="main"/>
+    <ant dir="${jsf-tools.dir}" inheritall="false" target="main"/>
 
     <copy todir="${build.generate}">
 
