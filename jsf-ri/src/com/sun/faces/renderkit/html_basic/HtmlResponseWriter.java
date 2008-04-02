@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.22 2006/01/11 15:28:09 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.23 2006/01/25 20:40:40 rlubke Exp $
  */
 
 /*
@@ -188,11 +188,8 @@ public class HtmlResponseWriter extends ResponseWriter {
                 dontEscape = true;
             }
         }
-        
-        
-        //PENDING (horwat) using String as a result of Tomcat char writer
-        //         ArrayIndexOutOfBoundsException (3584)
-        writer.write("<");
+                        
+        writer.write('<');
         writer.write(name);
         closeStart = true;
     }
@@ -226,15 +223,13 @@ public class HtmlResponseWriter extends ResponseWriter {
                 return;
             }
 
-            writer.write(">");
+            writer.write('>');
             closeStart = false;
         }
 
         writer.write("</");
-        writer.write(name);
-        //PENDING (horwat) using String as a result of Tomcat char writer
-        //         ArrayIndexOutOfBoundsException (3584)
-        writer.write(">");
+        writer.write(name);       
+        writer.write('>');
     }
 
 
@@ -318,10 +313,8 @@ public class HtmlResponseWriter extends ResponseWriter {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
                 MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
-        //PENDING (horwat) using String as a result of Tomcat char writer
-        //         ArrayIndexOutOfBoundsException (3584)
-        writer.write(" ");
+        
+        writer.write(' ');
         writer.write(name);
         writer.write("=\"");
 
@@ -333,10 +326,8 @@ public class HtmlResponseWriter extends ResponseWriter {
         } else {
             HtmlUtils.writeURL(writer, stringValue, encoding);
         }
-        
-        //PENDING (horwat) using String as a result of Tomcat char writer
-        //         ArrayIndexOutOfBoundsException (3584)
-        writer.write("\"");
+                
+        writer.write('"');
     }
 
 
@@ -503,10 +494,8 @@ public class HtmlResponseWriter extends ResponseWriter {
      * already closed).
      */
     private void closeStartIfNecessary() throws IOException {
-        if (closeStart) {
-            //PENDING (horwat) using String as a result of Tomcat char 
-            //         writer ArrayIndexOutOfBoundsException (3584)
-            writer.write(">");
+        if (closeStart) {            
+            writer.write('>');
             closeStart = false;
         }
     }
