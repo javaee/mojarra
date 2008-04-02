@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.8 2003/08/19 14:50:55 rlubke Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.9 2003/09/15 16:29:40 rkitain Exp $
  */
 
 /*
@@ -577,4 +577,33 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
                         
     }
 
+    public void testExceptions() throws Exception {
+
+	cmb = new ConfigManagedBean();
+	cmb.setManagedBeanClass("foo");
+	cmb.setManagedBeanScope("session");
+
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("one");
+
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValue("one");
+
+        cmbp.setValue(cmbpv);
+	boolean exceptionThrown = false;
+        try {
+            cmb.addProperty(cmbp); 
+	} catch (FacesException fe) {
+	    exceptionThrown = true;
+	}
+        assertTrue(exceptionThrown);
+	exceptionThrown = false;
+	try {
+	    cmbp = null;
+	    cmb.addProperty(cmbp);
+	} catch (NullPointerException npe) {
+	    exceptionThrown = true;
+	}
+        assertTrue(exceptionThrown);
+    }
 }
