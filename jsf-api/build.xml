@@ -54,7 +54,13 @@
     <pathelement location="${build.classes}"/>
     <pathelement location="${build.test}"/>
     <pathelement location="${junit.jar}"/>
+    <pathelement location="${jsf-ri.jar}"/>
     <pathelement location="${servlet.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${commons-digester.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-beanutils.jar}"/>
+    <pathelement location="${xerces.jar}"/>
   </path>
 
 

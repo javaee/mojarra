@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.4 2002/12/17 23:31:00 eburns Exp $
+ * $Id: UISelectManyTestCase.java,v 1.5 2003/01/23 03:30:07 jvisvanathan Exp $
  */
 
 /*
@@ -12,6 +12,8 @@ package javax.faces.component;
 
 import java.util.Iterator;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.ValueChangedEvent;
+import javax.faces.mock.MockFacesContext;
 import javax.faces.validator.Validator;
 import junit.framework.TestCase;
 import junit.framework.Test;
@@ -171,6 +173,82 @@ public class UISelectManyTestCase extends UISelectBaseTestCase {
     public void testDuplicateSelectBaseIds() {
 	doDuplicateSelectBaseIds();
     }
-
-
+    
+    public void testFireValueChangeEvents() {
+        
+        MockFacesContext facesContext = new MockFacesContext();
+       
+        // case 1: previous value null, new value is {"one", "two", "three"};
+        // make sure ValueChangedEvent is not fired if new value is same
+        // as the old value.
+        UISelectMany selectMany = (UISelectMany) component;
+        selectMany.previous = selectMany.currentValue(facesContext);
+        selectMany.setValue(null);
+        selectMany.validate(facesContext);
+        // ValueChangedEvent should not be fired in this case since the value
+        // didn't change.
+        Iterator eventsItr = facesContext.getFacesEvents();
+        assertTrue(!(eventsItr.hasNext()));
+        
+        // case 2: previous value null, new value is {"one", "two", "three"};
+        // make sure ValueChangedEvent is not fired if new value is same
+        // as the old value.
+        Object selectedValues[] = {"one", "two", "one"};
+        selectMany.previous = selectMany.currentValue(facesContext);
+        selectMany.setValue(selectedValues);
+        selectMany.validate(facesContext);
+        
+        // ValueChangedEvent should be fired in this case since the value
+        // changed
+        eventsItr = facesContext.getFacesEvents();
+        assertTrue((eventsItr.hasNext()));
+        Object eventObj = eventsItr.next();
+        // make sure it is an instance of ValueChangedEvent
+        assertTrue(eventObj instanceof ValueChangedEvent);
+        
+        // case 3: previous value {"one", "two", "one"}
+        // new value is {"one", "one", "two"}
+        // create a new FacesContext make sure we don't have any events 
+        // queued from previous test case.
+        facesContext = new MockFacesContext();
+        selectMany.previous = selectMany.currentValue(facesContext);
+        Object selectedValues2[] = {"one", "one", "two"};
+        selectMany.setValue(selectedValues2);
+        
+        selectMany.validate(facesContext);
+        // make sure ValueChangedEvent was not fired.
+        eventsItr = facesContext.getFacesEvents();
+        assertTrue(!(eventsItr.hasNext()));
+        
+        // case 4: previous value {{"one", "one", "two"}
+        // new value is {"one", "two", "two"}
+        selectMany.previous = selectMany.currentValue(facesContext);
+        Object newValues[] = {"one", "two", "two"};
+        selectMany.setValue(newValues);
+        selectMany.validate(facesContext);
+        
+        // ValueChangedEvent should be fired in this case since the value
+        // changed
+        eventsItr = facesContext.getFacesEvents();
+        assertTrue((eventsItr.hasNext()));
+        eventObj = eventsItr.next();
+        // make sure it is an instance of ValueChangedEvent
+        assertTrue(eventObj instanceof ValueChangedEvent);
+        
+        // case 5: previous value {"one", "two", "two"}
+        // new value is {"one", "two", "two", "one"}
+        facesContext = new MockFacesContext();
+        selectMany.previous = selectMany.currentValue(facesContext);
+        Object newValues2[] = {"one", "two", "two", "one"};
+        selectMany.setValue(newValues2);
+        selectMany.validate(facesContext);
+        
+        // ValueChangedEvent should be fired in this case since the value
+        // changed
+        eventsItr = facesContext.getFacesEvents();
+        assertTrue((eventsItr.hasNext()));
+        eventObj = eventsItr.next();
+        // make sure it is an instance of ValueChangedEvent
+        assertTrue(eventObj instanceof ValueChangedEvent);
+    }
 }

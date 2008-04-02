@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.11 2003/01/22 04:50:42 craigmcc Exp $
+ * $Id: UIInput.java,v 1.12 2003/01/23 03:30:05 jvisvanathan Exp $
  */
 
 /*
@@ -175,16 +175,24 @@ public class UIInput extends UIComponentBase {
         Object value = getValue();
         boolean changed;
         if (previous == value) {
+            // no change has occurred
             changed = false;
         } else if (previous == null) {
+            // if the value is going from null to non-null, a change 
+            // has occurred
             changed = (value != null);
         } else /* if (previous != null) */ {
+            // if the value is going from non-null
             if (value == null) {
+                // to null, no change has occurred.
                 changed = false;
-            } else if (previous == value) {
-                changed = false;
+            // if previous and current values are not null, compare values.
+            } else if (compareValues(previous, value)) {
+                // value change has occurred
+                changed = true;
             } else {
-                changed = !previous.equals(value);
+                // value change has not occurred
+                changed = false;
             }
         }
 
@@ -194,7 +202,17 @@ public class UIInput extends UIComponentBase {
         }
 
     }
-
+    
+    /**
+     * Returns <code>true</code> if the new value is different from the previous
+     * value.
+     *
+     * @param previous old value of this component
+     * @param value new value of this component
+     */
+    protected boolean compareValues(Object previous, Object value) {
+        return (!(previous == value));
+    }
 
     // ----------------------------------------------- Event Processing Methods
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.4 2003/01/16 20:48:01 craigmcc Exp $
+ * $Id: UIInputTestCase.java,v 1.5 2003/01/23 03:30:06 jvisvanathan Exp $
  */
 
 /*
@@ -9,13 +9,15 @@
 
 package javax.faces.component;
 
-
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Iterator;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangedEvent;
 import javax.faces.event.ValueChangedListener;
 import javax.faces.validator.Validator;
+import javax.faces.mock.MockFacesContext;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -205,6 +207,183 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         }
 
     }
+    
+    public void testFireValueChangeEvents() {
+        MockFacesContext facesContext = new MockFacesContext();
+        
+        // case 1: previous value null
+        // new value is null
+        // make sure ValueChangedEvent is not fired if new value is same
+        // as the old value.
+        UIInput input = (UIInput) component;
+        input.setValue(null);
+        input.previous = input.currentValue(facesContext);
+        input.validate(facesContext);
+        
+        // ValueChangedEvent should not be fired in this case since the value
+        // didn't change.
+        Iterator eventsItr = facesContext.getFacesEvents();
+        assertTrue(!(eventsItr.hasNext()));
+        
+        // case 2: previous value null
+        // new value is "New Value"
+        input.previous = input.currentValue(facesContext);
+        input.setValue("New Value");
+        input.validate(facesContext);
+        // make sure ValueChangedEvent was fired since the value changed
+        eventsItr = facesContext.getFacesEvents();
+        assertTrue((eventsItr.hasNext()));
+        Object eventObj = eventsItr.next();
+        // make sure it is an instance of ValueChangedEvent
+        assertTrue(eventObj instanceof ValueChangedEvent);
+        
+        // case 3: previous value "New Value"
+        // new value is "New Value"
+        // create a new FacesContext make sure we don't have any events 
+        // queued from previous test case.
+        input.previous = input.currentValue(facesContext);
+        facesContext = new MockFacesContext();
+        input.setValue("New Value");
+        input.validate(facesContext);
+        
+        // ValueChangedEvent should not be fired in this case since the value
+        // didn't change.
+        eventsItr = facesContext.getFacesEvents();
+        assertTrue(!(eventsItr.hasNext()));
+        
+        // case 3: previous value "New Value"
+        // new value is "Another Value"
+        input.previous = input.currentValue(facesContext);
+        input.setValue("Another Value");
+        input.validate(facesContext);
+        // make sure ValueChangedEvent was fired since the value changed
+        eventsItr = facesContext.getFacesEvents();
+        assertTrue((eventsItr.hasNext()));
+        eventObj = eventsItr.next();
+        // make sure it is an instance of ValueChangedEvent
+        assertTrue(eventObj instanceof ValueChangedEvent);
+    }    
+    
+    public void testBroadCast() {
+        // testBroadcast method that takes a ValueChangedEvent and List
+        // as parameters
+        ArrayList listenerList = null;
+        ValueChangedEvent event = null;
+        UIInput input = (UIInput) component;
+        
+        // null parameters are allowed and should not result in exception
+        try {
+            input.broadcast(event, listenerList);
+        } catch (Exception e ) {
+            assertTrue(false);
+        }
+        
+        listenerList = new ArrayList(4);
+        event = new ValueChangedEvent(input, "", "");
+        TestValueChangedListener listener1 =
+            new TestValueChangedListener(PhaseId.RECONSTITUTE_REQUEST);
+        TestValueChangedListener listener2 =
+            new TestValueChangedListener(PhaseId.PROCESS_VALIDATIONS);
+        TestValueChangedListener listener3 =
+            new TestValueChangedListener(PhaseId.UPDATE_MODEL_VALUES);
+        TestValueChangedListener listener4 =
+            new TestValueChangedListener(PhaseId.ANY_PHASE);
 
-
+        listenerList.add(listener1);
+        listenerList.add(listener2);
+        listenerList.add(listener3);
+        listenerList.add(listener4);
+        input.broadcast(event, listenerList);
+        assertEquals("Listener was called exactly once",
+                     1, listener1.getCount());
+        assertEquals("Listener was called exactly once",
+                     1, listener2.getCount());
+        assertEquals("Listener was called exactly once",
+                     1, listener3.getCount());
+        assertEquals("Listener was called exactly once",
+                     1, listener4.getCount());
+    }    
+    
+    public void testAddRemoveValueChangeListeners() {
+        UIInput input = (UIInput) component;
+       
+        TestValueChangedListener listener1 =
+            new TestValueChangedListener(PhaseId.RECONSTITUTE_REQUEST);
+        TestValueChangedListener listener2 =
+            new TestValueChangedListener(PhaseId.PROCESS_VALIDATIONS);
+        TestValueChangedListener listener3 =
+            new TestValueChangedListener(PhaseId.UPDATE_MODEL_VALUES);
+        TestValueChangedListener listener4 =
+            new TestValueChangedListener(PhaseId.ANY_PHASE);
+        TestValueChangedListener listener5 =
+            new TestValueChangedListener(PhaseId.PROCESS_VALIDATIONS);
+        TestValueChangedListener listener6 =
+            new TestValueChangedListener(PhaseId.UPDATE_MODEL_VALUES);
+        
+        // test addValueChangedListener
+        // if the listener is null, make sure a null ptr exception is thrown
+        boolean gotException=false;
+        try {
+            input.addValueChangedListener(null);
+        } catch (Exception e ) {
+            gotException = true;
+        }
+        assertTrue(gotException);
+        
+        // test addValueChangedListener works correctly if same listener 
+        // instance is added more than once.
+        input.addValueChangedListener(listener1);
+        input.addValueChangedListener(listener2);
+        input.addValueChangedListener(listener3);
+        input.addValueChangedListener(listener2);
+        input.addValueChangedListener(listener3);
+        input.addValueChangedListener(listener4);
+        input.addValueChangedListener(listener5);
+        input.addValueChangedListener(listener6);
+     
+        assertTrue((getListenerIndex(input, listener1)) == 0);
+        assertTrue((getListenerIndex(input, listener2)) == 0);
+        assertTrue((getListenerIndex(input, listener3)) == 0);
+        assertTrue((getListenerIndex(input, listener4)) == 0);
+        assertTrue((getListenerIndex(input, listener5)) == 2);
+        assertTrue((getListenerIndex(input, listener6)) == 2);
+        
+        // test removeValueChangedListener
+        // if the listener is null, make sure a null ptr exception is thrown
+        gotException=false;
+        try {
+            input.removeValueChangedListener(null);
+        } catch (Exception e ) {
+            gotException = true;
+        }
+        assertTrue(gotException);
+        
+        input.removeValueChangedListener(listener1);
+        input.removeValueChangedListener(listener2);
+        input.removeValueChangedListener(listener3);
+        input.removeValueChangedListener(listener4);
+        input.removeValueChangedListener(listener5);
+        input.removeValueChangedListener(listener6);
+     
+        assertTrue((getListenerIndex(input, listener1)) == -1);
+        // listener2 and listener3 should still exist since two instances
+        // were added
+        assertTrue((getListenerIndex(input, listener2)) == 0);
+        assertTrue((getListenerIndex(input, listener3)) == 0);
+        assertTrue((getListenerIndex(input, listener4)) == -1);
+        assertTrue((getListenerIndex(input, listener5)) == -1);
+        assertTrue((getListenerIndex(input, listener6)) == -1);
+        
+        input.removeValueChangedListener(listener2);
+        input.removeValueChangedListener(listener3);
+        assertTrue((getListenerIndex(input, listener2)) == -1);
+        assertTrue((getListenerIndex(input, listener3)) == -1);
+        
+    }    
+    
+    protected int getListenerIndex(UIInput input,
+            TestValueChangedListener listener) {
+        int ordinal = listener.getPhaseId().getOrdinal();
+        return (input.listeners[ordinal].indexOf(listener));
+    }     
 }
