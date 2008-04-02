@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.17 2005/08/22 22:10:46 ofung Exp $
+ $Id: build-tests.xml,v 1.18 2005/11/10 19:06:53 rlubke Exp $
 -->
 
 <!--
@@ -54,7 +54,7 @@
   <property name="golden.path"  value="${context.path}/golden"/>
   <property name="ignore.path"  value="${context.path}/ignore"/>
   <property name="local.golden.path" value="${basedir}/web/golden"/>
-  <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.2.3"/>
+  <property name="htmlunit.home" value="${appserver.home}/../htmlunit-1.2.3"/>
 
   <!-- Default value for debugging arguments is no.  Override in
        build.properties -->
@@ -137,6 +137,18 @@
              value="${basedir}/replace-lifecycle/src/java" />
       <param name="context.path" value="/jsf-replace-lifecycle"/>
       <param name="testcase" value="com/sun/faces/systest/ReplaceLifecycleTestCase.class"/>
+
+    </antcall>
+      
+    <antcall target="test.webapp">
+      <param name="webapp.build.home" 
+             value="${basedir}/view-expired/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/view-expired/web" />
+      <param name="source.home" 
+             value="${basedir}/view-expired/src/java" />
+      <param name="context.path" value="/jsf-view-expired"/>
+      <param name="testcase" value="com/sun/faces/systest/ViewExpiredExceptionTestCase.class"/>
 
     </antcall>
 

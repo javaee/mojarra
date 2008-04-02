@@ -288,6 +288,10 @@
     <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-replace-lifecycle"/>
     </antcall>
+      
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-view-expired"/>
+    </antcall>
 
     <antcall target="install.one">
       <param name="webapp.build.home" 
@@ -341,6 +345,17 @@
       <param name="source.home" 
              value="${basedir}/replace-lifecycle/src/java" />
       <param name="context.path" value="/jsf-replace-lifecycle"/>
+
+    </antcall>
+      
+    <antcall target="install.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/view-expired/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/view-expired/web" />
+      <param name="source.home" 
+             value="${basedir}/view-expired/src/java" />
+      <param name="context.path" value="/jsf-view-expired"/>
 
     </antcall>
 
@@ -470,6 +485,17 @@
       <param name="context.path" value="/jsf-replace-lifecycle"/>
 
     </antcall>
+      
+    <antcall target="reload.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/view-expired/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/view-expired/web" />
+      <param name="source.home" 
+             value="${basedir}/view-expired/src/java" />
+      <param name="context.path" value="/jsf-view-expired"/>
+
+    </antcall>
   </target>
 
   <target name="remove">
@@ -532,6 +558,7 @@
     <delete    dir="${basedir}/nested-datatables/build"/>
     <delete    dir="${basedir}/core-tags/build"/>
     <delete    dir="${basedir}/replace-lifecycle/build"/>
+    <delete    dir="${basedir}/view-expired/build"/>
   </target>
    
 
@@ -616,6 +643,17 @@
       <param name="source.home" 
              value="${basedir}/replace-lifecycle/src/java" />
       <param name="context.path" value="/jsf-replace-lifecycle"/>
+
+    </antcall>
+      
+    <antcall target="install.one.appserver">
+      <param name="webapp.build.home" 
+             value="${basedir}/view-expired/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/view-expired/web" />
+      <param name="source.home" 
+             value="${basedir}/view-expired/src/java" />
+      <param name="context.path" value="/jsf-view-expired"/>
 
     </antcall>
     

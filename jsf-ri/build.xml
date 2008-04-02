@@ -827,6 +827,9 @@ grant {
         </concat>
         <chmod file="${tomcat.home}/domains/domain1/config/server.policy"
                perm="777"/>
+        <replace file="${tomcat.home}/domains/domain1/config/domain.xml"
+                 token="keep-alive max-connections=&quot;250&quot; thread-count=&quot;1&quot; timeout-in-seconds=&quot;30&quot;"
+                 value="keep-alive max-connections=&quot;250&quot; thread-count=&quot;1&quot; timeout-in-seconds=&quot;70&quot;"/>
     </target>
     
 </project>
