@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.85 2003/09/08 19:33:08 horwat Exp $
+ * $Id: Util.java,v 1.86 2003/09/11 21:19:03 rkitain Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.85 2003/09/08 19:33:08 horwat Exp $
+ * @version $Id: Util.java,v 1.86 2003/09/11 21:19:03 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -193,9 +193,6 @@ public class Util extends Object
 
    public static final String SAVING_STATE_ERROR_MESSAGE_ID =
          "com.sun.faces.SAVING_STATE_ERROR";
-
-   public static final String RENDERER_ALREADY_EXISTS_ERROR_MESSAGE_ID =
-         "com.sun.faces.RENDERER_ALREADY_EXISTS";
 
    public static final String RENDERER_NOT_FOUND_ERROR_MESSAGE_ID =
          "com.sun.faces.RENDERER_NOT_FOUND";
