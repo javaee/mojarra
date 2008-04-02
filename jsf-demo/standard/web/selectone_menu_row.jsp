@@ -15,7 +15,7 @@
 				</tr>
 				<tr>
 					<td>Single-select menu - modelType String:</td>
-					<td><h:selectone_menu id="oneMenumodel" size="3">
+					<td><h:selectone_menu id="oneMenumodel">
 						<f:selectitems id="oneMenumodelItems"
 							value="#{LoginBean.options}" />
 					</h:selectone_menu></td>
@@ -23,7 +23,7 @@
 
                                 <tr>
 					<td>Single-select menumodel - modelType Boolean:</td>
-					<td><h:selectone_menu id="oneLongMenumodel" size="3" 
+					<td><h:selectone_menu id="oneLongMenumodel"  
                                              value="#{LoginBean.currentBooleanOption}">
 						<f:selectitems id="oneLongMenumodelItems"
 							value="#{LoginBean.booleanList}" />
