@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverChainWrapper.java,v 1.13 2006/09/01 01:22:47 tony_robertson Exp $
+ * $Id: PropertyResolverChainWrapper.java,v 1.14 2007/03/13 19:08:18 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -56,16 +56,18 @@ public class PropertyResolverChainWrapper extends ELResolver {
         if (base == null || property == null) {
             return null;
         }        
-        Object result = null;
+        Object result;
         context.setPropertyResolved(true);
         FacesContext facesContext = (FacesContext) 
             context.getContext(FacesContext.class);
+        ELContext jsfEL = facesContext.getELContext();
+        jsfEL.setPropertyResolved(true);
         if (base instanceof List || base.getClass().isArray()) {
             Object indexObj = facesContext.getApplication().getExpressionFactory().
                     coerceToType(property, Integer.class);
             int index = ((Integer)indexObj).intValue();
             try {
-                result = legacyPR.getValue(base, index);                
+                result = legacyPR.getValue(base, index);
             } catch (EvaluationException ex) {
                 context.setPropertyResolved(false);
                 throw new ELException(ex);
@@ -78,7 +80,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
                 throw new ELException(ex);
             }    
         }
-        
+        context.setPropertyResolved(jsfEL.isPropertyResolved());
         return result;
     }
 
@@ -90,11 +92,13 @@ public class PropertyResolverChainWrapper extends ELResolver {
             return null;
         }
         
-        Class result = null;
+        Class result;
         context.setPropertyResolved(true);
-        if (base instanceof List || base.getClass().isArray()) {
-            FacesContext facesContext = (FacesContext) 
+        FacesContext facesContext = (FacesContext)
                 context.getContext(FacesContext.class);
+        ELContext jsfEL = facesContext.getELContext();
+        jsfEL.setPropertyResolved(true);
+        if (base instanceof List || base.getClass().isArray()) {
             Object indexObj = facesContext.getApplication().getExpressionFactory().
                     coerceToType(property, Integer.class);
             int index = ((Integer)indexObj).intValue();
@@ -112,7 +116,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
                 throw new ELException(ex);
             }    
         }
-        
+        context.setPropertyResolved(jsfEL.isPropertyResolved());
         return result;
     }
 
@@ -125,10 +129,11 @@ public class PropertyResolverChainWrapper extends ELResolver {
         }       
 
         context.setPropertyResolved(true);
-
-        if (base instanceof List || base.getClass().isArray()) {
-            FacesContext facesContext = (FacesContext) 
+        FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
+        ELContext jsfEL = facesContext.getELContext();
+        jsfEL.setPropertyResolved(true);
+        if (base instanceof List || base.getClass().isArray()) {
             Object indexObj = facesContext.getApplication().getExpressionFactory().
                     coerceToType(property, Integer.class);
             int index = ((Integer)indexObj).intValue();            
@@ -146,6 +151,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
                 throw new ELException(ex);
             }    
         }
+        context.setPropertyResolved(jsfEL.isPropertyResolved());
     }
 
     @Override
@@ -155,11 +161,13 @@ public class PropertyResolverChainWrapper extends ELResolver {
         if (base == null || property == null) {
             return false;
         }      
-        boolean result = false;
+        boolean result;
         context.setPropertyResolved(true);
-        if (base instanceof List || base.getClass().isArray()) {
-            FacesContext facesContext = (FacesContext) 
+        FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
+        ELContext jsfEL = facesContext.getELContext();
+        jsfEL.setPropertyResolved(true);
+        if (base instanceof List || base.getClass().isArray()) {
             Object indexObj = facesContext.getApplication().getExpressionFactory().
                     coerceToType(property, Integer.class);
             int index = ((Integer)indexObj).intValue();
@@ -177,7 +185,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
                 throw new ELException(ex);
             }    
         }
-        
+        context.setPropertyResolved(jsfEL.isPropertyResolved());
         return result;
     }
 

@@ -64,7 +64,8 @@
                    string-converter,
                    replace-variableresolver,
                    converter-property-editor,
-                   late-bindings"/>
+                   late-bindings,
+                   property-resolver-jsp"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
