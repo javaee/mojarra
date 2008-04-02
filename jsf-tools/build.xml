@@ -181,7 +181,7 @@ necessary to generate required classes.
                         facesConfig="${build.temp}/standard-html-renderkit.xml"
                         fork="true">
         <classpath refid="run.classpath" />
-        <sysproperty key="java.endorsed.dirs" value="${tomcat.home}/common/endorsed"/>
+        <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
     </generateComponents>
 
   </target>
@@ -195,13 +195,12 @@ necessary to generate required classes.
         <fileset dir="${basedir}/conf">
             <include name="TAG-*"/>
         </fileset>
-    </copy>
-  
+    </copy>    
     <generateTaglib generatorConfig="${basedir}/conf/HtmlBasicTaglib21.properties"
                     facesConfig="${build.temp}/standard-html-renderkit.xml"
                     fork="true">
         <classpath refid="run.classpath" />
-        <sysproperty key="java.endorsed.dirs" value="${tomcat.home}/common/endorsed"/>
+        <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
         <jvmarg line="${debug.jvm.args}"/>
     </generateTaglib>
 
@@ -357,7 +356,7 @@ necessary to generate required classes.
                         facesConfig="${build.temp}/standard-html-renderkit.xml"
                         fork="true">
         <classpath refid="run.classpath" />
-        <sysproperty key="java.endorsed.dirs" value="${tomcat.home}/common/endorsed"/>
+        <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
       </generateRenderkitDocs>
 
     <touch file="${build.generate}/last-generation"/>

@@ -5,7 +5,7 @@
 # javaserverfaces-sources for your local environment.  It defines the location
 # of all external modules that the javaserverfaces-source project relies on.
 #
-# $Id: build.properties.sample,v 1.3 2005/02/08 19:25:05 rlubke Exp $
+# $Id: build.properties.sample,v 1.4 2005/05/19 18:46:53 rlubke Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
@@ -37,8 +37,11 @@ commons-collections.jar=${tomcat.home}/jwsdp-shared/lib/commons-collections.jar
 jstl.jar=${tomcat.home}/jstl/lib/jstl.jar
 standard.jar=${tomcat.home}/jstl/lib/standard.jar
 
+# ----- Endorsed Directory
+endorsed.dirs=${tomcat.home}/jaxp/lib/endorsed
+
 # ----- JAXP implementation JAR
-xerces.jar=${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar
+xerces.jar=${endorsed.dirs}/xercesImpl.jar
 
 # ----- Build Control Flags -----
 

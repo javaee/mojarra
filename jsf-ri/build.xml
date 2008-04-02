@@ -12,7 +12,7 @@
 
   <property name="Name" value="JavaServer Faces RI"/>
   <property name="name" value="jsf-impl"/>
-  <property name="version" value="1_1"/>
+  <property name="version" value="1_2"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -411,6 +411,24 @@ must exist.  This is necessary for the MessageFactory class.
 
 
   <target name="dist" depends="jars" description="Build distribution files">
+
+    <antcall target="get-update-manifest-info">
+             <param name="jar-name" value="commons-beanutils"/>
+             <param name="jar-file" value="${commons-beanutils.jar}"/>
+    </antcall>
+    <antcall target="get-update-manifest-info">
+             <param name="jar-name" value="commons-collections"/>
+             <param name="jar-file" value="${commons-collections.jar}"/>
+    </antcall>
+    <antcall target="get-update-manifest-info">
+             <param name="jar-name" value="commons-digester"/>
+             <param name="jar-file" value="${commons-digester.jar}"/>
+    </antcall>
+    <antcall target="get-update-manifest-info">
+             <param name="jar-name" value="commons-logging"/>
+             <param name="jar-file" value="${commons-logging.jar}"/>
+    </antcall>
+
     <mkdir dir="${dist.home}"/>
 
     <antcall target="tlddocs"/>
@@ -517,7 +535,7 @@ must exist.  This is necessary for the MessageFactory class.
          basedir="${build.classes}" > 
          <manifest>
           <attribute name="Specification-Title" value="JavaServer Faces"/>
-          <attribute name="Specification-Version" value="1.1"/>
+          <attribute name="Specification-Version" value="1.2"/>
           <attribute name="Implementation-Title" value="'${name}': ${Name}"/>
           <attribute name="Implementation-Version" value="${version}"/>
           <attribute name="Implementation-Vendor" value="Sun Microsystems, Inc."/>
@@ -525,22 +543,6 @@ must exist.  This is necessary for the MessageFactory class.
           <attribute name="Extension-Name" value="com.sun.faces"/>
         </manifest>
     </jar>
-    <antcall target="get-update-manifest-info">
-             <param name="jar-name" value="commons-beanutils"/>
-             <param name="jar-file" value="${commons-beanutils.jar}"/> 
-    </antcall>
-    <antcall target="get-update-manifest-info">
-             <param name="jar-name" value="commons-collections"/>
-             <param name="jar-file" value="${commons-collections.jar}"/> 
-    </antcall>
-    <antcall target="get-update-manifest-info">
-             <param name="jar-name" value="commons-digester"/>
-             <param name="jar-file" value="${commons-digester.jar}"/> 
-    </antcall>
-    <antcall target="get-update-manifest-info">
-             <param name="jar-name" value="commons-logging"/>
-             <param name="jar-file" value="${commons-logging.jar}"/> 
-    </antcall>
   </target>
 
   <target name="get-update-manifest-info">
@@ -724,7 +726,6 @@ must exist.  This is necessary for the MessageFactory class.
        depends="prepare.config,test.compile"
    description="Execute standalone JUnit tests on config subsystem">
 
-<!-- PENDING return to running
     <echo message="Running com.sun.faces.config tests ..."/>
     <junit printSummary="no" fork="no"
           haltonfailure="yes" haltonerror="yes">
@@ -738,7 +739,7 @@ must exist.  This is necessary for the MessageFactory class.
                    value="${build.home}"/>
 
       <sysproperty   key="java.endorsed.dirs"
-                   value="${tomcat.home}/jaxp/lib/endorsed"/>
+                   value="${endorsed.dirs}"/>
 
       <sysproperty   key="org.apache.commons.logging.Log"
                    value="${log.impl}"/>
@@ -757,7 +758,6 @@ must exist.  This is necessary for the MessageFactory class.
                includes="com/sun/faces/config/ConfigureListenerTestCase.class"/>
       </batchtest>
     </junit>
--->
   </target>
 
 
