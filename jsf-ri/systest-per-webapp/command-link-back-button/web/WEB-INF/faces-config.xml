@@ -18,4 +18,26 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <navigation-rule>
+    <from-view-id>/test.jsp</from-view-id>
+    <navigation-case>
+      <from-outcome>linkPressed</from-outcome>
+      <to-view-id>/linkPressed.jsp</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>buttonPressed</from-outcome>
+      <to-view-id>/buttonPressed.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>*</from-view-id>
+    <navigation-case>
+      <from-outcome>back</from-outcome>
+      <to-view-id>/test.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+
+
 </faces-config>

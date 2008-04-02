@@ -1,5 +1,5 @@
 /*
- * $Id: BackingBean.java,v 1.1 2004/10/21 21:25:10 edburns Exp $
+ * $Id: BackingBean.java,v 1.2 2004/10/21 21:50:12 edburns Exp $
  */
 
 /*
@@ -14,12 +14,12 @@ public class BackingBean extends Object {
 
     public String linkPressed() {
 	result.append("linkPressed");
-	return null;
+	return "linkPressed";
     }
 
     public String buttonPressed() {
 	result.append("buttonPressed");
-	return null;
+	return "buttonPressed";
     }
 
     StringBuffer result = new StringBuffer();
