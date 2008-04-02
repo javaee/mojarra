@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerBean.java,v 1.1 2004/06/02 13:57:46 eburns Exp $
+ * $Id: ValueChangeListenerBean.java,v 1.2 2004/06/02 14:00:03 eburns Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import javax.faces.event.AbortProcessingException;
 public class ValueChangeListenerBean extends Object {
 
     public ValueChangeListenerBean() {
-	System.out.println("debug: edburns: ValueChangeListenerBean ctor");
     }
 
     protected String textAResult;
