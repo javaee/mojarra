@@ -16,7 +16,7 @@
              <td>
 
                <h:selectboolean_checkbox id="checkbox1" 
-                                 valueRef="LoginBean.validUser"
+                                 value="#{LoginBean.validUser}"
                                  checked="true" 
                                  disabled="true"
                                  size="10"
@@ -46,7 +46,7 @@
 
                <h:selectboolean_checkbox id="checkbox3"
                                  checked="true"
-                                 valueRef="LoginBean.validUser"
+                                 value="#{LoginBean.validUser}"
                                  size="10"
                                  alt="checkbox"
                                  accesskey="C" 
