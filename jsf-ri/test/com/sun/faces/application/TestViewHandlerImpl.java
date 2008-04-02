@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.22 2004/11/12 18:00:28 jayashri Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.23 2005/03/17 15:16:17 edburns Exp $ 
  */ 
 
 
@@ -49,7 +49,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.22 2004/11/12 18:00:28 jayashri Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.23 2005/03/17 15:16:17 edburns Exp $
  */
 
 
@@ -168,6 +168,9 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         theRequest.addHeader("Accept-Language", "en,fr");
     }
 
+    public void beginRestoreViewNegative(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/faces", "", null);
+    }
 
     public void testGetActionURL() {
 
@@ -453,6 +456,14 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         Map facetList = panel1.getFacets();
         assertTrue(!(facetList.containsKey("userName3")));
         assertTrue(facetList.containsKey("userName4"));
+    }
+
+    public void testRestoreViewNegative() throws Exception {
+
+	// make sure the returned view is null if the viewId is the same
+	// as the servlet mapping.
+	assertNull(Util.getViewHandler(getFacesContext()).restoreView(getFacesContext(), 
+							   "/faces"));
     }
 
 
