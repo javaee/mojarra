@@ -2,7 +2,7 @@
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- * $Id: DigesterFactory.java,v 1.3 2004/11/08 19:23:13 rlubke Exp $
+ * $Id: DigesterFactory.java,v 1.4 2005/03/15 20:54:30 edburns Exp $
  */
 
 
@@ -286,7 +286,14 @@ public class DigesterFactory {
 
             // If no system ID, defer to superclass
             if (systemId == null) {
-                return super.resolveEntity(publicId, systemId);
+		InputSource result = null;
+		try {
+		    result = super.resolveEntity(publicId, systemId);
+		}
+		catch (Exception e) {
+		    throw new SAXException(e);
+		}
+                return result;
             }
 
             String grammarName =
@@ -302,7 +309,12 @@ public class DigesterFactory {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Unknown entity, deferring to superclass.");
                 }
-                source = super.resolveEntity(publicId, systemId);
+		try {
+		    source = super.resolveEntity(publicId, systemId);
+		}
+		catch (Exception e) {
+		    throw new SAXException(e);
+		}
 
             } else {
 
