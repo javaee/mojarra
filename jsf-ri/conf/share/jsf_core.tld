@@ -401,7 +401,7 @@
             <description>
                 Specifies how the number string will be formatted
                 and parsed.  Valid values are "number", "currency",
-                and "percentage".  Default value is "number".
+                and "percent".  Default value is "number".
             </description>
             <name>type</name>
             <deferred-value>
