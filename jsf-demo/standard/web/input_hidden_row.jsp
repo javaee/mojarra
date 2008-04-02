@@ -8,7 +8,7 @@
                          value="Date [MMM DD, YYYY Format]: " /></b></td>
               <td><h:input_hidden id="datetextHidden" 
                       valueRef="LoginBean.date"
-                      converter="date"/></td>
+                      converter="Date"/></td>
               <td><h:output_errors id="dateErr"
                       for="datetextHidden"/> </td>
             </tr>
@@ -17,7 +17,7 @@
                          value="Time [HH:MI:SS (AM/PM) Format]: " /></b></td>
               <td><h:input_hidden id="timetextHidden" 
                       valueRef="LoginBean.time"
-                      converter="time"/></td>
+                      converter="Time"/></td>
               <td><h:output_errors id="timeErr"
                       for="timetextHidden"/> </td>
             </tr>
@@ -26,7 +26,7 @@
                          value="Date/Time [MMM DD, YYYY HH:MI:SS (AM/PM) Format]: " /></b></td>
               <td><h:input_hidden id="datetimetextHidden" 
                       valueRef="LoginBean.dateTime"
-                      converter="datetime"/></td>
+                      converter="DateTime"/></td>
               <td><h:output_errors id="datetimeErr"
                       for="datetimetextHidden"/> </td>
             </tr>
@@ -34,7 +34,7 @@
               <td><b><h:output_text id="boolconvertLabel"
                          value="Boolean [true/false]: " /></b></td>
               <td><h:input_hidden id="booltextHidden" value="false"
-                      converter="boolean"/></td>
+                      converter="Boolean"/></td>
             </tr>
             <tr>
                 <td><b><h:output_text id="currencylabel"
@@ -42,7 +42,7 @@
                 <td>
                     <h:input_hidden id="currencyinputHidden"
                         valueRef="LoginBean.double"
-                        converter="number">
+                        converter="Number">
                         <f:attribute name="numberStyle" value="currency"/>
                     </h:input_hidden>
                 </td>
@@ -52,7 +52,7 @@
                            value="Percent Format:"/></b></td>
                 <td>
                     <h:input_hidden id="percentinputHidden"
-                        converter="number" value="54%">
+                        converter="Number" value="54%">
                         <f:attribute name="numberStyle" value="percent"/>
                     </h:input_hidden>
                 </td>
@@ -63,7 +63,7 @@
                 <td>
                     <h:input_hidden id="patterninputHidden"
                         value="1999.65"
-                        converter="number">
+                        converter="Number">
                         <f:attribute name="formatPattern" value="####"/>
                     </h:input_hidden>
                 </td>

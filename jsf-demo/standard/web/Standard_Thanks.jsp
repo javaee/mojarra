@@ -8,26 +8,30 @@
 
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
     <H3> Standard RenderKit Thank You Page </H3>
     <hr>
 
        <f:use_faces>
         <h:form id="standardForm" formName="standardForm" >
-
+ 
             <table> 
+
+           <c:if test="${requestScope.standard_chosen != null}">
+
             <tr> 
-              <td> <h:output_text id="thanksLabel" value="Thanks for using the Standard RenderKit Demo..." /> </td>
+              <td>The actuated component 
+                  was <h:output_text valueRef="requestScope.standard_chosen"/>. </td>
             </tr>
 
+        </c:if>
+
           </TR>
-            <td><h:command_hyperlink id="link" 
-                href="/faces/index.html"
-                label="Back To RenderKit Demo" /></td>
+            <td><a href="index.html">Back To RenderKit Demo</a></td>
           </TR>
 
           </table>
-
 
         </h:form>
      </f:use_faces>

@@ -18,6 +18,7 @@
 
                <h:input_date id="input_date1" dateStyle="medium"
                                  value="Jan 12, 1952" 
+                                 valueRef="model.date1"
                                  readonly="true"
                                  size="10" maxlength="20"
                                  alt="input_date medium readonly"
@@ -43,6 +44,7 @@
 
                <h:input_date id="input_date2" dateStyle="medium"
                                  value="Jan 12, 1952" 
+                                 valueRef="model.date2"
                                  alt="input_date medium"
                                   title="input_date medium"/>
 
@@ -72,6 +74,7 @@
 
                <h:input_date id="input_date3" dateStyle="short"
                                  value="01/12/1952" 
+                                 valueRef="model.date3"
                                  size="10"
                                  alt="input_date short"
                                   title="input_date short"/>
@@ -102,6 +105,7 @@
 
                <h:input_date id="input_date4" dateStyle="long" 
                                  value="January 12, 1952" 
+                                 valueRef="model.date4"
                                  size="20" maxlength="40"
                                  alt="input_date long"
                                  accesskey="d"

@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIInput.jsp,v 1.1 2003/07/17 02:58:43 rlubke Exp $ --%>
+<%-- $Id: UIInput.jsp,v 1.2 2003/08/11 23:26:42 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -22,8 +22,6 @@
      <fmt:setBundle basename="standard.Resources" scope="session"
                     var="standardBundle"/>
 
-     <jsp:useBean id="LoginBean" class="standard.LoginBean" scope="session" />
-
      <f:use_faces>  
 
        <p>Form is rendered after this.</p>
@@ -32,8 +30,8 @@
                    formName="standardRenderKitForm">
 
          <h:command_button id="standardRenderKitSubmit" 
-             action="success"
-             key="standardRenderKitSubmitLabel"
+             actionRef="model.postbackAction"
+             key="standardRenderKitPostbackLabel"
              bundle="standardBundle">
          </h:command_button>
 
@@ -64,7 +62,7 @@
 </td>
 
 <td>
-		<h:output_errors id="globalErrors" />
+		<h:output_errors id="globalErrors" for="" />
 </td>
 
 </tr>
@@ -72,8 +70,8 @@
          </table>
 
          <h:command_button id="standardRenderKitSubmit1" 
-             action="success"
-             key="standardRenderKitSubmitLabel"
+             actionRef="model.postbackAction"
+             key="standardRenderKitPostbackLabel"
              bundle="standardBundle">
          </h:command_button>
 

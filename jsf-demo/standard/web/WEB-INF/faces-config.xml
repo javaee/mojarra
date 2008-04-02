@@ -4,10 +4,43 @@
  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
+<!-- The faces-config for the standard renderkit demo -->
+
 <faces-config>
+
   <managed-bean>
     <managed-bean-name>model</managed-bean-name>
     <managed-bean-class>standard.ModelBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>LoginBean</managed-bean-name>
+    <managed-bean-class>standard.LoginBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <navigation-rule>
+    <from-tree-id> * </from-tree-id>
+    <navigation-case>
+      <description>If the action or ActionRef returns "success", goto
+      Standard_Thanks.jsp</description> 
+      <display-name>The Generic Rule</display-name> 
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/Standard_Thanks.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-tree-id>/UIInput.jsp</from-tree-id>
+    <navigation-case>
+      <description>If the action or ActionRef returns "success", goto
+      UIInput.jsp</description> 
+      <display-name>The Generic Rule</display-name>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/UIInput.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+
 </faces-config>

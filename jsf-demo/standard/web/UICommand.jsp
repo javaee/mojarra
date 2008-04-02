@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UICommand.jsp,v 1.1 2003/07/17 02:58:42 rlubke Exp $ --%>
+<%-- $Id: UICommand.jsp,v 1.2 2003/08/11 23:26:42 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -29,7 +29,8 @@
        <h:form id="standardRenderKitForm" 
                    formName="standardRenderKitForm">
 
-         <h:command_button id="standardRenderKitSubmit" action="success"
+         <h:command_button id="standardRenderKitSubmit" 
+             actionRef="model.defaultAction"
              key="standardRenderKitSubmitLabel" bundle="standardBundle">
          </h:command_button>
 
@@ -46,6 +47,7 @@
          </table>
 
          <h:command_button id="standardRenderKitSubmit1"
+             actionRef="model.defaultAction"
              key="standardRenderKitSubmitLabel" bundle="standardBundle">
          </h:command_button>
 

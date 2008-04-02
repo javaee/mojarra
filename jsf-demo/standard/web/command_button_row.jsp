@@ -16,6 +16,7 @@
 
                <h:command_button id="command_button1" action="success"
                    label="command_button with hard coded label">
+                 <f:action_listener type="standard.DefaultListener"/>
                </h:command_button>
 
               </td>
@@ -34,7 +35,9 @@
              <td>
 
                <h:command_button id="command_button6" action="success"
-                   valueRef="model.label"/>
+                   valueRef="model.label">
+                 <f:action_listener type="standard.DefaultListener"/>
+               </h:command_button>
 
               </td>
 
@@ -53,8 +56,10 @@
                   <h:command_button id="command_button2" 
                       tabindex="50" accesskey="B"
                       label="click to submit form"
+                      action="success"
                       imageKey="imageurl" bundle="standardBundle">
-                 </h:command_button>
+                 <f:action_listener type="standard.DefaultListener"/>
+               </h:command_button>
 
               </td>
 
@@ -70,9 +75,10 @@
              </td>
 
              <td>
-                 <h:command_button id="resetButton"  label="Click to reset form"
+                 <h:command_button id="resetButton"  label="Click to reset form"                    action="success"
                      type="reset" key="resetButton" bundle="standardBundle">
-                 </h:command_button>
+                 <f:action_listener type="standard.DefaultListener"/>
+               </h:command_button>
 
               </td>
 
@@ -90,9 +96,10 @@
              <td>
                  <h:command_button id="pushButton"
                      title="button is disabled" type="button" 
-                     disabled = "true"
+                     disabled = "true" action="success"
                      label="This is a disabled push button">
-                 </h:command_button>
+                 <f:action_listener type="standard.DefaultListener"/>
+               </h:command_button>
 
               </td>
 
@@ -109,9 +116,10 @@
              </td>
 
              <td>
-                  <h:command_button id="button5"
+                  <h:command_button id="button5" action="success"
                       title="click to submit form" image="duke.gif">
-                  </h:command_button>
+                 <f:action_listener type="standard.DefaultListener"/>
+               </h:command_button>
               </td>
 
             </tr>
