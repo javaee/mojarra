@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.28 2006/01/11 15:28:17 rlubke Exp $
+ * $Id: TestUtil.java,v 1.29 2006/01/18 15:52:57 rlubke Exp $
  */
 
 /*
@@ -31,28 +31,35 @@
 
 package com.sun.faces.util;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.cactus.ServletFacesTestCase;
-
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIInput;
+import javax.faces.component.UISelectItems;
+import javax.faces.component.UISelectOne;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.ResponseWriter;
+import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletContext;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 /**
  * <B>TestUtil</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.28 2006/01/11 15:28:17 rlubke Exp $
+ * @version $Id: TestUtil.java,v 1.29 2006/01/18 15:52:57 rlubke Exp $
  */
 
 public class TestUtil extends ServletFacesTestCase {
@@ -150,7 +157,7 @@ public class TestUtil extends ServletFacesTestCase {
             RenderKitUtils.renderPassThruAttributes(null, writer, input);
             String expectedResult = " size=\"12\"";
             assertEquals(expectedResult, sw.toString());
-          
+
             // test that setting the values to the default value causes
             // the attributes to not be rendered.
             sw = new StringWriter();
@@ -165,8 +172,8 @@ public class TestUtil extends ServletFacesTestCase {
             writer = renderKit.createResponseWriter(sw, "text/html",
                                                     "ISO-8859-1");
             input.setReadonly(false);
-            RenderKitUtils.renderPassThruAttributes(getFacesContext(), 
-                                                    writer, 
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(),
+                                                    writer,
                                                     input);
             expectedResult = "";
             assertEquals(expectedResult, sw.toString());
@@ -211,6 +218,46 @@ public class TestUtil extends ServletFacesTestCase {
         } catch (IOException e) {
             assertTrue(false);
         }
+    }
+
+    public void testGetSelectItems() {
+        SelectItem item1 = new SelectItem("value", "label");
+        SelectItem item2 = new SelectItem("value2", "label2");
+        SelectItem[] itemsArray = {
+              item1, item2
+        };
+        Collection<SelectItem> itemsCollection = new ArrayList<SelectItem>(2);
+        itemsCollection.add(item1);
+        itemsCollection.add(item2);
+        Map<String,String> selectItemMap = new LinkedHashMap<String,String>(2);
+        selectItemMap.put("label", "value");
+        selectItemMap.put("label2", "value2");
+
+        // test arrays
+        UISelectItems items = new UISelectItems();
+        items.setValue(itemsArray);
+        UISelectOne selectOne = new UISelectOne();
+        selectOne.getChildren().add(items);
+        Iterator iterator = RenderKitUtils.getSelectItems(getFacesContext(),
+                                                          selectOne);
+        assertTrue(item1.equals(iterator.next()));
+        assertTrue(item2.equals(iterator.next()));
+
+        items.setValue(itemsCollection);
+        iterator = RenderKitUtils.getSelectItems(getFacesContext(),
+                                                 selectOne);
+        assertTrue(item1.equals(iterator.next()));
+        assertTrue(item2.equals(iterator.next()));
+
+        items.setValue(selectItemMap);
+        iterator = RenderKitUtils.getSelectItems(getFacesContext(),
+                                                 selectOne);
+        SelectItem i = (SelectItem) iterator.next();
+        assertTrue(item1.getLabel().equals(i.getLabel()) 
+                    && item1.getValue().equals(i.getValue()));
+        i = (SelectItem) iterator.next();
+        assertTrue(item2.getLabel().equals(i.getLabel()) 
+                    && item2.getValue().equals(i.getValue()));
     }
 
 

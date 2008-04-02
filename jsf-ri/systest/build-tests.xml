@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.100 2006/01/10 21:37:29 edburns Exp $
+ $Id: build-tests.xml,v 1.101 2006/01/18 15:52:57 rlubke Exp $
 -->
 
 <!--
@@ -647,6 +647,15 @@
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/component.jsp"
               outContent="/component.jsp PASSED"/>
+        
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/ComponentMiscTestCase.class"/>
+            </tests>
+        </jsf.junit>   
     </target>
 
     <target name="test.component01"

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.10 2005/12/05 16:42:43 edburns Exp $
+ * $Id: SelectItemsIterator.java,v 1.11 2006/01/18 15:52:52 rlubke Exp $
  */
 
 /*
@@ -148,7 +148,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                     if (val == null) {
                         continue;
                     }
-                    list.add(new SelectItem(val.toString(), key.toString(),
+                    list.add(new SelectItem(val, key.toString(),
                         null));
 
                 }

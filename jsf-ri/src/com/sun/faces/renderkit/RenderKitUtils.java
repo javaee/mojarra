@@ -333,8 +333,8 @@ public class RenderKitUtils {
                         if (key == null || val == null) {
                             continue;
                         }
-                        list.add(new SelectItem(key.toString(),
-                                                val.toString()));
+                        list.add(new SelectItem(val, 
+                                                key.toString()));
                     }
                 } else {
                     throw new IllegalArgumentException(

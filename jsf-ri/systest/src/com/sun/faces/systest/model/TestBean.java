@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.22 2005/10/25 20:39:58 rlubke Exp $
+ * $Id: TestBean.java,v 1.23 2006/01/18 15:52:54 rlubke Exp $
  */
 
 /*
@@ -48,6 +48,9 @@ import javax.faces.el.PropertyNotFoundException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Map;
+import java.util.HashMap;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.context.ExternalContext;
@@ -740,6 +743,23 @@ public class TestBean {
             servletContext.removeAttribute("previousRequestStatus");
         }
         return null;
+    }
+    
+    public Map getSelectItems() {
+        Map<String,SpecialBean> map = new HashMap<String,SpecialBean>();
+        map.put("key1", new SpecialBean("value1"));
+        map.put("key2", new SpecialBean("value2"));
+        map.put("key3", new SpecialBean("value3"));
+        return map;        
+    }
+    
+    private SpecialBean special;
+    public void setSpecialModel(SpecialBean special) {
+        this.special = special;        
+    }
+    
+    public SpecialBean getSpecialModel() {
+        return special;
     }
 
 }

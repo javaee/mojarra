@@ -32,6 +32,11 @@
     <lifecycle-factory>com.sun.faces.systest.lifecycle.LifecycleFactoryWrapper</lifecycle-factory>
     <render-kit-factory>com.sun.faces.systest.lifecycle.RenderKitFactoryWrapper</render-kit-factory>
   </factory>
+    
+    <converter>
+        <converter-for-class>com.sun.faces.systest.model.SpecialBean</converter-for-class>
+        <converter-class>com.sun.faces.systest.model.SpecialConverter</converter-class>        
+    </converter>
 
   <managed-bean>
     <managed-bean-name>valueChangeListenerBean</managed-bean-name>
