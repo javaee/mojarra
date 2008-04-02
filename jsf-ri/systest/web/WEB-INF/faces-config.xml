@@ -415,11 +415,27 @@
   </managed-bean>
   
     <managed-bean>
+    <managed-bean-name>noneBean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>none</managed-bean-scope>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>noneBean</value>
+    </managed-property>
+  </managed-bean>
+  
+    <managed-bean>
     <managed-bean-name>requestBean</managed-bean-name>
     <managed-bean-class>
       com.sun.faces.systest.model.TestBean
     </managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>requestBean</value>
+    </managed-property>
   </managed-bean>
   
   <managed-bean>
@@ -428,6 +444,10 @@
       com.sun.faces.systest.model.TestBean
     </managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>sessionBean</value>
+    </managed-property>
   </managed-bean>
   
   <managed-bean>
@@ -436,7 +456,11 @@
       com.sun.faces.systest.model.TestBean
     </managed-bean-class>
     <managed-bean-scope>application</managed-bean-scope>
-  </managed-bean>  
+      <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>applicationBean</value>
+    </managed-property>
+</managed-bean>  
 
   <navigation-rule>
     <from-view-id>/redirect.jsp</from-view-id>

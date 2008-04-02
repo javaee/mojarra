@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.37 2005/08/26 15:27:04 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.38 2005/09/30 03:57:20 edburns Exp $
  */
 
 /*
@@ -63,14 +63,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.context.BaseContextMap.EntryIterator;
+import com.sun.faces.context.BaseContextMap.KeyIterator;
+import com.sun.faces.context.BaseContextMap.ValueIterator;
+import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.util.Util;
+import java.util.logging.Logger;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.37 2005/08/26 15:27:04 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.38 2005/09/30 03:57:20 edburns Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -87,6 +93,10 @@ public class ExternalContextImpl extends ExternalContext {
     private Map<String,String[]> requestHeaderValuesMap = null;
     private Map<String,Object> cookieMap = null;
     private Map<String,String> initParameterMap = null;
+    
+    // Log instance for this class
+    static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.CONTEXT_LOGGER);    
 
     static final Class theUnmodifiableMapClass =
         Collections.unmodifiableMap(new HashMap<Object,Object>()).getClass();
@@ -189,7 +199,7 @@ public class ExternalContextImpl extends ExternalContext {
 
     public Map<String,Object> getRequestMap() {
         if (requestMap == null) {
-            requestMap = new RequestMap(this.request);
+            requestMap = new RequestMap(this.request, this);
         }
         return requestMap;
     }
@@ -746,9 +756,18 @@ class ApplicationMap extends BaseContextMap {
     }
 
     public void clear() {
+        String name = null;
         for (Enumeration e = servletContext.getAttributeNames();
              e.hasMoreElements(); ) {
-            servletContext.removeAttribute((String) e.nextElement());
+            name = (String) e.nextElement();
+            try {
+                ApplicationAssociate.getInstance(servletContext).
+                        handlePreDestroy(name, Scope.APPLICATION);
+            }
+            catch (Throwable t) {
+                ExternalContextImpl.logger.info(t.getMessage());
+            }
+            servletContext.removeAttribute(name);
         }
     }
 
@@ -786,6 +805,13 @@ class ApplicationMap extends BaseContextMap {
         }
         String keyString = key.toString();
         Object result = servletContext.getAttribute(keyString);
+        try {
+            ApplicationAssociate.getInstance(servletContext).
+                    handlePreDestroy(keyString, Scope.APPLICATION);
+        } catch (Throwable t) {
+            ExternalContextImpl.logger.info(t.getMessage());
+        }
+        
         servletContext.removeAttribute(keyString);
         return (result);
     }
@@ -834,10 +860,19 @@ class SessionMap extends BaseContextMap {
     }
 
     public void clear() {
-         HttpSession session = getSession();
+        HttpSession session = getSession();
+        String name = null;
         for (Enumeration e = getSession().getAttributeNames();
              e.hasMoreElements(); ) {
-            session.removeAttribute((String) e.nextElement());
+            name = (String) e.nextElement();
+            try {
+                ApplicationAssociate.getInstance(session.getServletContext()).
+                        handlePreDestroy(name, Scope.SESSION);
+            }
+            catch (Throwable t) {
+                ExternalContextImpl.logger.info(t.getMessage());
+            }
+            session.removeAttribute(name);
         }
     }
 
@@ -878,6 +913,12 @@ class SessionMap extends BaseContextMap {
         String keyString = key.toString();
         HttpSession session = getSession();
         Object result = session.getAttribute(keyString);
+        try {
+            ApplicationAssociate.getInstance(session.getServletContext()).
+                    handlePreDestroy(keyString, Scope.SESSION);
+        } catch (Throwable t) {
+            ExternalContextImpl.logger.info(t.getMessage());
+        }
         session.removeAttribute(keyString);
         return (result);
     }
@@ -921,16 +962,27 @@ class SessionMap extends BaseContextMap {
 class RequestMap extends BaseContextMap {
 
     private final ServletRequest request;
+    private ExternalContext extContext = null;
 
 
-    RequestMap(ServletRequest request) {
+    RequestMap(ServletRequest request, ExternalContext extContext) {
         this.request = request;
+        this.extContext = extContext;
     }
 
     public void clear() {
+        String name = null;
         for (Enumeration e = request.getAttributeNames();
              e.hasMoreElements(); ) {
-            request.removeAttribute((String) e.nextElement());
+            name = (String) e.nextElement();
+            try {
+                ApplicationAssociate.getInstance(extContext).
+                        handlePreDestroy(name, Scope.REQUEST);
+            }
+            catch (Throwable t) {
+                ExternalContextImpl.logger.info(t.getMessage());
+            }
+            request.removeAttribute(name);
         }
     }
 
@@ -968,6 +1020,12 @@ class RequestMap extends BaseContextMap {
         }
         String keyString = key.toString();
         Object result = request.getAttribute(keyString);
+        try {
+            ApplicationAssociate.getInstance(extContext).
+                    handlePreDestroy(keyString, Scope.REQUEST);
+        } catch (Throwable t) {
+            ExternalContextImpl.logger.info(t.getMessage());
+        }
         request.removeAttribute(keyString);
         return (result);
     }

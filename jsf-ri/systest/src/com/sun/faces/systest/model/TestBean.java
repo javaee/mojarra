@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.20 2005/09/28 16:03:08 edburns Exp $
+ * $Id: TestBean.java,v 1.21 2005/09/30 03:57:22 edburns Exp $
  */
 
 /*
@@ -50,6 +50,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.faces.context.ExternalContext;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 /**
  * <p>Test JavaBean for managed object creation facility.</p>
@@ -60,9 +63,13 @@ public class TestBean {
     private Random random;
     private ArrayList newList1= new ArrayList();
     private ArrayList newList2= new ArrayList();
+    ServletContext servletContext = null;
 
     public TestBean() {
 	random = new Random(4143);
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = (null != context) ? context.getExternalContext() : null;
+        servletContext = (null != extContext) ? (ServletContext) extContext.getContext() : null;
     }	
 
 
@@ -555,7 +562,7 @@ public class TestBean {
     /**
      * Holds value of property postConstructCalled.
      */
-    private boolean postConstructCalled;
+    private boolean postConstructCalled  = false;
 
     /**
      * Getter for property postConstructCalled.
@@ -573,12 +580,15 @@ public class TestBean {
     public void setPostConstructCalled(boolean postConstructCalled) {
 
         this.postConstructCalled = postConstructCalled;
+        appendStatusMessage("bean: " + getStringProperty() + 
+                " postConstructCalled: " + postConstructCalled);
+        
     }
 
     /**
      * Holds value of property preDestroyCalled.
      */
-    private boolean preDestroyCalled;
+    private boolean preDestroyCalled  = false;;
 
     /**
      * Getter for property preDestroyCalled.
@@ -594,9 +604,75 @@ public class TestBean {
      * @param preDestroyCalled New value of property preDestroyCalled.
      */
     public void setPreDestroyCalled(boolean preDestroyCalled) {
-
         this.preDestroyCalled = preDestroyCalled;
+        appendStatusMessage("bean: " + getStringProperty() + 
+                " preDestroyCalled: " + preDestroyCalled);
     }
     
+    public String invalidateSession() {
+        ((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).invalidate();
+        return null;
+    }
+    
+    public String removeRequestBean() {
+        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().remove("requestBean");
+        return null;
+    }
+    
+    public String removeSessionBean() {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("sessionBean");
+        return null;
+    }
+    
+    public String removeApplicationBean() {
+        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().remove("applicationBean");
+        return null;
+    }
+    
+    public String clearRequestMap() {
+        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().clear();
+        return null;
+    }
+    
+    public String clearRequestMapTwice() {
+        clearRequestMap();
+        clearRequestMap();
+        return null;
+    }
+
+    public String clearSessionMap() {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
+        return null;
+    }
+    
+    public String clearSessionMapTwice() {
+        clearSessionMap();
+        clearSessionMap();
+        return null;
+    }
+
+    public void appendStatusMessage(String message) {
+        if (null == servletContext) {
+            return;
+        }
+        String oldMessage = (String) servletContext.getAttribute("previousRequestStatus");
+        oldMessage = (null != oldMessage) ? oldMessage + "\n": "";
+        message = (null != message) ? message : "";
+        oldMessage = oldMessage + message;
+        servletContext.setAttribute("previousRequestStatus", oldMessage);
+        
+    }
+    
+    public String getAppendRequestMarker() {
+        appendStatusMessage("-----------------");
+        return "";
+    }
+    
+    public String clearStatusMessage() {
+        if (null != servletContext) {
+            servletContext.removeAttribute("previousRequestStatus");
+        }
+        return null;
+    }
 	
 }

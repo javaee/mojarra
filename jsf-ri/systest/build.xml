@@ -285,14 +285,28 @@
   
   <target name="test.appserver" depends="compile, undeploy, deploy,test"
    description="Execute all tests against installed /jsf-systest application" />
-   
-  <target name="build.war"> 
-  
+
+  <target name="build.war.standalone" if="build.standalone">
+      <!-- edburns: remove this deletion when the glassfish regression is fixed 
+      <delete file="${build.home}/WEB-INF/sun-web.xml" /> -->
+      <delete>
+        <fileset dir="${build.home}/WEB-INF/lib">
+          <exclude name="commons-*.jar" />
+          <exclude name="jsf-impl.jar" />
+          <include name="*.jar" />
+        </fileset>
+      </delete>
+      <jar jarfile="${dist.home}/jsf-systest.war" basedir="${build.home}"/>
+  </target>
+
+  <target name="build.war.bundled" unless="build.standalone">
       <!-- edburns: remove this deletion when the glassfish regression is fixed 
       <delete file="${build.home}/WEB-INF/sun-web.xml" /> -->
 
       <jar jarfile="${dist.home}/jsf-systest.war" basedir="${build.home}"/>
   </target>
+   
+  <target name="build.war" depends="build.war.standalone,build.war.bundled"/> 
    
   <target description="Deploy web applications"  name="deploy.autodeploy" depends="build.war"> 
 

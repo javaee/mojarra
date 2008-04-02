@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.52 2005/09/28 16:03:05 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.53 2005/09/30 03:57:19 edburns Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -79,6 +79,7 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ConfigNavigationCase;
 import com.sun.faces.spi.ManagedBeanFactory;
+import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.config.beans.ApplicationBean;
 import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.ConverterBean;
@@ -98,6 +99,7 @@ import com.sun.faces.el.FacesCompositeELResolver;
 
 import com.sun.faces.el.DummyPropertyResolverImpl;
 import com.sun.faces.el.DummyVariableResolverImpl;
+import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.util.Util;
 
 import org.apache.commons.digester.Digester;
@@ -295,8 +297,16 @@ public class ConfigureListener implements ServletRequestListener, HttpSessionLis
     //
     
     public void requestDestroyed(ServletRequestEvent sre) {
-
-
+        ApplicationAssociate associate = 
+                ApplicationAssociate.getInstance(sre.getServletContext());
+        if (null != associate) {
+            try {
+                associate.handlePreDestroy(null, Scope.REQUEST);
+            }
+            catch (Throwable e) {
+                logger.info(e.getMessage());
+            }
+        }
     }
     
     public void requestInitialized(ServletRequestEvent sre) {
@@ -310,11 +320,20 @@ public class ConfigureListener implements ServletRequestListener, HttpSessionLis
     public void sessionCreated(HttpSessionEvent se) {
         
     }
+
     public void sessionDestroyed(HttpSessionEvent se) {
-        
-    }
+        ApplicationAssociate associate = 
+                ApplicationAssociate.getInstance(se.getSession().getServletContext());
+        if (null != associate) {
+            try {
+                associate.handlePreDestroy(null, Scope.SESSION);
+            }
+            catch (Throwable e) {
+                logger.info(e.getMessage());
+            }
+        }
     
-    
+    }    
 
     public void contextInitialized(ServletContextEvent sce) {
         
@@ -469,6 +488,17 @@ public class ConfigureListener implements ServletRequestListener, HttpSessionLis
             logger.fine("contextDestroyed(" + context.getServletContextName()
                       + ')');
         }
+        ApplicationAssociate associate = 
+                ApplicationAssociate.getInstance(sce.getServletContext());
+        if (null != associate) {
+            try {
+                associate.handlePreDestroy(null, Scope.APPLICATION);
+            }
+            catch (Throwable e) {
+                logger.info(e.getMessage());
+            }
+        }
+        
 
         // Release any allocated application resources
 	FactoryFinder.releaseFactories();

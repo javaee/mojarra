@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.173 2005/08/26 15:27:20 rlubke Exp $
+ * $Id: Util.java,v 1.174 2005/09/30 03:57:21 edburns Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.173 2005/08/26 15:27:20 rlubke Exp $
+ * @version $Id: Util.java,v 1.174 2005/09/30 03:57:21 edburns Exp $
  */
 
 public class Util extends Object {
@@ -1766,6 +1766,39 @@ public class Util extends Object {
             }
         }
         return result;
+    }
+
+    /**
+     * Returns a List of Methods on the instance referenced by argument
+     * <code>obj</code> that are annotated with the annotation
+     * referenced by argument <code>annoClass</code>.  If none are
+     * found, returns the empty list.
+     *
+     * @param the instance for which to inspect for annotated methods
+     *
+     * @param annoClass the Class of annotation to look for
+     */
+    
+    public static List<Method> getMethodsWithAnnotation(Object obj, Class annoClass) {
+        List<Method> list = null;
+        Method [] methods = null;
+        if (null != obj) {
+            Class objClass = obj.getClass();
+            methods = objClass.getMethods();
+
+            for (int i = 0; i < methods.length; i++) {
+                if (null != methods[i].getAnnotation(annoClass)) {
+		    if (null == list) {
+			list = new ArrayList<Method>();
+		    }
+                    list.add(methods[i]);
+                }                
+            }
+        }       
+        if (null == list) {
+            list = Collections.EMPTY_LIST;
+        }
+        return list;
     }
 
 } // end of class Util

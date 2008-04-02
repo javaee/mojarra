@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.22 2005/09/28 15:12:03 edburns Exp $
+ * $Id: ExternalContext.java,v 1.23 2005/09/30 03:57:18 edburns Exp $
  */
  
 /*
@@ -203,6 +203,19 @@ public abstract class ExternalContext {
      * <code>clear()</code>, <code>remove()</code>, <code>put()</code>,
      * and <code>get()</code> operations must take the appropriate
      * action on the underlying data structure.</p>
+     *
+     * <p>For any of the <code>Map</code> methods that cause an element
+     * to be removed from the underlying data structure, the following
+     * action regarding managed-beans must be taken.  If the element to
+     * be removed is a managed-bean, and it has one or more public
+     * no-argument void return methods annotated with
+     * <code>javax.annotation.PreDestroy</code>, each such method must
+     * be called before the element is removed from the underlying data
+     * structure.  Elements that are not managed-beans, but do happen to
+     * have methods with that annotation must not have those methods
+     * called on removal.  Any exception thrown by the
+     * <code>PreDestroy</code> annotated methods must by caught and not
+     * rethrown.  The exception may be logged.</p>
      *
      * <p><em>Servlet:</em>  This must be the set of attributes available via
      * the <code>javax.servlet.ServletContext</code> methods
@@ -481,6 +494,19 @@ public abstract class ExternalContext {
      * <code>clear()</code>, <code>remove()</code>, <code>put()</code>,
      * and <code>get()</code> operations must take the appropriate
      * action on the underlying data structure.</p>
+     *
+     * <p>For any of the <code>Map</code> methods that cause an element
+     * to be removed from the underlying data structure, the following
+     * action regarding managed-beans must be taken.  If the element to
+     * be removed is a managed-bean, and it has one or more public
+     * no-argument void return methods annotated with
+     * <code>javax.annotation.PreDestroy</code>, each such method must
+     * be called before the element is removed from the underlying data
+     * structure.  Elements that are not managed-beans, but do happen to
+     * have methods with that annotation must not have those methods
+     * called on removal.  Any exception thrown by the
+     * <code>PreDestroy</code> annotated methods must by caught and not
+     * rethrown.  The exception may be logged.</p>
      *
      * <p><em>Servlet:</em>  This must be the set of attributes available via
      * the <code>javax.servlet.ServletRequest</code> methods
@@ -784,6 +810,19 @@ public abstract class ExternalContext {
      * via this <code>Map</code> must cause the creation of a session
      * associated with the current request, if such a session does not
      * already exist.</p>
+     *
+     * <p>For any of the <code>Map</code> methods that cause an element
+     * to be removed from the underlying data structure, the following
+     * action regarding managed-beans must be taken.  If the element to
+     * be removed is a managed-bean, and it has one or more public
+     * no-argument void return methods annotated with
+     * <code>javax.annotation.PreDestroy</code>, each such method must
+     * be called before the element is removed from the underlying data
+     * structure.  Elements that are not managed-beans, but do happen to
+     * have methods with that annotation must not have those methods
+     * called on removal.  Any exception thrown by the
+     * <code>PreDestroy</code> annotated methods must by caught and not
+     * rethrown.  The exception may be logged.</p>
      *
      * <p><em>Servlet:</em>  This must be the set of attributes available via
      * the <code>javax.servlet.http.HttpServletSession</code> methods

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.21 2005/08/26 15:26:58 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.22 2005/09/30 03:57:19 edburns Exp $
  */
 
 /*
@@ -53,9 +53,14 @@ import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.config.beans.ResourceBundleBean;
 import com.sun.faces.util.Util;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.component.UIViewRoot;
+import javax.servlet.ServletContext;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -81,6 +86,30 @@ public class ApplicationAssociate {
     // mappings.
     //
     private Map<String, ManagedBeanFactory> managedBeanFactoriesMap = null;
+    
+    /**
+     * Simple struct encapsulating a managed bean instance with its list 
+     * of PreDestroy methods.
+     */
+    private static class ManagedBeanPreDestroyStruct extends Object {
+        private Object bean = null;
+        private List<Method> preDestroys = null;
+        ManagedBeanPreDestroyStruct(Object bean, List<Method> preDestroys) {
+            this.bean = bean;
+            this.preDestroys = preDestroys;
+        }
+        void clear() {
+            this.bean = null;
+            this.preDestroys = null;
+        }
+    }
+    
+    /**
+     * An array of size four (one for each scope) of Maps.  Each Map maps from
+     * managedBeanName to an instance of ManagedBeanPreDestroyStruct.
+     */
+    
+    private Map<String, ManagedBeanPreDestroyStruct> preDestroyMethods[] = null;
 
     // These maps stores "navigation rule" mappings.
     //
@@ -141,6 +170,13 @@ public class ApplicationAssociate {
         }
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();
+        preDestroyMethods = new Map[4];
+        preDestroyMethods[Scope.REQUEST.ordinal()] = 
+                new HashMap<String, ManagedBeanPreDestroyStruct>();
+        preDestroyMethods[Scope.SESSION.ordinal()] = 
+                new HashMap<String, ManagedBeanPreDestroyStruct>();
+        preDestroyMethods[Scope.APPLICATION.ordinal()] = 
+                new HashMap<String, ManagedBeanPreDestroyStruct>();
         caseListMap = new HashMap<String,List<ConfigNavigationCase>>();
         wildcardMatchList = new TreeSet<String>(new SortIt());
 
@@ -151,6 +187,10 @@ public class ApplicationAssociate {
         Map applicationMap = externalContext.getApplicationMap();    
 	return ((ApplicationAssociate) 
 		applicationMap.get(ASSOCIATE_KEY));
+    }
+    
+    public static ApplicationAssociate getInstance(ServletContext context) {
+        return (ApplicationAssociate) context.getAttribute(ASSOCIATE_KEY);
     }
     
     public static void clearInstance(ExternalContext 
@@ -430,6 +470,7 @@ public class ApplicationAssociate {
                 synchronized (applicationMap) {
                     try {
                         bean = managedBean.newInstance(context);
+                        handlePostConstruct(managedBeanName, scope, bean);
                         if (logger.isLoggable(Level.FINE)) {
                             logger.fine("Created application scoped bean " + 
                                     managedBeanName + " successfully ");
@@ -450,6 +491,7 @@ public class ApplicationAssociate {
                 synchronized (sessionMap) {
                     try {
                         bean = managedBean.newInstance(context);
+                        handlePostConstruct(managedBeanName, scope, bean);
                         if (logger.isLoggable(Level.FINE)) {
                             logger.fine("Created session scoped bean " 
                                     + managedBeanName + " successfully ");
@@ -470,6 +512,9 @@ public class ApplicationAssociate {
             scopeIsRequest = (scope == Scope.REQUEST);
             try {
                 bean = managedBean.newInstance(context);
+                if (scopeIsRequest) {
+                    handlePostConstruct(managedBeanName, scope, bean);
+                }
                 if (logger.isLoggable(Level.FINE)) {
                     logger.log(Level.FINE, "Created bean " + managedBeanName + 
                               " successfully ");
@@ -500,7 +545,150 @@ public class ApplicationAssociate {
 	return responseRendered;
     }
 
+    /**
+     * <p>Called from {@link #createAndMaybeStoreManagedBeans}.
+     * Discover the methods on argument <code>bean</code> annotated with
+     * <code>@PostConstruct</code> and <code>@PreDestroy</code> using
+     * {@link Util#getMethodsWithAnnotation}.  This method returns a
+     * possibly empty <code>List&lt;Method&gt;</code>.  For each method
+     * in the postConstruct list, invoke it.  For each method for each
+     * non NONE scoped bean in the preDestroyList, add to the
+     * preDestroyMethods array in the proper scope.</p>
+     *
+     * @param beanName the name of the bean for which to call PostConstruct
+     * annotated methods.  If <code>null</code>, all beans in argument
+     * <code>scope</code> have their PreDestroy annotated methods
+     * called.
+     *
+     * @param scope the managed bean scope in which to look for the bean
+     * or beans.
+     *
+     * @param bean the actual managed bean instance.  Injection must
+     * have already been performed.
+     */
 
+    private void handlePostConstruct(String beanName,
+        Scope scope, Object bean) throws IllegalAccessException,
+                     IllegalArgumentException,
+                     InvocationTargetException {
+        List<Method> postConstructs = Util.getMethodsWithAnnotation(bean, 
+                PostConstruct.class);
+        List<Method> preDestroys = Util.getMethodsWithAnnotation(bean, 
+                PreDestroy.class);
+        assert(null != postConstructs && null != preDestroys);
+        
+        for (Method method : postConstructs) {
+            method.invoke(bean);
+        }
+        // We can't call @PreDestroy on NONE scoped beans.
+        if (!preDestroys.isEmpty() && scope != Scope.NONE) {
+            
+            preDestroyMethods[scope.ordinal()].put(beanName, 
+                    new ManagedBeanPreDestroyStruct(bean, preDestroys));
+        }
+        
+    }
+
+    /**
+     * <p>Called from ExternalContextImpl, in the Map implementations
+     * for request, session, and application maps, from the remove() and
+     * clear() implementations in those maps.  Leverage the data stored
+     * by the required previous invocation of {@link
+     * #handlePostConstruct} to discover and invoke any postDestroy
+     * annotated methods.  If argument <code>beanName</code> is null,
+     * all managed-bean entries in argument <code>scope</code> have
+     * their PreDestroy annotated methods invoked.  Otherwise, only the
+     * managed bean named by argument <code>beanName</code> has its
+     * PreDestroy annotated methods called.</p>
+     *
+     * @param beanName the name of the bean for which to call PreDestroy
+     * annotated methods.  If <code>null</code>, all beans in argument
+     * <code>scope</code> have their PreDestroy annotated methods
+     * called.
+     *
+     * @param scope the managed bean scope in which to look for the bean
+     * or beans.
+     */ 
+    
+    public void handlePreDestroy(String beanName, Scope scope) throws
+	IllegalAccessException,
+	IllegalArgumentException,
+	InvocationTargetException {
+	// Get the pre-populated map for this Scope
+        Map<String, ManagedBeanPreDestroyStruct> destroyMap =
+	    preDestroyMethods[scope.ordinal()];
+        // If we have no beans in the map, just return;
+        if (destroyMap.isEmpty()) {
+            return;
+        }
+        // If we have no beanName, invoke all the preDestroy methods for
+        // all the managed-beans in the argument scope.
+        if (null == beanName) {
+            if (scope != Scope.REQUEST) {
+                synchronized(scope) {
+		    invokePreDestroyAndRemoveFromMap(destroyMap);
+                }
+            } 
+	    else {
+                assert(scope == Scope.REQUEST);
+		invokePreDestroyAndRemoveFromMap(destroyMap);
+            }
+	} 
+	else {
+	    // Otherwise, only invoke the preDestroy methods for the
+	    // argument beanName in the argument scope.
+	    ManagedBeanPreDestroyStruct struct = destroyMap.get(beanName);
+	    if (null != struct) {
+		if (scope != Scope.REQUEST) {
+		    synchronized(scope) {
+			for (Method method : struct.preDestroys) {
+			    method.invoke(struct.bean);
+			}
+			struct.preDestroys.clear();
+			struct.clear();
+			destroyMap.remove(beanName);
+		    }
+		}
+		else {
+		    assert(scope == Scope.REQUEST);
+		    for (Method method : struct.preDestroys) {
+			method.invoke(struct.bean);
+		    }
+		    struct.preDestroys.clear();
+		    struct.clear();
+		    destroyMap.remove(beanName);
+		}
+	    } // if null != struct
+	}
+    }
+
+    private void invokePreDestroyAndRemoveFromMap(Map<String, ManagedBeanPreDestroyStruct> destroyMap) throws
+	IllegalAccessException,
+	IllegalArgumentException,
+	InvocationTargetException {
+	ArrayList<String> names = new ArrayList(destroyMap.size());
+	// Go through the entries once and invoke the
+	// annotated methods
+	for (Map.Entry<String, ManagedBeanPreDestroyStruct> entry :
+		 destroyMap.entrySet()) {
+	    for (Method method : entry.getValue().preDestroys) {
+		method.invoke(entry.getValue().bean);
+	    }
+	    names.add(entry.getKey());
+	    entry.getValue().preDestroys.clear();
+	    entry.getValue().clear();
+	}
+        
+	// Go through the entries again, and remove them from
+	// the map.
+	for (String name : names) {
+	    destroyMap.remove(name);
+	}
+    }
+	
+
+
+    
 
 
     /**
