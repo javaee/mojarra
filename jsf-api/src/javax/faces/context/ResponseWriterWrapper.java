@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriterWrapper.java,v 1.4 2005/08/22 22:08:00 ofung Exp $
+ * $Id: ResponseWriterWrapper.java,v 1.5 2006/03/24 19:20:44 edburns Exp $
  */
 
 /*
@@ -224,6 +224,21 @@ public abstract class ResponseWriterWrapper extends ResponseWriter {
         getWrapped().writeText(text, property);
 
     }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ResponseWriter#writeText(Object, UIComponent, String)}
+     * on the wrapped {@link ResponseWriter} object.</p>
+     *
+     * @see ResponseWriter#writeText(Object, String)
+     * @since 1.2
+     */
+
+    public void writeText(Object text, UIComponent component, String property)
+        throws IOException {
+	getWrapped().writeText(text, component, property);
+    }
+
 
 
     /**
