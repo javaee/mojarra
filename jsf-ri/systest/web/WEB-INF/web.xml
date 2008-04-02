@@ -22,6 +22,11 @@
     </context-param>
     
     <context-param>
+        <param-name>com.sun.faces.compressJavaScript</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    
+    <context-param>
         <param-name>com.sun.faces.enableHtmlTagLibValidator</param-name>
         <param-value>true</param-value>
     </context-param>
