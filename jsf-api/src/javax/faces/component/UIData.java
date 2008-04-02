@@ -289,6 +289,9 @@ public class UIData extends UIComponentBase
      *
      * @exception IllegalArgumentException if <code>rowIndex</code>
      *  is less than -1
+     * @exception IndexOutOfBoundsException if <code>rowIndex</code>
+     *  is not -1, and the underlying {@link DataModel} reports that
+     *  there is now data available at the specified row index
      */
     public void setRowIndex(int rowIndex) {
 
@@ -296,8 +299,15 @@ public class UIData extends UIComponentBase
         saveDescendantState();
 
         // Update to the new row index
+        int previous = this.rowIndex;
         this.rowIndex = rowIndex;
-        getDataModel(FacesContext.getCurrentInstance()).setRowIndex(rowIndex);
+        DataModel model = getDataModel(FacesContext.getCurrentInstance());
+        model.setRowIndex(rowIndex);
+        if ((rowIndex >= 0) && !model.isRowAvailable()) {
+            this.rowIndex = previous;
+            model.setRowIndex(previous);
+            throw new IndexOutOfBoundsException("" + rowIndex);
+        }
 
         // Clear or expose the current row data as a request scope attribute
         if (var != null) {
@@ -717,7 +727,11 @@ public class UIData extends UIComponentBase
 	    }
 
 	    // Expose the current row in the specified request attribute
-	    setRowIndex(++rowIndex);
+            try {
+                setRowIndex(++rowIndex);
+            } catch (IndexOutOfBoundsException e) {
+                break; // Scrolled past the last row
+            }
 
 	    // Perform phase-specific processing as required
 	    Iterator kids = getChildren().iterator();

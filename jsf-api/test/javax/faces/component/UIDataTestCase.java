@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.14 2003/10/22 23:23:53 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.15 2003/10/22 23:59:01 craigmcc Exp $
  */
 
 /*
@@ -448,6 +448,24 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         checkResponse("/javax/faces/component/UIDataTestCase_1.xml");
         renderResponse();
         checkResponse("/javax/faces/component/UIDataTestCase_1.xml");
+
+    }
+
+
+    // Test rendering the tree when there are not enough available rows
+    public void testTreeTail() throws Exception {
+
+        // Set up for this test
+        setupModel();
+        setupRenderers();
+        setupTree();
+
+        // Validate the rendered output
+        ((UIData) component).setFirst(7);
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_5.xml");
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_5.xml");
 
     }
 
@@ -952,9 +970,13 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
                 if ((rows > 0) && (++done > rows)) {
                     break;
                 }
-                writer.write("<table-row rowId='" + ++rowId + "'>\n");
+                try {
+                    data.setRowIndex(++rowId);
+                } catch (IndexOutOfBoundsException e) {
+                    break; // Scrolled past the last row
+                }
+                writer.write("<table-row rowId='" + rowId + "'>\n");
                 kids = data.getChildren().iterator();
-                data.setRowIndex(rowId);
                 while (kids.hasNext()) {
                     UIComponent kid = (UIComponent) kids.next();
                     if (!(kid instanceof UIColumn)) {
