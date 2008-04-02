@@ -737,6 +737,17 @@ jsf-api.jar.
         </replacevalue>
     </replace>
     <delete file="${basedir}/doc/standard-html-renderkit-impl.xml"/>
+
+    <!-- PENDING - add uptodate check to reduce overhead of calling this target -->  
+    <ant dir="${jsf-tools.dir}" target="tools" inheritAll="false"/>
+
+    <!-- validate the generated standard-html-renderkit.xml -->
+    <taskdef name="validate" classname="com.sun.faces.ant.ValidateTask">
+        <classpath>
+            <pathelement location="${jsf-tools.dir}/build/classes"/>
+        </classpath>
+    </taskdef>
+    <validate schemaDir="${basedir}/doc"/>
   </target>
 
   <!--
