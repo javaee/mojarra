@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.1 2003/11/06 23:01:42 eburns Exp $
+ * $Id: UIMessage.java,v 1.2 2003/11/07 01:46:55 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.component;
 
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 /**
  * <p>This component is responsible for displaying messages for a given
@@ -40,31 +41,104 @@ public class UIMessage extends UIComponentBase {
 
     // ------------------------------------------------------ Instance Variables
 
-    protected boolean showSummary;
-    public boolean isShowSummary() {
-	return showSummary;
-    }
 
-    public void setShowSummary(boolean newShowSummary) {
-	showSummary = newShowSummary;
-    }
+    private String forVal = null;
+    private boolean showDetail = false;
+    private boolean showSummary = true;
 
-    protected boolean showDetail;
-    public boolean isShowDetail() {
-	return showDetail;
-    }
 
-    public void setShowDetail(boolean newShowDetail) {
-	showDetail = newShowDetail;
-    }
+    // -------------------------------------------------------------- Properties
 
-    protected String forVal;
+
+    /**
+     * <p>Return the client identifier of the component for which
+     * this component represents associated message(s) (if any).</p>
+     */
     public String getFor() {
-	return forVal;
+
+	ValueBinding vb = getValueBinding("for");
+	if (vb != null) {
+	    return ((String) vb.getValue(getFacesContext()));
+	} else {
+	    return (this.forVal);
+	}
+
     }
 
+
+    /**
+     * <p>Set the client identifier of the component for which
+     * this component represents associated message(s) (if any).</p>
+     *
+     * @param newFor The new client id
+     */
     public void setFor(String newFor) {
+
 	forVal = newFor;
+	setValueBinding("for", null);
+
+    }
+
+
+    /**
+     * <p>Return the flag indicating whether the <code>detail</code> property
+     * of the associated message(s) should be displayed.</p>
+     */
+    public boolean isShowDetail() {
+
+	ValueBinding vb = getValueBinding("showDetail");
+	if (vb != null) {
+	    Boolean value = (Boolean) vb.getValue(getFacesContext());
+	    return (value.booleanValue());
+	} else {
+	    return (this.showDetail);
+	}
+
+    }
+
+
+    /**
+     * <p>Set the flag indicating whether the <code>detail</code> property
+     * of the associated message(s) should be displayed.</p>
+     *
+     * @param showDetail The new flag
+     */
+    public void setShowDetail(boolean showDetail) {
+
+	this.showDetail = showDetail;
+	setValueBinding("showDetail", null);
+
+    }
+
+
+    /**
+     * <p>Return the flag indicating whether the <code>summary</code> property
+     * of the associated message(s) should be displayed.</p>
+     */
+    public boolean isShowSummary() {
+
+	ValueBinding vb = getValueBinding("showSummary");
+	if (vb != null) {
+	    Boolean value = (Boolean) vb.getValue(getFacesContext());
+	    return (value.booleanValue());
+	} else {
+	    return (this.showSummary);
+	}
+
+    }
+
+
+    /**
+     * <p>Set the flag indicating whether the <code>summary</code> property
+     * of the associated message(s) should be displayed.</p>
+     *
+     * @param showSummary The new flag value
+     */
+    public void setShowSummary(boolean showSummary) {
+
+	this.showSummary = showSummary;
+	setValueBinding("showSummary", null);
+
     }
 
 

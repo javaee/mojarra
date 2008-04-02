@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessages.java,v 1.1 2003/11/06 23:01:43 eburns Exp $
+ * $Id: UIMessages.java,v 1.2 2003/11/07 01:46:55 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.component;
 
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 /**
  * <p>The renderer for this component is responsible for obtaining the
@@ -43,13 +44,39 @@ public class UIMessages extends UIComponentBase {
 
     private boolean globalOnly = true;
 
+
+    // -------------------------------------------------------------- Properties
+
+
+    /**
+     * <p>Return the flag indicating whether only global messages (that is,
+     * messages with no associated client identifier) should be rendered.</p>
+     */
     public boolean isGlobalOnly() {
-	return globalOnly;
+
+	ValueBinding vb = getValueBinding("globalOnly");
+	if (vb != null) {
+	    Boolean value = (Boolean) vb.getValue(getFacesContext());
+	    return (value.booleanValue());
+	} else {
+	    return (this.globalOnly);
+	}
+
     }
 
-    public void setGlobalOnly(boolean newGlobalOnly) {
-	globalOnly = newGlobalOnly;
+
+    /**
+     * <p>Set the flag indicating whether only global messages (that is,
+     * messages with no associated client identifier) should be rendered.</p>
+     *
+     * @param globalOnly The new flag value
+     */
+    public void setGlobalOnly(boolean globalOnly) {
+
+	this.globalOnly = globalOnly;
+	setValueBinding("globalOnly", null);
     }
+
 
     // ----------------------------------------------------- StateHolder Methods
 
