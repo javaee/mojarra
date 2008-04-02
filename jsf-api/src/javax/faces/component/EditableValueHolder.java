@@ -1,5 +1,5 @@
 /*
- * $Id: EditableValueHolder.java,v 1.8 2004/02/26 20:30:29 eburns Exp $
+ * $Id: EditableValueHolder.java,v 1.9 2004/04/06 16:50:51 eburns Exp $
  */
 
 /*
@@ -26,10 +26,10 @@ import javax.faces.render.Renderer;
 public interface EditableValueHolder extends ValueHolder {
 
     /**
-     * <p>Return the submittedValue value of this component.
-     * This method should only be used by the <code>decode()</code> and
-     * <code>validate()</code> method of this component, or
-     *  its corresponding {@link Renderer}.</p>
+     * <p>Return the submittedValue value of this component.  This
+     * method should only be used by the <code>encodeBegin()</code>
+     * and/or <code>encodeEnd()</code> methods of this component, or its
+     * corresponding {@link Renderer}.</p>
      */
     public Object getSubmittedValue();
 
