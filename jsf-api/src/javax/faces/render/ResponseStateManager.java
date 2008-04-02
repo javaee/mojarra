@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.26 2006/01/23 21:01:43 edburns Exp $
+ * $Id: ResponseStateManager.java,v 1.27 2006/01/26 16:31:35 edburns Exp $
  */
 
 /*
@@ -265,7 +265,8 @@ public abstract class ResponseStateManager {
      * <code>false</code> otherwise.</p>
      *
      * <p>The implementation if this method for the Standard HTML
-     * RenderKit must consult the {@link ExternalContext}'s
+     * RenderKit must consult the {@link
+     * javax.faces.context.ExternalContext}'s
      * <code>requestParameterMap</code> and return <code>true</code> if
      * and only if there is a key equal to the value of the symbolic
      * constant {@link #VIEW_STATE_PARAM}.</p>
@@ -273,7 +274,7 @@ public abstract class ResponseStateManager {
      * <p>For backwards compatability with implementations of
      * <code>ResponseStateManager</code> prior to JSF 1.2, a default
      * implementation is provided that consults the {@link
-     * ExternalContext}'s <code>requestParameterMap</code> and return
+     * javax.faces.context.ExternalContext}'s <code>requestParameterMap</code> and return
      * <code>true</code> if its size is greater than 0.</p>
      *
      * @since 1.2

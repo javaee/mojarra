@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.30 2005/12/05 16:43:04 edburns Exp $
+ * $Id: FacesServlet.java,v 1.31 2006/01/26 16:31:35 edburns Exp $
  */
 
 /*
@@ -183,6 +183,32 @@ public final class FacesServlet implements Servlet {
     /**
      * <p>Process an incoming request, and create the corresponding
      * response, by executing the request processing lifecycle.</p>
+     *
+     * <p>If the <code>request</code> and <code>response</code>
+     * arguments to this method are not instances of
+     * <code>HttpServletRequest</code> and
+     * <code>HttpServletResponse</code>, respectively, the results of
+     * invoking this method are undefined.</p>
+     *
+     * <p>This method must respond to requests that start with the
+     * following strings by invoking the <code>sendError</code> method
+     * on the response argument (cast to
+     * <code>HttpServletResponse</code>), passing the code
+     * <code>HttpServletResponse.SC_NOT_FOUND</code> as the
+     * argument. </p>
+     *
+     * <ul>
+     *
+<pre><code>
+/WEB-INF/
+/WEB-INF
+/META-INF/
+/META-INF
+</code></pre>
+     *
+     * </ul>
+     *
+     * 
      *
      * @param request The servlet request we are processing
      * @param response The servlet response we are creating

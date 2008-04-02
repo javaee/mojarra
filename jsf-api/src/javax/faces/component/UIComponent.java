@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.136 2006/01/23 21:01:42 edburns Exp $
+ * $Id: UIComponent.java,v 1.137 2006/01/26 16:31:34 edburns Exp $
  */
 
 /*
@@ -198,7 +198,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param name Name of the attribute or property for which to set a
      *  {@link ValueExpression}
-     * @param expression The {@link ValueExpression} to set, or <code>null</code>
+     * @param binding The {@link ValueExpression} to set, or <code>null</code>
      *  to remove any currently set {@link ValueExpression}
      *
      * @throws IllegalArgumentException if <code>name</code> is one of
