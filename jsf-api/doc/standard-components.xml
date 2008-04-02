@@ -718,12 +718,21 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <!-- html renderer specific attributes -->
       <attribute>
-        <description>unavailable in this context</description>
+        <description>CSS style class to apply if disabled</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>disabled</attribute-name>
-        <attribute-class>boolean</attribute-class>
+        <attribute-name>disabledClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+      <attribute>
+        <description>CSS style class to apply if enabled</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>enabledClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <supported-component-type>
@@ -1380,12 +1389,21 @@
         <attribute-class>int</attribute-class>
       </attribute>
 
+      <!-- html renderer specific attributes -->
       <attribute>
-        <description>unavailable in this context</description>
+        <description>CSS style class to apply if disabled</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>disabled</attribute-name>
-        <attribute-class>boolean</attribute-class>
+        <attribute-name>disabledClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+      <attribute>
+        <description>CSS style class to apply if enabled</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>enabledClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
      <supported-component-type>
