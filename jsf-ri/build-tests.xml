@@ -241,11 +241,15 @@
     </target>
 
     <target name="execute.cactus.tests" depends="prepare.test.webapp">
-      <echo message="${skip.build}"/>
       <antcall target="safe.remove"/>
       <antcall target="install"/>
       <touch file="${out.test.dir}/last-testrun"/>
       <antcall target="run.cactus.test"/>
+    </target>
+
+    <target name="force.execute.cactus.tests">
+      <antcall target="remove.tstamp"/>
+      <antcall target="execute.cactus.tests"/>
     </target>
 
     <target name="remove.tstamp">
@@ -269,7 +273,6 @@
 
     <target name="remove" unless="skip.build"
             description="Remove cactus unit test webapp"> 
-      <echo message="${skip.build}" />
       <remove url="${url}" username="${username}" password="${password}"
             path="/test"/>
     </target>

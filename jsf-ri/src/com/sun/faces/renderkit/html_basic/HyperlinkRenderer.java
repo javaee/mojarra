@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.58 2003/09/10 21:54:10 horwat Exp $
+ * $Id: HyperlinkRenderer.java,v 1.59 2003/09/12 18:31:53 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.58 2003/09/10 21:54:10 horwat Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.59 2003/09/12 18:31:53 eburns Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -161,9 +161,9 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	sb.append("");
 	sb.append(formNumber);
 	sb.append("");
-	sb.append("].");
+	sb.append("]['");
 	sb.append(clientId);
-	sb.append(".value='");
+	sb.append("'].value='");
 	sb.append(clientId);
 	sb.append("'; document.forms[");
 	sb.append("");

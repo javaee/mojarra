@@ -19,7 +19,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 
-<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=48F0E0FD42F7CB76F17CB4CF1D9111D9" class="formClass" title="basicForm" accept="html,wml">
+<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=E9ACB00A867AE39715C6D7A4D9068DF3" class="formClass" title="basicForm" accept="html,wml">
 
 
   <TABLE BORDER="1">
@@ -138,7 +138,7 @@
 
 	<TD>
 
-	      <a href="#" onmousedown="document.forms[0].basicForm:link.value='basicForm:link'; document.forms[0].submit()" class="hyperlinkClass">link text</a><input type="hidden" name="basicForm:link" />
+	      <a href="#" onmousedown="document.forms[0]['basicForm:link'].value='basicForm:link'; document.forms[0].submit()" class="hyperlinkClass">link text</a><input type="hidden" name="basicForm:link" />
 
 	</TD>
 
@@ -148,25 +148,25 @@
 
 	<TD>
 
-	      <a href="#" onmousedown="document.forms[0].basicForm:imageLink.value='basicForm:imageLink'; document.forms[0].submit()"><img src="duke.gif"></a><input type="hidden" name="basicForm:imageLink" />
+	      <a href="#" onmousedown="document.forms[0]['basicForm:imageLink'].value='basicForm:imageLink'; document.forms[0].submit()"><img src="duke.gif"></a><input type="hidden" name="basicForm:imageLink" />
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=48F0E0FD42F7CB76F17CB4CF1D9111D9" usemap="#map1" ismap /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=E9ACB00A867AE39715C6D7A4D9068DF3" usemap="#map1" ismap /> 
         </TD>
 
       </TR>
 
       <TR>
         <TD>
-            <a href="#" onmousedown="document.forms[0].basicForm:commandLink.value='basicForm:commandLink'; document.forms[0].submit()" class="hyperlinkClass">link text</a><input type="hidden" name="basicForm:commandLink" />
+            <a href="#" onmousedown="document.forms[0]['basicForm:commandLink'].value='basicForm:commandLink'; document.forms[0].submit()" class="hyperlinkClass">link text</a><input type="hidden" name="basicForm:commandLink" />
        </TD>
       </TR>
 
       <TR>
         <TD>
-            <a href="#" onmousedown="document.forms[0].basicForm:commandParamLink.value='basicForm:commandParamLink'; document.forms[0].submit()" class="hyperlinkClass"
+            <a href="#" onmousedown="document.forms[0]['basicForm:commandParamLink'].value='basicForm:commandParamLink'; document.forms[0].submit()" class="hyperlinkClass"
               
               
             >link text</a><input type="hidden" name="basicForm:commandParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />
@@ -175,13 +175,13 @@
 
       <TR>
         <TD>
-            <a href="#" onmousedown="document.forms[0].basicForm:hrefLink.value='basicForm:hrefLink'; document.forms[0].submit()"><img src="duke.gif"></a><input type="hidden" name="basicForm:hrefLink" />
+            <a href="#" onmousedown="document.forms[0]['basicForm:hrefLink'].value='basicForm:hrefLink'; document.forms[0].submit()"><img src="duke.gif"></a><input type="hidden" name="basicForm:hrefLink" />
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a href="#" onmousedown="document.forms[0].basicForm:hrefParamLink.value='basicForm:hrefParamLink'; document.forms[0].submit()"
+            <a href="#" onmousedown="document.forms[0]['basicForm:hrefParamLink'].value='basicForm:hrefParamLink'; document.forms[0].submit()"
               
               
             ><img src="duke.gif"></a><input type="hidden" name="basicForm:hrefParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />

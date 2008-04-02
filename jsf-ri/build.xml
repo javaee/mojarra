@@ -272,6 +272,11 @@
         <ant antfile="build-tests.xml" target="execute.cactus.tests"/>
     </target>
 
+    <target name="force.run.cactus.test" depends="compile.test,jars"
+     description="Run unit tests requiring cactus, forcing reinstall">
+        <ant antfile="build-tests.xml" target="force.execute.cactus.tests"/>
+    </target>
+
     <target name="passthru">
         <ant antfile="build-tests.xml" target="safe.remove"/>
     </target>
