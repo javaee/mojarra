@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.44 2003/05/05 17:49:10 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.45 2003/05/13 22:55:21 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.44 2003/05/05 17:49:10 jvisvanathan Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.45 2003/05/13 22:55:21 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -480,7 +480,7 @@ public class HtmlBasicRenderKit extends RenderKit
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-//FIXME
+//PENDING(roger):
 //	String componentType = component.getComponentType();
 //	return this.getRendererTypes(componentType);
         return null;

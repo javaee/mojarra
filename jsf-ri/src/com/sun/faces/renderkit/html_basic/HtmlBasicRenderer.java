@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.39 2003/05/03 05:53:01 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.40 2003/05/13 22:55:22 eburns Exp $
  */
 
 /*
@@ -127,7 +127,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     //
     // Methods From Renderer
-    // FIXME: what if named attriubte doesn't exist? should exception be thrown?
+    // PENDING: what if named attriubte doesn't exist? should exception be thrown?
     //
 /*
     public AttributeDescriptor getAttributeDescriptor(

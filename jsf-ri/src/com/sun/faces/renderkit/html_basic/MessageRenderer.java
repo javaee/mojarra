@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.18 2003/04/29 20:51:55 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.19 2003/05/13 22:55:23 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.18 2003/04/29 20:51:55 eburns Exp $
+ * @version $Id: MessageRenderer.java,v 1.19 2003/05/13 22:55:23 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,7 +133,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
             }
         }
 
-/* FIXME
+/* PENDING(rogerk):
         if ( supportsComponentType(component)) {
             output = (UIOutput) component;
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererAttributes.java,v 1.8 2003/04/29 20:52:35 eburns Exp $
+ * $Id: TestRendererAttributes.java,v 1.9 2003/05/13 22:55:25 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererAttributes.java,v 1.8 2003/04/29 20:52:35 eburns Exp $
+ * @version $Id: TestRendererAttributes.java,v 1.9 2003/05/13 22:55:25 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -86,7 +86,7 @@ public static final String CORRECT_OUTPUT_FILENAME =
 //
 
     public void testGetAttributeNames() {
-/* FIXME
+/* PENDING
 	int result = -1;
 	final PrintStream out;
 	File file = null;
