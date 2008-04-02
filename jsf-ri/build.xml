@@ -221,7 +221,7 @@
 
   <target name="prepare.dist" depends="jars">
     <mkdir dir="${dist.home}"/>
-    <mkdir dir="${dist.home}/example"/>
+    <mkdir dir="${dist.home}/samples"/>
 
     <echo> Handle the top level files </echo>
     <copy file="README" todir="${dist.home}"/>
@@ -229,7 +229,7 @@
     <copy file="LICENSE.html" todir="${dist.home}"/>
     <copy file="LICENSE-APACHE.txt" todir="${dist.home}"/>
     <copy file="LICENSE-MOZILLA.txt" todir="${dist.home}"/>
-    <copy file="${jsf.api.dtd}" todir="${dist.home}"/>
+    <copy file="${jsf.api.dtd}" todir="${dist.home}/lib"/>
 
     <echo> Build the API Javadocs </echo>
     <ant dir="${jsf.api.home}" 
@@ -267,17 +267,17 @@
     <echo> Build the demos from the jsf-demo repository </echo>
     <ant dir="${jsf.demo.home}" target="build-all"
          antfile="${jsf.demo.home}/build.xml" />
-    <echo> copy the example war files to the zip area </echo>
-    <copy todir="${dist.home}/example" 
-          file="${jsf.demo.home}/components/build/components.war"/>
-    <copy todir="${dist.home}/example"
-          file="${jsf.demo.home}/cardemo/build/cardemo.war"/>
-    <copy todir="${dist.home}/example" 
-          file="${jsf.demo.home}/guessNumber/build/guessNumber.war"/>
-    <copy todir="${dist.home}/example" 
-          file="${jsf.demo.home}/nonjsp/dist/nonjsp.war"/> 
+    <echo> copy the sample war files to the zip area </echo>
+    <copy todir="${dist.home}/samples" 
+          file="${jsf.demo.home}/components/build/jsf-components.war"/>
+    <copy todir="${dist.home}/samples"
+          file="${jsf.demo.home}/cardemo/build/jsf-cardemo.war"/>
+    <copy todir="${dist.home}/samples" 
+          file="${jsf.demo.home}/guessNumber/build/jsf-guessNumber.war"/>
+    <copy todir="${dist.home}/samples" 
+          file="${jsf.demo.home}/nonjsp/dist/jsf-nonjsp.war"/> 
     <echo> copy the demo-components.jar </echo>
-    <copy todir="${dist.home}/example" 
+    <copy todir="${dist.home}/samples" 
      file="${jsf.demo.home}/components/build/demo/WEB-INF/lib/demo-components.jar"/>
   </target>
 
@@ -299,21 +299,21 @@
   </target>
 
   <target name="copyDemoSource">
-    <echo> copy the necessary examples </echo>
+    <echo> copy the necessary samples </echo>
 
-    <copy todir="${dist.home}/example/guessNumber" includeEmptyDirs="false">
+    <copy todir="${dist.home}/samples/guessNumber" includeEmptyDirs="false">
       <fileset dir="${jsf.demo.home}/guessNumber"/>
     </copy>
 
-    <copy todir="${dist.home}/example/cardemo" includeEmptyDirs="false">
+    <copy todir="${dist.home}/samples/cardemo" includeEmptyDirs="false">
       <fileset dir="${jsf.demo.home}/cardemo"/>
     </copy>
 
-    <copy todir="${dist.home}/example/nonjsp" includeEmptyDirs="false">
+    <copy todir="${dist.home}/samples/nonjsp" includeEmptyDirs="false">
       <fileset dir="${jsf.demo.home}/nonjsp"/>
     </copy>
 
-    <copy todir="${dist.home}/example/components" includeEmptyDirs="false">
+    <copy todir="${dist.home}/samples/components" includeEmptyDirs="false">
       <fileset dir="${jsf.demo.home}/components"/>
     </copy>
 
@@ -483,11 +483,11 @@
        ===================================================================
   -->
   <target name="wspack.jars" depends="jars">
-    <mkdir dir="${tomcat.home}/jsf-${version}"/>
-    <mkdir dir="${tomcat.home}/jsf-${version}/lib"/>
+    <mkdir dir="${tomcat.home}/jsf"/>
+    <mkdir dir="${tomcat.home}/jsf/lib"/>
 
-    <copy file="${build.home}/lib/${name}.jar" todir="${tomcat.home}/jsf-${version}/lib"/>
-    <copy file="${jsf.api.jar}" todir="${tomcat.home}/jsf-${version}/lib"/>
+    <copy file="${build.home}/lib/${name}.jar" todir="${tomcat.home}/jsf/lib"/>
+    <copy file="${jsf.api.jar}" todir="${tomcat.home}/jsf/lib"/>
 
   </target>
 
