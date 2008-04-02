@@ -62,8 +62,6 @@ import java.util.Enumeration;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.el.ExpressionEvaluator;
-import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import javax.servlet.ServletContext;
@@ -330,10 +328,5 @@ public class PageContextImpl
   }
 
   //-------------------------------------
-  
-  // Since JSP 2.0
-  public void include(java.lang.String relativeUrlPath, boolean flush) {}
-  public ExpressionEvaluator getExpressionEvaluator() { return null; }
-  public VariableResolver getVariableResolver() { return null; }  
   
 }
