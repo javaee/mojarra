@@ -1,5 +1,5 @@
 /*
- * $Id: BaseRenderer.java,v 1.7 2003/09/25 17:48:04 horwat Exp $
+ * $Id: BaseRenderer.java,v 1.8 2003/10/07 14:31:05 eburns Exp $
  */
 
 /*
@@ -60,70 +60,8 @@ public abstract class BaseRenderer extends Renderer {
 
     public static final String BUNDLE_ATTR = "com.sun.faces.bundle";
 
-    /**
-     * <p>Return the client-side id for the argument component.</p>
-     *
-     * <p>The purpose of this method is to give Renderers a chance to
-     * define, in a rendering specific way, the client side id for this
-     * component.  The client side id should be derived from the
-     * component id, if present.  </p>
-     *
-     * <p>Look up this component's "clientId" attribute.  If non-null,
-     * return it.  Get the component id for the argument
-     * <code>UIComponent</code>.  If null, generate one using the closest
-     * naming container that is an ancestor of this UIComponent, then set
-     * the generated id as the componentId of this UIComponent.  Prepend
-     * to the component id the component ids of each naming container up
-     * to, but not including, the root, separated by the
-     * UIComponent.SEPARATOR_CHAR.  In all cases, save the result as the
-     * value of the "clientId" attribute.</p>
-     *
-     * <p>This method must not return null.</p>
-     */ 
-    public String getClientId(FacesContext context, UIComponent component){
-	String clientId = null;
-	NamingContainer closestContainer = null;
-	UIComponent containerComponent = component;
-
-        // Search for an ancestor that is a naming container
-        while (null != (containerComponent = 
-                        containerComponent.getParent())) {
-            if (containerComponent instanceof NamingContainer) {
-                closestContainer = (NamingContainer) containerComponent;
-                break;
-            }
-        }
-
-        // If none is found, see if this is a naming container
-        if (null == closestContainer && component instanceof NamingContainer) {
-            closestContainer = (NamingContainer) component;
-        }
-
-        if (null != closestContainer) {
-
-            // If there is no componentId, generate one and store it
-            if (component.getId() == null) {
-                // Don't call setComponentId() because it checks for
-                // uniqueness.  No need.
-                clientId = closestContainer.generateClientId();
-            } else {
-                clientId = component.getId();
-            }
-
-            // build the client side id
-            containerComponent = (UIComponent) closestContainer;
-
-            // If this is the root naming container, break
-            if (null != containerComponent.getParent()) {
-                clientId = containerComponent.getClientId(context) +
-                    UIComponent.SEPARATOR_CHAR + clientId;
-            }
-        }
-
-        if (null == clientId) {
-	    throw new NullPointerException();
-	}
-	return (clientId);
+    public String convertClientId(FacesContext context, String clientId) {          
+	return clientId;
     }
 
     protected String getKeyAndLookupInBundle(FacesContext context,

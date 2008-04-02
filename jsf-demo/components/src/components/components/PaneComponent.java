@@ -1,5 +1,5 @@
 /*
- * $Id: PaneComponent.java,v 1.8 2003/09/26 20:02:00 horwat Exp $
+ * $Id: PaneComponent.java,v 1.9 2003/10/07 14:31:04 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.base.UIComponentBase;
+import javax.faces.component.UIComponentBase;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;

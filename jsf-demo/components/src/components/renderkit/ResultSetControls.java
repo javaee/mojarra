@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.15 2003/09/26 20:02:00 horwat Exp $
+ * $Id: ResultSetControls.java,v 1.16 2003/10/07 14:31:06 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import javax.faces.component.ValueHolder;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIComponent;
-import javax.faces.component.base.UIInputBase;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -65,14 +65,14 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.15 2003/09/26 20:02:00 horwat Exp $
+ * @version $Id: ResultSetControls.java,v 1.16 2003/10/07 14:31:06 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class ResultSetControls extends UIInputBase {
+public class ResultSetControls extends UIInput {
 
 //
 // Protected Constants

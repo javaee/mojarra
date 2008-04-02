@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.9 2003/09/25 17:48:04 horwat Exp $
+ * $Id: MenuBarRenderer.java,v 1.10 2003/10/07 14:31:06 eburns Exp $
  */
 
 /*
@@ -100,7 +100,7 @@ public class MenuBarRenderer extends BaseRenderer {
             if (log.isTraceEnabled()) {
                 log.trace("Adding event " + event);
             }
-            context.addFacesEvent(event);
+            component.queueEvent(event);
         }    
     }
 
@@ -306,7 +306,7 @@ public class MenuBarRenderer extends BaseRenderer {
         // want to go next (target).
         action = action.substring(URL_PREFIX.length());
         sb.append(action);
-        return (context.getExternalContext().encodeURL(sb.toString()));
+        return (context.getExternalContext().encodeActionURL(sb.toString()));
     }
 
 

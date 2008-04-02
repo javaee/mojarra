@@ -40,7 +40,7 @@ package components.components;
 
 
 import java.io.IOException;
-import javax.faces.component.base.UIComponentBase;
+import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 
 
@@ -94,8 +94,7 @@ public class MapComponent extends UIComponentBase {
                    (previous.equals(current))) {
             return;
         } else {
-            FacesContext.getCurrentInstance().addFacesEvent
-                (new AreaSelectedEvent(this));
+            this.queueEvent(new AreaSelectedEvent(this));
         }
 
     }

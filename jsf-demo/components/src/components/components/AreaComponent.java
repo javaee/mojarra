@@ -41,7 +41,7 @@ package components.components;
 
 import components.model.ImageArea;
 import java.io.IOException;
-import javax.faces.component.base.UIOutputBase;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 
 
@@ -56,7 +56,7 @@ import javax.faces.context.FacesContext;
  * property.</p>
  */
 
-public class AreaComponent extends UIOutputBase {
+public class AreaComponent extends UIOutput {
 
 
     // ------------------------------------------------------ Instance Variables

@@ -1,5 +1,5 @@
 /*
- * $Id: GraphComponent.java,v 1.7 2003/09/16 00:30:34 jvisvanathan Exp $
+ * $Id: GraphComponent.java,v 1.8 2003/10/07 14:31:03 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import javax.faces.FacesException;
-import javax.faces.component.base.UIOutputBase;
+import javax.faces.component.UIOutput;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
@@ -69,7 +69,7 @@ import org.apache.commons.logging.LogFactory;
  * state of the specified {@link Node} in the {@link Graph}.
  */
 
-public class GraphComponent extends UIOutputBase {
+public class GraphComponent extends UIOutput {
 
 
     private static Log log = LogFactory.getLog(GraphComponent.class);
