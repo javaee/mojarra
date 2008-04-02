@@ -236,6 +236,12 @@ must exist.  This is necessary for the MessageFactory class.
       jsf-tools is ${jsf-tools.dir}
     </echo>
 
+    <copy todir="${build.home}">
+        <fileset dir="${jsf-tools.dir}/conf">
+            <include name="TAG-*"/>
+        </fileset>
+    </copy>
+
     <ant dir="${jsf-tools.dir}" inheritall="false" target="clean.generated.taglib"/>
 
     <ant dir="${jsf-tools.dir}" inheritall="false" target="generate.taglib"/>

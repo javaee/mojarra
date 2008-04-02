@@ -179,64 +179,32 @@ necessary to generate required classes.
                       if="standard-html-renderkit-impl"
                   unless="skip.generation">
 
-    <java           fork="yes"
-               classname="com.sun.faces.generate.HtmlComponentGenerator">
-
-
-      <classpath   refid="compile.classpath"/>
-      <classpath   refid="run.classpath"/>
-      
-      <sysproperty   key="java.endorsed.dirs" value="${dom.jar.dir}"/>
-      <sysproperty   key="org.apache.commons.logging.Log" value="${log.impl}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.defaultlog"
-                   value="info"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.com.sun.faces"
-                   value="${log.level}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester"
-                   value="${log.digester}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester.sax"
-                   value="${log.sax}"/>
-
-      <arg         value="--config"/>
-      <arg         value="${build.temp}/standard-html-renderkit.xml"/>
-      <arg         value="--dir"/>
-      <arg         value="${build.generate}"/>
-      <arg         value="--copyright"/>
-      <arg         value="${basedir}/COPYRIGHT"/>
-
-    </java>
+    <generateComponents generatorConfig="${basedir}/conf/HtmlBasicTaglib12.properties"
+                        facesConfig="${build.temp}/standard-html-renderkit.xml">
+        <classpath refid="run.classpath" />
+    </generateComponents>
 
   </target>
 
-
-  <target    name="generate.taglib" 
+  <target name="generate.taglib"
           depends="tools"
-               if="standard-html-renderkit-impl" 
-           unless="skip.taglib.generation">
+          if="standard-html-renderkit-impl"
+      unless="skip.taglib.generation">
 
-    <generateTaglib inputfile="${build.temp}/standard-html-renderkit.xml" 
-                    tlddir="${build.generate.tld}"
-                    destdir="${build.generate}" fork="yes"
-                    copyright="${basedir}/COPYRIGHT"
-                    tagdef="${basedir}/TAG-DEF">
-      <sysproperty   key="java.endorsed.dirs" value="${dom.jar.dir}"/> 
-      <sysproperty   key="org.apache.commons.logging.Log" value="${log.impl}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.defaultlog"
-                   value="info"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.com.sun.faces"
-                   value="${log.level}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester"
-                   value="${log.digester}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester.sax"
-                   value="${log.sax}"/>
-      <!-- <jvmarg line="${debug.jvm.args}"/> --> 
-      <classpath refid="run.classpath" />
-
+    <copy todir="${build.dir}">
+        <fileset dir="${basedir}/conf">
+            <include name="TAG-*"/>
+        </fileset>
+    </copy>
+  
+    <generateTaglib generatorConfig="${basedir}/conf/HtmlBasicTaglib12.properties"
+                    facesConfig="${build.temp}/standard-html-renderkit.xml">
+        <classpath refid="run.classpath" />
     </generateTaglib>
 
   </target>
 
-  <target name="tools" depends="prepare.generate" 
+  <target name="tools" depends="prepare.generate"
                        if="standard-html-renderkit-impl">
 
     <javac srcdir="${src.dir}"
@@ -252,7 +220,19 @@ necessary to generate required classes.
 
     <taskdef name="generateTaglib" classname="com.sun.faces.ant.TaglibGenTask">
         <classpath>
-          <pathelement location="${build.classes}" />
+            <pathelement location="${build.classes}"/>
+        </classpath>
+    </taskdef>
+
+    <taskdef name="generateComponents" classname="com.sun.faces.ant.ComponentGenTask">
+        <classpath>
+            <pathelement location="${build.classes}"/>
+        </classpath>
+    </taskdef>
+
+    <taskdef name="generateRenderkitDocs" classname="com.sun.faces.ant.RenderkitDocGenTask">
+        <classpath>
+            <pathelement location="${build.classes}"/>
         </classpath>
     </taskdef>
 
@@ -382,33 +362,12 @@ necessary to generate required classes.
                       if="standard-html-renderkit-impl"
                   unless="skip.generation">
 
-    <java           fork="yes"
-        classname="com.sun.faces.generate.RenderKitSpecificationGenerator">
-      <jvmarg line="${debug.jvm.args}"/>
-      <classpath   refid="compile.classpath"/>
-      <classpath   refid="run.classpath"/>
-      <sysproperty   key="java.endorsed.dirs" value="${dom.jar.dir}"/> 
-      <sysproperty   key="org.apache.commons.logging.Log" value="${log.impl}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.defaultlog"
-                   value="info"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.com.sun.faces"
-                   value="${log.level}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester"
-                   value="${log.digester}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester.sax"
-                   value="${log.sax}"/>
-
-      <arg         value="--config"/>
-      <arg         value="${build.temp}/standard-html-renderkit.xml"/>
-      <arg         value="--dir"/>
-      <arg         value="${build.generate.facesdoc}"/>      
-      <arg         value="--copyright"/>
-      <arg         value="${basedir}/COPYRIGHT"/>
-
-    </java>
+      <generateRenderkitDocs generatorConfig="${basedir}/conf/HtmlBasicTaglib12.properties"
+                        facesConfig="${build.temp}/standard-html-renderkit.xml">
+        <classpath refid="run.classpath" />
+      </generateRenderkitDocs>
 
     <touch file="${build.generate}/last-generation"/>
-
 
   </target>
 

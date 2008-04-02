@@ -1,0 +1,67 @@
+    <tag>
+        <description>
+            <![CDATA[<p>Renders a UIComponent that represents a single column of data within a parent <code>UIData</code> component.</p>]]>
+        </description>
+        <name>
+            column
+        </name>
+        <tag-class>
+            com.sun.faces.taglib.html_basic.ColumnTag
+        </tag-class>
+        <tei-class>
+            com.sun.faces.taglib.FacesTagExtraInfo
+        </tei-class>
+        <body-content>
+            JSP
+        </body-content>
+        <attribute>
+            <description>
+                Flag indicating whether or not this component should be rendered
+                (during Render Response Phase), or processed on any subsequent
+                form submit.
+            </description>
+            <name>
+                rendered
+            </name>
+            <required>
+                false
+            </required>
+            <rtexprvalue>
+                false
+            </rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                The value binding expression linking this component to a property in a backing bean 
+            </description>
+            <name>
+                binding
+            </name>
+            <required>
+                false
+            </required>
+            <rtexprvalue>
+                false
+            </rtexprvalue>
+            <type>
+                java.lang.String
+            </type>
+        </attribute>
+        <attribute>
+            <description>
+                The component identifier for the associated component
+            </description>
+            <name>
+                id
+            </name>
+            <required>
+                false
+            </required>
+            <rtexprvalue>
+                false
+            </rtexprvalue>
+            <type>
+                java.lang.String
+            </type>
+        </attribute>
+    </tag>

@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractGenerator.java,v 1.7 2004/10/29 00:56:39 rlubke Exp $
+ * $Id: AbstractGenerator.java,v 1.8 2004/12/13 19:07:48 rlubke Exp $
  */
 
 /*
@@ -10,23 +10,14 @@
 package com.sun.faces.generate;
 
 
-import com.sun.faces.config.DigesterFactory;
-import com.sun.faces.config.beans.FacesConfigBean;
-import com.sun.faces.config.rules.FacesConfigRuleSet;
-import org.apache.commons.digester.Digester;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 
 /**
@@ -38,115 +29,115 @@ import java.util.Set;
  * </ul>
  */
 
-public abstract class AbstractGenerator {
+public abstract class AbstractGenerator implements Generator {
 
 
     // -------------------------------------------------------- Static Variables
 
 
     // The set of default values for primitives, keyed by the primitive type
-    protected static Map defaults = new HashMap();
+    protected static final Map TYPE_DEFAULTS = new HashMap();
     static {
-        defaults.put("boolean", "false");
-        defaults.put("byte", "Byte.MIN_VALUE");
-        defaults.put("char", "Character.MIN_VALUE");
-        defaults.put("double", "Double.MIN_VALUE");
-        defaults.put("float", "Float.MIN_VALUE");
-        defaults.put("int", "Integer.MIN_VALUE");
-        defaults.put("long", "Long.MIN_VALUE");
-        defaults.put("short", "Short.MIN_VALUE");
+        TYPE_DEFAULTS.put("boolean", "false");
+        TYPE_DEFAULTS.put("byte", "Byte.MIN_VALUE");
+        TYPE_DEFAULTS.put("char", "Character.MIN_VALUE");
+        TYPE_DEFAULTS.put("double", "Double.MIN_VALUE");
+        TYPE_DEFAULTS.put("float", "Float.MIN_VALUE");
+        TYPE_DEFAULTS.put("int", "Integer.MIN_VALUE");
+        TYPE_DEFAULTS.put("long", "Long.MIN_VALUE");
+        TYPE_DEFAULTS.put("short", "Short.MIN_VALUE");
     }
 
 
     // The set of reserved keywords in the Java language
-    protected static Set keywords = new HashSet();
+    protected static final Set JAVA_KEYWORDS = new HashSet();
     static {
-        keywords.add("abstract");
-        keywords.add("boolean");
-        keywords.add("break");
-        keywords.add("byte");
-        keywords.add("case");
-        keywords.add("cast");
-        keywords.add("catch");
-        keywords.add("char");
-        keywords.add("class");
-        keywords.add("const");
-        keywords.add("continue");
-        keywords.add("default");
-        keywords.add("do");
-        keywords.add("double");
-        keywords.add("else");
-        keywords.add("enum");
-        keywords.add("extends");
-        keywords.add("final");
-        keywords.add("finally");
-        keywords.add("float");
-        keywords.add("for");
-        keywords.add("future");
-        keywords.add("generic");
-        keywords.add("goto");
-        keywords.add("if");
-        keywords.add("implements");
-        keywords.add("import");
-        keywords.add("inner");
-        keywords.add("instanceof");
-        keywords.add("int");
-        keywords.add("interface");
-        keywords.add("long");
-        keywords.add("native");
-        keywords.add("new");
-        keywords.add("null");
-        keywords.add("operator");
-        keywords.add("outer");
-        keywords.add("package");
-        keywords.add("private");
-        keywords.add("protected");
-        keywords.add("public");
-        keywords.add("rest");
-        keywords.add("return");
-        keywords.add("short");
-        keywords.add("static");
-        keywords.add("strictfp");
-        keywords.add("super");
-        keywords.add("switch");
-        keywords.add("synchronized");
-        keywords.add("this");
-        keywords.add("throw");
-        keywords.add("throws");
-        keywords.add("transient");
-        keywords.add("try");
-        keywords.add("var");
-        keywords.add("void");
-        keywords.add("volatile");
-        keywords.add("while");
+        JAVA_KEYWORDS.add("abstract");
+        JAVA_KEYWORDS.add("boolean");
+        JAVA_KEYWORDS.add("break");
+        JAVA_KEYWORDS.add("byte");
+        JAVA_KEYWORDS.add("case");
+        JAVA_KEYWORDS.add("cast");
+        JAVA_KEYWORDS.add("catch");
+        JAVA_KEYWORDS.add("char");
+        JAVA_KEYWORDS.add("class");
+        JAVA_KEYWORDS.add("const");
+        JAVA_KEYWORDS.add("continue");
+        JAVA_KEYWORDS.add("default");
+        JAVA_KEYWORDS.add("do");
+        JAVA_KEYWORDS.add("double");
+        JAVA_KEYWORDS.add("else");
+        JAVA_KEYWORDS.add("enum");
+        JAVA_KEYWORDS.add("extends");
+        JAVA_KEYWORDS.add("final");
+        JAVA_KEYWORDS.add("finally");
+        JAVA_KEYWORDS.add("float");
+        JAVA_KEYWORDS.add("for");
+        JAVA_KEYWORDS.add("future");
+        JAVA_KEYWORDS.add("generic");
+        JAVA_KEYWORDS.add("goto");
+        JAVA_KEYWORDS.add("if");
+        JAVA_KEYWORDS.add("implements");
+        JAVA_KEYWORDS.add("import");
+        JAVA_KEYWORDS.add("inner");
+        JAVA_KEYWORDS.add("instanceof");
+        JAVA_KEYWORDS.add("int");
+        JAVA_KEYWORDS.add("interface");
+        JAVA_KEYWORDS.add("long");
+        JAVA_KEYWORDS.add("native");
+        JAVA_KEYWORDS.add("new");
+        JAVA_KEYWORDS.add("null");
+        JAVA_KEYWORDS.add("operator");
+        JAVA_KEYWORDS.add("outer");
+        JAVA_KEYWORDS.add("package");
+        JAVA_KEYWORDS.add("private");
+        JAVA_KEYWORDS.add("protected");
+        JAVA_KEYWORDS.add("public");
+        JAVA_KEYWORDS.add("rest");
+        JAVA_KEYWORDS.add("return");
+        JAVA_KEYWORDS.add("short");
+        JAVA_KEYWORDS.add("static");
+        JAVA_KEYWORDS.add("strictfp");
+        JAVA_KEYWORDS.add("super");
+        JAVA_KEYWORDS.add("switch");
+        JAVA_KEYWORDS.add("synchronized");
+        JAVA_KEYWORDS.add("this");
+        JAVA_KEYWORDS.add("throw");
+        JAVA_KEYWORDS.add("throws");
+        JAVA_KEYWORDS.add("transient");
+        JAVA_KEYWORDS.add("try");
+        JAVA_KEYWORDS.add("var");
+        JAVA_KEYWORDS.add("void");
+        JAVA_KEYWORDS.add("volatile");
+        JAVA_KEYWORDS.add("while");
     }
 
 
     // The set of unwrapper methods for primitives, keyed by the primitive type
-    protected static Map unwrappers = new HashMap();
+    protected static Map UNWRAPPERS = new HashMap();
     static {
-        unwrappers.put("boolean", "booleanValue");
-        unwrappers.put("byte", "byteValue");
-        unwrappers.put("char", "charValue");
-        unwrappers.put("double", "doubleValue");
-        unwrappers.put("float", "floatValue");
-        unwrappers.put("int", "intValue");
-        unwrappers.put("long", "longValue");
-        unwrappers.put("short", "shortValue");
+        UNWRAPPERS.put("boolean", "booleanValue");
+        UNWRAPPERS.put("byte", "byteValue");
+        UNWRAPPERS.put("char", "charValue");
+        UNWRAPPERS.put("double", "doubleValue");
+        UNWRAPPERS.put("float", "floatValue");
+        UNWRAPPERS.put("int", "intValue");
+        UNWRAPPERS.put("long", "longValue");
+        UNWRAPPERS.put("short", "shortValue");
     }
 
 
     // The set of wrapper classes for primitives, keyed by the primitive type
-    protected static Map wrappers = new HashMap();
+    protected static Map WRAPPERS = new HashMap();
     static {
-        wrappers.put("boolean", "Boolean");
-        wrappers.put("byte", "Byte");
-        wrappers.put("char", "Character");
-        wrappers.put("double", "Double");
-        wrappers.put("float", "Float");
-        wrappers.put("int", "Integer");
-        wrappers.put("long", "Long");
-        wrappers.put("short", "Short");
+        WRAPPERS.put("boolean", "Boolean");
+        WRAPPERS.put("byte", "Byte");
+        WRAPPERS.put("char", "Character");
+        WRAPPERS.put("double", "Double");
+        WRAPPERS.put("float", "Float");
+        WRAPPERS.put("int", "Integer");
+        WRAPPERS.put("long", "Long");
+        WRAPPERS.put("short", "Short");
     }
 
 
@@ -162,66 +153,7 @@ public abstract class AbstractGenerator {
 
         return (Character.toUpperCase(name.charAt(0)) + name.substring(1));
 
-    }
-
-
-    /**
-     * <p>Render the specified description text to the specified writer,
-     * prefixing each line by 'indent' spaces, an asterisk ("*"), and another
-     * space.  This rendering is appropriate for the creation of
-     * JavaDoc comments on classes, variables, and methods.</p>
-     *
-     * @param desc Description text to be rendered
-     * @param writer Writer to which output should be sent
-     * @param indent Number of leading space for each line
-     */
-    protected static void description(String desc, Writer writer, int indent)
-        throws Exception {
-
-        for (int i = 0; i < indent; i++) {
-            writer.write(" ");
-        }
-        writer.write("* ");
-        int n = desc.length();
-        for (int i = 0; i < n; i++) {
-            char ch = desc.charAt(i);
-            if (ch == '\r') {
-                continue;
-            }
-            writer.write(ch);
-            if (ch == '\n') {
-                for (int j = 0; j < indent; j++) {
-                    writer.write(" ");
-                }
-                writer.write("* ");
-            }
-        }
-        writer.write("\n");
-
-    }
-
-
-    /**
-     * <p>Configure and return a <code>Digester</code> instance suitable for
-     * use in the environment specified by our parameter flags.</p>
-     *
-     * @param design Include rules suitable for design time use in a tool
-     * @param generate Include rules suitable for generating component,
-     *  renderer, and tag classes
-     * @param runtime Include rules suitable for runtime execution
-     */
-    protected static Digester digester(boolean design,
-                                       boolean generate, boolean runtime) {
-
-        Digester digester = DigesterFactory.newInstance(true).createDigester();
-
-        // Configure parsing rules
-        digester.addRuleSet(new FacesConfigRuleSet(design, generate, runtime));
-
-        // Configure preregistered entities
-
-        return (digester);
-    }
+    }    
 
 
     /**
@@ -232,7 +164,7 @@ public abstract class AbstractGenerator {
      */
     protected static String mangle(String name) {
 
-        if (keywords.contains(name)) {
+        if (JAVA_KEYWORDS.contains(name)) {
             return ('_' + name);
         } else {
             return (name);
@@ -249,7 +181,7 @@ public abstract class AbstractGenerator {
      * @exception IllegalArgumentException if an option flag does not start
      *  with a '-' or is missing a corresponding value
      */
-    protected static Map options(String args[]) {
+    protected static Map options(String[] args) {
 
         Map options = new HashMap();
         int i = 0;
@@ -270,53 +202,13 @@ public abstract class AbstractGenerator {
 
 
     /**
-     * <p>Parse the specified configuration file, and return the root of the
-     * resulting tree of configuration beans.</p>
-     *
-     * @param digester Digester instance to use for parsing
-     * @param config Pathname of the configuration file to be parsed
-     *
-     * @exception IOException an input/output error occurred while parsing
-     * @exception SAXException an XML processing error occurred while parsing
-     */
-    protected static FacesConfigBean parse(Digester digester, String config)
-        throws IOException, SAXException {
-
-        File file = null;
-        FacesConfigBean fcb = null;
-        InputSource source = null;
-        InputStream stream = null;
-        try {
-            file = new File(config);
-            stream = new BufferedInputStream(new FileInputStream(file));
-            source = new InputSource(file.toURL().toString());
-            source.setByteStream(stream);
-            fcb = (FacesConfigBean) digester.parse(source);
-            stream.close();
-            stream = null;
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (Exception e) {
-                    ;
-                }
-                stream = null;
-            }
-        }
-        return (fcb);
-
-    }
-
-
-    /**
      * <p>Return <code>true</code> if the specified type is a primitive.</p>
      *
      * @param type Type to be tested
      */
     protected static boolean primitive(String type) {
 
-        return (wrappers.containsKey(type));
+        return (WRAPPERS.containsKey(type));
 
     }
 
@@ -340,4 +232,242 @@ public abstract class AbstractGenerator {
     }
 
 
+    // ----------------------------------------------------------- Inner Classes
+
+
+    protected static class CodeWriter extends BufferedWriter {
+
+        private final String TAB = "    ";
+        private final int TAB_LENGTH = TAB.length();
+
+        private Stack depth;
+        private String formatString = "";
+
+
+        // -------------------------------------------------------- Constructors
+
+        public CodeWriter(Writer writer) {
+
+            super(writer);
+            depth = new Stack();
+
+        } // END CodeWriter
+
+
+        public void indent() {
+
+            depth.push(TAB);
+            updateFormatString(depth.size());
+
+
+        } // END indent
+
+        public void outdent() {
+
+            depth.pop();
+            updateFormatString(depth.size());
+
+        } // END outdent
+
+
+        public void fwrite(String str) throws IOException {
+
+            super.write(formatString + str);
+
+        } // END write
+
+
+        public void writePackage(String packageName) throws IOException {
+
+            fwrite(new StringBuffer("package ").append(packageName).
+                append(";\n").toString());
+
+        } // END writePackage
+
+
+        public void writeImport(String fullyQualifiedClassName)
+        throws IOException {
+
+            fwrite(new StringBuffer("import ").
+                append(fullyQualifiedClassName).append(";\n").
+                toString());
+
+        } // END writeImport
+        
+       
+        public void writePublicClassDeclaration(String className,
+                                                String extendsClass,
+                                                String[] implementsClasses,
+                                                boolean isAbstract)
+        throws IOException {
+
+            StringBuffer sb = new StringBuffer("public");
+            if (isAbstract) {
+                sb.append(" abstract");
+            }
+            sb.append(" class ").append(className);
+
+            if (extendsClass != null && extendsClass.length() > 0) {
+                sb.append(" extends ").append(extendsClass);
+            }
+
+            if (implementsClasses != null && implementsClasses.length > 0) {
+                sb.append(" implements ");
+                for (int i = 0; i < implementsClasses.length; i++) {
+                    sb.append(implementsClasses[i]);
+                    if (i < implementsClasses.length) {
+                        sb.append(", ");
+                    }
+                }
+            }
+
+            sb.append(" {\n\n");
+            fwrite(sb.toString());
+
+        } // END writePublicClassDeclaration
+
+
+        public void writeJavadocComment(String str) throws IOException {
+
+            fwrite("/**\n");
+            String[] tokens = str.split("\r|\n|\t");
+            for (int i = 0; i < tokens.length; i++) {
+                fwrite(" * ");
+                write(tokens[i].trim());
+                write('\n');
+            }
+            fwrite(" */\n");
+
+        } // END writeJavadocComment
+
+
+        public void writeLineComment(String str) throws IOException {
+
+            String[] tokens = str.split("\r|\n|\t");
+            for (int i = 0; i < tokens.length; i++) {
+                fwrite("// ");
+                write(tokens[i].trim());
+                write('\n');
+            }           
+
+        } // END writeLineComment
+
+
+        public void writeBlockComment(String str) throws IOException {
+
+            fwrite("/*\n");
+            String[] tokens = str.split("\r|\n|\t");
+            for (int i = 0; i < tokens.length; i++) {
+                fwrite(" * ");
+                write(tokens[i].trim());
+                write('\n');
+            }
+            fwrite(" */\n");
+
+        } // END writeBlockComment
+
+
+        public void writeReadWriteProperty(String propertyName, String type,
+                                           String defaultValue)
+        throws IOException {
+
+            String iVarName = mangle(propertyName);
+            String methodName = capitalize(propertyName);
+            writeLineComment("PROPERTY: " + propertyName);
+            fwrite("private " + type + ' ' + iVarName +
+                (defaultValue == null ? ";" : " = " + defaultValue) + '\n');
+            fwrite("public void set" + methodName +
+                '(' + type + ' ' + iVarName + ") {\n");
+            indent();
+            fwrite("this." + iVarName + " = " + iVarName +
+                ";\n");
+            outdent();
+            fwrite("}\n\n");
+            fwrite("public " + type + "get" + methodName + "() {\n");
+            indent();
+            fwrite("return this." + iVarName + ";\n");
+            outdent();
+            fwrite("}\n\n");
+
+        } // END writeReadWriteProperty
+
+
+        public void writeReadWriteProperty(String propertyName, String type)
+        throws IOException {
+
+            writeReadWriteProperty(propertyName, type, null);
+
+        } // END writeReadWriteProperty
+
+
+        public void writeReadOnlyProperty(String propertyName, String type,
+                                          String defaultValue)
+        throws IOException {
+
+            writeLineComment("PROPERTY: " + propertyName);
+            String iVarName = mangle(propertyName);
+            fwrite("private " + type + ' ' + iVarName +
+                (defaultValue == null ? ";" : " = " + defaultValue) + '\n');
+            fwrite("public " + type + "get" + capitalize(propertyName) +
+                "() {\n");
+            indent();
+            fwrite("return this." + iVarName + ";\n");
+            outdent();
+            fwrite("}\n\n");
+
+        } // END writeReadOnlyProperty
+
+
+        public void writeReadOnlyProperty(String propertyName, String type)
+        throws IOException {
+
+            writeReadOnlyProperty(propertyName, type, null);
+
+        } // END writeReadOnlyProperty
+
+
+        public void writeWriteOnlyProperty(String propertyName, String type,
+                                           String defaultValue)
+        throws IOException {
+
+            writeLineComment("PROPERTY: " + propertyName);
+            String iVarName = mangle(propertyName);
+            fwrite("private " + type + ' ' + iVarName +
+                (defaultValue == null ? ";" : " = " + defaultValue) + '\n');
+            fwrite("public void set" + capitalize(propertyName) +
+                '(' + type + ' ' + iVarName + ") {\n");
+            indent();
+            fwrite("this." + iVarName + " = " + iVarName + ";\n");
+            outdent();
+            fwrite("}\n\n");
+
+        } // END writeWriteOnlyProperty
+
+
+        public void writeWriteOnlyProperty(String propertyName, String type)
+        throws IOException {
+
+            writeWriteOnlyProperty(propertyName, type, null);
+
+        } // END writeWriteOnlyProperty
+
+
+        // ----------------------------------------------------- Private Methods
+
+
+        private void updateFormatString(int numTabs) {
+
+            if (numTabs == 0) {
+                formatString = "";
+            } else {
+                StringBuffer sb = new StringBuffer(numTabs * TAB_LENGTH);
+                for (int i = 0; i < numTabs; i++) {
+                    sb.append(TAB);
+                }
+                formatString = sb.toString();
+            }
+
+        } // END updateFormatString
+
+    }
 }

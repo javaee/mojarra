@@ -1,5 +1,5 @@
 /*
- * $Id: TaglibGenTask.java,v 1.3 2004/12/13 19:07:48 rlubke Exp $
+ * $Id: ComponentGenTask.java,v 1.1 2004/12/13 19:07:48 rlubke Exp $
  */
 
 /*
@@ -12,12 +12,12 @@ package com.sun.faces.ant;
 import org.apache.tools.ant.BuildException;
 
 /**
- * <p>Task to create a JSP tags.</p>
+ * <p>Task to create HTML components.</p>
  */
-public class TaglibGenTask extends AbstractGeneratorTask {
+public class ComponentGenTask extends AbstractGeneratorTask {
 
     private static final String GENERATOR_CLASS =
-        "com.sun.faces.generate.HtmlTaglibGenerator";
+        "com.sun.faces.generate.HtmlComponentGenerator";
 
 
     // ---------------------------------------------------------- Public Methods
