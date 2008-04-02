@@ -1,5 +1,5 @@
 /*
- * $Id: CarActionListener.java,v 1.5 2003/04/15 17:08:56 jvisvanathan Exp $
+ * $Id: CarActionListener.java,v 1.6 2003/05/21 21:50:24 jvisvanathan Exp $
  */
 
 /*
@@ -69,7 +69,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CarActionListener.java,v 1.5 2003/04/15 17:08:56 jvisvanathan Exp $
+ * @version $Id: CarActionListener.java,v 1.6 2003/05/21 21:50:24 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -113,7 +113,7 @@ public class CarActionListener implements ActionListener {
     // This listener will process events after the phase specified.
     
     public PhaseId getPhaseId() {
-        return PhaseId.ANY_PHASE;
+        return PhaseId.APPLY_REQUEST_VALUES;
     }
 
     public void processAction(ActionEvent event) {
