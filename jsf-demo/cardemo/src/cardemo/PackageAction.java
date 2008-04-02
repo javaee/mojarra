@@ -1,5 +1,5 @@
 /*
- * $Id: PackageAction.java,v 1.5 2003/02/11 04:04:50 rajprem Exp $
+ * $Id: PackageAction.java,v 1.6 2003/02/11 08:55:08 rkitain Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: PackageAction.java,v 1.5 2003/02/11 04:04:50 rajprem Exp $
+ * @version $Id: PackageAction.java,v 1.6 2003/02/11 08:55:08 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,6 +94,21 @@ public class PackageAction implements ActionListener {
         } else if (actionCommand.equals("deluxe")) {
             processDeluxe(event, rb);
         } 
+        else if (actionCommand.equals("recalculate")) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            String currentPackage = (String)context.getModelValue(
+                "CurrentOptionServer.currentPackage");
+            if (currentPackage.equals("custom")) {
+                 processCustom(event, rb);
+            } else if (currentPackage.equals("standard")) {
+                processStandard(event, rb);
+            } else if (currentPackage.equals("performance")) {
+                processPerformance(event, rb);
+            } else if (currentPackage.equals("deluxe")) {
+                processDeluxe(event, rb);
+            }
+        }
+            
     }
 
     // helper method to set UI values for "custom" package selection
@@ -106,6 +121,9 @@ public class PackageAction implements ActionListener {
 //PENDING(rogerk) application data should be read from config file..
 
         FacesContext context = FacesContext.getCurrentInstance();
+
+        context.setModelValue("CurrentOptionServer.currentPackage", "custom");
+
         String[] engines = {"V4", "V6", "V8"};
         ArrayList engineOption = new ArrayList(engines.length);
         for (i=0; i<engines.length; i++) {
@@ -128,30 +146,37 @@ public class PackageAction implements ActionListener {
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.sunRoof", Boolean.FALSE);
 
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.securitySystem", Boolean.FALSE);
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.gps", Boolean.FALSE);
 
         foundComponent = component.findComponent("cruisecontrol");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.cruiseControl", Boolean.FALSE);
 
         foundComponent = component.findComponent("skirack");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.skiRack", Boolean.FALSE);
 
         foundComponent = component.findComponent("keylessentry");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.keylessEntry", Boolean.FALSE);
 
         foundComponent = component.findComponent("towPackage");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.towPackage", Boolean.FALSE);
 
         // Display locale specific button labels..
 
@@ -180,6 +205,8 @@ public class PackageAction implements ActionListener {
  
         FacesContext context = FacesContext.getCurrentInstance();
 
+        context.setModelValue("CurrentOptionServer.currentPackage", "standard");
+
         String[] engines = {"V4", "V6"};
         ArrayList engineOption = new ArrayList(engines.length);
         for (i=0; i<engines.length; i++) {
@@ -204,11 +231,15 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", Boolean.FALSE);
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.securitySystem", Boolean.FALSE);
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", Boolean.FALSE);
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.gps", Boolean.FALSE);
 
         foundComponent = component.findComponent("cruisecontrol");
         foundComponent.setAttribute("disabled", "true");
@@ -230,7 +261,9 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("towPackage");
         foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", Boolean.FALSE);
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.towPackage", Boolean.FALSE);
 
         // Display locale specific button labels..
 
@@ -259,6 +292,9 @@ public class PackageAction implements ActionListener {
 //PENDING(rogerk) application data should be read from config file..
 
         FacesContext context = FacesContext.getCurrentInstance();
+
+        context.setModelValue("CurrentOptionServer.currentPackage", "performance");
+
         String[] engines = {"V8"};
         ArrayList engineOption = new ArrayList();
         engineOption.add(new SelectItem(engines[0], engines[0], engines[0]));
@@ -280,11 +316,15 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", Boolean.FALSE);
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.securitySystem", Boolean.FALSE);
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", Boolean.FALSE);
         foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        context.setModelValue("CurrentOptionServer.gps", Boolean.FALSE);
 
         foundComponent = component.findComponent("cruisecontrol");
         foundComponent.setAttribute("disabled", "true");
@@ -336,6 +376,8 @@ public class PackageAction implements ActionListener {
         int i = 0;
 
         FacesContext context = FacesContext.getCurrentInstance();
+
+        context.setModelValue("CurrentOptionServer.currentPackage", "deluxe");
 
 //PENDING(rogerk) application data should be read from config file..
 

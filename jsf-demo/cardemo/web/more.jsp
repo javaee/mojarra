@@ -333,7 +333,9 @@
                 </TD>
                 <TD>
                 <P>
-                <h:command_button id="recalculate" key="recalculate" bundle="carDemoBundle" commandName="recalculate"/>
+                <h:command_button id="recalculate" key="recalculate" bundle="carDemoBundle" commandName="recalculate">
+                    <f:action_listener type="cardemo.PackageAction" />
+                </h:command_button>
                 <h:command_button id="buy2" key="buy" bundle="carDemoBundle" commandName="buy"/>
 
                 </TD>

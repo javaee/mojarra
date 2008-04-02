@@ -1,5 +1,5 @@
 /*
- * $Id: CurrentOptionServer.java,v 1.4 2003/02/11 04:04:50 rajprem Exp $
+ * $Id: CurrentOptionServer.java,v 1.5 2003/02/11 08:55:07 rkitain Exp $
  */
 /*
  *
@@ -108,6 +108,8 @@ public class CurrentOptionServer extends Object {
     protected boolean towPackageSelected = false;
     protected boolean gps = false;
     protected boolean gpsSelected = false;
+
+    protected String currentPackage = "custom"; //default 
     
     
     
@@ -505,5 +507,13 @@ public class CurrentOptionServer extends Object {
 
     public void setGpsSelected(boolean g) {
         gpsSelected = g;
+    }
+
+    public void setCurrentPackage(String pack) {
+        currentPackage = pack;
+    }
+
+    public String getCurrentPackage() {
+        return currentPackage;
     }
 }
