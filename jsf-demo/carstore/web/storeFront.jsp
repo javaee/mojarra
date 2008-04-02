@@ -65,6 +65,8 @@
 
     <h:form>
 
+        <h:graphic_image  url="/cardemo.jpg" /> 
+
         <h:panel_grid columns="2" 
                       footerClass="form-footer"
                       headerClass="form-header"

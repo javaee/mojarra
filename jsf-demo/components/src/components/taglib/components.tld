@@ -609,6 +609,14 @@
       <rtexprvalue>false</rtexprvalue>
       <type>java.lang.String</type>
     </attribute>
+
+    <attribute>
+      <name>action</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+
   </tag>
 
 

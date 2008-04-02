@@ -39,6 +39,14 @@
 
 package carstore;
 
+import components.components.AreaSelectedEvent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 /**
  * <p>This is the main backing file bean for the carstore
  * application.</p>
@@ -47,10 +55,44 @@ package carstore;
 
 public class CarStore extends Object {
 
-    public CarStore() {}
+    // 
+    // Relationship Instance Variables
+    // 
+
+    /**
+     * <p>The locales to be selected for each hotspot, keyed by the
+     * alternate text for that area.</p>
+     */
+    private Map locales = null;
+
+
+    public CarStore() {
+        locales = new HashMap();
+    	locales.put("NAmerica", Locale.ENGLISH);
+	locales.put("SAmerica", new Locale("es","es"));
+	locales.put("Germany", Locale.GERMAN);
+	locales.put("France", Locale.FRENCH); 	
+    }
 
     // 
-    // ActionRef handlers
+    // ActionListenerRef handlers
+    //
+
+    public void chooseLocaleFromMap(AreaSelectedEvent event) {
+	String current = event.getMapComponent().getCurrent();
+	FacesContext context = FacesContext.getCurrentInstance();
+	context.getViewRoot().setLocale((Locale) locales.get(current));
+    }    
+
+    public void chooseLocaleFromLink(ActionEvent event) {
+	String current = event.getComponent().getId();
+	FacesContext context = FacesContext.getCurrentInstance();
+	context.getViewRoot().setLocale((Locale) locales.get(current));
+    }    
+	
+
+    // 
+    // actionref handlers
     // 
     
     public String storeFront1Pressed() {

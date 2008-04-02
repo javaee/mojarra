@@ -64,6 +64,11 @@ public class MapTag extends UIComponentTag {
         this.actionListenerRef = actionListenerRef;
     }
 
+    private String action = null;
+    public void setAction(String action) {
+        this.action = action;
+    }
+
     private String immediate = null;
     public void setImmediate(String immediate) {
         this.immediate = immediate;
@@ -95,6 +100,7 @@ public class MapTag extends UIComponentTag {
         current = null;
         styleClass = null;
         actionListenerRef = null;
+        action = null;
     }
 
 
@@ -110,6 +116,17 @@ public class MapTag extends UIComponentTag {
 
         map.setActionListenerRef(actionListenerRef);
         map.setActionRef(actionRef);
+	if (null != action) {
+	    if (isValueReference(action)) {
+                ValueBinding vb = FacesContext.getCurrentInstance().getApplication().
+		    getValueBinding(action);
+                map.setValueBinding("action", vb);
+		
+	    }
+	    else {
+		map.setAction(action);
+	    }
+	}
 
         if (immediate != null) {
             if (isValueReference(immediate)) {
