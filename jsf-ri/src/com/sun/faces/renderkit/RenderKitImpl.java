@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.4 2003/07/24 23:24:17 rkitain Exp $
+ * $Id: RenderKitImpl.java,v 1.5 2003/07/28 22:27:40 rkitain Exp $
  */
 
 /*
@@ -11,6 +11,7 @@
 
 package com.sun.faces.renderkit;
 
+import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 import com.sun.faces.util.Util;
 
 import org.xml.sax.InputSource;
@@ -44,7 +45,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.4 2003/07/24 23:24:17 rkitain Exp $
+ * @version $Id: RenderKitImpl.java,v 1.5 2003/07/28 22:27:40 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -152,8 +153,12 @@ public class RenderKitImpl extends RenderKit {
     }
 
     //PENDING(rogerk) Implement for ResponseWriter implementation
+    //Just to get things running;
 
     public ResponseWriter getResponseWriter(Writer writer, String characterEncoding) {
+	if (writer != null) {
+	    return new HtmlResponseWriter(writer, characterEncoding);
+	}
         return null;
     }
 
