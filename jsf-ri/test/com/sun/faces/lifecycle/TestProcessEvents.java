@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.10 2003/10/06 18:11:34 eburns Exp $
+ * $Id: TestProcessEvents.java,v 1.11 2003/10/27 04:14:16 craigmcc Exp $
  */
 
 /*
@@ -23,8 +23,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.ValueChangedEvent;
-import javax.faces.event.ValueChangedListener;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
@@ -45,7 +45,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.10 2003/10/06 18:11:34 eburns Exp $
+ * @version $Id: TestProcessEvents.java,v 1.11 2003/10/27 04:14:16 craigmcc Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -111,9 +111,9 @@ public int eventLimit = 100; // some default;
 	super.tearDown();
     }
 
-// tests one component - one value changed listener
+// tests one component - one value change listener
 
-public void testSingleValueChanged()
+public void testSingleValueChange()
 {
     // for keeping track of events processed limit..
     //
@@ -125,14 +125,14 @@ public void testSingleValueChanged()
     // clear the property
     System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
 
-    // add valueChangedListener to the component
+    // add valueChangeListener to the component
  
     ValueChange1 valueChange1 = new ValueChange1();
-    userName.addValueChangedListener(valueChange1);
+    userName.addValueChangeListener(valueChange1);
 
-    // add value changed event (containing the component) to the queue
+    // add value change event (containing the component) to the queue
 
-    userName.queueEvent(new ValueChangedEvent( 
+    userName.queueEvent(new ValueChangeEvent( 
         userName, "foo", "bar"));
 
     getFacesContext().getViewRoot().processValidators(getFacesContext());
@@ -140,9 +140,9 @@ public void testSingleValueChanged()
     assertTrue(!System.getProperty(HANDLED_VALUEEVENT1).equals(EMPTY));
 }
 
-// tests one component - multiple value changed listeners
+// tests one component - multiple value change listeners
 
-public void testMultipleValueChanged()
+public void testMultipleValueChange()
 {
     // for keeping track of events processed limit..
     //
@@ -155,16 +155,16 @@ public void testMultipleValueChanged()
     System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
     System.setProperty(HANDLED_VALUEEVENT2, EMPTY);
 
-    // add valueChangedListener to the component
+    // add valueChangeListener to the component
 
     ValueChange1 valueChange1 = new ValueChange1();
     ValueChange2 valueChange2 = new ValueChange2();
-    userName.addValueChangedListener(valueChange1);
-    userName.addValueChangedListener(valueChange2);
+    userName.addValueChangeListener(valueChange1);
+    userName.addValueChangeListener(valueChange2);
 
-    // add value changed event (containing the component) to the queue
+    // add value change event (containing the component) to the queue
 
-    userName.queueEvent(new ValueChangedEvent(
+    userName.queueEvent(new ValueChangeEvent(
         userName, "foo", "bar"));
 
     getFacesContext().getViewRoot().processValidators(getFacesContext());
@@ -179,9 +179,9 @@ public void testMultipleValueChanged()
 
 
 // tests event recursion - infinite loop
-// ValueChangedEvent will fire back the same event it received..
+// ValueChangeEvent will fire back the same event it received..
 
-public void testValueChangedRecursion()
+public void testValueChangeRecursion()
 {
     // for keeping track of events processed limit..
     //
@@ -189,14 +189,14 @@ public void testValueChangedRecursion()
 
     UIInput userName = new UIInput();
 
-    // add valueChangedListener to the component
+    // add valueChangeListener to the component
 
     ValueChangeRecursion valueChange = new ValueChangeRecursion();
-    userName.addValueChangedListener(valueChange);
+    userName.addValueChangeListener(valueChange);
 
-    // add value changed event (containing the component) to the queue
+    // add value change event (containing the component) to the queue
 
-    userName.queueEvent(new ValueChangedEvent(
+    userName.queueEvent(new ValueChangeEvent(
         userName, "foo", "bar"));
 
     PhaseId phaseId = PhaseId.PROCESS_VALIDATIONS;
@@ -300,21 +300,21 @@ private boolean limitReached(UIComponent source, HashMap eventsProcessed) {
 }
 **********************/
 
-public class ValueChange1 implements ValueChangedListener {
+public class ValueChange1 implements ValueChangeListener {
     public PhaseId getPhaseId() {
         return PhaseId.PROCESS_VALIDATIONS;
     }
 
-    public void processValueChanged(ValueChangedEvent event) {
+    public void processValueChange(ValueChangeEvent event) {
         System.setProperty(HANDLED_VALUEEVENT1, HANDLED_VALUEEVENT1);
     }
 }
-public class ValueChange2 implements ValueChangedListener {
+public class ValueChange2 implements ValueChangeListener {
     public PhaseId getPhaseId() {
         return PhaseId.PROCESS_VALIDATIONS;
     }
 
-    public void processValueChanged(ValueChangedEvent event) {
+    public void processValueChange(ValueChangeEvent event) {
         System.setProperty(HANDLED_VALUEEVENT2, HANDLED_VALUEEVENT2);
     }
 }
@@ -325,13 +325,13 @@ public class ValueChange2 implements ValueChangedListener {
 
 // event recursion case - fires same event it received..
 
-public class ValueChangeRecursion implements ValueChangedListener {
+public class ValueChangeRecursion implements ValueChangeListener {
     public PhaseId getPhaseId() {
         return PhaseId.PROCESS_VALIDATIONS;
     }
 
-    public void processValueChanged(ValueChangedEvent event) {
-        getFacesContext().addFacesEvent(new ValueChangedEvent(
+    public void processValueChange(ValueChangeEvent event) {
+        getFacesContext().addFacesEvent(new ValueChangeEvent(
             event.getComponent(), "foo", "bar"));
     }
 }

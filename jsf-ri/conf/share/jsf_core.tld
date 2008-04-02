@@ -183,8 +183,8 @@
   </tag>
 
   <tag>
-      <name>valuechanged_listener</name>
-      <tag-class>com.sun.faces.taglib.jsf_core.ValueChangedListenerTag</tag-class>
+      <name>valuechange_listener</name>
+      <tag-class>com.sun.faces.taglib.jsf_core.ValueChangeListenerTag</tag-class>
       <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>

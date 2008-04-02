@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.14 2003/10/02 06:50:07 jvisvanathan Exp $
+ * $Id: TestActionListenerImpl.java,v 1.15 2003/10/27 04:14:16 craigmcc Exp $
  */
 
 /*
@@ -21,10 +21,10 @@ import com.sun.faces.util.DebugUtil;
 
 import java.util.List;
 
-import javax.faces.application.Action;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.event.ActionEvent;
 import javax.faces.FactoryFinder;
 
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.14 2003/10/02 06:50:07 jvisvanathan Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.15 2003/10/27 04:14:16 craigmcc Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -116,8 +116,6 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         command.setActionRef("userBean.login");
 
         UserBean user = new UserBean();
-        LoginAction login  = new LoginAction();
-        user.setLogin(login);
         context.getExternalContext().getSessionMap().put("userBean", user);
         assertTrue(user == context.getExternalContext().getSessionMap().get("userBean"));
 
@@ -153,27 +151,19 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         ActionListenerImpl actionListener = new ActionListenerImpl();
         try {
             actionListener.processAction(actionEvent);
-        } catch (IllegalArgumentException e) {
+        } catch (ReferenceSyntaxException e) {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
     }
 
-    public static class LoginAction extends Action {
-        public String invoke() {
-            return "success";
-        }
-    }
-
     public static class UserBean extends Object {
-        private Action login = null;
 
-        public void setLogin(Action login) {
-            this.login = login;
+        public String login() {
+            return ("success");
         }
-        public Action getLogin() {
-            return login;
-        }
+
     }
+
 } // end of class TestActionListenerImpl
 

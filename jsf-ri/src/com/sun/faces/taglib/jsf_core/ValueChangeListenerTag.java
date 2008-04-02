@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangedListenerTag.java,v 1.7 2003/10/07 20:16:05 horwat Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.1 2003/10/27 04:14:14 craigmcc Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.UISelectMany;
-import javax.faces.event.ValueChangedListener;
+import javax.faces.event.ValueChangeListener;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
@@ -25,7 +25,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 
 /**
- * <p>Tag implementation that creates a {@link ValueChangedListener} instance
+ * <p>Tag implementation that creates a {@link ValueChangeListener} instance
  * and registers it on the {@link UIComponent} associated with our most
  * immediate surrounding instance of a tag whose implementation class
  * is a subclass of {@link UIComponentTag}.  This tag creates no output to the
@@ -34,29 +34,29 @@ import javax.servlet.jsp.tagext.TagSupport;
  * <p>This class may be used directly to implement a generic event handler
  * registration tag (based on the fully qualified Java class name specified
  * by the <code>type</code> attribute), or as a base class for tag instances
- * that support specific {@link ValueChangedListener} subclasses.</p>
+ * that support specific {@link ValueChangeListener} subclasses.</p>
  *
  * <p>Subclasses of this class must implement the
- * <code>createValueChangedListener()</code> method, which creates and returns a
- * {@link ValueChangedListener} instance.  Any configuration properties that
- * are required by this {@link ValueChangedListener} instance must have been
- * set by the <code>createValueChangedListener()</code> method.  Generally, 
+ * <code>createValueChangeListener()</code> method, which creates and returns a
+ * {@link ValueChangeListener} instance.  Any configuration properties that
+ * are required by this {@link ValueChangeListener} instance must have been
+ * set by the <code>createValueChangeListener()</code> method.  Generally, 
  * this occurs by copying corresponding attribute values on the tag 
  * instance.</p>
  *
  * <p>This tag creates no output to the page currently being created.  It
- * is used solely for the side effect of {@link ValueChangedListener}
+ * is used solely for the side effect of {@link ValueChangeListener}
  * creation.</p>
  */
 
-public class ValueChangedListenerTag extends TagSupport {
+public class ValueChangeListenerTag extends TagSupport {
 
 
     // ------------------------------------------------------------- Attributes
 
 
     /**
-     * <p>The fully qualified class name of the {@link ValueChangedListener}
+     * <p>The fully qualified class name of the {@link ValueChangeListener}
      * instance to be created.</p>
      */
     private String type = null;
@@ -65,7 +65,7 @@ public class ValueChangedListenerTag extends TagSupport {
 
     /**
      * <p>Set the fully qualified class name of the
-     * {@link ValueChangedListener} instance to be created.
+     * {@link ValueChangeListener} instance to be created.
      *
      * @param type The new class name
      */
@@ -80,7 +80,7 @@ public class ValueChangedListenerTag extends TagSupport {
 
 
     /**
-     * <p>Create a new instance of the specified {@link ValueChangedListener}
+     * <p>Create a new instance of the specified {@link ValueChangeListener}
      * class, and register it with the {@link UIComponent} instance associated
      * with our most immediately surrounding {@link UIComponentTag} instance, if
      * the {@link UIComponent} instance was created by this execution of the
@@ -109,13 +109,13 @@ public class ValueChangedListenerTag extends TagSupport {
         //method does not apply to al components (it is not a method on
         //UIComponent/UIComponentBase).
 
-        ValueChangedListener handler = createValueChangedListener();
+        ValueChangeListener handler = createValueChangeListener();
         UIComponent component = tag.getComponent();
         if (component == null) {
             throw new JspException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         if (component instanceof UIInput) {
-            ((UIInput)component).addValueChangedListener(handler);
+            ((UIInput)component).addValueChangeListener(handler);
         }
         
         return (SKIP_BODY);
@@ -137,17 +137,17 @@ public class ValueChangedListenerTag extends TagSupport {
 
 
     /**
-     * <p>Create and return a new {@link ValueChangedListener} to be registered
+     * <p>Create and return a new {@link ValueChangeListener} to be registered
      * on our surrounding {@link UIComponent}.</p>
      *
      * @exception JspException if a new instance cannot be created
      */
-    protected ValueChangedListener createValueChangedListener()
+    protected ValueChangeListener createValueChangeListener()
         throws JspException {
 
         try {
             Class clazz = Util.loadClass(type, this);
-            return ((ValueChangedListener) clazz.newInstance());
+            return ((ValueChangeListener) clazz.newInstance());
         } catch (Exception e) {
             throw new JspException(e);
         }

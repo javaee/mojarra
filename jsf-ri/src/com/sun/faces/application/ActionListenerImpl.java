@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.5 2003/09/13 12:58:46 eburns Exp $
+ * $Id: ActionListenerImpl.java,v 1.6 2003/10/27 04:14:13 craigmcc Exp $
  */
 
 /*
@@ -9,16 +9,16 @@
 
 package com.sun.faces.application;
 
+import java.lang.reflect.InvocationTargetException;
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Action;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.el.PropertyNotFoundException;
-import javax.faces.el.ValueBinding;
+import javax.faces.el.MethodBinding;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
@@ -30,9 +30,12 @@ import com.sun.faces.util.Util;
 
 /**
  * This action listener implementation processes action events during the 
- * <strong>Invoke Application</strong> of the request processing lifecycle. 
- * Specifically, it determines the logical outcome of the current action,
- * and invokes the default navigation handling mechanism.
+ * <em>Apply Request Values</em> or <em>Invoke Application</em>
+ * phase of the request processing lifecycle (depending upon the
+ * <code>immediate</code> property of the {@link ActionSource} that
+ * queued this event.  It invokes the specified application action method,
+ * and uses the logical outcome value to invoke the default navigation handler
+ * mechanism to determine which view should be displayed next.</p>
  */
 public class ActionListenerImpl implements ActionListener {
 
@@ -76,25 +79,19 @@ public class ActionListenerImpl implements ActionListener {
         // be determined, throw an exception.
  
         String actionRef = null;
-        ValueBinding binding = null;
+        MethodBinding binding = null;
         Object action = null;
         if (null == outcome) {
             actionRef = actionSource.getActionRef();
             if (actionRef != null) {
-                binding = application.getValueBinding(actionRef);
+                binding = application.getMethodBinding(actionRef, null);
                 if (binding != null) {
                     try {
-                        action = binding.getValue(context);
-                    } catch (PropertyNotFoundException e) {
+                        outcome = (String) binding.invoke(context, null);
+                    } catch (InvocationTargetException e) {
+                        throw new FacesException(e.getTargetException());
                     }
                 }
-                if (null == action || !(action instanceof Action)) {
-                    Object[] obj = new Object[1];
-                    obj[0] = actionRef;
-                    throw new IllegalArgumentException(Util.getExceptionMessage(
-                        Util.NO_ACTION_FROM_ACTIONREF_ERROR_MESSAGE_ID, obj));
-                }
-                outcome = ((Action)action).invoke();
             }
         }
             
