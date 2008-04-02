@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.33 2006/02/01 18:24:07 rogerk Exp $
+ * $Id: RenderKitImpl.java,v 1.34 2006/03/22 20:15:14 rogerk Exp $
  */
 
 /*
@@ -31,9 +31,10 @@
 
 package com.sun.faces.renderkit;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
@@ -47,13 +48,15 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <B>RenderKitImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.33 2006/02/01 18:24:07 rogerk Exp $
+ * @version $Id: RenderKitImpl.java,v 1.34 2006/03/22 20:15:14 rogerk Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -69,6 +72,10 @@ public class RenderKitImpl extends RenderKit {
 //
 // Instance Variables
 //
+    // Log instance for this class
+    private static final Logger logger =
+            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+
     // used for ResponseWriter creation;
     private static String HTML_CONTENT_TYPE = "text/html";
     private static String XHTML_CONTENT_TYPE = "application/xhtml+xml";
@@ -91,6 +98,8 @@ public class RenderKitImpl extends RenderKit {
     private HashMap<String,HashMap<Object,Renderer>> rendererFamilies;
 
     private ResponseStateManager responseStateManager = null;
+
+    private boolean preferXhtml = false;
 //
 // Constructors and Initializers    
 //
@@ -180,6 +189,21 @@ public class RenderKitImpl extends RenderKit {
             { HTML_CONTENT_TYPE, XHTML_CONTENT_TYPE, 
               APPLICATION_XML_CONTENT_TYPE, TEXT_XML_CONTENT_TYPE };
 
+        // Step 0: Determine if we have a preference for XHTML
+        String preferXhtmlParam = context.getExternalContext().getInitParameter(
+            RIConstants.PREFER_XHTML);
+        if (null != preferXhtmlParam) {
+            if (!(preferXhtmlParam.equals("true")) &&
+                !(preferXhtmlParam.equals("false"))) {
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.warning(MessageUtils.getExceptionMessageString(
+                        MessageUtils.INVALID_INIT_PARAM_ERROR_MESSAGE_ID,
+                        new Object[] { preferXhtmlParam, RIConstants.PREFER_XHTML }));
+                }
+            }
+            preferXhtml = Boolean.valueOf(preferXhtmlParam);
+        }
+
         // Step 1: Check the content type passed into this method 
         if (null != desiredContentTypeList) {
             contentType = findMatch(context, desiredContentTypeList, supportedTypes); 
@@ -231,7 +255,14 @@ public class RenderKitImpl extends RenderKit {
         // Step 4: Default to text/html
         if (null == desiredContentTypeList ||
             desiredContentTypeList.equals(ALL_MEDIA)) {
-            contentType = HTML_CONTENT_TYPE;
+            Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
+            if (preferXhtml) {
+                contentType = XHTML_CONTENT_TYPE;
+                requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML, Boolean.TRUE);
+            } else {
+                contentType = HTML_CONTENT_TYPE;
+                requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML, Boolean.TRUE);
+            }
         }
 
 	if (null == contentType) {
@@ -276,8 +307,13 @@ public class RenderKitImpl extends RenderKit {
                 curContentType = supportedTypes[j].trim();
                 if (-1 != curDesiredType.indexOf(curContentType)) {
                     if (-1 != curContentType.indexOf(HTML_CONTENT_TYPE)) {
-                        contentType = HTML_CONTENT_TYPE;
-                        requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML, Boolean.TRUE);
+                        if (preferXhtml) {
+                            contentType = XHTML_CONTENT_TYPE;
+                            requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML, Boolean.TRUE);
+                        } else {
+                            contentType = HTML_CONTENT_TYPE;
+                            requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML, Boolean.TRUE);
+                        }
                     } else if (-1 != curContentType.indexOf(XHTML_CONTENT_TYPE) ||
                                -1 != curContentType.indexOf(APPLICATION_XML_CONTENT_TYPE) ||
                                -1 != curContentType.indexOf(TEXT_XML_CONTENT_TYPE)) {

@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.78 2006/01/06 15:42:15 rlubke Exp $
+ * $Id: RIConstants.java,v 1.79 2006/03/22 20:15:14 rogerk Exp $
  */
 
 /*
@@ -109,6 +109,9 @@ public class RIConstants {
 
     public static final String ONE_TIME_INITIALIZATION_ATTR =
         FACES_PREFIX + "OneTimeInitialization";
+
+    public static final String PREFER_XHTML = 
+	FACES_PREFIX + "PreferXHTML";
 
     public static final String CONTENT_TYPE_IS_XHTML = 
 	FACES_PREFIX + "ContentTypeIsXHTML";

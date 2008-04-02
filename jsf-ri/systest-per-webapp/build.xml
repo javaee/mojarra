@@ -55,7 +55,8 @@
          This property list *must* match the one defined in the
          systest-per-webapp build-tests.xml. -->
     <property name="applications"
-              value="replace-application,
+              value="prefer-xhtml-render,
+                   replace-application,
                    replace-statemanager,                                    
                    command-link-back-button,
                    nested-datatables,
