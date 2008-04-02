@@ -341,16 +341,16 @@
          antfile="${jsf.demo.home}/build.xml" />
 
     <!-- copy the necessary examples -->
-    <!-- PENDING(raj): include cardemo here -->
-    <copy todir="${dist.home}/example/helloDuke">
+    <!-- PENDING(jennifer): include cardemo here -->
+    <copy todir="${dist.home}/example/helloDuke" includeEmptyDirs="false">
       <fileset dir="${jsf.demo.home}/helloDuke"/>
     </copy>
 
-    <copy todir="${dist.home}/example/guessNumber">
+    <copy todir="${dist.home}/example/guessNumber" includeEmptyDirs="false">
       <fileset dir="${jsf.demo.home}/guessNumber"/>
     </copy>
 
-    <copy todir="${dist.home}/example/cardemo">
+    <copy todir="${dist.home}/example/cardemo" includeEmptyDirs="false">
       <fileset dir="${jsf.demo.home}/cardemo"/>
     </copy>
 
