@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.34 2006/05/22 23:35:52 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.35 2006/05/31 21:13:05 rlubke Exp $
  */
 
 /*
@@ -37,12 +37,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
@@ -51,7 +53,9 @@ import java.util.zip.GZIPOutputStream;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.WebEnvironmentEntry;
-import com.sun.faces.util.Base64;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.io.Base64InputStream;
+import com.sun.faces.io.Base64OutputStreamWriter;
 import com.sun.faces.util.Util;
 
 
@@ -64,29 +68,34 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     // Log instance for this class
     private static final Logger LOGGER =
           Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+
     private static final String FACES_VIEW_STATE =
           "com.sun.faces.FACES_VIEW_STATE";
 
+    private static final char[] STATE_FIELD_START =
+          ("<input type=\"hidden\" name=\""
+           + ResponseStateManager.VIEW_STATE_PARAM
+           + "\" id=\""
+           + ResponseStateManager.VIEW_STATE_PARAM
+           + "\" value=\"").toCharArray();
 
-    private Boolean compressState = null;
-    private ByteArrayGuard byteArrayGuard = null;
+    private static final char[] STATE_FIELD_END =
+          "\" />".toCharArray();
 
+
+    private Boolean compressState;   
+    private ByteArrayGuard guard; 
+    private int csBuffSize;
 
     public ResponseStateManagerImpl() {
 
-        super();
-        WebConfiguration webConfig = WebConfiguration.getInstance();
-        assert(webConfig != null);
-        byteArrayGuard = ByteArrayGuard
-              .newInstance(webConfig.getEnvironmentEntry(
-                    WebEnvironmentEntry.ClientStateSavingPassword));
+        super();        
+        init();
 
     }
 
     
-    /**
-     * @see {@link ResponseStateManager#getComponentStateToRestore(javax.faces.context.FacesContext)}       
-     */
+    /** @see {@link ResponseStateManager#getComponentStateToRestore(javax.faces.context.FacesContext)} */
     @Override
     @SuppressWarnings("Deprecation")
     public Object getComponentStateToRestore(FacesContext context) {
@@ -98,21 +107,17 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     }
 
 
-    /**
-     * @see {@link ResponseStateManager#isPostback(javax.faces.context.FacesContext)}     
-     */
-    @Override   
+    /** @see {@link ResponseStateManager#isPostback(javax.faces.context.FacesContext)} */
+    @Override
     public boolean isPostback(FacesContext context) {
 
         return context.getExternalContext().getRequestParameterMap().
               containsKey(ResponseStateManager.VIEW_STATE_PARAM);
 
-    }   
+    }
 
 
-    /**
-     * @see {@link ResponseStateManager#getTreeStructureToRestore(javax.faces.context.FacesContext, String)}      
-     */
+    /** @see {@link ResponseStateManager#getTreeStructureToRestore(javax.faces.context.FacesContext,String)} */
     @Override
     @SuppressWarnings("Deprecation")
     public Object getTreeStructureToRestore(FacesContext context,
@@ -121,44 +126,40 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         StateManager stateManager = Util.getStateManager(context);
 
         String viewString = getStateParam(context);
-        Object structure;
+       
         if (viewString == null) {
             return null;
         }
 
         if (stateManager.isSavingStateInClient(context)) {
-            Object state;
-            ByteArrayInputStream bis;
-            GZIPInputStream gis = null;
-            ObjectInputStream ois;
-            boolean compress = isCompressStateSet(context);
+                    
+         
+            ObjectInputStream ois = null;           
 
-            try {
-                byte[] bytes = byteArrayGuard.decrypt(
-                      (Base64.decode(viewString.getBytes())));
-                bis = new ByteArrayInputStream(bytes);
-                if (isCompressStateSet(context)) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.fine("Deflating state before restoring..");
-                    }
-                    gis = new GZIPInputStream(bis);
-                    ois = new ApplicationObjectInputStream(gis);
+            try {                           
+                InputStream bis;
+                if (guard != null) {
+                    bis = new CipherInputStream(
+                          new Base64InputStream(viewString),
+                          guard.getDecryptionCipher());                    
+                } else {
+                    bis = new Base64InputStream(viewString);
+                }
+                    
+                if (compressState) {                                        
+                    ois = new ApplicationObjectInputStream(
+                          new GZIPInputStream(bis));
                 } else {
                     ois = new ApplicationObjectInputStream(bis);
                 }
-                structure = ois.readObject();
-                state = ois.readObject();
-               
-                bis.close();
-                if (compress) {
-                    if (gis != null) {
-                        gis.close();
-                    }
-                }
+                Object structure = ois.readObject();
+                Object state = ois.readObject();
+                              
                 ois.close();
-                
+
                 storeStateInRequest(context, state);
-                
+                return structure;
+
             } catch (java.io.OptionalDataException ode) {
                 LOGGER.log(Level.SEVERE, ode.getMessage(), ode);
                 throw new FacesException(ode);
@@ -168,67 +169,81 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             } catch (java.io.IOException iox) {
                 LOGGER.log(Level.SEVERE, iox.getMessage(), iox);
                 throw new FacesException(iox);
+            } finally {
+                if (ois != null) {
+                    try {
+                        ois.close();
+                    } catch (IOException ioe) {
+                        // ignore
+                    }
+                }
             }
         } else {
-            structure = viewString;
-        }
-        return structure;
-
+            return viewString;
+        }       
     }
-    
 
-    /**
-     * @see {@link ResponseStateManager#writeState(javax.faces.context.FacesContext, javax.faces.application.StateManager.SerializedView)}       
-     */
+
+    /** @see {@link ResponseStateManager#writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView)} */
     @Override
     @SuppressWarnings("Deprecation")
     public void writeState(FacesContext context, SerializedView view)
-          throws IOException {
+    throws IOException {
 
         StateManager stateManager = Util.getStateManager(context);
         ResponseWriter writer = context.getResponseWriter();
 
-        writer.startElement("input", context.getViewRoot());
-        writer.writeAttribute("type", "hidden", null);
-        writer.writeAttribute("name",
-                              javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM,
-                              null);
-        writer.writeAttribute("id",
-                              javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM,
-                              null);
-
+        writer.write(STATE_FIELD_START);
 
         if (stateManager.isSavingStateInClient(context)) {
-            GZIPOutputStream zos = null;
-            ObjectOutputStream oos;
-            boolean compress = isCompressStateSet(context);
+            ObjectOutputStream oos = null;
+            try {
 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            if (compress) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("Compressing state before saving..");
+                Base64OutputStreamWriter bos =
+                      new Base64OutputStreamWriter(csBuffSize,
+                                                   writer);
+                OutputStream base;
+                if (guard != null) {
+                    base = new CipherOutputStream(bos,
+                                                  guard.getEncryptionCipher());
+                } else {
+                    base = bos;
                 }
-                zos = new GZIPOutputStream(bos);
-                oos = new ObjectOutputStream(zos);
-            } else {
-                oos = new ObjectOutputStream(bos);
+                if (compressState) {
+                    oos = new ObjectOutputStream(
+                          new GZIPOutputStream(base));
+                } else {
+                    oos = new ObjectOutputStream(base);
+                }
+
+                oos.writeObject(view.getStructure());
+                oos.writeObject(view.getState());
+                oos.flush();
+                oos.close();
+
+                // flush everything to the underlying writer
+                bos.finish();
+                
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Client State: total number of characters" 
+                                + " written: " + bos.getTotalCharsWritten());
+                }
+            } finally {
+                if (oos != null) {
+                    try {
+                        oos.close();
+                    } catch (IOException ioe) {
+                        // ignore
+                    }
+                }
+                    
             }
-            oos.writeObject(view.getStructure());
-            oos.writeObject(view.getState());
-            oos.close();
-            if (compress) {
-                zos.close();
-            }
-            byte[] securedata = byteArrayGuard.encrypt(bos.toByteArray());
-            bos.close();
-            String valueToWrite = (new String(Base64.encode(securedata),
-                                              "ISO-8859-1"));
-            writer.writeAttribute("value",
-                                  valueToWrite, null);
+
         } else {
-            writer.writeAttribute("value", view.getStructure(), null);
+            writer.write(view.getStructure().toString());
         }
-        writer.endElement("input");
+
+        writer.write(STATE_FIELD_END);
 
         writeRenderKitIdField(context, writer);
 
@@ -238,19 +253,20 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     /**
      * <p>Store the state for this request into a temporary attribute
      * within the same request.</p>
+     *
      * @param context the <code>FacesContext</code> of the current request
-     * @param state the view state
+     * @param state   the view state
      */
-     private void storeStateInRequest(FacesContext context, Object state) {
+    private void storeStateInRequest(FacesContext context, Object state) {
 
         // store the state object temporarily in request scope
         // until it is processed by getComponentStateToRestore
         // which resets it.
         context.getExternalContext().getRequestMap()
               .put(FACES_VIEW_STATE, state);
-       
+
     }
-    
+
 
     /**
      * <p>Write a hidden field if the default render kit ID is not
@@ -264,8 +280,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     private void writeRenderKitIdField(FacesContext context,
                                        ResponseWriter writer)
           throws IOException {
-        String result = context.getApplication().getDefaultRenderKitId();        
-        if (result != null && 
+        String result = context.getApplication().getDefaultRenderKitId();
+        if (result != null &&
             !RenderKitFactory.HTML_BASIC_RENDER_KIT.equals(result)) {
             writer.startElement("input", context.getViewRoot());
             writer.writeAttribute("type", "hidden", "type");
@@ -281,35 +297,69 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     /**
      * <p>Get our view state from this request</p>
+     *
      * @param context the <code>FacesContext</code> for the current request
+     *
      * @return the view state from this request
      */
-    private String getStateParam(FacesContext context) {       
+    private String getStateParam(FacesContext context) {
 
         return context.getExternalContext().getRequestParameterMap().get(
-              ResponseStateManager.VIEW_STATE_PARAM);       
+              ResponseStateManager.VIEW_STATE_PARAM);
     }
 
 
     /**
-     * <p>Determines if client state should or should not be
-     * compressed.</p>
-     * @param context the <code>FacesContext</code> for the current request
-     * @return <code>true</code> if the state should be compressed before 
-     *  writing to the response, otherwise <code>false</code>
+     * <p>Perform the necessary intialization to make this
+     * class work.</p>    
      */
-    private boolean isCompressStateSet(FacesContext context) {
-
-        if (null != compressState) {
-            return compressState;
+    private void init() {
+        
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        assert(webConfig != null);
+        
+        String pass = webConfig.getEnvironmentEntry(
+                        WebEnvironmentEntry.ClientStateSavingPassword);
+        if (pass != null) {
+            guard = new ByteArrayGuard(pass);
         }
-        compressState = WebConfiguration
-              .getInstance(context.getExternalContext())
-              .getBooleanContextInitParameter(BooleanWebContextInitParameter.CompressViewState);
-
-        return compressState;
-
+        compressState = webConfig.getBooleanContextInitParameter(
+                            BooleanWebContextInitParameter.CompressViewState);
+        String size = webConfig.getContextInitParameter(
+                         WebContextInitParameter.ClientStateWriteBufferSize);
+        String defaultSize = 
+              WebContextInitParameter.ClientStateWriteBufferSize.getDefaultValue();
+        try {
+            csBuffSize = Integer.parseInt(size);
+            if (csBuffSize % 2 != 0) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "jsf.renderkit.resstatemgr.clientbuf_div_two",
+                               new Object[] {
+                                   WebContextInitParameter.ClientStateWriteBufferSize.getQualifiedName(),
+                                   size,
+                                   defaultSize});
+                }          
+                csBuffSize = Integer.parseInt(defaultSize);
+            } else {
+                csBuffSize /= 2;
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Using client state buffer size of " 
+                                + csBuffSize);
+                }
+            }
+        } catch (NumberFormatException nfe) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "jsf.renderkit.resstatemgr.clientbuf_not_integer",
+                               new Object[] {
+                                   WebContextInitParameter.ClientStateWriteBufferSize.getQualifiedName(),
+                                   size,
+                                   defaultSize});
+                }   
+            csBuffSize = Integer.parseInt(defaultSize);
+        }
     }
 
+   
 } // end of class ResponseStateManagerImpl
-

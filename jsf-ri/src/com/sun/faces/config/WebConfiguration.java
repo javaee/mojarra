@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.6 2006/05/31 17:22:30 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.7 2006/05/31 21:13:05 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -467,6 +467,10 @@ public class WebConfiguration {
         ResponseBufferSize(
               "com.sun.faces.responseBufferSize",
               "4096"
+        ),
+        ClientStateWriteBufferSize(
+              "com.sun.faces.clientStateWriteBufferSize",
+              "8192"
         );
 
         private String defaultValue;

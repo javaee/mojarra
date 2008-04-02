@@ -222,6 +222,8 @@
             </custom-sysproperties>
             <suite>    
                 <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.io.TestIO"/>
+                <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestInjection"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestActionListenerImpl"/>

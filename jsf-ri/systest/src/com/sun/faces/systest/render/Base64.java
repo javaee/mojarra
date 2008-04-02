@@ -24,9 +24,9 @@
  */
 
 /*
- * $Header: /cvs/javaserverfaces-sources/jsf-ri/src/com/sun/faces/util/Attic/Base64.java,v 1.9 2006/03/29 23:03:53 rlubke Exp $
- * $Revision: 1.9 $
- * $Date: 2006/03/29 23:03:53 $
+ * $Header: /cvs/javaserverfaces-sources/jsf-ri/systest/src/com/sun/faces/systest/render/Base64.java,v 1.1 2006/05/31 21:13:06 rlubke Exp $
+ * $Revision: 1.1 $
+ * $Date: 2006/05/31 21:13:06 $
  * ====================================================================
  *
  * The Apache Software License, Version 1.1
@@ -83,7 +83,7 @@
  *
  */
 
-package com.sun.faces.util;
+package com.sun.faces.systest.render;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -102,7 +102,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  *
  * @@author Jeffrey Rodriguez
- * @@version $Revision: 1.9 $ $Date: 2006/03/29 23:03:53 $
+ * @@version $Revision: 1.1 $ $Date: 2006/05/31 21:13:06 $
  */
 public final class Base64 {
 

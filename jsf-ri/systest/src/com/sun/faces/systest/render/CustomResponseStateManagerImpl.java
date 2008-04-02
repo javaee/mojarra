@@ -1,5 +1,5 @@
 /*
- * $Id: CustomResponseStateManagerImpl.java,v 1.9 2006/04/05 17:53:44 rlubke Exp $
+ * $Id: CustomResponseStateManagerImpl.java,v 1.10 2006/05/31 21:13:06 rlubke Exp $
  */
 
 /*
@@ -30,14 +30,8 @@
 
 package com.sun.faces.systest.render;
 
-import com.sun.faces.renderkit.ByteArrayGuard;
-import com.sun.faces.util.Base64;
-import com.sun.faces.util.Util;
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
-
-import javax.faces.application.StateManager.SerializedView;
 import javax.faces.application.StateManager;
+import javax.faces.application.StateManager.SerializedView;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 
@@ -46,10 +40,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import java.util.Map;
+
+import com.sun.faces.util.Util;
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -76,7 +73,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
     // Instance Variables
     //
     private Boolean compressStateSet = null;
-    private ByteArrayGuard byteArrayGuard = null;
+
     
     //
     // Ivars used during actual client lifetime
@@ -90,8 +87,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
     //
 
     public CustomResponseStateManagerImpl() {
-        super();
-        byteArrayGuard = ByteArrayGuard.newInstance();
+        super();       
     }
 
 
@@ -151,8 +147,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 	    boolean compress = isCompressStateSet(context);
 	   
 	    try {
-                 byte[] bytes = byteArrayGuard.decrypt(
-                       (Base64.decode(viewString.getBytes())));
+                 byte[] bytes = Base64.decode(viewString.getBytes());
 		bis = new ByteArrayInputStream(bytes);
 		if (isCompressStateSet(context)) {
 		    if (log.isDebugEnabled()) {
@@ -230,8 +225,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 	    if (compress) {
 		zos.close();
 	    }
-            byte[] securedata = byteArrayGuard.encrypt(
-                  bos.toByteArray());
+            byte[] securedata = bos.toByteArray();
 	    bos.close();
 	    
 	    hiddenField = " <input type=\"hidden\" name=\""
