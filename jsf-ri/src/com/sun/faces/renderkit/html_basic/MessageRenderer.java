@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.24 2003/09/04 18:04:34 rlubke Exp $
+ * $Id: MessageRenderer.java,v 1.25 2003/09/04 19:52:17 rkitain Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.24 2003/09/04 18:04:34 rlubke Exp $
+ * @version $Id: MessageRenderer.java,v 1.25 2003/09/04 19:52:17 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -167,7 +167,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
 	    writer.startElement("span", component);
 	    writer.writeAttribute("class", styleClass, "styleClass");
 	}
-	//PENDING(rogerk)null 2nd arg?
         writer.writeText(message, null);
 	if (null != styleClass) {
 	    writer.endElement("span");

@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.56 2003/09/04 18:04:33 rlubke Exp $
+ * $Id: HyperlinkRenderer.java,v 1.57 2003/09/04 19:52:16 rkitain Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.56 2003/09/04 18:04:33 rlubke Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.57 2003/09/04 19:52:16 rkitain Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -169,7 +169,6 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         //make link act as if it's a button using javascript
 	StringBuffer sb = new StringBuffer();
 	writer.startElement("a", component);
-	//PENDING(rogerk)href 3rd arg?
 	writer.writeAttribute("href", "#", "href");
 	sb = new StringBuffer();
 	sb.append("document.forms[");
@@ -186,7 +185,6 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	sb.append("");
 	sb.append("].submit()");
 
-	//PENDING(rogerk)null 3rd arg?
 	writer.writeAttribute("onmousedown", sb.toString(), null); 
 
         //handle css style class
@@ -204,7 +202,6 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	    writer.startElement("img", null);
 	    writer.writeAttribute("src", getImageText(imageSrc), "image");
         } else {
-	    //PENDING(rogerk)value 2nd arg?
             writer.writeText(getLabel(context, command), "value");
         }
 
@@ -224,7 +221,6 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         for (int i = 0; i < paramList.length; i++) {
             writer.startElement("input", component);
 	    writer.writeAttribute("type", "hidden", "type");
-	    //PENDING(rogerk)3rd args?
 	    writer.writeAttribute("name", (paramList[i]).getName(), null);
 	    writer.writeAttribute("value", (paramList[i]).getValue(), null);
 	    writer.endElement("input");

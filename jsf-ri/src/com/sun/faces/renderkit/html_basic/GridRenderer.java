@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.16 2003/09/04 18:04:33 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.17 2003/09/04 19:52:16 rkitain Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.16 2003/09/04 18:04:33 rlubke Exp $
+ * @version $Id: GridRenderer.java,v 1.17 2003/09/04 19:52:16 rkitain Exp $
  *  
  */
 
@@ -95,7 +95,6 @@ public class GridRenderer extends HtmlBasicRenderer {
 
         Util.renderPassThruAttributes(writer, component);
 
-	//PENDING(rogerk)null 2nd arg?
 	writer.writeText("\n", null);
     }
 
@@ -133,7 +132,6 @@ public class GridRenderer extends HtmlBasicRenderer {
 	if (null != (facet = (UIComponent) component.getFacets().get("header"))) {
 	    
 	    if (headerClass != null) {
-		//PENDING(rogerk)facet 2nd arg?
 		writer.startElement("tr", facet);
 		writer.startElement("th", facet);
 		writer.writeAttribute("class", headerClass, "headerClass");
@@ -148,7 +146,6 @@ public class GridRenderer extends HtmlBasicRenderer {
 	    writer.endElement("thead");
             writer.endElement("th");
             writer.endElement("tr");
-	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
 	}
 
@@ -159,7 +156,6 @@ public class GridRenderer extends HtmlBasicRenderer {
 		if ((i % columns) == 0) {
 		    if (open) {
 			writer.endElement("tr");
-			//PENDING(rogerk)null 2nd arg?
 			writer.writeText("\n", null);
 			open = false;
 		    }
@@ -170,7 +166,6 @@ public class GridRenderer extends HtmlBasicRenderer {
 			    rowStyle = 0;
 			}
 		    }
-		    //PENDING(rogerk)null 2nd arg?
                     writer.writeText("\n", null);
 		    open = true;
 		    columnStyle = 0;
@@ -185,14 +180,12 @@ public class GridRenderer extends HtmlBasicRenderer {
 		UIComponent child = (UIComponent) kids.next();
 		encodeRecursive(context, child);
 		writer.endElement("td");
-	        //PENDING(rogerk)null 2nd arg?
 		writer.writeText("\n", null);
 		i++;
 	    }
 	}
         if (open) {
             writer.endElement("tr");
-            //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
         }
 	writer.endElement("tbody");
@@ -215,7 +208,6 @@ public class GridRenderer extends HtmlBasicRenderer {
 	    writer.endElement("tfoot");
 	    writer.endElement("th");
 	    writer.endElement("tr");
-            //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
         }
     }
@@ -236,7 +228,6 @@ public class GridRenderer extends HtmlBasicRenderer {
         // Render the ending of this panel
         ResponseWriter writer = context.getResponseWriter();
 	writer.endElement("table");
-        //PENDING(rogerk)null 2nd arg?
 	writer.writeText("\n", null);
     }
 

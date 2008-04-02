@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.56 2003/09/04 18:04:32 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.57 2003/09/04 19:52:16 rkitain Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.56 2003/09/04 18:04:32 rlubke Exp $
+ * @version $Id: FormRenderer.java,v 1.57 2003/09/04 19:52:16 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,7 +93,6 @@ public class FormRenderer extends HtmlBasicRenderer {
         // to the pass through attributes in Util class.
 	writer.startElement("form", component);
 	writer.writeAttribute("id", component.getClientId(context), "clientId");
-	//PENDING(rogerk)null 3rd arg?
 	writer.writeAttribute("method", "post", null);
 	writer.writeAttribute("action", getActionStr(context), null);
         if (null != (styleClass = (String) 
@@ -103,7 +102,6 @@ public class FormRenderer extends HtmlBasicRenderer {
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
-	//PENDING(rogerk)null 2nd arg?
 	writer.writeText("\n", null);
 	updateFormNumber(context, component);
     }

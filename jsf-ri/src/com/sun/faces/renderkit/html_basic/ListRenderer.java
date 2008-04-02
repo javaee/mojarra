@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.16 2003/09/04 18:04:34 rlubke Exp $
+ * $Id: ListRenderer.java,v 1.17 2003/09/04 19:52:17 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.16 2003/09/04 18:04:34 rlubke Exp $
+ * @version $Id: ListRenderer.java,v 1.17 2003/09/04 19:52:17 rkitain Exp $
  *  
  */
 
@@ -101,7 +101,6 @@ public class ListRenderer extends HtmlBasicRenderer {
 	    writer.writeAttribute("class", styleClass, "styleClass");
         }
 	Util.renderPassThruAttributes(writer, component);
-	//PENDING(rogerk)null 2nd arg?
 	writer.writeText("\n", null);
     }
 
@@ -139,7 +138,6 @@ public class ListRenderer extends HtmlBasicRenderer {
         if (null != (facet = (UIComponent) component.getFacets().get("header"))) {
 	    writer.startElement("tr", facet);
 	    writer.startElement("thead", facet);
-	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
 	    // If the header has kids, render them recursively
 	    if (null != (kids = facet.getChildren().iterator())) {
@@ -152,14 +150,12 @@ public class ListRenderer extends HtmlBasicRenderer {
 		    }
 		    else {
 			writer.startElement("th", kid);
-	                //PENDING(rogerk)null 2nd arg?
 			writer.writeText("\n", null);
 		    }
 		    // encode the children
 		    encodeRecursive(context, kid);
 		    // write out the table footer
 		    writer.endElement("th");
-	            //PENDING(rogerk)null 2nd arg?
 		    writer.writeText("\n", null);
 		}
 	    }
@@ -173,7 +169,6 @@ public class ListRenderer extends HtmlBasicRenderer {
             }
 	    writer.endElement("thead");
 	    writer.endElement("tr");
-	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
         }
 
@@ -202,7 +197,6 @@ public class ListRenderer extends HtmlBasicRenderer {
 			    rowStyle = 0;
 			}
 		    }
-		    //PENDING(rogerk)null 2nd arg?
 		    writer.writeText("\n", null);
 		    
 		    // Process each column to be rendered
@@ -223,13 +217,11 @@ public class ListRenderer extends HtmlBasicRenderer {
 			}
 			encodeRecursive(context, column);
 			writer.endElement("td");
-			//PENDING(rogerk)null 2nd arg?
 			writer.writeText("\n", null);
 		    }
 		    
 		    // Finish the row that was just rendered
 		    writer.endElement("tr");
-		    //PENDING(rogerk)null 2nd arg?
 		    writer.writeText("\n", null);
 		    if (var != null) {
 			requestMap.remove(var);
@@ -243,7 +235,6 @@ public class ListRenderer extends HtmlBasicRenderer {
         if (null != (facet = (UIComponent) component.getFacets().get("footer"))) {
 	    writer.startElement("tr", facet);
 	    writer.startElement("tfoot", facet);
-	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
 	    // If the footer has kids, render them recursively
 	    if (null != (kids = facet.getChildren().iterator())) {
@@ -262,7 +253,6 @@ public class ListRenderer extends HtmlBasicRenderer {
 		    encodeRecursive(context, kid);
 		    // write out the table footer
 		    writer.endElement("th");
-	            //PENDING(rogerk)null 2nd arg?
 	            writer.writeText("\n", null);
 		}
 	    }
@@ -276,7 +266,6 @@ public class ListRenderer extends HtmlBasicRenderer {
             }
 	    writer.endElement("tfoot");
 	    writer.endElement("tr");
-	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
         }
     }
@@ -296,7 +285,6 @@ public class ListRenderer extends HtmlBasicRenderer {
         // Render the ending of this panel
         ResponseWriter writer = context.getResponseWriter();
 	writer.endElement("table");
-	//PENDING(rogerk)null 2nd arg?
 	writer.writeText("\n", null);
     }
 

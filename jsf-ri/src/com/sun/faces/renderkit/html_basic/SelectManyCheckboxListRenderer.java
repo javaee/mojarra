@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.14 2003/09/04 02:01:56 rkitain Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.15 2003/09/04 19:52:18 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -101,20 +101,17 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             curItem = curItemWrapper.getSelectItem();
             curComponent = curItemWrapper.getUISelectItem();
 
-	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
 	    writer.startElement("label", curComponent);
 	    writer.writeAttribute("for", curComponent.getClientId(context), "clientId");
 	    writer.startElement("input", component);
 	    writer.writeAttribute("name", component.getClientId(context), "clientId");
-	    //PENDING(rogerk)clientId 3rd arg?
 	    writer.writeAttribute("id", curComponent.getClientId(context), "clientId");
 	    writer.writeAttribute("value",
 	        getFormattedValue(context, component, curItem.getValue()), "value");
 	    writer.writeAttribute("type", "checkbox", "type");
 	    String selectText = getSelectedText(curItem, selectedValues);
 	    if (!selectText.equals("")) {
-		//PENDING(rogerk)null 3rd arg?
 	        writer.writeAttribute(selectText, new Boolean("true"), null);
 	    }
             Util.renderPassThruAttributes(writer, curComponent);

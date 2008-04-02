@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.24 2003/09/04 18:04:34 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.25 2003/09/04 19:52:17 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -226,7 +226,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	writer.startElement("select", component);
 	writer.writeAttribute("name", component.getClientId(context), "clientId");
 	if (!getMultipleText(component).equals("")) {
-	    //PENDING(rogerk)null 3rd arg?
 	    writer.writeAttribute("multiple", new Boolean("true"), null);
 	}
 
@@ -272,14 +271,12 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
             curComponent = curItemWrapper.getUISelectItem();
-	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\t", null);
 	    writer.startElement("option", curComponent);
 	    writer.writeAttribute("value", 
                 getFormattedValue(context, component, curItem.getValue()), "value");
 	    String selectText = getSelectedText(curItem, selectedValues);
 	    if (!selectText.equals("")) {
-		//PENDING(rogerk)null 3rd arg?
 	        writer.writeAttribute(selectText, new Boolean("true"), null);
 	    }
 
@@ -288,7 +285,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
 	    writer.writeText(curItem.getLabel(), "label");
 	    writer.endElement("option");
-	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
         }
     }

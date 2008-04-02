@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.14 2003/09/04 18:04:33 rlubke Exp $
+ * $Id: LabelRenderer.java,v 1.15 2003/09/04 19:52:17 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.servlet.ServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.14 2003/09/04 18:04:33 rlubke Exp $
+ * @version $Id: LabelRenderer.java,v 1.15 2003/09/04 19:52:17 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,7 +109,6 @@ public class LabelRenderer extends HtmlBasicRenderer {
 		     component.getAttribute("styleClass"))) {
 	    writer.writeAttribute("class", styleClass, "styleClass");
 	}
-	//PENDING(rogerk)null 2nd arg?
         writer.writeText("\n", null);
     }
 
