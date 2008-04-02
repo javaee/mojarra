@@ -42,15 +42,16 @@ See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA14">JSFA14</a> in S
 <issue>
   <id>OutputMethods-2</id>
   <originator>Craig</originator>
-  <summary></summary>
+  <summary>JSFA18 in Scarab</summary>
   <description>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA18">JSFA18</a> in Scarab.
   </description>
   <resolution>
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
-  <priority>2</priority>
-  <effort>Small</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
@@ -74,7 +75,7 @@ See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA14">JSFA14</a> in S
   <id>NamedChild-4</id> <originator>Adam</originator> <summary>moved to
   <a
   href="http://tokyo.betaversion.org:8080/issues/id/JSFA1">JSFA1</a>
-  in scarab.</summary>
+  in Scarab.</summary>
   <description>
 moved to
   <a
@@ -93,22 +94,11 @@ moved to
 <issue>
   <id>StateSaving-5</id>
   <originator>Adam</originator>
-  <summary>Re-evaluate Question of State Saving Volume/Location</summary>
+  <summary>JSFA22 in Scarab</summary>
   <description>
-    <p>We currently put the onus for this on the JSP <code>use_faces</code>
-    tag, which is not sufficiently generalized to support non-JSP uses.</p>
-
-    <p>Additional related thoughts from Hans (09/13):</p>
-    <ul>
-    <li>Should state information saved in the session be thrown away if a
-        different tree is requested, or saved in case the original tree might
-        get re-requested?</li>
-    <li>Should we add some sort of event that can notify the application
-        about state saving and state restoring activities?</li>
-    </ul>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA22">JSFA22</a> in Scarab.
   </description>
   <resolution>
-    <p><em>04 Sep 2002</em> - Adam to present writeup to EG.</p>
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
@@ -120,25 +110,15 @@ moved to
 <issue>
   <id>ServletDependencies-6</id>
   <originator>Adam</originator>
-  <summary>Servlet API Dependencies</summary>
+  <summary>JSFA11 in Scarab</summary>
   <description>
-    <p>To what extent do we wish to abstract away the current dependencies
-    on the servlet API?  This may be necessary for the Portlet JSR, and
-    it would be necessary for using JSF to create content outside of
-    servlets.</p>
-
-    <p>Example scenario from Hans (09/13):  Having a command event include
-    a Map of parameter names/values directly, instead of letting the event
-    handler pull them out of the servlet request.  (<em>Craig - to be
-    complete, we'd want to think about maps of headers and cookies also</em>).
-    </p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA11">JSFA11</a> in Scarab.
   </description>
   <resolution>
-    <p><em>04 Sep 2002</em> - Adam to present writeup to EG.</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
-  <priority>3</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -146,21 +126,15 @@ moved to
 <issue>
   <id>JspDependencies-7</id>
   <originator>Hans</originator>
-  <summary>JSP API Dependencies</summary>
+  <summary>JSFA23 in Scarab</summary>
   <description>
-    <p>Although there are many who suggest we base JSF on JSP 1.2 for
-    immediate acceptance reasons, it forces us to do any custm tag
-    implementation classes based on the JSP 1.2 Tag and BodyTag APIs.
-    Can we avoid creating a dependency like this that ties us to this
-    API (which could potentially be deprecated in some future JSP spec)?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA23">JSFA23</a> in Scarab.
   </description>
   <resolution>
-    <p><em>02 Oct 2002</em> - Consensus appears to be that we stick with
-       the original decision to support JSP 1.2.</p>
   </resolution>
-  <status>CLOSED</status>
-  <status-date>02 Oct 2002</status-date>
-  <priority>5</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -168,32 +142,16 @@ moved to
 <issue>
   <id>ELDependencies-8</id>
   <originator>Hans</originator>
-  <summary>JSP EL API Dependencies</summary>
+  <summary>JSFA24</summary>
   <description>
-    <p>Basing JSF on JSP 1.2 means we must specify our version of the EL
-    language being used for model references in the JSF specification (or
-    perhaps point at the non-normative one in JSTL 1.0), since we would
-    not want to tie ourselves to the JSP 2.0 formal definition of the
-    language.  Is this acceptable?  Can we deal with it in a different
-    way?</p>
-
-    <p>In addition, we currently need a feature that is not supported by
-    the JSTL 1.0 or JSP 2.0 versions of the EL -- model object
-    <em>setting</em> as well as getting.  We're going to need to address
-    the syntax and semantics of this no matter what JSP version we choose
-    to depend on.</p>
-
-    <p>Futher, we have the opportunity to simplify the APIs somewhat by
-    using EL expressions for some common lookup scenarios such as resource
-    bundles (see Adam's mail threads for more  on this).</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA24">JSFA24</a> in Scarab.
   </description>
  <resolution>
-    
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
-  <priority>1</priority>
-  <effort>Large</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
@@ -252,25 +210,15 @@ moved to
 <issue>
   <id>ModelReferences-12</id>
   <originator>Public</originator>
-  <summary>Are modelReference attributes required?</summary>
+  <summary>JSFA25 in Scarab</summary>
   <description>
-    <p>Must I really specify a modelReference attribute for every component?
-    That really increases the verbosity of my JSP pages -- for those like me
-    that suffer from RSI its a real pain.  It certainly also painful for those
-    that don't suffer from RSI.</p>
-
-    <p>Can't the association be done with reflection?  Can't the form beans
-    be specified in a configuration file?  Please?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA25">JSFA25</a> in Scarab.
   </description>
   <resolution>
-    <p><em>02 Oct 2002</em> - Consistency with the EL syntax in JSTL 1.0
-       and JSP 2.0 mandates complete expressions, and avoids artificial
-       restrictions that a Struts-like style (single form bean) would
-       impose.</p>
   </resolution>
-  <status>CLOSED</status>
-  <status-date>02 Oct 2002</status-date>
-  <priority>5</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -278,21 +226,15 @@ moved to
 <issue>
   <id>XmlModel-13</id>
   <originator>Public</originator>
-  <summary>Please include support for an XML Model</summary>
+  <summary>JSFA26 in Scarab</summary>
   <description>
-    <p>Great work on this JSR.  I think it will debunk the claim that
-    Visual Studio .NET is "easier to use" than J2EE development products.</p>
-
-    <p>What you are missing here is support for an XML model rather than
-    JavaBeans.  JSTL has excellent support for rendering an XML model and
-    I am surprised to find this lacking in JSR-127.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA26">JSFA26</a> in Scarab.
   </description>
   <resolution>
-    <p><em>02 Oct 2002</em> - Suitable for deferral to JSF 1.1.</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
-  <priority>4</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -300,30 +242,15 @@ moved to
 <issue>
   <id>CommandHyperlink-14</id>
   <originator>RI Team</originator>
-  <summary>Cannot implement command_hyperlink as specified</summary>
+  <summary>JSFA27 in Scarab</summary>
   <description>
-    <p>The decode behavior of the <code>Hyperlink</code> Renderer is
-    currently specified as "send a CommandEvent to the application."
-    However, the current definition of phase switching does not provide
-    a path from <em>Process Request Events</em> to <em>Invoke
-    Application</em> without going through validations and model updates.
-    These phases are inappropriate in a CommandEvent scenario, because
-    a form (and the corresponding input fields) did not get submitted.</p>
-
-    <p>Jeff:  In the past I've done this via JavaScript and Form.submit()
-    for pages that contain other form data and with standard links with
-    parameters for pages that are display only.</p>
-
-    <p>Jeff:  Why is the second Hyperlink renderer a UICommand component,
-    when it doesn't trigger a command event?  Why isn't it under UIOutput
-    instead?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA27">JSFA27</a> in Scarab.
   </description>
   <resolution>
-    
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
-  <priority>3</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -331,36 +258,15 @@ moved to
 <issue>
   <id>UserAgent-15</id>
   <originator>Craig</originator>
-  <summary>Do we need a UserAgent classification scheme?</summary>
+  <summary>JSFA28 in Scarab</summary>
   <description>
-    <p>So far during the development of the Standard HTML RenderKit,
-    it has not been necessary to emit any browser-specific code.  Such
-    a need might come in the future, and will certainly be necessary
-    for user-created components that create complex DHTML and/or JavaScript
-    code that depends on the DOM of the browser being targeted.</p>
-
-    <p>Making applications parse the <code>User-Agent</code> header seems
-    like something we might want to abstract away.  Because not all
-    RenderKits will target web browsers, it's not just a matter of
-    identifying what browser type is in use.  Perhaps a UserAgentClassifier
-    plug-in interface that is part of the RenderKit?</p>
-
-    <p>If we ever do start emitting browser-dependent code from the
-    standard RenderKit, it's also important to understand how caches
-    can negatively affect application behavior by caching the content
-    for one browser and serving it to another.  This only happens if the
-    request URL is identical, which is something to avoid.</p>
-
-    <p>NOTE:  JSR188 <a href="http://jcp.org/jsr/detail/188.jsp">
-    http://jcp.org/jsr/detail/188.jsp</a> is operating in this space.
-    We should take its development into account.</p>
+See <a href=""></a> in Scarab.
   </description>
   <resolution>
-    
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
-  <priority>3</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -368,63 +274,31 @@ moved to
 <issue>
   <id>DataGrid-16</id>
   <originator>Jeff</originator>
-  <summary>What should a DataGrid control look like?</summary>
+  <summary>JSFA29 in Scarab</summary>
   <description>
-    <p>Many existing GUI frameworks for web applications have data grid
-    controls that allow page authors to do relatively sophisticated hookups
-    to back end data sources.  It is very likely that Faces will need
-    such a control as well.  What should it look like, in terms of the
-    Faces component and renderer design?</p>
-
-    <p>Besides supporting JavaBean arrays, Collections, and Maps (like the
-    propotype "List" renderer in jsf-psuedo) does, we should consider
-    supporting a control whose model reference points at either a JSTL
-    <code>javax.servlet.jsp.jstl.sql.Result</code> or a JDBC
-    <code>java.sql.ResultSet</code> (or <code>RowSet</code>) directly.
-    Using a <code>Result</code> object would allow very easy interoperability
-    with JSTL's SQL tags.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA29">JSFA29</a> in Scarab.
   </description>
   <resolution>
-    
   </resolution>
-  <status>OPEN</status>
-  <status-date>05 Sep 2002</status-date>
-  <priority>1</priority>
-  <effort>Large</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
 <issue>
   <id>NonJSPRendering-17</id>
   <originator>Hans</originator>
-  <summary>Non-JSP Rendering Environment</summary>
+  <summary>JSFA30 in Scarab</summary>
   <description>
-    <p>We have spent a significant amount of effort on making sure that Faces
-    interacts well with JSP and related technologies (such as JSTL).  We need
-    to prove (at a minimum to ourselves) that the basic APIs support rendering
-    in a non-JSP environment as well.  How much of this should show up in
-    the RI?  Or in ancillary distributions (along with enhanced renderkits)?
-    </p>
-
-    <p>Added Notes from Hans:  I reported that in my proof of concept
-    implementation with a DOM-based rendering model, I needed to implement
-    a custom ViewHandler, a RenderKit (with Renderers, of course), and a
-    TreeFactory.  It seems to me that the need for a custom TreeFactory
-    indicates a flaw in our abstractions, since it should be enough with a
-    ViewHandler and a RenderKit.</p>
-
-    <p>Added Notes from Hans:  Ana added that she feels that none of these
-    custom classes should be needed, arguing (I assume) that JSF should
-    provide all that's needed for DOM-based rendering in addition to JSP-based
-    rendering.  I'm not sure yet if I agree or not, so let's see how it plays
-    out when we look at the impact.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA30">JSFA30</a> in Scarab.
   </description>
   <resolution>
-    
   </resolution>
-  <status>OPEN</status>
-  <status-date>05 Sep 2002</status-date>
-  <priority>3</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -432,28 +306,16 @@ moved to
 <issue>
   <id>TreeClass-18</id>
   <originator>EG</originator>
-  <summary>Tree/TreeFactory Classes Needed?</summary>
+  <summary>JSFA31 in Scarab</summary>
   <description>
-    <p>One of the original motivations for the <code>Tree</code> and
-    <code>TreeFactory</code> classes was the notion of constructing an
-    entire component tree from some external metadata.  Our current approach
-    that allows the tree to be constructed dynamically during Render Response
-    makes the need for this substantially weaker.</p>
-
-    <p>Can we get rid of TreeFactory entirely?  Probably.</p>
-
-    <p>Can we get rid of Tree as well?  Possibly -- at the cost of replacing
-    two FacesContext properties (<code>requestTree</code> and
-    <code>responseTree</code>) with six (<code>renderKitId</code>,
-    <code>root</code>, and <code>treeId</code> for each of the two trees).</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA31">JSFA31</a> in Scarab.
   </description>
   <resolution>
-    
   </resolution>
-  <status>OPEN</status>
-  <status-date>05 Sep 2002</status-date>
-  <priority>2</priority>
-  <effort>Small</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 <issue>
@@ -491,46 +353,30 @@ moved to
 <issue>
   <id>UIComponentBase-21</id>
   <originator>EG</originator>
-  <summary>UIComponentBase exists in API but not Spec</summary>
+  <summary>See JSFA32 in Scarab</summary>
   <description>
-    <p>Based on EG feedback, UIComponent was converted from an abstract class
-    to an interface, and UIComponentBase added as an abstract class.  This
-    change has not yet been reflected in the spec.  Do we want to keep it?
-    If so, the spec needs to be updated to reflect this.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA32">JSFA32</a> in Scarab.
   </description>
   <resolution>
-    
   </resolution>
-  <status>OPEN</status>
-  <status-date>06 Sep 2002</status-date>
-  <priority>1</priority>
-  <effort>Small</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
 <issue>
   <id>OASIS-22</id>
   <originator>Kris &amp; Bart</originator>
-  <summary>Relationship with WSIA/WSRP Work</summary>
+  <summary>JSFA33 in Scarab</summary>
   <description>
-    <p>Review current progress on the OASIS <em>Web Services for Interactive
-    Applications</em> and <em>Web Services for Remote Portals</em>, and
-    make any needed recommendations for changes in JSF.</p>
-
-    <p><a href="http://www.oasis-open.org/">http://www.oasis-open.org</a></p>
-
-    <p>NOTE:  WSRP seems to me (Craig) to be clearly in the JSR168 sphere.</p>
-
-    <p>Craig:  The idea of supporting components that implement a web service
-    seems like a good JSF 1.1 topic, although it may turn out that a generic
-    component (as opposed to service-specific) is not feasible.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA33">JSFA33</a> in Scarab.
   </description>
-  <resolution>
-    
-  </resolution>
-  <status>OPEN</status>
-  <status-date>06 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -538,132 +384,80 @@ moved to
 <issue>
   <id>PortletTerminology-23</id>
   <originator>Kris &amp; Bart</originator>
-  <summary>Alignment with JSR168 Terminology Definitions</summary>
+  <summary>JSFA34 in Scarab</summary>
   <description>
-    <p>We should ensure that there is alignment between terminology definitions
-    in JSR168 (Portlets) and JSR127 (Faces) where the concepts are the same.
-    </p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA34">JSFA34</a> in Scarab.
   </description>
-  <resolution>
-    
-  </resolution>
-  <status>OPEN</status>
-  <status-date>06 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>FacesServlet-24</id>
   <originator>Kris &amp; Bart</originator>
-  <summary>Should we use FacesServlet or FacesFilter</summary>
+  <summary>JSFA35 in Scarab</summary>
   <description>
-    <p>Re-examine our current choice of using a Servlet instead of a Filter
-    for the Faces mini-front-controller.  Among the issues:</p>
-    <ul>
-    <li>JSR168 choice to mimic servlet APIs instead of extend them.</li>
-    <li>Filters don't work on RequestDispatcher.include() calls on Servlet
-        2.3 (but this is possible in Servlet 2.4).</li>
-    </ul>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA35">JSFA35</a> in Scarab.
   </description>
-  <resolution>
-    
-  </resolution>
-  <status>OPEN</status>
-  <status-date>06 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>LookAndFeel-25</id>
   <originator>Kris &amp; Bart</originator>
-  <summary>How will JSF address look and feel</summary>
+  <summary>JSFA36 in Scarab</summary>
   <description>
-    <p>This is a somewhat open ended question.  The philosophy in the 0902
-    version of the standard renderers is to delegate as much of possible to
-    CSS stylesheets and give page authors the ability to configure the
-    stylesheet class (or classes) to use for rendering each component.
-    That seems to be the direction that W3C encourages for HTML.  Is that
-    the way we want to stay?</p>
-
-    <p>NOTE:  Running the jsf-pseudo examples under Netscape 4.x looked
-    surprisingly better than I thought it would, but there are going to be
-    obvious issues around stylesheet directives that 4.x doesn't support
-    or implements incorrectly.</p>
-
-    <p>Craig:  I think supporting overall page look-and-feel, and things
-    like skinning, are suitable for JSF 1.1.  The current use of CSS is
-    more focused on the rendering of individual components than on overall
-    layout.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA36">JSFA36</a> in Scarab.
   </description>
-  <resolution>
-    
-  </resolution>
-  <status>OPEN</status>
-  <status-date>06 Sep 2002</status-date>
-  <priority>4</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>ConfigFiles-26</id>
   <originator>Kris &amp; Bart</originator>
-  <summary>Specify standard app configuration file format(s)</summary>
+  <summary>JSFA37 in Scarab</summary>
   <description>
-    <p>There are several cases where we expect page authors, component
-    writers, and application develop to register custom classes with a
-    JSF implementation, typically at startup time (application handler,
-    UIComponents, converters, renderers, and so on).  We should probably
-    define a standard configuration file format (probably in XML) so that
-    applications do not need to include programmatic logic to perform the
-    necessary registrations.  Section 9.3 of the spec is already reserved
-    for documenting such formats.</p>
-
-    <p>NOTE:  We'll probably want to specify a standard servlet init parameter
-    that specifies the resource path to such config files.  For maximum
-    flexibility, more than one config file should be allowed.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA37">JSFA37</a> in Scarab.
   </description>
-  <resolution>
-    
-  </resolution>
-  <status>OPEN</status>
-  <status-date>09 Sep 2002</status-date>
-  <priority>2</priority>
-  <effort>Large</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>ComponentIdentifiers-27</id>
   <originator>Joe</originator>
-  <summary>Define a mechanism for knowing rendered component ids</summary>
+  <summary>JSFA28 in Scarab</summary>
   <description>
-    <p>There are several scenarios in which it is important for the logic
-    performing component rendering to be able to predict what the rendered
-    "id" for another component will be, whether or not that component has
-    actually been rendered yet.  Sample use cases:</p>
-    <ul>
-    <li>Generating client-side JavaScript that references more than
-        one component.</li>
-    <li>Generating client-side JavaScript for validation.</li>
-    <li>Master-detail UI, so that you can generate hyperlinks for the
-        items that cross reference between the master and the items.</li>
-    </ul>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA28">JSFA28</a> in Scarab.
   </description>
-  <resolution>
-    <p><em>11 Sep 2002</em> - Joe submitted a proposal message titled
-    "form handling design pattern for viewing/editing entities".</p>
-    <p><em>02 Oct 2002</em> - Consolidate this item with
-       [ComponentNamespace-10].</p>
-  </resolution>
-  <status>CLOSED</status>
-  <status-date>02 Oct 2002</status-date>
-  <priority>5</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
@@ -702,64 +496,48 @@ moved to
 <issue>
   <id>OnLoad-30</id>
   <originator>Hans</originator>
-  <summary>How to add "onLoad" JavaScript handlers to a response</summary>
+  <summary>JSFA39 in Scarab</summary>
   <description>
-    <p>This is an issue I have hinted at in my arguments for a
-    DOM based rendering model, and I also saw it mentioned as an issue
-    in the public discussion about the released draft.</p>
-
-    <p>Craig:  There is probably some overlap with [StateSaving-5], at least
-    for the timing issues.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA39">JSFA39</a> in Scarab.
   </description>
-  <resolution>
-    <p><em>02 Oct 2002</em> - Consolidate [JavaScript-31] into this item.</p>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>JavaScript-31</id>
   <originator>Hans</originator>
-  <summary>How to add JavaScript event handlers to a response</summary>
+  <summary>JSFA40 in Scarab</summary>
   <description>
-    <p>It's been mentioned a number of times that we want to do so,
-    but it's not in the spec yet.</p>
-
-    <p>Craig:  Some overlap with [ComponentIdentifiers-27], which is a
-    key enabler.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA40">JSFA40</a> in Scarab.
   </description>
-  <resolution>
-    <p><em>02 Oct 2002</em> - Consolidated into [OnLoad-30].</p>
-  </resolution>
-  <status>CLOSED</status>
-  <status-date>02 Oct 2002</status-date>
-  <priority>5</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>InitialTree-32</id>
   <originator>Hans</originator>
-  <summary>How to wire up initial tree in a rendering-neutral way</summary>
+  <summary>JSFA41 in Scarab</summary>
   <description>
-    <p>This question pops up from time to time.  I, for instance,
-    suggested a while back that we need to define another lifecycle that
-    deals with this case.  The 0902 draft only says that an empty tree is
-    created, but it needs to be populated as well, and there's still no
-    arrow from the Reconstitute Request Tree phase to the Render
-    Response phase.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA41">JSFA41</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
@@ -798,79 +576,48 @@ moved to
 <issue>
   <id>InitialRequestURLs-35</id>
   <originator>Hans</originator>
-  <summary>URL contents for first view request, UIForm, UICommand</summary>
+  <summary>JSFA42 in Scarab</summary>
   <description>
-    <p>We have discussed on different threads how to encode the
-    tree id and other information in URLs.  This needs to be defined in
-    the spec.  The most recent suggestion (my proposal modified with
-    Craig's response) is:</p>
-    <ul>
-    <li>First request:  /{context.path}/{tree.id}</li>
-    <li>UIForm:  /{context.path}/{tree.id} (form name can be deduced
-        from the submit button that was used (<em>CRM</em>:  but only if
-        we can use <code>UIComponent.getParent()</code> -- see
-        [ComponentTreeParent-36])</li>
-    <li>UICommand:  /{context.path}/faces/command/{command.name}/{tree.id}.
-        </li>
-    </ul>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA42">JSFA42</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
-  <priority>1</priority>
-  <effort>Small</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>ComponentTreeParent-36</id>
   <originator>Adam</originator>
-  <summary>Should component trees have parent links?</summary>
+  <summary>JSFA43 in Scarab</summary>
   <description>
-    <p>The current implementation of UIComponent maintains links from a
-    component to its parent, which implies that you can't recycle parts of
-    a tree in more than one place, and other interesting things like that.
-    This feature is quite important in most use cases of collaboration between
-    components in a hierarchy (analogous to the issues of JSP custom tags
-    collaborating with each other).</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA43">JSFA43</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>RequiredValidator-37</id>
   <originator>Hans</originator>
-  <summary>Semantics of RequiredValidator needs refinement</summary>
+  <summary>JSFA44 in Scarab</summary>
   <description>
-    <p>The RequiredValidator accepts an empty string as valid,
-    but this means the validator is useless for a required text field,
-    since HTML always generates an empty request parameter for an empty
-    text field.  Combining it with LengthValidator, as was being suggested
-    when I raised the issue, doesn't help; sure, the LengthValidator will
-    catch it but the RequiredValidator is still useless and never generates
-    an appropriate error message for an empty field.</p>
-
-    <p>Adam added that we also have a reverse problem; an optional text
-    field that must accept an empty string, but if it has a value, it
-    must be possible to let a validator validate the value.  This is not
-    possible today, but he suggested that a solution to both problems is
-    to add a "required" property on UIInput (and others, I'm sure) instead
-    and only validate when the component has a value.  This would replace
-    the RequiredValidator.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA44">JSFA44</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
-  <priority>1</priority>
-  <effort>Small</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
@@ -893,112 +640,64 @@ moved to
 <issue>
   <id>EventProcessingPhases-39</id>
   <originator>Hans</originator>
-  <summary>Do we need more than one event processing phase?</summary>
+  <summary>JSFA45 in Scarab</summary>
   <description>
-    <p>If we implement [StandardComponentEvents-38], the answer is
-    yes.  We probably need to process events in the Handle Events phase
-    until the queue is empty (as opposed to the one pass approach), since
-    new events may be triggered in this phase.  We may also need new event
-    processing phases after other phases, such as Validation, Update Model
-    Values, and Invoke Application.</p>
-
-    <p>Jeff:  Two particular phases that might be useful:</p>
-    <ul>
-    <li>OnLoad -- Walks the component tree after Reconsitute Request Tree
-        but before Apply Request Values.</li>
-    <li>OnUnload -- Walks the component tree after Render Response
-        for cleanup purposes.</li>
-    </ul>
-
-    <p>See Also:  [Listeners-3], [StandardComponentEvents-38].</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA45">JSFA45</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>UntypedStrings-40</id>
   <originator>Hans</originator>
-  <summary>Should we replace untyped Strings with typesafe enums?</summary>
+  <summary>JSFA46 in Scarab</summary>
   <description>
-    <p>I made a proposal (with an example) for the component type
-    attribute used by the renderers, but the same applies to all cases
-    where we use Strings that need to be unique.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA46">JSFA46</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
-  <priority>1</priority>
-  <effort>Small</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>DecodeEncode-41</id>
   <originator>EG</originator>
-  <summary>Names for decode and encode methods</summary>
+  <summary>JSFA47 in Scarab</summary>
   <description>
-    <p>Many of us are uncomfortable with the names of the decode and
-    encode methods.  Craig feels that the names should be "paired" in
-    some fashion because the logic they implement must be complementary.
-    Consider:  decode/renderXxx.  parse/renderXxx.  applyRequest/renderXxx.</p>
-
-    <p>Adam:  Additional naming to think about:</p>
-    <ul>
-    <li>"Handle Request Events" to "Process Request Events".</li>
-    <li>UIComponent.processEvents() to processRequestEvents().</li>
-    <li>UIComponent.processValidators() to processValidation().</li>
-    </ul>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA47">JSFA47</a> in Scarab.
   </description>
-  <resolution>
-    <p><em>02 Oct 2002</em> - Transfer to [UsabilityRenames-59].</p>
-  </resolution>
-  <status>CLOSED</status>
-  <status-date>02 Oct 2002</status-date>
-  <priority>5</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>ValidatorsAPI-42</id>
   <originator>Adam</originator>
-  <summary>Add value parameter to Validator.validate()?</summary>
+  <summary>JSFA51 in Scarab</summary>
   <description>
-    <p>Currently, validators receive a FacesContext and UIComponent.
-    They are expected to turn around and immediately call
-    <code>UIComponent.getValue()</code>.  However, this means:</p>
-    <ul>
-    <li>No Validator can ever be used to validate anything other than
-        the primary value of its component.  A component that needs two
-        values will be forced to roll its own new Validators.</li>
-    <li>A component that wishes to validate the client side representation
-        (the String value) differently from the type-converted value cannot.
-        </li>
-    <li>getValue() is called once for each Validator.  Shouldn't be
-        expensive performance-wise, but ...</li>
-    </ul>
-    <p>This can all be fixed by simply adding the Object value to
-    Validator.validate().  We can (and should) still send the UIComponent
-    instance.</p>
-
-   <p>How do we handle "form level" validation, rather than "component
-   level" validation?</p>
-    
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA51">JSFA51</a> in Scarab.
   </description>
-  <resolution>
-   <p>5 November 2002 - edburns - Added content from http://forum.java.sun.com/thread.jsp?forum=427&amp;thread=319464 </p>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
@@ -1071,45 +770,16 @@ moved to
 <issue>
   <id>NonVisual-46</id>
   <originator>Bart &amp; Kris</originator>
-  <summary>Component names that assume visual rendering</summary>
+  <summary>JSFA49 in Scarab</summary>
   <description>
-    <p>We have always found the decision to look for inspiration in the
-    XForms standard to name the JSF components charming.  The reason is
-    that it has brought JSF a <em>not to be underestimated</em>
-    differentiator to ASP.NET Web Forms, at least theoretically.  Our
-    components are completely render-independent; not even the
-    visual/non-visual choice is made, as in XForms.</p>
-
-    <p>That's the reason why we are not favoring the addition of the
-    'visual' (<em>SPEC LEAD NOTE - is this a reference to the 'visible'
-    versus 'shouldRender' discussion?) attribute on UIComponent.  An
-    'encoded' attribute, however, would make sense.</em>)</p>
-
-    <p>The render-independent component model should theoretically also
-    cater for building voice user interfaces with JSF.  Two times already
-    we have written 'theoretically' because of course it requires a POC
-    before one can really make the statement.</p>
-
-    <p>Unfortunately, two components in the current spec seem not to fit
-    the above description:  UIGraphic and UIPanel.  The naming clearly
-    suggests that these components are visual.  At least, we cannot
-    envisage anything that would represent such things in for example
-    a voice user interface.  It could be that these components are simply
-    not part of such a user interface and that the remainder of the
-    components forms the full set for non-visual interfaces.  However,
-    we don't think so.</p>
-
-    <p>For more background, and sample scenarios, see the EG mailing list
-    message from Kris on 09/13/2002 entitled "Render-Independent UI
-    Component Model Catering for Visual and Non-Visual Interfaces."</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA49">JSFA49</a> in Scarab.
   </description>
-  <resolution>
-    <p><em>21 Oct 2002</em> - Merge into [UsabilityRenames-59].</p>
-  </resolution>
-  <status>CLOSED</status>
-  <status-date>21 Oct 2002</status-date>
-  <priority>2</priority>
-  <effort>Medium</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
@@ -1169,20 +839,16 @@ moved to
 <issue>
   <id>AbstractClassNames-49</id>
   <originator>Hans</originator>
-  <summary>Naming convention for abstract base classes</summary>
+  <summary>JSFA50 in Scarab</summary>
   <description>
-    <p>Currently, our abstract base classes have the naming convention
-    <code>FooBase</code> (such as UIComponentBase, etc.).  Some other Java
-    APIs use the convention <code>AbstractFoo</code> for this concept
-    instead.  Should we switch?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA50">JSFA50</a> in Scarab.
   </description>
-  <resolution>
-    <p><em>21 Oct 2002</em> - Merged into [UsabilityRenames-59].</p>
-  </resolution>
-  <status>CLOSED</status>
-  <status-date>21 Oct 2002</status-date>
-  <priority>2</priority>
-  <effort>Small</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
@@ -1404,41 +1070,16 @@ moved to
 <issue>
   <id>UsabilityRenames-59</id>
   <originator>EG</originator>
-  <summary>Should classes and methods be renamed for usability?</summary>
+  <summary>JSFA48 in Scarab</summary>
   <description>
-    <p>A variety of class and method renames have been suggested to improve
-    usability.  This issue is an omnibus to address them.  Included:</p>
-    <ul>
-    <li><strong>UIComponent</strong> - Change "modelReference" to "ref"
-        for XForms consistency (Craig - I think going back to "model" would
-        be better than this unless the semantics match exactly).</li>
-    <li><strong>UIGraphic</strong> - Change to "UIMedia" or "UIResource"
-        to remove visual connotation.</li>
-    <li><strong>UIPanel</strong> - Change to something that doesn't connote
-        visual representation (UIContainer?  UIManager?).</li>
-    <li><strong>UISelectMany</strong> - Rename to UISelect (new XForms).</li>
-    <li><strong>UISelectOne</strong> - Rename to UISelect1 (new XForms).</li>
-	  <li><strong>decode/encode</strong> - change to parse/render</li>
-
-    </ul>
-    <p>It's also worth reviewing the recent XForms 1.0 working draft
-    (08/21/2002) because they've changed some of the component names we
-    originally copied.</p>
-
-<p>Also check out Adam's post <a href="http://swjscmail1.java.sun.com/cgi-bin/wa?A2=ind0209&amp;L=jsr-127-eg&amp;D=0&amp;X=6F83683A67B23EB98E&amp;Y=ed.burns@sun.com&amp;P=14616">on the VisibleProperty thread</a>.</p>
-
-  <p> Clean up javadocs. (Specifically, adding "@return" and using "Returns" instead of "Return"
-      on all methods that have return value.) </p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA48">JSFA48</a> in Scarab.
   </description>
-  <resolution>
-    <p><em>02 Oct 2002</em> - Consolidate [DecodeEncode-41] into this.</p>
-    <p><em>21 Oct 2002</em> - Merge in [NonVisual-46] and
-       [AbstractClassNames-49].</p>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>20 Sep 2002</status-date>
-  <priority>1</priority>
-  <effort>Medium</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
