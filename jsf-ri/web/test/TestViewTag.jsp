@@ -10,7 +10,8 @@
   <body>
     <h1>TestViewTag</h1>
 
-<f:view locale="ps-PS_Traditional">
+<f:loadBundle basename="com.sun.faces.TestMessages" var="testMessages" />
+<f:view locale="#{testMessages.localeFromBundle}">
 <h:form styleClass="formClass" accept="html">
 
 <table>

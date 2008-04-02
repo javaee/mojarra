@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.13 2003/12/17 15:14:15 rkitain Exp $
+ * $Id: ViewTag.java,v 1.14 2004/01/14 21:48:52 jvisvanathan Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import com.sun.faces.util.Util;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.13 2003/12/17 15:14:15 rkitain Exp $
+ * @version $Id: ViewTag.java,v 1.14 2004/01/14 21:48:52 jvisvanathan Exp $
  * 
  *
  */
@@ -270,11 +270,16 @@ public class ViewTag extends UIComponentBodyTag
 	    if (isValueReference(locale)) {
 		component.setValueBinding("locale",
 					  vb = Util.getValueBinding(locale));
-		viewLocale = 
-		    (Locale) vb.getValue(FacesContext.getCurrentInstance());
+		Object resultLocale = 
+		        vb.getValue(FacesContext.getCurrentInstance());
+                if ( resultLocale instanceof Locale) {
+                    viewLocale = (Locale)resultLocale;
+                } else if ( resultLocale instanceof String) {
+                    viewLocale = getLocaleFromString((String)resultLocale);
+                }
 	    }
 	    else {
-		viewLocale = Util.getLocaleFromString(locale);
+		viewLocale = getLocaleFromString(locale);
 	    }
 	    ((UIViewRoot)component).setLocale(viewLocale);
 	    // update the JSTL locale attribute in request scope so that
@@ -287,4 +292,38 @@ public class ViewTag extends UIComponentBodyTag
         }
     }
     
-} // end of class UseFacesTag
+    /**
+     * Returns the locale represented by the expression.
+     * @param localeExpr a String in the format specified by JSTL Specification
+     *                   as follows:
+     *                   "A String value is interpreted as the printable 
+     *                    representation of a locale, which must contain a 
+     *                    two-letter (lower-case) language code (as defined by 
+     *                    ISO-639), and may contain a two-letter (upper-case)
+     *                    country code (as defined by ISO-3166). Language and 
+     *                    country codes must be separated by hyphen (’-’) or 
+     *                    underscore (’_’)."
+     * @return Locale instance cosntructed from the expression.
+     */
+    protected Locale getLocaleFromString(String localeExpr) {
+        Locale result = Locale.getDefault();
+        if (localeExpr.indexOf("_") == -1 && localeExpr.indexOf("-") == -1)  {
+            // expression has just language code in it. make sure the 
+            // expression contains exactly 2 characters.
+            if (localeExpr.length() == 2) {
+                result = new Locale(localeExpr);
+            }
+        } else {
+            // expression has country code in it. make sure the expression 
+            // contains exactly 5 characters.
+            if (localeExpr.length() == 5) {
+                // get the language and country to construct the locale.
+                String language = localeExpr.substring(0,2);
+                String country = localeExpr.substring(3,localeExpr.length());
+                result = new Locale(language,country);
+            }
+        }
+        return result;
+    }
+    
+} // end of class ViewTag

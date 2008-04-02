@@ -1,5 +1,5 @@
 /*
- * $Id: TestViewTag.java,v 1.4 2003/12/17 15:15:45 rkitain Exp $
+ * $Id: TestViewTag.java,v 1.5 2004/01/14 21:48:54 jvisvanathan Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewTag.java,v 1.4 2003/12/17 15:15:45 rkitain Exp $
+ * @version $Id: TestViewTag.java,v 1.5 2004/01/14 21:48:54 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -110,7 +110,7 @@ public void testViewTag()
 {    
     boolean result = false;    
     String value = null;
-    Locale expectedLocale = new Locale("ps", "PS", "Traditional");
+    Locale expectedLocale = new Locale("ps", "PS");
     Phase renderResponse = new RenderResponsePhase();    
     UIViewRoot page = new UIViewRoot();
     page.setId("root");
@@ -172,6 +172,21 @@ public void testViewTagVB()
 	}
     }
     assertEquals("locale not as expected", expectedLocale, page.getLocale());
+}
+
+public void testGetLocaleFromString() {
+    ViewTag viewTag = new ViewTag();
+    Locale locale = viewTag.getLocaleFromString("fr-FR");
+    assertTrue(locale.equals(new Locale("fr", "FR")));
+    
+    locale = viewTag.getLocaleFromString("fr_FR");
+    assertTrue(locale.equals(new Locale("fr", "FR")));
+    
+    locale = viewTag.getLocaleFromString("fr");
+    assertTrue(locale.equals(new Locale("fr")));
+    
+    locale = viewTag.getLocaleFromString("testLocale");
+    assertTrue(locale.equals(Locale.getDefault()));
 }
 
 } // end of class TestViewTag
