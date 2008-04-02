@@ -1595,10 +1595,10 @@
 
     <renderer>
 
-      <description>Renders an HTML "label" element.  Find the component
-      specified by the value of the "for" attribute, and render its
-      client id as the value of the "for" attribute.  If the
-      "styleClass" attribute is specified, render its value as the value
+      <description>Renders an HTML "label" element.  If a "for" attribute is 
+      specified, find the component specified by the value of the "for" 
+      attribute, and render its client id as the value of the "for" attribute.  
+      If "styleClass" attribute is specified, render its value as the value
       of the "class" attribute.</description>
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.Label</renderer-type>
@@ -1768,7 +1768,7 @@
 
     <renderer>
 
-      <description><p>Render an HTML option list.</p>
+      <description><p>Render an HTML checkbox list.</p>
 
       <p><a name="decode">Decode Behavior</a></p>
 
@@ -1783,11 +1783,10 @@
       <p>Encode Behavior</p>
 
       <ul>
-      <p>If the "styleClass" attribute is specified, render a
-      "span" element and render the value of the "styleClass attribute
-      as the value of the "class" attribute on the "span" element.
-      Render a "table" element.  If the "border" attribute is specified,
-      pass it thru.  If the "layout" attribute is specified, and its
+      <p>Render a "table" element.  If the "styleClass" is specified, render the 
+      value of the "styleClass" attribute as the value of the "class" attribute 
+      on the "table" element. If the "style", "border" attributes are specified,
+      pass them thru.  If the "layout" attribute is specified, and its
       value is "pageDirection", render the children elements vertically,
       otherwise horizontally, in the table.  If any of the children are
       an instance of SelectItemGroup, render them as a nested table.
@@ -1795,12 +1794,11 @@
       a "label" element with the "for" attribute being the clientId of
       the component.  Inside of the "label", render an "input" element
       of "type" "checkbox" for each child component.  As an exception to
-      the general rules about how to handle the "id" attribute, render a
-      "span" element around all the "input" elements, with an "id"
-      attribute, the value of which is the <code>clientId</code> of the
-      component per the rules at the beginning of this specification.
-      The "id" attribute must not be output on each "input" element.
-      The value of the current SelectItem is rendered as the value of
+      the general rules about how to handle the "id" attribute, render it
+      as an attribute on the outer "table" element, the value of which is the 
+      <code>clientId</code> of the component per the rules at the beginning 
+      of this specification.The "id" attribute must not be output on each "input" 
+      element. The value of the current SelectItem is rendered as the value of
       the "value" attribute.  If the value of the enclosing UISelectMany
       matches the current value, render "checked" as the value of the
       "checked" attribute.  If the current SelectItem.isDisabled()
@@ -1876,16 +1874,14 @@
 
       <ul>
 
-      <p>If the "styleClass" attribute is specified, render
-      a "span" element and render the value of the "styleClass"
-      attribute as the value of the "class" attribute on the "span"
-      element.  Render an HTML "select" element.  Render the clientId of
-      the component as the value of the "name" attribute.  If the
-      component is a <code>UISelectMany</code> instance, render
-      "multiple" as the value of the "multiple" attribute.  If the
-      "size" attribute is specified, render its value as the value of
-      the "size" attribute.  Otherwise use the number of items as the
-      value of the "size" attribute.</p>
+      <p>Render an HTML "select" element. Render the clientId of
+      the component as the value of the "name" attribute.  If the "styleClass" 
+      attribute is specified, render its value as the value of the "class" 
+      attribute on the "select" element.  If the component is a 
+      <code>UISelectMany</code> instance, render "multiple" as the value of the 
+      "multiple" attribute.  If the "size" attribute is specified, render its 
+      value as the value of the "size" attribute.  Otherwise use the number of 
+      items as the value of the "size" attribute.</p>
 
       </ul>
 
@@ -1981,11 +1977,10 @@
 
       <ul>
 
-      <p>If the "styleClass" attribute is specified, render a
-      "span" element and render the value of the "styleClass attribute
-      as the value of the "class" attribute on the "span" element.
-      Render an HTML "select" element.  Render the clientId of the
-      component as the value of the "name" attribute.  If the component
+      <p>Render an HTML "select" element.  Render the clientId of
+      the component as the value of the "name" attribute.  If the "styleClass" 
+      attribute is specified, render its value as the value of the "class" 
+      attribute on the "select" element. If the component
       to be rendered is a UISelectMany, render "true" as the value of
       the "multiple" attribute.  Render "1" as the value of the "size"
       attribute.  See the <a
@@ -2026,11 +2021,10 @@
       <p>Encode Behavior</p>
 
       <ul>
-      <p>If the "styleClass" attribute is specified, render a
-      "span" element and render the value of the "styleClass attribute
-      as the value of the "class" attribute on the "span" element.
-      Render an HTML "select" element.  Render the clientId of the
-      component as the value of the "name" attribute.  If the component
+      <p>Render an HTML "select" element.  Render the clientId of
+      the component as the value of the "name" attribute.  If the "styleClass" 
+      attribute is specified, render its value as the value of the "class" 
+      attribute on the "select" element. If the component
       to be rendered is a UISelectMany, render "true" as the value of
       the "multiple" attribute.  If the "size" attribute is specified,
       render its value as the value of the "size" attribute.  Otherwise
@@ -2073,11 +2067,10 @@
 
       <ul>
 
-      <p>If the "styleClass" attribute is specified, render a
-      "span" element and render the value of the "styleClass attribute
-      as the value of the "class" attribute on the "span" element.
-      Render an HTML "select" element.  Render the clientId of the
-      component as the value of the "name" attribute.  If the component
+      <p>Render an HTML "select" element.  Render the clientId of
+      the component as the value of the "name" attribute.  If the "styleClass" 
+      attribute is specified, render its value as the value of the "class" 
+      attribute on the "select" element. If the component
       to be rendered is a UISelectMany, render "true" as the value of
       the "multiple" attribute.  If the "size" attribute is specified,
       render its value as the value of the "size" attribute.  Otherwise
@@ -2121,22 +2114,20 @@
 
       <ul>
 
-      <p>If the "styleClass" attribute is specified, render a
-      "span" element and render the value of the "styleClass attribute
-      as the value of the "class" attribute on the "span" element.
-      Render a "table" element.  If the "border" attribute is specified,
-      pass it thru.  If the "layout" attribute is specified, and its
+      <p>Render a "table" element. If the "styleClass" is specified, render the 
+      value of the "styleClass" attribute as the value of the "class" attribute 
+      on the "table" element. If the "style", "border" attributes are specified,
+      pass them thru. If the "layout" attribute is specified, and its
       value is "pageDirection", render the children elements
       vertically, otherwise horizontally, in the table.  If any of the
       children are an instance of SelectItemGroup, render them as a
       nested table.  Render a "label" element with the "for" attribute
       being the clientId of the component.  Each of the children are
-      ultimately rendererd as an "input" element of "type" "radio".  As
-      an exception to the general rules about how to handle the "id"
-      attribute, render a "span" element around all the "input"
-      elements, with an "id" attribute, the value of which is the
-      <code>clientId</code> of the component per the rules at the
-      beginning of this specification.  The "id" attribute must not be
+      ultimately rendererd as an "input" element of "type" "radio". As an 
+      exception to the general rules about how to handle the "id" attribute, 
+      render it as an attribute on the outer "table" element, the value of which 
+      is the <code>clientId</code> of the component per the rules at the 
+      beginning  of this specification.  The "id" attribute must not be
       output on each "input" element.  Output the value of the "label"
       attribute of the <code>SelectItem</code> after the "input"
       element.  If the value of the currently rendered child is equal to
