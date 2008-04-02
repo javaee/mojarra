@@ -1033,16 +1033,18 @@
 
       <ul>
 
-      <p>Render the clientId of the component as the value of the
-      "name" attribute.  Render the current value of the component as
-      the value of the "value" attribute. If "image" attribute is specified 
-      render it as the value of the "src" attribute after passing it
-      to the <code>getResourceURL()</code> method of the <code>ViewHandler</code>
-      for this application, and passing the result through the 
-      <code>encodeResourceURL()</code> method of the
-      <code>ExternalContext</code>.If the "styleClass" attribute
-      is specified, render its value as the value of the "class"
-      attribute.</p>
+      <p>Render the clientId of the component as the value of the "name"
+      attribute.  Render the current value of the component as the value
+      of the "value" attribute. If "image" attribute is specified render
+      it as the value of the "src" attribute after passing it to the
+      <code>getResourceURL()</code> method of the
+      <code>ViewHandler</code> for this application, and passing the
+      result through the <code>encodeResourceURL()</code> method of the
+      <code>ExternalContext</code>.  When handling the "image"
+      attribute, the value must not be escaped.  For example,
+      <code>&</code> must not be turned into <code>&amp;amp;</code>.  If the
+      "styleClass" attribute is specified, render its value as the value
+      of the "class" attribute.</p>
 
       </ul>
             ]]>
@@ -1347,16 +1349,20 @@
 
         <renderer>
 
-            <description><![CDATA[Renders an HTML "img" element.  Render the clientId
-      as the value of the "id" attribute.  Render the value of the
-      component as the value of the "src" attribute, after passing it
-      to the <code>getResourceURL()</code> method of the <code>ViewHandler</code>
-      for this application, and passing the result
-      through the <code>encodeResourceURL()</code> method of the
-      <code>ExternalContext</code>.  If present, render the value of the
-      alt attribute as the value of the "alt" attribute.  If the
-      "styleClass" attribute is specified, render its value as the value
-      of the "class" attribute.]]></description>
+            <description><![CDATA[Renders an HTML "img" element.  Render
+            the clientId as the value of the "id" attribute.  Render the
+            value of the component as the value of the "src" attribute,
+            after passing it to the <code>getResourceURL()</code> method
+            of the <code>ViewHandler</code> for this application, and
+            passing the result through the
+            <code>encodeResourceURL()</code> method of the
+            <code>ExternalContext</code>.  When handling the "src"
+            attribute, the value must not be escaped.  For example,
+            <code>&</code> must not be turned into <code>&amp;amp;</code>.
+            If present, render the value of the alt attribute as the
+            value of the "alt" attribute.  If the "styleClass" attribute
+            is specified, render its value as the value of the "class"
+            attribute.]]></description>
             <component-family>javax.faces.Graphic</component-family>
             <renderer-type>javax.faces.Image</renderer-type>
             <renderer-class>
