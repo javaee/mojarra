@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.22 2004/01/08 21:21:18 eburns Exp $
+ * $Id: UICommandTestCase.java,v 1.23 2004/01/10 18:52:15 eburns Exp $
  */
 
 /*
@@ -97,12 +97,21 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 	MethodBinding binding = facesContext.getApplication().
 	    createMethodBinding("#{l3.processAction}", 
 				actionListenerSignature);
+	MethodBinding actionBinding = facesContext.getApplication().
+	    createMethodBinding("#{l4.test}", null);
         command.setId("command");
         command.addActionListener(new TestCommandActionListener("l1"));
         command.addActionListener(new TestCommandActionListener("l2"));
         command.setActionListener(binding);
+        command.setAction(actionBinding);
         command.setImmediate(true);
         request.setAttribute("l3", new TestCommandActionListener("l3"));
+
+        // Override the default action listener to test ordering
+        ActionListener oldDefaultActionListener = 
+          facesContext.getApplication().getActionListener();
+        facesContext.getApplication().setActionListener(
+           new TestCommandActionListener("14"));
         Map map = new HashMap();
         map.put(command.getClientId(facesContext), "");
         MockExternalContext econtext =
@@ -110,8 +119,11 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         econtext.setRequestParameterMap(map);
         TestCommandActionListener.trace(null);
         root.processDecodes(facesContext);
-        assertEquals("/l1/l2/l3", TestCommandActionListener.trace());
+        assertEquals("/l1/l2/l3/14", TestCommandActionListener.trace());
 
+        // Restore the default action listener
+        facesContext.getApplication().setActionListener(
+           oldDefaultActionListener);
     }
 
 
@@ -272,10 +284,10 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
             (new TestActionListener("PV2"));
 
         ActionListener listeners[] = command.getActionListeners();
-        assertEquals(6, listeners.length); // Count the default one
+        assertEquals(5, listeners.length);
         command.removeActionListener(listeners[2]);
 	listeners = command.getActionListeners();
-        assertEquals(5, listeners.length);
+        assertEquals(4, listeners.length);
 
     }
 
@@ -385,7 +397,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 	command.addActionListener(ta2);
 	ActionListener [] listeners = (ActionListener [])
 	    command.getActionListeners();
-	assertEquals(3, listeners.length);
+	assertEquals(2, listeners.length);
 	TestActionListener [] taListeners = (TestActionListener [])
 	    command.getFacesListeners(TestActionListener.class);
     }

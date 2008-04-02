@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.10 2003/12/17 15:15:27 rkitain Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.11 2004/01/10 18:52:16 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.10 2003/12/17 15:15:27 rkitain Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.11 2004/01/10 18:52:16 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -227,8 +227,8 @@ public void testRegisterListeners() {
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
     assertTrue(getFacesContext().getViewRoot() != null);
-    assertTrue(command1.getDefaultListenerCount() > 0); 
-    assertTrue(command2.getDefaultListenerCount() > 0); 
+    assertTrue(command1.getDefaultListenerCount() == 0); 
+    assertTrue(command2.getDefaultListenerCount() == 0); 
 
     // Now test with no facets... Listeners should still be registered on UICommand
     // components....
@@ -261,8 +261,8 @@ public void testRegisterListeners() {
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
 
-    assertTrue(command1.getDefaultListenerCount() > 0); 
-    assertTrue(command2.getDefaultListenerCount() > 0); 
+    assertTrue(command1.getDefaultListenerCount() == 0); 
+    assertTrue(command2.getDefaultListenerCount() == 0); 
     getFacesContext().setViewRoot(null);
 }
 

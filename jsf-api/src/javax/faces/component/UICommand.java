@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.61 2004/01/08 21:21:09 eburns Exp $
+ * $Id: UICommand.java,v 1.62 2004/01/10 18:52:14 eburns Exp $
  */
 
 /*
@@ -39,7 +39,16 @@ import java.util.List;
  * activated, it will queue an {@link ActionEvent}.
  * Later on, the <code>broadcast()</code> method will ensure that this
  * event is broadcast to all interested listeners.</p>
- *
+ * 
+ * <p>Listeners will be invoked in the following order:
+ * <ol>
+ *  <li>{@link ActionListener}s, in the order in which they were registered.
+ *  <li>The "actionListener" {@link MethodBinding}
+ *  <li>The default {@link ActionListener}, retrieved from the
+ *      {@link Application} - and therefore, any attached "action"
+ *      {@link MethodBinding}.
+ * </ol>
+ * </p>
  * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Button</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
@@ -60,8 +69,6 @@ public class UICommand extends UIComponentBase
 
         super();
         setRendererType("Button");
-        // add the default action listener
-	addDefaultActionListener(getFacesContext());
     }
 
 
@@ -206,8 +213,6 @@ public class UICommand extends UIComponentBase
 
     public Object saveState(FacesContext context) {
 
-        removeDefaultActionListener(context);
-
         Object values[] = new Object[6];
         values[0] = super.saveState(context);
         values[1] = saveAttachedState(context, action);
@@ -215,16 +220,12 @@ public class UICommand extends UIComponentBase
         values[3] = immediate ? Boolean.TRUE : Boolean.FALSE;
         values[4] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
         values[5] = value;
-
-        addDefaultActionListener(context);
         return (values);
 
     }
 
 
     public void restoreState(FacesContext context, Object state) {
-        removeDefaultActionListener(context);
-
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         action = (MethodBinding) restoreAttachedState(context, values[1]);
@@ -233,9 +234,6 @@ public class UICommand extends UIComponentBase
         immediate = ((Boolean) values[3]).booleanValue();
         immediateSet = ((Boolean) values[4]).booleanValue();
         value = values[5];
-
-        addDefaultActionListener(context);
-
     }
 
 
@@ -245,13 +243,17 @@ public class UICommand extends UIComponentBase
     /**
      * <p>In addition to to the default {@link UIComponent#broadcast}
      * processing, pass the {@link ActionEvent} being broadcast to the
-     * method referenced by <code>actionListener</code> (if any).</p>
+     * method referenced by <code>actionListener</code> (if any),
+     * and to the default {@link ActionListener} registered on the
+     * {@link Application}.</p>
      *
      * @param event {@link FacesEvent} to be broadcast
      *
      * @exception AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
+     * @exception IllegalArgumentException if the implementation class
+     *  of this {@link FacesEvent} is not supported by this component
      * @exception NullPointerException if <code>event</code> is
      * <code>null</code>
      */
@@ -260,15 +262,22 @@ public class UICommand extends UIComponentBase
         // Perform standard superclass processing
         super.broadcast(event);
 
-        // Notify the specified action listener method (if any)
         if (event instanceof ActionEvent) {
+            FacesContext context = getFacesContext();
+
+            // Notify the specified action listener method (if any)
             MethodBinding mb = getActionListener();
             if (mb != null) {
-                FacesContext context = getFacesContext();
                 mb.invoke(context, new Object[] { event });
             }
+
+            // Invoke the default ActionListener
+            ActionListener listener =
+              context.getApplication().getActionListener();
+            if (listener != null) {
+                listener.processAction((ActionEvent) event);
+            }
         }
-	
     }
 
     /**
@@ -289,24 +298,4 @@ public class UICommand extends UIComponentBase
 	}
 	super.queueEvent(e);
     }
-
-
-    // --------------------------------------------------------- Private Methods
-
-
-    // Add the default action listener
-    private void addDefaultActionListener(FacesContext context) {
-
-        ActionListener listener =
-            context.getApplication().getActionListener();
-	addActionListener(listener);
-    }
-
-
-    // Remove the default action listener
-    private void removeDefaultActionListener(FacesContext context) {
-	removeActionListener(context.getApplication().getActionListener());
-	
-    }
-
 }
