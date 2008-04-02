@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Content Stylesheet for Outstanding Issues Summary List -->
-<!-- $Id: OutstandingIssuesSummary.xsl,v 1.1 2002/09/05 16:53:52 craigmcc Exp $ -->
+<!-- $Id: OutstandingIssuesSummary.xsl,v 1.2 2002/10/03 00:43:36 craigmcc Exp $ -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
@@ -15,13 +15,26 @@
       <body bgcolor="#FFFFFF">
         <table border="1" width="100%" cellpadding="5">
           <tr>
+            <th width="5%">Pri</th>
             <th width="10%">Issue</th>
             <th width="55%">Summary</th>
-            <th width="10%">Source</th>
-            <th width="10%">Status</th>
+            <th width="5%">Source</th>
+            <th width="5%">Status</th>
             <th width="15%">Date</th>
+            <th width="5%">Effort</th>
           </tr>
-          <xsl:apply-templates select="issue"/>
+          <xsl:for-each select="issue">
+            <xsl:sort select="priority"/>
+            <tr>
+              <td align="center"><xsl:value-of select="priority"/></td>
+              <td><xsl:value-of select="id"/></td>
+              <td><xsl:value-of select="summary"/></td>
+              <td><xsl:value-of select="originator"/></td>
+              <td align="center"><xsl:value-of select="status"/></td>
+              <td align="center"><xsl:value-of select="status-date"/></td>
+              <td align="center"><xsl:value-of select="effort"/></td>
+            </tr>
+          </xsl:for-each>
         </table>
       </body>
     </html>
@@ -29,11 +42,13 @@
 
   <xsl:template match="issue">
     <tr>
+      <td align="center"><xsl:value-of select="priority"/></td>
       <td><xsl:value-of select="id"/></td>
       <td><xsl:value-of select="summary"/></td>
       <td><xsl:value-of select="originator"/></td>
       <td align="center"><xsl:value-of select="status"/></td>
       <td align="center"><xsl:value-of select="status-date"/></td>
+      <td align="center"><xsl:value-of select="effort"/></td>
     </tr>
   </xsl:template>
 

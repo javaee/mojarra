@@ -35,6 +35,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Large</effort>
 </issue>
 
 
@@ -63,6 +65,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -103,6 +107,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -121,6 +127,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Medium</effort>
 </issue>
 
 
@@ -146,6 +154,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Medium</effort>
 </issue>
 
 
@@ -170,6 +180,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -185,10 +197,13 @@
     API (which could potentially be deprecated in some future JSP spec)?</p>
   </description>
   <resolution>
-    
+    <p><em>02 Oct 2002</em> - Consensus appears to be that we stick with
+       the original decision to support JSP 1.2.</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>02 Oct 2002</status-date>
+  <priority>5</priority>
+  <effort></effort>
 </issue>
 
 
@@ -219,6 +234,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Large</effort>
 </issue>
 
 
@@ -238,6 +255,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -259,10 +278,13 @@
     corresponding JavaScript.</p>
   </description>
   <resolution>
-    
+    <p><em>02 Oct 2002</em> - Consolidate [ComponentIdentifiers-27]
+       into this item.</p>
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -309,6 +331,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -326,10 +350,15 @@
     be specified in a configuration file?  Please?</p>
   </description>
   <resolution>
-    
+    <p><em>02 Oct 2002</em> - Consistency with the EL syntax in JSTL 1.0
+       and JSP 2.0 mandates complete expressions, and avoids artificial
+       restrictions that a Struts-like style (single form bean) would
+       impose.</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>02 Oct 2002</status-date>
+  <priority>5</priority>
+  <effort></effort>
 </issue>
 
 
@@ -346,10 +375,12 @@
     I am surprised to find this lacking in JSR-127.</p>
   </description>
   <resolution>
-    
+    <p><em>02 Oct 2002</em> - Suitable for deferral to JSF 1.1.</p>
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>4</priority>
+  <effort></effort>
 </issue>
 
 
@@ -379,6 +410,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -414,6 +447,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -441,6 +476,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>05 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Large</effort>
 </issue>
 
 
@@ -474,6 +511,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>05 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -500,6 +539,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>05 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Small</effort>
 </issue>
 
 <issue>
@@ -518,6 +559,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>06 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -535,6 +578,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>06 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -553,6 +598,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>06 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -568,12 +615,18 @@
     <p><a href="http://www.oasis-open.org/">http://www.oasis-open.org</a></p>
 
     <p>NOTE:  WSRP seems to me (Craig) to be clearly in the JSR168 sphere.</p>
+
+    <p>Craig:  The idea of supporting components that implement a web service
+    seems like a good JSF 1.1 topic, although it may turn out that a generic
+    component (as opposed to service-specific) is not feasible.</p>
   </description>
   <resolution>
     
   </resolution>
   <status>OPEN</status>
   <status-date>06 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -591,6 +644,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>06 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -612,6 +667,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>06 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -631,12 +688,19 @@
     surprisingly better than I thought it would, but there are going to be
     obvious issues around stylesheet directives that 4.x doesn't support
     or implements incorrectly.</p>
+
+    <p>Craig:  I think supporting overall page look-and-feel, and things
+    like skinning, are suitable for JSF 1.1.  The current use of CSS is
+    more focused on the rendering of individual components than on overall
+    layout.</p>
   </description>
   <resolution>
     
   </resolution>
   <status>OPEN</status>
   <status-date>06 Sep 2002</status-date>
+  <priority>4</priority>
+  <effort></effort>
 </issue>
 
 
@@ -663,6 +727,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>09 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Large</effort>
 </issue>
 
 
@@ -686,9 +752,13 @@
   <resolution>
     <p><em>11 Sep 2002</em> - Joe submitted a proposal message titled
     "form handling design pattern for viewing/editing entities".</p>
+    <p><em>02 Oct 2002</em> - Consolidate this item with
+       [ComponentNamespace-10].</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>11 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>02 Oct 2002</status-date>
+  <priority>5</priority>
+  <effort></effort>
 </issue>
 
 
@@ -710,6 +780,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>11 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -732,6 +804,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>11 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Medium</effort>
 </issue>
 
 
@@ -748,9 +822,12 @@
     for the timing issues.</p>
   </description>
   <resolution>
+    <p><em>02 Oct 2002</em> - Consolidate [JavaScript-31] into this item.</p>
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -766,9 +843,12 @@
     key enabler.</p>
   </description>
   <resolution>
+    <p><em>02 Oct 2002</em> - Consolidated into [OnLoad-30].</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>02 Oct 2002</status-date>
+  <priority>5</priority>
+  <effort></effort>
 </issue>
 
 
@@ -788,6 +868,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -808,6 +890,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -828,6 +912,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -854,6 +940,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -873,6 +961,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -901,6 +991,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -922,6 +1014,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -951,6 +1045,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -967,6 +1063,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -988,9 +1086,12 @@
     </ul>
   </description>
   <resolution>
+    <p><em>02 Oct 2002</em> - Transfer to [UsabilityRenames-59].</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>02 Oct 2002</status-date>
+  <priority>5</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1020,6 +1121,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1043,6 +1146,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -1062,9 +1167,12 @@
   <resolution>
     <p><em>12 Sep 2002</em> - Partially implemented in 0902 draft, but
     spec needs updating (esp. 3.5.2.x and 3.1.7 example).</p>
+    <p><em>02 Oct 2002</em> - Spec updates were completed for 0920 draft.</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>02 Oct 2002</status-date>
+  <priority>5</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1081,11 +1189,15 @@
     <p>For more background, and sample scenarios, see the EG mailing list
     message from Kris on 09/13/2002 entitled "Request Processing Lifecycle
     Issue."</p>
+
+    <p>Craig:  Might become a JSF 1.1 issue.</p>
   </description>
   <resolution>
   </resolution>
   <status>OPEN</status>
   <status-date>18 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1128,6 +1240,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>18 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Medium</effort>
 </issue>
 
 
@@ -1144,6 +1258,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>18 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1177,6 +1293,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>18 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1194,6 +1312,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>18 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -1217,6 +1337,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>18 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Medium</effort>
 </issue>
 
 
@@ -1238,6 +1360,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>18 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1263,6 +1387,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>18 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1281,6 +1407,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>18 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1301,6 +1429,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>18 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Small</effort>
 </issue>
 
 
@@ -1320,6 +1450,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>18 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1341,6 +1473,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1364,6 +1498,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Medium</effort>
 </issue>
 
 
@@ -1392,6 +1528,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1411,9 +1549,12 @@
     </ul>
   </description>
   <resolution>
+    <p><em>02 Oct 2002</em> - Consolidate [DecodeEncode-41] into this.</p>
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
+  <priority>2</priority>
+  <effort>Medium</effort>
 </issue>
 
 
@@ -1429,6 +1570,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1444,6 +1587,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1454,11 +1599,15 @@
   <description>
     <p>It would be useful to have a component and/or renderer for processing
     file uploads.</p>
+
+    <p>Sounds like a good JSF 1.1 feature addition.</p>
   </description>
   <resolution>
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
+  <priority>4</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1474,6 +1623,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1490,6 +1641,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
+  <priority>1</priority>
+  <effort>Medium</effort>
 </issue>
 
 
@@ -1506,6 +1659,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
@@ -1521,6 +1676,8 @@
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
+  <priority>3</priority>
+  <effort></effort>
 </issue>
 
 
