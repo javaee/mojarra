@@ -149,6 +149,12 @@ public final class CommandButtonTag extends UIComponentELTag {
         this.style = style;
     }
 
+    // PROPERTY: labelStyle
+    private javax.el.ValueExpression labelStyle;
+    public void setLabelStyle(javax.el.ValueExpression labelStyle) {
+        this.labelStyle = labelStyle;
+    }
+
     // PROPERTY: type
     private javax.el.ValueExpression type;
     public void setType(javax.el.ValueExpression type) {
@@ -324,6 +330,13 @@ public final class CommandButtonTag extends UIComponentELTag {
                 command.getAttributes().put("style", style.getExpressionString());
             }
         }
+        if (labelStyle != null) {
+            if (!labelStyle.isLiteralText()) {
+                command.setValueExpression("labelStyle", labelStyle);
+            } else {
+                command.getAttributes().put("labelStyle", labelStyle.getExpressionString());
+            }
+        }
         if (type != null) {
             if (!type.isLiteralText()) {
                 command.setValueExpression("type", type);
@@ -400,6 +413,7 @@ public final class CommandButtonTag extends UIComponentELTag {
         this.rx = null;
         this.ry = null;
         this.style = null;
+        this.labelStyle = null;
         this.type = null;
         this.width = null;
     }

@@ -203,6 +203,10 @@ public class ButtonRenderer extends BaseRenderer {
         writer.writeAttribute("x", new Integer(tx), null);
         writer.writeAttribute("y", new Integer(ty), null);
         writer.writeAttribute("text-anchor", "middle", null);
+        String labelStyle = (String)component.getAttributes().get("labelStyle");
+        if (labelStyle != null) {
+            writer.writeAttribute("style", labelStyle, "labelStyle");
+        }
         writer.writeText(label, null);
         writer.endElement("text");
         writer.writeText("\n", null);

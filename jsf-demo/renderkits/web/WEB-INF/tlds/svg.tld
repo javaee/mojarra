@@ -481,6 +481,22 @@ xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSch
         </attribute>
         <attribute>
             <description>
+                <![CDATA[Style(s) to be applied to this component's label.]]>
+            </description>
+            <name>
+                labelStyle
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
                 <![CDATA[Type of button to create.  Valid values are "submit".]]>
             </description>
             <name>

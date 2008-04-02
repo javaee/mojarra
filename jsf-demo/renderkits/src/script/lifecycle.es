@@ -16,8 +16,7 @@
     var idx;
     var toggle = "stop";
     var vertical = "false";
-    var valError = "false";
-    var updError = "false";
+    var convalError = "false";
 
     /**
      * 'Initial request' simulation
@@ -58,7 +57,7 @@
     /**
      * 'Validation error' simulation
      */
-    function postbackValMove() {
+    function postbackConValMove() {
         coordinates = new Array(660, 200, 170, 200, 170, 270, 25, 270);
         idx = 0;
         posX = 25;
@@ -71,28 +70,8 @@
         clearInterval(timer);
         timer = setInterval("moveControlPoints()", delay);
         clearErrorPaths(); 
-        valError = "true";
+        convalError = "true";
     }
-
-    /**
-     * Conversion error simulation
-     */
-    function postbackUpdMove() {
-        coordinates = new Array(780, 275, 660, 270, 660, 210, 180, 210, 180, 250, 25, 270);
-        idx = 0;
-        posX = 25;
-        posY = 120;
-        deltaX = 1;
-        deltaY = 1;
-        setGraphicInfo();
-        toX = 780;
-        toY = 120;
-        clearInterval(timer);
-        timer = setInterval("moveControlPoints()", delay);
-        clearErrorPaths(); 
-        updError = "true";
-    }
-
 
     /**
      * Dynamically update 'request' symbol coordinates to
@@ -110,11 +89,8 @@
             rect.setAttribute("height", "10");
         }
 
-        if (posX == 660 && posY == 125 && valError == "true") {
-            showValError();
-        }
-        if (posX == 660 && posY == 270 && updError == "true") {
-            showUpdError();
+        if (posX == 660 && posY == 125 && convalError == "true") {
+            showConValError();
         }
     }
 
@@ -161,37 +137,22 @@
         }
     }
 
-    function showValError() {
-        var valError1 = window.document.getElementById("form:valError1");
-        valError1.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:visible");
-        var valError2 = window.document.getElementById("form:valError2");
-        valError2.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:visible");
-        var valError3 = window.document.getElementById("form:valError3");
-        valError3.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:visible");
+    function showConValError() {
+        var convalError1 = window.document.getElementById("form:convalError1");
+        convalError1.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:visible");
+        var convalError2 = window.document.getElementById("form:convalError2");
+        convalError2.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:visible");
+        var convalError3 = window.document.getElementById("form:convalError3");
+        convalError3.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:visible");
     }
                                                                                                                          
-    function showUpdError() {
-        var updError1 = window.document.getElementById("form:updError1");
-        updError1.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:visible");
-        var updError2 = window.document.getElementById("form:updError2");
-        updError2.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:visible");
-        var updError3 = window.document.getElementById("form:updError3");
-        updError3.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:visible");
-    }
-
     function clearErrorPaths() {
-        var valError1 = window.document.getElementById("form:valError1");
-        valError1.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden");
-        var valError2 = window.document.getElementById("form:valError2");
-        valError2.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden");
-        var valError3 = window.document.getElementById("form:valError3");
-        valError3.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden");
-        var updError1 = window.document.getElementById("form:updError1");
-        updError1.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden");
-        var updError2 = window.document.getElementById("form:updError2");
-        updError2.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden");
-        var updError3 = window.document.getElementById("form:updError3");
-        updError3.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden");
+        var convalError1 = window.document.getElementById("form:convalError1");
+        convalError1.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden");
+        var convalError2 = window.document.getElementById("form:convalError2");
+        convalError2.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden");
+        var convalError3 = window.document.getElementById("form:convalError3");
+        convalError3.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden");
     }
         
 

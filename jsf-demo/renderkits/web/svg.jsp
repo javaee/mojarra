@@ -85,17 +85,11 @@
            <g:outputText x="125" y="290" textAnchor="middle" value="Response" />
            <g:line id="toResponse" x1="100" y1="275" x2="25" y2="275" style="stroke: black; fill: none;" />
            <g:line id="toRender1" x1="160" y1="150" x2="160" y2="250" style="stroke: black; fill: none;" />
-           <g:line id="valError1" x1="660" y1="150" x2="660" y2="200" 
+           <g:line id="convalError1" x1="660" y1="150" x2="660" y2="200" 
                    style="stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden" />
-           <g:line id="valError2" x1="660" y1="200" x2="170" y2="200" 
+           <g:line id="convalError2" x1="660" y1="200" x2="170" y2="200" 
                    style="stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden" />
-           <g:line id="valError3" x1="170" y1="200" x2="170" y2="250" 
-                   style="stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden" />
-           <g:line id="updError1" x1="660" y1="250" x2="660" y2="210" 
-                   style="stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden" />
-           <g:line id="updError2" x1="660" y1="210" x2="180" y2="210" 
-                   style="stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden" />
-           <g:line id="updError3" x1="180" y1="210" x2="180" y2="250" 
+           <g:line id="convalError3" x1="170" y1="200" x2="170" y2="250" 
                    style="stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden" />
 
            <g:rectangle id="request" x="25" y="120" rx="5" ry="5" width="15" height="10" style="fill: #8470ff;"/>
@@ -106,11 +100,12 @@
            <g:commandButton id="postback" width="140" height="30" x="35" y="440" rx="5" ry="5" dx="70" dy="9"
                      style="stroke:black; fill:silver;" value="Postback" onclick="postbackMove()"/>
 
-           <g:commandButton id="postbackVal" width="140" height="30" x="185" y="400" rx="5" ry="5" dx="70" dy="9"
-                     style="stroke:black; fill:silver;" value="Validation Error" onclick="postbackValMove()"/>
+           <g:commandButton id="postbackVal" width="150" height="30" x="185" y="400" rx="5" ry="5" dx="70" dy="9"
+                     style="stroke:black; fill:silver;" value="Validation Error" 
+                     onclick="postbackConValMove()"/>
 
            <g:commandButton id="postbackUpd" width="140" height="30" x="185" y="440" rx="5" ry="5" dx="70" dy="9"
-                     style="stroke:black; fill:silver;" value="Conversion Error" onclick="postbackUpdMove()"/>
+                     style="stroke:black; fill:silver;" value="Conversion Error" onclick="postbackConValMove()"/>
 
            <g:commandButton id="stop" width="140" height="30" x="105" y="480" rx="5" ry="5" dx="68" dy="10"
                      style="stroke:black; fill:#ff4500;" value="Stop/Resume" onclick="stopMovement()"/>
