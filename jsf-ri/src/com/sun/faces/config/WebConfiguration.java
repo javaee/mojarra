@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.12 2006/08/30 17:42:50 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.13 2006/08/30 21:53:45 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -664,7 +664,7 @@ public class WebConfiguration {
         ),
         ExternalizeJavaScript(
             "com.sun.faces.externalizeJavaScript",
-            true
+            false
         );
 
         private BooleanWebContextInitParameter alternate;
