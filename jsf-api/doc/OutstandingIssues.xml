@@ -1565,6 +1565,9 @@
     <p>It's also worth reviewing the recent XForms 1.0 working draft
     (08/21/2002) because they've changed some of the component names we
     originally copied.</p>
+
+<p>Also check out Adam's post <a href="http://swjscmail1.java.sun.com/cgi-bin/wa?A2=ind0209&amp;L=jsr-127-eg&amp;D=0&amp;X=6F83683A67B23EB98E&amp;Y=ed.burns@sun.com&amp;P=14616">on the VisibleProperty thread</a>.</p>
+
   </description>
   <resolution>
     <p><em>02 Oct 2002</em> - Consolidate [DecodeEncode-41] into this.</p>
