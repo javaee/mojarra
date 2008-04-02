@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.24 2005/07/22 16:58:21 jayashri Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.25 2005/08/10 13:35:38 rogerk Exp $
  */
 
 /*
@@ -106,6 +106,10 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	return result;
     }
 
+    public Object getState(FacesContext context, String viewId) {
+        return ( super.getState(context, viewId) );
+    }
+    
     public Object getTreeStructureToRestore(FacesContext context,
                                             String treeId) {
 	StateManager stateManager = Util.getStateManager(context);
@@ -169,6 +173,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	return structure;
     }
 
+    public void writeState(FacesContext context, Object state) 
+        throws IOException {
+        super.writeState(context, state);
+    }
+    
     public void writeState(FacesContext context, SerializedView view)
         throws IOException {
         String hiddenField = null;

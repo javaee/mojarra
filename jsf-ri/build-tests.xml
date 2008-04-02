@@ -323,6 +323,7 @@
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestApplicationFactoryImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestApplicationImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestApplicationImpl_Config"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.application.TestHASDeprStateManagerImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestNavigationHandler"/>
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestStateManagerImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestViewHandlerImpl"/>

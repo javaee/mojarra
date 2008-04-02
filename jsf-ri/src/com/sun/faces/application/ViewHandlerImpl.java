@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.55 2005/07/22 16:58:20 jayashri Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.56 2005/08/10 13:35:38 rogerk Exp $ 
  */ 
 
 
@@ -50,7 +50,7 @@ import java.io.StringWriter;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.55 2005/07/22 16:58:20 jayashri Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.56 2005/08/10 13:35:38 rogerk Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -79,8 +79,23 @@ public class ViewHandlerImpl extends ViewHandler {
      * or, if that isn't defined, the value of <code>DEFAULT_SUFFIX</code>
      */
     private String contextDefaultSuffix;
-
-
+    
+    /**
+     * If <code>true</code>, at least one method exists on 
+     * the <code>StateManager</code> implementation that
+     * replaces a deprecated method.  This will be used 
+     * to determine if the non-deprecated methods should
+     * be called.
+     */
+    private boolean nonDeprecatedMethodExists = false;
+    
+    /**
+     * If <code>true</code>, then we've already performed
+     * the check on the <code>StateManager</code> implementation
+     * for at least one method that replace a deprecated method.
+     */
+    private boolean checkedForNonDeprecated = false;
+    
     public ViewHandlerImpl() {
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE,"Created ViewHandler instance ");
@@ -871,8 +886,19 @@ public class ViewHandlerImpl extends ViewHandler {
     
      public void replaceMarkers(String content, FacesContext context) {
          SerializedView view = null;
+         Object stateArray = null;
+         StateManager stateManager = Util.getStateManager(context);
          try {
-            view = Util.getStateManager(context).saveSerializedView(context);
+             if (!checkedForNonDeprecated) {
+                 nonDeprecatedMethodExists =
+                     Util.hasDeclaredMethod(stateManager, "saveView");
+                 checkedForNonDeprecated = true;
+             }
+             if (nonDeprecatedMethodExists) {
+                 stateArray = stateManager.saveView(context);
+             } else {
+                 view = stateManager.saveSerializedView(context);
+             }
         } catch (IllegalStateException ise) {
             throw new FacesException(ise);
         } catch (Exception ie) {
@@ -899,8 +925,12 @@ public class ViewHandlerImpl extends ViewHandler {
 		    // we have more markers, write out the current chunk
                 
 		    context.getResponseWriter().write(content.substring(
-                            beginIndex, markerIndex));                    
-		    Util.getStateManager(context).writeState(context, view);                   
+                            beginIndex, markerIndex));
+                    if (nonDeprecatedMethodExists) {
+                        stateManager.writeState(context, stateArray);
+                    } else {
+		        stateManager.writeState(context, view);       
+                    }
 		    beginIndex = markerIndex + markerLen;
 		}
 	    } while (-1 != markerIndex && beginIndex < contentLen);
@@ -909,6 +939,4 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new FacesException(ex);
         }
     }
-    
-    
 }

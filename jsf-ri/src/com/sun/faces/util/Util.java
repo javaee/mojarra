@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.168 2005/08/09 17:38:27 jayashri Exp $
+ * $Id: Util.java,v 1.169 2005/08/10 13:35:39 rogerk Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.168 2005/08/09 17:38:27 jayashri Exp $
+ * @version $Id: Util.java,v 1.169 2005/08/10 13:35:39 rogerk Exp $
  */
 
 public class Util extends Object {
@@ -1727,7 +1727,21 @@ public class Util extends Object {
         return fd;
     }
 
-    
-
+    /** <p>Checks for the existence of a method specified by the "methodName"
+     *  argument, on the "instance" argument.</p>
+     */
+    public static boolean hasDeclaredMethod(Object instance, String methodName) {
+        boolean result = false;
+        // Look for the presence of the method by method name.
+        Class c = instance.getClass();
+        Method[] methods = c.getDeclaredMethods();
+        for (int i = 0; i < methods.length; i++) {
+            if (methods[i].getName().equals(methodName)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
 
 } // end of class Util
