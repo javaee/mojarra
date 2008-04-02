@@ -36,7 +36,7 @@
     <property file="${user.home}/build.properties"/>
     <property file="../../build.properties"/>
     <import file="${jsf.build.home}/common/ant/common.xml"/>
-
+    <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
 
     <!-- ******************* Structural ************************** -->
 
@@ -415,6 +415,38 @@
         <jsf.manifested.jar jarfile="${build.dir}/lib/${name}-${sb.impl.version}.jar"
                             basedir="${build.classes.dir}"
                             extension-name=""/>       
+    </target>
+
+    <target name="nightly" description="update nightly build">
+        <if>
+            <available file="${tasks.home}"/>
+            <then>
+                <sequential>
+                    <taskdef resource="org/kohsuke/javanettasks.properties">
+                        <classpath>
+                            <pathelement location="${tasks.home}/javanettasks-1.0.8.jar"/>
+                            <fileset dir="${tasks.home}/lib" includes="*.jar"/>
+                        </classpath>
+                    </taskdef>
+
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/RI Sandbox/jsf-ri-sandbox-0.1.zip"
+                                   fromFile="${dist.dir}/jsf-ri-sandbox-0.1.zip"
+                                   fileDescription="Nightly snapshot of the Sandbox components"
+                                   overwrite="yes"/>
+
+
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/RI Sandbox/jsf-ri-sandbox-src-0.1.zip"
+                                   fromFile="${dist.dir}/jsf-ri-sandbox-src-0.1.zip"
+                                   fileDescription="Nightly snapshot of the source bundle for the Sandbox components"
+                                   overwrite="yes"/>
+                </sequential>
+            </then>
+            <else>
+                <fail message="Javanettasks version 1.0.8 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
+            </else>
+        </if>
     </target>
 
     <target name="main" depends="jars"/>
