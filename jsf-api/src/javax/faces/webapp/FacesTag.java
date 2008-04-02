@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.38 2003/04/29 18:51:49 eburns Exp $
+ * $Id: FacesTag.java,v 1.39 2003/05/02 02:36:26 eburns Exp $
  */
 
 /*
@@ -422,11 +422,15 @@ public abstract class FacesTag implements Tag {
         // Identify the component that is, or will be, our parent
         FacesTag parentTag = getParentFacesTag();
         UIComponent parentComponent = null;
-        boolean parentCreated = false;
+        boolean 
+	    thisTagIsRoot = false,
+	    parentCreated = false;
         if (parentTag != null) {
             parentComponent = parentTag.getComponent();
             parentCreated = parentTag.getCreated();
         } else {
+	    // If there is no parent tag, this tag must be the root.
+	    thisTagIsRoot = true;
             parentComponent = context.getTree().getRoot();
             parentCreated = parentComponent.getChildCount() < 1;
         }
@@ -434,15 +438,20 @@ public abstract class FacesTag implements Tag {
         // Case 1 -- Our parent was just created, so we must do so also
         if (parentCreated) {
 
-            // Create a new component instance
-	    try {
-		ApplicationFactory factory = (ApplicationFactory)
-		    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-		Application app = factory.getApplication();
-		component = app.getComponent(getComponentType());
+	    if (thisTagIsRoot) {
+		component = parentComponent;
 	    }
-	    catch (FacesException e) {
-		throw new JspException(e);
+	    else {
+		// Create a new component instance
+		try {
+		    ApplicationFactory factory = (ApplicationFactory)
+			FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+		    Application app = factory.getApplication();
+		    component = app.getComponent(getComponentType());
+		}
+		catch (FacesException e) {
+		    throw new JspException(e);
+		}
 	    }
 
             if (id != null) {
