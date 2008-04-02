@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.151 2004/12/16 17:56:39 edburns Exp $
+ * $Id: Util.java,v 1.152 2005/02/28 18:48:21 jayashri Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.151 2004/12/16 17:56:39 edburns Exp $
+ * @version $Id: Util.java,v 1.152 2005/02/28 18:48:21 jayashri Exp $
  */
 
 public class Util extends Object {
@@ -1148,9 +1148,9 @@ public class Util extends Object {
         if (className != null) {
             try {
                 clazz = Util.loadClass(className, returnObject);
-                if (clazz != null) {
-// Look for an adapter constructor if we've got
-// an object to adapt
+                if (clazz != null) { 
+                    // Look for an adapter constructor if we've got
+                    // an object to adapt
                     if ((rootType != null) && (root != null)) {
                         try {
                             Class[] parameterTypes = new Class[]{rootType};
@@ -1159,7 +1159,7 @@ public class Util extends Object {
                             Object[] parameters = new Object[]{root};
                             returnObject = construct.newInstance(parameters);
                         } catch (NoSuchMethodException nsme) {
-// OK - there's no adapter constructor
+                            // OK - there's no adapter constructor
                         }
                     }
 
@@ -1173,8 +1173,7 @@ public class Util extends Object {
                 String msg = Util.getExceptionMessageString(
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
                 if (log.isErrorEnabled()) {
-                    log.error(msg + ":" + className + ":exception:" +
-                              e.getMessage());
+                    log.error(msg + ":" + className + ":exception:", e);
                 }
             }
         }

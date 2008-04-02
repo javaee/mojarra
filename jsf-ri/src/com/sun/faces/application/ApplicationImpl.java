@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.56 2004/11/30 21:36:56 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.57 2005/02/28 18:48:20 jayashri Exp $
  */
 
 /*
@@ -678,9 +678,7 @@ public class ApplicationImpl extends Application {
                     assert (clazz != null);
                     map.put(key, clazz);
                 } catch (Throwable t) {
-                    Object[] params = {t.getMessage()};
-                    throw new FacesException(Util.getExceptionMessageString(
-                        Util.CANT_LOAD_CLASS_ERROR_MESSAGE_ID, params));
+                    throw new FacesException(t.getMessage(), t);
                 }
             } else {
                 clazz = (Class) value;

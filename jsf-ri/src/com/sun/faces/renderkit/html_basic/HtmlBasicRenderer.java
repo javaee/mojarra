@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.88 2004/12/14 21:08:55 jayashri Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.89 2005/02/28 18:48:20 jayashri Exp $
  */
 
 /*
@@ -517,7 +517,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             } catch (IOException e) {
                 if (log.isDebugEnabled()) {
                     // PENDING I18N
-                    log.debug("Can't write ID attribute" + e.getMessage());
+                    log.debug("Can't write ID attribute", e);
                 }
             }
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.29 2004/12/08 15:10:26 edburns Exp $
+ * $Id: ViewTag.java,v 1.30 2005/02/28 18:48:21 jayashri Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import java.util.Locale;
  * any renderers or attributes. It exists mainly to save the state of
  * the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.29 2004/12/08 15:10:26 edburns Exp $
+ * @version $Id: ViewTag.java,v 1.30 2005/02/28 18:48:21 jayashri Exp $
  */
 
 public class ViewTag extends UIComponentBodyTag {
@@ -144,7 +144,7 @@ public class ViewTag extends UIComponentBodyTag {
         try {
             writer.startDocument();
         } catch (IOException e) {
-            throw new JspException(e.getMessage());
+            throw new JspException(e);
         }
         return rc;
     }
@@ -235,7 +235,7 @@ public class ViewTag extends UIComponentBodyTag {
         try {
             writer.endDocument();
         } catch (IOException e) {
-            throw new JspException(e.getMessage());
+            throw new JspException(e);
         }
 
         // store the response character encoding
