@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.11 2004/01/15 06:03:25 eburns Exp $
+ * $Id: ValueHolder.java,v 1.12 2004/01/26 20:48:56 craigmcc Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.faces.el.ValueBinding;
  * <p><strong>ValueHolder</strong> is an interface that may be implemented
  * by any concrete {@link UIComponent} that wishes to support a local
  * value, as well as access data in the model tier via a <em>value
- * reference expression</em>, and support conversion 
+ * binding expression</em>, and support conversion 
  * between String and the model tier data's native data type.
  */
 

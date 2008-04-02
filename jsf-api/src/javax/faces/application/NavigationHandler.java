@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandler.java,v 1.8 2003/12/17 15:10:33 rkitain Exp $
+ * $Id: NavigationHandler.java,v 1.9 2004/01/26 20:48:52 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.context.FacesContext;
  * provided by the JSF implementation, which will be utilized unless
  * <code>setNavigationHandler()</code> is called to establish a different one.
  * This default instance will compare the view identifier of the current
- * view, the specified action reference, and the specified outcome against
+ * view, the specified action binding, and the specified outcome against
  * any navigation rules provided in <code>faces-config.xml</code> file(s).
  * If a navigation case matches, the current view will be changed by a call
  * to <code>FacesContext.setViewRoot()</code>.  Note that a <code>null</code>
@@ -40,7 +40,7 @@ public abstract class NavigationHandler {
      * returned by an executed application action.</p>
      *
      * @param context The {@link FacesContext} for the current request
-     * @param fromAction The action reference expression that was evaluated
+     * @param fromAction The action binding expression that was evaluated
      *  to retrieve the specified outcome, or <code>null</code> if the
      *  outcome was acquired by some other means
      * @param outcome The logical outcome returned by a previous invoked

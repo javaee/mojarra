@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.26 2004/01/26 19:00:30 craigmcc Exp $
+ * $Id: Application.java,v 1.27 2004/01/26 20:48:52 craigmcc Exp $
  */
 
 /*
@@ -203,7 +203,7 @@ public abstract class Application {
 
     /**
      * <p>Return the {@link PropertyResolver} instance that will be utilized
-     * to resolve method and value references.  If not explicitly set, a default
+     * to resolve method and value bindings.  If not explicitly set, a default
      * implementation must be provided that performs the functions described in
      * the {@link PropertyResolver} class description.</p>
      */
@@ -212,7 +212,7 @@ public abstract class Application {
 
     /**
      * <p>Set the {@link PropertyResolver} instance that will be utilized
-     * to resolve method and value references.</p>
+     * to resolve method and value bindings.</p>
      *
      * @param resolver The new {@link PropertyResolver} instance
      *
@@ -224,7 +224,7 @@ public abstract class Application {
 
     /**
      * <p>Return the {@link VariableResolver} instance that will be utilized
-     * to resolve method and value references.  If not explicitly set, a default
+     * to resolve method and value bindings.  If not explicitly set, a default
      * implementation must be provided that performs the functions described in
      * the {@link VariableResolver} class description.</p>
      */
@@ -233,7 +233,7 @@ public abstract class Application {
 
     /**
      * <p>Set the {@link VariableResolver} instance that will be utilized
-     * to resolve method and value references.</p>
+     * to resolve method and value bindings.</p>
      *
      * @param resolver The new {@link VariableResolver} instance
      *
@@ -461,10 +461,10 @@ public abstract class Application {
 
     /**
      * <p>Instantiate and return a new {@link MethodBinding} for the specified
-     * method reference expression, which may be used to call the corresponding
+     * method binding expression, which may be used to call the corresponding
      * method later.</p>
      *
-     * @param ref Reference expression for which to return a
+     * @param ref Method binding expression for which to return a
      *  {@link MethodBinding} instance
      * @param params Parameter signatures that must be compatible with those
      *  of the method to be invoked, or a zero-length array or <code>null</code>
@@ -544,10 +544,10 @@ public abstract class Application {
 
     /**
      * <p>Instantiate and return a new {@link ValueBinding} for the specified
-     * value reference expression, which may be used to manipulate the
+     * value binding expression, which may be used to manipulate the
      * corresponding property value later.</p>
      *
-     * @param ref Reference expression for which to return a
+     * @param ref Value binding expression for which to return a
      *  {@link ValueBinding} instance
      *
      * @exception NullPointerException if <code>ref</code>

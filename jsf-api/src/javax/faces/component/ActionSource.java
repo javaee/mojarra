@@ -1,5 +1,5 @@
 /*
- * $Id: ActionSource.java,v 1.7 2004/01/15 06:03:18 eburns Exp $
+ * $Id: ActionSource.java,v 1.8 2004/01/26 20:48:53 craigmcc Exp $
  */
 
 /*
@@ -79,7 +79,7 @@ public interface ActionSource {
      * a return type of <code>void</code>, and accept a single parameter of
      * type <code>ActionEvent</code>.</p>
      *
-     * @param actionListener The new method reference expression
+     * @param actionListener The new method binding expression
      */
     public void setActionListener(MethodBinding actionListener);
 

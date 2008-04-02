@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.44 2004/01/21 19:23:15 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.45 2004/01/26 20:48:55 craigmcc Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.faces.el.ValueBinding;
 
 /**
  * <p><strong>UIOutput</strong> is a {@link UIComponent} that has a
- * value, optionally retrieved from a model tier bean via a value reference
+ * value, optionally retrieved from a model tier bean via a value binding
  * expression, that is displayed to the user.  The user cannot directly modify
  * the rendered value; it is for display purposes only.</p>
  *

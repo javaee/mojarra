@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBinding.java,v 1.4 2004/01/20 23:13:29 craigmcc Exp $
+ * $Id: ValueBinding.java,v 1.5 2004/01/26 20:48:58 craigmcc Exp $
  */
 
 /*
@@ -16,8 +16,8 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p><strong>ValueBinding</strong> is an object that can be used
- * to access the property represented by an action or value reference
- * expression.  An immutable {@link ValueBinding} for a particular reference
+ * to access the property represented by an action or value binding
+ * expression.  An immutable {@link ValueBinding} for a particular value binding
  * can be acquired by calling the <code>createValueBinding()</code> method of
  * the {@link javax.faces.application.Application} instance for this web
  * application.  Implementations of {@link ValueBinding} are suitable for

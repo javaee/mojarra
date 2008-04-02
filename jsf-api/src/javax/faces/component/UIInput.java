@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.65 2004/01/21 19:23:14 craigmcc Exp $
+ * $Id: UIInput.java,v 1.66 2004/01/26 20:48:54 craigmcc Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.List;
  * {@link UIOutput} components do) and processes request parameters on the
  * subsequent request that need to be decoded.  There are no restrictions
  * on the data type of the local value, or the object referenced by the
- * value reference expression (if any); however, individual
+ * value binding expression (if any); however, individual
  * {@link javax.faces.render.Renderer}s will generally impose restrictions
  * on the type of data they know how to display.</p>
  *

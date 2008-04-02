@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.19 2004/01/26 06:49:40 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.20 2004/01/26 20:49:00 craigmcc Exp $
  */
 
 /*
@@ -64,7 +64,7 @@ import javax.faces.el.PropertyNotFoundException;
  * {@link DataModel} that wraps a <code>ResultSet</code> of Java objects.
  * Note that the specified <code>ResultSet</code> <strong>MUST</strong>
  * be scrollable.  In addition, if input components (that will be updating
- * model values) reference this object in value reference expressions, the
+ * model values) reference this object in value binding expressions, the
  * specified <code>ResultSet</code> <strong>MUST</strong> be updatable.</p>
  */
 

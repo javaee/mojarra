@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.22 2004/01/21 19:23:16 craigmcc Exp $
+ * $Id: UIParameter.java,v 1.23 2004/01/26 20:48:56 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.el.ValueBinding;
  * <p>Parent components should retrieve the value of a parameter by calling
  * <code>getValue()</code>.  In this way, the parameter value can be set
  * directly on the component (via <code>setValue()</code>), or retrieved
- * indirectly via the value reference expression.</p>
+ * indirectly via the value binding expression.</p>
  *
  * <p>In some scenarios, it is necessary to provide a parameter name, in
  * addition to the parameter value that is accessible via the

@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTag.java,v 1.10 2004/01/17 05:19:16 craigmcc Exp $
+ * $Id: FacetTag.java,v 1.11 2004/01/26 20:49:01 craigmcc Exp $
  */
 
 /*
@@ -41,8 +41,7 @@ public class FacetTag extends TagSupport {
 
 
     /**
-     * <p>Return the name to be assigned to this facet, after evaluating any
-     * value reference expression that was specified.</p>
+     * <p>Return the name to be assigned to this facet.</p>
      */
     public String getName() {
 
@@ -52,10 +51,9 @@ public class FacetTag extends TagSupport {
     
 
     /**
-     * <p>Set the name to be assigned to this facet, or a value reference
-     * expression to be used to calculate this name.</p>
+     * <p>Set the name to be assigned to this facet.</p>
      *
-     * @param name The new name or value reference expression
+     * @param name The new facet name
      */
     public void setName(String name) {
 

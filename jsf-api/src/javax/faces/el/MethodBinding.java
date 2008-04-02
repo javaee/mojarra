@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBinding.java,v 1.3 2003/12/17 15:10:49 rkitain Exp $
+ * $Id: MethodBinding.java,v 1.4 2004/01/26 20:48:58 craigmcc Exp $
  */
 
 /*
@@ -17,9 +17,9 @@ import javax.faces.context.FacesContext;
 /**
  * <p><strong>MethodBinding</strong> is an object that can be used
  * to call an arbitrary public method, on an instance that is acquired by
- * evaluatng the leading portion of a method reference expression via a
+ * evaluatng the leading portion of a method binding expression via a
  * {@link ValueBinding}.  An immutable {@link MethodBinding} for a particular
- * reference expression can be acquired by calling the
+ * method binding expression can be acquired by calling the
  * <code>createMethodBinding()</code> method of the
  * {@link javax.faces.application.Application} instance for this web
  * application.  Implementations of {@link MethodBinding} are suitable for
@@ -32,7 +32,7 @@ public abstract class MethodBinding {
 
     /**
      * <p>Return the return value (if any) resulting from a call to the
-     * method identified by this method reference expression, passing it
+     * method identified by this method binding expression, passing it
      * the specified parameters, relative to the specified {@link FacesContext}.
      * </p>
      *
@@ -53,7 +53,7 @@ public abstract class MethodBinding {
 
     /**
      * <p>Return the Java class representing the return type from the
-     * method identified by this method reference expression.  If the
+     * method identified by this method binding expression.  If the
      * identified method has a return type of <code>void</code>, return
      * <code>null</code> instead.</p>
      *

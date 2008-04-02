@@ -1,5 +1,5 @@
 /*
- * $Id: ReferenceSyntaxException.java,v 1.3 2003/12/17 15:10:50 rkitain Exp $
+ * $Id: ReferenceSyntaxException.java,v 1.4 2004/01/26 20:48:58 craigmcc Exp $
  */
 
 /*
@@ -12,8 +12,8 @@ package javax.faces.el;
 
 
 /**
- * <p>An exception reporting a syntax error in a method reference expression
- * or value reference exception.</p>
+ * <p>An exception reporting a syntax error in a method binding expression
+ * or value binding expression.</p>
  */
 
 public class ReferenceSyntaxException extends EvaluationException {

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.38 2004/01/17 05:19:16 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.39 2004/01/26 20:49:01 craigmcc Exp $
  */
 
 /*
@@ -151,19 +151,19 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
-     * <p>The value reference expression (if any) used to wire up this component
+     * <p>The value binding expression (if any) used to wire up this component
      * to a {@link UIComponent} property of a JavaBean class.</p>
      */
     private String binding = null;
 
 
     /**
-     * <p>Set the value reference expression for our component.</p>
+     * <p>Set the value binding expression for our component.</p>
      *
-     * @param binding The new value reference expression
+     * @param binding The new value binding expression
      *
      * @exception IllegalArgumentException if the specified binding is not a
-     * valid value reference expression.
+     * valid value binding expression.
      */
     public void setBinding(String binding) throws JspException {
 	if (!isValueReference(binding)) {
@@ -294,7 +294,7 @@ public abstract class UIComponentTag implements Tag {
 
     /**
      * <p>Return <code>true</code> if the specified value conforms to the
-     * syntax requirements of a value reference expression.  Such expressions
+     * syntax requirements of a value binding expression.  Such expressions
      * may be used on most component tag attributes to signal a desire for
      * deferred evaluation of the attribute or property value to be set on
      * the underlying {@link UIComponent}.</p>
