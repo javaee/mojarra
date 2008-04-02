@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.3 2004/02/05 16:24:13 rlubke Exp $
+ * $Id: MessageFactory.java,v 1.4 2004/05/10 19:54:18 jvisvanathan Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package guessNumber;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-
+import javax.faces.component.UIComponent;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -125,7 +125,7 @@ public class MessageFactory extends Object {
                                               locale,
                                               getCurrentLoader(bundleName));
             if (null == bundle) {
-                throw new NullPointerException();
+                throw new NullPointerException(" bundle " + bundle);
             }
             // see if we have a hit
             try {
@@ -141,7 +141,8 @@ public class MessageFactory extends Object {
 
         // At this point, we have a summary and a bundle.
         if (null == summary || null == bundle) {
-            throw new NullPointerException();
+            throw new NullPointerException(" summary " + summary + " bundle " + 
+                bundle);
         }
         summary = substituteParams(locale, summary, params);
 
@@ -167,8 +168,8 @@ public class MessageFactory extends Object {
     public static FacesMessage getMessage(FacesContext context, String messageId,
                                           Object params[]) {
         if (context == null || messageId == null) {
-            throw new NullPointerException(
-                "One or more parameters could be null");
+            throw new NullPointerException(" context " + context + " messageId " + 
+                messageId);
         }
         Locale locale = null;
         // viewRoot may not have been initialized at this point.
@@ -178,7 +179,7 @@ public class MessageFactory extends Object {
             locale = Locale.getDefault();
         }
         if (null == locale) {
-            throw new NullPointerException();
+            throw new NullPointerException(" locale " + locale);
         }
         FacesMessage message = getMessage(locale, messageId, params);
         if (message != null) {
@@ -188,7 +189,34 @@ public class MessageFactory extends Object {
         return (getMessage(locale, messageId, params));
     }
 
+    public static FacesMessage getMessage(FacesContext context, 
+        UIComponent component, String messageId, Object params[]) {
+        // if component id is specified, insert the "id" at
+        // the end of the parameter list
+        String id = "";
+        if (component != null && component.getId() != null) {
+            id = (" \"" + component.getId() + "\"" + ": ");
+        }
+        int length = 1;
+        if (params != null) {
+            length = (params.length) + 1;
+        }
+        Object[] newParams = new Object[length];
+        if ( params != null) {
+            for (int i = 0; i < params.length; ++i ) {
+                newParams[i] = params[i];
+            }
+        }
+        newParams[length-1] = id;
+        return getMessage(context, messageId, newParams);
+   }
 
+    public static FacesMessage getMessage(FacesContext context, 
+        UIComponent component, String messageId) {
+        return getMessage(context, component, messageId, null);
+         
+    }
+    
     public static FacesMessage getMessage(FacesContext context, String messageId,
                                           Object param0) {
         return getMessage(context, messageId, new Object[]{param0});
