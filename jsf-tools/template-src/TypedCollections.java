@@ -48,16 +48,14 @@ import java.util.Set;
      */
     @SuppressWarnings("unchecked")
     @protection@ static <E,TypedC extends Collection<E>> TypedC dynamicallyCastCollection(Collection<?> c,
-	    Class<E> type, Class<TypedC> collectionType) {
-	if (c == null)
+                                                                                          Class<E> type, 
+                                                                                          Class<TypedC> collectionType) {
+        if (c == null)
             return null;
         if (!collectionType.isInstance(c))
             throw new ClassCastException(c.getClass().getName());
-        for (Object element : c) {
-            if (element != null && !type.isInstance(element))
-                throw new ClassCastException(element.getClass().getName());
-        }
-	return collectionType.cast(c);
+       
+        return collectionType.cast(c);
     }
 
     /**
@@ -75,7 +73,7 @@ import java.util.Set;
      */
     @SuppressWarnings("unchecked")
     @protection@ static <E> List<E> dynamicallyCastList(List<?> list, Class<E> type) {
-	return dynamicallyCastCollection(list, type, List.class);
+        return dynamicallyCastCollection(list, type, List.class);
     }
 
     /**
@@ -92,8 +90,9 @@ import java.util.Set;
      * @throws java.lang.ClassCastException
      */
     @SuppressWarnings("unchecked")
-    @protection@ static <E> Set<E> dynamicallyCastSet(Set<?> set, Class<E> type) {
-	return dynamicallyCastCollection(set, type, Set.class);
+    @protection@ static <E> Set<E> dynamicallyCastSet(Set<?> set, 
+                                                      Class<E> type) {
+        return dynamicallyCastCollection(set, type, Set.class);
     }
 
     /**
@@ -115,16 +114,11 @@ import java.util.Set;
      */
     @SuppressWarnings("unchecked")
     @protection@ static <K, V> Map<K, V> dynamicallyCastMap(Map<?, ?> map,
-	    Class<K> keyType, Class<V> valueType) {
-	if (map != null) {
-            for (Map.Entry<?, ?> entry : map.entrySet()) {
-	        if (entry.getKey() != null && !keyType.isInstance(entry.getKey()))
-	            throw new ClassCastException(entry.getKey().getClass().getName());
-	        if (entry.getValue() != null
-		    && !valueType.isInstance(entry.getValue()))
-	            throw new ClassCastException(entry.getValue().getClass().getName());
-	    }
-	}
-	return (Map<K, V>) map;
+                                                            Class<K> keyType, 
+                                                            Class<V> valueType) {
+        if (map == null) {
+            return null;                                                                     
+        }
+        return (Map<K, V>) map;
     }
 }
