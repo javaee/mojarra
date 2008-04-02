@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinderTestCase.java,v 1.5 2005/10/19 19:51:11 edburns Exp $
+ * $Id: FactoryFinderTestCase.java,v 1.6 2006/03/07 20:35:52 rogerk Exp $
  */
 
 /*
@@ -142,6 +142,19 @@ public class FactoryFinderTestCase extends TestCase {
 	// verify that the delegation works
 	assertTrue(System.getProperty(FACTORIES[1][0]).equals("javax.faces.mock.MockFacesContextFactoryExtender2"));
 	assertTrue(System.getProperty("oldImpl").equals("javax.faces.mock.MockFacesContextFactoryExtender"));
+
+        // Verify IllegalStateException when factory not found 
+	FactoryFinder.releaseFactories();
+	FactoryFinder.setFactory(FACTORIES[0][0], FACTORIES[0][1]);
+	FactoryFinder.setFactory(FACTORIES[1][0], FACTORIES[1][1]);
+	FactoryFinder.setFactory(FACTORIES[3][0], FACTORIES[3][1]);
+        boolean exceptionThrown = false;
+        try {
+            factory = FactoryFinder.getFactory(FACTORIES[2][0]); 
+        } catch(IllegalStateException ise) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
     }    
 

@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.27 2005/12/05 16:42:40 edburns Exp $
+ * $Id: FactoryFinder.java,v 1.28 2006/03/07 20:35:52 rogerk Exp $
  */
 
 /*
@@ -35,11 +35,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import java.lang.reflect.Constructor;
 
 
@@ -196,6 +199,10 @@ public final class FactoryFinder {
 
     private static Map factoryClasses = null;
 
+    private static final Logger LOGGER =
+        Logger.getLogger("javax.faces", "javax.faces.LogStrings");
+
+
     // --------------------------------------------------------- Public Methods
 
 
@@ -249,6 +256,13 @@ public final class FactoryFinder {
             factory = getImplementationInstance(classLoader, factoryName,
 						(List) factoryOrList);
 	    
+            if (null == factory) {
+                ResourceBundle rb = LOGGER.getResourceBundle();
+                String message = rb.getString("severe.no_factory");
+                message = MessageFormat.format(message, factoryName);
+                throw new IllegalStateException(message);
+            }
+
             // Record and return the new instance
             appMap.put(factoryName, factory);
             return (factory);
