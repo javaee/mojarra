@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleBean.java,v 1.5 2005/08/25 17:11:00 rlubke Exp $
+ * $Id: LifecycleBean.java,v 1.6 2006/02/24 18:05:08 edburns Exp $
  */
 
 /*
@@ -30,6 +30,8 @@
 package com.sun.faces.config.beans;
 
 
+import com.sun.faces.config.DigesterFactory;
+import com.sun.faces.config.DigesterFactory.VersionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +54,10 @@ public class LifecycleBean {
 
     public void addPhaseListener(String phaseListener) {
         if (!phaseListeners.contains(phaseListener)) {
+            VersionListener listener = DigesterFactory.getVersionListener();
+            if (null != listener) {
+                listener.takeActionOnArtifact(phaseListener);
+            }
             phaseListeners.add(phaseListener);
         }
     }

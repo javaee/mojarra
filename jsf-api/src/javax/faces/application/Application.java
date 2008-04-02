@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.43 2006/02/01 03:05:59 edburns Exp $
+ * $Id: Application.java,v 1.44 2006/02/24 18:05:03 edburns Exp $
  */
 
 /*
@@ -309,6 +309,12 @@ public abstract class Application {
      */
     
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
+        Application impl = null;
+        if (null != (impl = (Application) ctx.getExternalContext().getApplicationMap().
+                get("com.sun.faces.ApplicationImpl"))) {
+            return impl.getResourceBundle(ctx, name);
+        }
+        
         throw new UnsupportedOperationException();
     }
     

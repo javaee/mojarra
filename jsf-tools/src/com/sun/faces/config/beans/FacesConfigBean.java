@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigBean.java,v 1.6 2005/08/25 17:11:00 rlubke Exp $
+ * $Id: FacesConfigBean.java,v 1.7 2006/02/24 18:05:08 edburns Exp $
  */
 
 /*
@@ -28,6 +28,8 @@
  */
 
 package com.sun.faces.config.beans;
+import com.sun.faces.config.DigesterFactory;
+import com.sun.faces.config.DigesterFactory.VersionListener;
 import com.sun.faces.util.ToolsUtil;
 import java.util.Map;
 import java.util.TreeMap;
@@ -257,6 +259,10 @@ public class FacesConfigBean {
     public void addRenderKit(RenderKitBean descriptor) {
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "addRenderKit(" + descriptor.getRenderKitId() + ")");
+        }
+        VersionListener listener = DigesterFactory.getVersionListener();
+        if (null != listener) {
+            listener.takeActionOnArtifact(descriptor.getRenderKitId());
         }
         renderKits.put(descriptor.getRenderKitId(), descriptor);
     }

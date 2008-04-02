@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationBean.java,v 1.7 2005/08/25 17:11:00 rlubke Exp $
+ * $Id: ApplicationBean.java,v 1.8 2006/02/24 18:05:07 edburns Exp $
  */
 
 /*
@@ -30,6 +30,8 @@
 package com.sun.faces.config.beans;
 
 
+import com.sun.faces.config.DigesterFactory;
+import com.sun.faces.config.DigesterFactory.VersionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +76,10 @@ public class ApplicationBean {
 
     public void addActionListener(String actionListener) {
         if (!actionListeners.contains(actionListener)) {
+            VersionListener listener = DigesterFactory.getVersionListener();
+            if (null != listener) {
+                listener.takeActionOnArtifact(actionListener);
+            }
             actionListeners.add(actionListener);
         }
     }
@@ -98,6 +104,10 @@ public class ApplicationBean {
 
     public void addNavigationHandler(String navigationHandler) {
         if (!navigationHandlers.contains(navigationHandler)) {
+            VersionListener listener = DigesterFactory.getVersionListener();
+            if (null != listener) {
+                listener.takeActionOnArtifact(navigationHandler);
+            }
             navigationHandlers.add(navigationHandler);
         }
     }
@@ -122,6 +132,10 @@ public class ApplicationBean {
 
     public void addPropertyResolver(String propertyResolver) {
         if (!propertyResolvers.contains(propertyResolver)) {
+            VersionListener listener = DigesterFactory.getVersionListener();
+            if (null != listener) {
+                listener.takeActionOnArtifact(propertyResolver);
+            }
             propertyResolvers.add(propertyResolver);
         }
     }
@@ -173,6 +187,10 @@ public class ApplicationBean {
 
     public void addStateManager(String stateManager) {
         if (!stateManagers.contains(stateManager)) {
+            VersionListener listener = DigesterFactory.getVersionListener();
+            if (null != listener) {
+                listener.takeActionOnArtifact(stateManager);
+            }
             stateManagers.add(stateManager);
         }
     }
@@ -197,6 +215,10 @@ public class ApplicationBean {
 
     public void addVariableResolver(String variableResolver) {
         if (!variableResolvers.contains(variableResolver)) {
+            VersionListener listener = DigesterFactory.getVersionListener();
+            if (null != listener) {
+                listener.takeActionOnArtifact(variableResolver);
+            }
             variableResolvers.add(variableResolver);
         }
     }
@@ -220,6 +242,10 @@ public class ApplicationBean {
 
     public void addELResolver(String elResolver) {
         if (!elResolvers.contains(elResolver)) {
+            VersionListener listener = DigesterFactory.getVersionListener();
+            if (null != listener) {
+                listener.takeActionOnArtifact(elResolver);
+            }
             elResolvers.add(elResolver);
         }
     }
@@ -244,6 +270,10 @@ public class ApplicationBean {
 
     public void addViewHandler(String viewHandler) {
         if (!viewHandlers.contains(viewHandler)) {
+            VersionListener listener = DigesterFactory.getVersionListener();
+            if (null != listener) {
+                listener.takeActionOnArtifact(viewHandler);
+            }
             viewHandlers.add(viewHandler);
         }
     }

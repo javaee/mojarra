@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.67 2006/02/01 03:06:02 edburns Exp $
+ * $Id: FacesContext.java,v 1.68 2006/02/24 18:05:04 edburns Exp $
  */
 
 /*
@@ -118,21 +118,27 @@ public abstract class FacesContext {
      *
      * </ul>
      *
-     * @throws IllegalStateException if this method is called after
-     *  this instance has been released
-     *
      * <p>The default implementation throws 
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
      * @since 1.2
      */ 
 
     public ELContext getELContext() {
+        FacesContext impl = null;
+        if (null != (impl = (FacesContext) getExternalContext().getRequestMap().
+                get("com.sun.faces.FacesContextImpl"))) {
+            return impl.getELContext();
+        }
         throw new UnsupportedOperationException();
-    }
 
+    }
+    
     /**
      * <p>Return the {@link ExternalContext} instance for this
      * <code>FacesContext</code> instance.</p>

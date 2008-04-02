@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.77 2006/01/11 15:28:04 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.78 2006/02/24 18:05:06 edburns Exp $
  */
 
 /*
@@ -29,6 +29,7 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.RIConstants;
 import javax.el.ELContext;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -63,6 +64,9 @@ import com.sun.faces.util.MessageUtils;
      //
      // Protected Constants
      //
+     
+     private static final String FACESCONTEXT_IMPL_ATTR_NAME = RIConstants.FACES_PREFIX + 
+             "FacesContextImpl";
 
      //
      // Class Variables
@@ -119,6 +123,9 @@ import com.sun.faces.util.MessageUtils;
          }
          this.externalContext = ec;
          setCurrentInstance(this);
+         // Store this in request scope so jsf-api can access it.
+         this.externalContext.getRequestMap().put(FACESCONTEXT_IMPL_ATTR_NAME, 
+                 this);
 
          rkFactory = (RenderKitFactory)
              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
@@ -342,6 +349,9 @@ import com.sun.faces.util.MessageUtils;
 
 
      public void release() {
+         
+         this.externalContext.getRequestMap().remove(FACESCONTEXT_IMPL_ATTR_NAME);
+         
          released = true;
          externalContext = null;
          responseStream = null;
@@ -350,7 +360,7 @@ import com.sun.faces.util.MessageUtils;
          renderResponse = false;
          responseComplete = false;
          viewRoot = null;
-
+         
          // PENDING(edburns): write testcase that verifies that release
          // actually works.  This will be important to keep working as
          // ivars are added and removed on this class over time.

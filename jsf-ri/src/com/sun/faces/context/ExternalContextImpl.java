@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.44 2006/01/20 17:32:42 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.45 2006/02/24 18:05:06 edburns Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ import java.util.logging.Logger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.44 2006/01/20 17:32:42 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.45 2006/02/24 18:05:06 edburns Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -93,6 +93,10 @@ public class ExternalContextImpl extends ExternalContext {
     private Map<String,String[]> requestHeaderValuesMap = null;
     private Map<String,Object> cookieMap = null;
     private Map<String,String> initParameterMap = null;
+    
+   private static final String EXTERNALCONTEXT_IMPL_ATTR_NAME = RIConstants.FACES_PREFIX + 
+             "ExternalContextImpl";
+    
     
     // Log instance for this class
     static Logger logger = Util.getLogger(Util.FACES_LOGGER 
@@ -140,6 +144,8 @@ public class ExternalContextImpl extends ExternalContext {
         }
         this.response = response;
 
+        // Store this in request scope so jsf-api can access it.
+        this.getRequestMap().put(EXTERNALCONTEXT_IMPL_ATTR_NAME, this);
     }
 
 

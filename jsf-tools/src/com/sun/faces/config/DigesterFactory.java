@@ -1,5 +1,5 @@
 /*
- * $Id: DigesterFactory.java,v 1.9 2005/12/14 22:28:03 rlubke Exp $
+ * $Id: DigesterFactory.java,v 1.10 2006/02/24 18:05:07 edburns Exp $
  */
 
 /*
@@ -48,6 +48,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.sun.faces.util.ToolsUtil;
+import org.xml.sax.EntityResolver;
 
 /**
  * <p>A simple factory to hide <code>Digester</code> configuration
@@ -94,6 +95,14 @@ public class DigesterFactory {
      * requested or not.</p>
      */
     private boolean validating;
+    
+    /**
+     * <p>The <code>ThreadLocal</code> variable used to record the
+     * VersionListener instance for each processing thread.</p>
+     */
+    private static ThreadLocal versionListener = new ThreadLocal() {
+            protected Object initialValue() { return (null); }
+        };
 
 
 
@@ -110,13 +119,11 @@ public class DigesterFactory {
     private DigesterFactory(boolean isValidating) {
 
         validating = isValidating;
-
     } // END DigesterFactory
 
 
     // ---------------------------------------------------------- Public Methods
-
-
+    
     /**
      * <p>Returns a new <code>DigesterFactory</code> instance that will create
      * a non-validating <code>Digester</code> instance.</p>
@@ -140,10 +147,43 @@ public class DigesterFactory {
      *  <code>Digester</code>instances
      */
     public static DigesterFactory newInstance(boolean isValidating) {
-
-        return new DigesterFactory(isValidating);
+        DigesterFactory result = new DigesterFactory(isValidating);
+        return result;
 
     } // END newInstance
+
+    /**
+     * <p>Creates a new <code>DigesterFactory</code> instance that will
+     * create a <code>Digester</code> instance where validation depends
+     * on the value of <code>isValidating</code>.</p>
+     * @param isValidating - <code>true</code> if the <code>Digester</code>
+     *  instance that is ultimately returned should be configured (if possible)
+     *  for document validation.  If validation is not desired, pass
+     *  <code>false</code>.
+     * @param GrammarListener a GrammarListener instance
+     * @return a new <code>DigesterFactory</code> capable of creating
+     *  <code>Digester</code>instances
+     */
+    public static DigesterFactory newInstance(boolean isValidating,
+            VersionListener listener) {
+        DigesterFactory result = new DigesterFactory(isValidating);
+        if (null != listener) {
+            result.RESOLVER.setVersionListener(listener);
+            versionListener.set(listener);
+        }
+
+        return result;
+
+    } // END newInstance
+    
+    public static VersionListener getVersionListener() {
+        return ((VersionListener) versionListener.get());
+    }
+    
+    public static void releaseDigester(Digester toRelease) {
+	RESOLVER.setVersionListener(null);
+        versionListener.set(null);
+    }
 
 
     /**
@@ -158,6 +198,30 @@ public class DigesterFactory {
         return digester;
 
     } // END getDigester
+
+    /**
+     * <p>Implemented by a class that wants to be called as a 
+     * particular configuration file is parsed.</p>
+     *
+     * <p>This interface is implemented as an anonymous inner class
+     * inside ConfigureListener.digester().</p>
+     */ 
+    
+    public interface VersionListener {
+
+	/**
+	 * <p>Called from the EntityResolver when we know one of the
+	 * XML Grammar elements to which this config file conforms.</p>
+	 */
+        public void takeActionOnGrammar(String grammar);
+
+	/**
+	 * <p>Called from the individual digester beans to cause the
+	 * artifact to be associated with the current JSF spec level of
+	 * the file being parsed.</p>
+	 */
+        public void takeActionOnArtifact(String artifactName);
+    }
 
 
     // --------------------------------------------------------- Private Methods
@@ -272,6 +336,8 @@ public class DigesterFactory {
          * physical resource.</p>
          */
         private HashMap<String,String> entities = new HashMap<String, String>();
+        
+        private DigesterFactory digesterFactory;
 
 
         // -------------------------------------------------------- Constructors
@@ -300,9 +366,19 @@ public class DigesterFactory {
                     entities.put(aDTD_SCHEMA_INFO[0], url.toString());
                 }
             }
+            
 
         } // END JsfEntityResolver
+        
+        private VersionListener versionListener;
 
+        public void setVersionListener(VersionListener listener) {
+            versionListener = listener;
+        }
+
+        public VersionListener getVersionListener() {
+            return versionListener;
+        }
 
         // ----------------------------------------- Methods from DefaultHandler
 
@@ -335,6 +411,9 @@ public class DigesterFactory {
 
             String grammarName =
                 systemId.substring(systemId.lastIndexOf('/') + 1);
+            if (null != getVersionListener()) {
+                getVersionListener().takeActionOnGrammar(grammarName);
+            }
 
             String entityURL = entities.get(grammarName);
 

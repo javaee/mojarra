@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.26 2006/02/01 03:06:01 edburns Exp $
+ * $Id: ExternalContext.java,v 1.27 2006/02/24 18:05:04 edburns Exp $
  */
  
 /*
@@ -347,6 +347,13 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public void setRequest(Object request) {
+        ExternalContext impl = null;
+        if (null != (impl = (ExternalContext) this.getRequestMap().
+                get("com.sun.faces.ExternalContextImpl"))) {
+            impl.setRequest(request);
+            return;
+        }
+        
         throw new UnsupportedOperationException();
     }
     
@@ -380,6 +387,13 @@ public abstract class ExternalContext {
      *
      */
     public void setRequestCharacterEncoding(String encoding) throws UnsupportedEncodingException {
+        ExternalContext impl = null;
+        if (null != (impl = (ExternalContext) this.getRequestMap().
+                get("com.sun.faces.ExternalContextImpl"))) {
+            impl.setRequestCharacterEncoding(encoding);
+            return;
+        }
+
         throw new UnsupportedOperationException();
     }
     
@@ -638,6 +652,11 @@ public abstract class ExternalContext {
      *
      */
     public String getRequestCharacterEncoding() {
+        ExternalContext impl = null;
+        if (null != (impl = (ExternalContext) this.getRequestMap().
+                get("com.sun.faces.ExternalContextImpl"))) {
+            return impl.getRequestCharacterEncoding();
+        }
         throw new UnsupportedOperationException();
     }
 
@@ -660,6 +679,12 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public String getRequestContentType() {
+        ExternalContext impl = null;
+        if (null != (impl = (ExternalContext) this.getRequestMap().
+                get("com.sun.faces.ExternalContextImpl"))) {
+            return impl.getRequestContentType();
+        }
+
         throw new UnsupportedOperationException();
     }
 
@@ -682,6 +707,12 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public String getResponseCharacterEncoding() {
+        ExternalContext impl = null;
+        if (null != (impl = (ExternalContext) this.getRequestMap().
+                get("com.sun.faces.ExternalContextImpl"))) {
+            return impl.getResponseCharacterEncoding();
+        }
+	
         throw new UnsupportedOperationException();
     }
 
@@ -705,6 +736,12 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public String getResponseContentType() {
+        ExternalContext impl = null;
+        if (null != (impl = (ExternalContext) this.getRequestMap().
+                get("com.sun.faces.ExternalContextImpl"))) {
+            return impl.getResponseContentType();
+        }
+
         throw new UnsupportedOperationException();
     }
 
@@ -805,6 +842,13 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public void setResponse(Object response) {
+        ExternalContext impl = null;
+        if (null != (impl = (ExternalContext) this.getRequestMap().
+                get("com.sun.faces.ExternalContextImpl"))) {
+            impl.setResponse(response);
+            return;
+        }
+        
         throw new UnsupportedOperationException();
     }
     
@@ -830,6 +874,13 @@ public abstract class ExternalContext {
      *
      */
     public void setResponseCharacterEncoding(String encoding) {
+        ExternalContext impl = null;
+        if (null != (impl = (ExternalContext) this.getRequestMap().
+                get("com.sun.faces.ExternalContextImpl"))) {
+            impl.setResponseCharacterEncoding(encoding);
+            return;
+        }
+        
         throw new UnsupportedOperationException();
     }
     

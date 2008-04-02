@@ -118,9 +118,14 @@
                  excludes="*ant*.jar"/>
     </path>
 
+    <!-- Make sure to run with the special cactus jar 
+         in our source repository, rather than the stock version -->
+
     <path id="cactus.runtime.classpath">
         <path refid="junit.classpath"/>
-        <fileset dir="${cactus.home}/lib" includes="*.jar"/>
+        <fileset dir="${cactus.home}/lib" includes="*.jar" 
+                 excludes="cactus-1.7.1.jar"/>
+        <fileset dir="${jsf.build.home}/lib" includes="cactus-*.jar"/>
     </path>
 
     <!-- Common Targets -->

@@ -157,7 +157,10 @@
                             includes="cactus*.jar,
                                       aspect*.jar,
                                       commons-logging*.jar"
-                            excludes="*ant*.jar"/>
+                            excludes="*ant*.jar,cactus-1.7.1.jar"/>
+                <zipfileset dir="${jsf.build.home}/lib"
+                            prefix="WEB-INF/lib"
+                            includes="cactus*.jar"/>
                 <zipfileset dir="${junit.home}"
                             prefix="WEB-INF/lib"
                             includes="junit.jar"/>

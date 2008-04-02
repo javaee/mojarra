@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.25 2006/01/13 19:19:13 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.26 2006/02/24 18:05:05 edburns Exp $
  */
 
 /*
@@ -77,6 +77,9 @@ public class ApplicationAssociate {
     // Log instance for this class
     private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
             + Util.APPLICATION_LOGGER);
+    
+    private static final String APPLICATION_IMPL_ATTR_NAME = RIConstants.FACES_PREFIX +
+             "ApplicationImpl";
 
     private ApplicationImpl app = null;
     
@@ -183,6 +186,8 @@ public class ApplicationAssociate {
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID));
         }
+        externalContext.getApplicationMap().put(APPLICATION_IMPL_ATTR_NAME,
+                appImpl);
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();
         preDestroyMethods = new Map[4];
@@ -712,6 +717,27 @@ public class ApplicationAssociate {
             String fromViewId2 = (String) o2;
             return -(fromViewId1.compareTo(fromViewId2));
         }
+    }
+
+    /**
+     * Holds value of property JSFVersionTracker.
+     */
+    private com.sun.faces.config.JSFVersionTracker JSFVersionTracker;
+
+    /**
+     * Getter for property JSFVersionTracker.
+     * @return Value of property JSFVersionTracker.
+     */
+    public com.sun.faces.config.JSFVersionTracker getJSFVersionTracker() {
+        return this.JSFVersionTracker;
+    }
+
+    /**
+     * Setter for property JSFVersionTracker.
+     * @param JSFVersionTracker New value of property JSFVersionTracker.
+     */
+    public void setJSFVersionTracker(com.sun.faces.config.JSFVersionTracker JSFVersionTracker) {
+        this.JSFVersionTracker = JSFVersionTracker;
     }
 
 }

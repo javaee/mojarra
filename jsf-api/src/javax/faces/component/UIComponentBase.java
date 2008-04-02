@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.128 2006/02/13 16:30:34 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.129 2006/02/24 18:05:04 edburns Exp $
  */
 
 /*
@@ -185,12 +185,6 @@ public abstract class UIComponentBase extends UIComponent {
     // ---------------------------------------------------------------- Bindings
 
 
-    // The set of ValueExpressions for this component, keyed by property
-    // name This collection is lazily instantiated
-    // The set of ValueExpressions for this component, keyed by property
-    // name This collection is lazily instantiated
-    private Map<String,ValueExpression> bindings = null;
-
     /**
      * {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
@@ -246,16 +240,7 @@ public abstract class UIComponentBase extends UIComponent {
      * @throws NullPointerException {@inheritDoc}
      */ 
     public ValueExpression getValueExpression(String name) {
-
-        if (name == null) {
-            throw new NullPointerException();
-        }
-        if (bindings == null) {
-            return (null);
-        } else {
-            return ((ValueExpression) bindings.get(name));
-        }
-
+        return super.getValueExpression(name);
     }
 
     /**
@@ -265,36 +250,7 @@ public abstract class UIComponentBase extends UIComponent {
      * @throws NullPointerException {@inheritDoc}
      */ 
     public void setValueExpression(String name, ValueExpression binding) {
-
-        if (name == null) {
-            throw new NullPointerException();
-        } else if ("id".equals(name) || "parent".equals(name)) {
-            throw new IllegalArgumentException();
-        }
-        if (binding != null) {
-            if (!binding.isLiteralText()) {
-                if (bindings == null) {
-                    bindings = new HashMap<String, ValueExpression>();
-                }
-                bindings.put(name, binding);
-            } else {
-                ELContext context =
-                    FacesContext.getCurrentInstance().getELContext();
-                try {
-                    getAttributes().put(name, binding.getValue(context));
-                } catch (ELException ele) {
-                    throw new FacesException(ele);
-                }
-            }
-        } else {
-            if (bindings != null) {
-                bindings.remove(name);
-                if (bindings.size() == 0) {
-                    bindings = null;
-                }
-            }
-        }
-
+        super.setValueExpression(name, binding);
     }
     
     // -------------------------------------------------------------- Properties
@@ -491,8 +447,7 @@ public abstract class UIComponentBase extends UIComponent {
         return result;
 
     }
-
-
+    
     // ------------------------------------------------- Tree Management Methods
 
 
@@ -701,29 +656,7 @@ public abstract class UIComponentBase extends UIComponent {
     public boolean invokeOnComponent(FacesContext context, String clientId, 
 				     ContextCallback callback) 
 	throws FacesException {
-	if (null == context || null == clientId || null == callback) {
-	    throw new NullPointerException();
-	}
-
-	boolean found = false;        
-	if (clientId.equals(this.getClientId(context))) {
-	    try {
-		callback.invokeContextCallback(context, this);
-		return true;
-	    }
-	    catch (Exception e) {
-		throw new FacesException(e);
-	    }
-	} 
-	else {
-	    Iterator<UIComponent> itr = this.getFacetsAndChildren();
-
-	    while (itr.hasNext() & !found) {
-		found = itr.next().invokeOnComponent(context, clientId, 
-						     callback);
-	    }
-	}
-	return found;
+        return super.invokeOnComponent(context, clientId, callback);
     }
 
 

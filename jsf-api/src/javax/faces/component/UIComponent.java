@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.142 2006/02/13 16:30:34 edburns Exp $
+ * $Id: UIComponent.java,v 1.143 2006/02/24 18:05:04 edburns Exp $
  */
 
 /*
@@ -147,10 +147,19 @@ public abstract class UIComponent implements StateHolder {
      * @deprecated This has been replaced by {@link #setValueExpression}.
      */
     public abstract void setValueBinding(String name, ValueBinding binding);
+    
+    // The set of ValueExpressions for this component, keyed by property
+    // name This collection is lazily instantiated
+    // The set of ValueExpressions for this component, keyed by property
+    // name This collection is lazily instantiated
+    protected Map<String,ValueExpression> bindings = null;    
 
     /**
      * <p>Return the {@link ValueExpression} used to calculate the value for the
      * specified attribute or property name, if any.</p>
+     *
+     * <p>This method must be overridden and implemented for components that 
+     * comply with JSF 1.2 and later.</p>
      *
      * @since 1.2
      *
@@ -162,9 +171,27 @@ public abstract class UIComponent implements StateHolder {
      *
      */
     public ValueExpression getValueExpression(String name) {
-	throw new UnsupportedOperationException();
-    }
+        ValueExpression result = null;
 
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        if (bindings == null) {
+            if (!isUIComponentBase()) {
+                ValueBinding binding = getValueBinding(name);
+                if (null != binding) {
+                    result = new ValueExpressionValueBindingAdapter(binding);
+                    // Cache this for future reference.
+                    bindings = new HashMap<String, ValueExpression>();
+                    bindings.put(name, result);
+                }
+            }
+            return (result);
+        } else {
+            return (bindings.get(name));
+        }
+
+    }
 
     /**
      * <p>Set the {@link ValueExpression} used to calculate the value
@@ -185,6 +212,9 @@ public abstract class UIComponent implements StateHolder {
      * collection of <code>ValueExpression</code>s under the key given
      * by the argument <code>name</code>.</p>
      *
+     * <p>This method must be overridden and implemented for components that 
+     * comply with JSF 1.2 and later.</p>
+     *
      * @since 1.2
      *
      * @param name Name of the attribute or property for which to set a
@@ -199,9 +229,38 @@ public abstract class UIComponent implements StateHolder {
      *
      */
     public void setValueExpression(String name, ValueExpression binding) {
-	throw new UnsupportedOperationException();
-    }
 
+        if (name == null) {
+            throw new NullPointerException();
+        } else if ("id".equals(name) || "parent".equals(name)) {
+            throw new IllegalArgumentException();
+        }
+        if (binding != null) {
+            if (!binding.isLiteralText()) {
+                if (bindings == null) {
+                    bindings = new HashMap<String, ValueExpression>();
+                }
+                bindings.put(name, binding);
+            } else {
+                ELContext context =
+                    FacesContext.getCurrentInstance().getELContext();
+                try {
+                    getAttributes().put(name, binding.getValue(context));
+                } catch (ELException ele) {
+                    throw new FacesException(ele);
+                }
+            }
+        } else {
+            if (bindings != null) {
+                bindings.remove(name);
+                if (bindings.size() == 0) {
+                    bindings = null;
+                }
+            }
+        }
+
+    }
+    
     // -------------------------------------------------------------- Properties
 
 
@@ -377,6 +436,24 @@ public abstract class UIComponent implements StateHolder {
      * UIComponentBase#encodeChildren}.</p>
      */
     public abstract boolean getRendersChildren();
+    
+    
+    // This is necessary for JSF components that extend from UIComponent
+    // directly rather than extending from UIComponentBase.  Such components
+    // may need to have implementations provided for methods that originated
+    // from a spec version more recent than the version with which the component
+    // complies.  Currently this private property is only consulted in the
+    // getValueExpression() method.
+    private boolean isUIComponentBase;
+    private boolean isUIComponentBaseIsSet = false;
+    
+    private boolean isUIComponentBase() {
+        if (!isUIComponentBaseIsSet) {
+            isUIComponentBase = (this instanceof UIComponentBase);
+        }
+
+        return isUIComponentBase;
+    }
 
 
     // ------------------------------------------------- Tree Management Methods
@@ -577,11 +654,31 @@ private void doFind(FacesContext context, String clientId) {
      *
      */
     
-    public boolean invokeOnComponent(FacesContext context, String clientId, 
+    public boolean invokeOnComponent(FacesContext context, String clientId,
             ContextCallback callback) throws FacesException {
-        throw new UnsupportedOperationException();
+        if (null == context || null == clientId || null == callback) {
+            throw new NullPointerException();
+        }
+        
+        boolean found = false;
+        if (clientId.equals(this.getClientId(context))) {
+            try {
+                callback.invokeContextCallback(context, this);
+                return true;
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        } else {
+            Iterator<UIComponent> itr = this.getFacetsAndChildren();
+            
+            while (itr.hasNext() & !found) {
+                found = itr.next().invokeOnComponent(context, clientId,
+                        callback);
+            }
+        }
+        return found;
     }
-    
+
 
     // ------------------------------------------------ Facet Management Methods
 

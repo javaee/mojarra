@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.30 2006/01/11 15:28:06 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.31 2006/02/24 18:05:07 edburns Exp $
  */
 
 /*
@@ -31,6 +31,9 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.JSFVersionTracker;
+import com.sun.faces.config.JSFVersionTracker.Version;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -51,12 +54,13 @@ import com.sun.faces.renderkit.RenderKitUtils;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import javax.faces.application.ViewHandler;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.30 2006/01/11 15:28:06 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.31 2006/02/24 18:05:07 edburns Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -166,11 +170,42 @@ public class RestoreViewPhase extends Phase {
 
 	if (isPostback(facesContext)) {
 	    // try to restore the view
-	    if (null == (viewRoot = (Util.getViewHandler(facesContext)).
-			 restoreView(facesContext, viewId))) {
-                Object[] params = {viewId};
-		throw new ViewExpiredException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID, params), viewId);
+            ViewHandler viewHandler = Util.getViewHandler(facesContext);
+	    if (null == (viewRoot = viewHandler.restoreView(facesContext, viewId))) {
+                JSFVersionTracker tracker = 
+                        ApplicationAssociate.getInstance(facesContext.getExternalContext()).getJSFVersionTracker();
+
+		// The tracker will be null if the user turned off the 
+		// version tracking feature.  
+                if (null != tracker) {
+		    // Get the versions of the current ViewHandler and
+		    // StateManager.  If they are older than the current
+		    // version of the implementation, fall back to the
+		    // JSF 1.1 behavior.
+                    Version toTest = tracker.
+                            getVersionForTrackedClassName(viewHandler.getClass().getName());
+                    Version currentVersion = tracker.getCurrentVersion();
+		    boolean viewHandlerIsOld = false,
+			stateManagerIsOld = false;
+		    
+		    viewHandlerIsOld = (toTest.compareTo(currentVersion) < 0);
+		    toTest = tracker.
+			getVersionForTrackedClassName(facesContext.getApplication().getStateManager().getClass().getName());
+		    stateManagerIsOld = (toTest.compareTo(currentVersion) < 0);
+
+                    if (viewHandlerIsOld || stateManagerIsOld) {
+                        viewRoot = viewHandler.createView(facesContext, viewId);
+                        if (null != viewRoot) {
+                            facesContext.renderResponse();
+                        }
+                    }
+                }
+                
+                if (null == viewRoot) {
+                    Object[] params = {viewId};
+                    throw new ViewExpiredException(MessageUtils.getExceptionMessageString(
+                            MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID, params), viewId);
+                }
 	    }
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Postback: Restored view for " + viewId);

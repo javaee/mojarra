@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryBean.java,v 1.6 2005/08/25 17:11:00 rlubke Exp $
+ * $Id: FactoryBean.java,v 1.7 2006/02/24 18:05:08 edburns Exp $
  */
 
 /*
@@ -29,6 +29,8 @@
 
 package com.sun.faces.config.beans;
 
+import com.sun.faces.config.DigesterFactory;
+import com.sun.faces.config.DigesterFactory.VersionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,25 +48,45 @@ public class FactoryBean {
     private List<String> applicationFactories = new ArrayList<String>();
     public List<String> getApplicationFactories() { return applicationFactories; }
     public void addApplicationFactory(String applicationFactory)
-    { applicationFactories.add(applicationFactory); }
+    { 
+        VersionListener listener = DigesterFactory.getVersionListener();
+        if (null != listener) {
+            listener.takeActionOnArtifact(applicationFactory);
+        }
+        applicationFactories.add(applicationFactory); }
 
 
     private List<String> facesContextFactories = new ArrayList<String>();
     public List<String> getFacesContextFactories() { return facesContextFactories; }
     public void addFacesContextFactory(String facesContextFactory)
-    { facesContextFactories.add(facesContextFactory); }
+    { 
+        VersionListener listener = DigesterFactory.getVersionListener();
+        if (null != listener) {
+            listener.takeActionOnArtifact(facesContextFactory);
+        }
+        facesContextFactories.add(facesContextFactory); }
 
 
     private List<String> lifecycleFactories = new ArrayList<String>();
     public List<String> getLifecycleFactories() { return lifecycleFactories; }
     public void addLifecycleFactory(String lifecycleFactory)
-    { lifecycleFactories.add(lifecycleFactory); }
+    { 
+        VersionListener listener = DigesterFactory.getVersionListener();
+        if (null != listener) {
+            listener.takeActionOnArtifact(lifecycleFactory);
+        }
+        lifecycleFactories.add(lifecycleFactory); }
 
 
     private List<String> renderKitFactories = new ArrayList<String>();
     public List<String> getRenderKitFactories() { return renderKitFactories; }
     public void addRenderKitFactory(String renderKitFactory)
-    { renderKitFactories.add(renderKitFactory); }
+    { 
+        VersionListener listener = DigesterFactory.getVersionListener();
+            if (null != listener) {
+                listener.takeActionOnArtifact(renderKitFactory);
+            }
+        renderKitFactories.add(renderKitFactory); }
 
 
 }

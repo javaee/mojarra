@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.61 2006/02/10 22:29:02 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.62 2006/02/24 18:05:06 edburns Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -70,6 +70,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -105,6 +106,8 @@ import org.apache.commons.digester.Digester;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -125,7 +128,6 @@ import javax.servlet.http.HttpSessionListener;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSession;
-
 
 /**
  * <p>Parse all relevant JavaServer Faces configuration resources, and
@@ -200,6 +202,13 @@ public class ConfigureListener implements ServletRequestListener,
      */
     protected static final String FORCE_LOAD_CONFIG =
         RIConstants.FACES_PREFIX + "forceLoadConfiguration";
+    
+    /**
+     * <p>When specified, disable tracking the version of JSF artifacts 
+     * that can be loaded via the application configuration resources.
+     */
+    static final String DISABLE_VERSION_TRACKING = 
+            RIConstants.FACES_PREFIX + "disableVersionTracking";
 
     /**
      * <p>The context initialization parameter that determines whether
@@ -356,14 +365,15 @@ public class ConfigureListener implements ServletRequestListener,
     }
 
     public void contextInitialized(ServletContextEvent sce) {
+        ServletContext context = sce.getServletContext();
+        Digester digester = null;
 
         try {
-            ServletContext context = sce.getServletContext();
-
+            
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO,
                            "jsf.config.listener.version",
-                           context.getServletContextName());
+                           context.getContextPath());
             }
 
             // Check to see if the FacesServlet is present in the
@@ -390,7 +400,6 @@ public class ConfigureListener implements ServletRequestListener,
             }
 
             // Prepare local variables we will need
-            Digester digester = null;
             FacesConfigBean fcb = new FacesConfigBean();
 
             // store the servletContext instance in Thread local Storage.
@@ -430,7 +439,7 @@ public class ConfigureListener implements ServletRequestListener,
 
             // Step 1, configure a Digester instance we can use
             digester = digester(isFeatureEnabled(context, VALIDATE_XML));
-
+            
             // Step 2, parse the RI configuration resource
             url = Util.getCurrentLoader(this).getResource(JSF_RI_CONFIG);
             parse(digester, url, fcb);
@@ -533,7 +542,19 @@ public class ConfigureListener implements ServletRequestListener,
             // Jsp.
             registerELResolverAndListenerWithJsp(context);
         } finally {
+            JSFVersionTracker tracker = getJSFVersionTracker();
+            if (null != tracker) {
+                tracker.publishInstanceToApplication();
+            }
+            releaseDigester(digester);
             tlsExternalContext.set(null);
+            
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO,
+                           "jsf.config.listener.version.complete",
+                           context.getContextPath());
+            }
+            
         }
     }
 
@@ -838,7 +859,9 @@ public class ConfigureListener implements ServletRequestListener,
                     elResolversFromFacesConfig = 
                         new ArrayList<ELResolver>(values.length);
                 }
-                elResolversFromFacesConfig.add((ELResolver) instance);
+                if (null != instance) {
+                    elResolversFromFacesConfig.add((ELResolver) instance);
+                }
             }
             associate.setELResolversFromFacesConfig(elResolversFromFacesConfig);
         }
@@ -1009,7 +1032,7 @@ public class ConfigureListener implements ServletRequestListener,
 		if (LOGGER.isLoggable(Level.FINER)) {
                     LOGGER.finer("setFacesContextFactory(" + value + ')');
 		}
-		FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
+                FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
 					 value);
 	    }
 	}
@@ -1021,7 +1044,7 @@ public class ConfigureListener implements ServletRequestListener,
 		if (LOGGER.isLoggable(Level.FINER)) {
                     LOGGER.finer("setLifecycleFactory(" + value + ')');
 		}
-		FactoryFinder.setFactory(FactoryFinder.LIFECYCLE_FACTORY,
+                FactoryFinder.setFactory(FactoryFinder.LIFECYCLE_FACTORY,
 					 value);
 	    }
 	}
@@ -1033,7 +1056,7 @@ public class ConfigureListener implements ServletRequestListener,
 		if (LOGGER.isLoggable(Level.FINER)) {
                     LOGGER.finer("setRenderKitFactory(" + value + ')');
 		}
-		FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+                FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
 					 value);
 	    }
 	}
@@ -1160,7 +1183,7 @@ public class ConfigureListener implements ServletRequestListener,
                     mbf = newMbf;
                 }
             }
-	    associate.addManagedBeanFactory(config[i].getManagedBeanName(),
+            associate.addManagedBeanFactory(config[i].getManagedBeanName(),
 					    mbf);
         }
     }
@@ -1399,8 +1422,30 @@ public class ConfigureListener implements ServletRequestListener,
     protected Digester digester(boolean validateXml) {
 
         Digester digester = null;
+        DigesterFactory.VersionListener listener = null;
+        final JSFVersionTracker tracker = getJSFVersionTracker();
+        
+        if (null != tracker) {
+            listener =
+                    new DigesterFactory.VersionListener() {
+                public void takeActionOnGrammar(String grammar) {
+                    tracker.pushJSFVersionNumberFromGrammar(grammar);
+                }
+
+                public void takeActionOnArtifact(String artifactName) {
+                    tracker.putTrackedClassName(artifactName);
+                }
+            };
+        }
+            
         try {
-            digester = DigesterFactory.newInstance(validateXml).createDigester();
+            if (null != listener) {
+                digester = DigesterFactory.newInstance(validateXml, 
+                        listener).createDigester();
+            }
+            else {
+                digester = DigesterFactory.newInstance(validateXml).createDigester();
+            }
         }
         catch (RuntimeException e) {
             Object [] args = { "Digester" };
@@ -1419,6 +1464,37 @@ public class ConfigureListener implements ServletRequestListener,
 
         return (digester);
 
+    }
+    
+    protected void releaseDigester(Digester toRelease) {
+        DigesterFactory.releaseDigester(toRelease);
+    }
+    
+    private JSFVersionTracker versionTracker = null;
+
+    /**
+     * <p>This is the single access point for accessing the
+     * JSFVersionTracker instance during initialization.  It returns
+     * null if the feature has been disabled via user configuration.</p>
+     */ 
+    
+    private JSFVersionTracker getJSFVersionTracker() {
+        // If the feature is disabled...
+        if (isFeatureEnabled(getExternalContextDuringInitialize().getContext(),
+                DISABLE_VERSION_TRACKING)) {
+            // make sure the tracker is released.
+            versionTracker = null;
+            return null;
+        }
+        
+        if (null == versionTracker) {
+            versionTracker = new JSFVersionTracker();
+        }
+        return versionTracker;
+    }
+    
+    private void releaseJSFVersionTracker() {
+        versionTracker = null;
     }
 
     /**
@@ -1607,6 +1683,7 @@ public class ConfigureListener implements ServletRequestListener,
         URLConnection conn = null;
         InputStream stream = null;
         InputSource source = null;
+        JSFVersionTracker tracker = getJSFVersionTracker();
         try {
             conn = url.openConnection();
             conn.setUseCaches(false);
@@ -1616,8 +1693,12 @@ public class ConfigureListener implements ServletRequestListener,
             source.setByteStream(stream);            
             digester.clear();
             digester.push(fcb);
-            digester.parse(source);                        
-        } catch (Exception e) {
+            if (null != tracker) {
+                tracker.startParse();
+            }
+            digester.parse(source);
+        } 
+        catch (Exception e) {
             int ln = -1;
             int cn = -1;            
             if (e instanceof SAXParseException) {
@@ -1648,22 +1729,29 @@ public class ConfigureListener implements ServletRequestListener,
                     ;
                 }
             }
+            if (null != tracker) {
+                tracker.endParse();
+            }
             stream = null;
         }
+        
+        
 
     }
-
+    
     /**
      * <p>Determines if a particular feature, configured via the web
      * deployment descriptor as a <code>true/false</code> value, is
      * enabled or not.</p>
-     * @param context the <code>ServletContext</code> of the application
+     * @param obj the <code>ServletContext</code> of the application, passed as an
+     * Object to allow usage given an ExternalContext.
      * @param paramName the name of the context init paramName to check
      *
      * @return <code>true</code> if the feature in question is enabled, otherwise
      *  <code>false</code>
      */
-    protected boolean isFeatureEnabled(ServletContext context, String paramName) {
+    protected boolean isFeatureEnabled(Object obj, String paramName) {
+        ServletContext context = (ServletContext) obj;
         String paramValue = context.getInitParameter(paramName);
         if (paramValue != null) {
             paramValue = paramValue.trim();
