@@ -64,10 +64,12 @@ public class UserNumberBean {
     }
 
     public String getResponse() {
-    	if(userNumber.compareTo(randomInt) == 0)
-		return "Yay! You got it!"; 
-	else 
-		return "Sorry, "+userNumber+" is incorrect.";
+    	if(userNumber != null && userNumber.compareTo(randomInt) == 0) {
+            return "Yay! You got it!"; 
+        }
+	else {
+            return "Sorry, "+userNumber+" is incorrect.";
+        }
     }
     	
 
