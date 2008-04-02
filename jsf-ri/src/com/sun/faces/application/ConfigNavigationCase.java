@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigNavigationCase.java,v 1.8 2006/03/29 23:03:42 rlubke Exp $
+ * $Id: ConfigNavigationCase.java,v 1.9 2006/09/05 22:52:31 rlubke Exp $
  */
 
 /*
@@ -112,11 +112,11 @@ public class ConfigNavigationCase {
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("FROM VIEW ID:" + getFromViewId());
-        sb.append("\nFROM ACTION:" + getFromAction());
-        sb.append("\nFROM OUTCOME:" + getFromOutcome());
-        sb.append("\nTO VIEW ID:" + getToViewId());
-        sb.append("\nREDIRECT:" + hasRedirect());
+        sb.append("FROM VIEW ID:").append(getFromViewId());
+        sb.append("\nFROM ACTION:").append(getFromAction());
+        sb.append("\nFROM OUTCOME:").append(getFromOutcome());
+        sb.append("\nTO VIEW ID:").append(getToViewId());
+        sb.append("\nREDIRECT:").append(hasRedirect());
         return sb.toString();
     }
 }

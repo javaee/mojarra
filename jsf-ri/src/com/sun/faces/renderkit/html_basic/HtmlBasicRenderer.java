@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.115 2006/09/01 17:30:54 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.116 2006/09/05 22:52:32 rlubke Exp $
  */
 
 /*
@@ -62,17 +62,7 @@ import com.sun.faces.util.Util;
  * for HtmlBasicRenderKit.
  */
 
-public abstract class HtmlBasicRenderer extends Renderer {
-
-
-    public static final String CLEAR_HIDDEN_FIELD_FN_NAME =
-          "clearFormHiddenParams";
-
-
-    public static final String SCRIPT_ELEMENT = "script";
-    public static final String SCRIPT_LANGUAGE = "language";
-    public static final String SCRIPT_LANGUAGE_JAVASCRIPT = "JavaScript";
-    public static final String SCRIPT_TYPE = "type";
+public abstract class HtmlBasicRenderer extends Renderer {   
 
 
     // Log instance for this class

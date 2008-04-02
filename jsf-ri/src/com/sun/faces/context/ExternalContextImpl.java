@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.50 2006/09/01 01:22:38 tony_robertson Exp $
+ * $Id: ExternalContextImpl.java,v 1.51 2006/09/05 22:52:31 rlubke Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.50 2006/09/01 01:22:38 tony_robertson Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.51 2006/09/05 22:52:31 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -870,10 +870,9 @@ class ApplicationMap extends BaseContextMap<Object> {
     public Object put(String key, Object value) {
         if (key == null) {
             throw new NullPointerException();
-        }
-        String keyString = key.toString();
-        Object result = servletContext.getAttribute(keyString);
-        servletContext.setAttribute(keyString, value);
+        }       
+        Object result = servletContext.getAttribute(key);
+        servletContext.setAttribute(key, value);
         return (result);
     }
 
@@ -966,11 +965,10 @@ class SessionMap extends BaseContextMap<Object> {
     public Object put(String key, Object value) {
         if (key == null) {
             throw new NullPointerException();
-        }
-        String keyString = key.toString();
+        }        
         HttpSession session = getSession();
-        Object result = session.getAttribute(keyString);
-        session.setAttribute(keyString, value);
+        Object result = session.getAttribute(key);
+        session.setAttribute(key, value);
         return (result);
     }
 
@@ -1065,10 +1063,9 @@ class RequestMap extends BaseContextMap<Object> {
     public Object put(String key, Object value) {
         if (key == null) {
             throw new NullPointerException();
-        }
-        String keyString = key.toString();
-        Object result = request.getAttribute(keyString);
-        request.setAttribute(keyString, value);
+        }        
+        Object result = request.getAttribute(key);
+        request.setAttribute(key, value);
         return (result);
     }
 

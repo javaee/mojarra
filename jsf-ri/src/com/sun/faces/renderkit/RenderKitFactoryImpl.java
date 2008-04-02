@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.27 2006/05/17 19:00:46 rlubke Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.28 2006/09/05 22:52:32 rlubke Exp $
  */
 
 /*
@@ -29,14 +29,14 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.util.MessageUtils;
-
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
+
+import com.sun.faces.util.MessageUtils;
 
 
 public class RenderKitFactoryImpl extends RenderKitFactory {
@@ -44,9 +44,9 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
 //
 // Protected Constants
 //
-    protected String renderKitId = null;
-    protected String className = null;
-    protected HashMap<String,RenderKit> renderKits = null;
+    protected String renderKitId;
+    protected String className;
+    protected ConcurrentHashMap<String,RenderKit> renderKits;
 
 //
 // Class Variables
@@ -64,7 +64,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
      */
     public RenderKitFactoryImpl() {
         super();
-        renderKits = new HashMap<String, RenderKit>();
+        renderKits = new ConcurrentHashMap<String, RenderKit>();
         addRenderKit(HTML_BASIC_RENDER_KIT, new RenderKitImpl());
     }
 
@@ -81,10 +81,9 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderKit");
             throw new NullPointerException(message);
         }
-
-        synchronized (renderKits) {
-            renderKits.put(renderKitId, renderKit);
-        }
+        
+        renderKits.put(renderKitId, renderKit);
+       
     }
 
 

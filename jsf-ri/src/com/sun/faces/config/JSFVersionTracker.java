@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.6 2006/09/01 01:22:35 tony_robertson Exp $
+ * $Id: JSFVersionTracker.java,v 1.7 2006/09/05 22:52:31 rlubke Exp $
  */
 
 /*
@@ -124,7 +124,7 @@ public class JSFVersionTracker {
                             result.append("null\n");
                         }
                         else {
-                            result.append(cur.toString() + "\n");
+                            result.append(cur.toString()).append('\n');
                         }
                     }
                     return result.toString();
@@ -186,7 +186,8 @@ public class JSFVersionTracker {
                     Version curVersion = null;
                     for (Map.Entry cur : this.entrySet()) {
                         curVersion = (Version)cur.getValue();
-                        result.append(cur + ": " + curVersion.toString() + "\n");
+                        result.append(cur).append(": ");
+                        result.append(curVersion.toString()).append('\n');
                     }
                     return result.toString();
                 }

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.21 2006/09/01 01:22:52 tony_robertson Exp $
+ * $Id: RenderResponsePhase.java,v 1.22 2006/09/05 22:52:32 rlubke Exp $
  */
 
 /*
@@ -32,6 +32,11 @@
 package com.sun.faces.lifecycle;
 
 
+import javax.faces.FacesException;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -39,11 +44,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.faces.FacesException;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.TypedCollections;
@@ -54,7 +54,7 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.21 2006/09/01 01:22:52 tony_robertson Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.22 2006/09/05 22:52:32 rlubke Exp $
  */
 
 public class RenderResponsePhase extends Phase {
@@ -150,10 +150,10 @@ public class RenderResponsePhase extends Phase {
             			while (messages.hasNext()) {
             				FacesMessage message = messages.next();
             				builder.append("\n");
-            				builder.append("sourceId="+clientId);
-            				builder.append("[severity=("+message.getSeverity());
-            				builder.append("), summary=("+message.getSummary());
-            				builder.append("), detail=("+message.getDetail()+")]");
+            				builder.append("sourceId=").append(clientId);
+            				builder.append("[severity=(").append(message.getSeverity());
+            				builder.append("), summary=(").append(message.getSummary());
+            				builder.append("), detail=(").append(message.getDetail()).append(")]");
             			}
             		}
             		logger.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
