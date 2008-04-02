@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.175 2005/10/18 00:27:06 rlubke Exp $
+ * $Id: Util.java,v 1.176 2005/11/02 17:47:25 rlubke Exp $
  */
 
 /*
@@ -88,10 +88,10 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.175 2005/10/18 00:27:06 rlubke Exp $
+ * @version $Id: Util.java,v 1.176 2005/11/02 17:47:25 rlubke Exp $
  */
 
-public class Util extends Object {
+public class Util {
 
     //
     // Private/Protected Constants
@@ -369,6 +369,12 @@ public class Util extends Object {
     
     public static final String RESTORE_VIEW_ERROR_MESSAGE_ID = 
         "com.sun.faces.RESTORE_VIEW_ERROR";
+    
+    public static final String VALUE_NOT_SELECT_ITEM_ID =
+        "com.sun.faces.OPTION_NOT_SELECT_ITEM";
+    
+    public static final String CHILD_NOT_OF_EXPECTED_TYPE_ID = 
+        "com.sun.faces.CHILD_NOT_OF_EXPECTED_TYPE";
     
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
@@ -702,58 +708,74 @@ public class Util extends Object {
      * @throws NullPointerException if <code>context</code>
      *                              is <code>null</code>
      */
-    public static Iterator getSelectItems(FacesContext context,
-                                          UIComponent component) {
+    public static Iterator<SelectItem> getSelectItems(FacesContext context,
+                                                      UIComponent component) {
 
-        ArrayList<Object> list = new ArrayList<Object>();
-        Iterator<UIComponent> kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = kids.next();
+        ArrayList<SelectItem> list = new ArrayList<SelectItem>();
+        for (UIComponent kid : component.getChildren()) {
             if (kid instanceof UISelectItem) {
-                Object value = ((UISelectItem) kid).getValue();
+                UISelectItem item = (UISelectItem) kid;
+                Object value = item.getValue();
                 if (value == null) {
-                    UISelectItem item = (UISelectItem) kid;
                     list.add(new SelectItem(item.getItemValue(),
                                             item.getItemLabel(),
                                             item.getItemDescription(),
                                             item.isItemDisabled()));
                 } else if (value instanceof SelectItem) {
-                    list.add(value);
+                    list.add((SelectItem) value);
                 } else {
-                    throw new IllegalArgumentException(Util.getExceptionMessageString(
-                        Util.CONVERSION_ERROR_MESSAGE_ID));
+                    throw new IllegalArgumentException(
+                        Util.getExceptionMessageString(
+                            Util.VALUE_NOT_SELECT_ITEM_ID,
+                            new Object[] { 
+                                  component.getId(),
+                                  value.getClass().getName() }));
                 }
             } else if (kid instanceof UISelectItems && null != context) {
                 Object value = ((UISelectItems) kid).getValue();
                 if (value instanceof SelectItem) {
-                    list.add(value);
+                    list.add((SelectItem) value);
                 } else if (value instanceof SelectItem[]) {
                     SelectItem[] items = (SelectItem[]) value;
-                    for (int i = 0; i < items.length; i++) {
-                        list.add(items[i]);
+                    for (SelectItem item : items) {
+                        list.add(item);
                     }
                 } else if (value instanceof Collection) {
-                    Iterator elements = ((Collection) value).iterator();
+                    Iterator elements = ((Collection) value).iterator();                    
                     while (elements.hasNext()) {
-                        list.add(elements.next());
+                        Object element = elements.next();
+                        if (SelectItem.class.isInstance(element)) {
+                            list.add((SelectItem) elements.next());
+                        } else {
+                            throw new IllegalArgumentException(
+                                Util.getExceptionMessageString(
+                                    Util.VALUE_NOT_SELECT_ITEM_ID,
+                                    new Object[] { 
+                                        component.getId(),
+                                        value.getClass().getName() }));
+                        }
                     }
                 } else if (value instanceof Map) {
-                    Iterator keys = ((Map) value).keySet().iterator();
-                    while (keys.hasNext()) {
-                        Object key = keys.next();
-                        if (key == null) {
+                    Map optionMap = (Map) value;
+                    for (Iterator i = optionMap.entrySet().iterator(); 
+                          i.hasNext(); ) {
+                        Map.Entry entry = (Map.Entry) i.next();
+                        Object key = entry.getKey();
+                        Object val = entry.getValue();
+                        if (key == null || val == null) {
                             continue;
                         }
-                        Object val = ((Map) value).get(key);
-                        if (val == null) {
-                            continue;
-                        }
-                        list.add(new SelectItem(val.toString(), key.toString(),
-                                                null));
-                    }
+                        list.add(new SelectItem(key.toString(), 
+                                                val.toString()));
+                    }                    
                 } else {
-                    throw new IllegalArgumentException(Util.getExceptionMessageString(
-                        Util.CONVERSION_ERROR_MESSAGE_ID));
+                    throw new IllegalArgumentException(
+                          Util.getExceptionMessageString(
+                            Util.CHILD_NOT_OF_EXPECTED_TYPE_ID,
+                            new Object[] {
+                                  "UISelectItem or UISelectItems",
+                                  component.getFamily(),
+                                  component.getId()}));
                 }
             }
         }
