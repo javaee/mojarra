@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.177 2005/11/02 17:55:43 rlubke Exp $
+ * $Id: Util.java,v 1.178 2005/11/22 18:48:34 rlubke Exp $
  */
 
 /*
@@ -88,7 +88,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.177 2005/11/02 17:55:43 rlubke Exp $
+ * @version $Id: Util.java,v 1.178 2005/11/22 18:48:34 rlubke Exp $
  */
 
 public class Util {
@@ -375,6 +375,9 @@ public class Util {
     
     public static final String CHILD_NOT_OF_EXPECTED_TYPE_ID = 
         "com.sun.faces.CHILD_NOT_OF_EXPECTED_TYPE";
+    
+    public static final String COMMAND_LINK_NO_FORM_MESSAGE_ID =
+        "com.sun.faces.COMMAND_LINK_NO_FORM_MESSAGE";
     
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

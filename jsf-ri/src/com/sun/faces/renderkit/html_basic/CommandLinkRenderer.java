@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.40 2005/10/18 00:27:05 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.41 2005/11/22 18:48:33 rlubke Exp $
  */
 
 /*
@@ -175,7 +175,16 @@ public class CommandLinkRenderer extends LinkRenderer {
                 componentDisabled = true;
             }
         }
-        if (componentDisabled) {
+        
+        Object form = getMyForm(component);
+        if (form == null) {
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("component '" + component.getId() +
+                               "' must be enclosed inside a form ");
+            }            
+        }
+
+        if (componentDisabled || getMyForm(component) == null) {
             renderAsDisabled(context, command);
         } else {
             renderAsActive(context, command);
@@ -237,14 +246,17 @@ public class CommandLinkRenderer extends LinkRenderer {
         }
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
-
-        //Write Anchor inline elements
-                                                                                                                        
+        
         String fieldName = getHiddenFieldName(context, component);
-        if (null == fieldName) {
+        if (fieldName == null) {
+            writer.write(Util.getExceptionMessageString(
+                  Util.COMMAND_LINK_NO_FORM_MESSAGE_ID));   
+            writer.endElement("span");
             return;
         }
-                                                                                                                        
+        
+        //Write Anchor inline elements
+                                                                                                                                                                                                                                                       
         boolean componentDisabled = false;
         if (component.getAttributes().get("disabled") != null) {
             if ((component.getAttributes().get("disabled")).equals(Boolean.TRUE)) {
@@ -266,15 +278,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         writer.endElement("a");
                                                                                                                         
         renderHiddenFieldsAndScriptIfNecessary(context, writer, component, fieldName);
-                                                                                                                        
-        UIForm uiform = getMyForm(command);
-        if ( uiform == null ) {
-            if (logger.isLoggable(Level.WARNING)) {
-                 logger.warning("component " + component.getId() +
-                          " must be enclosed inside a form ");
-            }
-            return;
-        }
+                                                                                                                                       
         
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
