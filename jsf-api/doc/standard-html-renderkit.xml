@@ -1227,20 +1227,6 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>key</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>bundle</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
       <property-name>styleClass</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
