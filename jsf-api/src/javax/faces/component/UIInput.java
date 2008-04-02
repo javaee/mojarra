@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.22 2003/06/21 01:05:41 craigmcc Exp $
+ * $Id: UIInput.java,v 1.23 2003/06/21 01:41:32 craigmcc Exp $
  */
 
 /*
@@ -17,7 +17,9 @@ import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
+import javax.faces.application.Message;
 import javax.faces.context.FacesContext;
+import javax.faces.context.MessageResources;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
@@ -50,6 +52,18 @@ import javax.faces.validator.Validator;
  */
 
 public class UIInput extends UIOutput {
+
+
+    // ----------------------------------------------------- Manifest Constants
+
+
+    /**
+     * <p>The message identifier of the {@link Message} to be created if
+     * this validation fails.</p>
+     */
+    public static final String REQUIRED_MESSAGE_ID =
+        "javax.faces.component.UIInput.REQUIRED";
+
 
 
     // ----------------------------------------------------------- Constructors
@@ -100,6 +114,34 @@ public class UIInput extends UIOutput {
     public void setPrevious(Object previous) {
 
         this.previous = previous;
+
+    }
+
+
+    /**
+     * <p>The "required field" state for this component.</p>
+     */
+    private boolean required = false;
+
+
+    /**
+     * <p>Return the "required field" state for this component.</p>
+     */
+    public boolean isRequired() {
+
+	return (this.required);
+
+    }
+
+
+    /**
+     * <p>Set the "required field" state for this component.</p>
+     *
+     * @param required The new "required field" state
+     */
+    public void setRequired(boolean required) {
+
+	this.required = required;
 
     }
 
@@ -214,10 +256,22 @@ public class UIInput extends UIOutput {
      * <ul>
      * <li>Save the current local value (if any) in the <code>previous</code>
      *     property.</li>
-     * <li>If the <code>valid</code> property on this component is already
-     *     <code>false</code> take no further action.
-     * <li>Call the <code>validate()</code> method of each
-     *     {@link Validator} registered for this {@link UIInput}.</li>
+     * <li>If the <code>valid</code> property on this component is still
+     *     <code>true</code>, and the <code>required</code> property is also
+     *     true, ensure that the local value is not empty (where "empty" is
+     *     defined as <code>null</code> or a zero-length String.  If the local
+     *     value is empty:
+     *     <ul>
+     *     <li>Enqueue an appropriate error message by calling the
+     *         <code>addMessage()</code> method on the <code>FacesContext</code>
+     *         instance for the current request.</li>
+     *     <li>Set the <code>valid</code> property on this component to
+     *         <code>false</code>.</li>
+     *     </ul></li>
+     * <li>If the <code>valid</code> property on this component is still
+     *     <code>true</code>, and the local value is not empty, call the
+     *     <code>validate()</code> method of each {@link Validator}
+     *     registered for this {@link UIInput}.</li>
      * <li>If the <code>valid</code> property of this component is still
      *     <code>true</code>, and if the local value is different from
      *     the previous value of this component, fire a
@@ -246,8 +300,18 @@ public class UIInput extends UIOutput {
         Object previous = getPrevious();
         setPrevious(null);
 
-	// If our value is valid, call all external validators
-	if (isValid() && (this.validators != null)) {
+	// If our value is valid, enforce the required property if present
+	if (isValid() && isRequired() && isEmpty()) {
+	    Message message =
+		context.getApplication().
+		getMessageResources(MessageResources.FACES_API_MESSAGES).
+		getMessage(context, REQUIRED_MESSAGE_ID);
+	    context.addMessage(this, message);
+	    setValid(false);
+	}
+
+	// If our value is valid and not empty, call all external validators
+	if (isValid() && !isEmpty() && (this.validators != null)) {
 	    Iterator validators = this.validators.iterator();
 	    while (validators.hasNext()) {
 		Validator validator = (Validator) validators.next();
@@ -285,6 +349,21 @@ public class UIInput extends UIOutput {
 		fireValueChangedEvent(context, previous, value);
 	    }
         }
+
+    }
+
+
+    private boolean isEmpty() {
+
+	Object value = getValue();
+	if (value == null) {
+	    return (true);
+	} else if ((value instanceof String) &&
+		   (((String) value).length() < 1)) {
+	    return (true);
+	} else {
+	    return (false);
+	}
 
     }
     
