@@ -39,21 +39,21 @@ import javax.faces.render.ResponseStateManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.InputStreamReader;
-import java.io.InputStream;
 import java.io.Writer;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.util.Map.Entry;
-import java.net.URL;
-import java.net.URLConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
@@ -869,32 +869,58 @@ public class RenderKitUtils {
      * @throws java.io.IOException if an error occurs writing to the response
      */
     public static void renderFormInitScript(ResponseWriter writer,
-                                            FacesContext context) 
-    throws IOException {
-        
-        boolean isXhtml = 
-              RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
-        
-        writer.write('\n');
-        writer.startElement("script", null);
-        writer.writeAttribute("type", "text/javascript", null);
-        writer.writeAttribute("language", "Javascript", null);
-        if (isXhtml) {
-            writer.write("\n//<![CDATA[");
-        } else {
-            writer.write("\n<!--");
-        }
+                                            FacesContext context)
+          throws IOException {
+        WebConfiguration webConfig =
+              WebConfiguration.getInstance(context.getExternalContext());
 
-        writeSunJS(context, writer);
-        
-        if (isXhtml) {
-            writer.write("\n//]]>\n");            
+        if (webConfig
+              .getBooleanContextInitParameter(BooleanWebContextInitParameter.ExternalizeJavaScript)) {
+            // PENDING
+            // We need to look into how to make this work in a portlet environment.
+            // For the time being, this feature will need to be disabled when running
+            // in a portlet.
+            String mapping = Util.getFacesMapping(context);
+            String uri = null;
+            if ((mapping != null) && (Util.isPrefixMapped(mapping))) {
+                uri = mapping + '/' + RIConstants.SUN_JSF_JS_URI;
+            } else {
+                uri = '/' + RIConstants.SUN_JSF_JS_URI + mapping;
+            }
+            writer.write('\n');
+            writer.startElement("script", null);
+            writer.writeAttribute("type", "text/javascript", null);
+            writer.writeAttribute("src",
+                                  context.getExternalContext()
+                                        .getRequestContextPath() + uri,
+                                  null);
+            writer.endElement("script");
+            writer.write("\n");
         } else {
-            writer.write("\n//-->\n");
+            boolean isXhtml =
+                  RIConstants.XHTML_CONTENT_TYPE
+                        .equals(writer.getContentType());
+
+            writer.write('\n');
+            writer.startElement("script", null);
+            writer.writeAttribute("type", "text/javascript", null);
+            writer.writeAttribute("language", "Javascript", null);
+            if (isXhtml) {
+                writer.write("\n//<![CDATA[");
+            } else {
+                writer.write("\n<!--");
+            }
+
+            writeSunJS(context, writer);
+
+            if (isXhtml) {
+                writer.write("\n//]]>\n");
+            } else {
+                writer.write("\n//-->\n");
+            }
+            writer.endElement("script");
+            writer.write("\n");
         }
-        writer.endElement("script");
-        writer.write("\n");
-        
     }
 
     /**

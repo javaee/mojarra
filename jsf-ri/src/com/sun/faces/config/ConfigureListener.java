@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.83 2006/08/24 21:55:59 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.84 2006/08/30 17:42:50 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -57,11 +57,11 @@ import javax.servlet.jsp.JspFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.io.BufferedInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -72,10 +72,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -109,6 +109,7 @@ import com.sun.faces.el.ChainAwareVariableResolver;
 import com.sun.faces.el.DummyPropertyResolverImpl;
 import com.sun.faces.el.DummyVariableResolverImpl;
 import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.renderkit.JsfJsResourcePhaseListener;
 import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -885,6 +886,10 @@ public class ConfigureListener implements ServletContextListener {
             }
             Lifecycle lifecycle =
                     factory.getLifecycle(lifecycleId);
+            if (webConfig.getBooleanContextInitParameter(
+                  BooleanWebContextInitParameter.ExternalizeJavaScript)) {
+                lifecycle.addPhaseListener(new JsfJsResourcePhaseListener());
+            }
             for (int i = 0, len = listeners.length; i < len; i++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
                     LOGGER.finer("addPhaseListener(" + listeners[i] + ')');

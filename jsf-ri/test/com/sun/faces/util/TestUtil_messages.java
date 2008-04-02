@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.55 2006/07/31 23:05:00 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.56 2006/08/30 17:42:52 rlubke Exp $
  */
 
 /*
@@ -31,9 +31,9 @@
 
 package com.sun.faces.util;
 
-import java.util.Locale;
-
 import javax.faces.component.UIViewRoot;
+
+import java.util.Locale;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 
@@ -43,7 +43,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.55 2006/07/31 23:05:00 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.56 2006/08/30 17:42:52 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -154,7 +154,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.CANT_WRITE_ID_ATTRIBUTE_ERROR_MESSAGE_ID, "1"},
         {MessageUtils.NOT_NESTED_IN_UICOMPONENT_TAG_ERROR_MESSAGE_ID, "0"},
         {MessageUtils.NO_COMPONENT_ASSOCIATED_WITH_UICOMPONENT_TAG_MESSAGE_ID, "0"},
-        {MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID, "0"}
+        {MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID, "0"},
+        {MessageUtils.JS_RESOURCE_WRITING_ERROR_ID, "0"}
     };
 
     private String[][] toolsMessageInfo = {

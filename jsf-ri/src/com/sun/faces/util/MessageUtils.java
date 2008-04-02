@@ -229,6 +229,9 @@ public class MessageUtils {
           "com.sun.faces.VALIDATOR_NOT_FOUND_ERROR";
     public static final String VALUE_NOT_SELECT_ITEM_ID =
           "com.sun.faces.OPTION_NOT_SELECT_ITEM";
+    
+    public static final String JS_RESOURCE_WRITING_ERROR_ID =
+        "com.sun.faces.JS_RESOURCE_WRITING_ERROR";
 
 
     // ------------------------------------------------------------ Constructors
