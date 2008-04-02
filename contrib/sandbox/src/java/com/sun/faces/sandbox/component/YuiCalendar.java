@@ -1,6 +1,5 @@
 package com.sun.faces.sandbox.component;
 
-import javax.el.ValueExpression;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 /**
@@ -13,103 +12,30 @@ public class YuiCalendar extends UIInput {
     protected Boolean hideBlankWeeks = false;
     protected String language = null;
     protected Boolean multiSelect = false;
-    protected String onchange = null;
+    protected String onChange = null;
     protected Boolean showWeekdays = true;
     protected Boolean showWeekFooter = false;
     protected Boolean showWeekHeader = false;
     protected Integer startWeekday = 0; // Sunday
+
+    public YuiCalendar() { setRendererType(RENDERER_TYPE); }
+    public String getFamily() { return COMPONENT_TYPE; }
     
-    public YuiCalendar() {
-        setRendererType(RENDERER_TYPE);
-    }
+    public Boolean getHideBlankWeeks() { return ComponentHelper.getValue(this, "hideBlankWeeks", hideBlankWeeks); }
+    public Boolean getMultiSelect()    { return ComponentHelper.getValue(this, "multiSelect", multiSelect); }
+    public String getOnChange()        { return ComponentHelper.getValue(this, "onChange", onChange); }
+    public Boolean getShowWeekdays()   { return ComponentHelper.getValue(this, "showWeekdays", showWeekdays); }
+    public Boolean getShowWeekFooter() { return ComponentHelper.getValue(this, "showWeekFooter", showWeekFooter); }
+    public Boolean getShowWeekHeader() { return ComponentHelper.getValue(this, "showWeekHeader", showWeekHeader); }
+    public Integer getStartWeekday()   { return ComponentHelper.getValue(this, "startWeekday", startWeekday); }
 
-    public String getFamily() {
-        return COMPONENT_TYPE;
-    }
-    
-    public Boolean getHideBlankWeeks() {
-        if (null != this.hideBlankWeeks) {
-            return this.hideBlankWeeks;
-        }
-        ValueExpression _ve = getValueExpression("hideBlankWeeks");
-        if (_ve != null) {
-            return (java.lang.Boolean) _ve.getValue(getFacesContext().getELContext());
-        } else {
-            return null;
-        }
-    }
-    
-    public Boolean getMultiSelect() {
-        if (null != this.multiSelect) {
-            return this.multiSelect;
-        }
-        ValueExpression _ve = getValueExpression("multiSelect");
-        if (_ve != null) {
-            return (java.lang.Boolean) _ve.getValue(getFacesContext().getELContext());
-        } else {
-            return null;
-        }
-    }
-
-    public String getOnchange() {
-        if (null != this.onchange) {
-            return this.onchange;
-        }
-        ValueExpression _ve = getValueExpression("onchange");
-        if (_ve != null) {
-            return (java.lang.String) _ve.getValue(getFacesContext().getELContext());
-        } else {
-            return null;
-        }
-    }
-
-    public Boolean getShowWeekdays() {
-        if (null != this.showWeekdays) {
-            return this.showWeekdays;
-        }
-        ValueExpression _ve = getValueExpression("showWeekdays");
-        if (_ve != null) {
-            return (java.lang.Boolean) _ve.getValue(getFacesContext().getELContext());
-        } else {
-            return null;
-        }
-    }
-
-    public Boolean getShowWeekFooter() {
-        if (null != this.showWeekFooter) {
-            return this.showWeekFooter;
-        }
-        ValueExpression _ve = getValueExpression("showWeekFooter");
-        if (_ve != null) {
-            return (java.lang.Boolean) _ve.getValue(getFacesContext().getELContext());
-        } else {
-            return null;
-        }
-    }
-
-    public Boolean getShowWeekHeader() {
-        if (null != this.showWeekHeader) {
-            return this.showWeekHeader;
-        }
-        ValueExpression _ve = getValueExpression("showWeekHeader");
-        if (_ve != null) {
-            return (java.lang.Boolean) _ve.getValue(getFacesContext().getELContext());
-        } else {
-            return null;
-        }
-    }
-
-    public Integer getStartWeekday() {
-        if (null != this.startWeekday) {
-            return this.startWeekday;
-        }
-        ValueExpression _ve = getValueExpression("startWeekday");
-        if (_ve != null) {
-            return (java.lang.Integer) _ve.getValue(getFacesContext().getELContext());
-        } else {
-            return null;
-        }
-    }
+    public void setHideBlankWeeks(Boolean hideBlankWeeks) { this.hideBlankWeeks = hideBlankWeeks; }
+    public void setMultiSelect(Boolean multiSelect)       { this.multiSelect = multiSelect; }
+    public void setOnChange(String onChange)              { this.onChange = onChange; }
+    public void setShowWeekdays(Boolean showWeekdays)     { this.showWeekdays = showWeekdays; }
+    public void setShowWeekFooter(Boolean showWeekFooter) { this.showWeekFooter = showWeekFooter; }
+    public void setShowWeekHeader(Boolean showWeekHeader) { this.showWeekHeader = showWeekHeader; }
+    public void setStartWeekday(Integer startWeekday)     { this.startWeekday = startWeekday; }
 
     public void restoreState(FacesContext _context, Object _state) {
         this._state = (Object[]) _state;
@@ -120,7 +46,7 @@ public class YuiCalendar extends UIInput {
         showWeekHeader = (java.lang.Boolean) this._state[4];
         showWeekFooter = (java.lang.Boolean) this._state[5];
         hideBlankWeeks = (java.lang.Boolean) this._state[6];
-        onchange = (java.lang.String) this._state[7];
+        onChange = (java.lang.String) this._state[7];
         language = (java.lang.String) this._state[8];
     }
 
@@ -135,37 +61,10 @@ public class YuiCalendar extends UIInput {
         _state[4] = showWeekHeader;
         _state[5] = showWeekFooter;
         _state[6] = hideBlankWeeks;
-        _state[7] = onchange;
+        _state[7] = onChange;
         _state[8] = language;
-        
+
         return _state;
     }
 
-    public void setHideBlankWeeks(Boolean hideBlankWeeks) {
-        this.hideBlankWeeks = hideBlankWeeks;
-    }
-
-    public void setMultiSelect(Boolean multiSelect) {
-        this.multiSelect = multiSelect;
-    }
-
-    public void setOnchange(String onChange) {
-        this.onchange = onChange;
-    }
-
-    public void setShowWeekdays(Boolean showWeekdays) {
-        this.showWeekdays = showWeekdays;
-    }
-
-    public void setShowWeekFooter(Boolean showWeekFooter) {
-        this.showWeekFooter = showWeekFooter;
-    }
-
-    public void setShowWeekHeader(Boolean showWeekHeader) {
-        this.showWeekHeader = showWeekHeader;
-    }
-
-    public void setStartWeekday(Integer startWeekday) {
-        this.startWeekday = startWeekday;
-    }
 }

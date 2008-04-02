@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.3 2007/01/05 22:33:43 jdlee Exp $
+ * $Id: Util.java,v 1.4 2007/01/11 23:31:19 jdlee Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.3 2007/01/05 22:33:43 jdlee Exp $
+ * @version $Id: Util.java,v 1.4 2007/01/11 23:31:19 jdlee Exp $
  */
 
 public class Util {      
@@ -154,13 +154,14 @@ public class Util {
         return result;
     }
     
+    
     public static Object evaluateVBExpression(String expression) {
         if (expression == null || (!isVBExpression(expression))) {
             return expression;
         }
         FacesContext context = FacesContext.getCurrentInstance();
         Object result =
-             context.getApplication().createValueBinding(expression).getValue(
+             getValueBinding(expression).getValue(
                   context);
         return result;
 
@@ -297,14 +298,9 @@ public class Util {
         return context.getExternalContext().getSessionMap();
     }
 
-
     public static ValueBinding getValueBinding(String valueRef) {
-        ValueBinding vb = null;
-        // Must parse the value to see if it contains more than
-        // one expression
-        FacesContext context = FacesContext.getCurrentInstance();
-        vb = context.getApplication().createValueBinding(valueRef);
-        return vb;
+        // Must parse the value to see if it contains more than one expression
+        return FacesContext.getCurrentInstance().getApplication().createValueBinding(valueRef);
     }
 
 

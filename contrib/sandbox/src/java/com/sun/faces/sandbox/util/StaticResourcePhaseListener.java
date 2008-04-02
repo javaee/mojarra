@@ -51,13 +51,13 @@ public class StaticResourcePhaseListener implements PhaseListener {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             String uri = request.getRequestURI();
             if ((uri != null) && (uri.indexOf(Util.STATIC_RESOURCE_IDENTIFIER) > -1)){
-                try {
-                    // TODO:  make sure we can sandbox this correctly (i.e., no file=../foo.txt)
-                    String fileName = request.getParameter("file");
-                    if ((fileName != null) && !"".equals(fileName.trim())) {
-                        fileName = "/META-INF/static" +
-                            (fileName.startsWith("/") ? "" : "/") + fileName;
-                        HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+                // TODO:  make sure we can sandbox this correctly (i.e., no file=../foo.txt)
+                String fileName = request.getParameter("file");
+                if ((fileName != null) && !"".equals(fileName.trim())) {
+                    fileName = "/META-INF/static" +
+                    (fileName.startsWith("/") ? "" : "/") + fileName;
+                    HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+                    try {
                         InputStream is = getClass().getResourceAsStream(fileName);
                         if (is != null) {
                             OutputStream os = response.getOutputStream();
@@ -85,13 +85,13 @@ public class StaticResourcePhaseListener implements PhaseListener {
                                 }
                             }
                             is.close();
-                            context.responseComplete();
                         } else {
                             response.sendError(404);
                         }
+                        context.responseComplete();
+                    } catch (IOException ioe) {
+                        System.err.println(ioe.getMessage());
                     }
-                } catch (IOException ioe) {
-                    System.err.println(ioe.getMessage());
                 }
             }
         }

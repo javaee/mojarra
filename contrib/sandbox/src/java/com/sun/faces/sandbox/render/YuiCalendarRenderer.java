@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
@@ -14,7 +13,6 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.DateTimeConverter;
-import javax.faces.render.Renderer;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.sandbox.component.YuiCalendar;
@@ -24,7 +22,7 @@ import com.sun.faces.sandbox.util.YuiConstants;
 /**
  * @author Jason Lee
  */
-public class YuiCalendarRenderer extends Renderer {
+public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
     private static final String scriptIds[] = {
         YuiConstants.JS_YAHOO_DOM_EVENT,
         YuiConstants.JS_CALENDAR,
@@ -35,7 +33,6 @@ public class YuiCalendarRenderer extends Renderer {
         YuiConstants.CSS_CALENDAR 
     };
     
-    private static final Logger logger = Logger.getLogger(YuiCalendarRenderer.class.getCanonicalName());
     private static final String DATE_FORMAT = "yyyy/MM/dd";
 
     public YuiCalendarRenderer() {
@@ -49,10 +46,6 @@ public class YuiCalendarRenderer extends Renderer {
         }
         for (int i = 0; i < cssIds.length; i++) {
             Util.linkStyleSheet(context.getResponseWriter(), cssIds[i]);
-        }
-        Object resp = context.getExternalContext().getResponse();
-        if (resp instanceof HttpServletResponse) {
-//            ((HttpServletResponse)resp).setContentType("text/html");
         }
     }
 
@@ -74,8 +67,8 @@ public class YuiCalendarRenderer extends Renderer {
         writer.writeAttribute("size", "10", "size");
         writer.writeAttribute("readonly", "readonly", "readonly");
         writer.writeAttribute("value", getStringValue(context, component), "value");
-        if (component.getOnchange() != null) {
-            writer.writeAttribute("onchange", component.getOnchange(), "onchange");
+        if (component.getOnChange() != null) {
+            writer.writeAttribute("onchange", component.getOnChange(), "onchange");
         }
         writer.endElement("input");
     }
