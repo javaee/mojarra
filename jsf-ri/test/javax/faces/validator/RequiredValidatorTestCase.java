@@ -1,5 +1,5 @@
 /*
- * $Id: RequiredValidatorTestCase.java,v 1.3 2003/04/03 18:40:55 rkitain Exp $
+ * $Id: RequiredValidatorTestCase.java,v 1.4 2003/04/03 21:51:44 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ public class RequiredValidatorTestCase extends ServletFacesTestCase {
     /**
      * The component to be tested for each test.
      */
-    protected UIComponent component = null;
+    protected UIInput component = null;
     protected Validator validator = null;
 
 

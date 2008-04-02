@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.4 2003/03/27 21:38:20 eburns Exp $
+ * $Id: VariableResolverImpl.java,v 1.5 2003/04/03 21:51:41 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.el.VariableResolver;
 import javax.faces.el.PropertyResolver;
 import javax.servlet.http.HttpSession;
-import com.sun.faces.context.EvaluationContext;
 import com.sun.faces.context.FacesContextImpl;
 
 

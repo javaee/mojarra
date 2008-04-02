@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.35 2003/03/24 19:45:26 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.36 2003/04/03 21:51:40 eburns Exp $
  */
 
 /*
@@ -65,7 +65,6 @@ public class FacesContextImpl extends FacesContext
     private ResponseStream responseStream = null;
     private ResponseWriter responseWriter = null;
     private CursorableLinkedList facesEvents = null;
-    private EvaluationContext evaluationContext = null;
     private ExternalContext externalContext = null;
 
     /**
@@ -308,74 +307,6 @@ public class FacesContextImpl extends FacesContext
         list.add(message);
     }
 
-    private EvaluationContext getEvaluationContext() {
-        if (evaluationContext == null) {
-            evaluationContext = new EvaluationContext(this);
-        }
-        return (evaluationContext);
-    }
-    
-    /**
-     * POSTCONDITION: Class type of the property is returned as identified by  
-     * the model reference string.
-     *
-     * @param modelReference A string referencing a bean's property.
-     *
-     * @exception FacesException If the model bean identified by the
-     *     model reference string cannot be found in the any scope,
-     *     or the property value could not be retrieved.
-     * @exception NullPointerException if model argument is <code>null</code>
-     */
-    public Class getModelType(String modelReference) throws FacesException {
-        if (modelReference == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        return (getEvaluationContext().getModelType(modelReference));
-    } 
-    
-    /**
-     * POSTCONDITION: An object is returned as identified by  
-     * the model reference string.
-     *
-     * @param modelReference A string referencing a bean's property.
-     *
-     * @exception FacesException If the model bean identified by the
-     *     model reference string cannot be found in the any scope,
-     *     or the property value could not be retrieved.
-     * @exception NullPointerException if model argument is <code>null</code>
-     *
-     */
-    public Object getModelValue(String modelReference) throws FacesException {
-        if (modelReference == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        Object value = getEvaluationContext().get(modelReference);
-        return (value);
-    }
-
-    /**
-     * 
-     * POSTCONDITION: The property value is set, where the property
-     * is identified by the model reference string.  
-     * @param modelReference A string referencing a bean's property.
-     * @param value The value of the property to be set.
-     *
-     * @exception FacesException If the model bean identified by the
-     *     model reference string cannot be found in the any scope,
-     *     or the property value could not be set.
-     * @exception NullPointerException if model argument is <code>null</code>
-     */
-    public void setModelValue(String modelReference, Object value) 
-            throws FacesException {
-        if (modelReference == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        getEvaluationContext().set(modelReference, value);
-    }
-    
     public void release() {
         externalContext = null;
         locale = null;

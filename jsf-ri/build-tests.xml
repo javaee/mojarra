@@ -85,10 +85,10 @@
       <pathelement location="${httpclient.jar}"/>
       <pathelement location="${aspectjrt.jar}"/>
       <pathelement location="${jsf-api.jar}"/>
-      <pathelement location="${commons.beanutils.jar}"/>
-      <pathelement location="${commons.collections.jar}"/>
-      <pathelement location="${commons.digester.jar}"/>
-      <pathelement location="${commons.logging.jar}"/>      
+      <pathelement location="${commons-beanutils.jar}"/>
+      <pathelement location="${commons-collections.jar}"/>
+      <pathelement location="${commons-digester.jar}"/>
+      <pathelement location="${commons-logging.jar}"/>      
       <pathelement location="${build.home}/classes"/>
       <pathelement location="${xerces.jar}"/>
       <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
@@ -141,8 +141,6 @@
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/classes"
             debug="${compile.debug}"
-            includes="com/sun/faces/application/*.java,com/sun/faces/*.java,com/sun/faces/lifecycle/*.java,com/sun/faces/el/*.java,com/sun/faces/context/*.java,com/sun/faces/util/*.java,com/sun/faces/renderkit/html_basic/*.java,com/sun/faces/convert/*.java,com/sun/faces/renderkit/*.java,com/sun/faces/taglib/jsf_core/*.java,com/sun/faces/taglib/html_basic/*.java,javax/faces/validator/*.java"
-            excludes="com/sun/faces/context/TestFacesContextImpl_EL.java,com/sun/faces/context/TestFacesContextImpl_Model.java"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
 
@@ -164,10 +162,10 @@
         <copy file="${junit.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${cactus.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${aspectjrt.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons.beanutils.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons.collections.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons.digester.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons.logging.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${commons-beanutils.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${commons-collections.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${commons-digester.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${commons-logging.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${jsf-api.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${jstl.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${standard.jar}" todir="${out.test.dir}/lib"/>
