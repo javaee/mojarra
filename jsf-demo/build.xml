@@ -173,7 +173,7 @@
     </antcall>
     <antcall target="checkRequiredFile">
        <param name="file" value="${naming-resources.jar}"/>
-       <param name="fail.message" value="commons-el.jar must be set"/>
+       <param name="fail.message" value="naming-resources.jar must be set"/>
     </antcall>
     <antcall target="checkRequiredFile">
        <param name="file" value="${naming-common.jar}"/>
