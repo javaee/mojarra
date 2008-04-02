@@ -6,7 +6,12 @@
 <html>
 <f:view> 
     <h:outputText id="text" value="This should have a context menu!">
-        <risb:contextMenu value="#{testBean.menu}" width="225px"/>
+        <risb:contextMenu width="225px">
+            <risb:menuItem value="Test!" url="http://www.yahoo.com"/>
+            <risb:menuItem>
+                <h:outputLink value="https://javaserverfaces.dev.java.net/">JSF RI Homepage</h:outputLink>
+            </risb:menuItem>
+        </risb:contextMenu>
     </h:outputText>
 </f:view>
 </html>

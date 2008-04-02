@@ -193,6 +193,11 @@
         </renderer>    
     </render-kit>
     
+    <component>
+        <component-type>com.sun.faces.sandbox.YuiMenuItem</component-type>
+        <component-class>com.sun.faces.sandbox.component.YuiMenuItem</component-class>
+    </component>
+
     <!-- *************************** YUI Context Menu *************************** -->
     <component>
         <component-type>com.sun.faces.sandbox.YuiContextMenu</component-type>
