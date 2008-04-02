@@ -1217,11 +1217,6 @@
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
-    <attribute>
-      <name>required</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
   </tag>
 
   <tag>
@@ -1372,11 +1367,6 @@
     </attribute>
     <attribute>
       <name>componentRef</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>required</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>
