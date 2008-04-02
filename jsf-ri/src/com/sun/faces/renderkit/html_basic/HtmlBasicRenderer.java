@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.104 2006/03/21 23:43:16 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.105 2006/03/27 22:54:48 rlubke Exp $
  */
 
 /*
@@ -440,10 +440,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
                 result =
                     findUIComponentBelow(context.getViewRoot(), forComponent);
             }
-        } catch (Throwable t) {
-            Object[] params = {forComponent};
-            throw new RuntimeException(MessageUtils.getExceptionMessageString(
-                MessageUtils.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+        } catch (Exception e) {
+           // ignore - log the warning
         }
         // log a message if we were unable to find the specified
         // component (probably a misconfigured 'for' attribute
