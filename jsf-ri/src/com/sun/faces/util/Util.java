@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.71 2003/08/08 23:34:47 eburns Exp $
+ * $Id: Util.java,v 1.72 2003/08/13 03:04:54 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.71 2003/08/08 23:34:47 eburns Exp $
+ * @version $Id: Util.java,v 1.72 2003/08/13 03:04:54 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -326,6 +326,7 @@ public class Util extends Object
         {"java.lang.Short", "Number"},
         {"java.lang.Long", "Number"},
         {"byte", "Number"},
+        {"boolean", "Boolean"},
         {"double", "Number"},
         {"float", "Number"},
         {"int", "Number"},

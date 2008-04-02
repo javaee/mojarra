@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.3 2003/08/12 15:26:39 rkitain Exp $
+ * $Id: HtmlResponseWriter.java,v 1.4 2003/08/13 03:04:53 eburns Exp $
  */
 
 /*
@@ -169,7 +169,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         // See if we need to close the start of the last element
         if (closeStart) {
             boolean isEmptyElement = HtmlUtils.isEmptyElement(name);
-            writer.write('>');
+            writer.write(">");
             closeStart = false;
         
             if (isEmptyElement) {
