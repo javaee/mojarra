@@ -1,5 +1,5 @@
 /*
- * $Id: MockPageContext.java,v 1.1 2003/03/13 06:06:17 craigmcc Exp $
+ * $Id: MockPageContext.java,v 1.2 2003/03/13 22:02:35 craigmcc Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ public class MockPageContext extends PageContext {
     private ServletConfig config = null;
     private ServletContext context = null;
     private JspWriter out = null;
-    private Hashtable attributes = null;
+    private Hashtable attributes = new Hashtable();
 
 
     // ---------------------------------------------------- PageContext Methods
