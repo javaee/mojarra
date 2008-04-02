@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.81 2006/08/31 22:26:39 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.82 2006/09/06 00:04:02 rlubke Exp $ 
  */ 
 
 
@@ -69,7 +69,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.81 2006/08/31 22:26:39 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.82 2006/09/06 00:04:02 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -204,10 +204,10 @@ public class ViewHandlerImpl extends ViewHandler {
         // write any AFTER_VIEW_CONTENT to the response
         Object content = extContext.getRequestMap().get(AFTER_VIEW_CONTENT);
         assert(null != content);
-        if (content instanceof byte []) {
+        if (content instanceof char[]) {            
+            response.getWriter().write((char[]) content);
+        } else if (content instanceof byte[]) {
             response.getWriter().write(new String((byte[]) content));
-        } else if (content instanceof char []) {
-            response.getWriter().write((char []) content);
         } else {
             assert(false);
         }
