@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.156 2005/04/26 19:36:17 edburns Exp $
+ * $Id: Util.java,v 1.157 2005/05/02 12:49:57 edburns Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import java.text.MessageFormat;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.156 2005/04/26 19:36:17 edburns Exp $
+ * @version $Id: Util.java,v 1.157 2005/05/02 12:49:57 edburns Exp $
  */
 
 public class Util extends Object {
@@ -1598,6 +1598,26 @@ public class Util extends Object {
 	}
 	return result;
     }		
+
+    public static boolean prefixViewTraversal(FacesContext context,
+					      UIComponent root,
+					      TreeTraversalCallback action) throws FacesException {
+	boolean keepGoing = false;
+	if (keepGoing = action.takeActionOnNode(context, root)) {
+	    Iterator kids = root.getFacetsAndChildren();
+	    while (kids.hasNext() && keepGoing) {
+		keepGoing = prefixViewTraversal(context, 
+						(UIComponent) kids.next(), 
+						action);
+	    }
+	}
+	return keepGoing;
+    }
+
+    public static interface TreeTraversalCallback {
+	public boolean takeActionOnNode(FacesContext context, 
+					UIComponent curNode) throws FacesException;
+    }
 
 
 } // end of class Util

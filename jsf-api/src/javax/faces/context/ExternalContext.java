@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.17 2005/03/12 19:06:14 edburns Exp $
+ * $Id: ExternalContext.java,v 1.18 2005/05/02 12:49:54 edburns Exp $
  */
  
 /*
@@ -520,6 +520,33 @@ public abstract class ExternalContext {
      * <p><em>Portlet:</em> This must be <code>null</code>.</p>
      */
     public abstract String getRequestServletPath();
+
+    /**
+     *
+     * <p>Return the MIME Content-Type for this request.  If not
+     * available, return <code>null</code>.</p>
+     *
+     * <p><em>Servlet:</em> This must return the value returned by the
+     * <code>javax.servlet.ServletRequest</code> method
+     * <code>getContentType()</code>.</p>
+     *
+     * <p><em>Portlet:</em> This must return <code>null</code>.</p>
+     */
+    public abstract String getRequestContentType();
+
+    /**
+     *
+     * <p>Return the MIME Content-Type for this response.  If not
+     * available, return <code>null</code>.</p>
+     *
+     * <p><em>Servlet:</em> This must return the value returned by the
+     * <code>javax.servlet.ServletResponse</code> method
+     * <code>getContentType()</code>.</p>
+     *
+     * <p><em>Portlet:</em> This must return <code>null</code>.</p>
+     */
+    public abstract String getResponseContentType();
+
     
 
     /**

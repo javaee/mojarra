@@ -763,17 +763,27 @@ see the <i>angle brackets</i> on this text"></h:outputText>
 </td>
 </tr>
 
+<tr><td>
+
 <h:panelGrid>
 <f:subview id="subview1" rendered="false">
    <h:outputText value="This should not be rendered" />
 </f:subview>
 </h:panelGrid>
 
+</td></tr>
+
+<tr><td>
+
 <h:panelGrid>
 <h:panelGroup rendered="false">
    <h:outputText value="This should not be rendered" />
 </h:panelGroup>
 </h:panelGrid>
+
+</td></tr>
+
+<tr><td>
 
 <h:dataTable>
 <f:subview id="subview2" rendered="false">
@@ -789,13 +799,16 @@ see the <i>angle brackets</i> on this text"></h:outputText>
 <h:commandLink rendered="false">
       <h:outputText value="This should not be rendered" />
 </h:commandLink>
-  <TABLE>
 
 <h:outputText title="output text with title" value="should be spanned" />
 
 <h:outputFormat id="userMsg" value="Param 0: {0}" >
    <f:param value="my param"/>
 </h:outputFormat>
+
+</td></tr>
+
+<tr><td>
 
 <h:dataTable headerClass="table-header" footerClass="table-footer"
    rows="1">
@@ -826,7 +839,22 @@ see the <i>angle brackets</i> on this text"></h:outputText>
    </h:column>
 </h:dataTable>
 
+</td></tr>
+
+</table>
+
 </h:form>
+
+<h:form id="form2">
+  <h:commandButton value="form2 button1"/> <p />
+  <h:commandButton value="form2 button2"/> <p />
+</h:form>
+
+<h:form id="form3">
+  <h:commandButton value="form3 button1"/> <p />
+  <h:commandLink value="form3 link1"/> <p />
+</h:form>
+
 </f:view>
 
     </BODY>

@@ -16,23 +16,30 @@
 	</tr>
 </table></td>	</tr>
 </table>
-<input id="imageButton" type="image" src="duke.gif;jsessionid=622782DC71087A2B5450FE82B0B25EB0" name="imageButton" onclick="clearFormHiddenParams(this.form.id);" />
-<input id="imageButton2" type="image" src="resduke.gif;jsessionid=622782DC71087A2B5450FE82B0B25EB0" name="imageButton2" onclick="clearFormHiddenParams(this.form.id);" />
-<input id="labelButton1" type="submit" name="labelButton1" value="PASSED" onclick="clearFormHiddenParams(this.form.id);" />
-<input id="labelButton2" type="reset" name="labelButton2" value="model label" onclick="clearFormHiddenParams(this.form.id);" />
-<input id="labelButton3" type="submit" name="labelButton3" value="RES-BUNDLE PASSED" onclick="clearFormHiddenParams(this.form.id);" />
-<input id="labelButton4" type="reset" name="labelButton4" value="" onclick="clearFormHiddenParams(this.form.id);" />
-<a id="labelLink1" href="hrefValue;jsessionid=622782DC71087A2B5450FE82B0B25EB0">PASSED</a>
-<a id="labelLink2" href="hrefValue;jsessionid=622782DC71087A2B5450FE82B0B25EB0">model label</a>
-<a id="labelLink3" href="hrefValue;jsessionid=622782DC71087A2B5450FE82B0B25EB0">RES-BUNDLE PASSED</a>
-<a id="labelLink4" href="hrefValue;jsessionid=622782DC71087A2B5450FE82B0B25EB0" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape"></a>
-<a id="linkImage" href="hrefValue;jsessionid=622782DC71087A2B5450FE82B0B25EB0"><img src="duke.gif;jsessionid=622782DC71087A2B5450FE82B0B25EB0" /></a>
-<a id="linkImage2" href="hrefValue;jsessionid=622782DC71087A2B5450FE82B0B25EB0"><img src="resduke.gif;jsessionid=622782DC71087A2B5450FE82B0B25EB0" /></a>
-<a id="paramLink" href="hrefValue;jsessionid=622782DC71087A2B5450FE82B0B25EB0?parameter1=param_value1&parameter2=param_value2"><img src="resduke.gif;jsessionid=622782DC71087A2B5450FE82B0B25EB0" /></a>
-<a id="_id0:labelLink1" href="#" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:labelLink1'; document.forms['_id0'].submit(); return false;">PASSED</a>
+<input id="imageButton" type="image" src="duke.gif;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87" name="imageButton" />
+<input id="imageButton2" type="image" src="resduke.gif;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87" name="imageButton2" />
+<input id="labelButton1" type="submit" name="labelButton1" value="PASSED" />
+<input id="labelButton2" type="reset" name="labelButton2" value="model label" />
+<input id="labelButton3" type="submit" name="labelButton3" value="RES-BUNDLE PASSED" />
+<input id="labelButton4" type="reset" name="labelButton4" value="" />
+<a id="labelLink1" href="hrefValue;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87">PASSED</a>
+<a id="labelLink2" href="hrefValue;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87">model label</a>
+<a id="labelLink3" href="hrefValue;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87">RES-BUNDLE PASSED</a>
+<a id="labelLink4" href="hrefValue;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape"></a>
+<a id="linkImage" href="hrefValue;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87"><img src="duke.gif;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87" /></a>
+<a id="linkImage2" href="hrefValue;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87"><img src="resduke.gif;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87" /></a>
+<a id="paramLink" href="hrefValue;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87?parameter1=param_value1&parameter2=param_value2"><img src="resduke.gif;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87" /></a>
+<a id="_id0:labelLink1" href="#" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:labelLink1'; document.forms['_id0'].submit(); return false;">PASSED</a><input type="hidden" name="_id0:_idcl" /><script type="text/javascript" language="Javascript"<!--
+
+function clearFormHiddenParams__id0(curFormName) {
+  var curForm = document.forms[curFormName];
+ curForm.elements['_id0:_idcl'].value = null;
+}
+//-->
+></script>
 <a id="_id0:labelLink2" href="#" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:labelLink2'; document.forms['_id0'].submit(); return false;">model label</a>
 <a id="_id0:labelLink3" href="#" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:labelLink3'; document.forms['_id0'].submit(); return false;">RES-BUNDLE PASSED</a>
 <a id="_id0:labelLink4" href="#" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:labelLink4'; document.forms['_id0'].submit(); return false;"></a>
-<a id="_id0:linkImage" href="#" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:linkImage'; document.forms['_id0'].submit(); return false;"><img src="duke.gif;jsessionid=622782DC71087A2B5450FE82B0B25EB0" /></a>
-<a id="_id0:linkImage2" href="#" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:linkImage2'; document.forms['_id0'].submit(); return false;"><img src="resduke.gif;jsessionid=622782DC71087A2B5450FE82B0B25EB0" /></a>
+<a id="_id0:linkImage" href="#" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:linkImage'; document.forms['_id0'].submit(); return false;"><img src="duke.gif;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87" /></a>
+<a id="_id0:linkImage2" href="#" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:linkImage2'; document.forms['_id0'].submit(); return false;"><img src="resduke.gif;jsessionid=9EC05D3D6CE58CE3D16980DB10367A87" /></a>
 <a id="_id0:paramLink" href="#" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:paramLink';document.forms['_id0']['parameter1'].value='param_value1';document.forms['_id0']['parameter2'].value='param_value2'; document.forms['_id0'].submit(); return false;"link with parameters></a>

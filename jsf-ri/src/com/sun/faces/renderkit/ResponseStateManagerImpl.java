@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.16 2005/04/20 23:01:37 jayashri Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.17 2005/05/02 12:49:56 edburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.faces.application.StateManager.SerializedView;
 import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
+import javax.faces.context.ResponseWriter;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -167,6 +168,13 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         throws IOException {
         String hiddenField = null;
 	StateManager stateManager = Util.getStateManager(context);
+        ResponseWriter writer = context.getResponseWriter();
+
+	writer.startElement("input", context.getViewRoot());
+	writer.writeAttribute("type", "hidden", null);
+	writer.writeAttribute("name", RIConstants.FACES_VIEW, null);
+	writer.writeAttribute("id", RIConstants.FACES_VIEW, null);
+	
 	
 	if (stateManager.isSavingStateInClient(context)) {
 	    GZIPOutputStream zos = null;
@@ -192,20 +200,15 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             byte[] securedata = byteArrayGuard.encrypt(context, 
                     bos.toByteArray());
 	    bos.close();
-	    
-	    hiddenField = " <input type=\"hidden\" name=\""
-		+ RIConstants.FACES_VIEW + "\"" + " value=\"" +
-                    (new String(Base64.encode(securedata), "ISO-8859-1"))
-		+ "\" />\n ";
+	    String valueToWrite = (new String(Base64.encode(securedata), 
+					      "ISO-8859-1"));
+	    writer.writeAttribute("value", 
+				  valueToWrite, null);
 	}
 	else {
-	    hiddenField = " <input type=\"hidden\" name=\""
-		+ RIConstants.FACES_VIEW + "\"" + " value=\"" +
-		view.getStructure() +
-		"\" />\n ";
-	    
+	    writer.writeAttribute("value", view.getStructure(), null);
 	}
-        context.getResponseWriter().write(hiddenField);
+	writer.endElement("input");
 	
     }
     

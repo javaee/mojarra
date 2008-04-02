@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.85 2005/04/21 18:55:36 edburns Exp $
+ * $Id: FormRenderer.java,v 1.86 2005/05/02 12:49:57 edburns Exp $
  */
 
 /*
@@ -136,14 +136,6 @@ public class FormRenderer extends HtmlBasicRenderer {
         Util.renderPassThruAttributes(context, writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
         writer.writeText("\n", null);
-        
-        // store the clientId of the form in request scope. This will be used
-        // by the commandLinkRenderer and ButtonRenderer to arrive the name of
-        // the javascript function to invoke from the onclick event handler.
-        // PENDING (visvan) we need to fix this dependency between the renderers.
-        // This solution is only temporary.
-        Map requestMap =context.getExternalContext().getRequestMap();
-        requestMap.put(FORM_CLIENT_ID_ATTR, component.getClientId(context));
     }
 
 
@@ -185,8 +177,8 @@ public class FormRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
 
-        // this hidden field will be checked in the decode method to determine if
-        // this form has been submitted.
+        // this hidden field will be checked in the decode method to
+        // determine if this form has been submitted.
         //
         writer.startElement("input", component);
         writer.writeAttribute("type", "hidden", "type");
@@ -195,129 +187,10 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.writeAttribute("value", component.getClientId(context), "value");
         writer.endElement("input");
 
-        renderNeededHiddenFields(context, component);
         writer.endElement("form");
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }
-        
-        Map requestMap = context.getExternalContext().getRequestMap();
-        String formClientId = (String)requestMap.put(FORM_CLIENT_ID_ATTR, null);
     }
-
-
-    /**
-     * <p>Render any need hidden fields.</p>
-     */
-    private static void renderNeededHiddenFields(FacesContext context,
-                                                 UIComponent component)
-        throws IOException {
-
-        ResponseWriter writer = context.getResponseWriter();
-        Map map = getHiddenFieldMap(context, false);
-        if (map != null) {
-            Iterator entries = map.entrySet().iterator();
-            while (entries.hasNext()) {
-                Map.Entry entry = (Map.Entry) entries.next();
-                if (Boolean.TRUE.equals(entry.getValue())) {
-                    writer.startElement("input", component);
-                    writer.writeAttribute("type", "hidden", null);
-                    writer.writeAttribute("name", entry.getKey(), null);
-                    writer.endElement("input");
-                }
-            }
-                
-            // Clear the hidden field map
-            Map requestMap = context.getExternalContext().getRequestMap();
-            requestMap.put(HIDDEN_FIELD_KEY, null);
-        }
-        String formTarget = (String) component.getAttributes().get("target");
-        renderClearHiddenParamsJavaScript(writer, map, formTarget, 
-            component.getClientId(context));
-    }
-
-
-    /**
-     * <p>Remember that we will need a new hidden field.</p>
-     */
-    public static void addNeededHiddenField(FacesContext context,
-                                            String clientId) {
-        Map map = getHiddenFieldMap(context, true);
-        if (!map.containsKey(clientId)) {
-            map.put(clientId, Boolean.TRUE);
-        }
-    }
-
-
-    /**
-     * <p>Note that a hidden field has already been rendered.</p>
-     */
-    public static void addRenderedHiddenField(FacesContext context,
-                                              String clientId) {
-        Map map = getHiddenFieldMap(context, true);
-        map.put(clientId, Boolean.FALSE);
-    }
-
-
-    private static Map getHiddenFieldMap(FacesContext context,
-                                         boolean createIfNew) {
-        Map requestMap = context.getExternalContext().getRequestMap();
-        Map map = (Map) requestMap.get(HIDDEN_FIELD_KEY);
-        if (map == null) {
-            if (createIfNew) {
-                map = new HashMap();
-                requestMap.put(HIDDEN_FIELD_KEY, map);
-            }
-        }
-
-        return map;
-    }
-
-    /**
-     * Generates a JavaScript function to clear all the hidden fields
-     * associated with a form and reset the target attribute if necessary.
-     */
-    private static void renderClearHiddenParamsJavaScript(ResponseWriter writer,
-        Map formParams, String formTarget, String formName) throws IOException {
-            
-         // clear all the hidden field parameters in the form represented by
-         // formName.
-         writer.write("\n");
-         writer.startElement(SCRIPT_ELEMENT, null);
-         writer.writeAttribute(SCRIPT_TYPE, "text/javascript", null);
-         writer.write("\n<!--");
-         writer.write("\nfunction ");
-         String functionName = (CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formName.replace(NamingContainer.SEPARATOR_CHAR, '_')); 
-         writer.write(functionName);
-         writer.write("(curFormName) {");
-         writer.write("\n  var curForm = document.forms[curFormName];"); 
-         if (formParams != null) {
-            Iterator entries = formParams.entrySet().iterator();
-            // clear only the hidden fields rendered by the form.
-            while (entries.hasNext()) {
-                Map.Entry entry = (Map.Entry) entries.next();
-                if (Boolean.TRUE.equals(entry.getValue())) {
-                    writer.write("\n curForm.elements['"); 
-                    writer.write((String) entry.getKey());
-                    writer.write("'].value = null;");
-                }
-            }
-         }
-         // clear form target attribute if its present
-         if (formTarget != null && formTarget.length() > 0) {
-             writer.write("\n  curForm.target=");
-             writer.write("'");
-             writer.write(formTarget);
-             writer.write("';");
-         }
-         writer.write("\n}");
-         writer.write("\n//-->\n");
-         writer.endElement(SCRIPT_ELEMENT);
-         writer.write("\n");
-         
-     }
-
-    private static final String HIDDEN_FIELD_KEY =
-        RIConstants.FACES_PREFIX + "FormHiddenFieldMap";
 
 } // end of class FormRenderer

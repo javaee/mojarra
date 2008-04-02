@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.28 2005/04/21 18:55:35 edburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.29 2005/05/02 12:49:55 edburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.util.HashMap;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.28 2005/04/21 18:55:35 edburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.29 2005/05/02 12:49:55 edburns Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -268,6 +268,14 @@ public class ExternalContextImpl extends ExternalContext {
         return (((HttpServletRequest) request).getServletPath());
     }
 
+     
+    public String getRequestContentType() {
+        return (((HttpServletRequest) request).getContentType());
+    }
+
+    public String getResponseContentType() {
+        return (((HttpServletResponse) response).getContentType());
+    }
 
     /**
      * <p>Manage attributes associated with the <code>ServletContext</code>

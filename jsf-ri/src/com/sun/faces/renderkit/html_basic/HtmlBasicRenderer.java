@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.90 2005/04/21 18:55:36 edburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.91 2005/05/02 12:49:57 edburns Exp $
  */
 
 /*
@@ -72,8 +72,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     public static final String CLEAR_HIDDEN_FIELD_FN_NAME = 
          "clearFormHiddenParams";
-    public static final String FORM_CLIENT_ID_ATTR = 
-         "com.sun.faces.FORM_CLIENT_ID_ATTR";
     
     public HtmlBasicRenderer() {
         super();

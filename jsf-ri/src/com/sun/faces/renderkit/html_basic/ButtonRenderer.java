@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.84 2005/04/21 18:55:35 edburns Exp $
+ * $Id: ButtonRenderer.java,v 1.85 2005/05/02 12:49:57 edburns Exp $
  */
 
 /*
@@ -12,8 +12,6 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
@@ -24,6 +22,10 @@ import javax.faces.event.ActionEvent;
 
 import java.io.IOException;
 import java.util.Map;
+import javax.faces.FacesException;
+import javax.faces.component.UIForm;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <B>ButtonRenderer</B> is a class that renders the current value of
@@ -41,6 +43,11 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // Class Variables
     //
+    private static final String FORM_HAS_COMMAND_LINK_ATTR = 
+         "com.sun.faces.FORM_HAS_COMMAND_LINK_ATTR";
+
+    private static final String NO_COMMAND_LINK_FOUND_VALUE = 
+         "com.sun.faces.NO_COMMAND_LINK_FOUND";
 
     //
     // Instance Variables
@@ -170,29 +177,25 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("name", clientId, "clientId");
             writer.writeAttribute("value", label, "value");
         }
+
+	StringBuffer sb = new StringBuffer();
+	// get the clearHiddenField script, if necessary
+	String clearScript = getClearHiddenFieldScript(context, component);
+        if (clearScript != null && clearScript.length() != 0) {
+	    sb.append(clearScript);
+	}
         
-        // look up the clientId of the form in request scope to arrive the name of
-        // the javascript function to invoke from the onclick event handler.
-        // PENDING (visvan) we need to fix this dependency between the renderers.
-        // This solution is only temporary.
-        Map requestMap = context.getExternalContext().getRequestMap();
-        String formClientId = (String)requestMap.get(FORM_CLIENT_ID_ATTR);
-        
-        StringBuffer sb = new StringBuffer();
-        // call the javascript function that clears the all the hidden field
-        // parameters in the form.
-        sb.append(CLEAR_HIDDEN_FIELD_FN_NAME);
-        if (formClientId != null) {
-            sb.append("_" + formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_'));
-        }
-        sb.append("(this.form.id);");
         // append user specified script for onclick if any.
         String onclickAttr = (String)component.getAttributes().get("onclick");
         if (onclickAttr != null && onclickAttr.length() != 0) {
             sb.append(onclickAttr);
             
         }
-        writer.writeAttribute("onclick", sb.toString(), null);
+	// only output the attribute if necessary
+	clearScript = sb.toString();
+        if (clearScript != null && clearScript.length() != 0) {
+	    writer.writeAttribute("onclick", clearScript, null);
+	}
 
         Util.renderPassThruAttributes(context, writer, component, 
 				      new String[]{"onclick"});
@@ -219,6 +222,124 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // General Methods
     //
+
+    /**
+     *
+     * <p>Return the script to invoke to clear the hidden fields related
+     * to commandLink components in the same form as the argument button
+     * component.</p>
+     *
+     * <p>Algorithm:</p>
+     *
+     * <p>Find the form in which the argument button component resides
+     * by going up the parent tree until you find the form.  If you hit
+     * the root, return <code>null</code>. </p>
+     *
+     * <p>Get the form's <code>clientId</code>.</p>
+     *
+     * <p>Discover if there are one or more commandLink components in
+     * this form.  If not, return <code>null</code>.  Do this by first
+     * looking in the request scope for the attr
+     * <code>FORM_HAS_COMMAND_LINK_ATTR</code>.  If found, see if the
+     * value is equal to the clientId of the current form.  If so,
+     * continue to the next step.  If not found, or the value is not
+     * equal to the current form's clientId, start traversing the
+     * children of this form until you find a component whose
+     * renderer-type is <code>javax.faces.Link</code> and family is
+     * <code>javax.faces.Command</code>.  If such a component is found
+     * set the <code>FORM_HAS_COMMAND_LINK_ATTR</code> into request
+     * scope (with the value being the form clientId) so subsequent
+     * buttons in this form don't have to perform the search.</p>
+     *
+     * <p>At this point, we know we have one or more commandLink
+     * components in this form, so we need to generate the script.</p>
+     */
+
+    private String getClearHiddenFieldScript(FacesContext context, 
+					     UIComponent component) {
+        Map requestMap = context.getExternalContext().getRequestMap();
+	UIComponent 
+	    myForm = component,
+	    root = context.getViewRoot();
+        String 
+	    formClientId = null,
+	    commandLinkAttrValue = null;
+	String result = null;
+	boolean formHasCommandLink = false;
+
+	//
+	// find the form
+	//
+
+	while (!(myForm instanceof UIForm) && root != myForm) {
+	    myForm = myForm.getParent();
+	}
+
+	if (root == myForm) {
+	    return null;
+	}
+
+	formClientId = myForm.getClientId(context);
+
+	assert(null != formClientId);
+
+	// 
+	// Inspect the form for command link instances
+	//
+	if (null == (commandLinkAttrValue = 
+		     (String) requestMap.get(FORM_HAS_COMMAND_LINK_ATTR))) {
+	    Util.TreeTraversalCallback callback = 
+		new Util.TreeTraversalCallback() {
+		    public boolean takeActionOnNode(FacesContext 
+						    context,
+						    UIComponent 
+						    curNode) throws FacesException {
+			boolean keepGoing = true;
+			String 
+			    rendererType = curNode.getRendererType(),
+			    family = curNode.getFamily();
+			if (null != rendererType && 
+			    rendererType.equals("javax.faces.Link") && 
+			    null != family &
+			    family.equals("javax.faces.Command")) {
+			    keepGoing = false;
+			    
+			}
+			return keepGoing;
+		    }
+		};
+	    // if the traversal aborted early due to a match being found
+	    if (formHasCommandLink = 
+		(!Util.prefixViewTraversal(context, myForm, callback))) {
+		requestMap.put(FORM_HAS_COMMAND_LINK_ATTR, formClientId);
+	    }
+	    else {
+		requestMap.put(FORM_HAS_COMMAND_LINK_ATTR, 
+			       NO_COMMAND_LINK_FOUND_VALUE);
+	    }
+	}
+	else {
+	    // if there is an entry in the map, but it is not equal to
+	    // the id for this form,
+	    if (!(formHasCommandLink = 
+		  commandLinkAttrValue.equals(formClientId))) {
+		// see if it is the NO_COMMAND_LINK_FOUND_VALUE
+		formHasCommandLink = 
+		    !commandLinkAttrValue.equals(NO_COMMAND_LINK_FOUND_VALUE);
+	    }
+	}
+		
+	if (!formHasCommandLink) {
+	    return null;
+	}
+	
+	result = CLEAR_HIDDEN_FIELD_FN_NAME +
+	    "_" + formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_') +
+	    "(this.form.id);";
+	
+	return result;
+    }
+
        
     private String src(FacesContext context, String value) {
         if (value == null) {

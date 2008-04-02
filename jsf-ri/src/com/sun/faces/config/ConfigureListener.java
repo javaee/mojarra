@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.30 2005/03/12 19:06:15 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.31 2005/05/02 12:49:55 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -1402,6 +1402,15 @@ public class ConfigureListener implements ServletContextListener {
         public String getRequestServletPath() {
             return null;
         }
+        
+         
+    public String getRequestContentType() {
+        return null;
+    }
+
+    public String getResponseContentType() {
+        return null;
+    }
 
         public URL getResource(String path) throws MalformedURLException {
             return null;

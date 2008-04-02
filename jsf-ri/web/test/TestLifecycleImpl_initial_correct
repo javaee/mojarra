@@ -10,18 +10,9 @@
     <body bgcolor="white">
     <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
     Can you guess it?</h2>
-    <form id="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=3AA8E143FBEC4C5709754AE0E091CECE" enctype="application/x-www-form-urlencoded">
+    <form id="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=0EA6D577F3E6F6F3433BC214E7C8B6FC" enctype="application/x-www-form-urlencoded">
 <input id="helloForm:userNo" type="text" name="helloForm:userNo" value="NUMBER" />
   	 <BR>
 
-	 <input id="helloForm:submit" type="submit" name="helloForm:submit" value="Submit" onclick="clearFormHiddenParams_helloForm(this.form.id);" /> <input type="hidden" name="com.sun.faces.VIEW" value="_id1" />
- <input type="hidden" name="helloForm" value="helloForm" />
-<script type="text/javascript">
-<!--
-function clearFormHiddenParams_helloForm(curFormName) {
-  var curForm = document.forms[curFormName];
-}
-//-->
-</script>
-</form>
+	 <input id="helloForm:submit" type="submit" name="helloForm:submit" value="Submit" /><input type="hidden" name="com.sun.faces.VIEW" id="com.sun.faces.VIEW" value="_id1" /><input type="hidden" name="helloForm" value="helloForm" /></form>
 </HTML>  

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.26 2004/12/20 15:19:06 edburns Exp $
+ * $Id: RenderKitImpl.java,v 1.27 2005/05/02 12:49:56 edburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.26 2004/12/20 15:19:06 edburns Exp $
+ * @version $Id: RenderKitImpl.java,v 1.27 2005/05/02 12:49:56 edburns Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -146,48 +146,71 @@ public class RenderKitImpl extends RenderKit {
 
 
     public ResponseWriter createResponseWriter(Writer writer, 
-					       String contentTypeList,
+					       String desiredContentTypeList,
                                                String characterEncoding) {
         if (writer == null) {
             return null;
         }
         String contentType = null;
 	FacesContext context = FacesContext.getCurrentInstance();
+        
+        String [] supportedTypes = 
+            { HTML_CONTENT_TYPE, XHTML_CONTENT_TYPE, 
+              APPLICATION_XML_CONTENT_TYPE, TEXT_XML_CONTENT_TYPE };
+        String [] desiredTypes = null;
+            
 
-	// if no contentTypeList was passed
-	if (null == contentTypeList) {
-	    // use the Accept header.
-	    contentTypeList = (String)
-	      context.getExternalContext().getRequestHeaderMap().get("Accept");
+        // Obtain the desired content type list
+	// first crack is the passed in list
+	if (null == desiredContentTypeList) {
+	    // second crack is the response content type
+	    desiredContentTypeList = 
+                    context.getExternalContext().getResponseContentType();
 	}
+        if (null == desiredContentTypeList) {
+            // third crack is the Accept header.
+            desiredContentTypeList = (String)
+	      context.getExternalContext().getRequestHeaderMap().get("Accept");
+        }
+        // fourth, default to text/html
+        if (null == desiredContentTypeList) {
+            desiredContentTypeList = "text/html";
+        }
 
-	if (null != contentTypeList) {
+	if (null != desiredContentTypeList) {
 	    Map requestMap = context.getExternalContext().getRequestMap();
-
-	    // search for the first occurrence of XHTML_CONTENT_TYPE or
-	    // HTML_CONTENT_TYPE.  Choose whichever we find first.
-	    String[] types = contentTypeList.split(",");
-	    String curContentType = null;
 	    
-	    for (int i = 0; i < types.length; i++) {
-		curContentType = types[i].trim();
-		if (-1 != curContentType.indexOf(HTML_CONTENT_TYPE)) {
-		    contentType = HTML_CONTENT_TYPE;
-		    requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML,
-				   Boolean.TRUE);
-		    break;
-		}
-		else if (-1 != curContentType.indexOf(XHTML_CONTENT_TYPE) ||
-			 -1 != curContentType.indexOf(APPLICATION_XML_CONTENT_TYPE) ||
-			 -1 != curContentType.indexOf(TEXT_XML_CONTENT_TYPE)) {
-		    contentType = XHTML_CONTENT_TYPE;
-		    requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML,
-				   Boolean.TRUE);
-		    break;
-		}
+	    desiredTypes = contentTypeSplit(desiredContentTypeList);
+	    String curContentType = null, curDesiredType = null;                       
+            
+            // For each entry in the desiredTypes array, look for a match in 
+            // the supportedTypes array
+	    for (int i = 0; i < desiredTypes.length; i++) {
+                curDesiredType = desiredTypes[i];
+                for (int j = 0; j < supportedTypes.length; j++) {
+                    curContentType = supportedTypes[j].trim();
+                    if (-1 != curDesiredType.indexOf(curContentType)) {
+                        if (-1 != curContentType.indexOf(HTML_CONTENT_TYPE)) {
+                            contentType = HTML_CONTENT_TYPE;
+                            requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML,
+                                	   Boolean.TRUE);
+                        }
+                        else if (-1 != curContentType.indexOf(XHTML_CONTENT_TYPE) ||
+                                 -1 != curContentType.indexOf(APPLICATION_XML_CONTENT_TYPE) ||
+                                 -1 != curContentType.indexOf(TEXT_XML_CONTENT_TYPE)) {
+                            contentType = XHTML_CONTENT_TYPE;
+                            requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML,
+                                	   Boolean.TRUE);
+                        }        
+                        break;
+                    }
+                }
+                if (null != contentType) {
+                    break;
+                }
 	    }
 	    // If none of the contentTypes about which we know was in
-	    // contentTypeList
+	    // desiredContentTypeList
 	    if (null == contentType) {
                 throw new IllegalArgumentException(Util.getExceptionMessageString(
                     Util.CONTENT_TYPE_ERROR_MESSAGE_ID));
@@ -203,6 +226,17 @@ public class RenderKitImpl extends RenderKit {
         }
 
         return new HtmlResponseWriter(writer, contentType, characterEncoding);
+    }
+    
+    private String[] contentTypeSplit(String contentTypeString) {
+        String [] result = contentTypeString.split(",");
+        for (int i = 0; i < result.length; i++) {
+            int semicolon = result[i].indexOf(";");
+            if (-1 != semicolon) {
+                result[i] = result[i].substring(0,semicolon);
+            }
+        }
+        return result;
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: StoreServletContext.java,v 1.3 2005/03/12 19:06:16 edburns Exp $
+ * $Id: StoreServletContext.java,v 1.4 2005/05/02 12:49:59 edburns Exp $
  */
 
 /*
@@ -147,6 +147,15 @@ public class StoreServletContext extends Object {
 
 
         public String getRequestServletPath() {
+            return null;
+        }
+        
+         
+        public String getRequestContentType() {
+            return null;
+        }
+        
+        public String getResponseContentType() {
             return null;
         }
 

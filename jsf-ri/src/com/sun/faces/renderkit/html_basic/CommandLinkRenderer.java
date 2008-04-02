@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.27 2005/04/15 21:19:38 rogerk Exp $
+ * $Id: CommandLinkRenderer.java,v 1.28 2005/05/02 12:49:57 edburns Exp $
  */
 
 /*
@@ -22,6 +22,7 @@ import javax.faces.component.UIForm;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
@@ -47,6 +48,9 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
     //
     // Class Variables
     //
+
+    private static final String DID_RENDER_SCRIPT = RIConstants.FACES_PREFIX +
+	"didRenderScript";
 
     //
     // Instance Variables
@@ -99,6 +103,9 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         String 
 	    clientId = command.getClientId(context),
 	    paramName = getHiddenFieldName(context, command);
+	if (null == paramName) {
+	    return;
+	}
         Map requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
         String value = (String) requestParameterMap.get(paramName);
@@ -303,33 +310,140 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 
         //Write Anchor inline elements
 
+	String fieldName = getHiddenFieldName(context, component);
+	if (null == fieldName) {
+	    return;
+	}
+
         //Done writing Anchor element
         writer.endElement("a");
 
-        //Handle hidden fields
+	renderHiddenFieldsAndScriptIfNecessary(context, writer, component, fieldName);
 
-        //Only need one hidden field for the link itself per form.
-	FormRenderer.addNeededHiddenField(context, 
-	    getHiddenFieldName(context, command));
-
-	// PENDING(edburns): not sure if the JSFA59 back button problem
-	// manifests itself with param children as well...
-
-        // get UIParameter children...
-        Param paramList[] = getParamList(context, command);
-        for (int i = 0; i < paramList.length; i++) {
-            FormRenderer.addNeededHiddenField(context, paramList[i].getName());
-        }
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }
 
         return;
     }
+
+    public void writeScriptContent(FacesContext context, 
+				   ResponseWriter writer,
+				   UIComponent component) throws IOException {
+	Map requestMap = context.getExternalContext().getRequestMap();
+	UIForm myForm = getMyForm(context, component);
+	boolean isXHTML = 
+	    requestMap.containsKey(RIConstants.CONTENT_TYPE_IS_XHTML);
+
+	if (null == myForm) {
+            return;
+	}
+
+	// if the script content has already been rendered for this form
+	if (null != myForm.getAttributes().get(DID_RENDER_SCRIPT)){
+	    return;
+	}
+	    
+	String formName = myForm.getClientId(context);
+	writer.startElement("script", component);
+	writer.writeAttribute("type", "text/javascript", "type");
+	writer.writeAttribute("language", "Javascript", "language");
+	writer.write("<!--\n");
+	if (isXHTML) {
+	    writer.write("<![CDATA[\n");
+	}
+	writer.write("\nfunction ");
+	String functionName = (CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formName.replace(NamingContainer.SEPARATOR_CHAR, '_')); 
+	writer.write(functionName);
+	writer.write("(curFormName) {");
+	writer.write("\n  var curForm = document.forms[curFormName];"); 
+	writer.write("\n curForm.elements['"); 
+	writer.write(getHiddenFieldName(context, component));
+	writer.write("'].value = null;");
+        Param paramList[] = getParamList(context, component);
+        for (int i = 0; i < paramList.length; i++) {
+	    writer.write("\n curForm.elements['"); 
+	    writer.write(paramList[i].getName());
+	    writer.write("'].value = null;");
+        }
+        String formTarget = (String) myForm.getAttributes().get("target");
+	if (formTarget != null && formTarget.length() > 0) {
+	    writer.write("\n  curForm.target=");
+	    writer.write("'");
+	    writer.write(formTarget);
+	    writer.write("';");
+	}
+	writer.write("\n}\n");
+
+	if (isXHTML) {
+	    writer.write("]]>\n");
+	}
+	writer.write("//-->\n");
+	writer.endElement("script");
+
+	// say that we've already rendered the script for this form
+	myForm.getAttributes().put(DID_RENDER_SCRIPT, DID_RENDER_SCRIPT);
+    }
+
+    /**
+     * <p>Render the hidden fields necessary to the execution of this
+     * commandLink component.  This method should only take action once
+     * per form.  This is achieved by storing a request attribute with
+     * the name of the hidden field.  If there is no request attribute
+     * with that name, or there is one, but it's a different name then
+     * "our" hidden field name, render the hidden field.</p>
+     */
+
+    private void renderHiddenFieldsAndScriptIfNecessary(FacesContext context,
+					       ResponseWriter writer,
+					       UIComponent component,
+					       String fieldName) throws IOException {
+        //Handle hidden fields
+	Map requestMap = context.getExternalContext().getRequestMap();
+	
+	if (null == fieldName) {
+	    return;
+	}
+	String keyName = RIConstants.FACES_PREFIX + fieldName;
+	Object keyVal = null;
+	// if the hidden field for this form hasn't yet been rendered
+	if ((null == (keyVal = requestMap.get(keyName))) 
+	    ||
+	    (null != keyVal && !keyVal.equals(keyName))) {
+	    writer.startElement("input", component);
+	    writer.writeAttribute("type", "hidden", null);
+	    writer.writeAttribute("name", fieldName, null);
+	    writer.endElement("input");
+	    // declare that we have rendered it
+	    requestMap.put(keyName, keyName);
+	    
+	    // PENDING(edburns): not sure if the JSFA59 back button problem
+	    // manifests itself with param children as well...
+	    
+	    // get UIParameter children...
+	    Param paramList[] = getParamList(context, component);
+	    for (int i = 0; i < paramList.length; i++) {
+		fieldName = paramList[i].getName();
+		keyName = RIConstants.FACES_PREFIX + fieldName;
+		if ((null != (keyVal = requestMap.get(keyName))) && 
+		    !keyVal.equals(keyName)) {
+		    writer.startElement("input", component);
+		    writer.writeAttribute("type", "hidden", null);
+		    writer.writeAttribute("name", fieldName, null);
+		    writer.endElement("input");
+		}
+	    }
+	    writeScriptContent(context, writer, component);
+	}
+    }
+
     
     protected String getHiddenFieldName(FacesContext context, 
 					UIComponent component) {
 	UIForm uiform = getMyForm(context, component);
+	if (null == uiform) {
+	    return null;
+	}
 	String formClientId = uiform.getClientId(context);
 	return (formClientId + NamingContainer.SEPARATOR_CHAR + 
 		UIViewRoot.UNIQUE_ID_PREFIX + "cl");
@@ -343,6 +457,13 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             }
             parent = parent.getParent();
         }
+	if (null == parent) {
+            if (log.isErrorEnabled()) {
+                log.error("component " + component.getId() +
+                          " must be enclosed inside a form ");
+            }
+	}
+
         return (UIForm) parent;
     }
 
