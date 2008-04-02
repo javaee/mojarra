@@ -24,6 +24,12 @@
   </managed-bean>
 
   <managed-bean>
+    <managed-bean-name>bean</managed-bean-name>
+    <managed-bean-class>com.sun.faces.systest.model.ActionBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <managed-bean-name>inner</managed-bean-name>
     <managed-bean-class>
       com.sun.faces.systest.model.BeanList
