@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.26 2004/03/31 18:48:27 eburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.27 2005/03/12 19:06:16 edburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import java.util.Set;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.26 2004/03/31 18:48:27 eburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.27 2005/03/12 19:06:16 edburns Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -119,11 +119,21 @@ public class ExternalContextImpl extends ExternalContext {
         return this.request;
     }
 
+    public void setRequest(Object request) {
+	if (request instanceof ServletRequest) {
+	    this.request = (ServletRequest) request;
+	}
+    }
 
     public Object getResponse() {
         return this.response;
     }
 
+    public void setResponse(Object response) {
+	if (response instanceof ServletResponse) {
+	    this.response = (ServletResponse) response;
+	}
+    }
 
     public Map getApplicationMap() {
         if (applicationMap == null) {

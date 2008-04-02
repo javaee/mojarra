@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.29 2005/02/24 01:10:41 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.30 2005/03/12 19:06:15 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -1343,6 +1343,9 @@ public class ConfigureListener implements ServletContextListener {
             return null;
         }
 
+	public void setRequest(Object request) {
+	}
+
         public String getRequestContextPath() {
             return null;
         }
@@ -1415,6 +1418,9 @@ public class ConfigureListener implements ServletContextListener {
 
         public Object getResponse() {
             return null;
+        }
+
+        public void setResponse(Object response) {
         }
 
         public Object getSession(boolean create) {

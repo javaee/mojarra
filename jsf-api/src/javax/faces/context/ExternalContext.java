@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.16 2004/02/04 23:37:59 ofung Exp $
+ * $Id: ExternalContext.java,v 1.17 2005/03/12 19:06:14 edburns Exp $
  */
  
 /*
@@ -296,6 +296,15 @@ public abstract class ExternalContext {
      * is called.</p>
      */
     public abstract Object getRequest();
+
+    /**
+     * <p>Set the environment-specific request to be returned by
+     * subsequent calls to {@link #getRequest}.  This may be used to
+     * install a wrapper for the request.</p>
+     *
+     * @since 1.2
+     */
+    public abstract void setRequest(Object request);
 
 
     /**
@@ -593,6 +602,17 @@ public abstract class ExternalContext {
      * is called.</p>
      */
     public abstract Object getResponse();
+
+    /**
+     * <p>Set the environment-specific response to be returned by
+     * subsequent calls to {@link #getResponse}.  This may be used to
+     * install a wrapper for the response.</p>
+     *
+     * @since 1.2
+     */
+    public abstract void setResponse(Object response);
+
+
 
 
     /**

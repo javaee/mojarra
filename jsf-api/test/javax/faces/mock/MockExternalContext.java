@@ -1,5 +1,5 @@
 /*
- * $Id: MockExternalContext.java,v 1.14 2004/11/11 18:03:07 edburns Exp $
+ * $Id: MockExternalContext.java,v 1.15 2005/03/12 19:06:15 edburns Exp $
  */
 
 /*
@@ -59,12 +59,18 @@ public class MockExternalContext extends ExternalContext {
     public Object getRequest() {
         return (request);
     }
-    
-    
+
+    public void setRequest(Object request) {
+	throw new UnsupportedOperationException();
+    }
+
     public Object getResponse() {
         return (response);
     }
-    
+
+    public void setResponse(Object response) {
+	throw new UnsupportedOperationException();
+    }
 
     private Map applicationMap = null;
     public Map getApplicationMap() {

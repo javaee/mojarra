@@ -1,5 +1,5 @@
 /*
- * $Id: StoreServletContext.java,v 1.2 2004/07/17 01:37:14 jayashri Exp $
+ * $Id: StoreServletContext.java,v 1.3 2005/03/12 19:06:16 edburns Exp $
  */
 
 /*
@@ -91,6 +91,8 @@ public class StoreServletContext extends Object {
             return null;
         }
 
+	public void setRequest(Object request) {}
+
         public String getRequestContextPath() {
             return null;
         }
@@ -165,6 +167,8 @@ public class StoreServletContext extends Object {
         public Object getResponse() {
             return null;
         }
+
+	public void setResponse(Object response) {} 
 
         public Object getSession(boolean create) {
             return null;
