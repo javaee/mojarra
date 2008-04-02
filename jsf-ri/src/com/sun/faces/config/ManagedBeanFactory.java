@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.7 2003/09/24 23:16:22 horwat Exp $
+ * $Id: ManagedBeanFactory.java,v 1.8 2003/10/10 18:11:23 eburns Exp $
  */
 
 /*
@@ -115,10 +115,10 @@ public class ManagedBeanFactory extends Object {
             value = null;
             cmp = (ConfigManagedBeanProperty)props.get(iter.next());
             if (cmp.hasValuesArray()) {
-            List list = cmp.getValues();
-            for (int i = 0, size = list.size(); i < size; i++) {
+		List list = cmp.getValues();
+		for (int i = 0, size = list.size(); i < size; i++) {
                     cmpv = (ConfigManagedBeanPropertyValue)list.get(i);
-
+		    
                     //set the indexed property on the bean
                     if (cmpv.getValueCategory() == 
                         ConfigManagedBeanPropertyValue.VALUE_REF) {
@@ -126,30 +126,30 @@ public class ManagedBeanFactory extends Object {
                     } else {
                         value = cmpv.getValue();
                     }
-
+		    
                     try {
                         // if it's a class type do not set it
                         if (cmpv.getValueCategory() != 
                             ConfigManagedBeanPropertyValue.VALUE_CLASS) {
                             PropertyUtils.setIndexedProperty(
-                                bean, 
-                                cmp.getPropertyName(), 
-                                i, 
-                                value);
+							     bean, 
+							     cmp.getPropertyName(), 
+							     i, 
+							     value);
                         }
                     } catch (Exception ex) {
                         // if the property happens to be attribute on UIComponent
                         // then bean introspection will fail.
                         if ( isUIComponent) {
                             setComponentAttribute(bean, cmp.getPropertyName(), 
-                            value);  
+						  value);  
                         } else {
                             Object[] obj = new Object[1];
                             obj[0] = cmp.getPropertyName();
                             throw new FacesException(
-                            Util.getExceptionMessage(
-                            Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
-                            ex);
+						     Util.getExceptionMessage(
+									      Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
+						     ex);
                         }
                     }
                 }
@@ -158,7 +158,7 @@ public class ManagedBeanFactory extends Object {
                 List list = cmp.getMapEntries();
                 for (int i = 0, size = list.size(); i < size; i++) {
                     cmpm = (ConfigManagedPropertyMap)list.get(i);
-
+		    
                     //set the mapped property on the bean
                     if (cmpm.getValueCategory() == 
                         ConfigManagedPropertyMap.VALUE_REF) {
@@ -166,30 +166,30 @@ public class ManagedBeanFactory extends Object {
                     } else {
                         value = cmpm.getValue();
                     }
-
+		    
                     try {
                         PropertyUtils.setMappedProperty(
-                            bean, 
-                             cmp.getPropertyName(), 
-                            (String)cmpm.getKey(), 
-                            value);
+							bean, 
+							cmp.getPropertyName(), 
+							(String)cmpm.getKey(), 
+							value);
                     } catch (Exception ex) {
                         if ( isUIComponent) {
                             setComponentAttribute(bean, cmp.getPropertyName(), 
-                            value);
+						  value);
                         } else {
                             Object[] obj = new Object[1];
                             obj[0] = cmp.getPropertyName();
                             throw new FacesException(Util.getExceptionMessage(
-                            Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
-                            ex);   
+									      Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
+						     ex);   
                         }
                     }
                 }
             } else {
-               
+		
                 cmpv = cmp.getValue();
-
+		
                 //find properties and set them on the bean
                 if (cmpv.getValueCategory() == 
                     ConfigManagedBeanPropertyValue.VALUE_REF) {
@@ -200,29 +200,29 @@ public class ManagedBeanFactory extends Object {
                 try {
                     // if it's a class type do not set it
                     if (cmpv.getValueCategory() != 
-                    
+			
                         ConfigManagedBeanPropertyValue.VALUE_CLASS) {
                         PropertyUtils.setSimpleProperty(
-                            bean, 
-                            cmp.getPropertyName(), 
-                            value);
+							bean, 
+							cmp.getPropertyName(), 
+							value);
                     }
                 } catch (Exception ex) {
                     if ( isUIComponent) {
                         setComponentAttribute(bean, cmp.getPropertyName(), 
-                            value);
+					      value);
                     } else {
                         Object[] obj = new Object[1];
                         obj[0] = cmp.getPropertyName();
                         throw new FacesException(Util.getExceptionMessage(
-                        Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
-                        ex);
+									  Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
+						 ex);
                     }
                 }
             }
-
+	    
         }
-
+	
         return bean;
     }
 
