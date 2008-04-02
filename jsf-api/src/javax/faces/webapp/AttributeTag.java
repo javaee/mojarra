@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.5 2003/05/02 05:04:54 craigmcc Exp $
+ * $Id: AttributeTag.java,v 1.6 2003/05/13 22:47:31 eburns Exp $
  */
 
 /*
@@ -85,13 +85,13 @@ public class AttributeTag extends TagSupport {
         while ((tag != null) && !(tag instanceof UIComponentTag)) {
             tag = tag.getParent();
         }
-        if (tag == null) { // FIXME - i18n
+        if (tag == null) { // PENDING - i18n
             throw new JspException("Not nested in a UIComponentTag");
         }
 
         // Add this attribute if it is not already defined
         UIComponent component = ((UIComponentTag) tag).getComponent();
-        if (component == null) { // FIXME - i18n
+        if (component == null) { // PENDING - i18n
             throw new JspException("No component associated with UIComponentTag");
         }
         if (component.getAttribute(name) == null) {

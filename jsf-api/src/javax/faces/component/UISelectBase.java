@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBase.java,v 1.10 2003/03/13 01:11:58 craigmcc Exp $
+ * $Id: UISelectBase.java,v 1.11 2003/05/13 22:47:29 eburns Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ abstract class UISelectBase extends UIInput implements NamingContainer {
                 } else if (value instanceof SelectItem) {
                     list.add(value);
                 } else {
-                    throw new IllegalArgumentException // FIXME - i18n
+                    throw new IllegalArgumentException // PENDING - i18n
                         ("Value is not a SelectItem");
                 }
             } else if (kid instanceof UISelectItems) {
@@ -103,7 +103,7 @@ abstract class UISelectBase extends UIInput implements NamingContainer {
                                                 null));
                     }
                 } else {
-                    throw new IllegalArgumentException // FIXME - i18n
+                    throw new IllegalArgumentException // PENDING - i18n
                         ("Value is not a SelectItem, SelectItem[], Collection, or Map");
                 }
             }

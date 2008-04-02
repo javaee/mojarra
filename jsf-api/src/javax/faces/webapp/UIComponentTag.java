@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.2 2003/05/02 05:27:13 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.3 2003/05/13 22:47:32 eburns Exp $
  */
 
 /*
@@ -265,7 +265,7 @@ public abstract class UIComponentTag implements Tag {
         // PENDING(craigmcc) - Make this more efficient by doing so
         // only in the outermost tag
         context = FacesContext.getCurrentInstance();
-        if (context == null) { // FIXME - i18n
+        if (context == null) { // PENDING - i18n
             throw new JspException("Cannot find FacesContext");
         }
 

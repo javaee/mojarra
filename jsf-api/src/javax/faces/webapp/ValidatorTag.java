@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.6 2003/05/02 05:04:55 craigmcc Exp $
+ * $Id: ValidatorTag.java,v 1.7 2003/05/13 22:47:32 eburns Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ public class ValidatorTag extends TagSupport {
         while ((tag != null) && !(tag instanceof UIComponentTag)) {
             tag = tag.getParent();
         }
-        if (tag == null) { // FIXME - i18n
+        if (tag == null) { // PENDING - i18n
             throw new JspException("Not nested in a UIComponentTag");
         }
         UIComponentTag facesTag = (UIComponentTag) tag;

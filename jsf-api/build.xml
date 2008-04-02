@@ -204,7 +204,8 @@
                 test.UISelectOne,
                 test.UINamingContainer,
                 test.ConfigFile,
-                test.UIComponentTag">
+                test.UIComponentTag,
+                test.PhaseId">
   </target>
 
   <target name="test.UIComponent" depends="build.test">

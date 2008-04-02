@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.30 2003/04/29 18:51:51 eburns Exp $
+ * $Id: UIComponentTestCase.java,v 1.31 2003/05/13 22:47:33 eburns Exp $
  */
 
 /*
@@ -689,14 +689,12 @@ public class UIComponentTestCase extends TestCase {
 	    exceptionThrown = true;
         }
 	assertTrue(!exceptionThrown);
-        /** FIXME - checking valid characters not yet implemented
         try {
             component.setComponentId("*");
             fail("setComponentId did not throw IAE");
         } catch (IllegalArgumentException e) {
             ; // Expected result
         }
-        */
 
         // [3.1.7] setAttribute()
         try {
