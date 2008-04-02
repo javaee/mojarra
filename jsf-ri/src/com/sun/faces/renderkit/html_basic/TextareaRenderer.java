@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.4 2004/01/27 21:04:29 eburns Exp $
+ * $Id: TextareaRenderer.java,v 1.5 2004/01/31 00:00:47 craigmcc Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.servlet.ServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextareaRenderer.java,v 1.4 2004/01/27 21:04:29 eburns Exp $
+ * @version $Id: TextareaRenderer.java,v 1.5 2004/01/31 00:00:47 craigmcc Exp $
  * 
  */
 
@@ -99,6 +99,14 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
 	writer.startElement("textarea", component);
 	writeIdAttributeIfNecessary(context, writer, component);
 	writer.writeAttribute("name", component.getClientId(context), "clientId");
+        // Deal with "rows" specially since it is not passthru on <h:dataTable/>
+        Object rows = component.getAttributes().get("rows");
+        if (rows != null) {
+            if (!(rows instanceof String)) {
+                rows = rows.toString();
+            }
+            writer.writeAttribute("rows", rows, "rows");
+        }
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);

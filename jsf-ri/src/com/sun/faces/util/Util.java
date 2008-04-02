@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.126 2004/01/30 22:58:08 horwat Exp $
+ * $Id: Util.java,v 1.127 2004/01/31 00:00:47 craigmcc Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.126 2004/01/30 22:58:08 horwat Exp $ 
+ * @version $Id: Util.java,v 1.127 2004/01/31 00:00:47 craigmcc Exp $ 
  */
 
 public class Util extends Object
@@ -368,7 +368,6 @@ public class Util extends Object
 	"onunload",
         "rel",
         "rev",
-        "rows",
         "rules",
         "shape",
 	"size",
@@ -380,6 +379,9 @@ public class Util extends Object
         "usemap",
         "width"
     };
+
+    // NOTE - "rows" cannot be on the above list, <h:dataTable> uses it in a
+    // non-passthru way
 
     //NOTE - "type" was deliberately skipped from the list of passthru attrs above
     //All renderers that need this attribute should manually pass it.
