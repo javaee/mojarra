@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.18 2004/05/13 01:06:25 jvisvanathan Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.19 2004/06/15 21:03:39 rlubke Exp $ 
  */ 
 
 
@@ -49,7 +49,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.18 2004/05/13 01:06:25 jvisvanathan Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.19 2004/06/15 21:03:39 rlubke Exp $
  */
 
 
@@ -372,7 +372,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         System.out.println("Testing calculateLocale - No Match case");
         ViewHandler handler = new ViewHandlerImpl();
         Locale locale = handler.calculateLocale(getFacesContext());
-        assertTrue(locale.equals(new Locale("en", "US")));
+        assertTrue(locale.equals(Locale.getDefault()));
     }
 
 

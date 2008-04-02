@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.33 2004/02/26 20:34:09 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.34 2004/06/15 21:03:39 rlubke Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.33 2004/02/26 20:34:09 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.34 2004/06/15 21:03:39 rlubke Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -526,8 +526,8 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 
         assertNotNull("Can't get default locale from Application",
                       locale = application.getDefaultLocale());
-        assertEquals("en", locale.getLanguage());
-        assertEquals("US", locale.getCountry());
+        Locale defaultLocale = Locale.getDefault();
+        assertEquals(locale, defaultLocale);        
 
         Iterator iter;
         int j = 0, len = 0;
