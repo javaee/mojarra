@@ -167,6 +167,8 @@
       <arg line="-d ${src.dir}"/>
       <arg line="-c ${basedir}/COPYRIGHT"/>
       <arg value="javax.faces.component.UICommand"/>
+      <arg value="javax.faces.component.UIData"/>
+      <arg value="javax.faces.component.UIForm"/>
     </java>
 
   </target>

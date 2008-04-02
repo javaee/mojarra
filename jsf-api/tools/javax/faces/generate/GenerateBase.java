@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateBase.java,v 1.1 2003/09/26 14:54:42 eburns Exp $
+ * $Id: GenerateBase.java,v 1.2 2003/09/26 21:12:09 eburns Exp $
  */
 
 /*
@@ -12,11 +12,15 @@ package javax.faces.generate;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.io.InputStream;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
+import java.net.MalformedURLException;
 import org.xml.sax.SAXException;
+import org.xml.sax.InputSource;
 
 import org.apache.commons.logging.Log;
 
@@ -49,7 +53,6 @@ public abstract class GenerateBase extends Object {
     
     public GenerateBase() {
 	super();
-	parser = new ConfigParser();
     }
 
     //
@@ -74,18 +77,20 @@ public abstract class GenerateBase extends Object {
 			String absolutePathToTopMatterFile,
 			String absolutePathToOutputDir) throws IllegalStateException {
 	// parse the config file
-	FileReader configReader = null;
+	File configFile = null;
+	URL configUrl = null;
 	BufferedReader topMatterReader = null;
 	
 	try {
-	    configReader = new FileReader(absolutePathToConfigFile);
+	    configFile = new File(absolutePathToConfigFile);
+	    configUrl = configFile.toURL();
 	    if (null != absolutePathToTopMatterFile) {
 		topMatterReader = 
 		    new BufferedReader(new FileReader(absolutePathToTopMatterFile));
 	    }
 	    outputDir = new File(absolutePathToOutputDir);
 	}
-	catch (FileNotFoundException e) {
+	catch (IOException e) {
 	    if (getLog().isErrorEnabled()) {
 		getLog().error("File not found.  Config file is " + 
 			       absolutePathToConfigFile + 
@@ -124,11 +129,27 @@ public abstract class GenerateBase extends Object {
 	    }
 	    topMatter = topMatterBuf.toString();
 	}	
+
+	parser = new ConfigParser();
 	
 	// read in and parse the config file
+        InputStream stream = null;
+        InputSource source = null;
 	try {
-	    parser.parseConfig(configReader);
-	    configReader.close();
+	    stream = configUrl.openStream();
+	    source = new InputSource(configUrl.toExternalForm());
+	    source.setByteStream(stream);
+	    parser.parseConfig(source);
+	    
+	    try {
+		if (stream != null) {
+		    stream.close();
+		}
+	    } catch (Exception e) {
+		if (getLog().isWarnEnabled()) {
+		    getLog().warn(e.getMessage(), e);
+		}
+	    }    
 	}
 	catch (IOException ioe) {
 	    if (getLog().isErrorEnabled()) {
