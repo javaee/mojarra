@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.17 2004/04/07 17:52:45 rkitain Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.18 2004/05/13 01:06:25 jvisvanathan Exp $ 
  */ 
 
 
@@ -49,7 +49,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.17 2004/04/07 17:52:45 rkitain Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.18 2004/05/13 01:06:25 jvisvanathan Exp $
  */
 
 
@@ -71,7 +71,6 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
     public static final String ignore[] = {
         "    <form id=\"helloForm\" method=\"post\" action=\"/test/greeting.jsf\">"
     };
-
 
     public String[] getLinesToIgnore() {
         return ignore;

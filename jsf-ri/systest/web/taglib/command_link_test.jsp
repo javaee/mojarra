@@ -1,14 +1,9 @@
-<!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
-
 <%--
    Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: command_link_test.jsp,v 1.12 2004/05/12 18:31:18 ofung Exp $ --%>
+<%-- $Id: command_link_test.jsp,v 1.13 2004/05/13 01:06:23 jvisvanathan Exp $ --%>
 
 <html>
 <head>
