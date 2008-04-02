@@ -38,18 +38,6 @@
       <supported-locale>es</supported-locale>
     </locale-config>
   </application>
-
-      <component>
-
-        <component-type>javax.faces.ViewRoot</component-type>
-        <component-class>guessNumber.ProcessingContextViewRoot</component-class>
-
-        <component-extension>
-            <component-family>javax.faces.ViewRoot</component-family>
-        </component-extension>
-
-    </component>
-
   
   <navigation-rule>
     <description>
