@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.17 2004/11/11 16:09:39 rogerk Exp $
+ * $Id: ValidatorTag.java,v 1.18 2004/11/11 20:33:35 rogerk Exp $
  */
 
 /*
@@ -60,12 +60,6 @@ public class ValidatorTag extends TagSupport {
 
     // ------------------------------------------------------------- Attributes
 
-    public static final String INVALID_EXPRESSION_MESSAGE_ID = "javax.faces.el.INVALID_EXPRESSION";
-    public static final String COMPONENT_FROM_TAG_ERROR_MESSAGE_ID = "javax.faces.webapp.COMPONENT_FROM_TAG_ERROR";
-    public static final String NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID = "javax.faces.webapp.NOT_NESTED_IN_TYPE_TAG_ERROR";
-    public static final String NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID = "javax.faces.webapp.NOT_NESTED_IN_FACES_TAG_ERROR";
-    public static final String CANT_CREATE_CLASS_ID = "javax.faces.webapp.CANT_CREATE_CLASS";
-
     /**
      * <p>The identifier of the {@link Validator} instance to be created.</p>
      */
@@ -100,14 +94,8 @@ public class ValidatorTag extends TagSupport {
     public void setBinding(String binding) 
         throws JspException {
         if (binding != null && !UIComponentTag.isValueReference(binding)) {
-            Object[] params = {binding};
-            FacesMessage message = MessageFactory.getMessage(
-                INVALID_EXPRESSION_MESSAGE_ID, params);
-            if (message != null) {
-                throw new JspException(message.getSummary());
-            } else {
-                throw new JspException("Invalid Expression:"+binding);
-            }
+            //PENDING i18n
+            throw new JspException("Invalid Expression:"+binding);
         }
         this.binding = binding;
     }
@@ -132,15 +120,9 @@ public class ValidatorTag extends TagSupport {
         UIComponentTag tag =
             UIComponentTag.getParentUIComponentTag(pageContext);
         if (tag == null) { 
-            Object[] params = {this.getClass().getName()};
-            FacesMessage message = MessageFactory.getMessage(
-                NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params);
-            if (message != null) {
-                throw new JspException(message.getSummary());
-            } else {
-                throw new JspException("Not nested in a UIComponentTag Error for tag with handler class:"+
+       	    //PENDING i18n
+            throw new JspException("Not nested in a UIComponentTag Error for tag with handler class:"+
                     this.getClass().getName());
-            }
         }
 
         // Nothing to do unless this tag created a component
@@ -150,24 +132,13 @@ public class ValidatorTag extends TagSupport {
         
         UIComponent component = tag.getComponentInstance();
         if (component == null) {            
-            FacesMessage message = MessageFactory.getMessage(
-                COMPONENT_FROM_TAG_ERROR_MESSAGE_ID, null);
-            if (message != null) {
-                throw new JspException(message.getSummary());
-            } else {
-                throw new JspException("Can't create Component from tag.");
-            }
+            //PENDING i18n
+            throw new JspException("Can't create Component from tag.");
         }
         if (!(component instanceof EditableValueHolder)) {
-            Object params [] = {this.getClass().getName()};
-            FacesMessage message = MessageFactory.getMessage(
-                NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params);
-            if (message != null) {
-                throw new JspException(message.getSummary());
-            } else {
-                throw new JspException("Not nested in a tag of proper type. Error for tag with handler class:"+
+            // PENDING i18n
+            throw new JspException("Not nested in a tag of proper type. Error for tag with handler class:"+
                     this.getClass().getName());
-            }
         }
 
         validator = createValidator();
@@ -185,15 +156,9 @@ public class ValidatorTag extends TagSupport {
                 }
             }
                 
-            Object params [] = {"javax.faces.validator.Validator",validateError};
-            FacesMessage message = MessageFactory.getMessage(
-                CANT_CREATE_CLASS_ID, params);
-            if (message != null) {
-                throw new JspException(message.getSummary());
-            } else {
-                throw new JspException("Can't create class of type:"+
-                    "javax.faces.validator.Validator from:"+validateError);
-            }
+            // PENDING i18n
+            throw new JspException("Can't create class of type:"+
+                "javax.faces.validator.Validator from:"+validateError);
         }
 
         // Register an instance with the appropriate component
