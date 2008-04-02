@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.8 2003/06/16 22:52:22 eburns Exp $
+ $Id: build-tests.xml,v 1.9 2003/06/20 13:25:25 eburns Exp $
 -->
 
 
@@ -55,7 +55,8 @@
                 test.validator,
                 test.component,
                 test.navigation,
-                test.tlvalidator
+                test.tlvalidator,
+                test.standard
                "/>
 
 
@@ -213,6 +214,16 @@
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/component.jsp"
       outContent="/component.jsp PASSED"/>
+  </target>
+
+  <target name="test.standard"
+          description="Test the Standard RenderKit">
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/standard/output_errors01.jsp"
+          golden="${golden.path}/standard/output_errors01.txt"/>
+
+
   </target>
 
 </project>

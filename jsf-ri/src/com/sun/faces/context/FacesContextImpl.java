@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.37 2003/04/29 20:51:41 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.38 2003/06/20 13:25:24 eburns Exp $
  */
 
 /*
@@ -272,23 +272,6 @@ public class FacesContextImpl extends FacesContext
             facesEvents = new CursorableLinkedList();
         }
         facesEvents.add(event);
-    }
-
-    public void addMessage(Message message) {
-        ArrayList list = null;
-        if ( message == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_MESSAGE_ERROR_MESSAGE_ID));
-        }
-        if (null == messageLists) {
-            messageLists = new HashMap();
-        }
-        
-        list = (ArrayList) messageLists.get(null);
-        if (list == null) {
-            list = new ArrayList();
-            messageLists.put(null, list);
-        }
-        list.add(message);  
     }
 
     public void addMessage(UIComponent component, Message message) {
