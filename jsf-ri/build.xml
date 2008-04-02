@@ -63,7 +63,8 @@
     <path id="impl.compile.classpath">
         <pathelement location="${jsf-api.jar}"/>
         <path refid="sun.commons.classpath"/>
-        <path refid="compile.classpath"/>        
+        <path refid="compile.classpath"/> 
+        <pathelement location="${tools.dir}/build/classes"/>
     </path>
 
 
@@ -144,7 +145,7 @@
     </target>
 
     <target name="generate"
-            depends="check.taglib.generation.necessity,create.runtime.config"
+            depends="check.taglib.generation.necessity"
             unless="skip.taglib.generation">        
         <path id="ant.classpath">
             <pathelement location="${myenv.ANT_HOME}/lib/ant.jar"/>
@@ -211,6 +212,8 @@
         </copy>
 
         <touch file="${build.generate.dir}/last-taglib-generation"/>
+        
+        <antcall target="create.runtime.config"/>
 
     </target>
 
@@ -400,7 +403,7 @@
          =================================================================== 
     -->
 
-    <target name="jars" depends="create.runtime.config,compile">
+    <target name="jars" depends="compile">
         <unjar dest="${build.classes.dir}">
             <fileset dir="${jsf.build.home}/common/lib"
                      includes="com-sun-commons*.jar"/>
@@ -413,7 +416,7 @@
 
     <target name="main" depends="update,jars"/>
 
-    <target name="create.runtime.config" depends="prepare">
+    <target name="create.runtime.config">
 <!--    in="${build.dir}/classes/com/sun/faces/standard-html-renderkit.xml"-->
         <xslt in="${api.dir}/doc/standard-html-renderkit.xml" 
               out="merged.xml"
@@ -448,17 +451,17 @@
             </replacevalue>
         </replace>
         <delete file="${basedir}/merged.xml"/>
-    	<taskdef name="generateBootstrap"
-    		classname="com.sun.faces.ant.BootstrapperTask">
-    		<classpath>
-    			<pathelement location="${tools.dir}/build/classes" />
-    		</classpath>
-    	</taskdef>
-    	<generateBootstrap 
-    		runtimeConfig="${impl.dir}/${build.dir}/classes/com/sun/faces/jsf-ri-runtime.xml"
-    		copyright="${jsf.build.home}/legal/jsf-cddl/jsf-cddl-header.txt"
-    		outputDir="${impl.dir}/${build.generate.dir}">
-    	</generateBootstrap>
+        <taskdef name="generateBootstrap"
+                 classname="com.sun.faces.ant.BootstrapperTask">
+            <classpath>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+        </taskdef>
+        <generateBootstrap
+              runtimeConfig="${impl.dir}/${build.dir}/classes/com/sun/faces/jsf-ri-runtime.xml"
+              copyright="${jsf.build.home}/legal/jsf-cddl/jsf-cddl-header.txt"
+              outputDir="${impl.dir}/${build.generate.dir}">
+        </generateBootstrap>
     </target>
 
     <!--
