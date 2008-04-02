@@ -138,16 +138,97 @@ grant {
         <echo message="PENDING = Please implement"/>
     </target>
 
-    <target name="container.deploy" 
-            description="Deploy the JSF Implementation artifacts to the target container.">
-        <delete>
+    <macrodef name="container.deploy"
+              description="Deploy the JSF Implementation artifacts to the target container.">
+        <sequential>
+            <delete>
                 <fileset dir="${container.home}/lib" includes="jsf-*.jar"/>
-        </delete> 
-        <jar jarfile="${container.home}/lib/javaee.jar" update="yes">
+            </delete>
+            <jar jarfile="${container.home}/lib/javaee.jar" update="yes">
                 <zipfileset src="${api.dir}/build/lib/jsf-api.jar"/>
-        </jar>
-        <copy todir="${container.home}/lib"
-              file="${impl.dir}/build/lib/jsf-impl.jar"/>      
-    </target>
+            </jar>
+            <copy todir="${container.home}/lib"
+                  file="${impl.dir}/build/lib/jsf-impl.jar"/>
+        </sequential>
+    </macrodef>
     
+    <macrodef name="container.start"
+            description="Start the GlassFish container">
+        <sequential>
+            <start.domain/>
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="container.stop"
+            description="Stop the GlassFish container">
+        <sequential>
+            <stop.domain/>
+        </sequential>
+    </macrodef>
+
+
+    <!-- 'PRIVATE' targets -->
+    <macrodef name="start.domain">
+        <sequential>
+            <echo>
+                
+"------------ Starting ${glassfish.domain} ------------"
+                
+            </echo>
+            <if>
+                <os family="unix"/>
+                <then>
+                    <exec executable="${container.home}/bin/asadmin"
+                          failonerror="true">
+                        <arg line="start-domain"/>
+                        <arg line="--user ${glassfish.admin.user}"/>
+                        <arg line="${glassfish.domain}"/>
+                    </exec>
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </then>
+                <else>
+                    <exec executable="${container.home}/bin/asadmin.bat"
+                          spawn="true">
+                        <arg line="start-domain"/>
+                        <arg line="--user ${glassfish.admin.user}"/>
+                        <arg line="${glassfish.domain}"/>
+                    </exec>
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="stop.domain">
+        <sequential>
+            <echo>
+                
+"------------ Stopping ${glassfish.domain} ------------"
+                
+            </echo>
+            <if>
+                <os family="unix"/>
+                <then>
+                    <exec executable="${container.home}/bin/asadmin">
+                        <arg line="stop-domain"/>
+                        <arg line="${glassfish.domain}"/>
+                    </exec>
+                </then>
+                <else>
+                    <exec executable="${container.home}/bin/asadmin.bat"
+                          spawn="true">
+                        <arg line="stop-domain"/>
+                        <arg line="${glassfish.domain}"/>
+                    </exec>
+                </else>
+            </if>
+
+            <sleep seconds="15"/>
+        </sequential>
+    </macrodef>
+
 </project>

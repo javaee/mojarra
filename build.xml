@@ -80,6 +80,15 @@
         <call.modules target="test"/>
     </target>
     
+    <target name="test.with.container.refresh" 
+            description="Stop the target container, deploy the build artifacts, restart the container and test">
+        <container.stop/>
+        <container.deploy/>
+        <container.start/>
+        <call.modules target="test"/>
+    </target>
+        
+
 
     <!-- Create the source distribution -->
     <target name="jsf.source">
@@ -333,43 +342,5 @@
         </manifest>
       </jar>
     </target>
-
-
-    <!--
-     Commenting out for now.  
-   <target name="update.glassfish">
-     <mkdir dir="${basedir}/build" />
-     <mkdir dir="${basedir}/build/javaee" />
-     <unjar dest="${basedir}/build/javaee" 
-            src="${javaee.jar}"/>
-     <delete>
-       <fileset dir="${basedir}/build/javaee/javax/faces">
-         <include name="**/*.*" />
-       </fileset>
-     </delete>
-     <jar destfile="${javaee.jar}">
-       <fileset dir="${basedir}/build/javaee">
-         <include name="**/*.*" />
-       </fileset>
-     </jar>
-     <antcall target="copy.jars"/>
-   </target>
- 
-   <target name="copy.jars">
-     <copy file="${basedir}/jsf-ri/build/lib/jsf-impl.jar" 
-           todir="${tomcat.home}/lib" />
-     <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar" 
-           todir="${tomcat.home}/lib" />
-     <mkdir dir="${myenv.HOME}/.maven/repository/javax.faces" />
-     <mkdir dir="${myenv.HOME}/.maven/repository/javax.faces/jars" />
-     <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar" 
-           tofile="${myenv.HOME}/.maven/repository/javax.faces/jars/jsf-api-1.2a1.jar" />
-     <copy file="${basedir}/jsf-ri/build/lib/jsf-impl.jar" 
-           tofile="${myenv.HOME}/.maven/repository/javax.faces/jars/jsf-impl-1.2a1.jar" />
-   
- 
-   </target>
-   
-    -->
 
 </project>

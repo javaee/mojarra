@@ -91,10 +91,12 @@
            java.util.PropertyPermission is read,write
            java.lang.ReflectPermission is "*"                   
     -->
-    <target name="config.container"
+    <macrodef name="config.container"
             description="Perform any container specific configuration necessary for the unit tests to run">
-        <echo message="Provide 'undeploy.artifact' implementation"/>
-    </target>
+        <sequential>
+            <echo message="Provide 'undeploy.artifact' implementation"/>
+        </sequential>
+    </macrodef>
 
     <!--
          Display/Validate any property information necessary to build 
@@ -125,4 +127,26 @@
         <echo message="Provide 'container.deploy' implementation"/>    
     </target>
     
+    <!-- 
+        OPTIONAL
+          Start the container
+    -->
+    <macrodef name="container.start"
+            description="Start the target container.">
+        <sequential>
+            <echo message="Provide 'container.start' implementation"/>
+        </sequential>
+    </macrodef>
+    
+    <!--
+       OPTIONAL
+          Stop the container
+    -->
+    <macrodef name="container.stop"
+              description="Stop the target container.">
+        <sequential>
+            <echo message="Provide 'container.stop' implementation"/>
+        </sequential>
+    </macrodef>
+
 </project>
