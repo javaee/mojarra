@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.9 2003/11/05 01:05:15 craigmcc Exp $
+ * $Id: TableRenderer.java,v 1.10 2003/12/24 19:11:21 jvisvanathan Exp $
  */
 
 /*
@@ -312,7 +312,11 @@ public class TableRenderer extends HtmlBasicRenderer {
      */
     private void encodeRecursive(FacesContext context, UIComponent component)
         throws IOException {
-
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
         component.encodeBegin(context);
         if (component.getRendersChildren()) {
             component.encodeChildren(context);

@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.21 2003/12/17 15:13:53 rkitain Exp $
+ * $Id: GridRenderer.java,v 1.22 2003/12/24 19:11:20 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.21 2003/12/17 15:13:53 rkitain Exp $
+ * @version $Id: GridRenderer.java,v 1.22 2003/12/24 19:11:20 jvisvanathan Exp $
  *  
  */
 
@@ -241,6 +241,11 @@ public class GridRenderer extends HtmlBasicRenderer {
     private void encodeRecursive(FacesContext context, UIComponent component)
         throws IOException {
 
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
         component.encodeBegin(context);
         if (component.getRendersChildren()) {
             component.encodeChildren(context);

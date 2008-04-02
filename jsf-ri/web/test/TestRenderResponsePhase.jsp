@@ -581,7 +581,7 @@ brackets</i> on this text</f:verbatim>
 
 </td>
 </tr>
-
+<
 <tr><td>
 
 <f:verbatim escape="#{SimpleBean.falseValue}">5. You should not see the
@@ -630,9 +630,32 @@ see the <i>angle brackets</i> on this text"></h:output_text>
 </td>
 </tr>
 
+<h:panel_grid>
+<f:subview id="subview1" rendered="false">
+   <h:output_text value="This should not be rendered" />
+</f:subview>
+</h:panel_grid>
+
+<h:panel_grid>
+<h:panel_group rendered="false">
+   <h:output_text value="This should not be rendered" />
+</h:panel_group>
+</h:panel_grid>
+
+<h:data_table>
+<f:subview id="subview2" rendered="false">
+   <h:output_text value="This should not be rendered" />
+</f:subview>
+</h:data_table>
 
 
+<h:output_link value="test.html" rendered="false">
+    <h:graphic_image url="duke.gif"/>
+</h:output_link>
 
+<h:command_link rendered="false">
+      <h:output_text value="This should not be rendered" />
+</h:command_link>
   <TABLE>
 
 </h:form>

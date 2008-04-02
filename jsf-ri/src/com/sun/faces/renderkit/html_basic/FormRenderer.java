@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.65 2003/12/17 15:13:52 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.66 2003/12/24 19:11:19 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.65 2003/12/17 15:13:52 rkitain Exp $ 
+ * @version $Id: FormRenderer.java,v 1.66 2003/12/24 19:11:19 jvisvanathan Exp $ 
  */
 
 public class FormRenderer extends HtmlBasicRenderer {
@@ -135,8 +135,6 @@ public class FormRenderer extends HtmlBasicRenderer {
 		     requestMap.get(RIConstants.FORM_NUMBER_ATTR))) {
 	    numForms = formsInt.intValue();
 	}
-	component.getAttributes().put(RIConstants.FORM_NUMBER_ATTR, 
-	    formsInt = new Integer(numForms));
 	requestMap.put(RIConstants.FORM_NUMBER_ATTR, 
             formsInt = new Integer(++numForms));
 	return numForms;

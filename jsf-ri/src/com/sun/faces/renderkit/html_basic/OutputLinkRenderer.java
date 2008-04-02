@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.2 2003/12/17 15:13:56 rkitain Exp $
+ * $Id: OutputLinkRenderer.java,v 1.3 2003/12/24 19:11:21 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.2 2003/12/17 15:13:56 rkitain Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.3 2003/12/24 19:11:21 jvisvanathan Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -147,6 +147,11 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
         }
 	Iterator kids = component.getChildren().iterator();
 	while (kids.hasNext()) {

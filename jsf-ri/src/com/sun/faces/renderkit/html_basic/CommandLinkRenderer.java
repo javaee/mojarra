@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.3 2003/12/17 15:13:51 rkitain Exp $
+ * $Id: CommandLinkRenderer.java,v 1.4 2003/12/24 19:11:19 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandLinkRenderer.java,v 1.3 2003/12/17 15:13:51 rkitain Exp $
+ * @version $Id: CommandLinkRenderer.java,v 1.4 2003/12/24 19:11:19 jvisvanathan Exp $
  */
 
 public class CommandLinkRenderer extends HtmlBasicRenderer {
@@ -119,10 +119,17 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	if (null == form) {
 	    return 0;
 	}
-	Integer formsInt = (Integer)
-	    form.getAttributes().get(RIConstants.FORM_NUMBER_ATTR);
-	Util.doAssert(null != formsInt);
-	return formsInt.intValue();
+        Map requestMap = context.getExternalContext().getRequestMap();
+	int numForms = 0;
+	Integer formsInt = null;
+	// find out the current number of forms in the page.
+	if (null != (formsInt = (Integer) 
+		     requestMap.get(RIConstants.FORM_NUMBER_ATTR))) {
+	    numForms = formsInt.intValue();
+            // since the form index in the document starts from 0.
+            numForms--;
+	}
+	return numForms;
     }
 
     public boolean getRendersChildren() {
@@ -203,6 +210,11 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
         }
 	Iterator kids = component.getChildren().iterator();
 	while (kids.hasNext()) {
