@@ -1,5 +1,5 @@
 /*
- * $Id: CarServer.java,v 1.5 2003/08/29 15:41:19 eburns Exp $
+ * $Id: CarServer.java,v 1.6 2003/10/15 16:59:57 jvisvanathan Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -162,7 +162,7 @@ public class CarServer extends Object {
         if ( optionValues != null ) {
             optionValues.clear();
         }
-        Locale locale = (FacesContext.getCurrentInstance()).getLocale();
+        Locale locale = (FacesContext.getCurrentInstance()).getViewRoot().getLocale();
         ResourceBundle carResources = carDemoResources.
                 getBundle(CARDEMO_PREFIX + "Resources", locale);
         
@@ -201,7 +201,7 @@ public class CarServer extends Object {
      */
     public void setCarId(int id) throws MissingResourceException {
         this.carId = id;
-        Locale locale = (FacesContext.getCurrentInstance()).getLocale();
+        Locale locale = (FacesContext.getCurrentInstance()).getViewRoot().getLocale();
         try {            
             ResourceBundle rb = null;            
             String idStr = String.valueOf(id);
@@ -227,7 +227,7 @@ public class CarServer extends Object {
         int price= 0;
         String priceStr = null;
         
-        Locale locale = (FacesContext.getCurrentInstance()).getLocale();
+        Locale locale = (FacesContext.getCurrentInstance()).getViewRoot().getLocale();
         ResourceBundle rb = null;            
         String idStr = String.valueOf(carId);
         String carBundleName = CARDEMO_PREFIX + "CarOptions" + idStr; 

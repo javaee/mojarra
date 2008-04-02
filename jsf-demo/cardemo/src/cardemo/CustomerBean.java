@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.7 2003/09/15 20:26:01 eburns Exp $
+ * $Id: CustomerBean.java,v 1.8 2003/10/15 16:59:57 jvisvanathan Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -68,7 +68,8 @@ public class CustomerBean extends Object {
     public Collection getTitleOptions() {
 	if (null == titleOptions) {
 	    titleOptions = new ArrayList();
-	    ResourceBundle rb = ResourceBundle.getBundle("cardemo/Resources", (FacesContext.getCurrentInstance().getLocale()));
+	    ResourceBundle rb = ResourceBundle.getBundle("cardemo/Resources", 
+                (FacesContext.getCurrentInstance().getViewRoot().getLocale()));
 	    String titleStr = (String)rb.getObject("mrLabel");
 	    titleOptions.add(new SelectItem(titleStr, titleStr, 
 					    titleStr));

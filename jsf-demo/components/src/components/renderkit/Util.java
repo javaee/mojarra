@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.9 2003/09/25 17:48:06 horwat Exp $
+ * $Id: Util.java,v 1.10 2003/10/15 16:59:58 jvisvanathan Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ import java.util.Locale;
  *  <B>Util</B> is a class which houses common functionality used by
  *     other classes.
  *
- * @version $Id: Util.java,v 1.9 2003/09/25 17:48:06 horwat Exp $
+ * @version $Id: Util.java,v 1.10 2003/10/15 16:59:58 jvisvanathan Exp $
  * 
  */
 
@@ -267,7 +267,7 @@ private Util()
 	    }
 	}
 	if (null == result) {
-	    result = context.getLocale();
+	    result = context.getViewRoot().getLocale();
 	}
 
 	return result;

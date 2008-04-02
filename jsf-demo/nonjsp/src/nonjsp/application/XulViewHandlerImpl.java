@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.8 2003/10/08 17:52:56 eburns Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.9 2003/10/15 17:00:00 jvisvanathan Exp $ 
  */ 
 
 
@@ -81,7 +81,7 @@ import java.util.Map;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.8 2003/10/08 17:52:56 eburns Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.9 2003/10/15 17:00:00 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -156,7 +156,8 @@ public class XulViewHandlerImpl implements ViewHandler {
 
         log.trace("Save the view and locale in the session");
         Map sessionMap = getSessionMap(context);
-        sessionMap.put(RIConstants.REQUEST_LOCALE, context.getLocale());
+        sessionMap.put(RIConstants.REQUEST_LOCALE, 
+                context.getViewRoot().getLocale());
         sessionMap.put(RIConstants.FACES_VIEW, context.getViewRoot());
 
     } 

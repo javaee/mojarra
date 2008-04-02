@@ -109,7 +109,7 @@ public class AreaSelectedHandler implements AreaSelectedListener {
 
         String current = event.getMapComponent().getCurrent();
         FacesContext context = FacesContext.getCurrentInstance();
-        context.setLocale((Locale) locales.get(current));
+        context.getViewRoot().setLocale((Locale) locales.get(current));
 
     }
 
