@@ -1,5 +1,5 @@
-/*
- * $Id: FacesContextImpl.java,v 1.75 2005/11/29 16:20:13 rlubke Exp $
+ /*
+ * $Id: FacesContextImpl.java,v 1.76 2005/12/16 18:07:08 rlubke Exp $
  */
 
 /*
@@ -29,12 +29,7 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.util.Util;
-import org.apache.commons.collections.CursorableLinkedList;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
+import javax.el.ELContext;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -45,22 +40,22 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
-import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.el.ELContext;
+
 import com.sun.faces.el.ELContextImpl;
+import com.sun.faces.util.Util;
 
 public class FacesContextImpl extends FacesContext {
 
@@ -83,8 +78,7 @@ public class FacesContextImpl extends FacesContext {
 
     // Relationship Instance Variables
     private ResponseStream responseStream = null;
-    private ResponseWriter responseWriter = null;
-    private CursorableLinkedList facesEvents = null;
+    private ResponseWriter responseWriter = null;   
     private ExternalContext externalContext = null;
     private Application application = null;
     private UIViewRoot viewRoot = null;
@@ -187,18 +181,7 @@ public class FacesContextImpl extends FacesContext {
 
         }
         return result;
-    }
-
-
-    public Iterator getFacesEvents() {
-        assertNotReleased();
-        if (facesEvents != null) {
-            return (facesEvents.cursor());
-        } else {
-            return (Collections.EMPTY_LIST.iterator());
-        }
-    }
-
+    }    
 
     public Severity getMaximumSeverity() {
         assertNotReleased();
@@ -305,10 +288,7 @@ public class FacesContextImpl extends FacesContext {
                 (Util.getExceptionMessageString(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        
-        if (viewRoot != root) {
-            facesEvents = null;
-        }
+               
         viewRoot = root;
     }
 
@@ -327,33 +307,7 @@ public class FacesContextImpl extends FacesContext {
                     Util.NULL_RESPONSE_WRITER_ERROR_MESSAGE_ID));
         }
         responseWriter = newResponseWriter;
-    }
-
-
-    public void addFacesEvent(FacesEvent event) {
-        assertNotReleased();
-        // Validate our preconditions
-        if (event == null) {
-            throw new NullPointerException
-                (Util.getExceptionMessageString(Util.NULL_EVENT_ERROR_MESSAGE_ID));
-        }
-
-        // Add this event to our internal queue
-        if (facesEvents == null) {
-            facesEvents = new CursorableLinkedList();
-        }
-        facesEvents.add(event);
-                    
-        if (logger.isLoggable(Level.FINE)) {
-            String id = event.getComponent().getId();
-            if (id == null) {
-                id = "<<NONE>>";
-            }
-            logger.fine("Adding FacesEvent[sourceId=" + id +
-                      ",type=" + event.getClass().getName());
-        }
-
-    }
+    }   
 
 
     public void addMessage(String clientId, FacesMessage message) {
@@ -390,8 +344,7 @@ public class FacesContextImpl extends FacesContext {
         released = true;
         externalContext = null;
         responseStream = null;
-        responseWriter = null;
-        facesEvents = null;
+        responseWriter = null;      
         componentMessageLists = null;
         renderResponse = false;
         responseComplete = false;
