@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.13 2005/05/05 20:51:37 edburns Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.14 2005/05/17 14:58:52 rlubke Exp $
  */
 
 /*
@@ -175,8 +175,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.writeImport("java.io.IOException");
         writer.write('\n');
         writer.writeImport("javax.faces.context.FacesContext");
-        writer.writeImport("javax.faces.el.MethodBinding");
-        writer.writeImport("javax.faces.el.ValueBinding");
+        writer.writeImport("javax.el.MethodExpression");
+        writer.writeImport("javax.el.ValueExpression");
         writer.write("\n\n");
 
         writer.writeBlockComment("******* GENERATED CODE - DO NOT EDIT *******");
@@ -324,14 +324,14 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(";\n");
              writer.outdent();
             writer.fwrite("}\n");
-            writer.fwrite("ValueBinding _vb = getValueBinding(\"");
+            writer.fwrite("ValueExpression _ve = getValueExpression(\"");
             writer.write(pb.getPropertyName());
             writer.write("\");\n");
-            writer.fwrite("if (_vb != null) {\n");
+            writer.fwrite("if (_ve != null) {\n");
             writer.indent();
             if (primitive(type)) {
                 writer.fwrite(
-                    "Object _result = _vb.getValue(getFacesContext());\n");
+                    "Object _result = _ve.getValue(getFacesContext().getELContext());\n");
                 writer.fwrite("if (_result == null) {\n");
                 writer.indent();
                 writer.fwrite("return ");
@@ -350,7 +350,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             } else {
                 writer.fwrite("return (");
                 writer.write(type);
-                writer.write(") _vb.getValue(getFacesContext());\n");
+                writer.write(") _ve.getValue(getFacesContext().getELContext());\n");
             }
             writer.outdent();
             writer.fwrite("} else {\n");
@@ -406,7 +406,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
     private void suffix() throws Exception {
 
         int p = 0; // Number of primitive properties
-        for (int i = 0; i < properties.size(); i++) {
+        for (int i = 0, size = properties.size(); i < size; i++) {
             PropertyBean pb = (PropertyBean) properties.get(i);
             if (primitive(pb.getPropertyClass())) {
                 p++;
@@ -416,7 +416,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         // Generate the saveState() method
         writer.fwrite("public Object saveState(FacesContext _context) {\n");
         writer.indent();
-        writer.fwrite("Object _values[] = new Object[");
+        writer.fwrite("Object[] _values = new Object[");
         writer.write("" + (properties.size() + p + 1));
         writer.write("];\n");
         writer.fwrite("_values[0] = super.saveState(_context);\n");
@@ -459,10 +459,10 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.fwrite(
             "public void restoreState(FacesContext _context, Object _state) {\n");
         writer.indent();
-        writer.fwrite("Object _values[] = (Object[]) _state;\n");
+        writer.fwrite("Object[] _values = (Object[]) _state;\n");
         writer.fwrite("super.restoreState(_context, _values[0]);\n");
         n = 1;
-        for (int i = 0; i < properties.size(); i++) {
+        for (int i = 0, size = properties.size(); i < size; i++) {
             PropertyBean pb = (PropertyBean) properties.get(i);
             String name = mangle(pb.getPropertyName());
             String type = pb.getPropertyClass();
