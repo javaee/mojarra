@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.47 2005/12/05 16:43:02 edburns Exp $
+ * $Id: LengthValidator.java,v 1.48 2006/12/15 17:44:43 rlubke Exp $
  */
 
 /*
@@ -41,19 +41,19 @@ import javax.faces.convert.Converter;
  * associated component.  The following algorithm is implemented:</p>
  * <ul>
  * <li>Convert the passed value to a String, if necessary, by calling its
- *     <code>toString()</code> method.</li>
+ * <code>toString()</code> method.</li>
  * <li>If a <code>maximum</code> property has been configured on this
- *     {@link Validator}, check the length of the converted
- *     String against this limit.  If the String length is larger than the
- *     specified maximum, throw a {@link ValidatorException} containing a
- *     a MAXIMUM_MESSAGE_ID message.</li>
+ * {@link Validator}, check the length of the converted
+ * String against this limit.  If the String length is larger than the
+ * specified maximum, throw a {@link ValidatorException} containing a
+ * a MAXIMUM_MESSAGE_ID message.</li>
  * <li>If a <code>minimum</code> property has been configured on this
- *     {@link Validator}, check the length of the converted
- *     String against this limit.  If the String length is less than the
- *     specified minimum, throw a {@link ValidatorException} containing a
- *     a MINIMUM_MESSAGE_ID message.</li>
+ * {@link Validator}, check the length of the converted
+ * String against this limit.  If the String length is less than the
+ * specified minimum, throw a {@link ValidatorException} containing a
+ * a MINIMUM_MESSAGE_ID message.</li>
  * </ul>
- * 
+ * <p/>
  * <p>For all of the above cases that cause a {@link ValidatorException}
  * to be thrown, if there are parameters to the message that match up
  * with validator parameters, the values of these parameters must be
@@ -64,7 +64,6 @@ import javax.faces.convert.Converter;
  */
 
 public class LengthValidator implements Validator, StateHolder {
-
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -77,16 +76,16 @@ public class LengthValidator implements Validator, StateHolder {
 
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
-     * the maximum length check fails.   The message format string for 
+     * the maximum length check fails.   The message format string for
      * this message may optionally include the following placeholders:
      * <ul>
      * <li><code>{0}</code> replaced by the configured maximum length.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String MAXIMUM_MESSAGE_ID =
-        "javax.faces.validator.LengthValidator.MAXIMUM";
+         "javax.faces.validator.LengthValidator.MAXIMUM";
 
 
     /**
@@ -96,12 +95,11 @@ public class LengthValidator implements Validator, StateHolder {
      * <ul>
      * <li><code>{0}</code> replaced by the configured minimum length.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String MINIMUM_MESSAGE_ID =
-        "javax.faces.validator.LengthValidator.MINIMUM";
-
+         "javax.faces.validator.LengthValidator.MINIMUM";
 
     // ------------------------------------------------------------ Constructors
 
@@ -136,7 +134,6 @@ public class LengthValidator implements Validator, StateHolder {
      *
      * @param maximum Maximum value to allow
      * @param minimum Minimum value to allow
-     *
      */
     public LengthValidator(int maximum, int minimum) {
 
@@ -145,7 +142,6 @@ public class LengthValidator implements Validator, StateHolder {
         setMinimum(minimum);
 
     }
-
 
     // -------------------------------------------------------------- Properties
 
@@ -170,7 +166,6 @@ public class LengthValidator implements Validator, StateHolder {
      * <p>Set the maximum length to be enforced by this {@link Validator}.</p>
      *
      * @param maximum The new maximum value
-     *
      */
     public void setMaximum(int maximum) {
 
@@ -199,7 +194,6 @@ public class LengthValidator implements Validator, StateHolder {
      * <p>Set the minimum length to be enforced by this {@link Validator}.</p>
      *
      * @param minimum The new minimum value
-     *
      */
     public void setMinimum(int minimum) {
 
@@ -208,16 +202,15 @@ public class LengthValidator implements Validator, StateHolder {
 
     }
 
-
     // ------------------------------------------------------- Validator Methods
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
-     * @throws ValidatorException {@inheritDoc}     
-     */ 
+     * @throws NullPointerException {@inheritDoc}
+     * @throws ValidatorException   {@inheritDoc}
+     */
     public void validate(FacesContext context,
-                         UIComponent  component,
-                         Object       value) throws ValidatorException {
+                         UIComponent component,
+                         Object value) throws ValidatorException {
 
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
@@ -225,24 +218,24 @@ public class LengthValidator implements Validator, StateHolder {
         if (value != null) {
             String converted = stringValue(value);
             if (maximumSet &&
-                (converted.length() > maximum)) {
+                 (converted.length() > maximum)) {
                 throw new ValidatorException(MessageFactory.getMessage
-                                   (context,
-                                    MAXIMUM_MESSAGE_ID,
-                                    new Object[] {
-                                    integerToString(component, 
-						    new Integer(maximum)),
-                                     MessageFactory.getLabel(context, component)} ));
+                     (context,
+                          MAXIMUM_MESSAGE_ID,
+                          new Object[]{
+                               integerToString(component,
+                                    new Integer(maximum)),
+                               MessageFactory.getLabel(context, component)}));
             }
             if (minimumSet &&
-                (converted.length() < minimum)) {
+                 (converted.length() < minimum)) {
                 throw new ValidatorException(MessageFactory.getMessage
-                                   (context,
-                                    MINIMUM_MESSAGE_ID,
-                                    new Object[] {
-                                    integerToString(component,
-						    new Integer(minimum)),
-                                     MessageFactory.getLabel(context, component)}));
+                     (context,
+                          MINIMUM_MESSAGE_ID,
+                          new Object[]{
+                               integerToString(component,
+                                    new Integer(minimum)),
+                               MessageFactory.getLabel(context, component)}));
             }
         }
 
@@ -251,26 +244,25 @@ public class LengthValidator implements Validator, StateHolder {
 
     public boolean equals(Object otherObj) {
 
-	if (!(otherObj instanceof LengthValidator)) {
-	    return false;
-	}
-	LengthValidator other = (LengthValidator) otherObj;
-	return ((maximum == other.maximum) &&
-                (minimum == other.minimum) &&
-		(maximumSet == other.maximumSet) &&
-                (minimumSet == other.minimumSet));
+        if (!(otherObj instanceof LengthValidator)) {
+            return false;
+        }
+        LengthValidator other = (LengthValidator) otherObj;
+        return ((maximum == other.maximum) &&
+             (minimum == other.minimum) &&
+             (maximumSet == other.maximumSet) &&
+             (minimumSet == other.minimumSet));
 
     }
 
     public int hashCode() {
 
         int hashCode = minimum + maximum
-            + Boolean.valueOf(minimumSet).hashCode()
-            + Boolean.valueOf(maximumSet).hashCode();
+             + Boolean.valueOf(minimumSet).hashCode()
+             + Boolean.valueOf(maximumSet).hashCode();
         return (hashCode);
 
     }
-
 
     // -------------------------------------------------------- Private Methods
 
@@ -294,18 +286,18 @@ public class LengthValidator implements Validator, StateHolder {
     }
 
     private String integerToString(UIComponent component, Integer toConvert) {
-	String result = null;
-	Converter converter = null;
-	FacesContext context = FacesContext.getCurrentInstance();
+        String result = null;
+        Converter converter = null;
+        FacesContext context = FacesContext.getCurrentInstance();
 
-	converter = (Converter)
-	    context.getApplication().createConverter("javax.faces.Number");
-	result = converter.getAsString(context, component, toConvert);
-	return result;
+        converter = (Converter)
+             context.getApplication().createConverter("javax.faces.Number");
+        result = converter.getAsString(context, component, toConvert);
+        return result;
     }
 
     // ----------------------------------------------------- StateHolder Methods
-    
+
 
     public Object saveState(FacesContext context) {
 

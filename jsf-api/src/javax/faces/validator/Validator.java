@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.28 2005/12/05 16:43:03 edburns Exp $
+ * $Id: Validator.java,v 1.29 2006/12/15 17:44:44 rlubke Exp $
  */
 
 /*
@@ -30,11 +30,10 @@
 package javax.faces.validator;
 
 
-import java.util.EventListener;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.application.FacesMessage;
+import java.util.EventListener;
 
 
 /**
@@ -45,17 +44,17 @@ import javax.faces.application.FacesMessage;
  * {@link javax.faces.component.EditableValueHolder} in
  * the view, and are called during the <em>Process Validations</em>
  * phase of the request processing lifecycle.</p>
- *
+ * <p/>
  * <p>Individual {@link Validator}s should examine the value and
  * component that they are passed, and throw a {@link ValidatorException}
  * containing a {@link javax.faces.application.FacesMessage}, documenting
  * any failures to conform to the required rules.
- *
+ * <p/>
  * <p>For maximum generality, {@link Validator} instances may be
  * configurable based on properties of the {@link Validator} implementation
  * class.  For example, a range check {@link Validator} might support
  * configuration of the minimum and maximum values to be used.</p>
- *
+ * <p/>
  * <p>{@link Validator} implementations must have a zero-arguments
  * public constructor.  In addition, if the {@link Validator} class
  * wishes to have configuration property values saved and restored with
@@ -73,11 +72,12 @@ public interface Validator extends EventListener {
      * <code>{0}</code> placeholder, which will be replaced by the
      * configured minimum value, and a <code>{1}</code> placeholder,
      * which will be replaced by the configured maximum value.</p>
-     * @deprecated Use {@link DoubleRangeValidator#NOT_IN_RANGE_MESSAGE_ID} or 
-     *   {@link LongRangeValidator#NOT_IN_RANGE_MESSAGE_ID} instead.
+     *
+     * @deprecated Use {@link DoubleRangeValidator#NOT_IN_RANGE_MESSAGE_ID} or
+     *             {@link LongRangeValidator#NOT_IN_RANGE_MESSAGE_ID} instead.
      */
     public static final String NOT_IN_RANGE_MESSAGE_ID =
-        "javax.faces.validator.NOT_IN_RANGE";
+         "javax.faces.validator.NOT_IN_RANGE";
 
     /**
      * <p>Perform the correctness checks implemented by this
@@ -86,17 +86,16 @@ public interface Validator extends EventListener {
      * will be thrown containing the {@link javax.faces.application.FacesMessage} describing
      * the failure.
      *
-     * @param context FacesContext for the request we are processing
+     * @param context   FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
      * @param value     the value to validate
-     *
-     * @throws ValidatorException if validation fails
+     * @throws ValidatorException   if validation fails
      * @throws NullPointerException if <code>context</code>
-     *  or <code>component</code> is <code>null</code>
+     *                              or <code>component</code> is <code>null</code>
      */
     public void validate(FacesContext context,
-                         UIComponent  component,
-                         Object       value) throws ValidatorException;
+                         UIComponent component,
+                         Object value) throws ValidatorException;
 
 
 }

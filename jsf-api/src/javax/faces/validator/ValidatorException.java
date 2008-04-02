@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorException.java,v 1.4 2005/08/22 22:08:10 ofung Exp $
+ * $Id: ValidatorException.java,v 1.5 2006/12/15 17:44:44 rlubke Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.faces.application.FacesMessage;
 
 /**
  * <p>A <strong>ValidatorException</strong> is an exception
- * thrown by the <code>validate()</code> method of a 
+ * thrown by the <code>validate()</code> method of a
  * {@link Validator} to indicate that validation failed.
  */
 public class ValidatorException extends FacesException {
@@ -60,7 +60,7 @@ public class ValidatorException extends FacesException {
      * root cause.</p>
      *
      * @param message The detail message for this exception
-     * @param cause The root cause for this exception
+     * @param cause   The root cause for this exception
      */
     public ValidatorException(FacesMessage message, Throwable cause) {
 

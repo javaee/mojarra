@@ -1,5 +1,5 @@
 /*
- * $Id: MethodExpressionValidator.java,v 1.4 2005/12/05 16:43:03 edburns Exp $
+ * $Id: MethodExpressionValidator.java,v 1.5 2006/12/15 17:44:44 rlubke Exp $
  */
 
 /*
@@ -38,22 +38,21 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * <p><strong>MethodExpressionValidator</strong> is a {@link Validator} that 
+ * <p><strong>MethodExpressionValidator</strong> is a {@link Validator} that
  * wraps a {@link MethodExpression}, and it performs validation by executing
  * a method on an object identified by the {@link MethodExpression}.</p>
  */
 
 public class MethodExpressionValidator implements Validator, StateHolder {
 
-
     // ------------------------------------------------------ Instance Variables
-    
+
     private MethodExpression methodExpression = null;
 
     public MethodExpressionValidator() {
 
         super();
-        
+
     }
 
     /**
@@ -66,16 +65,15 @@ public class MethodExpressionValidator implements Validator, StateHolder {
 
     }
 
-
     // ------------------------------------------------------- Validator Methods
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
-     * @throws ValidatorException {@inheritDoc}     
-     */ 
+     * @throws NullPointerException {@inheritDoc}
+     * @throws ValidatorException   {@inheritDoc}
+     */
     public void validate(FacesContext context,
-                         UIComponent  component,
-                         Object       value) throws ValidatorException {
+                         UIComponent component,
+                         Object value) throws ValidatorException {
 
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
@@ -83,7 +81,7 @@ public class MethodExpressionValidator implements Validator, StateHolder {
         if (value != null) {
             try {
                 ELContext elContext = context.getELContext();
-                methodExpression.invoke(elContext, new Object[] {context, component, value});
+                methodExpression.invoke(elContext, new Object[]{context, component, value});
             } catch (ELException ee) {
                 Throwable e = ee.getCause();
                 if (e instanceof ValidatorException) {
@@ -97,7 +95,7 @@ public class MethodExpressionValidator implements Validator, StateHolder {
     }
 
     // ----------------------------------------------------- StateHolder Methods
-    
+
 
     public Object saveState(FacesContext context) {
 
@@ -111,7 +109,7 @@ public class MethodExpressionValidator implements Validator, StateHolder {
     public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
-        methodExpression = (MethodExpression)values[0];
+        methodExpression = (MethodExpression) values[0];
     }
 
 
