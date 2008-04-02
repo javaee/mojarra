@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.35 2003/09/26 14:26:52 rkitain Exp $
+ * $Id: ConfigFileTestCase.java,v 1.36 2003/09/29 20:57:04 jvisvanathan Exp $
  */
 
 /*
@@ -296,9 +296,9 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    "Listbox",
 	    "Menu",
 	    "Message",
-	    "Radio",
+	    "RadioButtonList",
 	    "Secret",
-	    "SelectManyCheckbox",
+	    "CheckboxList",
 	    "Textarea",
 	    "Text"
 	};

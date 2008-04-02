@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.15 2003/09/23 17:23:12 eburns Exp $
+ * $Id: TestConverters.java,v 1.16 2003/09/29 20:57:04 jvisvanathan Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.15 2003/09/23 17:23:12 eburns Exp $
+ * @version $Id: TestConverters.java,v 1.16 2003/09/29 20:57:04 jvisvanathan Exp $
  * 
  *
  */
@@ -290,7 +290,7 @@ public class TestConverters extends JspFacesTestCase
 	// test model type of boolean []
 	UISelectManyBase booleanv = new UISelectManyBase();
 	booleanv.setId("bool");
-	booleanv.setRendererType("SelectManyCheckbox");
+	booleanv.setRendererType("CheckboxList");
 	booleanv.setValueRef("bean.booleans");
 	root.getChildren().add(booleanv);
 	booleanv.decode(getFacesContext());
@@ -303,7 +303,7 @@ public class TestConverters extends JspFacesTestCase
 	// test model type of boolean []
 	booleanv = new UISelectManyBase();
 	booleanv.setId("bool2");
-	booleanv.setRendererType("SelectManyCheckbox");
+	booleanv.setRendererType("CheckboxList");
 	booleanv.setValueRef("bean.booleans");
 	root.getChildren().add(booleanv);
 	booleanv.decode(getFacesContext());
@@ -315,7 +315,7 @@ public class TestConverters extends JspFacesTestCase
 	// test model type of byte []
 	UISelectManyBase bytev = new UISelectManyBase();
 	bytev.setId("byte");
-	bytev.setRendererType("SelectManyCheckbox");
+	bytev.setRendererType("CheckboxList");
 	bytev.setValueRef("bean.bytes");
 	root.getChildren().add(bytev);
 	bytev.decode(getFacesContext());
@@ -328,7 +328,7 @@ public class TestConverters extends JspFacesTestCase
 	// test model type of char []
 	UISelectManyBase charv = new UISelectManyBase();
 	charv.setId("char");
-	charv.setRendererType("SelectManyCheckbox");
+	charv.setRendererType("CheckboxList");
 	charv.setValueRef("bean.chars");
 	root.getChildren().add(charv);
 	charv.decode(getFacesContext());
@@ -341,7 +341,7 @@ public class TestConverters extends JspFacesTestCase
 	// test model type of short []
 	UISelectManyBase shortv = new UISelectManyBase();
 	shortv.setId("short");
-	shortv.setRendererType("SelectManyCheckbox");
+	shortv.setRendererType("CheckboxList");
 	shortv.setValueRef("bean.shorts");
 	root.getChildren().add(shortv);
 	shortv.decode(getFacesContext());
@@ -354,7 +354,7 @@ public class TestConverters extends JspFacesTestCase
 	// test model type of int []
 	UISelectManyBase intv = new UISelectManyBase();
 	intv.setId("int");
-	intv.setRendererType("SelectManyCheckbox");
+	intv.setRendererType("CheckboxList");
 	intv.setValueRef("bean.ints");
 	root.getChildren().add(intv);
 	intv.decode(getFacesContext());
@@ -367,7 +367,7 @@ public class TestConverters extends JspFacesTestCase
 	// test model type of float []
 	UISelectManyBase floatv = new UISelectManyBase();
 	floatv.setId("float");
-	floatv.setRendererType("SelectManyCheckbox");
+	floatv.setRendererType("CheckboxList");
 	floatv.setValueRef("bean.floats");
 	root.getChildren().add(floatv);
 	floatv.decode(getFacesContext());
@@ -380,7 +380,7 @@ public class TestConverters extends JspFacesTestCase
 	// test model type of long []
 	UISelectManyBase longv = new UISelectManyBase();
 	longv.setId("long");
-	longv.setRendererType("SelectManyCheckbox");
+	longv.setRendererType("CheckboxList");
 	longv.setValueRef("bean.longs");
 	root.getChildren().add(longv);
 	longv.decode(getFacesContext());
@@ -393,7 +393,7 @@ public class TestConverters extends JspFacesTestCase
 	// test model type of double []
 	UISelectManyBase doublev = new UISelectManyBase();
 	doublev.setId("double");
-	doublev.setRendererType("SelectManyCheckbox");
+	doublev.setRendererType("CheckboxList");
 	doublev.setValueRef("bean.doubles");
 	root.getChildren().add(doublev);
 	doublev.decode(getFacesContext());
@@ -406,7 +406,7 @@ public class TestConverters extends JspFacesTestCase
 	// test model type of String []
 	UISelectManyBase str = new UISelectManyBase();
 	str.setId("str");
-	str.setRendererType("SelectManyCheckbox");
+	str.setRendererType("CheckboxList");
 	str.setValueRef("bean.strings");
 	root.getChildren().add(str);
 	str.decode(getFacesContext());
@@ -420,7 +420,7 @@ public class TestConverters extends JspFacesTestCase
 	assertNotNull(dateConv);
 	date.setConverter(dateConv);
 	date.setId("date");
-	date.setRendererType("SelectManyCheckbox");
+	date.setRendererType("CheckboxList");
 	date.setValueRef("bean.dates");
 	root.getChildren().add(date);
 	date.decode(getFacesContext());
@@ -442,7 +442,7 @@ public class TestConverters extends JspFacesTestCase
 	assertNotNull(numberConv);
 	number.setConverter(numberConv);
 	number.setId("num");
-	number.setRendererType("SelectManyCheckbox");
+	number.setRendererType("CheckboxList");
 	number.setValueRef("bean.numbers");
 	root.getChildren().add(number);
 	number.decode(getFacesContext());
@@ -460,7 +460,7 @@ public class TestConverters extends JspFacesTestCase
 	// test model type of List of Strings
 	UISelectManyBase stringList = new UISelectManyBase();
 	stringList.setId("stringList");
-	stringList.setRendererType("SelectManyCheckbox");
+	stringList.setRendererType("CheckboxList");
 	stringList.setValueRef("bean.stringList");
 	root.getChildren().add(stringList);
 	stringList.decode(getFacesContext());
