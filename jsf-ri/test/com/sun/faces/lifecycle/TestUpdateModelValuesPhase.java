@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.27 2003/09/24 19:50:26 rkitain Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.28 2003/09/25 21:03:00 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.27 2003/09/24 19:50:26 rkitain Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.28 2003/09/25 21:03:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,7 +129,12 @@ public void testUpdateNormal()
     viewRoot.setViewId("updateModel.xul");
     getFacesContext().setViewRoot(viewRoot);
     
-    updateModelValues.execute(getFacesContext());
+    try {
+        updateModelValues.execute(getFacesContext());
+    } catch (Throwable e) {
+        e.printStackTrace();
+        assertTrue(false);
+    }
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
     assertTrue(null == userName.getValue());
@@ -176,7 +181,13 @@ public void testUpdateFailed()
 
     // This stage will go to render, since there was at least one error
     // during component updates... 
-    updateModelValues.execute(getFacesContext());
+    try {
+         updateModelValues.execute(getFacesContext());
+    } catch (Throwable e) {
+        e.printStackTrace();
+        assertTrue(false);
+    }
+    
     assertTrue(getFacesContext().getRenderResponse());
 
     assertTrue(true == (getFacesContext().getMessages().hasNext()));

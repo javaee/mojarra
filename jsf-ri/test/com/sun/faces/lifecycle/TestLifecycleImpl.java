@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.18 2003/08/28 21:39:22 eburns Exp $
+ * $Id: TestLifecycleImpl.java,v 1.19 2003/09/25 21:03:00 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.18 2003/08/28 21:39:22 eburns Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.19 2003/09/25 21:03:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -156,7 +156,9 @@ public void testAnyPhaseWithListenerAndValidationFailure() {
 		       phaseCalled[i] == 2);
 	}
 	else {
-	    assertTrue(phaseCalled[i] == 0);
+	    assertTrue("For phase: " + PhaseId.VALUES.get(i) + 
+		       " expected no calls, got " + phaseCalled[i] + ".", 
+		       phaseCalled[i] == 0);
 	}
     }
 }
@@ -291,16 +293,17 @@ public void testValidateWithoutListener() {
 class PhaseListenerImpl implements PhaseListener {
     int [] phaseCalled = null;
     PhaseId phaseId = null;
-    PhaseId messageBeforeThisPhase = null;
+    PhaseId callRenderResponseBeforeThisPhase = null;
 
     public int [] getPhaseCalled() {
 	return phaseCalled;
     }
 
-    public PhaseListenerImpl(int [] newPhaseCalled, PhaseId newPhaseId, PhaseId addErrorMessageBeforeThisPhase) {
+    public PhaseListenerImpl(int [] newPhaseCalled, PhaseId newPhaseId, PhaseId yourCallRenderResponseBeforeThisPhase) {
 	phaseCalled = newPhaseCalled;
 	phaseId = newPhaseId;
-	messageBeforeThisPhase = addErrorMessageBeforeThisPhase;
+	callRenderResponseBeforeThisPhase = 
+	    yourCallRenderResponseBeforeThisPhase;
     }
 
     public void afterPhase(PhaseEvent event) {
@@ -311,9 +314,8 @@ class PhaseListenerImpl implements PhaseListener {
     public void beforePhase(PhaseEvent event) {
 	phaseCalled[event.getPhaseId().getOrdinal()] = 
 	    phaseCalled[event.getPhaseId().getOrdinal()] + 1;
-	if (messageBeforeThisPhase == event.getPhaseId()) {
-	    FacesContext.getCurrentInstance().addMessage(null,
-							 Util.getMessageResources().getMessage(FacesContext.getCurrentInstance(), Util.VALIDATOR_NOT_FOUND_ERROR_MESSAGE_ID));
+	if (callRenderResponseBeforeThisPhase == event.getPhaseId()) {
+	    FacesContext.getCurrentInstance().renderResponse();
 	}
     }
     

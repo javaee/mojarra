@@ -1,13 +1,11 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.15 2003/08/22 16:49:28 eburns Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.16 2003/09/25 21:02:58 jvisvanathan Exp $
  */
 
 /*
  * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-
-// ProcessValidationsPhase.java
 
 package com.sun.faces.lifecycle;
 
@@ -18,22 +16,21 @@ import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 
-import java.util.Iterator;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
-
- * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
- * DefaultLifecycleImpl.
- *
- * @version $Id: ProcessValidationsPhase.java,v 1.15 2003/08/22 16:49:28 eburns Exp $
- * 
+ * ProcessValidationsPhase executes <code>processValidators</code> on each 
+ * component in the tree.
  */
-
 public class ProcessValidationsPhase extends Phase {
+    
 //
 // Protected Constants
 //
+    
+// Log instance for this class
+protected static Log log = LogFactory.getLog(ProcessValidationsPhase.class);
 
 //
 // Class Variables
@@ -72,19 +69,19 @@ public PhaseId getId() {
 
 public void execute(FacesContext facesContext) throws FacesException
 {
-    Iterator messageIter = null;
-
     UIComponent component = facesContext.getViewRoot();
     Assert.assert_it(null != component);
-
-    component.processValidators(facesContext);
-
-    messageIter = facesContext.getMessages();
-    Assert.assert_it(null != messageIter);
-
-    if (messageIter.hasNext()) {
-	// Proceed based on the number of errors present
-        facesContext.renderResponse();
+    
+    try {
+	component.processValidators(facesContext);
+    } catch (RuntimeException re) {
+	String exceptionMessage = re.getMessage();
+        if (null != exceptionMessage) {
+            if (log.isErrorEnabled()) {
+                log.error(exceptionMessage, re);
+            }
+            throw new FacesException(exceptionMessage, re);
+        }
     }
 }
 

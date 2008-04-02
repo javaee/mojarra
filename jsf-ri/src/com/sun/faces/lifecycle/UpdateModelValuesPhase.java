@@ -1,13 +1,11 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.25 2003/09/08 20:10:08 jvisvanathan Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.26 2003/09/25 21:02:58 jvisvanathan Exp $
  */
 
 /*
  * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-
-// UpdateModelValuesPhase.java
 
 package com.sun.faces.lifecycle;
 
@@ -25,18 +23,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 
-import java.util.Iterator;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
-
- * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
- * DefaultLifecycleImpl.
- *
- * @version $Id: UpdateModelValuesPhase.java,v 1.25 2003/09/08 20:10:08 jvisvanathan Exp $
- * 
+ * UpdateModelValuesPhase executes <code>processUpdates</code> on each 
+ * component in the tree so that it may have a chance to update its model value.
  */
-
 public class UpdateModelValuesPhase extends Phase {
 //
 // Protected Constants
@@ -49,6 +43,8 @@ public class UpdateModelValuesPhase extends Phase {
 //
 // Instance Variables
 //
+// Log instance for this class
+protected static Log log = LogFactory.getLog(UpdateModelValuesPhase.class);
 
 // Attribute Instance Variables
 
@@ -78,16 +74,23 @@ public PhaseId getId() {
     return PhaseId.UPDATE_MODEL_VALUES;
 }
 
-public void execute(FacesContext facesContext) throws FacesException
+public void execute(FacesContext facesContext) 
 {
-    Iterator messageIter = null;
-
     UIComponent component = facesContext.getViewRoot();
     Assert.assert_it(null != component);
+    String exceptionMessage = null;
     
     try {
         component.processUpdates(facesContext);
-    } catch (Throwable e) {
+    } 
+    catch (IllegalStateException e) {
+	exceptionMessage = e.getMessage();
+    }
+    catch (FacesException fe) {
+	exceptionMessage = fe.getMessage();
+    }
+
+    if (null != exceptionMessage) {
         Object[] params = new Object[3];
         ValueHolder valueHolder = null;
         if ( component instanceof ValueHolder) {
@@ -95,22 +98,16 @@ public void execute(FacesContext facesContext) throws FacesException
             params[0] = valueHolder.getValue();
             params[1] = valueHolder.getValueRef();
         }  
-        params[2] = e.getMessage();
+        params[2] = exceptionMessage;
         MessageResources resources = Util.getMessageResources();
         Assert.assert_it( resources != null );
         Message msg = resources.getMessage(facesContext,
             Util.MODEL_UPDATE_ERROR_MESSAGE_ID,params);
         facesContext.addMessage(component, msg);
+        if (log.isErrorEnabled()) {
+	    log.error(exceptionMessage);
+	}
     }
-
-    messageIter = facesContext.getMessages();
-    Assert.assert_it(null != messageIter);
-
-    if (messageIter.hasNext()) {
-        // Proceed based on the number of errors present
-        facesContext.renderResponse();
-    }
-
 }
 
 
