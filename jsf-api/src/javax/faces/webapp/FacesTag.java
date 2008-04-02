@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.23 2002/12/03 23:23:41 jvisvanathan Exp $
+ * $Id: FacesTag.java,v 1.24 2002/12/05 18:05:05 rkitain Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * expression that is resolved from the closest surrounding
  * <code>FacesTag</code> instance as if by a call to the
  * <code>findComponent()</code> method, passing
- * the specified <code>id</code> value as a paramter.</p>
+ * the specified <code>id</code> value as a parameter.</p>
  */
 
 public abstract class FacesTag extends TagSupport {
