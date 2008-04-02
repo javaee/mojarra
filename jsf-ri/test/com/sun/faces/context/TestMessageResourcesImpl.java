@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageResourcesImpl.java,v 1.2 2002/07/24 19:15:34 jvisvanathan Exp $
+ * $Id: TestMessageResourcesImpl.java,v 1.3 2002/10/10 02:02:21 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageResourcesImpl.java,v 1.2 2002/07/24 19:15:34 jvisvanathan Exp $
+ * @version $Id: TestMessageResourcesImpl.java,v 1.3 2002/10/10 02:02:21 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,14 +94,14 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
         gotException = false;
         msg = null;
         
-        // if msgId doesn't exist in the resource, faces exception must be
-        // thrown.
+        // if msgId doesn't exist in the resource, null must be returned
         try {
             msg = resources.getMessage(facesContext,"MSG01", "param1");
+	    assertTrue(null == msg);
         } catch ( FacesException fe ) {
-            gotException = true;
+	    assertTrue(false);
         }    
-        assertTrue (gotException);
+
         
         Object[] params1 = {"JavaServerFaces"};
         msg = resources.getMessage(facesContext, "MSG0001", params1);

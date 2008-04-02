@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.5 2002/09/18 23:53:19 rkitain Exp $
+ * $Id: MessageResourcesImpl.java,v 1.6 2002/10/10 02:02:20 eburns Exp $
  */
 
 /*
@@ -229,8 +229,7 @@ public class MessageResourcesImpl extends MessageResources
         }
         MessageTemplate template = (MessageTemplate) catalog.get(messageId);
         if (template == null) {
-            throw new FacesException("The message id '" +
-				     messageId + "' was not found in the message catalog");
+	    return null;
         }
         
         // substitute parameters
