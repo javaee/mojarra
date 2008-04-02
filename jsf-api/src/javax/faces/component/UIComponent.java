@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.70 2003/01/22 23:36:42 eburns Exp $
+ * $Id: UIComponent.java,v 1.71 2003/01/24 00:28:09 craigmcc Exp $
  */
 
 /*
@@ -540,7 +540,9 @@ public interface UIComponent extends Serializable {
     /**
      * <p>Broadcast the specified {@link FacesEvent} to all registered
      * event listeners who have expressed an interest in events of this
-     * type, for the specified {@link PhaseId}.  The order in which
+     * type, for the specified {@link PhaseId} (or for any phase, if the
+     * listener returns <code>PhaseId.ANY_PHASE</code> from its
+     * <code>getPhaseId()</code> method.  The order in which
      * registered listeners are notified is implementation dependent.</p>
      *
      * <p>After all interested listeners have been notified, return
