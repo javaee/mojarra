@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.17 2005/12/05 16:43:04 edburns Exp $
+ * $Id: AttributeTag.java,v 1.18 2007/01/29 07:29:01 rlubke Exp $
  */
 
 /*
@@ -113,7 +113,7 @@ public class AttributeTag extends TagSupport {
 
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
-            UIComponentTag.getParentUIComponentClassicTagBase(pageContext);
+             UIComponentClassicTagBase.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) { // PENDING - i18n
             throw new JspException("Not nested in a UIComponentTag");
         }

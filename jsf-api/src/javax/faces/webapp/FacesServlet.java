@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.31 2006/01/26 16:31:35 edburns Exp $
+ * $Id: FacesServlet.java,v 1.32 2007/01/29 07:29:01 rlubke Exp $
  */
 
 /*
@@ -155,7 +155,7 @@ public final class FacesServlet implements Servlet {
         try {
             LifecycleFactory lifecycleFactory = (LifecycleFactory)
                 FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-            String lifecycleId = null;
+            String lifecycleId ;
 
             // First look in the servlet init-param set
             if (null == (lifecycleId = servletConfig.getInitParameter(LIFECYCLE_ID_ATTR))) {

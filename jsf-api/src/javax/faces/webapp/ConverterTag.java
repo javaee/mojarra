@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.23 2006/11/07 23:09:34 rlubke Exp $
+ * $Id: ConverterTag.java,v 1.24 2007/01/29 07:29:01 rlubke Exp $
  */
 
 /*
@@ -144,8 +144,6 @@ public class ConverterTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
 
-        Converter converter = null;
-        
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
             UIComponentClassicTagBase.getParentUIComponentClassicTagBase(pageContext);
@@ -170,9 +168,10 @@ public class ConverterTag extends TagSupport {
                     this.getClass().getName());
         }
         
-        converter = createConverter();
+        Converter converter = createConverter();
         
         if (converter == null) {
+            //noinspection NonConstantStringShouldBeStringBuffer
             String converterError = null;
             if (binding != null) {
                 converterError = binding;

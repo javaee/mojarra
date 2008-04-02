@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentELTag.java,v 1.6 2006/09/01 01:22:26 tony_robertson Exp $
+ * $Id: UIComponentELTag.java,v 1.7 2007/01/29 07:29:00 rlubke Exp $
  */
 
 /*
@@ -205,7 +205,7 @@ public abstract class UIComponentELTag extends UIComponentClassicTagBase impleme
      * @param newId id of the component
      */
     protected UIComponent createComponent(FacesContext context, String newId) throws JspException {
-        UIComponent component = null;
+        UIComponent component;
         Application application = context.getApplication();
         if (binding != null) {
             component = application.createComponent(binding, context,

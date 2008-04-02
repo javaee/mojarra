@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorELTag.java,v 1.3 2005/12/05 16:43:05 edburns Exp $
+ * $Id: ValidatorELTag.java,v 1.4 2007/01/29 07:29:01 rlubke Exp $
  */
 
 /*
@@ -80,12 +80,9 @@ public abstract class ValidatorELTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
         
-        Validator validator = null;
-        
-        
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
-            UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
+             UIComponentClassicTagBase.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) { 
        	    //PENDING i18n
             throw new JspException("Not nested in a UIComponentTag Error for tag with handler class:"+
@@ -108,7 +105,7 @@ public abstract class ValidatorELTag extends TagSupport {
                     this.getClass().getName());
         }
 
-        validator = createValidator();
+        Validator validator = createValidator();
         
         if (validator == null) {
             // PENDING i18n

@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTag.java,v 1.16 2005/08/22 22:08:11 ofung Exp $
+ * $Id: FacetTag.java,v 1.17 2007/01/29 07:29:00 rlubke Exp $
  */
 
 /*
@@ -30,8 +30,6 @@
 package javax.faces.webapp;
 
 
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 

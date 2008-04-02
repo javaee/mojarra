@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.58 2006/09/01 01:22:27 tony_robertson Exp $
+ * $Id: UIComponentTag.java,v 1.59 2007/01/29 07:29:01 rlubke Exp $
  */
 
 /*
@@ -194,7 +194,7 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
      * @param newId {@inheritDoc}
      */
     protected UIComponent createComponent(FacesContext context, String newId) {
-        UIComponent component = null;
+        UIComponent component;
         Application application = context.getApplication();
         if (binding != null) {
             ValueBinding vb = application.createValueBinding(binding);

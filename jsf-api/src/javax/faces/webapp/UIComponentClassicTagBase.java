@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.29 2007/01/26 17:15:37 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.30 2007/01/29 07:29:00 rlubke Exp $
  */
 
 /*
@@ -195,7 +195,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * uniqueness conflicts with the transient verbatim components.
      */
     protected static final String UNIQUE_ID_PREFIX = 
-	UIViewRoot.UNIQUE_ID_PREFIX + "_";
+	UIViewRoot.UNIQUE_ID_PREFIX + '_';
 
     /**
      * Used to store the previousJspId Map in requestScope
@@ -501,7 +501,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * @param component {@link UIComponent} to be searched
      * @param componentId Component id to search for
      */
-    private UIComponent getChild(UIComponent component, String componentId) {
+    private static UIComponent getChild(UIComponent component, String componentId) {
 
         Iterator<UIComponent> kids = component.getChildren().iterator();
         while (kids.hasNext()) {
@@ -573,7 +573,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         // Step 2 -- Identify the component that is, or will be, our parent
         UIComponentClassicTagBase parentTag = 
 	    getParentUIComponentClassicTagBase(pageContext);
-        UIComponent parentComponent = null;
+        UIComponent parentComponent;
         if (parentTag != null) {
             parentComponent = parentTag.getComponentInstance();
         } else {
@@ -636,8 +636,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         // Step 4 -- Create or return a facet with the specified name (if any)
         String facetName = getFacetName();
         if (facetName != null) {
-            component = (UIComponent)
-                parentComponent.getFacets().get(facetName);
+            component = parentComponent.getFacets().get(facetName);
             if (component == null) {
                 component = createFacet(context, parentComponent, facetName,
                         newId);
@@ -704,6 +703,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     protected void addFacet(String name) {
 
         if (createdFacets == null) {
+            //noinspection CollectionWithoutInitialCapacity
             createdFacets = new ArrayList<String>();
         }
         createdFacets.add(name);
@@ -739,6 +739,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         List<UIComponentClassicTagBase> list = TypedCollections.dynamicallyCastList((List) 
               requestMap.get(COMPONENT_TAG_STACK_ATTR), UIComponentClassicTagBase.class);
         if (list == null) {
+            //noinspection CollectionWithoutInitialCapacity
             list = new ArrayList<UIComponentClassicTagBase>();
             requestMap.put(COMPONENT_TAG_STACK_ATTR, list);
         }
@@ -761,7 +762,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         // Remove old children that are no longer present
         List<String> oldList = TypedCollections.dynamicallyCastList(
             (List) component.getAttributes().get(JSP_CREATED_COMPONENT_IDS), String.class);
-        if (oldList != null && oldList.size() > 0) {
+        if (oldList != null && !oldList.isEmpty()) {
 
             if (createdComponents != null) {
 
@@ -875,8 +876,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
     protected UIComponent createVerbatimComponentFromBodyContent() {
         UIOutput verbatim = null;
-        String bodyContentString = null;
-        String trimString = null;
+        String bodyContentString;
+        String trimString;
         if (null != bodyContent &&
              null != (bodyContentString = bodyContent.getString()) &&
              0 < (trimString = bodyContent.getString().trim()).length()) {
@@ -886,7 +887,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                 verbatim.setValue(bodyContentString);
                 bodyContent.clearBody();
             } else {
-                StringBuilder content = new StringBuilder();
+                StringBuilder content = new StringBuilder(trimString.length());
                 int sIdx = trimString.indexOf("<!--");
                 int eIdx = trimString.indexOf("-->", sIdx);
                 while (sIdx >= 0 && eIdx >= 0) {
@@ -929,7 +930,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
     protected UIOutput createVerbatimComponent() {
 	assert(null != getFacesContext());
-	UIOutput verbatim = null;
+	UIOutput verbatim;
 	Application application = getFacesContext().getApplication();
 	verbatim = (UIOutput)
 	    application.createComponent("javax.faces.HtmlOutputText");
@@ -994,7 +995,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     protected void addVerbatimAfterComponent(UIComponentClassicTagBase parentTag,
 					   UIComponent verbatim,
 					   UIComponent component) {
-	int indexOfComponentInParent = 0;
+	int indexOfComponentInParent;
 	UIComponent parent = component.getParent();
 	
 	// invert the order of this if and the assignment below.  Since this line is
@@ -1063,9 +1064,10 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
         parentTag = getParentUIComponentClassicTagBase(pageContext);
         Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-        Map<String,UIComponentTagBase> componentIds = null;
+        Map<String,UIComponentTagBase> componentIds;
         if (parentTag == null) {
             // create the map if we're the top level UIComponentTag
+            //noinspection CollectionWithoutInitialCapacity
             componentIds = new HashMap<String,UIComponentTagBase>();
             requestMap.put(GLOBAL_ID_VIEW, componentIds); 
         } else {
@@ -1120,6 +1122,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             // verify the JSP IDs are different.  If they are, then continue,
             // if they aren't, then we're dealing with EVAL_BODY_AGAIN (see
             // below)
+            //noinspection ObjectEquality
             if (temp == this
                  && !this.getFacesJspId().equals(temp.getFacesJspId())) {
                 tagInstance = this;
@@ -1226,7 +1229,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         // Render the children (if needed) and  end of the component
         // associated with this tag
         try {
-	    UIComponent verbatim = null;
+	    UIComponent verbatim;
 	    UIComponentClassicTagBase parentTag = 
 		getParentUIComponentClassicTagBase(pageContext);
 
@@ -1346,13 +1349,14 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
     public int doAfterBody() throws JspException {
 	
-	UIComponent verbatim = null;
+	UIComponent verbatim;
 	UIComponentClassicTagBase parentTag = 
 	    getParentUIComponentClassicTagBase(pageContext);
 	
 	// if we are the root tag, or if we are inside of a
 	// rendersChildren==true component
-	if (this == parentTag || 
+        //noinspection ObjectEquality
+        if (this == parentTag ||
 	    (null != parentTag && 
 	     parentTag.getComponentInstance().getRendersChildren())) {
 	    // stuff the template text or custom tag output into a
@@ -1470,7 +1474,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             if (parentTag.isNestedInIterator) {
                 return true;
             } 
-             List childComponents = parentTag.getCreatedComponents();
+             List childComponents = parentTag.createdComponents;
             // PENDING: Need to analyze the impact of this look up on pages
             // with several levels of nesting.            
             if (childComponents != null) {
@@ -1637,14 +1641,15 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
     
     private void updatePreviousJspIdAndIteratorStatus(String id) {
-        Set<String> previousJspIdSet = null;
+        Set<String> previousJspIdSet;
        
         if (null == (previousJspIdSet = TypedCollections.dynamicallyCastSet((Set)
             pageContext.getRequest().getAttribute(PREVIOUS_JSP_ID_SET), String.class))) {
-            pageContext.getRequest().setAttribute(PREVIOUS_JSP_ID_SET, 
+            //noinspection CollectionWithoutInitialCapacity
+            pageContext.getRequest().setAttribute(PREVIOUS_JSP_ID_SET,
                     previousJspIdSet = new HashSet<String>());
         }
-        assert(null != previousJspIdSet);
+
         // detect the iterator case
         if (previousJspIdSet.contains(id)) {
             if (log.isLoggable(Level.FINEST)) {
@@ -1820,7 +1825,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         } else {
             indentPrintln(out, "+id: " + root.getId(), curDepth);
         }
-        indentPrintln(out, " type: " + root.toString(), curDepth);           
+        //noinspection ObjectToString
+        indentPrintln(out, " type: " + root.toString(), curDepth);
 
         curDepth++;       
         // print all the facets of this component
@@ -1841,7 +1847,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             for (int i = 0; i < curDepth; i++) {
                 out.write("  ");
             }
-            out.write(str + "\n");
+            out.write(str + '\n');
         } catch (IOException ex) {
             // ignore
         }
@@ -1855,7 +1861,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * 
      * @return the parent <code>NamingContainer</code>
      */
-    private UIComponent getNamingContainer(UIComponent component) {        
+    private static UIComponent getNamingContainer(UIComponent component) {
         UIComponent namingContainer = component;
         while (namingContainer != null) {
             if (namingContainer instanceof NamingContainer) {
@@ -1893,6 +1899,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         @Override public int indexOf(Object elem) {
             int idx = 0;
             for (Object o : this) {
+                //noinspection ObjectEquality
                 if (o == elem) {
                     return idx;
                 }
