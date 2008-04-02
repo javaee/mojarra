@@ -1,6 +1,26 @@
 REM
-REM Copyright 2004 Sun Microsystems, Inc. All rights reserved.
-REM SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+REM The contents of this file are subject to the terms
+REM of the Common Development and Distribution License
+REM (the License). You may not use this file except in
+REM compliance with the License.
+REM 
+REM You can obtain a copy of the License at
+REM https://javaserverfaces.dev.java.net/CDDL.html or
+REM legal/CDDLv1.0.txt. 
+REM See the License for the specific language governing
+REM permission and limitations under the License.
+REM 
+REM When distributing Covered Code, include this CDDL
+REM Header Notice in each file and include the License file
+REM at legal/CDDLv1.0.txt.    
+REM If applicable, add the following below the CDDL Header,
+REM with the fields enclosed by brackets [] replaced by
+REM your own identifying information:
+REM "Portions Copyrighted [year] [name of copyright owner]"
+REM 
+REM [Name of File] [ver.__] [Date]
+REM 
+REM Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 REM
 
 @if "%TOMCAT_HOME%" == "" goto printUsage
