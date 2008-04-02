@@ -704,9 +704,6 @@ be
         <tag-class>
             renderkits.taglib.xul.OutputLabelTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>
@@ -1101,9 +1098,6 @@ be
         <tag-class>
             renderkits.taglib.xul.OutputLabelTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>
@@ -1245,9 +1239,6 @@ be
         <tag-class>
             renderkits.taglib.xul.OutputTextTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>
@@ -1396,9 +1387,6 @@ be
         <tag-class>
             renderkits.taglib.xul.PanelGridTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>
@@ -1766,9 +1754,6 @@ be
         <tag-class>
             renderkits.taglib.xul.PanelGroupTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>

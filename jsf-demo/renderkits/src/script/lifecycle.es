@@ -96,6 +96,8 @@
 
         if (posX == 660 && posY == 120 && convalError == "true") {
             showConValError();
+            var messagePanel = window.document.getElementById("form:messagePanel");
+            messagePanel.setAttribute("style", "stroke:red; fill:#f0e68c; visibility:visible");
             var msg1 = window.document.getElementById("form:msg1");
             msg1.firstChild.nodeValue = "Process Validations Phase:";
             msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
@@ -107,6 +109,8 @@
             msg3.setAttribute("style", "stroke:red; fill:none; visibility:visible");
         }
         if (posX == 105 && posY == 120) {
+            var messagePanel = window.document.getElementById("form:messagePanel");
+            messagePanel.setAttribute("style", "stroke:red; fill:#f0e68c; visibility:visible");
             var msg1 = window.document.getElementById("form:msg1");
             msg1.firstChild.nodeValue = "Restore View Phase:";
             msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
@@ -125,6 +129,8 @@
             }
         } else if ((posX >= 100 && posX <= 200) && (posY >= 250 && posY <= 300)) {
             clearMessages();
+            var messagePanel = window.document.getElementById("form:messagePanel");
+            messagePanel.setAttribute("style", "stroke:red; fill:#f0e68c; visibility:visible");
             var msg1 = window.document.getElementById("form:msg1");
             msg1.firstChild.nodeValue = "Render Response Phase:";
             msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
@@ -136,6 +142,8 @@
             msg3.setAttribute("style", "stroke:red; fill:none; visibility:visible");
         } else if (posX == 355 && posY == 120) {
             clearMessages();
+            var messagePanel = window.document.getElementById("form:messagePanel");
+            messagePanel.setAttribute("style", "stroke:red; fill:#f0e68c; visibility:visible");
             var msg1 = window.document.getElementById("form:msg1");
             msg1.firstChild.nodeValue = "Apply Request Values Phase:";
             msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
@@ -147,6 +155,8 @@
             msg3.setAttribute("style", "stroke:red; fill:none; visibility:visible");
         } else if (posX == 605 && posY == 120) {
             clearMessages();
+            var messagePanel = window.document.getElementById("form:messagePanel");
+            messagePanel.setAttribute("style", "stroke:red; fill:#f0e68c; visibility:visible");
             var msg1 = window.document.getElementById("form:msg1");
             msg1.firstChild.nodeValue = "Process Validations Phase:";
             msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
@@ -158,6 +168,8 @@
             msg3.setAttribute("style", "stroke:red; fill:none; visibility:visible");
         } else if ((posX >= 600 && posX <= 720) && (posY >= 250 && posY <= 300)) {
             clearMessages();
+            var messagePanel = window.document.getElementById("form:messagePanel");
+            messagePanel.setAttribute("style", "stroke:red; fill:#f0e68c; visibility:visible");
             var msg1 = window.document.getElementById("form:msg1");
             msg1.firstChild.nodeValue = "Update Model Values Phase:";
             msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
@@ -166,6 +178,8 @@
             msg2.setAttribute("style", "stroke:red; fill:none; visibility:visible");
         } else if ((posX >= 350 && posX <= 470) && (posY >= 250 && posY <= 300)) {
             clearMessages();
+            var messagePanel = window.document.getElementById("form:messagePanel");
+            messagePanel.setAttribute("style", "stroke:red; fill:#f0e68c; visibility:visible");
             var msg1 = window.document.getElementById("form:msg1");
             msg1.firstChild.nodeValue = "Invoke Applications Phase:";
             msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
@@ -268,6 +282,8 @@
     }
 
     function clearMessages() {
+        var messagePanel = window.document.getElementById("form:messagePanel");
+        messagePanel.setAttribute("style", "stroke:red; fill:#f0e68c; visibility:hidden");
         var msg1 = window.document.getElementById("form:msg1");
         msg1.setAttribute("style", "stroke:red; fill: none; visibility:hidden");
         var msg2 = window.document.getElementById("form:msg2");

@@ -153,9 +153,10 @@
            <g:commandButton id="back" width="140" height="30" x="105" y="470" rx="5" ry="5" dx="68" dy="10"
                      style="stroke:black; fill:silver;" value="Main" type="submit" action="success" />
 
-           <g:outputText id="msg1" x="400" y="350" value="marker" style="visibility:hidden" />
-           <g:outputText id="msg2" x="410" y="370" value="marker" style="visibility:hidden" />
-           <g:outputText id="msg3" x="410" y="390" value="marker" style="visibility:hidden" />
+           <g:rectangle id="messagePanel" x="350" y="340" width="510" height="170" style="stroke:black;fill:#f0e68c; visibility:hidden" />
+           <g:outputText id="msg1" x="370" y="370" value="marker" style="visibility:hidden" />
+           <g:outputText id="msg2" x="380" y="390" value="marker" style="visibility:hidden" />
+           <g:outputText id="msg3" x="390" y="410" value="marker" style="visibility:hidden" />
        </g:form>
     </f:view>
 </svg>

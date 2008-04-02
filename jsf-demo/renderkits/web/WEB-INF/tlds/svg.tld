@@ -852,9 +852,6 @@ be
         <tag-class>
             renderkits.taglib.svg.OutputTextTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>
@@ -1135,9 +1132,6 @@ be
         <tag-class>
             renderkits.taglib.svg.RectangleTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>
@@ -1312,9 +1306,6 @@ be
         <tag-class>
             renderkits.taglib.svg.LineTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>
