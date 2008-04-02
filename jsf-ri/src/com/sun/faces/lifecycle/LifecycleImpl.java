@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.19 2003/03/11 05:37:55 rkitain Exp $
+ * $Id: LifecycleImpl.java,v 1.20 2003/03/12 19:51:06 rkitain Exp $
  */
 
 /*
@@ -11,6 +11,7 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
 import org.mozilla.util.Assert;
@@ -18,7 +19,6 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.lifecycle.ViewHandler;
 import javax.faces.context.FacesContext;
@@ -37,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.19 2003/03/11 05:37:55 rkitain Exp $
+ * @version $Id: LifecycleImpl.java,v 1.20 2003/03/12 19:51:06 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -105,24 +105,17 @@ public LifecycleImpl()
 
 protected void initPhases()
 {
-    phaseWrappers.add(new PhaseWrapper(new ReconstituteComponentTreePhase(this, 
-            RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new ApplyRequestValuesPhase(this, 
-            RIConstants.APPLY_REQUEST_VALUES_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new ProcessValidationsPhase(this, 
-            RIConstants.PROCESS_VALIDATIONS_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new UpdateModelValuesPhase(this,
-            RIConstants.UPDATE_MODEL_VALUES_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new InvokeApplicationPhase(this, 
-	    RIConstants.INVOKE_APPLICATION_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new RenderResponsePhase(this, 
-	    RIConstants.RENDER_RESPONSE_PHASE)));
+    phaseWrappers.add(new PhaseWrapper(new ReconstituteComponentTreePhase()));
+    phaseWrappers.add(new PhaseWrapper(new ApplyRequestValuesPhase()));
+    phaseWrappers.add(new PhaseWrapper(new ProcessValidationsPhase()));
+    phaseWrappers.add(new PhaseWrapper(new UpdateModelValuesPhase()));
+    phaseWrappers.add(new PhaseWrapper(new InvokeApplicationPhase(this)));
+    phaseWrappers.add(new PhaseWrapper(new RenderResponsePhase(this)));
 }
 
-protected int executeRender(FacesContext context) throws FacesException
+protected void executeRender(FacesContext context) throws FacesException
 {
     Assert.assert_it(null != phaseWrappers);
-    int rc = 0;
     Phase renderPhase = null;
     PhaseWrapper wrapper = null;
   
@@ -132,16 +125,14 @@ protected int executeRender(FacesContext context) throws FacesException
         Assert.assert_it(wrapper != null);
         renderPhase = wrapper.instance;
         Assert.assert_it(renderPhase != null);
-        if ( (((GenericPhaseImpl)renderPhase).getId()) == 
-                RIConstants.RENDER_RESPONSE_PHASE) {
+        if ( (((Phase)renderPhase).getId()) == 
+                Phase.RENDER_RESPONSE) {
             break;
         }
     }
     
     Assert.assert_it(null != renderPhase);
-    rc = renderPhase.execute(context);
-    
-    return rc;
+    renderPhase.execute(context);
 }
 
 //
@@ -191,10 +182,8 @@ public void execute(FacesContext context) throws FacesException
     PhaseWrapper wrapper = null;
     Phase curPhase = null;
     Iterator phaseIter = phaseWrappers.iterator();
-    int curPhaseId = 0, rc = 0;
+    int curPhaseId = 0;
     Assert.assert_it(null != phaseIter);
-
-    PhaseId phaseId = null;
 
     // for keeping track of events processed limit..
     //
@@ -210,29 +199,26 @@ public void execute(FacesContext context) throws FacesException
 	curPhase = wrapper.instance;
 
         // Execute the current phase
-        rc = curPhase.execute(context);
+        curPhase.execute(context);
 
         // Process Events 
 
-        int phaseNumber = ((GenericPhaseImpl)curPhase).getId();
+        int phaseNumber = ((Phase)curPhase).getId();
 
-        if (phaseNumber == RIConstants.APPLY_REQUEST_VALUES_PHASE) {
-            phaseId = PhaseId.APPLY_REQUEST_VALUES;
-            processEvents(context, phaseId);
-        } else if (phaseNumber == RIConstants.PROCESS_VALIDATIONS_PHASE) {
-            phaseId = PhaseId.PROCESS_VALIDATIONS;
-            processEvents(context, phaseId);
-        } else if (phaseNumber == RIConstants.UPDATE_MODEL_VALUES_PHASE) {
-            phaseId = PhaseId.UPDATE_MODEL_VALUES;
-            processEvents(context, phaseId);
+        if (phaseNumber == Phase.APPLY_REQUEST_VALUES) {
+            processEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+        } else if (phaseNumber == Phase.PROCESS_VALIDATIONS) {
+            processEvents(context, PhaseId.PROCESS_VALIDATIONS);
+        } else if (phaseNumber == Phase.UPDATE_MODEL_VALUES) {
+            processEvents(context, PhaseId.UPDATE_MODEL_VALUES);
         }
 
-        if (rc == Phase.GOTO_EXIT) {
+        if (((FacesContextImpl)context).getResponseComplete()) {
             return;
-        } else if (rc == Phase.GOTO_RENDER) {
-	    executeRender(context);
-	    return;
-	}
+        } else if (((FacesContextImpl)context).getRenderResponse()) {
+            executeRender(context);
+            return;
+        }
 
         curPhaseId++;
     }
@@ -278,7 +264,8 @@ private boolean limitReached(UIComponent source, HashMap eventsProcessed) {
     return false;
 }
 
-public int executePhase(FacesContext context, Phase phase) throws FacesException
+//PENDING(rogerk) remove this method when Phase is offically removed from API;
+public int executePhase(FacesContext context, javax.faces.lifecycle.Phase phase) throws FacesException
 {
     if (null == context || null == phase) { 
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -312,19 +299,18 @@ PhaseWrapper(Phase newInstance)
 
 */
 
-private int executePhaseIterator(Iterator phaseIter, 
+private void executePhaseIterator(Iterator phaseIter, 
 				 FacesContext context) throws FacesException
 {
     Phase curPhase = null;
-    int rc = Phase.GOTO_NEXT;
     while (phaseIter.hasNext()) {
 	curPhase = (Phase) phaseIter.next();
-	rc = curPhase.execute(context);
-	if (Phase.GOTO_NEXT != rc) {
-	    return rc;
-	}
+	curPhase.execute(context);
+        if (((FacesContextImpl)context).getResponseComplete() || 
+            ((FacesContextImpl)context).getRenderResponse()) {
+            return;
+        }
     }
-    return rc;
 }
 
 } // end of class PhaseWrapper

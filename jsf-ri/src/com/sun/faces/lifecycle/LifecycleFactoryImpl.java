@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.10 2003/03/11 05:37:55 rkitain Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.11 2003/03/12 19:51:06 rkitain Exp $
  */
 
 /*
@@ -18,10 +18,8 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.Phase;
 import javax.faces.FacesException;
 
-import com.sun.faces.RIConstants;
 import java.util.Iterator;
 import java.util.HashMap;
 
@@ -31,7 +29,7 @@ import java.util.HashMap;
  *  in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.10 2003/03/11 05:37:55 rkitain Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.11 2003/03/12 19:51:06 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.LifecycleFactory
  *
@@ -42,8 +40,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory
 //
 // Protected Constants
 //
-static final int FIRST_PHASE = RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE;
-static final int LAST_PHASE = RIConstants.RENDER_RESPONSE_PHASE;
+static final int FIRST_PHASE = Phase.RECONSTITUTE_COMPONENT_TREE;
+static final int LAST_PHASE = Phase.RENDER_RESPONSE;
 
 
 
@@ -174,32 +172,6 @@ public Lifecycle getLifecycle(String lifecycleId) throws FacesException
 public Iterator getLifecycleIds()
 {
     return lifecycleMap.keySet().iterator();
-}
-
-public void registerAfter(String lifecycleId, int phaseId, Phase phase)
-{
-    throw new UnsupportedOperationException("PENDING(): fixme");
-    
-    /**********
-    Lifecycle life =verifyRegisterArgs(lifecycleId, phaseId, phase);
-    synchronized (lock) {
-	life.registerAfter(phaseId, phase);
-    }
-    *********/
-}
-
-public void registerBefore(String lifecycleId, int phaseId, Phase phase)
-{
-
-    throw new UnsupportedOperationException("PENDING(): fixme");
-    /********
-
-    Lifecycle life =verifyRegisterArgs(lifecycleId, phaseId, phase);
-    synchronized (lock) {
-	life.registerBefore(phaseId, phase);
-    }
-
-    ********/
 }
 
 //

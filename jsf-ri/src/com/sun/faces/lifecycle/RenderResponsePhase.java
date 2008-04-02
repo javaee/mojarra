@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.4 2003/02/20 22:48:48 ofung Exp $
+ * $Id: RenderResponsePhase.java,v 1.5 2003/03/12 19:51:06 rkitain Exp $
  */
 
 /*
@@ -18,7 +18,6 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.Phase;
 import javax.faces.tree.Tree;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -37,15 +36,11 @@ import com.sun.faces.context.FacesContextImpl;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.4 2003/02/20 22:48:48 ofung Exp $
- * 
- * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
- * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
+ * @version $Id: RenderResponsePhase.java,v 1.5 2003/03/12 19:51:06 rkitain Exp $
  *
  */
 
-public class RenderResponsePhase extends GenericPhaseImpl
-{
+public class RenderResponsePhase extends Phase {
 //
 // Protected Constants
 //
@@ -57,6 +52,7 @@ public class RenderResponsePhase extends GenericPhaseImpl
 //
 // Instance Variables
 //
+private Lifecycle lifecycleDriver = null;
 
 // Attribute Instance Variables
 
@@ -66,9 +62,8 @@ public class RenderResponsePhase extends GenericPhaseImpl
 // Constructors and Genericializers    
 //
 
-public RenderResponsePhase(Lifecycle newDriver, int newId)
-{
-    super(newDriver, newId);
+public RenderResponsePhase(Lifecycle newDriver) {
+    lifecycleDriver = newDriver;
 }
 
 //
@@ -83,12 +78,12 @@ public RenderResponsePhase(Lifecycle newDriver, int newId)
 // Methods from Phase
 //
 
-public int execute(FacesContext facesContext) throws FacesException
+public int getId() {
+    return Phase.RENDER_RESPONSE;
+}
+
+public void execute(FacesContext facesContext) throws FacesException
 {
-    if (((FacesContextImpl)facesContext).getResponseComplete()) {
-        return Phase.GOTO_EXIT;
-    }
-    int rc = Phase.GOTO_NEXT;
     Assert.assert_it(null != lifecycleDriver.getViewHandler());
     try { 
 	lifecycleDriver.getViewHandler().renderView(facesContext); 
@@ -97,7 +92,6 @@ public int execute(FacesContext facesContext) throws FacesException
     } catch (ServletException e) { 
 	throw new FacesException(e.getMessage(), e);
     }
-    return rc;
 }
 
 

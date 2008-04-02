@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.17 2003/02/20 22:48:48 ofung Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.18 2003/03/12 19:51:07 rkitain Exp $
  */
 
 /*
@@ -22,7 +22,6 @@ import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.Phase;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 
@@ -34,15 +33,11 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.17 2003/02/20 22:48:48 ofung Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.18 2003/03/12 19:51:07 rkitain Exp $
  * 
- * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
- * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
- *
  */
 
-public class UpdateModelValuesPhase extends GenericPhaseImpl
-{
+public class UpdateModelValuesPhase extends Phase {
 //
 // Protected Constants
 //
@@ -64,9 +59,7 @@ public class UpdateModelValuesPhase extends GenericPhaseImpl
 // Constructors and Genericializers    
 //
 
-public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
-{
-    super(newDriver, newId);
+public UpdateModelValuesPhase() {
 }
 
 //
@@ -81,9 +74,12 @@ public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
 // Methods from Phase
 //
 
-public int execute(FacesContext facesContext) throws FacesException
+public int getId() {
+    return Phase.UPDATE_MODEL_VALUES;
+}
+
+public void execute(FacesContext facesContext) throws FacesException
 {
-    int rc = Phase.GOTO_NEXT;
     Iterator messageIter = null;
 
     UIComponent component = 
@@ -104,21 +100,14 @@ public int execute(FacesContext facesContext) throws FacesException
         facesContext.addMessage(component, msg);
     }
 
-    if (((FacesContextImpl)facesContext).getResponseComplete()) {
-        return Phase.GOTO_EXIT;
-    } else if (((FacesContextImpl)facesContext).getRenderResponse()) {
-        return Phase.GOTO_RENDER;
-    }
-
     messageIter = facesContext.getMessages();
     Assert.assert_it(null != messageIter);
 
     if (messageIter.hasNext()) {
         // Proceed based on the number of errors present
-        rc = Phase.GOTO_RENDER;
+        facesContext.renderResponse();
     }
 
-    return rc;
 }
 
 

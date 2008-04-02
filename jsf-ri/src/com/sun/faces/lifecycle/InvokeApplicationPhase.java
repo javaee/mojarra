@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.6 2003/02/20 22:48:47 ofung Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.7 2003/03/12 19:51:05 rkitain Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -32,15 +31,11 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.6 2003/02/20 22:48:47 ofung Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.7 2003/03/12 19:51:05 rkitain Exp $
  * 
- * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
- * @see	javax.faces.lifecycle.Lifecycle#INVOKE_APPLICATION_PHASE
- *
  */
 
-public class InvokeApplicationPhase extends GenericPhaseImpl
-{
+public class InvokeApplicationPhase extends Phase {
 //
 // Protected Constants
 //
@@ -52,6 +47,7 @@ public class InvokeApplicationPhase extends GenericPhaseImpl
 //
 // Instance Variables
 //
+private Lifecycle lifecycleDriver = null;
 
 // Attribute Instance Variables
 
@@ -61,23 +57,25 @@ public class InvokeApplicationPhase extends GenericPhaseImpl
 // Constructors and Genericializers    
 //
 
-public InvokeApplicationPhase(Lifecycle newDriver, int newId)
-{
-    super(newDriver, newId);
+public InvokeApplicationPhase(Lifecycle newDriver) {
+    lifecycleDriver = newDriver;
 }
 
-public int execute(FacesContext facesContext) throws FacesException
+public int getId() {
+    return Phase.INVOKE_APPLICATION;
+}
+
+public void execute(FacesContext facesContext) throws FacesException
 {
-    int rc = Phase.GOTO_NEXT;
     ApplicationHandler handler = null;
 
     if (null == lifecycleDriver) {
-        return rc;
+        return;
     }
 
     handler = lifecycleDriver.getApplicationHandler();
     if (null == handler) {
-        return rc;
+        return;
     }
 
     // Process all events that have been queued to the
@@ -86,10 +84,9 @@ public int execute(FacesContext facesContext) throws FacesException
     while (events.hasNext()) {
         FacesEvent event = (FacesEvent) events.next();
 	if (!handler.processEvent(facesContext, event)) {
-            return Phase.GOTO_RENDER;
+            facesContext.renderResponse();
         }  
     }
-    return rc;
 }
 
 //

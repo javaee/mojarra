@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteComponentTreePhase.java,v 1.1 2003/03/11 05:37:56 rkitain Exp $
+ * $Id: ReconstituteComponentTreePhase.java,v 1.2 2003/03/12 19:51:06 rkitain Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.Phase;
 import javax.faces.context.FacesContext;
 import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
@@ -40,15 +39,11 @@ import com.sun.faces.util.DebugUtil;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteComponentTreePhase.java,v 1.1 2003/03/11 05:37:56 rkitain Exp $
+ * @version $Id: ReconstituteComponentTreePhase.java,v 1.2 2003/03/12 19:51:06 rkitain Exp $
  * 
- * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
- * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
- *
  */
 
-public class ReconstituteComponentTreePhase extends GenericPhaseImpl
-{
+public class ReconstituteComponentTreePhase extends Phase {
 //
 // Protected Constants
 //
@@ -70,10 +65,7 @@ private TreeFactory treeFactory = null;
 // Constructors and Genericializers    
 //
 
-public ReconstituteComponentTreePhase(Lifecycle newDriver, int newId)
-{
-    super(newDriver, newId);
-    
+public ReconstituteComponentTreePhase() {
     treeFactory = (TreeFactory)
          FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
     Assert.assert_it(treeFactory != null);
@@ -92,6 +84,10 @@ public ReconstituteComponentTreePhase(Lifecycle newDriver, int newId)
 //
 
 
+public int getId() {
+    return Phase.RECONSTITUTE_COMPONENT_TREE;
+}
+
 /**
 
 * PRECONDITION: the necessary factories have been installed in the
@@ -101,7 +97,7 @@ public ReconstituteComponentTreePhase(Lifecycle newDriver, int newId)
 
 */
 
-public int execute(FacesContext facesContext) throws FacesException
+public void execute(FacesContext facesContext) throws FacesException
 {
     if (null == facesContext) {
         // PENDING (visvan) localize
@@ -109,7 +105,6 @@ public int execute(FacesContext facesContext) throws FacesException
     }
 
     // Create the requested component tree
-    int rc = Phase.GOTO_NEXT;
     Tree requestTree = null;
     
     // look up saveStateInClient parameter to check whether to restore
@@ -125,7 +120,6 @@ public int execute(FacesContext facesContext) throws FacesException
     } else {
         restoreTreeFromPage(facesContext);           
     }
-    return rc;
 }    
         
 public void restoreTreeFromPage(FacesContext facesContext) {

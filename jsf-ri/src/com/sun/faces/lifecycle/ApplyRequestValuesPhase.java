@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.7 2003/02/20 22:48:46 ofung Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.8 2003/03/12 19:51:04 rkitain Exp $
  */
 
 /*
@@ -18,7 +18,6 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.Phase;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
@@ -32,14 +31,11 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ApplyRequestValuesPhase.java,v 1.7 2003/02/20 22:48:46 ofung Exp $
+ * @version $Id: ApplyRequestValuesPhase.java,v 1.8 2003/03/12 19:51:04 rkitain Exp $
  * 
- * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
- * @see	javax.faces.lifecycle.Lifecycle#APPLY_REQUEST_VALUES_PHASE
- *
  */
 
-public class ApplyRequestValuesPhase extends GenericPhaseImpl {
+public class ApplyRequestValuesPhase extends Phase {
 //
 // Protected Constants
 //
@@ -58,8 +54,7 @@ public class ApplyRequestValuesPhase extends GenericPhaseImpl {
 // Constructors and Genericializers    
 //
 
-    public ApplyRequestValuesPhase( Lifecycle newDriver, int newId) {
-        super(newDriver, newId);
+    public ApplyRequestValuesPhase() {
     }
 
 //
@@ -74,7 +69,11 @@ public class ApplyRequestValuesPhase extends GenericPhaseImpl {
 // Methods from Phase
 //
 
-    public int execute(FacesContext facesContext) throws FacesException {
+    public int getId() {
+        return Phase.APPLY_REQUEST_VALUES;
+    }
+
+    public void execute(FacesContext facesContext) throws FacesException {
 
         UIComponent component = 
             (UIComponent)facesContext.getTree().getRoot();
@@ -82,20 +81,10 @@ public class ApplyRequestValuesPhase extends GenericPhaseImpl {
 
         try {
             component.processDecodes(facesContext);
-            if (((FacesContextImpl)facesContext).getResponseComplete()) {
-                return Phase.GOTO_EXIT;
-            } else if (((FacesContextImpl)facesContext).getRenderResponse()) {
-                return Phase.GOTO_RENDER;
-            }
         } catch (IOException e) {
-            return Phase.GOTO_RENDER;
+            facesContext.renderResponse();
         }
-        return Phase.GOTO_NEXT;
     }
-
-
-
-
 
 // The testcase for this class is TestApplyRequestValuesPhase.java
 
