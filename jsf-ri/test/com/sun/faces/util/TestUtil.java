@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.9 2003/08/21 14:18:29 rlubke Exp $
+ * $Id: TestUtil.java,v 1.10 2003/08/22 19:28:28 horwat Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.9 2003/08/21 14:18:29 rlubke Exp $
+ * @version $Id: TestUtil.java,v 1.10 2003/08/22 19:28:28 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +84,7 @@ public class TestUtil extends ServletFacesTestCase
 	        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	    RenderKit renderKit = renderKitFactory.getRenderKit("DEFAULT");
 	    StringWriter sw = new StringWriter();
-	    ResponseWriter writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
+	    ResponseWriter writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
 
 	    UIInput input = new UIInputBase();
@@ -98,7 +98,7 @@ public class TestUtil extends ServletFacesTestCase
 
 	    // verify no passthru attributes returns empty string
 	    sw = new StringWriter();
-	    writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
+	    writer = renderKit.createResponseWriter(sw,"text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
 	    input.setAttribute("onblur", null);
 	    input.setAttribute("onchange", null);
@@ -115,7 +115,7 @@ public class TestUtil extends ServletFacesTestCase
 	        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	    RenderKit renderKit = renderKitFactory.getRenderKit("DEFAULT");
 	    StringWriter sw = new StringWriter();
-	    ResponseWriter writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
+	    ResponseWriter writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
 
 	    UIInput input = new UIInputBase();
@@ -128,7 +128,7 @@ public class TestUtil extends ServletFacesTestCase
 
 	// verify no passthru attributes returns empty string
 	    sw = new StringWriter();
-	    writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
+	    writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
 	    input.setAttribute("disabled", null);
 	    input.setAttribute("readonly", null);
