@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolverForJsp.java,v 1.2 2005/06/01 14:03:34 rlubke Exp $
+ * $Id: ImplicitObjectELResolverForJsp.java,v 1.3 2005/06/13 19:28:22 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -17,6 +17,7 @@ import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.el.PropertyNotFoundException;
+import javax.el.PropertyNotWritableException;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
@@ -105,10 +106,10 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         } 
         switch (index) {
             case FACES_CONTEXT:
-                throw new ELException(Util.getExceptionMessageString
+                throw new PropertyNotWritableException(Util.getExceptionMessageString
                 (Util.OBJECT_IS_READONLY, new String[]{"facesContext"}));
             case VIEW:
-                throw new ELException(Util.getExceptionMessageString
+                throw new PropertyNotWritableException(Util.getExceptionMessageString
                 (Util.OBJECT_IS_READONLY, new String[]{"view"}));
             default:
         }
