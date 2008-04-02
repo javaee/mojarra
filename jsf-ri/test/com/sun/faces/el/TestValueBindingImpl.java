@@ -1,8 +1,8 @@
 /*
 <<<<<<< TestValueBindingImpl.java
- * $Id: TestValueBindingImpl.java,v 1.35 2005/05/06 22:02:07 edburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.36 2005/06/01 07:01:45 jhook Exp $
 =======
- * $Id: TestValueBindingImpl.java,v 1.35 2005/05/06 22:02:07 edburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.36 2005/06/01 07:01:45 jhook Exp $
 >>>>>>> 1.32.18.5
  */
 
@@ -381,9 +381,9 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         ExternalContext extContext = getFacesContext().getExternalContext();
         
         vb = getFacesContext().getApplication().createValueBinding("test");
-        assertEquals(vb.getValue(getFacesContext()), "test");
+        assertEquals("test", vb.getValue(getFacesContext()));
         
-        assertEquals(vb.getType(getFacesContext()), null);
+        assertEquals(String.class, vb.getType(getFacesContext()));
         try
         {
             vb.setValue(getFacesContext(), "other");

@@ -1,8 +1,8 @@
 /*
 <<<<<<< TestValueExpressionImpl.java
- * $Id: TestValueExpressionImpl.java,v 1.1 2005/05/06 22:02:07 edburns Exp $
+ * $Id: TestValueExpressionImpl.java,v 1.2 2005/06/01 07:03:45 jhook Exp $
 =======
- * $Id: TestValueExpressionImpl.java,v 1.1 2005/05/06 22:02:07 edburns Exp $
+ * $Id: TestValueExpressionImpl.java,v 1.2 2005/06/01 07:03:45 jhook Exp $
 >>>>>>> 1.32.18.5
  */
 
@@ -387,9 +387,9 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         
         vb = getFacesContext().getApplication().getExpressionFactory().
             createValueExpression(getFacesContext().getELContext(),"test", Object.class);
-        assertEquals(vb.getValue(getFacesContext().getELContext()), "test");
+        assertEquals("test", vb.getValue(getFacesContext().getELContext()));
         
-        assertEquals(vb.getType(getFacesContext().getELContext()), null);
+        assertEquals(String.class, vb.getType(getFacesContext().getELContext()));
         try
         {
             vb.setValue(getFacesContext().getELContext(), "other");
