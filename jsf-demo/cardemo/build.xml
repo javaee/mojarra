@@ -85,6 +85,7 @@
   <target name="clean" >
     <delete dir="${build}" />
     <delete dir="${context.path}" />
+    <delete file="${example}.war" />
   </target>
 
   <target name="verifyPreconditions">
@@ -214,6 +215,10 @@
     </copy>
   </target>	 
 
+  <target name="build.war" depends="build">
+    <!-- create a war file for distribution -->
+    <jar jarfile="${example}.war" basedir="${build}"/> 
+  </target>
 
 </project>
 
