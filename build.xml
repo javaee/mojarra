@@ -62,10 +62,7 @@
     </macrodef>
 
     <target name="clean"
-            description="Clean build and distribution directories">
-        <delete file="jsf-portlet.zip"/>
-        <delete file="jsf-portlet_source.zip"/>
-        <delete dir="${portlet.dir}/dist"/>
+            description="Clean build and distribution directories">       
         <delete file="jsf-samples.zip"/>
         <delete dir="${basedir}/build"/>
         <delete dir="${dist.dir}"/>
@@ -95,7 +92,7 @@
         <zip destfile="${dist.dir}/javaserverfaces_source.zip">
 
             <zipfileset dir="${basedir}"
-                        excludes="**/build.properties/**, **/CVS/**, **/build/**, **/dist/**, **/www/**, **/jsf-portlet/**,
+                        excludes="**/build.properties/**, **/CVS/**, **/build/**, **/dist/**, **/www/**,
           **/jsf-demo/**, **/test-sqe/**" prefix="javaserverfaces_sources"/>
 
         </zip>
@@ -161,68 +158,7 @@
               zipFile="${dist.dir}/javaserverfaces_source.zip">
         </installerBuilder>
 
-    </target>
-
-    <!-- 
-         =================================================================== 
-           Create the Portlet Integration library
-         =================================================================== 
-    -->
-    <target name="build-portletLibrary"
-            description="Build Portlet Integration Library">
-        <mkdir dir="${portlet.dir}/dist/jsf-portlet"/>
-        <mkdir dir="${portlet.dir}/dist/jsf-portlet/samples"/>
-        <mkdir dir="${portlet.dir}/dist/jsf-portlet/lib"/>       
-
-        <delete file="jsf-portlet.zip"/>
-        <delete file="jsf-portlet_source.zip"/>
-        <delete file="${dist.dir}/javaserverfaces_portlet.class"/>
-        <delete file="${dist.dir}/javaserverfaces_portlet_source.class"/>
-        <delete dir="${portlet.dir}/dist"/>
-        <delete dir="${portlet.dir}/build"/>
-
-        <zip destfile="${basedir}/jsf-portlet_source.zip">
-            <zipfileset dir="${basedir}/jsf-portlet"
-                        excludes="**/CVS/**, **/build/**, **/dist/**"
-                        prefix="jsf-portlet_sources"/>
-        </zip>
-
-        <installerBuilder
-              classFile="${dist.dir}/javaserverfaces_portlet_source.class"
-              licenseFile="${LICENSEFILE}"
-              zipFile="${basedir}/jsf-portlet_source.zip"/>
-
-        <ant dir="${portlet.dir}" 
-             antfile="build.xml"
-             inheritall="false" 
-             target="main"/>
-        <copy file="${LICENSEFILE}"
-              todir="${portlet.dir}/dist/jsf-portlet"/>
-        <copy file="${portlet.dir}/portlet-lib/build/lib/jsf-portlet.jar"
-              todir="${portlet.dir}/dist/jsf-portlet/lib"/>
-
-        <!-- copy the portlet-guessNumber.war and source -->
-        <ant dir="${portlet.dir}/portlet-guessNumber" inheritAll="false">
-        </ant>
-        <copy todir="${portlet.dir}/dist/jsf-portlet/samples"
-              file="${portlet.dir}/portlet-guessNumber/build/portlet-guessNumber.war"/>
-
-        <copy todir="${portlet.dir}/dist/jsf-portlet/samples/portlet-guessNumber"
-              includeEmptyDirs="false">
-            <fileset dir="${portlet.dir}/portlet-guessNumber"
-                     excludes="**/build/**"/>
-        </copy>
-        <zip zipfile="jsf-portlet.zip">
-            <fileset dir="${portlet.dir}/dist"
-                     includes="jsf-portlet/**"/>
-        </zip>
-
-        <installerBuilder
-              classFile="${dist.dir}/javaserverfaces_portlet.class"
-              licenseFile="${LICENSEFILE}"
-              zipFile="${basedir}/jsf-portlet.zip"/>
-
-    </target>
+    </target>   
 
     <target name="nightly" depends="build.java.net"
             description="update nightly build">

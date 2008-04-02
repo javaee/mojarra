@@ -10,69 +10,24 @@
   </head>
   <body>
     
-<form id="j_id_id17" name="j_id_id17" method="post" action="/jsf-systest/faces/interweaving11.jsp;jsessionid=32258ba15d311956c70fee827140f" enctype="application/x-www-form-urlencoded">
+<form id="j_id_id17" name="j_id_id17" method="post" action="/jsf-systest/faces/interweaving11.jsp;jsessionid=af18d432e0d67060d95b0c5ac2c2" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="j_id_id17" value="j_id_id17" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id39:j_id40" />
 
 <script type="text/javascript" language="Javascript">
 <!--
-function jsfcljs(f, pvp, t) {
-    if (f.sjsfinit == null) {
-        f.dpf = function() {
-            var adp = this.adp;
-            if (adp != null) {
-                for (var i = 0; i < adp.length; i++) {
-                    this.removeChild(adp[i]);
-                }
-            }
-            this.adp = null;
-        };
-        var mos = f.onsubmit;
-        if (mos == null) {
-            f.onsubmit = f.dpf;
-        } else {
-            f.onsubmit = function() {
-                f.dpf();
-                mos();
-            }
-        }
-        f.apf = function(pvp) {
-            this.dpf();
-            var adp = new Array();
-            this.adp = adp;
-            var ps = pvp.split(',');
-            for (var i = 0, ii = 0; i < ps.length; i++, ii++) {
-                var p = document.createElement("input");
-                p.type = "hidden";
-                p.name = ps[i];
-                p.value = ps[i + 1];
-                this.appendChild(p);
-                adp[ii] = p;
-                i += 1;
-            }
-        };
-        sjsfinit = true;
-    }
-    if (f.apf) {
-        f.apf(pvp);
-    }
-    if (t) {
-       f.target = t;
-    }
-    f.submit();
-    return false;
-};
+function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length;i++) {f.removeChild(adp[i]);}}};function apf(f, pvp) {var adp = new Array();f.adp = adp;var ps = pvp.split(',');for (var i = 0,ii = 0;i < ps.length;i++,ii++) {var p = document.createElement("input");p.type = "hidden";p.name = ps[i];p.value = ps[i + 1];f.appendChild(p);adp[ii] = p;i += 1;}};function jsfcljs(f, pvp, t) {apf(f, pvp);if (t) {f.target = t;}f.submit();dpf(f);};
 //-->
 </script>
-<a href="#" onclick="return jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21,j_id_id17:j_id_id21,param,value','');">one</a>
+<a href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21,j_id_id17:j_id_id21,param,value','');}return false">one</a>
             
                 
                 </br>
             
-                <a href="#" onclick="return jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21j_id_1,j_id_id17:j_id_id21j_id_1,param,value','');">two</a>
+                <a href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21j_id_1,j_id_id17:j_id_id21j_id_1,param,value','');}return false">two</a>
                 </br>
             
-                <a href="#" onclick="return jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21j_id_2,j_id_id17:j_id_id21j_id_2,param,value','');">three</a>
+                <a href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21j_id_2,j_id_id17:j_id_id21j_id_2,param,value','');}return false">three</a>
                 </br>
             
         

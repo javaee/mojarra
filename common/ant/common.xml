@@ -56,8 +56,7 @@
     <!-- Structural -->
     <property name="api.dir" value="${jsf.build.home}/jsf-api"/>
     <property name="impl.dir" value="${jsf.build.home}/jsf-ri"/>
-    <property name="tools.dir" value="${jsf.build.home}/jsf-tools"/>
-    <property name="portlet.dir" value="${jsf.build.home}/jsf-portlet"/>
+    <property name="tools.dir" value="${jsf.build.home}/jsf-tools"/>    
     <property name="demo.dir" value="${jsf.build.home}/jsf-demo"/>
     <property name="impl.test.results.dir"
               value="${impl.dir}/testresults"/>
@@ -70,9 +69,7 @@
     <property name="jsf-tools.jar"
               value="${tools.dir}/build/lib/jsf-tools.jar"/>
     <property name="jsf-impl.jar"
-              value="${impl.dir}/build/lib/jsf-impl.jar"/>
-    <property name="jsf-portlet.jar"
-              value="${portlet.dir}/portlet-lib/build/lib/jsf-portlet.jar"/>
+              value="${impl.dir}/build/lib/jsf-impl.jar"/>   
     <property name="jsf.test.jar"
               value="${jsf.build.home}/lib/jsf-extensions-test-time.jar"/>    
     <property name="installer.jar"

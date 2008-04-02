@@ -41,12 +41,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.Map.Entry;
+import java.net.URL;
+import java.net.URLConnection;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
@@ -185,61 +192,17 @@ public class RenderKitUtils {
      * Example: text/html </p>
      */
     private final static String CONTENT_TYPE_SUBTYPE_DELIMITER = "/";
-    
-    private final static String FORM_INIT_JS =         
-          "\nfunction jsfcljs(f, pvp, t) {"          
-          + "\n    if (f.sjsfinit == null) {" 
-          + "\n        f.dpf = function() {"      
-          + "\n            var adp = this.adp;"
-          + "\n            if (adp != null) {"        
-          + "\n                for (var i = 0; i < adp.length; i++) {"
-          + "\n                    this.removeChild(adp[i]);"
-          + "\n                }"
-          + "\n            }"
-          + "\n            this.adp = null;"
-          + "\n        };"        
-          + "\n        var mos = f.onsubmit;"
-          + "\n        if (mos == null) {"       
-          + "\n            f.onsubmit = f.dpf;"
-          + "\n        } else {"      
-          + "\n            f.onsubmit = function() {"
-          + "\n                f.dpf();"
-          + "\n                mos();"       
-          + "\n            }"
-          + "\n        }"
-          + "\n        f.apf = function(pvp) {"
-          + "\n            this.dpf();"
-          + "\n            var adp = new Array();"
-          + "\n            this.adp = adp;"
-          + "\n            var ps = pvp.split(',');"
-          + "\n            for (var i = 0, ii = 0; i < ps.length; i++, ii++) {"        
-          + "\n                var p = document.createElement(\"input\");"
-          + "\n                p.type = \"hidden\";"
-          + "\n                p.name = ps[i];"
-          + "\n                p.value = ps[i + 1];"
-          + "\n                this.appendChild(p);"
-          + "\n                adp[ii] = p;"
-          + "\n                i += 1;"
-          + "\n            }"
-          + "\n        };"
-          + "\n        sjsfinit = true;"
-          + "\n    }"
-          + "\n    if (f.apf) {"
-          + "\n        f.apf(pvp);"
-          + "\n    }"
-          + "\n    if (t) {"
-          + "\n       f.target = t;"
-          + "\n    }"
-          + "\n    f.submit();"
-          + "\n    return false;"
-          + "\n};";
-          
-    
+
     /**
-     * <p>A <code>compressed</code> version of <code>FORM_INIT_JS</code>.</p>
+     * <p>JavaScript to be rendered when a commandLink is used.
+     * This may be expaned to include other uses.</p>
      */
-    private static final String FORM_INIT_JS_COMPRESSED = 
-          compressJS(FORM_INIT_JS);
+    private static String SUN_JSF_JS = null;        
+                          
+    
+    protected static final Logger LOGGER = 
+            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+          
 
     // ------------------------------------------------------------ Constructors
 
@@ -922,13 +885,7 @@ public class RenderKitUtils {
             writer.write("\n<!--");
         }
 
-        if (WebConfiguration.getInstance(context.getExternalContext())
-              .getBooleanContextInitParameter(BooleanWebContextInitParameter.CompressJavaScript)
-            && FORM_INIT_JS_COMPRESSED != null) {
-            writer.write(FORM_INIT_JS_COMPRESSED);
-        } else {
-            writer.write(FORM_INIT_JS);
-        }
+        writeSunJS(context, writer);
         
         if (isXhtml) {
             writer.write("\n//]]>\n");            
@@ -945,7 +902,7 @@ public class RenderKitUtils {
      * handler of a command.  This string will add all request parameters
      * as well as the client ID of the activated command to the form as
      * hidden input parameters, update the target of the link if necessary,
-     * and handle the form submission.  The content of {@link #FORM_INIT_JS}
+     * and handle the form submission.  The content of {@link #SUN_JSF_JS}
      * must be rendered prior to using this method.</p>
      * @param formClientId the client ID of the form
      * @param commandClientId the client ID of the command
@@ -958,8 +915,8 @@ public class RenderKitUtils {
                                                      String target,
                                                      Param[] params) {
 
-        StringBuilder sb = new StringBuilder(64);    
-        sb.append("return jsfcljs(document.forms['");
+        StringBuilder sb = new StringBuilder(256);    
+        sb.append("if(window.jsfcljs){window.jsfcljs(document.forms['");
         sb.append(formClientId);        
         sb.append("'],'");
         sb.append(commandClientId).append(',').append(commandClientId);
@@ -971,7 +928,7 @@ public class RenderKitUtils {
         }          
         sb.append("','");
         sb.append(target);
-        sb.append("');");
+        sb.append("');}return false");
 
         return sb.toString();
         
@@ -980,7 +937,7 @@ public class RenderKitUtils {
 
     /**
      * <p>This is a utility method for compressing multi-lined javascript.
-     * In the case of {@link #FORM_INIT_JS} it offers about a 47% decrease
+     * In the case of {@link #SUN_JSF_JS} it offers about a 47% decrease
      * in length.</p>
      * 
      * <p>For our purposes, compression is just trimming each line and 
@@ -1008,6 +965,94 @@ public class RenderKitUtils {
         }
         return null;
 
+    }
+
+
+    /**
+     * <p>Return the implementation JavaScript.  If compression
+     * is enabled, the result will be compressed.</p>
+     * 
+     * @param context - the <code>FacesContext</code> for the current request
+     * @param writer - the <code>Writer</code> to write the JS to
+     * 
+     * @return the implemenation javascript as a String
+     */
+    public static void writeSunJS(FacesContext context, Writer writer) 
+    throws IOException {
+        loadSunJsfJs(context);
+        writer.write(SUN_JSF_JS);
+    }
+    
+    
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * <p>Loads the contents of the sunjsf.js file into memory removing any
+     * comments/empty lines it encoutners, and, if enabled, compressing the 
+     * result.</p>
+     * @return the JavaScript sans comments and blank lines
+     */
+    private static void loadSunJsfJs(FacesContext context) {
+
+        if (SUN_JSF_JS == null) {
+            synchronized (XHTML_ATTR_PREFIX) {
+                if (SUN_JSF_JS == null) {
+                    InputStream input = null;
+                    try {
+                        URL url = Util.getCurrentLoader(null)
+                              .getResource("com/sun/faces/sunjsf.js");
+                        if (url == null) {
+                            LOGGER.severe(
+                                  "jsf.renderkit.resstatemgr.clientbuf_not_integer");
+                        }
+                        URLConnection conn = url.openConnection();
+                        conn.setUseCaches(false);
+                        input = conn.getInputStream();
+                        BufferedReader reader =
+                              new BufferedReader(
+                                    new InputStreamReader(input));
+                        StringBuilder builder = new StringBuilder(128);
+                        builder.append('\n');
+                        for (String line = reader.readLine();
+                             line != null;
+                             line = reader.readLine()) {
+
+                            String temp = line.trim();
+                            if (temp.length() == 0
+                                || temp.startsWith("/*")
+                                || temp.startsWith("*")
+                                || temp.startsWith("*/")
+                                || temp.startsWith("//")) {
+                                continue;
+                            }
+                            builder.append(line).append('\n');
+                        }
+                        builder.deleteCharAt(builder.length() - 1);
+                        if (WebConfiguration
+                              .getInstance(context.getExternalContext())
+                              .getBooleanContextInitParameter(
+                                    BooleanWebContextInitParameter.CompressJavaScript)) {
+                            SUN_JSF_JS = compressJS(builder.toString());
+                        } else {
+                            SUN_JSF_JS = builder.toString();
+                        }
+                    } catch (IOException ioe) {
+                        LOGGER.log(Level.SEVERE,
+                                   "jsf.renderkit.resstatemgr.clientbuf_not_integer",
+                                   ioe);
+                    } finally {
+                        if (input != null) {
+                            try {
+                                input.close();
+                            } catch (IOException ioe) {
+                                // ignore                    
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
                            
 } // END RenderKitUtils

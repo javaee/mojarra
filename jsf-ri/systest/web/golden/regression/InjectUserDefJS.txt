@@ -12,61 +12,16 @@
     </head>
     <body>
         
-<form id="j_id_id16" name="j_id_id16" method="post" action="/jsf-systest/faces/regression/InjectUserDefJS.jsp;jsessionid=3226eb9750e7a9238f31cba4f4f5" enctype="application/x-www-form-urlencoded">
+<form id="j_id_id16" name="j_id_id16" method="post" action="/jsf-systest/faces/regression/InjectUserDefJS.jsp;jsessionid=af370768ebb3d0cf78608ca8d74d" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="j_id_id16" value="j_id_id16" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id45:j_id46" />
 
 <script type="text/javascript" language="Javascript">
 <!--
-function jsfcljs(f, pvp, t) {
-    if (f.sjsfinit == null) {
-        f.dpf = function() {
-            var adp = this.adp;
-            if (adp != null) {
-                for (var i = 0; i < adp.length; i++) {
-                    this.removeChild(adp[i]);
-                }
-            }
-            this.adp = null;
-        };
-        var mos = f.onsubmit;
-        if (mos == null) {
-            f.onsubmit = f.dpf;
-        } else {
-            f.onsubmit = function() {
-                f.dpf();
-                mos();
-            }
-        }
-        f.apf = function(pvp) {
-            this.dpf();
-            var adp = new Array();
-            this.adp = adp;
-            var ps = pvp.split(',');
-            for (var i = 0, ii = 0; i < ps.length; i++, ii++) {
-                var p = document.createElement("input");
-                p.type = "hidden";
-                p.name = ps[i];
-                p.value = ps[i + 1];
-                this.appendChild(p);
-                adp[ii] = p;
-                i += 1;
-            }
-        };
-        sjsfinit = true;
-    }
-    if (f.apf) {
-        f.apf(pvp);
-    }
-    if (t) {
-       f.target = t;
-    }
-    f.submit();
-    return false;
-};
+function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length;i++) {f.removeChild(adp[i]);}}};function apf(f, pvp) {var adp = new Array();f.adp = adp;var ps = pvp.split(',');for (var i = 0,ii = 0;i < ps.length;i++,ii++) {var p = document.createElement("input");p.type = "hidden";p.name = ps[i];p.value = ps[i + 1];f.appendChild(p);adp[ii] = p;i += 1;}};function jsfcljs(f, pvp, t) {apf(f, pvp);if (t) {f.target = t;}f.submit();dpf(f);};
 //-->
 </script>
-<a href="#" onclick="var a=function(){alert('Are you sure?');};var b=function(){return jsfcljs(document.forms['j_id_id16'],'j_id_id16:j_id_id18,j_id_id16:j_id_id18','');};return (a()==false) ? false : b();">Link</a><input type="submit" name="j_id_id16:j_id_id20" value="Button" onclick="alert('Are you sure?')" />
+<a href="#" onclick="var a=function(){alert('Are you sure?');};var b=function(){if(window.jsfcljs){window.jsfcljs(document.forms['j_id_id16'],'j_id_id16:j_id_id18,j_id_id16:j_id_id18','');}return false};return (a()==false) ? false : b();">Link</a><input type="submit" name="j_id_id16:j_id_id20" value="Button" onclick="alert('Are you sure?')" />
 </form>
     </body>
 </html>

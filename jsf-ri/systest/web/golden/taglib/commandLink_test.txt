@@ -11,61 +11,16 @@
 <body>
     
     
-<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp;jsessionid=3226199168bdf420c768c3d075620" enctype="application/x-www-form-urlencoded">
+<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp;jsessionid=af24dd9160ddda32c12dfd945e46" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form01" value="form01" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id41:j_id42" />
 
 <script type="text/javascript" language="Javascript">
 <!--
-function jsfcljs(f, pvp, t) {
-    if (f.sjsfinit == null) {
-        f.dpf = function() {
-            var adp = this.adp;
-            if (adp != null) {
-                for (var i = 0; i < adp.length; i++) {
-                    this.removeChild(adp[i]);
-                }
-            }
-            this.adp = null;
-        };
-        var mos = f.onsubmit;
-        if (mos == null) {
-            f.onsubmit = f.dpf;
-        } else {
-            f.onsubmit = function() {
-                f.dpf();
-                mos();
-            }
-        }
-        f.apf = function(pvp) {
-            this.dpf();
-            var adp = new Array();
-            this.adp = adp;
-            var ps = pvp.split(',');
-            for (var i = 0, ii = 0; i < ps.length; i++, ii++) {
-                var p = document.createElement("input");
-                p.type = "hidden";
-                p.name = ps[i];
-                p.value = ps[i + 1];
-                this.appendChild(p);
-                adp[ii] = p;
-                i += 1;
-            }
-        };
-        sjsfinit = true;
-    }
-    if (f.apf) {
-        f.apf(pvp);
-    }
-    if (t) {
-       f.target = t;
-    }
-    f.submit();
-    return false;
-};
+function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length;i++) {f.removeChild(adp[i]);}}};function apf(f, pvp) {var adp = new Array();f.adp = adp;var ps = pvp.split(',');for (var i = 0,ii = 0;i < ps.length;i++,ii++) {var p = document.createElement("input");p.type = "hidden";p.name = ps[i];p.value = ps[i + 1];f.appendChild(p);adp[ii] = p;i += 1;}};function jsfcljs(f, pvp, t) {apf(f, pvp);if (t) {f.target = t;}f.submit();dpf(f);};
 //-->
 </script>
-<a id="form01:hyperlink01" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink01,form01:hyperlink01','');">My Link</a><a id="form01:hyperlink02" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink02,form01:hyperlink02','');">This is a String property</a><a id="form01:hyperlink03" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink03,form01:hyperlink03','');">RES-BUNDLE LINK</a><a id="form01:hyperlink04" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink04,form01:hyperlink04','');"><img src="duke.gif" /></a><a id="form01:hyperlink05" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink05,form01:hyperlink05','');"><img src="resbundle_image.gif;jsessionid=3226199168bdf420c768c3d075620" /></a><a id="form01:hyperlink06" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink06,form01:hyperlink06,param1,value1','');">Paramter Link</a>
+<a id="form01:hyperlink01" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['form01'],'form01:hyperlink01,form01:hyperlink01','');}return false">My Link</a><a id="form01:hyperlink02" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['form01'],'form01:hyperlink02,form01:hyperlink02','');}return false">This is a String property</a><a id="form01:hyperlink03" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['form01'],'form01:hyperlink03,form01:hyperlink03','');}return false">RES-BUNDLE LINK</a><a id="form01:hyperlink04" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['form01'],'form01:hyperlink04,form01:hyperlink04','');}return false"><img src="duke.gif" /></a><a id="form01:hyperlink05" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['form01'],'form01:hyperlink05,form01:hyperlink05','');}return false"><img src="resbundle_image.gif;jsessionid=af24dd9160ddda32c12dfd945e46" /></a><a id="form01:hyperlink06" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['form01'],'form01:hyperlink06,form01:hyperlink06,param1,value1','');}return false">Paramter Link</a>
 </form>
 </body>
 </html>

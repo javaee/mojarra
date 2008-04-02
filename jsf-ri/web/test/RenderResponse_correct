@@ -13,7 +13,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 
-<form id="basicForm" name="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" target="_self" title="basicForm">
+<form id="basicForm" name="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=ae7c99ff7fded0264594085bf96b" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" target="_self" title="basicForm">
 <input type="hidden" name="basicForm" value="basicForm" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
 
@@ -50,7 +50,7 @@
 
 	<TD>
 
-            <input id="basicForm:pushButton" type="image" src="duke.gif;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" name="basicForm:pushButton" style="someStyle" disabled="disabled" />
+            <input id="basicForm:pushButton" type="image" src="duke.gif;jsessionid=ae7c99ff7fded0264594085bf96b" name="basicForm:pushButton" style="someStyle" disabled="disabled" />
 	</TD>
 
       </TR>
@@ -60,7 +60,7 @@
 
 	<TD>
 
-            <input id="basicForm:imageOnlyButton" type="image" src="/test/duke.gif;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8?title=LOGIN&color=red" name="basicForm:imageOnlyButton" />
+            <input id="basicForm:imageOnlyButton" type="image" src="/test/duke.gif;jsessionid=ae7c99ff7fded0264594085bf96b?title=LOGIN&color=red" name="basicForm:imageOnlyButton" />
 	</TD>
 
       </TR>
@@ -72,10 +72,10 @@
 	      
 <script type="text/javascript" language="Javascript">
 <!--
-function jsfcljs(f, pvp, t) {if (f.sjsfinit == null) {f.dpf = function() {var adp = this.adp;if (adp != null) {for (var i = 0; i < adp.length; i++) {this.removeChild(adp[i]);}}this.adp = null;};var mos = f.onsubmit;if (mos == null) {f.onsubmit = f.dpf;} else {f.onsubmit = function() {f.dpf();mos();}}f.apf = function(pvp) {this.dpf();var adp = new Array();this.adp = adp;var ps = pvp.split(',');for (var i = 0, ii = 0; i < ps.length; i++, ii++) {var p = document.createElement("input");p.type = "hidden";p.name = ps[i];p.value = ps[i + 1];this.appendChild(p);adp[ii] = p;i += 1;}};sjsfinit = true;}if (f.apf) {f.apf(pvp);}if (t) {f.target = t;}f.submit();return false;};
+function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length;i++) {f.removeChild(adp[i]);}}};function apf(f, pvp) {var adp = new Array();f.adp = adp;var ps = pvp.split(',');for (var i = 0,ii = 0;i < ps.length;i++,ii++) {var p = document.createElement("input");p.type = "hidden";p.name = ps[i];p.value = ps[i + 1];f.appendChild(p);adp[ii] = p;i += 1;}};function jsfcljs(f, pvp, t) {apf(f, pvp);if (t) {f.target = t;}f.submit();dpf(f);};
 //-->
 </script>
-<a id="basicForm:link" href="#" onclick="return jsfcljs(document.forms['basicForm'],'basicForm:link,basicForm:link','');" class="hyperlinkClass">link text with localized outputMessage with &euro;</a>
+<a id="basicForm:link" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['basicForm'],'basicForm:link,basicForm:link','');}return false" class="hyperlinkClass">link text with localized outputMessage with &euro;</a>
 
 	</TD>
 
@@ -85,7 +85,7 @@ function jsfcljs(f, pvp, t) {if (f.sjsfinit == null) {f.dpf = function() {var ad
 
 	<TD>
 
-	      <a id="basicForm:linkWithValue1" href="#" onclick="return jsfcljs(document.forms['basicForm'],'basicForm:linkWithValue1,basicForm:linkWithValue1','');" class="hyperlinkClass">link text</a>
+	      <a id="basicForm:linkWithValue1" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['basicForm'],'basicForm:linkWithValue1,basicForm:linkWithValue1','');}return false" class="hyperlinkClass">link text</a>
 	</TD>
 
       </TR>
@@ -94,7 +94,7 @@ function jsfcljs(f, pvp, t) {if (f.sjsfinit == null) {f.dpf = function() {var ad
 
 	<TD>
 
-	      <a id="basicForm:linkWithValue2" href="#" onclick="return jsfcljs(document.forms['basicForm'],'basicForm:linkWithValue2,basicForm:linkWithValue2','');" class="hyperlinkClass">link textwith some text</a>   
+	      <a id="basicForm:linkWithValue2" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['basicForm'],'basicForm:linkWithValue2,basicForm:linkWithValue2','');}return false" class="hyperlinkClass">link textwith some text</a>   
 	</TD>
 
       </TR>
@@ -103,37 +103,37 @@ function jsfcljs(f, pvp, t) {if (f.sjsfinit == null) {f.dpf = function() {var ad
 
 	<TD>
 
-	      <a id="basicForm:imageLink" href="#" style="someStyle" onclick="return jsfcljs(document.forms['basicForm'],'basicForm:imageLink,basicForm:imageLink','');"><img src="duke.gif;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8?title=LOGIN&color=red" /></a>
+	      <a id="basicForm:imageLink" href="#" style="someStyle" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['basicForm'],'basicForm:imageLink,basicForm:imageLink','');}return false"><img src="duke.gif;jsessionid=ae7c99ff7fded0264594085bf96b?title=LOGIN&color=red" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" style="someStyle" usemap="#map1" ismap="ismap" /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=ae7c99ff7fded0264594085bf96b" style="someStyle" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:commandLink" href="#" onclick="return jsfcljs(document.forms['basicForm'],'basicForm:commandLink,basicForm:commandLink','');" class="hyperlinkClass">link text</a>
+            <a id="basicForm:commandLink" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['basicForm'],'basicForm:commandLink,basicForm:commandLink','');}return false" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:commandParamLink" href="#" onclick="return jsfcljs(document.forms['basicForm'],'basicForm:commandParamLink,basicForm:commandParamLink,name,horwat,value,password','');" class="hyperlinkClass">link text</a>
+            <a id="basicForm:commandParamLink" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['basicForm'],'basicForm:commandParamLink,basicForm:commandParamLink,name,horwat,value,password','');}return false" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:hrefLink" href="#" onclick="return jsfcljs(document.forms['basicForm'],'basicForm:hrefLink,basicForm:hrefLink','');"><img src="duke.gif"></a>
+            <a id="basicForm:hrefLink" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['basicForm'],'basicForm:hrefLink,basicForm:hrefLink','');}return false"><img src="duke.gif"></a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:hrefParamLink" href="#" onclick="return jsfcljs(document.forms['basicForm'],'basicForm:hrefParamLink,basicForm:hrefParamLink,name,horwat,value,password','_top');"><img src="duke.gif;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['basicForm'],'basicForm:hrefParamLink,basicForm:hrefParamLink,name,horwat,value,password','_top');}return false"><img src="duke.gif;jsessionid=ae7c99ff7fded0264594085bf96b" /></a>
         </TD>
       </TR>
 
@@ -141,7 +141,7 @@ function jsfcljs(f, pvp, t) {if (f.sjsfinit == null) {f.dpf = function() {var ad
 
 	<TD>
 
-	      <a id="basicForm:outputLink" name="basicForm:outputLink" href="test.html;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" class="hyperlinkClass">output link text</a>
+	      <a id="basicForm:outputLink" name="basicForm:outputLink" href="test.html;jsessionid=ae7c99ff7fded0264594085bf96b" class="hyperlinkClass">output link text</a>
 
 	</TD>
 
@@ -151,37 +151,37 @@ function jsfcljs(f, pvp, t) {if (f.sjsfinit == null) {f.dpf = function() {var ad
 
 	<TD>
 
-	      <a id="basicForm:output_imageLink" name="basicForm:output_imageLink" href="test.html;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" /></a>
+	      <a id="basicForm:output_imageLink" name="basicForm:output_imageLink" href="test.html;jsessionid=ae7c99ff7fded0264594085bf96b" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=ae7c99ff7fded0264594085bf96b" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" usemap="#map1" ismap="ismap" /> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=ae7c99ff7fded0264594085bf96b" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_commandLink" name="basicForm:output_commandLink" href="test.html;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandLink" name="basicForm:output_commandLink" href="test.html;jsessionid=ae7c99ff7fded0264594085bf96b" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_commandParamLink" name="basicForm:output_commandParamLink" href="test.html;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8?name=horwat&value=password" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandParamLink" name="basicForm:output_commandParamLink" href="test.html;jsessionid=ae7c99ff7fded0264594085bf96b?name=horwat&value=password" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefLink" name="basicForm:output_hrefLink" href="test.html;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8"><img src="duke.gif"></a>
+            <a id="basicForm:output_hrefLink" name="basicForm:output_hrefLink" href="test.html;jsessionid=ae7c99ff7fded0264594085bf96b"><img src="duke.gif"></a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefParamLink" name="basicForm:output_hrefParamLink" href="test.html;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8?name=horwat&value=password"><img src="duke.gif;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" /></a>
+            <a id="basicForm:output_hrefParamLink" name="basicForm:output_hrefParamLink" href="test.html;jsessionid=ae7c99ff7fded0264594085bf96b?name=horwat&value=password"><img src="duke.gif;jsessionid=ae7c99ff7fded0264594085bf96b" /></a>
         </TD>
       </TR>
 
@@ -717,7 +717,7 @@ see the <i>angle brackets</i> on this text
 
 
 </form>
-<form id="form2" name="form2" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" enctype="application/x-www-form-urlencoded">
+<form id="form2" name="form2" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=ae7c99ff7fded0264594085bf96b" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form2" value="form2" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
 <input type="submit" name="form2:j_id_id818" value="form2 button1" />
@@ -725,18 +725,18 @@ see the <i>angle brackets</i> on this text
   <input type="submit" name="form2:j_id_id821" value="form2 button2" /> <p />
 
 </form>
-<form id="form3" name="form3" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" enctype="application/x-www-form-urlencoded">
+<form id="form3" name="form3" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=ae7c99ff7fded0264594085bf96b" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form3" value="form3" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
 <input type="submit" name="form3:j_id_id827" value="form3 button1" />
    <p />
-  <a href="#" onclick="return jsfcljs(document.forms['form3'],'form3:j_id_id830,form3:j_id_id830','');">form3 link1</a> <p />
+  <a href="#" onclick="if(window.jsfcljs){window.jsfcljs(document.forms['form3'],'form3:j_id_id830,form3:j_id_id830','');}return false">form3 link1</a> <p />
 
 </form>
-<form id="form4" name="form4" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8" enctype="application/x-www-form-urlencoded">
+<form id="form4" name="form4" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=ae7c99ff7fded0264594085bf96b" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form4" value="form4" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
-<a href="http://localhost:8080/test/;jsessionid=4aadd56e5dce1ffffffffce38098eedbc8b8">
+<a href="http://localhost:8080/test/;jsessionid=ae7c99ff7fded0264594085bf96b">
       Link Enabled
   </a><span>
       Link Disabled

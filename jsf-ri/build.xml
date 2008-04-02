@@ -234,7 +234,7 @@
         </jsf.javac>
 
         <copy todir="${build.classes.dir}">
-            <fileset dir="${source.dir}" includes="**/*.properties"/>
+            <fileset dir="${source.dir}" includes="**/*.properties,**/*.js"/>
             <fileset dir="${tools.dir}/src" includes="**/*.properties"/>
         </copy>
         
