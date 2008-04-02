@@ -1,5 +1,5 @@
 /*
- * $Id: GraphComponent.java,v 1.1 2004/05/20 17:08:47 jvisvanathan Exp $
+ * $Id: GraphComponent.java,v 1.2 2005/05/17 17:00:15 jayashri Exp $
  */
 
 /*
@@ -52,6 +52,11 @@ import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.ResponseStateManager;
+import javax.faces.FactoryFinder;
+
 /**
  * Component wrapping a {@link Graph} object that is pointed at by the
  * a value binding reference expression.  This component supports
@@ -69,10 +74,20 @@ public class GraphComponent extends UICommand {
         // set a default actionListener to expand or collapse a node
         // when a node is clicked.
         Class signature[] = {ActionEvent.class};
-        setActionListener(FacesContext.getCurrentInstance().getApplication()
+        // add listener only if its an initial request. If its a postback
+        // the listener will be persisted by the state saving mechanism, so
+        // we don't want to accumulate the listeners.
+        FacesContext context = FacesContext.getCurrentInstance();
+        String renderkitId = 
+                context.getApplication().getViewHandler().
+                calculateRenderKitId(context);
+        ResponseStateManager rsm = this.getResponseStateManager(context,
+                renderkitId);
+        if (!rsm.isPostback(context)) {
+            setActionListener(FacesContext.getCurrentInstance().getApplication()
                           .createMethodBinding(
-                              "#{GraphBean.processGraphEvent}",
-                              signature));
+                              "#{GraphBean.processGraphEvent}", signature));
+        }
 
     }
 
@@ -84,6 +99,20 @@ public class GraphComponent extends UICommand {
 
         return ("Graph");
 
+    }
+    
+    protected ResponseStateManager getResponseStateManager(FacesContext context, 
+            String renderKitId){
+
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+
+        RenderKit renderKit = renderKitFactory.getRenderKit(context, renderKitId);        
+
+        if ( renderKit != null) {
+            return renderKit.getResponseStateManager();
+        }
+        return null;
     }
 
 }

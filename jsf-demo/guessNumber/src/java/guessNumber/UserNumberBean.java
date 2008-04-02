@@ -77,10 +77,11 @@ public class UserNumberBean {
 
     public String getResponse() {
 
-        assert (userNumber != null); // indicates an EL conversion failure
-        
-        if (userNumber.compareTo(randomInt) == 0) {
+        if (userNumber != null && userNumber.compareTo(randomInt) == 0) {
             return "Yay! You got it!";
+        } else if (userNumber == null) {
+            return "Sorry, " + userNumber +
+                    " is incorrect. Try a larger number.";    
         } else {
             int num = userNumber.intValue();
             if (num > randomInt.intValue()) {

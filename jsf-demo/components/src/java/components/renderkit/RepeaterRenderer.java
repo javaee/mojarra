@@ -1,5 +1,5 @@
 /*
- * $Id: RepeaterRenderer.java,v 1.2 2004/07/16 01:09:19 jayashri Exp $
+ * $Id: RepeaterRenderer.java,v 1.3 2005/05/17 17:00:15 jayashri Exp $
  */
 
 /*
@@ -101,8 +101,9 @@ public class RepeaterRenderer extends BaseRenderer {
      */
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
-
-        super.encodeChildren(context, component);
+        // PENDING (visvan) Issue 79. If we decide to fix this in the spec,
+        // this call can be uncommented.
+        // super.encodeChildren(context, component);
         ResponseWriter writer = context.getResponseWriter();
         UIData data = (UIData) component;
 
