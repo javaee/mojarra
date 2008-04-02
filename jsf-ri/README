@@ -1,8 +1,8 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20020902A
-jsf-api-spec for this implementation: JSF_20020902.pdf
+jsf-api cvs tag for this implementation: JSF_API_20020920B
+jsf-api-spec for this implementation: JSF_20020920.pdf
 
 Installation Notes
 ==================
@@ -20,6 +20,9 @@ distribution in your WEB-INF/lib directory in your webapp.
 
 Major changes/features in this release:
 =======================================
+
+* command_button, render an <input> element instead of a
+  <button> as a concession to old browsers.
 
 * Saving the tree can be done either in session (server) or in page by
   turning off/on context parameter "saveStateInClient". Default is page. 
