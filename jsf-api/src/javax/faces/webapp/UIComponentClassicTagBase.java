@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.30 2007/01/29 07:29:00 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.31 2007/02/01 22:18:10 rlubke Exp $
  */
 
 /*
@@ -36,7 +36,6 @@ import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.render.ResponseStateManager;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -665,8 +664,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
     public static UIComponentClassicTagBase getParentUIComponentClassicTagBase(PageContext context) {
 
-        FacesContext facesContext = (FacesContext)
-              context.getAttribute(CURRENT_FACES_CONTEXT);
+        FacesContext facesContext = getFacesContext(context);
         List list = (List) facesContext.getExternalContext().getRequestMap()
               .get(COMPONENT_TAG_STACK_ATTR);
        
@@ -1548,10 +1546,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                             // since the tree was restored.  So check for the
                             // saved state request parameter to determine if
                             // this was a post-back or not.
-                            if (comp == null
-                                || context.getExternalContext()
-                                  .getRequestParameterMap().containsKey(
-                                  ResponseStateManager.VIEW_STATE_PARAM)) {
+                            if (comp == null || isPostBack(context)) {
                                 return (this.id);
                             }
                         }
@@ -1570,6 +1565,19 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             }
 	    return (this.id);
         }
+
+    }
+
+
+    /**
+     * Determine if the request is a postback or not.
+     * @param context the FacesContext for the current request
+     * @return <code>true</code> if the request is a postback
+     *  otherwise, return <code>false</code>
+     */
+    private static boolean isPostBack(FacesContext context) {
+
+        return context.getRenderKit().getResponseStateManager().isPostback(context);
 
     }
 
@@ -1811,7 +1819,25 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
     }
 
-    private static void printTree(UIComponent root, 
+
+    private static FacesContext getFacesContext(PageContext pageContext) {
+
+        FacesContext context = (FacesContext)
+             pageContext.getAttribute(CURRENT_FACES_CONTEXT);
+        if (context == null) {
+            context = FacesContext.getCurrentInstance();
+            if (context == null) {
+                 throw new RuntimeException("Cannot find FacesContext");
+            } else {
+                pageContext.setAttribute(CURRENT_FACES_CONTEXT, context);
+            }
+        }
+
+        return (context);
+
+    }
+
+    private static void printTree(UIComponent root,
                                   String duplicateId,
                                   Writer out, 
                                   int curDepth) {
