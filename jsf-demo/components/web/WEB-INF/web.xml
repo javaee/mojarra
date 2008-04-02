@@ -44,6 +44,7 @@
 
 
 <web-app>
+
     <display-name>JavaServer Faces Custom Components</display-name>
     <description>
         JavaServer Faces Custom Components
@@ -62,6 +63,29 @@
     <context-param>
         <param-name>com.sun.faces.validateXml</param-name>
         <param-value>true</param-value>
+        <description>
+            Set this flag to true if you want the JavaServer Faces
+            Reference Implementation to validate the XML in your
+            faces-config.xml resources against the DTD.  Default
+            value is false.
+        </description>
+    </context-param>
+
+    <!--
+         PENDING:  MapComponent and GraphComponent currently add
+         a default listener in their constructor, which can only
+         succeed if there is a FacesContext for the current request.
+    -->
+    <context-param>
+        <param-name>com.sun.faces.verifyObjects</param-name>
+        <param-value>false</param-value>
+        <description>
+            Set this flag to true if you want the JavaServer Faces
+            Reference Implementation to verify that all of the application
+            objects you have configured (components, converters,
+            renderers, and validators) can be successfully created.
+            Default value is false.
+        </description>
     </context-param>
 
     <!-- Faces Servlet -->

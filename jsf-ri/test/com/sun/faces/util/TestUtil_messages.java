@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.27 2003/12/22 23:26:02 eburns Exp $
+ * $Id: TestUtil_messages.java,v 1.28 2004/01/31 06:27:07 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.27 2003/12/22 23:26:02 eburns Exp $
+ * @version $Id: TestUtil_messages.java,v 1.28 2004/01/31 06:27:07 craigmcc Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -109,7 +109,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.INVALID_EXPRESSION_ID, "1"},
         {Util.NULL_FORVALUE_ID, "1"},
         {Util.EMPTY_PARAMETER_ID, "0"},
-        {Util.ASSERTION_FAILED_ID, "0"}
+        {Util.ASSERTION_FAILED_ID, "0"},
+        {Util.OBJECT_CREATION_ERROR_ID, "0"},
     };
 
 // Attribute Instance Variables

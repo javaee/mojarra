@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.54 2004/01/27 21:03:59 eburns Exp $
+ * $Id: RIConstants.java,v 1.55 2004/01/31 06:27:00 craigmcc Exp $
  */
 
 /*
@@ -93,6 +93,8 @@ public class RIConstants {
     public static final String CONFIG_ATTR = FACES_PREFIX + "ConfigBase";
 
     public static final String VALIDATE_XML = FACES_PREFIX + "validateXml";
+
+    public static final String VERIFY_OBJECTS = FACES_PREFIX + "verifyObjects";
 
     public static final String ONE_TIME_INITIALIZATION_ATTR = 
 	FACES_PREFIX + "OneTimeInitialization";

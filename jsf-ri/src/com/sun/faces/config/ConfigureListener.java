@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.3 2004/01/31 02:44:32 rkitain Exp $
+ * $Id: ConfigureListener.java,v 1.4 2004/01/31 06:27:01 craigmcc Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -83,6 +83,7 @@ import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
@@ -312,6 +313,13 @@ public final class ConfigureListener implements ServletContextListener {
             throw e;
         } catch (Exception e) {
             throw new FacesException(e);
+        }
+
+        // Step 8, verify that all the configured factories are available
+        // and optionall that configured objects can be created
+        verifyFactories();
+        if (shouldVerifyObjects(context)) {
+            verifyObjects(context, fcb);
         }
 
         context.setAttribute(RIConstants.CONFIG_ATTR, new Boolean(true)); 
@@ -969,6 +977,31 @@ public final class ConfigureListener implements ServletContextListener {
     }
 
 
+    private String factoryNames[] =
+    { FactoryFinder.APPLICATION_FACTORY,
+      FactoryFinder.FACES_CONTEXT_FACTORY,
+      FactoryFinder.LIFECYCLE_FACTORY,
+      FactoryFinder.RENDER_KIT_FACTORY };
+
+
+    /**
+     * <p>Verify that all of the required factory objects are available.</p>
+     *
+     * @exception FacesException if a factory cannot be created
+     */
+    private void verifyFactories() throws FacesException {
+
+        for (int i = 0, len=factoryNames.length; i < len; i++) {
+            try {
+                Object factory = FactoryFinder.getFactory(factoryNames[i]);
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+
+    }
+
+
     /**
      * <p>Return <code>true</code> if this web application has already
      * been initialized.  If it has not been initialized, also record
@@ -995,6 +1028,127 @@ public final class ConfigureListener implements ServletContextListener {
 	        return true;
 	    }
 	}
+
+    }
+
+
+    /**
+     * <p>Verify that all of the application-defined objects that have been
+     * configured can be successfully instantiated.</p>
+     *
+     * @param context <code>ServletContext</code> instance for this application
+     * @param fcb <code>FacesConfigBean</code> containing the
+     *  configuration information
+     *
+     * @exception FacesException if an application-defined object cannot
+     *  be instantiated
+     */
+    private void verifyObjects(ServletContext context, FacesConfigBean fcb)
+        throws FacesException {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Verifying application objects");
+        }
+
+        ApplicationFactory af = (ApplicationFactory)
+            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application app = af.getApplication();
+        RenderKitFactory rkf = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        boolean success = true;
+
+        // Check components
+        ComponentBean comp[] = fcb.getComponents();
+        for (int i = 0, len=comp.length; i < len; i++) {
+            try {
+                app.createComponent(comp[i].getComponentType());
+            } catch (Exception e) {
+                context.log(comp[i].getComponentClass(), e);
+                success = false;
+            }
+        }
+
+        // Check converters
+        ConverterBean conv1[] = fcb.getConvertersByClass();
+        Class clazz;
+        for (int i = 0, len=conv1.length; i < len; i++) {
+            try {
+                clazz = Util.loadClass(conv1[i].getConverterForClass(), this);
+                app.createConverter(clazz);
+            } catch (Exception e) {
+                context.log(conv1[i].getConverterForClass(), e);
+                clazz = null;
+                success = false;
+            }
+            try {
+                app.createConverter(clazz);
+            } catch (Exception e) {
+                context.log(conv1[i].getConverterClass(), e);
+                success = false;
+            }
+        }
+        ConverterBean conv2[] = fcb.getConvertersById();
+        for (int i = 0, len=conv2.length; i < len; i++) {
+            try {
+                app.createConverter(conv2[i].getConverterId());
+            } catch (Exception e) {
+                context.log(conv2[i].getConverterClass());
+                success = false;
+            }
+        }
+
+        // Check renderers
+        RenderKitBean rkb[] = fcb.getRenderKits();
+        RenderKit rk;
+        for (int i = 0, len = rkb.length; i < len; i++) {
+            try {
+                rk = rkf.getRenderKit(null, rkb[i].getRenderKitId());
+                RendererBean rb[] = rkb[i].getRenderers();
+                for (int j = 0, len2 = rb.length; j < len2; j++) {
+                    try {
+                        rk.getRenderer(rb[j].getComponentFamily(),
+                                       rb[j].getRendererType());
+                    } catch (Exception e) {
+                        context.log(rb[j].getRendererClass(), e);
+                        success = false;
+                    }
+                }
+            } catch (Exception e) {
+                context.log(rkb[i].getRenderKitId());
+                success = false;
+            }
+        }
+
+        // Check validators
+        ValidatorBean val[] = fcb.getValidators();
+        for (int i = 0, len = val.length; i < len; i++) {
+            try {
+                app.createValidator(val[i].getValidatorId());
+            } catch (Exception e) {
+                context.log(val[i].getValidatorClass(), e);
+                success = false;
+            }
+        }
+
+        // Throw an exception on any failures
+        if (!success) {
+            String message;
+	    try {
+                message = Util.getExceptionMessage
+                    (Util.OBJECT_CREATION_ERROR_ID,
+                     new Object[] {  });
+	    } catch (Exception ee) {
+                message = "One or more configured application objects " +
+                    "cannot be created.  See your web application logs " +
+                    "for details.";
+	    }
+            log.warn(message);
+            throw new FacesException(message);
+        } else {
+            if (log.isInfoEnabled()) {
+                log.info("Application object verification completed successfully");
+            }
+        }
 
     }
 
@@ -1051,6 +1205,26 @@ public final class ConfigureListener implements ServletContextListener {
      */
     private boolean validateTheXml(ServletContext sc) {
         String validateXml = sc.getInitParameter(RIConstants.VALIDATE_XML);
+        if (validateXml != null) {
+            if (!(validateXml.equals("true")) && !(validateXml.equals("false"))) {
+                Object[] obj = new Object[1];
+                obj[0] = "validateXml";
+                throw new FacesException(Util.getExceptionMessage(
+                    Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID, obj));
+            }
+        } else {
+            validateXml = "false";
+        }
+        return new Boolean(validateXml).booleanValue();
+    }
+
+    /**
+     * <p>Determine if we will verify objects after configuration.
+     *
+     * @param sc the servlet context
+     */
+    private boolean shouldVerifyObjects(ServletContext sc) {
+        String validateXml = sc.getInitParameter(RIConstants.VERIFY_OBJECTS);
         if (validateXml != null) {
             if (!(validateXml.equals("true")) && !(validateXml.equals("false"))) {
                 Object[] obj = new Object[1];

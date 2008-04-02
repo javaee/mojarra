@@ -44,6 +44,7 @@
 
 
 <web-app>
+
     <display-name>JavaServer Faces Guess Number Sample Application</display-name>
     <description>
         JavaServer Faces Guess Number Sample Application
@@ -55,13 +56,26 @@
     </context-param>
 
     <context-param>
-        <param-name>javax.faces.application.CONFIG_FILES</param-name>
-        <param-value>/WEB-INF/faces-config.xml</param-value>
+        <param-name>com.sun.faces.validateXml</param-name>
+        <param-value>true</param-value>
+        <description>
+            Set this flag to true if you want the JavaServer Faces
+            Reference Implementation to validate the XML in your
+            faces-config.xml resources against the DTD.  Default
+            value is false.
+        </description>
     </context-param>
 
     <context-param>
-        <param-name>com.sun.faces.validateXml</param-name>
+        <param-name>com.sun.faces.verifyObjects</param-name>
         <param-value>true</param-value>
+        <description>
+            Set this flag to true if you want the JavaServer Faces
+            Reference Implementation to verify that all of the application
+            objects you have configured (components, converters,
+            renderers, and validators) can be successfully created.
+            Default value is false.
+        </description>
     </context-param>
 
     <!-- Faces Servlet -->

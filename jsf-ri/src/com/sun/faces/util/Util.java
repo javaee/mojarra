@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.127 2004/01/31 00:00:47 craigmcc Exp $
+ * $Id: Util.java,v 1.128 2004/01/31 06:27:02 craigmcc Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.127 2004/01/31 00:00:47 craigmcc Exp $ 
+ * @version $Id: Util.java,v 1.128 2004/01/31 06:27:02 craigmcc Exp $ 
  */
 
 public class Util extends Object
@@ -291,6 +291,8 @@ public class Util extends Object
          "com.sun.faces.EMPTY_PARAMETER";
     public static final String ASSERTION_FAILED_ID =
          "com.sun.faces.ASSERTION_FAILED";
+    public static final String OBJECT_CREATION_ERROR_ID =
+        "com.sun.faces.OBJECT_CREATION_ERROR";
     
 
 // README - make sure to add the message identifier constant
