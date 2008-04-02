@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.2 2003/04/29 20:51:34 eburns Exp $
+ * $Id: ConfigParser.java,v 1.3 2003/04/30 19:06:02 rkitain Exp $
  */
 
 /*
@@ -9,7 +9,9 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.util.Util;
 
 import java.io.File;
 import java.io.InputStream;
@@ -28,6 +30,8 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.mozilla.util.Assert;
 
 import org.xml.sax.Attributes;
@@ -42,6 +46,9 @@ public class ConfigParser {
     //
     // Instance Variables
     //
+
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(ConfigParser.class);
 
     // The public identifier of our DTD
     protected String CONFIG_DTD_PUBLIC_ID =
@@ -66,8 +73,11 @@ public class ConfigParser {
     public ConfigParser(ServletContext servletContext) {
 
         super();
-
-        digester = createDigester();
+        boolean validateXml = validateTheXml(servletContext);
+        if (log.isTraceEnabled()) {
+            log.trace("Validate Xml:"+validateXml);
+        }
+        digester = createDigester(validateXml);
         configureRules(digester);
 
         base = parseConfig("/WEB-INF/faces-config.xml", servletContext);
@@ -80,8 +90,8 @@ public class ConfigParser {
      */
     public ConfigParser(String configPath, ServletContext servletContext) {
         super();
-
-        digester = createDigester();
+        boolean validateXml = validateTheXml(servletContext);
+        digester = createDigester(validateXml);
         configureRules(digester);
 
         base = parseConfig(configPath, servletContext);
@@ -108,15 +118,20 @@ public class ConfigParser {
         try {
             input = servletContext.getResourceAsStream(configPath);
         } catch (Throwable t) {
-            throw new RuntimeException("Error Opening File:"+configPath);
+            Object[] obj = new Object[1];
+            obj[0] = configPath;
+            throw new RuntimeException(Util.getExceptionMessage(
+                Util.ERROR_OPENING_FILE_ERROR_MESSAGE_ID, obj));
         }
         try {
             digester.clear();
             digester.push(new ConfigBase());
             base = (ConfigBase) digester.parse(input);
         } catch (Throwable t) {
-            throw new RuntimeException("Unable to parse file:"+configPath+":"+
-                t.getMessage());
+            Object[] obj = new Object[1];
+            obj[0] = configPath;
+            throw new RuntimeException(Util.getExceptionMessage(
+                Util.ERROR_PARSING_FILE_ERROR_MESSAGE_ID, obj)+t.getMessage());
         }
             
         try {
@@ -129,15 +144,18 @@ public class ConfigParser {
 
 
     // Create a Digester instance with no rules yet
-    protected Digester createDigester() {
+    protected Digester createDigester(boolean validateXml) {
 
         Digester digester = new Digester();
         try {
             URL url = this.getClass().getResource("/com/sun/faces/config/faces-config.dtd");
             digester.register(CONFIG_DTD_PUBLIC_ID, url.toString());
-            digester.setValidating(true);
+            digester.setValidating(validateXml);
         } catch (Throwable t) {
-            throw new RuntimeException("Error registering DTD:"+t.getMessage());
+            Object[] obj = new Object[1];
+            obj[0] = "/com/sun/faces/config/faces-config.dtd";
+            throw new RuntimeException(Util.getExceptionMessage(
+                Util.ERROR_REGISTERING_DTD_ERROR_MESSAGE_ID, obj)+t.getMessage());
         }
         return (digester);
 
@@ -177,7 +195,6 @@ public class ConfigParser {
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigAttribute");
         digester.addSetNext(prefix, "addAttribute", "com.sun.faces.config.ConfigAttribute");
-        configureRulesFeature(digester, prefix);
         digester.addCallMethod(prefix + "/attribute-name",
                                "setAttributeName", 0);
         digester.addCallMethod(prefix + "/attribute-class",
@@ -193,7 +210,6 @@ public class ConfigParser {
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigComponent");
         digester.addSetNext(prefix, "addComponent", "com.sun.faces.config.ConfigComponent");
-        configureRulesFeature(digester, prefix);
         digester.addCallMethod(prefix + "/component-type",
                                "setComponentType", 0);
         digester.addCallMethod(prefix + "/component-class",
@@ -211,7 +227,6 @@ public class ConfigParser {
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigConverter");
         digester.addSetNext(prefix, "addConverter", "com.sun.faces.config.ConfigConverter");
-        configureRulesFeature(digester, prefix);
         digester.addCallMethod(prefix + "/converter-id",
                                "setConverterId", 0);
         digester.addCallMethod(prefix + "/converter-class",
@@ -222,27 +237,11 @@ public class ConfigParser {
     }
 
 
-    // Configure the generic feature rules for the specified prefix
-    protected void configureRulesFeature(Digester digester, String prefix) {
-
-        digester.addCallMethod(prefix + "/description",
-                               "setDescription", 0);
-        digester.addCallMethod(prefix + "/display-name",
-                               "setDisplayName", 0);
-        digester.addCallMethod(prefix + "/icon/large-icon",
-                               "setLargeIcon", 0);
-        digester.addCallMethod(prefix + "/icon/small-icon",
-                               "setSmallIcon", 0);
-
-    }
-
-
     // Configure the rules for a <property> element
     protected void configureRulesProperty(Digester digester, String prefix) {
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigProperty");
         digester.addSetNext(prefix, "addProperty", "com.sun.faces.config.ConfigProperty");
-        configureRulesFeature(digester, prefix);
         digester.addCallMethod(prefix + "/property-name",
                                "setPropertyName", 0);
         digester.addCallMethod(prefix + "/property-class",
@@ -258,7 +257,6 @@ public class ConfigParser {
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigValidator");
         digester.addSetNext(prefix, "addValidator", "com.sun.faces.config.ConfigValidator");
-        configureRulesFeature(digester, prefix);
         digester.addCallMethod(prefix + "/validator-id",
                                "setValidatorId", 0);
         digester.addCallMethod(prefix + "/validator-class",
@@ -275,7 +273,6 @@ public class ConfigParser {
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigManagedBean");
         digester.addSetNext(prefix, "addManagedBean", "com.sun.faces.config.ConfigManagedBean");
-        configureRulesFeature(digester, prefix);
         digester.addCallMethod(prefix + "/managed-bean-name", "setManagedBeanId", 0);
         digester.addCallMethod(prefix + "/managed-bean-class", "setManagedBeanClass", 0);
         digester.addCallMethod(prefix + "/managed-bean-scope", "setManagedBeanScope", 0);
@@ -389,6 +386,19 @@ public class ConfigParser {
         File file = new File(System.getProperty("base.dir"), relativePath);
         return (file.toURL());
 
+    }
+
+    private boolean validateTheXml(ServletContext sc) {
+        String validateXml = sc.getInitParameter(RIConstants.VALIDATE_XML);
+        if (validateXml != null) {
+            if (!(validateXml.equals("true")) && !(validateXml.equals("false"))) {
+                throw new RuntimeException("Validate Xml initialization parameter must "+
+                    "be 'true' or 'false'");
+            }
+        } else if (validateXml == null) {
+            validateXml = "false";
+        }
+        return new Boolean(validateXml).booleanValue();
     }
 }
 
