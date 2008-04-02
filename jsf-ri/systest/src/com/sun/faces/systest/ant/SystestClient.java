@@ -143,7 +143,7 @@ import java.util.Map;
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.4 $ $Date: 2003/12/17 15:14:33 $
+ * @version $Revision: 1.5 $ $Date: 2004/01/20 22:00:30 $
  */
 
 public class SystestClient extends Task {
@@ -1117,6 +1117,29 @@ public class SystestClient extends Task {
 
     }
 
+    protected String stripJsessionidFromLine(String line) {
+	if (null == line) {
+	    return line;
+	}
+	int 
+	    start = 0,
+	    end = 0;
+	String result = line;
+
+	if (-1 == (start = line.indexOf(";jsessionid="))) {
+	    return result;
+	}
+	
+	if (-1 == (end = line.indexOf("?", start))) {
+	    if (-1 == (end = line.indexOf("\"", start))) {
+		throw new IllegalStateException();
+	    }
+	}
+	result = stripJsessionidFromLine(line.substring(0, start) + 
+					 line.substring(end));
+	return result;
+    }
+
 
     /**
      * Validate the response against the golden file (if any), skipping the
@@ -1138,8 +1161,11 @@ public class SystestClient extends Task {
                 String golden = (String) saveGolden.get(i);
                 String response = (String) saveResponse.get(i);
                 if (!validateIgnore(golden) && !golden.equals(response)) {
-                    ok = false;
-                    break;
+		    response = stripJsessionidFromLine(response);
+		    if (!golden.equals(response)) {
+			ok = false;
+			break;
+		    }
                 }
             }
         }

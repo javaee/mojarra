@@ -1,5 +1,5 @@
 /*
- * $Id: CompareFiles.java,v 1.8 2003/07/29 16:49:39 rlubke Exp $
+ * $Id: CompareFiles.java,v 1.9 2004/01/20 22:00:31 eburns Exp $
  */
 
 /*
@@ -17,6 +17,29 @@ import java.util.Iterator;
 public class CompareFiles {
 
     public CompareFiles() {
+    }
+
+    public static String stripJsessionidFromLine(String line) {
+	if (null == line) {
+	    return line;
+	}
+	int 
+	    start = 0,
+	    end = 0;
+	String result = line;
+
+	if (-1 == (start = line.indexOf(";jsessionid="))) {
+	    return result;
+	}
+	
+	if (-1 == (end = line.indexOf("?", start))) {
+	    if (-1 == (end = line.indexOf("\"", start))) {
+		throw new IllegalStateException();
+	    }
+	}
+	result = stripJsessionidFromLine(line.substring(0, start) + 
+					 line.substring(end));
+	return result;
     }
 
     /**
@@ -50,7 +73,7 @@ public class CompareFiles {
 	while (null != newLine && null != oldLine) {
 	    if (!newLine.equals(oldLine)) {
 
-		if (null != oldLinesToIgnore) {
+		if (null != oldLinesToIgnore && oldLinesToIgnore.size() > 0) {
 		    // go thru the list of oldLinesToIgnore and see if
 		    // the current oldLine matches any of them.
 		    Iterator ignoreLines = oldLinesToIgnore.iterator();
@@ -70,8 +93,11 @@ public class CompareFiles {
 		    }
 		}
 		else {
-		    same = false;
-		    break;
+		    newLine = stripJsessionidFromLine(newLine);
+		    if (!newLine.equals(oldLine)) {
+			same = false;
+			break;
+		    }
 		}
 	    }
 	    
