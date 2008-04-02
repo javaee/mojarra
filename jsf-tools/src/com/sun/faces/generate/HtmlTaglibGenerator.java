@@ -392,7 +392,9 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
 	if (componentFamily == null) {
 	    return null;
 	}
-        String tagName = componentFamily.toLowerCase();
+        String tagName =
+            Character.toLowerCase(componentFamily.charAt(0)) +
+            componentFamily.substring(1);
 	if (rendererType == null) {
 	    return tagName;
 	}
