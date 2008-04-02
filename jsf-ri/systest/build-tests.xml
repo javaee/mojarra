@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.117 2006/07/27 22:03:41 rlubke Exp $
+ $Id: build-tests.xml,v 1.118 2006/07/28 15:35:13 rlubke Exp $
 -->
 
 <!--
@@ -118,6 +118,7 @@
                 test.interweaving,
                 test.listener,
                 test.duplicateIds,
+                test.viewIdNormalization,
                 test.renderkit,
                 test.hello,
                 test.external,
@@ -193,6 +194,13 @@
         -->
 
 
+    </target>
+    
+    
+    <target name="test.viewIdNormalization">
+        <!-- request for any page will do -->
+        <jsf.tester request="${context.path}/faces/faces/faces/faces/duplicateIds02.jsp"
+                status="200"/>
     </target>
 
     <target name="test.external"

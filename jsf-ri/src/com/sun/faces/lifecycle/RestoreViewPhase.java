@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.34 2006/05/26 01:10:37 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.35 2006/07/28 15:35:13 rlubke Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.34 2006/05/26 01:10:37 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.35 2006/07/28 15:35:13 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -287,7 +287,16 @@ public class RestoreViewPhase extends Phase {
 
             }
         } else {
-            convertedViewId = viewId.substring((viewId.indexOf(mapping) + 1));
+            // if using relative URLs and prefix mapping,
+            // there is a chance of having multiple instances
+            // of the mapping in the URI.  This attempts to 
+            // normalize the URI to prevent a request dispatcher
+            // loop
+            convertedViewId = viewId;            
+            int length = mapping != null ? mapping.length() : 0;
+            while (convertedViewId.startsWith(mapping)) {
+                convertedViewId = convertedViewId.substring(length);                
+            }          
         }
                       
         return convertedViewId;
