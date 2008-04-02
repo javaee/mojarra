@@ -1,5 +1,5 @@
 /*
- * $Id: Converter.java,v 1.7 2003/08/18 16:38:26 eburns Exp $
+ * $Id: Converter.java,v 1.8 2003/09/25 19:27:18 rlubke Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.convert;
 
 
-import javax.faces.FacesException;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -40,15 +39,18 @@ public interface Converter {
      * @param context {@link FacesContext} for the request being processed
      * @param component {@link UIComponent} with which this model object
      *  value is associated
-     * @param value String value to be converted (may be null)
+     * @param value String value to be converted (may be <code>null</code>)
+     * 
+     * @return <code>null</code> if the value to convert is <code>null</code>, 
+     *  otherwise the result of the conversion
      *
      * @exception ConverterException if conversion cannot be successfully
      *  performed
      * @exception NullPointerException if <code>context</code> or
-     *  <code>component</code> is null
+     *  <code>component</code> is <code>null</code>
      */
     public Object getAsObject(FacesContext context, UIComponent component,
-                              String value) throws ConverterException;
+                              String value);
 
 
 
@@ -62,15 +64,19 @@ public interface Converter {
      * @param context {@link FacesContext} for the request being processed
      * @param component {@link UIComponent} with which this model object
      *  value is associated
-     * @param value Model object value to be converted (may be null)
+     * @param value Model object value to be converted 
+     *  (may be <code>null</code>)
+     * 
+     * @return a zero-length String if value is <code>null</code>, 
+     *  otherwise the result of the conversion
      *
      * @exception ConverterException if conversion cannot be successfully
      *  performed
      * @exception NullPointerException if <code>context</code> or
-     *  <code>component</code> is null
+     *  <code>component</code> is <code>null</code>
      */
     public String getAsString(FacesContext context, UIComponent component,
-                              Object value) throws ConverterException;
+                              Object value);
 
 
 }

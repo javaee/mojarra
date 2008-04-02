@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterException.java,v 1.3 2003/02/20 22:46:25 ofung Exp $
+ * $Id: ConverterException.java,v 1.4 2003/09/25 19:27:19 rlubke Exp $
  */
 
 /*
@@ -11,8 +11,6 @@ package javax.faces.convert;
 
 
 import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 
 
 /**
