@@ -38,10 +38,13 @@
  
 package components.taglib;
 
+import components.components.AreaComponent;
+import components.renderkit.Util;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import components.components.AreaComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
 
 
@@ -92,9 +95,9 @@ public class AreaTag extends UIComponentTag {
     }
 
 
-    private String valueRef = null;
-    public void setValueRef(String newValueRef) {
-	valueRef = newValueRef;
+    private String value = null;
+    public void setValue(String newValue) {
+	value = newValue;
     }
 
 
@@ -116,7 +119,7 @@ public class AreaTag extends UIComponentTag {
         this.onmouseover = null;
         this.shape = null;
         this.styleClass = null;
-        this.valueRef = null;
+        this.value = null;
     }
 
 
@@ -124,32 +127,58 @@ public class AreaTag extends UIComponentTag {
         super.overrideProperties(component);
         AreaComponent area = (AreaComponent) component;
         if (alt != null) {
-            area.setAlt(alt);
+	    if (isValueReference(alt)) {
+	        area.setValueBinding("alt", Util.getValueBinding(alt));
+	    } else {
+                area.getAttributes().put("alt", alt);
+	    }
         }
         if (coords != null) {
-            area.setCoords(coords);
+	    if (isValueReference(coords)) {
+	        area.setValueBinding("coords", Util.getValueBinding(coords));
+	    } else {
+                area.getAttributes().put("coords", coords);
+	    }
         }
         if (onmouseout != null) {
-            area.getAttributes().put("onmouseout", onmouseout);
+	    if (isValueReference(onmouseout)) {
+	        area.setValueBinding("onmouseout", Util.getValueBinding(onmouseout));
+	    } else {
+                area.getAttributes().put("onmouseout", onmouseout);
+	    }
         }
         if (onmouseover != null) {
-            area.getAttributes().put("onmouseover", onmouseover);
+	    if (isValueReference(onmouseover)) {
+	        area.setValueBinding("onmouseover", Util.getValueBinding(onmouseover));
+	    } else {
+                area.getAttributes().put("onmouseover", onmouseover);
+	    }
         }
         if (shape != null) {
-            area.setShape(shape);
+	    if (isValueReference(shape)) {
+	        area.setValueBinding("shape", Util.getValueBinding(shape));
+	    } else {
+                area.getAttributes().put("shape", shape);
+	    }
         }
         if (styleClass != null) {
-            area.getAttributes().put("styleClass", styleClass);
+	    if (isValueReference(styleClass)) {
+	        area.setValueBinding("styleClass", Util.getValueBinding(styleClass));
+	    } else {
+                area.getAttributes().put("styleClass", styleClass);
+	    }
         }
-        if (valueRef != null) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            ValueBinding vb = context.getApplication().getValueBinding(valueRef);
-            area.setValueBinding("value", vb);
+	if (area instanceof ValueHolder) {
+            ValueHolder valueHolder = (ValueHolder)component;
+            if (value != null) {
+	        if (isValueReference(value)) {
+                    area.setValueBinding("value", Util.getValueBinding(value));
+		} else {
+		    valueHolder.setValue(value);
+		}
+            }
         }
         // target image is required
         area.setTargetImage(targetImage);
-
     }
-
-
 }

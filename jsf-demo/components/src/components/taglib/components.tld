@@ -65,7 +65,7 @@
     <description>
       Description of a single hotspot in a client side image map.  This
       tag MUST be nested inside a &lt;map&gt; tag.  To specify the hotspot
-      characteristics, you must specify EITHER a valueRef OR the
+      characteristics, you must specify EITHER a value OR the
       alt, coords, and shape attributes.
     </description>
 
@@ -145,7 +145,7 @@
     </attribute>
 
     <attribute>
-      <name>valueRef</name>
+      <name>value</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
@@ -176,6 +176,103 @@
       <description>
         Fully qualified name of a JavaBean class (which must implement
         components.components.AreaSelectedListener) to be registered.
+      </description>
+    </attribute>
+
+  </tag>
+
+
+  <tag>
+
+    <name>data_repeater</name>
+    <tag-class>components.taglib.DataRepeaterTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+      Render the components of the child UIColumn components under the
+      UIData component associated with this tag, once per row.  The actual
+      renderer class (components.renderkit.RepeaterRenderer) can serve as
+      the base class for more specialized markup generation.
+    </description>
+
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component reference expression for this component.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>first</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Zero-relative row index of the first row to be displayed.  If not
+        specified, the default value is zero (i.e. the first row of the
+        underlying data model).
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component identifier of this component.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>rendered</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag indicating whether or not this component should be rendered.
+        If not specified, the default value is "true".
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>rows</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        The maximum number of rows (from the underlying data model) to be
+        rendered.  If not specified, the default value is zero, which indicates
+        that all remaining rows should be rendered.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>styleClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        The CSS style class to use when rendering the entire table, if any.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>value</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value reference expression pointing at (a) a DataModel instance,
+        (b) an array of objects, (c) a List of objects, (d) a
+        java.sql.ResultSet (or RowSet), (d) a javax.servlet.jsp.jstl.sql.Result
+        object, or (e) a JavaBean (which will be treated as a one-row dataset).
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>var</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Attribute key under which an object representing the current row
+        will be exposed as a request scope attribute.  If not specified, no
+        such row data object will be exposed.
       </description>
     </attribute>
 
