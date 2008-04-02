@@ -52,6 +52,7 @@ standard.jar=${tomcat.home}/jstl-1.0.3/standard/lib/standard.jar
 # Set the following only if you are building with JWSDP1.2.x
 # or TOMCAT 5.x 
 #servlet.jar=${tomcat.home}/common/lib/servlet-api.jar  
+#jsp.jar=${tomcat.home}/common/lib/jsp-api.jar
 
 # Set the following only if you are using JWSDP1.2.x
 #jsf-api.jar=${tomcat.home}/jsf-${version}/jsf-api.jar
