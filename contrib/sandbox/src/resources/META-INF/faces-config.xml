@@ -36,6 +36,11 @@
         <phase-listener>com.sun.faces.sandbox.util.StaticResourcePhaseListener</phase-listener>
     </lifecycle>
     <component>
+        <component-type>com.sun.faces.sandbox.SelectItems</component-type>
+        <component-class>com.sun.faces.sandbox.component.UISelectItems</component-class>
+    </component>
+    
+    <component>
         <component-type>com.sun.faces.sandbox.AccessibleHtmlColumn</component-type>
         <component-class>com.sun.faces.sandbox.component.AccessibleHtmlColumn</component-class>
     </component>

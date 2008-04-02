@@ -58,7 +58,7 @@ import javax.faces.model.SelectItemGroup;
  * 
  */
 public class UISelectItems extends javax.faces.component.UISelectItems {
-    public static final String COMPONENT_TYPE = "com.sun.faces.SelectItems";
+    public static final String COMPONENT_TYPE = "com.sun.faces.sandbox.SelectItems";
     protected String itemLabel;
     protected String itemValue;
     protected String itemVar;
@@ -197,19 +197,12 @@ public class UISelectItems extends javax.faces.component.UISelectItems {
 
         protected class IteratorWrapper implements Iterator {
             protected Iterator i;
-
             protected UISelectItems si;
-
             protected String itemVar;
-
             protected ELResolver er;
-
             protected ELContext ec;
-
             protected boolean useItemLabel;
-
             protected boolean useItemValue;
-
             protected boolean saveOldBinding;
 
             public IteratorWrapper(Iterator i, UISelectItems si) {

@@ -55,6 +55,21 @@ public class FileDownload extends UIOutput {
     protected Object data;
     protected String width;
     
+    /**
+     * If set, this property will cause an EL variable, by the name of <code>urlVar</code>
+     * to be added to the ELContext for the duration of the component rendering (i.e.,
+     * it will only be available to child components).
+     */
+    protected String urlVar = "downloadUrl";
+    
+    public String getUrlVar() {
+        return urlVar;
+    }
+
+    public void setUrlVar(String urlVar) {
+        this.urlVar = urlVar;
+    }
+
     public FileDownload() {
         setRendererType(RENDERER_TYPE);
     }

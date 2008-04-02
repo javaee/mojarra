@@ -5,6 +5,8 @@ package com.sun.faces.sandbox.render;
 
 import java.io.IOException;
 
+import javax.el.ELContext;
+import javax.el.ELResolver;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -19,6 +21,9 @@ import com.sun.faces.sandbox.util.Util;
  *
  */
 public class FileDownloadRenderer extends Renderer {
+    protected ELResolver elResolver;
+    protected ELContext elContext;
+    protected Object oldBinding = null;
 
     @Override
     public boolean getRendersChildren() {
@@ -32,8 +37,24 @@ public class FileDownloadRenderer extends Renderer {
         }
         FileDownload dl = (FileDownload) comp;
         super.encodeBegin(context, comp);
-        if (FileDownload.METHOD_DOWNLOAD.equals(dl.getMethod())) {
+        if ((dl.getUrlVar() != null) || (comp.getChildCount() > 0)){
+            setElValue(context, dl);
+        }
+        if (FileDownload.METHOD_DOWNLOAD.equals(dl.getMethod()) || (comp.getChildCount() == 0)) {
             renderLink(context, dl);
+        }
+    }
+    
+    protected void setElValue(FacesContext context, FileDownload comp) {
+        this.elContext = context.getELContext();
+        this.elResolver = elContext.getELResolver();
+        oldBinding = this.elResolver.getValue(elContext, null, comp.getUrlVar());
+        elResolver.setValue(elContext, null, comp.getUrlVar(), generateUri(context, comp));
+    }
+    
+    protected void resetElValue(FacesContext context, FileDownload comp) {
+        if (elResolver != null) {
+            elResolver.setValue(elContext, null, comp.getUrlVar(), oldBinding);
         }
     }
 
@@ -51,6 +72,7 @@ public class FileDownloadRenderer extends Renderer {
         }
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         request.getSession().setAttribute("HtmlDownload-" + dl.getClientId(context), dl);
+        resetElValue(context, dl);
         super.encodeEnd(context, comp);
     }
 

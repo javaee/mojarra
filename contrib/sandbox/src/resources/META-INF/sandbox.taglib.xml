@@ -36,14 +36,14 @@
     <tag>
         <tag-name>multiFileUpload</tag-name>
         <component>
-            <component-type>ccom.sun.faces.sandbox.MultiFileUpload</component-type>
+            <component-type>com.sun.faces.sandbox.MultiFileUpload</component-type>
             <renderer-type>com.sun.faces.sandbox.MultiFileUploadRenderer</renderer-type>
         </component>
     </tag>
     <tag>
         <tag-name>selectItems</tag-name>
         <component>
-            <component-type>com.sun.faces.SelectItems</component-type>
+            <component-type>com.sun.faces.sandbox.SelectItems</component-type>
         </component>
     </tag>
 

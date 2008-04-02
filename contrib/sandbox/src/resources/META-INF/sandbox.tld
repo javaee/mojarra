@@ -972,7 +972,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
         <attribute>
-            <name>accesskey</name>
+            <name>accessKey</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
@@ -1013,7 +1013,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
         <attribute>
-            <name>onchange</name>
+            <name>onChange</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
@@ -1037,7 +1037,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
         <attribute>
-            <name>tabindex</name>
+            <name>tabIndex</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
@@ -1240,13 +1240,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
 
         <attribute>
             <name>method</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description><![CDATA[The method for displaying the object:  inline or download ]]></description>
         </attribute>
         <attribute>
             <name>mimeType</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description><![CDATA[The mime type of the object]]></description>
         </attribute>
@@ -1270,16 +1270,18 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <description><![CDATA[The height of the object to be displayed; used only for method=inline]]></description>
         </attribute>
         <attribute>
-            <name>text</name>
-            <required>false</required>
-            <rtexprvalue>false</rtexprvalue>
-            <description><![CDATA[The text of the download link; used only for method=download]]></description>
-        </attribute>
-        <attribute>
             <name>iframe</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description><![CDATA[Whether or not to use asn iframe for displaying the object; used only for method=inline]]></description>
+        </attribute>
+        <attribute>
+            <name>urlVar</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[If set, this property will cause an EL variable, by the name of <code>urlVar</code> 
+            to be added to the ELContext for the duration of the component rendering (i.e., it will only be available 
+            to child components).]]></description>
         </attribute>
     </tag>
     <!-- ******************************************************************* -->

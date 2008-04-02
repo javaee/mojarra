@@ -24,6 +24,7 @@ public class DownloadTag extends UIComponentTag {
     protected String mimeType;
     protected String text;
     protected String width;
+    protected String urlVar;
 
     @Override
     public String getComponentType() {
@@ -179,5 +180,21 @@ public class DownloadTag extends UIComponentTag {
             }
         }
 
+        if (urlVar != null) {
+            if (isValueReference(urlVar)) {
+                ValueBinding vb = Util.getValueBinding(urlVar);
+                download.setValueBinding("urlVar", vb);
+            } else {
+                download.setUrlVar(urlVar);
+            }
+        }
+    }
+
+    public String getUrlVar() {
+        return urlVar;
+    }
+
+    public void setUrlVar(String urlVar) {
+        this.urlVar = urlVar;
     }
 }

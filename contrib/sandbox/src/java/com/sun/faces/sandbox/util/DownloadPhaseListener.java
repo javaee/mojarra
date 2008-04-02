@@ -57,7 +57,9 @@ public class DownloadPhaseListener implements PhaseListener {
                         if (FileDownload.METHOD_DOWNLOAD.equals(comp.getMethod())) {
                             response.setHeader("Content-Disposition", "attachment; filename=\"" +
                                     comp.getFileName() + "\"");
-                        }
+                        } else {
+                            response.setHeader("Content-Disposition", "inline; filename=\"" +
+                                    comp.getFileName() + "\"");                        }
                         response.setContentType(mimeType);
                         try {
                             ServletOutputStream sos = response.getOutputStream();
