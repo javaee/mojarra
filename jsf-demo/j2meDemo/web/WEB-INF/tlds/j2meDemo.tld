@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE taglib
+  PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+  "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+<taglib>
+   <tlib-version>0.03</tlib-version>
+   <jsp-version>1.2</jsp-version>
+   <short-name>j2medemo</short-name>
+   <uri>j2meDemotaglibrary_1.1</uri>
+   <description>
+      This tag library contains tags for the faces/j2me demo.
+   </description>   
+   <tag>
+      <name>form</name>
+      <tag-class>j2meDemo.taglib.FormTag</tag-class>
+      <attribute> 
+         <name>id</name>
+      </attribute>
+   </tag>
+   <tag>
+      <name>input</name>
+      <tag-class>j2meDemo.taglib.InputTag</tag-class>
+      <attribute> 
+         <name>id</name>
+      </attribute>
+      <attribute> 
+         <name>value</name> 
+      </attribute> 
+      <attribute> 
+         <name>validator</name> 
+      </attribute> 
+   </tag>
+   <tag>
+      <name>output</name>
+      <tag-class>j2meDemo.taglib.OutputTag</tag-class>
+      <attribute> 
+         <name>id</name>
+      </attribute>
+      <attribute> 
+         <name>value</name> 
+      </attribute> 
+   </tag>
+   <tag>
+      <name>selectOne</name>
+      <tag-class>j2meDemo.taglib.SelectOneTag</tag-class>
+      <attribute> 
+         <name>id</name>
+      </attribute>
+      <attribute> 
+         <name>binding</name>
+      </attribute>
+      <attribute> 
+         <name>value</name> 
+      </attribute> 
+   </tag>
+   <tag>
+      <name>command</name>
+      <tag-class>j2meDemo.taglib.CommandTag</tag-class>
+      <attribute> 
+         <name>id</name>
+      </attribute>
+      <attribute> 
+         <name>action</name> 
+      </attribute> 
+   </tag>
+
+   <tag>
+      <name>board</name>
+      <tag-class>j2meDemo.taglib.GameBoardTag</tag-class>
+      <attribute>
+         <name>id</name>
+      </attribute>
+      <attribute>
+         <name>value</name>
+      </attribute>
+      <attribute>
+         <name>own</name>
+      </attribute>
+      <attribute>
+         <name>validator</name>
+      </attribute>
+   </tag>
+
+</taglib>
