@@ -41,7 +41,7 @@
                 false
             </required>
             <deferred-value>
-                <type>javax.faces.UIComponent</type>
+                <type>javax.faces.component.UIComponent</type>
             </deferred-value>
         </attribute>
         <attribute>
