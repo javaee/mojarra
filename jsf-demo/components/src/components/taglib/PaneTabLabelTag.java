@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabLabelTag.java,v 1.9 2004/02/05 16:23:16 rlubke Exp $
+ * $Id: PaneTabLabelTag.java,v 1.10 2004/05/12 22:03:20 eburns Exp $
  */
 
 /*
@@ -93,6 +93,14 @@ public class PaneTabLabelTag extends UIComponentTag {
         return ("TabLabel");
     }
 
+    protected String paneTabLabelClass;
+    public String getPaneTabLabelClass() {
+	return paneTabLabelClass;
+    }
+
+    public void setPaneTabLabelClass(String newPaneTabLabelClass) {
+	paneTabLabelClass = newPaneTabLabelClass;
+    }
 
     public void release() {
         super.release();
@@ -138,6 +146,19 @@ public class PaneTabLabelTag extends UIComponentTag {
                 component.getAttributes().put("label", label);
             }
         }
+
+        if (paneTabLabelClass != null) {
+            if (isValueReference(paneTabLabelClass)) {
+                ValueBinding vb =
+                    getFacesContext().getApplication().
+                    createValueBinding(paneTabLabelClass);
+                component.setValueBinding("paneTabLabelClass", vb);
+            } else {
+                component.getAttributes().put("paneTabLabelClass", 
+					      paneTabLabelClass);
+            }
+        }
+
     }
 
 

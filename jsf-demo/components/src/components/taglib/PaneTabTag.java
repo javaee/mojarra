@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabTag.java,v 1.8 2004/02/05 16:23:16 rlubke Exp $
+ * $Id: PaneTabTag.java,v 1.9 2004/05/12 22:03:20 eburns Exp $
  */
 
 /*
@@ -48,6 +48,7 @@ import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
+import javax.faces.el.ValueBinding;
 
 
 /**
@@ -74,8 +75,30 @@ public class PaneTabTag extends UIComponentTag {
         super.release();
     }
 
+    protected String paneClass;
+    public String getPaneClass() {
+	return paneClass;
+    }
+
+    public void setPaneClass(String newPaneClass) {
+	paneClass = newPaneClass;
+    }
+
+
 
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
+
+        if (paneClass != null) {
+            if (isValueReference(paneClass)) {
+                ValueBinding vb =
+                    getFacesContext().getApplication().
+                    createValueBinding(paneClass);
+                component.setValueBinding("paneClass", vb);
+            } else {
+                component.getAttributes().put("paneClass", paneClass);
+            }
+        }
+
     }
 }
