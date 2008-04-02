@@ -804,4 +804,18 @@ must exist.  This is necessary for the MessageFactory class.
         <ant antfile="build-tests.xml" target="run.cactus.test.appserver"/>
     </target>
     
+    <target name="config.appserver">
+        <replace file="${tomcat.home}/domains/domain1/config/server.policy"
+                 token="permission java.util.PropertyPermission &quot;*&quot;, &quot;read&quot;;"
+                 value="permission java.util.PropertyPermission &quot;*&quot;, &quot;read,write&quot;;"/>
+        <concat append="true"
+                destfile="${tomcat.home}/domains/domain1/config/server.policy">
+grant {
+    permission java.lang.RuntimePermission &quot;suppressAccessChecks&quot;;
+};
+        </concat>
+        <chmod file="${tomcat.home}/domains/domain1/config/server.policy"
+               perm="777"/>
+    </target>
+    
 </project>

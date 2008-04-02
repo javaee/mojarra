@@ -1,5 +1,5 @@
 /*
- * $Id: StoreServletContext.java,v 1.6 2005/08/22 22:11:12 ofung Exp $
+ * $Id: StoreServletContext.java,v 1.7 2005/09/15 00:46:01 rlubke Exp $
  */
 
 /*
@@ -38,6 +38,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Locale;
 import java.util.Iterator;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.TestingUtil;
+
 /**
  * <p>The purpose of this class is to call the package private
  * getThreadLocalServletContext() method to set the ServletContext into
@@ -46,30 +52,39 @@ import java.util.Iterator;
 
 public class StoreServletContext extends Object {
     ExternalContext ec = null;
+
     public void setServletContext(ServletContext sc) {
         ec = new ServletContextAdapter(sc);
-	ConfigureListener.getThreadLocalExternalContext().set(new ServletContextAdapter(sc));
+
+        ThreadLocal<ServletContextAdapter> threadLocal =
+            (ThreadLocal<ServletContextAdapter>)
+                TestingUtil.invokePrivateMethod("getThreadLocalExternalContext",
+                                                RIConstants.EMPTY_CLASS_ARGS,
+                                                RIConstants.EMPTY_METH_ARGS,
+                                                ConfigureListener.class,
+                                                null);
+        threadLocal.set(new ServletContextAdapter(sc));
     }
-    
+
     public ExternalContext getServletContextWrapper() {
         return ec;
     }
 
     public class ServletContextAdapter extends ExternalContext {
-        
+
         private ServletContext servletContext = null;
         private ApplicationMap applicationMap = null;
-        
+
         public ServletContextAdapter(ServletContext sc) {
             this.servletContext = sc;
         }
-        
+
         public void dispatch(String path) throws java.io.IOException {
         }
-    
+
         public String encodeActionURL(String url) {
             return null;
-        }   
+        }
 
         public String encodeNamespace(String name) {
             return null;
@@ -86,7 +101,7 @@ public class StoreServletContext extends Object {
             }
             return applicationMap;
         }
-        
+
         public String getAuthType() {
             return null;
         }
@@ -112,9 +127,9 @@ public class StoreServletContext extends Object {
             return null;
         }
 
-	public void setRequest(Object request) {}
-        
-        
+    public void setRequest(Object request) {}
+
+
         public String getRequestCharacterEncoding() {
             return null;
         }
@@ -128,7 +143,7 @@ public class StoreServletContext extends Object {
         }
 
         public void setResponseCharacterEncoding(String responseCharacterEncoding) {
-        }        
+        }
 
         public String getRequestContextPath() {
             return null;
@@ -186,18 +201,18 @@ public class StoreServletContext extends Object {
         public String getRequestServletPath() {
             return null;
         }
-        
-         
+
+
         public String getRequestContentType() {
             return null;
         }
-        
+
         public String getResponseContentType() {
             return null;
         }
 
-        public java.net.URL getResource(String path) throws 
-            java.net.MalformedURLException {
+        public java.net.URL getResource(String path) throws
+                                                     java.net.MalformedURLException {
             return null;
         }
 
@@ -214,7 +229,7 @@ public class StoreServletContext extends Object {
             return null;
         }
 
-	public void setResponse(Object response) {} 
+    public void setResponse(Object response) {}
 
         public Object getSession(boolean create) {
             return null;
@@ -227,22 +242,22 @@ public class StoreServletContext extends Object {
         public java.security.Principal getUserPrincipal() {
             return null;
         }
-        
+
         public boolean isUserInRole(String role) {
             return false;
         }
 
         public void log(String message) {
         }
-        
+
         public void log(String message, Throwable exception){
         }
-        
+
         public void redirect(String url) throws java.io.IOException {
         }
 
     }
-    
+
     class ApplicationMap extends java.util.AbstractMap {
 
         private ServletContext servletContext = null;
@@ -292,7 +307,7 @@ public class StoreServletContext extends Object {
                 return false;
             return super.equals(obj);
         }
-        
+
         public void clear() {
             throw new UnsupportedOperationException();
         }
@@ -300,7 +315,7 @@ public class StoreServletContext extends Object {
         public void putAll(Map t) {
             throw new UnsupportedOperationException();
         }
-       
+
 
     } // END ApplicationMap
 }

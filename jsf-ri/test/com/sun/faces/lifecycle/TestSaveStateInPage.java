@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.29 2005/08/22 22:11:21 ofung Exp $
+ * $Id: TestSaveStateInPage.java,v 1.30 2005/09/15 00:46:02 rlubke Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.29 2005/08/22 22:11:21 ofung Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.30 2005/09/15 00:46:02 rlubke Exp $
  */
 
 public class TestSaveStateInPage extends JspFacesTestCase {
@@ -147,7 +147,7 @@ public class TestSaveStateInPage extends JspFacesTestCase {
         // root is marked transient.
         // precreate tree and set it in session and make sure the tree is
         // restored from session.
-        getFacesContext().setViewRoot(null);
+        //getFacesContext().setViewRoot(null);
         UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setViewId(TEST_URI);
 

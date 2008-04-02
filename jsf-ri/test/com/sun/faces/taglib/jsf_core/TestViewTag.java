@@ -1,5 +1,5 @@
 /*
- * $Id: TestViewTag.java,v 1.12 2005/08/22 22:11:26 ofung Exp $
+ * $Id: TestViewTag.java,v 1.13 2005/09/15 00:46:03 rlubke Exp $
  */
 
 /*
@@ -35,6 +35,8 @@ import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.lifecycle.RenderResponsePhase;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.TestingUtil;
+
 import org.apache.cactus.JspTestCase;
 import org.apache.cactus.WebRequest;
 
@@ -50,7 +52,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewTag.java,v 1.12 2005/08/22 22:11:26 ofung Exp $
+ * @version $Id: TestViewTag.java,v 1.13 2005/09/15 00:46:03 rlubke Exp $
  */
 
 public class TestViewTag extends JspFacesTestCase {
@@ -168,16 +170,39 @@ public class TestViewTag extends JspFacesTestCase {
 
     public void testGetLocaleFromString() {
         ViewTag viewTag = new ViewTag();
-        Locale locale = viewTag.getLocaleFromString("fr-FR");
+        Locale locale = (Locale) 
+            TestingUtil.invokePrivateMethod("getLocaleFromString",
+                                            new Class[] { String.class },
+                                            new Object[] { "fr-FR" },
+                                            ViewTag.class,
+                                            viewTag);        
         assertTrue(locale.equals(new Locale("fr", "FR")));
 
-        locale = viewTag.getLocaleFromString("fr_FR");
+        
+        locale = (Locale)
+            TestingUtil.invokePrivateMethod("getLocaleFromString",
+                                            new Class[] { String.class },
+                                            new Object[] { "fr_FR" },
+                                            ViewTag.class,
+                                            viewTag);
         assertTrue(locale.equals(new Locale("fr", "FR")));
 
-        locale = viewTag.getLocaleFromString("fr");
+        
+        locale = (Locale)
+            TestingUtil.invokePrivateMethod("getLocaleFromString",
+                                            new Class[] {String.class},
+                                            new Object[] {"fr"},
+                                            ViewTag.class,
+                                            viewTag);
         assertTrue(locale.equals(new Locale("fr", "")));
 
-        locale = viewTag.getLocaleFromString("testLocale");
+       
+        locale = (Locale)
+            TestingUtil.invokePrivateMethod("getLocaleFromString",
+                                            new Class[] {String.class},
+                                            new Object[] {"testLocale"},
+                                            ViewTag.class,
+                                            viewTag);
         assertTrue(locale.equals(Locale.getDefault()));
     }
 

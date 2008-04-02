@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.19 2005/08/22 22:11:20 ofung Exp $
+ * $Id: TestProcessEvents.java,v 1.20 2005/09/15 00:46:02 rlubke Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.HashMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.19 2005/08/22 22:11:20 ofung Exp $
+ * @version $Id: TestProcessEvents.java,v 1.20 2005/09/15 00:46:02 rlubke Exp $
  */
 
 public class TestProcessEvents extends ServletFacesTestCase {
@@ -110,8 +110,7 @@ public class TestProcessEvents extends ServletFacesTestCase {
     }
 
 
-    public void tearDown() {
-        getFacesContext().setViewRoot(null);
+    public void tearDown() {        
         super.tearDown();
     }
 

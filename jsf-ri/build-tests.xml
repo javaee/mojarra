@@ -235,7 +235,7 @@
             destdir="${out.test.dir}/WEB-INF/classes"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
-            source="1.4"
+            source="1.5"
             deprecation="${compile.deprecation}">
 
             <classpath refid="compile.classpath"/>
@@ -373,8 +373,10 @@
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestPhase"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestProcessEvents"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestRenderResponsePhase"/> 
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestRestoreViewPhase"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
+            <!-- Commented out.  This test relies heavily on a bug in FacesContext.setViewRoot()
+                 that allowed one to pass a null value in.  This test case needs to be revisited. 
+            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestRestoreViewPhase"/> -->
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
             <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
             <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestHtmlResponseWriter"/>

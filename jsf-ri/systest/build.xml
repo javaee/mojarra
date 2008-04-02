@@ -129,6 +129,7 @@
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${jstl.jar}"/>
     <pathelement location="${junit.jar}"/>
+    <pathelement location="${build.home/WEB-INF/classes}"/>
     <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
   </path>
 
@@ -239,6 +240,14 @@
    description="Just compile the classes">
 
     <!-- Run javac through everything -->
+    <javac srcdir="${basedir}/../test"
+           destdir="${build.home}/WEB-INF/classes"
+           debug="${compile.debug}"
+     deprecation="${compile.deprecation}"
+        optimize="${compile.optimize}"
+        includes="**/TestingUtil**">
+      <classpath refid="compile.classpath"/>
+    </javac>
     <javac  srcdir="${source.home}"
            destdir="${build.home}/WEB-INF/classes"
              debug="${compile.debug}"

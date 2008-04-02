@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.25 2005/08/22 22:11:21 ofung Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.26 2005/09/15 00:46:02 rlubke Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.25 2005/08/22 22:11:21 ofung Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.26 2005/09/15 00:46:02 rlubke Exp $
  */
 
 public class TestRestoreViewPhase extends ServletFacesTestCase {
@@ -136,7 +136,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 	// here we do what the StateManager does to save the state in
 	// the server.
 	Util.getStateManager(context).saveSerializedView(context);
-	context.setViewRoot(null);
+	//context.setViewRoot(null);
 
         Phase restoreView = new RestoreViewPhase();
 
@@ -162,7 +162,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         assertTrue(root.getChildCount() == 1);
         assertTrue(basicForm.getId().equals(root.findComponent("basicForm").getId()));
 	assertTrue(userName.getId().equals(basicForm.findComponent("userName").getId()));
-        getFacesContext().setViewRoot(null);
+        //getFacesContext().setViewRoot(null);
     }
 
     /**
@@ -199,7 +199,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 	// here we do what the StateManager does to save the state in
 	// the server.
 	Util.getStateManager(context).saveSerializedView(context);
-	context.setViewRoot(null);
+	//context.setViewRoot(null);
 
         Phase restoreView = new RestoreViewPhase();
 
@@ -216,7 +216,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         // Now test with no facets... Listeners should still be registered on UICommand
         // components....
         //
-        context.setViewRoot(null);
+        //context.setViewRoot(null);
 
         root = Util.getViewHandler(context).createView(context, null);
         root.setViewId(TEST_URI);
@@ -234,7 +234,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 	// the server.
 	com.sun.faces.application.TestStateManagerImpl.resetStateManagerRequestIdSerialNumber(context);
 	Util.getStateManager(context).saveSerializedView(context);
-	context.setViewRoot(null);
+	//context.setViewRoot(null);
 
         restoreView = new RestoreViewPhase();
 
@@ -246,7 +246,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         assertTrue(!(context.getRenderResponse()) &&
                    !(context.getResponseComplete()));
 
-        context.setViewRoot(null);
+        //context.setViewRoot(null);
     }
 
     public void beginRestoreViewExpired(WebRequest theRequest) {
@@ -280,7 +280,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         // here we do what the StateManager does to save the state in
         // the server.
         Util.getStateManager(context).saveSerializedView(context);
-        context.setViewRoot(null);
+        //context.setViewRoot(null);
                                                                                                                         
         // invalidate the session before we attempt to restore
         ((HttpSession)context.getExternalContext().getSession(true)).invalidate();

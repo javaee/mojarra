@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.27 2005/08/22 22:11:09 ofung Exp $
+ * $Id: TestApplicationImpl.java,v 1.28 2005/09/15 00:46:00 rlubke Exp $
  */
 
 /*
@@ -33,9 +33,13 @@ package com.sun.faces.application;
 
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.TestComponent;
+import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.TestingUtil;
+
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -60,7 +64,7 @@ import javax.el.ValueExpression;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.27 2005/08/22 22:11:09 ofung Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.28 2005/09/15 00:46:00 rlubke Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -576,10 +580,19 @@ public class TestApplicationImpl extends JspFacesTestCase {
     }
     
     public static void clearResourceBundlesFromAssociate(ApplicationImpl application) {
-        ApplicationAssociate associate = application.getAssociate();
+        ApplicationAssociate associate = (ApplicationAssociate)
+            TestingUtil.invokePrivateMethod("getAssociate",
+                                            RIConstants.EMPTY_CLASS_ARGS,
+                                            RIConstants.EMPTY_METH_ARGS,
+                                            ApplicationImpl.class,
+                                            application);       
         if (null != associate) {
-            if (null != associate.resourceBundles) {
-                associate.resourceBundles.clear();
+            Map resourceBundles = (Map) 
+                TestingUtil.getPrivateField("resourceBundles",
+                                            ApplicationAssociate.class,
+                                            associate);
+            if (null != resourceBundles) {
+                resourceBundles.clear();
             }
         }
     }
