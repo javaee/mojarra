@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.22 2003/10/22 04:43:05 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.23 2003/10/23 00:37:56 craigmcc Exp $
  */
 
 /*
@@ -960,6 +960,9 @@ public abstract class UIComponentTag implements Tag {
         UIComponent component =
             context.getApplication().createComponent(getComponentType());
         overrideProperties(component);
+        if (component.getId() == null) {
+            component.setId(createId());
+        }
         parent.getFacets().put(name, component);
         created = true;
         return (component);
