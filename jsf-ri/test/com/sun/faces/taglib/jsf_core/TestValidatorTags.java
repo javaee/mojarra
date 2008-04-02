@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.7 2003/03/12 19:54:20 rkitain Exp $
+ * $Id: TestValidatorTags.java,v 1.8 2003/04/03 18:39:51 rkitain Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.7 2003/03/12 19:54:20 rkitain Exp $
+ * @version $Id: TestValidatorTags.java,v 1.8 2003/04/03 18:39:51 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,7 +134,9 @@ public void testValidators()
 {
     System.setProperty(RIConstants.DISABLE_RENDERERS, "");
     // Verify the parmeters are as expected
-    assertTrue(OUTOFBOUNDS1_VALUE.equals(getFacesContext().getServletRequest().getParameter(OUTOFBOUNDS1_ID)));
+    String paramVal = (String)(getFacesContext().getExternalContext().getRequestParameterMap()).get(OUTOFBOUNDS1_ID);
+    assertTrue(OUTOFBOUNDS1_VALUE.equals(paramVal));
+//    assertTrue(OUTOFBOUNDS1_VALUE.equals(getFacesContext().getServletRequest().getParameter(OUTOFBOUNDS1_ID)));
 
     boolean result = false;
     String value = null;

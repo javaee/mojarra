@@ -1,5 +1,5 @@
 /*
- * $Id: RequiredValidatorTestCase.java,v 1.2 2003/02/20 22:50:12 ofung Exp $
+ * $Id: RequiredValidatorTestCase.java,v 1.3 2003/04/03 18:40:55 rkitain Exp $
  */
 
 /*
@@ -86,7 +86,7 @@ public class RequiredValidatorTestCase extends ServletFacesTestCase {
     // ------------------------------------------------ Individual Test Methods
     public void testValidatorNull() {
 	component.addValidator(validator);
-	component.setValue(null);
+	((UIInput)component).setValue(null);
 	validator.validate(getFacesContext(), component);
 	Iterator messages = getFacesContext().getMessages();
 	assertTrue(messages.hasNext());
@@ -94,7 +94,7 @@ public class RequiredValidatorTestCase extends ServletFacesTestCase {
 
     public void testValidatorZeroLength() {
 	component.addValidator(validator);
-	component.setValue(new String(""));
+	((UIInput)component).setValue(new String(""));
 	validator.validate(getFacesContext(), component);
 	Iterator messages = getFacesContext().getMessages();
 	assertTrue(messages.hasNext());
@@ -102,7 +102,7 @@ public class RequiredValidatorTestCase extends ServletFacesTestCase {
 
     public void testValidatorValid() {
 	component.addValidator(validator);
-	component.setValue("hello");
+	((UIInput)component).setValue("hello");
 	validator.validate(getFacesContext(), component);
 	Iterator messages = getFacesContext().getMessages();
 	assertTrue(!messages.hasNext());
