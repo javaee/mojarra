@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.115 2006/05/09 20:18:48 rlubke Exp $
+ $Id: build-tests.xml,v 1.116 2006/05/10 21:06:10 rlubke Exp $
 -->
 
 <!--
@@ -970,6 +970,11 @@
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving10.jsp"
             golden="${golden.path}/interweaving10.txt"/>
+        
+        <jsf.tester
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/faces/interweaving11.jsp"              
+              golden="${golden.path}/interweaving11.txt"/>
         
         
         <jsf.tester

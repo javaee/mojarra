@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.18 2006/05/05 16:29:10 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.19 2006/05/10 21:06:10 rlubke Exp $
  */
 
 /*
@@ -1402,18 +1402,19 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     private boolean isDuplicateId(String componentId) {
         boolean result = false;
         if (parentTag != null) {
-            List childComponents = parentTag.getCreatedComponents();
+           
+            if (parentTag.isNestedInIterator) {
+                return true;
+            } 
+             List childComponents = parentTag.getCreatedComponents();
             // PENDING: Need to analyze the impact of this look up on pages
-            // with several levels of nesting.
+            // with several levels of nesting.            
             if (childComponents != null) {
                 result = childComponents.contains(componentId);
                 if (result && (!isNestedInIterator)) {
                     return true;
                 }
-            }
-            else {
-                result = parentTag.isNestedInIterator;
-            }
+            }           
         }
        
         return result;
