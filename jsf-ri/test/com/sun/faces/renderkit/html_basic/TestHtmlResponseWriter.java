@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.1 2003/08/04 21:54:54 rkitain Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.2 2003/08/22 21:05:32 rkitain Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.component.base.UIInputBase;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -37,7 +38,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.1 2003/08/04 21:54:54 rkitain Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.2 2003/08/22 21:05:32 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +85,20 @@ import org.mozilla.util.Assert;
 	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	renderKit = renderKitFactory.getRenderKit("DEFAULT");
 	sw = new StringWriter();
-        writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
+        writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+    }
+
+    public void testContentType() {
+        assertTrue(writer.getContentType().equals("text/html"));
+
+	// Test Invalid Encoding
+	boolean exceptionThrown = false;
+	try {
+	    writer = renderKit.createResponseWriter(sw, "foobar", "ISO-8859-1");
+	} catch (IllegalArgumentException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
     }
 
     public void testEncoding() {
@@ -93,7 +107,7 @@ import org.mozilla.util.Assert;
 	// Test Invalid Encoding
 	boolean exceptionThrown = false;
 	try {
-	    writer = renderKit.getResponseWriter(sw, "foobar");
+	    writer = renderKit.createResponseWriter(sw, "text/html", "foobar");
 	} catch (FacesException e) {
 	    exceptionThrown = true;
 	}
@@ -105,9 +119,9 @@ import org.mozilla.util.Assert;
     //
     public void testStartElement() {
 	try {
-            writer.startElement("input");
+            writer.startElement("input", new UIInputBase());
 	    assertTrue(sw.toString().equals("<input"));
-            writer.startElement("select");
+            writer.startElement("select", new UIInputBase());
 	    assertTrue(sw.toString().equals("<input><select"));
 	} catch (IOException e) {
             assertTrue(false);
@@ -120,7 +134,7 @@ import org.mozilla.util.Assert;
 	try {
 	    writer.endElement("input");
 	    assertTrue(sw.toString().equals("</input>"));
-	    writer.startElement("frame");
+	    writer.startElement("frame", new UIInputBase());
 	    writer.endElement("frame");
 	    assertTrue(sw.toString().equals("</input><frame>"));
 	    writer.endElement("frame");
@@ -134,22 +148,22 @@ import org.mozilla.util.Assert;
     //
     public void testWriteAttribute() {
 	try {
-	    writer.startElement("input");
-	    writer.writeAttribute("type", "text");
+	    writer.startElement("input", new UIInputBase());
+	    writer.writeAttribute("type", "text", "type");
 	    assertTrue(sw.toString().equals("<input type="+"\"text\""));
 	    Boolean bool = new Boolean("true");
-	    writer.writeAttribute("readonly", bool);
+	    writer.writeAttribute("readonly", bool, "readonly");
 	    assertTrue(sw.toString().equals("<input type="+"\"text\""+" readonly")); 
 	    //
 	    //Assert that boolean "false" values don't get written out
 	    //
 	    bool = new Boolean("false");
-	    writer.writeAttribute("disabled", bool);
+	    writer.writeAttribute("disabled", bool, "disabled");
 	    assertTrue(sw.toString().equals("<input type="+"\"text\""+" readonly")); 
 	    //
 	    //Assert correct escape char
 	    //
-	    writer.writeAttribute("greaterthan", ">");
+	    writer.writeAttribute("greaterthan", ">", "greaterthan");
 	    assertTrue(sw.toString().equals("<input type="+"\"text\""+" readonly"+
 	        " greaterthan="+"\"&gt;\"")); 
 	} catch (IOException e) {
@@ -162,9 +176,9 @@ import org.mozilla.util.Assert;
     //
     public void testWriteURIAttribute() {
         try {
-            writer.startElement("input");
-	    writer.writeAttribute("type", "image");
-	    writer.writeURIAttribute("src", "/mygif/foo.gif");
+            writer.startElement("input", new UIInputBase());
+	    writer.writeAttribute("type", "image", "type");
+	    writer.writeURIAttribute("src", "/mygif/foo.gif", "src");
 	    writer.endElement("input");
 	    assertTrue(sw.toString().equals("<input type="+"\"image\""+
 	        " src="+"\"/mygif/foo.gif\""+">")); 
@@ -172,17 +186,17 @@ import org.mozilla.util.Assert;
 	    // test URL encoding
 	    //
 	    sw = new StringWriter();
-            writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
-	    writer.startElement("foo");
-	    writer.writeURIAttribute("player","Bobby Orr");
+            writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+	    writer.startElement("foo", new UIInputBase());
+	    writer.writeURIAttribute("player","Bobby Orr", "player");
 	    assertTrue(sw.toString().equals("<foo player="+"\"Bobby+Orr\""));
 	    //
 	    // test no URL encoding (javascript)
 	    //
 	    sw = new StringWriter();
-            writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
-	    writer.startElement("foo");
-	    writer.writeURIAttribute("player","javascript:Bobby Orr");
+            writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+	    writer.startElement("foo", new UIInputBase());
+	    writer.writeURIAttribute("player","javascript:Bobby Orr", null);
 	    assertTrue(sw.toString().equals("<foo player="+"\"javascript:Bobby Orr\""));
 	} catch (IOException e) {
 	    assertTrue(false);
@@ -207,34 +221,18 @@ import org.mozilla.util.Assert;
 	    // test Object param flavor...
 	    //----------------------------
 	    StringBuffer sb = new StringBuffer("Some & Text");
-	    writer.writeText(sb);
+	    writer.writeText(sb, null);
 	    assertTrue(sw.toString().equals("Some &amp; Text"));
-	    //----------------------------
-	    // test char param flavor...
-	    //----------------------------
-	    sw = new StringWriter();
-            writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
-	    char c = '<';
-            writer.writeText(c);
-	    assertTrue(sw.toString().equals("&lt;"));
-	    //----------------------------
-	    // test char[] param flavor...
-	    //----------------------------
-	    sw = new StringWriter();
-            writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
-	    char[] carr = {'a','b','c'}; 
-            writer.writeText(carr);
-	    assertTrue(sw.toString().equals("abc"));
 	    //-----------------------------------------
 	    // test char[], offset, len param flavor...
 	    //-----------------------------------------
 	    sw = new StringWriter();
-            writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
+            writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    char[] carr1 = {'a','b','c','d','e'}; 
             writer.writeText(carr1, 0, 2);
 	    assertTrue(sw.toString().equals("ab"));
 	    sw = new StringWriter();
-            writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
+            writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
             writer.writeText(carr1, 0, 0);
 	    assertTrue(sw.toString().equals(""));
 
@@ -277,7 +275,7 @@ import org.mozilla.util.Assert;
     public void testNullArgExceptions() {
 	boolean exceptionThrown = false;
 	try {
-	    writer.startElement(null);
+	    writer.startElement(null, null);
 	} catch (IOException e) {
             assertTrue(false);
         } catch (NullPointerException npe) {
@@ -295,7 +293,7 @@ import org.mozilla.util.Assert;
 	assertTrue(exceptionThrown);
 	exceptionThrown = false;
 	try {
-	    writer.writeAttribute("foo", null);
+	    writer.writeAttribute("foo", null, null);
 	} catch (IOException e) {
             assertTrue(false);
         } catch (NullPointerException npe) {
@@ -304,7 +302,7 @@ import org.mozilla.util.Assert;
 	assertTrue(exceptionThrown);
 	exceptionThrown = false;
 	try {
-	    writer.writeAttribute(null, "bar");
+	    writer.writeAttribute(null, "bar", null);
 	} catch (IOException e) {
             assertTrue(false);
         } catch (NullPointerException npe) {
@@ -313,7 +311,7 @@ import org.mozilla.util.Assert;
 	assertTrue(exceptionThrown);
 	exceptionThrown = false;
 	try {
-	    writer.writeURIAttribute("foo", null);
+	    writer.writeURIAttribute("foo", null, null);
 	} catch (IOException e) {
             assertTrue(false);
         } catch (NullPointerException npe) {
@@ -322,7 +320,7 @@ import org.mozilla.util.Assert;
 	assertTrue(exceptionThrown);
 	exceptionThrown = false;
 	try {
-	    writer.writeURIAttribute(null, "bar");
+	    writer.writeURIAttribute(null, "bar", null);
 	} catch (IOException e) {
             assertTrue(false);
         } catch (NullPointerException npe) {
@@ -340,7 +338,7 @@ import org.mozilla.util.Assert;
 	assertTrue(exceptionThrown);
 	exceptionThrown = false;
 	try {
-	    writer.writeText(null);
+	    writer.writeText(null, null);
 	} catch (IOException e) {
             assertTrue(false);
         } catch (NullPointerException npe) {
