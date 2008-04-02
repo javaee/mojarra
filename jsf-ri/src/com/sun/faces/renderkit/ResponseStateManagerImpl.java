@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.35 2006/05/31 21:13:05 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.36 2006/06/29 21:01:51 rlubke Exp $
  */
 
 /*
@@ -30,6 +30,8 @@
 
 package com.sun.faces.renderkit;
 
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
 import javax.faces.FacesException;
 import javax.faces.application.StateManager;
 import javax.faces.application.StateManager.SerializedView;
@@ -37,14 +39,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.BufferedOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
@@ -52,10 +53,12 @@ import java.util.zip.GZIPOutputStream;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.config.WebConfiguration.WebEnvironmentEntry;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.config.WebConfiguration.WebEnvironmentEntry;
 import com.sun.faces.io.Base64InputStream;
 import com.sun.faces.io.Base64OutputStreamWriter;
+import com.sun.faces.spi.SerializationProvider;
+import com.sun.faces.spi.SerializationProviderFactory;
 import com.sun.faces.util.Util;
 
 
@@ -83,6 +86,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
           "\" />".toCharArray();
 
 
+    private SerializationProvider serialProvider;
     private Boolean compressState;   
     private ByteArrayGuard guard; 
     private int csBuffSize;
@@ -123,6 +127,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     public Object getTreeStructureToRestore(FacesContext context,
                                             String treeId) {
 
+        if (serialProvider == null) {
+            serialProvider = SerializationProviderFactory
+                  .createInstance(context.getExternalContext());
+        }
+        
         StateManager stateManager = Util.getStateManager(context);
 
         String viewString = getStateParam(context);
@@ -147,10 +156,10 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                 }
                     
                 if (compressState) {                                        
-                    ois = new ApplicationObjectInputStream(
+                    ois = serialProvider.createObjectInputStream(
                           new GZIPInputStream(bis));
                 } else {
-                    ois = new ApplicationObjectInputStream(bis);
+                    ois = serialProvider.createObjectInputStream(bis);
                 }
                 Object structure = ois.readObject();
                 Object state = ois.readObject();
@@ -190,6 +199,10 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     public void writeState(FacesContext context, SerializedView view)
     throws IOException {
 
+        if (serialProvider == null) {
+            serialProvider = SerializationProviderFactory
+                  .createInstance(context.getExternalContext());
+        }
         StateManager stateManager = Util.getStateManager(context);
         ResponseWriter writer = context.getResponseWriter();
 
@@ -210,10 +223,14 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                     base = bos;
                 }
                 if (compressState) {
-                    oos = new ObjectOutputStream(
-                          new GZIPOutputStream(base));
+                    oos = serialProvider.createObjectOutputStream(
+                          new BufferedOutputStream(new GZIPOutputStream(base),
+                                                   1024));
                 } else {
-                    oos = new ObjectOutputStream(base);
+                    oos = serialProvider
+                          .createObjectOutputStream(new BufferedOutputStream(
+                                base,
+                                1024));
                 }
 
                 oos.writeObject(view.getStructure());
@@ -359,6 +376,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                 }   
             csBuffSize = Integer.parseInt(defaultSize);
         }
+                
     }
 
    

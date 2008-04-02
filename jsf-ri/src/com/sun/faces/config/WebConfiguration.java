@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.8 2006/06/16 19:31:50 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.9 2006/06/29 21:01:54 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -523,6 +523,10 @@ public class WebConfiguration {
         InjectionProviderClass(
                 "com.sun.faces.injectionProvider",
                 ""
+        ),
+        SerializationProviderClass(
+              "com.sun.faces.serializationProvider",
+              ""
         ),
         ResponseBufferSize(
               "com.sun.faces.responseBufferSize",

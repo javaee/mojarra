@@ -631,6 +631,7 @@ public class StateManagerImpl extends StateManager {
 
     private static class TreeNode implements Externalizable {
 
+        private static final String NULL_ID = "";
 
         public String componentType;
         public String id;
@@ -663,6 +664,8 @@ public class StateManagerImpl extends StateManager {
             out.writeUTF(this.componentType);
             if (this.id != null) {
                 out.writeUTF(this.id);
+            } else {
+                out.writeUTF(NULL_ID);
             }
 
         }
@@ -673,9 +676,11 @@ public class StateManagerImpl extends StateManager {
 
             this.parent = in.readInt();
             this.componentType = in.readUTF();
-            if (in.available() > 0) {
-                this.id = in.readUTF();
+            this.id = in.readUTF();
+            if (id.length() == 0) {
+                id = null;
             }
+                    
 
         }
 
