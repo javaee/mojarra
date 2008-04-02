@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- $Id: index.jsp,v 1.2 2003/09/11 21:40:01 craigmcc Exp $ -->
+<!-- $Id: index.jsp,v 1.3 2003/10/17 03:53:49 eburns Exp $ -->
 <html>
   <head>
     <title>JavaServer Faces 1.0 Standard RenderKit Demo</title>
@@ -40,6 +40,9 @@
 	  </p></li>
 
 	  <li><p><a href="faces/UISelectOne.jsp">UISelectOne</a>
+	  </p></li>
+
+	  <li><p><a href="faces/DataModel.jsp">DataModel</a>
 	  </p></li>
 
 	</ul>

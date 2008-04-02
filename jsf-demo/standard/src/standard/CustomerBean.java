@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.1 2003/07/17 02:58:37 rlubke Exp $
+ * $Id: CustomerBean.java,v 1.2 2003/10/17 03:53:46 eburns Exp $
  */
 
 /*
@@ -10,13 +10,16 @@
 package standard;
 
 
+import java.io.Serializable;
+
+
 /**
  * <p>JavaBean represented the data for an individual customer.</p>
  *
- * @version $Id: CustomerBean.java,v 1.1 2003/07/17 02:58:37 rlubke Exp $
+ * @version $Id: CustomerBean.java,v 1.2 2003/10/17 03:53:46 eburns Exp $
  */
 
-public class CustomerBean {
+public class CustomerBean implements Serializable {
 
 
     public CustomerBean() {
@@ -52,6 +55,8 @@ public class CustomerBean {
     }
 
     public void setName(String name) {
+        System.err.println("setName(" + accountId + "," + this.name +
+                           "," + name);
         this.name = name;
     }
 

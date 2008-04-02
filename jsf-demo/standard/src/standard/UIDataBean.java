@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataBean.java,v 1.2 2003/09/11 21:39:59 craigmcc Exp $
+ * $Id: UIDataBean.java,v 1.3 2003/10/17 03:53:46 eburns Exp $
  */
 
 /*
@@ -151,7 +151,6 @@ public class UIDataBean {
                ",accountId=" +
                accountId.currentValue(context) + ")");
 	clear();
-	erase();
 	return (null);
 
     }
@@ -165,7 +164,6 @@ public class UIDataBean {
 
         append("create()");
 	clear();
-	erase();
 
 	// Add a new row to the table
 	List list = list();
@@ -173,7 +171,7 @@ public class UIDataBean {
 	    CustomerBean customer = new CustomerBean();
 	    list.add(customer);
             int index = data.getRowIndex();
-            data.setRowIndex(list.size());
+            data.setRowIndex(list.size() - 1);
             created.setSelected(true);
             data.setRowIndex(index);
 	}
@@ -195,7 +193,7 @@ public class UIDataBean {
 	// Delete customers for whom the checked field is selected
         List removes = new ArrayList();
         int n = data.getRowCount();
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i < n; i++) {
             data.setRowIndex(i);
             if (checked.isSelected()) {
                 removes.add(data.getRowData());
@@ -212,7 +210,6 @@ public class UIDataBean {
         }
 
 	clear();
-	erase();
 
 	return (null);
     }
@@ -224,9 +221,7 @@ public class UIDataBean {
     private String first() {
 
         append("first()");
-	clear();
-	erase();
-	scroll(1);
+	scroll(0);
 	return (null);
 
     }
@@ -238,9 +233,7 @@ public class UIDataBean {
     private String last() {
 
         append("last()");
-	clear();
-	erase();
-	scroll(data.getRowCount());
+	scroll(data.getRowCount() - 1);
 	return (null);
 
     }
@@ -252,12 +245,7 @@ public class UIDataBean {
     private String next() {
 
         append("next()");
-	clear();
-	erase();
 	int first = data.getFirst();
-	if (first <= 0) {
-	    first = 1;
-	}
         scroll(first + data.getRows());
 	return (null);
 
@@ -274,7 +262,6 @@ public class UIDataBean {
                ",accountId=" +
                accountId.currentValue(context) + ")");
 	clear();
-	erase();
 	return (null);
 
     }
@@ -286,12 +273,7 @@ public class UIDataBean {
     private String previous() {
 
         append("previous()");
-	clear();
-	erase();
 	int first = data.getFirst();
-	if (first <= 0) {
-	    first = 1;
-	}
         scroll(first - data.getRows());
 	return (null);
 
@@ -305,7 +287,6 @@ public class UIDataBean {
 
         append("reset()");
 	clear();
-	erase();
 	return (null);
 
     }
@@ -320,8 +301,8 @@ public class UIDataBean {
 
         append("update()");
 	; // Save to database as necessary
+        clear();
 	created();
-	erase();
 	return (null);
 
     }
@@ -338,6 +319,7 @@ public class UIDataBean {
      */
     private void append(String text) {
 
+        //        System.out.println("APPEND:  " + text);
         FacesContext context = FacesContext.getCurrentInstance();
         String message = (String)
             context.getExternalContext().getRequestMap().get("message");
@@ -357,7 +339,7 @@ public class UIDataBean {
 
         append("clear()");
 	int n = data.getRowCount();
-	for (int i = 1; i <= n; i++) {
+	for (int i = 0; i < n; i++) {
 	    data.setRowIndex(i);
 	    checked.setSelected(false);
 	}
@@ -372,22 +354,10 @@ public class UIDataBean {
 
         append("created()");
 	int n = data.getRowCount();
-	for (int i = 1; i <= n; i++) {
+	for (int i = 0; i < n; i++) {
 	    data.setRowIndex(i);
 	    created.setSelected(false);
 	}
-
-    }
-
-
-    /**
-     * <p>Erase the previous and local values of all input components
-     * for this table.</p>
-     */
-    private void erase() {
-
-        append("erase()");
-	data.erase(FacesContext.getCurrentInstance());
 
     }
 
@@ -434,14 +404,12 @@ public class UIDataBean {
             append("scroll(" + row + ") showing entire table already");
 	    return; // Showing entire table already
 	}
-	if (row <= 1) {
-	    data.setFirst(1);
-	} else if (row > data.getRowCount()) {
-            data.setFirst(data.getRowCount());
+	if (row < 0) {
+	    data.setFirst(0);
+	} else if (row >= data.getRowCount()) {
+            data.setFirst(data.getRowCount() - 1);
         } else {
-            row--; // Convert to zero relative
-            data.setFirst(row - (row % rows) + 1);
-            row++;
+            data.setFirst(row - (row % rows));
         }
         append("scroll(" + row + "), first=" + data.getFirst());
 

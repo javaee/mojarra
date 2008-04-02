@@ -8,9 +8,21 @@
 
 <faces-config>
 
+<!--
+  <lifecycle>
+    <phase-listener>standard.MyPhaseListener</phase-listener>
+  </lifecycle>
+-->
+
   <managed-bean>
     <managed-bean-name>model</managed-bean-name>
     <managed-bean-class>standard.ModelBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>DataModelBean</managed-bean-name>
+    <managed-bean-class>standard.DataModelBean</managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
 

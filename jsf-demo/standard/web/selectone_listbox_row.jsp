@@ -12,9 +12,14 @@
 
 
              <td>
+<%-- PENDING: accesskey not recognized
                  <h:selectone_listbox id="appleQuantity" 
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
+--%>
+                 <h:selectone_listbox id="appleQuantity" 
+                     title="Select Quantity"
+                     tabindex="20" >
 
                 <h:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
                 <h:selectitem  itemValue="1" itemLabel="1" title="One" />
