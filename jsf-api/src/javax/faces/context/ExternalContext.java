@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.28 2006/05/02 19:17:58 edburns Exp $
+ * $Id: ExternalContext.java,v 1.29 2007/01/29 06:46:51 rlubke Exp $
  */
  
 /*
@@ -347,7 +347,7 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public void setRequest(Object request) {
-        ExternalContext impl = null;
+        ExternalContext impl;
         if (null != (impl = (ExternalContext) this.getRequestMap().
                 get("com.sun.faces.ExternalContextImpl"))) {
             impl.setRequest(request);
@@ -387,7 +387,7 @@ public abstract class ExternalContext {
      *
      */
     public void setRequestCharacterEncoding(String encoding) throws UnsupportedEncodingException {
-        ExternalContext impl = null;
+        ExternalContext impl;
         if (null != (impl = (ExternalContext) this.getRequestMap().
                 get("com.sun.faces.ExternalContextImpl"))) {
             impl.setRequestCharacterEncoding(encoding);
@@ -652,9 +652,10 @@ public abstract class ExternalContext {
      *
      */
     public String getRequestCharacterEncoding() {
-        ExternalContext impl = null;
+        ExternalContext impl;
         if (null != (impl = (ExternalContext) this.getRequestMap().
                 get("com.sun.faces.ExternalContextImpl"))) {
+            //noinspection TailRecursion
             return impl.getRequestCharacterEncoding();
         }
         throw new UnsupportedOperationException();
@@ -679,9 +680,10 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public String getRequestContentType() {
-        ExternalContext impl = null;
+        ExternalContext impl;
         if (null != (impl = (ExternalContext) this.getRequestMap().
                 get("com.sun.faces.ExternalContextImpl"))) {
+            //noinspection TailRecursion
             return impl.getRequestContentType();
         }
 
@@ -707,9 +709,10 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public String getResponseCharacterEncoding() {
-        ExternalContext impl = null;
+        ExternalContext impl;
         if (null != (impl = (ExternalContext) this.getRequestMap().
                 get("com.sun.faces.ExternalContextImpl"))) {
+            //noinspection TailRecursion
             return impl.getResponseCharacterEncoding();
         }
 	
@@ -736,9 +739,10 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public String getResponseContentType() {
-        ExternalContext impl = null;
+        ExternalContext impl;
         if (null != (impl = (ExternalContext) this.getRequestMap().
                 get("com.sun.faces.ExternalContextImpl"))) {
+            //noinspection TailRecursion
             return impl.getResponseContentType();
         }
 
@@ -842,7 +846,7 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public void setResponse(Object response) {
-        ExternalContext impl = null;
+        ExternalContext impl;
         if (null != (impl = (ExternalContext) this.getRequestMap().
                 get("com.sun.faces.ExternalContextImpl"))) {
             impl.setResponse(response);
@@ -874,7 +878,7 @@ public abstract class ExternalContext {
      *
      */
     public void setResponseCharacterEncoding(String encoding) {
-        ExternalContext impl = null;
+        ExternalContext impl;
         if (null != (impl = (ExternalContext) this.getRequestMap().
                 get("com.sun.faces.ExternalContextImpl"))) {
             impl.setResponseCharacterEncoding(encoding);

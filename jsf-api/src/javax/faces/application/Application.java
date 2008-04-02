@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.46 2006/05/17 19:00:42 rlubke Exp $
+ * $Id: Application.java,v 1.47 2007/01/29 06:44:05 rlubke Exp $
  */
 
 /*
@@ -309,9 +309,10 @@ public abstract class Application {
      */
     
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
-        Application impl = null;
+        Application impl;
         if (null != (impl = (Application) ctx.getExternalContext().getApplicationMap().
                 get("com.sun.faces.ApplicationImpl"))) {
+            //noinspection TailRecursion
             return impl.getResourceBundle(ctx, name);
         }
         
@@ -593,13 +594,15 @@ public abstract class Application {
         if (null == componentExpression || null == context ||
             null == componentType) {
         	// PENDING - i18n
-            String message = "null parameters";
-            message = message +" componentExpression " + componentExpression +
-                " context " + context + " componentType " + componentType;
-            throw new NullPointerException(message);
+            StringBuilder builder = new StringBuilder(64);
+            builder.append("null parameters - ");
+            builder.append("componentExpression: ").append(componentExpression);
+            builder.append(", context: ").append(context);
+            builder.append(", componentType: ").append(componentType);
+            throw new NullPointerException(builder.toString());
         }
 
-        Object result = null;
+        Object result;
         boolean createOne = false;
 
         try {

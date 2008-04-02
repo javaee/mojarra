@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.70 2006/09/01 01:22:19 tony_robertson Exp $
+ * $Id: FacesContext.java,v 1.71 2007/01/29 06:46:51 rlubke Exp $
  */
 
 /*
@@ -128,9 +128,10 @@ public abstract class FacesContext {
      */ 
 
     public ELContext getELContext() {
-        FacesContext impl = null;
+        FacesContext impl;
         if (null != (impl = (FacesContext) getExternalContext().getRequestMap().
                 get("com.sun.faces.FacesContextImpl"))) {
+            //noinspection TailRecursion
             return impl.getELContext();
         }
         throw new UnsupportedOperationException();
