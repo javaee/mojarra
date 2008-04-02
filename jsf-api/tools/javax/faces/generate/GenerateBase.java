@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateBase.java,v 1.5 2003/09/30 13:52:30 eburns Exp $
+ * $Id: GenerateBase.java,v 1.6 2003/09/30 15:43:39 eburns Exp $
  */
 
 /*
@@ -273,16 +273,16 @@ public abstract class GenerateBase extends Object {
 	if (null == dir) {
 	    return;
 	}
+	if (dir.exists()) {
+	    return;
+	}
 	File parentFile = null;
 	if (null != (parentFile = dir.getParentFile())) {
 	    if (!parentFile.exists()) {
 		makeDirectories(parentFile);
-		parentFile.mkdir();
-	    }
-	    else {
-		dir.mkdir();
 	    }
 	}
+	dir.mkdir();
 	return;
     }
 

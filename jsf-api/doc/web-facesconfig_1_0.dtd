@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.15 2003/09/25 21:41:31 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.16 2003/09/30 15:43:38 eburns Exp $
 
 -->
 
@@ -158,7 +158,7 @@
     Attribute names must be unique within the scope of the parent (or related)
     component.
 -->
-<!ELEMENT attribute       (description*, display-name*, icon*, attribute-name, attribute-class)>
+<!ELEMENT attribute       (description*, display-name*, icon*, attribute-name, attribute-class, tag-attribute*)>
 
 
 <!--
@@ -293,7 +293,7 @@
     property names that will be recognized when performing introspection
     against that class via java.beans.Introspector.
 -->
-<!ELEMENT property        (description*, display-name*, icon*, property-name, property-class)>
+<!ELEMENT property        (description*, display-name*, icon*, property-name, property-class, tag-attribute*)>
 
 
 <!--
@@ -739,6 +739,16 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!ELEMENT summary         (#PCDATA)>
 <!ATTLIST summary         xml:lang        %Language;      #IMPLIED>
 
+<!--
+    The "tag-attribute" element states that the property or attribute in
+    which this tag-attribute element is a child should be exposed as a
+    property settable by the page-author.  Valid values are "yes", "no"
+    and "required", without the quotes.  "required" means that this
+    attribute is should be exposed as a required page-author settable
+    property.  If no value is specified, a value of "yes" should be
+    assumed.
+-->
+<!ELEMENT tag-attribute   (#PCDATA)>
 
 <!--
     The "to-view" element contains the view identifier of the next view
