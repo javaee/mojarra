@@ -217,7 +217,7 @@
                 <sysproperty key="cactus.contextURL"
                              value="http://${container.host}:${container.port}/test"/>
             </custom-sysproperties>
-            <suite>
+            <suite>               
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestActionListenerImpl"/>
                 <test todir="${impl.test.results.dir}"
@@ -347,7 +347,9 @@
                    test-results-dir="${impl.test.results.dir}">
             <suite>
                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.util.TestUtil_local"/>    
+                      name="com.sun.faces.util.TestUtil_local"/>  
+                 <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.util.TestLRUMap_local"/>
             </suite>    
         </jsf.junit>
         <antcall target="test.config"/>

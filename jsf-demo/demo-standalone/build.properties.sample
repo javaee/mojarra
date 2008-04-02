@@ -31,7 +31,7 @@
 # and the ant-contrib tasks installed as an extension to your ant
 # installation.
 #
-# $Id: build.properties.sample,v 1.1 2005/12/14 22:27:23 rlubke Exp $
+# $Id: build.properties.sample,v 1.2 2005/12/15 23:40:27 rlubke Exp $
 # -----------------------------------------------------------------------------
 
 # -------------------------------------
@@ -39,7 +39,6 @@
 #    commons-digester (version 1.5)
 #    commons-beanutils (version 1.6.1)
 #    commons-logging (latest)
-#    commons-collections (version 2.1)
 #    Servlet (version 2.5)
 #    JSP (version 2.1)
 #    JSTL (version 1.2)
@@ -62,7 +61,6 @@ compile.classpath=
 #       commons-digester (version 1.5)
 #       commons-beanutils (version 1.6.1)
 #       commons-logging (latest)
-#       commons-collections (version 2.1)
 #
 #    If the container already has the necessary dependencies,
 #    then leave this property blank.

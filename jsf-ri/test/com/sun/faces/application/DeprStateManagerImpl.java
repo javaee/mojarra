@@ -1,5 +1,5 @@
 /* 
- * $Id: DeprStateManagerImpl.java,v 1.2 2005/08/22 22:11:08 ofung Exp $ 
+ * $Id: DeprStateManagerImpl.java,v 1.3 2005/12/15 23:40:29 rlubke Exp $ 
  */ 
 
 
@@ -36,7 +36,7 @@ package com.sun.faces.application;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.TreeStructure;
 import com.sun.faces.util.Util;
-import org.apache.commons.collections.LRUMap;
+import com.sun.faces.util.LRUMap;
 
 import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
@@ -57,7 +57,7 @@ import javax.faces.component.NamingContainer;
  * <B>DeprStateManagerImpl</B> is a test class which implements
  * deprecated methods only. 
  *
- * @version $Id: DeprStateManagerImpl.java,v 1.2 2005/08/22 22:11:08 ofung Exp $
+ * @version $Id: DeprStateManagerImpl.java,v 1.3 2005/12/15 23:40:29 rlubke Exp $
  */
 public class DeprStateManagerImpl extends StateManager {
 

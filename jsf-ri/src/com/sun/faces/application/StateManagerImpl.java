@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.38 2005/08/26 15:26:59 rlubke Exp $ 
+ * $Id: StateManagerImpl.java,v 1.39 2005/12/15 23:40:28 rlubke Exp $ 
  */ 
 
 
@@ -36,7 +36,7 @@ package com.sun.faces.application;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.TreeStructure;
 import com.sun.faces.util.Util;
-import org.apache.commons.collections.LRUMap;
+import com.sun.faces.util.LRUMap;
 
 import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
@@ -59,7 +59,7 @@ import javax.faces.component.NamingContainer;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.38 2005/08/26 15:26:59 rlubke Exp $
+ * @version $Id: StateManagerImpl.java,v 1.39 2005/12/15 23:40:28 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
