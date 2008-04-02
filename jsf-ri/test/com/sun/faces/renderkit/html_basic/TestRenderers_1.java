@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.25 2003/02/20 22:50:06 ofung Exp $
+ * $Id: TestRenderers_1.java,v 1.26 2003/03/28 18:01:40 jvisvanathan Exp $
  */
 
 /*
@@ -26,8 +26,6 @@ import javax.faces.component.SelectItem;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIComponent;
-import javax.faces.event.FormEvent;
-import javax.faces.event.CommandEvent;
 import javax.faces.event.FacesEvent;
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
@@ -43,7 +41,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.25 2003/02/20 22:50:06 ofung Exp $
+ * @version $Id: TestRenderers_1.java,v 1.26 2003/03/28 18:01:40 jvisvanathan Exp $
  * 
  *
  */
@@ -154,9 +152,9 @@ public class TestRenderers_1 extends JspFacesTestCase
          
         // Test FormRenderer.
         System.out.println("Testing FormRenderer");
-        UIComponent uiForm = new UIForm();
+        UIForm uiForm = new UIForm();
         uiForm.setComponentId("formRenderer" + expectedFormNumber);
-        uiForm.setValue("FormRenderer");
+        uiForm.setFormName("basicForm");
         root.addChild(uiForm);
 
         FormRenderer formRenderer = new FormRenderer();
@@ -167,14 +165,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         
         // make sure formEvent was queued.
         System.out.println("Testing getApplicationEvent: ");
-        Iterator it = getFacesContext().getApplicationEvents();
-        assertTrue(it != null );
-        
-        /* assertTrue(it.hasNext());
-        FacesEvent event = (FacesEvent) it.next();
-        assertTrue(event instanceof FormEvent); */
-        
-      
+       
         // test encode method
         System.out.println("Testing encode method");
         formRenderer.encodeBegin(getFacesContext(), uiForm);
@@ -205,9 +196,9 @@ public class TestRenderers_1 extends JspFacesTestCase
          
         // Test ButtonRenderer.
         System.out.println("Testing ButtonRenderer");
-        UIComponent uiCommand = new UICommand();
+        UICommand uiCommand = new UICommand();
         uiCommand.setComponentId("buttonRenderer");
-        uiCommand.setValue("ButtonRenderer");
+        uiCommand.setCommandName("Login");
         uiCommand.setAttribute("label", "Login");
         root.addChild(uiCommand);
 
@@ -231,7 +222,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         // Test <Button> element rendering
         uiCommand = new UICommand();
         uiCommand.setComponentId("myButton");
-        uiCommand.setValue("button");
+        uiCommand.setCommandName("button");
         uiCommand.setAttribute("type", "submit");
         root.addChild(uiCommand);
         System.out.println("Testing encode (<button> rendering) method");

@@ -25,7 +25,6 @@
 <!-- ************ Where are we building into? ***************************** -->
 
   <!-- the root of our tomcat -->
-  <property name="tomcat.home" value="${myenv.JWSDP_HOME}"/>
 
   <!-- The base directory for compilation targets -->
   <property name="build.home" value="${basedir}/build"/>
@@ -243,8 +242,6 @@
     <copy todir="${dist.home}/example" 
           file="${jsf.demo.home}/components/build/components.war"/>
     <copy todir="${dist.home}/example" 
-          file="${jsf.demo.home}/helloDuke/build/helloDuke.war"/>
-    <copy todir="${dist.home}/example" 
           file="${jsf.demo.home}/guessNumber/build/guessNumber.war"/>
     <copy todir="${dist.home}/example" 
           file="${jsf.demo.home}/cardemo/build/cardemo.war"/>
@@ -265,9 +262,6 @@
     <echo> copy the demo-components.jar to the webapps that need it </echo>
 
     <echo> copy the necessary examples </echo>
-    <copy todir="${dist.home}/example/helloDuke" includeEmptyDirs="false">
-      <fileset dir="${jsf.demo.home}/helloDuke"/>
-    </copy>
 
     <copy todir="${dist.home}/example/guessNumber" includeEmptyDirs="false">
       <fileset dir="${jsf.demo.home}/guessNumber"/>

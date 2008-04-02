@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.40 2003/02/20 22:50:06 ofung Exp $
+ * $Id: TestRenderers_2.java,v 1.41 2003/03/28 18:01:41 jvisvanathan Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import com.sun.faces.renderkit.html_basic.CheckboxRenderer;
 import com.sun.faces.renderkit.html_basic.NumberRenderer;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.tree.SimpleTreeImpl;
+import com.sun.faces.util.Util;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -53,7 +54,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.40 2003/02/20 22:50:06 ofung Exp $
+ * @version $Id: TestRenderers_2.java,v 1.41 2003/03/28 18:01:41 jvisvanathan Exp $
  * 
  *
  */
@@ -288,7 +289,7 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testHyperlinkRenderer(UIComponent root) throws IOException {
         System.out.println("Testing HyperlinkRenderer");
         UICommand command = new UICommand();
-        command.setValue("HyperlinkRenderer");
+        command.setCommandName("HyperlinkRenderer");
         command.setComponentId("my_command");
         root.addChild(command);
 
@@ -299,8 +300,8 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         // Verify command event was set for the application..
         System.out.println("    Testing added application event (commandEvent)..");
-        Iterator iter = getFacesContext().getApplicationEvents();
-        assertTrue(iter != null); 
+        Iterator iter = getFacesContext().getFacesEvents();
+        assertTrue(iter.hasNext()); 
 
         // Test encode method
 
@@ -500,10 +501,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 	img = new UIGraphic();
 	root.addChild(img);
 	TestBean testBean = (TestBean) 
-	    getFacesContext().getHttpSession().getAttribute("TestBean");
+	    (Util.getValueBinding("TestBean")).getValue(getFacesContext());
 	assertTrue(null != testBean); // set in FacesTestCaseService
 	testBean.setImagePath("/foo/modelReferenceImage.gif");
-	img.setModelReference("TestBean.imagePath");
+	img.setValueRef("TestBean.imagePath");
 
         imageRenderer.encodeBegin(getFacesContext(), img);
         imageRenderer.encodeEnd(getFacesContext(), img);

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.34 2003/03/21 23:24:01 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.35 2003/03/28 18:01:39 jvisvanathan Exp $
  */
 
 /*
@@ -303,7 +303,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
         UIInput uiInput = null;
         if ( component instanceof UIInput) {
             uiInput= (UIInput) component;
-        }
+        } else {
+            // decode needs to be invoked only for components that are
+            // instances or subclasses of UIInput.
+            return;
+        }    
+        
         String clientId = component.getClientId(context);
         Assert.assert_it(clientId != null );
         
@@ -324,7 +329,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
         setPreviousValue(component, curValue);
 
-        Map requestMap = context.getExternalContext().getRequestMap();
+        Map requestMap = context.getExternalContext().getRequestParameterMap();
         String newValue = (String)requestMap.get(clientId);
         try {
             convertedValue = getConvertedValue(context, component, newValue);   
@@ -333,7 +338,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             addConversionErrorMessage(context, component, ce.getMessage());
             component.setValid(false);
             return;
-        }    
+        }   
         uiInput.setValue(convertedValue);
         component.setValid(true);
     }
