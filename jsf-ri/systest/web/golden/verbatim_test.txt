@@ -17,21 +17,27 @@
       <h1>Test of the Verbatim Tag</h1>
 
       <p>
-        [DEFAULT]
+        
+          [DEFAULT]
           This text <b>has angle brackets</b>.
           The angle brackets MUST NOT be escaped.
+        
       </p>
 
       <p>
-        [FALSE]
+        
+          [FALSE]
           This text <b>has angle brackets</b>.
           The angle brackets MUST NOT be escaped.
+        
       </p>
 
       <p>
-        [TRUE]
+        
+          [TRUE]
           This text &lt;b&gt;has angle brackets&lt;/b&gt;.
           The angle brackets MUST be escaped.
+        
       </p>
 
     </body>

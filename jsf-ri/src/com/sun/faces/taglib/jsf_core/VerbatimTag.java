@@ -1,5 +1,5 @@
 /*
- * $Id: VerbatimTag.java,v 1.9 2004/02/26 20:33:20 eburns Exp $
+ * $Id: VerbatimTag.java,v 1.10 2004/10/08 14:27:26 rlubke Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ public class VerbatimTag extends UIComponentBodyTag {
                     createValueBinding(escape);
                 component.setValueBinding("escape", vb);
             } else {
-                boolean _escape = new Boolean(escape).booleanValue();
+                boolean _escape = Boolean.valueOf(escape).booleanValue();
                 component.getAttributes().put
                     ("escape", _escape ? Boolean.TRUE : Boolean.FALSE);
             }
@@ -77,7 +77,7 @@ public class VerbatimTag extends UIComponentBodyTag {
     public int doAfterBody() throws JspException {
 
         if (getBodyContent() != null) {
-            String value = getBodyContent().getString().trim();
+            String value = getBodyContent().getString();
             if (value != null) {
                 UIOutput output = (UIOutput) getComponentInstance();
                 output.setValue(value);
