@@ -1,9 +1,9 @@
 /*
- * $Id: ResultSetBean.java,v 1.2 2003/12/17 15:19:25 rkitain Exp $
+ * $Id: ResultSetBean.java,v 1.3 2004/02/05 16:23:36 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -42,16 +42,16 @@
 
 package demo.model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import javax.faces.component.UIData;
-import javax.faces.component.UIComponent;
-import javax.faces.event.ActionEvent;
-import javax.faces.context.FacesContext;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIData;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>Backing file bean for <code>ResultSet</code> demo.</p>
@@ -60,26 +60,30 @@ import org.apache.commons.logging.LogFactory;
 public class ResultSetBean {
 
     private static Log log = LogFactory.getLog(ResultSetBean.class);
-    
+
     private List list = null;
+
+
     public ResultSetBean() {
     }
-    
-    public List getList() { 
+
+
+    public List getList() {
         // Construct a preconfigured customer list lazily.
-        if ( list == null ) {
+        if (list == null) {
             list = new ArrayList();
             for (int i = 0; i < 1000; i++) {
-                list.add(new CustomerBean(Integer.toString(i), 
-                    "name_" + Integer.toString(i),
-                    "symbol_" + Integer.toString(i), i));
+                list.add(new CustomerBean(Integer.toString(i),
+                                          "name_" + Integer.toString(i),
+                                          "symbol_" + Integer.toString(i), i));
             }
         }
         return list;
     }
-    
-    public void setList(List newlist) { 
-        this.list = newlist; 
+
+
+    public void setList(List newlist) {
+        this.list = newlist;
     }
 
     // -------------------------------------------------------- Bound Components
@@ -88,8 +92,16 @@ public class ResultSetBean {
      * <p>The <code>UIData</code> component representing the entire table.</p>
      */
     private UIData data = null;
-    public UIData getData() { return data; }
-    public void setData(UIData data) { this.data = data; }
+
+
+    public UIData getData() {
+        return data;
+    }
+
+
+    public void setData(UIData data) {
+        this.data = data;
+    }
 
 
     // ---------------------------------------------------------- Action Methods
@@ -99,8 +111,8 @@ public class ResultSetBean {
      * <p>Scroll directly to the first page.</p>
      */
     public String first() {
-	scroll(0);
-	return (null);
+        scroll(0);
+        return (null);
 
     }
 
@@ -109,8 +121,8 @@ public class ResultSetBean {
      * <p>Scroll directly to the last page.</p>
      */
     public String last() {
-	scroll(data.getRowCount() - 1);
-	return (null);
+        scroll(data.getRowCount() - 1);
+        return (null);
 
     }
 
@@ -121,7 +133,7 @@ public class ResultSetBean {
     public String next() {
         int first = data.getFirst();
         scroll(first + data.getRows());
-	return (null);
+        return (null);
 
     }
 
@@ -130,11 +142,12 @@ public class ResultSetBean {
      * <p>Scroll backwards to the previous page.</p>
      */
     public String previous() {
-	int first = data.getFirst();
+        int first = data.getFirst();
         scroll(first - data.getRows());
-	return (null);
+        return (null);
 
     }
+
 
     /**
      * <p>Scroll to the page that contains the specified row number.</p>
@@ -143,20 +156,21 @@ public class ResultSetBean {
      */
     public void scroll(int row) {
 
-	int rows = data.getRows();
-	if (rows < 1) {
-	    return; // Showing entire table already
-	}
-	if (row < 0) {
-	    data.setFirst(0);
-	} else if (row >= data.getRowCount()) {
+        int rows = data.getRows();
+        if (rows < 1) {
+            return; // Showing entire table already
+        }
+        if (row < 0) {
+            data.setFirst(0);
+        } else if (row >= data.getRowCount()) {
             data.setFirst(data.getRowCount() - 1);
         } else {
             data.setFirst(row - (row % rows));
         }
 
     }
-    
+
+
     /**
      * Handles the ActionEvent generated as a result of clicking on a
      * link that points a particular page in the result-set.
@@ -168,8 +182,8 @@ public class ResultSetBean {
         }
         FacesContext context = FacesContext.getCurrentInstance();
         UIComponent component = event.getComponent();
-        Integer curRow = (Integer)component.getAttributes().get("currentRow");
-        if ( curRow != null) {
+        Integer curRow = (Integer) component.getAttributes().get("currentRow");
+        if (curRow != null) {
             currentRow = curRow.intValue();
         }
         // scroll to the appropriate page in the ResultSet.

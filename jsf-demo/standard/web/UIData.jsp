@@ -1,9 +1,9 @@
 <!--
- Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIData.jsp,v 1.16 2004/01/30 05:24:58 craigmcc Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.17 2004/02/05 16:25:18 rlubke Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>

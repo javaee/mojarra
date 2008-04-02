@@ -1,9 +1,9 @@
 /*
- * $Id: MenuTreeRenderer.java,v 1.9 2003/12/24 23:44:19 jvisvanathan Exp $
+ * $Id: MenuTreeRenderer.java,v 1.10 2004/02/05 16:22:56 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -46,17 +46,15 @@ package components.renderkit;
 import components.components.GraphComponent;
 import components.model.Graph;
 import components.model.Node;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
-import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * <p>Render our current value (which must be a <code>Graph</code>)
@@ -69,21 +67,22 @@ public class MenuTreeRenderer extends MenuBarRenderer {
     /**
      * The names of tree state images that we need.
      */
-    public static final String IMAGE_HANDLE_DOWN_LAST =    "handledownlast.gif";
-    public static final String IMAGE_HANDLE_DOWN_MIDDLE =  "handledownmiddle.gif";
-    public static final String IMAGE_HANDLE_RIGHT_LAST =   "handlerightlast.gif";
+    public static final String IMAGE_HANDLE_DOWN_LAST = "handledownlast.gif";
+    public static final String IMAGE_HANDLE_DOWN_MIDDLE = "handledownmiddle.gif";
+    public static final String IMAGE_HANDLE_RIGHT_LAST = "handlerightlast.gif";
     public static final String IMAGE_HANDLE_RIGHT_MIDDLE = "handlerightmiddle.gif";
-    public static final String IMAGE_LINE_LAST =           "linelastnode.gif";
-    public static final String IMAGE_LINE_MIDDLE =         "linemiddlenode.gif";
-    public static final String IMAGE_LINE_VERTICAL =       "linevertical.gif";
-  
+    public static final String IMAGE_LINE_LAST = "linelastnode.gif";
+    public static final String IMAGE_LINE_MIDDLE = "linemiddlenode.gif";
+    public static final String IMAGE_LINE_VERTICAL = "linevertical.gif";
+
     String imageLocation = null;
+
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         Graph graph = null;
         // Acquire the root node of the graph representing the menu
-        graph = (Graph) ((GraphComponent)component).getValue();
+        graph = (Graph) ((GraphComponent) component).getValue();
         if (graph == null) {
             throw new FacesException("Graph could not be located");
         }
@@ -98,13 +97,14 @@ public class MenuTreeRenderer extends MenuBarRenderer {
         this.context = context;
         clientId = component.getClientId(context);
         imageLocation = getImagesLocation(context);
-      
-        treeClass = (String)component.getAttributes().get("graphClass");
-        selectedClass = (String)component.getAttributes().get("selectedClass");
-        unselectedClass = (String)component.getAttributes().get("unselectedClass");
-        
+
+        treeClass = (String) component.getAttributes().get("graphClass");
+        selectedClass = (String) component.getAttributes().get("selectedClass");
+        unselectedClass =
+            (String) component.getAttributes().get("unselectedClass");
+
         ResponseWriter writer = context.getResponseWriter();
-       
+
         writer.write("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"");
         if (treeClass != null) {
             writer.write(" class=\"");
@@ -115,16 +115,17 @@ public class MenuTreeRenderer extends MenuBarRenderer {
         writer.write("\n");
 
         int level = 0;
-        encodeNode(writer, root, level, root.getDepth(),true);
+        encodeNode(writer, root, level, root.getDepth(), true);
         writer.write("<input type=\"hidden\" name=\"" + clientId + "\" />");
         writer.write("</table>");
         writer.write("\n");
     }
 
+
     protected void encodeNode(ResponseWriter writer, Node node,
                               int level, int width, boolean last)
-                              throws IOException {
- 
+        throws IOException {
+
         // Render the beginning of this node
         writer.write("  <tr valign=\"middle\">");
       
@@ -164,10 +165,10 @@ public class MenuTreeRenderer extends MenuBarRenderer {
                 writer.write(IMAGE_HANDLE_RIGHT_LAST);
             } else {
                 writer.write(IMAGE_HANDLE_RIGHT_MIDDLE);
-            }    
+            }
             writer.write("\" border=\"0\">");
             writer.write("</a>");
-            writer.write("</td>");       
+            writer.write("</td>");
         } else {
             writer.write("<img src=\"");
             writer.write(imageLocation);
@@ -177,13 +178,13 @@ public class MenuTreeRenderer extends MenuBarRenderer {
                     writer.write(IMAGE_LINE_LAST);
                 } else {
                     writer.write(IMAGE_LINE_MIDDLE);
-                }    
+                }
             } else if (node.isExpanded()) {
                 if (node.isLast()) {
                     writer.write(IMAGE_HANDLE_DOWN_LAST);
                 } else {
                     writer.write(IMAGE_HANDLE_DOWN_MIDDLE);
-                }    
+                }
             }
             writer.write("\" border=\"0\">");
             writer.write("</td>");
@@ -201,26 +202,25 @@ public class MenuTreeRenderer extends MenuBarRenderer {
                 writer.write("<a href=\"");
                 writer.write(href(node.getAction()));
                 writer.write("\">");
-            } 
+            }
             writer.write("<img src=\"");
             writer.write(imageLocation);
             writer.write("/");
-            writer.write(node.getIcon()); 
+            writer.write(node.getIcon());
             writer.write("\" border=\"0\">");
             if (node.getAction() != null) {
-                writer.write("</a>"); 
-            } 
-        } 
+                writer.write("</a>");
+            }
+        }
         // Render the label for this node (if any) as link.
         if (node.getLabel() != null) {
             writer.write("   ");
             String labelStyle = null;
             if (node.isSelected() && (selectedClass != null)) {
                 labelStyle = selectedClass;
-            }    
-            else if (!node.isSelected() && (unselectedClass != null)) {
+            } else if (!node.isSelected() && (unselectedClass != null)) {
                 labelStyle = unselectedClass;
-            }    
+            }
             if (node.isEnabled()) {
                 // Note: we assume that the links do not act as command button,
                 // meaning they do not cause the form to be submitted.
@@ -243,7 +243,7 @@ public class MenuTreeRenderer extends MenuBarRenderer {
                 writer.write("</a>");
             } else if (labelStyle != null) {
                 writer.write("</span>");
-            }    
+            }
         }
         writer.write("</td>");
         writer.write("\n");
@@ -257,14 +257,15 @@ public class MenuTreeRenderer extends MenuBarRenderer {
             Iterator children = node.getChildren();
             int lastIndex = (node.getChildCount()) - 1;
             int newLevel = level + 1;
-            while(children.hasNext()) {
-                Node nextChild = (Node)children.next();
+            while (children.hasNext()) {
+                Node nextChild = (Node) children.next();
                 boolean lastNode = nextChild.isLast();
                 encodeNode(writer, nextChild, newLevel, width, lastNode);
             }
         }
     }
-   
+
+
     /**
      * Returns the location of images by looking up the servlet context
      * init parameter. If parameter is not found, default to "/images".
@@ -273,19 +274,21 @@ public class MenuTreeRenderer extends MenuBarRenderer {
     protected String getImagesLocation(FacesContext context) {
         StringBuffer sb = new StringBuffer();
 
-       // First, add the context path
-       String contextPath = context.getExternalContext().getRequestContextPath();
-       sb.append(contextPath);
+        // First, add the context path
+        String contextPath = context.getExternalContext()
+            .getRequestContextPath();
+        sb.append(contextPath);
 
-       // Next, add the images directory path
-       Map initParameterMap = context.getExternalContext().getInitParameterMap();
-       String images = (String) initParameterMap.get("tree.control.images");
-       if (images == null) {
-           images = "/images";
-       }
-       sb.append(images);
-       return (sb.toString()); 
+        // Next, add the images directory path
+        Map initParameterMap = context.getExternalContext()
+            .getInitParameterMap();
+        String images = (String) initParameterMap.get("tree.control.images");
+        if (images == null) {
+            images = "/images";
+        }
+        sb.append(images);
+        return (sb.toString());
     }
-    
-    
+
+
 }

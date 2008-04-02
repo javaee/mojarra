@@ -1,9 +1,9 @@
 /*
- * $Id: XmlDialectProvider.java,v 1.1 2003/09/08 19:31:19 horwat Exp $
+ * $Id: XmlDialectProvider.java,v 1.2 2004/02/05 16:24:39 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -47,15 +47,13 @@ package nonjsp.application;
 import org.apache.commons.digester.RuleSetBase;
 
 /**
- *  <B>XmlDialectProvider</B> encapsulates the Xml Dialect specific
- *  logic required for creating a tree of UIComponent instances from an
- *  Xml file. <P>
+ * <B>XmlDialectProvider</B> encapsulates the Xml Dialect specific
+ * logic required for creating a tree of UIComponent instances from an
+ * Xml file. <P>
  *
- * @version $Id: XmlDialectProvider.java,v 1.1 2003/09/08 19:31:19 horwat Exp $
- * 
+ * @version $Id: XmlDialectProvider.java,v 1.2 2004/02/05 16:24:39 rlubke Exp $
  */
-public interface XmlDialectProvider
-{
+public interface XmlDialectProvider {
 
     /**
      * @return the Digester rule set for use in this implementation
@@ -63,9 +61,10 @@ public interface XmlDialectProvider
 
     public RuleSetBase getRuleSet();
 
+
     /**
      * @return the file suffix for files of this Xml type.  For example
-     * ".xul" or ".uiml".
+     *         ".xul" or ".uiml".
      */
 
     public String getSuffix();

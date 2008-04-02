@@ -1,9 +1,9 @@
 /*
- * $Id: BuildComponentFromTag.java,v 1.1 2003/09/08 19:31:18 horwat Exp $
+ * $Id: BuildComponentFromTag.java,v 1.2 2004/02/05 16:24:37 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -44,14 +44,14 @@
 
 package nonjsp.application;
 
-import javax.faces.component.UIComponent;
 import org.xml.sax.Attributes;
 
+import javax.faces.component.UIComponent;
+
 /**
- *
- *  An instance of this class knows how to build a UIComponent instance
- *  from a JSP tag.  This allows locating this knowledge near the tag
- *  handlers.  <P>
+ * An instance of this class knows how to build a UIComponent instance
+ * from a JSP tag.  This allows locating this knowledge near the tag
+ * handlers.  <P>
  *
  * The implementation must be modified if the tags change. <P>
  *
@@ -63,23 +63,26 @@ import org.xml.sax.Attributes;
  * Has the same scope as the ViewEngine instance.  The ViewEngine has a
  * BuildComponentFromTag instance. <P>
  *
- * @version $Id: BuildComponentFromTag.java,v 1.1 2003/09/08 19:31:18 horwat Exp $
- *
+ * @version $Id: BuildComponentFromTag.java,v 1.2 2004/02/05 16:24:37 rlubke Exp $
  */
 
 public interface BuildComponentFromTag {
 
     public UIComponent createComponentForTag(String shortTagName);
 
+
     public boolean tagHasComponent(String shortTagName);
+
 
     public boolean isNestedComponentTag(String shortTagName);
 
-    public void handleNestedComponentTag(UIComponent parent, 
-				         String shortTagName, Attributes attrs);
-    
-    public void applyAttributesToComponentInstance(UIComponent child, 
-					           Attributes attrs);
+
+    public void handleNestedComponentTag(UIComponent parent,
+                                         String shortTagName, Attributes attrs);
+
+
+    public void applyAttributesToComponentInstance(UIComponent child,
+                                                   Attributes attrs);
 
 } // end of interface BuildComponentFromTag
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -39,23 +39,26 @@
 
 package carstore;
 
-import javax.faces.event.ValueChangeListener;
-import javax.faces.event.ValueChangeEvent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PhaseId;
-import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 
 public class FirstNameChanged extends Object implements ValueChangeListener {
 
     public void processValueChange(ValueChangeEvent event)
         throws AbortProcessingException {
-	if (null != event.getNewValue()) {
-	    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("firstName", event.getNewValue());
-	}
+        if (null != event.getNewValue()) {
+            FacesContext.getCurrentInstance().getExternalContext()
+                .getSessionMap()
+                .put("firstName", event.getNewValue());
+        }
     }
 
+
     public PhaseId getPhaseId() {
-	return PhaseId.ANY_PHASE;
+        return PhaseId.ANY_PHASE;
     }
 
 }

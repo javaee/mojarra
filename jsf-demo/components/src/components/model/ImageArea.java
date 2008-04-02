@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -65,9 +65,9 @@ public class ImageArea implements Serializable {
      * <p>Construct an {@link ImageArea} initialized with the specified
      * property values.</p>
      *
-     * @param alt Alternate text for this hotspot
+     * @param alt    Alternate text for this hotspot
      * @param coords Coordinate positions for this hotspot
-     * @param shape Shape of this hotspot (default, rect, circle, poly)
+     * @param shape  Shape of this hotspot (default, rect, circle, poly)
      */
     public ImageArea(String alt, String coords, String shape) {
         setAlt(alt);

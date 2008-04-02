@@ -1,9 +1,9 @@
 /*
- * $Id: DataRepeaterTag.java,v 1.4 2004/01/27 21:31:21 eburns Exp $
+ * $Id: DataRepeaterTag.java,v 1.5 2004/02/05 16:23:14 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -46,7 +46,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
-import javax.servlet.jsp.JspException;
 
 /**
  * <p>DataRepeaterTag is the tag handler class for a <code>UIData</code>
@@ -60,30 +59,40 @@ public class DataRepeaterTag extends UIComponentTag {
 
 
     private String first = null;
+
+
     public void setFirst(String first) {
         this.first = first;
     }
 
 
     private String rows = null;
+
+
     public void setRows(String rows) {
         this.rows = rows;
     }
 
 
     private String styleClass = null;
+
+
     public void setStyleClass(String styleClass) {
         this.styleClass = styleClass;
     }
 
 
     private String value = null;
+
+
     public void setValue(String value) {
         this.value = value;
     }
 
 
     private String var = null;
+
+
     public void setVar(String var) {
         this.var = var;
     }
@@ -120,7 +129,7 @@ public class DataRepeaterTag extends UIComponentTag {
             if (isValueReference(first)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(first);
+                    createValueBinding(first);
                 component.setValueBinding("first", vb);
             } else {
                 ((UIData) component).setFirst(Integer.parseInt(first));
@@ -131,7 +140,7 @@ public class DataRepeaterTag extends UIComponentTag {
             if (isValueReference(rows)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(rows);
+                    createValueBinding(rows);
                 component.setValueBinding("rows", vb);
             } else {
                 ((UIData) component).setRows(Integer.parseInt(rows));
@@ -142,29 +151,29 @@ public class DataRepeaterTag extends UIComponentTag {
             if (isValueReference(styleClass)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(styleClass);
+                    createValueBinding(styleClass);
                 component.setValueBinding("styleClass", vb);
             } else {
                 component.getAttributes().put("styleClass", styleClass);
             }
         }
-                
+
         if (value != null) {
             if (isValueReference(value)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(value);
+                    createValueBinding(value);
                 component.setValueBinding("value", vb);
             } else {
                 ((UIData) component).setValue(value);
             }
         }
-                
+
         if (var != null) {
             if (isValueReference(var)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(var);
+                    createValueBinding(var);
                 component.setValueBinding("var", vb);
             } else {
                 ((UIData) component).setVar(var);

@@ -1,20 +1,20 @@
 /*
- * $Id: SelectItemsData.java,v 1.2 2004/02/03 21:44:41 jvisvanathan Exp $
+ * $Id: SelectItemsData.java,v 1.3 2004/02/05 16:25:05 rlubke Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 package standard;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -51,6 +51,7 @@ public class SelectItemsData {
 
     private List nesteds;
 
+
     // Return a set of nested items were even-numbered items in the primary
     // group are disabled, and odd-numbered items in the secondary group
     public List getNesteds() {
@@ -67,11 +68,11 @@ public class SelectItemsData {
             secondary[1] = new SelectItem("S1", "Item S1", "", true);
             secondary[2] = new SelectItem("S2", "Item S2", "", false);
             nesteds = new ArrayList();
-            System.out.println("Creating nesteds");            
+            System.out.println("Creating nesteds");
             nesteds.add(new SelectItemGroup
-                        ("Primary", "", false, primary));
+                ("Primary", "", false, primary));
             nesteds.add(new SelectItemGroup
-                        ("Secondary", "", true, secondary));
+                ("Secondary", "", true, secondary));
             System.out.println("Returning nesteds");
         }
         return (nesteds);
@@ -83,25 +84,54 @@ public class SelectItemsData {
 
 
     private String disabled;
-    public String getDisabled() { return disabled; }
-    public void setDisabled(String disabled) { this.disabled = disabled; }
+
+
+    public String getDisabled() {
+        return disabled;
+    }
+
+
+    public void setDisabled(String disabled) {
+        this.disabled = disabled;
+    }
 
 
     private String nested;
-    public String getNested() { return nested; }
-    public void setNested(String nested) { this.nested = nested; }
-    
-    private String[] disabledSelected;
-    public String[] getDisabledSelected() { 
-        return disabledSelected; 
+
+
+    public String getNested() {
+        return nested;
     }
-    public void setDisabledSelected(String[] disabledSelected) { 
-        this.disabledSelected = disabledSelected; 
+
+
+    public void setNested(String nested) {
+        this.nested = nested;
+    }
+
+
+    private String[] disabledSelected;
+
+
+    public String[] getDisabledSelected() {
+        return disabledSelected;
+    }
+
+
+    public void setDisabledSelected(String[] disabledSelected) {
+        this.disabledSelected = disabledSelected;
     }
 
 
     private String[] nestedSelected;
-    public String[] getNestedSelected() { return nestedSelected; }
-    public void setNestedSelected(String[] nested) { this.nestedSelected = nestedSelected; }
+
+
+    public String[] getNestedSelected() {
+        return nestedSelected;
+    }
+
+
+    public void setNestedSelected(String[] nested) {
+        this.nestedSelected = nestedSelected;
+    }
 
 }

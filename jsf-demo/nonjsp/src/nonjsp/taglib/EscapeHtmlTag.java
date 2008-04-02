@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -89,25 +89,33 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- */ 
+ */
 
 package nonjsp.taglib;
 
-import java.io.*;
-
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.Writer;
 
 /**
  * <p>Tag handler for &lt;escapeHtml&gt;
  *
  * @author Pierre Delisle
- * @version $Revision: 1.1 $ $Date: 2003/04/12 01:25:59 $
+ * @version $Revision: 1.2 $ $Date: 2004/02/05 16:24:48 $
  */
 public class EscapeHtmlTag extends BodyTagSupport {
-    
+
     //*********************************************************************
     // Instance variables
     
@@ -121,7 +129,8 @@ public class EscapeHtmlTag extends BodyTagSupport {
         super();
         init();
     }
-    
+
+
     private void init() {
         reader = null;
         writer = null;
@@ -137,7 +146,8 @@ public class EscapeHtmlTag extends BodyTagSupport {
     public void setReader(String reader) {
         this.reader = reader;
     }
-    
+
+
     /**
      * Tag's 'writer' attribute
      */
@@ -151,28 +161,29 @@ public class EscapeHtmlTag extends BodyTagSupport {
     public int doEndTag() throws JspException {
         Reader in;
         Writer out;
-        
+
         if (reader == null) {
             String bcs = getBodyContent().getString().trim();
             if (bcs == null || bcs.equals("")) {
                 throw new JspTagException("In &lt;escapeHtml&gt;, 'reader' " +
-                "not specified and no non-whitespace content inside the tag.");
+                                          "not specified and no non-whitespace content inside the tag.");
             }
             in = castToReader(bcs);
         } else {
             in = castToReader(eval("reader", reader, Object.class));
         }
-        
+
         if (writer == null) {
             out = pageContext.getOut();
         } else {
             out = castToWriter(eval("writer", writer, Object.class));
         }
-        
+
         transform(in, out);
         return EVAL_PAGE;
     }
-    
+
+
     /**
      * Releases any resources we may have (or inherit)
      */
@@ -188,7 +199,7 @@ public class EscapeHtmlTag extends BodyTagSupport {
      * Transform
      */
     public void transform(Reader reader, Writer writer)
-    throws JspException {
+        throws JspException {
         int c;
         try {
             writer.write("<pre>");
@@ -204,7 +215,7 @@ public class EscapeHtmlTag extends BodyTagSupport {
             writer.write("</pre>");
         } catch (IOException ex) {
             throw new JspException("EscapeHtml: " +
-            "error copying chars", ex);
+                                   "error copying chars", ex);
         }
     }
     
@@ -215,9 +226,10 @@ public class EscapeHtmlTag extends BodyTagSupport {
      * Evaluate elexprvalue
      */
     private Object eval(String attName, String attValue, Class clazz)
-    throws JspException {
-        Object obj = ExpressionEvaluatorManager.evaluate(
-        attName, attValue, clazz, this, pageContext);
+        throws JspException {
+        Object obj = ExpressionEvaluatorManager.evaluate(attName, attValue,
+                                                         clazz, this,
+                                                         pageContext);
         if (obj == null) {
             throw new JspException("escapeHtml");
         } else {
@@ -225,30 +237,32 @@ public class EscapeHtmlTag extends BodyTagSupport {
         }
     }
 
+
     public static Reader castToReader(Object obj) throws JspException {
         if (obj instanceof InputStream) {
-            return new InputStreamReader((InputStream)obj);
+            return new InputStreamReader((InputStream) obj);
         } else if (obj instanceof Reader) {
-            return (Reader)obj;
+            return (Reader) obj;
         } else if (obj instanceof String) {
-            return new StringReader((String)obj);
+            return new StringReader((String) obj);
         }
         throw new JspException("Invalid type '" + obj.getClass().getName() +
-			       "' for castToReader()");
+                               "' for castToReader()");
     }
+
 
     public static Writer castToWriter(Object obj) throws JspException {
         if (obj instanceof OutputStream) {
-            return new OutputStreamWriter((OutputStream)obj);
+            return new OutputStreamWriter((OutputStream) obj);
         } else if (obj instanceof Writer) {
-            return (Writer)obj;
+            return (Writer) obj;
             /*@@@
         } else if (obj instanceof String) {
             return new StringWriter();
              */
         }
         throw new JspException("Invalid type '" + obj.getClass().getName() +
-			       "' for castToWriter()");
+                               "' for castToWriter()");
     }
 
 }

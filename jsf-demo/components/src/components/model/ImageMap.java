@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -41,11 +41,13 @@ package components.model;
 
 
 import components.components.AreaSelectedEvent;
+
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 
 
 /**
@@ -69,12 +71,12 @@ public class ImageMap {
     /**
      * <p>Construct a new instance of this image map.</p>
      */
-    public ImageMap( ) {
+    public ImageMap() {
         locales = new HashMap();
         locales.put("NAmerica", Locale.ENGLISH);
-        locales.put("SAmerica", new Locale("es","es"));
+        locales.put("SAmerica", new Locale("es", "es"));
         locales.put("Germany", Locale.GERMAN);
-        locales.put("Finland", new Locale("fi","fi"));
+        locales.put("Finland", new Locale("fi", "fi"));
         locales.put("France", Locale.FRENCH);
     }
 
@@ -85,11 +87,12 @@ public class ImageMap {
      * @param event The {@link AreaSelectedEvent} that has occurred
      */
     public void processAreaSelected(ActionEvent actionEvent) {
-	AreaSelectedEvent event = (AreaSelectedEvent) actionEvent;
+        AreaSelectedEvent event = (AreaSelectedEvent) actionEvent;
         String current = event.getMapComponent().getCurrent();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getViewRoot().setLocale((Locale) locales.get(current));
     }
+
 
     /**
      * <p>Return an indication for navigation.  Application using this component,

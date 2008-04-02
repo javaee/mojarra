@@ -1,27 +1,25 @@
 /*
- * $Id: HtmlUnitTestCase.java,v 1.5 2004/01/29 15:51:22 eburns Exp $
+ * $Id: HtmlUnitTestCase.java,v 1.6 2004/02/05 16:26:40 rlubke Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 package com.sun.faces.demotest;
 
-import junit.framework.TestCase;
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
-
-import java.net.URL;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
-
+import junit.framework.TestCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class HtmlUnitTestCase extends TestCase {
@@ -30,10 +28,10 @@ public class HtmlUnitTestCase extends TestCase {
 
     // target host
     protected String host;
-    
+
     // target port
     protected String port;
-    
+
     // target context
     protected String context;
 
@@ -52,8 +50,9 @@ public class HtmlUnitTestCase extends TestCase {
         port = System.getProperty("port");
         context = System.getProperty("context.path");
         client = new WebClient();
-        super.setUp();    
+        super.setUp();
     }
+
 
     // Utility method to strip jsessionid information from values.
     // Servlet specification doesn't disallow a path from being
@@ -65,13 +64,15 @@ public class HtmlUnitTestCase extends TestCase {
         }
         return value;
     }
-    
+
+
     // Get the initial page of the target application
     protected Page getInitialPage() throws Exception {
         WebClient client = new WebClient();
-	client.setRedirectEnabled(true);
+        client.setRedirectEnabled(true);
         return client.getPage(new URL("http://" + host + ":" + port + context));
     }
+
 
     /**
      * <p>Return the page for the specified context-relative path,
@@ -80,9 +81,9 @@ public class HtmlUnitTestCase extends TestCase {
      * @param path Context-relative part of the path
      */
     protected HtmlPage getPage(String path) throws Exception {
-	if (log.isTraceEnabled()) {
-	    log.trace("Getting URL: " + getURL(path).toString());
-	}
+        if (log.isTraceEnabled()) {
+            log.trace("Getting URL: " + getURL(path).toString());
+        }
 
         /* Cookies seem to be maintained automatically now
         if (sessionId != null) {
@@ -97,6 +98,7 @@ public class HtmlUnitTestCase extends TestCase {
         return (page);
 
     }
+
 
     /**
      * <p>Return a <code>URL</code> for the specified context-relative
@@ -116,6 +118,7 @@ public class HtmlUnitTestCase extends TestCase {
         return (new URL(sb.toString()));
 
     }
+
 
     /**
      * <p>Parse and save any session identifier from the specified page.</p>
@@ -143,32 +146,32 @@ public class HtmlUnitTestCase extends TestCase {
 
     }
 
+
     /**
      * Depth first search from root to find all children that are
      * instances of HtmlInput.  Add them to the list.
-     *
-     */ 
+     */
     protected List getAllElementsOfGivenClass(HtmlElement root, List list,
-					      Class matchClass) {
-	Iterator iter = null;
-	if (null == root) {
-	    return list;
-	}
-	if (null == list) {
-	    list = new ArrayList();
-	}
-	iter = root.getAllHtmlChildElements();
-	while (iter.hasNext()) {
-	    getAllElementsOfGivenClass((HtmlElement) iter.next(), list,
-				       matchClass);
-	}
-	if (matchClass.isInstance(root)) {
-	    if (!list.contains(root)) {
-		list.add(root);
-	    }
-	}
-	return list;
+                                              Class matchClass) {
+        Iterator iter = null;
+        if (null == root) {
+            return list;
+        }
+        if (null == list) {
+            list = new ArrayList();
+        }
+        iter = root.getAllHtmlChildElements();
+        while (iter.hasNext()) {
+            getAllElementsOfGivenClass((HtmlElement) iter.next(), list,
+                                       matchClass);
+        }
+        if (matchClass.isInstance(root)) {
+            if (!list.contains(root)) {
+                list.add(root);
+            }
+        }
+        return list;
     }
-	
-	
+
+
 }

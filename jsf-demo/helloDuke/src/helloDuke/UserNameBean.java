@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -41,16 +41,18 @@ package helloDuke;
 public class UserNameBean {
 
     String userName = null;
-    
 
-    public UserNameBean () {
+
+    public UserNameBean() {
         System.out.println("Model Object Created");
     }
-  
+
+
     public void setUserName(String user_name) {
         userName = user_name;
         System.out.println("Set userName " + userName);
     }
+
 
     public String getUserName() {
         System.out.println("get userName " + userName);

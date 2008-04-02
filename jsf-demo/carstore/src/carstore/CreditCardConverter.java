@@ -1,9 +1,9 @@
 /*
- * $Id: CreditCardConverter.java,v 1.2 2003/12/17 15:17:50 rkitain Exp $
+ * $Id: CreditCardConverter.java,v 1.3 2004/02/05 16:21:08 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,7 +43,6 @@
 package carstore;
 
 
-import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -51,10 +50,10 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
 /**
- * CreditCardConverter Class accepts a Credit Card Number of type String 
- * and strips blanks and <oode>"-"</code> if any from it. It also formats the 
+ * CreditCardConverter Class accepts a Credit Card Number of type String
+ * and strips blanks and <oode>"-"</code> if any from it. It also formats the
  * CreditCardNumber such a blank space separates every four characters.
- * Blanks and <oode>"-"</code> characters are the expected demiliters 
+ * Blanks and <oode>"-"</code> characters are the expected demiliters
  * that could be used as part of a CreditCardNumber.
  */
 public class CreditCardConverter implements Converter {
@@ -67,29 +66,29 @@ public class CreditCardConverter implements Converter {
      * will be replaced by the object and value.</p>
      */
     public static final String CONVERSION_ERROR_MESSAGE_ID =
-	"carstore.Conversion_Error";
+        "carstore.Conversion_Error";
 
 
     /**
-     * Parses the CreditCardNumber and strips any blanks or <oode>"-"</code> 
+     * Parses the CreditCardNumber and strips any blanks or <oode>"-"</code>
      * characters from it.
      */
     public Object getAsObject(FacesContext context, UIComponent component,
-        String newValue) throws ConverterException {
+                              String newValue) throws ConverterException {
 
         String convertedValue = null;
-        if ( newValue == null ) {
+        if (newValue == null) {
             return newValue;
         }
         // Since this is only a String to String conversion, this conversion 
         // does not throw ConverterException.
         convertedValue = newValue.trim();
-        if ( ((convertedValue.indexOf("-")) != -1) || 
+        if (((convertedValue.indexOf("-")) != -1) ||
             ((convertedValue.indexOf(" ")) != -1)) {
             char[] input = convertedValue.toCharArray();
             StringBuffer buffer = new StringBuffer(50);
-            for ( int i = 0; i < input.length; ++i ) {
-                if ( input[i] == '-' || input[i] == ' '  ) {
+            for (int i = 0; i < input.length; ++i) {
+                if (input[i] == '-' || input[i] == ' ') {
                     continue;
                 } else {
                     buffer.append(input[i]);
@@ -97,47 +96,48 @@ public class CreditCardConverter implements Converter {
             }
             convertedValue = buffer.toString();
         }
-       // System.out.println("Converted value " + convertedValue);
+        // System.out.println("Converted value " + convertedValue);
         return convertedValue;
     }
 
+
     /**
-     * Formats the value by inserting space after every four characters 
+     * Formats the value by inserting space after every four characters
      * for better readability if they don't already exist. In the process
      * converts any <oode>"-"</code> characters into blanks for consistency.
      */
     public String getAsString(FacesContext context, UIComponent component,
-        Object value) throws ConverterException {
+                              Object value) throws ConverterException {
 
         String inputVal = null;
-        if ( value == null ) {
+        if (value == null) {
             return null;
         }
         // value must be of the type that can be cast to a String.
         try {
-            inputVal = (String)value;
+            inputVal = (String) value;
         } catch (ClassCastException ce) {
             FacesMessage errMsg = MessageFactory.getMessage(
-                CONVERSION_ERROR_MESSAGE_ID, 
-                (new Object[] { value, inputVal }));
+                CONVERSION_ERROR_MESSAGE_ID,
+                (new Object[]{value, inputVal}));
             throw new ConverterException(errMsg.getSummary());
         }
 
         // insert spaces after every four characters for better    
         // readability if it doesn't already exist.   
-        char[] input = inputVal.toCharArray();  
+        char[] input = inputVal.toCharArray();
         StringBuffer buffer = new StringBuffer(50);
-        for ( int i = 0; i < input.length; ++i ) {
-            if ( (i % 4) == 0 && i != 0) {
-                if (input[i] != ' ' || input[i] != '-'){ 
-                    buffer.append(" "); 
-                  // if there any "-"'s convert them to blanks.    
+        for (int i = 0; i < input.length; ++i) {
+            if ((i % 4) == 0 && i != 0) {
+                if (input[i] != ' ' || input[i] != '-') {
+                    buffer.append(" ");
+                    // if there any "-"'s convert them to blanks.
                 } else if (input[i] == '-') {
-                    buffer.append(" "); 
-                }    
-            } 
+                    buffer.append(" ");
+                }
+            }
             buffer.append(input[i]);
-        } 
+        }
         String convertedValue = buffer.toString();
         // System.out.println("Formatted value " + convertedValue);
         return convertedValue;

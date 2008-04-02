@@ -1,9 +1,9 @@
 /*
- * $Id: GraphTreeNodeTag.java,v 1.7 2003/12/17 15:19:15 rkitain Exp $
+ * $Id: GraphTreeNodeTag.java,v 1.8 2004/02/05 16:23:16 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -44,29 +44,26 @@
 
 package components.taglib;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
-
 import components.model.Graph;
 import components.model.Node;
 import components.renderkit.Util;
-import javax.faces.component.UIComponent;
+
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.UIComponentBodyTag;
-import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTag;
+import javax.servlet.jsp.tagext.TagSupport;
 
 /**
- *
  * <B>GraphMenuNodeTag</B> builds the graph as the nodes are processed.
- * This tag creates a node with specified properties. Locates the parent of 
- * this node by using the node name from its immediate parent tag of the 
+ * This tag creates a node with specified properties. Locates the parent of
+ * this node by using the node name from its immediate parent tag of the
  * type GraphTreeNodeTag. If the parent could not be located, then the created
  * node is assumed to be root.
  */
 
 public class GraphTreeNodeTag extends UIComponentBodyTag {
-    
+
     //
     // Protected Constants
     //
@@ -83,7 +80,7 @@ public class GraphTreeNodeTag extends UIComponentBodyTag {
 
     private String name = null;
     private String icon = null;
-    private String label =null;
+    private String label = null;
     private String action = null;
     private boolean expanded;
     private boolean enabled = true;
@@ -106,103 +103,116 @@ public class GraphTreeNodeTag extends UIComponentBodyTag {
     // General Methods
     //
     /**
-     *  Name of the node
+     * Name of the node
      */
     public void setName(String name) {
         this.name = name;
     }
-    
+
+
     public String getName() {
         return this.name;
     }
 
+
     /**
-     *  Should the node appear expanded by default
+     * Should the node appear expanded by default
      */
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
     }
 
+
     /**
-     *  Icon representing the node.
+     * Icon representing the node.
      */
     public void setIcon(String icon) {
         this.icon = icon;
     }
 
-   /**
-     *  Label for the node.
-     */    
+
+    /**
+     * Label for the node.
+     */
     public void setLabel(String label) {
         this.label = label;
     }
 
+
     /**
-     *  Should the node be enabled by default
+     * Should the node be enabled by default
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
+
     /**
-     *  Link the node points to.
+     * Link the node points to.
      */
     public void setAction(String action) {
         this.action = action;
     }
 
+
     public String getComponentType() {
         return null;
     }
-    
+
+
     public String getRendererType() {
         return null;
     }
-    
+
+
     //
     // Methods from FacesBodyTag
     //
     public int doStartTag() throws JspException {
-        
+
         FacesContext context = FacesContext.getCurrentInstance();
-     
+
         Graph graph = (Graph)
-            ((Util.getValueBinding("#{sessionScope.graph_tree}").getValue(context)));
+            ((Util.getValueBinding("#{sessionScope.graph_tree}").getValue(
+                context)));
         // In the postback case, graph and the node exist already.So make sure
         // it doesn't created again.
-        if ( graph.findNodeByName(getName()) != null) {
+        if (graph.findNodeByName(getName()) != null) {
             return BodyTag.EVAL_BODY_BUFFERED;
-        }    
-        Node node = new Node(name,label, action, icon, enabled, expanded);
+        }
+        Node node = new Node(name, label, action, icon, enabled, expanded);
         
         // get the immediate ancestor/parent tag of this tag.
         GraphTreeNodeTag parentNode = null;
         try {
-            parentNode = (GraphTreeNodeTag) TagSupport.findAncestorWithClass(this,
+            parentNode = (GraphTreeNodeTag) TagSupport.findAncestorWithClass(
+                this,
                 GraphTreeNodeTag.class);
-        } catch ( Exception e ) {
-            System.out.println("Exception while locating GraphTreeNodeTag.class");
+        } catch (Exception e) {
+            System.out.println(
+                "Exception while locating GraphTreeNodeTag.class");
         }    
         // if this tag has no parent that is a node tag,
-        if ( parentNode == null ) {
+        if (parentNode == null) {
             // then this should be root
-            graph.setRoot( node );
+            graph.setRoot(node);
         } else {
             // add the node to its parent node.
-            Node nodeToAdd = graph.findNodeByName( parentNode.getName());
+            Node nodeToAdd = graph.findNodeByName(parentNode.getName());
             // this node should exist
-            if ( nodeToAdd != null ) {
-                nodeToAdd.addChild( node );
+            if (nodeToAdd != null) {
+                nodeToAdd.addChild(node);
             }
         }
-        
+
         return BodyTag.EVAL_BODY_BUFFERED;
     }
-    
+
+
     public int doEndTag() throws JspException {
         return (EVAL_PAGE);
     }
-  
+
 }
     
 

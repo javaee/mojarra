@@ -1,9 +1,9 @@
 /*
- * $Id: RepeaterBean.java,v 1.3 2003/12/24 20:45:21 craigmcc Exp $
+ * $Id: RepeaterBean.java,v 1.4 2004/02/05 16:23:34 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,17 +43,15 @@
 package demo.model;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIColumn;
-import javax.faces.component.UICommand;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.component.UIInput;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.context.FacesContext;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -70,33 +68,64 @@ public class RepeaterBean {
      * <p>The <code>accountId</code> field for the current row.</p>
      */
     private UIInput accountId = null;
-    public UIInput getAccountId() { return accountId; }
-    public void setAccountId(UIInput accountId) { this.accountId = accountId; }
 
+
+    public UIInput getAccountId() {
+        return accountId;
+    }
+
+
+    public void setAccountId(UIInput accountId) {
+        this.accountId = accountId;
+    }
 
 
     /**
      * <p>The <code>checked</code> field for the current row.</p>
      */
     private UISelectBoolean checked = null;
-    public UISelectBoolean getChecked() { return checked; }
-    public void setChecked(UISelectBoolean checked) { this.checked = checked; }
+
+
+    public UISelectBoolean getChecked() {
+        return checked;
+    }
+
+
+    public void setChecked(UISelectBoolean checked) {
+        this.checked = checked;
+    }
 
 
     /**
      * <p>The <code>created</code> field for the current row.</p>
      */
     private UISelectBoolean created = null;
-    public UISelectBoolean getCreated() { return created; }
-    public void setCreated(UISelectBoolean created) { this.created = created; }
+
+
+    public UISelectBoolean getCreated() {
+        return created;
+    }
+
+
+    public void setCreated(UISelectBoolean created) {
+        this.created = created;
+    }
 
 
     /**
      * <p>The <code>UIData</code> component representing the entire table.</p>
      */
     private UIData data = null;
-    public UIData getData() { return data; }
-    public void setData(UIData data) { this.data = data; }
+
+
+    public UIData getData() {
+        return data;
+    }
+
+
+    public void setData(UIData data) {
+        this.data = data;
+    }
 
 
     // --------------------------------------------------- Calculated Properties
@@ -154,8 +183,8 @@ public class RepeaterBean {
     public String click() {
 
         append("Link clicked for account " + accountId.getValue());
-	clear();
-	return (null);
+        clear();
+        return (null);
 
     }
 
@@ -167,22 +196,22 @@ public class RepeaterBean {
     public String create() {
 
         append("CREATE NEW ROW button pressed");
-	clear();
+        clear();
 
-	// Add a new row to the table
-	List list = getCustomers();
-	if (list != null) {
-	    CustomerBean customer = new CustomerBean();
-	    list.add(customer);
+        // Add a new row to the table
+        List list = getCustomers();
+        if (list != null) {
+            CustomerBean customer = new CustomerBean();
+            list.add(customer);
             int index = data.getRowIndex();
             data.setRowIndex(list.size() - 1);
             created.setSelected(true);
             data.setRowIndex(index);
-	}
+        }
 
-	// Position so that the new row is visible if necessary
-	scroll(list.size());
-	return (null);
+        // Position so that the new row is visible if necessary
+        scroll(list.size());
+        return (null);
 
     }
 
@@ -194,7 +223,7 @@ public class RepeaterBean {
 
         append("DELETE CHECKED button pressed");
 
-	// Delete customers for whom the checked field is selected
+        // Delete customers for whom the checked field is selected
         List removes = new ArrayList();
         int n = data.getRowCount();
         for (int i = 0; i < n; i++) {
@@ -213,8 +242,8 @@ public class RepeaterBean {
             }
         }
 
-	clear();
-	return (null);
+        clear();
+        return (null);
     }
 
 
@@ -224,8 +253,8 @@ public class RepeaterBean {
     public String first() {
 
         append("FIRST PAGE button pressed");
-	scroll(0);
-	return (null);
+        scroll(0);
+        return (null);
 
     }
 
@@ -236,8 +265,8 @@ public class RepeaterBean {
     public String last() {
 
         append("LAST PAGE button pressed");
-	scroll(count() - 1);
-	return (null);
+        scroll(count() - 1);
+        return (null);
 
     }
 
@@ -248,9 +277,9 @@ public class RepeaterBean {
     public String next() {
 
         append("NEXT PAGE button pressed");
-	int first = data.getFirst();
+        int first = data.getFirst();
         scroll(first + data.getRows());
-	return (null);
+        return (null);
 
     }
 
@@ -261,8 +290,8 @@ public class RepeaterBean {
     public String press() {
 
         append("Button pressed for account " + accountId.getValue());
-	clear();
-	return (null);
+        clear();
+        return (null);
 
     }
 
@@ -273,9 +302,9 @@ public class RepeaterBean {
     public String previous() {
 
         append("PREVIOUS PAGE button pressed");
-	int first = data.getFirst();
+        int first = data.getFirst();
         scroll(first - data.getRows());
-	return (null);
+        return (null);
 
     }
 
@@ -286,8 +315,8 @@ public class RepeaterBean {
     public String reset() {
 
         append("RESET CHANGES button pressed");
-	clear();
-	return (null);
+        clear();
+        return (null);
 
     }
 
@@ -300,10 +329,10 @@ public class RepeaterBean {
     public String update() {
 
         append("SAVE CHANGES button pressed");
-	; // Save to database as necessary
+        ; // Save to database as necessary
         clear();
-	created();
-	return (null);
+        created();
+        return (null);
 
     }
 
@@ -332,11 +361,11 @@ public class RepeaterBean {
      */
     private void clear() {
 
-	int n = count();
-	for (int i = 0; i < n; i++) {
-	    data.setRowIndex(i);
-	    checked.setSelected(false);
-	}
+        int n = count();
+        for (int i = 0; i < n; i++) {
+            data.setRowIndex(i);
+            checked.setSelected(false);
+        }
 
     }
 
@@ -367,11 +396,11 @@ public class RepeaterBean {
      */
     private void created() {
 
-	int n = count();
-	for (int i = 0; i < n; i++) {
-	    data.setRowIndex(i);
-	    created.setSelected(false);
-	}
+        int n = count();
+        for (int i = 0; i < n; i++) {
+            data.setRowIndex(i);
+            created.setSelected(false);
+        }
 
     }
 
@@ -382,12 +411,12 @@ public class RepeaterBean {
      */
     private Iterator iterator() {
 
-	List list = getCustomers();
-	if (list != null) {
-	    return (list.iterator());
-	} else {
-	    return (null);
-	}
+        List list = getCustomers();
+        if (list != null) {
+            return (list.iterator());
+        } else {
+            return (null);
+        }
 
     }
 
@@ -399,13 +428,13 @@ public class RepeaterBean {
      */
     private void scroll(int row) {
 
-	int rows = data.getRows();
-	if (rows < 1) {
-	    return; // Showing entire table already
-	}
-	if (row < 0) {
-	    data.setFirst(0);
-	} else if (row >= count()) {
+        int rows = data.getRows();
+        if (rows < 1) {
+            return; // Showing entire table already
+        }
+        if (row < 0) {
+            data.setFirst(0);
+        } else if (row >= count()) {
             data.setFirst(count() - 1);
         } else {
             data.setFirst(row - (row % rows));

@@ -1,9 +1,9 @@
 <!--
- Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: repeater.jsp,v 1.8 2004/01/30 05:24:56 craigmcc Exp $ --%>
+<%-- $Id: repeater.jsp,v 1.9 2004/02/05 16:23:51 rlubke Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>

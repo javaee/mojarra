@@ -1,5 +1,5 @@
 <!--
- Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  
  Redistribution and use in source and binary forms, with or
  without modification, are permitted provided that the following
@@ -36,7 +36,7 @@
  maintenance of any nuclear facility.
 -->
 
-<%-- $Id: result-set.jsp,v 1.14 2004/01/27 21:31:26 eburns Exp $ --%>
+<%-- $Id: result-set.jsp,v 1.15 2004/02/05 16:23:52 rlubke Exp $ --%>
 
 
 

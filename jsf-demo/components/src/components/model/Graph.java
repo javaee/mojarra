@@ -1,9 +1,9 @@
 /*
- * $Id: Graph.java,v 1.2 2003/02/21 23:44:51 ofung Exp $
+ * $Id: Graph.java,v 1.3 2004/02/05 16:22:47 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -73,22 +73,24 @@ public class Graph {
      * The collection of nodes that represent this hierarchy, keyed by name.
      */
     protected HashMap registry = new HashMap();
-    
+
     // The root node
     private Node root = null;
+
 
     public Node getRoot() {
         return (this.root);
     }
 
+
     public void setRoot(Node root) {
         setSelected(null);
         if (this.root != null) {
             removeNode(this.root);
-        }    
+        }
         if (root != null) {
             addNode(root);
-        }    
+        }
         root.setLast(true);
         this.root = root;
     }
@@ -97,9 +99,11 @@ public class Graph {
     // The currently selected node (if any)
     private Node selected = null;
 
+
     public Node getSelected() {
         return (this.selected);
     }
+
 
     public void setSelected(Node selected) {
         if (this.selected != null) {
@@ -148,14 +152,15 @@ public class Graph {
         return (node);
 
     }
-    
+
+
     /**
      * Register the specified node in our registry of the complete tree.
      *
      * @param node The <code>Node</code> to be registered
      *
-     * @exception IllegalArgumentException if the name of this node
-     *  is not unique
+     * @throws IllegalArgumentException if the name of this node
+     *                                  is not unique
      */
     protected void addNode(Node node) throws IllegalArgumentException {
 
@@ -164,13 +169,14 @@ public class Graph {
             if (registry.containsKey(name)) {
                 throw new IllegalArgumentException("Name '" + name +
                                                    "' is not unique");
-            }    
+            }
             node.setGraph(this);
             registry.put(name, node);
         }
 
     }
-    
+
+
     /**
      * Deregister the specified node, as well as all child nodes of this
      * node, from our registry of the complete tree.  If this node is not
@@ -183,17 +189,18 @@ public class Graph {
         synchronized (registry) {
             Iterator nodeItr = node.getChildren();
             while (nodeItr.hasNext()) {
-                removeNode((Node)nodeItr.next());
-            }     
+                removeNode((Node) nodeItr.next());
+            }
             node.setParent(null);
             node.setGraph(null);
             if (node == this.root) {
                 this.root = null;
-            }    
+            }
         }
 
     }
-    
+
+
     /**
      * Return <code>Node</code> by looking up the node registry.
      *
@@ -202,7 +209,7 @@ public class Graph {
     public Node findNodeByName(String nodename) {
 
         synchronized (registry) {
-            return ((Node)registry.get(nodename)); 
+            return ((Node) registry.get(nodename));
         }
     }
 }

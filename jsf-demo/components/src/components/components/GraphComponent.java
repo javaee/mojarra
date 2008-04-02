@@ -1,9 +1,9 @@
 /*
- * $Id: GraphComponent.java,v 1.12 2004/01/27 21:31:17 eburns Exp $
+ * $Id: GraphComponent.java,v 1.13 2004/02/05 16:22:36 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -45,26 +45,11 @@ package components.components;
 
 import components.model.Graph;
 import components.model.Node;
-import components.renderkit.Util;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-import javax.faces.FacesException;
-import javax.faces.component.UICommand;
-import javax.faces.component.StateHolder;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.FacesEvent;
-import javax.faces.event.FacesListener;
-import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.faces.component.ValueHolder;
-import javax.faces.el.ValueBinding;
-import javax.faces.el.MethodBinding;
-import javax.faces.event.ActionListener;
+import javax.faces.component.UICommand;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -74,20 +59,24 @@ import javax.faces.event.ActionEvent;
  * state of the specified {@link Node} in the {@link Graph}.
  */
 
-public class GraphComponent extends UICommand{
-    
+public class GraphComponent extends UICommand {
+
     private static Log log = LogFactory.getLog(GraphComponent.class);
-    
+
+
     public GraphComponent() {
-	
+
         // set a default actionListener to expand or collapse a node
         // when a node is clicked.
-	Class signature[] = { ActionEvent.class };
-	setActionListener(FacesContext.getCurrentInstance().getApplication().createMethodBinding("#{GraphBean.processGraphEvent}", 
-												 signature));
+        Class signature[] = {ActionEvent.class};
+        setActionListener(FacesContext.getCurrentInstance().getApplication()
+                          .createMethodBinding(
+                              "#{GraphBean.processGraphEvent}",
+                              signature));
 
-    }   
-    
+    }
+
+
     /**
      * <p>Return the component family for this component.</p>
      */

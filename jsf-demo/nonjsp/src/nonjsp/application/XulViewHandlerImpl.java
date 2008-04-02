@@ -1,10 +1,10 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.18 2004/01/30 21:48:53 craigmcc Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.19 2004/02/05 16:24:40 rlubke Exp $ 
  */ 
 
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -44,7 +44,7 @@
 
 // XulViewHandlerImpl.java 
 
-package nonjsp.application; 
+package nonjsp.application;
 
 import nonjsp.util.RIConstants;
 import org.apache.commons.digester.Digester;
@@ -53,41 +53,35 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.impl.SimpleLog;
 
-
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.UINamingContainer;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext; 
-import javax.faces.context.ResponseWriter; 
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Locale;
 import java.util.Enumeration;
-import javax.servlet.ServletRequest;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 
 
-/** 
+/**
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.18 2004/01/30 21:48:53 craigmcc Exp $ * 
- * @see javax.faces.application.ViewHandler 
- * 
- */ 
-public class XulViewHandlerImpl extends ViewHandler { 
+ * @version $Id: XulViewHandlerImpl.java,v 1.19 2004/02/05 16:24:40 rlubke Exp $ *
+ * @see javax.faces.application.ViewHandler
+ */
+public class XulViewHandlerImpl extends ViewHandler {
 
     // Log instance for this class
     protected static Log log = LogFactory.getLog(XulViewHandlerImpl.class);
@@ -96,15 +90,15 @@ public class XulViewHandlerImpl extends ViewHandler {
 
     //PENDING(rogerk) maybe config file?
     /**
-      * Should we use a validating XML parser to read the configuration file?
-      */
+     * Should we use a validating XML parser to read the configuration file?
+     */
     protected boolean validate = false;
 
     /**
      * The set of public identifiers, and corresponding resource names, for
      * the versions of the configuration file DTDs that we know about.  There
      * <strong>MUST</strong> be an even number of Strings in this list!
-     * Only used if you are validating against DTD.	 
+     * Only used if you are validating against DTD.
      * Could be read from config file instead.
      */
     protected String registrations[] = {
@@ -124,44 +118,46 @@ public class XulViewHandlerImpl extends ViewHandler {
 
 
     // Render the components
-    public void renderView(FacesContext context, 
-			   UIViewRoot viewToRender) throws IOException, 
-             FacesException { 
+    public void renderView(FacesContext context,
+                           UIViewRoot viewToRender) throws IOException,
+        FacesException {
 
-        if (context == null || viewToRender == null) { 
+        if (context == null || viewToRender == null) {
             throw new NullPointerException("RenderView: FacesContext is null");
-        } 
+        }
 
-        RequestDispatcher requestDispatcher = null; 
+        RequestDispatcher requestDispatcher = null;
 
-	log.trace("Determine View Identifier And Build View...");
+        log.trace("Determine View Identifier And Build View...");
         String viewId = viewToRender.getViewId();
 
         HttpServletResponse response = (HttpServletResponse)
-        (context.getExternalContext().getResponse());
-	log.trace("Set ResponseWriter in FacesContext");
+            (context.getExternalContext().getResponse());
+        log.trace("Set ResponseWriter in FacesContext");
 
         RenderKitFactory factory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit renderKit = factory.getRenderKit(context, RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        RenderKit renderKit = factory.getRenderKit(context,
+                                                   RenderKitFactory.HTML_BASIC_RENDER_KIT);
 
         ResponseWriter writer = renderKit.createResponseWriter(
             response.getWriter(), CONTENT_TYPE, CHAR_ENCODING);
         context.setResponseWriter(writer);
         response.setContentType(CONTENT_TYPE);
 
-	log.trace("Call encode methods on components");
+        log.trace("Call encode methods on components");
         createHeader(context);
         renderResponse(context);
         createFooter(context);
 
         log.trace("Save the view and locale in the session");
         Map sessionMap = getSessionMap(context);
-        sessionMap.put(RIConstants.REQUEST_LOCALE, 
-                context.getViewRoot().getLocale());
+        sessionMap.put(RIConstants.REQUEST_LOCALE,
+                       context.getViewRoot().getLocale());
         sessionMap.put(RIConstants.FACES_VIEW, context.getViewRoot());
 
-    } 
+    }
+
 
     public UIViewRoot restoreView(FacesContext context, String viewId) {
         if (context == null) {
@@ -189,12 +185,12 @@ public class XulViewHandlerImpl extends ViewHandler {
         }
 
         try {
-            viewInput = context.getExternalContext().getResourceAsStream(viewId);
- 	    if (null == viewInput) {
+            viewInput =
+                context.getExternalContext().getResourceAsStream(viewId);
+            if (null == viewInput) {
                 throw new NullPointerException();
             }
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
             throw new FacesException("Can't get stream for " + viewId, e);
         }
 
@@ -223,7 +219,7 @@ public class XulViewHandlerImpl extends ViewHandler {
 
         if (validate) {
             for (int i = 0; i < registrations.length; i += 2) {
-                URL url = this.getClass().getResource(registrations[i+1]);
+                URL url = this.getClass().getResource(registrations[i + 1]);
                 if (url != null) {
                     digester.register(registrations[i], url.toString());
                 }
@@ -232,7 +228,7 @@ public class XulViewHandlerImpl extends ViewHandler {
 
         digester.push(root);
         try {
-            root = (UIViewRoot)digester.parse(viewInput);
+            root = (UIViewRoot) digester.parse(viewInput);
         } catch (Throwable e) {
             throw new FacesException("Can't parse stream for " + viewId, e);
         }
@@ -248,6 +244,7 @@ public class XulViewHandlerImpl extends ViewHandler {
         return root;
     }
 
+
     public UIViewRoot createView(FacesContext context, String viewId) {
         if (context == null) {
             throw new NullPointerException("CreateView: FacesContext is null");
@@ -256,17 +253,18 @@ public class XulViewHandlerImpl extends ViewHandler {
         return restoreView(context, viewId);
     }
 
+
     public String getActionURL(FacesContext context, String viewId) {
-        if (viewId.charAt(0) != '/') {            
+        if (viewId.charAt(0) != '/') {
             throw new IllegalArgumentException(
-		"Illegal view ID "+viewId+". the ID must begin with '/'");
+                "Illegal view ID " + viewId + ". the ID must begin with '/'");
         }
-	// PENDING(edburns): do a more complete implementation that
-	// deals with the vagaries of prefix and suffix mapping.  For
-	// now , just slap "/faces" onto the front.
-	if (!viewId.startsWith("/faces")) {
-	    viewId = "/faces" + viewId;
-	}
+        // PENDING(edburns): do a more complete implementation that
+        // deals with the vagaries of prefix and suffix mapping.  For
+        // now , just slap "/faces" onto the front.
+        if (!viewId.startsWith("/faces")) {
+            viewId = "/faces" + viewId;
+        }
         return context.getExternalContext().getRequestContextPath() + viewId;
     }
 
@@ -290,7 +288,8 @@ public class XulViewHandlerImpl extends ViewHandler {
         writer.startElement("head", null);
         writer.writeText("\n", null);
         writer.startElement("title", null);
-        writer.writeText(context.getExternalContext().getRequestContextPath(), null);
+        writer.writeText(context.getExternalContext().getRequestContextPath(),
+                         null);
         writer.endElement("title");
         writer.writeText("\n", null);
         writer.endElement("head");
@@ -311,12 +310,15 @@ public class XulViewHandlerImpl extends ViewHandler {
         writer.writeText("\n", null);
     }
 
+
     // Render the response content for the completed page
     private void renderResponse(FacesContext context) throws IOException {
 
         UIComponent root = context.getViewRoot();
         if (log.isTraceEnabled()) {
-            log.trace("Rendering " + root + " with " + root.getChildCount() + " children");
+            log.trace(
+                "Rendering " + root + " with " + root.getChildCount() +
+                " children");
         }
         renderResponse(context, root);
 
@@ -346,6 +348,7 @@ public class XulViewHandlerImpl extends ViewHandler {
 
     }
 
+
     private Map getSessionMap(FacesContext context) {
         if (context == null) {
             context = FacesContext.getCurrentInstance();
@@ -358,6 +361,7 @@ public class XulViewHandlerImpl extends ViewHandler {
         return sessionMap;
     }
 
+
     private void printView(UIComponent uic) {
         Iterator kids = uic.getChildren().iterator();
         while (kids.hasNext()) {
@@ -366,16 +370,18 @@ public class XulViewHandlerImpl extends ViewHandler {
         log.debug("VIEW: " + uic.getId());
     }
 
+
     public void writeState(FacesContext context) throws IOException {
     }
-    
+
+
     public Locale calculateLocale(FacesContext context) {
         Locale result = null;
         // determine the locales that are acceptable to the client based on the 
         // Accept-Language header and the find the best match among the 
         // supported locales specified by the client.
         Enumeration enum = ((ServletRequest)
-                context.getExternalContext().getRequest()).getLocales();
+            context.getExternalContext().getRequest()).getLocales();
         while (enum.hasMoreElements()) {
             Locale perf = (Locale) enum.nextElement();
             result = findMatch(context, perf);
@@ -384,8 +390,8 @@ public class XulViewHandlerImpl extends ViewHandler {
             }
         }
         // no match is found.
-        if ( result == null ) {
-            if (context.getApplication().getDefaultLocale() == null ) {
+        if (result == null) {
+            if (context.getApplication().getDefaultLocale() == null) {
                 result = Locale.getDefault();
             } else {
                 result = context.getApplication().getDefaultLocale();
@@ -394,12 +400,14 @@ public class XulViewHandlerImpl extends ViewHandler {
         return result;
     }
 
+
     public String calculateRenderKitId(FacesContext context) {
-	return null;
+        return null;
     }
 
+
     /**
-     * Attempts to find a matching locale based on <code>perf></code> and 
+     * Attempts to find a matching locale based on <code>perf></code> and
      * list of supported locales, using the matching algorithm
      * as described in JSTL 8.3.2.
      */
@@ -407,9 +415,9 @@ public class XulViewHandlerImpl extends ViewHandler {
         Locale result = null;
         Iterator it = context.getApplication().getSupportedLocales();
         while (it.hasNext()) {
-            Locale supportedLocale = (Locale)it.next();
-            
-            if ( perf.equals(supportedLocale)) {
+            Locale supportedLocale = (Locale) it.next();
+
+            if (perf.equals(supportedLocale)) {
                 // exact match
                 result = supportedLocale;
                 break;

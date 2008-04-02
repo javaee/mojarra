@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -39,22 +39,16 @@
 package components.components;
 
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.faces.FacesException;
 import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
-import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
+
+import java.io.IOException;
 
 /**
  * <p>{@link MapComponent} is a JavaServer Faces component that corresponds
@@ -66,8 +60,7 @@ import javax.faces.event.PhaseId;
  * which are fired whenever the current area is changed.</p>
  */
 
-public class MapComponent extends UICommand
- {
+public class MapComponent extends UICommand {
 
 
     // ------------------------------------------------------ Instance Variables
@@ -85,7 +78,7 @@ public class MapComponent extends UICommand
     // --------------------------------------------------------------Constructors 
 
     public MapComponent() {
-	super();
+        super();
         addDefaultActionListener(getFacesContext());
     }
 
@@ -118,7 +111,7 @@ public class MapComponent extends UICommand
         if ((previous == null) && (current == null)) {
             return;
         } else if ((previous != null) && (current != null) &&
-                   (previous.equals(current))) {
+            (previous.equals(current))) {
             return;
         } else {
             this.queueEvent(new AreaSelectedEvent(this));
@@ -138,26 +131,27 @@ public class MapComponent extends UICommand
    
     // ----------------------------------------------------- Event Methods
 
-    private static Class signature[] = { AreaSelectedEvent.class };
+    private static Class signature[] = {AreaSelectedEvent.class};
+
 
     /**
      * <p>In addition to to the default {@link UIComponent#broadcast}
      * processing, pass the {@link ActionEvent} being broadcast to the
      * method referenced by <code>actionListener</code> (if any).</p>
      *
-     * @param event {@link FacesEvent} to be broadcast
+     * @param event   {@link FacesEvent} to be broadcast
      * @param phaseId {@link PhaseId} of the current phase of the
-     *  request processing lifecycle
+     *                request processing lifecycle
      *
-     * @exception AbortProcessingException Signal the JavaServer Faces
-     *  implementation that no further processing on the current event
-     *  should be performed
-     * @exception IllegalArgumentException if the implementation class
-     *  of this {@link FacesEvent} is not supported by this component
-     * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
-     *  for the phase identifier
-     * @exception NullPointerException if <code>event</code> is
-     * <code>null</code>
+     * @throws AbortProcessingException Signal the JavaServer Faces
+     *                                  implementation that no further processing on the current event
+     *                                  should be performed
+     * @throws IllegalArgumentException if the implementation class
+     *                                  of this {@link FacesEvent} is not supported by this component
+     * @throws IllegalStateException    if PhaseId.ANY_PHASE is passed
+     *                                  for the phase identifier
+     * @throws NullPointerException     if <code>event</code> is
+     *                                  <code>null</code>
      */
     public void broadcast(FacesEvent event) throws AbortProcessingException {
 
@@ -168,15 +162,16 @@ public class MapComponent extends UICommand
         MethodBinding mb = getActionListener();
         if (mb != null) {
             if ((isImmediate() &&
-                 event.getPhaseId().equals(PhaseId.APPLY_REQUEST_VALUES)) ||
+                event.getPhaseId().equals(PhaseId.APPLY_REQUEST_VALUES)) ||
                 (!isImmediate() &&
-                 event.getPhaseId().equals(PhaseId.INVOKE_APPLICATION))) {
+                event.getPhaseId().equals(PhaseId.INVOKE_APPLICATION))) {
                 FacesContext context = getFacesContext();
-                    mb.invoke(context, new Object[] { event });
+                mb.invoke(context, new Object[]{event});
             }
         }
 
     }
+
 
     /**
      * <p>Intercept <code>queueEvent</code> and mark the phaseId for the
@@ -186,15 +181,14 @@ public class MapComponent extends UICommand
      */
 
     public void queueEvent(FacesEvent e) {
-	if (e instanceof ActionEvent) {
-	    if (isImmediate()) {
-		e.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
-	    }
-	    else {
-		e.setPhaseId(PhaseId.INVOKE_APPLICATION);
-	    }
-	}
-	super.queueEvent(e);
+        if (e instanceof ActionEvent) {
+            if (isImmediate()) {
+                e.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
+            } else {
+                e.setPhaseId(PhaseId.INVOKE_APPLICATION);
+            }
+        }
+        super.queueEvent(e);
     }
 
     // ----------------------------------------------------- StateHolder Methods
@@ -206,7 +200,7 @@ public class MapComponent extends UICommand
      * @param context <code>FacesContext</code> for the current request
      */
     public Object saveState(FacesContext context) {
-	removeDefaultActionListener(context);
+        removeDefaultActionListener(context);
         Object values[] = new Object[6];
         values[0] = super.saveState(context);
         values[1] = current;
@@ -223,18 +217,18 @@ public class MapComponent extends UICommand
      * <p>Restore the state for this component.</p>
      *
      * @param context <code>FacesContext</code> for the current request
-     * @param state State to be restored
+     * @param state   State to be restored
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      */
     public void restoreState(FacesContext context, Object state) {
-	removeDefaultActionListener(context);
+        removeDefaultActionListener(context);
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         current = (String) values[1];
         action = (MethodBinding) restoreAttachedState(context, values[2]);
-        actionListener = (MethodBinding) restoreAttachedState(context, 
-							      values[3]);
+        actionListener = (MethodBinding) restoreAttachedState(context,
+                                                              values[3]);
         immediate = ((Boolean) values[4]).booleanValue();
         immediateSet = ((Boolean) values[5]).booleanValue();
         addDefaultActionListener(context);
@@ -246,12 +240,13 @@ public class MapComponent extends UICommand
     private void addDefaultActionListener(FacesContext context) {
         ActionListener listener =
             context.getApplication().getActionListener();
-            addActionListener(listener);
-        }
+        addActionListener(listener);
+    }
+
 
     // Remove the default action listener
     private void removeDefaultActionListener(FacesContext context) {
-            removeActionListener(context.getApplication().getActionListener());
-        }
+        removeActionListener(context.getApplication().getActionListener());
+    }
 
 }

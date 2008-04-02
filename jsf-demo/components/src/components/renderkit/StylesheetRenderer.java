@@ -1,9 +1,9 @@
 /*
- * $Id: StylesheetRenderer.java,v 1.6 2003/09/25 17:48:05 horwat Exp $
+ * $Id: StylesheetRenderer.java,v 1.7 2004/02/05 16:22:57 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,12 +43,12 @@
 package components.renderkit;
 
 
-import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
 
 
 /**
@@ -63,6 +63,7 @@ public class StylesheetRenderer extends BaseRenderer {
     public boolean supportsComponentType(UIComponent component) {
         return (component instanceof UIOutput);
     }
+
 
     public void decode(FacesContext context, UIComponent component) {
     }
@@ -85,12 +86,12 @@ public class StylesheetRenderer extends BaseRenderer {
      * <code>text/css</code> stylesheet at the specified context-relative
      * path.</p>
      *
-     * @param context FacesContext for the request we are processing
+     * @param context   FacesContext for the request we are processing
      * @param component UIComponent to be rendered
      *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  or <code>component</code> is null
+     * @throws IOException          if an input/output error occurs while rendering
+     * @throws NullPointerException if <code>context</code>
+     *                              or <code>component</code> is null
      */
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
@@ -100,9 +101,10 @@ public class StylesheetRenderer extends BaseRenderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        String contextPath = context.getExternalContext().getRequestContextPath();
+        String contextPath = context.getExternalContext()
+            .getRequestContextPath();
         writer.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"");
-        
+
         writer.write(contextPath);
         writer.write((String) component.getAttributes().get("path"));
         writer.write("\">");

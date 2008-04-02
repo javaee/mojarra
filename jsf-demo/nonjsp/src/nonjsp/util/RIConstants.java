@@ -1,9 +1,9 @@
 /*
- * $Id: RIConstants.java,v 1.8 2004/01/27 21:31:36 eburns Exp $
+ * $Id: RIConstants.java,v 1.9 2004/02/05 16:24:51 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -49,22 +49,20 @@ import javax.faces.render.RenderKitFactory;
  *
  * Based on com.sun.faces.RIConstants
  *
- * @version $Id: RIConstants.java,v 1.8 2004/01/27 21:31:36 eburns Exp $
- *
+ * @version $Id: RIConstants.java,v 1.9 2004/02/05 16:24:51 rlubke Exp $
  * @see com.sun.faces.RIConstants
- *
  */
 public class RIConstants {
 
     /**
      * Used to add uniqueness to the names.
-    */
+     */
     public final static String FACES_PREFIX = "com.sun.faces.";
 
     public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX +
-	RenderKitFactory.HTML_BASIC_RENDER_KIT;
-    
+        RenderKitFactory.HTML_BASIC_RENDER_KIT;
+
     public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
     public final static String REQUEST_LOCALE = FACES_PREFIX + "LOCALE";
-   
+
 }

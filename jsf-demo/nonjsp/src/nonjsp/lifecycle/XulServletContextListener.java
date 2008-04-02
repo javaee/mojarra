@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -40,31 +40,27 @@
 
 package nonjsp.lifecycle;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletContextEvent;
-
-import javax.faces.FactoryFinder;
-import javax.faces.context.FacesContextFactory;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.Application;
-import javax.faces.application.ViewHandler;
-
 import nonjsp.application.XulViewHandlerImpl;
 
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.ViewHandler;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
 /**
- *
  * <B>XulServletContextListener</B> is a class that sets the
  * XulViewHandler to be the default ViewHandler for the web
  * application.
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XulServletContextListener.java,v 1.4 2003/10/07 20:57:41 rlubke Exp $ 
+ * @version $Id: XulServletContextListener.java,v 1.5 2004/02/05 16:24:47 rlubke Exp $
  */
 
-public class XulServletContextListener implements ServletContextListener
-{
+public class XulServletContextListener implements ServletContextListener {
+
     //
     // Protected Constants
     //
@@ -85,8 +81,7 @@ public class XulServletContextListener implements ServletContextListener
     // Constructors and Initializers    
     //
 
-    public XulServletContextListener()
-    {
+    public XulServletContextListener() {
     }
 
     //
@@ -101,19 +96,18 @@ public class XulServletContextListener implements ServletContextListener
     // Methods from ServletContextListener
     //
 
-    public void contextInitialized(ServletContextEvent event) 
-    {
+    public void contextInitialized(ServletContextEvent event) {
         //Set the ViewHandler to the Xul implementation
         ViewHandler handler = new XulViewHandlerImpl();
         ApplicationFactory factory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         Application application =
             factory.getApplication();
-        application.setViewHandler(handler); 
+        application.setViewHandler(handler);
     }
 
-    public void contextDestroyed(ServletContextEvent e)
-    {
+
+    public void contextDestroyed(ServletContextEvent e) {
     }
 
 } // end of class XulServletContextListener

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -42,19 +42,18 @@ package components.renderkit;
 import components.components.AreaComponent;
 import components.components.MapComponent;
 import components.model.ImageArea;
-import java.io.IOException;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.el.ValueBinding;
-import javax.faces.render.Renderer;
+
+import java.io.IOException;
 
 
 /**
  * This class converts the internal representation of a <code>UIArea</code>
  * component into the output stream associated with the response to a
  * particular request.
- *
  */
 
 public class AreaRenderer extends BaseRenderer {
@@ -66,7 +65,7 @@ public class AreaRenderer extends BaseRenderer {
     /**
      * <p>No decoding is required.</p>
      *
-     * @param context <code>FacesContext</code>for the current request
+     * @param context   <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
      */
     public void decode(FacesContext context, UIComponent component) {
@@ -81,7 +80,7 @@ public class AreaRenderer extends BaseRenderer {
     /**
      * <p>No begin encoding is required.</p>
      *
-     * @param context <code>FacesContext</code>for the current request
+     * @param context   <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
      */
     public void encodeBegin(FacesContext context, UIComponent component)
@@ -97,7 +96,7 @@ public class AreaRenderer extends BaseRenderer {
     /**
      * <p>No children encoding is required.</p>
      *
-     * @param context <code>FacesContext</code>for the current request
+     * @param context   <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
      */
     public void encodeChildren(FacesContext context, UIComponent component)
@@ -113,7 +112,7 @@ public class AreaRenderer extends BaseRenderer {
     /**
      * <p>Encode this component.</p>
      *
-     * @param context <code>FacesContext</code>for the current request
+     * @param context   <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
      */
     public void encodeEnd(FacesContext context, UIComponent component)
@@ -123,8 +122,8 @@ public class AreaRenderer extends BaseRenderer {
             throw new NullPointerException();
         }
         AreaComponent area = (AreaComponent) component;
-        String targetImageId = 
-                area.findComponent(area.getTargetImage()).getClientId(context);
+        String targetImageId =
+            area.findComponent(area.getTargetImage()).getClientId(context);
         ImageArea iarea = (ImageArea) area.getValue();
         ResponseWriter writer = context.getResponseWriter();
         StringBuffer sb = null;
@@ -134,13 +133,19 @@ public class AreaRenderer extends BaseRenderer {
         writer.writeAttribute("coords", iarea.getCoords(), "coords");
         writer.writeAttribute("shape", iarea.getShape(), "shape");
         // PENDING(craigmcc) - onmouseout only works on first form of a page
-        sb = new StringBuffer("document.forms[0]['").append(targetImageId).append("'].src='");
-        sb.append(getURI(context, (String) area.getAttributes().get("onmouseout")));
+        sb =
+            new StringBuffer("document.forms[0]['").append(targetImageId)
+            .append("'].src='");
+        sb.append(
+            getURI(context, (String) area.getAttributes().get("onmouseout")));
         sb.append("'");
         writer.writeAttribute("onmouseout", sb.toString(), "onmouseout");
         // PENDING(craigmcc) - onmouseover only works on first form of a page
-        sb = new StringBuffer("document.forms[0]['").append(targetImageId).append("'].src='");
-        sb.append(getURI(context, (String) area.getAttributes().get("onmouseover")));
+        sb =
+            new StringBuffer("document.forms[0]['").append(targetImageId)
+            .append("'].src='");
+        sb.append(
+            getURI(context, (String) area.getAttributes().get("onmouseover")));
         sb.append("'");
         writer.writeAttribute("onmouseover", sb.toString(), "onmouseover");
         // PENDING(craigmcc) - onclick only works on first form of a page
@@ -161,7 +166,7 @@ public class AreaRenderer extends BaseRenderer {
     /**
      * <p>Return the calculated name for the hidden input field.</p>
      *
-     * @param context Context for the current request
+     * @param context   Context for the current request
      * @param component Component we are rendering
      */
     private String getName(FacesContext context, UIComponent component) {
@@ -180,17 +185,16 @@ public class AreaRenderer extends BaseRenderer {
      * value.</p>
      *
      * @param context Context for the current request
-     * @param value Partial path to be (potentially) modified
+     * @param value   Partial path to be (potentially) modified
      */
     private String getURI(FacesContext context, String value) {
         if (value.startsWith("/")) {
             return (context.getExternalContext().getRequestContextPath() +
-                    value);
+                value);
         } else {
             return (value);
         }
     }
-
 
 
 }

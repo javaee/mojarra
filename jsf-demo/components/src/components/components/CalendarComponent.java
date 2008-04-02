@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -39,12 +39,12 @@
 package components.components;
 
 
+import javax.faces.component.UIComponentBase;
+import javax.faces.context.FacesContext;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
-import javax.faces.component.UIComponentBase;
-import javax.faces.context.FacesContext;
 
 
 /**
@@ -76,7 +76,7 @@ public class CalendarComponent extends UIComponentBase {
         Set attrSet = map.keySet();
         Iterator iter = attrSet.iterator();
         while (iter.hasNext()) {
-            String key = (String)iter.next();
+            String key = (String) iter.next();
             Object value = map.get(key);
             sb.append(key).append(": ").append(value).append("\n");
         }

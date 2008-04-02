@@ -1,9 +1,9 @@
 /*
- * $Id: MyPhaseListener.java,v 1.2 2003/10/17 03:53:46 eburns Exp $
+ * $Id: MyPhaseListener.java,v 1.3 2004/02/05 16:25:05 rlubke Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

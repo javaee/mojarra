@@ -1,9 +1,9 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.3 2003/12/17 15:19:52 rkitain Exp $
+ * $Id: XmlXulRuleSet.java,v 1.4 2004/02/05 16:24:39 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -45,27 +45,22 @@
 package nonjsp.application;
 
 import nonjsp.util.Util;
+import org.apache.commons.digester.AbstractObjectCreationFactory;
+import org.apache.commons.digester.Digester;
+import org.apache.commons.digester.Rule;
+import org.apache.commons.digester.RuleSetBase;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.AttributesImpl;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIOutput;
 
-import org.apache.commons.digester.AbstractObjectCreationFactory;
-import org.apache.commons.digester.Digester;
-import org.apache.commons.digester.Rule;
-import org.apache.commons.digester.RuleSetBase;
-
-
-
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.AttributesImpl;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * <p>The set of Digester rules required to parse a Faces Xul (Xml)
- * configuration file. 
+ * configuration file.
  */
 public class XmlXulRuleSet extends RuleSetBase {
 
@@ -73,6 +68,7 @@ public class XmlXulRuleSet extends RuleSetBase {
     protected static Log log = LogFactory.getLog(XmlXulRuleSet.class);
 
     private BuildComponentFromTag buildComponent = null;
+
 
     /**
      * Constructor sets Faces modules needed for building
@@ -82,12 +78,13 @@ public class XmlXulRuleSet extends RuleSetBase {
         buildComponent = bc;
     }
 
+
     /**
      * <p>Add the set of Rule instances defined in this RuleSet to the
      * specified <code>Digester</code> instance.
      *
      * @param digester Digester instance to which the new Rule instances
-     *  should be added.
+     *                 should be added.
      */
     public void addRuleInstances(Digester digester) {
 
@@ -99,11 +96,14 @@ public class XmlXulRuleSet extends RuleSetBase {
 
         digester.addObjectCreate("*/textbox", "javax.faces.component.UIInput");
 
-        digester.addObjectCreate("*/checkbox", "javax.faces.component.UISelectBoolean");
+        digester.addObjectCreate("*/checkbox",
+                                 "javax.faces.component.UISelectBoolean");
 
-        digester.addObjectCreate("*/radiogroup", "javax.faces.component.UISelectOne");
+        digester.addObjectCreate("*/radiogroup",
+                                 "javax.faces.component.UISelectOne");
 
-        digester.addObjectCreate("*/menupopup", "javax.faces.component.UISelectOne");
+        digester.addObjectCreate("*/menupopup",
+                                 "javax.faces.component.UISelectOne");
 
         digester.addObjectCreate("*/link", "javax.faces.component.UICommand");
 
@@ -152,21 +152,21 @@ final class UIComponentFactory extends AbstractObjectCreationFactory {
         // Instantiate the new object and return it
         try {
             cClass = Util.loadClass(className);
-            c = (UIComponent)cClass.newInstance();
+            c = (UIComponent) cClass.newInstance();
         } catch (ClassNotFoundException cnf) {
-            throw new RuntimeException("Class Not Found:"+ cnf.getMessage());
+            throw new RuntimeException("Class Not Found:" + cnf.getMessage());
         } catch (InstantiationException ie) {
-            throw new RuntimeException("Class Instantiation Exception:"+
-                ie.getMessage());
+            throw new RuntimeException("Class Instantiation Exception:" +
+                                       ie.getMessage());
         } catch (IllegalAccessException ia) {
-            throw new RuntimeException("Illegal Access Exception:"+
-            ia.getMessage());
+            throw new RuntimeException("Illegal Access Exception:" +
+                                       ia.getMessage());
         }
 
         c.setId(id);
-        if ( c instanceof UIOutput) {
-            ((UIOutput)c).setValue(value);
-        }    
+        if (c instanceof UIOutput) {
+            ((UIOutput) c).setValue(value);
+        }
         return c;
     }
 }
@@ -179,10 +179,12 @@ final class ComponentRule extends Rule {
     private BuildComponentFromTag bc;
     private UIComponent root;
 
+
     public ComponentRule() {
         super();
         root = null;
     }
+
 
     /**
      * This method is invoked when the beginning of the matched
@@ -191,23 +193,25 @@ final class ComponentRule extends Rule {
      * @param attributes The element's attribute list
      */
     public void begin(Attributes attributes) throws Exception {
-        UIComponent uic = (UIComponent)digester.peek();
+        UIComponent uic = (UIComponent) digester.peek();
         if (log.isTraceEnabled()) {
             log.trace("component: " + uic.getId());
         }
         AttributesImpl attrs = new AttributesImpl(attributes);
-        for (int i=0; i<attrs.getLength(); i++) {
+        for (int i = 0; i < attrs.getLength(); i++) {
             String qName = attributes.getQName(i);
             attrs.setLocalName(i, qName);
             attrs.setValue(i, attributes.getValue(qName));
             if (log.isTraceEnabled()) {
-                log.trace("ComponentRule: qName: " + qName + " value: " + attributes.getValue(qName));
+                log.trace(
+                    "ComponentRule: qName: " + qName + " value: " +
+                    attributes.getValue(qName));
             }
         }
         bc.applyAttributesToComponentInstance(uic, attrs);
 
         if (root == null) {
-            root = (UIComponent)digester.peek(digester.getCount() - 1);
+            root = (UIComponent) digester.peek(digester.getCount() - 1);
         }
         root.getChildren().add(uic);
 
@@ -218,6 +222,7 @@ final class ComponentRule extends Rule {
         }
     }
 
+
     /**
      * This method is invoked when the end of the matched
      * Xml element is encountered ;
@@ -225,12 +230,13 @@ final class ComponentRule extends Rule {
      * @param attributes The element's attribute list
      */
     public void end(String namespace, String name) {
-       //Reset the root
-       UIComponent uic = (UIComponent)digester.peek();
-       if (uic instanceof UIForm) {
-           root = (UIComponent)digester.peek(digester.getCount() - 1);
+        //Reset the root
+        UIComponent uic = (UIComponent) digester.peek();
+        if (uic instanceof UIForm) {
+            root = (UIComponent) digester.peek(digester.getCount() - 1);
         }
     }
+
 
     public void setBuildComponent(BuildComponentFromTag bc) {
         this.bc = bc;
@@ -240,15 +246,17 @@ final class ComponentRule extends Rule {
 /**
  * This processing rule translates nested element names and values
  * (as in Faces "SelectOne" component items.
- * The attributes are set on the UIComponent instance.  
+ * The attributes are set on the UIComponent instance.
  */
 final class ComponentNestedRule extends Rule {
 
     private BuildComponentFromTag bc;
 
+
     public ComponentNestedRule() {
         super();
     }
+
 
     /**
      * This method is invoked when the beginning of the matched
@@ -257,15 +265,16 @@ final class ComponentNestedRule extends Rule {
      * @param attributes The element's attribute list
      */
     public void begin(Attributes attributes) throws Exception {
-        UIComponent uic = (UIComponent)digester.peek();
+        UIComponent uic = (UIComponent) digester.peek();
         AttributesImpl attrs = new AttributesImpl(attributes);
-        for (int i=0; i<attrs.getLength(); i++) {
+        for (int i = 0; i < attrs.getLength(); i++) {
             String qName = attributes.getQName(i);
             attrs.setLocalName(i, qName);
             attrs.setValue(i, attributes.getValue(qName));
         }
         bc.handleNestedComponentTag(uic, "SelectOne_Option", attrs);
     }
+
 
     public void setBuildComponent(BuildComponentFromTag bc) {
         this.bc = bc;

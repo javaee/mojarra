@@ -1,9 +1,9 @@
 /*
- * $Id: CustomerBean.java,v 1.3 2003/12/17 15:19:22 rkitain Exp $
+ * $Id: CustomerBean.java,v 1.4 2004/02/05 16:23:33 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -68,36 +68,52 @@ public class CustomerBean implements Serializable {
 
 
     private String accountId = null;
+
+
     public String getAccountId() {
         return (this.accountId);
     }
+
+
     public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 
 
     private String name = null;
+
+
     public String getName() {
         return (this.name);
     }
+
+
     public void setName(String name) {
         this.name = name;
     }
 
 
     private String symbol = null;
+
+
     public String getSymbol() {
         return (this.symbol);
     }
+
+
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
 
 
     private double totalSales = 0.0;
+
+
     public double getTotalSales() {
         return (this.totalSales);
     }
+
+
     public void setTotalSales(double totalSales) {
         this.totalSales = totalSales;
     }

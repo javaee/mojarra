@@ -1,9 +1,9 @@
 /*
- * $Id: ScrollerTag.java,v 1.2 2003/12/17 15:19:16 rkitain Exp $
+ * $Id: ScrollerTag.java,v 1.3 2004/02/05 16:23:17 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -42,35 +42,34 @@
 
 package components.taglib;
 
-import javax.faces.component.UIComponent;
-import javax.faces.webapp.UIComponentTag;
-import javax.servlet.jsp.JspException;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.faces.el.MethodBinding;
-import javax.faces.event.ActionEvent;
-
-
 import components.components.ScrollerComponent;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.MethodBinding;
+import javax.faces.el.ValueBinding;
+import javax.faces.event.ActionEvent;
+import javax.faces.webapp.UIComponentTag;
 
 /**
  * ScrollerTag is the tag handler class for <code>ScrollerComponent.</code>
  */
 public class ScrollerTag extends UIComponentTag {
-    
+
     protected String actionListener = null;
     protected String navFacetOrientation = null;
     protected String forValue = null;
-    
+
+
     /**
-     *  method reference to handle an action event generated as a result of 
-     *  clicking on a link that points a particular page in the result-set.
+     * method reference to handle an action event generated as a result of
+     * clicking on a link that points a particular page in the result-set.
      */
     public void setActionListener(String actionListener) {
         this.actionListener = actionListener;
     }
-    
+
+
     /*
      * When rendering a widget representing "page navigation" where
      * should the facet markup be rendered in relation to the page
@@ -79,8 +78,9 @@ public class ScrollerTag extends UIComponentTag {
      * reference expression.
      */
     public void setNavFacetOrientation(String navFacetOrientation) {
-	this.navFacetOrientation = navFacetOrientation;
+        this.navFacetOrientation = navFacetOrientation;
     }
+
 
     /*
      * The data grid component for which this acts as a scroller.
@@ -89,7 +89,8 @@ public class ScrollerTag extends UIComponentTag {
     public void setFor(String newForValue) {
         forValue = newForValue;
     }
-    
+
+
     public String getComponentType() {
         return ("Scroller");
     }
@@ -104,20 +105,23 @@ public class ScrollerTag extends UIComponentTag {
         super.release();
         this.navFacetOrientation = null;
     }
-    
+
+
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
         FacesContext context = FacesContext.getCurrentInstance();
         ValueBinding vb = null;
-        
+
         if (actionListener != null) {
             if (isValueReference(actionListener)) {
-                Class args[] = { ActionEvent.class };
-                MethodBinding mb = FacesContext.getCurrentInstance().getApplication().createMethodBinding(actionListener, args);
-                ((ScrollerComponent)component).setActionListener(mb);
+                Class args[] = {ActionEvent.class};
+                MethodBinding mb = FacesContext.getCurrentInstance()
+                    .getApplication()
+                    .createMethodBinding(actionListener, args);
+                ((ScrollerComponent) component).setActionListener(mb);
             } else {
-              Object params [] = {actionListener};
-              throw new javax.faces.FacesException();
+                Object params [] = {actionListener};
+                throw new javax.faces.FacesException();
             }
         }
 
@@ -126,13 +130,16 @@ public class ScrollerTag extends UIComponentTag {
         // evaluated lazily.
         if (navFacetOrientation != null) {
             if (isValueReference(navFacetOrientation)) {
-                vb = context.getApplication().createValueBinding(navFacetOrientation);
+                vb =
+                    context.getApplication().createValueBinding(
+                        navFacetOrientation);
                 component.setValueBinding("navFacetOrientation", vb);
             } else {
-                component.getAttributes().put("navFacetOrientation", navFacetOrientation);
+                component.getAttributes().put("navFacetOrientation",
+                                              navFacetOrientation);
             }
         }
-        
+
         if (forValue != null) {
             if (isValueReference(forValue)) {
                 vb = context.getApplication().createValueBinding(forValue);

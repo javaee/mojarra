@@ -1,9 +1,9 @@
 /*
- * $Id: TabRenderer.java,v 1.6 2003/12/17 15:19:09 rkitain Exp $
+ * $Id: TabRenderer.java,v 1.7 2004/02/05 16:22:57 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -44,14 +44,14 @@ package components.renderkit;
 
 
 import components.components.PaneComponent;
-import java.io.IOException;
-import java.util.Iterator;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 
 /**

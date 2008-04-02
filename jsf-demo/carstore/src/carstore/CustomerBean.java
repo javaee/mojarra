@@ -1,8 +1,8 @@
 /*
- * $Id: CustomerBean.java,v 1.2 2003/12/17 15:17:50 rkitain Exp $
+ * $Id: CustomerBean.java,v 1.3 2004/02/05 16:21:09 rlubke Exp $
  */
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -41,14 +41,16 @@
 
 package carstore;
 
-import java.util.*;
-import javax.faces.model.SelectItem;
-import java.util.ResourceBundle;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.ResourceBundle;
 
 public class CustomerBean extends Object {
-    
-    
+
+
     String firstName = null;
     String middleInitial = null;
     String lastName = null;
@@ -58,113 +60,140 @@ public class CustomerBean extends Object {
     String zip = null;
     String month = null;
     String year = null;
-    
+
+
     public CustomerBean() {
         super();
     }
 
+
     protected Collection titleOptions = null;
 
+
     public Collection getTitleOptions() {
-	if (null == titleOptions) {
-	    titleOptions = new ArrayList();
-	    ResourceBundle rb = ResourceBundle.getBundle("carstore.bundles.Resources", 
+        if (null == titleOptions) {
+            titleOptions = new ArrayList();
+            ResourceBundle rb = ResourceBundle.getBundle(
+                "carstore.bundles.Resources",
                 (FacesContext.getCurrentInstance().getViewRoot().getLocale()));
-	    String titleStr = (String)rb.getObject("mrLabel");
-	    titleOptions.add(new SelectItem(titleStr, titleStr, 
-					    titleStr));
-	    titleStr = (String)rb.getObject("mrsLabel");
-	    titleOptions.add(new SelectItem(titleStr, titleStr, 
-					    titleStr));
-	    titleStr = (String)rb.getObject("msLabel");
-	    titleOptions.add(new SelectItem(titleStr, titleStr, 
-					    titleStr));
-	    
-	}
-	    
-	return titleOptions;
+            String titleStr = (String) rb.getObject("mrLabel");
+            titleOptions.add(new SelectItem(titleStr, titleStr,
+                                            titleStr));
+            titleStr = (String) rb.getObject("mrsLabel");
+            titleOptions.add(new SelectItem(titleStr, titleStr,
+                                            titleStr));
+            titleStr = (String) rb.getObject("msLabel");
+            titleOptions.add(new SelectItem(titleStr, titleStr,
+                                            titleStr));
+
+        }
+
+        return titleOptions;
     }
+
 
     public void setTitleOptions(Collection newOptions) {
-	titleOptions = new ArrayList(newOptions);
+        titleOptions = new ArrayList(newOptions);
     }
+
 
     String title = null;
+
+
     public void setCurrentTitle(String newTitle) {
-	title = newTitle;
+        title = newTitle;
     }
 
+
     public String getCurrentTitle() {
-	return title;
+        return title;
     }
+
 
     public void setFirstName(String first) {
         firstName = first;
     }
-    
+
+
     public String getFirstName() {
         return firstName;
     }
-    
+
+
     public void setMiddleInitial(String mI) {
         middleInitial = mI;
     }
-    
+
+
     public String getMiddleInitial() {
         return middleInitial;
     }
-    
+
+
     public void setLastName(String last) {
         lastName = last;
     }
-    
+
+
     public String getLastName() {
         return lastName;
     }
-    
+
+
     public void setMailingAddress(String mA) {
         mailingAddress = mA;
     }
-    
+
+
     public String getMailingAddress() {
         return mailingAddress;
     }
-    
+
+
     public void setCity(String cty) {
         city = cty;
     }
-    
+
+
     public String getCity() {
         return city;
     }
-    
+
+
     public void setState(String sT) {
         state = sT;
     }
-    
+
+
     public String getState() {
         return state;
     }
-    
+
+
     public void setZip(String zipCode) {
         zip = zipCode;
     }
-    
+
+
     public String getZip() {
         return zip;
     }
-    
+
+
     public void setMonth(String mth) {
         month = mth;
     }
-    
+
+
     public String getMonth() {
         return month;
     }
-    
+
+
     public void setYear(String yr) {
         year = yr;
     }
+
 
     public String getYear() {
         return year;

@@ -1,9 +1,9 @@
 /*
- * $Id: UIDataBean.java,v 1.10 2004/01/27 21:31:38 eburns Exp $
+ * $Id: UIDataBean.java,v 1.11 2004/02/05 16:25:05 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,16 +43,14 @@
 package standard;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import javax.faces.component.UIColumn;
-import javax.faces.component.UICommand;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.component.UIInput;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.context.FacesContext;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -69,33 +67,64 @@ public class UIDataBean {
      * <p>The <code>accountId</code> field for the current row.</p>
      */
     private UIInput accountId = null;
-    public UIInput getAccountId() { return accountId; }
-    public void setAccountId(UIInput accountId) { this.accountId = accountId; }
 
+
+    public UIInput getAccountId() {
+        return accountId;
+    }
+
+
+    public void setAccountId(UIInput accountId) {
+        this.accountId = accountId;
+    }
 
 
     /**
      * <p>The <code>checked</code> field for the current row.</p>
      */
     private UISelectBoolean checked = null;
-    public UISelectBoolean getChecked() { return checked; }
-    public void setChecked(UISelectBoolean checked) { this.checked = checked; }
+
+
+    public UISelectBoolean getChecked() {
+        return checked;
+    }
+
+
+    public void setChecked(UISelectBoolean checked) {
+        this.checked = checked;
+    }
 
 
     /**
      * <p>The <code>created</code> field for the current row.</p>
      */
     private UISelectBoolean created = null;
-    public UISelectBoolean getCreated() { return created; }
-    public void setCreated(UISelectBoolean created) { this.created = created; }
+
+
+    public UISelectBoolean getCreated() {
+        return created;
+    }
+
+
+    public void setCreated(UISelectBoolean created) {
+        this.created = created;
+    }
 
 
     /**
      * <p>The <code>UIData</code> component representing the entire table.</p>
      */
     private UIData data = null;
-    public UIData getData() { return data; }
-    public void setData(UIData data) { this.data = data; }
+
+
+    public UIData getData() {
+        return data;
+    }
+
+
+    public void setData(UIData data) {
+        this.data = data;
+    }
 
 
     // --------------------------------------------------- Calculated Properties
@@ -149,8 +178,8 @@ public class UIDataBean {
         append("click(rowIndex=" + data.getRowIndex() +
                ",accountId=" +
                accountId.getValue() + ")");
-	clear();
-	return (null);
+        clear();
+        return (null);
 
     }
 
@@ -162,22 +191,22 @@ public class UIDataBean {
     public String create() {
 
         append("create()");
-	clear();
+        clear();
 
-	// Add a new row to the table
-	List list = list();
-	if (list != null) {
-	    CustomerBean customer = new CustomerBean();
-	    list.add(customer);
+        // Add a new row to the table
+        List list = list();
+        if (list != null) {
+            CustomerBean customer = new CustomerBean();
+            list.add(customer);
             int index = data.getRowIndex();
             data.setRowIndex(list.size() - 1);
             created.setSelected(true);
             data.setRowIndex(index);
-	}
+        }
 
-	// Position so that the new row is visible if necessary
-	scroll(list.size());
-	return (null);
+        // Position so that the new row is visible if necessary
+        scroll(list.size());
+        return (null);
 
     }
 
@@ -190,12 +219,15 @@ public class UIDataBean {
 
         append("delete()");
 
-	// Delete customers for whom the checked field is selected
+        // Delete customers for whom the checked field is selected
         List removes = new ArrayList();
         int n = data.getRowCount();
         for (int i = 0; i < n; i++) {
             data.setRowIndex(i);
-            System.out.println("delete(accountId=" + accountId.getValue() + ",checked=" + checked.getSubmittedValue() + ")");
+            System.out.println(
+                "delete(accountId=" + accountId.getValue() + ",checked=" +
+                checked.getSubmittedValue() +
+                ")");
             if ("true".equals(checked.getSubmittedValue())) {
                 removes.add(data.getRowData());
                 checked.setSelected(false);
@@ -210,9 +242,9 @@ public class UIDataBean {
             }
         }
 
-	clear();
+        clear();
 
-	return (null);
+        return (null);
     }
 
 
@@ -224,12 +256,15 @@ public class UIDataBean {
 
         append("delete()");
 
-	// Delete customers for whom the checked field is selected
+        // Delete customers for whom the checked field is selected
         List removes = new ArrayList();
         int n = data.getRowCount();
         for (int i = 0; i < n; i++) {
             data.setRowIndex(i);
-            System.out.println("delete(accountId=" + accountId.getValue() + ",checked=" + checked.isSelected() + ")");
+            System.out.println(
+                "delete(accountId=" + accountId.getValue() + ",checked=" +
+                checked.isSelected() +
+                ")");
             if (checked.isSelected()) {
                 removes.add(data.getRowData());
                 checked.setSelected(false);
@@ -244,9 +279,9 @@ public class UIDataBean {
             }
         }
 
-	clear();
+        clear();
 
-	return (null);
+        return (null);
     }
 
 
@@ -256,8 +291,8 @@ public class UIDataBean {
     public String first() {
 
         append("first()");
-	scroll(0);
-	return (null);
+        scroll(0);
+        return (null);
 
     }
 
@@ -269,8 +304,8 @@ public class UIDataBean {
 
         FacesContext context = FacesContext.getCurrentInstance();
         append("footer()");
-	clear();
-	return (null);
+        clear();
+        return (null);
 
     }
 
@@ -282,8 +317,8 @@ public class UIDataBean {
 
         FacesContext context = FacesContext.getCurrentInstance();
         append("header()");
-	clear();
-	return (null);
+        clear();
+        return (null);
 
     }
 
@@ -294,8 +329,8 @@ public class UIDataBean {
     public String last() {
 
         append("last()");
-	scroll(data.getRowCount() - 1);
-	return (null);
+        scroll(data.getRowCount() - 1);
+        return (null);
 
     }
 
@@ -306,9 +341,9 @@ public class UIDataBean {
     public String next() {
 
         append("next()");
-	int first = data.getFirst();
+        int first = data.getFirst();
         scroll(first + data.getRows());
-	return (null);
+        return (null);
 
     }
 
@@ -322,8 +357,8 @@ public class UIDataBean {
         append("press(rowIndex=" + data.getRowIndex() +
                ",accountId=" +
                accountId.getValue() + ")");
-	clear();
-	return (null);
+        clear();
+        return (null);
 
     }
 
@@ -334,9 +369,9 @@ public class UIDataBean {
     public String previous() {
 
         append("previous()");
-	int first = data.getFirst();
+        int first = data.getFirst();
         scroll(first - data.getRows());
-	return (null);
+        return (null);
 
     }
 
@@ -347,8 +382,8 @@ public class UIDataBean {
     public String reset() {
 
         append("reset()");
-	clear();
-	return (null);
+        clear();
+        return (null);
 
     }
 
@@ -361,10 +396,10 @@ public class UIDataBean {
     public String update() {
 
         append("update()");
-	; // Save to database as necessary
+        ; // Save to database as necessary
         clear();
-	created();
-	return (null);
+        created();
+        return (null);
 
     }
 
@@ -399,11 +434,11 @@ public class UIDataBean {
     private void clear() {
 
         append("clear()");
-	int n = data.getRowCount();
-	for (int i = 0; i < n; i++) {
-	    data.setRowIndex(i);
-	    checked.setSelected(false);
-	}
+        int n = data.getRowCount();
+        for (int i = 0; i < n; i++) {
+            data.setRowIndex(i);
+            checked.setSelected(false);
+        }
 
     }
 
@@ -414,11 +449,11 @@ public class UIDataBean {
     private void created() {
 
         append("created()");
-	int n = data.getRowCount();
-	for (int i = 0; i < n; i++) {
-	    data.setRowIndex(i);
-	    created.setSelected(false);
-	}
+        int n = data.getRowCount();
+        for (int i = 0; i < n; i++) {
+            data.setRowIndex(i);
+            created.setSelected(false);
+        }
 
     }
 
@@ -429,12 +464,12 @@ public class UIDataBean {
      */
     private Iterator iterator() {
 
-	List list = list();
-	if (list != null) {
-	    return (list.iterator());
-	} else {
-	    return (null);
-	}
+        List list = list();
+        if (list != null) {
+            return (list.iterator());
+        } else {
+            return (null);
+        }
 
     }
 
@@ -445,10 +480,10 @@ public class UIDataBean {
      */
     private List list() {
 
-	List list = (List)
-	    FacesContext.getCurrentInstance().getExternalContext().
-	    getSessionMap().get("list");
-	return (list);
+        List list = (List)
+            FacesContext.getCurrentInstance().getExternalContext().
+            getSessionMap().get("list");
+        return (list);
 
     }
 
@@ -460,14 +495,14 @@ public class UIDataBean {
      */
     private void scroll(int row) {
 
-	int rows = data.getRows();
-	if (rows < 1) {
+        int rows = data.getRows();
+        if (rows < 1) {
             append("scroll(" + row + ") showing entire table already");
-	    return; // Showing entire table already
-	}
-	if (row < 0) {
-	    data.setFirst(0);
-	} else if (row >= data.getRowCount()) {
+            return; // Showing entire table already
+        }
+        if (row < 0) {
+            data.setFirst(0);
+        } else if (row >= data.getRowCount()) {
             data.setFirst(data.getRowCount() - 1);
         } else {
             data.setFirst(row - (row % rows));

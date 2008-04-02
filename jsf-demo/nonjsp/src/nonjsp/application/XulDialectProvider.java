@@ -1,9 +1,9 @@
 /*
- * $Id: XulDialectProvider.java,v 1.2 2003/12/17 15:19:52 rkitain Exp $
+ * $Id: XulDialectProvider.java,v 1.3 2004/02/05 16:24:39 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -45,20 +45,17 @@
 package nonjsp.application;
 
 
-
-
 import org.apache.commons.digester.RuleSetBase;
 
 /**
+ * <B>XulDialectProvider</B> is a class that encapsulates the Xul Dialect
+ * specific logic required for creating a tree of UIComponent instances
+ * from an Xml file. <P>
  *
- * <B>XulDialectProvider</B> is a class that encapsulates the Xul Dialect 
- *  specific logic required for creating a tree of UIComponent instances 
- *  from an Xml file. <P>
- *
- * @version $Id: XulDialectProvider.java,v 1.2 2003/12/17 15:19:52 rkitain Exp $
- * 
+ * @version $Id: XulDialectProvider.java,v 1.3 2004/02/05 16:24:39 rlubke Exp $
  */
 public class XulDialectProvider extends Object implements XmlDialectProvider {
+
     //
     // Protected Constants
     //
@@ -103,6 +100,9 @@ public class XulDialectProvider extends Object implements XmlDialectProvider {
         return result;
     }
 
-    public String getSuffix() { return ".xul"; }
+
+    public String getSuffix() {
+        return ".xul";
+    }
 
 } // end of class XulDialectProvider

@@ -1,9 +1,9 @@
 /*
- * $Id: PaneTabLabelTag.java,v 1.8 2004/01/27 21:31:21 eburns Exp $
+ * $Id: PaneTabLabelTag.java,v 1.9 2004/02/05 16:23:16 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,11 +43,12 @@
 package components.taglib;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.faces.component.UIComponent;
 import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -60,18 +61,24 @@ public class PaneTabLabelTag extends UIComponentTag {
 
 
     private String commandName = null;
+
+
     public void setCommandName(String newCommandName) {
         commandName = newCommandName;
     }
 
 
     private String image = null;
+
+
     public void setImage(String newImage) {
         image = newImage;
     }
 
 
     private String label = null;
+
+
     public void setLabel(String newLabel) {
         label = newLabel;
     }
@@ -103,7 +110,7 @@ public class PaneTabLabelTag extends UIComponentTag {
             if (isValueReference(commandName)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(commandName);
+                    createValueBinding(commandName);
                 component.setValueBinding("commandName", vb);
             } else {
                 component.getAttributes().put("commandName", commandName);
@@ -114,7 +121,7 @@ public class PaneTabLabelTag extends UIComponentTag {
             if (isValueReference(image)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(image);
+                    createValueBinding(image);
                 component.setValueBinding("image", vb);
             } else {
                 component.getAttributes().put("image", image);
@@ -125,7 +132,7 @@ public class PaneTabLabelTag extends UIComponentTag {
             if (isValueReference(label)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(label);
+                    createValueBinding(label);
                 component.setValueBinding("label", vb);
             } else {
                 component.getAttributes().put("label", label);

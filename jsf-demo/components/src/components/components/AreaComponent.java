@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -40,9 +40,11 @@ package components.components;
 
 
 import components.model.ImageArea;
-import java.io.IOException;
+
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
+
+import java.io.IOException;
 
 
 /**
@@ -126,22 +128,27 @@ public class AreaComponent extends UIOutput {
         this.shape = shape;
     }
 
+
     /**
      * <p>Set the image that is the target of this <code>AreaComponent</code>.</p>
+     *
      * @return the target image of this area component.
-     */ 
+     */
     public String getTargetImage() {
         return targetImage;
     }
-    
+
+
     /**
      * <p>Set the image that is the target of this <code>AreaComponent</code>.</p>
+     *
      * @param targetImage the ID of the target of this <code>AreaComponent</code>
-     */ 
+     */
     public void setTargetImage(String targetImage) {
         this.targetImage = targetImage;
     }
-    
+
+
     /**
      * <p>Return the component family for this component.</p>
      */
@@ -192,9 +199,9 @@ public class AreaComponent extends UIOutput {
      * <p>Restore the state for this component.</p>
      *
      * @param context <code>FacesContext</code> for the current request
-     * @param state State to be restored
+     * @param state   State to be restored
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      */
     public void restoreState(FacesContext context, Object state) {
         Object values[] = (Object[]) state;

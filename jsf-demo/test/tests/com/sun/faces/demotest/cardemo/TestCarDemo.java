@@ -1,9 +1,9 @@
 /*
- * $Id: TestCarDemo.java,v 1.6 2004/02/02 16:35:09 eburns Exp $
+ * $Id: TestCarDemo.java,v 1.7 2004/02/05 16:26:41 rlubke Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -11,23 +11,17 @@ package com.sun.faces.demotest.cardemo;
 
 import com.gargoylesoftware.htmlunit.html.*;
 import com.sun.faces.demotest.HtmlUnitTestCase;
-
-import javax.faces.component.NamingContainer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Collection;
 import java.util.ResourceBundle;
-import java.util.HashMap;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>Assumptions: the app is localized for four locales, English,
  * German, French, Spanish.</p>
- *
  */
 
 public class TestCarDemo extends HtmlUnitTestCase {
@@ -35,24 +29,26 @@ public class TestCarDemo extends HtmlUnitTestCase {
     // Log instance for this class
     private static final Log log = LogFactory.getLog(TestCarDemo.class);
 
+
     public TestCarDemo() {
     }
 
+
     protected ResourceBundle resources = null;
-    protected String [] carBundleNames = {
-	"carstore.bundles.Jalopy",
-	"carstore.bundles.Luxury",
-	"carstore.bundles.Roadster",
-	"carstore.bundles.SUV"
+    protected String[] carBundleNames = {
+        "carstore.bundles.Jalopy",
+        "carstore.bundles.Luxury",
+        "carstore.bundles.Roadster",
+        "carstore.bundles.SUV"
     };
-    protected String [] packageLabelKeys = {
-	"Custom",
-	"Standard",
-	"Performance",
-	"Deluxe"
+    protected String[] packageLabelKeys = {
+        "Custom",
+        "Standard",
+        "Performance",
+        "Deluxe"
     };
-	
-    protected ResourceBundle [] carBundles = null;
+
+    protected ResourceBundle[] carBundles = null;
 
 
 
@@ -63,47 +59,46 @@ public class TestCarDemo extends HtmlUnitTestCase {
      * <p>Load the main page.  Assumptions: there are exactly four
      * buttons, in a certain order, to select each locale.  For each
      * button, press it, and call doStoreFront() on the result.</p>
-     *
      */
 
     public void testCarDemo() throws Exception {
 
-	// for each of the language links run the test
-	HtmlPage page = (HtmlPage) getInitialPage();
-	List buttons = getAllElementsOfGivenClass(page, null, 
-						  HtmlSubmitInput.class);
-	HtmlSubmitInput button = null;
-	int i, j = 0;
-	Locale [] locales = {
-	    Locale.ENGLISH,
-	    Locale.GERMAN,
-	    Locale.FRENCH,
-	    new Locale("es", "")
-	};
+        // for each of the language links run the test
+        HtmlPage page = (HtmlPage) getInitialPage();
+        List buttons = getAllElementsOfGivenClass(page, null,
+                                                  HtmlSubmitInput.class);
+        HtmlSubmitInput button = null;
+        int i, j = 0;
+        Locale[] locales = {
+            Locale.ENGLISH,
+            Locale.GERMAN,
+            Locale.FRENCH,
+            new Locale("es", "")
+        };
 
-	for (i = 0; i < locales.length; i++) {
-	    resources = ResourceBundle.getBundle("carstore.bundles.Resources",
-						 locales[i]);
-	    carBundles = 
-		new ResourceBundle[carBundleNames.length];
-	    for (j = 0; j < carBundleNames.length; j++) {
-		carBundles[j] = 
-		    ResourceBundle.getBundle(carBundleNames[j], locales[i]);
-	    }
-	    
-	    button = (HtmlSubmitInput) buttons.get(i);
-	    if (log.isTraceEnabled()) {
-		log.trace("Running test for language: " + button.asText());
-	    }
-	    doStoreFront((HtmlPage) button.click());
-	}
+        for (i = 0; i < locales.length; i++) {
+            resources = ResourceBundle.getBundle("carstore.bundles.Resources",
+                                                 locales[i]);
+            carBundles =
+                new ResourceBundle[carBundleNames.length];
+            for (j = 0; j < carBundleNames.length; j++) {
+                carBundles[j] =
+                    ResourceBundle.getBundle(carBundleNames[j], locales[i]);
+            }
+
+            button = (HtmlSubmitInput) buttons.get(i);
+            if (log.isTraceEnabled()) {
+                log.trace("Running test for language: " + button.asText());
+            }
+            doStoreFront((HtmlPage) button.click());
+        }
     }
 
+
     /**
-     *
      * <p>Assumptions: there are exactly four buttons on this page, one
      * for each car model.</p>
-     * 
+     *
      * <p>Verify that all of the expected cars have their descriptions
      * on the page.</p>
      *
@@ -112,205 +107,201 @@ public class TestCarDemo extends HtmlUnitTestCase {
      *
      * <p>Press the button for each model and execute doCarDetail() on
      * the result.</p>
-     *
-     *
-     */ 
-    
+     */
+
     public void doStoreFront(HtmlPage storeFront) throws Exception {
-	HtmlSubmitInput button = null;
-	HtmlTableDataCell cell = null;
-	String 
-	    description = null,
-	    moreButton = null;
-	Iterator iter = null;
-	boolean found = false;
-	int i;
+        HtmlSubmitInput button = null;
+        HtmlTableDataCell cell = null;
+        String
+            description = null,
+            moreButton = null;
+        Iterator iter = null;
+        boolean found = false;
+        int i;
 
-	assertNotNull(storeFront);
+        assertNotNull(storeFront);
 
-	List
-	    cells = getAllElementsOfGivenClass(storeFront, null, 
-					       HtmlTableDataCell.class),
-	    buttons = getAllElementsOfGivenClass(storeFront, null, 
-						 HtmlSubmitInput.class);
+        List
+            cells = getAllElementsOfGivenClass(storeFront, null,
+                                               HtmlTableDataCell.class),
+            buttons = getAllElementsOfGivenClass(storeFront, null,
+                                                 HtmlSubmitInput.class);
 
-	// verify the expected descriptions are present
+        // verify the expected descriptions are present
 
-	for (i = 0; i < carBundles.length; i++) {
-	    iter = cells.iterator();
-	    description = carBundles[i].getString("description").trim();
-	    while (iter.hasNext()) {
-		cell = (HtmlTableDataCell) iter.next();
-		if (-1 != cell.asText().indexOf(description)) {
-		    if (log.isTraceEnabled()) {
-			log.trace("Found description " + description + ".");
-		    }
-		    found = true;
-		    break;
-		}
-	    }
-	}
-	assertTrue("Did not find description: " + description, found);
+        for (i = 0; i < carBundles.length; i++) {
+            iter = cells.iterator();
+            description = carBundles[i].getString("description").trim();
+            while (iter.hasNext()) {
+                cell = (HtmlTableDataCell) iter.next();
+                if (-1 != cell.asText().indexOf(description)) {
+                    if (log.isTraceEnabled()) {
+                        log.trace("Found description " + description + ".");
+                    }
+                    found = true;
+                    break;
+                }
+            }
+        }
+        assertTrue("Did not find description: " + description, found);
 
-	iter = buttons.iterator();
-	moreButton = resources.getString("moreButton").trim();
-	while (iter.hasNext()) {
-	    button = (HtmlSubmitInput) iter.next();
-	    assertTrue(-1 != 
-		       button.asText().indexOf(moreButton));
-	    if (log.isTraceEnabled()) {
-		log.trace("Button text of " + moreButton + " confirmed.");
-	    }
-	    doCarDetail((HtmlPage) button.click());
-	}
-	
+        iter = buttons.iterator();
+        moreButton = resources.getString("moreButton").trim();
+        while (iter.hasNext()) {
+            button = (HtmlSubmitInput) iter.next();
+            assertTrue(-1 !=
+                       button.asText().indexOf(moreButton));
+            if (log.isTraceEnabled()) {
+                log.trace("Button text of " + moreButton + " confirmed.");
+            }
+            doCarDetail((HtmlPage) button.click());
+        }
+
     }
+
 
     /**
      * <p>Assumptions: Each of the package buttons causes an increase in
      * base price over the previous button, in order.</p>
-     *
-     *
      */
 
     public void doCarDetail(HtmlPage carDetail) throws Exception {
-	assertNotNull(carDetail);
-	int 
-	    previousPrice = 0,
-	    basePrice = getNumberNearLabel("basePriceLabel", carDetail),
-	    currentPrice = getNumberNearLabel("yourPriceLabel", carDetail);
-	List buttons = getAllElementsOfGivenClass(carDetail, null, 
-						  HtmlSubmitInput.class);
-	HtmlSubmitInput button = null;
-	int i = 0;
-	String label = null;
-	Iterator iter = null;
-	
-	assertEquals(basePrice, currentPrice);
+        assertNotNull(carDetail);
+        int
+            previousPrice = 0,
+            basePrice = getNumberNearLabel("basePriceLabel", carDetail),
+            currentPrice = getNumberNearLabel("yourPriceLabel", carDetail);
+        List buttons = getAllElementsOfGivenClass(carDetail, null,
+                                                  HtmlSubmitInput.class);
+        HtmlSubmitInput button = null;
+        int i = 0;
+        String label = null;
+        Iterator iter = null;
 
-	if (log.isTraceEnabled()) {
-	    log.trace("No package selected: base price: " + basePrice + 
-		      " current price: " + currentPrice);
-	}
-	
-	// press each of the package buttons and see that the price
-	// increases for each one.
-	for (i = 0; i < packageLabelKeys.length; i++) {
-	    previousPrice = currentPrice;
-	    iter = buttons.iterator();
-	    label = resources.getString(packageLabelKeys[i]).trim();
-	    while (iter.hasNext()) {
-		button = (HtmlSubmitInput) iter.next();
-		// if this is the button we're looking for
-		if (-1 != (button.asText().indexOf(label))) {
-		    // press it
-		    carDetail = (HtmlPage) button.click();
-		    // resample yourPrice
-		    currentPrice = getNumberNearLabel("yourPriceLabel", 
-						      carDetail);
-		    if (log.isTraceEnabled()) {
-			log.trace("Package: " + label + " currentPrice: " + 
-				  currentPrice);
-		    }
-		    
-		    assertTrue(previousPrice < currentPrice);
-		    break;
-		}
-	    }
-	}
+        assertEquals(basePrice, currentPrice);
 
-	// press the "performance" button and see that some of the
-	// checkboxes are disabled.
-	HtmlCheckBoxInput checkbox = null;
-	List checkboxes = null;
-	Iterator checkboxIter = null;
-	boolean foundDisabled = false;
-	String disabledValue = null;
-	iter = buttons.iterator();
-	while (iter.hasNext()) {
-	    button = (HtmlSubmitInput) iter.next();
-	    // 2 is the index for the "performance" label
-	    label = resources.getString(packageLabelKeys[2]).trim();
-	    // if this is the button we're looking for
-	    if (-1 != (button.asText().indexOf(label))) {
-		// press it
-		carDetail = (HtmlPage) button.click();
-		checkboxes = getAllElementsOfGivenClass(carDetail, null,
-							HtmlCheckBoxInput.class);
-		// verify that at least one of the checkboxes are
-		// disabled.
-		checkboxIter = checkboxes.iterator();
-		while (checkboxIter.hasNext()) {
-		    checkbox = (HtmlCheckBoxInput) checkboxIter.next();
-		    if (null != (disabledValue = 
-				 checkbox.getDisabledAttribute())) {
-			if (log.isTraceEnabled()) {
-			    log.trace("Checkbox disabled: " + disabledValue);
-			}
-			foundDisabled = true;
-		    }
-		    break;
-		}
-	    }
-	    if (foundDisabled) {
-		break;
-	    }
-	}
-	assertTrue(foundDisabled);
+        if (log.isTraceEnabled()) {
+            log.trace("No package selected: base price: " + basePrice +
+                      " current price: " + currentPrice);
+        }
+
+        // press each of the package buttons and see that the price
+        // increases for each one.
+        for (i = 0; i < packageLabelKeys.length; i++) {
+            previousPrice = currentPrice;
+            iter = buttons.iterator();
+            label = resources.getString(packageLabelKeys[i]).trim();
+            while (iter.hasNext()) {
+                button = (HtmlSubmitInput) iter.next();
+                // if this is the button we're looking for
+                if (-1 != (button.asText().indexOf(label))) {
+                    // press it
+                    carDetail = (HtmlPage) button.click();
+                    // resample yourPrice
+                    currentPrice = getNumberNearLabel("yourPriceLabel",
+                                                      carDetail);
+                    if (log.isTraceEnabled()) {
+                        log.trace("Package: " + label + " currentPrice: " +
+                                  currentPrice);
+                    }
+
+                    assertTrue(previousPrice < currentPrice);
+                    break;
+                }
+            }
+        }
+
+        // press the "performance" button and see that some of the
+        // checkboxes are disabled.
+        HtmlCheckBoxInput checkbox = null;
+        List checkboxes = null;
+        Iterator checkboxIter = null;
+        boolean foundDisabled = false;
+        String disabledValue = null;
+        iter = buttons.iterator();
+        while (iter.hasNext()) {
+            button = (HtmlSubmitInput) iter.next();
+            // 2 is the index for the "performance" label
+            label = resources.getString(packageLabelKeys[2]).trim();
+            // if this is the button we're looking for
+            if (-1 != (button.asText().indexOf(label))) {
+                // press it
+                carDetail = (HtmlPage) button.click();
+                checkboxes = getAllElementsOfGivenClass(carDetail, null,
+                                                        HtmlCheckBoxInput.class);
+                // verify that at least one of the checkboxes are
+                // disabled.
+                checkboxIter = checkboxes.iterator();
+                while (checkboxIter.hasNext()) {
+                    checkbox = (HtmlCheckBoxInput) checkboxIter.next();
+                    if (null != (disabledValue =
+                        checkbox.getDisabledAttribute())) {
+                        if (log.isTraceEnabled()) {
+                            log.trace("Checkbox disabled: " + disabledValue);
+                        }
+                        foundDisabled = true;
+                    }
+                    break;
+                }
+            }
+            if (foundDisabled) {
+                break;
+            }
+        }
+        assertTrue(foundDisabled);
     }
+
 
     protected int getNumberNearLabel(String label, HtmlPage page) {
-	List cells;
-	Iterator iter = null;
-	HtmlTableDataCell cell = null;
-	String yourPrice = null;
-	int result = Integer.MIN_VALUE;
-	
-	cells = getAllElementsOfGivenClass(page, null, 
-					   HtmlTableDataCell.class);
-	iter = cells.iterator();
-	yourPrice = resources.getString(label).trim();
-	// look in the current or next cell for the price data.
-	while (iter.hasNext()) {
-	    cell = (HtmlTableDataCell) iter.next();
-	    if (-1 != cell.asText().indexOf(yourPrice)) {
-		if (Integer.MIN_VALUE != 
-		    (result = extractNumberFromText(cell.asText().trim()))) {
-		    return result;
-		}
-		// try the next cell
-		cell = (HtmlTableDataCell) iter.next();
-		if (Integer.MIN_VALUE != 
-		    (result=extractNumberFromText(cell.asText().trim()))) {
-		    return result;
-		}
-	    }
-	}
-	return Integer.MIN_VALUE;
+        List cells;
+        Iterator iter = null;
+        HtmlTableDataCell cell = null;
+        String yourPrice = null;
+        int result = Integer.MIN_VALUE;
+
+        cells = getAllElementsOfGivenClass(page, null,
+                                           HtmlTableDataCell.class);
+        iter = cells.iterator();
+        yourPrice = resources.getString(label).trim();
+        // look in the current or next cell for the price data.
+        while (iter.hasNext()) {
+            cell = (HtmlTableDataCell) iter.next();
+            if (-1 != cell.asText().indexOf(yourPrice)) {
+                if (Integer.MIN_VALUE !=
+                    (result = extractNumberFromText(cell.asText().trim()))) {
+                    return result;
+                }
+                // try the next cell
+                cell = (HtmlTableDataCell) iter.next();
+                if (Integer.MIN_VALUE !=
+                    (result = extractNumberFromText(cell.asText().trim()))) {
+                    return result;
+                }
+            }
+        }
+        return Integer.MIN_VALUE;
     }
+
 
     protected int extractNumberFromText(String content) {
-	char [] chars = null;
-	chars = content.toCharArray();
-	String number = null;
-	int i,j;
-	for (i = 0; i < chars.length; i++) {
-	    if (Character.isDigit(chars[i])) {
-		for (j = i; j < chars.length; j++) {
-		    if (Character.isWhitespace(chars[j])) {
-			break;
-		    }
-		}
-		number = content.substring(i, j);
-		return Integer.valueOf(number).intValue();
-	    }
-	}
-	return Integer.MIN_VALUE;
+        char[] chars = null;
+        chars = content.toCharArray();
+        String number = null;
+        int i, j;
+        for (i = 0; i < chars.length; i++) {
+            if (Character.isDigit(chars[i])) {
+                for (j = i; j < chars.length; j++) {
+                    if (Character.isWhitespace(chars[j])) {
+                        break;
+                    }
+                }
+                number = content.substring(i, j);
+                return Integer.valueOf(number).intValue();
+            }
+        }
+        return Integer.MIN_VALUE;
     }
 
-			
-		
-	    
-    
+
 } // end of class DemoTest01
     

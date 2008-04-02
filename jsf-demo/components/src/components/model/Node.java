@@ -1,9 +1,9 @@
 /*
- * $Id: Node.java,v 1.2 2003/02/21 23:44:52 ofung Exp $
+ * $Id: Node.java,v 1.3 2004/02/05 16:22:48 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -91,36 +91,44 @@ public class Node {
      * entire tree.
      */
     protected Graph graph = null;
-    
+
+
     void setGraph(Graph graph) {
         this.graph = graph;
     }
-    
+
+
     public Graph getGraph() {
         return graph;
     }
 
-    /* 
+
+    /*
      * Node action (context-relative URL triggered when node selected)
      */
     private String action = null;
+
 
     public String getAction() {
         return (this.action);
     }
 
+
     public void setAction(String action) {
         this.action = action;
     }
-    
+
+
     private String icon = null;
 
-    /* 
+
+    /*
      * Icon for this node if any.
      */
     public String getIcon() {
         return (this.icon);
     }
+
 
     public void setIcon(String icon) {
         this.icon = icon;
@@ -140,6 +148,7 @@ public class Node {
      */
     private int depth = 1;
 
+
     public int getDepth() {
         return (this.depth);
     }
@@ -150,9 +159,11 @@ public class Node {
      */
     private boolean enabled = false;
 
+
     public boolean isEnabled() {
         return (this.enabled);
     }
+
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -164,9 +175,11 @@ public class Node {
      */
     private boolean expanded = false;
 
+
     public boolean isExpanded() {
         return (this.expanded);
     }
+
 
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
@@ -178,9 +191,11 @@ public class Node {
      */
     private String label = null;
 
+
     public String getLabel() {
         return (this.label);
     }
+
 
     public void setLabel(String label) {
         this.label = label;
@@ -192,9 +207,11 @@ public class Node {
      */
     private String name = null;
 
+
     public String getName() {
         return (this.name);
     }
+
 
     public void setName(String name) {
         this.name = name;
@@ -206,9 +223,11 @@ public class Node {
      */
     private Node parent = null;
 
+
     public Node getParent() {
         return (this.parent);
     }
+
 
     void setParent(Node parent) {
         this.parent = parent;
@@ -257,26 +276,33 @@ public class Node {
      */
     private boolean selected = false;
 
+
     public boolean isSelected() {
         return (this.selected);
     }
 
+
     void setSelected(boolean selected) {
         this.selected = selected;
     }
-   
+
+
     /**
      * Is this the last node in the set of children for our parent node?
      */
     protected boolean last = false;
+
+
     public boolean isLast() {
         return (this.last);
     }
 
+
     void setLast(boolean last) {
         this.last = last;
     }
-    
+
+
     /**
      * Is this a "leaf" node (i.e. one with no children)?
      */
@@ -290,7 +316,7 @@ public class Node {
 
     /**
      * Adds the specified node as a child of this node and sets this node
-     * as its parent. 
+     * as its parent.
      */
     public void addChild(Node child) {
         if (child.getParent() != null) {
@@ -298,14 +324,14 @@ public class Node {
         }
         // if graph is created after all the nodes are created, then
         // graph will be null.
-        if ( graph != null ) {
+        if (graph != null) {
             graph.addNode(child);
-        }    
+        }
         synchronized (children) {
             children.add(child);
         }
         child.setParent(this);
-        
+
         int n = children.size();
         if (n > 0) {
             Node node = (Node) children.get(n - 1);
@@ -323,9 +349,9 @@ public class Node {
         if (child.getParent() != null) {
             throw new IllegalArgumentException("Child already has a parent");
         }
-        if ( graph != null ) {
+        if (graph != null) {
             graph.addNode(child);
-        }    
+        }
         synchronized (children) {
             children.add(offset, child);
         }
@@ -336,7 +362,7 @@ public class Node {
     /**
      * Returns the node with the specified name by looking up
      * by child list. If node is not found returns <code>null</code>
-     */ 
+     */
     public Node findChild(String name) {
         int n = children.size();
         for (int i = 0; i < n; i++) {
@@ -356,12 +382,14 @@ public class Node {
         return (children.iterator());
     }
 
+
     /**
      * Removes the specified node from the child list of this node.
      */
     public void removeChild(Node child) {
         if (child.getParent() != this) {
-            throw new IllegalArgumentException("Child not related to this node");
+            throw new IllegalArgumentException(
+                "Child not related to this node");
         }
         synchronized (children) {
             children.remove(child);

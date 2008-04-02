@@ -1,9 +1,9 @@
 /*
- * $Id: RepeaterRenderer.java,v 1.2 2003/12/17 15:19:09 rkitain Exp $
+ * $Id: RepeaterRenderer.java,v 1.3 2004/02/05 16:22:57 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,17 +43,14 @@
 package components.renderkit;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 
 /**
@@ -75,10 +72,10 @@ public class RepeaterRenderer extends BaseRenderer {
     /**
      * <p>Render the beginning of the table for our associated data.</p>
      *
-     * @param context <code>FacesContext</code> for the current request
+     * @param context   <code>FacesContext</code> for the current request
      * @param component <code>UIComponent</code> being rendered
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      */
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
@@ -97,10 +94,10 @@ public class RepeaterRenderer extends BaseRenderer {
     /**
      * <p>Render the body rows of the table for our associated data.</p>
      *
-     * @param context <code>FacesContext</code> for the current request
+     * @param context   <code>FacesContext</code> for the current request
      * @param component <code>UIComponent</code> being rendered
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      */
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
@@ -140,10 +137,10 @@ public class RepeaterRenderer extends BaseRenderer {
     /**
      * <p>Render the ending of the table for our associated data.</p>
      *
-     * @param context <code>FacesContext</code> for the current request
+     * @param context   <code>FacesContext</code> for the current request
      * @param component <code>UIComponent</code> being rendered
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      */
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
@@ -244,8 +241,8 @@ public class RepeaterRenderer extends BaseRenderer {
      * default implementation renders <code>&lt;tr&gt;</code>.</p>
      *
      * @param context <code>FacesContext</code> for the current request
-     * @param data <code>UIData</code> being rendered
-     * @param writer <code>ResponseWriter</code> to render to
+     * @param data    <code>UIData</code> being rendered
+     * @param writer  <code>ResponseWriter</code> to render to
      *
      * @excepton IOException if an input/output error occurs
      */
@@ -265,8 +262,8 @@ public class RepeaterRenderer extends BaseRenderer {
      * and <code>&lt;/td&gt;</code>.</p>
      *
      * @param context <code>FacesContext</code> for the current request
-     * @param data <code>UIData</code> being rendered
-     * @param writer <code>ResponseWriter</code> to render to
+     * @param data    <code>UIData</code> being rendered
+     * @param writer  <code>ResponseWriter</code> to render to
      *
      * @excepton IOException if an input/output error occurs
      */
@@ -302,8 +299,8 @@ public class RepeaterRenderer extends BaseRenderer {
      * default implementation renders <code>&lt;/tr&gt;</code>.</p>
      *
      * @param context <code>FacesContext</code> for the current request
-     * @param data <code>UIData</code> being rendered
-     * @param writer <code>ResponseWriter</code> to render to
+     * @param data    <code>UIData</code> being rendered
+     * @param writer  <code>ResponseWriter</code> to render to
      *
      * @excepton IOException if an input/output error occurs
      */
@@ -322,16 +319,16 @@ public class RepeaterRenderer extends BaseRenderer {
      * <ul>
      * <li>A <code>&lt;table&gt;</code> element.</li>
      * <li>If the <code>UIData</code> component has a facet named
-     *     <code>header</code>, render it in a table row with a
-     *     <code>colspan</code> set to span all the columns in the table.</li>
+     * <code>header</code>, render it in a table row with a
+     * <code>colspan</code> set to span all the columns in the table.</li>
      * <li>If any of the child <code>UIColumn</code> components has a facet
-     *     named <code>header</code>, render them in a table row with a
-     *     each header in a <code>&lt;th&gt;</code> element.</li>
+     * named <code>header</code>, render them in a table row with a
+     * each header in a <code>&lt;th&gt;</code> element.</li>
      * </ul>
      *
      * @param context <code>FacesContext</code> for the current request
-     * @param data <code>UIData</code> being rendered
-     * @param writer <code>ResponseWriter</code> to render to
+     * @param data    <code>UIData</code> being rendered
+     * @param writer  <code>ResponseWriter</code> to render to
      *
      * @excepton IOException if an input/output error occurs
      */
@@ -403,17 +400,17 @@ public class RepeaterRenderer extends BaseRenderer {
      * default implementation renders:</p>
      * <ul>
      * <li>If any of the child <code>UIColumn</code> components has a facet
-     *     named <code>footer</code>, render them in a table row with a
-     *     each footer in a <code>&lt;th&gt;</code> element.</li>
+     * named <code>footer</code>, render them in a table row with a
+     * each footer in a <code>&lt;th&gt;</code> element.</li>
      * <li>If the <code>UIData</code> component has a facet named
-     *     <code>footer</code>, render it in a table row with a
-     *     <code>colspan</code> set to span all the columns in the table.</li>
+     * <code>footer</code>, render it in a table row with a
+     * <code>colspan</code> set to span all the columns in the table.</li>
      * <li>A <code>&lt;/table&gt;</code> element.</li>
      * </ul>
      *
      * @param context <code>FacesContext</code> for the current request
-     * @param data <code>UIData</code> being rendered
-     * @param writer <code>ResponseWriter</code> to render to
+     * @param data    <code>UIData</code> being rendered
+     * @param writer  <code>ResponseWriter</code> to render to
      *
      * @excepton IOException if an input/output error occurs
      */

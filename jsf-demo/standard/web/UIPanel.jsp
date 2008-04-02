@@ -1,5 +1,5 @@
 <!--
- Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 
-<%-- $Id: UIPanel.jsp,v 1.4 2004/01/27 21:31:42 eburns Exp $ --%>
+<%-- $Id: UIPanel.jsp,v 1.5 2004/02/05 16:25:19 rlubke Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <f:view>  

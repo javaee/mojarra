@@ -1,9 +1,9 @@
 /*
- * $Id: CustomerBean.java,v 1.2 2003/10/17 03:53:46 eburns Exp $
+ * $Id: CustomerBean.java,v 1.3 2004/02/05 16:25:02 rlubke Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -16,7 +16,7 @@ import java.io.Serializable;
 /**
  * <p>JavaBean represented the data for an individual customer.</p>
  *
- * @version $Id: CustomerBean.java,v 1.2 2003/10/17 03:53:46 eburns Exp $
+ * @version $Id: CustomerBean.java,v 1.3 2004/02/05 16:25:02 rlubke Exp $
  */
 
 public class CustomerBean implements Serializable {
@@ -39,9 +39,11 @@ public class CustomerBean implements Serializable {
 
     private String accountId = null;
 
+
     public String getAccountId() {
         return (this.accountId);
     }
+
 
     public void setAccountId(String accountId) {
         this.accountId = accountId;
@@ -50,9 +52,11 @@ public class CustomerBean implements Serializable {
 
     private String name = null;
 
+
     public String getName() {
         return (this.name);
     }
+
 
     public void setName(String name) {
         System.err.println("setName(" + accountId + "," + this.name +
@@ -63,9 +67,11 @@ public class CustomerBean implements Serializable {
 
     private String symbol = null;
 
+
     public String getSymbol() {
         return (this.symbol);
     }
+
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
@@ -74,9 +80,11 @@ public class CustomerBean implements Serializable {
 
     private double totalSales = 0.0;
 
+
     public double getTotalSales() {
         return (this.totalSales);
     }
+
 
     public void setTotalSales(double totalSales) {
         this.totalSales = totalSales;

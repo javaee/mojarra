@@ -1,9 +1,9 @@
 /*
- * $Id: LogValueChangedListener.java,v 1.4 2003/12/17 15:19:57 rkitain Exp $
+ * $Id: LogValueChangedListener.java,v 1.5 2004/02/05 16:25:04 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -44,7 +44,6 @@ package standard;
 
 
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 
@@ -65,23 +64,23 @@ public class LogValueChangedListener implements ValueChangeListener {
      */
     public void processValueChange(ValueChangeEvent event) {
 
-	FacesContext context = FacesContext.getCurrentInstance();
-	append(context, "ValueChangeEvent(" +
-	       event.getComponent().getClientId(context) + "," +
-	       event.getOldValue() + "," + event.getNewValue() + ")");
+        FacesContext context = FacesContext.getCurrentInstance();
+        append(context, "ValueChangeEvent(" +
+                        event.getComponent().getClientId(context) + "," +
+                        event.getOldValue() + "," + event.getNewValue() + ")");
 
     }
 
 
     private void append(FacesContext context, String value) {
 
-	String message = (String)
-	    context.getExternalContext().getRequestMap().get("message");
-	if (message == null) {
-	    message = "";
-	}
-	message += "<li>" + value + "</li>";
-	context.getExternalContext().getRequestMap().put("message", message);
+        String message = (String)
+            context.getExternalContext().getRequestMap().get("message");
+        if (message == null) {
+            message = "";
+        }
+        message += "<li>" + value + "</li>";
+        context.getExternalContext().getRequestMap().put("message", message);
 
     }
 

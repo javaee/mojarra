@@ -1,9 +1,9 @@
 /*
- * $Id: GraphMenuBarTag.java,v 1.10 2003/12/17 15:19:15 rkitain Exp $
+ * $Id: GraphMenuBarTag.java,v 1.11 2004/02/05 16:23:14 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -45,16 +45,13 @@ package components.taglib;
 
 import components.components.GraphComponent;
 import components.model.Graph;
-import components.renderkit.Util;
+
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
-import javax.faces.webapp.UIComponentTag;
-
-import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
+import javax.faces.webapp.UIComponentTag;
 
 
 /**
@@ -72,23 +69,26 @@ public class GraphMenuBarTag extends UIComponentTag {
     protected String unselectedClass = null;
     protected String value = null;
     protected String immediate = null;
-    
+
+
     /**
-     * Optional method reference to handle menu expansion and contraction 
+     * Optional method reference to handle menu expansion and contraction
      * events.
      */
     public void setActionListener(String actionListener) {
         this.actionListener = actionListener;
     }
-    
+
+
     /**
      * Value Binding reference expression that points to a Graph in scoped
      * namespace.
      */
     public void setValue(String newValue) {
-	value = newValue;
+        value = newValue;
     }
-    
+
+
     /**
      * The CSS style <code>class</code> to be applied to the text
      * of selected nodes. This can be value or a value binding reference
@@ -97,6 +97,7 @@ public class GraphMenuBarTag extends UIComponentTag {
     public void setSelectedClass(String styleSelected) {
         this.selectedClass = styleSelected;
     }
+
 
     /**
      * The CSS style <code>class</code> to be applied to the text
@@ -107,6 +108,7 @@ public class GraphMenuBarTag extends UIComponentTag {
         this.unselectedClass = styleUnselected;
     }
 
+
     /**
      * The CSS style <code>class</code> to be applied to the entire menu.
      * This can be value or a value binding reference expression.
@@ -115,40 +117,46 @@ public class GraphMenuBarTag extends UIComponentTag {
         this.styleClass = style;
     }
 
+
     /**
      * A flag indicating that the default ActionListener should execute
-     * immediately (that is, during the Apply Request Values phase of the 
-     * request processing lifecycle, instead of waiting for Invoke 
+     * immediately (that is, during the Apply Request Values phase of the
+     * request processing lifecycle, instead of waiting for Invoke
      * Application phase). The default value of this property must be false.
      * This can be value or a value binding reference expression.
      */
     public void setImmediate(java.lang.String immediate) {
         this.immediate = immediate;
     }
-    
+
+
     public String getComponentType() {
         return ("Graph");
     }
-  
+
+
     public String getRendererType() {
         return ("MenuBar");
     }
-  
+
+
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
         FacesContext context = FacesContext.getCurrentInstance();
         ValueBinding vb = null;
-        
-        GraphComponent graphComponent = (GraphComponent)component;
-        
+
+        GraphComponent graphComponent = (GraphComponent) component;
+
         if (actionListener != null) {
             if (isValueReference(actionListener)) {
-                Class args[] = { ActionEvent.class };
-                MethodBinding mb = FacesContext.getCurrentInstance().getApplication().createMethodBinding(actionListener, args);
+                Class args[] = {ActionEvent.class};
+                MethodBinding mb = FacesContext.getCurrentInstance()
+                    .getApplication()
+                    .createMethodBinding(actionListener, args);
                 graphComponent.setActionListener(mb);
             } else {
-              Object params [] = {actionListener};
-              throw new javax.faces.FacesException();
+                Object params [] = {actionListener};
+                throw new javax.faces.FacesException();
             }
         }
         // if the attributes are values set them directly on the component, if
@@ -164,21 +172,26 @@ public class GraphMenuBarTag extends UIComponentTag {
         }
         if (selectedClass != null) {
             if (isValueReference(selectedClass)) {
-                vb = context.getApplication().createValueBinding(selectedClass);
+                vb =
+                    context.getApplication().createValueBinding(selectedClass);
                 graphComponent.setValueBinding("selectedClass", vb);
             } else {
-                graphComponent.getAttributes().put("selectedClass", selectedClass);
+                graphComponent.getAttributes().put("selectedClass",
+                                                   selectedClass);
             }
         }
         if (unselectedClass != null) {
             if (isValueReference(unselectedClass)) {
-                vb = context.getApplication().createValueBinding(unselectedClass);
+                vb =
+                    context.getApplication().createValueBinding(
+                        unselectedClass);
                 graphComponent.setValueBinding("unselectedClass", vb);
             } else {
-                graphComponent.getAttributes().put("unselectedClass", unselectedClass);
+                graphComponent.getAttributes().put("unselectedClass",
+                                                   unselectedClass);
             }
         }
-        
+
         if (immediate != null) {
             if (isValueReference(immediate)) {
                 vb = context.getApplication().createValueBinding(immediate);
@@ -188,27 +201,29 @@ public class GraphMenuBarTag extends UIComponentTag {
                 graphComponent.setImmediate(_immediate);
             }
         }
-        
+
         if (value != null) {
             // if the value is not value reference expression, we need
             // to build the graph using the nested node tags.
             if (isValueReference(value)) {
-               vb = context.getApplication().createValueBinding(value);
-               component.setValueBinding("value", vb);
+                vb = context.getApplication().createValueBinding(value);
+                component.setValueBinding("value", vb);
             }
         }
-        
-        if ( value == null ) {
-            vb = context.getApplication().createValueBinding("#{sessionScope.graph_menu}");
+
+        if (value == null) {
+            vb =
+                context.getApplication().createValueBinding(
+                    "#{sessionScope.graph_menu}");
             component.setValueBinding("value", vb); 
            
             // In the postback case, graph exists already. So make sure
             // it doesn't created again.
-            Graph graph = (Graph) ((GraphComponent)component).getValue();
-            if ( graph == null ) {
+            Graph graph = (Graph) ((GraphComponent) component).getValue();
+            if (graph == null) {
                 graph = new Graph();
                 vb.setValue(context, graph);
-            }     
-        } 
+            }
+        }
     }
 }

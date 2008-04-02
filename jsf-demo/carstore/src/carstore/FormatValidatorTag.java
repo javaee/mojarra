@@ -1,9 +1,9 @@
 /*
- * $Id: FormatValidatorTag.java,v 1.2 2003/12/17 15:17:51 rkitain Exp $
+ * $Id: FormatValidatorTag.java,v 1.3 2004/02/05 16:21:09 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,17 +43,17 @@
 package carstore;
 
 
-import javax.faces.webapp.ValidatorTag;
 import javax.faces.validator.Validator;
+import javax.faces.webapp.ValidatorTag;
 import javax.servlet.jsp.JspException;
 
 /**
  * FormatValidatorTag is the tag handler class for FormatValidator tag,
  * <code>format_validator</code>.
- *
  */
 
 public class FormatValidatorTag extends ValidatorTag {
+
     //
     // Protected Constants
     //
@@ -93,19 +93,19 @@ public class FormatValidatorTag extends ValidatorTag {
         return formatPatterns;
     }
 
-    public void setFormatPatterns(String fmtPatterns){
-       formatPatterns = fmtPatterns;
+
+    public void setFormatPatterns(String fmtPatterns) {
+        formatPatterns = fmtPatterns;
     }
 
     // 
     // Methods from ValidatorTag
     // 
 
-    protected Validator createValidator() throws JspException
-    {
+    protected Validator createValidator() throws JspException {
         FormatValidator result = null;
         result = (FormatValidator) super.createValidator();
-        
+
         result.setFormatPatterns(formatPatterns);
         return result;
     }

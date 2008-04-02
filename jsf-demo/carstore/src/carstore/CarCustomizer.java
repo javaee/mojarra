@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -42,23 +42,19 @@ package carstore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Collections;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
-import javax.faces.convert.Converter;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+
+import java.util.Enumeration;
+import java.util.ResourceBundle;
 
 /**
  * <p>A helper class that customizes a CarBean for a set of options
  * in a package.</p>
  *
  * <p>This class reads its settings from a Properties file</p>
- *
  */
 
 public class CarCustomizer extends Object {
@@ -70,93 +66,98 @@ public class CarCustomizer extends Object {
     //
 
     private ResourceBundle bundle = null;
-    
+
+
     public CarCustomizer() {
-	this.init(CarStore.DEFAULT_PACKAGE_PROPERTIES);
+        this.init(CarStore.DEFAULT_PACKAGE_PROPERTIES);
     }
+
 
     public CarCustomizer(String bundleName) {
-	this.init(bundleName);
+        this.init(bundleName);
     }
 
+
     private void init(String bundleName) {
-	FacesContext context = FacesContext.getCurrentInstance();
-	
-	if (log.isDebugEnabled()) {
-	    log.debug("Loading bundle: " + bundleName + ".");
-	}
-	bundle = ResourceBundle.getBundle(bundleName);
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (log.isDebugEnabled()) {
+            log.debug("Loading bundle: " + bundleName + ".");
+        }
+        bundle = ResourceBundle.getBundle(bundleName);
     }
+
 
     private String buttonStyle = null;
 
+
     public String getButtonStyle() {
-	return buttonStyle;
+        return buttonStyle;
     }
+
 
     public void setButtonStyle(String newButtonStyle) {
-	buttonStyle = newButtonStyle;
+        buttonStyle = newButtonStyle;
     }
 
+
     public void customizeCar(CarBean toCustomize) {
-	FacesContext context = FacesContext.getCurrentInstance();
-	Enumeration keys = bundle.getKeys();
-	String 
-	    key = null,
-	    disabledStr = null,
-	    curSetting = null;
-	Boolean disabled = null;
-	UIComponent component = null;
-	Converter converter = null;
-	Object valueToSet = null;
-	
-	while (keys.hasMoreElements()) {
-	    key = (String) keys.nextElement();
-	    // skip null and secondary keys.
-	    if (key == null || -1 != key.indexOf("_")) {
-		continue;
-	    }
-	    // skip null values
-	    if (null == (curSetting = bundle.getString(key))) {
-		continue;
-	    }
+        FacesContext context = FacesContext.getCurrentInstance();
+        Enumeration keys = bundle.getKeys();
+        String
+            key = null,
+            disabledStr = null,
+            curSetting = null;
+        Boolean disabled = null;
+        UIComponent component = null;
+        Converter converter = null;
+        Object valueToSet = null;
 
-	    // skip null components
-	    if (null == 
-		(component = 
-		 (UIComponent)toCustomize.getComponents().get(key))) {
-		continue;
-	    }
+        while (keys.hasMoreElements()) {
+            key = (String) keys.nextElement();
+            // skip null and secondary keys.
+            if (key == null || -1 != key.indexOf("_")) {
+                continue;
+            }
+            // skip null values
+            if (null == (curSetting = bundle.getString(key))) {
+                continue;
+            }
 
-	    // handle the disabled setting, if necessary
-	    disabled = null;
-	    try {
-		if (null !=(disabledStr=bundle.getString(key + "_disabled"))) {
-		    disabled = Boolean.valueOf(disabledStr);
-		}
-	    }
-	    catch (Throwable e) {
-	    }
-	    if (null != disabled) {
-		component.getAttributes().put("disabled", disabled);
-	    }
+            // skip null components
+            if (null ==
+                (component =
+                (UIComponent) toCustomize.getComponents().get(key))) {
+                continue;
+            }
 
-	    // set the value
-	    // If the component can and does have a converter
-	    if (component instanceof ValueHolder &&
-		(null != (converter = 
-			 ((ValueHolder)component).getConverter()))){
-		valueToSet = converter.getAsObject(context, component, 
-						   curSetting);
-	    }
-	    else {
-		valueToSet = curSetting;
-	    }
+            // handle the disabled setting, if necessary
+            disabled = null;
+            try {
+                if (null != (disabledStr = bundle.getString(key + "_disabled"))) {
+                    disabled = Boolean.valueOf(disabledStr);
+                }
+            } catch (Throwable e) {
+            }
+            if (null != disabled) {
+                component.getAttributes().put("disabled", disabled);
+            }
 
-	    if (component instanceof ValueHolder) {
-		((ValueHolder)component).setValue(valueToSet);
-	    }
-	}
+            // set the value
+            // If the component can and does have a converter
+            if (component instanceof ValueHolder &&
+                (null != (converter =
+                ((ValueHolder) component).getConverter()))) {
+                valueToSet = converter.getAsObject(context, component,
+                                                   curSetting);
+            } else {
+                valueToSet = curSetting;
+            }
+
+            if (component instanceof ValueHolder) {
+                ((ValueHolder) component).setValue(valueToSet);
+            }
+        }
     }
 }
 	

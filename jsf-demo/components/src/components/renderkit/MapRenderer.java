@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -40,11 +40,12 @@ package components.renderkit;
 
 
 import components.components.MapComponent;
-import java.io.IOException;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
+
+import java.io.IOException;
 
 
 /**
@@ -61,7 +62,7 @@ public class MapRenderer extends BaseRenderer {
      * <p>Decode the incoming request parameters to determine which
      * hotspot (if any) has been selected.</p>
      *
-     * @param context <code>FacesContext</code>for the current request
+     * @param context   <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
      */
     public void decode(FacesContext context, UIComponent component) {
@@ -84,7 +85,7 @@ public class MapRenderer extends BaseRenderer {
     /**
      * <p>Encode the beginning of this component.</p>
      *
-     * @param context <code>FacesContext</code>for the current request
+     * @param context   <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
      */
     public void encodeBegin(FacesContext context, UIComponent component)
@@ -105,7 +106,7 @@ public class MapRenderer extends BaseRenderer {
     /**
      * <p>Encode the children of this component.</p>
      *
-     * @param context <code>FacesContext</code>for the current request
+     * @param context   <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
      */
     public void encodeChildren(FacesContext context, UIComponent component)
@@ -121,7 +122,7 @@ public class MapRenderer extends BaseRenderer {
     /**
      * <p>Encode the ending of this component.</p>
      *
-     * @param context <code>FacesContext</code>for the current request
+     * @param context   <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
      */
     public void encodeEnd(FacesContext context, UIComponent component)
@@ -148,7 +149,7 @@ public class MapRenderer extends BaseRenderer {
     /**
      * <p>Return the calculated name for the hidden input field.</p>
      *
-     * @param context Context for the current request
+     * @param context   Context for the current request
      * @param component Component we are rendering
      */
     private String getName(FacesContext context, UIComponent component) {

@@ -1,9 +1,9 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.16 2004/01/27 21:31:20 eburns Exp $
+ * $Id: MenuBarRenderer.java,v 1.17 2004/02/05 16:22:56 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -46,22 +46,19 @@ package components.renderkit;
 import components.components.GraphComponent;
 import components.model.Graph;
 import components.model.Node;
-
-import java.util.Map;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.event.ActionEvent;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
-import javax.servlet.http.HttpServletResponse;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.event.ActionEvent;
+
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * <p>Render our current value (which must be a <code>Graph</code>)
@@ -74,8 +71,8 @@ import javax.servlet.http.HttpServletResponse;
 public class MenuBarRenderer extends BaseRenderer {
 
     public static final String URL_PREFIX = "/faces";
-    public final static String FORM_NUMBER_ATTR = 
-	"com.sun.faces.FormNumber";
+    public final static String FORM_NUMBER_ATTR =
+        "com.sun.faces.FormNumber";
 
     private static Log log = LogFactory.getLog(MenuBarRenderer.class);
 
@@ -85,35 +82,37 @@ public class MenuBarRenderer extends BaseRenderer {
     protected String clientId = null;
     protected UIComponent component = null;
     protected FacesContext context = null;
-    
+
+
     public void decode(FacesContext context, UIComponent component) {
-            
+
         Graph graph = null;
   
         // if a node was clicked queue an ActionEvent.
         Map requestParameterMap = (Map) context.getExternalContext().
-                getRequestParameterMap();
+            getRequestParameterMap();
         String path = (String) requestParameterMap.
-                get(component.getClientId(context));
+            get(component.getClientId(context));
         if (path != null && path.length() != 0) {
             component.getAttributes().put("path", path);
             component.queueEvent(new ActionEvent(component));
             if (log.isTraceEnabled()) {
                 log.trace("ActionEvent queued on Graph component for " + path);
             }
-            
-        }    
+
+        }
     }
+
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         Graph graph = null;
         // Acquire the root node of the graph representing the menu
-        graph = (Graph) ((GraphComponent)component).getValue();
+        graph = (Graph) ((GraphComponent) component).getValue();
         if (graph == null) {
             throw new FacesException("Graph could not be located");
         }
-        
+
         Node root = graph.getRoot();
         if (root == null) {
             throw new FacesException("Graph has no root node");
@@ -125,10 +124,11 @@ public class MenuBarRenderer extends BaseRenderer {
         this.component = component;
         this.context = context;
         clientId = component.getClientId(context);
-     
-        treeClass = (String)component.getAttributes().get("menuClass");
-        selectedClass = (String)component.getAttributes().get("selectedClass");
-        unselectedClass = (String)component.getAttributes().get("unselectedClass");
+
+        treeClass = (String) component.getAttributes().get("menuClass");
+        selectedClass = (String) component.getAttributes().get("selectedClass");
+        unselectedClass =
+            (String) component.getAttributes().get("unselectedClass");
         
         // Render the menu bar for this graph
         Iterator menus = null;
@@ -166,8 +166,9 @@ public class MenuBarRenderer extends BaseRenderer {
         menus = root.getChildren();
         while (menus.hasNext()) {
             Node menu = (Node) menus.next();
-            writer.write("<td bgcolor=\"silver\" align=\"left\" valign=\"top\">");
-           
+            writer.write(
+                "<td bgcolor=\"silver\" align=\"left\" valign=\"top\">");
+
             if (menu.isExpanded()) {
                 writer.write("<ul>");
                 Iterator items = menu.getChildren();
@@ -181,15 +182,15 @@ public class MenuBarRenderer extends BaseRenderer {
                         String labelStyle = null;
                         if (node.isSelected() && (selectedClass != null)) {
                             labelStyle = selectedClass;
-                        }    
-                        else if (!node.isSelected() && (unselectedClass != null)) {
+                        } else if (!node.isSelected() &&
+                            (unselectedClass != null)) {
                             labelStyle = unselectedClass;
-                        }    
+                        }
                         if (node.isEnabled()) {
                             writer.write("<a href=\"");
-                             // Note: we assume that the links do not act as 
-                             // command button, meaning they do not cause the
-                             // form to be submitted.
+                            // Note: we assume that the links do not act as
+                            // command button, meaning they do not cause the
+                            // form to be submitted.
                             writer.write(href(node.getAction()));
                             writer.write("\"");
                             if (labelStyle != null) {
@@ -208,7 +209,7 @@ public class MenuBarRenderer extends BaseRenderer {
                             writer.write("</a>");
                         } else if (labelStyle != null) {
                             writer.write("</span>");
-                        }    
+                        }
                     }
                     writer.write("</li>");
                     // PENDING - marker for submenu
@@ -225,6 +226,7 @@ public class MenuBarRenderer extends BaseRenderer {
 
     }
 
+
     /**
      * Returns a string that is rendered as the value of
      * onmousedown attribute. onmousedown event handler is used
@@ -232,15 +234,16 @@ public class MenuBarRenderer extends BaseRenderer {
      * the form so that we have the state information to reconstitute the tree.
      */
     protected String getSubmitScript(String path, FacesContext context) {
-         UIForm uiform = getMyForm();
-         String formClientId = uiform.getClientId(context);
-         StringBuffer sb = new StringBuffer();
-         sb.append("#\" onclick=\"document.forms['" + formClientId + "']['" + 
-		     clientId + "'].value='" + path + 
-		     "';document.forms['" + formClientId + "'].submit()\"");
-         return sb.toString();
-    }     
-    
+        UIForm uiform = getMyForm();
+        String formClientId = uiform.getClientId(context);
+        StringBuffer sb = new StringBuffer();
+        sb.append("#\" onclick=\"document.forms['" + formClientId + "']['" +
+                  clientId + "'].value='" + path +
+                  "';document.forms['" + formClientId + "'].submit()\"");
+        return sb.toString();
+    }
+
+
     /**
      * Returns the parent form of graph component.
      */
@@ -252,8 +255,9 @@ public class MenuBarRenderer extends BaseRenderer {
             }
             parent = parent.getParent();
         }
-	return (UIForm) parent;
+        return (UIForm) parent;
     }
+
 
     /**
      * Returns a string that is rendered as the value of
@@ -265,7 +269,7 @@ public class MenuBarRenderer extends BaseRenderer {
         if (action != null && !(action.startsWith("/"))) {
             return action;
         }
-       
+
         StringBuffer sb = new StringBuffer();
         if (action.startsWith("/")) {
             sb.append(context.getExternalContext().getRequestContextPath());

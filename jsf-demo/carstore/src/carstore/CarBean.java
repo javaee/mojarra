@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -39,28 +39,27 @@
 
 package carstore;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.component.ValueHolder;
 import javax.faces.component.UISelectItems;
-import javax.faces.convert.Converter;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.application.Application;
+import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
-import java.util.ResourceBundle;
-import java.util.ArrayList;
-import java.util.MissingResourceException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.StringTokenizer;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -170,7 +169,6 @@ public class CarBean extends Object {
     /**
      * Keys: String attribute name, such as engine. Values: UIComponent
      * for the attribute
-     *
      */
 
     private Map components = null;
@@ -187,12 +185,14 @@ public class CarBean extends Object {
     //
 
     public CarBean() {
-	this.init(CarStore.DEFAULT_MODEL_PROPERTIES);
+        this.init(CarStore.DEFAULT_MODEL_PROPERTIES);
     }
-    
+
+
     public CarBean(String bundleName) {
-	this.init(bundleName);
+        this.init(bundleName);
     }
+
 
     /**
      * <p>Initialize our components <code>Map</code> as described in the
@@ -202,265 +202,289 @@ public class CarBean extends Object {
      * <code>Map</code> that exposes the String converted value of each
      * component.</p>
      */
-    
+
     private void init(String bundleName) {
-	FacesContext context = FacesContext.getCurrentInstance();
-	ResourceBundle data = null;
-	Enumeration keys = null;
-	components = new HashMap();
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResourceBundle data = null;
+        Enumeration keys = null;
+        components = new HashMap();
 
-	// load the labels
-	resources = ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
-					     ".bundles.Resources", 
-				     context.getViewRoot().getLocale());
+        // load the labels
+        resources = ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
+                                             ".bundles.Resources",
+                                             context.getViewRoot().getLocale());
 
-	// load the prices
-	priceData = ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
-					     ".bundles.OptionPrices");
-	
-	// populate the locale-specific information
-	if (log.isDebugEnabled()) {
-	    log.debug("Loading bundle: " + bundleName + ".");
-	}
-	data = ResourceBundle.getBundle(bundleName, 
-					context.getViewRoot().getLocale());
-	if (log.isDebugEnabled()) {
-	    log.debug("Bundle " + bundleName + 
-		      " loaded. Reading properties...");
-	}
-	initComponentsFromProperties(context, data);
-	if (log.isDebugEnabled()) {
-	    log.debug("done.");
-	}
+        // load the prices
+        priceData = ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
+                                             ".bundles.OptionPrices");
 
-	// populate the non-locale-specific information common to all cars
-	if (log.isDebugEnabled()) {
-	    log.debug("Loading bundle: Common_options.");
-	}
-	data = ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX + 
-					".bundles.Common_options");
-	if (log.isDebugEnabled()) {
-	    log.debug("Bundle Common_options loaded. Reading properties...");
-	}
-	initComponentsFromProperties(context, data);
-	if (log.isDebugEnabled()) {
-	    log.debug("done.");
-	}
+        // populate the locale-specific information
+        if (log.isDebugEnabled()) {
+            log.debug("Loading bundle: " + bundleName + ".");
+        }
+        data = ResourceBundle.getBundle(bundleName,
+                                        context.getViewRoot().getLocale());
+        if (log.isDebugEnabled()) {
+            log.debug("Bundle " + bundleName +
+                      " loaded. Reading properties...");
+        }
+        initComponentsFromProperties(context, data);
+        if (log.isDebugEnabled()) {
+            log.debug("done.");
+        }
 
-	// populate the non-locale-specific information specific to each car
-	if (log.isDebugEnabled()) {
-	    log.debug("Loading bundle: " + bundleName + "_options.");
-	}
-	data = ResourceBundle.getBundle(bundleName + "_options");
-	if (log.isDebugEnabled()) {
-	    log.debug("Bundle " + bundleName + 
-		      "_options loaded. Reading properties...");
-	}
-	initComponentsFromProperties(context, data);
-	if (log.isDebugEnabled()) {
-	    log.debug("done.");
-	}
+        // populate the non-locale-specific information common to all cars
+        if (log.isDebugEnabled()) {
+            log.debug("Loading bundle: Common_options.");
+        }
+        data = ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
+                                        ".bundles.Common_options");
+        if (log.isDebugEnabled()) {
+            log.debug("Bundle Common_options loaded. Reading properties...");
+        }
+        initComponentsFromProperties(context, data);
+        if (log.isDebugEnabled()) {
+            log.debug("done.");
+        }
 
-	// create a read-only Map exposing the values of all of our
-	// components.
-	attributes = 
-	    new Map() {
-		public void clear() { 
-		    CarBean.this.components.clear(); 
-		}
-		public boolean containsKey(Object key) {
-		    return CarBean.this.components.containsKey(key);
-		}
-		public boolean containsValue(Object value) {
-		    throw new UnsupportedOperationException();
-		}
-		public java.util.Set entrySet() { 
-		    throw new UnsupportedOperationException();
-		}
-		public boolean equals(Object o) {
-		    throw new UnsupportedOperationException();
-		}
-		public Object get(Object key) {
-		    UIComponent component = null;
-		    Converter converter = null;
-		    Object result = null;
-		    if (null == key) {
-			return null;
-		    }
-		    if (null != (component = (UIComponent) 
-				 CarBean.this.components.get(key))) {
-			// if this component can have a Converter
-			if (component instanceof ValueHolder) {
-			    // try to get it
-			    converter = ((ValueHolder)component).
-				getConverter();
-			    result = ((ValueHolder)component).getValue();
-			}
+        // populate the non-locale-specific information specific to each car
+        if (log.isDebugEnabled()) {
+            log.debug("Loading bundle: " + bundleName + "_options.");
+        }
+        data = ResourceBundle.getBundle(bundleName + "_options");
+        if (log.isDebugEnabled()) {
+            log.debug("Bundle " + bundleName +
+                      "_options loaded. Reading properties...");
+        }
+        initComponentsFromProperties(context, data);
+        if (log.isDebugEnabled()) {
+            log.debug("done.");
+        }
 
-			// if we do have a value
-			if (null != result) {
-			    // and we do have a converter
-			    if (null != converter) {
-				// convert the value to String
-				result = converter.
-				    getAsString(FacesContext.
-						getCurrentInstance(), 
-						component, result);
-			    }
-			}
-		    }
-		    return result;
-		}
-		
-		public int hashCode() {
-		    return CarBean.this.components.hashCode();
-		}
-		public boolean isEmpty() {
-		    return CarBean.this.components.isEmpty();
-		}
-		public java.util.Set keySet() { 
-		    return CarBean.this.components.keySet();
-		}
-		public Object put(Object k, Object v) { 
-		    throw new UnsupportedOperationException(); 
-		}
-		public void putAll(Map t) { 
-		    throw new UnsupportedOperationException(); 
-		}
-		public Object remove(Object k) { 
-		    throw new UnsupportedOperationException(); 
-		}
-		public int size() {
-		    return CarBean.this.components.size();
-		}
-		public java.util.Collection values() {
-		    ArrayList result = new ArrayList();
-		    Iterator keys = keySet().iterator();
-		    while (keys.hasNext()) {
-			result.add(get(keys.next()));
-		    }
-		    return result;
-		}
-	    };
-	
+        // create a read-only Map exposing the values of all of our
+        // components.
+        attributes =
+            new Map() {
+                public void clear() {
+                    CarBean.this.components.clear();
+                }
+
+
+                public boolean containsKey(Object key) {
+                    return CarBean.this.components.containsKey(key);
+                }
+
+
+                public boolean containsValue(Object value) {
+                    throw new UnsupportedOperationException();
+                }
+
+
+                public java.util.Set entrySet() {
+                    throw new UnsupportedOperationException();
+                }
+
+
+                public boolean equals(Object o) {
+                    throw new UnsupportedOperationException();
+                }
+
+
+                public Object get(Object key) {
+                    UIComponent component = null;
+                    Converter converter = null;
+                    Object result = null;
+                    if (null == key) {
+                        return null;
+                    }
+                    if (null != (component = (UIComponent)
+                        CarBean.this.components.get(key))) {
+                        // if this component can have a Converter
+                        if (component instanceof ValueHolder) {
+                            // try to get it
+                            converter = ((ValueHolder) component).
+                                getConverter();
+                            result = ((ValueHolder) component).getValue();
+                        }
+
+                        // if we do have a value
+                        if (null != result) {
+                            // and we do have a converter
+                            if (null != converter) {
+                                // convert the value to String
+                                result = converter.
+                                    getAsString(FacesContext.
+                                                getCurrentInstance(),
+                                                component, result);
+                            }
+                        }
+                    }
+                    return result;
+                }
+
+
+                public int hashCode() {
+                    return CarBean.this.components.hashCode();
+                }
+
+
+                public boolean isEmpty() {
+                    return CarBean.this.components.isEmpty();
+                }
+
+
+                public java.util.Set keySet() {
+                    return CarBean.this.components.keySet();
+                }
+
+
+                public Object put(Object k, Object v) {
+                    throw new UnsupportedOperationException();
+                }
+
+
+                public void putAll(Map t) {
+                    throw new UnsupportedOperationException();
+                }
+
+
+                public Object remove(Object k) {
+                    throw new UnsupportedOperationException();
+                }
+
+
+                public int size() {
+                    return CarBean.this.components.size();
+                }
+
+
+                public java.util.Collection values() {
+                    ArrayList result = new ArrayList();
+                    Iterator keys = keySet().iterator();
+                    while (keys.hasNext()) {
+                        result.add(get(keys.next()));
+                    }
+                    return result;
+                }
+            };
+
     }
+
 
     /**
      * <p>For each entry in data, create component and cause it to be
      * populated with values.</p>
-     *  
      */
 
     private void initComponentsFromProperties(FacesContext context,
-					      ResourceBundle data) {
-	Application application = context.getApplication();
-	Enumeration keys = data.getKeys();
-	String 
-	    key = null,
-	    value = null,
-	    componentType = null,
-	    valueType = null;
-	UIComponent component = null;
+                                              ResourceBundle data) {
+        Application application = context.getApplication();
+        Enumeration keys = data.getKeys();
+        String
+            key = null,
+            value = null,
+            componentType = null,
+            valueType = null;
+        UIComponent component = null;
 
-	// populate the map
-	while (keys.hasMoreElements()) {
-	    key = (String) keys.nextElement();
-	    if (key == null) {
-		continue;
-	    }
-	    // skip secondary keys.
-	    if (-1 != key.indexOf("_")) {
-		continue;
-	    }
-	    value = data.getString(key);
-	    componentType = data.getString(key + "_componentType");
-	    valueType = data.getString(key + "_valueType");
-	    if (log.isDebugEnabled()) {
-		log.debug("populating map for " + key + "\n" + 
-			  "\n\tvalue: " + value +
-			  "\n\tcomponentType: " + componentType + 
-			  "\n\tvalueType: " + valueType);
-	    }
-	    // create the component for this componentType
-	    component = application.createComponent(componentType);
-	    populateComponentWithValue(context, component, componentType,
-				       value, valueType);
-	    components.put(key, component);
-	}
+        // populate the map
+        while (keys.hasMoreElements()) {
+            key = (String) keys.nextElement();
+            if (key == null) {
+                continue;
+            }
+            // skip secondary keys.
+            if (-1 != key.indexOf("_")) {
+                continue;
+            }
+            value = data.getString(key);
+            componentType = data.getString(key + "_componentType");
+            valueType = data.getString(key + "_valueType");
+            if (log.isDebugEnabled()) {
+                log.debug("populating map for " + key + "\n" +
+                          "\n\tvalue: " + value +
+                          "\n\tcomponentType: " + componentType +
+                          "\n\tvalueType: " + valueType);
+            }
+            // create the component for this componentType
+            component = application.createComponent(componentType);
+            populateComponentWithValue(context, component, componentType,
+                                       value, valueType);
+            components.put(key, component);
+        }
     }
+
 
     /**
      * <p>populate the argument component with values, being sensitive
      * to the possible multi-nature of the values, and to the type of
      * the values.</p>
-     * 
      */
 
     private void populateComponentWithValue(FacesContext context,
-					    UIComponent component, 
-					    String componentType,
-					    String value, String valueType) {
-	Application application = context.getApplication();
-	Converter converter = null;
-	UISelectItems items = null;
+                                            UIComponent component,
+                                            String componentType,
+                                            String value, String valueType) {
+        Application application = context.getApplication();
+        Converter converter = null;
+        UISelectItems items = null;
 
-	// if we need a converter, and can have a converter
-	if (!valueType.equals("java.lang.String") && 
-	    component instanceof ValueHolder) {
-	    // if so create it,
-	    try {
-		converter = 
-		    application.createConverter(CarStore.loadClass(valueType,
-								   this));
-	    }
-	    catch (ClassNotFoundException cne) {
-                FacesMessage errMsg = MessageFactory.getMessage(
-                    CONVERTER_ERROR_MESSAGE_ID,
-                    (new Object[] { valueType }));
-		throw new IllegalStateException(errMsg.getSummary());
-	    }
-	    // add it to our component,
-	    ((ValueHolder)component).setConverter(converter);
-	}
-	
-	// if this component is a SelectOne or SelectMany, take special action
-	if (isMultiValue(componentType)) {
-	    // create a UISelectItems instance
-	    items = new UISelectItems();
-	    items.setValue(parseStringIntoArrayList(context, component, 
-						    value, valueType, 
-						    converter));
-	    // add it to the component
-	    component.getChildren().add(items);
-	}
-	else {
-	    // we have a single value
-	    if (null != converter) {
-		component.getAttributes().put("value",
-					      converter.getAsObject(context, 
-								    component, 
-								    value));
-	    }
-	    else {
-		component.getAttributes().put("value", value);
-	    }
-	}
+        // if we need a converter, and can have a converter
+        if (!valueType.equals("java.lang.String") &&
+            component instanceof ValueHolder) {
+            // if so create it,
+            try {
+                converter =
+                    application.createConverter(CarStore.loadClass(valueType,
+                                                                   this));
+            } catch (ClassNotFoundException cne) {
+                FacesMessage errMsg = MessageFactory.getMessage(CONVERTER_ERROR_MESSAGE_ID,
+                                                                (new Object[]{
+                                                                    valueType
+                                                                }));
+                throw new IllegalStateException(errMsg.getSummary());
+            }
+            // add it to our component,
+            ((ValueHolder) component).setConverter(converter);
+        }
+
+        // if this component is a SelectOne or SelectMany, take special action
+        if (isMultiValue(componentType)) {
+            // create a UISelectItems instance
+            items = new UISelectItems();
+            items.setValue(parseStringIntoArrayList(context, component,
+                                                    value, valueType,
+                                                    converter));
+            // add it to the component
+            component.getChildren().add(items);
+        } else {
+            // we have a single value
+            if (null != converter) {
+                component.getAttributes().put("value",
+                                              converter.getAsObject(context,
+                                                                    component,
+                                                                    value));
+            } else {
+                component.getAttributes().put("value", value);
+            }
+        }
     }
+
 
     /**
      * @return true if componentType starts with SelectMany or SelectOne
-     *
      */
     private boolean isMultiValue(String componentType) {
-	if (null == componentType) {
-	    return false;
-	}
-	return (componentType.startsWith("javax.faces.SelectMany") || 
-		componentType.startsWith("javax.faces.SelectOne"));
+        if (null == componentType) {
+            return false;
+        }
+        return (componentType.startsWith("javax.faces.SelectMany") ||
+            componentType.startsWith("javax.faces.SelectOne"));
     }
 
+
     /**
-     * Tokenizes the passed in String which is a comma separated string of 
+     * Tokenizes the passed in String which is a comma separated string of
      * option values that serve as keys into the main resources file.
      * For example, optionStr could be "Disc,Drum", which corresponds to
      * brake options available for the chosen car. This String is tokenized
@@ -468,101 +492,100 @@ public class CarBean extends Object {
      * values and stored in the passed in ArrayList.
      */
     public ArrayList parseStringIntoArrayList(FacesContext context,
-					      UIComponent component,
-					      String value, 
-					      String valueType, 
-					      Converter converter) {
+                                              UIComponent component,
+                                              String value,
+                                              String valueType,
+                                              Converter converter) {
         ArrayList optionsList = null;
         int i = 0;
-	Object optionValue = null;
-	String 
-	    optionKey = null,
-	    optionLabel = null;
-	Map nonLocalizedOptionValues = null;
-        
-        if ( value == null ) {
+        Object optionValue = null;
+        String
+            optionKey = null,
+            optionLabel = null;
+        Map nonLocalizedOptionValues = null;
+
+        if (value == null) {
             return null;
-        }     
+        }
         StringTokenizer st = new StringTokenizer(value, ",");
-        optionsList = new ArrayList((st.countTokens())+1);
+        optionsList = new ArrayList((st.countTokens()) + 1);
         while (st.hasMoreTokens()) {
             optionKey = st.nextToken();
-	    try {
+            try {
                 optionLabel = resources.getString(optionKey);
-            } 
-	    catch (MissingResourceException e) {
-		// if we can't find a hit, the key is the label
-		optionLabel = optionKey;
-	    }
+            } catch (MissingResourceException e) {
+                // if we can't find a hit, the key is the label
+                optionLabel = optionKey;
+            }
 
-	    if (null != converter) {
-		// PENDING deal with the converter case
-	    }
-	    else {
-		optionsList.add(new SelectItem(optionKey, optionLabel));
-	    }
-        }    
+            if (null != converter) {
+                // PENDING deal with the converter case
+            } else {
+                optionsList.add(new SelectItem(optionKey, optionLabel));
+            }
+        }
         return optionsList;
     }
 
+
     public String updatePricing() {
-	getCurrentPrice();
-	return null;
+        getCurrentPrice();
+        return null;
     }
+
 
     public Integer getCurrentPrice() {
-	// go through our options and try to get the prices
-	int sum = ((Integer)((ValueHolder)getComponents().get("basePrice")).
-		   getValue()).intValue();
-	Iterator iter = getComponents().keySet().iterator();
-	String key = null;
-	Object value = null;
-	UIComponent component = null;
-	while (iter.hasNext()) {
-	    key = (String) iter.next();
-	    component = (UIComponent) getComponents().get(key);
-	    value = component.getAttributes().get("value");
-	    if (null == value || (!(component instanceof UIInput))) {
-		continue;
-	    }
-	    
-	    // if the value is a String, see if we have priceData for it
-	    if (value instanceof String) {
-		try {
-		    sum += 
-			Integer.valueOf(priceData.getString((String)value)).intValue();
-		}
-		catch (NumberFormatException e) {
-		}
-	    }
-	    // if the value is a Boolean, look up the price by name
-	    else if (value instanceof Boolean && 
-		     ((Boolean)value).booleanValue()) {
-		try {
-		    sum += 
-			Integer.valueOf(priceData.getString(key)).intValue();
-		}
-		catch (NumberFormatException e) {
-		}
-	    }
-	    else if (value instanceof Number) {
-		sum += ((Number)value).intValue();
-	    }
-	}
-	Integer result = new Integer(sum);
-	// store the new price into the component for currentPrice
-	((ValueHolder)getComponents().get("currentPrice")).
-	    setValue(result);
-	return result;
+        // go through our options and try to get the prices
+        int sum = ((Integer) ((ValueHolder) getComponents().get("basePrice")).
+            getValue()).intValue();
+        Iterator iter = getComponents().keySet().iterator();
+        String key = null;
+        Object value = null;
+        UIComponent component = null;
+        while (iter.hasNext()) {
+            key = (String) iter.next();
+            component = (UIComponent) getComponents().get(key);
+            value = component.getAttributes().get("value");
+            if (null == value || (!(component instanceof UIInput))) {
+                continue;
+            }
+
+            // if the value is a String, see if we have priceData for it
+            if (value instanceof String) {
+                try {
+                    sum +=
+                        Integer.valueOf(priceData.getString((String) value))
+                        .intValue();
+                } catch (NumberFormatException e) {
+                }
+            }
+            // if the value is a Boolean, look up the price by name
+            else if (value instanceof Boolean &&
+                ((Boolean) value).booleanValue()) {
+                try {
+                    sum +=
+                        Integer.valueOf(priceData.getString(key)).intValue();
+                } catch (NumberFormatException e) {
+                }
+            } else if (value instanceof Number) {
+                sum += ((Number) value).intValue();
+            }
+        }
+        Integer result = new Integer(sum);
+        // store the new price into the component for currentPrice
+        ((ValueHolder) getComponents().get("currentPrice")).
+            setValue(result);
+        return result;
     }
-	
+
 
     public Map getComponents() {
-	return components;
+        return components;
     }
 
+
     public Map getAttributes() {
-	return attributes;
+        return attributes;
     }
 
 

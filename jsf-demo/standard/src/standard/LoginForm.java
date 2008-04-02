@@ -1,9 +1,9 @@
 /*
- * $Id: LoginForm.java,v 1.4 2003/10/30 23:16:04 eburns Exp $
+ * $Id: LoginForm.java,v 1.5 2004/02/05 16:25:04 rlubke Exp $
  */
 
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -26,18 +26,26 @@ public class LoginForm {
 
 
     private UIInput password = null;
+
+
     public UIInput getPassword() {
         return (this.password);
     }
+
+
     public void setPassword(UIInput password) {
         this.password = password;
     }
 
 
     private UIInput username = null;
+
+
     public UIInput getUsername() {
         return (this.username);
     }
+
+
     public void setUsername(UIInput username) {
         this.username = username;
     }
@@ -58,8 +66,8 @@ public class LoginForm {
             context.addMessage
                 (this.username.getClientId(context),
                  new FacesMessage(FacesMessage.SEVERITY_ERROR,
-				  "Invalid username or password, please retry",
-				  null));
+                                  "Invalid username or password, please retry",
+                                  null));
             return (null);
         }
 

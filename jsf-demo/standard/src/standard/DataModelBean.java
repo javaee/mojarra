@@ -1,9 +1,9 @@
 /*
- * $Id: DataModelBean.java,v 1.3 2003/10/27 04:15:53 craigmcc Exp $
+ * $Id: DataModelBean.java,v 1.4 2004/02/05 16:25:02 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,12 +43,13 @@
 package standard;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.faces.component.UISelectOne;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -82,10 +83,14 @@ public class DataModelBean {
      * <p>The <code>accountId</code> field for the current row.</p>
      */
     private UISelectOne accountId = null;
+
+
     public UISelectOne getAccountId() {
         // System.err.println("getAccountId(): returning " + accountId);
         return accountId;
     }
+
+
     public void setAccountId(UISelectOne accountId) {
         // System.err.println("setAccountId(): setting " + accountId);
         this.accountId = accountId;
@@ -110,9 +115,9 @@ public class DataModelBean {
             int n = list.size();
             for (int i = 0; i < n; i++) {
                 accountIds.add(new SelectItem
-                               ("" + i,
-                                ((CustomerBean) list.get(i)).getAccountId(),
-                                null));
+                    ("" + i,
+                     ((CustomerBean) list.get(i)).getAccountId(),
+                     null));
             }
         }
         // System.err.println("getAccountIds(): returning list");
@@ -128,17 +133,17 @@ public class DataModelBean {
      * <p>Return a <code>DataModel</code> containing our customer list.</p>
      */
     public DataModel getCustomers() {
-        if (list == null ) {
+        if (list == null) {
             // System.err.println("getCustomers(): creating list");
             list = new ArrayList();
             list.add(new CustomerBean
-                     ("123456", "Alpha Beta Company", "ABC", 1234.56));
+                ("123456", "Alpha Beta Company", "ABC", 1234.56));
             list.add(new CustomerBean
-                     ("445566", "General Services, Ltd.", "GS", 33.33));
+                ("445566", "General Services, Ltd.", "GS", 33.33));
             list.add(new CustomerBean
-                     ("654321", "Summa Cum Laude, Inc.", "SCL", 76543.21));
+                ("654321", "Summa Cum Laude, Inc.", "SCL", 76543.21));
             list.add(new CustomerBean
-                     ("333333", "Yabba Dabba Doo", "YDD",  333.33));
+                ("333333", "Yabba Dabba Doo", "YDD", 333.33));
             for (int i = 10; i < 20; i++) {
                 list.add(new CustomerBean("8888" + i,
                                           "Customer " + i,

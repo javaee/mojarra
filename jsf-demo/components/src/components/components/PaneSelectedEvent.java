@@ -1,9 +1,9 @@
 /*
- * $Id: PaneSelectedEvent.java,v 1.4 2003/08/28 20:11:04 eburns Exp $
+ * $Id: PaneSelectedEvent.java,v 1.5 2004/02/05 16:22:37 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -63,6 +63,8 @@ public class PaneSelectedEvent extends FacesEvent {
 
     // The component id of the newly selected child pane
     private String id = null;
+
+
     public String getId() {
         return (this.id);
     }
@@ -76,11 +78,14 @@ public class PaneSelectedEvent extends FacesEvent {
     }
 
 
-    public boolean isAppropriateListener(FacesListener listener) { 
-	return (listener instanceof PaneComponent.PaneSelectedListener);
+    public boolean isAppropriateListener(FacesListener listener) {
+        return (listener instanceof PaneComponent.PaneSelectedListener);
     }
-    public void processListener(FacesListener listener) { 
-	((PaneComponent.PaneSelectedListener)listener).processPaneSelectedEvent(this);
+
+
+    public void processListener(FacesListener listener) {
+        ((PaneComponent.PaneSelectedListener) listener).processPaneSelectedEvent(
+            this);
     }
 
 }

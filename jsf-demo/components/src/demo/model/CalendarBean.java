@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -38,19 +38,16 @@
 
 package demo.model;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.ResourceBundle;
-import java.util.Locale;
-import java.text.MessageFormat;
-
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.jstl.fmt.LocaleSupport;
-
-import javax.faces.context.FacesContext;
-import javax.faces.application.FacesMessage;
-
 import components.components.CalendarComponent;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+import java.io.Serializable;
+import java.text.MessageFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * <p>Backing file for the Calendar demo.</p>
@@ -60,7 +57,7 @@ import components.components.CalendarComponent;
  */
 
 public class CalendarBean implements Serializable {
-    
+
     //**************************************************************************
     // Constructor
     
@@ -71,20 +68,36 @@ public class CalendarBean implements Serializable {
         this.date = new Date();
     }
 
+
     //**************************************************************************
     // Component binding
     private transient CalendarComponent calendar = null;
-    public CalendarComponent getCalendar() { return calendar; }
-    public void setCalendar(CalendarComponent calendar)
-    { this.calendar = calendar; }
+
+
+    public CalendarComponent getCalendar() {
+        return calendar;
+    }
+
+
+    public void setCalendar(CalendarComponent calendar) {
+        this.calendar = calendar;
+    }
 
     //**************************************************************************
     // Model processing
         
     // The model is simply a Date object
     private Date date = null;
-    public Date getDate() { return date; }    
-    public void setDate(Date date) { this.date = date; } 
+
+
+    public Date getDate() {
+        return date;
+    }
+
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     //**************************************************************************
     // Action processing
@@ -93,30 +106,33 @@ public class CalendarBean implements Serializable {
         setLocale("en");
         return null;
     }
-    
+
+
     public String selectLocaleFR() {
         setLocale("fr");
         return null;
     }
-    
+
+
     /**
      * <p>Process the date.</p>
      */
     public String process() {
-        String message;        
-        Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
-	ResourceBundle rb = 
-        ResourceBundle.getBundle("demo.model.Resources", locale);  
-        
-	message = (String)rb.getString("calendar.dateProcessed");
+        String message;
+        Locale locale = FacesContext.getCurrentInstance().getViewRoot()
+            .getLocale();
+        ResourceBundle rb =
+            ResourceBundle.getBundle("demo.model.Resources", locale);
+
+        message = (String) rb.getString("calendar.dateProcessed");
         MessageFormat mf = new MessageFormat("");
         mf.setLocale(locale);
         mf.applyPattern(message);
-	message = mf.format(new Object[] {date});
-        
-        append(message); 
-        
-	return (null);
+        message = mf.format(new Object[]{date});
+
+        append(message);
+
+        return (null);
     }
 
     //**************************************************************************
@@ -129,6 +145,7 @@ public class CalendarBean implements Serializable {
         setDate(date);
     }
 
+
     /**
      * <p>Append an informational message to the set of messages that will
      * be rendered when this view is redisplayed.</p>
@@ -136,7 +153,9 @@ public class CalendarBean implements Serializable {
      * @param message Message text to be added
      */
     private void append(String message) {
-        FacesContext.getCurrentInstance().addMessage(
-        null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+        FacesContext.getCurrentInstance().addMessage(null,
+                                                     new FacesMessage(
+                                                         FacesMessage.SEVERITY_INFO,
+                                                         message, null));
     }
 }

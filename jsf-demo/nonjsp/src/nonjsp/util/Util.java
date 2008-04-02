@@ -1,9 +1,9 @@
 /*
- * $Id: Util.java,v 1.2 2003/02/21 23:46:01 ofung Exp $
+ * $Id: Util.java,v 1.3 2004/02/05 16:24:52 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -45,7 +45,6 @@
 package nonjsp.util;
 
 /**
- *
  * <B>Util</B> is a class ...
  *
  * Copy of com.sun.faces.util.Util in order to remove
@@ -54,14 +53,12 @@ package nonjsp.util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.2 2003/02/21 23:46:01 ofung Exp $
- * 
+ * @version $Id: Util.java,v 1.3 2004/02/05 16:24:52 rlubke Exp $
  * @see	com.sun.faces.util.Util
- *
  */
 
-public class Util extends Object
-{
+public class Util extends Object {
+
 //
 // Protected Constants
 //
@@ -70,7 +67,7 @@ public class Util extends Object
 // Class Variables
 //
 
-private static long id = 0;
+    private static long id = 0;
 
 
 //
@@ -85,24 +82,23 @@ private static long id = 0;
 // Constructors and Initializers    
 //
 
-private Util()
-{
-    throw new IllegalStateException();
-}
+    private Util() {
+        throw new IllegalStateException();
+    }
 
 //
 // Class methods
 //
     public static Class loadClass(String name) throws ClassNotFoundException {
-	ClassLoader loader =
-	    Thread.currentThread().getContextClassLoader();
-	if (loader == null) {
-	    return Class.forName(name);
-	}
-	else {
-	    return loader.loadClass(name);
-	}
+        ClassLoader loader =
+            Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            return Class.forName(name);
+        } else {
+            return loader.loadClass(name);
+        }
     }
+
 
     /**
      * Generate a new identifier currently used to uniquely identify
@@ -111,7 +107,7 @@ private Util()
     public static synchronized String generateId() {
         if (id == Long.MAX_VALUE) {
             id = 0;
-        } else { 
+        } else {
             id++;
         }
         return Long.toHexString(id);

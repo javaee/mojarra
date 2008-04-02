@@ -1,9 +1,9 @@
 /*
- * $Id: BaseRenderer.java,v 1.9 2003/12/17 15:19:07 rkitain Exp $
+ * $Id: BaseRenderer.java,v 1.10 2004/02/05 16:22:54 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,15 +43,14 @@
 package components.renderkit;
 
 
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
 import java.util.Iterator;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * <p>Convenient base class for <code>Renderer</code> implementations.</p>
@@ -61,51 +60,56 @@ public abstract class BaseRenderer extends Renderer {
 
     public static final String BUNDLE_ATTR = "com.sun.faces.bundle";
 
-    public String convertClientId(FacesContext context, String clientId) {          
-	return clientId;
+
+    public String convertClientId(FacesContext context, String clientId) {
+        return clientId;
     }
 
+
     protected String getKeyAndLookupInBundle(FacesContext context,
-					     UIComponent component, 
-					     String keyAttr) throws MissingResourceException{
-	String key = null, bundleName = null;
-	ResourceBundle bundle = null;
+                                             UIComponent component,
+                                             String keyAttr)
+        throws MissingResourceException {
+        String key = null, bundleName = null;
+        ResourceBundle bundle = null;
 
         key = (String) component.getAttributes().get(keyAttr);
-        bundleName = (String)component.getAttributes().get(BUNDLE_ATTR);
+        bundleName = (String) component.getAttributes().get(BUNDLE_ATTR);
 
         // if the bundleName is null for this component, it might have
         // been set on the root component.
-        if ( bundleName == null ) {
+        if (bundleName == null) {
             UIComponent root = context.getViewRoot();
 
-            bundleName = (String)root.getAttributes().get(BUNDLE_ATTR);
+            bundleName = (String) root.getAttributes().get(BUNDLE_ATTR);
         }
-	// verify our component has the proper attributes for key and bundle.
-	if (null == key || null == bundleName) {
-	    throw new MissingResourceException("Can't load JSTL classes", 
-					       bundleName, key);
-	}
-	
-	// verify the required Class is loadable
-	// PENDING(edburns): Find a way to do this once per ServletContext.
-	if (null == Thread.currentThread().getContextClassLoader().
-	    getResource("javax.servlet.jsp.jstl.fmt.LocalizationContext")){
-	    Object [] params = { "javax.servlet.jsp.jstl.fmt.LocalizationContext" };
-	    throw new MissingResourceException("Can't load JSTL classes", 
-					       bundleName, key);
-	}
-	
-	// verify there is a ResourceBundle in scoped namescape.
-	javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
-	if (null == (locCtx = (javax.servlet.jsp.jstl.fmt.LocalizationContext) 
+        // verify our component has the proper attributes for key and bundle.
+        if (null == key || null == bundleName) {
+            throw new MissingResourceException("Can't load JSTL classes",
+                                               bundleName, key);
+        }
+
+        // verify the required Class is loadable
+        // PENDING(edburns): Find a way to do this once per ServletContext.
+        if (null == Thread.currentThread().getContextClassLoader().
+            getResource("javax.servlet.jsp.jstl.fmt.LocalizationContext")) {
+            Object[] params = {
+                "javax.servlet.jsp.jstl.fmt.LocalizationContext"
+            };
+            throw new MissingResourceException("Can't load JSTL classes",
+                                               bundleName, key);
+        }
+
+        // verify there is a ResourceBundle in scoped namescape.
+        javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
+        if (null == (locCtx = (javax.servlet.jsp.jstl.fmt.LocalizationContext)
             (Util.getValueBinding(bundleName)).getValue(context)) ||
-	    null == (bundle = locCtx.getResourceBundle())) {
-	    throw new MissingResourceException("Can't load ResourceBundle ", 
-                    bundleName, key);
-	}
-	
-	return bundle.getString(key);
+            null == (bundle = locCtx.getResourceBundle())) {
+            throw new MissingResourceException("Can't load ResourceBundle ",
+                                               bundleName, key);
+        }
+
+        return bundle.getString(key);
     }
 
 

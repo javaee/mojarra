@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -40,16 +40,16 @@
 package carstore;
 
 import components.components.AreaSelectedEvent;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Iterator;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>This is the main bean for the application.  It maintains a
@@ -80,7 +80,6 @@ import org.apache.commons.logging.LogFactory;
  * pull the user's choices from the currently chosen model.</p></li>
  *
  * </ul>
- *
  */
 
 public class CarStore extends Object {
@@ -92,12 +91,12 @@ public class CarStore extends Object {
     static final String DEFAULT_MODEL = "Jalopy";
 
     static final String DEFAULT_PACKAGE = "Custom";
-    
-    static final String DEFAULT_MODEL_PROPERTIES = CARSTORE_PREFIX + 
-	".bundles." + DEFAULT_MODEL;
 
-    static final String DEFAULT_PACKAGE_PROPERTIES = CARSTORE_PREFIX + 
-	".bundles." + DEFAULT_PACKAGE;
+    static final String DEFAULT_MODEL_PROPERTIES = CARSTORE_PREFIX +
+        ".bundles." + DEFAULT_MODEL;
+
+    static final String DEFAULT_PACKAGE_PROPERTIES = CARSTORE_PREFIX +
+        ".bundles." + DEFAULT_PACKAGE;
 
     // 
     // Relationship Instance Variables
@@ -111,7 +110,6 @@ public class CarStore extends Object {
 
     /**
      * <p>The currently selected car model.</p>
-     *
      */
 
     private String currentModelName = DEFAULT_MODEL;
@@ -123,12 +121,10 @@ public class CarStore extends Object {
      * packages.</p>
      *
      * <p>Values: CarBean instances</p>
-     * 
      */
     private Map carModels = null;
 
     /**
-     *
      * <p>Keys: Strings that happen to correspond to the name of the
      * Properties file for the car (without the package prefix).</p>
      *
@@ -139,15 +135,15 @@ public class CarStore extends Object {
 
 
     public CarStore() {
-	if (log.isDebugEnabled()) {
-	    log.debug("Creating main CarStore bean");
-	    log.debug("Populating locale map");
-	}
+        if (log.isDebugEnabled()) {
+            log.debug("Creating main CarStore bean");
+            log.debug("Populating locale map");
+        }
         locales = new HashMap();
-    	locales.put("NAmerica", Locale.ENGLISH);
-	locales.put("SAmerica", new Locale("es","es"));
-	locales.put("Germany", Locale.GERMAN);
-	locales.put("France", Locale.FRENCH); 	
+        locales.put("NAmerica", Locale.ENGLISH);
+        locales.put("SAmerica", new Locale("es", "es"));
+        locales.put("Germany", Locale.GERMAN);
+        locales.put("France", Locale.FRENCH);
     }
 
     // 
@@ -155,57 +151,60 @@ public class CarStore extends Object {
     //
 
     public void chooseLocaleFromMap(ActionEvent actionEvent) {
-	AreaSelectedEvent event = (AreaSelectedEvent) actionEvent;
-	String current = event.getMapComponent().getCurrent();
-	FacesContext context = FacesContext.getCurrentInstance();
-	context.getViewRoot().setLocale((Locale) locales.get(current));
-	resetMaps();
-    }    
+        AreaSelectedEvent event = (AreaSelectedEvent) actionEvent;
+        String current = event.getMapComponent().getCurrent();
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getViewRoot().setLocale((Locale) locales.get(current));
+        resetMaps();
+    }
+
 
     public void chooseLocaleFromLink(ActionEvent event) {
-	String current = event.getComponent().getId();
-	FacesContext context = FacesContext.getCurrentInstance();
-	context.getViewRoot().setLocale((Locale) locales.get(current));
-	resetMaps();
-    }    
+        String current = event.getComponent().getId();
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getViewRoot().setLocale((Locale) locales.get(current));
+        resetMaps();
+    }
+
 
     private void resetMaps() {
-	if (null != carModels) {
-	    carModels.clear();
-	    carModels = null;
-	}
-	if (null != carCustomizers) {
-	    carCustomizers.clear();
-	    carCustomizers = null;
-	}
+        if (null != carModels) {
+            carModels.clear();
+            carModels = null;
+        }
+        if (null != carCustomizers) {
+            carCustomizers.clear();
+            carCustomizers = null;
+        }
     }
+
 
     public void choosePackage(ActionEvent event) {
-	String packageName = event.getComponent().getId();
-	choosePackage(packageName);
+        String packageName = event.getComponent().getId();
+        choosePackage(packageName);
     }
-    
-    public void choosePackage(String packageName) {
-	CarCustomizer packageCustomizer = 
-	    (CarCustomizer) carCustomizers.get(packageName);
-	packageCustomizer.customizeCar(getCurrentModel());
-	getCurrentModel().getCurrentPrice();
 
-	// HERE IS WHERE WE UPDATE THE BUTTON STYLE!
-	String curName;
-	Iterator iter = carCustomizers.keySet().iterator();
-	// go through all the available packages and set the button
-	// style accordingly.
-	while (iter.hasNext()) {
-	    curName = (String) iter.next();
-	    packageCustomizer = (CarCustomizer) carCustomizers.get(curName);
-	    if (curName.equals(packageName)) {
-		packageCustomizer.setButtonStyle("package-selected");
-	    }
-	    else {
-		packageCustomizer.setButtonStyle("package-unselected");
-	    }
-	}
+
+    public void choosePackage(String packageName) {
+        CarCustomizer packageCustomizer =
+            (CarCustomizer) carCustomizers.get(packageName);
+        packageCustomizer.customizeCar(getCurrentModel());
+        getCurrentModel().getCurrentPrice();
+
+        // HERE IS WHERE WE UPDATE THE BUTTON STYLE!
+        String curName;
+        Iterator iter = carCustomizers.keySet().iterator();
+        // go through all the available packages and set the button
+        // style accordingly.
+        while (iter.hasNext()) {
+            curName = (String) iter.next();
+            packageCustomizer = (CarCustomizer) carCustomizers.get(curName);
+            if (curName.equals(packageName)) {
+                packageCustomizer.setButtonStyle("package-selected");
+            } else {
+                packageCustomizer.setButtonStyle("package-unselected");
+            }
+        }
     }
 
     // 
@@ -213,28 +212,32 @@ public class CarStore extends Object {
     // 
     
     public String storeFrontJalopyPressed() {
-	setCurrentModelName("Jalopy");
-	return "carDetail";
+        setCurrentModelName("Jalopy");
+        return "carDetail";
     }
+
 
     public String storeFrontRoadsterPressed() {
-	setCurrentModelName("Roadster");
-	return "carDetail";
+        setCurrentModelName("Roadster");
+        return "carDetail";
     }
+
 
     public String storeFrontLuxuryPressed() {
-	setCurrentModelName("Luxury");
-	return "carDetail";
+        setCurrentModelName("Luxury");
+        return "carDetail";
     }
+
 
     public String storeFrontSUVPressed() {
-	setCurrentModelName("SUV");
-	return "carDetail";
+        setCurrentModelName("SUV");
+        return "carDetail";
     }
 
+
     public String buyCurrentCar() {
-	getCurrentModel().getCurrentPrice();
-	return "confirmChoices";
+        getCurrentModel().getCurrentPrice();
+        return "confirmChoices";
     }
 
     //
@@ -242,50 +245,52 @@ public class CarStore extends Object {
     // 
 
     public CarBean getCurrentModel() {
-	CarBean result = (CarBean) carModels.get(getCurrentModelName());
-	return result;
+        CarBean result = (CarBean) carModels.get(getCurrentModelName());
+        return result;
     }
+
 
     public Map getModels() {
-	if (null == carModels) {
-	    carModels = new HashMap();
-	    if (log.isDebugEnabled()) {
-		log.debug("Populating carModel map");
-	    }
-	    carModels.put(DEFAULT_MODEL, 
-			  new CarBean(DEFAULT_MODEL_PROPERTIES));
-	    carModels.put("Roadster", 
-			  new CarBean(CARSTORE_PREFIX + ".bundles.Roadster"));
-	    carModels.put("Luxury", new CarBean(CARSTORE_PREFIX + 
-						".bundles.Luxury"));
-	    carModels.put("SUV", new CarBean(CARSTORE_PREFIX + 
-					     ".bundles.SUV"));
-	}
+        if (null == carModels) {
+            carModels = new HashMap();
+            if (log.isDebugEnabled()) {
+                log.debug("Populating carModel map");
+            }
+            carModels.put(DEFAULT_MODEL,
+                          new CarBean(DEFAULT_MODEL_PROPERTIES));
+            carModels.put("Roadster",
+                          new CarBean(CARSTORE_PREFIX + ".bundles.Roadster"));
+            carModels.put("Luxury", new CarBean(CARSTORE_PREFIX +
+                                                ".bundles.Luxury"));
+            carModels.put("SUV", new CarBean(CARSTORE_PREFIX +
+                                             ".bundles.SUV"));
+        }
 
-	return carModels;
+        return carModels;
     }
 
+
     public Map getCustomizers() {
-	getModels();
-	if (null == carCustomizers) {
-	    carCustomizers = new HashMap();
-	    if (log.isDebugEnabled()) {
-		log.debug("Populating carCustomizers map");
-	    }
-	    carCustomizers.put("Custom", new CarCustomizer(CARSTORE_PREFIX + 
-							   ".bundles.Custom"));
-	    carCustomizers.put("Standard", 
-			       new CarCustomizer(CARSTORE_PREFIX + 
-						 ".bundles.Standard"));
-	    carCustomizers.put("Performance", 
-			       new CarCustomizer(CARSTORE_PREFIX + 
-						 ".bundles.Performance"));
-	    carCustomizers.put("Deluxe", 
-			       new CarCustomizer(CARSTORE_PREFIX + 
-						 ".bundles.Deluxe"));
-	    choosePackage("Custom");
-	}
-	return carCustomizers;
+        getModels();
+        if (null == carCustomizers) {
+            carCustomizers = new HashMap();
+            if (log.isDebugEnabled()) {
+                log.debug("Populating carCustomizers map");
+            }
+            carCustomizers.put("Custom", new CarCustomizer(CARSTORE_PREFIX +
+                                                           ".bundles.Custom"));
+            carCustomizers.put("Standard",
+                               new CarCustomizer(CARSTORE_PREFIX +
+                                                 ".bundles.Standard"));
+            carCustomizers.put("Performance",
+                               new CarCustomizer(CARSTORE_PREFIX +
+                                                 ".bundles.Performance"));
+            carCustomizers.put("Deluxe",
+                               new CarCustomizer(CARSTORE_PREFIX +
+                                                 ".bundles.Deluxe"));
+            choosePackage("Custom");
+        }
+        return carCustomizers;
     }
 
 	
@@ -295,29 +300,31 @@ public class CarStore extends Object {
     // 
 
     private String getCurrentModelName() {
-	return currentModelName;
+        return currentModelName;
     }
-    
+
+
     private void setCurrentModelName(String newName) {
-	currentModelName = newName;
+        currentModelName = newName;
     }
 
     // package private util methods
 
-    static Class loadClass(String name, 
-			   Object fallbackClass) throws ClassNotFoundException {
-	ClassLoader loader = getCurrentLoader(fallbackClass);
-	return loader.loadClass(name);
+    static Class loadClass(String name,
+                           Object fallbackClass) throws ClassNotFoundException {
+        ClassLoader loader = getCurrentLoader(fallbackClass);
+        return loader.loadClass(name);
     }
-    
+
+
     static ClassLoader getCurrentLoader(Object fallbackClass) {
         ClassLoader loader =
-	    Thread.currentThread().getContextClassLoader();
-	if (loader == null) {
-	    loader = fallbackClass.getClass().getClassLoader();
-	}
-	return loader;
-    }    
+            Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            loader = fallbackClass.getClass().getClassLoader();
+        }
+        return loader;
+    }
 
 
 }

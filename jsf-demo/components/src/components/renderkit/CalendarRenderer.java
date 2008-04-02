@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -39,20 +39,18 @@
 package components.renderkit;
 
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import components.components.CalendarComponent;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.DateTimeConverter;
 
-import components.components.CalendarComponent;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 
 /**
@@ -60,7 +58,7 @@ import components.components.CalendarComponent;
  */
 
 public class CalendarRenderer extends BaseRenderer {
-    
+
 
     // -------------------------------------------------------- Renderer Methods
 
@@ -74,13 +72,13 @@ public class CalendarRenderer extends BaseRenderer {
         return (true);
 
     }
-    
-    
+
+
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
 
         super.encodeBegin(context, component);
-        
+
         UIComponent calendar = component;
         ResponseWriter writer = context.getResponseWriter();
 
@@ -104,23 +102,26 @@ public class CalendarRenderer extends BaseRenderer {
         date.setSubmittedValue(null);
 
     }
-    
+
 
     public void encodeEnd(FacesContext context, UIComponent component)
-    throws IOException {
+        throws IOException {
         super.encodeEnd(context, component);
-        
+
         UIComponent calendar = component;
         ResponseWriter writer = context.getResponseWriter();
-        String contextPath = context.getExternalContext().getRequestContextPath();
+        String contextPath = context.getExternalContext()
+            .getRequestContextPath();
         
         // Get formatting used according to locale so we can set the
         // DHTML to the same.
         Locale locale = context.getViewRoot().getLocale();
         String dateFormatPattern = "MM/dd/yyyy";
-        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT,
+                                                       locale);
         if (format instanceof SimpleDateFormat) {
-            dateFormatPattern = ((SimpleDateFormat)format).toLocalizedPattern();
+            dateFormatPattern =
+                ((SimpleDateFormat) format).toLocalizedPattern();
         }
         dateFormatPattern = dateFormatPattern.toLowerCase();
         
@@ -138,14 +139,22 @@ public class CalendarRenderer extends BaseRenderer {
         // FIXME: String formName = getMyForm(context, component).getClientId(context);
         String formName = "forms[0]";
         String dateName = component.findComponent("date").getClientId(context);
-        
+
         writer.startElement("td", calendar);
         writer.startElement("a", calendar);
         writer.writeAttribute("href", "javascript: void(0);", null);
         // writer.writeAttribute("onclick", "g_Calendar.show(event, document." + formName + "[\"" + dateName + "\"], false, '" + dateFormatPattern + "'); return false;", null);//FIXME
-        writer.writeAttribute("onclick", "g_Calendar.show(event, document." + formName + "['" + dateName + "'], false, '" + dateFormatPattern + "'); return false;", null);//FIXME
+        writer.writeAttribute("onclick",
+                              "g_Calendar.show(event, document." + formName +
+                              "['" +
+                              dateName +
+                              "'], false, '" +
+                              dateFormatPattern +
+                              "'); return false;",
+                              null);//FIXME
         writer.startElement("img", calendar);
-        writer.writeURIAttribute("src", contextPath + "/images/calendar.gif", null);
+        writer.writeURIAttribute("src", contextPath + "/images/calendar.gif",
+                                 null);
         writer.writeAttribute("name", "imgCalendar", null);
         writer.writeAttribute("width", "34", null);
         writer.writeAttribute("height", "21", null);
@@ -160,7 +169,6 @@ public class CalendarRenderer extends BaseRenderer {
         writer.endElement("tr");
         writer.endElement("table");
     }
-    
 
 
 }

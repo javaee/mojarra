@@ -1,9 +1,9 @@
 /*
- * $Id: AreaSelectedListener.java,v 1.1 2003/08/26 18:40:44 craigmcc Exp $
+ * $Id: AreaSelectedListener.java,v 1.2 2004/02/05 16:22:35 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,8 +43,6 @@
 package components.components;
 
 
-import javax.faces.component.UIComponent;
-import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 
 

@@ -1,9 +1,9 @@
 /*
- * $Id: PaneComponent.java,v 1.12 2004/01/27 21:31:17 eburns Exp $
+ * $Id: PaneComponent.java,v 1.13 2004/02/05 16:22:36 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,18 +43,17 @@
 package components.components;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import javax.faces.FacesException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
-import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
-import javax.faces.event.PhaseId;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import java.util.Iterator;
 
 /**
  * <p>Component designed to contain child components (and possibly other
@@ -64,12 +63,14 @@ public class PaneComponent extends UIComponentBase {
 
 
     private static Log log = LogFactory.getLog(PaneComponent.class);
-    
+
+
     // creates and adds a listener;
     public PaneComponent() {
         PaneSelectedListener listener = new PaneSelectedListener();
-        addFacesListener(listener);    
+        addFacesListener(listener);
     }
+
 
     /**
      * <p>Return the component family for this component.</p>
@@ -85,6 +86,7 @@ public class PaneComponent extends UIComponentBase {
     public boolean getRendersChildren() {
         return (true);
     }
+
 
     public void processDecodes(FacesContext context) {
         // Process all facets and children of this component
@@ -103,9 +105,11 @@ public class PaneComponent extends UIComponentBase {
         }
     }
 
+
     // Ignore update model requests
     public void updateModel(FacesContext context) {
     }
+
 
     /**
      * <p>Faces Listener implementation which sets the selected tab
@@ -120,18 +124,19 @@ public class PaneComponent extends UIComponentBase {
 
         public void processPaneSelectedEvent(FacesEvent event) {
             UIComponent source = event.getComponent();
-            PaneSelectedEvent pevent = (PaneSelectedEvent)event;
+            PaneSelectedEvent pevent = (PaneSelectedEvent) event;
             String id = pevent.getId();
 
             boolean paneSelected = false;
 
             // Find the parent tab control so we can set all tabs
             // to "unselected";
-            UIComponent tabControl = findParentForRendererType(
-                source, "Tabbed");
+            UIComponent tabControl = findParentForRendererType(source,
+                                                               "Tabbed");
             int n = tabControl.getChildCount();
             for (int i = 0; i < n; i++) {
-                PaneComponent pane = (PaneComponent)tabControl.getChildren().get(i);
+                PaneComponent pane = (PaneComponent) tabControl.getChildren()
+                    .get(i);
                 if (pane.getId().equals(id)) {
                     pane.setRendered(true);
                     paneSelected = true;
@@ -139,31 +144,37 @@ public class PaneComponent extends UIComponentBase {
                     pane.setRendered(false);
                 }
             }
-            
+
             if (!paneSelected) {
                 log.warn("Cannot select pane for id=" + id + "," +
-                     ", selecting first pane");
-                ((PaneComponent) tabControl.getChildren().get(0)).setRendered(true);
+                         ", selecting first pane");
+                ((PaneComponent) tabControl.getChildren().get(0)).setRendered(
+                    true);
             }
         }
+
+
         // methods from StateHolder
         public Object saveState(FacesContext context) {
             return null;
         }
-        
+
+
         public void restoreState(FacesContext context, Object state) {
         }
-        
+
+
         public void setTransient(boolean newTransientValue) {
         }
-        
+
+
         public boolean isTransient() {
             return true;
         }
     }
 
-    private UIComponent findParentForRendererType(
-        UIComponent component, String rendererType) {
+
+    private UIComponent findParentForRendererType(UIComponent component, String rendererType) {
         Object facetParent = null;
         UIComponent currentComponent = component;
         

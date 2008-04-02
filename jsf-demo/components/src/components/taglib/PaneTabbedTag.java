@@ -1,9 +1,9 @@
 /*
- * $Id: PaneTabbedTag.java,v 1.8 2004/01/27 21:31:21 eburns Exp $
+ * $Id: PaneTabbedTag.java,v 1.9 2004/02/05 16:23:17 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,11 +43,12 @@
 package components.taglib;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.faces.component.UIComponent;
 import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -61,24 +62,32 @@ public class PaneTabbedTag extends UIComponentTag {
 
 
     private String contentClass = null;
+
+
     public void setContentClass(String contentClass) {
         this.contentClass = contentClass;
     }
 
 
     private String paneClass = null;
+
+
     public void setPaneClass(String paneClass) {
         this.paneClass = paneClass;
     }
 
 
     private String selectedClass = null;
+
+
     public void setSelectedClass(String selectedClass) {
         this.selectedClass = selectedClass;
     }
 
 
     private String unselectedClass = null;
+
+
     public void setUnselectedClass(String unselectedClass) {
         this.unselectedClass = unselectedClass;
     }
@@ -111,7 +120,7 @@ public class PaneTabbedTag extends UIComponentTag {
             if (isValueReference(contentClass)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(contentClass);
+                    createValueBinding(contentClass);
                 component.setValueBinding("contentClass", vb);
             } else {
                 component.getAttributes().put("contentClass", contentClass);
@@ -122,7 +131,7 @@ public class PaneTabbedTag extends UIComponentTag {
             if (isValueReference(paneClass)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(paneClass);
+                    createValueBinding(paneClass);
                 component.setValueBinding("paneClass", vb);
             } else {
                 component.getAttributes().put("paneClass", paneClass);
@@ -133,7 +142,7 @@ public class PaneTabbedTag extends UIComponentTag {
             if (isValueReference(selectedClass)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(selectedClass);
+                    createValueBinding(selectedClass);
                 component.setValueBinding("selectedClass", vb);
             } else {
                 component.getAttributes().put("selectedClass", selectedClass);
@@ -144,10 +153,11 @@ public class PaneTabbedTag extends UIComponentTag {
             if (isValueReference(unselectedClass)) {
                 ValueBinding vb =
                     getFacesContext().getApplication().
-		    createValueBinding(unselectedClass);
+                    createValueBinding(unselectedClass);
                 component.setValueBinding("unselectedClass", vb);
             } else {
-                component.getAttributes().put("unselectedClass", unselectedClass);
+                component.getAttributes().put("unselectedClass",
+                                              unselectedClass);
             }
         }
     }

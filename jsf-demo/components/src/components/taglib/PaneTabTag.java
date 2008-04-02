@@ -1,9 +1,9 @@
 /*
- * $Id: PaneTabTag.java,v 1.7 2003/12/17 15:19:15 rkitain Exp $
+ * $Id: PaneTabTag.java,v 1.8 2004/02/05 16:23:16 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -43,10 +43,11 @@
 package components.taglib;
 
 
-import javax.faces.component.UIComponent;
-import javax.faces.webapp.UIComponentTag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.UIComponentTag;
 
 
 /**
@@ -67,6 +68,7 @@ public class PaneTabTag extends UIComponentTag {
     public String getRendererType() {
         return ("Tab");
     }
+
 
     public void release() {
         super.release();

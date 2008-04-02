@@ -1,9 +1,9 @@
 <!--
- Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIGraphic.jsp,v 1.5 2004/01/27 21:31:42 eburns Exp $ --%>
+<%-- $Id: UIGraphic.jsp,v 1.6 2004/02/05 16:25:18 rlubke Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>

@@ -1,9 +1,9 @@
 /*
- * $Id: AreaSelectedEvent.java,v 1.4 2003/12/17 15:18:59 rkitain Exp $
+ * $Id: AreaSelectedEvent.java,v 1.5 2004/02/05 16:22:35 rlubke Exp $
  */
 
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following

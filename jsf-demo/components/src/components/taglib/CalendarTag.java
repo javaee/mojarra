@@ -1,5 +1,5 @@
 /*
- * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
@@ -38,15 +38,14 @@
 
 package components.taglib;
 
-import java.util.Locale;
-import java.util.TimeZone;
-
-import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.DateTimeConverter;
 import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
-import javax.faces.convert.DateTimeConverter;
+
+import java.util.TimeZone;
 
 /**
  * <p>CalendarTag is the tag handler class for a <code>Calendar</code>
@@ -54,7 +53,7 @@ import javax.faces.convert.DateTimeConverter;
  */
 
 public class CalendarTag extends UIComponentTag {
-    
+
     //*********************************************************************
     // Constructor and initializations
     
@@ -62,7 +61,8 @@ public class CalendarTag extends UIComponentTag {
         super();
         init();
     }
-    
+
+
     private void init() {
         dateStyle = null;
         immediateSpecified = false;
@@ -74,7 +74,8 @@ public class CalendarTag extends UIComponentTag {
         styleClass = null;
         value = null;
     }
-    
+
+
     public void release() {
         super.release();
         init();
@@ -84,54 +85,80 @@ public class CalendarTag extends UIComponentTag {
     // Tag attributes and their setters
     
     private String dateStyle;
+
+
     public void setDateStyle(String dateStyle) {
         this.dateStyle = dateStyle;
     }
-    
+
+
     private boolean immediate;
     private boolean immediateSpecified = false;
+
+
     public void setImmediate(boolean immediate) {
         this.immediate = immediate;
         immediateSpecified = true;
     }
 
+
     private int maxlength;
     private boolean maxlengthSpecified = false;
+
+
     public void setMaxlength(int maxlength) {
         this.maxlength = maxlength;
         maxlengthSpecified = true;
     }
 
+
     private String pattern = null;
+
+
     public void setPattern(String pattern) {
         this.pattern = pattern;
     }
-    
+
+
     private boolean required;
     private boolean requiredSpecified = false;
+
+
     public void setRequired(boolean required) {
         this.required = required;
         requiredSpecified = true;
     }
-    
+
+
     private int size;
     private boolean sizeSpecified = false;
+
+
     public void setSize(int size) {
         this.size = size;
         sizeSpecified = true;
     }
 
+
     private String style = null;
+
+
     public void setStyle(String style) {
         this.style = style;
     }
 
+
     public String styleClass = null;
+
+
     public void setStyleClass(String styleClass) {
         this.styleClass = styleClass;
     }
 
+
     private String value;
+
+
     public void setValue(String value) {
         this.value = value;
     }
@@ -139,8 +166,14 @@ public class CalendarTag extends UIComponentTag {
     //*********************************************************************
     // URenderer/Component identification
     
-    public String getRendererType() { return "Calendar"; }
-    public String getComponentType() { return "Calendar"; }
+    public String getRendererType() {
+        return "Calendar";
+    }
+
+
+    public String getComponentType() {
+        return "Calendar";
+    }
     
     //*********************************************************************
     // Properties Setting on the associated component
@@ -151,19 +184,19 @@ public class CalendarTag extends UIComponentTag {
      * The renderer takes care of adding a graphical representation
      * of a calendar.
      *
-     * We use setProperties() to dynamically add the UIInput component to 
+     * We use setProperties() to dynamically add the UIInput component to
      * the view tree. We then set its properties according to the values
      * specified in the Calendar tag.
      */
     protected void setProperties(UIComponent component) {
-        super.setProperties(component);    
-        
-        UIInput textComp = (UIInput)component.findComponent("date");
-        if (textComp == null) { 
+        super.setProperties(component);
+
+        UIInput textComp = (UIInput) component.findComponent("date");
+        if (textComp == null) {
             // We add the UIInput component to the tree only if it does not
             // already exist.
             textComp = new UIInput();
-            textComp.setRendererType("javax.faces.Text");  
+            textComp.setRendererType("javax.faces.Text");
             textComp.setId("date");
             DateTimeConverter converter = (DateTimeConverter)
                 FacesContext.getCurrentInstance().getApplication().
@@ -213,32 +246,31 @@ public class CalendarTag extends UIComponentTag {
     //*********************************************************************
     // Utility methods
 
-    private void processAttribute(
-    UIComponent component, String attrName, Object attrValue) {
+    private void processAttribute(UIComponent component, String attrName, Object attrValue) {
         if (attrValue != null) {
             component.getAttributes().put(attrName, attrValue);
         }
     }
-    
-    private void processAttribute(
-    UIComponent component, String attrName, Object attrValue, 
-    boolean attrSpecified) {
+
+
+    private void processAttribute(UIComponent component, String attrName, Object attrValue,
+                                  boolean attrSpecified) {
         if (attrSpecified) {
             component.getAttributes().put(attrName, attrValue);
         }
     }
 
-    private void processAttributeRef(
-    UIComponent component, String attrName, String attrValue) {
+
+    private void processAttributeRef(UIComponent component, String attrName, String attrValue) {
         if (attrValue != null) {
             if (isValueReference(attrValue)) {
                 ValueBinding vb =
-                FacesContext.getCurrentInstance().getApplication().
-                createValueBinding(attrValue);
+                    FacesContext.getCurrentInstance().getApplication().
+                    createValueBinding(attrValue);
                 component.setValueBinding(attrName, vb);
             } else {
                 component.getAttributes().put(attrName, attrValue);
             }
         }
-    }   
+    }
 }

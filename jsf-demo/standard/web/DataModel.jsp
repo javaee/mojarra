@@ -1,9 +1,9 @@
 <!--
- Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: DataModel.jsp,v 1.10 2004/01/30 05:24:57 craigmcc Exp $ --%>
+<%-- $Id: DataModel.jsp,v 1.11 2004/02/05 16:25:17 rlubke Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
