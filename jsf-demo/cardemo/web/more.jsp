@@ -44,6 +44,8 @@
 <HEAD>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
 	<TITLE>CarDemo</TITLE>
+        <link rel="stylesheet" type="text/css"
+            href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 </HEAD>
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
@@ -60,7 +62,7 @@
 <h:form  formName="carStoreForm" modelReference="CurrentOptionServer" >
 
 <P>
-<TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
+<TABLE BORDER="0" WIDTH="760" BGCOLOR="#4F4F72">
 <TR>
     <TD WIDTH="828">
     <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
@@ -113,22 +115,23 @@
         </TR>
         <TR>
             <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="3" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text value="Package:" />
+            <h:output_text key="Package" bundle="carDemoBundle" />
             </FONT></B>
             <h:command_button id="custom" commandName="custom"
-                label="Custom *" >
+                commandClass="package-selected"
+                key="Custom" bundle="carDemoBundle">
                 <f:action_listener type="cardemo.PackageAction" />
             </h:command_button>
             <h:command_button id="standard" commandName="standard"
-                label="Standard" >
+                key="Standard" bundle="carDemoBundle">
                 <f:action_listener type="cardemo.PackageAction" />
             </h:command_button>
             <h:command_button id="performance" commandName="performance"
-                label="Performance" >
+                key="Performance" bundle="carDemoBundle">
                 <f:action_listener type="cardemo.PackageAction" />
             </h:command_button>
             <h:command_button id="deluxe" commandName="deluxe"
-                label="Deluxe" >
+                key="Deluxe" bundle="carDemoBundle">
                 <f:action_listener type="cardemo.PackageAction" />
             </h:command_button>
             <BR> <BR>

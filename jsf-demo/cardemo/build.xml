@@ -203,6 +203,7 @@
         <include name="*.jpg" />
         <include name="*.jsp" />
         <include name="*.xml" />
+        <include name="*.css" />
       </fileset>
     </copy>
     <copy todir="${build}/WEB-INF/classes/${example}" >
