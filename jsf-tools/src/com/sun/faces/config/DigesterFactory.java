@@ -1,5 +1,5 @@
 /*
- * $Id: DigesterFactory.java,v 1.7 2005/08/22 22:12:15 ofung Exp $
+ * $Id: DigesterFactory.java,v 1.8 2005/11/15 15:54:24 rlubke Exp $
  */
 
 /*
@@ -30,20 +30,24 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.util.ToolsUtil;
-import org.apache.commons.digester.Digester;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.helpers.DefaultHandler;
-
 import javax.xml.parsers.ParserConfigurationException;
 
 import java.net.URL;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.commons.digester.Digester;
+import org.apache.commons.logging.impl.NoOpLog;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import com.sun.faces.util.ToolsUtil;
 
 /**
  * <p>A simple factory to hide <code>Digester</code> configuration
@@ -79,6 +83,11 @@ public class DigesterFactory {
      * <p>Custom <code>EntityResolver</code>.</p>
      */
     private static final JsfEntityResolver RESOLVER = new JsfEntityResolver();
+
+    /**
+     * <p>Custom <code>ErrorHandler</code>.</p>
+     */
+    private static final JsfErrorHandler ERROR_HANDLER = new JsfErrorHandler();
 
     /**
      * <p>Indicates whether or not document validation is
@@ -164,6 +173,9 @@ public class DigesterFactory {
         digester.setNamespaceAware(true);
         digester.setUseContextClassLoader(true);
         digester.setEntityResolver(RESOLVER);
+        digester.setErrorHandler(ERROR_HANDLER);
+        // disable digester log messages
+        digester.setLogger(new NoOpLog());
 
         if (validating) {
 
@@ -370,5 +382,19 @@ public class DigesterFactory {
         } // END resolveEntity
 
     } // END JsfEntityResolver
+    
+    private static class JsfErrorHandler implements ErrorHandler {
+        public void warning(SAXParseException exception) throws SAXException {
+            // do nothing
+        }
+
+        public void error(SAXParseException exception) throws SAXException {
+            throw exception;
+        }
+
+        public void fatalError(SAXParseException exception) throws SAXException {
+            throw exception;
+        }
+    }
 
 }

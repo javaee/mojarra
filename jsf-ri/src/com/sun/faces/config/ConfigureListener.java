@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.54 2005/10/25 20:39:55 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.55 2005/11/15 15:54:22 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -105,6 +105,7 @@ import org.apache.commons.digester.Digester;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.logging.Logger;
@@ -1554,24 +1555,34 @@ public class ConfigureListener implements ServletRequestListener,
             conn.setUseCaches(false);
             stream = conn.getInputStream();
             source = new InputSource(url.toExternalForm());
-            source.setByteStream(stream);
+            source.setSystemId(url.toExternalForm());
+            source.setByteStream(stream);            
             digester.clear();
             digester.push(fcb);
-            digester.parse(source);
+            digester.parse(source);                        
         } catch (Exception e) {
+            int ln = -1;
+            int cn = -1;            
+            if (e instanceof SAXParseException) {
+                SAXParseException spe = (SAXParseException) e;
+                ln = spe.getLineNumber();
+                cn = spe.getColumnNumber();                           
+            }
             String message = null;
             try {
                 message = Util.getExceptionMessageString
                     (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                        new Object[]{url.toExternalForm()});
+                        new Object[]{url.toExternalForm(),
+                                     ln,
+                                     cn,
+                                     e.getMessage()});
             } catch (Exception ee) {
-                message = "Can't parse configuration file:" +
-                    url.toExternalForm();
+                message = "Can't parse configuration file: " 
+                          + url.toExternalForm() + ": Error at line "
+                          + ln + " column " + cn 
+                          + ": " + e.getMessage();
             }
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING, message, e);
-            }
-            throw new FacesException(message, e);
+            throw new FacesException(message);
         } finally {
             if (stream != null) {
                 try {
