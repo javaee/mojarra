@@ -99,7 +99,6 @@ function getPostData(form, control) {
             formValues[len] = new Object();
             formValues[len].id = child.id;
             formValues[len].value = child.getAttribute("value");
-alert("added text element:"+len);
         }
         child = child.nextSibling;
     }
@@ -110,5 +109,4 @@ alert("added text element:"+len);
             postData += "&";
         }
     }
-alert("postdata:"+postData);
 }
