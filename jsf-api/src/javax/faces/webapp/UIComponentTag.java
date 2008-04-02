@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.25 2003/10/24 23:34:43 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.26 2003/10/27 15:42:54 eburns Exp $
  */
 
 /*
@@ -681,6 +681,10 @@ public abstract class UIComponentTag implements Tag {
 		    parentComponent.getAttributes().put(CURRENT_VIEW_ROOT, 
 							CURRENT_VIEW_ROOT);
 		}
+		else if (override) {
+		    overrideProperties(parentComponent);
+		}
+
 	    }
 	    // this is not the first time this tag instance is trying to
 	    // be bound to this UIViewRoot, take no extra action.
