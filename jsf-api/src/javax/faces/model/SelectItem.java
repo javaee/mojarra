@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.7 2004/02/26 20:31:08 eburns Exp $
+ * $Id: SelectItem.java,v 1.8 2004/06/01 22:14:26 rogerk Exp $
  */
 
 /*
@@ -221,7 +221,7 @@ public class SelectItem implements Serializable {
 
     /**
      * <p>Set the value of this item, to be delivered to the model
-     * if this item is selected by thie user.
+     * if this item is selected by this user.
      *
      * @param value The new value
      *
