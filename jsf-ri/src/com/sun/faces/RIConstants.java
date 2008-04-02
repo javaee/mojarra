@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.45 2003/09/04 21:15:03 jvisvanathan Exp $
+ * $Id: RIConstants.java,v 1.46 2003/10/06 18:11:31 eburns Exp $
  */
 
 /*
@@ -61,12 +61,6 @@ public class RIConstants {
 
     public static final String JSF_RI_CONFIG = 
 	"com/sun/faces/jsf-ri-config.xml";
-
-    // PENDING(rogerk) this needs to be mentioned in the spec, 
-    // under [ConfigFiles-26]
-    // EVENT_LIMIT is configured as servlet init param;
-    public static final String EVENT_LIMIT = "maxevents";
-    public static final int MAX_EVENTS = 100;
 
     public final static String FORM_NUMBER_ATTR = FACES_PREFIX +
 	"FormNumber";

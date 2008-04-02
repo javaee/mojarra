@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.34 2003/10/02 00:39:54 jvisvanathan Exp $
+ * $Id: LifecycleImpl.java,v 1.35 2003/10/06 18:11:32 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.34 2003/10/02 00:39:54 jvisvanathan Exp $
+ * @version $Id: LifecycleImpl.java,v 1.35 2003/10/06 18:11:32 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -82,13 +82,6 @@ public class LifecycleImpl extends Lifecycle
 
 
     protected Object lock = null;    
-
-    // keeps track of total number of events processed 
-    // per event source component
-
-    public HashMap eventsProcessed = null;
-    public String limit= null;
-    public int eventLimit = RIConstants.MAX_EVENTS; // some default;
 
     //
     // Constructors and Initializers    
@@ -150,15 +143,6 @@ public class LifecycleImpl extends Lifecycle
         int curPhaseId = 0;
         Assert.assert_it(null != phaseIter);
 
-        // for keeping track of events processed limit..
-        //
-        limit = context.getExternalContext().getInitParameter(
-            RIConstants.EVENT_LIMIT);
-        if (limit != null) {
-            eventLimit = new Integer(limit).intValue();
-        }
-        eventsProcessed = new HashMap();
-
         while (phaseIter.hasNext()) {
 	    wrapper = (PhaseWrapper)phaseIter.next();
 	    curPhase = wrapper.instance;
@@ -173,18 +157,6 @@ public class LifecycleImpl extends Lifecycle
                 (!hasPostDataOrQueryParams(context))) {
                 curPhase = getRenderPhase(context);
                 context.renderResponse();
-            }
-
-            // Process Events 
-
-            if (curPhase.getId() == PhaseId.APPLY_REQUEST_VALUES) {
-                processEvents(context, PhaseId.APPLY_REQUEST_VALUES);
-            } else if (curPhase.getId() == PhaseId.PROCESS_VALIDATIONS) {
-                processEvents(context, PhaseId.PROCESS_VALIDATIONS);
-            } else if (curPhase.getId() == PhaseId.UPDATE_MODEL_VALUES) {
-                processEvents(context, PhaseId.UPDATE_MODEL_VALUES);
-            } else if (curPhase.getId() == PhaseId.INVOKE_APPLICATION) {
-                processEvents(context, PhaseId.INVOKE_APPLICATION);
             }
 
             if (context.getResponseComplete()) {
@@ -248,47 +220,6 @@ public class LifecycleImpl extends Lifecycle
 
         //default to going through all processing phases
         return true;
-    }
-
-    // This method processes the events in the queue;
-
-    //We call iter.remove() to remove the event from the queue
-    //after all listeners for the event have received the event; The "broadcast"
-    //method returns "false" to indicate this.
-
-    private void processEvents(FacesContext context, PhaseId phaseId) {
-        // PENDING IMPLEMENTATION. This is now handled by UIViewRoot.
-       /* Iterator iter = context.getFacesEvents();
-        while (iter.hasNext()) {
-            FacesEvent event = (FacesEvent)iter.next();
-            UIComponent source = event.getComponent();
-            if (!source.broadcast(event, phaseId)) {
-                iter.remove();
-                if (limitReached(source, eventsProcessed)) {
-		    Object [] params = { Integer.toString(eventLimit) };
-                    throw new RuntimeException(Util.getExceptionMessage(Util.MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID, params));
-                }
-
-            }
-        } */
-    }
-
-    //PENDING(rogerk) maybe we can optimize this method a bit..
-
-    private boolean limitReached(UIComponent source, HashMap eventsProcessed) {
-        if (!eventsProcessed.containsKey(source)) {
-            eventsProcessed.put(source, new Integer(1));
-            return false;
-        }
-
-        int count = ((Integer)eventsProcessed.get(source)).intValue()+1;
-        if (count > eventLimit) {
-            return true;
-        }
-
-
-        eventsProcessed.put(source, new Integer(count));
-        return false;
     }
 
     public void addPhaseListener(PhaseListener listener) {

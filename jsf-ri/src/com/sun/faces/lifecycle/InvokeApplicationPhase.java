@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.9 2003/07/07 20:52:55 eburns Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.10 2003/10/06 18:11:32 eburns Exp $
  */
 
 /*
@@ -18,18 +18,20 @@ import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.event.FacesEvent;
 
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
 
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.9 2003/07/07 20:52:55 eburns Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.10 2003/10/06 18:11:32 eburns Exp $
  * 
  */
 
@@ -41,6 +43,9 @@ public class InvokeApplicationPhase extends Phase {
 //
 // Class Variables
 //
+
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(InvokeApplicationPhase.class);
 
 //
 // Instance Variables
@@ -65,6 +70,21 @@ public PhaseId getId() {
 
 public void execute(FacesContext facesContext) throws FacesException
 {
+    UIViewRoot root = facesContext.getViewRoot();
+    Assert.assert_it(null != root);
+    
+    
+    try {
+	root.processApplication(facesContext);
+    } catch (RuntimeException re) {
+	String exceptionMessage = re.getMessage();
+	if (null != exceptionMessage) {
+	    if (log.isErrorEnabled()) {
+		log.error(exceptionMessage, re);
+	    }
+	}
+	throw new FacesException(exceptionMessage, re);
+    }
 }
 
 //

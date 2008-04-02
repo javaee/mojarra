@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.9 2003/10/02 06:50:16 jvisvanathan Exp $
+ * $Id: TestProcessEvents.java,v 1.10 2003/10/06 18:11:34 eburns Exp $
  */
 
 /*
@@ -29,6 +29,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIViewRoot;
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.RIConstants;
@@ -44,7 +45,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.9 2003/10/02 06:50:16 jvisvanathan Exp $
+ * @version $Id: TestProcessEvents.java,v 1.10 2003/10/06 18:11:34 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -99,11 +100,19 @@ public int eventLimit = 100; // some default;
 // General Methods
 //
 
+    public void setUp() {
+	super.setUp();
+	UIViewRoot root = new UIViewRoot();
+	getFacesContext().setViewRoot(root);
+    }
+    
+    public void tearDown() {
+	getFacesContext().setViewRoot(null);
+	super.tearDown();
+    }
+
 // tests one component - one value changed listener
 
-// PENDING FIX are these tests required now that this is done in
-// UIViewRoot
-/*
 public void testSingleValueChanged()
 {
     // for keeping track of events processed limit..
@@ -111,6 +120,7 @@ public void testSingleValueChanged()
     eventsProcessed = new HashMap();
 
     UIInput userName = new UIInput();
+    getFacesContext().getViewRoot().getChildren().add(userName);
 
     // clear the property
     System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
@@ -125,8 +135,7 @@ public void testSingleValueChanged()
     userName.queueEvent(new ValueChangedEvent( 
         userName, "foo", "bar"));
 
-    PhaseId phaseId = PhaseId.PROCESS_VALIDATIONS;
-    processEvents(getFacesContext(), phaseId);
+    getFacesContext().getViewRoot().processValidators(getFacesContext());
  
     assertTrue(!System.getProperty(HANDLED_VALUEEVENT1).equals(EMPTY));
 }
@@ -140,6 +149,7 @@ public void testMultipleValueChanged()
     eventsProcessed = new HashMap();
 
     UIInput userName = new UIInput();
+    getFacesContext().getViewRoot().getChildren().add(userName);
 
     // clear the property
     System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
@@ -157,12 +167,16 @@ public void testMultipleValueChanged()
     userName.queueEvent(new ValueChangedEvent(
         userName, "foo", "bar"));
 
-    PhaseId phaseId = PhaseId.PROCESS_VALIDATIONS;
-    processEvents(getFacesContext(), phaseId);
-
+    getFacesContext().getViewRoot().processValidators(getFacesContext());
+    
     assertTrue(!System.getProperty(HANDLED_VALUEEVENT1).equals(EMPTY));
     assertTrue(!System.getProperty(HANDLED_VALUEEVENT2).equals(EMPTY));
 }
+
+
+/*********************** 
+ * PENDING() perhaps reactivate this if the EG wants event loop detection.
+
 
 // tests event recursion - infinite loop
 // ValueChangedEvent will fire back the same event it received..
@@ -196,7 +210,7 @@ public void testValueChangedRecursion()
 
     assertTrue(exceptionthrown);
 }
-
+**************************/
 
 // tests one component - one action listener
 
@@ -207,6 +221,8 @@ public void testSingleAction()
     eventsProcessed = new HashMap();
 
     UICommand button = new UICommand();
+    getFacesContext().getViewRoot().getChildren().add(button);
+
     // clear the property
     System.setProperty(HANDLED_ACTIONEVENT1, EMPTY);
 
@@ -219,11 +235,13 @@ public void testSingleAction()
 
     button.queueEvent(new ActionEvent(button));
 
-    PhaseId phaseId = PhaseId.APPLY_REQUEST_VALUES;
-    processEvents(getFacesContext(), phaseId);
+    getFacesContext().getViewRoot().processDecodes(getFacesContext());
 
     assertTrue(!System.getProperty(HANDLED_ACTIONEVENT1).equals(EMPTY));
 }
+
+/**************************
+ * PENDING() perhaps reactivate this if the EG wants event loop detection.
 
 // tests event recursion - infinite loop
 // ActionEvent will fire back the same event it received..
@@ -263,23 +281,6 @@ public void testActionRecursion()
     assertTrue(exceptionthrown);
 }
 
-
-private void processEvents(FacesContext context, PhaseId phaseId) {
-    Iterator iter = getFacesContext().getFacesEvents();
-    assertTrue(iter.hasNext());
-    while (iter.hasNext()) {
-        FacesEvent event = (FacesEvent)iter.next();
-        UIComponent source = event.getComponent();
-        if (!source.broadcast(event, phaseId)) {
-            iter.remove();
-            if (limitReached(source, eventsProcessed)) {
-                throw new RuntimeException("Maximum number of events ("+
-                    eventLimit+") processed");
-            }
-        }
-    }
-} 
-
 private boolean limitReached(UIComponent source, HashMap eventsProcessed) {
     if (!eventsProcessed.containsKey(source)) {
         eventsProcessed.put(source, new Integer(1));
@@ -297,6 +298,7 @@ private boolean limitReached(UIComponent source, HashMap eventsProcessed) {
     eventsProcessed.put(source, new Integer(count));
     return false;
 }
+**********************/
 
 public class ValueChange1 implements ValueChangedListener {
     public PhaseId getPhaseId() {
@@ -317,6 +319,10 @@ public class ValueChange2 implements ValueChangedListener {
     }
 }
 
+
+/**************
+ * PENDING() perhaps reactivate this if the EG wants event loop detection.
+
 // event recursion case - fires same event it received..
 
 public class ValueChangeRecursion implements ValueChangedListener {
@@ -329,6 +335,7 @@ public class ValueChangeRecursion implements ValueChangedListener {
             event.getComponent(), "foo", "bar"));
     }
 }
+***************/
 
 public class Action1 implements ActionListener {
     public PhaseId getPhaseId() {
@@ -339,6 +346,10 @@ public class Action1 implements ActionListener {
         System.setProperty(HANDLED_ACTIONEVENT1, HANDLED_ACTIONEVENT1);
     }
 }
+
+
+/**************
+ * PENDING() perhaps reactivate this if the EG wants event loop detection.
 
 // event recursion case - fires same event it received..
 
@@ -353,10 +364,12 @@ public class ActionRecursion implements ActionListener {
     }
 }
 
+*****************/
+
 public static class UICommandSub extends UICommand {
     public List[] getListeners() { 
 	return listeners;
     }
-} */
+} 
 
 } // end of class TestProcessEvents
