@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.1 2002/09/09 23:52:25 visvan Exp $
+ * $Id: ListRenderer.java,v 1.2 2002/09/11 20:02:25 edburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.1 2002/09/09 23:52:25 visvan Exp $
+ * @version $Id: ListRenderer.java,v 1.2 2002/09/11 20:02:25 edburns Exp $
  *  
  */
 
@@ -87,8 +87,9 @@ public class ListRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UIPanel.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component)
+    public boolean decode(FacesContext context, UIComponent component)
         throws IOException {
+	return true;
     }
 
 

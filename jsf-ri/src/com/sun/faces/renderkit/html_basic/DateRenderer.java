@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.8 2002/09/07 16:35:58 eburns Exp $
+ * $Id: DateRenderer.java,v 1.9 2002/09/11 20:02:21 edburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.8 2002/09/07 16:35:58 eburns Exp $
+ * @version $Id: DateRenderer.java,v 1.9 2002/09/11 20:02:21 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,8 +124,9 @@ public class DateRenderer extends HtmlBasicRenderer {
 		componentType.equals(UIOutput.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) 
+    public boolean decode(FacesContext context, UIComponent component) 
             throws IOException {
+	boolean result = true;
         Object convertedValue = null;
         Class modelType = null;
         String newValue = null;
@@ -139,7 +140,7 @@ public class DateRenderer extends HtmlBasicRenderer {
 
 	if (!(component instanceof UIInput)) {
 	    // do nothing in output case
-	    return;
+	    return result;
 	}
 	
         compoundId = component.getCompoundId();
@@ -147,7 +148,7 @@ public class DateRenderer extends HtmlBasicRenderer {
         
 	if (null == (newValue = 
 		     context.getServletRequest().getParameter(compoundId))) {
-	    return;
+	    return result;
 	}
 	
         modelRef = component.getModelReference();
@@ -158,9 +159,8 @@ public class DateRenderer extends HtmlBasicRenderer {
 	}
 	catch (ParseException e) {
 	    component.setValue(newValue);
-	    component.setValid(false);
             addConversionErrorMessage(context, component, e.getMessage()); 
-	    return;
+	    return false;
 	}
 	
 	if (null != modelRef) {
@@ -185,7 +185,7 @@ public class DateRenderer extends HtmlBasicRenderer {
 	else {
 	    component.setValue(newDateValue);
 	}
-	component.setValid(true);
+	return result;
     }
     
     public void encodeBegin(FacesContext context, UIComponent component) 

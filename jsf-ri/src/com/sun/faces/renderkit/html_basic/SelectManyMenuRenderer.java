@@ -1,5 +1,5 @@
 /**
- * $Id: SelectManyMenuRenderer.java,v 1.3 2002/09/07 16:35:59 eburns Exp $
+ * $Id: SelectManyMenuRenderer.java,v 1.4 2002/09/11 20:02:29 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyMenuRenderer.java,v 1.3 2002/09/07 16:35:59 eburns Exp $
+ * @version $Id: SelectManyMenuRenderer.java,v 1.4 2002/09/11 20:02:29 edburns Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -85,7 +85,7 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UISelectMany.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component)
+    public boolean decode(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
@@ -101,7 +101,7 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
         // currently we assume the model type to be of type string or 
         // convertible to string and localised by the application.
         component.setValue(newValues);
-        component.setValid(true);
+	return true;
     }
 
     public void encodeBegin(FacesContext context, UIComponent component)

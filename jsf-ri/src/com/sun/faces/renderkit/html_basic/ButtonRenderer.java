@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.34 2002/09/07 16:35:57 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.35 2002/09/11 20:02:20 edburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.34 2002/09/07 16:35:57 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.35 2002/09/11 20:02:20 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -117,28 +117,28 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UICommand.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) 
+    public boolean decode(FacesContext context, UIComponent component) 
             throws IOException {
-       if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	boolean result = true;
+	if (context == null || component == null) {
+	    throw new NullPointerException(Util.getExceptionMessage(
+				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
+	
         // Was our command the one that caused this submission?
         // we don' have to worry about getting the value from request parameter
         // because we just need to know if this command caused the submission. We
         // can get the command name by calling currentValue. This way we can 
         // get around the IE bug.
-        component.setValid(true);
         String value = context.getServletRequest().
                 getParameter(component.getCompoundId());
         if (value == null) {
-            return;
+            return result;
         }
 
         String type = (String) component.getAttribute("type");
         if ((type == null) || (type.toLowerCase().equals("reset")) ) {
-            return;
+            return result;
         }
 
         // Construct and enqueue a FormEvent for the application
@@ -156,11 +156,12 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             // PENDING (visvan) log error
             //log.error("Button[" + component.getCompoundId() +
             //          "] not nested in a form");
-            return;
+            return false;
         }
         FormEvent formEvent =
             new FormEvent(component, formName, commandName);
         context.addApplicationEvent(formEvent);
+	return result;
     }
     
      public void encodeBegin(FacesContext context, UIComponent component) 

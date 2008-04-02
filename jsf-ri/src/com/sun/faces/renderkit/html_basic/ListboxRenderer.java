@@ -1,5 +1,5 @@
 /*
- * $Id: ListboxRenderer.java,v 1.1 2002/09/08 21:30:53 eburns Exp $
+ * $Id: ListboxRenderer.java,v 1.2 2002/09/11 20:02:25 edburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListboxRenderer.java,v 1.1 2002/09/08 21:30:53 eburns Exp $
+ * @version $Id: ListboxRenderer.java,v 1.2 2002/09/11 20:02:25 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,7 +93,7 @@ public class ListboxRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UISelectOne.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) 
+    public boolean decode(FacesContext context, UIComponent component) 
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -106,7 +106,7 @@ public class ListboxRenderer extends HtmlBasicRenderer {
         // currently we assume the model type to be of type string or 
         // convertible to string and localised by the application.
         component.setValue(newValue);
-        component.setValid(true);
+	return true;
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 

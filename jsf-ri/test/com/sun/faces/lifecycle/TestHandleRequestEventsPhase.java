@@ -1,5 +1,5 @@
 /*
- * $Id: TestHandleRequestEventsPhase.java,v 1.9 2002/08/08 16:24:56 rkitain Exp $
+ * $Id: TestHandleRequestEventsPhase.java,v 1.10 2002/09/11 20:02:31 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHandleRequestEventsPhase.java,v 1.9 2002/08/08 16:24:56 rkitain Exp $
+ * @version $Id: TestHandleRequestEventsPhase.java,v 1.10 2002/09/11 20:02:31 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -173,7 +173,7 @@ public void testCallback()
 public static class UIValueChangeTextEntry1 extends UIInput
 {
 
-public void decode(FacesContext context) throws IOException 
+public boolean decode(FacesContext context) throws IOException 
 {
     System.setProperty(DID_DECODE1, DID_DECODE1);
     if (context == null) {
@@ -196,7 +196,7 @@ public void decode(FacesContext context) throws IOException
     }
 	
     setValue(newValue);
-    
+    return true;
 }
 
 public boolean processEvent(FacesContext context, FacesEvent event) 
@@ -210,7 +210,7 @@ public boolean processEvent(FacesContext context, FacesEvent event)
 public static class UIValueChangeTextEntry2 extends UIInput
 {
 
-public void decode(FacesContext context) throws IOException
+public boolean decode(FacesContext context) throws IOException
 {
     System.setProperty(DID_DECODE2, DID_DECODE2);
     if (context == null) {
@@ -233,7 +233,7 @@ public void decode(FacesContext context) throws IOException
     }
 
     setValue(newValue);
-
+    return true;
 }
 
 public boolean processEvent(FacesContext context, FacesEvent event)

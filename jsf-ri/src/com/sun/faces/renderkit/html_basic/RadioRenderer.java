@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.32 2002/09/07 16:35:59 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.33 2002/09/11 20:02:27 edburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.32 2002/09/07 16:35:59 eburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.33 2002/09/11 20:02:27 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -98,7 +98,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UISelectOne.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) 
+    public boolean decode(FacesContext context, UIComponent component) 
            throws IOException {
         Object convertedValue = null;
         Class modelType = null;
@@ -114,7 +114,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
         // currently we assume the model type to be of type string or 
         // convertible to string and localised by the application.
         component.setValue(newValue);
-        component.setValid(true);
+	return true;
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.35 2002/08/29 19:38:00 eburns Exp $
+ * $Id: FormRenderer.java,v 1.36 2002/09/11 20:02:22 edburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.35 2002/08/29 19:38:00 eburns Exp $
+ * @version $Id: FormRenderer.java,v 1.36 2002/09/11 20:02:22 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,11 +92,12 @@ public class FormRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UIForm.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) 
+    public boolean decode(FacesContext context, UIComponent component) 
             throws IOException{
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+	return true;
     }
     
     public void encodeBegin(FacesContext context, UIComponent component) 

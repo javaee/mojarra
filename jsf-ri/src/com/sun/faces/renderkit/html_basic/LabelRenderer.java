@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.3 2002/09/07 16:35:59 eburns Exp $
+ * $Id: LabelRenderer.java,v 1.4 2002/09/11 20:02:25 edburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.3 2002/09/07 16:35:59 eburns Exp $
+ * @version $Id: LabelRenderer.java,v 1.4 2002/09/11 20:02:25 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,12 +88,13 @@ public class LabelRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UIOutput.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) 
+    public boolean decode(FacesContext context, UIComponent component) 
             throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 	// NO-OP decode
+	return true;
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 

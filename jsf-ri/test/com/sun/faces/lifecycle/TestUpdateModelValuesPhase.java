@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.12 2002/08/08 16:24:57 rkitain Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.13 2002/09/11 20:02:32 edburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.12 2002/08/08 16:24:57 rkitain Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.13 2002/09/11 20:02:32 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -89,9 +89,9 @@ public void testUpdateNormal()
 {
     int rc = Phase.GOTO_NEXT;
     UIForm form = null;
-    UIInput userName = null;
-    UIInput userName1 = null;
-    UIInput userName2 = null;
+    TestUIInput userName = null;
+    TestUIInput userName1 = null;
+    TestUIInput userName2 = null;
     Tree tree = null;
     TestBean testBean = (TestBean)
 	(getFacesContext().getHttpSession()).getAttribute("TestBean");
@@ -101,23 +101,23 @@ public void testUpdateNormal()
 				       Lifecycle.UPDATE_MODEL_VALUES_PHASE);
     form = new UIForm();
     form.setComponentId("form");
-    userName = new UIInput();
+    userName = new TestUIInput();
     userName.setComponentId("userName");
     userName.setValue("one");
     userName.setModelReference("${TestBean.one}");
-    userName.setValid(true);
+    userName.testSetValid(true);
     form.addChild(userName);
-    userName1 = new UIInput();
+    userName1 = new TestUIInput();
     userName1.setComponentId("userName1");
     userName1.setValue("one");
     userName1.setModelReference("${TestBean.one}");
-    userName1.setValid(true);
+    userName1.testSetValid(true);
     form.addChild(userName1);
-    userName2 = new UIInput();
+    userName2 = new TestUIInput();
     userName2.setComponentId("userName2");
     userName2.setValue("one");
     userName2.setModelReference("${TestBean.one}");
-    userName2.setValid(true);
+    userName2.testSetValid(true);
     form.addChild(userName2);
 
     tree = new XmlTreeImpl(config.getServletContext(), form, 
@@ -137,9 +137,9 @@ public void testUpdateFailed()
 {
     int rc = Phase.GOTO_NEXT;
     UIForm form = null;
-    UIInput userName = null;
-    UIInput userName1 = null;
-    UIInput userName2 = null;
+    TestUIInput userName = null;
+    TestUIInput userName1 = null;
+    TestUIInput userName2 = null;
     Tree tree = null;
     String value = null;
     Phase 
@@ -147,23 +147,23 @@ public void testUpdateFailed()
 				       Lifecycle.UPDATE_MODEL_VALUES_PHASE);
     form = new UIForm();
     form.setComponentId("form");
-    userName = new UIInput();
+    userName = new TestUIInput();
     userName.setComponentId("userName");
     userName.setValue("one");
-    userName.setValid(true);
+    userName.testSetValid(true);
     userName.setModelReference("${UserBean.one}");
     form.addChild(userName);
-    userName1 = new UIInput();
+    userName1 = new TestUIInput();
     userName1.setComponentId("userName1");
     userName1.setValue("one");
-    userName1.setValid(true);
+    userName1.testSetValid(true);
     userName1.setModelReference("${TestBean.one}");
     form.addChild(userName1);
-    userName2 = new UIInput();
+    userName2 = new TestUIInput();
     userName2.setComponentId("userName2");
     userName2.setValue("one");
     userName2.setModelReference("${TestBean.one}");
-    userName2.setValid(true);
+    userName2.testSetValid(true);
     form.addChild(userName2);
 
     tree = new XmlTreeImpl(config.getServletContext(), form,
@@ -178,6 +178,14 @@ public void testUpdateFailed()
     assertTrue(null != userName.getValue());
     assertTrue(true == (getFacesContext().getMessages().hasNext()));
     
+}
+
+public static class TestUIInput extends UIInput {
+
+    public void testSetValid(boolean validState) {
+	this.setValid(validState);
+    }
+
 }
 
 } // end of class TestUpdateModelValuesPhase

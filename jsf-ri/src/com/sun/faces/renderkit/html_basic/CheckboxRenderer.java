@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.35 2002/09/07 16:35:57 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.36 2002/09/11 20:02:20 edburns Exp $
  *
  */
 
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.35 2002/09/07 16:35:57 eburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.36 2002/09/11 20:02:20 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,7 +92,7 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UISelectBoolean.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) 
+    public boolean decode(FacesContext context, UIComponent component) 
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -118,7 +118,7 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
             newValue = "true";
         }
         component.setValue(Boolean.valueOf(newValue));
-        component.setValid(true);
+	return true;
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 

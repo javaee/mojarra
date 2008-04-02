@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.8 2002/09/07 16:35:59 eburns Exp $
+ * $Id: NumberRenderer.java,v 1.9 2002/09/11 20:02:27 edburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.8 2002/09/07 16:35:59 eburns Exp $
+ * @version $Id: NumberRenderer.java,v 1.9 2002/09/11 20:02:27 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -98,11 +98,12 @@ public class NumberRenderer extends HtmlBasicRenderer {
                 componentType.equals(UIOutput.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) 
+    public boolean decode(FacesContext context, UIComponent component) 
             throws IOException {
+	boolean result = true;
         
-        if (!(component instanceof UIInput)) {
-            return;
+        if (!(component.getComponentType() == UIInput.TYPE)) {
+            return result;
         }
                  
         Number convertedValue = null;
@@ -123,7 +124,7 @@ public class NumberRenderer extends HtmlBasicRenderer {
         }    
         if ( newValue == null || newValue.length() == 0) {
             component.setValue(newValue);
-            return;
+            return result;
         }
         
         // get FormatPool Instance from ServletContext
@@ -133,18 +134,16 @@ public class NumberRenderer extends HtmlBasicRenderer {
         
         try {
             parsedValue = formatPool.numberFormat_parse(context, component, newValue);
-            component.setValid(true);
         } catch (ParseException pe ) {
             component.setValue(newValue);
-            component.setValid(false);
             addConversionErrorMessage( context, component, pe.getMessage());
-            return;
+            return false;
         }
         // if modelReference is null, store value as Number.
         String modelRef = component.getModelReference();
         if ( modelRef == null ) {
              component.setValue(parsedValue);
-             return;
+             return result;
              
         }    
         // convert the parsed value to model property type.
@@ -166,7 +165,7 @@ public class NumberRenderer extends HtmlBasicRenderer {
             convertedValue = convertToModelType(modelType, parsedValue);
             component.setValue(convertedValue);
         }    
-        
+        return result;
     }
     
     protected Number convertToModelType(Class modelType, Number parsedValue) {

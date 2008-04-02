@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.31 2002/09/07 16:35:59 eburns Exp $
+ * $Id: SecretRenderer.java,v 1.32 2002/09/11 20:02:28 edburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.31 2002/09/07 16:35:59 eburns Exp $
+ * @version $Id: SecretRenderer.java,v 1.32 2002/09/11 20:02:28 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,7 +85,7 @@ public class SecretRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UIInput.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) 
+    public boolean decode(FacesContext context, UIComponent component) 
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -99,7 +99,7 @@ public class SecretRenderer extends HtmlBasicRenderer {
         String newValue = context.getServletRequest().getParameter(compoundId);
 
         component.setValue(newValue);
-        component.setValid(true);
+	return true;
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
