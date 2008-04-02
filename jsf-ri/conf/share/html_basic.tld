@@ -237,6 +237,11 @@
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
+      <attribute>
+          <name>valueRef</name>
+          <required>false</required>
+          <rtexprvalue>false</rtexprvalue>
+      </attribute>
        <!-- HTML 4.0 Attributes  -->
      <attribute>
       <name>type</name>
@@ -370,14 +375,14 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
     <attribute>
-      <name>href</name>
+      <name>image</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>image</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+        <name>imageKey</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
       <name>label</name>
@@ -408,6 +413,11 @@
         <name>required</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
+          <name>valueRef</name>
+          <required>false</required>
+          <rtexprvalue>false</rtexprvalue>
       </attribute>
   </tag>
 

@@ -1,0 +1,23 @@
+
+
+
+<html>
+<head>
+    
+    
+    
+    <title>command_button_test.jsp</title>
+</head>
+<body>
+    
+    
+    
+        <input type="submit" name="button01" value="My Label">
+        <input type="reset" name="button02" value="This is a String property">
+        <input type="submit" name="button03" value="RES-BUNDLE KEY">
+        <input type="image" src="duke.gif" name="button04">
+        <input type="image" src="resbundle_image.gif" name="button05">
+    
+</body>
+</html>
+

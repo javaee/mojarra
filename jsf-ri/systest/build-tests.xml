@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.9 2003/06/20 13:25:25 eburns Exp $
+ $Id: build-tests.xml,v 1.10 2003/07/29 16:31:06 rlubke Exp $
 -->
 
 
@@ -56,7 +56,8 @@
                 test.component,
                 test.navigation,
                 test.tlvalidator,
-                test.standard
+                test.standard,
+                test.html.taglib
                "/>
 
 
@@ -224,6 +225,19 @@
           golden="${golden.path}/standard/output_errors01.txt"/>
 
 
+  </target>
+
+  <target name="test.html.taglib"
+          description="Test the HTML JSP Tags">
+      <echo message="Testing command_button..."/>
+      <tester host="${host}" port="${port}" protocol="${protocol}"
+              request="${context.path}/faces/taglib/command_button_test.jsp"
+              golden="${golden.path}/taglib/command_button_test.txt"/>
+
+      <echo message="Testing command_hyperlink..."/>
+      <tester host="${host}" port="${port}" protocol="${protocol}"
+              request="${context.path}/faces/taglib/command_hyperlink_test.jsp"
+              golden="${golden.path}/taglib/command_hyperlink_test.txt"/>
   </target>
 
 </project>
