@@ -1,5 +1,5 @@
 /*
- * $Id: RepeaterBean.java,v 1.4 2005/08/29 19:40:24 edburns Exp $
+ * $Id: RepeaterBean.java,v 1.5 2005/12/06 02:17:50 rlubke Exp $
  */
 
 /*
@@ -31,18 +31,19 @@ package demo.model;
 
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.ejb.PostConstruct;
-import javax.ejb.PreDestroy;
+
 
 
 /**
@@ -51,16 +52,17 @@ import javax.ejb.PreDestroy;
 
 public class RepeaterBean {
 
-
+    
     @PostConstruct public void postConstruct() {
         System.out.printf("postConstruct Called\n");
     }
+
     
     @PreDestroy public void preDestroy() {
         System.out.printf("preDestroy Called\n");
     }
-    
-    
+
+
     // -------------------------------------------------------- Bound Components
 
 
@@ -189,12 +191,12 @@ public class RepeaterBean {
     }
 
     public void clickAction(ActionEvent e) {
-	UIComponent link = e.getComponent();
-	String key = (String) link.getAttributes().get("key");
+    UIComponent link = e.getComponent();
+    String key = (String) link.getAttributes().get("key");
         append("Link clicked for account " + accountId.getValue());
-	append("actionEvent occurred " + key);
-	clear();
-	
+    append("actionEvent occurred " + key);
+    clear();
+
     }
 
 
