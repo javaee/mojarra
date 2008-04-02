@@ -1,5 +1,5 @@
 /*
- * $Id: Output_DateTag.java,v 1.10 2003/07/16 00:00:11 jvisvanathan Exp $
+ * $Id: Output_DateTag.java,v 1.11 2003/08/13 02:08:07 eburns Exp $
  */
 
 /*
@@ -63,15 +63,6 @@ public class Output_DateTag extends com.sun.faces.taglib.FacesTag
     public String getComponentType() { 
         return "Output"; 
     }
-
-    protected void overrideProperties(UIComponent component) {
-	super.overrideProperties(component);
-        UIOutput uiOutput = (UIOutput)component;
-	if (null != value) {
-	    uiOutput.setValue(value);
-	}
-    }
-
 
     //
     // Methods from TagSupport

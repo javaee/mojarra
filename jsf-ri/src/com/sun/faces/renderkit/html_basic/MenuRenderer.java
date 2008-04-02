@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.17 2003/08/08 16:20:22 rkitain Exp $
+ * $Id: MenuRenderer.java,v 1.18 2003/08/13 02:08:04 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -94,14 +94,18 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         if (component instanceof UISelectMany) {
             Map requestParameterValuesMap = context.getExternalContext().
                 getRequestParameterValuesMap();
-            String newValues[] = (String[])requestParameterValuesMap.
-                get(clientId);
-            setSelectManyValue(context, ((UISelectMany)component), newValues);
+	    if (requestParameterValuesMap.containsKey(clientId)) {
+		String newValues[] = (String[])requestParameterValuesMap.
+		    get(clientId);
+		setSelectManyValue(context, ((UISelectMany)component), newValues);
+	    }
         } else {
             Map requestParameterMap = context.getExternalContext().
                 getRequestParameterMap();
-            String newValue = (String)requestParameterMap.get(clientId);
-            setSelectOneValue(context, ((UISelectOne)component), newValue);
+	    if (requestParameterMap.containsKey(clientId)) {
+		String newValue = (String)requestParameterMap.get(clientId);
+		setSelectOneValue(context, ((UISelectOne)component), newValue);
+	    }
         }    
         return;
     }

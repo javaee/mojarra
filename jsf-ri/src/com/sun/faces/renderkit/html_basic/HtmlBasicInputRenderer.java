@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.6 2003/07/29 18:23:22 jvisvanathan Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.7 2003/08/13 02:08:03 eburns Exp $
  */
 
 /*
@@ -83,7 +83,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             Class converterType = 
                     (Util.getValueBinding(valueRef)).getType(context);
             // if converterType is null, assume the modelType is "String".
-            if ( converterType == null) {
+            if ( converterType == null || converterType == String.class) {
                 return newValue;
             }
             // if getType returns a type for which we support a default

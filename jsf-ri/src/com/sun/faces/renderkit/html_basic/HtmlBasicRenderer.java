@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.46 2003/08/08 16:20:21 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.47 2003/08/13 02:08:03 eburns Exp $
  */
 
 /*
@@ -261,16 +261,19 @@ public abstract class HtmlBasicRenderer extends Renderer {
         setPreviousValue(component, curValue);
 
         Map requestMap = context.getExternalContext().getRequestParameterMap();
-        String newValue = (String)requestMap.get(clientId);
-        try {
-            convertedValue = getConvertedValue(context, component, newValue);   
-        } catch (ConverterException ce) {
-            uiInput.setValue(newValue);
-            addConversionErrorMessage(context, component, ce.getMessage());
-            uiInput.setValid(false);
-            return;
-        }   
-        uiInput.setValue(convertedValue);
+	// Don't overwrite the value unless you have to!
+	if (requestMap.containsKey(clientId)) {
+	    String newValue = (String)requestMap.get(clientId);
+	    try {
+		convertedValue = getConvertedValue(context, component, newValue);   
+	    } catch (ConverterException ce) {
+		uiInput.setValue(newValue);
+		addConversionErrorMessage(context, component, ce.getMessage());
+		uiInput.setValid(false);
+		return;
+	    }   
+	    uiInput.setValue(convertedValue);
+	}
      }
     
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: Output_MessageTag.java,v 1.9 2003/07/16 00:00:11 jvisvanathan Exp $
+ * $Id: Output_MessageTag.java,v 1.10 2003/08/13 02:08:08 eburns Exp $
  */
 
 /*
@@ -66,14 +66,6 @@ public class Output_MessageTag extends FacesTag
         return "Output"; 
     }
 
-    protected void overrideProperties(UIComponent component) {
-	super.overrideProperties(component);
-	UIOutput textOutput = (UIOutput) component;
-        if (null != value) {
-	    textOutput.setValue(value);
-	}
-    }
-    
     //
     // Methods from TagSupport
     // 

@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.45 2003/07/16 00:00:11 jvisvanathan Exp $
+ * $Id: Output_TextTag.java,v 1.46 2003/08/13 02:08:08 eburns Exp $
  */
 
 /*
@@ -73,9 +73,6 @@ public class Output_TextTag extends FacesTag
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIOutput textOutput = (UIOutput) component;
-	if (null != value) {
-	    textOutput.setValue(value);
-	}
         if (converter != null) {
             component.setAttribute("converter", converter);
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: Output_NumberTag.java,v 1.10 2003/07/16 00:00:11 jvisvanathan Exp $
+ * $Id: Output_NumberTag.java,v 1.11 2003/08/13 02:08:08 eburns Exp $
  */
 
 /*
@@ -76,9 +76,6 @@ public class Output_NumberTag extends FacesTag
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIOutput output = (UIOutput) component;
-	if (null != value) {
-	    output.setValue(value);
-	}
         if (null != numberStyle) {
 	    component.setAttribute("numberStyle", numberStyle);
         }

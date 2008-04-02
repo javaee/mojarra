@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.38 2003/08/08 23:34:45 eburns Exp $
+ * $Id: FacesTag.java,v 1.39 2003/08/13 02:08:05 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.38 2003/08/08 23:34:45 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.39 2003/08/13 02:08:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -1194,6 +1194,9 @@ protected void overrideProperties(UIComponent component)
         if (null != valueRef) {
             output.setValueRef(valueRef);
         }    
+	if (null != value) {
+	    output.setValue(value);
+	}
         if (null != converter) {
             output.setConverter(converter);
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: Output_DateTimeTag.java,v 1.10 2003/07/16 00:00:11 jvisvanathan Exp $
+ * $Id: Output_DateTimeTag.java,v 1.11 2003/08/13 02:08:08 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Output_DateTimeTag.java,v 1.10 2003/07/16 00:00:11 jvisvanathan Exp $
+ * @version $Id: Output_DateTimeTag.java,v 1.11 2003/08/13 02:08:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -74,14 +74,6 @@ public class Output_DateTimeTag extends com.sun.faces.taglib.FacesTag
     }
     public String getComponentType() { 
         return "Output"; 
-    }
-
-    protected void overrideProperties(UIComponent component) {
-	super.overrideProperties(component);
-        UIOutput uiOutput = (UIOutput)component;
-	if (null != value) {
-	    uiOutput.setValue(value);
-	}
     }
 
     //
