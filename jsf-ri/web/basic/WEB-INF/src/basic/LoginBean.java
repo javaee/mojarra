@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.10 2002/08/29 00:28:06 jvisvanathan Exp $
+ * $Id: LoginBean.java,v 1.11 2002/09/13 19:54:04 edburns Exp $
  */
 
 /*
@@ -11,12 +11,13 @@ package basic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.faces.component.SelectItem;
 
 public class LoginBean {
 
-    String userName = null;
+    String userName = "joebob";
     String password = null;
     String address = null;
     Boolean validUser = null;
@@ -150,7 +151,7 @@ public class LoginBean {
         longVal = newLongVal;
     }
 
-    protected char charVal;
+    protected char charVal = 'e';
 
     public char getChar()
     {
@@ -206,6 +207,29 @@ public class LoginBean {
 	currentOption = newCurrentOption;
     }
 
+    protected Date date = new Date(System.currentTimeMillis());
 
+    public Date getDate()
+    {
+	return date;
+    }
+    
+    public void setDate(Date newDate)
+    {
+	date = newDate;
+    }
+
+    protected Float floater = new Float(3.141592);
+
+    public Float getFloater()
+    {
+	return floater;
+    }
+    
+    public void setFloater(Float newFloater)
+    {
+	floater = newFloater;
+    }
+    
 
 }
