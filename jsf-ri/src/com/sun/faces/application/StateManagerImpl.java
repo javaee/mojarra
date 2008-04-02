@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.40 2006/01/11 15:28:03 rlubke Exp $ 
+ * $Id: StateManagerImpl.java,v 1.41 2006/01/17 22:44:33 rlubke Exp $ 
  */ 
 
 
@@ -61,7 +61,7 @@ import javax.faces.component.NamingContainer;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.40 2006/01/11 15:28:03 rlubke Exp $
+ * @version $Id: StateManagerImpl.java,v 1.41 2006/01/17 22:44:33 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -193,43 +193,29 @@ public class StateManagerImpl extends StateManager {
 
 
     protected void checkIdUniqueness(FacesContext context,
-        UIComponent component, Set<String> componentIds) throws IllegalStateException{
-        UIComponent kid;
-        // deal with children that are marked transient.
-        Iterator<UIComponent> kids = component.getChildren().iterator();
-        String id;
-        while (kids.hasNext()) {
-            kid = kids.next();
-	    // check for id uniqueness
-	    id = kid.getClientId(context);
-	    if (id != null && !componentIds.add(id)) {
+                                     UIComponent component,
+                                     Set<String> componentIds)
+    throws IllegalStateException {
+        
+        // deal with children/facets that are marked transient.        
+        for (Iterator<UIComponent> kids = component.getFacetsAndChildren();
+             kids.hasNext();) {
+       
+            UIComponent kid = kids.next();
+            // check for id uniqueness
+            String id = kid.getClientId(context);
+            if (componentIds.add(id)) {
+                checkIdUniqueness(context, kid, componentIds);
+            } else {
                 if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE,"jsf.duplicate_component_id_error",id);
+                    logger.log(Level.SEVERE,
+                               "jsf.duplicate_component_id_error",
+                               id);
                 }
-		throw new IllegalStateException(MessageUtils.getExceptionMessageString(
-                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID,
-                        new Object[]{id}));
-	    }
-
-	    checkIdUniqueness(context, kid, componentIds);
-        }
-        // deal with facets that are marked transient.
-        kids = component.getFacets().values().iterator();
-        while (kids.hasNext()) {
-            kid = kids.next();
-	    // check for id uniqueness
-	    id = kid.getClientId(context);
-	    if (id != null && !componentIds.add(id)) {
-                if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE,"jsf.duplicate_component_id_error",id);
-                }
-		throw new IllegalStateException(MessageUtils.getExceptionMessageString(
-                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID,
-                        new Object[]{id}));
-	    }
-
-	    checkIdUniqueness(context, kid, componentIds);
-
+                throw new IllegalStateException(
+                      MessageUtils.getExceptionMessageString(
+                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id));
+            }
         }
     }
 
