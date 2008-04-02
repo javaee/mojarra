@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.3 2003/02/21 23:45:58 ofung Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.4 2003/04/12 01:26:01 rkitain Exp $
  */
 
 /*
@@ -63,6 +63,9 @@ import org.mozilla.util.ParameterCheck;
 
 import nonjsp.util.Util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  *
  * <B>BuildComponentFromTagImpl</B> is a class ...
@@ -72,7 +75,7 @@ import nonjsp.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.3 2003/02/21 23:45:58 ofung Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.4 2003/04/12 01:26:01 rkitain Exp $
  * 
  * @see	com.sun.faces.tree.BuildComponentFromTagImpl
  *
@@ -93,6 +96,8 @@ public class BuildComponentFromTagImpl extends Object
      * of components to properties in the bean.
      */
     protected static String FORM_MODELREF = "faces.FORM_MODELREF";
+
+    protected static Log log = LogFactory.getLog(BuildComponentFromTagImpl.class);
 
     //
     // Class Variables
@@ -195,8 +200,7 @@ public class BuildComponentFromTagImpl extends Object
         }
 
         if (attrName.equals("valueChangeListener") ||
-	    attrName.equals("commandListener") ||
-	    attrName.equals("formListener") ||
+	    attrName.equals("actionListener") ||
             attrName.equals("required") || 
             attrName.equals("format") ||
             attrName.equals("rangeMaximum") ||
@@ -226,30 +230,27 @@ public class BuildComponentFromTagImpl extends Object
 	        attrMethod = 
 		    child.getClass().getMethod("addValueChangeListener", 
 					   stringArg);
+	    } catch (SecurityException e) {
+	        log.trace("handleSpecialAttr: " + e);
 	    }
-	    catch (SecurityException e) {
-	        System.out.println("debug: edburns: handleSpecialAttr: " + e);
-	    }
-        }
-        else if (attrName.equals("formListener")) {
-	    try {
-	        attrMethod = 
-		    child.getClass().getMethod("addFormListener", 
-					       stringArg);
-	    }
-	    catch (SecurityException e) {
-	        System.out.println("debug: edburns: handleSpecialAttr: " + e);
-	    }
-        } 
-        else if (attrName.equals("commandListener")) {
-	    try {
-	        attrMethod = 
-		    child.getClass().getMethod("addCommandListener", 
-					       stringArg);
-	    }
-	    catch (SecurityException e) {
-	        System.out.println("debug: edburns: handleSpecialAttr: " + e);
-	    }
+        } else if (attrName.equals("actionListener")) {
+            try {
+                attrMethod = child.getClass().getMethod("addActionListener", stringArg);
+            } catch (SecurityException e) {
+                log.trace("handleSpecialAttr: " + e);
+            }
+        } else if (attrName.equals("action")) {
+            try {
+                attrMethod = child.getClass().getMethod("setAction", stringArg);
+            } catch (SecurityException e) {
+                log.trace("handleSpecialAttr: " + e);
+            }
+        } else if (attrName.equals("actionRef")) {
+            try {
+                attrMethod = child.getClass().getMethod("setActionRef", stringArg);
+            } catch (SecurityException e) {
+                log.trace("handleSpecialAttr: " + e);
+            }
         }
 
         Object [] args = { attrValue };
@@ -432,33 +433,33 @@ public class BuildComponentFromTagImpl extends Object
 	        }
 	        catch (IllegalAccessException innerE) {
 		    innerE.printStackTrace();
-		    System.out.println(innerE.getMessage());
+		    log.trace(innerE.getMessage());
 		    Assert.assert_it(false);
 	        }
 	        catch (IllegalArgumentException innerE) {
 		    innerE.printStackTrace();
-		    System.out.println(innerE.getMessage());
+		    log.trace(innerE.getMessage());
 		    Assert.assert_it(false);
 	        }
 	        catch (InvocationTargetException innerE) {
 		    innerE.printStackTrace();
-		    System.out.println(innerE.getMessage());
+		    log.trace(innerE.getMessage());
 		    Assert.assert_it(false);
 	        }
 	        catch (NoSuchMethodException innerE) {
 		    innerE.printStackTrace();
-		    System.out.println(innerE.getMessage());
+		    log.trace(innerE.getMessage());
 		    Assert.assert_it(false);
 	        }
 	    }
 	    catch (InvocationTargetException e) {
 	        e.printStackTrace();
-	        System.out.println(e.getMessage());
+	        log.trace(e.getMessage());
 	        Assert.assert_it(false);
 	    }
 	    catch (IllegalAccessException e) {
 	        e.printStackTrace();
-	        System.out.println(e.getMessage());
+	        log.trace(e.getMessage());
 	        Assert.assert_it(false);
 	    }
         }

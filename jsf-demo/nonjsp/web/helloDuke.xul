@@ -6,7 +6,7 @@
 
 <image id="duke" URL="/images/wave.med.gif" />
 
-<button id="hello" commandName="Hello" listener="nonjsp.lifecycle.ButtonAction"/>
+<button id="hello" commandName="Hello" action="success" label="Submit"/>
 
 </window>
 

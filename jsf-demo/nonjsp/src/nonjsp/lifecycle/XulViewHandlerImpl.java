@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.3 2003/03/27 19:44:06 jvisvanathan Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.4 2003/04/12 01:25:58 rkitain Exp $ 
  */ 
 
 
@@ -72,11 +72,10 @@ import javax.servlet.RequestDispatcher;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.3 2003/03/27 19:44:06 jvisvanathan Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.4 2003/04/12 01:25:58 rkitain Exp $ 
  * 
  * @see javax.faces.lifecycle.ViewHandler 
  * 
@@ -96,31 +95,24 @@ public class XulViewHandlerImpl implements ViewHandler {
 
         RequestDispatcher requestDispatcher = null; 
 
-        log.trace("Step 1: Parse XmlRuleSet");
-        Map requestMap = context.getExternalContext().getRequestMap();
-        String treeId = (String)
-                   requestMap.get("javax.servlet.include.path_info");
-        if (treeId == null) {
-	    treeId = context.getExternalContext().getRequestPathInfo();
-        }
-
-	log.trace("Step 2: Set Tree in FacesContext");
+	log.trace("Determine Tree Identifier And Build Tree...");
+        String treeId = context.getTree().getTreeId();
         XmlTreeFactoryImpl xmlTree = new XmlTreeFactoryImpl();
         context.setTree(xmlTree.getTree(context, treeId));
 
         HttpServletResponse response = (HttpServletResponse)
         (context.getExternalContext().getResponse());
-	log.trace("Step 3: Set ResponseWriter in FacesContext");
+	log.trace("Set ResponseWriter in FacesContext");
         context.setResponseWriter
             (new ServletResponseWriter(response.getWriter()));
         response.setContentType("text/html");
 
-	log.trace("Step 4: Call encode methods on components");
+	log.trace("Call encode methods on components");
         createHeader(context);
         renderResponse(context);
         createFooter(context);
 
-        log.trace("Step 5: Save the tree and locale in the session");
+        log.trace("Save the tree and locale in the session");
         Map sessionMap = context.getExternalContext().getSessionMap();
         sessionMap.put(RIConstants.REQUEST_LOCALE, context.getLocale());
         sessionMap.put(RIConstants.FACES_TREE, context.getTree());

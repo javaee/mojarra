@@ -86,6 +86,7 @@
     <pathelement location="${jsf-api.jar}"/>
     <pathelement location="${jsf-ri.jar}"/>
     <pathelement location="${jstl.jar}"/>
+    <pathelement location="${standard.jar}"/>
     <pathelement location="${build}/WEB-INF/classes"/>
     <pathelement location="${servlet.jar}"/>
   </path>
@@ -213,10 +214,12 @@
     </javac>
     <copy todir="${build}/WEB-INF">
       <fileset dir="web/WEB-INF"    >
-        <include name="web.xml" />
+        <include name="*.xml" />
         <include name="*.tld" />
       </fileset>
     </copy>
+
+    <copy todir="${build}/WEB-INF" file="src/nonjsp/taglib/nonjsp.tld"/>
 
      <copy todir="${build}">
       <fileset dir="web">
@@ -226,6 +229,7 @@
         <include name="*.xul" />
         <include name="*.xml" />
         <include name="*.css" />
+        <include name="*.jsp" />
       </fileset>
     </copy>
 

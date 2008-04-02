@@ -81,7 +81,7 @@ independently of a JSP container.
       <a href="label.xul">
         <img SRC="images/code.gif" HSPACE=4 BORDER=0 height=24 width=24 align=TOP>
       </a>
-      <a href="label.xul">Source</a>
+      <a href="ShowSource.jsp?filename=/label.xul">Source</a>
     </td>
   </tr>
 
@@ -99,7 +99,7 @@ independently of a JSP container.
       <a href="textField.xul">
         <img SRC="images/code.gif" HSPACE=4 BORDER=0 height=24 width=24 align=TOP>
       </a>
-      <a href="textField.xul">Source</a>
+      <a href="ShowSource.jsp?filename=/textField.xul">Source</a>
     </td>
   </tr>
 
@@ -117,7 +117,7 @@ independently of a JSP container.
       <a href="helloDuke.xul">
         <img SRC="images/code.gif" HSPACE=4 BORDER=0 height=24 width=24 align=TOP>
       </a>
-      <a href="helloDuke.xul">Source</a>
+      <a href="ShowSource.jsp?filename=/helloDuke.xul">Source</a>
     </td>
   </tr>
 

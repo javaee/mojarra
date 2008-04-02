@@ -2,5 +2,8 @@
 
     <!-- Components Navigation Rules -->
     <rule>
+        <page>/helloDuke.xul</page>
+        <outcome>success</outcome>
+        <select>/hi.xul</select>
     </rule>
 </navigation>
