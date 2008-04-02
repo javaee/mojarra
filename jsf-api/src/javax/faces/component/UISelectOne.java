@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.47 2005/05/05 20:51:04 edburns Exp $
+ * $Id: UISelectOne.java,v 1.48 2005/05/19 17:02:51 rlubke Exp $
  */
 
 /*
@@ -163,7 +163,7 @@ public class UISelectOne extends UIInput {
     }
 
 
-    class ArrayIterator implements Iterator {
+    static class ArrayIterator implements Iterator {
 
         public ArrayIterator(Object items[]) {
             this.items = items;

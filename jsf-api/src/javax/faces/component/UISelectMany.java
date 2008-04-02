@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.54 2005/05/05 20:51:04 edburns Exp $
+ * $Id: UISelectMany.java,v 1.55 2005/05/19 17:02:51 rlubke Exp $
  */
 
 /*
@@ -484,7 +484,7 @@ public class UISelectMany extends UIInput {
     }
 
 
-    class ArrayIterator implements Iterator {
+    static class ArrayIterator implements Iterator {
 
         public ArrayIterator(Object items[]) {
             this.items = items;

@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.27 2004/05/12 18:29:14 ofung Exp $
+ * $Id: ResultSetDataModel.java,v 1.28 2005/05/19 17:02:52 rlubke Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ package javax.faces.model;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.Collection;
@@ -22,8 +21,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
 import javax.faces.FacesException;
-import javax.faces.el.PropertyNotFoundException;
 
 
 /**
@@ -67,10 +66,6 @@ public class ResultSetDataModel extends DataModel {
 
 
     // ------------------------------------------------------ Instance Variables
-
-
-    // The row index for the row whose column values may be read or written
-    private int current = -1;
 
 
     // The current row index (zero relative)
@@ -355,11 +350,10 @@ public class ResultSetDataModel extends DataModel {
         }
 
         public boolean containsValue(Object value) {
-            Iterator keys = keySet().iterator();
-            while (keys.hasNext()) {
-                Object key = keys.next();
-                Object contained = get(key);
-                if (value == null) {
+            for (Iterator i = entrySet().iterator(); i .hasNext(); ) {
+                Map.Entry entry = (Map.Entry) i.next();
+                Object contained = entry.getValue();
+                 if (value == null) {
                     if (contained == null) {
                         return (true);
                     }
@@ -416,11 +410,10 @@ public class ResultSetDataModel extends DataModel {
             }
         }
 
-        public void putAll(Map map) {
-            Iterator keys = map.keySet().iterator();
-            while (keys.hasNext()) {
-                Object key = keys.next();
-                put(key, map.get(key));
+        public void putAll(Map map) {            
+            for (Iterator i = map.entrySet().iterator(); i.hasNext(); ) {
+                Map.Entry entry = (Map.Entry) i.next();
+                put(entry.getKey(), entry.getValue());
             }
         }
 
@@ -615,7 +608,7 @@ public class ResultSetDataModel extends DataModel {
 
     // Private implementation of Set that implements the keySet() behavior
     // for ResultSetMap
-    private class ResultSetKeys extends AbstractSet {
+    private static class ResultSetKeys extends AbstractSet {
 
         public ResultSetKeys(ResultSetMap map) {
             this.map = map;
@@ -674,14 +667,12 @@ public class ResultSetDataModel extends DataModel {
 
     // Private implementation of Iterator that implements the iterator()
     // behavior for the Set returned by keySet() from ResultSetMap
-    private class ResultSetKeysIterator implements Iterator {
+    private static class ResultSetKeysIterator implements Iterator {
 
         public ResultSetKeysIterator(ResultSetMap map) {
-            this.map = map;
             this.keys = map.realKeys();
         }
 
-        private ResultSetMap map = null;
         private Iterator keys = null;
 
         public boolean hasNext() {
@@ -702,7 +693,7 @@ public class ResultSetDataModel extends DataModel {
 
     // Private implementation of Collection that implements the behavior
     // for the Collection returned by values() from ResultSetMap
-    private class ResultSetValues extends AbstractCollection {
+    private static class ResultSetValues extends AbstractCollection {
 
         public ResultSetValues(ResultSetMap map) {
             this.map = map;
@@ -751,7 +742,7 @@ public class ResultSetDataModel extends DataModel {
 
     // Private implementation of Iterator that implements the behavior
     // for the Iterator returned by values().iterator() from ResultSetMap
-    private class ResultSetValuesIterator implements Iterator {
+    private static class ResultSetValuesIterator implements Iterator {
 
         public ResultSetValuesIterator(ResultSetMap map) {
             this.map = map;

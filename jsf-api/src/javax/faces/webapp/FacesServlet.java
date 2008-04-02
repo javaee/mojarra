@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.24 2004/02/26 20:31:19 eburns Exp $
+ * $Id: FacesServlet.java,v 1.25 2005/05/19 17:02:52 rlubke Exp $
  */
 
 /*
@@ -11,10 +11,9 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
+
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
@@ -54,12 +53,6 @@ public final class FacesServlet implements Servlet {
 
 
     /**
-     * <p>The {@link Application} instance for this web application.</p>
-     */
-    private Application application = null;
-
-
-    /**
      * <p>Factory for {@link FacesContext} instances.</p>
      */
     private FacesContextFactory facesContextFactory = null;
@@ -82,7 +75,6 @@ public final class FacesServlet implements Servlet {
      */
     public void destroy() {
 
-	application = null;
         facesContextFactory = null;
         lifecycle = null;
         servletConfig = null;
@@ -128,20 +120,6 @@ public final class FacesServlet implements Servlet {
             facesContextFactory = (FacesContextFactory)
                 FactoryFinder.getFactory
                 (FactoryFinder.FACES_CONTEXT_FACTORY);
-        } catch (FacesException e) {
-            Throwable rootCause = e.getCause();
-            if (rootCause == null) {
-                throw e;
-            } else {
-                throw new ServletException(e.getMessage(), rootCause);
-            }
-        }
-
-        // Acquire our Application instance
-        try {
-            ApplicationFactory applicationFactory = (ApplicationFactory)
-                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-            application = applicationFactory.getApplication();
         } catch (FacesException e) {
             Throwable rootCause = e.getCause();
             if (rootCause == null) {

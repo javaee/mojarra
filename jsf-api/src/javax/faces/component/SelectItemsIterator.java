@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.6 2004/07/12 14:26:04 rlubke Exp $
+ * $Id: SelectItemsIterator.java,v 1.7 2005/05/19 17:02:51 rlubke Exp $
  */
 
 /*
@@ -39,7 +39,6 @@ final class SelectItemsIterator implements Iterator {
      */
     public SelectItemsIterator(UIComponent parent) {
 
-        this.parent = parent;
         this.kids = parent.getChildren().iterator();
 
     }
@@ -59,12 +58,6 @@ final class SelectItemsIterator implements Iterator {
      * <p>Iterator over the children of the parent component.</p>
      */
     private Iterator kids = null;
-
-
-    /**
-     * <p>The parent {@link UIComponent} whose children are being iterated.</p>
-     */
-    private UIComponent parent = null;
 
 
     // -------------------------------------------------------- Iterator Methods

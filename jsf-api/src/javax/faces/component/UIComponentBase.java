@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.108 2005/05/18 00:52:41 jayashri Exp $
+ * $Id: UIComponentBase.java,v 1.109 2005/05/19 17:02:51 rlubke Exp $
  */
 
 /*
@@ -28,9 +28,12 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.WeakHashMap;
-import javax.el.ValueExpression;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.el.ELContext;
 import javax.el.ELException;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
@@ -38,12 +41,9 @@ import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
-import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import javax.faces.render.Renderer;
 
 
 /**
@@ -1210,11 +1210,6 @@ public abstract class UIComponentBase extends UIComponent {
     // ------------------------------------------------------- Protected Methods
 
 
-    // Cache a reference to the FacesContext the first time it is requested
-    // This is *not* part of the saved state of the component
-    private transient FacesContext facesContext = null;
-
-
     protected FacesContext getFacesContext() {
 
 	// PENDING(edburns): we can't use the cache ivar because we
@@ -1294,11 +1289,10 @@ public abstract class UIComponentBase extends UIComponent {
         attributes = getAttributes();
         if ( values[0] != null ) {
             HashMap attributesCopy = (HashMap)values[0];
-            Iterator it = attributesCopy.keySet().iterator();
-            while ( it.hasNext()) {
-                Object key = it.next();
-                Object value = attributesCopy.get(key);
-                attributes.put(key, value);
+            for (Iterator i = attributesCopy.entrySet().iterator();
+                 i.hasNext(); ) {
+                Map.Entry entry = (Map.Entry) i.next();
+                attributes.put(entry.getKey(), entry.getValue());
             }
         }
 	bindings = restoreBindingsState(context, values[1]);
@@ -1608,10 +1602,9 @@ public abstract class UIComponentBase extends UIComponent {
             if (map == null) {
                 throw new NullPointerException();
             }
-            Iterator keys = map.keySet().iterator();
-            while (keys.hasNext()) {
-                Object key = keys.next();
-                put(key, map.get(key));
+            for (Iterator i = map.entrySet().iterator(); i.hasNext(); ) {
+                Map.Entry entry = (Map.Entry) i.next();
+                put(entry.getKey(), entry.getValue());
             }
         }
 
@@ -1791,7 +1784,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of ListIterator for ChildrenList
-    private class ChildrenListIterator implements ListIterator {
+    private static class ChildrenListIterator implements ListIterator {
 
 
         public ChildrenListIterator(ChildrenList list) {
@@ -1882,7 +1875,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Iterator for getFacetsAndChildren()
-    private class FacetsAndChildrenIterator implements Iterator {
+    private static class FacetsAndChildrenIterator implements Iterator {
 
         public FacetsAndChildrenIterator(List list) {
             this.iterator = list.iterator();
@@ -1952,6 +1945,10 @@ public abstract class UIComponentBase extends UIComponent {
                 Object key = keys.next();
                 put(key, map.get(key));
             }
+            for (Iterator i = map.entrySet().iterator(); i.hasNext(); ) {
+                Map.Entry entry = (Map.Entry) i.next();
+                put(entry.getKey(), entry.getValue());
+            }
         }
 
         public Object remove(Object key) {
@@ -1975,7 +1972,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Set for FacetsMap.getEntrySet()
-    private class FacetsMapEntrySet extends AbstractSet {
+    private static class FacetsMapEntrySet extends AbstractSet {
 
         public FacetsMapEntrySet(FacetsMap map) {
             this.map = map;
@@ -2070,7 +2067,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Map.Entry for FacetsMapEntrySet
-    private class FacetsMapEntrySetEntry implements Map.Entry {
+    private static class FacetsMapEntrySetEntry implements Map.Entry {
 
         public FacetsMapEntrySetEntry(FacetsMap map, Object key) {
             this.map = map;
@@ -2134,7 +2131,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Set for FacetsMap.getEntrySet().iterator()
-    private class FacetsMapEntrySetIterator implements Iterator {
+    private static class FacetsMapEntrySetIterator implements Iterator {
 
         public FacetsMapEntrySetIterator(FacetsMap map) {
             this.map = map;
@@ -2166,7 +2163,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Set for FacetsMap.getKeySet()
-    private class FacetsMapKeySet extends AbstractSet {
+    private static class FacetsMapKeySet extends AbstractSet {
 
         public FacetsMapKeySet(FacetsMap map) {
             this.map = map;
@@ -2250,7 +2247,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Set for FacetsMap.getKeySet().iterator()
-    private class FacetsMapKeySetIterator implements Iterator {
+    private static class FacetsMapKeySetIterator implements Iterator {
 
         public FacetsMapKeySetIterator(FacetsMap map) {
             this.map = map;
@@ -2282,7 +2279,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Collection for FacetsMap.values()
-    private class FacetsMapValues extends AbstractCollection {
+    private static class FacetsMapValues extends AbstractCollection {
 
         public FacetsMapValues(FacetsMap map) {
             this.map = map;
@@ -2319,7 +2316,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Iterator for FacetsMap.values().iterator()
-    private class FacetsMapValuesIterator implements Iterator {
+    private static class FacetsMapValuesIterator implements Iterator {
 
         public FacetsMapValuesIterator(FacetsMap map) {
             this.map = map;
