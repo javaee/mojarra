@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListenerTag.java,v 1.9 2006/09/05 23:42:06 rlubke Exp $
+ * $Id: PhaseListenerTag.java,v 1.10 2006/12/12 19:45:54 rlubke Exp $
  */
 
 /*
@@ -54,7 +54,6 @@ import com.sun.faces.util.Util;
 
 public class PhaseListenerTag extends TagSupport {
 
-
     // ------------------------------------------------------------- Attributes
 
 
@@ -69,7 +68,7 @@ public class PhaseListenerTag extends TagSupport {
      * instance and it is also used to wire up this listener to an
      * {@link PhaseListener} property of a JavaBean class.</p>
      */
-    private ValueExpression binding= null;
+    private ValueExpression binding = null;
 
     /**
      * <p>Set the fully qualified class name of the
@@ -107,87 +106,87 @@ public class PhaseListenerTag extends TagSupport {
     public int doStartTag() throws JspException {
 
         PhaseListener handler = null;
-	ValueExpression handlerError = null;
+        ValueExpression handlerError = null;
 
-	// find the viewTag
-	Tag parent = this;
-	UIComponentELTag tag = null;
-	while (null != (parent = parent.getParent())) {
-	    if (parent instanceof UIComponentELTag) {
-		tag = (UIComponentELTag) parent;
-	    }
-	}
+        // find the viewTag
+        Tag parent = this;
+        UIComponentELTag tag = null;
+        while (null != (parent = parent.getParent())) {
+            if (parent instanceof UIComponentELTag) {
+                tag = (UIComponentELTag) parent;
+            }
+        }
 
         if (tag == null) {
-            Object params [] = {this.getClass().getName()};
+            Object params[] = {this.getClass().getName()};
             throw new JspException(
-                MessageUtils.getExceptionMessageString(
-                    MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params));
+                 MessageUtils.getExceptionMessageString(
+                      MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params));
         }
-        
+
         // Nothing to do unless this tag created a component
         if (!tag.getCreated()) {
             return (SKIP_BODY);
         }
-        
+
         UIViewRoot viewRoot = (UIViewRoot) tag.getComponentInstance();
         if (viewRoot == null) {
             throw new JspException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
+                 MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
-        
+
         // If "binding" is set use it to create a listener instance.
-        
+
         FacesContext context = FacesContext.getCurrentInstance();
         if (null != binding) {
-	    handlerError = binding;
-	    try {
-		handler = 
-		    (PhaseListener)binding.getValue(context.getELContext());
-		if (handler != null) {
-		    // we ignore the type in this case, even though
-		    // it may have been set.
-		    viewRoot.addPhaseListener(handler);
-		    return (SKIP_BODY);
-		}
-	    } catch (ELException e) {
-		throw new JspException(e);
-	    }
-	}
+            handlerError = binding;
+            try {
+                handler =
+                     (PhaseListener) binding.getValue(context.getELContext());
+                if (handler != null) {
+                    // we ignore the type in this case, even though
+                    // it may have been set.
+                    viewRoot.addPhaseListener(handler);
+                    return (SKIP_BODY);
+                }
+            } catch (ELException e) {
+                throw new JspException(e);
+            }
+        }
         // If "type" is set, use it to create the listener
         // instance.  
 
         if (null != type) {
-	    handlerError = type;
+            handlerError = type;
             handler = createPhaseListener(context);
             if (handler != null) {
-		if (binding != null) {
-		    // If "type" and "binding" are both set, store the listener
-		    // instance in the value of the property represented by the
-		    // value binding expression.
-		    
-		    try {
-			binding.setValue(context.getELContext(), handler);
-		    } catch (ELException e) {
-			throw new JspException(e);
-		    }
+                if (binding != null) {
+                    // If "type" and "binding" are both set, store the listener
+                    // instance in the value of the property represented by the
+                    // value binding expression.
+
+                    try {
+                        binding.setValue(context.getELContext(), handler);
+                    } catch (ELException e) {
+                        throw new JspException(e);
+                    }
                 }
             }
         }
-       
+
         if (handler == null) {
-            Object params [] = {"javax.faces.event.PhaseListener",
-				handlerError.getExpressionString()};
+            Object params[] = {"javax.faces.event.PhaseListener",
+                 handlerError.getExpressionString()};
             throw new JspException(
-                MessageUtils.getExceptionMessageString(
-                    MessageUtils.CANT_CREATE_CLASS_ERROR_ID, params));
+                 MessageUtils.getExceptionMessageString(
+                      MessageUtils.CANT_CREATE_CLASS_ERROR_ID, params));
         }
-        
+
         // We need to cast here because addPhaseListener
         // method does not apply to all components (it is not a method on
         // UIComponent/UIComponentBase).
         viewRoot.addPhaseListener(handler);
-               
+
         return (SKIP_BODY);
 
     }
@@ -202,7 +201,6 @@ public class PhaseListenerTag extends TagSupport {
 
     }
 
-
     // ------------------------------------------------------ Protected Methods
 
 
@@ -213,12 +211,12 @@ public class PhaseListenerTag extends TagSupport {
      * @throws JspException if a new instance cannot be created
      */
     protected PhaseListener createPhaseListener(FacesContext context)
-        throws JspException {
-	
+         throws JspException {
+
         try {
-	    String className = 
-		type.getValue(context.getELContext()).toString();
-	    
+            String className =
+                 type.getValue(context.getELContext()).toString();
+
             Class clazz = Util.loadClass(className, this);
             return ((PhaseListener) clazz.newInstance());
         } catch (Exception e) {
