@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.44 2004/01/27 20:29:20 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.45 2004/01/27 23:10:13 craigmcc Exp $
  */
 
 /*
@@ -149,6 +149,55 @@ public class UISelectMany extends UIInput {
     public void setSelectedValues(Object selectedValues[]) {
 
         setValue(selectedValues);
+
+    }
+
+
+    // ---------------------------------------------------------------- Bindings
+
+
+    /**
+     * <p>Return any {@link ValueBinding} set for <code>value</code> if a
+     * {@link ValueBinding} for <code>selectedValues</code> is requested;
+     * otherwise, perform the default superclass processing for this method.</p>
+     *
+     * @param name Name of the attribute or property for which to retrieve
+     *  a {@link ValueBinding}
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     */
+    public ValueBinding getValueBinding(String name) {
+
+        if ("selectedValues".equals(name)) {
+            return (super.getValueBinding("value"));
+        } else {
+            return (super.getValueBinding(name));
+        }
+
+    }
+
+
+    /**
+     * <p>Store any {@link ValueBinding} specified for
+     * <code>selectedValues</code> under <code>value</code> instead;
+     * otherwise, perform the default superclass processing for this method.</p>
+     *
+     * @param name Name of the attribute or property for which to set
+     *  a {@link ValueBinding}
+     * @param binding The {@link ValueBinding} to set, or <code>null</code>
+     *  to remove any currently set {@link ValueBinding}
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     */
+    public void setValueBinding(String name, ValueBinding binding) {
+
+        if ("selectedValues".equals(name)) {
+            super.setValueBinding("value", binding);
+        } else {
+            super.setValueBinding(name, binding);
+        }
 
     }
 

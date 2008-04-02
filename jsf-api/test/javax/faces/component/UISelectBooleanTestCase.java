@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBooleanTestCase.java,v 1.15 2004/01/27 20:30:10 craigmcc Exp $
+ * $Id: UISelectBooleanTestCase.java,v 1.16 2004/01/27 23:10:16 craigmcc Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectBoolean;
+import javax.faces.el.ValueBinding;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -129,6 +130,24 @@ public class UISelectBooleanTestCase extends UIInputTestCase {
         assertTrue(!selectBoolean.isSelected());
         selectBoolean.setValue(null);
         assertTrue(!selectBoolean.isSelected());
+
+        // Transparency applies to value bindings as well
+        assertNull(selectBoolean.getValueBinding("selected"));
+        assertNull(selectBoolean.getValueBinding("value"));
+        request.setAttribute("foo", Boolean.TRUE);
+        ValueBinding vb = application.createValueBinding("#{foo}");
+        selectBoolean.setValueBinding("selected", vb);
+        assertTrue(vb == selectBoolean.getValueBinding("selected"));
+        assertTrue(vb == selectBoolean.getValueBinding("value"));
+        selectBoolean.setValueBinding("selected", null);
+        assertNull(selectBoolean.getValueBinding("selected"));
+        assertNull(selectBoolean.getValueBinding("value"));
+        selectBoolean.setValueBinding("value", vb);
+        assertTrue(vb == selectBoolean.getValueBinding("selected"));
+        assertTrue(vb == selectBoolean.getValueBinding("value"));
+        selectBoolean.setValueBinding("selected", null);
+        assertNull(selectBoolean.getValueBinding("selected"));
+        assertNull(selectBoolean.getValueBinding("value"));
 
     }
 

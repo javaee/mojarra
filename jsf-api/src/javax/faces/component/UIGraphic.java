@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.34 2004/01/27 20:29:17 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.35 2004/01/27 23:10:12 craigmcc Exp $
  */
 
 /*
@@ -133,6 +133,53 @@ public class UIGraphic extends UIComponentBase {
     }
 
 
+    // ---------------------------------------------------------------- Bindings
+
+
+    /**
+     * <p>Return any {@link ValueBinding} set for <code>value</code> if a
+     * {@link ValueBinding} for <code>url</code> is requested; otherwise,
+     * perform the default superclass processing for this method.</p>
+     *
+     * @param name Name of the attribute or property for which to retrieve
+     *  a {@link ValueBinding}
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     */
+    public ValueBinding getValueBinding(String name) {
+
+        if ("url".equals(name)) {
+            return (super.getValueBinding("value"));
+        } else {
+            return (super.getValueBinding(name));
+        }
+
+    }
+
+
+    /**
+     * <p>Store any {@link ValueBinding} specified for <code>url</code> under
+     * <code>value</code> instead; otherwise, perform the default superclass
+     * processing for this method.</p>
+     *
+     * @param name Name of the attribute or property for which to set
+     *  a {@link ValueBinding}
+     * @param binding The {@link ValueBinding} to set, or <code>null</code>
+     *  to remove any currently set {@link ValueBinding}
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     */
+    public void setValueBinding(String name, ValueBinding binding) {
+
+        if ("url".equals(name)) {
+            super.setValueBinding("value", binding);
+        } else {
+            super.setValueBinding(name, binding);
+        }
+
+    }
 
 
     // ----------------------------------------------------- StateHolder Methods

@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.17 2004/01/27 20:30:08 craigmcc Exp $
+ * $Id: UIGraphicTestCase.java,v 1.18 2004/01/27 23:10:15 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.component;
 
 import java.io.IOException;
 import java.util.Iterator;
+import javax.faces.el.ValueBinding;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -143,6 +144,24 @@ public class UIGraphicTestCase extends UIComponentBaseTestCase {
         assertEquals("bar", graphic.getUrl());
         graphic.setValue(null);
         assertNull(graphic.getUrl());
+
+        // Transparency applies to value bindings as well
+        assertNull(graphic.getValueBinding("url"));
+        assertNull(graphic.getValueBinding("value"));
+        request.setAttribute("foo", "bar");
+        ValueBinding vb = application.createValueBinding("#{foo}");
+        graphic.setValueBinding("url", vb);
+        assertTrue(vb == graphic.getValueBinding("url"));
+        assertTrue(vb == graphic.getValueBinding("value"));
+        graphic.setValueBinding("url", null);
+        assertNull(graphic.getValueBinding("url"));
+        assertNull(graphic.getValueBinding("value"));
+        graphic.setValueBinding("value", vb);
+        assertTrue(vb == graphic.getValueBinding("url"));
+        assertTrue(vb == graphic.getValueBinding("value"));
+        graphic.setValueBinding("url", null);
+        assertNull(graphic.getValueBinding("url"));
+        assertNull(graphic.getValueBinding("value"));
 
     }
 

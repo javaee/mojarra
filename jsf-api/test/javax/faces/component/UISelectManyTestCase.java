@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.20 2004/01/27 20:30:10 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.21 2004/01/27 23:10:17 craigmcc Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
+import javax.faces.el.ValueBinding;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -139,6 +140,24 @@ public class UISelectManyTestCase extends UIInputTestCase {
         selectMany.setValue(null);
         assertNull(selectMany.getSelectedValues());
         assertNull(selectMany.getValue());
+
+        // Transparency applies to value bindings as well
+        assertNull(selectMany.getValueBinding("selectedValues"));
+        assertNull(selectMany.getValueBinding("value"));
+        request.setAttribute("foo", new Object[] { "bar", "baz" });
+        ValueBinding vb = application.createValueBinding("#{foo}");
+        selectMany.setValueBinding("selectedValues", vb);
+        assertTrue(vb == selectMany.getValueBinding("selectedValues"));
+        assertTrue(vb == selectMany.getValueBinding("value"));
+        selectMany.setValueBinding("selectedValues", null);
+        assertNull(selectMany.getValueBinding("selectedValues"));
+        assertNull(selectMany.getValueBinding("value"));
+        selectMany.setValueBinding("value", vb);
+        assertTrue(vb == selectMany.getValueBinding("selectedValues"));
+        assertTrue(vb == selectMany.getValueBinding("value"));
+        selectMany.setValueBinding("selectedValues", null);
+        assertNull(selectMany.getValueBinding("selectedValues"));
+        assertNull(selectMany.getValueBinding("value"));
 
     }
 
