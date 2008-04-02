@@ -89,6 +89,7 @@
   <path id="compile.classpath">
     <pathelement location="${build.home}/classes"/>
     <pathelement location="${commons.beanutils.jar}"/>
+    <pathelement location="${commons.collections.jar}"/>
     <pathelement location="${commons.digester.jar}"/>
     <pathelement location="${commons.logging.jar}"/>
     <pathelement location="${jsf-api.jar}"/>
