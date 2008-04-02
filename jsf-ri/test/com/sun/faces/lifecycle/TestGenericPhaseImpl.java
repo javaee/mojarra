@@ -1,5 +1,5 @@
 /*
- * $Id: TestGenericPhaseImpl.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
+ * $Id: TestGenericPhaseImpl.java,v 1.7 2002/10/07 22:58:00 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.CompareFiles;
 import com.sun.faces.FileOutputResponseWrapper;
 import com.sun.faces.lifecycle.LifecycleCallback;
-
+import com.sun.faces.RIConstants;
 import java.io.PrintStream;
 import java.io.FileOutputStream;
 import java.io.File;
@@ -45,7 +45,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestGenericPhaseImpl.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
+ * @version $Id: TestGenericPhaseImpl.java,v 1.7 2002/10/07 22:58:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -116,7 +116,7 @@ public void testExecute()
 
     Phase
         reconstituteTree = new ReconstituteRequestTreePhase(null,
-            Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE);
+            RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE);
     try {
         result = reconstituteTree.execute(getFacesContext());
     }
@@ -138,7 +138,7 @@ public void testExecute()
     basicForm.addChild(userName);
 
     Phase applyValues = new ApplyRequestValuesPhase(null, 
-        Lifecycle.APPLY_REQUEST_VALUES_PHASE) {
+        RIConstants.APPLY_REQUEST_VALUES_PHASE) {
             public int execute(FacesContext facesContext) 
                 throws FacesException {
 	        int rc = -1;

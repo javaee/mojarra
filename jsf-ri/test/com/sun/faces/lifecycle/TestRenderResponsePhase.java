@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.33 2002/10/03 18:11:35 rkitain Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.34 2002/10/07 22:58:02 jvisvanathan Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.33 2002/10/03 18:11:35 rkitain Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.34 2002/10/07 22:58:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -135,7 +135,7 @@ public void testHtmlBasicRenderKit()
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase 
 	renderResponse = new JspRenderResponsePhase(lifecycle, 
-				       Lifecycle.RENDER_RESPONSE_PHASE);
+				       RIConstants.RENDER_RESPONSE_PHASE);
     root = new UIComponentBase() {
 	    public String getComponentType() { return "Root"; }
 	};
@@ -144,7 +144,7 @@ public void testHtmlBasicRenderKit()
     TreeFactory treeFactory = (TreeFactory)
          FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
     Assert.assert_it(treeFactory != null);
-    Tree requestTree = treeFactory.getTree(getFacesContext().getServletContext(),
+    Tree requestTree = treeFactory.getTree(getFacesContext(),
             TEST_URI );
     getFacesContext().setRequestTree(requestTree);
 

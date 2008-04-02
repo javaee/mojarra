@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.7 2002/10/07 22:58:01 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.faces.event.CommandEvent;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.tree.XmlTreeImpl;
-
+import com.sun.faces.RIConstants;
 import java.io.IOException;
 
 import java.util.Iterator;
@@ -41,7 +41,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.7 2002/10/07 22:58:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -95,7 +95,7 @@ public void testInvokeNormal()
     System.setProperty(DID_FORM, EMPTY);
     final UIInput root = new UIInput();
     Lifecycle life = new LifecycleImpl();
-    Tree tree = new XmlTreeImpl(config.getServletContext(),
+    Tree tree = new XmlTreeImpl(getFacesContext(),
 				root, "default.xul", "");
     ApplicationHandler appHandler = new ApplicationHandler() {
         public boolean processEvent(FacesContext context, FacesEvent event){
@@ -106,7 +106,7 @@ public void testInvokeNormal()
 	    }
 	};
     Phase invokeApplicationPhase = new InvokeApplicationPhase(life, 
-				      Lifecycle.INVOKE_APPLICATION_PHASE);
+				      RIConstants.INVOKE_APPLICATION_PHASE);
     int rc = Phase.GOTO_NEXT;
     getFacesContext().setRequestTree(tree);
 
@@ -124,10 +124,10 @@ public void testInvokeNoOp()
 {
     UIInput root = new UIInput();
     Lifecycle life = new LifecycleImpl();
-    Tree tree = new XmlTreeImpl(config.getServletContext(),
+    Tree tree = new XmlTreeImpl(getFacesContext(),
 				root, "default.xul", "");
     Phase invokeApplicationPhase = new InvokeApplicationPhase(life, 
-				      Lifecycle.INVOKE_APPLICATION_PHASE);
+				      RIConstants.INVOKE_APPLICATION_PHASE);
     int rc = Phase.GOTO_NEXT;
     getFacesContext().setRequestTree(tree);
 

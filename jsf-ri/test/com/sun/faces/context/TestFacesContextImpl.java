@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.15 2002/10/03 07:06:04 rkitain Exp $
+ * $Id: TestFacesContextImpl.java,v 1.16 2002/10/07 22:57:59 jvisvanathan Exp $
  */
 
 /*
@@ -30,6 +30,7 @@ import javax.faces.component.UICommand;
 import javax.faces.component.UIForm;
 
 import javax.faces.event.FacesEvent;
+import javax.faces.event.RequestEvent;
 import javax.faces.event.CommandEvent;
 import javax.faces.event.FormEvent;
 import javax.faces.tree.Tree;
@@ -53,7 +54,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.15 2002/10/03 07:06:04 rkitain Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.16 2002/10/07 22:57:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,7 +134,7 @@ public void testAccessors()
     System.out.println("Testing getLocale: " + result);
     assertTrue(result);
 
-    getFacesContext().setRequestTree( new XmlTreeImpl(config.getServletContext(),
+    getFacesContext().setRequestTree( new XmlTreeImpl(getFacesContext(),
                 new UIForm(),"treeId", ""));
     Tree requestTree = getFacesContext().getRequestTree();
     result = null != requestTree;
@@ -143,7 +144,7 @@ public void testAccessors()
     exceptionThrown = false; 
     System.out.println("Testing setRequestTree IllegalStateException..."); 
     try {
-        getFacesContext().setRequestTree( new XmlTreeImpl(config.getServletContext(),
+        getFacesContext().setRequestTree( new XmlTreeImpl(getFacesContext(),
             new UIForm(),"treeId", ""));
     } catch (IllegalStateException e) {
         exceptionThrown = true;
@@ -268,10 +269,10 @@ public void testRequestEvents()
     UIForm 
 	source1 = new UIForm(),
 	source2 = new UIForm();
-    FacesEvent 
+    RequestEvent 
 	testEvent = null,
-	event1 = new FacesEvent(source1),
-	event2 = new FacesEvent(source2);
+	event1 = new RequestEvent(source1),
+	event2 = new RequestEvent(source2);
 
 
     System.out.println("Testing addRequestEvent(source1, event1)");
@@ -298,7 +299,7 @@ public void testRequestEvents()
     assertTrue(iter.hasNext());
 
     while (iter.hasNext()) {
-	testEvent = (FacesEvent) iter.next();
+	testEvent = (RequestEvent) iter.next();
 	assertTrue(testEvent == event1);
 	assertTrue(testEvent.getComponent() == source1);
     }
@@ -308,7 +309,7 @@ public void testRequestEvents()
     assertTrue(iter.hasNext());
 
     while (iter.hasNext()) {
-	testEvent = (FacesEvent) iter.next();
+	testEvent = (RequestEvent) iter.next();
 	assertTrue(testEvent == event2);
 	assertTrue(testEvent.getComponent() == source2);
     }

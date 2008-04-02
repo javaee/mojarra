@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreTreeFromPage.java,v 1.3 2002/09/20 21:14:41 jvisvanathan Exp $
+ * $Id: TestRestoreTreeFromPage.java,v 1.4 2002/10/07 22:58:02 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.FileOutputResponseWriter;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreTreeFromPage.java,v 1.3 2002/09/20 21:14:41 jvisvanathan Exp $
+ * @version $Id: TestRestoreTreeFromPage.java,v 1.4 2002/10/07 22:58:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -107,7 +107,7 @@ public void beginRestoreTreeFromPage(WebRequest theRequest)
 public void testRestoreTreeFromPage()
 {
     Phase reconstituteTree = new ReconstituteRequestTreePhase(null, 
-			Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE);
+			RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE);
     int result = -1;
 
     try {

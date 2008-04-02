@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.3 2002/09/20 21:14:42 jvisvanathan Exp $
+ * $Id: TestSaveStateInPage.java,v 1.4 2002/10/07 22:58:02 jvisvanathan Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponentBase;
+import com.sun.faces.RIConstants;
 
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
@@ -32,7 +33,7 @@ import javax.faces.tree.TreeFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.3 2002/09/20 21:14:42 jvisvanathan Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.4 2002/10/07 22:58:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -114,7 +115,7 @@ public void testSaveStateInPage()
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase 
 	renderResponse = new JspRenderResponsePhase(lifecycle, 
-				       Lifecycle.RENDER_RESPONSE_PHASE);
+				       RIConstants.RENDER_RESPONSE_PHASE);
     root = new UIComponentBase() {
 	    public String getComponentType() { return "Root"; }
 	};
@@ -123,7 +124,7 @@ public void testSaveStateInPage()
     TreeFactory treeFactory = (TreeFactory)
          FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
     assertTrue(treeFactory != null);
-    Tree requestTree = treeFactory.getTree(getFacesContext().getServletContext(),
+    Tree requestTree = treeFactory.getTree(getFacesContext(),
             TEST_URI );
     getFacesContext().setRequestTree(requestTree);
 

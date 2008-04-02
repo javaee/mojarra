@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.7 2002/10/07 22:58:00 jvisvanathan Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
 
 /**
@@ -33,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.7 2002/10/07 22:58:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,9 +94,9 @@ public void testCallback()
     String value = null;
     Phase 
         reconstituteTree = new ReconstituteRequestTreePhase(null,
-            Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE),
+            RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE),
 	applyValues = new ApplyRequestValuesPhase(null, 
-					Lifecycle.APPLY_REQUEST_VALUES_PHASE);
+					RIConstants.APPLY_REQUEST_VALUES_PHASE);
 
     // 1. Set the root of the tree ...
     //

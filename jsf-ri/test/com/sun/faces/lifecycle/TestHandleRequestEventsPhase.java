@@ -1,5 +1,5 @@
 /*
- * $Id: TestHandleRequestEventsPhase.java,v 1.10 2002/09/11 20:02:31 edburns Exp $
+ * $Id: TestHandleRequestEventsPhase.java,v 1.11 2002/10/07 22:58:01 jvisvanathan Exp $
  */
 
 /*
@@ -23,8 +23,9 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.event.FacesEvent;
+import javax.faces.event.RequestEvent;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHandleRequestEventsPhase.java,v 1.10 2002/09/11 20:02:31 edburns Exp $
+ * @version $Id: TestHandleRequestEventsPhase.java,v 1.11 2002/10/07 22:58:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,7 +107,7 @@ public void testCallback()
     // 1. Set the root of the tree ...
     //
     Phase reconstituteTree = new ReconstituteRequestTreePhase(null,
-                        Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE);
+                        RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE);
     int result = -1;
     try {
         result = reconstituteTree.execute(getFacesContext());
@@ -124,9 +125,9 @@ public void testCallback()
     String value = null;
     Phase 
 	applyValues = new ApplyRequestValuesPhase(null, 
-					Lifecycle.APPLY_REQUEST_VALUES_PHASE), 
+					RIConstants.APPLY_REQUEST_VALUES_PHASE), 
 	handleEvents = new HandleRequestEventsPhase(null, 
-                                      Lifecycle.HANDLE_REQUEST_EVENTS_PHASE);
+                                      RIConstants.HANDLE_REQUEST_EVENTS_PHASE);
     // clear the property
     System.setProperty(DID_DECODE1, EMPTY);
     System.setProperty(DID_EVENT1, EMPTY);
@@ -192,14 +193,14 @@ public boolean decode(FacesContext context) throws IOException
 	valueChanged = true;
     }
     if (valueChanged) {
-	context.addRequestEvent(this,new FacesEvent(this));
+	context.addRequestEvent(this,new RequestEvent(this));
     }
 	
     setValue(newValue);
     return true;
 }
 
-public boolean processEvent(FacesContext context, FacesEvent event) 
+public boolean processEvent(FacesContext context, RequestEvent event) 
 {
     assertTrue(event.getSource() == this);
     System.setProperty(DID_EVENT1, DID_EVENT1);
@@ -229,14 +230,14 @@ public boolean decode(FacesContext context) throws IOException
         valueChanged = true;
     }
     if (valueChanged) {
-        context.addRequestEvent(this,new FacesEvent(this));
+        context.addRequestEvent(this,new RequestEvent(this));
     }
 
     setValue(newValue);
     return true;
 }
 
-public boolean processEvent(FacesContext context, FacesEvent event)
+public boolean processEvent(FacesContext context, RequestEvent event)
 {
     assertTrue(event.getSource() == this);
     System.setProperty(DID_EVENT2, DID_EVENT2);

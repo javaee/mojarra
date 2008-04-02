@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.10 2002/07/17 22:34:06 jvisvanathan Exp $
+ * $Id: TestLifecycleImpl.java,v 1.11 2002/10/07 22:58:01 jvisvanathan Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FormEvent;
 import javax.faces.event.FacesEvent;
-
+import com.sun.faces.RIConstants;
 import java.util.Iterator;
 
 import com.sun.faces.JspFacesTestCase;
@@ -35,7 +35,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.10 2002/07/17 22:34:06 jvisvanathan Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.11 2002/10/07 22:58:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -150,9 +150,9 @@ public void testExtraPhases()
     // try to register before create
     try {
 	factory.registerBefore(LifecycleFactory.DEFAULT_LIFECYCLE,
-			       Lifecycle.RENDER_RESPONSE_PHASE, 
+			       RIConstants.RENDER_RESPONSE_PHASE, 
 	       new GenericPhaseImpl(null, 
-				    Lifecycle.RENDER_RESPONSE_PHASE) {
+				    RIConstants.RENDER_RESPONSE_PHASE) {
 		   public int execute(FacesContext facesContext) 
 		       throws FacesException
 		   {
@@ -164,9 +164,9 @@ public void testExtraPhases()
 		   
 	       });
 	factory.registerAfter(LifecycleFactory.DEFAULT_LIFECYCLE,
-			      Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE, 
+			      RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE, 
 	       new GenericPhaseImpl(null, 
-				    Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE) {
+				    RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE) {
 		   public int execute(FacesContext facesContext) 
 		       throws FacesException
 		   {

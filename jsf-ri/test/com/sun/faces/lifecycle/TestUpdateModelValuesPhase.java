@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.13 2002/09/11 20:02:32 edburns Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.14 2002/10/07 22:58:02 jvisvanathan Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.tree.Tree;
-
+import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
 import com.sun.faces.tree.XmlTreeImpl;
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.13 2002/09/11 20:02:32 edburns Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.14 2002/10/07 22:58:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -98,7 +98,7 @@ public void testUpdateNormal()
     String value = null;
     Phase 
 	updateModelValues = new UpdateModelValuesPhase(null, 
-				       Lifecycle.UPDATE_MODEL_VALUES_PHASE);
+				       RIConstants.UPDATE_MODEL_VALUES_PHASE);
     form = new UIForm();
     form.setComponentId("form");
     userName = new TestUIInput();
@@ -120,7 +120,7 @@ public void testUpdateNormal()
     userName2.testSetValid(true);
     form.addChild(userName2);
 
-    tree = new XmlTreeImpl(config.getServletContext(), form, 
+    tree = new XmlTreeImpl(getFacesContext(), form, 
 			   "updateModel.xul", "");
     getFacesContext().setRequestTree(tree);
 
@@ -144,7 +144,7 @@ public void testUpdateFailed()
     String value = null;
     Phase 
 	updateModelValues = new UpdateModelValuesPhase(null, 
-				       Lifecycle.UPDATE_MODEL_VALUES_PHASE);
+				       RIConstants.UPDATE_MODEL_VALUES_PHASE);
     form = new UIForm();
     form.setComponentId("form");
     userName = new TestUIInput();
@@ -166,7 +166,7 @@ public void testUpdateFailed()
     userName2.testSetValid(true);
     form.addChild(userName2);
 
-    tree = new XmlTreeImpl(config.getServletContext(), form,
+    tree = new XmlTreeImpl(getFacesContext(), form,
                            "updateModel.xul", "");
     getFacesContext().setRequestTree(tree);
 

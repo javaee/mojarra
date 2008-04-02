@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.9 2002/08/08 16:24:57 rkitain Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.10 2002/10/07 22:58:02 jvisvanathan Exp $ 
  */ 
 
 
@@ -63,7 +63,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.9 2002/08/08 16:24:57 rkitain Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.10 2002/10/07 22:58:02 jvisvanathan Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -156,7 +156,7 @@ public void testRender()
     int rc = Phase.GOTO_NEXT; 
     UIComponentBase root = null; 
     String value = null; 
-    SimpleTreeImpl newTree = new SimpleTreeImpl(config.getServletContext(),
+    SimpleTreeImpl newTree = new SimpleTreeImpl(getFacesContext(),
 						TEST_URI);
     getFacesContext().setRequestTree(newTree);
 

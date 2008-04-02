@@ -1,5 +1,5 @@
 /*
- * $Id: TestReconstituteRequestTreePhase.java,v 1.4 2002/08/08 16:24:56 rkitain Exp $
+ * $Id: TestReconstituteRequestTreePhase.java,v 1.5 2002/10/07 22:58:02 jvisvanathan Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestReconstituteRequestTreePhase.java,v 1.4 2002/08/08 16:24:56 rkitain Exp $
+ * @version $Id: TestReconstituteRequestTreePhase.java,v 1.5 2002/10/07 22:58:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,7 +101,7 @@ public void beginReconstituteRequestSubmit(WebRequest theRequest)
 public void testReconstituteRequestInitial()
 {
     Phase reconstituteTree = new ReconstituteRequestTreePhase(null, 
-			Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE);
+			RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE);
     int result = -1;
 
     try {
@@ -147,7 +147,7 @@ public void testReconstituteRequestSubmit()
     root.addChild(basicForm);
     basicForm.addChild(userName);
     
-    requestTree = new SimpleTreeImpl(getFacesContext().getServletContext(), root, 
+    requestTree = new SimpleTreeImpl(getFacesContext(), root, 
             TEST_URI);
     assertTrue(requestTree != null);
     
@@ -158,7 +158,7 @@ public void testReconstituteRequestSubmit()
     session.setAttribute(RIConstants.REQUEST_LOCALE, locale);
     
     Phase reconstituteTree = new ReconstituteRequestTreePhase(null, 
-			Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE);
+			RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE);
     int result = -1;
 
     try {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.1 2002/09/20 00:59:51 eburns Exp $
+ * $Id: TestValidatorTags.java,v 1.2 2002/10/07 22:58:08 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.1 2002/09/20 00:59:51 eburns Exp $
+ * @version $Id: TestValidatorTags.java,v 1.2 2002/10/07 22:58:08 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -140,16 +140,16 @@ public void testValidators()
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase 
 	renderResponse = new JspRenderResponsePhase(lifecycle, 
-				       Lifecycle.RENDER_RESPONSE_PHASE),
+				       RIConstants.RENDER_RESPONSE_PHASE),
 	processValidations = new ProcessValidationsPhase(lifecycle,
-					  Lifecycle.PROCESS_VALIDATIONS_PHASE),
+					  RIConstants.PROCESS_VALIDATIONS_PHASE),
 	applyRequestValues = new ApplyRequestValuesPhase(lifecycle,
-					Lifecycle.APPLY_REQUEST_VALUES_PHASE);
+					RIConstants.APPLY_REQUEST_VALUES_PHASE);
 
     TreeFactory treeFactory = (TreeFactory)
          FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
     Assert.assert_it(treeFactory != null);
-    Tree requestTree = treeFactory.getTree(getFacesContext().getServletContext(),
+    Tree requestTree = treeFactory.getTree(getFacesContext(),
             TEST_URI );
     getFacesContext().setRequestTree(requestTree);
 

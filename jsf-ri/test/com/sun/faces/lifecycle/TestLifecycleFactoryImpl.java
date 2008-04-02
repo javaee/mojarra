@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleFactoryImpl.java,v 1.3 2002/09/20 20:47:19 eburns Exp $
+ * $Id: TestLifecycleFactoryImpl.java,v 1.4 2002/10/07 22:58:01 jvisvanathan Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-
+import com.sun.faces.RIConstants;
 import java.util.Iterator;
 
 /**
@@ -27,7 +27,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleFactoryImpl.java,v 1.3 2002/09/20 20:47:19 eburns Exp $
+ * @version $Id: TestLifecycleFactoryImpl.java,v 1.4 2002/10/07 22:58:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,7 +124,7 @@ public void testIllegalStateException()
     try {
 	factory.registerBefore(LifecycleFactory.DEFAULT_LIFECYCLE,
 			       LifecycleFactoryImpl.LAST_PHASE, 
-			       new GenericPhaseImpl(null, Lifecycle.RENDER_RESPONSE_PHASE));
+			       new GenericPhaseImpl(null, RIConstants.RENDER_RESPONSE_PHASE));
     }
     catch (IllegalStateException e) {
 	exceptionThrown = true;
@@ -144,7 +144,7 @@ public void testIllegalStateException()
     try {
 	factory.registerBefore(LifecycleFactory.DEFAULT_LIFECYCLE,
 			       LifecycleFactoryImpl.LAST_PHASE, 
-			       new GenericPhaseImpl(life, Lifecycle.RENDER_RESPONSE_PHASE));
+			       new GenericPhaseImpl(life, RIConstants.RENDER_RESPONSE_PHASE));
     }
     catch (IllegalStateException e) {
 	exceptionThrown = true;
@@ -168,7 +168,7 @@ public void testIllegalArgumentException()
     try {
 	factory.registerBefore("BOGUS",
 			       LifecycleFactoryImpl.LAST_PHASE, 
-			       new GenericPhaseImpl(null, Lifecycle.RENDER_RESPONSE_PHASE));
+			       new GenericPhaseImpl(null, RIConstants.RENDER_RESPONSE_PHASE));
     }
     catch (IllegalArgumentException e) {
 	exceptionThrown = true;
@@ -183,7 +183,7 @@ public void testIllegalArgumentException()
     try {
 	factory.registerBefore(LifecycleFactory.DEFAULT_LIFECYCLE,
 			       LifecycleFactoryImpl.LAST_PHASE + 1, 
-			       new GenericPhaseImpl(null, Lifecycle.RENDER_RESPONSE_PHASE));
+			       new GenericPhaseImpl(null, RIConstants.RENDER_RESPONSE_PHASE));
     }
     catch (IllegalArgumentException e) {
 	exceptionThrown = true;

@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.8 2002/09/11 20:02:31 edburns Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.9 2002/10/07 22:58:02 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.validator.Validator;
 import javax.faces.component.AttributeDescriptor;
 
 import com.sun.faces.ServletFacesTestCase;
-
+import com.sun.faces.RIConstants;
 import java.io.IOException;
 
 import java.util.Iterator;
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.8 2002/09/11 20:02:31 edburns Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.9 2002/10/07 22:58:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -103,13 +103,13 @@ public void testCallback()
     String value = null;
     Phase 
         reconstituteTree = new ReconstituteRequestTreePhase(null,
-            Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE),
+            RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE),
 	applyValues = new ApplyRequestValuesPhase(null, 
-            Lifecycle.APPLY_REQUEST_VALUES_PHASE), 
+            RIConstants.APPLY_REQUEST_VALUES_PHASE), 
 	handleEvents = new HandleRequestEventsPhase(null, 
-            Lifecycle.HANDLE_REQUEST_EVENTS_PHASE),
+            RIConstants.HANDLE_REQUEST_EVENTS_PHASE),
 	processValidations = new ProcessValidationsPhase(null, 
-            Lifecycle.PROCESS_VALIDATIONS_PHASE);
+            RIConstants.PROCESS_VALIDATIONS_PHASE);
 
     int result = -1;
     try {
