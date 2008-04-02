@@ -2,7 +2,7 @@
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- * $Id: ResponseWriterWrapper.java,v 1.2 2004/10/18 21:22:30 edburns Exp $
+ * $Id: ResponseWriterWrapper.java,v 1.3 2004/10/18 22:46:02 edburns Exp $
  */
 
 package javax.faces.context;
@@ -31,7 +31,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter {
      * @return the instance that we are wrapping.
      */ 
 
-    abstract protected ResponseWriterWrapper getWrapped();
+    abstract protected ResponseWriter getWrapped();
 
     // -------------------------- Methods from javax.faces.contxt.ResponseWriter
 

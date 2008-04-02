@@ -2,7 +2,7 @@
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- * $Id: StateManagerWrapper.java,v 1.2 2004/10/18 21:22:30 edburns Exp $
+ * $Id: StateManagerWrapper.java,v 1.3 2004/10/18 22:46:01 edburns Exp $
  */
 
 package javax.faces.application;
@@ -31,7 +31,7 @@ public abstract class StateManagerWrapper extends StateManager {
      * @return the instance that we are wrapping.
      */ 
 
-    abstract protected StateManagerWrapper getWrapped();
+    abstract protected StateManager getWrapped();
 
     // ----------------------- Methods from javax.faces.application.StateManager
 

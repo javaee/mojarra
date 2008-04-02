@@ -12,6 +12,11 @@
 
 <faces-config>
 
+  <application>
+    <view-handler>com.sun.faces.systest.NewViewHandler</view-handler>
+    <state-manager>com.sun.faces.systest.NewStateManager</state-manager>
+  </application>
+
   <factory>
     <application-factory>com.sun.faces.systest.NewApplicationFactory</application-factory>
   </factory>
@@ -74,6 +79,12 @@
       com.sun.faces.systest.model.TestBean
     </managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>replaceApplication</managed-bean-name>
+    <managed-bean-class>com.sun.faces.systest.ReplaceApplicationBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
 </faces-config>

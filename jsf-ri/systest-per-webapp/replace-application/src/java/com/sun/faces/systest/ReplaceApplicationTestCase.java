@@ -1,5 +1,5 @@
 /*
- * $Id: ReplaceApplicationTestCase.java,v 1.2 2004/05/12 18:31:24 ofung Exp $
+ * $Id: ReplaceApplicationTestCase.java,v 1.3 2004/10/18 22:46:04 edburns Exp $
  */
 
 /*
@@ -97,6 +97,9 @@ public class ReplaceApplicationTestCase extends AbstractTestCase {
     public void testReplaceApplication() throws Exception {
 	HtmlPage page = getPage("/faces/test.jsp");
 	assertTrue(-1 != page.asText().indexOf("New String Value"));
+	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewStateManager"));
+	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewViewHandler"));
+	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewApplication"));
 	
     }
 

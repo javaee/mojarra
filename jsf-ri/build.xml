@@ -504,30 +504,30 @@ must exist.  This is necessary for the MessageFactory class.
         <mkdir dir="${test.results.dir}"/>
     </target>
 
-    <target name="run.systest" description="Run system tests">
+    <target name="run.systest" description="Run system tests" depends="init.test">
       <ant dir="${basedir}/systest" inheritall="false" target="safe.remove"/>
       <ant dir="${basedir}/systest" inheritall="false" target="install"/>
       <ant dir="${basedir}/systest" inheritall="false" target="test"/>
       <ant dir="${basedir}/systest" inheritall="false" target="remove"/>
     </target>
 
-    <target name="run.systest-per-webapp" description="Run per-webapp system tests">
+    <target name="run.systest-per-webapp" description="Run per-webapp system tests" depends="init.test">
       <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="test"/>
       <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="remove"/>
     </target>
 
 
-    <target name="run.junit.test" depends="compile.test"
+    <target name="run.junit.test" depends="init.test,compile.test"
      description="Run unit tests not requiring cactus">
         <ant antfile="build-tests.xml" target="run.test"/>
     </target>
 
-    <target name="run.cactus.test" depends="compile.test,jars"
+    <target name="run.cactus.test" depends="init.test,compile.test,jars"
      description="Run unit tests requiring cactus">
         <ant antfile="build-tests.xml" target="execute.cactus.tests"/>
     </target>
 
-    <target name="force.run.cactus.test" depends="compile.test,jars"
+    <target name="force.run.cactus.test" depends="init.test,compile.test,jars"
      description="Run unit tests requiring cactus, forcing reinstall">
         <ant antfile="build-tests.xml" target="force.execute.cactus.tests"/>
     </target>

@@ -20,7 +20,13 @@
 
     <h:outputText value="#{test2.stringProperty}" />
 
-    <h:commandButton value="submit" />
+    <h:commandButton value="submit" /> <br />
+
+    <h:outputText value="#{replaceApplication.stateManagerClass}" /> <br />
+
+    <h:outputText value="#{replaceApplication.viewHandlerClass}" /> <br />
+
+    <h:outputText value="#{replaceApplication.applicationClass}" />
 
   </h:form>
 
