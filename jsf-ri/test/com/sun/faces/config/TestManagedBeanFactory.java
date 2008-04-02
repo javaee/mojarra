@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.28 2005/10/19 19:51:30 edburns Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.29 2006/02/21 20:37:51 rlubke Exp $
  */
 
 /*
@@ -209,6 +209,62 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         //make sure scope is stored properly
         assertTrue(mbf.getScope() == Scope.SESSION);
+    }
+    
+    public void testSimpleNumericProperty() throws Exception {
+        // If a property value is "" ensure numeric properties
+        // are set to 0.
+        bean = new ManagedBeanBean();
+        bean.setManagedBeanClass(beanName);
+        bean.setManagedBeanScope("session");
+                
+        property = new ManagedPropertyBean();
+        property.setPropertyName("byteProp");
+        property.setValue("");
+        bean.addManagedProperty(property);
+        
+        property = new ManagedPropertyBean();
+        property.setPropertyName("charProp");
+        property.setValue("");
+        bean.addManagedProperty(property);
+              
+        property = new ManagedPropertyBean();
+        property.setPropertyName("doubleProp");
+        property.setValue("");
+        bean.addManagedProperty(property);
+      
+        property = new ManagedPropertyBean();
+        property.setPropertyName("floatProp");
+        property.setValue("");
+        bean.addManagedProperty(property);
+       
+        property = new ManagedPropertyBean();
+        property.setPropertyName("intProp");
+        property.setValue("");
+        bean.addManagedProperty(property);
+       
+        property = new ManagedPropertyBean();
+        property.setPropertyName("longProp");
+        property.setValue("");
+        bean.addManagedProperty(property);
+        
+        property = new ManagedPropertyBean();
+        property.setPropertyName("shortProp");
+        property.setValue("");
+        bean.addManagedProperty(property);
+        
+        mbf = new ManagedBeanFactoryImpl(bean);
+               
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
+        
+        mbf = new ManagedBeanFactoryImpl(bean);      
+        assertTrue(testBean.getByteProp() == 0); 
+        assertTrue(testBean.getCharProp() == 0);
+        assertTrue(testBean.getDoubleProp() == 0);
+        assertTrue(testBean.getFloatProp() == 0);
+        assertTrue(testBean.getIntProp() == 0);
+        assertTrue(testBean.getLongProp() == 0);
+        assertTrue(testBean.getShortProp() == 0);
     }
 
 

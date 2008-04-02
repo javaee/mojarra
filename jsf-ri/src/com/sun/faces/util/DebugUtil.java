@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.32 2006/01/11 15:28:14 rlubke Exp $
+ * $Id: DebugUtil.java,v 1.33 2006/02/21 20:37:51 rlubke Exp $
  */
 
 /*
@@ -43,6 +43,7 @@ import javax.faces.component.ValueHolder;
 import javax.faces.model.SelectItem;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.io.FastStringWriter;
 
 /**
  * <B>DebugUtil</B> is a class ...
@@ -138,7 +139,7 @@ public class DebugUtil {
      *    logger.log(DebugUtil.printTree(root));
      */
     public static String printTree(UIComponent root) {
-        StringWriter writer = new StringWriter();
+        Writer writer = new FastStringWriter(1024);
         printTree(root, writer);
         return writer.toString();
     }
@@ -242,7 +243,7 @@ public class DebugUtil {
      *    logger.log(DebugUtil.printTree(root));
      */
     public static String printTree(TreeStructure root) {
-        StringWriter writer = new StringWriter();
+        Writer writer = new FastStringWriter(1024);
         printTree(root, writer);
         return writer.toString();
     }

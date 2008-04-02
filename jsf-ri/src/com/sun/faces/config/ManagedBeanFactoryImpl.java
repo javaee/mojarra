@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.6 2006/02/14 19:59:42 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.7 2006/02/21 20:37:50 rlubke Exp $
  */
 
 /*
@@ -186,11 +186,11 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         Class<?> managedBeanClass = this.getManagedBeanClass();
         if (managedBeanClass != null) {
             postConstructMethods = 
-                  this.getMethodsWithAnnotation(managedBeanClass,
-                                                Annotations.POST_CONSTRUCT);
+                  getMethodsWithAnnotation(managedBeanClass,
+                                           Annotations.POST_CONSTRUCT);
             preDestroyMethods = 
-                  this.getMethodsWithAnnotation(managedBeanClass,
-                                                Annotations.PRE_DESTROY);    
+                  getMethodsWithAnnotation(managedBeanClass,
+                                           Annotations.PRE_DESTROY);    
         }                
     }
 
@@ -254,7 +254,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         return null;
     }
     
-    public Class getManagedBeanClass() {
+    public final Class getManagedBeanClass() {
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             if (loader == null) {
@@ -550,7 +550,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             strKey = null,
             strValue = null;
 
-        if (null == mapEntries || 0 == valuesFromConfig.length) {
+        if (valuesFromConfig.length == 0) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("null or zero length array");
             }
@@ -758,8 +758,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 !java.util.List.class.isAssignableFrom(propertyType)) {
                 throw new FacesException(MessageUtils.getExceptionMessageString(
                     MessageUtils.MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY_ID,
-                    new Object[] { propertyName,
-                                   managedBean.getManagedBeanName() }));
+                    propertyName,
+                    managedBean.getManagedBeanName()));
             }
         }
 
@@ -782,9 +782,9 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 if (!(result instanceof List)) {
                     // throw an exception
                     throw new FacesException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.MANAGED_BEAN_EXISTING_VALUE_NOT_LIST_ID,
-                    new Object[] { propertyName,
-                                   managedBean.getManagedBeanName() }));
+                        MessageUtils.MANAGED_BEAN_EXISTING_VALUE_NOT_LIST_ID,
+                        propertyName,
+                        managedBean.getManagedBeanName()));
                 }
                 valuesForBean = (List<Object>) result;
             }
@@ -890,8 +890,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             !java.util.Map.class.isAssignableFrom(propertyType)) {
             throw new FacesException(MessageUtils.getExceptionMessageString(
                     MessageUtils.MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY_ID,
-                    new Object[] { propertyName,
-                                   managedBean.getManagedBeanName() }));
+                    propertyName,
+                    managedBean.getManagedBeanName()));
         }
 
 
@@ -942,44 +942,58 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
     private Object getConvertedValueConsideringPrimitives(Object value,
                                                           Class valueType)
-        throws FacesException {
+        throws FacesException {        
         if (null != value && null != valueType) {
+            String valueString = value.toString();
             if (valueType.isEnum()) {
-                value = Enum.valueOf(valueType, value.toString());
+                value = Enum.valueOf(valueType, valueString);
             }
             else if (valueType == Boolean.TYPE ||
                 valueType == java.lang.Boolean.class) {
-                value = value.toString().toLowerCase().equals("true")
-                        ? Boolean.TRUE : Boolean.FALSE;
+                value = Boolean.valueOf(valueString);
             } else if (valueType == Byte.TYPE ||
                 valueType == java.lang.Byte.class) {
-                value = new Byte(value.toString());
+                value = (valueString.length() == 0
+                         ? 0
+                         : Byte.valueOf(valueString));
             } else if (valueType == Double.TYPE ||
-                valueType == java.lang.Double.class) {
-                value = new Double(value.toString());
+                valueType == java.lang.Double.class) {               
+                value = (valueString.length() == 0
+                         ? 0
+                         : Double.valueOf(valueString));
             } else if (valueType == Float.TYPE ||
-                valueType == java.lang.Float.class) {
-                value = new Float(value.toString());
+                valueType == java.lang.Float.class) {                
+                value = (valueString.length() == 0
+                         ? 0
+                         : Float.valueOf(valueString));
             } else if (valueType == Integer.TYPE ||
-                valueType == java.lang.Integer.class) {
-                value = new Integer(value.toString());
+                valueType == java.lang.Integer.class) {               
+                value = (valueString.length() == 0
+                         ? 0
+                         : Integer.valueOf(valueString));
             } else if (valueType == Character.TYPE ||
-                valueType == java.lang.Character.class) {
-                value = value.toString().charAt(0);
+                valueType == java.lang.Character.class) {               
+                value = (valueString.length() == 0
+                         ? 0
+                         : valueString.charAt(0));
             } else if (valueType == Short.TYPE ||
-                valueType == java.lang.Short.class) {
-                value = new Short(value.toString());
+                valueType == java.lang.Short.class) {               
+                value = (valueString.length() == 0
+                         ? 0
+                         : Short.valueOf(valueString));
             } else if (valueType == Long.TYPE ||
-                valueType == java.lang.Long.class) {
-                value = new Long(value.toString());
+                valueType == java.lang.Long.class) {               
+                value = (valueString.length() == 0
+                         ? 0
+                         : Long.valueOf(valueString));
             } else if (valueType == String.class) {
             } else if (!valueType.isAssignableFrom(value.getClass())) {
                 throw new FacesException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.MANAGED_BEAN_TYPE_CONVERSION_ERROR_ID,
-                    new Object[] { value.toString(),
-                                   value.getClass(),
-                                   valueType,
-                                   managedBean.getManagedBeanName()}));
+                      MessageUtils.MANAGED_BEAN_TYPE_CONVERSION_ERROR_ID,
+                      value.toString(),
+                      value.getClass(),
+                      valueType,
+                      managedBean.getManagedBeanName()));
 
             }
         }
@@ -1040,12 +1054,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         //if the managed bean's scope is "none" but the scope of the
         //referenced object is not "none", scope is invalid
         if (scope == Scope.NONE) {
-            if (valueScope != Scope.NONE) {
-                return false;
-            }
-            else {
-                return true;
-            }
+            return valueScope == Scope.NONE;
         }
        
         //if the managed bean's scope is "request" it is able to refer
@@ -1057,19 +1066,14 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         //if the managed bean's scope is "session" it is able to refer
         //to objects in other "session", "application", or "none" scopes
         if (scope == Scope.SESSION) {
-            if (valueScope == Scope.REQUEST) {
-                    return false;
-            }
-            return true;
+            return valueScope != Scope.REQUEST;
         }
 
         //if the managed bean's scope is "application" it is able to refer
         //to objects in other "application", or "none" scopes
         if (scope == Scope.APPLICATION) {
-            if (valueScope == Scope.REQUEST || valueScope == Scope.SESSION) {
-                return false;
-            }
-            return true;
+            return !(valueScope == Scope.REQUEST
+                     || valueScope == Scope.SESSION);
         }
 
         //the managed bean is required to be in either "request", "session",
@@ -1110,29 +1114,29 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 	    shortestScope = Scope.NONE.ordinal(),
 	    currentScope = Scope.NONE.ordinal();
 	Scope 
-	    scope = Scope.NONE,
+	    lScope = Scope.NONE,
 	    result = Scope.NONE;
 	
 	// loop over the expressions 
 	while (iter.hasNext()) {
-	    scope = getScopeForSingleExpression((String)iter.next());
+	    lScope = getScopeForSingleExpression((String)iter.next());
 	    // don't consider none
-	    if (null == scope || scope == Scope.NONE) {
+	    if (null == lScope || lScope == Scope.NONE) {
 		continue;
 	    }
 
-	    currentScope = scope.ordinal();
+	    currentScope = lScope.ordinal();
 	    
 	    // if we have no basis for comparison
 	    if (Scope.NONE.ordinal() == shortestScope) {
 		shortestScope = currentScope;
-		result = scope;
+		result = lScope;
 	    }
 	    else {
 		// we have a basis for comparison
 		if (currentScope < shortestScope) {
 		    shortestScope = currentScope;
-		    result = scope;
+		    result = lScope;
 		}
 	    }
 	}

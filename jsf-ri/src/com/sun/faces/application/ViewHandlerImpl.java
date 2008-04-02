@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.65 2006/02/10 22:29:01 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.66 2006/02/21 20:37:50 rlubke Exp $ 
  */ 
 
 
@@ -33,14 +33,6 @@
 
 package com.sun.faces.application;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.StateManager;
@@ -59,14 +51,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
+import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.65 2006/02/10 22:29:01 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.66 2006/02/21 20:37:50 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -151,7 +152,7 @@ public class ViewHandlerImpl extends ViewHandler {
         ServletResponse response = (ServletResponse) extContext.getResponse();
         
         ResponseWriter oldWriter = context.getResponseWriter();
-        StringWriter strWriter = new StringWriter();
+        Writer strWriter = new FastStringWriter(2048);
         ResponseWriter newWriter = null;
         if (null != oldWriter) {
             newWriter = oldWriter.cloneWithWriter(strWriter);
@@ -177,7 +178,7 @@ public class ViewHandlerImpl extends ViewHandler {
         }
         context.setResponseWriter(responseWriter);
         
-        String bodyContent = strWriter.getBuffer().toString();
+        String bodyContent = strWriter.toString();
         replaceMarkers(bodyContent, context);
         
         if (null != oldWriter) {
