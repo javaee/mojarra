@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContext.java,v 1.5 2003/08/28 18:19:04 craigmcc Exp $
+ * $Id: ExternalContext.java,v 1.6 2003/09/02 19:02:15 eburns Exp $
  */
  
 /*
@@ -48,96 +48,150 @@ public abstract class ExternalContext {
     public abstract Object getSession(boolean create);
     
     /**
-     * @return the <code>ServletContext</code> object for the web
-     * application associated with this request.
+     * @return the <code>ServletContext</code> or
+     * <code>PortletContext</code> object for the web application
+     * associated with this request.
      */
     public abstract Object getContext();
     
     
     /**
-     * @return the <code>ServletRequest</code> object representing the
-     * current request that is being processed.
+     * @return the <code>ServletRequest</code> or
+     * <code>PortletRequest</code> object representing the current
+     * request that is being processed.
      */
     public abstract Object getRequest();
     
     
     /**
-     * @return the <code>ServletResponse</code> object representing the
-     * current response that is being rendered.
+     * @return the <code>ServletResponse</code>
+     * <code>PortletResponse</code> object representing the current
+     * response that is being rendered.
      */
     public abstract Object getResponse();
     
     /**
-       
-    * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
-    * from this method is equivalent to getting the
-    * <code>ServletContext</code> for this request and calling
-    * <code>getAttribute(key)</code> on it.  Similar rules apply for
-    * other <code>Map</code> methods where they make sense.</p>
-
-    * @return a <code>Map</code> that wraps the ServletContext's
-    * attribute set.
-    
-    */
+     *       
+     * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
+     * from this method is equivalent to getting the
+     * <code>ServletContext</code> for this request and calling
+     * <code>getAttribute(key)</code> on it.</p>
+     *
+     * <p>The following methods of <code>Map</code> must be supported.</p>
+     *
+     * <ul><p><code>get, put, equals, remove, entrySet</code>, and all
+     * of the <code>Map</code> methods from
+     * <code>java.util.AbstractMap</code>, except for below
+     * exclusions.</p></ul>
+     *
+     * <p>The following methods of <code>Map</code> must not be supported.</p>
+     *
+     * <ul><p><code>clear</code>, and <code>putAll</code>.</p></ul>
+     *
+     * @return a <code>Map</code> that wraps the ServletContext's
+     * attribute set.
+     *
+     */
     public abstract Map getApplicationMap();
     
     /**
-     
+     *     
      * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
      * from this method is equivalent to getting the
      * <code>HttpSession</code> for this request and calling
-     * <code>getAttribute(key)</code> on it.  Similar rules apply for *
-     * other <code>Map</code> methods where they make sense.</p>
-     
-    * @return a <code>Map</code> that wraps the HttpSession's
-    * attribute set.
+     * <code>getAttribute(key)</code> on it.</p>
+     *
+     * <p>The following methods of <code>Map</code> must be supported.</p>
+     *
+     * <ul><p><code>get, put, equals, remove, entrySet</code>, and all
+     * of the <code>Map</code> methods from
+     * <code>java.util.AbstractMap</code>, except for below
+     * exclusions.</p></ul>
+     *
+     * <p>The following methods of <code>Map</code> must not be supported.</p>
+     *
+     * <ul><p><code>clear</code>, and <code>putAll</code>.</p></ul>
+     *
+     * @return a <code>Map</code> that wraps the HttpSession's
+     * attribute set.
+     *
+     */
     
-    */
     public abstract Map getSessionMap();
     
     /**
-     
+     *     
      * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
      * from this method is equivalent to getting the
      * <code>ServletRequest</code> for this request and calling
-     * <code>getAttribute(key)</code> on it.  Similar rules apply for *
-     * other <code>Map</code> methods where they make sense.</p>
-
-    * @return a <code>Map</code> that wraps the Request's
-    * attribute set.
-     
+     * <code>getAttribute(key)</code> on it.</p>
+     *
+     * <p>The following methods of <code>Map</code> must be supported.</p>
+     *
+     * <ul><p><code>get, put, equals, remove, entrySet</code>, and all
+     * of the <code>Map</code> methods from
+     * <code>java.util.AbstractMap</code>, except for below
+     * exclusions.</p></ul>
+     *
+     * <p>The following methods of <code>Map</code> must not be supported.</p>
+     *
+     * <ul><p><code>clear</code>, and <code>putAll</code>.</p></ul>
+     *
+     * @return a <code>Map</code> that wraps the Request's
+     * attribute set.
      */
     public abstract Map getRequestMap();
     
     /**
-       
-    * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
-    * from this method is equivalent to getting the
-    * <code>ServletRequest</code> for this request and calling
-    * <code>getParameter(key)</code> on it.  Similar rules apply for
-    * other <code>Map</code> methods where they make sense.</p>
-    
-    * @return a <code>Map</code> of all the parameters sent with this request.
-    
-    */
+     *
+     * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
+     * from this method is equivalent to getting the
+     * <code>ServletRequest</code> for this request and calling
+     * <code>getParameter(key)</code> on it.</p>
+     *
+     * <p>The following methods of <code>Map</code> must be supported.</p>
+     *
+     * <ul><p><code>get, equals, entrySet</code>, and all of
+     * the <code>Map</code> methods from
+     * <code>java.util.AbstractMap</code>, except for below
+     * exclusions.</p></ul>
+     *
+     * <p>The following methods of <code>Map</code> must not be supported.</p>
+     *
+     * <ul><p><code>put, remove, clear</code>, and
+     * <code>putAll</code>.</p></ul>
+     *
+     * @return a <code>Map</code> of all the parameters sent with this request.
+     *
+     */
     
     public abstract Map getRequestParameterMap();
     
     /**
-       
-    * <p>Similar to <code>getRequestParameterMap</code>, but useful for those
-    * parameters that can have multiple values with one key.</p>
-    
-    * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
-    * from this method is equivalent to getting the
-    * <code>ServletRequest</code> for this request and calling
-    * <code>getParameterValues(key)</code> on it.  Similar rules apply
-    * for other <code>Map</code> methods where they make sense.</p>
-
-    * @return a <code>Map</code> that wraps the getParameterValues()
-    * result set.
-    
-    */
+     *       
+     * <p>Similar to <code>getRequestParameterMap</code>, but useful for those
+     * parameters that can have multiple values with one key.</p>
+     *
+     * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
+     * from this method is equivalent to getting the
+     * <code>ServletRequest</code> for this request and calling
+     * <code>getParameterValues(key)</code> on it.</p>
+     *
+     * <p>The following methods of <code>Map</code> must be supported.</p>
+     *
+     * <ul><p><code>get, equals, entrySet</code>, and all of the
+     * <code>Map</code> methods from <code>java.util.AbstractMap</code>,
+     * except for below exclusions.</p></ul>
+     *
+     * <p>The following methods of <code>Map</code> must not be supported.</p>
+     *
+     * <ul><p><code>put, remove, clear</code>, and
+     * <code>putAll</code>.</p></ul>
+     *
+     * @return a <code>Map</code> that wraps the getParameterValues()
+     * result set.
+     *
+     */
     
     public abstract Map getRequestParameterValuesMap();
 
@@ -155,51 +209,79 @@ public abstract class ExternalContext {
     public abstract Iterator getRequestParameterNames();
 
     /**
-
-    * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
-    * from this method is equivalent to getting the
-    * <code>ServletRequest</code> for this request and calling
-    * <code>getHeader(key)</code> on it.  Similar rules apply for
-    * other Map methods where they make sense.</p>
-    
-    * @return a <code>Map</code> that wraps the Header set for this
-    * request.
-
-
-    */ 
+     *
+     * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
+     * from this method is equivalent to getting the
+     * <code>ServletRequest</code> for this request and calling
+     * <code>getHeader(key)</code> on it.</p>
+     *
+     * <p>The following methods of <code>Map</code> must be supported.</p>
+     *
+     * <ul><p><code>get, equals, entrySet</code>, and all of the
+     * <code>Map</code> methods from <code>java.util.AbstractMap</code>,
+     * except for below exclusions.</p></ul>
+     *
+     * <p>The following methods of <code>Map</code> must not be supported.</p>
+     *
+     * <ul><p><code>put, remove, clear</code>, and
+     * <code>putAll</code>.</p></ul>
+     *
+     * @return a <code>Map</code> that wraps the Header set for this
+     * request.
+     *
+     */ 
     
     public abstract Map getRequestHeaderMap();
 
     /**
-
-    * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
-    * from this method is equivalent to getting the
-    * <code>ServletRequest</code> for this request and calling
-    * <code>getHeader<em>s</em>(key)</code> on it.  Similar rules apply for
-    * other Map methods where they make sense.</p>
-    
-    * @return a <code>Map</code> that wraps the Header set for this
-    * request, but calls <code>getHeader<em>s</em>()</code> instead of
-    * <code>getHeader()</code>.
-
-    */ 
+     *
+     * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
+     * from this method is equivalent to getting the
+     * <code>ServletRequest</code> for this request and calling
+     * <code>getHeader<em>s</em>(key)</code> on it.</p>
+     *
+     * <p>The following methods of <code>Map</code> must be supported.</p>
+     *
+     * <ul><p><code>get, equals, entrySet</code>, and all of the
+     * <code>Map</code> methods from <code>java.util.AbstractMap</code>,
+     * except for below exclusions.</p></ul>
+     *
+     * <p>The following methods of <code>Map</code> must not be supported.</p>
+     *
+     * <ul><p><code>put, remove, clear</code>, and
+     * <code>putAll</code>.</p></ul>
+     *
+     * @return a <code>Map</code> that wraps the Header set for this
+     * request, but calls <code>getHeader<em>s</em>()</code> instead of
+     * <code>getHeader()</code>.
+     */ 
     
     public abstract Map getRequestHeaderValuesMap();
 
     /**
-
-    * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
-    * from this method is equivalent to getting the
-    * <code>ServletRequest</code> for this request and looking through
-    * the <code>Cookie[]</code> returned by calling
-    * <code>getCookies()</code> and finding a cookie with the name of
-    * <code>key</code>.  Similar rules apply for other Map methods where
-    * they make sense.</p>
-    
-    * @return a <code>Map</code> that wraps the Cookie set for this
-    * request.
-
-    */ 
+     *
+     * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
+     * from this method is equivalent to getting the
+     * <code>ServletRequest</code> for this request and looking through
+     * the <code>Cookie[]</code> returned by calling
+     * <code>getCookies()</code> and finding a cookie with the name of
+     * <code>key</code>.</p>
+     *
+     * <p>The following methods of <code>Map</code> must be supported.</p>
+     *
+     * <ul><p><code>get, equals, entrySet</code>, and all of the
+     * <code>Map</code> methods from <code>java.util.AbstractMap</code>,
+     * except for below exclusions.</p></ul>
+     *
+     * <p>The following methods of <code>Map</code> must not be supported.</p>
+     *
+     * <ul><p><code>put, remove, clear</code>, and
+     * <code>putAll</code>.</p></ul>
+     *
+     * @return a <code>Map</code> that wraps the Cookie set for this
+     * request.
+     *
+     */ 
 
     public abstract Map getRequestCookieMap();
 
@@ -244,17 +326,26 @@ public abstract class ExternalContext {
     public abstract String getInitParameter(String name);
 
     /**
-     
+     *
      * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
      * from this method is equivalent to getting the
      * <code>ServletContext</code> for this request and calling
-     * <code>getInitParam(key)</code> on it.  Similar rules apply for
-     * other <code>Map</code> methods where they make sense.</p>
-     
-    * @return a <code>Map</code> that wraps the ServletContext's
-    * init parameter set.
-    
-    */
+     * <code>getInitParam(key)</code> on it.</p>
+     *
+     * <p>The following methods of <code>Map</code> must be supported.</p>
+     *
+     * <ul><p><code>get, equals, entrySet</code>, and all of the
+     * <code>Map</code> methods from <code>java.util.AbstractMap</code>,
+     * except for below exclusions.</p></ul>
+     *
+     * <p>The following methods of <code>Map</code> must not be supported.</p>
+     *
+     * <ul><p><code>put, remove, clear</code>, and
+     * <code>putAll</code>.</p></ul>
+     *
+     * @return a <code>Map</code> that wraps the ServletContext's
+     * init parameter set.
+     */
 
     public abstract Map getInitParameterMap();
 
