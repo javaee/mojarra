@@ -1,4 +1,5 @@
-build
 build.properties
-dist
+build
 systest/build
+target
+dist

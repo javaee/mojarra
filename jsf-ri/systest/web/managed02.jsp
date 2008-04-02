@@ -74,6 +74,14 @@
   if (!"New String Value".equals(bean.getStringProperty())) {
     sb.append("stringProperty(" + bean.getStringProperty() + ")|");
   }
+  TestBean.Suit suit = bean.getSuit();
+  if (suit != TestBean.Suit.Heart) {
+      sb.append("suit(" + suit.toString() + ")|");
+  }
+  suit = bean.getReferencedSuit();
+  if (suit != TestBean.Suit.Spade) {
+      sb.append("referencedSuit(" + suit.toString() + ")|");
+  }
 
   // Report any property errors
   String errors = sb.toString();
@@ -82,4 +90,4 @@
   } else {
     out.println("/managed02.jsp FAILED - property value errors:  " + errors);
   }
-%>
+%>2

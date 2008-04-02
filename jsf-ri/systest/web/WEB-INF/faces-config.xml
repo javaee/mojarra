@@ -152,6 +152,14 @@
       <property-name>userName</property-name>
       <value>#{usernamecomponent}</value>
     </managed-property>
+    <managed-property>
+      <property-name>suit</property-name>
+      <value>Heart</value>
+    </managed-property>
+    <managed-property>
+      <property-name>referencedSuit</property-name>
+      <value>#{test3.suit}</value>
+    </managed-property>    
   </managed-bean>
 
   <!-- Managed Bean #3, No Property Overrides -->
@@ -161,6 +169,10 @@
       com.sun.faces.systest.model.TestBean
     </managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>suit</property-name>
+      <value>Spade</value>
+    </managed-property>
   </managed-bean>
 
   <managed-bean>

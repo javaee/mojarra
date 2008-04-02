@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.23 2006/01/18 15:52:54 rlubke Exp $
+ * $Id: TestBean.java,v 1.24 2006/01/27 21:39:04 edburns Exp $
  */
 
 /*
@@ -68,6 +68,10 @@ public class TestBean {
     private ArrayList newList1= new ArrayList();
     private ArrayList newList2= new ArrayList();
     ServletContext servletContext = null;
+    
+    public enum Suit {
+        Spade, Heart, Diamond, Club
+    }
 
     public TestBean() {
     random = new Random(4143);
@@ -760,6 +764,48 @@ public class TestBean {
     
     public SpecialBean getSpecialModel() {
         return special;
+    }
+
+    /**
+     * Holds value of property suit.
+     */
+    private Suit suit;
+
+    /**
+     * Getter for property suit.
+     * @return Value of property suit.
+     */
+    public Suit getSuit() {
+        return this.suit;
+    }
+
+    /**
+     * Setter for property suit.
+     * @param suit New value of property suit.
+     */
+    public void setSuit(Suit suit) {
+        this.suit = suit;
+    }
+
+    /**
+     * Holds value of property referencedSuit.
+     */
+    private Suit referencedSuit;
+
+    /**
+     * Getter for property referencedSuit.
+     * @return Value of property referencedSuit.
+     */
+    public Suit getReferencedSuit() {
+        return this.referencedSuit;
+    }
+
+    /**
+     * Setter for property referencedSuit.
+     * @param referencedSuit New value of property referencedSuit.
+     */
+    public void setReferencedSuit(Suit referencedSuit) {
+        this.referencedSuit = referencedSuit;
     }
 
 }

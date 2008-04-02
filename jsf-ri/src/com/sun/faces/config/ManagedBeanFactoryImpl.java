@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.4 2006/01/13 19:19:15 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.5 2006/01/27 21:39:04 edburns Exp $
  */
 
 /*
@@ -948,7 +948,10 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                                                           Class valueType)
         throws FacesException {
         if (null != value && null != valueType) {
-            if (valueType == Boolean.TYPE ||
+            if (valueType.isEnum()) {
+                value = Enum.valueOf(valueType, value.toString());
+            }
+            else if (valueType == Boolean.TYPE ||
                 valueType == java.lang.Boolean.class) {
                 value = value.toString().toLowerCase().equals("true")
                         ? Boolean.TRUE : Boolean.FALSE;
