@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.13 2003/10/21 23:58:19 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.14 2003/10/22 23:23:53 craigmcc Exp $
  */
 
 /*
@@ -16,9 +16,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Message;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -26,6 +29,8 @@ import javax.faces.convert.ConverterException;
 import javax.faces.convert.LongConverter;
 import javax.faces.convert.ShortConverter;
 import javax.faces.el.ValueBinding;
+import javax.faces.event.ActionEvent;
+import javax.faces.mock.MockExternalContext;
 import javax.faces.mock.MockResponseWriter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -341,23 +346,237 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
     }
 
 
+    // Test request processing lifecycle (successful input)
+    public void testTreeLifecycle() throws Exception {
+
+        ValueBinding vbCommand = application.getValueBinding("foo.command");
+        ValueBinding vbInput = application.getValueBinding("foo.input");
+        ValueBinding vbOutput = application.getValueBinding("foo.output");
+        String before[] =
+            { "input3", "input4", "input5", "input6", "input7" };
+        String after[] =
+            { "input3", "input4A", "input5", "input6B", "input7" };
+
+        // Set up for this test
+        setupModel();
+        setupRenderers();
+        setupTree();
+        UIData data = (UIData) component;
+
+        // Set up our fake request parameters (two command invocations)
+        Map params = new HashMap();
+        params.put("data:5:command", "");
+        params.put("data:7:command", "");
+        params.put("data:3:input", "input3");
+        params.put("data:4:input", "input4A");
+        params.put("data:5:input", "input5");
+        params.put("data:6:input", "input6B");
+        params.put("data:7:input", "input7");
+        MockExternalContext econtext =
+          (MockExternalContext) facesContext.getExternalContext();
+        econtext.setRequestParameterMap(params);
+        checkMessages(0);
+
+        // Simulate the Request Processing Lifecycle
+        TestDataActionListener.trace(null);
+        TestDataValidator.trace(null);
+        TestDataValueChangedListener.trace(null);
+        UIViewRoot root = (UIViewRoot) data.getParent();
+
+        //   APPLY REQUEST VALUES
+        root.processDecodes(facesContext);
+        assertEquals("/data:5:command" +
+                     "/data:7:command",
+                     TestDataActionListener.trace());
+        assertEquals("", TestDataValidator.trace());
+        assertEquals("", TestDataValueChangedListener.trace());
+        checkMessages(0);
+
+        //   PERFORM VALIDATIONS
+        root.processValidators(facesContext);
+        assertEquals("/data:5:command" +
+                     "/data:7:command",
+                     TestDataActionListener.trace());
+        assertEquals("/data:3:input/input3" +
+                     "/data:4:input/input4A" +
+                     "/data:5:input/input5" +
+                     "/data:6:input/input6B" +
+                     "/data:7:input/input7",
+                     TestDataValidator.trace());
+        assertEquals("/data:4:input/input4/input4A" +
+                     "/data:6:input/input6/input6B",
+                     TestDataValueChangedListener.trace());
+        checkModelInputs(before);
+        checkMessages(0);
+
+        //   UPDATE MODEL VALUES
+        root.processUpdates(facesContext);
+        assertEquals("/data:5:command" +
+                     "/data:7:command",
+                     TestDataActionListener.trace());
+        assertEquals("/data:3:input/input3" +
+                     "/data:4:input/input4A" +
+                     "/data:5:input/input5" +
+                     "/data:6:input/input6B" +
+                     "/data:7:input/input7",
+                     TestDataValidator.trace());
+        assertEquals("/data:4:input/input4/input4A" +
+                     "/data:6:input/input6/input6B",
+                     TestDataValueChangedListener.trace());
+        checkModelInputs(after);
+        checkMessages(0);
+
+        //   RENDER RESPONSE
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_3.xml");
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_3.xml");
+
+    }
+
+
     // Test rendering the tree and validate the output twice
     public void testTreeRendering() throws Exception {
 
+        // Set up for this test
         setupModel();
         setupRenderers();
         setupTree();
 
+        // Validate the rendered output
         renderResponse();
         checkResponse("/javax/faces/component/UIDataTestCase_1.xml");
-
         renderResponse();
         checkResponse("/javax/faces/component/UIDataTestCase_1.xml");
 
     }
 
 
+    // Test updating the tree's per-row values and validate the output twice
+    public void testTreeUpdating() throws Exception {
+
+        ValueBinding vbCommand = application.getValueBinding("foo.command");
+        ValueBinding vbInput = application.getValueBinding("foo.input");
+        ValueBinding vbOutput = application.getValueBinding("foo.output");
+
+        // Set up for this test
+        setupModel();
+        setupRenderers();
+        setupTree();
+        UIData data = (UIData) component;
+
+        // Use value references to update certain values directly
+        data.setRowIndex(4);
+        vbCommand.setValue(facesContext, "command4A");
+        vbInput.setValue(facesContext, "input4B");
+        vbOutput.setValue(facesContext, "output4C");
+        data.setRowIndex(6);
+        vbCommand.setValue(facesContext, "command6D");
+        vbInput.setValue(facesContext, "input6E");
+        vbOutput.setValue(facesContext, "output6F");
+        data.setRowIndex(-1);
+
+        // Validate the response (twice)
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_2.xml");
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_2.xml");
+
+    }
+
+
+    // Test request processing lifecycle (validation errors)
+    public void testTreeValidation() throws Exception {
+
+        ValueBinding vbCommand = application.getValueBinding("foo.command");
+        ValueBinding vbInput = application.getValueBinding("foo.input");
+        ValueBinding vbOutput = application.getValueBinding("foo.output");
+        String before[] =
+            { "input3", "input4", "input5", "input6", "input7" };
+
+        // Set up for this test
+        setupModel();
+        setupRenderers();
+        setupTree();
+        UIData data = (UIData) component;
+
+        // Set up our fake request parameters (no command invocations)
+        Map params = new HashMap();
+        params.put("data:3:input", "input3A");
+        params.put("data:4:input", "bad");
+        params.put("data:5:input", "input5");
+        params.put("data:6:input", "bad");
+        params.put("data:7:input", "input7B");
+        MockExternalContext econtext =
+          (MockExternalContext) facesContext.getExternalContext();
+        econtext.setRequestParameterMap(params);
+
+        // Simulate the Request Processing Lifecycle
+        TestDataActionListener.trace(null);
+        TestDataValidator.trace(null);
+        TestDataValueChangedListener.trace(null);
+        UIViewRoot root = (UIViewRoot) data.getParent();
+
+        //   APPLY REQUEST VALUES
+        root.processDecodes(facesContext);
+        assertEquals("", TestDataActionListener.trace());
+        assertEquals("", TestDataValidator.trace());
+        assertEquals("", TestDataValueChangedListener.trace());
+        checkMessages(0);
+
+        //   PERFORM VALIDATIONS
+        root.processValidators(facesContext);
+        assertEquals("", TestDataActionListener.trace());
+        assertEquals("/data:3:input/input3A" +
+                     "/data:4:input/bad/ERROR" +
+                     "/data:5:input/input5" +
+                     "/data:6:input/bad/ERROR" +
+                     "/data:7:input/input7B",
+                     TestDataValidator.trace());
+        assertEquals("/data:3:input/input3/input3A" +
+                     "/data:7:input/input7/input7B",
+                     TestDataValueChangedListener.trace());
+        checkModelInputs(before);
+        checkMessages(2);
+
+        //   UPDATE MODEL VALUES - skipped due to validation errors
+
+        //   RENDER RESPONSE (twice)
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_4.xml");
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_4.xml");
+
+    }
+
+
     // --------------------------------------------------------- Support Methods
+
+
+    // Check that the number of queued messages equals the expected count
+    protected void checkMessages(int expected) {
+
+        int n = 0;
+        Iterator messages = facesContext.getMessages();
+        while (messages.hasNext()) {
+            Message message = (Message) messages.next();
+            n++;
+            // System.err.println(message.getSummary());
+        }
+        assertEquals("expected message count", expected, n);
+
+    }
+
+
+    // Check the current values of the model objects being rendered
+    protected void checkModelInputs(String values[]) {
+
+        for (int i = 0; i < values.length; i++) {
+            TestDataBean bean = (TestDataBean) beans.get(i + 3);
+            assertEquals("correct input value", values[i], bean.getInput());
+        }
+
+    }
 
 
     // Check that the properties on the specified components are equal
@@ -563,6 +782,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         command.setValueRef("foo.command");
         column.getChildren().add(command);
         data.getChildren().add(column);
+        command.addActionListener(new TestDataActionListener());
 
         column = new UIColumn();
         column.setId("inputColumn");
@@ -579,6 +799,8 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         input.setValueRef("foo.input");
         column.getChildren().add(input);
         data.getChildren().add(column);
+        input.addValidator(new TestDataValidator());
+        input.addValueChangedListener(new TestDataValueChangedListener());
 
         column = new UIColumn();
         column.setId("outputColumn");
@@ -609,6 +831,15 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
+            }
+
+            if (!(component instanceof ActionSource)) {
+                return;
+            }
+            String clientId = component.getClientId(context);
+            Map params = context.getExternalContext().getRequestParameterMap();
+            if (params.containsKey(clientId)) {
+                component.queueEvent(new ActionEvent(component));
             }
 
         }
@@ -802,12 +1033,31 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 
 
     // "Text" Renderer
+    // NOTE - No conversion processing, assumes only Strings!
     class TextRenderer extends Renderer {
 
         public void decode(FacesContext context, UIComponent component) {
 
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
+            }
+
+            if (!(component instanceof UIInput)) {
+                return;
+            }
+            UIInput input = (UIInput) component;
+            String clientId = input.getClientId(context);
+            // System.err.println("decode(" + clientId + ")");
+
+            // Save the previous value for future ValueChangedEvent handling
+            input.setPrevious(input.currentValue(context));
+
+            // Decode incoming request parameters
+            Map params = context.getExternalContext().getRequestParameterMap();
+            if (params.containsKey(clientId)) {
+                // System.err.println("  '" + input.currentValue(context) +
+                //                    "' --> '" + params.get(clientId) + "'");
+                input.setValue((String) params.get(clientId));
             }
 
         }

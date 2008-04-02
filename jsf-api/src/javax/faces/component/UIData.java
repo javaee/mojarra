@@ -705,11 +705,11 @@ public class UIData extends UIComponentBase
 	}
 
 	// Iterate over our children, once per row
-	int first = getFirst();                  // Zero relative
-	int rowCount = getRowCount();
 	int processed = 0;
+        int rowIndex = getFirst() - 1;
 	int rows = getRows();
-        for (int rowIndex = first; rowIndex < rowCount; rowIndex++) {
+
+        while (true) {
 
 	    // Have we processed the requested number of rows?
 	    if ((rows > 0) && (++processed > rows)) {
@@ -717,7 +717,7 @@ public class UIData extends UIComponentBase
 	    }
 
 	    // Expose the current row in the specified request attribute
-	    setRowIndex(rowIndex);
+	    setRowIndex(++rowIndex);
 
 	    // Perform phase-specific processing as required
 	    Iterator kids = getChildren().iterator();
@@ -751,7 +751,7 @@ public class UIData extends UIComponentBase
      */
     private void restoreDescendantState() {
 
-        System.err.println("restoreDescendantState(" + rowIndex + ")");
+        // System.err.println("restoreDescendantState(" + rowIndex + ")");
         FacesContext context = FacesContext.getCurrentInstance();
         Iterator kids = getChildren().iterator();
         while (kids.hasNext()) {
@@ -760,7 +760,7 @@ public class UIData extends UIComponentBase
                 restoreDescendantState(kid, context);
             }
         }
-        System.err.println("retoreDescendantState(COMPLETED)");
+        // System.err.println("retoreDescendantState(COMPLETED)");
 
     }
 
@@ -778,19 +778,19 @@ public class UIData extends UIComponentBase
         // Restore state for this component
         if (component instanceof ValueHolder) {
             String clientId = component.getClientId(context);
-            System.err.println("  clientId=" + clientId);
+            // System.err.println("  clientId=" + clientId);
             SavedState state = (SavedState) saved.get(clientId);
             if (state == null) {
-                return;
+                state = new SavedState();
             }
-            System.err.println("     value=" + state.getValue());
+            // System.err.println("     value=" + state.getValue());
             ((ValueHolder) component).setValue(state.getValue());
             if (component instanceof ConvertableValueHolder) {
-                System.err.println("     valid=" + state.isValid());
+                // System.err.println("     valid=" + state.isValid());
                 ((ConvertableValueHolder) component).setValid(state.isValid());
             }
             if (component instanceof UIInput) {
-                System.err.println("      prev=" + state.getPrevious());
+                // System.err.println("      prev=" + state.getPrevious());
                 ((UIInput) component).setPrevious(state.getPrevious());
             }
         }
@@ -811,7 +811,7 @@ public class UIData extends UIComponentBase
      */
     private void saveDescendantState() {
 
-        System.err.println("saveDescendantState(" + rowIndex + ")");
+        // System.err.println("saveDescendantState(" + rowIndex + ")");
         FacesContext context = FacesContext.getCurrentInstance();
         Iterator kids = getChildren().iterator();
         while (kids.hasNext()) {
@@ -820,7 +820,7 @@ public class UIData extends UIComponentBase
                 saveDescendantState(kid, context);
             }
         }
-        System.err.println("saveDescendantState(COMPLETED)");
+        // System.err.println("saveDescendantState(COMPLETED)");
 
     }
 
@@ -843,15 +843,15 @@ public class UIData extends UIComponentBase
                 state = new SavedState();
                 saved.put(clientId, state);
             }
-            System.err.println("  clientId=" + clientId);
-            System.err.println("     value=" + (((ValueHolder) component).getValue()));
+            // System.err.println("  clientId=" + clientId);
+            // System.err.println("     value=" + (((ValueHolder) component).getValue()));
             state.setValue(((ValueHolder) component).getValue());
             if (component instanceof ConvertableValueHolder) {
-                System.err.println("     valid=" + (((ConvertableValueHolder) component).isValid()));
+                // System.err.println("     valid=" + (((ConvertableValueHolder) component).isValid()));
                 state.setValid(((ConvertableValueHolder) component).isValid());
             }
             if (component instanceof UIInput) {
-                System.err.println("      prev=" + (((UIInput) component).getPrevious()));
+                // System.err.println("      prev=" + (((UIInput) component).getPrevious()));
                 state.setPrevious(((UIInput) component).getPrevious());
             }
         }
