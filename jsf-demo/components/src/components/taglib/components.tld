@@ -84,4 +84,252 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>    
   </tag>
+
+  <tag>
+
+    <name>graph_menubar</name>
+    <tag-class>components.taglib.GraphMenuBarTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+      Render a components.model.Graph (referenced by the current value of a
+      UIOutput component) as a menu bar (whose items are from the children
+      of the root node of the graph), with expanded menus (and submenus)
+      underneath.
+    </description>
+
+    <attribute>
+      <name>graphClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style class to use when rendering this component.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>selectedClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style class to use when rendering a seelcted node.
+      </description>
+    </attribute>
+    <attribute>
+      <name>unselectedClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style class to use when rendering a unselected node.
+      </description>
+    </attribute>
+    <attribute>
+      <name>id</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component id of this component
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>modelReference</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Model reference expression pointing at a components.model.Graph instance.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>action_listener</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         Optional listener to handle tree expansion and contraction events.
+      </description>
+    </attribute>
+
+  </tag>
+
+  <tag>
+
+    <name>graph_menutree</name>
+    <tag-class>components.taglib.GraphMenuTreeTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+      Render a components.model.Graph (referenced by the current value of a
+      UIOutput component) as a tree control with subtrees expanded or
+      contracted based on the "expanded" property.
+    </description>
+
+    <attribute>
+      <name>graphClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style class to use when rendering this component.
+      </description>
+    </attribute>
+    <attribute>
+      <name>selectedClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style class to use when rendering a seelcted node.
+      </description>
+    </attribute>
+    <attribute>
+      <name>unselectedClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style class to use when rendering a unselected node.
+      </description>
+    </attribute>
+    <attribute>
+      <name>id</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component id of this component
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>modelReference</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Model reference expression pointing at a components.model.Graph instance.
+      </description>
+    </attribute>
+    <attribute>
+      <name>action_listener</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         Optional listener to handle tree expansion and contraction events.
+      </description>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>graph_menunode</name>
+    <tag-class>components.taglib.GraphMenuNodeTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+      Render a components.model.Node that represents a node of the tree.
+    </description>
+
+    <attribute>
+      <name>name</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Name of the node.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>label</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        visual representation of the node.
+      </description>
+    </attribute>
+    <attribute>
+      <name>icon</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        icon to visually represent the node. This can be used with or without
+        label.
+      </description>
+    </attribute>
+    <attribute>
+      <name>action</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+          context-relative URL triggered when node selected.
+      </description>
+    </attribute>
+    <attribute>
+      <name>expanded</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Should the node appear expanded or collapased ?
+      </description>
+    </attribute>
+    <attribute>
+      <name>enabled</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         should the node be enabled ?
+      </description>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>graph_treenode</name>
+    <tag-class>components.taglib.GraphTreeNodeTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+      Render a components.model.Node that represents a node of the tree.
+    </description>
+
+    <attribute>
+      <name>name</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Name of the node.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>label</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        visual representation of the node.
+      </description>
+    </attribute>
+    <attribute>
+      <name>icon</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        icon to visually represent the node. This can be used with or without
+        label.
+      </description>
+    </attribute>
+    <attribute>
+      <name>action</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+          context-relative URL triggered when node selected.
+      </description>
+    </attribute>
+    <attribute>
+      <name>expanded</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Should the node appear expanded or collapased ?
+      </description>
+    </attribute>
+    <attribute>
+      <name>enabled</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         should the node be enabled ?
+      </description>
+    </attribute>
+  </tag>
 </taglib>

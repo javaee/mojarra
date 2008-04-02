@@ -49,6 +49,7 @@
   <property file="../build.properties"/>            <!-- Commons local     -->
   <property name="context.path" value="/components"/>
   <property name="example" value="components" />
+  <property name="webapp" value="demo" />
   <property name="build"   value="${basedir}/build" />
 
   <!-- Configure properties to access the Manager application -->
@@ -77,8 +78,8 @@
             value="web/WEB-INF/lib/standard.jar"/>
 
   <path id="classpath">
-    <fileset dir="${build}/webapp/WEB-INF/lib" includes="*.jar" />
-    <pathelement location="${build}/WEB-INF/classes"/>
+    <fileset dir="${build}/${webapp}/WEB-INF/lib" includes="*.jar" />
+    <pathelement location="${build}/classes"/>
     <pathelement location="${servlet23.jar}"/>
   </path>
 
@@ -145,12 +146,13 @@
   <target name="prepare" depends="init"
    	description="Create build directories.">
     <mkdir dir="${build}" />
-    <mkdir dir="${build}/webapp/WEB-INF" />
+    <mkdir dir="${build}/${webapp}" />
     <mkdir dir="${build}/classes" />
-    <mkdir dir="${build}/classes/META-INF" />
-    <mkdir dir="${build}/webapp/WEB-INF/classes" />
-    <mkdir dir="${build}/webapp/WEB-INF/lib" />
-    <copy todir="${build}/webapp/WEB-INF/lib" >
+    <mkdir dir="${build}/classes/${webapp}" />
+    <mkdir dir="${build}/classes/${example}" />
+    <mkdir dir="${build}/classes/${example}/META-INF" />
+    <mkdir dir="${build}/${webapp}/WEB-INF/lib" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" >
       <fileset dir="${basedir}/web/WEB-INF/lib">
         <include name="*.jar"/>
       </fileset>
@@ -169,13 +171,13 @@
   </target>
 
   <target name="install" description="Install web application"
-          depends="build.webapp">
+          depends="build">
     <install url="${url}" username="${username}" password="${password}"
-          path="${context.path}"  war="file:${build}" />
+          path="${context.path}"  war="file://${build}/${webapp}" />
   </target>
 
   <target name="reload" description="Reload web application"
-          depends="build.webapp">
+          depends="build">
     <reload  url="${url}" username="${username}" password="${password}"
           path="${context.path}"/>
   </target>
@@ -185,23 +187,35 @@
           path="${context.path}"/>
   </target>
 
-  <target name="build.webapp" depends="build.components"/>
-
-  <target name="build.components" depends="prepare" 
+  <target name="build" depends="prepare" 
      description="Compile Java files for components, not webapp." >
-    <javac srcdir="src" destdir="${build}/classes">
-    	<include name="components/**/*.java" />
+    <javac srcdir="src" destdir="${build}/classes/${example}">
+        <include name="components/**" />
      <classpath refid="classpath"/>
     </javac>
+    <copy todir="${build}/classes/${example}/META-INF" 
+            file="src/components/taglib/components.tld"/>
 
-    <copy todir="${build}/classes/META-INF" file="src/components/taglib/components.tld"/>
+    <javac srcdir="src" destdir="${build}/classes/${webapp}">
+        <include name="demo/**" />
+     <classpath refid="classpath"/>
+    </javac>
+    <copy todir="${build}/${webapp}/WEB-INF">
+      <fileset dir="web/WEB-INF"    >
+        <include name="web.xml" />
+      </fileset>
+    </copy>
+
+     <copy todir="${build}/${webapp}">
+      <fileset dir="web" />
+    </copy>
 
   </target>	
 
-  <target name="build.jar" depends="build.components">
-    <jar jarfile="${build}/demo-${example}.jar" basedir="${build}/classes"/>
+  <target name="build.jar" depends="build">
+    <jar destfile="${build}/${webapp}/WEB-INF/lib/demo-${example}.jar" 
+            basedir="${build}/classes/${example}"/>
   </target>
-     
 
 </project>
 

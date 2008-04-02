@@ -15,11 +15,16 @@
         <param-name>saveStateInClient</param-name>
         <param-value>false</param-value>
     </context-param>
-    
-    <listener>
-        <listener-class>templateDemo.ServletContextListener</listener-class>
-    </listener>
 
+    <context-param>
+        <param-name>tree.control.images</param-name>
+        <param-value>/images</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>components.renderkit.ComponentsSetupListener</listener-class>
+    </listener>
+    
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -34,4 +39,8 @@
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Welcome File List -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>
