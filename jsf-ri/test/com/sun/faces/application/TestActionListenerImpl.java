@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.2 2003/04/08 18:08:47 rkitain Exp $
+ * $Id: TestActionListenerImpl.java,v 1.3 2003/05/05 15:24:14 rkitain Exp $
  */
 
 /*
@@ -11,21 +11,29 @@
 
 package com.sun.faces.application;
 
-import org.apache.cactus.WebRequest;
+import com.sun.faces.RIConstants;
+import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.config.ConfigBase;
+import com.sun.faces.config.ConfigListener;
+import com.sun.faces.config.ConfigNavigationCase;
+import com.sun.faces.context.FacesContextImpl;
+import com.sun.faces.tree.SimpleTreeImpl;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import java.util.List;
 
 import javax.faces.application.Action;
 import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import com.sun.faces.context.FacesContextImpl;
-import com.sun.faces.tree.SimpleTreeImpl;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContext;
 
-import com.sun.faces.ServletFacesTestCase;
+import org.apache.cactus.WebRequest;
+import org.apache.cactus.server.ServletContextWrapper;
+import org.mozilla.util.Assert;
+import org.mozilla.util.Debug;
+import org.mozilla.util.ParameterCheck;
 
 /**
  *
@@ -33,7 +41,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.2 2003/04/08 18:08:47 rkitain Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.3 2003/05/05 15:24:14 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -76,15 +84,51 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 // General Methods
 //
 
-// NOTE: These tests work in conjunction with web/test/WEB-INF/NavigationConfig.xml file..
+    private void loadConfigFile() {
+        config.getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
+        final String paramVal = "WEB-INF/faces-navigation.xml";
+
+        // work around a bug in cactus where calling
+        // config.setInitParameter() doesn't cause
+        // servletContext.getInitParameter() to relfect the call.
+
+        ServletContextWrapper sc =
+            new ServletContextWrapper(config.getServletContext()) {
+                public String getInitParameter(String theName) {
+                    if (null != theName &&
+                        theName.equals(RIConstants.CONFIG_FILES_INITPARAM)) {
+                        return paramVal;
+                    }
+                    return super.getInitParameter(theName);
+                }
+            };
+
+        ConfigListener configListener = new ConfigListener();
+        ServletContextEvent e =
+            new ServletContextEvent(sc);
+        configListener.contextInitialized(e);
+
+        System.out.println("NAV CASES LOADED:");
+        ConfigBase cbase = (ConfigBase)config.getServletContext().getAttribute(RIConstants.CONFIG_ATTR);
+        List navs = cbase.getNavigationCases();
+        for (int i=0; i<navs.size(); i++) {
+            ConfigNavigationCase nc = (ConfigNavigationCase)navs.get(i);
+            System.out.println("<from-tree-id>:"+nc.getFromTreeId());
+            System.out.println(" : <from-action-ref>:"+nc.getFromActionRef());
+            System.out.println(" : <from-outcome>:"+nc.getFromOutcome());
+            System.out.println(" : <to-tree-id>:"+nc.getToTreeId());
+            System.out.println("----------------------------------------------");
+        }
+    }
 
     public void testProcessAction() {
+        loadConfigFile();
         FacesContext context = getFacesContext();
 
         System.out.println("Testing With Action Literal Set...");
 
         UICommand command = new UICommand();
-        command.setAction("failure");
+        command.setAction("success");
         context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
 
         ActionListenerImpl actionListener = new ActionListenerImpl();
@@ -93,23 +137,27 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         actionListener.processAction(actionEvent);
 
         String newTreeId = context.getTree().getTreeId();
-        assertTrue(newTreeId.equals("/login-retry.jsp"));
+        assertTrue(newTreeId.equals("/home.jsp"));
 
 
-        System.out.println("Testing With Action *and* ActionRef Set...");
+        System.out.println("Testing With ActionRef Set...");
+
+        UserBean user = new UserBean();
+        context.getExternalContext().getApplicationMap().put("UserBean", user);
+        assertTrue(user == context.getExternalContext().getApplicationMap().get("UserBean"));
 
         command = new UICommand();
-        command.setAction("failure");
         command.setActionRef("UserBean");
         context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
 
+        actionEvent = new ActionEvent(command, "register");
         actionListener.processAction(actionEvent);
 
         newTreeId = context.getTree().getTreeId();
-
+System.out.println("NEWTREEID:"+newTreeId);
         // expected outcome should be tree id corresponding to "page/outcome" search..
 
-        assertTrue(newTreeId.equals("/login-retry.jsp"));
+        assertTrue(newTreeId.equals("/get-user-info.jsp"));
     }
 
     public void testIllegalArgException() {
@@ -136,3 +184,9 @@ public class TestActionListenerImpl extends ServletFacesTestCase
     }
 
 } // end of class TestActionListenerImpl
+
+class UserBean extends Action {
+    public String invoke() {
+        return "success";
+    }
+}
