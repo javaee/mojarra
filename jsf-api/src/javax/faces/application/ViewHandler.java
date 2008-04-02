@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.20 2003/10/22 04:43:03 eburns Exp $
+ * $Id: ViewHandler.java,v 1.21 2003/10/22 05:19:56 eburns Exp $
  */
 
 /*
@@ -71,8 +71,8 @@ public interface ViewHandler {
 	"javax.faces.DEFAULT_SUFFIX";
 
     /**
-     * <p>The value to use for the default suffix if the webapp is using
-     * url suffix mapping.</p>
+     * <p>The value to use for the default extension if the webapp is using
+     * url extension mapping.</p>
      */
 
     public static String DEFAULT_SUFFIX = ".jsp";
@@ -98,13 +98,13 @@ public interface ViewHandler {
      * this method simply calls {@link
      * javax.faces.context.ExternalContext#dispatchMessage} passing the
      * <code>viewId</code> of the argument <code>viewToRender</code>.
-     * If a suffix mapping was used, the default implementation must
+     * If a extension mapping was used, the default implementation must
      * check the servlet context init parameter named by the value of
      * the constant {@link #DEFAULT_SUFFIX_PARAM_NAME}.  If this
      * parameter is not defined, use {@link #DEFAULT_SUFFIX} as the
-     * suffix.  If the <code>viewId</code> of the argument
-     * <code>viewToRender</code> has a suffix, replace it with the new
-     * suffix.  Otherwise append the new suffix.  Then call {@link
+     * extension.  If the <code>viewId</code> of the argument
+     * <code>viewToRender</code> has a extension, replace it with the new
+     * extension.  Otherwise append the new extension.  Then call {@link
      * javax.faces.context.ExternalContext#dispatchMessage} on the
      * result.</p>
      *
@@ -182,6 +182,9 @@ public interface ViewHandler {
      * <p>PENDING(edburns): do we formalize that the renderkitId should
      * be set into the ViewRoot here?</p>
      *
+     * <p>In all cases, the returned <code>UIViewRoot</code> must be set
+     * as the viewRoot of the {@link FacesContext}.</p>
+     *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      *
@@ -227,7 +230,7 @@ public interface ViewHandler {
      * in the <code>viewId</code> with the extension of the appropriate mapping.
      * If the <code>viewId</code> has no extension, append the appropriate
      * mapping.  It should be noted that if the deployment descriptor
-     * contains multiple suffix mappings, the mapping used in the replacement
+     * contains multiple extension mappings, the mapping used in the replacement
      * is implementation dependent. The default implementation expects the 
      * argument <code>viewId</code> to be a context relative path, starting 
      * with '<code>/</code>'.  If this is not the case, the default 
