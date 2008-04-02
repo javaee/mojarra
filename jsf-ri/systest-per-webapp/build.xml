@@ -39,7 +39,7 @@
   <property name="lib.home" value="${basedir}/../lib"/>
 
   <!-- HtmlUnit, installed relative to tomcat.home -->
-  <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.2.3"/>
+  <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.4"/>
 
   <property name="username" value="tomcat"/>
   <property name="password" value="tomcat"/>

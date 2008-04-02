@@ -35,5 +35,19 @@
             <required>false</required>
         </attribute-extension>
     </attribute>
+    <attribute>
+        <description>
+        Flag indicating that characters that are sensitive
+        in HTML and XML markup must be escaped.  This flag
+        is set to "true" by default.
+        </description>
+        <display-name>Escape Characters</display-name>
+        <icon></icon>
+        <attribute-name>escape</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+            <default-value>true</default-value>
+        </attribute-extension>
+    </attribute>
 </root>
 

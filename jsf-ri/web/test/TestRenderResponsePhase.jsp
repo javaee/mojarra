@@ -303,6 +303,19 @@
 	</TD>
 
       </TR>
+
+      <TR>
+        <TD>
+             <h:outputLabel id="labe18" for="checkbox8" escape="true" value="escape<p>this markup</p>">
+                <h:outputText id="outputlabel8" value="andsometext"/>
+              </h:outputLabel>
+           
+              <h:selectBooleanCheckbox  id="checkbox8" rendered="true"
+                   styleClass="selectbooleanClass" />
+	</TD>
+
+      </TR>
+
       <TR>
 
 	<TD>

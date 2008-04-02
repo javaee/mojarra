@@ -9715,6 +9715,20 @@
         <required>false</required>
       </property-extension>
     </property>
+    <property>
+      <description>
+        Flag indicating that characters that are sensitive
+        in HTML and XML markup must be escaped.  This flag
+        is set to "true" by default.
+        </description>
+      <display-name>Escape Characters</display-name>
+      <icon/>
+      <property-name>escape</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <default-value>true</default-value>
+      </property-extension>
+    </property>
 
     <component-extension>
       <base-component-type>javax.faces.Output</base-component-type>
@@ -19671,6 +19685,20 @@
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <required>false</required>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+        Flag indicating that characters that are sensitive
+        in HTML and XML markup must be escaped.  This flag
+        is set to "true" by default.
+        </description>
+        <display-name>Escape Characters</display-name>
+        <icon/>
+        <attribute-name>escape</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <default-value>true</default-value>
         </attribute-extension>
       </attribute>
 

@@ -51,7 +51,7 @@
   <property name="webapp.name"  value="systest"/>
 
   <!-- HtmlUnit, installed relative to tomcat.home -->
-  <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.2.3"/>
+  <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.4"/>
 
   <!-- Context Path of the integration test web-app -->
   <property name="context.path" value="/jsf-systest"/>
