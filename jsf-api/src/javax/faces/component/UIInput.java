@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.76 2005/03/07 21:50:27 rogerk Exp $
+ * $Id: UIInput.java,v 1.77 2005/03/10 21:39:14 jayashri Exp $
  */
 
 /*
@@ -489,7 +489,19 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             MethodBinding method = getValueChangeListener();
             if (method != null) {
                 FacesContext context = getFacesContext();
-                method.invoke(context, new Object[] { event });
+                try {
+                    method.invoke(context, new Object[] { event });
+                } catch (EvaluationException ee) {
+                    Throwable cause = ee.getCause();
+                    if (cause != null && 
+                            cause instanceof AbortProcessingException) {
+                        throw  ((AbortProcessingException) cause);
+                    }
+                    if (cause != null && cause instanceof RuntimeException) {
+                        throw ((RuntimeException) cause);
+                    }
+                    throw new IllegalStateException(ee.getMessage());
+                }
             }
         }
 

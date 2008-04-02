@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.17 2004/12/16 17:56:38 edburns Exp $
+ * $Id: OutputMessageRenderer.java,v 1.18 2005/03/10 21:39:15 jayashri Exp $
  */
 
 /*
@@ -124,6 +124,9 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             } else {
                 currentValue = currentObj.toString();
             }
+        } else {
+            // if the value is null, do not output anything.
+            return;
         }
 
         ArrayList parameterList = new ArrayList();

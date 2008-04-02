@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeRule.java,v 1.3 2004/02/04 23:46:20 ofung Exp $
+ * $Id: AttributeRule.java,v 1.4 2005/03/10 21:39:17 jayashri Exp $
  */
 
 /*
@@ -116,8 +116,8 @@ public class AttributeRule extends FeatureRule {
             }
             ah.addAttribute(top);
         } else {
-            if (digester.getLogger().isWarnEnabled()) {
-                digester.getLogger().warn("[AttributeRule]{" +
+            if (digester.getLogger().isDebugEnabled()) {
+                digester.getLogger().debug("[AttributeRule]{" +
                                           digester.getMatch() +
                                           "} Merge(" +
                                           top.getAttributeName() +

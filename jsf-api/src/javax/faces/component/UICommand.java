@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.69 2004/02/26 20:30:30 eburns Exp $
+ * $Id: UICommand.java,v 1.70 2005/03/10 21:39:14 jayashri Exp $
  */
 
 /*
@@ -9,23 +9,16 @@
 
 package javax.faces.component;
 
-
-import javax.faces.FacesException;
-import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
+import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
-import javax.faces.render.Renderer;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
 
 
 /**
@@ -300,9 +293,21 @@ public class UICommand extends UIComponentBase
             FacesContext context = getFacesContext();
 
             // Notify the specified action listener method (if any)
-            MethodBinding mb = getActionListener();
-            if (mb != null) {
-                mb.invoke(context, new Object[] { event });
+            try { 
+                MethodBinding mb = getActionListener();
+                if (mb != null) {
+                    mb.invoke(context, new Object[] { event });
+                }
+            } catch (EvaluationException ee) {
+                Throwable cause = ee.getCause();
+                if (cause != null && 
+                        cause instanceof AbortProcessingException) {
+                    throw  ((AbortProcessingException) cause);
+                }
+                if (cause != null && cause instanceof RuntimeException) {
+                    throw ((RuntimeException) cause);
+                }
+                throw new IllegalStateException(ee.getMessage());
             }
 
             // Invoke the default ActionListener

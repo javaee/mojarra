@@ -1,5 +1,5 @@
 /*
- * $Id: RendererRule.java,v 1.4 2004/02/04 23:46:23 ofung Exp $
+ * $Id: RendererRule.java,v 1.5 2005/03/10 21:39:19 jayashri Exp $
  */
 
 /*
@@ -119,8 +119,8 @@ public class RendererRule extends FeatureRule {
             }
             rkb.addRenderer(top);
         } else {
-            if (digester.getLogger().isWarnEnabled()) {
-                digester.getLogger().warn("[RendererRule]{" +
+            if (digester.getLogger().isDebugEnabled()) {
+                digester.getLogger().debug("[RendererRule]{" +
                                           digester.getMatch() +
                                           "} Merge(" +
                                           top.getComponentFamily() +

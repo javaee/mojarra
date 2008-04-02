@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedPropertyRule.java,v 1.4 2004/11/23 19:26:56 rlubke Exp $
+ * $Id: ManagedPropertyRule.java,v 1.5 2005/03/10 21:39:18 jayashri Exp $
  */
 
 /*
@@ -120,8 +120,8 @@ public class ManagedPropertyRule extends FeatureRule {
             }
             mbb.addManagedProperty(top);
         } else {
-            if (digester.getLogger().isWarnEnabled()) {
-                digester.getLogger().warn("[ManagedPropertyRule]{" +
+            if (digester.getLogger().isDebugEnabled()) {
+                digester.getLogger().debug("[ManagedPropertyRule]{" +
                                           digester.getMatch() +
                                           "} Merge(" +
                                           top.getPropertyName() +

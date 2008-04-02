@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorRule.java,v 1.3 2004/02/04 23:46:24 ofung Exp $
+ * $Id: ValidatorRule.java,v 1.4 2005/03/10 21:39:19 jayashri Exp $
  */
 
 /*
@@ -116,8 +116,8 @@ public class ValidatorRule extends FeatureRule {
             }
             fcb.addValidator(top);
         } else {
-            if (digester.getLogger().isWarnEnabled()) {
-                digester.getLogger().warn("[ValidatorRule]{" +
+            if (digester.getLogger().isDebugEnabled()) {
+                digester.getLogger().debug("[ValidatorRule]{" +
                                           digester.getMatch() +
                                           "} Merge(" +
                                           top.getValidatorId() +

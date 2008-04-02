@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationRuleRule.java,v 1.3 2004/02/04 23:46:23 ofung Exp $
+ * $Id: NavigationRuleRule.java,v 1.4 2005/03/10 21:39:18 jayashri Exp $
  */
 
 /*
@@ -117,8 +117,8 @@ public class NavigationRuleRule extends FeatureRule {
             }
             fcb.addNavigationRule(top);
         } else {
-            if (digester.getLogger().isWarnEnabled()) {
-                digester.getLogger().warn("[NavigationRuleRule]{" +
+            if (digester.getLogger().isDebugEnabled()) {
+                digester.getLogger().debug("[NavigationRuleRule]{" +
                                           digester.getMatch() +
                                           "} Merge(" +
                                           top.getFromViewId() +

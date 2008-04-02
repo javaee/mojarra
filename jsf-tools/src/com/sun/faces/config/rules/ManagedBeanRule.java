@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanRule.java,v 1.4 2004/11/23 19:26:55 rlubke Exp $
+ * $Id: ManagedBeanRule.java,v 1.5 2005/03/10 21:39:18 jayashri Exp $
  */
 
 /*
@@ -130,8 +130,8 @@ public class ManagedBeanRule extends FeatureRule {
             }
             fcb.addManagedBean(top);
         } else {
-            if (digester.getLogger().isWarnEnabled()) {
-                digester.getLogger().warn("[ManagedBeanRule]{" +
+            if (digester.getLogger().isDebugEnabled()) {
+                digester.getLogger().debug("[ManagedBeanRule]{" +
                                           digester.getMatch() +
                                           "} Merge(" +
                                           top.getManagedBeanName() +

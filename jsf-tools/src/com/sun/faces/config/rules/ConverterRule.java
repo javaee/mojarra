@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterRule.java,v 1.3 2004/02/04 23:46:21 ofung Exp $
+ * $Id: ConverterRule.java,v 1.4 2005/03/10 21:39:18 jayashri Exp $
  */
 
 /*
@@ -123,8 +123,8 @@ public class ConverterRule extends FeatureRule {
             }
             fcb.addConverter(top);
         } else {
-            if (digester.getLogger().isWarnEnabled()) {
-                digester.getLogger().warn("[ConverterRule]{" +
+            if (digester.getLogger().isDebugEnabled()) {
+                digester.getLogger().debug("[ConverterRule]{" +
                                           digester.getMatch() +
                                           "} Merge(" +
                                           top.getConverterId() +

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.82 2004/12/16 17:56:37 edburns Exp $
+ * $Id: FormRenderer.java,v 1.83 2005/03/10 21:39:15 jayashri Exp $
  */
 
 /*
@@ -300,11 +300,16 @@ public class FormRenderer extends HtmlBasicRenderer {
          writer.write("(curFormName) {");
          writer.write("\n  var curForm = document.forms[curFormName];"); 
          if (formParams != null) {
-             for (Iterator it = formParams.keySet().iterator(); it.hasNext();){
-                 writer.write("\n curForm.elements['"); 
-                 writer.write((String)it.next());
-                 writer.write("'].value = null;");
-             }
+            Iterator entries = formParams.entrySet().iterator();
+            // clear only the hidden fields rendered by the form.
+            while (entries.hasNext()) {
+                Map.Entry entry = (Map.Entry) entries.next();
+                if (Boolean.TRUE.equals(entry.getValue())) {
+                    writer.write("\n curForm.elements['"); 
+                    writer.write((String) entry.getKey());
+                    writer.write("'].value = null;");
+                }
+            }
          }
          // clear form target attribute if its present
          if (formTarget != null && formTarget.length() > 0) {

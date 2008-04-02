@@ -1,5 +1,5 @@
 /*
- * $Id: ReferencedBeanRule.java,v 1.3 2004/02/04 23:46:23 ofung Exp $
+ * $Id: ReferencedBeanRule.java,v 1.4 2005/03/10 21:39:19 jayashri Exp $
  */
 
 /*
@@ -116,8 +116,8 @@ public class ReferencedBeanRule extends FeatureRule {
             }
             fcb.addReferencedBean(top);
         } else {
-            if (digester.getLogger().isWarnEnabled()) {
-                digester.getLogger().warn("[ReferencedBeanRule]{" +
+            if (digester.getLogger().isDebugEnabled()) {
+                digester.getLogger().debug("[ReferencedBeanRule]{" +
                                           digester.getMatch() +
                                           "} Merge(" +
                                           top.getReferencedBeanName() +
