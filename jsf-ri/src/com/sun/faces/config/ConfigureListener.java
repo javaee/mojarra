@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.4 2004/01/31 06:27:01 craigmcc Exp $
+ * $Id: ConfigureListener.java,v 1.5 2004/02/03 08:21:59 craigmcc Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -76,6 +76,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.List;
 import java.util.Set;
@@ -210,10 +211,15 @@ public final class ConfigureListener implements ServletContextListener {
         }
 
 	// Step 4, parse any "/META-INF/faces-config.xml" resources
-	Enumeration resources;
+	Iterator resources;
 	try {
-	    resources = Util.getCurrentLoader(this).getResources
+            List list = new LinkedList();
+            Enumeration items = Util.getCurrentLoader(this).getResources
 		("META-INF/faces-config.xml");
+            while (items.hasMoreElements()) {
+                list.add(0, items.nextElement());
+            }
+            resources = list.iterator();
 	} catch (IOException e) {
 	    String message = null;
 	    try {
@@ -227,8 +233,8 @@ public final class ConfigureListener implements ServletContextListener {
             log.warn(message, e);
             throw new FacesException(message, e);
 	}
-	while (resources.hasMoreElements()) {
-	    url = (URL) resources.nextElement();
+	while (resources.hasNext()) {
+	    url = (URL) resources.next();
 	    try {
 		parse(digester, url, fcb);
 	    } catch (Exception e) {
