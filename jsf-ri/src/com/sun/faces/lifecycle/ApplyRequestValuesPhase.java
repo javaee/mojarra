@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.3 2002/10/10 17:27:44 jvisvanathan Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.4 2002/12/19 03:09:27 rkitain Exp $
  */
 
 /*
@@ -30,15 +30,14 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ApplyRequestValuesPhase.java,v 1.3 2002/10/10 17:27:44 jvisvanathan Exp $
+ * @version $Id: ApplyRequestValuesPhase.java,v 1.4 2002/12/19 03:09:27 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#APPLY_REQUEST_VALUES_PHASE
  *
  */
 
-public class ApplyRequestValuesPhase extends GenericPhaseImpl
-{
+public class ApplyRequestValuesPhase extends GenericPhaseImpl {
 //
 // Protected Constants
 //
@@ -51,33 +50,15 @@ public class ApplyRequestValuesPhase extends GenericPhaseImpl
 // Instance Variables
 //
 
-// Attribute Instance Variables
-
 // Relationship Instance Variables
 
 //
 // Constructors and Genericializers    
 //
 
-public ApplyRequestValuesPhase(Lifecycle newDriver, int newId)
-{
-    super(newDriver, newId, 
-	  new LifecycleCallback() {
-	      public int takeActionOnComponent(FacesContext context,
-					       UIComponent comp) throws FacesException {
-                  try {
-		      boolean status = comp.decode(context);
-                      if ( !status ) {
-                          return Phase.GOTO_RENDER;
-                      }    
-		  } catch (IOException e) {
-		      throw new FacesException("Can't decode: " + 
-		          comp.getComponentId(), e);
-		  }
-                  return Phase.GOTO_NEXT;
-	      }
-	  });
-}
+    public ApplyRequestValuesPhase( Lifecycle newDriver, int newId) {
+        super(newDriver, newId);
+    }
 
 //
 // Class methods
@@ -86,6 +67,26 @@ public ApplyRequestValuesPhase(Lifecycle newDriver, int newId)
 //
 // General Methods
 //
+
+//
+// Methods from Phase
+//
+
+    public int execute(FacesContext facesContext) throws FacesException {
+
+        UIComponent component = 
+            (UIComponent)facesContext.getRequestTree().getRoot();
+        Assert.assert_it(null != component);
+
+        try {
+            if (!component.processDecodes(facesContext)) {
+                return Phase.GOTO_RENDER;
+            }
+        } catch (IOException e) {
+            return Phase.GOTO_RENDER;
+        }
+        return Phase.GOTO_NEXT;
+    }
 
 
 

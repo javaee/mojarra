@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.7 2002/08/01 20:51:29 eburns Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.8 2002/12/19 03:09:28 rkitain Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ProcessValidationsPhase.java,v 1.7 2002/08/01 20:51:29 eburns Exp $
+ * @version $Id: ProcessValidationsPhase.java,v 1.8 2002/12/19 03:09:28 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#PROCESS_VALIDATIONS_PHASE
@@ -60,14 +60,7 @@ public class ProcessValidationsPhase extends GenericPhaseImpl
 
 public ProcessValidationsPhase(Lifecycle newDriver, int newId)
 {
-    super(newDriver, newId, 
-	  new LifecycleCallback() {
-	      public int takeActionOnComponent(FacesContext context,
-					       UIComponent comp) throws FacesException {
-                  comp.processValidators(context);                                 
-		  return Phase.GOTO_NEXT;
-	      }
-	  });
+    super(newDriver, newId);
 }
 
 //
@@ -87,10 +80,11 @@ public int execute(FacesContext facesContext) throws FacesException
     int rc = Phase.GOTO_NEXT;
     Iterator messageIter = null;
 
-    rc = traverseTreeInvokingCallback(facesContext);
-    if (rc != Phase.GOTO_NEXT) {
-	return rc;
-    }
+    UIComponent component = 
+        (UIComponent)facesContext.getRequestTree().getRoot();
+    Assert.assert_it(null != component);
+
+    component.processValidators(facesContext);
     
     messageIter = facesContext.getMessages();
     Assert.assert_it(null != messageIter);

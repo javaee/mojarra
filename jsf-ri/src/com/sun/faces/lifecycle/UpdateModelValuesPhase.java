@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.12 2002/08/17 00:57:02 jvisvanathan Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.13 2002/12/19 03:09:28 rkitain Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.12 2002/08/17 00:57:02 jvisvanathan Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.13 2002/12/19 03:09:28 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -67,31 +67,6 @@ protected LifecycleCallback clearValues = null;
 public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
 {
     super(newDriver, newId);
-    pushValues = new LifecycleCallback() {
-	    public int takeActionOnComponent(FacesContext facesContext,
-					     UIComponent comp) throws FacesException {
-		int rc = Phase.GOTO_NEXT;
-		String model = null,
-		message = null;
-		model = comp.getModelReference();
-		try {
-                    comp.updateModel(facesContext);
-                }
-                catch (Throwable e) {
-                    Object[] params = new Object[3];
-                    params[0] = comp.getValue();
-                    params[1] = model;
-                    params[2] = e.getMessage(); 
-                    MessageResources resources = Util.getMessageResources();
-                    Assert.assert_it( resources != null );
-                    Message msg = resources.getMessage(facesContext, 
-                            Util.MODEL_UPDATE_ERROR_MESSAGE_ID,params);
-                    facesContext.addMessage(comp, msg);
-                }
-                return rc;
-            }
-	   
-	 };
     clearValues = new LifecycleCallback() {
 	    public int takeActionOnComponent(FacesContext facesContext,
 					     UIComponent comp) throws FacesException {
@@ -123,16 +98,33 @@ public int execute(FacesContext facesContext) throws FacesException
 {
     int rc = Phase.GOTO_NEXT;
     Iterator messageIter = null;
-    callback = pushValues;
-    rc = traverseTreeInvokingCallback(facesContext);
+
+    UIComponent component = 
+        (UIComponent)facesContext.getRequestTree().getRoot();
+    Assert.assert_it(null != component);
+
+    try {
+        component.processUpdates(facesContext);
+    } catch (Throwable e) {
+        Object[] params = new Object[3];
+        params[0] = component.getValue();
+        params[1] = component.getModelReference();
+        params[2] = e.getMessage();
+        MessageResources resources = Util.getMessageResources();
+        Assert.assert_it( resources != null );
+        Message msg = resources.getMessage(facesContext,
+            Util.MODEL_UPDATE_ERROR_MESSAGE_ID,params);
+        facesContext.addMessage(component, msg);
+    }
 
     messageIter = facesContext.getMessages();
     Assert.assert_it(null != messageIter);
-    
+
     if (messageIter.hasNext()) {
-	// If we have gotten one or more errors, go to render phase.
-	rc = Phase.GOTO_RENDER;
+        // Proceed based on the number of errors present
+        rc = Phase.GOTO_RENDER;
     }
+
     if (Phase.GOTO_NEXT == rc) {
 	callback = clearValues;
 	rc = traverseTreeInvokingCallback(facesContext);
