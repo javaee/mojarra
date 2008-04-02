@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.19 2003/08/25 16:19:11 rkitain Exp $
+ * $Id: TestRenderers_3.java,v 1.20 2003/08/26 16:08:10 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -54,7 +54,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.19 2003/08/25 16:19:11 rkitain Exp $
+ * @version $Id: TestRenderers_3.java,v 1.20 2003/08/26 16:08:10 rkitain Exp $
  * 
  *
  */
@@ -145,7 +145,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
 
             testSelectManyMenuRenderer(root);
             testSelectManyListboxRenderer(root);
-//            testSelectManyCheckboxListRenderer(root);
+            testSelectManyCheckboxListRenderer(root);
             testSelectOneMenuRenderer(root);
             testHiddenRenderer(root);
             assertTrue(verifyExpectedOutput());
@@ -209,7 +209,6 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem[] selectItems = { item1, item2, item3, item4 };
 	Object selectedValues[] = null;
         uiSelectItems.setValue(selectItems);
-        uiSelectItems.setId("manyitems");
         selectMany.getChildren().add(uiSelectItems);
         root.getChildren().add(selectMany);
 
