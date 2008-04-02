@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: TestELImpl.java,v 1.1 2003/08/13 18:21:50 rlubke Exp $
+ * $Id: TestELImpl.java,v 1.2 2003/08/13 21:24:26 rlubke Exp $
  */
 
 // TestELImpl
@@ -204,10 +204,10 @@ public class TestELImpl extends JspFacesTestCase {
             Bean1 b1 = new Bean1();
             b1.setBoolean1(true);
             b1.setByte1((byte) 12);
-            b1.setShort1((short) -124);
+            b1.setShort1((short) 98);
             b1.setChar1('b');
             b1.setInt1(4);
-            b1.setLong1(222423);
+            b1.setLong1(98);
             b1.setFloat1((float) 12.4);
             b1.setDouble1(89.224);
             b1.setString1("hello");
