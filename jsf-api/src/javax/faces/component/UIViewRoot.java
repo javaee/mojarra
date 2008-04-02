@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.15 2003/12/17 15:10:39 rkitain Exp $
+ * $Id: UIViewRoot.java,v 1.16 2004/01/14 21:48:01 jvisvanathan Exp $
  */
 
 /*
@@ -347,7 +347,13 @@ public class UIViewRoot extends UIComponentBase {
 	else {
 	    ValueBinding vb = getValueBinding("locale");
 	    if (vb != null) {
-		result = (Locale) vb.getValue(getFacesContext());
+                Object resultLocale = 
+		        vb.getValue(FacesContext.getCurrentInstance());
+                if ( resultLocale instanceof Locale) {
+                    result = (Locale)resultLocale;
+                } else if ( resultLocale instanceof String) {
+                    result = getLocaleFromString((String)resultLocale);
+                }
 	    } 
 	    else {
 		result = Locale.getDefault();
@@ -357,6 +363,40 @@ public class UIViewRoot extends UIComponentBase {
     }
 
 
+    /**
+     * Returns the locale represented by the expression.
+     * @param localeExpr a String in the format specified by JSTL Specification
+     *                   as follows:
+     *                   "A String value is interpreted as the printable 
+     *                    representation of a locale, which must contain a 
+     *                    two-letter (lower-case) language code (as defined by 
+     *                    ISO-639), and may contain a two-letter (upper-case)
+     *                    country code (as defined by ISO-3166). Language and 
+     *                    country codes must be separated by hyphen (’-’) or 
+     *                    underscore (’_’)."
+     * @return Locale instance cosntructed from the expression.
+     */
+    private Locale getLocaleFromString(String localeExpr) {
+        Locale result = Locale.getDefault();
+        if (localeExpr.indexOf("_") == -1 || localeExpr.indexOf("-") == -1)  {
+            // expression has just language code in it. make sure the 
+            // expression contains exactly 2 characters.
+            if (localeExpr.length() == 2) {
+                result = new Locale(localeExpr);
+            }
+        } else {
+            // expression has country code in it. make sure the expression 
+            // contains exactly 5 characters.
+            if (localeExpr.length() == 5) {
+                // get the language and country to construct the locale.
+                String language = localeExpr.substring(0,1);
+                String country = localeExpr.substring(3,4);
+                result = new Locale(language,country);
+            }
+        }
+        return result;
+    }
+    
     /**
      * <p>Set the <code>Locale</code> to be used in localizing the
      * response being created for this view. </p>
