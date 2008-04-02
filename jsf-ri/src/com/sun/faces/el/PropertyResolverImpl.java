@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.6 2003/10/23 15:20:22 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.7 2003/10/23 19:30:34 rlubke Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import com.sun.faces.RIConstants;
 import javax.faces.component.UIComponent;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
-import javax.faces.FacesException;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -215,74 +214,12 @@ public class PropertyResolverImpl extends PropertyResolver {
             result = (UIComponent.class);
         }
         Class baseClass = base.getClass();
-        if (baseClass.isArray()) {
-            Class componentType = baseClass.getComponentType();
-            if (Object.class.isAssignableFrom(componentType)) {
-                try {
-                    result = ((Object[]) base)[index].getClass();
-                } catch (Exception e) {
-                    throw new PropertyNotFoundException("" + index, e);
-                }
-            } else if (Boolean.TYPE.equals(componentType)) {
-                try {
-                    boolean b = ((boolean[]) base)[index];
-                    return Boolean.TYPE;                    
-                } catch (Exception e) {
-                    throw new PropertyNotFoundException("" + index, e);
-                }
-            } else if (Byte.TYPE.equals(componentType)) {
-                try {
-                    byte b = ((byte[]) base)[index];
-                    return Byte.TYPE;
-                } catch (Exception e) {
-                    throw new PropertyNotFoundException("" + index, e);
-                }
-            } else if (Short.TYPE.equals(componentType)) {
-                try {
-                    short s = ((short[]) base)[index];
-                    return Short.TYPE;
-                } catch (Exception e) {
-                    throw new PropertyNotFoundException("" + index, e);
-                }
-            } else if (Integer.TYPE.equals(componentType)) {
-                try {
-                    int i = ((int[]) base)[index];
-                    return Integer.TYPE;
-                } catch (Exception e) {
-                    throw new PropertyNotFoundException("" + index, e);
-                }
-            } else if (Long.TYPE.equals(componentType)) {
-                try {
-                    long l = ((long[]) base)[index];
-                    return Long.TYPE;
-                } catch (Exception e) {
-                    throw new PropertyNotFoundException("" + index, e);
-                }
-            } else if (Float.TYPE.equals(componentType)) {
-                try {
-                    float f = ((float[]) base)[index];
-                    return Float.TYPE;
-                } catch (Exception e) {
-                    throw new PropertyNotFoundException("" + index, e);
-                }
-            } else if (Double.TYPE.equals(componentType)) {
-                try {
-                    double d = ((double[]) base)[index];
-                    return Boolean.TYPE;
-                } catch (Exception e) {
-                    throw new PropertyNotFoundException("" + index, e);
-                }
-            } else if (Character.TYPE.equals(componentType)) {
-                try {
-                    char c = ((char[]) base)[index];
-                    return Character.TYPE;
-                } catch (Exception e) {
-                    throw new PropertyNotFoundException("" + index, e);
-                }
-            } else {
-                // Should not get here...
-                throw new FacesException();
-            }
+        if (baseClass.isArray()) {            
+            if (index >= 0 && index <= Array.getLength(base) - 1) {
+                return baseClass.getComponentType();
+            } else {                
+                new IndexOutOfBoundsException("" + index);
+            }            
         } else if (base instanceof List) {
             result = ((List) base).get(index).getClass();
         } else {
