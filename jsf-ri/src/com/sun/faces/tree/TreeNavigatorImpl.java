@@ -1,5 +1,5 @@
 /*
- * $Id: TreeNavigatorImpl.java,v 1.1 2002/06/01 00:58:22 eburns Exp $
+ * $Id: TreeNavigatorImpl.java,v 1.2 2003/02/14 00:18:02 eburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import java.util.Stack;
 
 /**
 
- * @version $Id: TreeNavigatorImpl.java,v 1.1 2002/06/01 00:58:22 eburns Exp $
+ * @version $Id: TreeNavigatorImpl.java,v 1.2 2003/02/14 00:18:02 eburns Exp $
  * 
  * @see	javax.faces.TreeNavigator
 
@@ -103,29 +103,32 @@ public UIComponent getNextStart() {
 	}
     }
     else {
-	// else the we are processing the children of the root
-	iter = (Iterator)startStack.peek();
-	if (null != iter && iter.hasNext()) {
-	    // if there are children left
-	    cur = (UIComponent) iter.next();
-	    // return this child
-	    childIter = cur.getChildren();
-	    // see if this child has children
-	    if (null != childIter && childIter.hasNext()) {
-		// if so, push them on the stack
-		startStack.push(childIter);
-	    }
-	    else {
-		// If this is the last child of this parent
-		if (!iter.hasNext()) {
-		    // pop up a level
-		    startStack.pop();
+	while (!startStack.empty()) {
+	    // else the we are processing the children of the root
+	    iter = (Iterator)startStack.peek();
+	    if (null != iter && iter.hasNext()) {
+		// if there are children left
+		cur = (UIComponent) iter.next();
+		// return this child
+		childIter = cur.getChildren();
+		// see if this child has children
+		if (null != childIter && childIter.hasNext()) {
+		    // if so, push them on the stack
+		    startStack.push(childIter);
 		}
+		else {
+		    // If this is the last child of this parent
+		    if (!iter.hasNext()) {
+			// pop up a level
+			startStack.pop();
+		    }
+		}
+		break;
 	    }
-	}
-	else if (null != iter) {
-	    // we are done with this level.
-	    startStack.pop();
+	    else if (null != iter) {
+		// we are done with this level.
+		startStack.pop();
+	    }
 	}
     }
     // done with traversal
