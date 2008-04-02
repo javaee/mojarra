@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueExpressionImpl_Model.java,v 1.1 2005/05/06 22:02:08 edburns Exp $
+ * $Id: TestValueExpressionImpl_Model.java,v 1.2 2005/06/01 07:05:42 jhook Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.el.ELContext;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueExpressionImpl_Model.java,v 1.1 2005/05/06 22:02:08 edburns Exp $
+ * @version $Id: TestValueExpressionImpl_Model.java,v 1.2 2005/06/01 07:05:42 jhook Exp $
  */
 
 public class TestValueExpressionImpl_Model extends ServletFacesTestCase {
@@ -162,12 +162,13 @@ public class TestValueExpressionImpl_Model extends ServletFacesTestCase {
         assertTrue(testBean.getInner() == null);
 
         // Inner bean does not exist anymore. So this should result in an
-        // exception.
+        // exception.  Should throw a PropertyNotFoundException according
+        // to page 92 of the EL Spec
         boolean exceptionThrown = false;
         valueExpression = this.create("sessionScope.TestBean.inner.two");
         try {
             valueExpression.setValue(getFacesContext().getELContext(), null);
-        } catch (javax.el.PropertyNotWritableException ee) {
+        } catch (javax.el.PropertyNotFoundException ee) {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
