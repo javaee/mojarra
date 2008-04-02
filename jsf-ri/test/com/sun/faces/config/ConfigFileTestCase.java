@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.6 2003/05/01 06:20:45 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.7 2003/05/01 07:20:19 rkitain Exp $
  */
 
 /*
@@ -310,4 +310,16 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	assertTrue(null != configBase.getManagedBeans().get("TestBean2"));
     }
 
+     public void testNavigationCase() {
+         ConfigParser cp = new ConfigParser(config.getServletContext());
+         base = cp.parseConfig("/WEB-INF/faces-config.xml",
+                               config.getServletContext());
+         List navCases = base.getNavigationCases();
+         assertTrue(!(navCases == Collections.EMPTY_LIST));
+         for (int i=0; i< navCases.size(); i++) {
+             ConfigNavigationCase cnc = (ConfigNavigationCase)navCases.get(i);
+             System.out.println("NAVIGATION CASE:");
+             System.out.println(cnc.toString());
+         }
+     }
 }

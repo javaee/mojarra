@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigBase.java,v 1.3 2003/05/01 06:20:39 eburns Exp $
+ * $Id: ConfigBase.java,v 1.4 2003/05/01 07:20:17 rkitain Exp $
  */
 
 /*
@@ -12,8 +12,10 @@ package com.sun.faces.config;
 
 import com.sun.faces.application.ApplicationImpl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.faces.FactoryFinder;
@@ -140,4 +142,31 @@ public class ConfigBase {
             return (this.managedBeans);
         }
     }    
+
+    // ------------------------------------------------------------ <navigation>
+
+    private String fromTreeId;
+    public void setFromTreeId(String fromTreeId) {
+        this.fromTreeId = fromTreeId;
+    }
+    public String getFromTreeId() {
+        return fromTreeId;
+    }
+
+    private List navigationCases = null;
+    public void addNavigationCase(ConfigNavigationCase navigationCase) {
+        if (navigationCases == null) {
+            navigationCases = new ArrayList();
+        }
+        navigationCase.setFromTreeId(getFromTreeId());
+        navigationCases.add(navigationCase);
+        setFromTreeId(null);
+    }
+    public List getNavigationCases() {
+        if (navigationCases == null) {
+            return (Collections.EMPTY_LIST);
+        } else {
+            return (this.navigationCases);
+        }
+    }
 }

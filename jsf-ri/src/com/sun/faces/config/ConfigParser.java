@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.7 2003/05/01 06:20:40 eburns Exp $
+ * $Id: ConfigParser.java,v 1.8 2003/05/01 07:20:17 rkitain Exp $
  */
 
 /*
@@ -196,6 +196,7 @@ public class ConfigParser {
         configureRulesComponent(digester);
         configureRulesValidator(digester);
         configureRulesManagedBean(digester);
+        configureRulesNavigationCase(digester);
 
     }
 
@@ -404,6 +405,17 @@ public class ConfigParser {
         digester.addCallMethod(prefix+"/value-ref", "setValue", 0);
         digester.addCallMethod(prefix+"/null-value", "setValue", 0);
         digester.addSetNext(prefix, "addMapEntry", "com.sun.faces.config.ConfigManagedPropertyMap");
+    }
+
+    // Configure the rules for a <navigation-rule><navigation-case> element
+    protected void configureRulesNavigationCase(Digester digester) {
+        digester.addCallMethod("faces-config/navigation-rule/from-tree-id", "setFromTreeId", 0);
+        String prefix = "faces-config/navigation-rule/navigation-case";
+        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigNavigationCase");
+        digester.addSetNext(prefix, "addNavigationCase", "com.sun.faces.config.ConfigNavigationCase");
+        digester.addCallMethod(prefix + "/from-action-ref", "setFromActionRef", 0);
+        digester.addCallMethod(prefix + "/from-outcome", "setFromOutcome", 0);
+        digester.addCallMethod(prefix + "/to-tree-id", "setToTreeId", 0);
     }
 
     // Return the URL of the specified path, relative to our base directory
