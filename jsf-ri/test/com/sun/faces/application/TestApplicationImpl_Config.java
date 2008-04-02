@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.20 2003/10/06 15:31:33 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.21 2003/10/14 23:44:52 eburns Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import javax.faces.FacesException;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 
 /**
  *
@@ -58,7 +59,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.20 2003/10/06 15:31:33 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.21 2003/10/14 23:44:52 eburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -471,6 +472,92 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(null != (viewHandler = 
 			    application.getViewHandler()));
 	assertTrue(viewHandler instanceof ViewHandlerTestImpl);
+    }
+
+    public void testLocaleConfigPositive() {
+	loadFromInitParam("locale-config.xml");
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        application = (ApplicationImpl) aFactory.getApplication();
+
+	Locale locale;
+
+	assertNotNull("Can't get default locale from Application",
+		      locale = application.getDefaultLocale());
+	assertEquals("Default locale language not as expected",
+		     "ps", locale.getLanguage());
+	assertEquals("Default locale country not as expected",
+		     "PS", locale.getCountry());
+
+	Iterator iter;
+
+	assertNotNull("Can't get supportedLocales from Application",
+		      iter = application.getSupportedLocales());
+
+	String [][] expected = {
+	    {"ps","PS"},
+	    {"tg","AF"},
+	    {"tk","IQ"},
+	    {"en","US"}
+	};
+	int i = 0;
+	    
+	while (iter.hasNext()) {
+	    locale = (Locale) iter.next();
+	    assertEquals("Supported locale " + i + " language not as expected",
+			 expected[i][0], locale.getLanguage());
+	    assertEquals("Supported locale " + i + " country not as expected",
+			 expected[i][0], locale.getLanguage());
+	    i++;
+	}
+
+    }
+
+    public void testLocaleConfigNegative() {
+	loadFromInitParam("locale-config1.xml");
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        application = (ApplicationImpl) aFactory.getApplication();
+
+	Locale locale;
+	
+	assertEquals("default locale not the same as system default locale",
+		     Locale.getDefault(), application.getDefaultLocale());
+
+	Iterator iter;
+
+	assertNotNull("Can't get supportedLocales from Application",
+		      iter = application.getSupportedLocales());
+
+	String [][] expected = {
+	    {"ps","PS"},
+	    {"tg","AF"},
+	    {"tk","IQ"},
+	    {"en","US"}
+	};
+	int i = 0;
+	
+	while (iter.hasNext()) {
+	    locale = (Locale) iter.next();
+	    assertEquals("Supported locale " + i + " language not as expected",
+			 expected[i][0], locale.getLanguage());
+	    assertEquals("Supported locale " + i + " country not as expected",
+			 expected[i][0], locale.getLanguage());
+	    i++;
+	}
+
+    }
+
+    public void testLocaleConfigNegative2() {
+	boolean exceptionThrown = false;
+	try {
+	    loadFromInitParam("locale-config2.xml");
+	}
+	catch (FacesException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
     }
 
 

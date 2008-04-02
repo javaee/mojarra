@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.42 2003/10/13 21:50:46 eburns Exp $
+ * $Id: ConfigParser.java,v 1.43 2003/10/14 23:44:49 eburns Exp $
  */
 
 /*
@@ -60,6 +60,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 
@@ -327,6 +328,11 @@ public class ConfigParser {
                                "setPropertyResolver", 0);
         digester.addCallMethod(prefix+"/variable-resolver",
                                "setVariableResolver", 0);
+        digester.addCallMethod(prefix+"/locale-config/default-locale",
+                               "setDefaultLocale", 0);
+        digester.addCallMethod(prefix+"/locale-config/supported-locale/locale",
+                               "addSupportedLocale", 0);
+
 	//
         // This custom rule will add application info to the Application instance;
         //
@@ -722,7 +728,6 @@ public class ConfigParser {
         }
         return new Boolean(validateXml).booleanValue();
     }
-   
 }
 
 /**
@@ -983,33 +988,50 @@ final class ApplicationRule extends Rule {
 	if (returnObject != null) {
 	    application.setActionListener((ActionListener)returnObject);
 	}
-
+	
 	returnObject = Util.createInstance(ca.getNavigationHandler());
 	if (returnObject != null) {
 	    application.setNavigationHandler((NavigationHandler)returnObject);
 	}
-
+	
 	returnObject = Util.createInstance(ca.getPropertyResolver());
 	if (returnObject != null) {
 	    application.setPropertyResolver((PropertyResolver)returnObject);
 	}
-
+	
 	returnObject = Util.createInstance(ca.getVariableResolver());
 	if (returnObject != null) {
 	    application.setVariableResolver((VariableResolver)returnObject);
 	}
-
+	
 	returnObject = Util.createInstance(ca.getViewHandler());
-    ViewHandler viewHandler;
+	ViewHandler viewHandler;
 	if (returnObject != null) {
-        viewHandler = (ViewHandler) returnObject;
-    } else {
-        viewHandler = new ViewHandlerImpl();	    
+	    viewHandler = (ViewHandler) returnObject;
+	} else {
+	    viewHandler = new ViewHandlerImpl();	    
 	} 
-    if (viewHandler instanceof ViewHandlerImpl) {
-        ((ViewHandlerImpl) viewHandler).setFacesMapping(mappings);
-    }    
-    application.setViewHandler(viewHandler);
+	if (viewHandler instanceof ViewHandlerImpl) {
+	    ((ViewHandlerImpl) viewHandler).setFacesMapping(mappings);
+	}    
+	application.setViewHandler(viewHandler);
+
+	String localeStr = null;
+	Iterator iter = null;
+	if (null !=  (localeStr = ca.getDefaultLocale())) {
+	    application.setDefaultLocale(Util.getLocaleFromString(localeStr));
+	}
+	
+	iter = ca.getSupportedLocales().iterator();
+	ArrayList supportedLocales = 
+	    new ArrayList(ca.getSupportedLocales().size());
+	while (iter.hasNext()) {
+	    if (null != (localeStr = (String) iter.next())) {
+		supportedLocales.add(Util.getLocaleFromString(localeStr));
+	    }
+	}
+	application.setSupportedLocales(supportedLocales);
+		
     }
 }
 
@@ -1194,7 +1216,7 @@ final class MessageResourceRule extends Rule {
 		    while (langIter.hasNext()) {
 			String xmlLocale = (String)langIter.next();
 			Assert.assert_it(null != xmlLocale);
-			locale = getLocale(xmlLocale);
+			locale = Util.getLocaleFromString(xmlLocale);
 		        messageTemplate = new MessageTemplate();
 			messageTemplate.setMessageId(configMessage.getMessageId());
 			messageTemplate.setLocale(locale);
@@ -1226,33 +1248,6 @@ final class MessageResourceRule extends Rule {
 		}
             }
 	}
-    }
-    
-    // W3C XML specification refers to IETF RFC 1766 for language code structure,
-    // therefore the value for the xml:lang attribute should be in the form of
-    // language or language-country or language-country-variant.
-    private static Locale getLocale(String locale) {       
-        String language = null;
-        String country = null;
-        String variant = null;
-        int dash = locale.indexOf('-');
-        if (dash < 0) {
-            language = locale;
-            country = "";
-            variant = "";
-        } else {
-            language = locale.substring(0, dash);
-            country = locale.substring(dash + 1);
-            int vDash = country.indexOf('-');
-            if (vDash > 0) {
-                String cTemp = country.substring(0, vDash);
-                variant = country.substring(vDash + 1);
-                country = cTemp;
-            } else {
-                variant = "";
-            }
-        }
-        return new Locale(language, country, variant);
     }
 }
 

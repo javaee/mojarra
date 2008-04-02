@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigApplication.java,v 1.3 2003/08/22 22:30:01 eburns Exp $
+ * $Id: ConfigApplication.java,v 1.4 2003/10/14 23:44:49 eburns Exp $
  */
 
 /*
@@ -63,6 +63,34 @@ public class ConfigApplication {
         this.viewHandler = viewHandler;
     }
 
+    protected String defaultLocale = null;
+    public void setDefaultLocale(String newDefaultLocale) {
+	defaultLocale = newDefaultLocale;
+    }
+    
+    public String getDefaultLocale() {
+	return defaultLocale;
+    }
+
+    protected ArrayList supportedLocales;
+    public void addSupportedLocale(String localeToAdd) {
+	if (null == supportedLocales) {
+	    supportedLocales = new ArrayList();
+	}
+	supportedLocales.add(localeToAdd);
+    }
+
+    public List getSupportedLocales() {
+	List result = null;
+	if (null == supportedLocales) {
+	    result = Collections.EMPTY_LIST;
+	}
+	else {
+	    result = supportedLocales;
+	}
+	return result;
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("Action Listener:"+getActionListener());
@@ -72,4 +100,6 @@ public class ConfigApplication {
         sb.append("\nView Handler:"+getViewHandler());
         return sb.toString();
     }
+
+    
 }

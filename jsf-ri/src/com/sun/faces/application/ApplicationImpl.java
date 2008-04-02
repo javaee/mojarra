@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.28 2003/10/07 19:53:08 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.29 2003/10/14 23:44:48 eburns Exp $
  */
 
 /*
@@ -12,6 +12,10 @@ package com.sun.faces.application;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
+import java.util.Collection;
+import java.util.Locale;
+import java.util.ArrayList;
 
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
@@ -502,6 +506,38 @@ public class ApplicationImpl extends Application {
 	return converterTypeMap.keySet().iterator();
     }
 
+    ArrayList supportedLocales = null;
+    public Iterator getSupportedLocales() {
+	Iterator result = Collections.EMPTY_LIST.iterator();
+	if (null != supportedLocales) {
+	    result = supportedLocales.iterator();
+	}
+	return result;
+    }
+
+    public void setSupportedLocales(Collection newLocales) {
+	if (null == newLocales) {
+	    throw new NullPointerException();
+	}
+	supportedLocales = new ArrayList(newLocales);
+    }
+
+    protected Locale defaultLocale = null;
+    public Locale getDefaultLocale(){
+	Locale result = defaultLocale;
+	if (null == defaultLocale) {
+	    result = Locale.getDefault();
+	}
+	return result;
+    }
+    
+    public void setDefaultLocale(Locale newLocale) {
+	if (null == newLocale) {
+	    throw new NullPointerException();
+	}
+	defaultLocale = newLocale;
+    }
+    
     /**
      *<p>Register a new mapping of validator id to the name of the 
      * {@link Validator} class.  Subsequent calls to

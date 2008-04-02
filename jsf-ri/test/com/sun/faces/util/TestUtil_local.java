@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_local.java,v 1.3 2003/09/11 23:13:02 eburns Exp $
+ * $Id: TestUtil_local.java,v 1.4 2003/10/14 23:44:53 eburns Exp $
  */
 
 /*
@@ -11,6 +11,8 @@
 
 package com.sun.faces.util;
 
+import java.util.Locale;
+
 import junit.framework.TestCase;
 
 /**
@@ -19,7 +21,7 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_local.java,v 1.3 2003/09/11 23:13:02 eburns Exp $
+ * @version $Id: TestUtil_local.java,v 1.4 2003/10/14 23:44:53 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -73,6 +75,17 @@ public class TestUtil_local extends TestCase
 	assertTrue(((String)Util.replaceOccurrences("hello hello", " ", "%20")).
 		   equals("hello%20hello"));
 	
+    }
+
+    public void testGetLocaleFromString() {
+	Locale result = null;
+
+	// positive tests
+	assertNotNull(result = Util.getLocaleFromString("ps"));
+	assertNotNull(result = Util.getLocaleFromString("tg_AF"));
+	assertNotNull(result = Util.getLocaleFromString("tk_IQ-Traditional"));
+	assertNotNull(result = Util.getLocaleFromString("tk-IQ_Traditional"));
+
     }
 
 } // end of class TestUtil_local

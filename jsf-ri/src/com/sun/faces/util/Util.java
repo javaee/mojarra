@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.102 2003/10/13 22:56:26 jvisvanathan Exp $
+ * $Id: Util.java,v 1.103 2003/10/14 23:44:51 eburns Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.102 2003/10/13 22:56:26 jvisvanathan Exp $ 
+ * @version $Id: Util.java,v 1.103 2003/10/14 23:44:51 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -1056,6 +1056,109 @@ private Util()
 	    }
         }
 	return returnObject;
+    }
+
+    // W3C XML specification refers to IETF RFC 1766 for language code
+    // structure, therefore the value for the xml:lang attribute should
+    // be in the form of language or language-country or
+    // language-country-variant.
+
+    public static Locale getLocaleFromString(String localeStr) throws IllegalArgumentException {
+	// length must be at least 2.
+	if (null == localeStr || localeStr.length() < 2) {
+	    throw new IllegalArgumentException("Illegal locale String: " + 
+					       localeStr);
+	}
+
+	Locale result = null;
+	String 
+	    lang = null,
+	    country = null,
+	    variant = null;
+	char [] seps = {
+	    '-',
+	    '_'
+	};
+	int 
+	    i = 0,
+	    j = 0;
+
+	// to have a language, the length must be >= 2
+	if ((localeStr.length() >= 2) &&
+	    (-1 == (i = indexOfSet(localeStr, seps, 0)))) {
+	    // we have only Language, no country or variant
+	    if (2 != localeStr.length()) {
+		throw new 
+		    IllegalArgumentException("Illegal locale String: " + 
+					     localeStr);
+	    }
+	    lang = localeStr.toLowerCase();
+	}
+	
+	// we have a separator, it must be either '-' or '_'
+	if (-1 != i) {
+	    lang = localeStr.substring(0, i);
+	    // look for the country sep.
+	    // to have a country, the length must be >= 5
+	    if ((localeStr.length() >= 5) &&
+		(-1 == (j = indexOfSet(localeStr, seps, i + 1)))) {
+		// no further separators, length must be 5
+		if (5 != localeStr.length()) {
+		    throw new 
+			IllegalArgumentException("Illegal locale String: " + 
+						 localeStr);
+		}
+		country = localeStr.substring(i + 1);
+	    }
+	    if (-1 != j) {
+		country = localeStr.substring(i + 1, j);
+		// if we have enough separators for language, locale,
+		// and variant, the length must be >= 8.
+		if (localeStr.length() >= 8) {
+		    variant = localeStr.substring(j+1);
+		}
+		else {
+		    throw new 
+			IllegalArgumentException("Illegal locale String: " + 
+						 localeStr);
+		}
+	    }
+	}
+	if (null != variant && null != country && null != lang) {
+	    result = new Locale(lang, country, variant);
+	}
+	else if (null != lang && null != country) {
+	    result = new Locale(lang, country);
+	}
+	else if (null != lang) {
+	    result = new Locale(lang);
+	}
+	return result;
+    }
+
+    /**
+     * @return starting at <code>fromIndex</code>, the index of the
+     * first occurrence of any substring from <code>set</code> in
+     * <code>toSearch</code>, or -1 if no such match is found
+     * 
+     */
+
+    public static int indexOfSet(String str, char [] set, 
+				  int fromIndex) {
+	int result = -1;
+	char [] toSearch = str.toCharArray();
+	for (int i = fromIndex, len = toSearch.length; i < len; i++) {
+	    for (int j = 0, innerLen = set.length; j < innerLen; j++) {
+		if (toSearch[i] == set[j]) {
+		    result = i;
+		    break;
+		}
+	    }
+	    if (-1 != result) {
+		break;
+	    }
+	}
+	return result;
     }
     
     //
