@@ -22,15 +22,9 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     // Log instance for this class
     protected static Log log = LogFactory.getLog(GenerateTaglib.class);
 
-    // This List will hold attribute names to be used in "evaluateExpressions" method;
+    // This List will hold component property names which are "value binding [VB] enabled;
     //
-    private List evaluateExpressionsAttributes = null;
-
-    // This boolean indicates if we generated an "evaluateExpressions" method - so
-    // we'll know that we need to generate a call to that method when generating
-    // doStartTag method.
-    //
-    private boolean generatedEvaluateExpressions;
+    private List valueBindingEnabledProperties = null;
 
     // A component in these lists signifies that the component is a ValueHolder or
     // ConvertibleValueHolder;  This is used to determine if we generate ValueHolder
@@ -58,6 +52,20 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	valueHolderComponents.add("UIInput");
 	convertibleValueHolderComponents = new ArrayList();
 	convertibleValueHolderComponents.add("UIOutput");
+
+	valueBindingEnabledProperties = new ArrayList();
+	valueBindingEnabledProperties.add("action");
+	valueBindingEnabledProperties.add("immediate");
+	valueBindingEnabledProperties.add("value");
+	valueBindingEnabledProperties.add("first");
+	valueBindingEnabledProperties.add("rows");
+	valueBindingEnabledProperties.add("rowIndex");
+	valueBindingEnabledProperties.add("required");
+	valueBindingEnabledProperties.add("for");
+	valueBindingEnabledProperties.add("showDetail");
+	valueBindingEnabledProperties.add("showSummary");
+	valueBindingEnabledProperties.add("globalOnly");
+	valueBindingEnabledProperties.add("converter");
     }
 
     // Not that the following methods simply return a global default value now.  When we
@@ -110,8 +118,11 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     public String getImportInfo() {
         StringBuffer sb = new StringBuffer();
 	sb.append("import com.sun.faces.util.*;\n");
-	sb.append("import javax.faces.webapp.UIComponentTag;\n");
 	sb.append("import javax.faces.component.*;\n");
+	sb.append("import javax.faces.context.FacesContext;\n");
+	sb.append("import javax.faces.convert.Converter;\n");
+	sb.append("import javax.faces.el.ValueBinding;\n");
+	sb.append("import javax.faces.webapp.UIComponentTag;\n");
 	sb.append("import javax.servlet.jsp.JspException;\n");
 	sb.append("import org.apache.commons.logging.*;\n");
 	return sb.toString();
@@ -174,19 +185,33 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    " = (UI"+componentType+ ")component;\n\n");
 	if (valueHolderComponents.contains(component)) {
 	    result.append("        if (component instanceof ValueHolder) {\n");
-	    result.append("            ValueHolder valueHolder = (ValueHolder)component;\n");
-	    result.append("            if (null != valueRef) {\n");
-	    result.append("                valueHolder.setValueRef(valueRef);\n");
+	    result.append("            if (value != null) {\n");
+	    result.append("                if (isValueReference(value)) {\n");
+	    result.append("                    ValueBinding vb = \n");
+	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
+	    result.append("                        getValueBinding(value);\n");
+	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
+	    result.append("\""+"value\", vb);\n"); 
+	    result.append("                } else {\n"); 
+	    result.append("                    ((ValueHolder)component).setValue(value);\n");
+	    result.append("                }\n");
 	    result.append("            }\n");
-	    result.append("            if (null != value) {\n");
-	    result.append("                valueHolder.setValue(value);\n");
-	    result.append("            }\n\n");
 	    result.append("        }\n\n");
 	}
 	if (convertibleValueHolderComponents.contains(component)) {
 	    result.append("        if (component instanceof ConvertibleValueHolder) {\n");
-	    result.append("            if (null != converter) {\n");
-	    result.append("                ((ConvertibleValueHolder)component).setConverter(converter);\n");
+	    result.append("            if (converter != null) {\n");
+	    result.append("                if (isValueReference(converter)) {\n");
+	    result.append("                    ValueBinding vb = \n");
+	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
+	    result.append("                        getValueBinding(converter);\n");
+	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
+	    result.append("\""+"converter\", vb);\n"); 
+	    result.append("                } else {\n"); 
+	    result.append("                    Converter _converter = (Converter)Util.createInstance("+
+	        "converter);\n");
+	    result.append("                    ((ConvertibleValueHolder)component).setConverter(_converter);\n");
+	    result.append("                }\n");
 	    result.append("            }\n");
 	    result.append("        }\n\n");
 	}
@@ -202,25 +227,6 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	if (info != null) {
 	    result.append(info);
 	}
-	result.append("    }\n\n");
-
-	// generate evaluateExpressions method;
-	//
-	generatedEvaluateExpressions = false; 
-	generated = new HashMap();
-	result.append("    public void evaluateExpressions() throws JspException {\n");
-	info = generateEvaluateExpressions(rendererAttributeNames, rendererType, generated);
-	if (info != null) {
-	    result.append(info);
-	    generatedEvaluateExpressions = true;
-	}
-	info = generateEvaluateExpressions(componentAttributeNames, componentRendererType,
-	    generated);
-	if (info != null) {
-	    result.append(info);
-	    generatedEvaluateExpressions = true;
-	}
-
 	result.append("    }\n\n");
 
 	// generate TagSupport Methods
@@ -253,19 +259,33 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    " = (UI"+componentType+ ")component;\n\n");
 	if (valueHolderComponents.contains(component)) {
 	    result.append("        if (component instanceof ValueHolder) {\n");
-	    result.append("            ValueHolder valueHolder = (ValueHolder)component;\n");
-	    result.append("            if (null != valueRef) {\n");
-	    result.append("                valueHolder.setValueRef(valueRef);\n");
+	    result.append("            if (value != null) {\n");
+	    result.append("                if (isValueReference(value)) {\n");
+	    result.append("                    ValueBinding vb = \n");
+	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
+	    result.append("                        getValueBinding(value);\n");
+	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
+	    result.append("\""+"value\", vb);\n"); 
+	    result.append("                } else {\n"); 
+	    result.append("                    ((ValueHolder)component).setValue(value);\n");
+	    result.append("                }\n");
 	    result.append("            }\n");
-	    result.append("            if (null != value) {\n");
-	    result.append("                valueHolder.setValue(value);\n");
-	    result.append("            }\n\n");
 	    result.append("        }\n\n");
 	}
 	if (convertibleValueHolderComponents.contains(component)) {
 	    result.append("        if (component instanceof ConvertibleValueHolder) {\n");
-	    result.append("            if (null != converter) {\n");
-	    result.append("                ((ConvertibleValueHolder)component).setConverter(converter);\n");
+	    result.append("            if (converter != null) {\n");
+	    result.append("                if (isValueReference(converter)) {\n");
+	    result.append("                    ValueBinding vb = \n");
+	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
+	    result.append("                        getValueBinding(converter);\n");
+	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
+	    result.append("\""+"converter\", vb);\n"); 
+	    result.append("                } else {\n"); 
+	    result.append("                    Converter _converter = (Converter)Util.createInstance("+
+	        "converter);\n");
+	    result.append("                    ((ConvertibleValueHolder)component).setConverter(_converter);\n");
+	    result.append("                }\n");
 	    result.append("            }\n");
 	    result.append("        }\n\n");
 	}
@@ -277,18 +297,6 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 
 	result.append("    }\n\n");
 	
-	// generate evaluateExpressions method;
-	//
-	Map generated = new HashMap();
-	generatedEvaluateExpressions = false; 
-	result.append("    public void evaluateExpressions() throws JspException {\n");
-	info = generateEvaluateExpressions(componentAttributeNames, componentType, generated);
-	if (info != null) {
-	    result.append(info);
-	    generatedEvaluateExpressions = true; 
-	}
-	result.append("    }\n\n");
-
 	// generate TagSupport Methods
 	//
 	info = generateTagSupportMethods();
@@ -315,9 +323,6 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
      * Generate instance variables from a List of attribute names, the type (component.renderer).
      * The "generated" Map contains attribute name|attribute type mappings, and is used to
      * ensure we don't use the same attribute for generation more than once.
-     * NOTE: Most strings are used in expression language evaluation, so there will be
-     * a set of two for each ivar (ivar_, ivar).  The exception to this rule is the
-     * variable "var".
      */
     private String generateIvarsFromAttributes(List attributeNames, String type, Map generated) {
         String attributeName = null;
@@ -333,13 +338,17 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		attributeName.equals("rendered")) {
 		continue;
 	    }
+	    boolean isRendererAttribute = false; 
 	    attributeClass = getParser().getRendererAttributeClass(type, attributeName);
-	    if (attributeClass == null) {
+	    if (attributeClass != null) {
+	        isRendererAttribute = true;
+	    } else {
 	        attributeClass = getParser().getComponentPropertyClass(type, attributeName);
-	    }
-	    if (attributeClass == null) {
-	        throw new IllegalStateException("Can't find attribute class for type:"+
-		    type+" and attribute name:"+attributeName);
+	        if (attributeClass == null) {
+	            throw new IllegalStateException("Can't find attribute class for type:"+
+		        type+" and attribute name:"+attributeName);
+		}
+	        isRendererAttribute = false;
 	    }
 	    // check if we've already generated the same attribute name
 	    //
@@ -363,29 +372,27 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		  attributeName.equals("override") ||
 		  attributeName.equals("rendered"))) {
 		
-		result.append("    private "+attributeClass+" "+ivar);
-		// if it's a primitive
-		if (isPrimitive(attributeClass)) {
-		    // assign the default value
-		    result.append(" = "+(String)defaultPrimitiveValues.get(attributeClass));
+		// if the attribute is a renderer attribute, or if it's a component
+		// property which is value binding enabled - then we just generate
+		// "String" types.
+		//
+		if (isRendererAttribute) {
+		    result.append("    private java.lang.String "+ivar);
+		} else if (valueBindingEnabledProperties.contains(attributeName)) {
+		    result.append("    private java.lang.String "+ivar);
+		} else {
+		    result.append("    private "+attributeClass+" "+ivar);
+		    // if it's a primitive
+		    if (isPrimitive(attributeClass)) {
+		        // assign the default value
+		        result.append(" = "+(String)defaultPrimitiveValues.get(attributeClass));
+	            }
 		}
 		result.append(";\n");
 	    }
 	    
-	    // if it's a String, we need to generate the "<name>_" flavor 
-	    // for expression evaluation (later);
-	    // Special Condition: Don't generate it for "var" attribute;
-	    //
-	    if (attributeClass.equals("java.lang.String")) {
-		if (!attributeName.equals("var")) {
-	            result.append("    private "+attributeClass+" "+ivar+"_;\n");
-		    if (evaluateExpressionsAttributes == null) {
-		        evaluateExpressionsAttributes = new ArrayList();
-		    }
-		    evaluateExpressionsAttributes.add(ivar);
-		}
-	    }
 	    generated.put(attributeName, attributeClass);
+		    
         }	
 
 	return result.toString();
@@ -408,14 +415,18 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		attributeName.equals("rendered")) {
 		continue;
 	    }
+	    boolean isRendererAttribute = false;
 	    attributeClass = getParser().getRendererAttributeClass(type, attributeName);
-	    if (attributeClass == null) {
+	    if (attributeClass != null) {
+	        isRendererAttribute = true;
+	    } else {
 	        attributeClass = getParser().getComponentPropertyClass(type, attributeName);
-	    }
-	    if (attributeClass == null) {
-	        throw new IllegalStateException("Can't find attribute class for type:"+
-		    type+":attribute name:"+attributeName);
-	    }
+	        if (attributeClass == null) {
+	            throw new IllegalStateException("Can't find attribute class for type:"+
+		        type+":attribute name:"+attributeName);
+	        }
+	        isRendererAttribute = false;
+	    } 
 	    // check if we have already generated the same attribute name
 	    //
 	    String attrType = (String)generated.get(attributeName);
@@ -433,18 +444,15 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    // setter
 	    result.append("    public void set" + 
 			  Character.toUpperCase(attributeName.charAt(0)) +
-			  attributeName.substring(1) + "(" + 
-			  attributeClass + " " + ivar + ") {\n");
-	    
-	    // Special Case: "var" is represented as "var" (not "var_");
-	    //
-	    if (attributeName.equals("var")) {
-	        result.append("        this." + ivar + " = " + ivar + ";\n");
-	    } else if (attributeClass.equals("java.lang.String")) {
-	        result.append("        this." + ivar + "_" + " = " + ivar + ";\n");
+			  attributeName.substring(1) + "(");
+	    if (isRendererAttribute) {
+	        result.append("java.lang.String " + ivar + ") {\n");
+	    } else if (valueBindingEnabledProperties.contains(attributeName)) {
+	        result.append("java.lang.String " + ivar + ") {\n");
 	    } else {
-	        result.append("        this." + ivar + " = " + ivar + ";\n");
+		result.append(attributeClass + " " + ivar + ") {\n");
 	    }
+	    result.append("        this." + ivar + " = " + ivar + ";\n");
 	    result.append("    }\n\n");
 
 	    generated.put(attributeName, attributeClass);
@@ -489,36 +497,49 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    String componentType = determineComponentType(componentRendererType, rendererType);
 
 	    if (metaType.equals("renderer")) {
-		if (isPrimitive(attributeClass)) {
-		    result.append("        if ("+ivar+" != ");
-		    result.append(defaultPrimitiveValues.get(attributeClass)+") {\n");
-		    result.append("            "+componentType.toLowerCase()+
-		        ".getAttributes().put(\""+ivar+"\", ");
+	        result.append("        if ("+ivar+" != null) {\n");
+		result.append("            if (isValueReference("+ivar+")) {\n");
+		result.append("                ValueBinding vb = FacesContext.getCurrentInstance().");
+		result.append("getApplication().getValueBinding("+ivar+");\n");
+                result.append("                "+componentType.toLowerCase());
+		if (ivar.equals("_for")) {
+	    result.append(".setValueBinding(\""+"_"+ivar+"\", vb);\n");
 		} else {
-	            result.append("        if (null != "+ivar+") {\n");
+		    result.append(".setValueBinding(\""+ivar+"\", vb);\n");
+		}
+		result.append("            } else {\n");
+		if (isPrimitive(attributeClass)) {
+		    result.append("                "+attributeClass+" _"+ivar+" ");
+		    result.append("= new "+wrappersForNumbers.get(attributeClass));
+		    result.append("("+ivar+")."+attributeClass+"Value();\n");
+		    if (attributeClass.equals("boolean")) {
+			result.append("                "+componentType.toLowerCase()+
+				      ".getAttributes().put(\""+ivar+"\", ");
+			result.append("_"+ivar+" ? Boolean.TRUE : Boolean.FALSE);\n");
+		    } else {
+		        result.append("                if (_"+ivar+" != ");
+		        result.append(defaultPrimitiveValues.get(attributeClass)+") {\n");
+		        result.append("                    "+componentType.toLowerCase()+
+		            ".getAttributes().put(\""+ivar+"\", new ");
+		        result.append(wrappersForNumbers.get(attributeClass)+"(_"+ivar+"));\n");
+		        result.append("                }\n");
+		    }
+		} else {
 		    if (ivar.equals("bundle")) {
-			result.append("            "+componentType.toLowerCase()+
+			result.append("                "+componentType.toLowerCase()+
 				      ".getAttributes().put(com.sun.faces.RIConstants.BUNDLE_ATTR, ");
 		    }
 		    else if (ivar.equals("_for")) {
-			result.append("            "+componentType.toLowerCase()+
+			result.append("                "+componentType.toLowerCase()+
 				      ".getAttributes().put(\"for\", ");
 		    }
 		    else {
-			result.append("            "+componentType.toLowerCase()+
+			result.append("                "+componentType.toLowerCase()+
 				      ".getAttributes().put(\""+ivar+"\", ");
 		    }
-		}
-		if (isPrimitive(attributeClass)) {
-		    if (attributeClass.equals("boolean")) {
-			result.append(ivar+" ? Boolean.TRUE : Boolean.FALSE);\n");
-		    } else {
-		        result.append("new "+(String)wrappersForNumbers.get(attributeClass)+
-		        "("+ivar+"));\n");
-		    }
-		} else {
 		    result.append(ivar+");\n");
 		}
+		result.append("            }\n");
 		result.append("        }\n");
 	    } else {
 	        if (attributeName.equals("id") || 
@@ -527,9 +548,33 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		    attributeName.equals("value") || attributeName.equals("valueRef")) {
 		    continue;
 		}
-	        result.append("        "+componentType.toLowerCase()+".set" + 
-		    Character.toUpperCase(attributeName.charAt(0)) +
-		    attributeName.substring(1) + "(" + ivar + ");\n");
+	        if (valueBindingEnabledProperties.contains(attributeName)) {
+	            result.append("        if ("+ivar+" != null) {\n");
+		    result.append("            if (isValueReference("+ivar+")) {\n");
+		    result.append("                ValueBinding vb = FacesContext.getCurrentInstance().");
+		    result.append("getApplication().getValueBinding("+ivar+");\n");
+                    result.append("                "+componentType.toLowerCase());
+		    result.append(".setValueBinding(\""+ivar+"\", vb);\n");
+		    result.append("            } else {\n");
+		    if (isPrimitive(attributeClass)) {
+		        result.append("                "+attributeClass+" _"+ivar+" ");
+		        result.append("= new "+wrappersForNumbers.get(attributeClass));
+		        result.append("("+ivar+")."+attributeClass+"Value();\n");
+			result.append("                "+componentType.toLowerCase()+
+			    ".set"+Character.toUpperCase(attributeName.charAt(0)) +
+			    attributeName.substring(1) + "(_" + ivar + ");\n");
+		    } else {
+	                result.append("                "+componentType.toLowerCase()+".set" + 
+		            Character.toUpperCase(attributeName.charAt(0)) +
+		            attributeName.substring(1) + "(" + ivar + ");\n");
+		    }
+		    result.append("            }\n");
+		    result.append("        }\n");
+	        } else {
+	            result.append("        "+componentType.toLowerCase()+".set" + 
+		        Character.toUpperCase(attributeName.charAt(0)) +
+		        attributeName.substring(1) + "(" + ivar + ");\n");
+		}
 	    }
 	    generated.put(attributeName, attributeClass);
         }	
@@ -555,72 +600,43 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		attributeName.equals("value") || attributeName.equals("valueRef")) {
 		continue;
 	    }
-	    result.append("        "+componentType.toLowerCase()+".set" + 
-	        Character.toUpperCase(attributeName.charAt(0)) +
-		attributeName.substring(1) + "(" + ivar + ");\n");
+	    if (valueBindingEnabledProperties.contains(attributeName)) {
+	        result.append("        if ("+ivar+" != null) {\n");
+	        result.append("            if (isValueReference("+ivar+")) {\n");
+		result.append("                ValueBinding vb = FacesContext.getCurrentInstance().");
+		result.append("getApplication().getValueBinding("+ivar+");\n");
+                result.append("                "+componentType.toLowerCase());
+		result.append(".setValueBinding(\""+ivar+"\", vb);\n");
+		result.append("            } else {\n");
+		if (isPrimitive(attributeClass)) {
+		    result.append("                "+attributeClass+" _"+ivar+" ");
+		    result.append("= new "+wrappersForNumbers.get(attributeClass));
+		    result.append("("+ivar+")."+attributeClass+"Value();\n");
+		    result.append("                "+componentType.toLowerCase()+
+		        ".set"+Character.toUpperCase(attributeName.charAt(0)) +
+		        attributeName.substring(1) + "(_" + ivar + ");\n");
+		} else {
+	            result.append("                "+componentType.toLowerCase()+".set" + 
+		        Character.toUpperCase(attributeName.charAt(0)) +
+		        attributeName.substring(1) + "(" + ivar + ");\n");
+		}
+		result.append("            }\n");
+		result.append("        }\n");
+	    } else {
+	        result.append("        "+componentType.toLowerCase()+".set" + 
+		    Character.toUpperCase(attributeName.charAt(0)) +
+		    attributeName.substring(1) + "(" + ivar + ");\n");
+	    }
         }	
 	return result.toString();
     }
 
-    /**
-     * Generates the special "evaluateExpressions" method;
-     */
-    private String generateEvaluateExpressions(List attributeNames, String type, Map generated) {
-        StringBuffer result = new StringBuffer(40000);
-	String ivar = null;
-	String ivar_ = null;
-	String attributeName = null;
-	String attributeClass= null;
-	for (int i=0; i<attributeNames.size(); i++) {
-	    attributeName = (String)attributeNames.get(i);
-	    // check if we've already generated the same attribute name
-	    //
-	    attributeClass = getParser().getComponentPropertyClass(type, attributeName);
-	    if (attributeClass == null) {
-	        attributeClass = getParser().getRendererAttributeClass(type, attributeName);
-	    }
-	        
-	    // check if we've already generated the same attribute name
-	    //
-	    String attrType = (String)generated.get(attributeName);
-	    if (attrType != null) {
-	        if (attrType.equals(attributeClass)) {
-		    continue;
-		} else {
-		    throw new IllegalStateException("Already generated attribute name:"+
-		        attributeName+" but with the type:"+attrType+
-			" for:"+type);
-		}
-	    }
-            int idx = -1;
-            if (attributeName.equals("for")) {
-	        idx = evaluateExpressionsAttributes.indexOf("_"+attributeName);
-	    } else {
-	        idx = evaluateExpressionsAttributes.indexOf(attributeName);
-	    }
-	    if (idx < 0) {
-	        continue;
-	    }
-	    ivar = (String)evaluateExpressionsAttributes.get(idx);
-	    ivar_ = ivar+"_";
-	    result.append("        if ("+ivar_+" != null) {\n");
-	    result.append("            "+ivar+" = Util.evaluateElExpression("+ivar_+", pageContext);\n");
-	    result.append("        }\n");
-	    generated.put(attributeName, attributeClass);
-	}
-	return result.toString();
-    }
-	    
     private String generateTagSupportMethods() {
         StringBuffer result = new StringBuffer(20000);
         result.append("    //\n    // Methods From TagSupport\n    //\n\n");
 	result.append("    public int doStartTag() throws JspException {\n");
 	result.append("        int rc = 0;\n");
 	result.append("        try {\n");
-	if (generatedEvaluateExpressions) {
-	    result.append("            evaluateExpressions();\n"); 
-	    generatedEvaluateExpressions = false;
-	}
 	result.append("            rc = super.doStartTag();\n");
 	result.append("        } catch (JspException e) {\n");
 	result.append("            if (log.isDebugEnabled()) {\n");
