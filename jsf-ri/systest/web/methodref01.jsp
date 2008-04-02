@@ -25,8 +25,6 @@
         <h:command_button id="button3" value="button3"
                            actionListenerRef="methodRef.button3Pressed"/>
         <hr>
-
-	<hr>
 	<p>the only valid value is batman</p>
         <h:input_text id="toValidate" 
                       valueRef="methodRef.validateOutcome"
@@ -35,8 +33,14 @@
         <h:input_text id="validateStatus" readonly="true" 
                       valueRef="methodRef.validateOutcome"/>
         <h:output_errors for="toValidate"/>
-        <hr>
 
+        <hr>
+	<p>test value change</p>
+        <h:input_text id="toChange" 
+                      valueChangeListenerRef="methodRef.valueChange"/>
+        <h:command_button id="changeValue" value="changeValue"/>
+        <h:input_text id="changeStatus" readonly="true" 
+                      valueRef="methodRef.changeOutcome"/>
       </h:form>
     </f:view>
 
@@ -46,7 +50,7 @@
     <address><a href="mailto:Ed Burns <ed.burns@sun.com>"></a></address>
 <!-- Created: Fri Oct 31 10:49:23 Eastern Standard Time 2003 -->
 <!-- hhmts start -->
-Last modified: Fri Oct 31 15:56:27 Eastern Standard Time 2003
+Last modified: Fri Oct 31 16:47:00 Eastern Standard Time 2003
 <!-- hhmts end -->
   </body>
 </html>

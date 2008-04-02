@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRef.java,v 1.2 2003/10/31 21:40:21 eburns Exp $
+ * $Id: MethodRef.java,v 1.3 2003/10/31 21:54:03 eburns Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package com.sun.faces.systest.model;
 
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIInput;
 import javax.faces.application.FacesMessage;
@@ -64,6 +65,20 @@ public class MethodRef extends Object {
 	else {
 	    toValidate.setValid(true);
 	}
+    }
+
+    protected String changeOutcome;
+    public String getChangeOutcome() {
+	return changeOutcome;
+    }
+
+    public void setChangeOutcome(String newChangeOutcome) {
+	changeOutcome = newChangeOutcome;
+    }
+
+
+    public void valueChange(ValueChangeEvent vce) {
+	setChangeOutcome(vce.getNewValue().toString());
     }
     
 

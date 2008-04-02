@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRefTestCase.java,v 1.2 2003/10/31 21:40:20 eburns Exp $
+ * $Id: MethodRefTestCase.java,v 1.3 2003/10/31 21:54:02 eburns Exp $
  */
 
 /*
@@ -184,6 +184,33 @@ public class MethodRefTestCase extends AbstractTestCase {
 	input = (HtmlTextInput) 
 	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
 				"validateStatus");
+	assertEquals("Input does not have expected value",
+		     "batman", input.asText());
+    }
+
+    public void testValueChangeListenerRef() throws Exception {
+	HtmlForm form;
+	HtmlSubmitInput submit;
+	HtmlAnchor link;
+	HtmlTextInput input;
+        HtmlPage page;
+
+	page = getPage("/faces/methodref01.jsp");
+	form = getFormById(page, "form");
+        submit = (HtmlSubmitInput)
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "changeValue");
+
+	// fill in a value, see we have a value
+	input = (HtmlTextInput) 
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+				"toChange");
+	input.setValueAttribute("batman");
+	page = (HtmlPage) submit.click();
+	form = getFormById(page, "form");
+	input = (HtmlTextInput) 
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+				"changeStatus");
 	assertEquals("Input does not have expected value",
 		     "batman", input.asText());
     }
