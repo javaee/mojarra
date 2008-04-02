@@ -1,5 +1,5 @@
 /*
- * $Id: TestHandleRequestEventsPhase.java,v 1.11 2002/10/07 22:58:01 jvisvanathan Exp $
+ * $Id: TestHandleRequestEventsPhase.java,v 1.12 2002/10/10 18:30:30 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHandleRequestEventsPhase.java,v 1.11 2002/10/07 22:58:01 jvisvanathan Exp $
+ * @version $Id: TestHandleRequestEventsPhase.java,v 1.12 2002/10/10 18:30:30 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -157,7 +157,7 @@ public void testCallback()
     //    component), and the next phase is "render".
     //
     rc = handleEvents.execute(getFacesContext());
-    assertTrue(Phase.GOTO_RENDER == rc);
+    assertTrue(Phase.GOTO_NEXT == rc);
     assertTrue(!System.getProperty(DID_EVENT1).equals(EMPTY));
     assertTrue(!System.getProperty(DID_EVENT2).equals(EMPTY));
 
