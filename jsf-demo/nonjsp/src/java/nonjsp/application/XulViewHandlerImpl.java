@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.1 2004/05/20 21:24:52 rkitain Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.2 2005/02/08 19:24:36 rlubke Exp $ 
  */ 
 
 
@@ -46,12 +46,13 @@
 
 package nonjsp.application;
 
-import nonjsp.util.RIConstants;
-import org.apache.commons.digester.Digester;
-import org.apache.commons.digester.RuleSetBase;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.impl.SimpleLog;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -66,19 +67,19 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import org.apache.commons.digester.Digester;
+import org.apache.commons.digester.RuleSetBase;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.impl.SimpleLog;
+
+import nonjsp.util.RIConstants;
 
 
 /**
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.1 2004/05/20 21:24:52 rkitain Exp $ *
+ * @version $Id: XulViewHandlerImpl.java,v 1.2 2005/02/08 19:24:36 rlubke Exp $ *
  * @see javax.faces.application.ViewHandler
  */
 public class XulViewHandlerImpl extends ViewHandler {
@@ -381,10 +382,10 @@ public class XulViewHandlerImpl extends ViewHandler {
         // determine the locales that are acceptable to the client based on the 
         // Accept-Language header and the find the best match among the 
         // supported locales specified by the client.
-        Enumeration enum = ((ServletRequest)
+        Enumeration e = ((ServletRequest)
             context.getExternalContext().getRequest()).getLocales();
-        while (enum.hasMoreElements()) {
-            Locale perf = (Locale) enum.nextElement();
+        while (e.hasMoreElements()) {
+            Locale perf = (Locale) e.nextElement();
             result = findMatch(context, perf);
             if (result != null) {
                 break;

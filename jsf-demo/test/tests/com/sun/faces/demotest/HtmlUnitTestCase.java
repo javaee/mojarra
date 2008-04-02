@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlUnitTestCase.java,v 1.7 2004/05/12 18:47:35 ofung Exp $
+ * $Id: HtmlUnitTestCase.java,v 1.8 2005/02/08 19:24:36 rlubke Exp $
  */
 
 /*
@@ -42,17 +42,19 @@
 
 package com.sun.faces.demotest;
 
-import com.gargoylesoftware.htmlunit.Page;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
-import junit.framework.TestCase;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import junit.framework.TestCase;
 
 
 public class HtmlUnitTestCase extends TestCase {
@@ -176,6 +178,19 @@ public class HtmlUnitTestCase extends TestCase {
         }
         sessionId = value;
         //        System.err.println("Beginning session " + sessionId);
+
+    }
+
+
+    /**
+     * Added due to API change in HtmlUnit.
+     */
+    protected List getAllElementsOfGivenClass(HtmlPage page, List list,
+                                              Class matchClass) {
+
+        return getAllElementsOfGivenClass(page.getDocumentElement(),
+                                          list,
+                                          matchClass);
 
     }
 

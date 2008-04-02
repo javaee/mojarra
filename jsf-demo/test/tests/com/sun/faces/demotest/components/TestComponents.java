@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponents.java,v 1.15 2004/05/12 18:47:37 ofung Exp $
+ * $Id: TestComponents.java,v 1.16 2005/02/08 19:24:36 rlubke Exp $
  */
 
 /*
@@ -42,12 +42,21 @@
 
 package com.sun.faces.demotest.components;
 
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
-import com.gargoylesoftware.htmlunit.ScriptResult;
-import com.gargoylesoftware.htmlunit.html.*;
+import java.util.Iterator;
+
 import com.sun.faces.demotest.HtmlUnitTestCase;
 
-import java.util.Iterator;
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
+import com.gargoylesoftware.htmlunit.ScriptResult;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlArea;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlMap;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTable;
 
 public class TestComponents extends HtmlUnitTestCase {
 
@@ -79,27 +88,19 @@ public class TestComponents extends HtmlUnitTestCase {
         String onClick = null;
         ScriptResult result = null;
         mapPage = accessAppAndGetPage("imagemap.faces");
+        form = (HtmlForm) mapPage.getAllForms().get(0);
+        map = (HtmlMap) form.getHtmlElementsByTagName("map").get(0);
 
         for (int i = 0, len = welcomeTexts.length; i < len; i++) {
-            form = (HtmlForm) mapPage.getAllForms().get(0);
 
-            // commented out until the Javascript interpreter in HtmlUnit
-            // can handle form access via index.
+            area = (HtmlArea) map.getHtmlElementsByTagName("area").get(i);
+            onClick = area.getOnClickAttribute();
+            result = mapPage.executeJavaScriptIfPossible(onClick,
+                                                         onClick,
+                                                         false,
+                                                         area);
+            mapPage = (HtmlPage) result.getNewPage();
 
-            //	    map = (HtmlMap) form.getChildElements().get(0);
-            //	    area = (HtmlArea) map.getChildElements().get(i);
-            //	    onClick = area.getOnClickAttribute();
-            //	    result = mapPage.executeJavaScriptIfPossible(onClick,
-            //							 onClick,
-            //							 false, area);
-            //	    mapPage = (HtmlPage) result.getNewPage();
-
-            // set the value of the hidden field manually and submit the form.
-            HtmlHiddenInput hidden =
-                (HtmlHiddenInput) form.getInputByName("worldMap_current");
-            assertNotNull(hidden);
-            hidden.setValueAttribute(lang[i]);
-            mapPage = (HtmlPage) form.submit();
             assertTrue(
                 -1 != getImageMapWelcomeText(mapPage).indexOf(welcomeTexts[i]));
         }

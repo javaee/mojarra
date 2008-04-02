@@ -42,6 +42,8 @@
     <property file="${user.home}/build.properties"/>   <!-- User local        -->
     <property file="build.properties"/>                <!-- Component local   -->
     <property file="../build.properties"/>             <!-- Commons local     -->
+ 
+    <property file="default.properties"/>
 
     <property name="build" value="${basedir}/test/build"/>
     <property name="url" value="http://${host}:${port}/manager"/>
@@ -55,7 +57,6 @@
     <property name="debug.jvm.args" value=""/>
     <property name="logger" value="org.apache.commons.logging.impl.SimpleLog" />
     <property name="level" value="trace" />
-    <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.2.3"/>
     
     <!-- Demo WAR files -->
     <property name="components.war" value="${basedir}/components/build/jsf-components.war"/>
@@ -69,12 +70,7 @@
       <pathelement location="${jsf-api.jar}"/>
       <pathelement location="${build}/classes"/>
       <fileset dir="${htmlunit.home}/lib">
-        <include name="htmlunit-1.2.3.jar"/>
-        <include name="commons-httpclient-2.0-beta2.jar"/>
-        <include name="xmlParserAPIs-2.2.1.jar"/>
-        <include name="commons-logging-1.0.2.jar"/>
-        <include name="xercesImpl-2.4.0.jar"/>
-        <include name="nekohtml-0.7.7.jar"/>
+        <include name="*.jar"/>
       </fileset>
     </path>
 
@@ -150,6 +146,7 @@
     </target>
 
     <target name="run.tests">
+        <echo message="Tomcat Home: ${tomcat.home}"/>
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes">
             <classpath refid="run.classpath"/>
             <formatter type="plain" usefile="false"/>
