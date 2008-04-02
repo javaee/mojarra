@@ -63,13 +63,6 @@
 
 -->
 
-  <property name="Name" value="JSF Demos"/>
-  <property name="name" value="jsf-demo"/>
-  <property name="version" value="20030825"/>
-
-  <property name="depth" value=""/>
-
-
 <!-- ************ Per user local properties ******************************* -->
 
   <property file="build.properties"/>                <!-- demo local    -->
@@ -81,6 +74,12 @@
 <!-- ************ Where are we building into? ***************************** -->
 
   <!-- The base directory for compilation targets -->
+  
+  <property name="Name" value="JSF Demos"/>
+  <property name="name" value="jsf-demo"/>
+  <property name="depth" value=""/>
+  <property name="version" value="20030825"/>
+  
   <property name="build.home" value="${basedir}/build"/>
 
   <property name="jsf.build.home" value="../jsf-ri/build" />
