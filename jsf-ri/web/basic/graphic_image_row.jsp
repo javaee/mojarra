@@ -40,3 +40,25 @@
 
             </tr>
 
+
+           <tr>
+
+             <td>
+
+               <h:output_text id="output_graphic3_label" 
+                     value="output_graphic with path from model"/>
+
+             </td>
+
+             <td>
+
+               <h:graphic_image id="output_graphic3" 
+	                        modelReference="LoginBean.imagePath" 
+	                            alt="output_graphic with path from model"
+                                  title="output_graphic with path from model"
+                           />
+
+             </td>
+
+            </tr>
+

@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.14 2002/09/23 20:36:27 rkitain Exp $
+ * $Id: LoginBean.java,v 1.15 2002/10/04 23:44:15 eburns Exp $
  */
 
 /*
@@ -270,6 +270,17 @@ public class LoginBean {
     {
 	floater = newFloater;
     }
+
+    protected String imagePath = null;
+
+    public String getImagePath()
+    {
+	return imagePath;
+    }
     
+    public void setImagePath(String newImagePath)
+    {
+	imagePath = newImagePath;
+    }
 
 }

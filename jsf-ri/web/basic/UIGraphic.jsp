@@ -8,7 +8,7 @@
 
     <h1>UIGraphic</h1>
 
-    <h3>$Id: UIGraphic.jsp,v 1.5 2002/10/03 18:13:28 rkitain Exp $</h3>
+    <h3>$Id: UIGraphic.jsp,v 1.6 2002/10/04 23:44:14 eburns Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
@@ -16,6 +16,10 @@
 
      <fmt:setBundle basename="basic.Resources" scope="session" 
                     var="basicBundle"/>
+     <jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session">
+       <jsp:setProperty name="LoginBean" property="imagePath" 
+                        value="duke.gif"/> 
+     </jsp:useBean>
 
      <f:usefaces>  
 
