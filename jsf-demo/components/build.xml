@@ -232,8 +232,8 @@
       <fileset dir="web" />
     </copy>
 
-    <jar destfile="${build}/${webapp}/WEB-INF/lib/demo-${example}.jar" 
-            basedir="${build}/classes/${example}"/>
+    <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-${example}.jar" 
+	 basedir="${build}/classes/${example}"/>
 
   </target>	
 
