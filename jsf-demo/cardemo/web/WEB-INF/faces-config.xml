@@ -15,17 +15,12 @@
 
    <!-- Validator -->
   <validator>
-    <description>CreditCardValidator Description</description>
-    <validator-id>CreditCardValidator</validator-id>
-    <validator-class>cardemo.CreditCardValidator</validator-class>
+    <description>FormatValidator Description</description>
+    <validator-id>FormatValidator</validator-id>
+    <validator-class>cardemo.FormatValidator</validator-class>
     <attribute>
-      <description>Minimum character allowed</description>
-      <attribute-name>minimumChar</attribute-name>
-      <attribute-class>java.lang.String</attribute-class>
-    </attribute>
-    <attribute>
-      <description>Maximum character allowed</description>
-      <attribute-name>maximumChar</attribute-name>
+      <description>List of format patterns separated by '|'</description>
+      <attribute-name>formatPatterns</attribute-name>
       <attribute-class>java.lang.String</attribute-class>
     </attribute>
   </validator>
