@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.1 2003/04/01 17:39:05 rkitain Exp $
+ * $Id: ActionListenerImpl.java,v 1.2 2003/04/03 18:27:49 rkitain Exp $
  */
 
 /*
@@ -77,9 +77,9 @@ public class ActionListenerImpl implements ActionListener {
         String actionRef = null;
         ValueBinding binding = null;
         Object action = null;
-        if (null == outcome || outcome.length() == 0) {
+        if (null == outcome) {
             actionRef = command.getActionRef();
-            if (actionRef != null && actionRef.length() > 0) {
+            if (actionRef != null) {
                 binding = application.getValueBinding(actionRef);
                 if (binding != null) {
                     try {
