@@ -182,6 +182,9 @@
     <copy todir="${build.home}/classes">
         <fileset dir="${source.home}" includes="**/*.xml"/>
     </copy>
+    <copy todir="${build.home}/classes">
+        <fileset dir="${source.home}" includes="**/*.dtd"/>
+    </copy>
 
     </target>
 

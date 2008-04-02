@@ -1,5 +1,5 @@
 /*
- * $Id: Output_MessageTag.java,v 1.5 2003/02/20 22:49:18 ofung Exp $
+ * $Id: Output_MessageTag.java,v 1.6 2003/04/29 20:52:07 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Output_MessageTag.java,v 1.5 2003/02/20 22:49:18 ofung Exp $
+ * @version $Id: Output_MessageTag.java,v 1.6 2003/04/29 20:52:07 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -78,6 +78,7 @@ public Output_MessageTag()
 //
 
     public String getLocalRendererType() { return "Message"; }
+    public String getComponentType() { return "Output"; }
 
     public UIComponent createComponent() {
         return (new UIOutput());

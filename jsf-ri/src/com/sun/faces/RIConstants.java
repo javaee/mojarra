@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.31 2003/04/04 22:47:22 eburns Exp $
+ * $Id: RIConstants.java,v 1.32 2003/04/29 20:51:29 eburns Exp $
  */
 
 /*
@@ -40,8 +40,8 @@ public class RIConstants {
     public final static String INITIAL_REQUEST_NAME = "initialRequest";
     public final static String INITIAL_REQUEST_VALUE = "true";
     
-    public final static String FACES_TREE = "com.sun.faces.TREE";
-    public final static String REQUEST_LOCALE = "com.sun.faces.LOCALE";
+    public final static String FACES_TREE = FACES_PREFIX + "TREE";
+    public final static String REQUEST_LOCALE = FACES_PREFIX + "LOCALE";
    
     /**
 
@@ -51,9 +51,9 @@ public class RIConstants {
 
     */ 
 
-    public final static String SELECTITEMS_CONFIGURED = "com.sun.faces.SELECTITEMS_CONFIGURED";
+    public final static String SELECTITEMS_CONFIGURED = FACES_PREFIX + "SELECTITEMS_CONFIGURED";
 
-    public final static String IMPL_MESSAGES = "com.sun.faces.IMPL_MESSAGES";
+    public final static String IMPL_MESSAGES = FACES_PREFIX + "IMPL_MESSAGES";
 
     public static final String SAVESTATE_MARKER = FACES_PREFIX + "saveStateMarker";
     public static final String SAVESTATE_INITPARAM = "saveStateInClient";
@@ -64,7 +64,7 @@ public class RIConstants {
     public static final String EVENT_LIMIT = "maxevents";
     public static final int MAX_EVENTS = 100;
 
-    public static final String FORMAT_POOL = "com.sun.faces.renderkit.FormatPool";
+    public static final String FORMAT_POOL = FACES_PREFIX + "renderkit.FormatPool";
     public static final String FACES_LOCALE = "FacesLocale";
 
     public final static String FORM_NUMBER_ATTR = FACES_PREFIX +
@@ -75,14 +75,14 @@ public class RIConstants {
     /**
      * <p>String identifer for <em>bundle attribute.</em>.</p>
      */
-    public static final String BUNDLE_ATTR = "com.sun.faces.bundle";
+    public static final String BUNDLE_ATTR = FACES_PREFIX + "bundle";
 
     /**
      * <p>The name of the attribute in the ServletContext's attr set
      * used to store the result of the check for the ability to load the
      * required classes for the Faces RI.</p>
      */
-    public static final String HAS_REQUIRED_CLASSES_ATTR = "com.sun.faces.HasRequiredClasses";
+    public static final String HAS_REQUIRED_CLASSES_ATTR = FACES_PREFIX + "HasRequiredClasses";
 
     /**
 
@@ -91,13 +91,18 @@ public class RIConstants {
     */
     
     public static final String IMMUTABLE_MARKER = 
-	"com.sun.faces.IMMUTABLE";
+	FACES_PREFIX + "IMMUTABLE";
 
+    public static final String CONFIG_ATTR = FACES_PREFIX + "ConfigBase";
+
+    public static final String VALIDATE_XML = FACES_PREFIX + "validateXml";
+
+/////////// PENDING(roger) - remove when Navigation handling complete (config)
     public static final String NAVIGATION_CONFIG_ATTR = 
-	"com.sun.faces.NavigationConfig";
-
+	FACES_PREFIX + "NavigationConfig";
     public static final String ONE_TIME_INITIALIZATION_ATTR = 
-	"com.sun.faces.OneTimeInitialization";
+	FACES_PREFIX + "OneTimeInitialization";
+/////////////////////////////////////////////////
 
 
 

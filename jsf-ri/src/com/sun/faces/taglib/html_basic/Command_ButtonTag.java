@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.33 2003/03/21 18:28:46 jvisvanathan Exp $
+ * $Id: Command_ButtonTag.java,v 1.34 2003/04/29 20:52:05 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.33 2003/03/21 18:28:46 jvisvanathan Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.34 2003/04/29 20:52:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,6 +124,7 @@ public class Command_ButtonTag extends FacesTag
     //
 
     public String getLocalRendererType() { return "Button"; }
+    public String getComponentType() { return "Command"; }
     
     public UIComponent createComponent() {
         return(new UICommand());

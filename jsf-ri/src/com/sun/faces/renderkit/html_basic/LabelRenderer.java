@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.9 2003/02/20 22:49:00 ofung Exp $
+ * $Id: LabelRenderer.java,v 1.10 2003/04/29 20:51:54 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import com.sun.faces.util.Util;
 
 import java.util.Iterator;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
@@ -36,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.9 2003/02/20 22:49:00 ofung Exp $
+ * @version $Id: LabelRenderer.java,v 1.10 2003/04/29 20:51:54 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -80,13 +79,6 @@ public class LabelRenderer extends HtmlBasicRenderer {
     //
     // Methods From Renderer
     //
-
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UIOutput.TYPE));
-    }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
            throws IOException {

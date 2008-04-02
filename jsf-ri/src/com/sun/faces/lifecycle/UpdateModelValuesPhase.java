@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.19 2003/03/19 21:16:30 jvisvanathan Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.20 2003/04/29 20:51:47 eburns Exp $
  */
 
 /*
@@ -16,8 +16,8 @@ import com.sun.faces.context.FacesContextImpl;
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
+import javax.faces.application.Message;
 import javax.faces.context.MessageResources;
-import javax.faces.context.Message;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
@@ -34,7 +34,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.19 2003/03/19 21:16:30 jvisvanathan Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.20 2003/04/29 20:51:47 eburns Exp $
  * 
  */
 

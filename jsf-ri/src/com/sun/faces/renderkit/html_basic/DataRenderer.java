@@ -1,5 +1,5 @@
 /*
- * $Id: DataRenderer.java,v 1.6 2003/04/04 22:47:26 eburns Exp $
+ * $Id: DataRenderer.java,v 1.7 2003/04/29 20:51:50 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DataRenderer.java,v 1.6 2003/04/04 22:47:26 eburns Exp $
+ * @version $Id: DataRenderer.java,v 1.7 2003/04/29 20:51:50 eburns Exp $
  *  
  */
 
@@ -65,14 +65,6 @@ public class DataRenderer extends HtmlBasicRenderer {
     //
     // Methods From Renderer
     //
-
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UIPanel.TYPE));
-    }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException{

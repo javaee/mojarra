@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.43 2003/02/20 22:49:02 ofung Exp $
+ * $Id: TextRenderer.java,v 1.44 2003/04/29 20:51:56 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import com.sun.faces.util.Util;
 
 import java.util.Iterator;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
@@ -44,7 +43,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.43 2003/02/20 22:49:02 ofung Exp $
+ * @version $Id: TextRenderer.java,v 1.44 2003/04/29 20:51:56 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,14 +87,6 @@ public class TextRenderer extends HtmlBasicInputRenderer {
     //
     // Methods From Renderer
     //
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UIInput.TYPE) ||
-            componentType.equals(UIOutput.TYPE));
-    }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
@@ -122,8 +113,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 		      component.getAttribute("outputClass")))) {
 	    buffer.append("<span class=\"" + styleClass + "\">");
 	}
-        if ((UIInput.TYPE.equals(component.getComponentType())) ||
-            (component instanceof UIInput)) {
+        if (component instanceof UIInput) {
             buffer.append("<input type=\"text\"");
             buffer.append(" name=\"");
             buffer.append(component.getClientId(context));
@@ -139,8 +129,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             buffer.append(Util.renderBooleanPassthruAttributes(context, 
                 component));
             buffer.append(">");            
-        } else if ((UIOutput.TYPE.equals(component.getComponentType())) ||
-            (component instanceof UIOutput)) {
+        } else if (component instanceof UIOutput) {
             if (currentValue == null || currentValue == "") {
                 try {
                     currentValue = getKeyAndLookupInBundle(context, component,

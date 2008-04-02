@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.12 2003/03/21 23:24:02 rkitain Exp $
+ * $Id: MenuRenderer.java,v 1.13 2003/04/29 20:51:54 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -39,7 +39,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.12 2003/03/21 23:24:02 rkitain Exp $
+ * @version $Id: MenuRenderer.java,v 1.13 2003/04/29 20:51:54 eburns Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -83,16 +83,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     // Methods From Renderer
     //
 
-    public boolean supportsComponentType(String componentType) {
-        if (componentType == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        return (componentType.equals(UISelectMany.TYPE) || 
-                componentType.equals(UISelectOne.TYPE));
-    }
-
     public void decode(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
@@ -107,8 +97,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Assert.assert_it(clientId != null);
         // currently we assume the model type to be of type string or 
         // convertible to string and localised by the application.
-        if ((UISelectMany.TYPE.equals(component.getComponentType())) ||
-            (component instanceof UISelectMany)) {
+        if (component instanceof UISelectMany) {
             Map requestParameterValuesMap = context.getExternalContext().
                 getRequestParameterValuesMap();
             String newValues[] = (String[])requestParameterValuesMap.
@@ -252,8 +241,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     String getMultipleText(UIComponent component) {
         // PENDING (visvan) not sure if this is the best way to check for
         // component type.
-        if ((UISelectMany.TYPE.equals(component.getComponentType())) ||
-            (component instanceof UISelectMany)) {
+        if (component instanceof UISelectMany) {
             return " multiple ";
         } 
         return "";
@@ -261,8 +249,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     Object[] getCurrentSelectedValues(FacesContext context,
 				      UIComponent component) {
-        if ((UISelectMany.TYPE.equals(component.getComponentType())) ||
-            (component instanceof UISelectMany)) {
+        if (component instanceof UISelectMany) {
             UISelectMany select = (UISelectMany) component;
             return (Object []) select.currentValue(context);
         } 
@@ -279,8 +266,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         String styleString = null;
         // PENDING (visvan) not sure if this is the best way to check for
         // component type.
-        if ((UISelectMany.TYPE.equals(component.getComponentType())) ||
-            (component instanceof UISelectMany)) {
+        if (component instanceof UISelectMany) {
             styleString = (String) component.getAttribute("selectmanyClass");
         } else {
             styleString = (String) component.getAttribute("selectoneClass");

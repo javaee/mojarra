@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.43 2003/04/08 17:46:16 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.44 2003/04/29 20:52:37 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import javax.faces.component.UIInput;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.context.MessageImpl;
+import javax.faces.application.MessageImpl;
 import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
 
@@ -54,7 +54,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.43 2003/04/08 17:46:16 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.44 2003/04/29 20:52:37 eburns Exp $
  * 
  *
  */
@@ -274,16 +274,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
         getFacesContext().getResponseWriter().write("\n");
-
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = checkboxRenderer.supportsComponentType("javax.faces.component.UISelectBoolean");
-        assertTrue(result);
-        result = checkboxRenderer.supportsComponentType(selectBoolean);
-        assertTrue(result);
-        result = checkboxRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testHyperlinkRenderer(UIComponent root) throws IOException {
@@ -311,16 +301,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         hyperlinkRenderer.encodeEnd(getFacesContext(), command);
         getFacesContext().getResponseWriter().write("\n");
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = hyperlinkRenderer.supportsComponentType("javax.faces.component.UICommand");
-        assertTrue(result);
-        result = hyperlinkRenderer.supportsComponentType(command);
-        assertTrue(result);
-        result = hyperlinkRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
-        
     }
 
     public void testListboxRenderer(UIComponent root) throws IOException {
@@ -357,15 +337,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         listboxRenderer.encodeEnd(getFacesContext(), selectOne);
         getFacesContext().getResponseWriter().write("\n");
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = listboxRenderer.supportsComponentType("javax.faces.component.UISelectOne");
-        assertTrue(result);
-        result = listboxRenderer.supportsComponentType(selectOne);
-        assertTrue(result);
-        result = listboxRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testSecretRenderer(UIComponent root) throws IOException {
@@ -390,15 +361,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         secretRenderer.encodeEnd(getFacesContext(), textEntry);
         getFacesContext().getResponseWriter().write("\n");
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = secretRenderer.supportsComponentType("javax.faces.component.UIInput");
-        assertTrue(result);
-        result = secretRenderer.supportsComponentType(textEntry);
-        assertTrue(result);
-        result = secretRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testInputTextRenderer(UIComponent root) throws IOException {
@@ -423,15 +385,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         textRenderer.encodeEnd(getFacesContext(), text);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = textRenderer.supportsComponentType("javax.faces.component.UIInput");
-        assertTrue(result);
-        result = textRenderer.supportsComponentType(text);
-        assertTrue(result);
-        result = textRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testOutputTextRenderer(UIComponent root) throws IOException {
@@ -455,15 +408,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         textRenderer.encodeEnd(getFacesContext(), text);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = textRenderer.supportsComponentType("javax.faces.component.UIOutput");
-        assertTrue(result);
-        result = textRenderer.supportsComponentType(text);
-        assertTrue(result);
-        result = textRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testGraphicImageRenderer(UIComponent root) throws IOException {
@@ -487,15 +431,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         imageRenderer.encodeEnd(getFacesContext(), img);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = imageRenderer.supportsComponentType("javax.faces.component.UIGraphic");
-        assertTrue(result);
-        result = imageRenderer.supportsComponentType(img);
-        assertTrue(result);
-        result = imageRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
 
         System.out.println("    Testing graphic support of modelReference...");
 	root.removeChild(img);
@@ -537,15 +472,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         errorsRenderer.encodeEnd(getFacesContext(), output);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = errorsRenderer.supportsComponentType("javax.faces.component.UIOutput");
-        assertTrue(result);
-        result = errorsRenderer.supportsComponentType(output);
-        assertTrue(result);
-        result = errorsRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testOutputMessageRenderer(UIComponent root) throws IOException {
@@ -574,16 +500,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer.encodeEnd(getFacesContext(), output);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = messageRenderer.supportsComponentType(
-            "javax.faces.component.UIOutput");
-        assertTrue(result);
-        result = messageRenderer.supportsComponentType(output);
-        assertTrue(result);
-        result = messageRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
         
 
@@ -617,15 +533,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         dateRenderer.encodeEnd(getFacesContext(), input);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = dateRenderer.supportsComponentType("javax.faces.component.UIInput");
-        assertTrue(result);
-        result = dateRenderer.supportsComponentType(input);
-        assertTrue(result);
-        result = dateRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testInputTimeRenderer(UIComponent root) throws IOException {
@@ -659,15 +566,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         timeRenderer.encodeEnd(getFacesContext(), input);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = timeRenderer.supportsComponentType("javax.faces.component.UIInput");
-        assertTrue(result);
-        result = timeRenderer.supportsComponentType(input);
-        assertTrue(result);
-        result = timeRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testInputDateTimeRendererWithPattern(UIComponent root) throws IOException {
@@ -699,15 +597,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         dateTimeRenderer.encodeEnd(getFacesContext(), input);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = dateTimeRenderer.supportsComponentType("javax.faces.component.UIInput");
-        assertTrue(result);
-        result = dateTimeRenderer.supportsComponentType(input);
-        assertTrue(result);
-        result = dateTimeRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testTextAreaRenderer(UIComponent root) throws IOException {
@@ -732,15 +621,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         textAreaRenderer.encodeEnd(getFacesContext(), textEntry);
         getFacesContext().getResponseWriter().write("\n");
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = textAreaRenderer.supportsComponentType("javax.faces.component.UIInput");
-        assertTrue(result);
-        result = textAreaRenderer.supportsComponentType(textEntry);
-        assertTrue(result);
-        result = textAreaRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
     
     public void testInputNumberRenderer(UIComponent root) throws IOException {
@@ -772,15 +652,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         numberRenderer.encodeEnd(getFacesContext(), input);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = numberRenderer.supportsComponentType("javax.faces.component.UIInput");
-        assertTrue(result);
-        result = numberRenderer.supportsComponentType(input);
-        assertTrue(result);
-        result = numberRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
     
     public void testInputNumberRendererWithPattern(UIComponent root) 
@@ -835,15 +706,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().getResponseWriter().write("\n");
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println(" Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = numberRenderer.supportsComponentType("javax.faces.component.UIInput");
-        assertTrue(result);
-        result = numberRenderer.supportsComponentType(output);
-        assertTrue(result);
-        result = numberRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
     
     public void testOutputNumberRendererWithPattern(UIComponent root) throws IOException {
@@ -895,15 +757,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         dateRenderer.encodeEnd(getFacesContext(), output);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = dateRenderer.supportsComponentType("javax.faces.component.UIOutput");
-        assertTrue(result);
-        result = dateRenderer.supportsComponentType(output);
-        assertTrue(result);
-        result = dateRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testOutputTimeRenderer(UIComponent root) throws IOException {
@@ -933,15 +786,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         timeRenderer.encodeEnd(getFacesContext(), output);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = timeRenderer.supportsComponentType("javax.faces.component.UIOutput");
-        assertTrue(result);
-        result = timeRenderer.supportsComponentType(output);
-        assertTrue(result);
-        result = timeRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testOutputDateTimeRendererWithPattern(UIComponent root) throws IOException {
@@ -970,15 +814,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         dateRenderer.encodeEnd(getFacesContext(), output);
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = dateRenderer.supportsComponentType("javax.faces.component.UIOutput");
-        assertTrue(result);
-        result = dateRenderer.supportsComponentType(output);
-        assertTrue(result);
-        result = dateRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
 
 	// testing encode with invalid date
 	output.setValue("invalidDate");

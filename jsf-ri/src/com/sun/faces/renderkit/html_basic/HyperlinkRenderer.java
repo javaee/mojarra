@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.44 2003/03/24 19:45:34 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.45 2003/04/29 20:51:52 eburns Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.io.IOException;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
@@ -49,7 +48,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.44 2003/03/24 19:45:34 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.45 2003/04/29 20:51:52 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -96,12 +95,6 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
     //
     // Methods From Renderer
     //
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UICommand.TYPE));
-    }
 
     public void decode(FacesContext context, UIComponent component) 
             throws IOException {

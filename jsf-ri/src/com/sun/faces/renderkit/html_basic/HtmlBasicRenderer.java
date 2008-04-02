@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.37 2003/04/08 17:46:14 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.38 2003/04/29 20:51:52 eburns Exp $
  */
 
 /*
@@ -11,7 +11,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.AttributeDescriptorImpl;
+//import com.sun.faces.util.AttributeDescriptorImpl;
 import com.sun.faces.util.Util;
 
 import java.util.Hashtable;
@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
-import javax.faces.component.AttributeDescriptor;
+//import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UISelectItem;
@@ -32,12 +32,12 @@ import javax.faces.el.ValueBinding;
 
 import javax.faces.render.Renderer;
 import javax.faces.component.UIInput;
-import javax.faces.context.Message;
+import javax.faces.application.Message;
 import javax.faces.context.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterFactory;
+//import javax.faces.convert.ConverterFactory;
 import javax.faces.convert.ConverterException;
 
 import org.mozilla.util.Assert;
@@ -110,9 +110,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	    attributeTable = new Hashtable();
 	}
 
+/*
         AttributeDescriptorImpl ad = new AttributeDescriptorImpl(name, 
 					 displayName, description, typeClass);
         attributeTable.put(name, ad);
+*/
     }
 
     public boolean hasAttributeWithName(String name) {
@@ -127,6 +129,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
     // Methods From Renderer
     // FIXME: what if named attriubte doesn't exist? should exception be thrown?
     //
+/*
     public AttributeDescriptor getAttributeDescriptor(
         UIComponent component, String name) {
 
@@ -135,7 +138,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
         return (getAttributeDescriptor(component.getComponentType(), name));
     }
+*/
 
+/*
     public AttributeDescriptor getAttributeDescriptor(
         String componentType, String name) {
 
@@ -155,6 +160,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
 	return (AttributeDescriptor)(attributeTable != null? attributeTable.get(name) : null); 
     }
+*/
 
     public Iterator getAttributeNames(UIComponent component) {
 
@@ -162,12 +168,14 @@ public abstract class HtmlBasicRenderer extends Renderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
 
+/*
         String componentType = component.getComponentType();
         if (!supportsComponentType(componentType)) {
             Object [] params = {componentType}; 
             throw new IllegalArgumentException(Util.getExceptionMessage(
                 Util.SUPPORTS_COMPONENT_ERROR_MESSAGE_ID, params));
         }
+*/
 
         return attributeTable != null? attributeTable.keySet().iterator() : emptyIterator();
     }
@@ -178,11 +186,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+/*
         if (!supportsComponentType(componentType)) {
             Object [] params = {componentType};
             throw new IllegalArgumentException(Util.getExceptionMessage(
                 Util.SUPPORTS_COMPONENT_ERROR_MESSAGE_ID, params));
         }
+*/
 
         return attributeTable != null? attributeTable.keySet().iterator() : emptyIterator();
 
@@ -196,13 +206,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	    };
     }
 
-    public boolean supportsComponentType(UIComponent component) {
-        if ( component == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
-        }     
-        return supportsComponentType(component.getComponentType());
-    }
-    
     public void addConversionErrorMessage( FacesContext facesContext, 
             UIComponent comp, String errorMessage ) {
         Object[] params = new Object[3];
@@ -427,6 +430,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * apply to all renderers.
      */
     protected Converter getConverter(UIComponent component) {
+//FIXME
+/*
         String converterId = component.getConverter();
         if (converterId == null) {
             return (null);
@@ -438,6 +443,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         } catch (Exception e) {
             return (null);
         }
+*/
+        return null;
     }
 
     public String getClientId(FacesContext context, UIComponent component){

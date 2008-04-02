@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.3 2003/03/12 19:53:43 rkitain Exp $
+ * $Id: TestProcessEvents.java,v 1.4 2003/04/29 20:52:32 eburns Exp $
  */
 
 /*
@@ -29,7 +29,6 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIInput;
-import javax.faces.component.AttributeDescriptor;
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.RIConstants;
@@ -44,7 +43,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.3 2003/03/12 19:53:43 rkitain Exp $
+ * @version $Id: TestProcessEvents.java,v 1.4 2003/04/29 20:52:32 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

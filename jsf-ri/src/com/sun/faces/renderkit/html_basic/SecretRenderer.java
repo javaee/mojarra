@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.40 2003/02/20 22:49:01 ofung Exp $
+ * $Id: SecretRenderer.java,v 1.41 2003/04/29 20:51:55 eburns Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.util.Iterator;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
@@ -35,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.40 2003/02/20 22:49:01 ofung Exp $
+ * @version $Id: SecretRenderer.java,v 1.41 2003/04/29 20:51:55 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -79,13 +78,6 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
     //
     // Methods From Renderer
     //
-
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        return (componentType.equals(UIInput.TYPE));
-    }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {

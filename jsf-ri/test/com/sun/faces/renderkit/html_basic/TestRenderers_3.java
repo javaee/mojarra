@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.14 2003/04/01 19:25:45 jvisvanathan Exp $
+ * $Id: TestRenderers_3.java,v 1.15 2003/04/29 20:52:37 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -43,7 +43,7 @@ import com.sun.faces.tree.SimpleTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.14 2003/04/01 19:25:45 jvisvanathan Exp $
+ * @version $Id: TestRenderers_3.java,v 1.15 2003/04/29 20:52:37 eburns Exp $
  * 
  *
  */
@@ -177,15 +177,6 @@ public class TestRenderers_3 extends JspFacesTestCase {
         getFacesContext().getResponseWriter().write("\n");
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-        boolean result =
-            selectManyListboxRenderer.supportsComponentType(
-                "javax.faces.component.UISelectMany");
-        assertTrue(result);
-        result = selectManyListboxRenderer.supportsComponentType(selectMany);
-        assertTrue(result);
-        result = selectManyListboxRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testSelectManyCheckboxListRenderer(UIComponent root)
@@ -228,17 +219,6 @@ public class TestRenderers_3 extends JspFacesTestCase {
         getFacesContext().getResponseWriter().write("\n");
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result =
-            selectManyCheckboxListRenderer.supportsComponentType(
-                "javax.faces.component.UISelectMany");
-        assertTrue(result);
-        result =
-            selectManyCheckboxListRenderer.supportsComponentType(selectMany);
-        assertTrue(result);
-        result = selectManyCheckboxListRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testSelectManyMenuRenderer(UIComponent root)
@@ -276,16 +256,6 @@ public class TestRenderers_3 extends JspFacesTestCase {
         getFacesContext().getResponseWriter().write("\n");
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result =
-            selectManyMenuRenderer.supportsComponentType(
-                "javax.faces.component.UISelectMany");
-        assertTrue(result);
-        result = selectManyMenuRenderer.supportsComponentType(selectMany);
-        assertTrue(result);
-        result = selectManyMenuRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 
     public void testSelectOneMenuRenderer(UIComponent root)
@@ -322,16 +292,6 @@ public class TestRenderers_3 extends JspFacesTestCase {
         getFacesContext().getResponseWriter().write("\n");
         getFacesContext().getResponseWriter().flush();
 
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result =
-            selectOneMenuRenderer.supportsComponentType(
-                "javax.faces.component.UISelectOne");
-        assertTrue(result);
-        result = selectOneMenuRenderer.supportsComponentType(selectOne);
-        assertTrue(result);
-        result = selectOneMenuRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
     
     public void testHiddenRenderer(UIComponent root) throws IOException {
@@ -385,15 +345,5 @@ public class TestRenderers_3 extends JspFacesTestCase {
         hiddenRenderer.encodeEnd(getFacesContext(), input2);
         getFacesContext().getResponseWriter().flush();
        
-
-        System.out.println("    Testing supportsComponentType methods..");
-
-        boolean result = false;
-        result = hiddenRenderer.supportsComponentType("javax.faces.component.UIInput");
-        assertTrue(result);
-        result = hiddenRenderer.supportsComponentType(input1);
-        assertTrue(result);
-        result = hiddenRenderer.supportsComponentType("FooBar");
-        assertTrue(!result);
     }
 } // end of class TestRenderers_3

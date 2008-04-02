@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.39 2003/04/15 17:07:58 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.40 2003/04/29 20:51:55 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import com.sun.faces.util.Util;
 
 import java.util.Iterator;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
@@ -46,7 +45,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.39 2003/04/15 17:07:58 jvisvanathan Exp $
+ * @version $Id: RadioRenderer.java,v 1.40 2003/04/29 20:51:55 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -91,13 +90,6 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
     // Methods From Renderer
     //
 
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UISelectOne.TYPE));
-    }
-
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
         if (context == null || component == null) {
@@ -122,9 +114,11 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	int border = 0;
 
         // cast component to UISelectOne.
+/* FIXME
         if ( supportsComponentType(component)) {
             uiSelectOne = (UISelectOne) component;
         }    
+*/
 
         Iterator items = Util.getSelectItemWrappers(context, uiSelectOne);
 	SelectItem curItem = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.14 2003/03/12 19:53:43 rkitain Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.15 2003/04/29 20:52:33 eburns Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.validator.Validator;
-import javax.faces.component.AttributeDescriptor;
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.context.FacesContextImpl;
@@ -39,7 +38,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.14 2003/03/12 19:53:43 rkitain Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.15 2003/04/29 20:52:33 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -137,9 +136,6 @@ public void testCallback()
 
     // add the validator
     Validator validator = new Validator() {
-        public AttributeDescriptor getAttributeDescriptor(String name) {
-            return null;
-        }
         public Iterator getAttributeNames() {
             return null;
         }

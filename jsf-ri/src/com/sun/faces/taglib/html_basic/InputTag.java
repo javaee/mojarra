@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.5 2003/02/20 22:49:16 ofung Exp $
+ * $Id: InputTag.java,v 1.6 2003/04/29 20:52:06 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.taglib.FacesTag;
 
 /**
  *
- * @version $Id: InputTag.java,v 1.5 2003/02/20 22:49:16 ofung Exp $
+ * @version $Id: InputTag.java,v 1.6 2003/04/29 20:52:06 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -111,6 +111,7 @@ public abstract class InputTag extends FacesTag
 	}
     }
 
+    public String getComponentType() { return "Input"; }
     
 //
 // Methods from TagSupport

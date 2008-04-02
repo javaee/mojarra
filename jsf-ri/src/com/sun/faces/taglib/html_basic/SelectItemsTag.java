@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsTag.java,v 1.3 2003/02/20 22:49:19 ofung Exp $
+ * $Id: SelectItemsTag.java,v 1.4 2003/04/29 20:52:09 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectItemsTag.java,v 1.3 2003/02/20 22:49:19 ofung Exp $
+ * @version $Id: SelectItemsTag.java,v 1.4 2003/04/29 20:52:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -78,6 +78,7 @@ public SelectItemsTag()
 // General Methods
 //
     public String getLocalRendererType() { return null; }
+    public String getComponentType() { return null; }
 
 
 //

@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.21 2003/04/08 17:46:15 jvisvanathan Exp $
+ * $Id: NumberRenderer.java,v 1.22 2003/04/29 20:51:55 eburns Exp $
  */
 
 /*
@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.Date;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
@@ -49,7 +48,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.21 2003/04/08 17:46:15 jvisvanathan Exp $
+ * @version $Id: NumberRenderer.java,v 1.22 2003/04/29 20:51:55 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,13 +92,6 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
     //
     // Methods From Renderer
     //
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UIInput.TYPE) || 
-                componentType.equals(UIOutput.TYPE));
-    }
 
     public Object getConvertedValue(FacesContext context, UIComponent component,
             String newValue) throws ConverterException {
@@ -194,8 +186,7 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
             String currentValue, StringBuffer buffer ) {
                 
         boolean isInput = false;
-        if ((UIInput.TYPE.equals(component.getComponentType())) ||
-            (component instanceof UIInput)) {
+        if (component instanceof UIInput) {
             isInput = true;
         }
         String styleClass = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.7 2003/04/01 19:25:40 jvisvanathan Exp $
+ * $Id: HiddenRenderer.java,v 1.8 2003/04/29 20:51:51 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import com.sun.faces.util.Util;
 
 import java.util.Iterator;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
@@ -40,7 +39,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HiddenRenderer.java,v 1.7 2003/04/01 19:25:40 jvisvanathan Exp $
+ * @version $Id: HiddenRenderer.java,v 1.8 2003/04/29 20:51:51 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,13 +83,6 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
     //
     // Methods From Renderer
     //
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UIInput.TYPE));
-    }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {

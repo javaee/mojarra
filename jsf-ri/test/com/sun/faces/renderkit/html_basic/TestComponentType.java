@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentType.java,v 1.2 2003/02/20 22:50:04 ofung Exp $
+ * $Id: TestComponentType.java,v 1.3 2003/04/29 20:52:35 eburns Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ package com.sun.faces.renderkit.html_basic;
 import javax.faces.FacesException;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIOutput;
@@ -35,7 +34,7 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestComponentType.java,v 1.2 2003/02/20 22:50:04 ofung Exp $
+ * @version $Id: TestComponentType.java,v 1.3 2003/04/29 20:52:35 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

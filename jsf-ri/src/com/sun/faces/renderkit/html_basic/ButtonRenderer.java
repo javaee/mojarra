@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.47 2003/03/24 19:45:33 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.48 2003/04/29 20:51:48 eburns Exp $
  */
 
 /*
@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.MissingResourceException;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
@@ -51,7 +50,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.47 2003/03/24 19:45:33 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.48 2003/04/29 20:51:48 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -158,14 +157,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // Methods From Renderer
     //
-
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UICommand.TYPE));
-    }
 
     public void decode(FacesContext context, UIComponent component) 
             throws IOException {

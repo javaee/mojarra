@@ -32,6 +32,14 @@
     </validator-class>
   </validator>
 
+  <!-- ============== Configuration Listener ============== -->
+
+  <!-- This ServletContextListener causes Faces configuration parsing
+       to occur.                                                     -->
+  <listener>
+    <listener-class>com.sun.faces.config.ConfigListener</listener-class>
+  </listener>
+
    <tag>
       <name>attribute</name>
       <tag-class>javax.faces.webapp.AttributeTag</tag-class>

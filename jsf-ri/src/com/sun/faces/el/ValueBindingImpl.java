@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.6 2003/04/18 16:20:56 rkitain Exp $
+ * $Id: ValueBindingImpl.java,v 1.7 2003/04/29 20:51:46 eburns Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package com.sun.faces.el;
 import java.util.Map;
 import java.util.List;
 
-import javax.faces.application.Application;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.context.FacesContext;
@@ -24,6 +23,7 @@ import org.mozilla.util.Assert;
 import com.sun.faces.el.impl.jstl.ELEvaluator;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import com.sun.faces.application.ApplicationImpl;
 
 public class ValueBindingImpl extends ValueBinding
 {
@@ -45,14 +45,14 @@ public class ValueBindingImpl extends ValueBinding
 
     protected String ref = null;
 
-    protected Application application = null;
+    protected ApplicationImpl application = null;
     protected static Map applicationMap = null;
 
 //
 // Constructors and Initializers    
 //
 
-    public ValueBindingImpl(Application application) { 
+    public ValueBindingImpl(ApplicationImpl application) { 
 	ParameterCheck.nonNull(application);
 	this.application = application;
 	
@@ -223,7 +223,17 @@ public class ValueBindingImpl extends ValueBinding
 	}
 	catch (Throwable e) {
 	    Object [] params = { toEvaluate };
-	    throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
+            //possible opportunity to create and install a managed bean
+            Object bean = application.createAndMaybeStoreManagedBeans
+                (context, getBeanName());
+
+            if ( bean != null) {
+                //re-evaluate expression
+                getValue(context, toEvaluate);
+            }
+            else {
+	        throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
+            }
 	}
 	return result;
     }
@@ -239,7 +249,18 @@ public class ValueBindingImpl extends ValueBinding
 	}
 	catch (Throwable e) {
 	    Object [] params = { ref };
-	    throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
+
+            //possible opportunity to create and install a managed bean
+            Object bean = application.createAndMaybeStoreManagedBeans
+                (context, getBeanName());
+
+            if ( bean != null) {
+                //re-evaluate expression
+                setValue(context, value);
+            }
+            else {
+	        throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
+            }
 	}
     }
 
@@ -380,6 +401,40 @@ public class ValueBindingImpl extends ValueBinding
 	}
 
 	return result;
+    }
+
+    //FIX_ME: REVIEW logic for getting Bean Name!
+    protected String getBeanName() {
+
+        if (!hasMultipleSegments()) {
+            return ref;
+        }
+
+        String first = null;
+        char [] str = ref.toCharArray();
+        int len = str.length;
+
+        for (int i = 0; i < str.length; i++) {
+            if ((str[i] == '[') || (str[i] == '.')) {
+                first = ref.substring(0, i);
+                break;
+            }
+        }
+
+        Object toTest = null;
+
+        if (null != (toTest = getValue(FacesContext.getCurrentInstance(), first))) {
+            // object is immutable so don't instantiate bean
+            if (application.getPropertyResolver().isReadOnly(toTest, first)) {
+                return null;
+            }
+            else {
+                //FIX_ME: need to fix logic to get BeanName
+                return first;
+            }
+        }
+
+        return null;
     }
 
 } // end of class ValueBindingImpl

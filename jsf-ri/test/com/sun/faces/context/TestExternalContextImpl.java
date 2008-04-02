@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.3 2003/04/01 17:39:15 rkitain Exp $
+ * $Id: TestExternalContextImpl.java,v 1.4 2003/04/29 20:52:26 eburns Exp $
  */
 
 /*
@@ -18,8 +18,8 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.context.FacesContext;
-import javax.faces.context.Message;
-import javax.faces.context.MessageImpl;
+import javax.faces.application.Message;
+import javax.faces.application.MessageImpl;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServlet;
@@ -62,7 +62,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.3 2003/04/01 17:39:15 rkitain Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.4 2003/04/29 20:52:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

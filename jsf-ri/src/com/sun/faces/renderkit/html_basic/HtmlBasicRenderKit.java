@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.42 2003/04/17 23:32:40 horwat Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.43 2003/04/29 20:51:51 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.42 2003/04/17 23:32:40 horwat Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.43 2003/04/29 20:51:51 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -440,10 +440,12 @@ public class HtmlBasicRenderKit extends RenderKit
 		    renderersByRendererType.get(rendererTypes[i]);
 		Assert.assert_it(null != curRenderer);
 		
+/*
 		if (curRenderer.supportsComponentType(componentType)) {
 		    result = i;
 		    break;
 		}
+*/
 	    }
 
 	    return result;
@@ -478,8 +480,10 @@ public class HtmlBasicRenderKit extends RenderKit
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-	String componentType = component.getComponentType();
-	return this.getRendererTypes(componentType);
+//FIXME
+//	String componentType = component.getComponentType();
+//	return this.getRendererTypes(componentType);
+        return null;
     }
 
     // The test for this class is in TestRenderKit.java

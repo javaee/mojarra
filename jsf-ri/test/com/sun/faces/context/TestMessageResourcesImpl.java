@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageResourcesImpl.java,v 1.4 2003/02/20 22:49:52 ofung Exp $
+ * $Id: TestMessageResourcesImpl.java,v 1.5 2003/04/29 20:52:29 eburns Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.context.FacesContext;
 import javax.faces.context.MessageResources;
-import javax.faces.context.Message;
+import javax.faces.application.Message;
 import com.sun.faces.context.MessageResourcesImpl;
 import com.sun.faces.util.Util;
 import java.util.Iterator;
@@ -31,7 +31,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageResourcesImpl.java,v 1.4 2003/02/20 22:49:52 ofung Exp $
+ * @version $Id: TestMessageResourcesImpl.java,v 1.5 2003/04/29 20:52:29 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

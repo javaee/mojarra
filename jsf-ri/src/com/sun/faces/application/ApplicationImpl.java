@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.6 2003/04/18 16:20:55 rkitain Exp $
+ * $Id: ApplicationImpl.java,v 1.7 2003/04/29 20:51:30 eburns Exp $
  */
 
 /*
@@ -9,24 +9,34 @@
 
 package com.sun.faces.application;
 
+import java.util.Iterator;
+import java.util.HashMap;
+
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.MessageResources;
+import javax.faces.convert.Converter;
 import javax.faces.event.ActionListener;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.ReferenceSyntaxException;
+import javax.faces.el.PropertyNotFoundException;
 import javax.faces.application.NavigationHandler;
 import javax.faces.event.PhaseId;
+import javax.faces.validator.Validator;
+import javax.faces.FacesException;
 
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
-
-import java.util.HashMap;
-
+import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.util.Util;
+
+import org.mozilla.util.Assert;
+
 
 
 /**
@@ -243,4 +253,117 @@ public class ApplicationImpl extends Application {
 
         this.variableResolver = resolver;
     }
+
+    public void addComponent(String componentType, String componentClass) {
+    }
+
+    public UIComponent getComponent(String componentType) throws FacesException {
+        return null;
+    }
+
+    public Iterator getComponentTypes() {
+        return null;
+    }
+
+    public void addConverter(String converterId, String converterClass) {
+    }
+
+    public Converter getConverter(String converterId) throws FacesException {
+        return null;
+    }
+
+    public Iterator getConverterIds() {
+        return null;
+    }
+
+    public void addMessageResources(String messageResourcesId, String messageResourcesClass) {
+    }
+
+    public MessageResources getMessageResources(String messageResourcesId) 
+        throws FacesException {
+        return null;
+    }
+
+    public Iterator getMessageResourcesIds() { 
+	return null;
+    }
+
+    public void addValidator(String validatorId, String validatorClass) {
+    }
+
+    public Validator getValidator(String validatorId) throws FacesException {
+        return null;
+    }
+
+    public Iterator getValidatorIds() {
+        return null;
+    }
+
+
+    private static final String APPLICATION = "application";
+    private static final String SESSION = "session";
+    private static final String REQUEST = "request";
+
+    protected HashMap managedBeanFactories;
+
+    /**
+     * The ConfigFile managed has populated the managedBeanFactories
+     * HashMap with ManagedBeanFactory object keyed by the bean name.
+     * Find the ManagedBeanFactory object and if it exists instantiate
+     * the bean and store it in the appropriate scope, if any.
+     */
+    public Object createAndMaybeStoreManagedBeans(FacesContext context,
+        String managedBeanName) throws PropertyNotFoundException {
+
+        ManagedBeanFactory managedBean = (ManagedBeanFactory) 
+            managedBeanFactories.get(managedBeanName);
+        if ( managedBean == null ) {
+            return null;
+        }
+    
+        Object bean;
+        try {
+            bean = managedBean.newInstance();
+        } catch (Exception ex) {
+            //FIX_ME: I18N error message
+            throw new PropertyNotFoundException("Error instantiating bean", ex);
+        }
+        //add bean to appropriate scope
+        String scope = managedBean.getScope();
+        //scope cannot be null
+        Assert.assert_it(null != scope);
+
+        if (scope.equalsIgnoreCase(APPLICATION)) {
+            context.getExternalContext().
+                getApplicationMap().put(managedBeanName, bean);
+        }
+        else if (scope.equalsIgnoreCase(SESSION)) {
+            context.getExternalContext().
+                getSessionMap().put(managedBeanName, bean);
+        }
+        else if (scope.equalsIgnoreCase(REQUEST)) {
+            context.getExternalContext().
+                getRequestMap().put(managedBeanName, bean);
+        }
+
+        return bean;
+    }
+
+    /**
+     * ConfigFiles manager populates the managedBeanFactories
+     * HashMap with ManagedBeanFactory Objects.
+     */
+    public void addManagedBeanFactory(String managedBeanName,
+                                      ManagedBeanFactory factory) {
+
+        managedBeanFactories.put(managedBeanName, factory);
+    }
+
+    /**
+     * Clear Hashmap when ConfigFile is reparsed.
+     */
+    public void clearManagedBeanFactories() {
+        managedBeanFactories = new HashMap();
+    }
+
 }

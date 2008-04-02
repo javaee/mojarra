@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.26 2003/03/28 18:01:40 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.27 2003/04/29 20:52:36 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.26 2003/03/28 18:01:40 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.27 2003/04/29 20:52:36 eburns Exp $
  * 
  *
  */
@@ -176,14 +176,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         formRenderer.encodeEnd(getFacesContext(), uiForm);
         getFacesContext().getResponseWriter().write("\n");
         
-        // test supportComponentType method
-        System.out.println("Testing supportsComponentType method"); 
-        result = formRenderer.supportsComponentType("Test"); 
-        assertTrue(!result);
-
-        result = formRenderer.supportsComponentType(uiForm); 
-        assertTrue(result);
-	
 	// test that our form number is correct.
 	Integer formNumber = (Integer)
 	    uiForm.getAttribute(RIConstants.FORM_NUMBER_ATTR);
@@ -235,13 +227,6 @@ public class TestRenderers_1 extends JspFacesTestCase
             throw new FacesException("Exception while flushing buffer");
         } 
 
-        // test supportComponentType method
-        System.out.println("Testing supportsComponentType method"); 
-        result = buttonRenderer.supportsComponentType("Test"); 
-        assertTrue(!result);
-
-        result = buttonRenderer.supportsComponentType(uiCommand); 
-        assertTrue(result);
     }
     
     public void verifyRadioRenderer(UIComponent root) throws IOException {
@@ -275,13 +260,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         radioRenderer.encodeBegin(getFacesContext(), uiSelectOne);
         radioRenderer.encodeEnd(getFacesContext(), uiSelectOne);
        
-        // test supportComponentType method
-        System.out.println("Testing supportsComponentType method"); 
-        result = radioRenderer.supportsComponentType("Test"); 
-        assertTrue(!result);
-
-        result = radioRenderer.supportsComponentType(uiSelectOne); 
-        assertTrue(result);
     }
     
 } // end of class TestRenderers_1

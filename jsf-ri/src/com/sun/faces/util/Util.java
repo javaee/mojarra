@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.54 2003/04/04 22:47:32 eburns Exp $
+ * $Id: Util.java,v 1.55 2003/04/29 20:52:22 eburns Exp $
  */
 
 /*
@@ -25,9 +25,9 @@ import javax.faces.tree.TreeFactory;
 import javax.faces.context.FacesContextFactory;
 
 import javax.faces.FactoryFinder;
-import javax.faces.context.MessageResourcesFactory;
+import javax.faces.application.Message;
+//import javax.faces.context.MessageResourcesFactory;
 import javax.faces.context.MessageResources;
-import javax.faces.context.Message;
 
 
 import javax.faces.application.Application;
@@ -57,7 +57,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.54 2003/04/04 22:47:32 eburns Exp $
+ * @version $Id: Util.java,v 1.55 2003/04/29 20:52:22 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -333,11 +333,13 @@ private Util()
      */
     public static synchronized MessageResources getMessageResources() {
         MessageResources resources = null;
+/* FIXME
 	MessageResourcesFactory factory = (MessageResourcesFactory)
 	    FactoryFinder.getFactory
 	    (FactoryFinder.MESSAGE_RESOURCES_FACTORY);
 	resources = factory.getMessageResources
 	    (MessageResourcesFactory.FACES_IMPL_MESSAGES);
+*/
 	
         return (resources);
     }

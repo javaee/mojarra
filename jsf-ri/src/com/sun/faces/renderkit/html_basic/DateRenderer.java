@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.22 2003/04/08 17:46:13 jvisvanathan Exp $
+ * $Id: DateRenderer.java,v 1.23 2003/04/29 20:51:50 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.22 2003/04/08 17:46:13 jvisvanathan Exp $
+ * @version $Id: DateRenderer.java,v 1.23 2003/04/29 20:51:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -116,13 +116,6 @@ public class DateRenderer extends HtmlBasicInputRenderer {
     //
     // Methods From Renderer
     //
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UIInput.TYPE) || 
-		componentType.equals(UIOutput.TYPE));
-    }
 
      public Object getConvertedValue(FacesContext context, UIComponent component,
             String newValue) throws ConverterException {
@@ -188,8 +181,7 @@ public class DateRenderer extends HtmlBasicInputRenderer {
             String currentValue, StringBuffer buffer ) {
                 
         boolean isInput = false;
-        if ((UIInput.TYPE.equals(component.getComponentType())) ||
-            (component instanceof UIInput)) {
+        if (component instanceof UIInput) {
             isInput = true;
         }
         String styleClass = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.11 2003/04/29 03:57:35 eburns Exp $
+ * $Id: UseFacesTag.java,v 1.12 2003/04/29 20:52:19 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.11 2003/04/29 03:57:35 eburns Exp $
+ * @version $Id: UseFacesTag.java,v 1.12 2003/04/29 20:52:19 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -190,14 +190,13 @@ public class UseFacesTag extends FacesBodyTag
 
     /**
 
-    * @return the root of the <code>UIComponent</code> tree
+    * This should never get called for UseFacesTag.
 
-    */
-    
-    public UIComponent createComponent() {
-	UIComponent result = context.getTree().getRoot();
-	result.setRendered(false);
-        return result;
+    */ 
+
+    public String getComponentType() {
+	Assert.assert_it(false);
+	throw new IllegalStateException();
     }    
 
     protected boolean isSuppressed() {

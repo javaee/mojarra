@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlBasicValidator.java,v 1.4 2003/03/12 19:54:19 rkitain Exp $
+ * $Id: TestHtmlBasicValidator.java,v 1.5 2003/04/29 20:52:39 eburns Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponentBase;
 import javax.faces.validator.Validator;
-import javax.faces.component.AttributeDescriptor;
 
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.FileOutputResponseWrapper;
@@ -53,7 +52,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlBasicValidator.java,v 1.4 2003/03/12 19:54:19 rkitain Exp $
+ * @version $Id: TestHtmlBasicValidator.java,v 1.5 2003/04/29 20:52:39 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

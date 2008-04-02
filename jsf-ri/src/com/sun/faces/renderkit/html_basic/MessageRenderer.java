@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.17 2003/04/04 22:47:28 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.18 2003/04/29 20:51:55 eburns Exp $
  */
 
 /*
@@ -18,7 +18,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIParameter;
@@ -40,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.17 2003/04/04 22:47:28 eburns Exp $
+ * @version $Id: MessageRenderer.java,v 1.18 2003/04/29 20:51:55 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,13 +83,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
     //
     // Methods From Renderer
     //
-
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        return (componentType.equals(UIOutput.TYPE));
-    }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
@@ -141,9 +133,11 @@ public class MessageRenderer extends HtmlBasicRenderer {
             }
         }
 
+/* FIXME
         if ( supportsComponentType(component)) {
             output = (UIOutput) component;
         }
+*/
        
         ArrayList parameterList = new ArrayList();
 

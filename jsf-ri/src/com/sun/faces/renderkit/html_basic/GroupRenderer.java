@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.7 2003/04/04 22:47:28 eburns Exp $
+ * $Id: GroupRenderer.java,v 1.8 2003/04/29 20:51:51 eburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import com.sun.faces.util.Util;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method. 
  *
- * @version $Id: GroupRenderer.java,v 1.7 2003/04/04 22:47:28 eburns Exp $
+ * @version $Id: GroupRenderer.java,v 1.8 2003/04/29 20:51:51 eburns Exp $
  *  
  */
 public class GroupRenderer extends HtmlBasicRenderer {
@@ -62,14 +62,6 @@ public class GroupRenderer extends HtmlBasicRenderer {
     //
     // Methods From Renderer
     //
-
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UIPanel.TYPE));
-    }
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {

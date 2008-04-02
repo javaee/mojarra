@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.22 2003/03/27 07:34:33 rkitain Exp $
+ * $Id: TestFacesContextImpl.java,v 1.23 2003/04/29 20:52:27 eburns Exp $
  */
 
 /*
@@ -16,8 +16,8 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.context.FacesContext;
-import javax.faces.context.Message;
-import javax.faces.context.MessageImpl;
+import javax.faces.application.Message;
+import javax.faces.application.MessageImpl;
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
 import javax.servlet.ServletResponse;
@@ -52,7 +52,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.22 2003/03/27 07:34:33 rkitain Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.23 2003/04/29 20:52:27 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

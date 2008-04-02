@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.9 2003/03/15 05:39:33 rkitain Exp $
+ * $Id: MessageResourcesImpl.java,v 1.10 2003/04/29 20:51:42 eburns Exp $
  */
 
 /*
@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 import javax.faces.FacesException;
-import javax.faces.context.MessageImpl;
-import javax.faces.context.Message;
+import javax.faces.application.MessageImpl;
+import javax.faces.application.Message;
 import javax.faces.context.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;

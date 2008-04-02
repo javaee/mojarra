@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.36 2003/04/03 21:51:40 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.37 2003/04/29 20:51:41 eburns Exp $
  */
 
 /*
@@ -19,11 +19,12 @@ import java.util.Properties;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.faces.FacesException;     
+import javax.faces.application.Application;
+import javax.faces.application.Message;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
-import javax.faces.context.Message;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.lifecycle.Lifecycle;

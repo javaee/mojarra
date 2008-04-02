@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.36 2003/03/26 21:37:12 horwat Exp $
+ * $Id: FormTag.java,v 1.37 2003/04/29 20:52:06 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FormTag.java,v 1.36 2003/03/26 21:37:12 horwat Exp $
+ * @version $Id: FormTag.java,v 1.37 2003/04/29 20:52:06 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -86,6 +86,7 @@ public FormTag()
 //
 
     public String getLocalRendererType() { return "Form"; }
+    public String getComponentType() { return "Form"; }
 
     public UIComponent createComponent() {
         return (new UIForm());

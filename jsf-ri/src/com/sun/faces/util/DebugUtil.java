@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.10 2003/03/19 21:16:43 jvisvanathan Exp $
+ * $Id: DebugUtil.java,v 1.11 2003/04/29 20:52:22 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.io.PrintStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.10 2003/03/19 21:16:43 jvisvanathan Exp $
+ * @version $Id: DebugUtil.java,v 1.11 2003/04/29 20:52:22 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -122,7 +122,9 @@ public static void printTree(UIComponent root, PrintStream out)
     int i = 0;
     Object value = null;
     
+/* FIXME
     indentPrintln(out, "===>Type:" + root.getComponentType());
+*/
     indentPrintln(out, "id:"+root.getComponentId());
 
     if ( root instanceof UIOutput) {

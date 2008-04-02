@@ -1,5 +1,5 @@
 /*
- * $Id: MessageCatalog.java,v 1.3 2003/02/20 22:48:36 ofung Exp $
+ * $Id: MessageCatalog.java,v 1.4 2003/04/29 20:51:41 eburns Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package com.sun.faces.context;
 import java.util.HashMap;
 import java.util.Locale;
 
-import javax.faces.context.Message;
+import javax.faces.application.Message;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
@@ -21,7 +21,7 @@ import org.mozilla.util.ParameterCheck;
  *
  *  <B>MessageCatalog</B> maintains a list of messages for a particular locale.
  *
- * @version $Id: MessageCatalog.java,v 1.3 2003/02/20 22:48:36 ofung Exp $
+ * @version $Id: MessageCatalog.java,v 1.4 2003/04/29 20:51:41 eburns Exp $
  * 
  * @see com.sun.faces.context.MessageTemplate
  *

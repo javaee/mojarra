@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.4 2003/03/13 01:06:35 eburns Exp $
+ * $Id: ActionListenerTag.java,v 1.5 2003/04/29 20:52:19 eburns Exp $
  */
 
 /*
@@ -111,7 +111,7 @@ public class ActionListenerTag extends TagSupport {
 
         //only apply to UICommand components
 
-        if (component.getComponentType().equals(UICommand.TYPE)) {
+        if (component instanceof UICommand) {
             ((UICommand)component).addActionListener(handler);
         }
 

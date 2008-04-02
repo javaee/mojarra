@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.5 2003/03/11 01:20:26 jvisvanathan Exp $
+ * $Id: TestConverters.java,v 1.6 2003/04/29 20:52:31 eburns Exp $
  */
 
 /*
@@ -11,7 +11,7 @@
 
 package com.sun.faces.convert;
 
-import com.sun.faces.convert.ConverterFactoryImpl;
+import com.sun.faces.application.ApplicationFactoryImpl;
 
 import java.util.Iterator;
 import java.util.Date;
@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
 
+import javax.faces.application.Application;
 import javax.faces.component.SelectItem;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UICommand;
@@ -36,7 +37,7 @@ import javax.faces.convert.ConverterException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.context.MessageImpl;
+import javax.faces.application.MessageImpl;
 import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
 
@@ -50,7 +51,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.5 2003/03/11 01:20:26 jvisvanathan Exp $
+ * @version $Id: TestConverters.java,v 1.6 2003/04/29 20:52:31 eburns Exp $
  * 
  *
  */
@@ -119,14 +120,17 @@ public class TestConverters extends JspFacesTestCase
     // General Methods
     //
 
-    public void testDateConverter(UIComponent root) throws ConverterException {
+    public void testDateConverter(UIComponent root) throws ConverterException,
+        InstantiationException, IllegalAccessException, ClassNotFoundException {
         System.out.println("Testing DateConverter");
         UIInput text = new UIInput();
         text.setComponentId("my_input_date");
         root.addChild(text);
 
-        ConverterFactoryImpl converterFactory = new ConverterFactoryImpl();
-        Converter converter = converterFactory.getConverter("Date");
+        Converter converter = null;
+        ApplicationFactoryImpl aFactory = new ApplicationFactoryImpl();
+        Application application = aFactory.getApplication();
+        converter = application.getConverter("Date");
 
         // date
         String stringToConvert = "Jan 1, 1967";
@@ -138,7 +142,7 @@ public class TestConverters extends JspFacesTestCase
         assertTrue(str.equals(stringToConvert));
 
         // time
-        converter = converterFactory.getConverter("Time");
+        converter = application.getConverter("Time");
         text = new UIInput();
         text.setComponentId("my_input_time");
         stringToConvert = "10:10:10 AM";
@@ -149,7 +153,7 @@ public class TestConverters extends JspFacesTestCase
         assertTrue(str.equals(stringToConvert));
 
         // datetime
-        converter = converterFactory.getConverter("DateTime");
+        converter = application.getConverter("DateTime");
         text = new UIInput();
         text.setComponentId("my_input_datetime");
         stringToConvert = "Jan 1, 1967 10:10:10 AM";
@@ -160,14 +164,16 @@ public class TestConverters extends JspFacesTestCase
         assertTrue(str.equals(stringToConvert));
     }
 
-    public void testNumberConverter(UIComponent root) throws ConverterException {
+    public void testNumberConverter(UIComponent root) throws ConverterException,
+        InstantiationException, IllegalAccessException, ClassNotFoundException {
         System.out.println("Tesing NumberConverter");
         UIInput text = new UIInput();
         text.setComponentId("my_input_number");
         root.addChild(text);
 
-        ConverterFactoryImpl converterFactory = new ConverterFactoryImpl();
-        Converter converter = converterFactory.getConverter("Number");
+        ApplicationFactoryImpl aFactory = new ApplicationFactoryImpl();
+        Application application = aFactory.getApplication();
+        Converter converter = application.getConverter("Number");
 
         String stringToConvert = "99.9";
         Object obj = converter.getAsObject(getFacesContext(), text,
@@ -178,14 +184,16 @@ public class TestConverters extends JspFacesTestCase
 
     }
 
-    public void testBooleanConverter(UIComponent root) throws ConverterException {
+    public void testBooleanConverter(UIComponent root) throws ConverterException,
+        InstantiationException, IllegalAccessException, ClassNotFoundException {
         System.out.println("Tesing BooleanConverter");
         UIInput text = new UIInput();
         text.setComponentId("my_input_boolean");
         root.addChild(text);
 
-        ConverterFactoryImpl converterFactory = new ConverterFactoryImpl();
-        Converter converter = converterFactory.getConverter("Boolean");
+        ApplicationFactoryImpl aFactory = new ApplicationFactoryImpl();
+        Application application = aFactory.getApplication();
+        Converter converter = application.getConverter("Boolean");
 
         String stringToConvert = "true";
         Object obj = converter.getAsObject(getFacesContext(), text,

@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.15 2003/04/03 18:39:05 rkitain Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.16 2003/04/29 20:52:33 eburns Exp $ 
  */ 
 
 
@@ -30,7 +30,6 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle; 
 import javax.faces.component.UIComponentBase; 
 import javax.faces.validator.Validator; 
-import javax.faces.component.AttributeDescriptor; 
 import javax.servlet.ServletException;
 
 import com.sun.faces.JspFacesTestCase; 
@@ -62,7 +61,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.15 2003/04/03 18:39:05 rkitain Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.16 2003/04/29 20:52:33 eburns Exp $ 
  * 
  * @see Blah 
  * @see Bloo 

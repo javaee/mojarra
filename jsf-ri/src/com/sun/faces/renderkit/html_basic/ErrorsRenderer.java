@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.11 2003/04/04 22:47:26 eburns Exp $
+ * $Id: ErrorsRenderer.java,v 1.12 2003/04/29 20:51:50 eburns Exp $
  */
 
 /*
@@ -15,11 +15,10 @@ import com.sun.faces.util.Util;
 
 import java.util.Iterator;
 
-import javax.faces.component.AttributeDescriptor;
+import javax.faces.application.Message;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
-import javax.faces.context.Message;
 import javax.faces.context.ResponseWriter;
 
 import org.mozilla.util.Assert;
@@ -37,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsRenderer.java,v 1.11 2003/04/04 22:47:26 eburns Exp $
+ * @version $Id: ErrorsRenderer.java,v 1.12 2003/04/29 20:51:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -81,12 +80,6 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
     //
     // Methods From Renderer
     //
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UIOutput.TYPE));
-    }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {

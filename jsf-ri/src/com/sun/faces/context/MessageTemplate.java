@@ -1,5 +1,5 @@
 /*
- * $Id: MessageTemplate.java,v 1.2 2003/02/20 22:48:37 ofung Exp $
+ * $Id: MessageTemplate.java,v 1.3 2003/04/29 20:51:42 eburns Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
 package com.sun.faces.context;
 
 import java.util.Locale;
-import javax.faces.context.Message;
+import javax.faces.application.Message;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;

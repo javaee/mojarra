@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.12 2003/04/04 22:47:28 eburns Exp $
+ * $Id: ImageRenderer.java,v 1.13 2003/04/29 20:51:52 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import com.sun.faces.util.Util;
 
 import java.util.Iterator;
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
@@ -35,7 +34,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.12 2003/04/04 22:47:28 eburns Exp $
+ * @version $Id: ImageRenderer.java,v 1.13 2003/04/29 20:51:52 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -79,12 +78,6 @@ public class ImageRenderer extends HtmlBasicRenderer {
     //
     // Methods From Renderer
     //
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
-        return (componentType.equals(UIGraphic.TYPE));
-    }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
