@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.86 2006/05/17 19:00:43 rlubke Exp $
+ * $Id: RIConstants.java,v 1.87 2006/05/22 17:16:01 rlubke Exp $
  */
 
 /*
@@ -45,8 +45,12 @@ public class RIConstants {
     public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX +
         RenderKitFactory.HTML_BASIC_RENDER_KIT;       
 
-    public static final String SAVESTATE_FIELD_MARKER = FACES_PREFIX +
-        "saveStateFieldMarker";
+    public static final String SAVESTATE_FIELD_DELIMITER = "~";
+    public static final String SAVESTATE_FIELD_MARKER = 
+          SAVESTATE_FIELD_DELIMITER 
+           + FACES_PREFIX 
+           + "saveStateFieldMarker" 
+           + SAVESTATE_FIELD_DELIMITER;
 
     public static final String LOGICAL_VIEW_MAP = FACES_PREFIX +
         "logicalViewMap";

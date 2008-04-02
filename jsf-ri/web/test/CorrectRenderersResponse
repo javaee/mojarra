@@ -1,9 +1,9 @@
 <form id="formRenderer0" name="formRenderer0" method="post" action="/test/JspRedirector/root;jsessionid=52128c0171351372c7e1c01f5fd07">
 
-com.sun.faces.saveStateFieldMarker<input type="hidden" name="formRenderer0" value="formRenderer0" /></form>
+~com.sun.faces.saveStateFieldMarker~<input type="hidden" name="formRenderer0" value="formRenderer0" /></form>
 <form id="formRenderer1" name="formRenderer1" method="post" action="/test/JspRedirector/root;jsessionid=52128c0171351372c7e1c01f5fd07">
 
-com.sun.faces.saveStateFieldMarker<input type="hidden" name="formRenderer1" value="formRenderer1" /></form>
+~com.sun.faces.saveStateFieldMarker~<input type="hidden" name="formRenderer1" value="formRenderer1" /></form>
 <table border="0" id="radioRenderer" class="styleClass">
 	<tr>
 <td>

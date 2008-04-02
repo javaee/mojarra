@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.4 2006/05/22 15:05:56 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.5 2006/05/22 17:16:02 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -463,6 +463,10 @@ public class WebConfiguration {
         InjectionProviderClass(
                 "com.sun.faces.InjectionProvider",
                 ""
+        ),
+        ResponseBufferSize(
+              "com.sun.faces.responseBufferSize",
+              "4096"
         );
 
         private String defaultValue;
@@ -570,11 +574,11 @@ public class WebConfiguration {
         ),
         CompressViewState(
               "com.sun.faces.compressViewState",
-              true
+              false
         ),
         CompressViewStateDeprecated(
               "com.sun.faces.COMPRESS_STATE",
-              true,
+              false,
               true,
               CompressViewState
         );

@@ -1,5 +1,5 @@
 /*
- * $Id: FastStringWriter.java,v 1.3 2006/03/29 23:03:45 rlubke Exp $
+ * $Id: FastStringWriter.java,v 1.4 2006/05/22 17:16:04 rlubke Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.io.Writer;
  */
 public class FastStringWriter extends Writer {
 
-    private StringBuilder builder;
+    protected StringBuilder builder;
 
     // ------------------------------------------------------------ Constructors
 
