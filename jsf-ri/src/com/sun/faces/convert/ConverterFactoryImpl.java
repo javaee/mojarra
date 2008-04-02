@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterFactoryImpl.java,v 1.2 2003/02/04 16:19:19 edburns Exp $
+ * $Id: ConverterFactoryImpl.java,v 1.3 2003/02/13 21:55:37 craigmcc Exp $
  */
 
 /*
@@ -33,6 +33,7 @@ public class ConverterFactoryImpl extends ConverterFactory {
 //
 // Protected Constants
 //
+    protected HashMap byClass = null;
     protected String converterId = null;
     protected String className = null;
     protected HashMap converters = null;
@@ -55,9 +56,31 @@ public class ConverterFactoryImpl extends ConverterFactory {
     public ConverterFactoryImpl() {
         super();
         digester = initConfig();
+        byClass = new HashMap();
         converters = new HashMap();
     }
     
+    /**
+     * Adds the {@link Converter} instance to the internal set.
+     *
+     * @param clazz Class supported by the specified {@link Converter}
+     * @param converter The Converter instance that will be added.
+     * @exception IllegalArgumentException if a {@link Converter} with the
+     *  specified <code>converterId</code> has already been registered
+     * @exception NullPointerException if <code>converterId</code>
+     *  or <code>converter</code> arguments are <code>null</code>
+     */
+    public void addConverter(Class clazz, Converter converter) {
+
+        if (clazz == null || converter == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
+        synchronized(byClass) {
+            byClass.put(clazz, converter);
+        }
+    }
+
     /**
      * Adds the {@link Converter} instance to the internal set.
      *
@@ -82,6 +105,67 @@ public class ConverterFactoryImpl extends ConverterFactory {
         synchronized(converters) {
             converters.put(converterId, converter);
         }
+    }
+
+    /**
+     * Return a {@link Converter} instance for the given converter 
+     * identifier.  If a {@link Converter} instance does not
+     * exist for the identifier, create one and add it to the
+     * internal table.
+     *
+     * @param clazz Class for which a Converter is requested
+     * @returns Converter A Converter instance.
+     * @exception FacesException if a {@link Converter} cannot be
+     *  constructed for the specified converter identifier
+     * @exception NullPointerException if <code>converterId</code>
+     *  argument is <code>null</code>
+     */ 
+    public Converter getConverter(Class clazz)
+        throws FacesException {
+
+        if (clazz == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
+        // PENDING(craigmcc): support registration of by-class converters
+        // in the configuration file.  We're fine for now, because the
+        // spec does not mandate any standard by-class converters
+
+        Class target = clazz;
+        Converter converter = null;
+        synchronized (byClass) {
+
+            while (target != null) {
+
+                // Try the exact-match case first
+                converter = (Converter) byClass.get(target);
+                if (converter != null) {
+                    if (target != clazz) {
+                        byClass.put(clazz, converter);
+                    }
+                    return (converter);
+                }
+
+                // Try the interfaces implemented by this class
+                Class interfaces[] = clazz.getInterfaces();
+                for (int i = 0; i < interfaces.length; i++) {
+                    converter = (Converter) byClass.get(interfaces[0]);
+                    if (converter != null) {
+                        byClass.put(clazz, converter);
+                        return (converter);
+                    }
+                }
+
+                // Recursively scan through our superclasses
+                target = target.getSuperclass();
+
+            }
+
+        }
+
+        return (null);
+
     }
 
     /**
@@ -173,9 +257,28 @@ public class ConverterFactoryImpl extends ConverterFactory {
      * @param className The fully qualified class name.
      */ 
     public void setConverterClass(String converterId, String className) {
+
+        // PENDING(craigmcc): This method should really not
+        // be public.  That can be avoided by creating a custom
+        // Digester rule (in the same package) that can call this
+        // method with package-level protection instead
+
         if (converterId.equalsIgnoreCase(this.converterId)) {
             this.className = className;
         }
+
+    }
+
+    /**
+     * Return an iteration of classes for which we have registered
+     * converters
+     *
+     * @returns Iterator The iteration of classes
+     */
+    public Iterator getConverterClasses() {
+
+        return (byClass.keySet().iterator());
+
     }
 
     /**
@@ -185,7 +288,15 @@ public class ConverterFactoryImpl extends ConverterFactory {
      * @returns Iterator The iteration of identfiers.
      */
     public Iterator getConverterIds() {
+
+        // PENDING(craigmcc): This iterator does not return
+        // the ids of the standard Converters until they have
+        // been retrieved by a call to getConverter() at least
+        // once.  This will be fixed by preloading the config
+        // file at startup instead of lazy instantiation
+
         return (converters.keySet().iterator());
+
     }
 
     private Digester initConfig() {
