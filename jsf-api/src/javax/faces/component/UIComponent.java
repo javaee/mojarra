@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.77 2003/03/14 01:40:01 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.78 2003/03/17 23:16:37 eburns Exp $
  */
 
 /*
@@ -681,7 +681,7 @@ public interface UIComponent extends Serializable {
     /**
      * <p>Perform the component tree processing required by the
      * <em>Reconstitute Component Tree</em> phase of the request processing
-     * lifecyc,e for all facets of this component, all children of this
+     * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>
      * <ul>
      * <li>Call the <code>processReconstitutes()</code> method of all facets
