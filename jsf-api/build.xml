@@ -522,8 +522,9 @@ jsf-api.jar.
 
   <target name="test.component" depends="build.test">
     <echo message="Running javax.faces.component tests ..."/>
-    <junit printSummary="no" fork="no"
+    <junit printSummary="no" fork="yes"
           haltonfailure="yes" haltonerror="yes">
+      <jvmarg line="${debug.jvm.args}"/>
       <classpath  refid="test.classpath"/>
       <formatter   type="plain"      usefile="false"/>
       <batchtest>
