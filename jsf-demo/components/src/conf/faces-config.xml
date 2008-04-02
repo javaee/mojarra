@@ -121,6 +121,50 @@
   <component>
     <component-type>Scroller</component-type>
     <component-class>components.components.ScrollerComponent</component-class>
+    <facet>
+
+      <description>This facet will render as the header of the table.
+      It should be a panelGroup with the same number of columns as the
+      data</description>
+      <display-name>header</display-name>
+      <facet-name>header</facet-name>
+    </facet>
+    <facet>
+
+      <description>This facet will render as the content of the "next"
+      widget in the scroller.  header of the table.  It should be a
+      panelGroup with an outputText that says "Next" in text, and also a
+      right arrow icon.</description> 
+      <display-name>next</display-name>
+      <facet-name>next</facet-name>
+    </facet>
+    <facet>
+
+      <description>This facet will render as the content of the "next"
+      widget in the scroller.  It should be a panelGroup with an
+      outputText that says "Next" in text, and also a right arrow
+      icon.</description> 
+      <display-name>next</display-name>
+      <facet-name>next</facet-name>
+    </facet>
+    <facet>
+
+      <description>This facet will render as the content of the "previous"
+      widget in the scroller.  It should be a panelGroup with an
+      outputText that says "Previous" in text, and also a left arrow
+      icon.</description> 
+      <display-name>next</display-name>
+      <facet-name>next</facet-name>
+    </facet>
+    <facet>
+
+      <description>This facet will render as the content of the
+      "current" widget in the scroller.  It shoud be an icon that
+      renders near the "current" page in the result set.</description>
+
+      <display-name>next</display-name>
+      <facet-name>next</facet-name>
+    </facet>
     
     <component-extension>
       <component-family>Scroller</component-family>
