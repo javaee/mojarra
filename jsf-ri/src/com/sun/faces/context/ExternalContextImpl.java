@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.31 2005/05/20 14:49:59 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.32 2005/06/01 14:03:31 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.31 2005/05/20 14:49:59 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.32 2005/06/01 14:03:31 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -86,7 +86,7 @@ public class ExternalContextImpl extends ExternalContext {
         // PENDING(edburns): Craig's workaround breaks
         // TestValidatorTags.java because Cactus expects a certain type
         // to be present for the value of the request.
-        if (RIConstants.IS_UNIT_TEST_MODE) {
+        if (Util.isUnitTestModeEnabled()) {
             this.request = request;
         } else {
             // PENDING(craigmcc) - Work around a Tomcat 4.1 and 5.0 bug

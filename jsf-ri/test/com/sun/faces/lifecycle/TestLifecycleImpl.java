@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.34 2005/05/02 19:27:15 edburns Exp $
+ * $Id: TestLifecycleImpl.java,v 1.35 2005/06/01 14:03:40 rlubke Exp $
  */
 
 /*
@@ -11,11 +11,6 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.JspFacesTestCase;
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
-import org.apache.cactus.WebRequest;
-
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
@@ -23,14 +18,18 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-import javax.servlet.http.HttpSession;
+
+import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.util.Util;
+
+import org.apache.cactus.WebRequest;
 
 /**
  * <B>TestLifecycleImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.34 2005/05/02 19:27:15 edburns Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.35 2005/06/01 14:03:40 rlubke Exp $
  */
 
 public class TestLifecycleImpl extends JspFacesTestCase {
@@ -98,7 +97,7 @@ public class TestLifecycleImpl extends JspFacesTestCase {
 
 
     public void setUp() {
-        RIConstants.IS_UNIT_TEST_MODE = true;
+        Util.setUnitTestModeEnabled(true);
         super.setUp();
 	FacesContext context = getFacesContext();
         UIViewRoot root = Util.getViewHandler(context).createView(context, null);

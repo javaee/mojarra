@@ -679,7 +679,8 @@ jsf-api.jar.
           haltonfailure="yes" haltonerror="yes">
       <jvmarg line="${debug.jvm.args}"/>
       <jvmarg line="${jvm.assertions}"/>
-      <classpath  refid="test.classpath"/>
+      <jvmarg line="-Djava.endorsed.dirs=${endorsed.dirs}"/>
+        <classpath  refid="test.classpath"/>
       <formatter   type="plain" usefile="false"/>
       <formatter   type="xml" usefile="true"/>
       <batchtest todir="${test.results.dir}">
@@ -697,7 +698,8 @@ jsf-api.jar.
           haltonfailure="yes" haltonerror="yes">
       <jvmarg line="${debug.jvm.args}"/>
       <jvmarg line="${jvm.assertions}"/>
-      <classpath  refid="test.classpath"/>
+      <jvmarg line="-Djava.endorsed.dirs=${endorsed.dirs}"/>
+        <classpath  refid="test.classpath"/>
       <formatter   type="plain"      usefile="false"/>
       <formatter   type="xml" usefile="true"/>
       <batchtest todir="${test.results.dir}">
@@ -727,7 +729,8 @@ jsf-api.jar.
           haltonfailure="yes" haltonerror="yes">
       <jvmarg line="${debug.jvm.args}"/>
       <jvmarg line="${jvm.assertions}"/>
-      <classpath  refid="test.classpath"/>
+      <jvmarg line="-Djava.endorsed.dirs=${endorsed.dirs}"/>
+        <classpath  refid="test.classpath"/>
       <formatter   type="plain"      usefile="false"/>
       <formatter   type="xml" usefile="true"/>
       <batchtest todir="${test.results.dir}">
@@ -743,7 +746,8 @@ jsf-api.jar.
           haltonfailure="yes" haltonerror="yes">
       <jvmarg line="${debug.jvm.args}"/>
       <jvmarg line="${jvm.assertions}"/>
-      <sysproperty key="base.dir" value="${basedir}"/>
+      <jvmarg line="-Djava.endorsed.dirs=${endorsed.dirs}"/>
+        <sysproperty key="base.dir" value="${basedir}"/>
       <classpath  refid="test.classpath"/>
       <formatter   type="plain"      usefile="false"/>
       <formatter   type="xml" usefile="true"/>

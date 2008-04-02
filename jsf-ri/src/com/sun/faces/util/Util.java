@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.161 2005/05/23 14:38:34 rlubke Exp $
+ * $Id: Util.java,v 1.162 2005/06/01 14:03:38 rlubke Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import java.text.MessageFormat;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.161 2005/05/23 14:38:34 rlubke Exp $
+ * @version $Id: Util.java,v 1.162 2005/06/01 14:03:38 rlubke Exp $
  */
 
 public class Util extends Object {
@@ -424,7 +424,21 @@ public class Util extends Object {
     //attrs above All renderers that need this attribute should manually
     //pass it.
 
+    /**
+     * Flag that, when true, enables special behavior in the RI to enable
+     * unit testing.
+     */
+    private static boolean unitTestModeEnabled = false;
 
+    /**
+     * Flag that enables/disables the core TLV.
+     */
+    private static boolean coreTLVEnabled = true;
+
+    /**
+     * Flag that enables/disables the html TLV.
+     */
+    private static boolean htmlTLVEnabled = true;
 
 //
 // Instance Variables
@@ -445,6 +459,32 @@ public class Util extends Object {
 //
 // Class methods
 //
+
+    public static void setUnitTestModeEnabled(boolean enabled) {
+        unitTestModeEnabled = enabled;
+    }
+
+    public static boolean isUnitTestModeEnabled() {
+        return unitTestModeEnabled;
+    }
+
+    public static void setCoreTLVActive(boolean active) {
+        coreTLVEnabled = active;
+    }
+
+    public static boolean isCoreTLVActive() {
+        return coreTLVEnabled;
+    }
+
+    public static void setHtmlTLVActive(boolean active) {
+        htmlTLVEnabled = active;
+    }
+
+    public static boolean isHtmlTLVActive() {
+        return htmlTLVEnabled;
+    }
+
+
     public static Class loadClass(String name,
                                   Object fallbackClass)
         throws ClassNotFoundException {

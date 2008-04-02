@@ -1,5 +1,5 @@
 /*
- * $Id: ELConstants.java,v 1.1 2005/05/05 20:51:22 edburns Exp $
+ * $Id: ELConstants.java,v 1.2 2005/06/01 14:03:32 rlubke Exp $
  */
 
 /*
@@ -43,8 +43,4 @@ public interface ELConstants {
 
     public static final int VIEW = 13;
     
-    public static final String[] IMPLICIT_OBJECTS = new String[] {
-        "application", "applicationScope", "cookie", "facesContext",
-	"header", "headerValues", "initParam", "param", "paramValues",
-	"request", "requestScope", "session", "sessionScope", "view" };
 }

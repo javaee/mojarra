@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolver.java,v 1.1 2005/05/05 20:51:22 edburns Exp $
+ * $Id: ImplicitObjectELResolver.java,v 1.2 2005/06/01 14:03:34 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -8,27 +8,29 @@
 
 package com.sun.faces.el;
 
-import java.util.Arrays;
+import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
-import java.beans.FeatureDescriptor;
 
+import javax.el.ELContext;
+import javax.el.ELException;
+import javax.el.ELResolver;
+import javax.el.PropertyNotFoundException;
+import javax.el.PropertyNotWritableException;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIViewRoot;
 
-import javax.el.ELException;
-import javax.el.PropertyNotWritableException;
-import javax.el.PropertyNotFoundException;
-import javax.el.PropertyNotFoundException;
-import javax.el.ELContext;
-import javax.el.ELResolver;
-
-import com.sun.faces.el.ELConstants;
 import com.sun.faces.util.Util;
 
 public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
+
+    static final String[] IMPLICIT_OBJECTS = new String[] {
+        "application", "applicationScope", "cookie", "facesContext",
+        "header", "headerValues", "initParam", "param", "paramValues",
+        "request", "requestScope", "session", "sessionScope", "view" };
 
     public ImplicitObjectELResolver() {
     }
@@ -40,7 +42,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         if (base != null) {
             return null;
         }
-        if ( base == null && property == null) {
+        if (property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
@@ -108,7 +110,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         if (base != null) {
             return;
         }
-        if ( base == null && property == null) {
+        if (property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
@@ -116,7 +118,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if ((base == null) && (index > 0)) {
+        if (index > 0) {
             throw new PropertyNotWritableException((String)property);
         }
     }
@@ -126,7 +128,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         if (base != null) {
             return false;
         }
-        if ( base == null && property == null) {
+        if (property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
@@ -134,7 +136,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if ((base == null) && (index > 0)) {
+        if (index > 0) {
             context.setPropertyResolved(true);
             return true;
         }                          
@@ -146,7 +148,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         if (base != null) {
             return null;
         }
-        if ( base == null && property == null) {
+        if (property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
@@ -154,7 +156,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if ((base == null) && (index > 0)) {
+        if (index > 0) {
             context.setPropertyResolved(true);
         }
         return null;

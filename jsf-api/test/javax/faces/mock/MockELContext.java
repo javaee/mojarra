@@ -1,5 +1,5 @@
 /*
- * $Id: MockELContext.java,v 1.1 2005/05/05 20:51:15 edburns Exp $
+ * $Id: MockELContext.java,v 1.2 2005/06/01 14:03:29 rlubke Exp $
  */
 
 /*
@@ -19,11 +19,12 @@ public class MockELContext extends ELContext {
  
     private FunctionMapper functionMapper;
     private VariableMapper variableMapper;
-    
+    private ELResolver resolver;
+
     protected MockELContext(ELResolver resolver) {
-	super(resolver);
+        this.resolver = resolver;
     }
-    
+
      public void setFunctionMapper(FunctionMapper fnMapper) {
         functionMapper = fnMapper;
     }
@@ -40,4 +41,8 @@ public class MockELContext extends ELContext {
         return variableMapper;
     }
 
+    public ELResolver getELResolver() {
+        return resolver;
+    }
+    
 }

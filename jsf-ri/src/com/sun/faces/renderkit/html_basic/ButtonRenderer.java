@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.86 2005/05/16 20:16:25 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.87 2005/06/01 14:03:34 rlubke Exp $
  */
 
 /*
@@ -299,10 +299,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 			String 
 			    rendererType = curNode.getRendererType(),
 			    family = curNode.getFamily();
-			if (null != rendererType && 
-			    rendererType.equals("javax.faces.Link") && 
-			    null != family &
-			    family.equals("javax.faces.Command")) {
+			if ("javax.faces.Link".equals(rendererType) &&   
+                 "javax.faces.Command".equals(family)) {
 			    keepGoing = false;
 			    
 			}

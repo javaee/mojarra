@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolverForJsp.java,v 1.1 2005/05/05 20:51:23 edburns Exp $
+ * $Id: ImplicitObjectELResolverForJsp.java,v 1.2 2005/06/01 14:03:34 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -22,8 +22,7 @@ import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
 
-public class ImplicitObjectELResolverForJsp extends ELResolver implements 
-    ELConstants{
+public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
 
     public ImplicitObjectELResolverForJsp() {
     }
@@ -35,7 +34,7 @@ public class ImplicitObjectELResolverForJsp extends ELResolver implements
         if (base != null) {
             return null;
         }
-        if ( base == null && property == null) {
+        if (property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
@@ -67,7 +66,7 @@ public class ImplicitObjectELResolverForJsp extends ELResolver implements
         if (base != null) {
             return null;
         }
-        if ( base == null && property == null) {
+        if (property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
@@ -79,10 +78,10 @@ public class ImplicitObjectELResolverForJsp extends ELResolver implements
             return null;
         } 
         switch (index) {
-            case FACES_CONTEXT:
-                context.setPropertyResolved(true);
+            case FACES_CONTEXT:                
             case VIEW:
                 context.setPropertyResolved(true);
+                return null;
             default:
                 return null;
         }
@@ -93,7 +92,7 @@ public class ImplicitObjectELResolverForJsp extends ELResolver implements
         if (base != null) {
             return;
         }
-        if ( base == null && property == null) {
+        if (property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
@@ -120,7 +119,7 @@ public class ImplicitObjectELResolverForJsp extends ELResolver implements
         if (base != null) {
             return false;
         }
-        if ( base == null && property == null) {
+        if (property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;

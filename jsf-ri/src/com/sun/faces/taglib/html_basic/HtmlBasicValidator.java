@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicValidator.java,v 1.13 2004/12/02 18:42:23 rogerk Exp $
+ * $Id: HtmlBasicValidator.java,v 1.14 2005/06/01 14:03:35 rlubke Exp $
  */
 
 /*
@@ -12,10 +12,9 @@ package com.sun.faces.taglib.html_basic;
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
 import com.sun.faces.util.Util;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
-
-import com.sun.faces.RIConstants;
 
 
 /**
@@ -61,7 +60,7 @@ public class HtmlBasicValidator extends FacesValidator {
 	// don't run the TLV if we're in designTime, or the RIConstants
 	// says not to.
 	if (java.beans.Beans.isDesignTime() || 
-	    !RIConstants.HTML_TLV_ACTIVE) {
+	    !Util.isHtmlTLVActive()) {
 	    return null;
 	}
 	

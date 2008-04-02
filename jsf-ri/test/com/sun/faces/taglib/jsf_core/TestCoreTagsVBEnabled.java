@@ -1,5 +1,5 @@
 /*
- * $Id: TestCoreTagsVBEnabled.java,v 1.6 2004/04/07 17:53:03 rkitain Exp $
+ * $Id: TestCoreTagsVBEnabled.java,v 1.7 2005/06/01 14:03:40 rlubke Exp $
  */
 
 /*
@@ -9,27 +9,27 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.JspFacesTestCase;
-import com.sun.faces.RIConstants;
-import com.sun.faces.lifecycle.ApplyRequestValuesPhase;
-import com.sun.faces.lifecycle.Phase;
-import com.sun.faces.lifecycle.ProcessValidationsPhase;
-import com.sun.faces.lifecycle.RenderResponsePhase;
-import com.sun.faces.util.Util;
-import org.apache.cactus.WebRequest;
+import java.util.Iterator;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 
-import java.util.Iterator;
+import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.lifecycle.ApplyRequestValuesPhase;
+import com.sun.faces.lifecycle.Phase;
+import com.sun.faces.lifecycle.ProcessValidationsPhase;
+import com.sun.faces.lifecycle.RenderResponsePhase;
+import com.sun.faces.util.Util;
+
+import org.apache.cactus.WebRequest;
 
 /**
  * <B>TestValidatorTags</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestCoreTagsVBEnabled.java,v 1.6 2004/04/07 17:53:03 rkitain Exp $
+ * @version $Id: TestCoreTagsVBEnabled.java,v 1.7 2005/06/01 14:03:40 rlubke Exp $
  */
 
 public class TestCoreTagsVBEnabled extends JspFacesTestCase {
@@ -103,7 +103,7 @@ public class TestCoreTagsVBEnabled extends JspFacesTestCase {
 
     public void setUp() {
 
-        RIConstants.IS_UNIT_TEST_MODE = true;
+        Util.setUnitTestModeEnabled(true);
         super.setUp();
         (getFacesContext().getExternalContext().getRequestMap()).put("intMin",
                                                                      new Integer(
@@ -203,7 +203,7 @@ public class TestCoreTagsVBEnabled extends JspFacesTestCase {
         assertTrue(messages.hasNext());
 
 
-        RIConstants.IS_UNIT_TEST_MODE = false;
+        Util.setUnitTestModeEnabled(false);
     }
 
 

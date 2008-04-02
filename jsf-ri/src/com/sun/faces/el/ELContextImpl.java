@@ -1,5 +1,5 @@
 /*
- * $Id: ELContextImpl.java,v 1.1 2005/05/05 20:51:22 edburns Exp $
+ * $Id: ELContextImpl.java,v 1.2 2005/06/01 14:03:33 rlubke Exp $
  */
 
 /*
@@ -24,13 +24,15 @@ public class ELContextImpl extends ELContext {
     
     private FunctionMapper functionMapper;
     private VariableMapper variableMapper;
+    private ELResolver resolver;
+
     /**
      * Constructs a new ELContext associated with the given ELResolver.
      */
     public ELContextImpl(ELResolver resolver) {
-        super(resolver);
+        this.resolver = resolver;
     }
-    
+
     public void setFunctionMapper(FunctionMapper fnMapper) {
         functionMapper = fnMapper;
     }
@@ -47,5 +49,8 @@ public class ELContextImpl extends ELContext {
         return variableMapper;
     }
 
-    
+    public ELResolver getELResolver() {
+        return resolver;
+    }
+
 }

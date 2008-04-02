@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.43 2005/04/05 22:03:01 jayashri Exp $
+ * $Id: FacesTestCaseService.java,v 1.44 2005/06/01 14:03:39 rlubke Exp $
  */
 
 /*
@@ -11,24 +11,6 @@
 
 package com.sun.faces;
 
-import com.sun.faces.config.ConfigureListener;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.util.Util;
-import org.apache.cactus.server.ServletContextWrapper;
-
-import javax.faces.FactoryFinder;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContextFactory;
-import javax.faces.context.ResponseWriter;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.webapp.FacesServlet;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequestWrapper;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -37,7 +19,23 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 
-import com.sun.faces.RIConstants;
+import javax.faces.FactoryFinder;
+import javax.faces.context.FacesContext;
+import javax.faces.context.FacesContextFactory;
+import javax.faces.context.ResponseWriter;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.webapp.FacesServlet;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.ConfigureListener;
+import com.sun.faces.util.Util;
+
+import org.apache.cactus.server.ServletContextWrapper;
 
 
 /**
@@ -50,7 +48,7 @@ import com.sun.faces.RIConstants;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.43 2005/04/05 22:03:01 jayashri Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.44 2005/06/01 14:03:39 rlubke Exp $
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
  */
@@ -120,7 +118,7 @@ public class FacesTestCaseService extends Object {
 
     public void setUp() {
         HttpServletResponse response = null;
-        RIConstants.IS_UNIT_TEST_MODE = true;
+        Util.setUnitTestModeEnabled(true);
 
 	// make sure the ApplicationAssociate is aware of the ServletContext
 	com.sun.faces.config.StoreServletContext storeSC = 

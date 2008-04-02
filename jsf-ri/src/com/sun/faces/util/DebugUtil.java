@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.27 2005/04/21 18:55:39 edburns Exp $
+ * $Id: DebugUtil.java,v 1.28 2005/06/01 14:03:38 rlubke Exp $
  */
 
 /*
@@ -11,16 +11,16 @@ package com.sun.faces.util;
 
 // DebugUtil.java
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Iterator;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.model.SelectItem;
-
-import java.io.PrintStream;
-import java.io.Writer;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.IOException;
-import java.util.Iterator;
 
 /**
  * <B>DebugUtil</B> is a class ...
@@ -154,7 +154,7 @@ public class DebugUtil extends Object {
             }
             indentPrintln(out, " }");
         } else {
-            if (null != root && (root instanceof ValueHolder)) {
+            if (root instanceof ValueHolder) {
                 value = ((ValueHolder)root).getValue();
             }
             indentPrintln(out, "value= " + value);

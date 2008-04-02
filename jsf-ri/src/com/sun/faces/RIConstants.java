@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.73 2005/05/16 20:16:13 rlubke Exp $
+ * $Id: RIConstants.java,v 1.74 2005/06/01 14:03:30 rlubke Exp $
  */
 
 /*
@@ -106,8 +106,6 @@ public class RIConstants {
     public static final String PARAM_VALUES_IMPLICIT_OBJ = "paramValues";
     public static final String VIEW_IMPLICIT_OBJ = "view";
 
-    public static boolean IS_UNIT_TEST_MODE = false;
-
     /*
      * <p>TLV Resource Bundle Location </p>
      */
@@ -115,9 +113,7 @@ public class RIConstants {
         FACES_PREFIX + "resources.Resources";
 
     public static final Object NO_VALUE = "";
-
-    public static boolean HTML_TLV_ACTIVE = true;
-    public static boolean CORE_TLV_ACTIVE = true;
+      
     public static final String CORE_NAMESPACE = 
         "http://java.sun.com/jsf/core";
     public static final String HTML_NAMESPACE = 

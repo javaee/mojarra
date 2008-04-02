@@ -1,5 +1,5 @@
 /*
- * $Id: MethodExpressionMethodBindingAdapter.java,v 1.2 2005/05/19 13:26:58 rlubke Exp $
+ * $Id: MethodExpressionMethodBindingAdapter.java,v 1.3 2005/06/01 14:03:28 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.io.Serializable;
     // Methods from MethodExpression
     //
 
-    private MethodInfo info = null;
+    private transient MethodInfo info = null;
 
     public MethodInfo getMethodInfo(ELContext context) throws ELException {
 	assert(null != binding);

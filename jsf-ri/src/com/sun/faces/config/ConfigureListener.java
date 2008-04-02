@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.35 2005/05/20 14:49:58 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.36 2005/06/01 14:03:30 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -229,7 +229,7 @@ public class ConfigureListener implements ServletContextListener {
         };
 
     static ThreadLocal getThreadLocalExternalContext() {
-        if (RIConstants.IS_UNIT_TEST_MODE) {
+        if (Util.isUnitTestModeEnabled()) {
 	    return tlsExternalContext;
 	}
 	return null;
@@ -280,7 +280,7 @@ public class ConfigureListener implements ServletContextListener {
 
 	// see if we're operating in the unit test environment
 	try {
-	    if (RIConstants.IS_UNIT_TEST_MODE) {
+	    if (Util.isUnitTestModeEnabled()) {
 		// if so, put the fcb in the servletContext
 		context.setAttribute(FACES_CONFIG_BEAN_KEY, fcb);
 	    }
@@ -292,8 +292,8 @@ public class ConfigureListener implements ServletContextListener {
 	}
 
 	    // see if we need to disable our TLValidator
-        RIConstants.HTML_TLV_ACTIVE =
-            isFeatureEnabled(context, ENABLE_HTML_TLV);
+        Util.setHtmlTLVActive(
+            isFeatureEnabled(context, ENABLE_HTML_TLV));
 
         URL url = null;
         if (log.isDebugEnabled()) {
@@ -1344,7 +1344,7 @@ public class ConfigureListener implements ServletContextListener {
         try {
             jspFactory.getClass().getMethod("getJspApplicationContext", new Class[] {
                 ServletContext.class });
-        } catch (Exception e) {
+        } catch (NoSuchMethodException nsme) {
             log.warn(Util.getExceptionMessage(Util.INCORRECT_JSP_VERSION_ID,
                                               new Object [] { "getJspApplicationContext" }));
             return;

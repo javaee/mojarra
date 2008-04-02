@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.15 2004/12/08 17:55:35 edburns Exp $
+ * $Id: CoreValidator.java,v 1.16 2005/06/01 14:03:37 rlubke Exp $
  */
 
 /*
@@ -9,9 +9,10 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
+import com.sun.faces.util.Util;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -80,7 +81,7 @@ public class CoreValidator extends FacesValidator {
      */
     protected DefaultHandler getSAXHandler() {
         if (java.beans.Beans.isDesignTime() || 
-	    !RIConstants.CORE_TLV_ACTIVE) {
+	    !Util.isCoreTLVActive()) {
 	    return null;
 	}
         DefaultHandler h = new CoreValidatorHandler();
