@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.28 2005/01/13 19:57:49 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.29 2005/02/24 01:10:41 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -8,28 +8,21 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.ConfigNavigationCase;
-import com.sun.faces.config.beans.ApplicationBean;
-import com.sun.faces.config.beans.ComponentBean;
-import com.sun.faces.config.beans.ConverterBean;
-import com.sun.faces.config.beans.FacesConfigBean;
-import com.sun.faces.config.beans.FactoryBean;
-import com.sun.faces.config.beans.LifecycleBean;
-import com.sun.faces.config.beans.LocaleConfigBean;
-import com.sun.faces.config.beans.ManagedBeanBean;
-import com.sun.faces.config.beans.NavigationCaseBean;
-import com.sun.faces.config.beans.NavigationRuleBean;
-import com.sun.faces.config.beans.RenderKitBean;
-import com.sun.faces.config.beans.RendererBean;
-import com.sun.faces.config.beans.ValidatorBean;
-import com.sun.faces.config.rules.FacesConfigRuleSet;
-import com.sun.faces.util.Util;
-import org.apache.commons.digester.Digester;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.xml.sax.InputSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -52,22 +45,35 @@ import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.ConfigNavigationCase;
+import com.sun.faces.config.beans.ApplicationBean;
+import com.sun.faces.config.beans.ComponentBean;
+import com.sun.faces.config.beans.ConverterBean;
+import com.sun.faces.config.beans.FacesConfigBean;
+import com.sun.faces.config.beans.FactoryBean;
+import com.sun.faces.config.beans.LifecycleBean;
+import com.sun.faces.config.beans.LocaleConfigBean;
+import com.sun.faces.config.beans.ManagedBeanBean;
+import com.sun.faces.config.beans.NavigationCaseBean;
+import com.sun.faces.config.beans.NavigationRuleBean;
+import com.sun.faces.config.beans.RenderKitBean;
+import com.sun.faces.config.beans.RendererBean;
+import com.sun.faces.config.beans.ValidatorBean;
+import com.sun.faces.config.rules.FacesConfigRuleSet;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.digester.Digester;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 
 /**
@@ -109,7 +115,7 @@ public class ConfigureListener implements ServletContextListener {
     /**
      * <p>The context initialization parameter that determines whether
      * or not the config files will be validated against their respective
-     * DTD.</p>
+     * DTD/Schema.</p>
      */
     protected static final String VALIDATE_XML =
         RIConstants.FACES_PREFIX + "validateXml";
@@ -122,6 +128,13 @@ public class ConfigureListener implements ServletContextListener {
     protected static final String VERIFY_OBJECTS =
         RIConstants.FACES_PREFIX + "verifyObjects";
 
+    /**
+     * <p>When specified, the faces configuration process will occur
+     * regardless of the presence of the <code>FacesServlet</code>
+     * in the application's deployment descriptor.</p>
+     */
+    protected static final String FORCE_LOAD_CONFIG =
+        RIConstants.FACES_PREFIX + "forceLoadConfiguration";
 
     /**
      * <p>The context initialization parameter that determines whether
@@ -143,7 +156,7 @@ public class ConfigureListener implements ServletContextListener {
     /**
      * <p>Array of known primitive types.</p>
      */
-    private static final Class PRIM_CLASSES_TO_CONVERT[] = {
+    private static final Class[] PRIM_CLASSES_TO_CONVERT = {
         java.lang.Boolean.TYPE,
         java.lang.Byte.TYPE,
         java.lang.Character.TYPE,
@@ -157,7 +170,7 @@ public class ConfigureListener implements ServletContextListener {
     /**
      * <p>Array of known converters for primitive types.</p>
      */
-    private static final String CONVERTERS_FOR_PRIMS[] = {
+    private static final String[] CONVERTERS_FOR_PRIMS = {
         "javax.faces.convert.BooleanConverter",
         "javax.faces.convert.ByteConverter",
         "javax.faces.convert.CharacterConverter",
@@ -217,10 +230,32 @@ public class ConfigureListener implements ServletContextListener {
     }
 
     public void contextInitialized(ServletContextEvent sce) {
+
+        ServletContext context = sce.getServletContext();
+
+        // Check to see if the FacesServlet is present in the
+        // web.xml.   If it is, perform faces configuration as normal,
+        // otherwise, simply return.
+        if (!isFeatureEnabled(context, FORCE_LOAD_CONFIG)) {
+            WebXmlProcessor processor = new WebXmlProcessor(context);
+            if (!processor.isFacesServletPresent()) {
+                if (log.isDebugEnabled()) {
+                    log.debug("No FacesServlet found in deployment descriptor -" +
+                            " bypassing configuration.");
+                }
+                return;
+            }
+
+            if (log.isDebugEnabled()) {
+                log.debug("FacesServlet found in deployment descriptor -" +
+                    " processing configuration.");
+                }
+        }
+
         // Prepare local variables we will need
         Digester digester = null;
         FacesConfigBean fcb = new FacesConfigBean();
-        ServletContext context = sce.getServletContext();
+
 
 	// store the servletContext instance in Thread local Storage.
 	// This enables our Application's ApplicationAssociate to locate
@@ -296,10 +331,10 @@ public class ConfigureListener implements ServletContextListener {
         String paths =
             context.getInitParameter(FacesServlet.CONFIG_FILES_ATTR);
         if (paths != null) {
-            for (StringTokenizer t = new StringTokenizer(paths.trim(), ",");
-                 t.hasMoreTokens(); ) {
+            String[] tokens = paths.trim().split(",");
+            for (int i = 0; i < tokens.length; i++) {
 
-                url = getContextURLForPath(context, t.nextToken().trim());
+                url = getContextURLForPath(context, tokens[i].trim());
                 if (url != null) {
                     parse(digester, url, fcb);
                 }
@@ -414,7 +449,7 @@ public class ConfigureListener implements ServletContextListener {
         Application application = application();
         Object instance;
         String value;
-        String values[];
+        String[] values;
 
         // Configure scalar properties
 
@@ -542,7 +577,7 @@ public class ConfigureListener implements ServletContextListener {
      * @param config Array of <code>ComponentBean</code> that contains
      *               our configuration information
      */
-    private void configure(ComponentBean config[]) throws Exception {
+    private void configure(ComponentBean[] config) throws Exception {
 
         if (config == null) {
             return;
@@ -568,7 +603,7 @@ public class ConfigureListener implements ServletContextListener {
      * @param config Array of <code>ConverterBean</code> that contains
      *               our configuration information
      */
-    private void configure(ConverterBean config[]) throws Exception {
+    private void configure(ConverterBean[] config) throws Exception {
         int i = 0, len = 0;
         Application application = application();
 
@@ -689,7 +724,7 @@ public class ConfigureListener implements ServletContextListener {
         if (config == null) {
             return;
         }
-        String listeners[] = config.getPhaseListeners();
+        String[] listeners = config.getPhaseListeners();
         LifecycleFactory factory = (LifecycleFactory)
             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
 	String lifecycleId = 
@@ -723,7 +758,7 @@ public class ConfigureListener implements ServletContextListener {
         }
         Application application = application();
         String value;
-        String values[];
+        String[] values;
 
         value = config.getDefaultLocale();
         if (value != null) {
@@ -758,7 +793,7 @@ public class ConfigureListener implements ServletContextListener {
     // PENDING - the code below is a start at converting new-style config beans
     // back to old style ones so we don't have to modify the functional code.
     // It is not clear that this is the lower-effort choice, however.
-    private void configure(ManagedBeanBean config[]) throws Exception {
+    private void configure(ManagedBeanBean[] config) throws Exception {
         if (config == null) {
             return;
         }
@@ -788,7 +823,7 @@ public class ConfigureListener implements ServletContextListener {
      * @param config Array of <code>NavigationRuleBean</code> that contains
      *               our configuration information
      */
-    private void configure(NavigationRuleBean config[]) {
+    private void configure(NavigationRuleBean[] config) {
 
         if (config == null) {
             return;
@@ -805,7 +840,7 @@ public class ConfigureListener implements ServletContextListener {
                 log.trace("addNavigationRule(" +
                           config[i].getFromViewId() + ')');
             }
-            NavigationCaseBean ncb[] = config[i].getNavigationCases();
+            NavigationCaseBean[] ncb = config[i].getNavigationCases();
             for (int j = 0; j < ncb.length; j++) {
                 if (log.isTraceEnabled()) {
                     log.trace("addNavigationCase(" +
@@ -855,7 +890,7 @@ public class ConfigureListener implements ServletContextListener {
      *               our configuration information
      * @param rk     RenderKit to be configured
      */
-    private void configure(RendererBean config[], RenderKit rk)
+    private void configure(RendererBean[] config, RenderKit rk)
         throws Exception {
 
         if (config == null) {
@@ -886,7 +921,7 @@ public class ConfigureListener implements ServletContextListener {
      * @param config Array of <code>RenderKitBean</code> that contains
      *               our configuration information
      */
-    private void configure(RenderKitBean config[]) throws Exception {
+    private void configure(RenderKitBean[] config) throws Exception {
 
         if (config == null) {
             return;
@@ -930,7 +965,7 @@ public class ConfigureListener implements ServletContextListener {
      * @param config Array of <code>ValidatorBean</code> that contains
      *               our configuration information
      */
-    private void configure(ValidatorBean config[]) throws Exception {
+    private void configure(ValidatorBean[] config) throws Exception {
 
         if (config == null) {
             return;
@@ -1043,7 +1078,7 @@ public class ConfigureListener implements ServletContextListener {
         boolean success = true;
 
         // Check components
-        ComponentBean comp[] = fcb.getComponents();
+        ComponentBean[] comp = fcb.getComponents();
         for (int i = 0, len = comp.length; i < len; i++) {
             try {
                 app.createComponent(comp[i].getComponentType());
@@ -1054,7 +1089,7 @@ public class ConfigureListener implements ServletContextListener {
         }
 
         // Check converters
-        ConverterBean conv1[] = fcb.getConvertersByClass();
+        ConverterBean[] conv1 = fcb.getConvertersByClass();
         Class clazz;
         for (int i = 0, len = conv1.length; i < len; i++) {
             try {
@@ -1072,7 +1107,7 @@ public class ConfigureListener implements ServletContextListener {
                 success = false;
             }
         }
-        ConverterBean conv2[] = fcb.getConvertersById();
+        ConverterBean[] conv2 = fcb.getConvertersById();
         for (int i = 0, len = conv2.length; i < len; i++) {
             try {
                 app.createConverter(conv2[i].getConverterId());
@@ -1083,12 +1118,12 @@ public class ConfigureListener implements ServletContextListener {
         }
 
         // Check renderers
-        RenderKitBean rkb[] = fcb.getRenderKits();
+        RenderKitBean[] rkb = fcb.getRenderKits();
         RenderKit rk;
         for (int i = 0, len = rkb.length; i < len; i++) {
             try {
                 rk = rkf.getRenderKit(null, rkb[i].getRenderKitId());
-                RendererBean rb[] = rkb[i].getRenderers();
+                RendererBean[] rb = rkb[i].getRenderers();
                 for (int j = 0, len2 = rb.length; j < len2; j++) {
                     try {
                         rk.getRenderer(rb[j].getComponentFamily(),
@@ -1105,7 +1140,7 @@ public class ConfigureListener implements ServletContextListener {
         }
 
         // Check validators
-        ValidatorBean val[] = fcb.getValidators();
+        ValidatorBean[] val = fcb.getValidators();
         for (int i = 0, len = val.length; i < len; i++) {
             try {
                 app.createValidator(val[i].getValidatorId());
@@ -1471,5 +1506,151 @@ public class ConfigureListener implements ServletContextListener {
     } // END ApplicationMap
 
 
-} 
+    /**
+     * <p>Processes a web application's deployment descriptor looking
+     * for a reference to <code>javax.faces.webapp.FacesServlet</code>.</p>
+     */
+    private static class WebXmlProcessor {
+
+        private static final String WEB_XML_PATH = "/WEB-INF/web.xml";
+
+        private boolean facesServletPresent;
+
+
+        /**
+         * <p>When instantiated, the web.xml of the current application
+         * will be scanned looking for a references to the
+         * <code>FacesServlet</code>.  <code>isFacesServletPresent()</code>
+         * will return the appropriate value based on the scan.</p>
+         * @param context the <code>ServletContext</code> for the application
+         *  of interest
+         */
+        WebXmlProcessor(ServletContext context) {
+
+            if (context != null) {
+                scanForFacesServlet(context);
+            }
+
+        } // END WebXmlProcessor
+
+
+        /**
+         * <p>Return <code>true</code> if the <code>WebXmlProcessor</code>
+         * detected a <code>FacesServlet</code> entry, otherwise return
+         * <code>false</code>.</p>
+         * @return
+         */
+        boolean isFacesServletPresent() {
+
+            return facesServletPresent;
+
+        } // END isFacesServletPresent
+
+
+        /**
+         * <p>Parse the web.xml for the current application and scan
+         * for a FacesServlet entry, if found, set the
+         * <code>facesServletPresent</code> property to true.
+         * @param context
+         */
+        private void scanForFacesServlet(ServletContext context) {
+
+            SAXParserFactory factory = getConfiguredFactory();
+            try {
+                SAXParser parser = factory.newSAXParser();
+                parser.parse(context.getResourceAsStream(WEB_XML_PATH),
+                              new WebXmlHandler());
+            } catch (Exception e) {
+                // This probably won't happen since the container would
+                // catch it before we would, but, if we catch an exception
+                // processing the web.xml, set facesServletFound to true to
+                // default to our previous behavior of processing the faces
+                // configuration.
+                if (log.isWarnEnabled()) {
+                    log.warn("Unable to process deployment descriptor for" +
+                        " context '" + context.getServletContextName() + '\'');
+                }
+                facesServletPresent = true;
+            }
+
+        } // END scanForFacesServlet
+
+        /**
+         * <p>Return a <code>SAXParserFactory</code> instance that is
+         * non-validating and is namespace aware.</p>
+         * @return configured <code>SAXParserFactory</code>
+         */
+        private SAXParserFactory getConfiguredFactory() {
+
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setValidating(false);
+            factory.setNamespaceAware(true);
+            return factory;
+
+        } // END getConfiguredFactory
+
+
+        /**
+         * <p>A simple SAX handler to process the elements of interested
+         * within a web application's deployment descriptor.</p>
+         */
+        private class WebXmlHandler extends DefaultHandler {
+
+            private final String SERVLET_CLASS = "servlet-class";
+            private final String FACES_SERVLET =
+                "javax.faces.webapp.FacesServlet";
+
+            private boolean servletClassFound;
+            private StringBuffer content;
+
+            public InputSource resolveEntity(String publicId, String systemId)
+            throws SAXException {
+
+                return new InputSource(new StringReader(""));
+
+            } // END resolveEntity
+
+
+            public void startElement(String uri, String localName,
+                                     String qName, Attributes attributes)
+            throws SAXException {
+
+                if (!facesServletPresent) {
+                    if (SERVLET_CLASS.equals(localName)) {
+                        servletClassFound = true;
+                        content = new StringBuffer();
+                    } else {
+                        servletClassFound = false;
+                    }
+                }
+
+            } // END startElement
+
+
+            public void characters(char[] ch, int start, int length)
+            throws SAXException {
+
+                if (servletClassFound && !facesServletPresent) {
+                    content.append(ch, start, length);
+                }
+
+            } // END characters
+
+
+            public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+
+                if (servletClassFound && !facesServletPresent) {
+                    if (FACES_SERVLET.equals(content.toString().trim())) {
+                        facesServletPresent = true;
+                    }
+                }
+
+            } // END endElement
+
+        } // END WebXmlHandler
+
+    } // END WebXmlProcessor
+
+}
 
