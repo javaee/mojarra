@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.13 2006/05/22 14:58:15 rlubke Exp $
+ * $Id: MessageFactory.java,v 1.14 2006/12/17 07:19:11 rlubke Exp $
  */
 
 /*
@@ -53,6 +53,47 @@ import java.util.ResourceBundle;
 
     private MessageFactory() {
     }
+
+    /**
+     * @see #getMessage(String, Object...)
+     * @param FacesMessage.Serverity set a custom severity
+     */
+    @protection@ static FacesMessage getMessage(String messageId,
+                                                FacesMessage.Severity severity,
+                                                Object... params) {
+        FacesMessage message = getMessage(messageId, params);
+        message.setSeverity(severity);
+        return message;
+    }
+
+
+    /**
+     * @see #getMessage(Locale, String, Object...)
+     * @param FacesMessage.Serverity set a custom severity
+     */
+    @protection@ static FacesMessage getMessage(Locale locale,
+                                                String messageId,
+                                                FacesMessage.Severity severity,
+                                                Object... params) {
+        FacesMessage message = getMessage(locale, messageId, params);
+        message.setSeverity(severity);
+        return message;
+    }
+
+
+    /**
+     * @see #getMessage(FacesContext, String, Object...)
+     * @param FacesMessage.Serverity set a custom severity
+     */
+    @protection@ static FacesMessage getMessage(FacesContext context,
+                                                String messageId,
+                                                FacesMessage.Severity severity,
+                                                Object... params) {
+        FacesMessage message = getMessage(context, messageId, params);
+        message.setSeverity(severity);
+        return message;
+    }
+
    
     /**
      * <p>This version of getMessage() is used for localizing implementation
@@ -61,7 +102,8 @@ import java.util.ResourceBundle;
      * @param messageId - the key of the message in the resource bundle
      * @param params    - substittion parameters
      *
-     * @return a localized <code>FacesMessage</code>
+     * @return a localized <code>FacesMessage</code> with the severity
+     *  of FacesMessage.SEVERITY_ERROR
      */
      @protection@ static FacesMessage getMessage(String messageId, 
                                                  Object... params) {
@@ -87,7 +129,8 @@ import java.util.ResourceBundle;
       * @param messageId - the key of the message in the resource bundle
       * @param params    - substittion parameters
       *
-      * @return a localized <code>FacesMessage</code>
+      * @return a localized <code>FacesMessage</code> with the severity
+      *  of FacesMessage.SEVERITY_ERROR
       */
      @protection@ static FacesMessage getMessage(Locale locale, 
                                                  String messageId, 
@@ -135,9 +178,10 @@ import java.util.ResourceBundle;
                 // ignore
             }
         }
-                           
-        // At this point, we have a summary and a bundle.        
-        return (new BindingFacesMessage(locale, summary, detail, params));
+        // At this point, we have a summary and a bundle.     
+        FacesMessage ret = new BindingFacesMessage(locale, summary, detail, params);
+        ret.setSeverity(FacesMessage.SEVERITY_ERROR);
+        return (ret);
     }
 
 
@@ -148,7 +192,8 @@ import java.util.ResourceBundle;
      * @param messageId - the key of the message in the resource bundle
      * @param params    - substittion parameters
      *
-     * @return a localized <code>FacesMessage</code>
+     * @return a localized <code>FacesMessage</code> with the severity
+     *  of FacesMessage.SEVERITY_ERROR
      */
     @protection@ static FacesMessage getMessage(FacesContext context, 
                                                 String messageId,

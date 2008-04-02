@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.59 2006/11/17 23:19:15 rlubke Exp $
+ * $Id: UISelectMany.java,v 1.60 2006/12/17 07:19:11 rlubke Exp $
  */
 
 /*
@@ -461,8 +461,7 @@ public class UISelectMany extends UIInput {
         if (!found) {
             FacesMessage message =
                 MessageFactory.getMessage(context, INVALID_MESSAGE_ID,
-                    new Object[] {MessageFactory.getLabel(context, this)});
-            message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    new Object[] {MessageFactory.getLabel(context, this)});            
             context.addMessage(getClientId(context), message);
             setValid(false);
         }

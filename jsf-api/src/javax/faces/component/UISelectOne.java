@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.52 2006/11/17 23:19:16 rlubke Exp $
+ * $Id: UISelectOne.java,v 1.53 2006/12/17 07:19:11 rlubke Exp $
  */
 
 /*
@@ -140,8 +140,7 @@ public class UISelectOne extends UIInput {
         if (!found) {
             FacesMessage message =
                 MessageFactory.getMessage(context, INVALID_MESSAGE_ID,
-                    new Object[] {MessageFactory.getLabel(context, this)});
-            message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    new Object[] {MessageFactory.getLabel(context, this)});            
             context.addMessage(getClientId(context), message);
             setValid(false);
         }

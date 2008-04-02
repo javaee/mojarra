@@ -1,5 +1,5 @@
 /*
- * $Id: MethodExpressionValidator.java,v 1.5 2006/12/15 17:44:44 rlubke Exp $
+ * $Id: MethodExpressionValidator.java,v 1.6 2006/12/17 07:19:12 rlubke Exp $
  */
 
 /*
@@ -87,7 +87,10 @@ public class MethodExpressionValidator implements Validator, StateHolder {
                 if (e instanceof ValidatorException) {
                     throw (ValidatorException) e;
                 }
-                FacesMessage message = new FacesMessage(ee.getMessage());
+                String errInfo = ee.getMessage();
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                        errInfo,
+                                                        errInfo);
                 throw new ValidatorException(message, ee.getCause());
             }
         }

@@ -40,6 +40,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageFactory;
 
 /**
  * Abstract base for a {@link java.beans.PropertyEditor} that delegates to a
@@ -110,7 +111,7 @@ public abstract class ConverterPropertyEditorBase extends PropertyEditorSupport 
             FacesException e = new FacesException(
                 "Cannot create Converter to convert value " + textValue
                     + " to instance of target class " + targetClass.getName()
-                    + ".");
+                    + '.');
             logger.warning("setAsText: no faces converter: " + e.getMessage());
             throw e;
         }
@@ -163,19 +164,19 @@ public abstract class ConverterPropertyEditorBase extends PropertyEditorSupport 
             input.setValid(false);
         }
         if (null != converterMessageString) {
-            message = new FacesMessage(converterMessageString,
-                converterMessageString);
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                       converterMessageString,
+                                       converterMessageString);
         } else {
             message = ce.getFacesMessage();
             if (message == null) {
-                message = com.sun.faces.util.MessageFactory.getMessage(context,
-                    UIInput.CONVERSION_MESSAGE_ID);
+                message = MessageFactory.getMessage(context,
+                                                    UIInput.CONVERSION_MESSAGE_ID);
                 if (message.getDetail() == null) {
                     message.setDetail(ce.getMessage());
                 }
             }
-        }
-        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+        }       
         context.addMessage(component != null ? component.getClientId(context)
             : null, message);
     }

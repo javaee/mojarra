@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.88 2006/12/15 00:21:52 rlubke Exp $
+ * $Id: UIInput.java,v 1.89 2006/12/17 07:19:11 rlubke Exp $
  */
 
 /*
@@ -778,9 +778,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                               new Object[]{MessageFactory.getLabel(
                                    context, this)});
                 } else {
-                    message = new FacesMessage(messageStr);
+                    message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                               messageStr,
+                                               messageStr);
                 }
-                message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context.addMessage(getClientId(context), message);
                 setValid(false);
             } catch (IllegalArgumentException e) {
@@ -788,7 +789,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                      MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
                           new Object[]{MessageFactory.getLabel(
                                context, this)});
-                message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context.addMessage(getClientId(context), message);
                 setValid(false);
             } catch (Exception e) {
@@ -796,7 +796,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                      MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
                           new Object[]{MessageFactory.getLabel(
                                context, this)});
-                message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context.addMessage(getClientId(context), message);
                 setValid(false);
             }
@@ -988,14 +987,15 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             String requiredMessageStr = getRequiredMessage();
             FacesMessage message = null;
             if (null != requiredMessageStr) {
-                message = new FacesMessage(requiredMessageStr, requiredMessageStr);
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                           requiredMessageStr,
+                                           requiredMessageStr);
             } else {
                 message =
                      MessageFactory.getMessage(context, REQUIRED_MESSAGE_ID,
                           new Object[]{MessageFactory.getLabel(
                                context, this)});
             }
-            message.setSeverity(FacesMessage.SEVERITY_ERROR);
             context.addMessage(getClientId(context), message);
             setValid(false);
         }
@@ -1017,13 +1017,14 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                         String validatorMessageString = getValidatorMessage();
 
                         if (null != validatorMessageString) {
-                            message = new FacesMessage(validatorMessageString,
-                                 validatorMessageString);
+                            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                       validatorMessageString,
+                                                       validatorMessageString);
+                            message.setSeverity(FacesMessage.SEVERITY_ERROR);
                         } else {
                             message = ve.getFacesMessage();
                         }
                         if (message != null) {
-                            message.setSeverity(FacesMessage.SEVERITY_ERROR);
                             context.addMessage(getClientId(context), message);
                         }
                     }
@@ -1301,19 +1302,20 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         FacesMessage message = null;
         String converterMessageString = getConverterMessage();
         if (null != converterMessageString) {
-            message = new FacesMessage(converterMessageString, converterMessageString);
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                       converterMessageString,
+                                       converterMessageString);
         } else {
             message = ce.getFacesMessage();
             if (message == null) {
                 message = MessageFactory.getMessage(context,
-                     CONVERSION_MESSAGE_ID);
+                     CONVERSION_MESSAGE_ID);                
                 if (message.getDetail() == null) {
                     message.setDetail(ce.getMessage());
                 }
             }
         }
 
-        message.setSeverity(FacesMessage.SEVERITY_ERROR);
         context.addMessage(getClientId(context), message);
     }
 
