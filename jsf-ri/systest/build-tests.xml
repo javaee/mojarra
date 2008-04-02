@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.106 2006/03/14 22:20:50 rlubke Exp $
+ $Id: build-tests.xml,v 1.107 2006/03/20 18:21:38 rlubke Exp $
 -->
 
 <!--
@@ -677,7 +677,17 @@
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/systest/ComponentMiscTestCase.class"/>
             </tests>
-        </jsf.junit>   
+        </jsf.junit>
+
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/component/*TestCase.class"/>
+            </tests>
+        </jsf.junit>
+        
     </target>
 
     <target name="test.component01"
