@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.10 2003/08/29 00:09:25 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.11 2003/09/02 03:13:03 eburns Exp $
  */
 
 /*
@@ -112,6 +112,10 @@ public class UIComponentTagTestCase extends TestCase {
                                true, 1024, true);
 
         // Set up Faces API Objects
+	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
+				 "javax.faces.mock.MockApplicationFactory");
+	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+				 "javax.faces.mock.MockRenderKitFactory");
         externalContext =
             new MockExternalContext(servletContext, request, response);
         lifecycle = new MockLifecycle();

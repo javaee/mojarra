@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.10 2003/08/30 00:31:41 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.11 2003/09/02 03:12:58 eburns Exp $
  */
 
 /*
@@ -93,6 +93,11 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         response = new MockHttpServletResponse();
 
         // Set up Faces API Objects
+	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
+				 "javax.faces.mock.MockApplicationFactory");
+	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+				 "javax.faces.mock.MockRenderKitFactory");
+
         externalContext =
             new MockExternalContext(servletContext, request, response);
         lifecycle = new MockLifecycle();

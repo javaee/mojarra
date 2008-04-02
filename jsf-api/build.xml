@@ -52,6 +52,8 @@
   <property name="build.test"       value="${build.dir}/test"/>
   <property name="build.javadocs"   value="${build.dir}/javadocs"/>
   <property name="build.mifdocs"    value="${build.dir}/mifdocs"/>
+  <property name="javadoc.private"  value="false"/>
+  <property name="javadoc.protected"  value="true"/>
 
 
   <!-- Default value for debugging arguments is no.  Override in
@@ -197,6 +199,8 @@
   <target name="test"
    description="Run all JUnit test cases"
        depends="build.test,
+                test.FactoryFinder,
+                test.FactoryFinder2,
                 test.UIComponent,
                 test.UIComponentBase,
                 test.UIComponentBaseState,
@@ -219,6 +223,29 @@
                 test.UIComponentTag">
   </target>
 
+  <target name="test.FactoryFinder" depends="build.test">
+    <echo message="Running FactoryFinder tests ..."/>
+    <mkdir dir="${build.classes}/META-INF/services"/>
+    <echo file="${build.classes}/META-INF/services/javax.faces.context.FacesContextFactory">javax.faces.mock.MockFacesContextFactoryExtender</echo>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.FactoryFinderTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+    <delete dir="${build.classes}/META-INF"/>
+  </target>
+
+  <target name="test.FactoryFinder2" depends="build.test">
+    <echo message="Running FactoryFinder tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.FactoryFinderTestCase2"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
   <target name="test.UIComponent" depends="build.test">
     <echo message="Running UIComponent tests ..."/>
     <java classname="${test.runner}" fork="yes"
@@ -234,10 +261,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UIComponentBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -248,10 +271,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UIComponentBaseStateTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -264,10 +283,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UICommandBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -278,10 +293,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UIFormBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -292,10 +303,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UIGraphicBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -306,10 +313,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UIInputBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -320,10 +323,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UINamingContainerBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -334,10 +333,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UIOutputBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -348,10 +343,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UIViewRootBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -362,10 +353,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UIPanelBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -376,10 +363,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UIParameterBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -390,10 +373,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UISelectBooleanBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -404,10 +383,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UISelectItemBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -418,10 +393,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UISelectItemsBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -432,10 +403,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UISelectManyBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -446,10 +413,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UISelectOneBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -478,10 +441,6 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
-      <sysproperty key="javax.faces.application.ApplicationFactory"
-                 value="javax.faces.mock.MockApplicationFactory"/>
-      <sysproperty key="javax.faces.render.RenderKitFactory"
-                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.webapp.UIComponentTagTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -567,8 +526,8 @@
     <javadoc packagenames="javax.*"
              sourcepath="${src.dir}"
              destdir="${build.javadocs}"
-             private="false"
-             protected="true"
+             private="${javadoc.private}"
+             protected="${javadoc.protected}"
              windowtitle="${Name} (${version})"
              doctitle="${Name} (${version})"
              bottom="Copyright &#169; 2002-2003 Sun Microsystems, Inc. All Rights Reserved.">

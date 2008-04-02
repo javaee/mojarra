@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKitFactory.java,v 1.1 2003/07/20 00:41:46 craigmcc Exp $
+ * $Id: MockRenderKitFactory.java,v 1.2 2003/09/02 03:13:01 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -21,7 +22,12 @@ import javax.faces.render.RenderKitFactory;
 
 public class MockRenderKitFactory extends RenderKitFactory {
 
-
+    public MockRenderKitFactory(RenderKitFactory oldImpl) {
+	System.setProperty(FactoryFinder.RENDER_KIT_FACTORY, 
+			   this.getClass().getName());
+    }
+    public MockRenderKitFactory() {}
+    
     private Map renderKits = new HashMap();
 
 

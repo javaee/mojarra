@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.8 2003/08/27 22:33:59 craigmcc Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.9 2003/09/02 03:12:53 eburns Exp $
 
 -->
 
@@ -126,7 +126,7 @@
     hierarchy, and contains nested elements for all of the other configuration
     settings.
 -->
-<!ELEMENT faces-config    ((application|component|converter|managed-bean|message-resources|navigation-rule|referenced-bean|render-kit|validator)*)>
+<!ELEMENT faces-config    ((application|factory|component|converter|managed-bean|message-resources|navigation-rule|referenced-bean|render-kit|validator)*)>
 
 
 <!-- ==================== Definition Elements ============================= -->
@@ -140,6 +140,15 @@
     default.
 -->
 <!ELEMENT application     ((action-listener|navigation-handler|view-handler|property-resolver|variable-resolver)*)>
+
+
+<!--
+    The "factory" element provides a mechanism to define the various
+    Factories that comprise parts of the implementation of JavaServer
+    Faces.  For nested elements that are not specified, the JSF
+    implementation must provide a suitable default.
+-->
+<!ELEMENT factory     ((application-factory|faces-context-factory|lifecycle-factory|render-kit-factory)*)>
 
 
 <!--

@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplicationFactory.java,v 1.3 2003/07/29 00:42:33 craigmcc Exp $
+ * $Id: MockApplicationFactory.java,v 1.4 2003/09/02 03:12:59 eburns Exp $
  */
 
 /*
@@ -9,13 +9,18 @@
 
 package javax.faces.mock;
 
-
+import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 
 
 public class MockApplicationFactory extends ApplicationFactory {
 
+    public MockApplicationFactory(ApplicationFactory oldImpl) {
+	System.setProperty(FactoryFinder.APPLICATION_FACTORY, 
+			   this.getClass().getName());
+    }
+    public MockApplicationFactory() {}
 
     private Application application = null;
 
