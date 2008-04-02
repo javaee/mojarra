@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.46 2006/03/29 23:03:42 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.47 2006/05/11 02:40:28 rlubke Exp $
  */
 
 /*
@@ -206,11 +206,11 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
          if (caseStruct == null && logger.isLoggable(Level.WARNING)) {
             if (fromAction == null) {
-                logger.log(Level.WARNING,
+                logger.log(Level.FINE,
                            "jsf.navigation.no_matching_outcome",
                            new Object[] {viewId, outcome});
             } else {
-                logger.log(Level.WARNING,
+                logger.log(Level.FINE,
                            "jsf.navigation.no_matching_outcome_action",
                            new Object[] {viewId, outcome, fromAction});
             }
