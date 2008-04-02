@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.37 2003/10/30 22:15:33 jvisvanathan Exp $
+ * $Id: LifecycleImpl.java,v 1.38 2003/10/30 23:07:35 craigmcc Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import org.apache.commons.logging.LogFactory;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.37 2003/10/30 22:15:33 jvisvanathan Exp $
+ * @version $Id: LifecycleImpl.java,v 1.38 2003/10/30 23:07:35 craigmcc Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -264,6 +264,17 @@ public class LifecycleImpl extends Lifecycle
 	    }
 	    phaseListeners.add(listener);
 	}
+    }
+
+    public PhaseListener[] getPhaseListeners() {
+        if (null == phaseListeners) {
+            return (new PhaseListener[0]);
+        } else {
+            synchronized(lock) {
+                return ((PhaseListener[]) phaseListeners.toArray
+                        (new PhaseListener[phaseListeners.size()]));
+            }
+        }
     }
 
     public void removePhaseListener(PhaseListener listener) {
