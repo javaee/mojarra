@@ -36,7 +36,7 @@
  maintenance of any nuclear facility.
 -->
 
-<%-- $Id: chart.jsp,v 1.5 2004/04/01 20:55:09 rkitain Exp $ --%>
+<%-- $Id: chart.jsp,v 1.6 2004/04/24 22:18:47 jvisvanathan Exp $ --%>
 
 
 
@@ -57,12 +57,11 @@
      <hr>
      <table> 
       <tr>
-         <th><h:outputText value="Vertical Bar Chart with data specifed via JSP" /></th>
+         <th align="left"><h:outputText value="Vertical Bar Chart with data specifed via JSP" /></th>
       </tr> 
       <tr> 
       <td>
-      <d:chart width="300" height="300" type="bar" orientation="vertical" 
-         title="Employee Number By Department" xlabel="Departments" ylabel="Employees">
+      <d:chart width="300" height="300" title="Employee Number By Department" xlabel="Departments" ylabel="Employees">
          <d:chartItem itemLabel="Eng" itemValue="200" itemColor="red" />
          <d:chartItem itemLabel="Mktg" itemValue="400" itemColor="green" />
          <d:chartItem itemLabel="Sales" itemValue="250" itemColor="blue" />
@@ -73,7 +72,7 @@
       <td>
       <table>
       <tr>
-         <th><h:outputText value="Horizontal Bar Chart with data specifed via JSP" /></th>
+         <th align="left"><h:outputText value="Horizontal Bar Chart with data specifed via JSP" /></th>
       </tr>
       <tr>
       <td>
@@ -87,15 +86,9 @@
       </d:chart>
       </td>
       </tr>
-      </table>
-      <td>
-      </tr> 
-    </table>
-
-     <table>
       <tr>
-         <th><h:outputText value="Pie Chart with data specifed via JSP" /></th>
-</h:form>
+         <th align="left"><h:outputText value="Pie Chart with data specifed via JSP" /></th>
+
       </tr>
       <tr>
      <td>
@@ -107,27 +100,24 @@
          <d:chartItem itemLabel="R&D" itemValue="700" itemColor="orange" />
          <d:chartItem itemLabel="HR" itemValue="800" itemColor="cyan" />
      </d:chart> </td>
-     </tr> </table>
+     </tr>
+      </table>
+      <td>
+      </tr> 
+    </table>
 
+</h:form>
+</f:view>
 
-
-<!--
   <hr>
   <a href='<%= request.getContextPath() + "/index.jsp" %>'>Back</a> to home page.
 
 <h1>How to Use this Component</h1>
 
-<p>This component produces a search engine style scroller that facilitates
-   easy navigation over results that span across several pages.
+<p>This component generates different types of charts like Bar and Pie.
 </p>
 
 <h2>JSP Attributes</h2>
-
-<p>This component relies on the presence of a data grid to display the results
-   in the form of a table. You can compare the
-rendered source of this page, using the "View Source" feature of your
-browser, with <a href="ShowSource.jsp?filename=/result-set.jsp">the JSP
-source</A> for this page.</p>
 
 <table border="1">
 
@@ -140,86 +130,73 @@ source</A> for this page.</p>
 
 <tr>
 
-<td><code>navFacetOrientation</code>
+<td><code>width</code>
 </td>
-
-<td>"NORTH", "SOUTH", "EAST", or "WEST".  This attribute tells where to
-put the number that means "skip to page N in the result set" in relation
-the facet.
+<td>
+A value binding expression or a literal value corresponding to the width of the chart.
 </td>
 </tr>
 
 <tr>
-<td><code>forValue</code>
+<td><code>height</code>
 </td>
-<td>The data grid component for which this acts as a scroller.
+<td>A value binding expression or a literal value corresponding to the height of the chart.
 </td>
 </tr>
 
 <tr>
-<td><code>actionListener</code></td>
-<td>Method binding reference to handle an action event generated as a result of 
-    clicking on a link that points a particular page in the result-set.
+<td><code>orientation</code></td>
+<td>A value binding expression or a literal value corresponding to the orientation of the chart.
+This attribute applies to bar charts only. Valid values are "horizontal" and "vertical".
+Default orientation is "vertical".
 </td>
 </tr>
+
+<tr>
+<td><code>title</code></td>
+<td>A value binding expression or a literal value corresponding to the title of the chart.
+</td>
+</tr>
+
+<tr>
+<td><code>xlabel</code></td>
+<td>A value binding expression or a literal value that represents the label for x-axis.
+</td>
+</tr>
+
+<tr>
+<td><code>ylabel</code></td>
+<td>A value binding expression or a literal value that represents the label for y-axis.
+</td>
+</tr>
+
+<tr>
+<td><code>type</code></td>
+<td>A value binding expression or a literal value that specifies what type of chart to generate.
+Supported types are "bar" and "pie". Default type is "bar".
+</td>
+</tr>
+
 </table>
 
-<h2>Facets</h2>
+<h2>How to specify data for chart</h2>
 
-<p>You can define Facets for each of the following elements of the
-result set component.</p>
+<p>Chart can be described using an array of <code>ChartItem</code> specified in the model or it can be described using <code>JSP</code> tags.</p>
 
-<table border="1">
-<tr>
-<th>Facet Name
-</th>
-<th>What it Does
-</th>
-</tr>
+<h3>Described From JSP</h3>
 
-<tr>
-<td><code>next</code>
-</td>
+<p>The <code>chart</code> tag consists of multiple <code>chartItem</code> tags.  
+Each <code>chartItem</code> tag corresponds to a single column of the chart. 
+The <code>chartItem</code> tag supports attributes like itemLabel, itemColor and itemValue
+which can be literal value or a valueBinding expression that points to a ChartItem.</p>
 
-<td>If present, this facet is output as the "Next" widget.  If absent,
-the word "Next" is used.
-</td>
-</tr>
+<h3>Described From Model</h3>
 
-<tr>
-<td><code>previous</code>
-</td>
-<td>If present, this facet is output as the "Previous" widget.  If absent,
-the word "Previous" is used.
-</td>
-</tr>
+<p>The <code>value</code> attribute specified on a chart tag refers to an array of <code>ChartItem</code>. 
+Each element of the array represents a single column of the chart.</p>
 
-
-<tr>
-<td><code>number</code>
-</td>
-
-<td>If present, this facet is output, leveraging the
-<code>navFacetOrientation</code> attribute, to represent "skip to page N
-in the result set".
-</td>
-
-</tr>
-
-<tr>
-<td><code>current</code>
-</td>
-
-<td>If present, this facet is output, leveraging the
-<code>navFacetOrientation</code> attribute, to represent the "current
-page" in the result set.
-</td>
-
-</tr>
-</table>
--->
 <hr>
 <a href='<%= request.getContextPath() + "/index.jsp" %>'>Back</a> to home page.
 </body>
 </html>
-</f:view>
+

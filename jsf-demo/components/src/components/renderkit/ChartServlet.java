@@ -1,5 +1,5 @@
 /*
- * $Id: ChartServlet.java,v 1.7 2004/04/06 16:54:19 rkitain Exp $
+ * $Id: ChartServlet.java,v 1.8 2004/04/24 22:18:45 jvisvanathan Exp $
  */
 
 /*
@@ -223,6 +223,9 @@ public final class ChartServlet extends HttpServlet {
 	    throw new ServletException("No data items specified...");
 	}
 
+        // remove the chart data from session now that chart has been rendered.
+        session.removeAttribute(id);
+        
 	// maximum data value
 	int maxDataValue = 0;
 	// maximum label width
@@ -416,9 +419,6 @@ public final class ChartServlet extends HttpServlet {
         JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(output);
         encoder.encode(bi);
         output.close();
-        
-        // remvoe the chart data from session now that chart has been rendered.
-        session.removeAttribute(id);
     }
 
     /**
@@ -459,12 +459,15 @@ public final class ChartServlet extends HttpServlet {
 	}
 	
 	// get an array of chart items containing our data..
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
 	ChartItem[] chartItems = (ChartItem[])session.getAttribute(id);
 	if (chartItems == null) {
             System.out.println("No data items specified...");
 	    throw new ServletException("No data items specified...");
 	}
+        
+        // remove the chart data from session now that chart has been rendered.
+        session.removeAttribute(id);
         
         // begin pie chart
         Color dropShadow = new Color(240,240,240);
@@ -598,10 +601,6 @@ public final class ChartServlet extends HttpServlet {
         JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(output);
         encoder.encode(bi);
         output.close();
-        
-        // remvoe the chart data from session now that chart has been rendered.
-        session.removeAttribute(id);
-
     }
     
     /**
