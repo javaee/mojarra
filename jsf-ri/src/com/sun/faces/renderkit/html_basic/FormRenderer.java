@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.58 2003/09/13 12:58:49 eburns Exp $
+ * $Id: FormRenderer.java,v 1.59 2003/09/24 19:49:23 rkitain Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -29,7 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.58 2003/09/13 12:58:49 eburns Exp $
+ * @version $Id: FormRenderer.java,v 1.59 2003/09/24 19:49:23 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -73,6 +74,21 @@ public class FormRenderer extends HtmlBasicRenderer {
     //
     // Methods From Renderer
     //
+
+    public void decode(FacesContext context, UIComponent component) 
+            throws IOException {
+	// Was our form the one that was submitted?  If so, we need to set
+	// the indicator accordingly..
+	// 
+        String clientId = component.getClientId(context);
+        Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
+        if (requestParameterMap.containsKey(clientId)) {
+	    ((UIForm)component).setSubmitted(true);
+	} else {
+	    ((UIForm)component).setSubmitted(false);
+	}
+    }
+
 
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException{
@@ -169,6 +185,15 @@ public class FormRenderer extends HtmlBasicRenderer {
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null);
+
+	// this hidden field will be checked in the decode method to determine if
+	// this form has been submitted.
+	//
+        writer.startElement("input", component);
+	writer.writeAttribute("type", "hidden", "type");
+	writer.writeAttribute("name", component.getClientId(context), "clientId");
+        writer.writeAttribute("value", component.getClientId(context), "value");
+
         writer.endElement("form");
     }
 
