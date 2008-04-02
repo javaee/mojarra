@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.71 2003/11/11 05:54:34 craigmcc Exp $
+ * $Id: TestRenderers_2.java,v 1.72 2003/11/11 06:45:02 horwat Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.71 2003/11/11 05:54:34 craigmcc Exp $
+ * @version $Id: TestRenderers_2.java,v 1.72 2003/11/11 06:45:02 horwat Exp $
  * 
  *
  */
@@ -466,7 +466,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("Testing MessageRenderer");
         UIMessage message = new UIMessage();
         message.setId("myMessage_0");
-        message.setFor("myForMessage_0");
+        message.setFor("myMessage_0");
         root.getChildren().add(message);
 
         ResponseWriter originalWriter = getFacesContext().getResponseWriter();
@@ -507,7 +507,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(message);
         message = new UIMessage();
         message.setId("myMessage_1");
-        message.setFor("myForMessage_1");
+        message.setFor("myMessage_1");
         root.getChildren().add(message);
 
         writer = new StringWriter();
@@ -544,7 +544,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(message);
         message = new UIMessage();
         message.setId("myMessage_2");
-        message.setFor("myForMessage_2");
+        message.setFor("myMessage_2");
         root.getChildren().add(message);
 
         writer = new StringWriter();
@@ -581,7 +581,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(message);
         message = new UIMessage();
         message.setId("myMessage_3");
-        message.setFor("myForMessage_3");
+        message.setFor("myMessage_3");
         root.getChildren().add(message);
 
 
@@ -620,7 +620,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(message);
         message = new UIMessage();
         message.setId("myMessage_4");
-        message.setFor("myForMessage_4");
+        message.setFor("myMessage_4");
         root.getChildren().add(message);
 
         writer = new StringWriter();
@@ -665,7 +665,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(message);
         message = new UIMessage();
         message.setId("myMessage_5");
-        message.setFor("myForMessage_5");
+        message.setFor("myMessage_5");
         root.getChildren().add(message);
 
         writer = new StringWriter();
@@ -720,7 +720,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("Testing MessagesRenderer");
         UIMessages messages = new UIMessages();
         messages.setId("myMessage_0");
-        messages.setFor("myForMessage_0");
+        messages.setFor("myMessage_0");
         root.getChildren().add(messages);
 
         ResponseWriter originalWriter = getFacesContext().getResponseWriter();
@@ -764,7 +764,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_1");
-        messages.setFor("myForMessage_1");
+        messages.setFor("myMessage_1");
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -809,7 +809,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_2");
-        messages.setFor("myForMessage_2");
+        messages.setFor("myMessage_2");
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -855,7 +855,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_3");
-        messages.setFor("myForMessage_3");
+        messages.setFor("myMessage_3");
         root.getChildren().add(messages);
 
 
@@ -899,7 +899,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_4");
-        messages.setFor("myForMessage_4");
+        messages.setFor("myMessage_4");
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -953,7 +953,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_5");
-        messages.setFor("myForMessage_5");
+        messages.setFor("myMessage_5");
         root.getChildren().add(messages);
 
         writer = new StringWriter();

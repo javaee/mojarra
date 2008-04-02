@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.4 2003/11/11 06:13:31 horwat Exp $
+ * $Id: MessagesRenderer.java,v 1.5 2003/11/11 06:45:04 horwat Exp $
  */
 
 /*
@@ -185,12 +185,11 @@ public class MessagesRenderer extends HtmlBasicRenderer {
 
                 if (!wroteSpan) {
                      writer.startElement("span", component);
-                     wroteTooltip = true;
                 }
                 writer.writeAttribute("title", summary, "title");
                 writer.closeStartTag(component);
-
 	        writer.writeText("\t", null);
+                wroteTooltip = true;
             } else if (wroteSpan) {
                 writer.closeStartTag(component);
             }
