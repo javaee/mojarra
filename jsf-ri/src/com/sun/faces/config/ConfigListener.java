@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.18 2003/09/13 01:57:16 rkitain Exp $
+ * $Id: ConfigListener.java,v 1.19 2003/09/16 18:10:11 rkitain Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -77,14 +77,16 @@ public class ConfigListener implements ServletContextListener
     //
     // Class Variables
     //
-    private static Set loaders = null;
+    // A set of current ClassLoader(s)
+    // This set is examined to determine if the contextInitialized method
+    // has already executed for the current web app.
+    //
+    private static Set loaders = new HashSet();
 
     //
     // Instance Variables
     //
     private ConfigParser configParser = null;
-    private ClassLoader loader = null;
-    private Object lock = new Object();
 
     // Attribute Instance Variables
 
@@ -114,10 +116,7 @@ public class ConfigListener implements ServletContextListener
     {
 	// If this method has already executed for this webapp...
 	//
-	loader = Thread.currentThread().getContextClassLoader();
-	if (loader == null) {
-            loader = this.getClass().getClassLoader();
-	}
+
 	if (isContextInitialized()) {
 	    return;
 	}
@@ -212,7 +211,9 @@ public class ConfigListener implements ServletContextListener
 
     public void contextDestroyed(ServletContextEvent e) {  
         e.getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
-	loaders = null;
+	synchronized(loaders) {
+	    loaders.remove(Util.getCurrentLoader(loaders));
+	}
         if (log.isTraceEnabled()) {
 	    log.trace("CONTEXT DESTROYED CALLED...");
         }
@@ -338,15 +339,9 @@ public class ConfigListener implements ServletContextListener
 	//
 	// Do this to ensure this method nly executes once per webapp
 	//
-	if (loader == null) {
-	    return false;
-	}
-	synchronized(lock) {
-	    if (loaders == null) {
-	        loaders = new HashSet();
-	    }
-	    if (!loaders.contains(loader)) {
-	        loaders.add(loader);
+	synchronized(loaders) {
+	    if (!loaders.contains(Util.getCurrentLoader(loaders))) {
+	        loaders.add(Util.getCurrentLoader(loaders));
 		if (log.isTraceEnabled()) {
 		    log.trace("Added Classloader");
 		}
@@ -358,11 +353,5 @@ public class ConfigListener implements ServletContextListener
 	        return true;
 	    }
 	}
-    }
-
-    // This is here so tests (same package) can manually clear the Set.
-    //
-    static void clearLoaderSet() {
-        loaders = null;
     }
 } 
