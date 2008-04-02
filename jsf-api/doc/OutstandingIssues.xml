@@ -36,25 +36,10 @@ See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA14">JSFA14</a> in S
 <issue>
   <id>OutputMethods-2</id>
   <originator>Craig</originator>
-  <summary>Consider refactoring OutputMethod from ResponseWriter</summary>
+  <summary></summary>
   <description>
-    <p>Currently, the extended methods for writing elements and attributes
-    (proposed by Adam) are defined on <code>ResponseWriter</code> directly.
-    The current implementation of <code>javax.faces.webapp.FacesTag</code>
-    requires a concrete implementation of <code>JspResponseWriter()</code>
-    to be in the API classes, which is undesireable for something as
-    detailed as these methods.  Options to consider:</p>
-    <ul>
-    <li>Modify <code>FacesTag</code> so that it can look up an
-        implementation of <code>JspResponseWriter</code> somehow.</li>
-    <li>Extract the element and attribute methods into a wrapper API
-        around a ResponseWriter (analogous to the way that
-        <code>java.io.FilterWriter</code> can wrap a Writer.  (Still
-        need a generic discovery mechanism though).</li>
-    </ul>
   </description>
   <resolution>
-    <p><em>04 Sep 2002</em> - Craig to present writeup to EG.</p>
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
@@ -698,24 +683,16 @@ moved to
 <issue>
   <id>Converters-29</id>
   <originator>EG</originator>
-  <summary>Add by-Class registration and lookup of Converters</summary>
+  <summary>JSFA19 in Scarab</summary>
   <description>
-    <p>Per EG discussion, we added <code>javax.faces.convert.Converter</code>
-    APIs in 20020902.  Based on subsequent discussion, we also need to add
-    by-Class registrtation and lookup of Converters, including search order
-    definition on the by-Class lookup (based on closest inheritance).</p>
-
-    <p>Additional note from Joe - should be able to use these converters
-    for UISelectOne/UISelectMany data too (Object/Object[] instead of
-    String/String[]).</p>
+    Now tracked at <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA19">JSFA19</a> at Scarab.
   </description>
   <resolution>
-    <p><em>11 Sep 2002</em> - Craig to add these APIs and spec changes.</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>11 Sep 2002</status-date>
-  <priority>2</priority>
-  <effort>Medium</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
