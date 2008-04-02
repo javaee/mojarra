@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.9 2003/08/25 21:34:55 jvisvanathan Exp $
+ * $Id: TestNavigationHandler.java,v 1.10 2003/09/08 20:13:14 rkitain Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.9 2003/08/25 21:34:55 jvisvanathan Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.10 2003/09/08 20:13:14 rkitain Exp $
  * 
  */
 
@@ -182,8 +182,13 @@ public class TestNavigationHandler extends ServletFacesTestCase
             }
             if ( !gotException) {
                 newViewId = context.getViewRoot().getViewId();
-                System.out.println("assertTrue("+newViewId+".equals("+testResult.toViewId+"))");
-                assertTrue(newViewId.equals(testResult.toViewId));
+		if (testResult.fromOutcome == null) {
+                    System.out.println("assertTrue("+newViewId+".equals("+testResult.fromViewId+"))");
+                    assertTrue(newViewId.equals(testResult.fromViewId));
+		} else {
+                    System.out.println("assertTrue("+newViewId+".equals("+testResult.toViewId+"))");
+                    assertTrue(newViewId.equals(testResult.toViewId));
+		}
             }
         }
     }
