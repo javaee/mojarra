@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.8 2003/10/23 06:12:47 craigmcc Exp $
+ * $Id: TableRenderer.java,v 1.9 2003/11/05 01:05:15 craigmcc Exp $
  */
 
 /*
@@ -173,9 +173,8 @@ public class TableRenderer extends HtmlBasicRenderer {
 		break;
 	    }
             // Select the current row
-            try {
-                data.setRowIndex(++rowIndex);
-            } catch (IndexOutOfBoundsException e) {
+	    data.setRowIndex(++rowIndex);
+	    if (!data.isRowAvailable()) {
                 break; // Scrolled past the last row
             }
 
