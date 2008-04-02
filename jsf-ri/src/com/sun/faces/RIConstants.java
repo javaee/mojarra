@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.48 2003/10/20 21:32:50 jvisvanathan Exp $
+ * $Id: RIConstants.java,v 1.49 2003/11/12 19:04:36 horwat Exp $
  */
 
 /*
@@ -118,5 +118,11 @@ public class RIConstants {
     public static final String REQUEST_SCOPE = "requestScope";
 
     public static boolean IS_UNIT_TEST_MODE = false;
+
+    /*
+     * <p>TLV Resource Bundle Location </p>
+     */
+    public static final String TLV_RESOURCE_LOCATION = "com.sun.faces.resources.Resources";
+
 
 }

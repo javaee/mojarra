@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTagParserImpl.java,v 1.4 2003/11/10 00:08:23 eburns Exp $
+ * $Id: CommandTagParserImpl.java,v 1.5 2003/11/12 19:04:34 horwat Exp $
  */
 
 /*
@@ -9,12 +9,15 @@
 
 package com.sun.faces.taglib.html_basic;
 
+import java.util.ResourceBundle;
+import java.text.MessageFormat;
+
 import org.xml.sax.Attributes;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
 import com.sun.faces.taglib.TagParser;
-import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
 
@@ -117,8 +120,10 @@ public class CommandTagParserImpl implements TagParser {
         if (failed = !(hasValue || hasImage)) {
   	    Object[] obj = new Object[1];
             obj[0] = qn;
-            failureMessages.append(Util.getExceptionMessage(
-                Util.VALIDATION_COMMAND_ERROR_ID, obj));
+            ResourceBundle rb = ResourceBundle.getBundle(
+                RIConstants.TLV_RESOURCE_LOCATION);
+            failureMessages.append(
+                MessageFormat.format(rb.getString("TLV_COMMAND_ERROR"), obj));
             failureMessages.append("\n");
         }
 

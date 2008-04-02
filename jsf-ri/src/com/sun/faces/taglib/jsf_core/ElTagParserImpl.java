@@ -1,5 +1,5 @@
 /*
- * $Id: ElTagParserImpl.java,v 1.7 2003/11/12 04:44:00 horwat Exp $
+ * $Id: ElTagParserImpl.java,v 1.8 2003/11/12 19:04:34 horwat Exp $
  */
 
 /*
@@ -8,6 +8,9 @@
  */
 
 package com.sun.faces.taglib.jsf_core;
+
+import java.util.ResourceBundle;
+import java.text.MessageFormat;
 
 import java.io.IOException;
 import javax.faces.el.ReferenceSyntaxException;
@@ -171,8 +174,10 @@ public class ElTagParserImpl implements TagParser {
 
   	Object[] obj = new Object[1];
         obj[0] = tagBuf;
+        ResourceBundle rb = ResourceBundle.getBundle(
+            RIConstants.TLV_RESOURCE_LOCATION);
         failureMessages.append(
-            Util.getExceptionMessage(Util.VALIDATION_EL_ERROR_ID, obj));
+            MessageFormat.format(rb.getString("TLV_EL_ERROR"), obj));
         failureMessages.append("\n");
     }
 }

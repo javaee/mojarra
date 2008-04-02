@@ -1,5 +1,5 @@
 /*
- * $Id: IdTagParserImpl.java,v 1.3 2003/11/06 22:40:16 horwat Exp $
+ * $Id: IdTagParserImpl.java,v 1.4 2003/11/12 19:04:35 horwat Exp $
  */
 
 /*
@@ -9,12 +9,15 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import java.util.ResourceBundle;
+import java.text.MessageFormat;
+
 import org.xml.sax.Attributes;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.taglib.ValidatorInfo;
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.TagParser;
-import com.sun.faces.util.Util;
 
 
 /**
@@ -71,7 +74,9 @@ public class IdTagParserImpl implements TagParser {
     public String getMessage() {
         Object[] obj = new Object[1];
         obj[0] = requiresIdList;
-        return Util.getExceptionMessage(Util.VALIDATION_ID_ERROR_ID, obj);
+        ResourceBundle rb = ResourceBundle.getBundle(
+            RIConstants.TLV_RESOURCE_LOCATION);
+        return MessageFormat.format(rb.getString("TLV_ID_ERROR"), obj);
     }
 
     /**
