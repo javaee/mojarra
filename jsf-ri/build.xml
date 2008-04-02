@@ -460,7 +460,7 @@
   </taskdef>
   <delete dir="${build.dir}/maven-repo" /><!-- clean it -->
   <maven-repository-importer destdir="${build.dir}/maven-repo" version="${snapshot.version}">
-    <artifact jar="${build.dir}/lib/jsf-impl.jar"  pom="jsf-impl.pom" />
+    <artifact jar="${build.dir}/lib/jsf-impl.jar"  pom="jsf-impl-pom.xml" />
   </maven-repository-importer>
 </target>
 
@@ -474,7 +474,7 @@
       <argument line="-z9 import -ko -W *.jar -kb -m" />
       <argument value="deploying new jars to the java.net maven repository" />
 
-      <argument value="javaserverfaces-sources/repo" />
+      <argument value="javaserverfaces/repo" />
       <argument line="deployment-to-maven-repository t${DSTAMP}${TSTAMP}" />
     </commandline>
   </cvs>
