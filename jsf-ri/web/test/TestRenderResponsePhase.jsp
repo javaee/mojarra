@@ -855,6 +855,18 @@ see the <i>angle brackets</i> on this text"></h:outputText>
   <h:commandLink value="form3 link1"/> <p />
 </h:form>
 
+<h:form id="form4">
+  <h:outputLink>
+      Link Enabled
+  </h:outputLink> 
+  <h:outputLink disabled="true">
+      Link Disabled
+  </h:outputLink> 
+  <h:outputLink disabled="true" styleClass="myClass">
+      Link Disabled With Class
+  </h:outputLink> 
+</h:form>
+
 </f:view>
 
     </BODY>

@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.20 2005/06/09 22:37:48 jayashri Exp $
+ * $Id: OutputLinkRenderer.java,v 1.21 2005/07/29 15:15:51 rogerk Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.logging.Level;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.20 2005/06/09 22:37:48 jayashri Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.21 2005/07/29 15:15:51 rogerk Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -107,6 +107,98 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         }
 
         UIOutput output = (UIOutput) component;
+        boolean componentDisabled = false;
+        if (output.getAttributes().get("disabled") != null) {
+            if ((output.getAttributes().get("disabled")).equals(Boolean.TRUE)) {
+                componentDisabled = true;
+            }
+        }
+        if (componentDisabled) {
+            renderAsDisabled(context, output);
+        } else {
+            renderAsActive(context, output);
+        }
+    }
+
+    public void encodeChildren(FacesContext context, UIComponent component)
+        throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding children " + component.getId());
+        }
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component "
+                          + component.getId() + " since " +
+                          "rendered attribute is set to false ");
+            }
+            return;
+        }
+        Iterator kids = component.getChildren().iterator();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            kid.encodeBegin(context);
+            if (kid.getRendersChildren()) {
+                kid.encodeChildren(context);
+            }
+            kid.encodeEnd(context);
+        }
+    }
+
+    public void encodeEnd(FacesContext context, UIComponent component)
+        throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+                                                                                                                          
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding " + component.getId());
+        }
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+           if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("End encoding component "
+                          + component.getId() + " since " +
+                          "rendered attribute is set to false ");
+            }
+            return;
+        }
+        ResponseWriter writer = context.getResponseWriter();
+        assert (writer != null);
+                                                                                                                          
+        boolean componentDisabled = false;
+        if (component.getAttributes().get("disabled") != null) {
+            if ((component.getAttributes().get("disabled")).equals(Boolean.TRUE)) {
+                componentDisabled = true;
+            }
+        }
+
+        if (componentDisabled) {
+            if (shouldWriteIdAttribute(component) ||
+                Util.hasPassThruAttributes(component) ||
+                (component.getAttributes().get("style") != null) ||
+                (component.getAttributes().get("styleClass") != null)) {
+                writer.endElement("span");
+            }
+        } else {
+            //Write Anchor inline elements
+            //Done writing Anchor element
+            writer.endElement("a");
+        }
+
+        return;
+    }
+
+    private void renderAsActive(FacesContext context, UIOutput component) 
+        throws IOException {
+ 
         String hrefVal = getCurrentValue(context, component);
         if (logger.isLoggable(Level.FINE)) {
              logger.fine("Value to be rendered " + hrefVal);
@@ -114,7 +206,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
 
         // suppress rendering if "rendered" property on the output is
         // false
-        if (!output.isRendered()) {
+        if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
                  logger.fine("End encoding component "
                           + component.getId() + " since " +
@@ -162,75 +254,43 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
 
         //handle css style class
         String styleClass = (String)
-            output.getAttributes().get("styleClass");
+            component.getAttributes().get("styleClass");
+        if (styleClass != null) {
+            writer.writeAttribute("class", styleClass, "styleClass");
+        }
+
+        writer.flush();
+    }
+
+    private void renderAsDisabled(FacesContext context, UIOutput component) 
+        throws IOException {
+
+        ResponseWriter writer = context.getResponseWriter();
+        assert (writer != null);
+
+        if (shouldWriteIdAttribute(component) ||
+            Util.hasPassThruAttributes(component) ||
+            (component.getAttributes().get("style") != null) ||
+            (component.getAttributes().get("styleClass") != null)) {
+            writer.startElement("span", component);
+        }
+        String writtenId = writeIdAttributeIfNecessary(context, writer, component);
+        if (null != writtenId) {
+            writer.writeAttribute("name", writtenId, "name");
+        }
+
+        Util.renderPassThruAttributes(context, writer, component);
+        String[] exclude = {"disabled"};
+        Util.renderBooleanPassThruAttributes(writer, component, exclude);
+                                                                                                                          
+        // style if present, rendered as passthru..
+        //handle css style class
+        String styleClass = (String)
+            component.getAttributes().get("styleClass");
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         writer.flush();
-
     }
-
-
-    public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding children " + component.getId());
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component "
-                          + component.getId() + " since " +
-                          "rendered attribute is set to false ");
-            }
-            return;
-        }
-        Iterator kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            kid.encodeBegin(context);
-            if (kid.getRendersChildren()) {
-                kid.encodeChildren(context);
-            }
-            kid.encodeEnd(context);
-        }
-    }
-
-
-    public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding " + component.getId());
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-           if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component "
-                          + component.getId() + " since " +
-                          "rendered attribute is set to false ");
-            }
-            return;
-        }
-        ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
-
-        //Write Anchor inline elements
-
-        //Done writing Anchor element
-        writer.endElement("a");
-        return;
-    }
-
 
 } // end of class OutputLinkRenderer
