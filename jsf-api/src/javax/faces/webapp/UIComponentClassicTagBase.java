@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.4 2005/05/12 22:10:55 jayashri Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.5 2005/08/15 18:58:32 jayashri Exp $
  */
 
 /*
@@ -8,20 +8,13 @@
  */
 
 package javax.faces.webapp;
-
-import javax.el.ELContext;
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
 import javax.servlet.jsp.tagext.JspIdConsumer;
-import javax.servlet.jsp.tagext.JspTag;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.BodyContent;
@@ -35,7 +28,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.io.IOException;
-import java.io.Writer;
+import javax.faces.component.NamingContainer;
 
 
 /**
@@ -168,7 +161,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */ 
     private static final String CURRENT_VIEW_ROOT =
         "javax.faces.webapp.CURRENT_VIEW_ROOT";
-
+    
     /**
      * Used as the prefix for ids.  This is necessary to avoid
      * uniqueness conflicts with the transient verbatim components.
@@ -246,6 +239,11 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
     private String id = null;
 
+    /**
+     * Caches the nearest enclosing {@link UIComponentClassicTagBase} of this
+     * tag. This is used for duplicate id detection.
+     */
+    private UIComponentClassicTagBase parentTag = null;
 
     // --------------------------------------------- Support Methods for Tag
 
@@ -640,7 +638,6 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             createdComponents = new ArrayList();
         }
         createdComponents.add(child.getId());
-
     }
 
     protected void addFacet(String name) {
@@ -962,7 +959,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             pageContext.setAttribute(CURRENT_FACES_CONTEXT, context);
         }        
 
-        UIComponentClassicTagBase parentTag = getParentUIComponentClassicTagBase(pageContext);
+        parentTag = getParentUIComponentClassicTagBase(pageContext);
         Map requestMap = context.getExternalContext().getRequestMap();
         Map componentIds = null;
         if (parentTag == null) {
@@ -981,11 +978,10 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 	    verbatim = parentTag.createVerbatimComponentFromBodyContent();
 	}
 
-
         // Locate the UIComponent associated with this UIComponentTag,
         // creating one if necessary
         component = findComponent(context);
-
+        
 	// if we have a verbatim component, add it after this component.
 	if (null != verbatim) {
 	    addVerbatimBeforeComponent(parentTag,
@@ -1280,7 +1276,15 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 	if (null == facesJspId) {
 	    if (null != jspId) {
 		facesJspId = UNIQUE_ID_PREFIX + jspId;
-	    }
+                // if this tag happens to be nested within <c:forEach>, jspId
+                // will be the same for each iteration. So it is
+                // transformed into a unique "id" by appending a counter which 
+                // gets stored in request scope with jspId as the key for use
+                // during the next iteration.
+                if (isDuplicateId(facesJspId)) {
+                    facesJspId = generateIdForIteratorChild(facesJspId);
+                } 
+            }
             else {
                 // jspId will be null if we're running in a container
                 // that doesn't support JspIdConsumer
@@ -1291,6 +1295,58 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     }
     
     /**
+     * Returns true if a component already exists with the same 
+     * <code>id</code>. This will be the case if this tag is 
+     * nested within <code><c:forEach></code> tag or any other JSTL loop tag 
+     * or if the page has components with the same <code>Id</code>.
+     *
+     * @param componentId <code>id</code> to be looked up for possible 
+     * duplication.
+     * @return true if this nested with <code>facesJspId</code> is duplicate.
+     */
+    private boolean isDuplicateId(String componentId) {
+        boolean result = false;
+        if (parentTag != null) {
+            List childComponents = parentTag.getCreatedComponents();
+            // PENDING: Need to analyze the impact of this look up on pages
+            // with several levels of nesting.
+            if (childComponents != null) {
+                result = childComponents.contains(componentId);
+            }
+        }
+       
+        return result;
+    }
+    
+    /*
+     * Appends a counter to the passed in <code>id</code> and stores the 
+     * <code>id</code> and counter information in request scope.
+     *
+     * @return String <code>id</code> with a counter appended to it.
+     */
+    private String generateIdForIteratorChild (String componentId) {
+        Map requestMap = getFacesContext().getExternalContext().getRequestMap();
+        Integer serialNum = (Integer) requestMap.get(componentId);
+        if (null == serialNum) {
+            serialNum = new Integer(1);
+        } else {
+            serialNum = new Integer(serialNum.intValue() + 1);            
+        }   
+        requestMap.put(componentId, serialNum);
+        componentId = componentId + UNIQUE_ID_PREFIX + serialNum.intValue();
+        return componentId;
+    }
+    
+    /**
+     * Returns the <code>List</code> of {@link UIComponent} ids created or 
+     * located by nested {@link UIComponentTag}s while processing the current
+     * request.</p>
+     */
+    protected List getCreatedComponents() {
+        return createdComponents;
+    }
+    
+    /**
      * <p>Create the component identifier to be used for this component.</p>
      */
     private String createId() {
@@ -1298,8 +1354,16 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 	if (this.id == null) {
 	    return getFacesJspId();
 	} else {
+            // if this tag happens to be nested within <c:forEach>, jspId
+            // will be the same for each iteration. So it is
+            // transformed into a unique "id" by appending a counter which gets
+            // stored in request scope with jspId as the key for use during next
+            // iteration.
+            if (isDuplicateId(this.id)) {
+                this.id = generateIdForIteratorChild(this.id);
+            }
 	    return (this.id);
-	}
+        }
 
     }
 
