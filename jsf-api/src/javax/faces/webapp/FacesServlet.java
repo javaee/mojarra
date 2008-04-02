@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.18 2004/01/16 21:30:15 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.19 2004/01/21 09:57:44 craigmcc Exp $
  */
 
 /*
@@ -30,19 +30,19 @@ import javax.servlet.ServletResponse;
  * <p><strong>FacesServlet</strong> is a servlet that manages the request
  * processing lifecycle for web applications that are utilizing JavaServer
  * Faces to construct the user interface.</p>
- *
- * <p>This servlet recognizes the following context initialization
- * parameters:</p>
- * <ul>
- * <li><strong>javax.faces.lifecycle.LIFECYCLE_ID</strong> - Lifecycle
- *     identifier of the {@link Lifecycle} instance to be used when
- *     processing JSF requests in this web application.  If not specified,
- *     the default instance, identified by
- *     <code>LifecycleFactory.DEFAULT_LIFECYCLE</code>, will be used.</li>
- * </ul>
  */
 
 public final class FacesServlet implements Servlet {
+
+
+    /**
+     * <p>Context initialization parameter name for a comma delimited list
+     * of context-relative resource paths (in addition to
+     * <code>/WEB-INF/faces-config.xml</code> which is loaded automatically
+     * if it exists) containing JavaServer Faces configuration information.</p>
+     */
+    private static final String CONFIG_FILES_ATTR =
+	"javax.faces.CONFIG_FILES";
 
 
     /**
@@ -50,7 +50,7 @@ public final class FacesServlet implements Servlet {
      * of the {@link Lifecycle} instance to be utilized.</p>
      */
     private static final String LIFECYCLE_ID_ATTR =
-        "javax.faces.lifecycle.LIFECYCLE_ID";
+        "javax.faces.LIFECYCLE_ID";
 
 
     /**
