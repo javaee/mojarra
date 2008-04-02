@@ -10,7 +10,7 @@ RenderKit Definition
 <SCRIPT>
 function asd()
 {
-parent.document.title="RenderKit Definition";
+parent.document.title="Standard HTML RenderKit";
 }
 </SCRIPT>
 <BODY BGCOLOR="white" onload="asd();">

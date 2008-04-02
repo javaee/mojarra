@@ -12,7 +12,7 @@ Faces RenderKit
 <SCRIPT>
 function asd()
 {
-parent.document.title="Faces RenderKit";
+parent.document.title="Standard HTML RenderKit";
 }
 </SCRIPT>
 <BODY BGCOLOR="white" onload="asd();">
