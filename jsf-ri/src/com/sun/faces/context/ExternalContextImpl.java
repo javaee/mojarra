@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.53 2006/11/29 20:39:04 edburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.54 2007/01/31 19:47:53 rlubke Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.53 2006/11/29 20:39:04 edburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.54 2007/01/31 19:47:53 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -172,9 +172,15 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
     public void setRequest(Object request) {
-	if (request instanceof ServletRequest) {
-	    this.request = (ServletRequest) request;
-	}
+        if (request instanceof ServletRequest) {
+            this.request = (ServletRequest) request;
+            requestHeaderMap = null;
+            requestHeaderValuesMap = null;
+            requestHeaderValuesMap = null;
+            requestMap = null;
+            requestParameterMap = null;
+            requestParameterValuesMap = null;
+        }
     }
     
     public void setRequestCharacterEncoding(String encoding) throws UnsupportedEncodingException {
