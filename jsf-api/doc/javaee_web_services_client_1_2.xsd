@@ -1,52 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!--
- The contents of this file are subject to the terms
- of the Common Development and Distribution License
- (the License). You may not use this file except in
- compliance with the License.
- 
- You can obtain a copy of the License at
- https://javaserverfaces.dev.java.net/CDDL.html or
- legal/CDDLv1.0.txt. 
- See the License for the specific language governing
- permission and limitations under the License.
- 
- When distributing Covered Code, include this CDDL
- Header Notice in each file and include the License file
- at legal/CDDLv1.0.txt.    
- If applicable, add the following below the CDDL Header,
- with the fields enclosed by brackets [] replaced by
- your own identifying information:
- "Portions Copyrighted [year] [name of copyright owner]"
- 
- [Name of File] [ver.__] [Date]
- 
- Copyright 2005 Sun Microsystems Inc. All Rights Reserved
--->
-
-
-<!--
- The contents of this file are subject to the terms
- of the Common Development and Distribution License
- (the "License").  You may not use this file except
- in compliance with the License.
-
- You can obtain a copy of the license at
- glassfish/bootstrap/legal/CDDLv1.0.txt or
- https://glassfish.dev.java.net/public/CDDLv1.0.html.
- See the License for the specific language governing
- permissions and limitations under the License.
-
- When distributing Covered Code, include this CDDL
- HEADER in each file and include the License file at
- glassfish/bootstrap/legal/CDDLv1.0.txt.  If applicable,
- add the following below this CDDL HEADER, with the
- fields enclosed by brackets "[]" replaced with your
- own identifying information: Portions Copyright [yyyy]
- [name of copyright owner]
--->
-
 <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema"
 	    targetNamespace="http://java.sun.com/xml/ns/javaee"
 	    xmlns:javaee="http://java.sun.com/xml/ns/javaee"
@@ -56,7 +8,7 @@
 	    version="1.2">
   <xsd:annotation>
     <xsd:documentation>
-      @(#)javaee_web_services_client_1_2.xsds	1.11 08/05/05
+      @(#)javaee_web_services_client_1_2.xsds	1.19 02/13/06
     </xsd:documentation>
   </xsd:annotation>
 
@@ -133,6 +85,20 @@
 
 	  </xsd:documentation>
 	</xsd:annotation>
+      </xsd:element>
+
+      <xsd:element name="enable-mtom"
+                   type="javaee:true-falseType"
+		   minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>
+
+            Used to enable or disable SOAP MTOM/XOP mechanism on the client
+	    side for a port-component.
+
+	    Not to be specified for JAX-RPC runtime
+          </xsd:documentation>
+        </xsd:annotation>
       </xsd:element>
 
       <xsd:element name="port-component-link"
@@ -228,6 +194,27 @@
 	</xsd:annotation>
       </xsd:element>
 
+      <xsd:element name="service-ref-type"
+		   type="javaee:fully-qualified-classType"
+		   minOccurs="0" maxOccurs="1">
+	<xsd:annotation>
+	  <xsd:documentation>
+
+	    The service-ref-type element declares the type of the service-ref
+	    element that is injected or returned when a JNDI lookup is done.
+	    This must be either a fully qualified name of Service class or
+	    the fully qualified name of service endpoint interface class.
+	    This is only used with JAX-WS runtime where the corresponding
+	    @WebServiceRef annotation can be used to denote both a Service
+	    or a Port.
+
+	    If this is not specified, then the type of service-ref element
+	    that is injected or returned when a JNDI lookup is done is
+	    always a Service interface/class.
+	  </xsd:documentation>
+	</xsd:annotation>
+      </xsd:element>
+
       <xsd:element name="wsdl-file"
 		   type="javaee:xsdAnyURIType"
 		   minOccurs="0" maxOccurs="1">
@@ -251,6 +238,8 @@
 	    describes the JAX-RPC mapping between the Java interaces used by
 	    the application and the WSDL description in the wsdl-file.  The
 	    file name is a relative path within the module file.
+
+	    This is not required when JAX-WS based runtime is used.
 
 	  </xsd:documentation>
 	</xsd:annotation>
@@ -286,22 +275,98 @@
 	</xsd:annotation>
       </xsd:element>
 
-      <xsd:element name="handler"
-		   type="javaee:service-ref_handlerType"
-		   minOccurs="0" maxOccurs="unbounded">
-	<xsd:annotation>
-	  <xsd:documentation>
+      <xsd:choice>
+	  <xsd:element name="handler"
+		       type="javaee:service-ref_handlerType"
+		       minOccurs="0" maxOccurs="unbounded">
+	    <xsd:annotation>
+	      <xsd:documentation>
 
-	    Declares the handler for a port-component. Handlers can
-	    access the init-param name/value pairs using the
-	    HandlerInfo interface. If port-name is not specified, the
-	    handler is assumed to be associated with all ports of the
-	    service.
+		Declares the handler for a port-component. Handlers can
+		access the init-param name/value pairs using the
+		HandlerInfo interface. If port-name is not specified, the
+		handler is assumed to be associated with all ports of the
+		service.
 
-	  </xsd:documentation>
-	</xsd:annotation>
-      </xsd:element>
+		To be used with JAX-RPC based runtime only.
+
+	      </xsd:documentation>
+	    </xsd:annotation>
+	  </xsd:element>
+	  <xsd:element name="handler-chains"
+		       type="javaee:service-ref_handler-chainsType"
+		       minOccurs="0" maxOccurs="1">
+	    <xsd:annotation>
+	      <xsd:documentation>
+		 To be used with JAX-WS based runtime only.
+	      </xsd:documentation>
+	    </xsd:annotation>
+	  </xsd:element>
+      </xsd:choice>
+
+      <xsd:group ref="javaee:resourceGroup"/>
+
     </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:ID"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="service-ref_handler-chainType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+      The handler-chain element defines the handlerchain.
+      Handlerchain can be defined such that the handlers in the
+      handlerchain operate,all ports of a service, on a specific
+      port or on a list of protocol-bindings. The choice of elements
+      service-name-pattern, port-name-pattern and protocol-bindings
+      are used to specify whether the handlers in handler-chain are
+      for a service, port or protocol binding. If none of these
+      choices are specified with the handler-chain element then the
+      handlers specified in the handler-chain will be applied on
+      everything.
+
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:sequence>
+
+      <xsd:choice minOccurs="0" maxOccurs="1">
+         <xsd:element name="service-name-pattern"
+		      type="javaee:service-ref_qname-pattern" />
+         <xsd:element name="port-name-pattern"
+	              type="javaee:service-ref_qname-pattern" />
+         <xsd:element name="protocol-bindings"
+	              type="javaee:service-ref_protocol-bindingListType"/>
+      </xsd:choice>
+
+      <xsd:element name="handler"
+                   type="javaee:service-ref_handlerType"
+		   minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+
+    <xsd:attribute name="id" type="xsd:ID"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="service-ref_handler-chainsType">
+    <xsd:annotation>
+      <xsd:documentation>
+
+      The handler-chains element defines the handlerchains associated with this
+      service or service endpoint.
+
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:sequence>
+      <xsd:element name="handler-chain"
+                   type="javaee:service-ref_handler-chainType"
+		   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+
     <xsd:attribute name="id" type="xsd:ID"/>
   </xsd:complexType>
 
@@ -389,6 +454,125 @@
     </xsd:sequence>
     <xsd:attribute name="id" type="xsd:ID"/>
   </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:simpleType name="service-ref_protocol-URIAliasType">
+     <xsd:annotation>
+        <xsd:documentation>
+	   Defines the type that is used for specifying tokens that
+	   start with ## which are used to alias existing standard
+	   protocol bindings and support aliases for new standard
+	   binding URIs that are introduced in future specifications.
+
+	   The following tokens alias the standard protocol binding
+	   URIs:
+
+	   ##SOAP11_HTTP = "http://schemas.xmlsoap.org/wsdl/soap/http"
+	   ##SOAP11_HTTP_MTOM =
+                 "http://schemas.xmlsoap.org/wsdl/soap/http?mtom=true"
+           ##SOAP12_HTTP = "http://www.w3.org/2003/05/soap/bindings/HTTP/"
+           ##SOAP12_HTTP_MTOM =
+                 "http://www.w3.org/2003/05/soap/bindings/HTTP/?mtom=true"
+           ##XML_HTTP = "http://www.w3.org/2004/08/wsdl/http"
+
+        </xsd:documentation>
+     </xsd:annotation>
+     <xsd:restriction base="xsd:token">
+        <xsd:pattern value="##.+"/>
+     </xsd:restriction>
+  </xsd:simpleType>
+
+<!-- **************************************************** -->
+
+  <xsd:simpleType name="service-ref_protocol-bindingListType">
+     <xsd:annotation>
+        <xsd:documentation>
+	   Defines the type used for specifying a list of
+	   protocol-bindingType(s). For e.g.
+
+	    ##SOAP11_HTTP ##SOAP12_HTTP ##XML_HTTP
+
+        </xsd:documentation>
+     </xsd:annotation>
+     <xsd:list itemType="javaee:service-ref_protocol-bindingType"/>
+  </xsd:simpleType>
+
+<!-- **************************************************** -->
+
+  <xsd:simpleType name="service-ref_protocol-bindingType">
+     <xsd:annotation>
+        <xsd:documentation>
+	   Defines the type used for specifying the URI for the
+	   protocol binding used by the port-component.  For
+	   portability one could use one of the following tokens that
+	   alias the standard binding types:
+
+	    ##SOAP11_HTTP
+	    ##SOAP11_HTTP_MTOM
+            ##SOAP12_HTTP
+            ##SOAP12_HTTP_MTOM
+            ##XML_HTTP
+
+	   Other specifications could define tokens that start with ##
+	   to alias new standard binding URIs that are introduced.
+
+        </xsd:documentation>
+     </xsd:annotation>
+     <xsd:union memberTypes="xsd:anyURI javaee:service-ref_protocol-URIAliasType"/>
+  </xsd:simpleType>
+
+<!-- **************************************************** -->
+
+  <xsd:simpleType name="service-ref_qname-pattern">
+     <xsd:annotation>
+        <xsd:documentation>
+	     This is used to specify the QName pattern in the
+	     attribute service-name-pattern and port-name-pattern in
+	     the handler-chain element
+
+	     For example, the various forms acceptable here for
+	     service-name-pattern attribute in handler-chain element
+	     are :
+
+	     Exact Name: service-name-pattern="ns1:EchoService"
+
+		 In this case, handlers specified in this
+		 handler-chain element will apply to all ports with
+		 this exact service name. The namespace prefix must
+		 have been declared in a namespace declaration
+		 attribute in either the start-tag of the element
+		 where the prefix is used or in an an ancestor
+		 element (i.e. an element in whose content the
+		 prefixed markup occurs)
+
+	     Pattern : service-name-pattern="ns1:EchoService*"
+
+		 In this case, handlers specified in this
+		 handler-chain element will apply to all ports whose
+		 Service names are like EchoService1, EchoServiceFoo
+		 etc. The namespace prefix must have been declared in
+		 a namespace declaration attribute in either the
+		 start-tag of the element where the prefix is used or
+		 in an an ancestor element (i.e. an element in whose
+		 content the prefixed markup occurs)
+
+	     Wild Card : service-name-pattern="*"
+
+		In this case, handlers specified in this handler-chain
+		element will apply to ports of all service names.
+
+	    The same can be applied to port-name attribute in
+	    handler-chain element.
+
+        </xsd:documentation>
+     </xsd:annotation>
+
+     <xsd:restriction base="xsd:token">
+        <xsd:pattern value="\*|([\i-[:]][\c-[:]]*:)?[\i-[:]][\c-[:]]*\*?"/>
+     </xsd:restriction>
+
+  </xsd:simpleType>
 
 </xsd:schema>
 
