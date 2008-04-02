@@ -2,7 +2,7 @@
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- * $Id: DigesterFactory.java,v 1.1 2004/10/29 00:56:39 rlubke Exp $
+ * $Id: DigesterFactory.java,v 1.2 2004/11/02 15:59:50 rlubke Exp $
  */
 
 
@@ -15,14 +15,13 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.HashMap;
 
 /**
@@ -37,8 +36,8 @@ public class DigesterFactory {
      * <p><code>Xerces</code> specific feature to enable both
      * DTD and Schema validation.</p>
      */
-    private static final String APACHE_DYNAMIC_VALIDATION =
-        "http://apache.org/xml/features/validation/dynamic";
+    private static final String APACHE_VALIDATION =
+        "http://xml.org/sax/features/validation";
 
     /**
      * <p><code>Xerces</code> specific feature to enable both
@@ -51,11 +50,6 @@ public class DigesterFactory {
      * <p>Custom <code>EntityResolver</code>.</p>
      */
     private static final JsfEntityResolver RESOLVER = new JsfEntityResolver();
-
-    /**
-     * <p>Custom <code>ErrorHandler</code>.</p>
-     */
-    private static final MessageLogger MESSAGE_LOGGER = new MessageLogger();
 
     /**
      * <p>Indicates whether or not document validation is
@@ -142,7 +136,6 @@ public class DigesterFactory {
 
         digester.setNamespaceAware(true);
         digester.setUseContextClassLoader(true);
-        digester.setErrorHandler(MESSAGE_LOGGER);
         digester.setEntityResolver(RESOLVER);
 
         if (validating) {
@@ -157,29 +150,15 @@ public class DigesterFactory {
             // features.  If an exception is thrown trying to set these
             // features, then disable validation.
 
-            XMLReader reader;
             try {
-                reader = digester.getXMLReader();
-            } catch (SAXException e) {
-
-                if (LOG.isWarnEnabled()) {
-                    LOG.warn("Unable to obtain XMLReader from Digester.  " +
-                        "Disabling validation");
-                }
-
-                digester.setValidating(false);
-                return;
-            }
-
-            try {
-                reader.setFeature(APACHE_DYNAMIC_VALIDATION, true);
-                reader.setFeature(APACHE_SCHEMA_VALIDATION, true);
+                digester.setFeature(APACHE_VALIDATION, true);
+                digester.setFeature(APACHE_SCHEMA_VALIDATION, true);
                 digester.setValidating(true);
             } catch (SAXNotSupportedException e) {
 
                 if (LOG.isWarnEnabled()) {
-                    LOG.warn("Attempt to set supported feature on XMLReader, but" +
-                        " the value provided was not accepted.  " +
+                    LOG.warn("Attempt to set supported feature on XMLReader, " +
+                        "but the value provided was not accepted.  " +
                         "Validation will be disabledb.");
                 }
 
@@ -188,9 +167,18 @@ public class DigesterFactory {
             } catch (SAXNotRecognizedException e) {
 
                 if (LOG.isWarnEnabled()) {
-                    LOG.warn("Attempt to set unsupported feature on XMLReader " +
-                        "necessary for validation.  Validation will be" +
+                    LOG.warn("Attempt to set unsupported feature on XMLReader" +
+                        " necessary for validation.  Validation will be" +
                         "disabled.");
+                }
+
+                digester.setValidating(false);
+
+            } catch (ParserConfigurationException e) {
+
+                if (LOG.isWarnEnabled()) {
+                    LOG.warn("Digester unable to configure underlying parser." +
+                        "  Validation will be disabled.");
                 }
 
                 digester.setValidating(false);
@@ -204,67 +192,6 @@ public class DigesterFactory {
 
 
     // ----------------------------------------------------------- Inner Classes
-
-
-    private static class MessageLogger extends DefaultHandler {
-
-        /**
-         * <p>Simple <code>MessageFormat</code> for displaying
-         * parser messages.</p>
-         */
-        private final MessageFormat format =
-            new MessageFormat("({0}: {1}, {2}): {3}");
-
-
-        // ----------------------------------------- Methods from DefaultHandler
-
-
-        public void warning(SAXParseException spe) {
-
-            if (LOG.isWarnEnabled()) {
-                LOG.warn(getMessage(spe));
-            }
-
-        } // END warning
-
-
-        public void error(SAXParseException spe) {
-
-            if (LOG.isErrorEnabled()) {
-                LOG.error(getMessage(spe), spe);
-            }
-
-        } // END error
-
-
-        public void fatalError(SAXParseException spe) throws SAXParseException {
-
-            if (LOG.isFatalEnabled()) {
-                LOG.fatal(getMessage(spe), spe);
-            }
-            throw spe;
-
-        } // END fatalError
-
-
-        // ----------------------------------------------------- Private Methods
-
-
-        private String getMessage(SAXParseException spe) {
-
-            String msg = format.format(new Object[]
-            {
-                spe.getSystemId(),
-                new Integer(spe.getLineNumber()),
-                new Integer(spe.getColumnNumber()),
-                spe.getMessage()
-            });
-
-            return msg;
-
-        } // END getMessage
-
-    } // END ErrorPrinter
 
 
     private static class JsfEntityResolver extends DefaultHandler {
@@ -323,8 +250,8 @@ public class DigesterFactory {
                     if (LOG.isWarnEnabled()) {
                         LOG.warn("Unable to locate local resource '" +
                             DTD_SCHEMA_INFO[i][1] + "'.  Standard entity " +
-                            "resolution will be used when request are present " +
-                            "for '" + DTD_SCHEMA_INFO[i][0] + '\'');
+                            "resolution will be used when request are present" +
+                            " for '" + DTD_SCHEMA_INFO[i][0] + '\'');
                     }
                 } else {
                     entities.put(DTD_SCHEMA_INFO[i][0], url.toString());
@@ -339,7 +266,8 @@ public class DigesterFactory {
 
         /**
          * <p>Resolves the physical resource using the last segment of
-         * the <code>systemId</code> (e.g. http://java.sun.com/dtds/web-facesconfig_1_1.dtd,
+         * the <code>systemId</code>
+         * (e.g. http://java.sun.com/dtds/web-facesconfig_1_1.dtd,
          * the last segment would be web-facesconfig_1_1.dtd).  If a mapping
          * cannot be found for the segment, then defer to the
          * <code>DefaultHandler</code> for resolution.</p>
@@ -380,6 +308,16 @@ public class DigesterFactory {
                 } catch (IOException ioe) {
                     System.out.println(ioe);
                     // do something
+                }
+            }
+
+            // Set the System ID of the InputSource with the URL of the local
+            // resource - necessary to prevent parsing errors
+            if (source != null) {
+                source.setSystemId(entityURL);
+
+                if (publicId != null) {
+                    source.setPublicId(publicId);
                 }
             }
 
