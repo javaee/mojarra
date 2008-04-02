@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.2 2003/02/15 01:20:46 rkitain Exp $
+ * $Id: TabLabelRenderer.java,v 1.3 2003/02/18 18:47:46 rkitain Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import org.apache.commons.beanutils.ConversionException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.2 2003/02/15 01:20:46 rkitain Exp $
+ * @version $Id: TabLabelRenderer.java,v 1.3 2003/02/18 18:47:46 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -107,6 +107,13 @@ public class TabLabelRenderer extends BaseRenderer {
     protected String getImageSrc(FacesContext context,
                                  UIComponent component) {
         String result = (String) component.getAttribute("image");
+
+        if (result != null) {
+            if (!result.startsWith("/")) {
+                result = "/" + result;
+                component.setAttribute("image", result);
+            }
+        }
  
         if (result == null) {
             try {
@@ -167,6 +174,7 @@ public class TabLabelRenderer extends BaseRenderer {
 	if (context == null || component == null) {
 	    throw new NullPointerException("Null Faces context or component parameter"); 
         }
+System.out.println("TABLABELRENDERER:DECODE:");
 
         // Was our command the one that caused this submission?
         // we don' have to worry about getting the value from request parameter
@@ -206,6 +214,7 @@ public class TabLabelRenderer extends BaseRenderer {
         
         // set the "tab" component's "id" in the event...
 
+System.out.println("TABLABELRENDERER:EVENT QUEUED:"+tabComponent.getClientId(context));
         context.addFacesEvent
             (new PaneSelectedEvent(component, tabComponent.getClientId(
                 context)));
