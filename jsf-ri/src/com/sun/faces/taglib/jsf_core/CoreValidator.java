@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.3 2003/03/13 23:01:32 eburns Exp $
+ * $Id: CoreValidator.java,v 1.4 2003/05/20 16:35:09 jvisvanathan Exp $
  */
 
 /*
@@ -106,7 +106,7 @@ public class CoreValidator extends FacesValidator {
             if (isJstlTag(qn)) {
                 requiresIdCount++;
             }
-            else if ( qn.startsWith(JSF_HTML_PRE) &&
+            else if ((JSF_HTML_PRE != null) && (qn.startsWith(JSF_HTML_PRE)) &&
                        (requiresIdCount > 0) ) {
                 //make sure that id is present in attributes
                 if (!hasIdAttribute(a)) {
@@ -117,7 +117,7 @@ public class CoreValidator extends FacesValidator {
             }
             else if ((requiresIdCount == 0) && (!siblingSatisfied)) {
                 //make sure jsf sibling has an id
-                if ( (qn.startsWith(JSF_HTML_PRE) ||
+                if ( (JSF_HTML_PRE != null) &&(qn.startsWith(JSF_HTML_PRE) ||
                       qn.startsWith(JSF_CORE_PRE)) &&
                       (!hasIdAttribute(a)) ) {
                     //add to list of jsf tags for error report
