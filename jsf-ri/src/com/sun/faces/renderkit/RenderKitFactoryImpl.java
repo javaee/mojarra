@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.8 2003/02/20 22:48:54 ofung Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.9 2003/03/12 04:57:46 eburns Exp $
  */
 
 /*
@@ -137,7 +137,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         // Create an instance of the render kit.
         //
         try {
-            Class kitClass = Util.loadClass(className);
+            Class kitClass = Util.loadClass(className, this);
             renderKit = (RenderKit)kitClass.newInstance();
         } catch (ClassNotFoundException cnf) {
             throw new RuntimeException("Class Not Found:"+cnf.getMessage());

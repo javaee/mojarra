@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.30 2003/03/11 01:20:23 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.31 2003/03/12 04:57:48 eburns Exp $
  */
 
 /*
@@ -98,7 +98,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			     String description, String typeClassName) {
 	Class typeClass = null;
         try {
-            typeClass = Util.loadClass(typeClassName);
+            typeClass = Util.loadClass(typeClassName, this);
         } catch (ClassNotFoundException cnf) {
             throw new RuntimeException("Class Not Found:"+cnf.getMessage());
         }

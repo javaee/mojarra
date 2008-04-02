@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.39 2003/03/10 20:23:50 eburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.40 2003/03/12 04:57:47 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.39 2003/03/10 20:23:50 eburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.40 2003/03/12 04:57:47 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,7 +134,7 @@ public class HtmlBasicRenderKit extends RenderKit
 
 	try {
 	    uiComponentClass = 
-		Util.loadClass("javax.faces.component.UIComponent");
+		Util.loadClass("javax.faces.component.UIComponent", this);
 	}
 	catch (Throwable e) {
 	    Assert.assert_it(false);
@@ -219,7 +219,7 @@ public class HtmlBasicRenderKit extends RenderKit
         if (parse_renderersForCurrentComponent != null && 
 	    parse_renderersForCurrentComponent.size() > 0) {
 	    try {
-		addComponentClass(Util.loadClass(componentType));
+		addComponentClass(Util.loadClass(componentType, this));
             } 
 	    catch (ClassNotFoundException cnf) {
                 throw new RuntimeException("Class Not Found:"+
@@ -270,7 +270,7 @@ public class HtmlBasicRenderKit extends RenderKit
 	if (null == (curRenderer = (HtmlBasicRenderer)
 		     renderersByRendererType.get(rendererType))){
 	    try {
-		Class rendererClass = Util.loadClass(className);
+		Class rendererClass = Util.loadClass(className, this);
 		curRenderer = (HtmlBasicRenderer)rendererClass.newInstance();
 	    } catch (ClassNotFoundException cnf) {
 		throw new RuntimeException("Class Not Found:"+cnf.getMessage());

@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangedListenerTag.java,v 1.2 2003/02/20 22:49:34 ofung Exp $
+ * $Id: ValueChangedListenerTag.java,v 1.3 2003/03/12 04:57:49 eburns Exp $
  */
 
 /*
@@ -146,12 +146,7 @@ public class ValueChangedListenerTag extends TagSupport {
         throws JspException {
 
         try {
-            ClassLoader classLoader =
-                Thread.currentThread().getContextClassLoader();
-            if (classLoader == null) {
-                classLoader = this.getClass().getClassLoader();
-            }
-            Class clazz = classLoader.loadClass(type);
+            Class clazz = Util.loadClass(type, this);
             return ((ValueChangedListener) clazz.newInstance());
         } catch (Exception e) {
             throw new JspException(e);

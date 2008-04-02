@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.44 2003/03/10 20:23:53 eburns Exp $
+ * $Id: Util.java,v 1.45 2003/03/12 04:57:51 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.44 2003/03/10 20:23:53 eburns Exp $
+ * @version $Id: Util.java,v 1.45 2003/03/12 04:57:51 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -243,15 +243,14 @@ private Util()
 //
 // Class methods
 //
-    public static Class loadClass(String name) throws ClassNotFoundException {
+    public static Class loadClass(String name, 
+				  Object fallbackClass) throws ClassNotFoundException {
 	ClassLoader loader =
 	    Thread.currentThread().getContextClassLoader();
 	if (loader == null) {
-	    return Class.forName(name);
+	    loader = fallbackClass.getClass().getClassLoader();
 	}
-	else {
-	    return loader.loadClass(name);
-	}
+	return loader.loadClass(name);
     }
 
     /**
@@ -397,14 +396,8 @@ private Util()
 	// We've not checked before, so do the check now!
 	// 
 
-	// Acquire a ClassLoader.
-	ClassLoader cl = null;
-	if (null == (cl = Thread.currentThread().getContextClassLoader())) {
-	    cl = facesContext.getClass().getClassLoader();
-	}
-
 	try {
-	    cl.loadClass(className);
+	    Util.loadClass(className, facesContext);
 	}
 	catch (ClassNotFoundException e) {
 	    context.setAttribute(RIConstants.HAS_REQUIRED_CLASSES_ATTR,

@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.10 2003/02/20 22:49:37 ofung Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.11 2003/03/12 04:57:50 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.10 2003/02/20 22:49:37 ofung Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.11 2003/03/12 04:57:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -248,7 +248,7 @@ public UIComponent createComponentForTag(String shortTagName)
 
     // PENDING(edburns): this can be way optimized
     try {
-	componentClass = Util.loadClass(className);
+	componentClass = Util.loadClass(className, this);
 	result = (UIComponent) componentClass.newInstance();
     }
     catch (IllegalAccessException iae) {

@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterFactoryImpl.java,v 1.5 2003/02/20 22:48:43 ofung Exp $
+ * $Id: ConverterFactoryImpl.java,v 1.6 2003/03/12 04:57:45 eburns Exp $
  */
 
 /*
@@ -228,7 +228,7 @@ public class ConverterFactoryImpl extends ConverterFactory {
         // Create a converter instance.
         //
         try {
-            Class converterClass = Util.loadClass(className);
+            Class converterClass = Util.loadClass(className, this);
             converter = (Converter)converterClass.newInstance();
         } catch (ClassNotFoundException cnf) {
             throw new RuntimeException("Class Not Found:"+cnf.getMessage());
