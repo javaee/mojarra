@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.4 2003/12/17 15:16:36 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.5 2003/12/23 19:57:35 eburns Exp $
  */
 
 /*
@@ -161,6 +161,8 @@ class ConfigParser extends Object {
                                "setAttributeName", 0);
         digester.addCallMethod(prefix + "/attribute-class",
                                "setAttributeClass", 0);
+        digester.addCallMethod(prefix + "/default-value",
+                               "setDefaultValue", 0);
         digester.addCallMethod(prefix + "/description",
                                "setDescription", 0);
         digester.addCallMethod(prefix + "/attribute-extension/tag-attribute",
@@ -190,13 +192,15 @@ class ConfigParser extends Object {
 	//
 	prefix = prefix + "/property";
 	digester.addObjectCreate(prefix,
-            "com.sun.faces.generate.ConfigAttribute");
+				 "com.sun.faces.generate.ConfigAttribute");
 	digester.addSetNext(prefix, "addProperty",
-            "com.sun.faces.generate.ConfigAttribute");
+			    "com.sun.faces.generate.ConfigAttribute");
         digester.addCallMethod(prefix + "/property-name",
-            "setAttributeName", 0);
+			       "setAttributeName", 0);
         digester.addCallMethod(prefix + "/property-class",
-            "setAttributeClass", 0);
+			       "setAttributeClass", 0);
+        digester.addCallMethod(prefix + "/default-value",
+			       "setDefaultValue", 0);
         digester.addCallMethod(prefix + "/description",
                                "setDescription", 0);
         digester.addCallMethod(prefix + "/property-extension/tag-attribute",

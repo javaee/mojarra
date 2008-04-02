@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigAttribute.java,v 1.2 2003/11/04 18:38:32 rkitain Exp $
+ * $Id: ConfigAttribute.java,v 1.3 2003/12/23 19:57:35 eburns Exp $
  */
 
 /*
@@ -46,4 +46,14 @@ public class ConfigAttribute extends Object {
     public void setTagAttribute(String tagAttribute) {
         this.tagAttribute = tagAttribute;
     }
+
+    protected String defaultValue;
+    public String getDefaultValue() {
+	return defaultValue;
+    }
+
+    public void setDefaultValue(String newDefaultValue) {
+	defaultValue = newDefaultValue;
+    }
+
 }

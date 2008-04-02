@@ -4184,6 +4184,7 @@
         <icon></icon>
         <attribute-name>escape</attribute-name>
         <attribute-class>boolean</attribute-class>
+        <default-value>true</default-value>
       </attribute>
 
       <supported-component-type>

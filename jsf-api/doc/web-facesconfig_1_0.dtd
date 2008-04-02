@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.26 2003/12/22 23:25:40 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.27 2003/12/23 19:57:33 eburns Exp $
 
 -->
 
@@ -150,7 +150,7 @@
     Attribute names must be unique within the scope of the parent (or related)
     component.
 -->
-<!ELEMENT attribute       (description*, display-name*, icon*, attribute-name, attribute-class, suggested-value?, attribute-extension*)>
+<!ELEMENT attribute       (description*, display-name*, icon*, attribute-name, attribute-class, default-value?, suggested-value?, attribute-extension*)>
 
 <!-- 
     Extension element for attribute.  May contain implementation
@@ -288,7 +288,7 @@
     property names that will be recognized when performing introspection
     against that class via java.beans.Introspector.
 -->
-<!ELEMENT property        (description*, display-name*, icon*, property-name, property-class, suggested-value?, property-extension*)>
+<!ELEMENT property        (description*, display-name*, icon*, property-name, property-class, default-value?, suggested-value?, property-extension*)>
 
 <!-- 
     Extension element for property.  May contain implementation
@@ -463,6 +463,14 @@
      '_'.
 -->
 <!ELEMENT default-locale (#PCDATA)>
+
+<!--
+    The "default-value" contains the value for the property or attribute
+    in which this element resides.  This value differs from the
+    "suggested-value" in that the property or attribute must take the
+    value, whereas in "suggested-value" taking the value is optional.
+-->
+<!ELEMENT default-value (#PCDATA)>
 
 <!--
     The "description" element contains a textual description of the element
@@ -818,6 +826,7 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!ATTLIST converter-for-class               id ID #IMPLIED>
 <!ATTLIST converter-id                      id ID #IMPLIED>
 <!ATTLIST default-locale                    id ID #IMPLIED>
+<!ATTLIST default-value                     id ID #IMPLIED>
 <!ATTLIST description                       id ID #IMPLIED>
 <!ATTLIST display-name                      id ID #IMPLIED>
 <!ATTLIST faces-config                      id ID #IMPLIED>

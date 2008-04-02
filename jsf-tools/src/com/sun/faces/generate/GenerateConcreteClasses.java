@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.8 2003/12/17 15:16:36 rkitain Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.9 2003/12/23 19:57:35 eburns Exp $
  */
 
 /*
@@ -234,28 +234,38 @@ public class GenerateConcreteClasses extends GenerateBase {
 	String 
 	    ivar = null,
 	    getOrIs = null,
+	    nextAttr = null,
 	    is = "is",
-	    get = "get";
+	    get = "get",
+	    defaultValue = null;
 	boolean isPrimitive = false;
+	ConfigAttribute attribute = null;
 
 	// attributes
 	while (iter.hasNext()) {
-	    attrName = ((String) iter.next()).trim();
+	    nextAttr = (String) iter.next();
+	    attrName = nextAttr.trim();
 	    ivar = generateIvar(attrName);
 	    attrClass = getParser().getRendererAttributeClass(rendererType,attrName).trim();
 	    // ivar declaration
 	    result.append("  private " + attrClass + " " + ivar);
+
+	    // if we have a ConfigAttribute bean for this attr
+	    if (null != (attribute = (ConfigAttribute) attrs.get(nextAttr))) {
+		defaultValue = attribute.getDefaultValue();
+	    }
+
 	    // if it's a primitive
 	    if (isPrimitive = isPrimitive(attrClass)) {
-		// assign the default value
-		// special case.  The escape attribute must default to true.
-		if (ivar.equals("escape")) {
-		    result.append(" = true;\n");
+		// if this attribute has a non-null defaultValue property
+		if (null != defaultValue) {
+		    // assign the default value
+		    result.append(" = " + defaultValue + ";\n");
 		}
 		else {
-		result.append(" = " + 
-			      (String) defaultPrimitiveValues.get(attrClass) +
-			      ";\n");
+		    result.append(" = " + 
+				  (String) defaultPrimitiveValues.get(attrClass) +
+				  ";\n");
 		}
 		result.append("  private boolean " + ivar + 
 			      "Set = false");
@@ -300,8 +310,10 @@ public class GenerateConcreteClasses extends GenerateBase {
 		result.append("          return (this." + ivar + ");\n");
 		result.append("      }\n");
 		result.append("      ValueBinding vb = null;\n");
-		if (ivar.equals("escape")) {
-		    result.append("      " + attrClass + " result = true;\n");
+		if (null != defaultValue) {
+		    // assign the default value
+		    result.append("      " + attrClass + " result = " + 
+				  defaultValue + ";\n");
 		}
 		else {
 		result.append("      " + attrClass + " result = " + 
