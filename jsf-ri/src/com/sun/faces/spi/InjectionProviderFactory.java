@@ -73,14 +73,14 @@ public class InjectionProviderFactory {
         InjectionProvider provider = getProviderInstance(providerClass);
 
         if (provider.getClass() != NoopInjectionProvider.class) {
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO,
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
                            "jsf.spi.injection.provider_configured",
                            new Object[]{provider.getClass().getName()});
             }
         } else {
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO, "jsf.spi.injection.no_injection");
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING, "jsf.spi.injection.no_injection");
             }
         }
         return provider;

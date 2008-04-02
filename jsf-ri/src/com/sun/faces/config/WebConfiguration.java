@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.7 2006/05/31 21:13:05 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.8 2006/06/16 19:31:50 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -56,6 +56,9 @@ public class WebConfiguration {
     // Key under which we store our WebConfiguration instance.
     private static final String WEB_CONFIG_KEY =
           "com.sun.faces.config.WebConfiguration";
+    
+    // Logging level.  Defaults to FINE
+    private Level loggingLevel = Level.FINE;
 
     private Map<BooleanWebContextInitParameter, Boolean> booleanContextParameters =
           new HashMap<BooleanWebContextInitParameter, Boolean>(
@@ -80,169 +83,10 @@ public class WebConfiguration {
         this.servletContext = servletContext;
 
         String contextName = getServletContextName();
-
-        // process non-boolean context parameters
-        for (WebContextInitParameter param : WebContextInitParameter.values()) {
-            String value =
-                  servletContext.getInitParameter(param.getQualifiedName());
-
-            if (value != null && value.length() > 0 && param.isDeprecated()) {
-                WebContextInitParameter alternate = param.getAlternate();
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.config.webconfig.param.deprecated",
-                               new Object[]{
-                                     contextName,
-                                     param.getQualifiedName(),
-                                     alternate.getQualifiedName()});
-                }
-
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
-                               "jsf.config.webconfig.configinfo.reset",
-                               new Object[]{contextName,
-                                            alternate.getQualifiedName(),
-                                            value});
-                }
-
-                contextParameters.put(alternate, value);
-                continue;
-            }
-
-            if ((value == null || value.length() == 0) && !param.isDeprecated()) {
-                value = param.getDefaultValue();
-            } 
-            if (value == null || value.length() == 0) {
-                continue;
-            }
-
-            if (value.length() > 0) {
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
-                               "jsf.config.webconfig.configinfo",
-                               new Object[]{contextName,
-                                            param.getQualifiedName(),
-                                            value});
-
-                }
-                contextParameters.put(param, value);
-            } else {
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
-                               "jsf.config.webconfig.option.notconfigured",
-                               new Object[]{contextName,
-                                            param.getQualifiedName()});
-                }
-            }
-
-        }
-
-        // process boolean contxt parameters
-        for (BooleanWebContextInitParameter param : BooleanWebContextInitParameter
-              .values()) {
-            String strValue =
-                  servletContext.getInitParameter(param.getQualifiedName());
-            boolean value;
-
-            if (strValue != null && strValue.length() > 0 && param.isDeprecated()) {
-                BooleanWebContextInitParameter alternate = param.getAlternate();
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.config.webconfig.param.deprecated",
-                               new Object[]{
-                                     contextName,
-                                     param.getQualifiedName(),
-                                     alternate.getQualifiedName()});
-                }
-
-                if (isValueValid(param, strValue)) {
-                    value = Boolean.valueOf(strValue);
-                } else {
-                    value = param.getDefaultValue();
-                }
-
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
-                               ((value)
-                                ? "jsf.config.webconfig.configinfo.reset.enabled"
-                                : "jsf.config.webconfig.configinfo.reset.disabled"),
-                               new Object[]{contextName,
-                                            alternate.getQualifiedName()});
-                }
-
-                booleanContextParameters.put(alternate, value);
-                continue;
-            }
-
-            if (!param.isDeprecated()) {
-                if (strValue == null) {
-                    value = param.getDefaultValue();
-                } else {
-                    if (isValueValid(param, strValue)) {
-                        value = Boolean.valueOf(strValue);
-                    } else {
-                        value = param.getDefaultValue();
-                    }
-                }
-
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
-                               ((value)
-                                ? "jsf.config.webconfig.boolconfiginfo.enabled"
-                                : "jsf.config.webconfig.boolconfiginfo.disabled"),
-                               new Object[]{contextName,
-                                            param.getQualifiedName()});
-                }
-
-                booleanContextParameters.put(param, value);
-            }
-
-        }
-
-        InitialContext initialContext = null;
-        try {
-            initialContext = new InitialContext();
-        } catch (NamingException ne) {
-            // log WARNING - unable to get JNDI initial context            
-        }
-
-        if (initialContext != null) {
-            // process environment entries
-            for (WebEnvironmentEntry entry : WebEnvironmentEntry.values()) {
-                String entryName = entry.getQualifiedName();
-
-                try {
-                    String value = (String) initialContext.lookup(entryName);
-                    if (value != null) {
-                        if (LOGGER.isLoggable(Level.INFO)) {
-                            // special logic for ClientStateSavingPassword
-                            if (!entry
-                                  .equals(WebEnvironmentEntry.ClientStateSavingPassword))
-                            {
-                                if (LOGGER
-                                      .isLoggable(Level.INFO)) {
-                                    LOGGER.log(Level.INFO,
-                                               "jsf.config.webconfig.enventryinfo",
-                                               new Object[]{contextName,
-                                                            entryName,
-                                                            value});
-                                }
-                            } else {
-                                if (LOGGER
-                                      .isLoggable(Level.INFO)) {
-                                    LOGGER.log(Level.INFO,
-                                               "jsf.config.webconfig.enventry.clientencrypt",
-                                               contextName);
-                                }
-                            }
-                        }
-                        envEntries.put(entry, value);
-                    }
-                } catch (NamingException ne) {
-                    // log WARNING - unable to lookup value
-                }
-            }
-        }
+        
+        processBooleanParameters(servletContext, contextName);
+        processInitParameters(servletContext, contextName);        
+        processJndiEntries(contextName);
 
     }
 
@@ -295,19 +139,6 @@ public class WebConfiguration {
 
 
     /**
-     * @return the name of this application
-     */
-    public String getServletContextName() {
-        if (servletContext.getMajorVersion() == 2
-            && servletContext.getMinorVersion() <= 4) {
-            return servletContext.getServletContextName();
-        } else {
-            return servletContext.getContextPath();
-        }
-    }
-
-
-    /**
      * Obtain the value of the specified boolean parameter
      * @param param the parameter of interest
      * @return the value of the specified boolean parameter
@@ -325,6 +156,18 @@ public class WebConfiguration {
 
 
     /**
+     * Obtain the value of the specified parameter
+     * @param param the parameter of interest
+     * @return the value of the specified parameter
+     */
+    public String getContextInitParameter(WebContextInitParameter param) {
+
+        return contextParameters.get(param);
+
+    }
+
+
+    /**
      * Obtain the value of the specified env-entry
      * @param entry the env-entry of interest
      * @return the value of the specified env-entry
@@ -337,29 +180,38 @@ public class WebConfiguration {
 
 
     /**
-     * Obtain the value of the specified parameter
-     * @param param the parameter of interest
-     * @return the value of the specified parameter
+     * @return the name of this application
      */
-    public String getContextInitParameter(WebContextInitParameter param) {
+    public String getServletContextName() {
 
-        return contextParameters.get(param);
+        if (servletContext.getMajorVersion() == 2
+            && servletContext.getMinorVersion() <= 4) {
+            return servletContext.getServletContextName();
+        } else {
+            return servletContext.getContextPath();
+        }
+
+    }
+
+
+    public void overrideContextInitParameter(BooleanWebContextInitParameter param) {
+
+        // no-op for now
 
     }
 
 
     public void overrideContextInitParameter(WebContextInitParameter param) {
-        // no-op for now
-    }
 
-
-    public void overrideContextInitParameter(BooleanWebContextInitParameter param) {
         // no-op for now
+
     }
 
 
     public void overrideEnvEntry(WebEnvironmentEntry entry) {
+
         // no-op for now
+
     }
 
 
@@ -390,6 +242,13 @@ public class WebConfiguration {
     // --------------------------------------------------------- Private Methods
 
 
+    /**
+     * <p>Is the configured value valid against the default boolean pattern.</p>
+     * @param param the boolean parameter
+     * @param value the configured value
+     * @return <code>true</code> if the value is valid, 
+     *  otherwise <code>false</code>
+     */
     private boolean isValueValid(BooleanWebContextInitParameter param,
                                  String value) {
 
@@ -411,6 +270,206 @@ public class WebConfiguration {
     }
 
 
+    /**
+     * <p>Process all boolean context initialization parameters.</p>
+     * @param servletContext the ServletContext of interest
+     * @param contextName the context name
+     */
+    private void processBooleanParameters(ServletContext servletContext,
+                                          String contextName) {
+
+        // process boolean contxt parameters
+        for (BooleanWebContextInitParameter param : BooleanWebContextInitParameter
+              .values()) {
+            String strValue =
+                  servletContext.getInitParameter(param.getQualifiedName());
+            boolean value;
+
+            if (strValue != null && strValue.length() > 0 && param.isDeprecated()) {
+                BooleanWebContextInitParameter alternate = param.getAlternate();
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "jsf.config.webconfig.param.deprecated",
+                               new Object[]{
+                                     contextName,
+                                     param.getQualifiedName(),
+                                     alternate.getQualifiedName()});
+                }
+
+                if (isValueValid(param, strValue)) {
+                    value = Boolean.valueOf(strValue);
+                } else {
+                    value = param.getDefaultValue();
+                }
+
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    LOGGER.log(Level.INFO,
+                               ((value)
+                                ? "jsf.config.webconfig.configinfo.reset.enabled"
+                                : "jsf.config.webconfig.configinfo.reset.disabled"),
+                               new Object[]{contextName,
+                                            alternate.getQualifiedName()});
+                }
+
+                booleanContextParameters.put(alternate, value);
+                continue;
+            }
+
+            if (!param.isDeprecated()) {
+                if (strValue == null) {
+                    value = param.getDefaultValue();
+                } else {
+                    if (isValueValid(param, strValue)) {
+                        value = Boolean.valueOf(strValue);
+                    } else {
+                        value = param.getDefaultValue();
+                    }
+                }
+                
+                // first param processed should be 
+                // com.sun.faces.displayConfiguration
+                if (BooleanWebContextInitParameter.DisplayConfiguration
+                      .equals(param) && value) {
+                    loggingLevel = Level.INFO;
+                }
+
+                if (LOGGER.isLoggable(loggingLevel)) {
+                    LOGGER.log(loggingLevel,
+                               ((value)
+                                ? "jsf.config.webconfig.boolconfiginfo.enabled"
+                                : "jsf.config.webconfig.boolconfiginfo.disabled"),
+                               new Object[]{contextName,
+                                            param.getQualifiedName()});
+                }
+
+                booleanContextParameters.put(param, value);
+            }
+
+        }
+
+    }
+
+
+    /**
+     * <p>Process all non-boolean context initialization parameters.</p>
+     * @param servletContext the ServletContext of interest
+     * @param contextName the context name
+     */
+    private void processInitParameters(ServletContext servletContext,
+                                       String contextName) {
+
+        for (WebContextInitParameter param : WebContextInitParameter.values()) {
+            String value =
+                  servletContext.getInitParameter(param.getQualifiedName());
+
+            if (value != null && value.length() > 0 && param.isDeprecated()) {
+                WebContextInitParameter alternate = param.getAlternate();
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "jsf.config.webconfig.param.deprecated",
+                               new Object[]{
+                                     contextName,
+                                     param.getQualifiedName(),
+                                     alternate.getQualifiedName()});
+                }
+
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    LOGGER.log(Level.INFO,
+                               "jsf.config.webconfig.configinfo.reset",
+                               new Object[]{contextName,
+                                            alternate.getQualifiedName(),
+                                            value});
+                }
+
+                contextParameters.put(alternate, value);
+                continue;
+            }
+
+            if ((value == null || value.length() == 0) && !param.isDeprecated()) {
+                value = param.getDefaultValue();
+            } 
+            if (value == null || value.length() == 0) {
+                continue;
+            }
+
+            if (value.length() > 0) {
+                if (LOGGER.isLoggable(loggingLevel)) {
+                    LOGGER.log(loggingLevel,
+                               "jsf.config.webconfig.configinfo",
+                               new Object[]{contextName,
+                                            param.getQualifiedName(),
+                                            value});
+
+                }
+                contextParameters.put(param, value);
+            } else {
+                if (LOGGER.isLoggable(loggingLevel)) {
+                    LOGGER.log(loggingLevel,
+                               "jsf.config.webconfig.option.notconfigured",
+                               new Object[]{contextName,
+                                            param.getQualifiedName()});
+                }
+            }
+
+        }
+
+    }
+
+
+    /**
+     * <p>Process all JNDI entries.</p>     
+     * @param contextName the context name
+     */
+    private void processJndiEntries(String contextName) {
+
+        InitialContext initialContext = null;
+        try {
+            initialContext = new InitialContext();
+        } catch (NamingException ne) {
+            // log WARNING - unable to get JNDI initial context            
+        }
+
+        if (initialContext != null) {
+            // process environment entries
+            for (WebEnvironmentEntry entry : WebEnvironmentEntry.values()) {
+                String entryName = entry.getQualifiedName();
+
+                try {
+                    String value = (String) initialContext.lookup(entryName);
+                    if (value != null) {
+                        if (LOGGER.isLoggable(Level.INFO)) {
+                            // special logic for ClientStateSavingPassword
+                            if (!entry
+                                  .equals(WebEnvironmentEntry.ClientStateSavingPassword))
+                            {
+                                if (LOGGER
+                                      .isLoggable(loggingLevel)) {
+                                    LOGGER.log(loggingLevel,
+                                               "jsf.config.webconfig.enventryinfo",
+                                               new Object[]{contextName,
+                                                            entryName,
+                                                            value});
+                                }
+                            } else {
+                                if (LOGGER
+                                      .isLoggable(loggingLevel)) {
+                                    LOGGER.log(loggingLevel,
+                                               "jsf.config.webconfig.enventry.clientencrypt",
+                                               contextName);
+                                }
+                            }
+                        }
+                        envEntries.put(entry, value);
+                    }
+                } catch (NamingException ne) {
+                    // log WARNING - unable to lookup value
+                }
+            }
+        }
+
+    }
+
+
     // ------------------------------------------------------------------- Enums
 
 
@@ -419,6 +478,7 @@ public class WebConfiguration {
      * recognized by the implementation.</p>
      */
     public enum WebContextInitParameter {
+
 
         // implementation note:
         // if a parameter is to be deprecated,
@@ -479,7 +539,24 @@ public class WebConfiguration {
         private boolean deprecated;
 
 
-    // ------------------------------------------------------------ Constructors
+    // ---------------------------------------------------------- Public Methods
+
+
+        public String getDefaultValue() {
+
+            return defaultValue;
+
+        }
+
+
+        public String getQualifiedName() {
+
+            return qualifiedName;
+
+        }
+
+
+    // ------------------------------------------------- Package Private Methods
 
 
         WebContextInitParameter(String qualifiedName,
@@ -499,23 +576,6 @@ public class WebConfiguration {
             this.defaultValue = defaultValue;
             this.deprecated = deprecated;
             this.alternate = alternate;
-
-        }
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-        public String getDefaultValue() {
-
-            return defaultValue;
-
-        }
-
-
-        public String getQualifiedName() {
-
-            return qualifiedName;
 
         }
 
@@ -544,12 +604,16 @@ public class WebConfiguration {
      */
     public enum BooleanWebContextInitParameter {
 
+
         // implementation note:
         // if a parameter is to be deprecated,
         // then the <name>Deprecated enum element
         // *must* appear after the one that is taking
         // its place.  The reporting logic depends on this
 
+        DisplayConfiguration(
+              "com.sun.faces.displayConfiguration",
+              false), 
         ValidateFacesConfigFiles(
               "com.sun.faces.validateXml",
               false),
@@ -578,11 +642,11 @@ public class WebConfiguration {
         ),
         CompressViewState(
               "com.sun.faces.compressViewState",
-              false
+              true
         ),
         CompressViewStateDeprecated(
               "com.sun.faces.COMPRESS_STATE",
-              false,
+              true,
               true,
               CompressViewState
         );
@@ -593,7 +657,24 @@ public class WebConfiguration {
         private boolean deprecated;
 
 
-    // ------------------------------------------------------------ Constructors
+    // ---------------------------------------------------------- Public Methods
+
+
+        public boolean getDefaultValue() {
+
+            return defaultValue;
+
+        }
+
+
+        public String getQualifiedName() {
+
+            return qualifiedName;
+
+        }
+
+
+    // ------------------------------------------------- Package Private Methods
 
 
         BooleanWebContextInitParameter(String qualifiedName,
@@ -613,23 +694,6 @@ public class WebConfiguration {
             this.defaultValue = defaultValue;
             this.deprecated = deprecated;
             this.alternate = alternate;
-
-        }
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-        public boolean getDefaultValue() {
-
-            return defaultValue;
-
-        }
-
-
-        public String getQualifiedName() {
-
-            return qualifiedName;
 
         }
 
@@ -665,7 +729,17 @@ public class WebConfiguration {
         private String qualifiedName;
 
 
-    // ------------------------------------------------------------ Constructors
+    // ---------------------------------------------------------- Public Methods
+
+
+         public String getQualifiedName() {
+
+            return qualifiedName;
+
+        }
+
+
+    // ------------------------------------------------- Package Private Methods
 
 
         WebEnvironmentEntry(String qualifiedName) {
@@ -673,16 +747,6 @@ public class WebConfiguration {
             this.qualifiedName = JNDI_PREFIX 
                                  + RIConstants.FACES_PREFIX 
                                  + qualifiedName;
-
-        }
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-         public String getQualifiedName() {
-
-            return qualifiedName;
 
         }
 
