@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.64 2005/05/09 22:12:19 edburns Exp $
+ * $Id: TestRenderers_1.java,v 1.65 2005/05/21 00:01:05 jayashri Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import java.util.ResourceBundle;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.64 2005/05/09 22:12:19 edburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.65 2005/05/21 00:01:05 jayashri Exp $
  */
 
 public class TestRenderers_1 extends JspFacesTestCase {
@@ -158,9 +158,9 @@ public class TestRenderers_1 extends JspFacesTestCase {
         
         getFacesContext().getApplication().setViewHandler(viewHandler);
         getFacesContext().setViewRoot(root);
-        Object view = 
+     /*   Object view = 
 	    Util.getStateManager(getFacesContext()).saveSerializedView(getFacesContext());
-	getFacesContext().getExternalContext().getRequestMap().put(RIConstants.SAVED_STATE, view);
+	getFacesContext().getExternalContext().getRequestMap().put(RIConstants.SAVED_STATE, view);*/
         // Call this twice to test the multiple forms in a page logic.
         getFacesContext().getResponseWriter().startDocument();
         verifyFormRenderer(root, 0);

@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.52 2005/05/02 14:58:44 rogerk Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.53 2005/05/21 00:01:04 jayashri Exp $ 
  */ 
 
 
@@ -45,11 +45,12 @@ import javax.servlet.jsp.jstl.core.Config;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
+import java.io.StringWriter;
 
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.52 2005/05/02 14:58:44 rogerk Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.53 2005/05/21 00:01:04 jayashri Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -123,34 +124,65 @@ public class ViewHandlerImpl extends ViewHandler {
         ServletResponse response = (ServletResponse) extContext.getResponse();
         
         ResponseWriter oldWriter = context.getResponseWriter();
+        StringWriter strWriter = new StringWriter();
         ResponseWriter newWriter = null;
 	if (null != oldWriter) {
-	    newWriter = oldWriter.cloneWithWriter(response.getWriter());
+            newWriter = oldWriter.cloneWithWriter(strWriter);
 	}
 	else {
-	    newWriter = renderKit.createResponseWriter(response.getWriter(), 
-						       null, 
-						       request.getCharacterEncoding());
+           newWriter = renderKit.createResponseWriter(strWriter, null,
+                   request.getCharacterEncoding());
 	}
         context.setResponseWriter(newWriter);
-
+        
 	newWriter.startDocument();
 
         doRenderView(context, viewToRender);
 
 	newWriter.endDocument();
-
+        
+        // replace markers in the body content and write it to response.
+        ResponseWriter responseWriter = null;
+        if (null != oldWriter) {
+	    responseWriter = oldWriter.cloneWithWriter(response.getWriter());
+        } else {
+	    responseWriter = renderKit.createResponseWriter(response.getWriter(), 
+                null, request.getCharacterEncoding());
+	}
+        context.setResponseWriter(responseWriter);
+        
+        String bodyContent = strWriter.getBuffer().toString();
+        replaceMarkers(bodyContent, context);
+       
         if (null != oldWriter) {
             context.setResponseWriter(oldWriter);
         }
         
-        if (!context.getExternalContext().getRequestMap().containsKey(RIConstants.SAVED_STATE)) {
+        // write any AFTER_VIEW_CONTENT to the response
+        Object content = extContext.getRequestMap().get(AFTER_VIEW_CONTENT);
+        assert(null != content);
+        if (content instanceof byte []) {
+            response.getWriter().write(new String((byte[]) content));
+        } else if (content instanceof char []) {
+            response.getWriter().write((char []) content);
+        } else {
+            assert(false);
+        }       
+        
+        response.flushBuffer(); // PENDING(edburns): necessary?
+        
+        // remove the AFTER_VIEW_CONTENT from the view root
+        extContext.getRequestMap().remove(AFTER_VIEW_CONTENT); 
+        
+        // PENDING (visvan) do we need this any more since we save the tree
+        // after encode ??
+       /* if (!context.getExternalContext().getRequestMap().containsKey(RIConstants.SAVED_STATE)) {
             // if we didn't serialize the state, or we didn't save it in
             // the client, we need to manually remove the transient
             // children and facets.
             removeTransientChildrenAndFacets(context, viewToRender,
                     new HashSet());
-        }
+        } */
     }
     
     /**
@@ -175,19 +207,6 @@ public class ViewHandlerImpl extends ViewHandler {
             UIViewRoot viewToRender) throws IOException,
             FacesException {
 	ExternalContext extContext = context.getExternalContext();
-        ServletResponse response = (ServletResponse) extContext.getResponse();
-
-        // NOTE: With tree pre-creation, components can be dynamically added 
-        // to the tree by registering a beforeRender phaseListener. So, any 
-        // component added during encodeAll, will not be persisted as a result.
-        // With this change, we can avoid buffering and the marker replacement
-        // complexity since the actual state is written out during 
-        // ViewHandler.writeState(). saveSerializedView() must be called before
-        // encodeAll because writeState() needs the actual state which gets
-        // created during saveSerializedView
-	Object view = 
-	    Util.getStateManager(context).saveSerializedView(context);
-	extContext.getRequestMap().put(RIConstants.SAVED_STATE, view);
 
 	ApplicationAssociate associate = 
 	    ApplicationAssociate.getInstance(extContext);
@@ -200,25 +219,7 @@ public class ViewHandlerImpl extends ViewHandler {
             logger.log(Level.FINE, "About to render view " + viewToRender.getViewId());
         }
         
-        viewToRender.encodeAll(context);
-        
-        // write any AFTER_VIEW_CONTENT to the response
-        Object content = extContext.getRequestMap().get(AFTER_VIEW_CONTENT);
-        assert(null != content);
-        if (content instanceof byte []) {
-            response.getWriter().write(new String((byte[]) content));
-        } else if (content instanceof char []) {
-            response.getWriter().write((char []) content);
-        } else {
-            assert(false);
-        }
-        
-        response.flushBuffer(); // PENDING(edburns): necessary?
-        
-        // remove the AFTER_VIEW_CONTENT from the view root
-        extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
-        
-        
+        viewToRender.encodeAll(context);                       
     }
     
     private void removeTransientChildrenAndFacets(FacesContext context,
@@ -625,22 +626,16 @@ public class ViewHandlerImpl extends ViewHandler {
             message = message +"context " + context;
             throw new NullPointerException(message);
         }
-        StateManager stateManager = Util.getStateManager(context);
-        
-        SerializedView viewState = (SerializedView)
-        context.getExternalContext().getRequestMap().get(RIConstants.SAVED_STATE);
-        assert(null != viewState);
-
+      
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Begin writing state to response for viewId " +
+            logger.fine("Begin writing market for viewId " +
                         context.getViewRoot().getViewId());
         }
 
-        // write out the state
-        stateManager.writeState(context, viewState);
-
+        context.getResponseWriter().writeText(
+				    RIConstants.SAVESTATE_FIELD_MARKER, null);
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("End writing state to response for viewId " +
+            logger.fine("End writing marker for viewId " +
                         context.getViewRoot().getViewId());
         }
  
@@ -876,6 +871,47 @@ public class ViewHandlerImpl extends ViewHandler {
 
         }
         return convertedViewId;
+    }
+    
+     public void replaceMarkers(String content, FacesContext context) {
+         SerializedView view = null;
+         try {
+            view = Util.getStateManager(context).saveSerializedView(context);
+        } catch (IllegalStateException ise) {
+            throw new FacesException(ise);
+        } catch (Exception ie) {
+            // catch any exception thrown while saving the view           
+            throw new FacesException(Util.getExceptionMessageString(
+                Util.SAVING_STATE_ERROR_MESSAGE_ID), ie);    
+        }
+        int
+            beginIndex = 0,
+            markerIndex = 0,
+            markerLen = RIConstants.SAVESTATE_FIELD_MARKER.length(),
+            contentLen = 0;
+        
+        try {
+	    contentLen = content.length();
+	    do {
+		// if we have no more markers
+		if (-1 == (markerIndex =
+			   content.indexOf(RIConstants.SAVESTATE_FIELD_MARKER,
+					   beginIndex))) {
+		    // write out the rest of the content
+                     context.getResponseWriter().write(content.substring(beginIndex));
+		} else {
+		    // we have more markers, write out the current chunk
+                
+		    context.getResponseWriter().write(content.substring(
+                            beginIndex, markerIndex));                    
+		    Util.getStateManager(context).writeState(context, view);                   
+		    beginIndex = markerIndex + markerLen;
+		}
+	    } while (-1 != markerIndex && beginIndex < contentLen);
+        } catch (Exception ex) {
+            // catch any thrown while write state.
+            throw new FacesException(ex);
+        }
     }
     
     
