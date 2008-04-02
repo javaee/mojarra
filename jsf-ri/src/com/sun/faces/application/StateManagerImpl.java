@@ -165,7 +165,13 @@ public class StateManagerImpl extends StateManager {
                     return null;
                 }
 
-                viewRoot = restoreTree(((Object[]) stateArray[0]));
+                // We need to clone the tree, otherwise we run the risk
+                // of being left in a state where the restored
+                // UIComponent instances are in the session instead
+                // of the TreeNode instances.  This is a problem 
+                // for servers that persist session data since 
+                // UIComponent instances are not serializable.
+                viewRoot = restoreTree(((Object[]) stateArray[0]).clone());
                 viewRoot.processRestoreState(context, stateArray[1]);
 
                 if (LOGGER.isLoggable(Level.FINE)) {
