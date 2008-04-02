@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.1 2003/03/21 23:19:17 rkitain Exp $
+ * $Id: ExternalContextImpl.java,v 1.2 2003/03/24 19:45:26 eburns Exp $
  */
 
 /*
@@ -59,7 +59,8 @@ public class ExternalContextImpl extends ExternalContext {
     private RequestParameterValuesMap requestParameterValuesMap = null;
     private RequestHeaderMap requestHeaderMap = null;
     private RequestHeaderValuesMap requestHeaderValuesMap = null;
-
+    private RequestCookieMap cookieMap = null;
+    private InitParameterMap initParameterMap = null;
 
     public ExternalContextImpl(ServletContext sc, ServletRequest request,
         ServletResponse response) {
@@ -95,9 +96,6 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
 
-    /**
-     * @see javax.faces.context.ExternalContext#getSession()
-     */
     public Object getSession(boolean create) {
         HttpSession result = null;
         if (null != request) {
@@ -106,85 +104,89 @@ public class ExternalContextImpl extends ExternalContext {
         return result;
     }
 
-    /**
-     * @see javax.faces.context.ExternalContext#getContext()
-     */
     public Object getContext() {
         return this.servletContext;
     }
 
-    /**
-     * @see javax.faces.context.ExternalContext#getRequest()
-     */
     public Object getRequest() {
         return this.request;
     }
 
-    /**
-     * @see javax.faces.context.ExternalContext#getResponse()
-     */
     public Object getResponse() {
         return this.response;
     }
 
-    /**
-     * @see javax.faces.context.ExternalContext#getApplicationMap()
-     */
     public Map getApplicationMap() {
         return applicationMap;
     }
 
-    /**
-     * @see javax.faces.context.ExternalContext#getSessionMap()
-     */
     public Map getSessionMap() {
         return sessionMap;
     }
 
-    /**
-     * @see javax.faces.context.ExternalContext#getRequestMap()
-     */
     public Map getRequestMap() {
         return requestMap;
     }
 
-    /**
-     * @see javax.faces.context.ExternalContext#getRequestHeaderMap()
-     */
     public Map getRequestHeaderMap() {
+	if (null == requestHeaderMap) {
+	    requestHeaderMap = new RequestHeaderMap(request);
+	}
         return requestHeaderMap;
     }
 
-    /**
-     * @see javax.faces.context.ExternalContext#getRequestHeaderValuesMap()
-     */
     public Map getRequestHeaderValuesMap() {
+	if (null == requestHeaderValuesMap) {
+	    requestHeaderValuesMap = new RequestHeaderValuesMap(request);
+	}
         return requestHeaderValuesMap;
     }
 
-    /**
-     * @see javax.faces.context.ExternalContext#getRequestParameterMap()
-     */
+    public Map getRequestCookieMap() {
+	if (null == cookieMap) {
+	    cookieMap = new RequestCookieMap(request);
+	}
+        return cookieMap;
+    }
+
+    public Map getInitParameterMap() {
+	if (null == initParameterMap) {
+	    initParameterMap = new InitParameterMap(servletContext);
+	}
+        return initParameterMap;
+    }
+
+
     public Map getRequestParameterMap() {
+	if (null == requestParameterMap) {
+	    requestParameterMap = new RequestParameterMap(request);
+	}
         return requestParameterMap;
     }
 
-    /**
-     * @see javax.faces.context.ExternalContext#getRequestParameterValuesMap()
-     */
     public Map getRequestParameterValuesMap() {
+	if (null == requestParameterValuesMap) {
+	    requestParameterValuesMap = new RequestParameterValuesMap(request);
+	}
         return requestParameterValuesMap;
     }
 
     public Iterator getRequestParameterNames() {
-        Enumeration  namEnum = request.getParameterNames();
-        ListIterator namIter = null;
+        final Enumeration  namEnum = request.getParameterNames();
+
+	Iterator result = new Iterator() {
+		public boolean hasNext() {
+		    return namEnum.hasMoreElements();
+		}
+		public Object next() {
+		    return namEnum.nextElement();
+		}
+		public void remove() {
+		    throw new UnsupportedOperationException();
+		}
+	    };
      	
-     	while (namEnum.hasMoreElements()) {
-            namIter.add(namEnum.nextElement());
-     	}
-     	
-     	return namIter;
+     	return result;
     }
 
     public Locale getRequestLocale() {
@@ -747,4 +749,160 @@ class RequestHeaderValuesMap implements Map {
     public Collection values() {
         throw new UnsupportedOperationException();
     }
+}
+
+class RequestCookieMap implements Map {
+    private HttpServletRequest request = null;
+    protected Cookie[] cookies = null;
+    protected final int cookieLen;
+
+    public RequestCookieMap(ServletRequest newRequest) {
+        this.request = (HttpServletRequest) newRequest;
+        cookies = request.getCookies();
+	if (null != cookies) {
+	    cookieLen = cookies.length;
+	}
+	else {
+	    cookieLen = -1;
+	}
+    }
+
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean containsKey(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean containsValue(Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Set entrySet() {
+        throw new UnsupportedOperationException();
+    }
+
+    public Object get(Object key) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+	if (null == cookies) {
+	    return null;
+	}
+        String keyString = key.toString();
+	Object result = null;
+	int i = 0;
+
+	for (i = 0; i < cookieLen; i++) {
+	    if (cookies[i].getName().equals(keyString)) {
+		result = cookies[i];
+		break;
+	    }
+	}
+        return result;
+    }
+
+    public int hashCode() {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException();
+    }
+
+    public Set keySet() {
+        throw new UnsupportedOperationException();
+    }
+
+    public Object put(Object key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void putAll(Map map) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Object remove(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+    public int size() {
+        throw new UnsupportedOperationException();
+    }
+
+    public Collection values() {
+        throw new UnsupportedOperationException();
+    }
+}
+
+class InitParameterMap implements Map {
+    private ServletContext servletContext;
+
+    public InitParameterMap(ServletContext newServletContext) {
+	servletContext = newServletContext;
+    }
+
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsKey(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsValue(Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Set entrySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object get(Object key) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+        String keyString = key.toString();
+        return servletContext.getInitParameter(keyString);
+    }
+
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set keySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object put(Object key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public void putAll(Map map) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object remove(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public int size() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Collection values() {
+        throw new UnsupportedOperationException();
+    }
+
+
 }

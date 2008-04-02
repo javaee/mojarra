@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.10 2003/02/20 22:49:46 ofung Exp $
+ * $Id: FacesTestCaseService.java,v 1.11 2003/03/24 19:45:35 eburns Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // FacesTestCaseService.java
 
 package com.sun.faces;
+
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,7 +46,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.10 2003/02/20 22:49:46 ofung Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.11 2003/03/24 19:45:35 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -148,23 +150,17 @@ public void setUp()
     }    
     
     TestBean testBean = new TestBean();
-    (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
+    facesContext.getExternalContext().getSessionMap().put("TestBean", testBean);
     System.setProperty(RIConstants.DISABLE_RENDERERS, 
 		       RIConstants.DISABLE_RENDERERS);
 
-    PageContext pageContext = null;
-    
-    if (null != (pageContext = facesTestCase.getPageContext())) {
-	pageContext.setAttribute(FacesContext.FACES_CONTEXT_ATTR, facesContext,
-				 PageContext.REQUEST_SCOPE);
-    }
-
-    java.util.Enumeration paramNames = getFacesContext().getServletRequest().getParameterNames();
-    while (paramNames.hasMoreElements()) {
-	String curName = (String) paramNames.nextElement();
+    Iterator paramNames = getFacesContext().getExternalContext().getRequestParameterNames();
+    while (paramNames.hasNext()) {
+	String curName = (String) paramNames.next();
 	
 	System.out.println(curName + "=" +
-			   getFacesContext().getServletRequest().getParameter(curName));
+			   getFacesContext().getExternalContext().
+			   getRequestParameterMap().get(curName));
     }
 }
 
@@ -173,14 +169,9 @@ public void tearDown()
     Util.releaseFactoriesAndDefaultRenderKit(facesTestCase.getConfig().getServletContext());
     // make sure session is not null. It will null in case release
     // was invoked.
-    if ( facesContext.getHttpSession() != null ) {
-        (facesContext.getHttpSession()).removeAttribute("TestBean");
+    if ( facesContext.getExternalContext().getSession(true) != null ) {
+        facesContext.getExternalContext().getSessionMap().remove("TestBean");
     }    
-
-    PageContext pageContext = null;
-    if (null != (pageContext = facesTestCase.getPageContext())) {
-	pageContext.removeAttribute(FacesContext.FACES_CONTEXT_ATTR);
-    }
 }
 
 public boolean verifyExpectedOutput()

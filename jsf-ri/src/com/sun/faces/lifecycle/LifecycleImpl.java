@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.23 2003/03/21 23:22:45 rkitain Exp $
+ * $Id: LifecycleImpl.java,v 1.24 2003/03/24 19:45:31 eburns Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.lifecycle.ViewHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
@@ -37,7 +36,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.23 2003/03/21 23:22:45 rkitain Exp $
+ * @version $Id: LifecycleImpl.java,v 1.24 2003/03/24 19:45:31 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -73,7 +72,6 @@ protected ArrayList phaseWrappers;
 
 protected Object lock = null;
 
-protected ApplicationHandler applicationHandler = null;
 protected ViewHandler viewHandler = null;
 
 // keeps track of total number of events processed 
@@ -138,21 +136,6 @@ protected void executeRender(FacesContext context) throws FacesException
 //
 // Methods from Lifecycle
 //
-
-public ApplicationHandler getApplicationHandler()
-{
-    return applicationHandler;
-}
-
-public void setApplicationHandler(ApplicationHandler handler)
-{
-    if (handler == null) {
-        throw new NullPointerException(Util.getExceptionMessage(
-            Util.NULL_HANDLER_ERROR_MESSAGE_ID));
-    }
-
-    applicationHandler = handler;
-}
 
 public ViewHandler getViewHandler()
 {

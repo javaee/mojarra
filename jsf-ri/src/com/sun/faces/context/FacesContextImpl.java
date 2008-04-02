@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.34 2003/03/21 23:19:18 rkitain Exp $
+ * $Id: FacesContextImpl.java,v 1.35 2003/03/24 19:45:26 eburns Exp $
  */
 
 /*
@@ -18,12 +18,6 @@ import java.util.Locale;
 import java.util.Properties;
 import java.lang.reflect.InvocationTargetException;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpServletRequest;
-
 import javax.faces.FacesException;     
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -36,9 +30,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.FactoryFinder;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.ApplicationEvent;
 import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.lifecycle.ViewHandler;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -67,16 +59,11 @@ public class FacesContextImpl extends FacesContext
     //
     // Instance Variables
     //
-    private ServletContext servletContext = null;
     private Locale locale = null;
-    private ServletRequest request = null;
     private Tree tree = null;
-    private ServletResponse response = null;
     private Tree responseTree = null;
     private ResponseStream responseStream = null;
     private ResponseWriter responseWriter = null;
-    private HttpSession session = null;
-    private ArrayList applicationEvents = null;
     private CursorableLinkedList facesEvents = null;
     private EvaluationContext evaluationContext = null;
     private ExternalContext externalContext = null;
@@ -91,7 +78,6 @@ public class FacesContextImpl extends FacesContext
 
     private HashMap messageLists = null;
     private ViewHandler viewHandler = null;
-    private ApplicationHandler applicationHandler = null;
     
     private boolean renderResponse = false;
     private boolean responseComplete = false;
@@ -117,15 +103,14 @@ public class FacesContextImpl extends FacesContext
         }
         
         this.externalContext = ec;
-        this.locale = request.getLocale();
+        this.locale = externalContext.getRequestLocale();
 
         this.viewHandler = lifecycle.getViewHandler();
-        this.applicationHandler = lifecycle.getApplicationHandler();
 
-	// Verify the FormatPool is in the ServletContext
+	// Verify the FormatPool is in the ApplicationMap
 
 	// PENDING(edburns): when we have a startup/shutdown hook,
-	// remove this from the ServletContext.
+	// remove this from the ApplicationMap.
 	FormatPool formatPool = null;
 	if (null == (formatPool = (FormatPool)
             getExternalContext().getApplicationMap().get(RIConstants.FORMAT_POOL))) {
@@ -153,21 +138,6 @@ public class FacesContextImpl extends FacesContext
         return externalContext;
     }
 
-    public Iterator getApplicationEvents() {
-        if (applicationEvents != null) {
-            return (applicationEvents.iterator());
-        } else {
-            return (Collections.EMPTY_LIST.iterator());
-        }
-    }
-
-    public int getApplicationEventsCount() {
-	if (null == applicationEvents) {
-	    return 0;
-	}
-	return applicationEvents.size();
-    }
-
     public Iterator getFacesEvents() {
         if (facesEvents != null) {
             return (facesEvents.cursor());
@@ -186,7 +156,7 @@ public class FacesContextImpl extends FacesContext
         // update the JSTL configuration parameter with the new locale instance,
         // so that the new LocalizationContext that gets created when the setBundle
         // tag is processed is based on the modified locale.
-        javax.servlet.jsp.jstl.core.Config.set(getServletRequest(),
+        javax.servlet.jsp.jstl.core.Config.set((javax.servlet.ServletRequest) externalContext.getRequest(),
                 javax.servlet.jsp.jstl.core.Config.FMT_LOCALE, locale);
     }
 
@@ -291,32 +261,6 @@ public class FacesContextImpl extends FacesContext
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_RESPONSE_WRITER_ERROR_MESSAGE_ID));
         }
 	responseWriter = newResponseWriter;
-    }
-
-    public ServletContext getServletContext() {
-        return (this.servletContext);
-    }
-
-
-    public ServletRequest getServletRequest() {
-        return (this.request);
-    }
-
-
-    public ServletResponse getServletResponse() {
-        return (this.response);
-    }
-
-
-    public void addApplicationEvent(ApplicationEvent event) {
-        if (event == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                Util.NULL_EVENT_ERROR_MESSAGE_ID));
-        }
-        if (applicationEvents == null) {
-            applicationEvents = new ArrayList();
-        }
-        applicationEvents.add(event);
     }
 
     public void addFacesEvent(FacesEvent event) {
@@ -438,10 +382,8 @@ public class FacesContextImpl extends FacesContext
         tree = null;
         responseStream = null;
         responseWriter = null;
-        applicationEvents = null;
         facesEvents = null;
         viewHandler = null;
-        applicationHandler = null;
         renderResponse = false;
         responseComplete = false;
 	// Make sure to clear our ThreadLocal instance.
@@ -468,10 +410,6 @@ public class FacesContextImpl extends FacesContext
         return this.viewHandler;
     }
    
-    public ApplicationHandler getApplicationHandler() {
-        return this.applicationHandler;
-    }
-    
     // The testcase for this class is TestFacesContextImpl.java 
     // The testcase for this class is TestFacesContextImpl_Model.java
 

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.5 2003/03/12 19:51:06 rkitain Exp $
+ * $Id: RenderResponsePhase.java,v 1.6 2003/03/24 19:45:31 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.context.FacesContextImpl;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.5 2003/03/12 19:51:06 rkitain Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.6 2003/03/24 19:45:31 eburns Exp $
  *
  */
 
@@ -88,8 +88,6 @@ public void execute(FacesContext facesContext) throws FacesException
     try { 
 	lifecycleDriver.getViewHandler().renderView(facesContext); 
     } catch (IOException e) { 
-	throw new FacesException(e.getMessage(), e);
-    } catch (ServletException e) { 
 	throw new FacesException(e.getMessage(), e);
     }
 }

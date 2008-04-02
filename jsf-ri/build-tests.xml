@@ -141,6 +141,7 @@
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/classes"
             debug="${compile.debug}"
+            includes="com/sun/faces/*.java,com/sun/faces/el/*.java"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
 
@@ -309,6 +310,10 @@
 
             <formatter type="plain" usefile="false"/>
             <!-- Suite of tests -->
+            <test name="com.sun.faces.el.TestVariableResolverImpl"/>
+            <test name="com.sun.faces.el.TestPropertyResolverImpl"/>
+<!--
+            <test name="com.sun.faces.el.TestValueBindingImpl"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
             <test name="com.sun.faces.util.TestUtil_messages"/>
             <test name="com.sun.faces.util.TestUtil"/>
@@ -343,7 +348,7 @@
             <test name="javax.faces.validator.RequiredValidatorTestCase"/>
             <test name="com.sun.faces.taglib.html_basic.TestHtmlBasicValidator"/>
             <test name="com.sun.faces.taglib.jsf_core.TestCoreValidator"/>
-
+-->
             <!-- To run the following tests, comment last 3 tests, uncomment
                  following tests and set saveStateInClient property in 
                  conf/test/web.xml to true 

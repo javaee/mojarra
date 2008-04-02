@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.46 2003/03/21 23:24:00 rkitain Exp $
+ * $Id: ButtonRenderer.java,v 1.47 2003/03/24 19:45:33 eburns Exp $
  */
 
 /*
@@ -25,7 +25,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 
 import javax.faces.component.UIForm;
-import javax.faces.event.FormEvent;
 import javax.faces.component.UIForm;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,7 +40,6 @@ import org.apache.commons.beanutils.ConversionException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
-import javax.faces.event.FormEvent;
 import javax.faces.component.UICommand;
 import com.sun.faces.RIConstants;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +51,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.46 2003/03/21 23:24:00 rkitain Exp $
+ * @version $Id: ButtonRenderer.java,v 1.47 2003/03/24 19:45:33 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -197,28 +195,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             component.setValid(true);
             return;
         }
-
-        // Construct and enqueue a FormEvent for the application 
-        String commandName = ((UICommand)component).getCommandName();
-        String formName = null;
-        UIComponent parent = component.getParent();
-        while (parent != null) {
-            if (parent instanceof UIForm) {
-                formName = (String) ((UIForm)parent).getFormName();
-                break;
-            }
-            parent = parent.getParent();
-        }
-        if (formName == null) {
-	    addGenericErrorMessage(context, component, 
-				   Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,
-				   "formName");
-            component.setValid(false);
-            return;
-        }
-        FormEvent formEvent =
-            new FormEvent(component, formName, commandName);
-        context.addApplicationEvent(formEvent);
 
         //PENDING(rogerk) fire action event
         //

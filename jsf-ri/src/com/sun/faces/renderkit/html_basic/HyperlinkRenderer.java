@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.43 2003/03/21 23:24:01 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.44 2003/03/24 19:45:34 eburns Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
-import javax.faces.event.FormEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
@@ -50,7 +49,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.43 2003/03/21 23:24:01 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.44 2003/03/24 19:45:34 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,22 +124,6 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
 	    return;
         }
 
-        // Construct and enqueue a FormEvent for the application
-        String commandName = (String) command.getCommandName();
-        String formName = null;
-	UIForm form = getMyForm(context, command);
-
-        if (null == (formName = (String) form.getFormName())) {
-	    addGenericErrorMessage(context, component, 
-				   Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,
-				   "formName");
-            command.setValid(false);
-            return;
-        }
-        FormEvent formEvent =
-            new FormEvent(command, formName, commandName);
-        context.addApplicationEvent(formEvent);
-	
         //PENDING(rogerk) fire action event
         //
         command.fireActionEvent(context);
