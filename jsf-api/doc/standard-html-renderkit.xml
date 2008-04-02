@@ -93,6 +93,11 @@
   </component>
 
   <component>
+    <component-type>NamingContainer</component-type>
+    <component-class>javax.faces.component.UINamingContainer</component-class>
+  </component>
+
+  <component>
     <component-type>Output</component-type>
     <component-class>javax.faces.component.UIOutput</component-class>
   </component>
