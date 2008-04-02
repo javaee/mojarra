@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.10 2003/09/13 12:57:46 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.11 2003/09/15 14:16:18 eburns Exp $
  */
 
 /*
@@ -52,9 +52,8 @@ public class MockViewHandler extends Object implements ViewHandler {
 			return null;
 		    }
 
-		    public Object writeState(FacesContext context, 
-					     SerializedView state) throws IOException {
-                        return null;
+		    public void writeState(FacesContext context, 
+					   SerializedView state) throws IOException {
                     }
 
 		    protected UIViewRoot restoreTreeStructure(FacesContext context, 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.12 2003/09/13 12:57:44 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.13 2003/09/15 14:16:16 eburns Exp $
  */
 
 /*
@@ -716,6 +716,11 @@ public abstract class UIComponentBase implements UIComponent {
         if (id == null) {
             return;
         }
+
+	if (-1 != id.indexOf(UIComponent.SEPARATOR_CHAR)) {
+	    throw new IllegalArgumentException();
+        }
+	    
         int n = id.length();
         if (n < 1) {
             throw new IllegalArgumentException();
