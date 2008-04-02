@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.8 2003/09/30 22:04:40 eburns Exp $
+ * $Id: UIViewRoot.java,v 1.9 2003/10/15 18:11:35 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
@@ -264,6 +265,33 @@ public class UIViewRoot extends UIComponentBase {
      */
     public String createUniqueId() {
 	return UNIQUE_ID_PREFIX + lastId++;
+    }
+    
+    /*
+     * <p>The locale for this view.</p>
+     */
+    private Locale locale = null;
+    
+    /**
+     * <p>Return the <code>Locale</code> to be used in localizing the
+     * response being created for this view.</p>
+     */
+    public Locale getLocale() {
+        if (locale == null ) {
+            return Locale.getDefault();
+        }
+        return locale;
+    }
+
+
+    /**
+     * <p>Set the <code>Locale</code> to be used in localizing the
+     * response being created for this view. </p>
+     *
+     * @param locale The new localization Locale
+     */
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
     
     // ----------------------------------------------------- StateHolder Methods

@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.8 2003/09/30 17:37:40 rlubke Exp $
+ * $Id: NumberConverter.java,v 1.9 2003/10/15 18:11:37 eburns Exp $
  */
 
 /*
@@ -616,7 +616,7 @@ public class NumberConverter implements Converter, StateHolder {
         // PENDING(craigmcc) - JSTL localization context?
         Locale locale = parseLocale;
         if (locale == null) {
-            locale = context.getLocale();
+            locale = context.getViewRoot().getLocale();
         }
         if (locale == null) {
             locale = Locale.getDefault();

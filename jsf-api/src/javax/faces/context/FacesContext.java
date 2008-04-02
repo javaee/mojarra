@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.51 2003/09/25 23:21:43 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.52 2003/10/15 18:11:36 eburns Exp $
  */
 
 /*
@@ -62,27 +62,6 @@ public abstract class FacesContext {
      *  once without a call to <code>release()</code> in between.
      */
     public abstract Iterator getComponentsWithMessages();
-
-
-    /**
-     * <p>Return the <code>Locale</code> to be used in localizing the
-     * response being created for this <code>FacesContext</code>.</p>
-     */
-    public abstract Locale getLocale();
-
-
-    /**
-     * <p>Set the <code>Locale</code> to be used in localizing the
-     * response being created for this <code>FacesContext</code>.  If not
-     * set, the default Locale for our servlet container will be used.</p>
-     *
-     * @param locale The new localization Locale
-     *
-     * @exception IllegalStateException if this method is called more than
-     *  once without a call to <code>release()</code> in between.
-     */
-    public abstract void setLocale(Locale locale);
-
 
     /**
      * <p>Return the maximum severity level recorded on any {@link Message}s

@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.13 2003/10/07 20:53:51 eburns Exp $
+ * $Id: DateTimeConverter.java,v 1.14 2003/10/15 18:11:37 eburns Exp $
  */
 
 /*
@@ -390,7 +390,7 @@ public class DateTimeConverter implements Converter, StateHolder {
         // PENDING(craigmcc) - JSTL localization context?
         Locale locale = this.locale;
         if (locale == null) {
-            locale = context.getLocale();
+            locale = context.getViewRoot().getLocale();
         }        
         return (locale);
 
