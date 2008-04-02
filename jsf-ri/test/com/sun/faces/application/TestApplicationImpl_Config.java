@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.2 2003/05/01 07:42:12 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.3 2003/05/01 18:04:07 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.2 2003/05/01 07:42:12 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.3 2003/05/01 18:04:07 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -286,18 +286,5 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 					 standardConverterIds));
 	}
     }
-
-    protected boolean isMember(String toTest, String [] set) {
-	int 
-	    len = set.length,
-	    i = 0;
-	for (i = 0; i < len; i++) {
-	    if (set[i].equals(toTest)) {
-		return true;
-	    }
-	}
-	return false;
-    }
-	
 
 } // end of class TestApplicationImpl_Config

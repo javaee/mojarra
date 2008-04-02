@@ -155,6 +155,80 @@
       <converter-class>com.sun.faces.convert.BooleanConverter</converter-class>
   </converter>
 
+  <!-- standard message-resources -->
+ 
+  <message-resources>
+    <message-resources-id>javax.faces.context.FACES_API_MESSAGES</message-resources-id>
+    <message-resources-class>com.sun.faces.context.MessageResourcesImpl</message-resources-class>
+    <message>
+      <message-id>javax.faces.validator.DoubleRangeValidator.LIMIT</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.DoubleRangeValidator.MAXIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.DoubleRangeValidator.MINIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.DoubleRangeValidator.TYPE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.LengthValidator.LIMIT</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.LengthValidator.MAXIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.LengthValidator.MINIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.RequiredValidator.FAILED</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.LongRangeValidator.LIMIT</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.LongRangeValidator.MAXIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.LongRangeValidator.MINIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.LongRangeValidator.TYPE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.StringRangeValidator.LIMIT</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.StringRangeValidator.MAXIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.StringRangeValidator.MINIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.StringRangeValidator.TYPE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.RequiredValidator.FAILED</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+  </message-resources>
 
   <!-- Second application element with overapping values -->
   <application>

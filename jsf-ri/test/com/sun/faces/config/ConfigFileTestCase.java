@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.7 2003/05/01 07:20:19 rkitain Exp $
+ * $Id: ConfigFileTestCase.java,v 1.8 2003/05/01 18:04:08 eburns Exp $
  */
 
 /*
@@ -27,6 +27,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.context.MessageResources;
 
 import org.apache.cactus.ServletTestCase;
 import org.apache.cactus.WebRequest;
@@ -69,6 +70,49 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
     // ------------------------------------------------ Individual Test Methods
+
+    public void testMessageResources() {
+	// test the default messages
+        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
+        FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
+	ConfigBase yourBase = application.getAppConfig().getConfigBase();
+	ConfigMessageResources messageResources = null;
+	ConfigMessage message = null;
+	Map 
+	    messageResourcesMap = null,
+	    messagesMap = null;
+	String apiMessages [] = {
+	    "javax.faces.validator.DoubleRangeValidator.LIMIT",
+	    "javax.faces.validator.DoubleRangeValidator.MAXIMUM",
+	    "javax.faces.validator.DoubleRangeValidator.MINIMUM",
+	    "javax.faces.validator.DoubleRangeValidator.TYPE",
+	    "javax.faces.validator.LengthValidator.LIMIT",
+	    "javax.faces.validator.LengthValidator.MAXIMUM",
+	    "javax.faces.validator.LengthValidator.MINIMUM",
+	    "javax.faces.validator.RequiredValidator.FAILED",
+	    "javax.faces.validator.LongRangeValidator.LIMIT",
+	    "javax.faces.validator.LongRangeValidator.MAXIMUM",
+	    "javax.faces.validator.LongRangeValidator.MINIMUM",
+	    "javax.faces.validator.LongRangeValidator.TYPE",
+	    "javax.faces.validator.StringRangeValidator.LIMIT",
+	    "javax.faces.validator.StringRangeValidator.MAXIMUM",
+	    "javax.faces.validator.StringRangeValidator.MINIMUM",
+	    "javax.faces.validator.StringRangeValidator.TYPE",
+	    "javax.faces.validator.RequiredValidator.FAILED"	    
+	};
+	Iterator messageIter = null;
+
+	assertTrue(null != (messageResourcesMap = 
+			    yourBase.getMessageResources()));
+	assertTrue(null != (messageResources = (ConfigMessageResources)
+			    messageResourcesMap.get(MessageResources.FACES_API_MESSAGES)));
+	assertTrue(null != (messagesMap = messageResources.getMessages()));
+	assertTrue(null != (messageIter = messagesMap.keySet().iterator()));
+	while (messageIter.hasNext()) {
+	    assertTrue(isMember((String) messageIter.next(), apiMessages));
+	}
+    }
 
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigBase.java,v 1.4 2003/05/01 07:20:17 rkitain Exp $
+ * $Id: ConfigBase.java,v 1.5 2003/05/01 18:04:01 eburns Exp $
  */
 
 /*
@@ -101,6 +101,23 @@ public class ConfigBase {
         }
     }
 
+    // ------------------------------------------------------------ <message-resources>
+
+    private Map messageResources = null;
+    public void addMessageResources(ConfigMessageResources newResource) {
+        if (messageResources == null) {
+            messageResources = new HashMap();
+        }
+        messageResources.put(newResource.getMessageResourcesId(), 
+			     newResource);
+    }
+    public Map getMessageResources() {
+        if (messageResources == null) {
+            return (Collections.EMPTY_MAP);
+        } else {
+            return (this.messageResources);
+        }
+    }
 
     // ------------------------------------------------------------ <validator>
 

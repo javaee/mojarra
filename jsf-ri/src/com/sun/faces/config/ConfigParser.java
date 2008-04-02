@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.8 2003/05/01 07:20:17 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.9 2003/05/01 18:04:03 eburns Exp $
  */
 
 /*
@@ -193,6 +193,7 @@ public class ConfigParser {
 
         configureRulesApplication(digester);
         configureRulesConverter(digester);
+        configureRulesMessageResources(digester);
         configureRulesComponent(digester);
         configureRulesValidator(digester);
         configureRulesManagedBean(digester);
@@ -262,6 +263,29 @@ public class ConfigParser {
 
     }
 
+    // Configure the rules for a <message-resources> element
+    protected void configureRulesMessageResources(Digester digester) {
+        String prefix = "faces-config/message-resources";
+
+        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigMessageResources");
+        digester.addSetNext(prefix, "addMessageResources", "com.sun.faces.config.ConfigMessageResources");
+        digester.addCallMethod(prefix + "/message-resources-id",
+                               "setMessageResourcesId", 0);
+        digester.addCallMethod(prefix + "/message-resources-class",
+                               "setMessageResourcesClass", 0);
+	configureRulesMessage(digester);
+    }
+
+    protected void configureRulesMessage(Digester digester) {
+        String prefix = "faces-config/message-resources/message";
+
+        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigMessage");
+        digester.addSetNext(prefix, "addMessage", "com.sun.faces.config.ConfigMessage");
+        digester.addCallMethod(prefix + "/message-id",
+                               "setMessageId", 0);
+        digester.addCallMethod(prefix + "/message-class",
+                               "setMessageClass", 0);
+    }
 
     // Configure the rules for a <property> element
     protected void configureRulesProperty(Digester digester, String prefix) {

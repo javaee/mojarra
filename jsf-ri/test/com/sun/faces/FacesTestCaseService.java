@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.13 2003/05/01 06:31:59 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.14 2003/05/01 18:04:04 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.13 2003/05/01 06:31:59 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.14 2003/05/01 18:04:04 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -240,6 +240,18 @@ public boolean verifyExpectedOutput()
     }
     System.out.println("VERIFY:"+result); 
     return result;
+}
+
+public boolean isMember(String toTest, String [] set) {
+    int 
+	len = set.length,
+	i = 0;
+    for (i = 0; i < len; i++) {
+	if (set[i].equals(toTest)) {
+	    return true;
+	}
+    }
+    return false;
 }
 
 } // end of class FacesTestCaseService
