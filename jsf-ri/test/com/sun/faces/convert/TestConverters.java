@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.13 2003/09/11 23:13:01 eburns Exp $
+ * $Id: TestConverters.java,v 1.14 2003/09/16 17:29:16 rlubke Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.13 2003/09/11 23:13:01 eburns Exp $
+ * @version $Id: TestConverters.java,v 1.14 2003/09/16 17:29:16 rlubke Exp $
  * 
  *
  */
@@ -215,13 +215,11 @@ public class TestConverters extends JspFacesTestCase
 	theRequest.addParameter("byte", Byte.toString(Byte.MIN_VALUE));
 	theRequest.addParameter("byte", Byte.toString(Byte.MAX_VALUE));
 	theRequest.addParameter("byte", "1");
-
-	theRequest.addParameter("char", 
-				Character.toString(Character.MIN_VALUE));
-	theRequest.addParameter("char", 
-				Character.toString('A'));
-	theRequest.addParameter("char", 
-			        Character.toString('z'));
+	theRequest.addParameter("char",
+                new Character(Character.MIN_VALUE).toString());				
+	theRequest.addParameter("char", "A"); 				
+	theRequest.addParameter("char", "z"); 
+			    
 
 	theRequest.addParameter("short", Short.toString(Short.MIN_VALUE));
 	theRequest.addParameter("short", Short.toString(Short.MAX_VALUE));
