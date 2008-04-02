@@ -17,6 +17,14 @@ distribution in your WEB-INF/lib directory in your webapp.
 
 Major changes/features in this release:
 =======================================
+Here are the changes since the 1.1 release
+
+* In order to reduce the number of bytes sent to the client in the
+  state saving client mode, state can be optionally compressed before it is
+  encoded and written as a hidden field.This is turned off by default.
+  You can turn on this feature by setting the ServletContext 
+  Init Paramter "com.sun.faces.COMPRESS_STATE" to true in your web deployment
+  descriptor (web.xml) file.
 
 Here are the changes since the 1.0 release
 

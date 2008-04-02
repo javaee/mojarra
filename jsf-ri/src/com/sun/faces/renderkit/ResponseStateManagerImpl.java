@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.11 2004/02/26 20:32:52 eburns Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.12 2004/06/12 00:15:10 jvisvanathan Exp $
  */
 
 /*
@@ -23,8 +23,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import java.util.Map;
 
 
@@ -41,6 +43,9 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         LogFactory.getLog(ResponseStateManagerImpl.class);
     private static final String FACES_VIEW_STATE =
         "com.sun.faces.FACES_VIEW_STATE";
+    
+     private static final String COMPRESS_STATE_PARAM =
+        "com.sun.faces.COMPRESS_STATE";
     //
     // Class Variables
     //
@@ -48,7 +53,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     //
     // Instance Variables
     //
-
+    private Boolean compressStateSet = null;
+    
     //
     // Ivars used during actual client lifetime
     //
@@ -92,7 +98,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                                             String treeId) {
         Object structure = null;
         Object state = null;
-
+        ByteArrayInputStream bis = null;
+        GZIPInputStream gis = null;
+        ObjectInputStream ois = null;
+        boolean compress = isCompressStateSet(context);
+        
         Map requestParamMap = context.getExternalContext()
             .getRequestParameterMap();
 
@@ -103,14 +113,26 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         }
         byte[] bytes = Base64.decode(viewString.getBytes());
         try {
-            ObjectInputStream ois = new ObjectInputStream(
-                new ByteArrayInputStream(bytes));
+            bis = new ByteArrayInputStream(bytes);
+            if (isCompressStateSet(context)) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Deflating state before restoring..");
+                }
+                gis = new GZIPInputStream(bis);
+                ois = new ObjectInputStream(gis);
+            } else {
+                ois = new ObjectInputStream(bis);
+            }
             structure = ois.readObject();
             state = ois.readObject();
             Map requestMap = context.getExternalContext().getRequestMap();
             // store the state object temporarily in request scope until it is
             // processed by getComponentStateToRestore which resets it.
             requestMap.put(FACES_VIEW_STATE, state);
+            bis.close();
+            if ( compress) {
+                gis.close();
+            }
             ois.close();
         } catch (java.io.OptionalDataException ode) {
             log.error(ode.getMessage(), ode);
@@ -125,13 +147,29 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     public void writeState(FacesContext context, SerializedView view)
         throws IOException {
-        ByteArrayOutputStream bos = null;
+        
         String hiddenField = null;
-
-        bos = new ByteArrayOutputStream();
-        ObjectOutput output = new ObjectOutputStream(bos);
-        output.writeObject(view.getStructure());
-        output.writeObject(view.getState());
+        GZIPOutputStream zos = null;
+        ObjectOutputStream oos = null;
+        boolean compress = isCompressStateSet(context);
+        
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        if (compress) {
+            if (log.isDebugEnabled()) {
+                log.debug("Compressing state before saving..");
+            }
+            zos = new GZIPOutputStream(bos);
+            oos = new ObjectOutputStream(zos);
+        } else {
+            oos = new ObjectOutputStream(bos);    
+        }
+        oos.writeObject(view.getStructure());
+        oos.writeObject(view.getState());
+        oos.close();
+        if (compress) {
+            zos.close();
+        }
+        bos.close();
 
         hiddenField = " <input type=\"hidden\" name=\""
             + RIConstants.FACES_VIEW + "\"" + " value=\"" +
@@ -156,6 +194,20 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             markerIdx = response.indexOf(marker);
         }
         return response;
+    }
+    
+    public boolean isCompressStateSet(FacesContext context) {
+	if (null != compressStateSet) {
+	    return compressStateSet.booleanValue();
+	}
+	compressStateSet = Boolean.FALSE;
+
+        String compressStateParam = context.getExternalContext().
+            getInitParameter(COMPRESS_STATE_PARAM);
+        if (compressStateParam != null){
+	    compressStateSet = Boolean.valueOf(compressStateParam);
+        }
+	return compressStateSet.booleanValue();
     }
 
 
