@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.30 2003/09/25 16:36:33 rlubke Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.31 2003/09/26 23:13:32 eburns Exp $
  */
 
 /*
@@ -69,7 +69,7 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
     //
 
     public String getRendererType() { 
-        return "Radio"; 
+        return "RadioButtonList"; 
     }
     public String getComponentType() { 
         return "SelectOne"; 

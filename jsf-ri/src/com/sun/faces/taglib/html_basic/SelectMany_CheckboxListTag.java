@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_CheckboxListTag.java,v 1.11 2003/09/25 16:36:32 rlubke Exp $
+ * $Id: SelectMany_CheckboxListTag.java,v 1.12 2003/09/26 23:13:32 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -72,7 +72,7 @@ public class SelectMany_CheckboxListTag extends BaseComponentTag
     //
 
     public String getRendererType() { 
-        return "SelectManyCheckbox"; 
+        return "CheckboxList"; 
     } 
     public String getComponentType() {
         return "SelectMany"; 
