@@ -1,5 +1,5 @@
 /*
- * $Id: PrependIdTestCase.java,v 1.1 2006/01/10 21:37:29 edburns Exp $
+ * $Id: PrependIdTestCase.java,v 1.2 2006/03/07 08:30:14 srinivas635 Exp $
  */
 
 /*
@@ -123,14 +123,14 @@ public class PrependIdTestCase extends AbstractTestCase {
         assertTrue(-1 != pageText.indexOf("span id=\"form6:case2prependIdUnspecified\""));
         
         // Auto-generated ids with prependId literal
-	assertTrue(-1 != pageText.indexOf("input name=\"_id_id54\" type=\"text\" value=\"prependIdFalse\""));
-        assertTrue(-1 != pageText.indexOf("input name=\"_id_id57:_id_id59\" type=\"text\" value=\"prependIdTrue\""));
-        assertTrue(-1 != pageText.indexOf("input name=\"_id_id62:_id_id64\" type=\"text\" value=\"prependIdUnspecified\""));
+	assertTrue(-1 != pageText.indexOf("input value=\"prependIdFalse\" type=\"text\" name=\"_id_id54\""));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdTrue\" type=\"text\" name=\"_id_id57:_id_id59\""));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdUnspecified\" type=\"text\" name=\"_id_id62:_id_id64\""));
         
         // Auto-generated ids with prependId from expression
-        assertTrue(-1 != pageText.indexOf("input name=\"_id_id71\" type=\"text\" value=\"prependIdFalse\""));
-        assertTrue(-1 != pageText.indexOf("input name=\"_id_id74:_id_id76\" type=\"text\" value=\"prependIdTrue\""));
-        assertTrue(-1 != pageText.indexOf("input name=\"_id_id79:_id_id81\" type=\"text\" value=\"prependIdUnspecified\""));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdFalse\" type=\"text\" name=\"_id_id71\""));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdTrue\" type=\"text\" name=\"_id_id74:_id_id76\""));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdUnspecified\" type=\"text\" name=\"_id_id79:_id_id81\""));
        
     }
 
