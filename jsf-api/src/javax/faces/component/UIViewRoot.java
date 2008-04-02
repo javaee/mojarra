@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.29 2004/11/11 18:03:06 edburns Exp $
+ * $Id: UIViewRoot.java,v 1.30 2004/11/11 20:39:30 edburns Exp $
  */
 
 /*
@@ -383,7 +383,7 @@ public class UIViewRoot extends UIComponentBase {
      * before falling through to the standard superclass processing.  If
      * {@link #getBeforePhaseListener} returns non-<code>null</code>,
      * invoke it, passing a {@link PhaseEvent} for the {@link
-     * PhaseId.RENDER_RESPONSE} phase.  If the internal list populated
+     * PhaseId#RENDER_RESPONSE} phase.  If the internal list populated
      * by calls to {@link #addPhaseListener} is non-empty, any listeners
      * in that list must have their {@link PhaseListener#beforePhase}
      * method called, passing the <code>PhaseEvent</code>.  Any errors
@@ -430,7 +430,7 @@ public class UIViewRoot extends UIComponentBase {
      * <p>Override the default {@link UIComponentBase#encodeEnd}
      * behavior.  If {@link #getAfterPhaseListener} returns
      * non-<code>null</code>, invoke it, passing a {@link PhaseEvent}
-     * for the {@link PhaseId.RENDER_RESPONSE} phase.  Any errors that
+     * for the {@link PhaseId#RENDER_RESPONSE} phase.  Any errors that
      * occur during invocation of the afterPhase listener must be
      * logged and swallowed.</p>
      */
