@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.26 2003/12/20 03:46:23 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.27 2003/12/20 04:23:56 craigmcc Exp $
  */
 
 /*
@@ -587,13 +587,16 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	assertEquals(10, test.getFirst());
 	assertNotNull(test.getValueBinding("first"));
 
-	// "rowIndex" property
-	request.setAttribute("foo", new Integer(5));
-	test.setValueBinding("rowIndex", application.createValueBinding("#{foo}"));
-	assertEquals(5, test.getRowIndex());
-	test.setRowIndex(10);
-	assertEquals(10, test.getRowIndex());
-	assertNotNull(test.getValueBinding("rowIndex"));
+        // "rowIndex" property
+        try {
+            request.setAttribute("foo", new Integer(5));
+            test.setValueBinding("rowIndex",
+                                 application.createValueBinding("#{foo}"));
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+        request.removeAttribute("foo");
 
 	// "rows" property
 	request.setAttribute("foo", new Integer(5));
@@ -618,20 +621,16 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	assertNull(test.getValueBinding("value"));
 	assertNull(test.getValue());
 
-	// "var" property
-	request.setAttribute("foo", "bar");
-	test.setVar(null);
-	assertNull(test.getVar());
-	test.setValueBinding("var", application.createValueBinding("#{foo}"));
-	assertNotNull(test.getValueBinding("var"));
-	assertEquals("bar", test.getVar());
-	test.setVar("baz");
-	assertEquals("baz", test.getVar());
-	test.setVar(null);
-	assertEquals("bar", test.getVar());
-	test.setValueBinding("var", null);
-	assertNull(test.getValueBinding("var"));
-	assertNull(test.getVar());
+        // "var" property
+        try {
+            request.setAttribute("foo", "bar");
+            test.setValueBinding("var",
+                                 application.createValueBinding("#{foo}"));
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+        request.removeAttribute("foo");
 
     }
 

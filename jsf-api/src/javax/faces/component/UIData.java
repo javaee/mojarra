@@ -119,7 +119,6 @@ public class UIData extends UIComponentBase
      * no current row association.</p>
      */
     private int rowIndex = -1;
-    private boolean rowIndexSet = false;
 
 
     /**
@@ -252,22 +251,14 @@ public class UIData extends UIComponentBase
 
     /**
      * <p>Return the zero-relative index of the currently selected row.  If
-     * we are not currently positioned on a row, return -1.</p>
+     * we are not currently positioned on a row, return -1.  This property
+     * is <strong>not</strong> enabled for value binding expressions.</p>
      *
      * @exception FacesException if an error occurs getting the row index
      */
     public int getRowIndex() {
 
-	if (this.rowIndexSet) {
-	    return (this.rowIndex);
-	}
-	ValueBinding vb = getValueBinding("rowIndex");
-	if (vb != null) {
-	    Integer value = (Integer) vb.getValue(getFacesContext());
-	    return (value.intValue());
-	} else {
-	    return (this.rowIndex);
-	}
+        return (this.rowIndex);
 
     }
 
@@ -307,12 +298,11 @@ public class UIData extends UIComponentBase
      * {@link UIData} must maintain per-row information for each descendant
      * as follows:<p>
      * <ul>
-     * <li>If the descendant is an instance of <code>ValueHolder</code>, save
-     *     the state of the <code>value</code> property.</li>
-     * <li>If the descendant is also an instance of
-     *     <code>ConvertibleValueHolder</code>, save the state of the
-     *     <code>valid</code> property.</li>
-     * <li>If the descendant is also an instance of <code>UIInput</code>,
+     * <li>If the descendant is an instance of <code>UIInput</code>, save
+     *     the state of the <code>localValue</code> property.</li>
+     * <li>If the descendant is an instance of <code>UIInput</code>, save
+     *     the state of the <code>valid</code> property.</li>
+     * <li>If the descendant is an instance of <code>UIInput</code>,
      *     save the state of the <code>previous</code> property.</li>
      * </ul>
      *
@@ -321,12 +311,11 @@ public class UIData extends UIComponentBase
      * current <code>rowIndex</code> and call setters for each descendant
      * as follows:</p>
      * <ul>
-     * <li>If the descendant is an instance of <code>ValueHolder</code>,
+     * <li>If the descendant is an instance of <code>UIInput</code>,
      *     restore the <code>value</code> property.</li>
-     * <li>If the descendant is also an instance of
-     *     <code>ConvertibleValueHolder</code>, restore the state of the
-     *     <code>valid</code> property.</li>
-     * <li>If the descendant is also an instance of <code>UIInput</code>,
+     * <li>If the descendant is an instance of <code>UIInput</code>,
+     *     restore the state of the <code>valid</code> property.</li>
+     * <li>If the descendant is an instance of <code>UIInput</code>,
      *     restore the state of the <code>previous</code> property.</li>
      * </ul>
      *
@@ -362,8 +351,6 @@ public class UIData extends UIComponentBase
 
         // Reset current state information for the new row index
         restoreDescendantState();
-
-	this.rowIndexSet = true;
 
     }
 
@@ -410,19 +397,12 @@ public class UIData extends UIComponentBase
 
     /**
      * <p>Return the request-scope attribute under which the data object
-     * for the current row will be exposed when iterating.</p>
+     * for the current row will be exposed when iterating.  This property
+     * is <strong>not</strong> enabled for value binding expressions.</p>
      */
     public String getVar() {
 
-	if (this.var != null) {
-	    return (this.var);
-	}
-	ValueBinding vb = getValueBinding("var");
-	if (vb != null) {
-	    return ((String) vb.getValue(getFacesContext()));
-	} else {
-	    return (null);
-	}
+        return (this.var);
 
     }
 
@@ -445,17 +425,16 @@ public class UIData extends UIComponentBase
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[10];
+        Object values[] = new Object[9];
         values[0] = super.saveState(context);
         values[1] = new Integer(first);
 	values[2] = firstSet ? Boolean.TRUE : Boolean.FALSE;
         values[3] = new Integer(rowIndex);
-	values[4] = rowIndexSet ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = new Integer(rows);
-	values[6] = rowsSet ? Boolean.TRUE : Boolean.FALSE;
-        values[7] = saved;
-        values[8] = value;
-        values[9] = var;
+        values[4] = new Integer(rows);
+	values[5] = rowsSet ? Boolean.TRUE : Boolean.FALSE;
+        values[6] = saved;
+        values[7] = value;
+        values[8] = var;
         return (values);
 
     }
@@ -468,12 +447,11 @@ public class UIData extends UIComponentBase
         first = ((Integer) values[1]).intValue();
 	firstSet = ((Boolean) values[2]).booleanValue();
         rowIndex = ((Integer) values[3]).intValue();
-	rowIndexSet = ((Boolean) values[4]).booleanValue();
-        rows = ((Integer) values[5]).intValue();
-	rowsSet = ((Boolean) values[6]).booleanValue();
-        saved = (Map) values[7];
-        value = values[8];
-        var = (String) values[9];
+        rows = ((Integer) values[4]).intValue();
+	rowsSet = ((Boolean) values[5]).booleanValue();
+        saved = (Map) values[6];
+        value = values[7];
+        var = (String) values[8];
 
     }
 
@@ -515,10 +493,31 @@ public class UIData extends UIComponentBase
 
     private transient String baseClientId = null;
 
+
+    /**
+     * <p>Set the {@link ValueBinding} used to calculate the value for the
+     * specified attribute or property name, if any.  In addition, if a
+     * {@link ValueBinding} is set for the <code>value</code> property,
+     * remove any synthesized {@link DataModel} for the data previously
+     * bound to this component.</p>
+     *
+     * @param name Name of the attribute or property for which to set a
+     *  {@link ValueBinding}
+     * @param binding The {@link ValueBinding} to set, or <code>null</code>
+     *  to remove any currently set {@link ValueBinding}
+     *
+     * @exception IllegalArgumentException if <code>name</code> is one of
+     *  <code>id</code>, <code>parent</code>, <code>var</code>, or
+     *  <code>rowIndex</code>
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     */
     public void setValueBinding(String name, ValueBinding binding) {
         
         if ("value".equals(name)) {
             this.model = null;
+        } else if ("var".equals(name) || "rowIndex".equals(name)) {
+            throw new IllegalArgumentException();
         }
         super.setValueBinding(name, binding);
         
