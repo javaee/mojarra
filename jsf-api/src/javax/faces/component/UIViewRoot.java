@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.11 2003/10/21 04:04:00 eburns Exp $
+ * $Id: UIViewRoot.java,v 1.12 2003/10/24 17:45:33 rlubke Exp $
  */
 
 /*
@@ -275,6 +275,10 @@ public class UIViewRoot extends UIComponentBase {
     /**
      * <p>Return the <code>Locale</code> to be used in localizing the
      * response being created for this view.</p>
+     *
+     * @return The current <code>Locale</code> or if no <code>Locale</code>
+     *  has been explicitly set, return the default <code>Locale</code> of the
+     *  VM.
      */
     public Locale getLocale() {
         if (locale == null ) {

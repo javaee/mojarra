@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.17 2003/10/22 18:40:13 rlubke Exp $
+ * $Id: DateTimeConverter.java,v 1.18 2003/10/24 17:45:34 rlubke Exp $
  */
 
 /*
@@ -121,7 +121,8 @@ public class DateTimeConverter implements Converter, StateHolder {
     /**
      * <p>Return the <code>Locale</code> to be used when parsing or formatting
      * dates and times. If not explicitly set, the <code>Locale</code> stored
-     * in the {@link FacesContext} for the current request is returned.</p>
+     * in the {@link javax.faces.component.UIViewRoot} for the current 
+     * request is returned.</p>
      */
     public Locale getLocale() {
 
@@ -137,8 +138,8 @@ public class DateTimeConverter implements Converter, StateHolder {
     /**
      * <p>Set the <code>Locale</code> to be used when parsing or formatting
      * dates and times.  If set to <code>null</code>, the <code>Locale</code> 
-     * stored in {@link FacesContext} for the current request will 
-     * be utilized.</p>
+     * stored in the {@link javax.faces.component.UIViewRoot} for the current 
+     * request will be utilized.</p>
      *
      * @param locale The new <code>Locale</code> (or <code>null</code>)
      */

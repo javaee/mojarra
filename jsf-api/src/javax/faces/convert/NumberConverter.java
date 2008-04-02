@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.10 2003/10/20 02:45:59 eburns Exp $
+ * $Id: NumberConverter.java,v 1.11 2003/10/24 17:45:34 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.faces.context.FacesContext;
  * <li>If the specified String is null or zero length, return
  *     a <code>null</code>.  Otherwise, trim leading and trailing
  *     whitespace before proceedng.</li>
- * <li>If the <code>parseLocale</code> property is not null,
+ * <li>If the <code>locale</code> property is not null,
  *     use that <code>Locale</code> for managing parsing.  Otherwise, use the
  *     <code>Locale</code> from the <code>UIViewRoot</code>.</li>
  * <li>If a <code>pattern</code> has been specified, its syntax must conform
@@ -64,7 +64,7 @@ import javax.faces.context.FacesContext;
  *     does not have a decimal point) or
  *     <code>java.lang.Double.parseDouble()</code> (if the value does
  *     have a decimal point).</li>
- * <li>If the <code>parseLocale</code> property is not null,
+ * <li>If the <code>locale</code> property is not null,
  *     use that <code>Locale</code> for managing formatting.  Otherwise, use the
  *     <code>Locale</code> from the <code>FacesContext</code>.</li>
  * <li>If a <code>pattern</code> has been specified, its syntax must conform
@@ -119,7 +119,7 @@ public class NumberConverter implements Converter, StateHolder {
     private boolean minFractionDigitsSpecified = false;
     private int minIntegerDigits = 0;
     private boolean minIntegerDigitsSpecified = false;
-    private Locale parseLocale = null;
+    private Locale locale = null;
     private String pattern = null;
     private String type = "number";
 
@@ -334,25 +334,31 @@ public class NumberConverter implements Converter, StateHolder {
     /**
      * <p>Return the <code>Locale</code> to be used when parsing numbers.
      * If this value is <code>null</code>, the <code>Locale</code> stored
-     * in {@link FacesContext} for the current request will be utilized.</p>
+     * in the {@link javax.faces.component.UIViewRoot} for the current request 
+     * will be utilized.</p>
      */
-    public Locale getParseLocale() {
+    public Locale getLocale() {
 
-        return (this.parseLocale);
+        if (this.locale == null) {
+            this.locale =
+            getLocale(FacesContext.getCurrentInstance());
+        }
+        return (this.locale);
 
     }
 
 
     /**
      * <p>Set the <code>Locale</code> to be used when parsing numbers.
-     * If set to <code>null</code>, the <code>Locale</code> stored in
-     * {@link FacesContext} for the current request will be utilized.</p>
+     * If set to <code>null</code>, the <code>Locale</code> stored in the
+     * {@link javax.faces.component.UIViewRoot} for the current request 
+     * will be utilized.</p>
      *
-     * @param parseLocale The new <code>Locale</code> (or <code>null</code>)
+     * @param locale The new <code>Locale</code> (or <code>null</code>)
      */
-    public void setParseLocale(Locale parseLocale) {
+    public void setLocale(Locale locale) {
 
-        this.parseLocale = parseLocale;
+        this.locale = locale;
 
     }
 
@@ -432,11 +438,10 @@ public class NumberConverter implements Converter, StateHolder {
             }
 
             // Identify the Locale to use for parsing
-            Locale locale = getLocale(context, component);
+            Locale locale = getLocale(context);
 
             // Create and configure the parser to be used
-            NumberFormat parser =
-                getNumberFormat(context, component, locale);
+            NumberFormat parser = getNumberFormat(locale);
             parser.setParseIntegerOnly(isIntegerOnly());
 
             // Perform the requested parsing
@@ -483,11 +488,11 @@ public class NumberConverter implements Converter, StateHolder {
             }
 
             // Identify the Locale to use for formatting
-            Locale locale = getLocale(context, component);
+            Locale locale = getLocale(context);
 
             // Create and configure the formatter to be used
             NumberFormat formatter =
-                getNumberFormat(context, component, locale);
+                getNumberFormat(locale);
             if (((pattern != null) && !pattern.equals(""))
                 || "currency".equals(type)) {
                 configureCurrency(formatter);
@@ -510,13 +515,48 @@ public class NumberConverter implements Converter, StateHolder {
 
 
     private static Class currencyClass;
+    
+    static {
+        try {
+            currencyClass = Class.forName("java.util.Currency");
+            // container's runtime is J2SE 1.4 or greater
+        } catch (Exception cnfe) {
+        }
+    }
+    
     private static final Class[] GET_INSTANCE_PARAM_TYPES =
 	new Class[] { String.class };
 
 
     /**
-     * <p>Override the currency formatting symbol based on the specified
-     * <code>currencyCode</code> or <code>currencySymbol</code> property.</p>
+     * <p>
+     * Override the formatting locale's default currency symbol with the
+     * specified currency code (specified via the "currencyCode" attribute) or
+     * currency symbol (specified via the "currencySymbol" attribute).</p>
+     *
+     * <p>If both "currencyCode" and "currencySymbol" are present,
+     * "currencyCode" takes precedence over "currencySymbol" if the
+     * java.util.Currency class is defined in the container's runtime (that
+     * is, if the container's runtime is J2SE 1.4 or greater), and
+     * "currencySymbol" takes precendence over "currencyCode" otherwise.</p>
+     *
+     * <p>If only "currencyCode" is given, it is used as a currency symbol if
+     * java.util.Currency is not defined.</p>
+     * <pre>
+     * Example:
+     *
+     * JDK    "currencyCode" "currencySymbol" Currency symbol being displayed
+     * -----------------------------------------------------------------------
+     * all         ---            ---         Locale's default currency symbol
+     *
+     * <1.4        EUR            ---         EUR
+     * >=1.4       EUR            ---         Locale's currency symbol for Euro
+     *
+     * all         ---           \u20AC       \u20AC
+     * 
+     * <1.4        EUR           \u20AC       \u20AC
+     * >=1.4       EUR           \u20AC       Locale's currency symbol for Euro
+     * </pre>
      *
      * @param formatter The <code>NumberFormatter</code> to be configured
      */
@@ -608,19 +648,15 @@ public class NumberConverter implements Converter, StateHolder {
      * <p>Return the <code>Locale</code> we will use for localizing our
      * formatting and parsing processing.</p>
      *
-     * @param context The {@link FacesContext} for the current request
-     * @param component The {@link UIComponent} for which we are converting
+     * @param context The {@link FacesContext} for the current request 
      */
-    private Locale getLocale(FacesContext context, UIComponent component) {
+    private Locale getLocale(FacesContext context) {
 
         // PENDING(craigmcc) - JSTL localization context?
-        Locale locale = parseLocale;
+        Locale locale = this.locale;
         if (locale == null) {
             locale = context.getViewRoot().getLocale();
-        }
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
+        }      
         return (locale);
 
     }
@@ -629,16 +665,13 @@ public class NumberConverter implements Converter, StateHolder {
     /**
      * <p>Return a <code>NumberFormat</code> instance to use for formatting
      * and parsing in this {@link Converter}.</p>
-     *
-     * @param context The {@link FacesContext} for the current request
-     * @param component The {@link UIComponent} for which we are converting
+     *          
      * @param locale The <code>Locale</code> used to select formatting
      *  and parsing conventions
      *
      * @exception ConverterException if no instance can be created
      */
-    private NumberFormat getNumberFormat
-        (FacesContext context, UIComponent component, Locale locale) {
+    private NumberFormat getNumberFormat(Locale locale) {
 
         // PENDING(craigmcc) - Implement pooling if needed for performance?
 
@@ -683,7 +716,7 @@ public class NumberConverter implements Converter, StateHolder {
         values[9] = minFractionDigitsSpecified ? Boolean.TRUE : Boolean.FALSE;
         values[10] = new Integer(minIntegerDigits);
         values[11] = minIntegerDigitsSpecified ? Boolean.TRUE : Boolean.FALSE;
-        values[12] = parseLocale;
+        values[12] = locale;
         values[13] = pattern;
         values[14] = type;
         return (values);
@@ -706,7 +739,7 @@ public class NumberConverter implements Converter, StateHolder {
         minFractionDigitsSpecified = ((Boolean) values[9]).booleanValue();
         minIntegerDigits = ((Integer) values[10]).intValue();
         minIntegerDigitsSpecified = ((Boolean) values[11]).booleanValue();
-        parseLocale = (Locale) values[12];
+        locale = (Locale) values[12];
         pattern = (String) values[13];
         type = (String) values[14];
 

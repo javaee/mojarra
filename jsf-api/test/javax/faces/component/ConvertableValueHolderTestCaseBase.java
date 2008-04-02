@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertableValueHolderTestCaseBase.java,v 1.2 2003/10/09 22:58:10 craigmcc Exp $
+ * $Id: ConvertableValueHolderTestCaseBase.java,v 1.3 2003/10/24 17:45:35 rlubke Exp $
  */
 
 /*
@@ -173,7 +173,7 @@ public abstract class ConvertableValueHolderTestCaseBase
         assertEquals(nc1.getMaxIntegerDigits(), nc2.getMaxIntegerDigits());
         assertEquals(nc1.getMinFractionDigits(), nc2.getMinFractionDigits());
         assertEquals(nc1.getMinIntegerDigits(), nc2.getMinIntegerDigits());
-        assertEquals(nc1.getParseLocale(), nc2.getParseLocale());
+        assertEquals(nc1.getLocale(), nc2.getLocale());
         assertEquals(nc1.getPattern(), nc2.getPattern());
         assertEquals(nc1.getType(), nc2.getType());
 
@@ -235,7 +235,7 @@ public abstract class ConvertableValueHolderTestCaseBase
         assertEquals(nc1.getMaxIntegerDigits(), nc2.getMaxIntegerDigits());
         assertEquals(nc1.getMinFractionDigits(), nc2.getMinFractionDigits());
         assertEquals(nc1.getMinIntegerDigits(), nc2.getMinIntegerDigits());
-        assertEquals(nc1.getParseLocale(), nc2.getParseLocale());
+        assertEquals(nc1.getLocale(), nc2.getLocale());
         assertEquals(nc1.getPattern(), nc2.getPattern());
         assertEquals(nc1.getType(), nc2.getType());
 
