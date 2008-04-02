@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.14 2003/10/07 19:53:08 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.15 2003/10/08 18:14:51 rlubke Exp $ 
  */ 
 
 
@@ -15,6 +15,8 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -26,15 +28,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.14 2003/10/07 19:53:08 rlubke Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.15 2003/10/08 18:14:51 rlubke Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -59,14 +56,21 @@ public class ViewHandlerImpl extends Object
     protected List facesServletMappings;
     
     /**
-     * <p>Map to cache the processed results of getViewIdPath.</p>
+     * <p>If there are multiple extension mappings, then the
+     * mapping returned will be arbitrary.  Return this value
+     * in that case.</p>
      */ 
-    private Map viewIdPathMap;
-            
+    private String defaultMappingExtension;
+    
+    /**
+     * <p>Store the value of <code>DEFAULT_SUFFIX_PARAM_NAME</code>
+     * or, if that isn't defined, the value of <code>DEFAULT_SUFFIX</code>
+     */ 
+    private String contextDefaultSuffix;
+        
 
     public ViewHandlerImpl() {
-	    stateManagerImpl = new StateManagerImpl();
-        viewIdPathMap = new HashMap();
+	    stateManagerImpl = new StateManagerImpl();            
     }
 
     public void renderView(FacesContext context, 
@@ -84,23 +88,26 @@ public class ViewHandlerImpl extends Object
         String requestURI = viewToRender.getViewId();
         
         if (!isPrefixMapped(getFacesMapping(context))) {            
-            String suffixToUse = context.getExternalContext().
-                getInitParameter(ViewHandler.DEFAULT_SUFFIX_PARAM_NAME);
             
-            if (suffixToUse == null) {
-                suffixToUse = ViewHandler.DEFAULT_SUFFIX;
+            if (contextDefaultSuffix == null) {
+                contextDefaultSuffix = context.getExternalContext().
+                    getInitParameter(ViewHandler.DEFAULT_SUFFIX_PARAM_NAME);
+                if (contextDefaultSuffix == null) {
+                    contextDefaultSuffix = ViewHandler.DEFAULT_SUFFIX;
+                }
             }
             
             // if the viewId doesn't already use the above suffix,
             // replace or append.
-            if (!requestURI.endsWith(suffixToUse)) {
+            if (!requestURI.endsWith(contextDefaultSuffix)) {
                 StringBuffer buffer = new StringBuffer(requestURI);
                 int extIdx = requestURI.lastIndexOf('.');
                 if (extIdx != -1) {
-                    buffer.replace(extIdx, requestURI.length(), suffixToUse);
+                    buffer.replace(extIdx, requestURI.length(), 
+                                   contextDefaultSuffix);
                 } else {
                     // no extension in the provided viewId, append the suffix
-                    buffer.append(suffixToUse);
+                    buffer.append(contextDefaultSuffix);
                 }
                 requestURI = buffer.toString();
             }
@@ -170,10 +177,7 @@ public class ViewHandlerImpl extends Object
         
         // Check our cache for a processed result        
         String mapping = getFacesMapping(context);
-        Object cachedMapping = viewIdPathMap.get(mapping + viewId);
-        if (cachedMapping != null) {
-            return (String) cachedMapping;
-        }
+        
         
         // No previous processed value
         StringBuffer buffer = new StringBuffer(viewId);        
@@ -206,9 +210,7 @@ public class ViewHandlerImpl extends Object
             }
         }
         
-        String result = buffer.toString();
-        viewIdPathMap.put(mapping + viewId, result);
-        return result;
+        return buffer.toString();
     }
 
     /**
@@ -226,7 +228,18 @@ public class ViewHandlerImpl extends Object
         if (mappings == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }    
+        }  
+        
+        int size = mappings.size();
+        if (mappings.size() > 1) {
+            for (int i = 0; i < size; i++) {
+                String mapping = (String) mappings.get(i);
+                if (mapping.charAt(0) == '.') {
+                    defaultMappingExtension = mapping;
+                    break;
+                }
+            }
+        }
             
         facesServletMappings = mappings;
     }
@@ -330,8 +343,18 @@ public class ViewHandlerImpl extends Object
                     mapping = temp;
                     break;
                 }
-            }
+            }    
             
+            
+            if (mapping == null) {
+                //no exact match found.  If the path ends with
+                // .jsp or .jspx, return the first extension 
+                // mapping found
+                if (servletPath.endsWith(".jsp") || 
+                    servletPath.endsWith(".jspx")) {
+                    mapping = defaultMappingExtension;
+                }
+            }                        
         } 
         
         if (mapping == null) {

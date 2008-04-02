@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.4 2003/09/15 22:11:46 eburns Exp $
+ * $Id: RestoreViewPhase.java,v 1.5 2003/10/08 18:14:52 rlubke Exp $
  */
 
 /*
@@ -11,51 +11,33 @@
 
 package com.sun.faces.lifecycle;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.faces.FacesException;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.event.PhaseId;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIViewRoot;
-
-import javax.faces.el.ValueBinding;
-import javax.faces.FactoryFinder;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UICommand;
-import javax.faces.component.UIInput;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.event.ActionListener;
-import javax.faces.application.ViewHandler;
-
-import java.util.Iterator;
-import java.util.Map;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Locale;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Base64;
-import java.io.IOException;
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-
-import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.Util;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.mozilla.util.Assert;
+
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.faces.event.ActionListener;
+import javax.faces.event.PhaseId;
+import javax.servlet.http.HttpServletRequest;
+
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 
 /**
 
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.4 2003/09/15 22:11:46 eburns Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.5 2003/10/08 18:14:52 rlubke Exp $
  * 
  */
 
@@ -144,6 +126,22 @@ public class RestoreViewPhase extends Phase {
         if (viewId == null) {
             viewId = facesContext.getExternalContext().getRequestPathInfo();
         }
+        
+        // It could be that this request was mapped using
+        // an extension mapping in which case there would be no
+        // path_info.  Query the servlet path.
+        if (viewId == null) {
+            viewId = (String)
+                requestMap.get("javax.servlet.include.servlet_path");
+        }
+        
+        if (viewId == null) {
+            Object request = facesContext.getExternalContext().getRequest();
+            if (request instanceof HttpServletRequest) {
+                viewId = ((HttpServletRequest) request).getServletPath();    
+            }
+        }
+        
         if (viewId == null) {
             throw new FacesException(Util.getExceptionMessage(
                     Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
