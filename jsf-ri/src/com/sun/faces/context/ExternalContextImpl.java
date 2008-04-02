@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.48 2006/05/17 19:00:45 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.49 2006/05/18 21:20:58 rlubke Exp $
  */
 
 /*
@@ -75,7 +75,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.48 2006/05/17 19:00:45 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.49 2006/05/18 21:20:58 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -873,6 +873,10 @@ class ApplicationMap extends BaseContextMap {
     }
 
 
+    @Override public boolean containsKey(Object key) {
+        return (servletContext.getAttribute(key.toString()) != null);
+    }
+
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof ApplicationMap)) {
             return false;
@@ -964,6 +968,11 @@ class SessionMap extends BaseContextMap {
         Object result = session.getAttribute(keyString);
         session.removeAttribute(keyString);
         return (result);
+    }
+
+
+    @Override public boolean containsKey(Object key) {
+        return (getSession().getAttribute(key.toString()) != null);
     }
 
     public boolean equals(Object obj) {
@@ -1058,6 +1067,11 @@ class RequestMap extends BaseContextMap {
         return (result);
     }
 
+
+    @Override public boolean containsKey(Object key) {
+        return (request.getAttribute(key.toString()) != null);
+    }
+
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof RequestMap)) {
             return false;
@@ -1119,8 +1133,13 @@ class RequestParameterMap extends BaseContextMap {
         return Collections.unmodifiableCollection(super.values());
     }
 
+
+    @Override public boolean containsKey(Object key) {
+        return (request.getParameter(key.toString()) != null);
+    }
+
     public boolean equals(Object obj) {
-        if (obj == null || 
+        if (obj == null ||
             !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
             return false;
         }
@@ -1167,6 +1186,11 @@ class RequestParameterValuesMap extends StringArrayValuesMap {
         }
         
         return request.getParameterValues(key.toString());
+    }
+
+
+    @Override public boolean containsKey(Object key) {
+        return (request.getParameterValues(key.toString()) != null);
     }
 
     public Set entrySet() {
@@ -1232,6 +1256,10 @@ class RequestHeaderMap extends BaseContextMap {
         return Collections.unmodifiableCollection(super.values());
     }
 
+
+    @Override public boolean containsKey(Object key) {
+        return (request.getHeader(key.toString()) != null);
+    }
 
     public boolean equals(Object obj) {
         if (obj == null ||
@@ -1456,8 +1484,13 @@ class InitParameterMap extends BaseContextMap {
         return Collections.unmodifiableCollection(super.values());
     }
 
+
+    @Override public boolean containsKey(Object key) {
+        return (servletContext.getInitParameter(key.toString()) != null);
+    }
+
     public boolean equals(Object obj) {
-        if (obj == null || 
+        if (obj == null ||
             !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
             return false;
         }
