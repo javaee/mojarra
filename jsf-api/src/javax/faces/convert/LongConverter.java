@@ -1,5 +1,5 @@
 /*
- * $Id: LongConverter.java,v 1.7 2003/09/30 17:37:40 rlubke Exp $
+ * $Id: LongConverter.java,v 1.8 2004/01/10 03:16:32 eburns Exp $
  */
 
 /*
@@ -64,12 +64,17 @@ public class LongConverter implements Converter {
             throw new NullPointerException();
         }
         
-        // If the specified value is null or zero-length, return a 
-        // zero-length String
-        if ((value == null) || value.equals("")) {
+        // If the specified value is null, return a zero-length String
+        if (value == null) {
             return "";
         }
-        
+
+        // If the incoming value is still a string, play nice
+        // and return the value unmodified
+        if (value instanceof String) {
+            return (String) value;
+        }
+
         try {
             return (Long.toString(((Long) value).longValue()));
         } catch (Exception e) {

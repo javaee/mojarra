@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.5 2003/12/17 15:14:12 rkitain Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.6 2004/01/10 03:16:39 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import com.sun.faces.util.Util;
  * <p>ConvertDateTimeTag is a ConverterTag implementation for 
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.5 2003/12/17 15:14:12 rkitain Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.6 2004/01/10 03:16:39 eburns Exp $
  * 
  */
 
@@ -75,17 +75,17 @@ public class ConvertDateTimeTag extends ConverterTag {
 
     private void init() {
         dateStyle = "default";
-        dateStyle_ = "default";
+        dateStyle_ = null;
         locale = null;
         locale_ = null;
         pattern = null;
         pattern_ = null;
         timeStyle = "default";
-        timeStyle_ = "default";
+        timeStyle_ = null;
         timeZone = null;
         timeZone_ = null;
         type = "date";
-        type_ = "date";
+        type_ = null;
     }
 
     //
@@ -159,6 +159,16 @@ public class ConvertDateTimeTag extends ConverterTag {
         }
         if (type_ != null) {
             type = (String)Util.evaluateVBExpression(type_);
+        } else {
+            if (timeStyle_ != null) {
+                if (dateStyle_ != null) {
+                    type = "both";
+                } else {
+                    type = "time";
+                }
+            } else {
+                type = "date";
+            }
         }
         if (locale_ != null) {
             if (Util.isVBExpression(locale_)) {  

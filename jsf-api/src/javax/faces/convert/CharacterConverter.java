@@ -1,5 +1,5 @@
 /*
- * $Id: CharacterConverter.java,v 1.6 2003/09/30 17:37:40 rlubke Exp $
+ * $Id: CharacterConverter.java,v 1.7 2004/01/10 03:16:32 eburns Exp $
  */
 
 /*
@@ -63,9 +63,8 @@ public class CharacterConverter implements Converter {
             throw new NullPointerException();
         }
         
-        // If the specified value is null or zero-length, return a 
-        // zero-length String
-        if ((value == null) || value.equals("")) {
+        // If the specified value is null, return a zero-length String
+        if (value == null) {
             return "";
         }
         

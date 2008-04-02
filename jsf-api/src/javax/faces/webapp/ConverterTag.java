@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.6 2004/01/08 21:21:16 eburns Exp $
+ * $Id: ConverterTag.java,v 1.7 2004/01/10 03:16:37 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import javax.faces.component.ValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
@@ -107,7 +108,26 @@ public class ConverterTag extends TagSupport {
 
         // Create and register an instance with the appropriate component
         Converter converter = createConverter();
-        ((ValueHolder) tag.getComponentInstance()).setConverter(converter);
+        ValueHolder vh = ((ValueHolder) tag.getComponentInstance());
+        vh.setConverter(converter);
+
+        // Once the converter has been set, attempt to convert the
+        // incoming "value"
+        Object localValue = vh.getLocalValue();
+        if (localValue instanceof String) {
+            try {
+                FacesContext context = FacesContext.getCurrentInstance();
+                localValue = converter.getAsObject(context,
+                                                   (UIComponent) vh,
+                                                   (String) localValue);
+                vh.setValue(localValue);
+            }
+            catch (ConverterException ce) {
+                // PENDING - Ignore?  Throw an exception?  Set the local
+                // value back to "null" and log a warning?
+            }
+        }
+
         return (SKIP_BODY);
 
     }

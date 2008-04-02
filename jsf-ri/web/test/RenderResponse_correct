@@ -339,7 +339,7 @@
 
 	<TD>
                 
-            <input type="text" name="basicForm:_id31" value="Wed, Jul 10, 1996" class="inputClass" />
+            <input type="text" name="basicForm:_id31" value="July 10, 1996" class="inputClass" />
 	</TD>
 
       </TR>
@@ -352,7 +352,7 @@
 
 	<TD>
                 
-            <input type="text" name="basicForm:date2" value="Thu, Jul 11, 1996" accesskey="D" maxlength="20" size="3" tabindex="1" readonly="readonly" />
+            <input type="text" name="basicForm:date2" value="July 11, 1996" accesskey="D" maxlength="20" size="3" tabindex="1" readonly="readonly" />
 	</TD>
 
       </TR>
@@ -374,7 +374,7 @@
           <td>
             
                
-            <input type="text" name="basicForm:testPattern" value="9999.98765" class="inputClass" accesskey="D" maxlength="20" size="3" tabindex="2" />
+            <input type="text" name="basicForm:testPattern" value="10000" class="inputClass" accesskey="D" maxlength="20" size="3" tabindex="2" />
               </td>
 
       </tr>
@@ -395,7 +395,7 @@
 
 	<TD>
                 
-            <span class="outputClass">Wed, Jul 10, 1996</span>
+            <span class="outputClass">July 10, 1996</span>
 	</TD>
 
       </TR>
@@ -468,7 +468,7 @@
                
                    
                    
-                <input type="text" name="basicForm:inputDate3" value="01/12/1952" alt="input_date short" title="input_date short" />
+                <input type="text" name="basicForm:inputDate3" value="1/12/52" alt="input_date short" title="input_date short" />
 
              </td>
 

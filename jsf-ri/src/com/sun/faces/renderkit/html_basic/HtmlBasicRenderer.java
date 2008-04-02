@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.73 2004/01/08 21:21:31 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.74 2004/01/10 03:16:38 eburns Exp $
  */
 
 /*
@@ -216,11 +216,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
              } 
              return result;
         }
-       
-        // if this value is a non-null String use it "as is"
-        if ( currentValue != null && currentValue instanceof String) {
-            return ((String)currentValue);
-        }
          
         Converter converter = null;
 
@@ -238,6 +233,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
 
 	if ( converter == null ) {
+            // Do not look for "by-type" converters for Strings
+            if ( currentValue instanceof String ) {
+                return (String) currentValue;
+            }
+
             // if converter attribute set, try to acquire a converter
             // using its class type.
         

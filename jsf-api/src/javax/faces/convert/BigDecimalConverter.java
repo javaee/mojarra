@@ -1,5 +1,5 @@
 /*
- * $Id: BigDecimalConverter.java,v 1.2 2003/12/17 15:10:46 rkitain Exp $
+ * $Id: BigDecimalConverter.java,v 1.3 2004/01/10 03:16:30 eburns Exp $
  */
 
 /*
@@ -66,12 +66,17 @@ public class BigDecimalConverter implements Converter {
             throw new NullPointerException();
         }
         
-        // If the specified value is null or zero-length, return a 
-        // zero-length String
-        if ((value == null) || value.equals("")) {
+        // If the specified value is null, return a zero-length String
+        if (value == null) {
             return "";
         }
-        
+  
+        // If the incoming value is still a string, play nice
+        // and return the value unmodified
+        if (value instanceof String) {
+            return (String) value;
+        }
+
         try {
             return (((BigDecimal)value).toString());
         } catch (Exception e) {

@@ -310,7 +310,7 @@
         <TD>Date: 
         </TD>
 
-	<TD><h:input_text value="Wed, Jul 10, 1996"
+	<TD><h:input_text value="July 10, 1996"
                               styleClass="inputClass">
                 <f:convert_datetime dateStyle="long"/>
             </h:input_text>
@@ -324,7 +324,7 @@
         <TD>Disabled Date: 
         </TD>
 
-	<TD><h:input_text id="date2" value="Thu, Jul 11, 1996"
+	<TD><h:input_text id="date2" value="July 11, 1996"
                          readonly="true"
                         size="3" maxlength="20" tabindex="1" accesskey="D">
                 <f:convert_datetime dateStyle="long"/>
@@ -363,7 +363,7 @@
           <td> <h:output_text styleClass="outputClass" id="percentLabel" value="OUTPUT-PERCENT" /> </td>
               <td>
                    <h:output_text id="testPercent" value="45%">
-                       <f:convert_number type="number"/>
+                       <f:convert_number type="number" pattern="#%"/>
                    </h:output_text>
               </td>
       </tr>
@@ -373,7 +373,7 @@
         <TD>OutputDate: 
         </TD>
 
-	<TD><h:output_text id="date4" value="Wed, Jul 10, 1996"
+	<TD><h:output_text id="date4" value="July 10, 1996"
                               styleClass="outputClass" >
                 <f:convert_datetime dateStyle="long"/>
             </h:output_text>
@@ -547,7 +547,7 @@
 </tr>
 
 <h:input_hidden value="48%" >
-    <f:convert_number type="number"/>
+    <f:convert_number type="number" pattern="#%"/>
 </h:input_hidden>
 
 <tr><td>

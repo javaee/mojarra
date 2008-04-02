@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.18 2003/10/24 17:45:34 rlubke Exp $
+ * $Id: DateTimeConverter.java,v 1.19 2004/01/10 03:16:32 eburns Exp $
  */
 
 /*
@@ -51,8 +51,8 @@ import javax.faces.context.FacesContext;
  * <code>java.util.Date</code> (or a subclass), and creates a formatted
  * String according to the following algorithm:</p>
  * <ul>
- * <li>If the specified value is null or a zero-length String, return
- *     a zero-length String.</li>
+ * <li>If the specified value is null, return a zero-length String.</li>
+ * <li>If the specified value is a String, return it unmodified.</li>
  * <li>If the <code>locale</code> property is not null,
  *     use that <code>Locale</code> for managing formatting.  Otherwise, use the
  *     <code>Locale</code> from the <code>UIViewRoot</code>.</li>
@@ -310,10 +310,15 @@ public class DateTimeConverter implements Converter, StateHolder {
 
         try {
             
-            // If the specified value is null or zero-length, return a 
-            // zero-length String
-            if ((value == null) || value.equals("")) {
+            // If the specified value is null, return a zero-length String
+            if (value == null) {
                 return "";
+            }
+
+            // If the incoming value is still a string, play nice
+            // and return the value unmodified
+            if (value instanceof String) {
+                return (String) value;
             }
 
             // Identify the Locale to use for formatting

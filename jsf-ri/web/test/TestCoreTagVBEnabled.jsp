@@ -48,11 +48,11 @@
 
     </td>
 
-     <h:output_text id="outputNumber2" value="123.456">
+     <h:output_text id="outputNumber2" value="$123.45">
                    <f:convert_number type="currency" currencySymbol="$" />
                </h:output_text>
 
-    <h:output_text id="outputDatetime3" value="12/12/03">
+    <h:output_text id="outputDatetime3" value="7/10/96 12:31:31 PM PDT">
        <f:convert_datetime type="both" timeStyle="full" dateStyle="short" 
             locale="en"/>
     </h:output_text>

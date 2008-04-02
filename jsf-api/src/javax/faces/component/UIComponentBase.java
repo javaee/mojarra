@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.88 2004/01/06 23:02:40 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.89 2004/01/10 03:16:27 eburns Exp $
  */
 
 /*
@@ -1235,24 +1235,6 @@ public abstract class UIComponentBase extends UIComponent {
             UIComponent kid = (UIComponent) kids.next();
             kid.processValidators(context);
         }
-
-        // Validate this component itself
-        if (this instanceof UIInput) {
-            try {
-                ((UIInput) this).validate(context);
-            } catch (RuntimeException e) {
-                context.renderResponse();
-                throw e;
-            }
-        }
-
-        // Advance to Render Response if this component is not valid
-        if ((this instanceof UIInput) &&
-            !((UIInput) this).isValid()) {
-            // PENDING(craigmcc): shouldn't this be in UIInput?
-            context.renderResponse();
-        }
-
     }
 
 
@@ -1276,21 +1258,6 @@ public abstract class UIComponentBase extends UIComponent {
             UIComponent kid = (UIComponent) kids.next();
             kid.processUpdates(context);
         }
-
-        // Process this component itself
-        if (this instanceof UIInput) {
-            try {
-                ((UIInput) this).updateModel(context);
-            } catch (RuntimeException e) {
-                context.renderResponse();
-                throw e;
-            }
-
-            if (!((UIInput) this).isValid()) {
-                context.renderResponse();
-            }
-        }
-
     }
 
     private static final int MY_STATE = 0;

@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.13 2003/12/17 15:10:48 rkitain Exp $
+ * $Id: NumberConverter.java,v 1.14 2004/01/10 03:16:32 eburns Exp $
  */
 
 /*
@@ -57,13 +57,8 @@ import javax.faces.context.FacesContext;
  * <code>java.lang.Number</code> (or a subclass), and creates a formatted
  * String according to the following algorithm:</p>
  * <ul>
- * <li>If the specified value is null or a zero-length String, return
- *     a zero-length String.</li>
- * <li>If the specified value is a already a String, it is first parsed into
- *     a number with <code>java.lang.Long.parseLong()</code> (if the value
- *     does not have a decimal point) or
- *     <code>java.lang.Double.parseDouble()</code> (if the value does
- *     have a decimal point).</li>
+ * <li>If the specified value is null, return a zero-length String.</li>
+ * <li>If the specified value is a String, return it unmodified.</li>
  * <li>If the <code>locale</code> property is not null,
  *     use that <code>Locale</code> for managing formatting.  Otherwise, use the
  *     <code>Locale</code> from the <code>FacesContext</code>.</li>
@@ -474,25 +469,15 @@ public class NumberConverter implements Converter, StateHolder {
         
         try {
             
-            // If the specified value is null or zero-length, return a 
-            // zero-length String
-            if ((value == null) || value.equals("")) {
+            // If the specified value is null, return a zero-length String
+            if (value == null) {
                 return "";
             }
 
-            // If value is a String, first convert to an instance of Number
+            // If the incoming value is still a string, play nice
+            // and return the value unmodified
             if (value instanceof String) {
-                try {
-                    if (((String) value).indexOf('.') >= 0) {
-                        value = Double.valueOf((String) value);
-                    } else {
-                        value = Integer.valueOf((String) value);
-                    }
-                } catch (NumberFormatException e) {
-                    // PENDING(craigmcc) - i18n
-                    throw new ConverterException
-                        ("Cannot parse '" + value + "' as a number");
-                }
+                return (String) value;
             }
 
             // Identify the Locale to use for formatting

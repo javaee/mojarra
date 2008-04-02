@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.119 2003/12/17 15:10:37 rkitain Exp $
+ * $Id: UIComponent.java,v 1.120 2004/01/10 03:16:27 eburns Exp $
  */
 
 /*
@@ -672,16 +672,6 @@ public abstract class UIComponent implements StateHolder {
      * <li>Call the <code>processValidators()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>If the current component is a {@link UIInput}, call its
-     *     <code>validate()</code> method.</li>
-     * <li>If the current component is a {@link UIInput}, and
-     *     its <code>valid</code> property is <code>false</code>,
-     *     call the <code>renderResponse()</code> method
-     *     on the {@link FacesContext} instance for this request.</li>
-     * <li>If a <code>RuntimeException</code> is thrown during
-     *     validation processing, call {@link FacesContext#renderResponse}
-     *     and re-throw the exception.</li>
-     *
      * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing
@@ -703,15 +693,6 @@ public abstract class UIComponent implements StateHolder {
      * <li>Call the <code>processUpdates()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>If the current component is an {@link UIInput}, call its
-     *     <code>updateModel()</code> method of this component.</li>
-     * <li>If the current component is a {@link UIInput}, and
-     *     its <code>valid</code> property is <code>false</code>,
-     *     call the <code>renderResponse()</code> method
-     *     on the {@link FacesContext} instance for this request.</li>
-     * <li>If a <code>RuntimeException</code> is thrown during
-     *     update model processing, call {@link FacesContext#renderResponse}
-     *     and re-throw the exception.</li>
      * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing

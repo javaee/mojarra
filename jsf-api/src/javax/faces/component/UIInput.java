@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.59 2004/01/09 06:52:43 eburns Exp $
+ * $Id: UIInput.java,v 1.60 2004/01/10 03:16:28 eburns Exp $
  */
 
 /*
@@ -217,6 +217,79 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
 
     // ----------------------------------------------------- UIComponent Methods
+    /**
+     * <p>In addition to the standard <code>processValidators</code> behavior
+     * inherited from {@link UIComponentBase}, calls <code>validate()</code>.
+     * If the component is invalid afterwards, calls
+     * {@link FacesContext#renderResponse}.
+     * If a <code>RuntimeException</code> is thrown during
+     * validation processing, calls {@link FacesContext#renderResponse}
+     * and re-throw the exception.
+     * </p>
+     * @exception NullPointerException {@inheritDoc}    
+     */ 
+    public void processValidators(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Skip processing if our rendered flag is false
+        if (!isRendered()) {
+            return;
+        }
+
+        super.processValidators(context);
+        try {
+            validate(context);
+        } catch (RuntimeException e) {
+            context.renderResponse();
+            throw e;
+        }
+
+        // Advance to Render Response if this component is not valid
+        if (!isValid()) {
+            context.renderResponse();
+        }
+    }
+
+    /**
+     * <p>In addition to the standard <code>processUpdates</code> behavior
+     * inherited from {@link UIComponentBase}, calls
+     * <code>updateModel()</code>.
+     * If the component is invalid afterwards, calls
+     * {@link FacesContext#renderResponse}.
+     * If a <code>RuntimeException</code> is thrown during
+     * update processing, calls {@link FacesContext#renderResponse}
+     * and re-throw the exception.
+     * </p>
+     * @exception NullPointerException {@inheritDoc}     
+     */ 
+    public void processUpdates(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Skip processing if our rendered flag is false
+        if (!isRendered()) {
+            return;
+        }
+
+        super.processUpdates(context);
+
+        try {
+            updateModel(context);
+        } catch (RuntimeException e) {
+            context.renderResponse();
+            throw e;
+        }
+
+        if (!isValid()) {
+            context.renderResponse();
+        }
+    }
+
     /**
      * @exception NullPointerException {@inheritDoc}     
      */ 

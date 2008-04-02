@@ -1,5 +1,5 @@
 /*
- * $Id: BooleanConverter.java,v 1.8 2003/09/30 17:37:39 rlubke Exp $
+ * $Id: BooleanConverter.java,v 1.9 2004/01/10 03:16:31 eburns Exp $
  */
 
 /*
@@ -64,14 +64,13 @@ public class BooleanConverter implements Converter {
             throw new NullPointerException();
         }
         
-        // If the specified value is null or zero-length, return a 
-        // zero-length String
-        if ((value == null) || value.equals("")) {
+        // If the specified value is null, return a zero-length String
+        if (value == null) {
             return "";
         }
         
         try {            
-            return (new Boolean(((Boolean) value).booleanValue()).toString());
+            return value.toString();
         } catch (Exception e) {
             throw new ConverterException(e);
         }
