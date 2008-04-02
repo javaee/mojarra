@@ -8,15 +8,15 @@
 <h1>An Introduction to JavaServer Faces</h1>
 <h2>JavaServer Faces Overview
 </h2>
-<p><a href="(EmptyReference!)" target="http://java.sun.com/j2ee/javaserverfaces">JavaServer Faces (JSF) 1.0 Framework</a> makes it easy to build powerful and dynamic web applications. There are many web user interface frameworks available, but JSF stands out for several reasons: it is a <a href="(EmptyReference!)" target="http://jcp.org/aboutJava/communityprocess/final/jsr127">Java Community Process</a> standard, it brings JavaBeans paradigms to Web UI programming, and it was built by taking the best ideas from many existing frameworks.&nbsp; As a standard, many tool venders can rely on well defined and consistent behavior. JSF was designed for use inside of tools from the very beginning. Users can also rely on consistent and specific behavior from one JSF implementation to the next.</p>
+<p><a href="http://java.sun.com/j2ee/javaserverfaces" target="http://java.sun.com/j2ee/javaserverfaces">JavaServer Faces (JSF) 1.0 Framework</a> makes it easy to build powerful and dynamic web applications. There are many web user interface frameworks available, but JSF stands out for several reasons: it is a <a href="http://jcp.org/aboutJava/communityprocess/final/jsr127" target="http://jcp.org/aboutJava/communityprocess/final/jsr127">Java Community Process</a> standard, it brings JavaBeans paradigms to Web UI programming, and it was built by taking the best ideas from many existing frameworks.&nbsp; As a standard, many tool venders can rely on well defined and consistent behavior. JSF was designed for use inside of tools from the very beginning. Users can also rely on consistent and specific behavior from one JSF implementation to the next.</p>
 <p>There are many features available in JSF. Some of the main feature
 highlights include:
 </p>
 <ul>
   <li>Managed Bean Facility</li>
   <li>Validation Facility</li>
-  <li><a href="(EmptyReference!)" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/api/index.html">Rich and Extensible Component Library</a></li>
-			<li><a href="(EmptyReference!)" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/renderkitdocs/index.html">Pluggable Renderkits</a></li>
+  <li><a href="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/api/index.html" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/api/index.html">Rich and Extensible Component Library</a></li>
+			<li><a href="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/renderkitdocs/index.html" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/renderkitdocs/index.html">Pluggable Renderkits</a></li>
 			<li>Navigation in Response to Specific User Events</li>
 			<li>Preserving Application State Across Requests</li>
   <li>Conversion Model</li>
@@ -24,7 +24,7 @@ highlights include:
 <p>This article will give an overview and examples of some of these JSF
 features.
 </p>
-<p>A JSF application is essentially a Servlet or JSP application running on a <a href="(EmptyReference!)" target="http://java.sun.com/j2ee">J2EE 1.3 or 1.4</a> compliant container. This means <a href="(EmptyReference!)" target="http://java.sun.com/products/servlet/index.jsp">Servlet version 2.3</a> and <a href="(EmptyReference!)" target="http://java.sun.com/products/jsp">JSP version 1.2</a> or later.&nbsp; On a side note, JSF does not require that JSP pages be used in the application, you are free to use straight up Servlets or another templating technology. If you do use JSF with a JSP container, you benefit from the built-in <a href="(EmptyReference!)" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/tlddocs/index.html">JSF Core and HTML component libraries</a> via the JSF custom component tags. The JSF components represent web controls like text fields, forms, buttons, tables, checkboxes, and so forth.</p>
+<p>A JSF application is essentially a Servlet or JSP application running on a <a href="http://java.sun.com/j2ee" target="http://java.sun.com/j2ee">J2EE 1.3 or 1.4</a> compliant container. This means <a href="http://java.sun.com/products/servlet/index.jsp" target="http://java.sun.com/products/servlet/index.jsp">Servlet version 2.3</a> and <a href="http://java.sun.com/products/jsp" target="http://java.sun.com/products/jsp">JSP version 1.2</a> or later.&nbsp; On a side note, JSF does not require that JSP pages be used in the application, you are free to use straight up Servlets or another templating technology. If you do use JSF with a JSP container, you benefit from the built-in <a href="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/tlddocs/index.html" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/tlddocs/index.html">JSF Core and HTML component libraries</a> via the JSF custom component tags. The JSF components represent web controls like text fields, forms, buttons, tables, checkboxes, and so forth.</p>
 <p>When you create a JSP page with JSF components, a component tree is built in memory on the server, with each component tag corresponding to a UIComponent instance in the tree. This component tree is used by the framework to handle your application request and create a rendered response. When the user generates an event, for example, by clicking on a button, the JSF lifecycle handles that event and generates an appropriate response. This is a familiar paradigm common to most forms of graphical user interface programming.</p>
 		<p>The FacesServlet is the entry point into the JSF framework. It
 handles
@@ -33,7 +33,7 @@ also has the notion of a context where important information request
 information is stored. That object is called the FacesContext. It is
 modified at each stage of the JSF Lifecycle and is valid per-request.
 </p>
-		<p>The JSF framework also has the notion of Value Binding and Method Binding Expressions. If you are familiar with technologies like the <a href="(EmptyReference!)" target="http://java.sun.com/products/jsp/jstl">JSP Standard Tag Library (JSTL)</a> or <a href="(EmptyReference!)" target="http://java.sun.com/products/jsp">JSP 2.0</a> then you are already familiar with the notion of an Expression Language. The JSF Binding Expressions allow you to easily interact with your underlying Data Model. The Character Combat demo illustrates how you can retrieve values from your Data Model using Value Bindings.</p>
+		<p>The JSF framework also has the notion of Value Binding and Method Binding Expressions. If you are familiar with technologies like the <a href="http://java.sun.com/products/jsp/jstl" target="http://java.sun.com/products/jsp/jstl">JSP Standard Tag Library (JSTL)</a> or <a href="http://java.sun.com/products/jsp" target="http://java.sun.com/products/jsp">JSP 2.0</a> then you are already familiar with the notion of an Expression Language. The JSF Binding Expressions allow you to easily interact with your underlying Data Model. The Character Combat demo illustrates how you can retrieve values from your Data Model using Value Bindings.</p>
 		<h2>Simple JSF Application
 </h2>
 		<p>This article includes a simple JSF application that illustrates some
@@ -93,8 +93,14 @@ fun way. The application is called Character Combat.
 		</ul>
 		<p>You will note that this workflow lends itself to the &quot;wizard&quot; UI design pattern.&nbsp; We have extracted the wizard functionality of this example into a simple reusable bean for your own applications.&nbsp; For more on the wizard bean, see the section: <a id="" name="" href="#Example Wizard Component">Example Wizard Component</a>.</p>
 		<h2>Running the Application</h2>
-		<p>The latest JSF 1.0 Framework and all the runtime dependencies are already integrated in the <a href="(EmptyReference!)" target="http://java.sun.com/j2ee">Sun Java Systems Application Server 8.0 PE</a>. In SJSAS 8.0 PE you do not need to take any extra configuration steps to setup a JSF web application. SJSAS 8.0 PE is free and contains the latest implementation of J2EE technologies.</p>
-		<p>In order to run the sample application discussed in this article, simply deploy the supplied war file in the application server. The application will be available by the context name &quot;jsf-characterCombat&quot;.</p>
+		<p>The latest JSF 1.0 Framework and all the runtime dependencies are already integrated in the <a href="http://java.sun.com/j2ee" target="http://java.sun.com/j2ee">Sun Java Systems Application Server 8.0 PE</a>. In SJSAS 8.0 PE you do not need to take any extra configuration steps to setup a JSF web application. SJSAS 8.0 PE is free and contains the latest implementation of J2EE technologies.</p>
+		<p>In order to run the sample application discussed in this article, simply deploy the supplied war file in the application server. The application will be available by the context name &quot;jsf-characterCombat&quot;. The demo source is available along with a pre-built war file. You will find instructions on how to deploy and built in the README provided with the source distribution.</p>
+		<p>The demo source is available <a href="article.tar.gz">here</a>. To unpack it, simply invoke the following command:</p>
+		<table border="1" cellspacing="2" cellpadding="0">
+			<tr>
+				<td><code>% tar zxvf <a href="article.tar.gz">article.tar.gz</a></code></td>
+			</tr>
+		</table>
 		<p>If you write your own JSF web application the only thing you would need to do in SJSAS 8.0 PE in order to use the JSF 1.0 Framework is to simply specify the Faces Servlet and Mapping in your web application's deployment descriptor. All the dependencies are already part of the container and you don't need to bundle any extra jar files.</p>
 		<h2>Demo Application Building Blocks</h2>
 		<h3>Deployment Descriptor</h3>
@@ -142,14 +148,14 @@ fun way. The application is called Character Combat.
 			</tr>
 		</table>
 		<p>This entry creates a mapping between a bean name and class. This mapping is used by the Managed Bean creation facility. The first time the &quot;modelBean&quot; is referenced, the model object is created and stored in the appropriate scope. Model Beans are discussed later on in the article.</p>
-		<p>There are many more configuration options. You can find the complete set by looking at the <a href="(EmptyReference!)" target="http://java.sun.com/j2ee/javaserverfaces/download.html">JSF 1.0 Specification</a>.</p>
+		<p>There are many more configuration options. You can find the complete set by looking at the <a href="http://java.sun.com/j2ee/javaserverfaces/download.html" target="http://java.sun.com/j2ee/javaserverfaces/download.html">JSF 1.0 Specification</a>.</p>
 		<h3>Building the Application</h3>
 		<p>A pre-built war file is included in the demo source distribution. You can simply deploy that war file in your web container. </p>
 		<p>Note that the war file contains a JSTL 1.1 implementation. If your web container does not support JSTL 1.1 then you will need to rebuild your war with a JSTL 1.0 implementation.</p>
 		<p>If you wish to build the demo on your own you will need to take the following steps:</p>
 		<ol>
 			<li>Make sure you have all of your compile time dependencies before you attempt to build the demo application. The demo comes with a &quot;build.properties.sample&quot; file. Copy that file and rename it to &quot;build.properties&quot; and make the changes appropriate to your environment.
-			<li>If you are using the <a href="(EmptyReference!)" target="http://java.sun.com/j2ee">Sun Java Systems Application Server 8.0 PE</a>, the JSF 1.0 Framework and all the dependencies necessary to run a JSF application are already part of your environment. The only thing you would need to modify in your &quot;build.properties&quot; file is the location of your SJSAS 8.0 PE installation.
+			<li>If you are using the <a href="http://java.sun.com/j2ee" target="http://java.sun.com/j2ee">Sun Java Systems Application Server 8.0 PE</a>, the JSF 1.0 Framework and all the dependencies necessary to run a JSF application are already part of your environment. The only thing you would need to modify in your &quot;build.properties&quot; file is the location of your SJSAS 8.0 PE installation.
 			<li>The Character Combat demo application comes with a &quot;build.xml&quot; file. This file contains a set of rules and targets that will build the demo application web archive. You will need Ant in order to build the application. Ant is already part of your SJSAS 8.0 PE distribution located in <code>&lt;SJSAS_HOME&gt;/bin/asant.</code>
 			<li>With the SJSAS 8.0 PE container, to build the demo simply invoke &quot;<code>asant</code>&quot; in your unpacked Character Combat demo directory where your &quot;build.xml&quot; file and customized &quot;build.properties&quot; files exist.
 		</ol>
@@ -209,7 +215,7 @@ modifying the model and view to support this feature.
 </p>
 		<h2>JSP Pages
 </h2>
-		<p>The JSP pages provide the UI for the web application. JSF provides <a href="(EmptyReference!)" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/tlddocs/index.html">two JSP tag libraries</a> that expose the components to the page author.&nbsp; You can customize these components or create your own.&nbsp; The standard components <a href="(EmptyReference!)" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/renderkitdocs/index.html">render themselves as basic HTML 4.01</a>, with the absolute minimum of JavaScript.&nbsp; This ensures that there is a high likelyhood that your page will render as expected in all browsers.&nbsp; If you need support for other rendering types, such as WML, or SVG, JSF includes the concept of a RenderKit, which is a software module used by the components to render themselves into a particular client device type.&nbsp;</p>
+		<p>The JSP pages provide the UI for the web application. JSF provides <a href="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/tlddocs/index.html" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/tlddocs/index.html">two JSP tag libraries</a> that expose the components to the page author.&nbsp; You can customize these components or create your own.&nbsp; The standard components <a href="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/renderkitdocs/index.html" target="http://java.sun.com/j2ee/javaserverfaces/1.0/docs/renderkitdocs/index.html">render themselves as basic HTML 4.01</a>, with the absolute minimum of JavaScript.&nbsp; This ensures that there is a high likelyhood that your page will render as expected in all browsers.&nbsp; If you need support for other rendering types, such as WML, or SVG, JSF includes the concept of a RenderKit, which is a software module used by the components to render themselves into a particular client device type.&nbsp;</p>
 		<p>To use the built-in JSF tag libraries that contain the components,
 you
 will need to include the following tag directives in your JSP page:
