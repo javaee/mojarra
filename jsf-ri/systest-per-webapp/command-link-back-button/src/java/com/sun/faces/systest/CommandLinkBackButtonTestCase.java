@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkBackButtonTestCase.java,v 1.2 2005/08/22 22:10:47 ofung Exp $
+ * $Id: CommandLinkBackButtonTestCase.java,v 1.3 2006/03/07 08:31:23 srinivas635 Exp $
  */
 
 /*
@@ -122,7 +122,7 @@ public class CommandLinkBackButtonTestCase extends AbstractTestCase {
 	// due to a bug in HtmlUnit 1.2.3, we can't just click the link:
 	// page = (HtmlPage) link.click();
 	// therefore, we have to hack around it.
-	list = page.getAllForms();
+	list = page.getForms();
 	HtmlHiddenInput hidden = (HtmlHiddenInput) ((HtmlForm)list.get(0)).getInputByName("form:_idcl");
         assertTrue( hidden != null);
 	hidden.setValueAttribute("form:link");
