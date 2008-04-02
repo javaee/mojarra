@@ -1,5 +1,5 @@
 /*
- * $Id: UIValueChangeTextEntry.java,v 1.2 2002/08/09 19:38:31 jvisvanathan Exp $
+ * $Id: UIValueChangeTextEntry.java,v 1.3 2002/09/12 17:10:49 rogerk Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: UIValueChangeTextEntry.java,v 1.2 2002/08/09 19:38:31 jvisvanathan Exp $
+ * @version $Id: UIValueChangeTextEntry.java,v 1.3 2002/09/12 17:10:49 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -79,7 +79,7 @@ public UIValueChangeTextEntry()
 
     }
 
-    public void decode(FacesContext context) throws IOException {
+    public boolean decode(FacesContext context) throws IOException {
         if (context == null) {
             throw new NullPointerException();
         }
@@ -96,6 +96,7 @@ public UIValueChangeTextEntry()
 	    valueChangeEvent = new FacesEvent(this);
 	    context.addRequestEvent(this, valueChangeEvent);
 	}
+        return true;
     }
 
 
