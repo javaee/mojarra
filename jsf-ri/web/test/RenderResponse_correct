@@ -19,7 +19,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 
-<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=884241010348B244D954B77358716144">
+<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=6868D3527EC685F250B42181B624DDED">
 
   <TABLE BORDER="1">
 
@@ -44,11 +44,9 @@
                     
 
                     
-                      
                     
 
                     
-                      
                     
 
                 <tr>
@@ -61,12 +59,10 @@
 </tr>
 <tr>
 <td><input type="password" name="/basicForm/logonPanel1/password1" value="" class="secretClass" ></td>
-<td><button id="/basicForm/logonPanel1/submit1" name="/basicForm/logonPanel1/submit1" type="submit" value="submit" class="commandClass" >Login</button>
-</td>
+<td><input type="submit" name="/basicForm/logonPanel1/submit1" value="Login" class="commandClass" ></td>
 </tr>
 <tr>
-<td><button id="/basicForm/logonPanel1/reset1" name="/basicForm/logonPanel1/reset1" type="reset" value="reset">Reset</button>
-</td>
+<td><input type="reset" name="/basicForm/logonPanel1/reset1" value="Reset"></td>
 </tr>
 </table>
 
@@ -120,16 +116,8 @@
 
 	<TD>
 
-            <button id="/basicForm/pushButton" name="/basicForm/pushButton" type="button" value="button" disabled >
-                 This is a push button 
-                 <img src="/test/duke.gif;jsessionid=884241010348B244D954B77358716144">
-                 <!-- this isn't valid HTML, but it works for our label case -->
-                 <label for="/basicForm/pushButton"  accesskey="Z" lang="en_US" style="12pt"  class="outputClass" >
-
-                 Label for PushButon
-                 </label>
-             </button>
-
+            <input type="image" src="duke.gif" name="/basicForm/pushButton" value="duke.gif" disabled >
+            
 	</TD>
 
       </TR>
@@ -139,10 +127,8 @@
 
 	<TD>
 
-            <button id="/basicForm/imageOnlyButton" name="/basicForm/imageOnlyButton" type="submit" value="submit">
-                 <img src="/test/duke.gif;jsessionid=884241010348B244D954B77358716144" class="buttonImage1">
-             </button>
-
+            <input type="image" src="duke.gif" name="/basicForm/imageOnlyButton" value="duke.gif"> 
+             
 	</TD>
 
       </TR>

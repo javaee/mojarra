@@ -61,12 +61,12 @@
                     <h:input_secret inputClass="secretClass" id="password1" />
 
                     <h:command_button id="submit1" type="SUBMIT"
-                           commandClass="commandClass" commandName="submit">
-                      <h:output_text id="submit1_label" value="Login" />
+                        commandClass="commandClass" commandName="submit"
+                        label="Login" >
                     </h:command_button>
 
-                    <h:command_button id="reset1" type="RESET" commandName="reset">
-                      <h:output_text id="reset1_label" value="Reset" />
+                    <h:command_button id="reset1" type="RESET" 
+                        commandName="reset" label="Reset">
                     </h:command_button>
 
                 </h:panel_grid>
@@ -103,17 +103,8 @@
 	<TD>
 
             <h:command_button id="pushButton" type="button"
-                     commandName="push" disabled = "true" >
-                 <h:output_text id="buttonLabel" value="This is a push button " />
-                 <h:graphic_image id="buttonImage" url="/duke.gif" />
-                 <!-- this isn't valid HTML, but it works for our label case -->
-                 <h:output_label id="pushButtonLabel" 
-	             outputClass="outputClass"
-                     lang="en_US" accesskey="Z" 
-                     style="12pt" for="../pushButton">
-                 Label for PushButon
-                 </h:output_label>
-             </h:command_button>
+                commandName="push" disabled = "true" image="duke.gif">
+            </h:command_button>
 	</TD>
 
       </TR>
@@ -124,9 +115,7 @@
 	<TD>
 
             <h:command_button id="imageOnlyButton" type="submit"
-                     commandName="login"  >
-                 <h:graphic_image id="buttonImage1" url="/duke.gif" 
-                        graphicClass="buttonImage1"/>
+                commandName="login" image="duke.gif"> 
              </h:command_button>
 	</TD>
 

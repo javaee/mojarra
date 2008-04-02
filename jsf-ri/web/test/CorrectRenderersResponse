@@ -1,4 +1,4 @@
-<FORM METHOD="post" ACTION="/test/facestreeId;jsessionid=7B0D3B1D274C56B08A504EC211965B4C">
+<FORM METHOD="post" ACTION="/test/facestreeId;jsessionid=714A95ACD9C25E7FC4818BBFE5206E85">
 </FORM>
 <table border="0">
 	<tr>
@@ -8,5 +8,4 @@
 	</tr>
 </table>
 <input type="submit" name="/buttonRenderer" value="Login">
-<button id="/myButton" name="/myButton" type="submit" value="submit"></button>
-
+>
