@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKit.java,v 1.2 2003/07/28 22:22:34 eburns Exp $
+ * $Id: MockRenderKit.java,v 1.3 2003/07/31 12:22:30 eburns Exp $
  */
 
 /*
@@ -15,10 +15,13 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.ResponseStream;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.ResponseStateManager;
 import java.io.Writer;
+import java.io.OutputStream;
+import java.io.IOException;
 
 
 public class MockRenderKit extends RenderKit {
@@ -58,6 +61,28 @@ public class MockRenderKit extends RenderKit {
                                             String characterEncoding) {
         return new MockResponseWriter(writer, characterEncoding);
     }
+
+    public ResponseStream getResponseStream(OutputStream out) {
+	final OutputStream os = out;
+	return new ResponseStream() {
+		public void close() throws IOException {
+		    os.close();
+		}
+		public void flush() throws IOException {
+		    os.flush();
+		}
+		public void write(byte[] b) throws IOException {
+		    os.write(b);
+		}
+		public void write(byte[] b, int off, int len) throws IOException {
+		    os.write(b, off, len);
+		}
+		public void write(int b) throws IOException {
+		    os.write(b);
+		}
+	    };
+    }
+
 
     public ResponseStateManager getResponseStateManager() {
 	return null;

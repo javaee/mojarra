@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBaseTestCase.java,v 1.3 2003/07/28 22:22:28 eburns Exp $
+ * $Id: UIOutputBaseTestCase.java,v 1.4 2003/07/31 12:22:28 eburns Exp $
  */
 
 /*
@@ -288,9 +288,9 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
 
     }
 
-    protected boolean propertiesAreEqual(FacesContext context,
-					 UIComponent comp1,
-					 UIComponent comp2) {
+    boolean propertiesAreEqual(FacesContext context,
+			       UIComponent comp1,
+			       UIComponent comp2) {
 	if (super.propertiesAreEqual(context, comp1, comp2)) {
 	    UIOutput 
 		output1 = (UIOutput) comp1,

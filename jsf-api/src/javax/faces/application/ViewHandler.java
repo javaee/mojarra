@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.2 2003/07/28 22:18:39 eburns Exp $
+ * $Id: ViewHandler.java,v 1.3 2003/07/31 12:22:19 eburns Exp $
  */
 
 /*
@@ -17,16 +17,16 @@ import javax.faces.component.UIPage;
 
 /**
  * <p><strong>ViewHandler</strong> is the pluggablity mechanism for
- * allowing implementations of the JavaServer Faces specification to
- * provide their own handling of the activities in the <em>Render
- * Response</em> and <em>Restore Component Tree</em> phases of the
- * request processing lifecycle.  This allows for implementations to
- * support different response generation technologies, and state
- * saving/restoring approaches.  JSF implementations, or JSF-based
- * applications, can register an instance of this interface by calling
- * the <code>setViewHandler()</code> method of the {@link Application}
- * prior to the application receiving its first request from a client.
- * </p>
+ * allowing implementations of or applications using the JavaServer
+ * Faces specification to provide their own handling of the activities
+ * in the <em>Render Response</em> and <em>Restore Component Tree</em>
+ * phases of the request processing lifecycle.  This allows for
+ * implementations to support different response generation
+ * technologies, and state saving/restoring approaches.  JSF
+ * implementations, or JSF-based applications, can register an instance
+ * of this interface by calling the <code>setViewHandler()</code> method
+ * of the {@link Application} prior to the application receiving its
+ * first request from a client.  </p>
  *
  * <p>The <code>ViewHandler</code> implementation must provide a
  * reference to an implementation of a {@link StateManager}, which is
@@ -54,9 +54,11 @@ public interface ViewHandler {
      * component tree to the <code>ServletResponse</code> associated
      * with the specified {@link FacesContext}.  Also perform required
      * actions to save the state of the response between requests, using
-     * the {@link StateManager}.  The responsibility for saving state
-     * resides in this method due to the limitations of JSP
-     * technology.</p>
+     * the {@link StateManager}.  This method is responsible for
+     * ensuring that the {@link FacesContext} has been provided with
+     * valid {@link javax.faces.context.ResponseWriter} and {@link
+     * javax.faces.context.ResponseStream} instances for the current
+     * request.</p>
      *
      * @param context {@link FacesContext} for the current request
      *
@@ -71,7 +73,8 @@ public interface ViewHandler {
     /**
      * <p>Perform whatever actions are required to restore the component
      * tree associated with the specified {@link FacesContext} and
-     * treeId.</p>
+     * treeId.  This method may call through to {@link
+     * StateManager#restoreTree}.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param treeId the tree identifier for the current request

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.17 2003/07/28 22:19:00 eburns Exp $
+ * $Id: RenderKit.java,v 1.18 2003/07/31 12:22:23 eburns Exp $
  */
 
 /*
@@ -13,7 +13,9 @@ package javax.faces.render;
 import java.util.Iterator;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.ResponseStream;
 import java.io.Writer;
+import java.io.OutputStream;
 
 
 /**
@@ -83,8 +85,8 @@ public abstract class RenderKit {
 
     /**
      * <p>Use the provided <code>Writer</code> to create a new {@link
-     * ResponseWriter} instance for the specified mime-type and
-     * character encoding.</p>
+     * ResponseWriter} instance for the specified character
+     * encoding.</p>
      *
      * <p>Implementors are advised to consult the
      * <code>getCharacterEncoding()</code> method of class {@link
@@ -108,5 +110,13 @@ public abstract class RenderKit {
 
     public abstract ResponseWriter getResponseWriter(Writer writer,
 						     String characterEncoding);
+
+    /** 
+     * <p>Use the provided <code>OutputStream</code> to create a new
+     * {@link ResponseStream} instance.</p>
+     *
+     */ 
+
+    public abstract ResponseStream getResponseStream(OutputStream out);
 
 }

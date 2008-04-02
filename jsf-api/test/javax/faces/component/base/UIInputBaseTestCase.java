@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBaseTestCase.java,v 1.4 2003/07/28 22:22:28 eburns Exp $
+ * $Id: UIInputBaseTestCase.java,v 1.5 2003/07/31 12:22:27 eburns Exp $
  */
 
 /*
@@ -480,9 +480,9 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
 	assertTrue(validatorsAreEqual(facesContext, preSave, postSave));
     }    
  
-    protected boolean propertiesAreEqual(FacesContext context,
-					 UIComponent comp1,
-					 UIComponent comp2) {
+    boolean propertiesAreEqual(FacesContext context,
+			       UIComponent comp1,
+			       UIComponent comp2) {
 	UIInputSub 
 	    input1 = (UIInputSub) comp1,
 	    input2 = (UIInputSub) comp2;
@@ -570,7 +570,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
 	return true;
     }
 
-    private class UIInputSub extends UIInputBase {
+    public static class UIInputSub extends UIInputBase {
 	public List[] getListeners() { 
 	    return listeners;
 	}

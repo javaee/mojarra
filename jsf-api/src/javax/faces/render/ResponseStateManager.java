@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.2 2003/07/28 22:19:00 eburns Exp $
+ * $Id: ResponseStateManager.java,v 1.3 2003/07/31 12:22:23 eburns Exp $
  */
 
 /*
@@ -33,9 +33,10 @@ public abstract class ResponseStateManager {
 
     * <p>This method causes a special marker, the contents of which are
     * only interpreted by this <code>ResponseStateManager</code>
-    * implementation, that encapsulates the state of the tree.  This
-    * method must be called once per <code>UIForm</code> instance in the
-    * tree.</p>
+    * implementation, to be immediately written to the
+    * <code>ResponseWriter</code> for this request.  This marker
+    * encapsulates the state of the tree.  This method must be called
+    * once per <code>UIForm</code> instance in the tree.</p>
 
     */
 

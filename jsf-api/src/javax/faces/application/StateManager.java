@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.3 2003/07/28 22:39:45 craigmcc Exp $
+ * $Id: StateManager.java,v 1.4 2003/07/31 12:22:18 eburns Exp $
  */
 
 /*
@@ -188,12 +188,9 @@ public abstract class StateManager {
     * javax.faces.render.Renderer}s</code> and other objects
     * associated with a component.</p>
     *
-    * <p>For attached objects that have an <code>id</code> (or type), such as
-    * <code>{@link javax.faces.convert.Converter}s, {@link
-    * javax.faces.validator.Validator}s</code>, and <code>{@link
-    * javax.faces.render.Renderer}s</code>, that <code>id</code> (or type) is all
-    * that need be saved.  For attached objects that don't have an <code>id</code>
-    * (or type), the fully qualified java class name is saved.</p>
+    * <p>Each component is responsible for saving its attached objects.
+    * The {@link javax.faces.component.StateHolder} interface is
+    * provided for this use.</p>
     *
     * </li>
     *
@@ -247,7 +244,7 @@ public abstract class StateManager {
      * server.</p>
      *
      * <p>If the ServletContext init parameter directs the state to be
-     * saved to the response, the implementation of method must call
+     * saved to the response, the implementation of this method must call
      * {@link javax.faces.render.ResponseStateManager#writeState} to
      * cause the state to be saved to the response.</p>
      *

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.6 2003/07/29 16:38:05 eburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.7 2003/07/31 12:22:27 eburns Exp $
  */
 
 /*
@@ -382,9 +382,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     }
 
-    protected boolean propertiesAreEqual(FacesContext context,
-					 UIComponent comp1,
-					 UIComponent comp2) {
+    boolean propertiesAreEqual(FacesContext context,
+			       UIComponent comp1,
+			       UIComponent comp2) {
 	// if they're not both null, or not the same string
 	if (!((null == comp1.getClientId(context) && 
 	     null == comp2.getClientId(context)) ||

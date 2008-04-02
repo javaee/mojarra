@@ -1,5 +1,5 @@
 /*
- * $Id: UIPageBaseTestCase.java,v 1.2 2003/07/29 16:38:05 eburns Exp $
+ * $Id: UIPageBaseTestCase.java,v 1.3 2003/07/31 12:22:28 eburns Exp $
  */
 
 /*
@@ -131,9 +131,9 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
 
     // -------------------------------------------------------- Support Methods
 
-    protected boolean propertiesAreEqual(FacesContext context,
-					 UIComponent comp1,
-					 UIComponent comp2) {
+    boolean propertiesAreEqual(FacesContext context,
+			       UIComponent comp1,
+			       UIComponent comp2) {
 	if (super.propertiesAreEqual(context, comp1, comp2)) {
 	    UIPageBase 
 		page1 = (UIPageBase) comp1,

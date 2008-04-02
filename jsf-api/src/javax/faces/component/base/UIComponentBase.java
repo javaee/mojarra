@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.4 2003/07/28 22:18:45 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.5 2003/07/31 12:22:20 eburns Exp $
  */
 
 /*
@@ -1122,25 +1122,25 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
-    private Object [] stateStruct;
-    private int MY_STATE = 0;
-    private int CHILD_STATE = 1;
+    private static final int MY_STATE = 0;
+    private static final int CHILD_STATE = 1;
 
     public Object processGetState(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
         }
+	Object [] stateStruct = new Object[2];
+	Object [] childState = null;
 
         // Process all facets and children of this component
+	int i = 0, len = getFacets().values().size() + getChildren().size();
+	childState = new Object[len];
+	stateStruct[CHILD_STATE] = childState;
         Iterator kids = getFacetsAndChildren();
-	Object childState = null;
-	if (null == stateStruct) {
-	    stateStruct = new Object[2];
-	}
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
-            stateStruct[CHILD_STATE] = kid.processGetState(context);
+	    childState[i++] = kid.processGetState(context);
         }
 
         // Process this component itself
@@ -1155,13 +1155,15 @@ public abstract class UIComponentBase implements UIComponent {
             throw new NullPointerException();
         }
 
-	stateStruct = (Object []) state;
+	Object [] stateStruct = (Object []) state;
+	Object [] childState = (Object []) stateStruct[CHILD_STATE];
+	int i = 0;
 
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
-            kid.processRestoreState(context, stateStruct[CHILD_STATE]);
+            kid.processRestoreState(context, childState[i++]);
         }
 
         // Process this component itself

@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.6 2003/07/19 04:52:57 eburns Exp $
+ * $Id: ResponseWriter.java,v 1.7 2003/07/31 12:22:22 eburns Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.io.Writer;
  * <p><strong>ResponseWriter</strong> is an abstract class describing an
  * adapter to an underlying output mechanism for character-based output.
  * In addition to the low-level <code>write()</code> methods inherited from
- * <code>java.io>Writer</code>, this class provides utility methods
+ * <code>java.io.Writer</code>, this class provides utility methods
  * that are useful in producing elements and attributes for markup languages
  * like HTML and XML.</p>
  *

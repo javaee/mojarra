@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.4 2003/07/28 22:22:28 eburns Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.5 2003/07/31 12:22:26 eburns Exp $
  */
 
 /*
@@ -379,9 +379,9 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 
     // -------------------------------------------------------- Support Methods
 
-    protected boolean propertiesAreEqual(FacesContext context,
-					 UIComponent comp1,
-					 UIComponent comp2) {
+    boolean propertiesAreEqual(FacesContext context,
+			       UIComponent comp1,
+			       UIComponent comp2) {
 	UICommandSub 
 	    command1 = (UICommandSub) comp1,
 	    command2 = (UICommandSub) comp2;
@@ -447,7 +447,7 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 	return true;
     }
 
-    private class UICommandSub extends UICommandBase {
+    public static class UICommandSub extends UICommandBase {
 	public List[] getListeners() { 
 	    return listeners;
 	}
