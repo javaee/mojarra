@@ -120,7 +120,20 @@ fun way. The application is called Character Combat.
   </ul>
 </ul>
 <img src="workflow.jpg" title="" alt="Workflow Diagram"
- style="width: 512px; height: 662px;"><br>
+ style="width: 437px; height: 165px;"><br>
+The above workflow diagram shows the workflow through the
+application.&nbsp; On the first page, the user can either add
+characters, or go straight to the next page.&nbsp; On the second page,
+the user can go back to the first page and add more characters, choose
+the first participant in the battle, or go to the third page.&nbsp; On
+the third page, the user can go back to the second page, choose the
+second participant in the battle, or go to the final page.&nbsp; On the
+final page, the user can see the results of the battle, go back to the
+third page, or restart at the beginning.<br>
+<br>
+You wil note that this workflow lends itself to the "wizard" UI design
+pattern.&nbsp; We have extracted the wizard functionality of this
+example into a simple reusable bean for your own applications.<br>
 <h2>Managed Beans
 </h2>
 <p>A managed bean is simply a java class with a public, no-args
@@ -136,7 +149,7 @@ bean
 name. The bean will be created and placed in the appropriate scope the
 first time you reference it. Managed beans are very flexible and allow
 you to customize your bean by specifying properties, including java
-arrays, Maps,Lists, and other managed beans.
+arrays, Maps, Lists, and other managed beans.
 </p>
 <p>The Character Combat example has a backing bean called ModelBean.
 Here
