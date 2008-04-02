@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.49 2004/04/02 21:35:54 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.50 2004/04/09 17:11:05 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -557,6 +557,26 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         if (curItem.isDisabled()) {
             writer.writeAttribute("disabled", "disabled", "disabled");
         }
+
+	String labelClass = null;
+	Boolean disabledAttr = (Boolean)component.getAttributes().get("disabled") ;
+	boolean componentDisabled = false ;
+	if (disabledAttr != null) {
+            if (disabledAttr.equals(Boolean.TRUE)) {
+	        componentDisabled = true;
+	    }
+	}
+        if (componentDisabled || curItem.isDisabled()) {
+            labelClass = (String) component.
+                getAttributes().get("disabledClass");
+        } else {
+            labelClass = (String) component.
+                getAttributes().get("enabledClass");
+        }
+        if (labelClass != null) {
+            writer.writeAttribute("class", labelClass, "labelClass");
+        }
+
 
         writer.writeText(curItem.getLabel(), "label");
         writer.endElement("option");
