@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.13 2003/02/20 22:46:36 ofung Exp $
+ * $Id: RenderKit.java,v 1.14 2003/04/29 18:51:44 eburns Exp $
  */
 
 /*
@@ -35,21 +35,6 @@ public abstract class RenderKit {
 
 
     /**
-     * <p>Add a new {@link UIComponent} subclass to the set of component
-     * classes registered with this {@link RenderKit} instance
-     * and supported by its constituent {@link Renderer}s.</p>
-     *
-     * @param componentClass {@link UIComponent} subclass to be supported
-     *
-     * @exception IllegalArgumentException if <code>componentClass</code>
-     *  is not a {@link UIComponent} subclass
-     * @exception NullPointerException if <code>componentClass</code>
-     *  is <code>null</code>
-     */
-    public abstract void addComponentClass(Class componentClass);
-
-
-    /**
      * <p>Add a new {@link Renderer} instance, associated with the
      * specified <code>rendererType</code>, to the set of
      * {@link Renderer}s registered with this {@link RenderKit}.
@@ -66,16 +51,6 @@ public abstract class RenderKit {
 
 
     /**
-     * <p>Return an <code>Iterator</code> of the {@link UIComponent}
-     * classes that are registered with this {@link RenderKit}
-     * instance and supported by its constituent {@link Renderer}s.  If
-     * there are no such registered component classes, an empty
-     * <code>Iterator</code> is returned.</p>
-     */
-    public abstract Iterator getComponentClasses();
-
-
-    /**
      * <p>Create (if necessary) and return a {@link Renderer} instance
      * with the specified renderer type.  Subsequent calls to this method
      * with the same <code>rendererType</code>, from the same web application,
@@ -89,44 +64,5 @@ public abstract class RenderKit {
      *  is <code>null</code>
      */
     public abstract Renderer getRenderer(String rendererType);
-
-
-    /**
-     * <p>Return an <code>Iterator</code> of all the renderer types registered
-     * with this <code>RenderKit</code>.</p>
-     */
-    public abstract Iterator getRendererTypes();
-
-
-    /**
-     * <p>Return an <code>Iterator</code> of the renderer types of all
-     * {@link Renderer} instances registered with this {@link RenderKit}
-     * that support components of the specified component type.
-     * If no {@link Renderer}s support this component type, an empty
-     * <code>Iterator</code> is returned.</p>
-     *
-     * @param componentType Canonical name of the component type tested
-     *  for support
-     *
-     * @exception NullPointerException if <code>componentType</code>
-     *  is <code>null</code>
-     */
-    public abstract Iterator getRendererTypes(String componentType);
-
-
-    /**
-     * <p>Return an <code>Iterator</code> of the renderer types of all
-     * {@link Renderer} instances registered with this {@link RenderKit}
-     * that support components of the specified {@link UIComponent} subclass.
-     * If no {@link Renderer}s support this component class, an empty
-     * <code>Iterator</code> is returned.</p>
-     *
-     * @param component UIComponent whose class is tested for support
-     *
-     * @exception NullPointerException if <code>component</code>
-     *  is <code>null</code>
-     */
-    public abstract Iterator getRendererTypes(UIComponent component);
-
 
 }

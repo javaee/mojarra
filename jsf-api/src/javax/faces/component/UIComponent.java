@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.79 2003/04/16 21:09:01 eburns Exp $
+ * $Id: UIComponent.java,v 1.80 2003/04/29 18:51:29 eburns Exp $
  */
 
 /*
@@ -127,12 +127,6 @@ public interface UIComponent extends Serializable {
 
      */
     public void setComponentId(String componentId);
-
-
-    /**
-     * <p>Return the component type of this {@link UIComponent}.</p>
-     */
-    public String getComponentType();
 
 
     /**

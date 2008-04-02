@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.8 2003/02/20 22:46:41 ofung Exp $
+ * $Id: Validator.java,v 1.9 2003/04/29 18:51:47 eburns Exp $
  */
 
 /*
@@ -12,10 +12,9 @@ package javax.faces.validator;
 
 import java.io.Serializable;
 import java.util.Iterator;
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.context.Message;
+import javax.faces.application.Message;
 
 
 /**

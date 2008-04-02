@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.18 2003/03/13 01:12:26 craigmcc Exp $
+ * $Id: Renderer.java,v 1.19 2003/04/29 18:51:44 eburns Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.render;
 
 import java.io.IOException;
 import java.util.Iterator;
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -39,108 +38,6 @@ import javax.faces.context.FacesContext;
  */
 
 public abstract class Renderer {
-
-
-    // ------------------------------------------------------- Metadata Methods
-
-
-    /**
-     * <p>Return an {@link AttributeDescriptor} for the specified attribute
-     * name, as supported for the specified component class.</p>
-     *
-     * @param component {@link UIComponent} whose implementation class
-     *  is supported
-     * @param name Name of the attribute for which to return a descriptor
-     *
-     * @exception IllegalArgumentException if the specified component class
-     *  is not supported
-     * @exception IllegalArgumentException if the specified attribute name
-     *  is not supported for the specified component class
-     * @exception NullPointerException if <code>component</code> or
-     *  <code>name</code> is null
-     */
-    public abstract AttributeDescriptor getAttributeDescriptor
-        (UIComponent component, String name);
-
-
-    /**
-     * <p>Return an {@link AttributeDescriptor} for the specified attribute
-     * name, as supported for the specified component type.</p>
-     *
-     * @param componentType Canonical name of a supported component type
-     * @param name Name of the attribute for which to return a descriptor
-     *
-     * @exception IllegalArgumentException if the specified component type
-     *  is not supported
-     * @exception IllegalArgumentException if the specified attribute name
-     *  is not supported for the specified component type
-     * @exception NullPointerException if <code>type</code> or
-     *  <code>name</code> is <code>null</code>
-     */
-    public abstract AttributeDescriptor getAttributeDescriptor
-        (String componentType, String name);
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the names of the supported
-     * attributes for the specified {@link UIComponent} implementation class.
-     * If no attributes are supported, an empty <code>Iterator</code>
-     * is returned.</p>
-     *
-     * @param component {@link UIComponent} whose implementation class
-     *  is supported
-     *
-     * @exception IllegalArgumentException if the specified component class
-     *  is not supported
-     * @exception NullPointerException if <code>component</code>
-     *  is <code>null</code>
-     */
-    public abstract Iterator getAttributeNames(UIComponent component);
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the names of the supported
-     * attributes for the specified component type.  If no attributes are
-     * supported, an empty <code>Iterator</code> is returned.</p>
-     *
-     * @param componentType Canonical name of a supported component type
-     *
-     * @exception IllegalArgumentException if the specified component type
-     *  is not supported
-     * @exception NullPointerException if <code>type</code>
-     *  is <code>null</code>
-     */
-    public abstract Iterator getAttributeNames(String componentType);
-
-
-    /**
-     * <p>Return <code>true</code> if this <code>Renderer</code> supports
-     * components of the specified {@link UIComponent} class.</p>
-     *
-     * @param component {@link UIComponent} whose implementation class is
-     *  checked for compatibility
-     *
-     * @exception NullPointerException if <code>component</code>
-     *  is <code>null</code>
-     */
-    public abstract boolean supportsComponentType(UIComponent component);
-
-
-    /**
-     * <p>Return <code>true</code> if this <code>Renderer</code> supports
-     * components of the specified <code>type</code>.  This is matched against
-     * the <code>type</code> property of each {@link UIComponent} to determine
-     * compatibility.</p>
-     *
-     * @param componentType Canonical name of the component type to be tested
-     *  for compatibility
-     *
-     * @exception NullPointerException if <code>componentType</code>
-     *  is <code>null</code>
-     */
-    public abstract boolean supportsComponentType(String componentType);
-
-
 
     // ------------------------------------------------------ Rendering Methods
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.26 2003/03/13 01:11:59 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.27 2003/04/29 18:51:31 eburns Exp $
  */
 
 /*
@@ -24,12 +24,6 @@ public class UISelectBoolean extends UIInput {
 
 
     // ------------------------------------------------------- Static Variables
-
-
-    /**
-     * <p>The component type of this {@link UIComponent} subclass.</p>
-     */
-    public static final String TYPE = "javax.faces.component.UISelectBoolean";
 
 
     // ----------------------------------------------------------- Constructors
@@ -82,13 +76,6 @@ public class UISelectBoolean extends UIInput {
 
 
     // ------------------------------------------------------------- Properties
-
-
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIFormTestCase.java,v 1.4 2003/03/13 01:12:40 craigmcc Exp $
+ * $Id: UIFormTestCase.java,v 1.5 2003/04/29 18:51:52 eburns Exp $
  */
 
 /*
@@ -102,17 +102,6 @@ private class UIFormNamingContainer extends UIForm implements NamingContainer {
 
 
     // ------------------------------------------------ Individual Test Methods
-
-
-    /**
-     * [3.1.1] Component Type.
-     */
-    public void testComponentType() {
-
-        assertEquals("componentType", UIForm.TYPE,
-                     component.getComponentType());
-
-    }
 
 
 }

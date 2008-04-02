@@ -18,7 +18,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="20030318A"/>
+  <property name="version"          value="20030429"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -354,6 +354,8 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
+      <sysproperty key="javax.faces.application.ApplicationFactory"
+                 value="javax.faces.mock.MockApplicationFactory"/>
       <arg value="javax.faces.webapp.FacesTagTestCase"/>
       <classpath refid="test.classpath"/>
     </java>

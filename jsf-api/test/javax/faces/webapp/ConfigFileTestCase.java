@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.2 2003/04/07 23:37:50 craigmcc Exp $
+ * $Id: ConfigFileTestCase.java,v 1.3 2003/04/29 18:52:02 eburns Exp $
  */
 
 /*
@@ -175,7 +175,7 @@ public class ConfigFileTestCase extends TestCase {
         assertEquals("attr1",
                      cc1a1.getAttributeName());
         assertEquals("java.lang.String",
-                     cc1a1.getAttributeType());
+                     cc1a1.getAttributeClass());
         assertEquals(0, cc1.getProperties().size());
         ConfigConverter cc2 = (ConfigConverter) converters.get("Second");
         assertNotNull(cc2);
@@ -237,7 +237,7 @@ public class ConfigFileTestCase extends TestCase {
         assertEquals("attr1",
                      cv1a1.getAttributeName());
         assertEquals("java.lang.String",
-                     cv1a1.getAttributeType());
+                     cv1a1.getAttributeClass());
         assertEquals(0, cv1.getProperties().size());
         ConfigValidator cv2 = (ConfigValidator) validators.get("Second");
         assertNotNull(cv2);
@@ -286,6 +286,7 @@ public class ConfigFileTestCase extends TestCase {
         Digester digester = new Digester();
         digester.register(CONFIG_DTD_PUBLIC_ID,
                           relativeURL("doc/faces-config.dtd").toString());
+        digester.setValidating(true);
         return (digester);
 
     }
@@ -329,8 +330,8 @@ public class ConfigFileTestCase extends TestCase {
         configureRulesFeature(digester, prefix);
         digester.addCallMethod(prefix + "/attribute-name",
                                "setAttributeName", 0);
-        digester.addCallMethod(prefix + "/attribute-type",
-                               "setAttributeType", 0);
+        digester.addCallMethod(prefix + "/attribute-class",
+                               "setAttributeClass", 0);
 
     }
 

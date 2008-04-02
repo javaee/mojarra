@@ -1,5 +1,5 @@
 /*
- * $Id: NamingTag.java,v 1.1 2003/03/13 22:02:37 craigmcc Exp $
+ * $Id: NamingTag.java,v 1.2 2003/04/29 18:52:03 eburns Exp $
  */
 
 /*
@@ -16,8 +16,8 @@ import javax.faces.component.UIComponent;
 // Test UINamingContainer Tag
 public class NamingTag extends FacesTag {
 
-    public UIComponent createComponent() {
-        return (new TestNamingContainer());
+    public String getComponentType() {
+        return ("TestNamingContainer");
     }
 
     public String getRendererType() {

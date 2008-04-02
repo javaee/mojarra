@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigAttribute.java,v 1.1 2003/04/07 21:45:33 craigmcc Exp $
+ * $Id: ConfigAttribute.java,v 1.2 2003/04/29 18:52:02 eburns Exp $
  */
 
 /*
@@ -15,20 +15,20 @@ package javax.faces.webapp;
  */
 public class ConfigAttribute extends ConfigFeature {
 
+    private String attributeClass;
+    public String getAttributeClass() {
+        return (this.attributeClass);
+    }
+    public void setAttributeClass(String attributeClass) {
+        this.attributeClass = attributeClass;
+    }
+
     private String attributeName;
     public String getAttributeName() {
         return (this.attributeName);
     }
     public void setAttributeName(String attributeName) {
         this.attributeName = attributeName;
-    }
-
-    private String attributeType;
-    public String getAttributeType() {
-        return (this.attributeType);
-    }
-    public void setAttributeType(String attributeType) {
-        this.attributeType = attributeType;
     }
 
 }

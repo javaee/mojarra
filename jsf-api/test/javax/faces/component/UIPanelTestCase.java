@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelTestCase.java,v 1.5 2003/03/13 01:12:41 craigmcc Exp $
+ * $Id: UIPanelTestCase.java,v 1.6 2003/04/29 18:51:53 eburns Exp $
  */
 
 /*
@@ -101,17 +101,6 @@ private class UIPanelNamingContainer extends UIPanel implements NamingContainer 
 
 
     // ------------------------------------------------ Individual Test Methods
-
-
-    /**
-     * [3.1.1] Component Type.
-     */
-    public void testComponentType() {
-
-        assertEquals("componentType", UIPanel.TYPE,
-                     component.getComponentType());
-
-    }
 
 
     /**

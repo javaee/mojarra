@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBaseTestCase.java,v 1.4 2003/02/20 22:46:51 ofung Exp $
+ * $Id: UISelectBaseTestCase.java,v 1.5 2003/04/29 18:51:54 eburns Exp $
  */
 
 /*
@@ -383,7 +383,6 @@ public class UISelectBaseTestCase extends UIInputTestCase {
 	FacesContext context = new MockFacesContext();
 	component = new UINamingContainer();
 	UIComponent rootChild = new UIComponentBase() {
-		public String getComponentType() { return "normalRoot";}
 	    };
 	component.addChild(rootChild);
 	

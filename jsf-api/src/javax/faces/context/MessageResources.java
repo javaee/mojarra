@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResources.java,v 1.4 2003/02/20 22:46:21 ofung Exp $
+ * $Id: MessageResources.java,v 1.5 2003/04/29 18:51:39 eburns Exp $
  */
 
 /*
@@ -9,6 +9,8 @@
 
 package javax.faces.context;
 
+import javax.faces.application.Message;
+
 
 /**
  * <p><strong>MessageResources</strong> represents a collection of message
@@ -17,13 +19,35 @@ package javax.faces.context;
  * message list in a {@link FacesContext}.</p>
  *
  * <p>An instance of <code>MessageResources</code> is created by calling the
- * <code>getMessageResources()</code> method of
- * {@link MessageResourcesFactory}, for a specified message resources
- * identifier.  Because this instance is shared across multiple requests,
- * it must be implemented in a thread-safe manner.</p>
+ * <code>createMessageResources()</code> method of
+ * {@link javax.faces.application.Application}, for a specified message
+ * resources identifier.  Because this instance is shared across multiple
+ * requests, it must be implemented in a thread-safe manner.</p>
  */
 
 public abstract class MessageResources {
+
+    // ----------------------------------------------------- Manifest Constants
+
+
+    /**
+     * <p>Message resources identifier for a {@link MessageResources} instance
+     * containing messages whose message identifiers are defined in the
+     * JavaServer Faces specification.</p>
+     */
+    public static final String FACES_API_MESSAGES =
+        "javax.faces.context.FACES_API_MESSAGES";
+
+
+    /**
+     * <p>Message resources identifier for a {@link MessageResources} instance
+     * containing messages whose message identifiers are defined by the
+     * JavaServer Faces implementation being used.</p>
+     */
+    public static final String FACES_IMPL_MESSAGES =
+        "javax.faces.context.FACES_IMPL_MESSAGES";
+
+    
 
 
     /**

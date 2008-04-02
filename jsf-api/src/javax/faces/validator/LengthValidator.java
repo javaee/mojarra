@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.16 2003/04/17 20:24:39 eburns Exp $
+ * $Id: LengthValidator.java,v 1.17 2003/04/29 18:51:45 eburns Exp $
  */
 
 /*
@@ -10,11 +10,10 @@
 package javax.faces.validator;
 
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import javax.faces.context.Message;
+import javax.faces.application.Message;
 
 
 /**

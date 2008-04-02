@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.16 2003/03/13 01:11:58 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.17 2003/04/29 18:51:30 eburns Exp $
  */
 
 /*
@@ -24,12 +24,6 @@ public class UIGraphic extends UIOutput {
 
 
     // ------------------------------------------------------- Static Variables
-
-
-    /**
-     * The component type of this {@link UIComponent} subclass.
-     */
-    public static final String TYPE = "javax.faces.component.UIGraphic";
 
 
     // ----------------------------------------------------------- Constructors
@@ -73,13 +67,6 @@ public class UIGraphic extends UIOutput {
 
 
     // ------------------------------------------------------------- Properties
-
-
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
 
 
 }

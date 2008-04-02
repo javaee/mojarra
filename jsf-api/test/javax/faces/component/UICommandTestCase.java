@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.6 2003/03/13 01:12:39 craigmcc Exp $
+ * $Id: UICommandTestCase.java,v 1.7 2003/04/29 18:51:51 eburns Exp $
  */
 
 /*
@@ -102,17 +102,6 @@ private class UICommandNamingContainer extends UICommand implements NamingContai
 
 
     // ------------------------------------------------ Individual Test Methods
-
-
-    /**
-     * [3.1.1] Component Type.
-     */
-    public void testComponentType() {
-
-        assertEquals("componentType", UICommand.TYPE,
-                     component.getComponentType());
-
-    }
 
 
     // ----- ActionEvents Tests -----

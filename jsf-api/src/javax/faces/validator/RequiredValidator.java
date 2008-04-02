@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: RequiredValidator.java,v 1.13 2003/03/13 01:12:29 craigmcc Exp $
+ * $Id: RequiredValidator.java,v 1.14 2003/04/29 18:51:46 eburns Exp $
  */
 
 /*
@@ -15,11 +15,10 @@
 package javax.faces.validator;
 
 
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import javax.faces.context.Message;
+import javax.faces.application.Message;
 
 
 /**

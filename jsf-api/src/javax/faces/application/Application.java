@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.2 2003/03/13 01:11:52 craigmcc Exp $
+ * $Id: Application.java,v 1.3 2003/04/29 18:51:25 eburns Exp $
  */
 
 /*
@@ -17,6 +17,14 @@ import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
+import javax.faces.component.UIComponent;
+import javax.faces.convert.Converter;
+import javax.faces.context.MessageResources;
+import javax.faces.validator.Validator;
+import javax.faces.FacesException;
+
+import java.util.Iterator;
+
 
 /**
  * <p><strong>Application</strong> represents a per-web-application
@@ -31,6 +39,12 @@ import javax.faces.event.ActionListener;
  * <code>getApplication()</code> method of {@link ApplicationFactory}.
  * Because this instance is shared, it must be implemented in a
  * thread-safe manner.</p>
+ *
+ * <p>The application also acts as a factory for several types of
+ * Objects specified in the Faces Configuration file.  Please see {@link
+ * Application#getComponent}, {@link Application#getConverter},
+ * {@link Application#getMessageResources}, and {@link
+ * Application#getValidator}. </p>
  */
 
 public abstract class Application {
@@ -170,6 +184,173 @@ public abstract class Application {
      *  is <code>null</code>
      */
     public abstract void setVariableResolver(VariableResolver resolver);
+
+
+    // ------------------------------------------------------- Object Factories
+
+
+    /**
+     * <p>Register a new mapping of component type to the name of the
+     * corresponding {@link UIComponent} class.  This allows subsequent calls
+     * to <code>getComponent()</code> to serve as a factory for
+     * {@link UIComponent} instances.</p>
+     *
+     * @param componentType The component type to be registered
+     * @param componentClass The fully qualified class name of the
+     *  corresponding {@link UIComponent} implementation
+     *
+     * @exception NullPointerException if <code>componentType</code> or
+     *  <code>componentClass</code> is <code>null</code>
+     */
+    public abstract void addComponent(String componentType,
+                                      String componentClass);
+
+
+    /**
+     * <p>Instantiate and return a new {@link UIComponent} instance of the
+     * class specified by a previous call to <code>addComponent()</code> for
+     * the specified component type.</p>
+     *
+     * @param componentType The component type for which to create and
+     *  return a new {@link UIComponent} instance
+     *
+     * @exception FacesException if a {@link UIComponent} of the
+     *  specified type cannot be created
+     * @exception NullPointerException if <code>componentType</code>
+     *  is <code>null</code>
+     */ 
+    public abstract UIComponent getComponent(String componentType)
+        throws FacesException;
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the set of currently defined
+     * component types for this <code>Application</code>.</p>
+     */
+    public abstract Iterator getComponentTypes();
+
+
+    /**
+     * <p>Register a new mapping of converter id to the name of the
+     * corresponding {@link Converter} class.  This allows subsequent calls
+     * to <code>getConverter()</code> to serve as a factory for
+     * {@link Converter} instances.</p>
+     *
+     * @param converterId The converter id to be registered
+     * @param converterClass The fully qualified class name of the
+     *  corresponding {@link Converter} implementation
+     *
+     * @exception NullPointerException if <code>converterId</code>
+     *  or <code>converterClass</code> is <code>null</code>
+     */
+    public abstract void addConverter(String converterId, 
+				      String converterClass);
+
+
+    /**
+     * <p>Instantiate and return a new {@link Converter} instance of the
+     * class specified by a previous call to <code>addConverter()</code>
+     * for the specified converter id.</p>
+     *
+     * @param converterId The converter id for which to create and
+     *  return a new {@link Converter} instance
+     *
+     * @exception FacesException if a {@link Converter} of the
+     *  specified id cannot be created
+     * @exception NullPointerException if <code>converterId</code>
+     *  is <code>null</code>
+     */ 
+    public abstract Converter getConverter(String converterId)
+        throws FacesException;
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the set of currently registered
+     * converter ids for this <code>Application</code>.</p>
+     */
+    public abstract Iterator getConverterIds();
+
     
+    /**
+    * <p>Register a new mapping of message resources id to the name of the
+    * corresponding {@link MessageResources} class.  This allows subsequent
+    * calls to <code>getMessageResources()</code> to serve as a factory for
+    * {@link MessageResources} instances.</p>
+    *
+    * @param messageResourcesId The message resources id to be registered
+    * @param messageResourcesClass The fully qualified class name of the
+    *  corresponding {@link MessageResources} implementation
+    *
+    * @exception NullPointerException if <code>messageResourcesId</code>
+    *  or <code>messageResourcesClass</code> is <code>null</code>
+    */
+    public abstract void addMessageResources(String messageResourcesId,
+					     String messageResourcesClass);
+
+
+    /**
+     * <p>Instantiate (if necessary) and return a {@link MessageResources}
+     * instance of the class specified by a previous call to
+     * <code>addMessageResources</code>.</p>
+     *
+     * @param messageResourcesId The message resources id for which to
+     *  create (if necessary) and return a {@link MessageResources}
+     *  instance
+     *
+     * @exception FacesException if a {@link MessageResources} instance
+     *  of the specified id cannot be created
+     * @exception NullPointerException if <code>messageResourcesId</code>
+     *  is <code>null</code>
+     */ 
+    public abstract MessageResources getMessageResources
+        (String messageResourcesId) throws FacesException;
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the set of currently registered
+     * message resources ids for this <code>Application</code>.</p>
+     */
+    public abstract Iterator getMessageResourcesIds();
+
+
+    /**
+     * <p>Register a new mapping of validator id to the name of the
+     * corresponding {@link Validator} class.  This allows subsequent calls
+     * to <code>getValidator()</code> to serve as a factory for
+     * {@link Validator} instances.</p>
+     *
+     * @param validatorId The validator id to be registered
+     * @param validatorClass The fully qualified class name of the
+     *  corresponding {@link Validator} implementation
+     *
+     * @exception NullPointerException if <code>validatorId</code>
+     *  or <code>validatorClass</code> is <code>null</code>
+     */
+    public abstract void addValidator(String validatorId, 
+				      String validatorClass);
+
+    /**
+     * <p>Instantiate and return a new {@link Validator} instance of the
+     * class specified by a previous call to <code>addValidator()</code>
+     * for the specified validator id.</p>
+     *
+     * @param validatorId The validator id for which to create and
+     *  return a new {@link Validator} instance
+     *
+     * @exception FacesException if a {@link Validator} of the
+     *  specified id cannot be created
+     * @exception NullPointerException if <code>validatorId</code>
+     *  is <code>null</code>
+     */ 
+    public abstract Validator getValidator(String validatorId)
+        throws FacesException;
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the set of currently registered
+     * validator ids for this <code>Application</code>.</p>
+     */
+    public abstract Iterator getValidatorIds();
+
 
 }

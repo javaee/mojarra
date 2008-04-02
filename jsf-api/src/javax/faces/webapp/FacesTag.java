@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.37 2003/04/29 03:41:38 eburns Exp $
+ * $Id: FacesTag.java,v 1.38 2003/04/29 18:51:49 eburns Exp $
  */
 
 /*
@@ -14,11 +14,14 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.HashMap;
 import javax.faces.FactoryFinder;
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.tree.Tree;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
@@ -130,7 +133,19 @@ public abstract class FacesTag implements Tag {
 
 
     // ------------------------------------------------------------- Properties
+    /**
 
+    * <p>Returns the componentType for the component that is or will be
+    * bound to this tag.</p>
+
+    * @return the componentType for this tag instance.  This value can
+    * be plugged into {@link
+    * javax.faces.application.Application#getComponent} to create the
+    * {@link javax.faces.component.UIComponent} instance for this tag.
+
+    */
+
+    protected abstract String getComponentType();
 
     /**
      * <p>Return the {@link UIComponent} instance that is associated with
@@ -257,7 +272,7 @@ public abstract class FacesTag implements Tag {
 
         // Locate and configure the component that corresponds to this tag
         childIndex = 0;
-        component = findComponent();
+        component = findComponent(context);
         overrideProperties(component);
 
         // Render the beginning of the component associated with this tag
@@ -340,14 +355,6 @@ public abstract class FacesTag implements Tag {
 
     // ------------------------------------------------------ Protected Methods
 
-
-    /**
-     * <p>Create and return a new {@link UIComponent} that is acceptable
-     * to this tag.  Concrete subclasses must override this method.</p>
-     */
-    protected abstract UIComponent createComponent();
-
-
     /**
      * <p>Delegate to the <code>encodeBegin()</code> method of our
      * corresponding {@link UIComponent}.  This method is called from
@@ -400,12 +407,12 @@ public abstract class FacesTag implements Tag {
      * <p>Find and return the {@link UIComponent}, from the component
      * tree, that corresponds to this tag handler instance.  If there
      * is no such {@link UIComponent}, create one by calling
-     * <code>createComponent()</code>, and add it is a child or facet
+     * <code>getComponent()</code>, and add it is a child or facet
      * of the {@link UIComponent} associated with our nearest enclosing
      * {@link FacesTag}.</p>
      *
      */
-    protected UIComponent findComponent() throws JspException {
+    protected UIComponent findComponent(FacesContext context) throws JspException {
 
         // Have we already found the relevant component?
         if (component != null) {
@@ -428,7 +435,16 @@ public abstract class FacesTag implements Tag {
         if (parentCreated) {
 
             // Create a new component instance
-            component = createComponent();
+	    try {
+		ApplicationFactory factory = (ApplicationFactory)
+		    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+		Application app = factory.getApplication();
+		component = app.getComponent(getComponentType());
+	    }
+	    catch (FacesException e) {
+		throw new JspException(e);
+	    }
+
             if (id != null) {
                 component.setComponentId(id);
             }

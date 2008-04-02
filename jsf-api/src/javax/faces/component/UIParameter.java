@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.5 2003/03/13 01:11:58 craigmcc Exp $
+ * $Id: UIParameter.java,v 1.6 2003/04/29 18:51:31 eburns Exp $
  */
 
 /*
@@ -31,13 +31,6 @@ public class UIParameter extends UIOutput {
 
 
     // ------------------------------------------------------- Static Variables
-
-
-    /**
-     * The component type of this {@link UIComponent} subclass.
-     */
-    public static final String TYPE = "javax.faces.component.UIParameter";
-
 
     // ----------------------------------------------------------- Constructors
 
@@ -80,14 +73,6 @@ public class UIParameter extends UIOutput {
 
 
     // ------------------------------------------------------------- Properties
-
-
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
-
 
     /**
      * <p>Return <code>true</code> to indicate that no

@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.34 2003/03/13 01:11:56 craigmcc Exp $
+ * $Id: UICommand.java,v 1.35 2003/04/29 18:51:29 eburns Exp $
  */
 
 /*
@@ -42,13 +42,6 @@ public class UICommand extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables
-
-
-    /**
-     * The component type of this {@link UIComponent} subclass.
-     */
-    public static final String TYPE = "javax.faces.component.UICommand";
-
 
     // ----------------------------------------------------------- Constructors
 
@@ -160,13 +153,6 @@ public class UICommand extends UIComponentBase {
     }
 
     
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
-
-
     // ---------------------------------------------------- UIComponent Methods
 
 

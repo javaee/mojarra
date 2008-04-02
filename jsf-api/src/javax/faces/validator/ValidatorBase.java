@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.10 2003/02/20 22:46:41 ofung Exp $
+ * $Id: ValidatorBase.java,v 1.11 2003/04/29 18:51:47 eburns Exp $
  */
 
 /*
@@ -14,12 +14,13 @@ import java.util.HashMap;
 import java.util.Collections;
 import java.util.Iterator;
 import javax.faces.FactoryFinder;
-import javax.faces.component.AttributeDescriptor;
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.context.Message;
+import javax.faces.application.Message;
 import javax.faces.context.MessageResources;
-import javax.faces.context.MessageResourcesFactory;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 
 
 /**
@@ -88,11 +89,14 @@ abstract class ValidatorBase implements Validator {
     protected synchronized MessageResources getMessageResources() {
 
         if (resources == null) {
-            MessageResourcesFactory factory = (MessageResourcesFactory)
-                FactoryFinder.getFactory
-                (FactoryFinder.MESSAGE_RESOURCES_FACTORY);
-            resources = factory.getMessageResources
-                (MessageResourcesFactory.FACES_API_MESSAGES);
+            ApplicationFactory factory = (ApplicationFactory)
+                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+	    Application app = factory.getApplication();
+	    try {
+		resources = app.getMessageResources
+                    (MessageResources.FACES_API_MESSAGES);
+	    } catch (FacesException e) {
+	    }
         }
         return (resources);
 

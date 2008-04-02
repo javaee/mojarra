@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainer.java,v 1.4 2003/02/20 22:46:12 ofung Exp $
+ * $Id: UINamingContainer.java,v 1.5 2003/04/29 18:51:31 eburns Exp $
  */
 
 /*
@@ -22,13 +22,6 @@ public class UINamingContainer extends UIComponentBase
     // ------------------------------------------------------- Static Variables
 
 
-    /**
-     * The component type of this {@link UIComponent} subclass.
-     */
-    public static final String TYPE =
-        "javax.faces.component.UINamingContainer";
-
-
     // ----------------------------------------------------- Instance Variables
 
 
@@ -39,14 +32,6 @@ public class UINamingContainer extends UIComponentBase
 
 
     // ------------------------------------------------------------- Properties
-
-
-    public String getComponentType() {
-	
-        return (TYPE);
-	
-    }
-    
 
     // ------------------------------------------------ NamingContainer Methods
 

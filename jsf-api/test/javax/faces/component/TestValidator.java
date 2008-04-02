@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidator.java,v 1.5 2003/02/20 22:46:49 ofung Exp $
+ * $Id: TestValidator.java,v 1.6 2003/04/29 18:51:51 eburns Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.component;
 
 import java.util.Collections;
 import java.util.Iterator;
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;

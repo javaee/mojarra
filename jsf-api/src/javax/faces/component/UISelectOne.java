@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.25 2003/03/13 01:11:59 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.26 2003/04/29 18:51:32 eburns Exp $
  */
 
 /*
@@ -31,12 +31,6 @@ public class UISelectOne extends UISelectBase {
     // ------------------------------------------------------- Static Variables
 
 
-    /**
-     * The component type of this {@link UIComponent} subclass.
-     */
-    public static final String TYPE = "javax.faces.component.UISelectOne";
-
-
     // ----------------------------------------------------------- Constructors
 
 
@@ -53,14 +47,6 @@ public class UISelectOne extends UISelectBase {
 
 
     // ------------------------------------------------------------- Properties
-
-
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
-
 
     /**
      * <p>Return the currently selected item, or <code>null</code> if there

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageImpl.java,v 1.7 2003/02/20 22:46:21 ofung Exp $
+ * $Id: MessageImpl.java,v 1.2 2003/04/29 18:51:26 eburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.context;
+package javax.faces.application;
 
 
 import java.io.Serializable;

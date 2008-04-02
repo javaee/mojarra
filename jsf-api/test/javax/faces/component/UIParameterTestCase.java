@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterTestCase.java,v 1.4 2003/03/13 01:12:41 craigmcc Exp $
+ * $Id: UIParameterTestCase.java,v 1.5 2003/04/29 18:51:53 eburns Exp $
  */
 
 /*
@@ -101,17 +101,6 @@ private class UIParameterNamingContainer extends UIParameter implements NamingCo
 
 
     // ------------------------------------------------ Individual Test Methods
-
-
-    /**
-     * [3.1.1] Component Type.
-     */
-    public void testComponentType() {
-
-        assertEquals("componentType", UIParameter.TYPE,
-                     component.getComponentType());
-
-    }
 
 
     /**

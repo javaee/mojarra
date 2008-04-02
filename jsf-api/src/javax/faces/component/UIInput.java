@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.17 2003/03/13 01:11:58 craigmcc Exp $
+ * $Id: UIInput.java,v 1.18 2003/04/29 18:51:30 eburns Exp $
  */
 
 /*
@@ -53,12 +53,6 @@ public class UIInput extends UIOutput {
     // ------------------------------------------------------- Static Variables
 
 
-    /**
-     * The component type of this {@link UIComponent} subclass.
-     */
-    public static final String TYPE = "javax.faces.component.UIInput";
-
-
     // ----------------------------------------------------------- Constructors
 
 
@@ -75,13 +69,6 @@ public class UIInput extends UIOutput {
 
 
     // ------------------------------------------------------------- Properties
-
-
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
 
 
     /**

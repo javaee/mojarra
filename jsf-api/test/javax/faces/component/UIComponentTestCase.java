@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.29 2003/04/16 21:15:05 eburns Exp $
+ * $Id: UIComponentTestCase.java,v 1.30 2003/04/29 18:51:51 eburns Exp $
  */
 
 /*
@@ -462,17 +462,6 @@ public class UIComponentTestCase extends TestCase {
                      test2.findComponent("test3"));
         assertEquals("component find test3", test3,
                      component.findComponent("test3"));
-
-    }
-
-
-    /**
-     * [3.1.1] Component Type.
-     */
-    public void testComponentType() {
-
-        assertEquals("componentType", "TestComponent",
-                     component.getComponentType());
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.8 2003/03/13 01:12:41 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.9 2003/04/29 18:51:54 eburns Exp $
  */
 
 /*
@@ -84,17 +84,6 @@ public class UISelectManyTestCase extends UISelectBaseTestCase {
 
 
     // ------------------------------------------------ Individual Test Methods
-
-
-    /**
-     * [3.1.1] Component Type.
-     */
-    public void testComponentType() {
-
-        assertEquals("componentType", UISelectMany.TYPE,
-                     component.getComponentType());
-
-    }
 
 
     /**

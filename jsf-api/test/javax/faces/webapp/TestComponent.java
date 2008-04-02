@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.1 2003/03/13 22:02:38 craigmcc Exp $
+ * $Id: TestComponent.java,v 1.2 2003/04/29 18:52:03 eburns Exp $
  */
 
 /*
@@ -51,12 +51,6 @@ public class TestComponent extends UIComponentBase {
     public void setRendersChildren(boolean rendersChildren) {
         this.rendersChildren = rendersChildren;
     }
-
-
-    public String getComponentType() {
-        return ("TEST");
-    }
-
 
     public void encodeBegin(FacesContext context) throws IOException {
         if (!isRendered()) {

@@ -8,6 +8,8 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
+    $Id: faces-config.dtd,v 1.6 2003/04/29 18:51:23 eburns Exp $
+
 -->
 
 
@@ -26,6 +28,13 @@
     instantiated to provide the functionality of the enclosing element.
 -->
 <!ENTITY % ClassName "CDATA">
+
+
+<!--
+    An "Identifier" is a string of characters that conforms to the variable
+    naming conventions of the Java programming language (JLS Section ?.?.?).
+-->
+<!ENTITY % Identifier "CDATA">
 
 
 <!--
@@ -53,6 +62,24 @@
 
 
 <!--
+    A "Scope" is the well-known name of a scope in which managed beans may
+    optionally be defined to be created in.
+-->
+<!ENTITY % Scope "(request|session|application)">
+
+
+
+<!--
+    A "ScopeOrNone" element defines the legal values for the
+    <managed-bean-scope> element's body content, which includes
+    all of the scopes respresented by the "Scope" type, plus the
+    "none" value indicating that a created bean should not be
+    stored into any scope.
+-->
+<!ENTITY % ScopeOrNone "(request|session|application|none)">
+
+
+<!--
     A "Severity" is the message severity level associated with a parent
     "message" element.
 -->
@@ -60,9 +87,24 @@
 
 
 <!--
-    A "TreeId" is the tree identifier of a JavaServer Faces component tree.
+    A "TreeIdPattern" is a pattern for matching component tree identifiers
+    in order to determine whether a particular navigation rule should be
+    fired.  It must contain one of the following values:
+
+    - The exact match for a component tree identifier that is recognized
+      by the the TreeFactory implementation being used (such as "/index.jsp"
+      if you are using the default TreeFactory).
+
+    - A proper prefix of a component tree identifier, plus a trailing "*"
+      character.  This pattern indicates that all component tree identifiers
+      that match the portion of the pattern up to the asterisk will match
+      the surrounding rule.  When more than one match exists, the match
+      with the longest pattern is selected.
+
+    - An "*" character, which means that this pattern applies to all
+      component tree identifiers.
 -->
-<!ENTITY % TreeId "CDATA">
+<!ENTITY % TreeIdPattern "CDATA">
 
 
 <!--
@@ -79,7 +121,7 @@
     hierarchy, and contains nested elements for all of the other configuration
     settings.
 -->
-<!ELEMENT faces-config    ((application|component|converter|message-resources|navigation-rules|render-kit|validator)*)>
+<!ELEMENT faces-config    ((application|component|converter|managed-bean|message-resources|navigation-rule|referenced-bean|render-kit|validator)*)>
 
 
 <!-- ==================== Definition Elements ============================= -->
@@ -134,6 +176,53 @@
 
 
 <!--
+    The "icon" element contains "small-icon" and "large-icon" elements that
+    specify the resoruce paths for small and large GIF or JPG icon images
+    used to represent the parent element in a GUI tool.
+-->
+<!ELEMENT icon            (small-icon?, large-icon?)>
+<!ATTLIST icon            xml:lang        %Language;      #IMPLIED>
+
+
+<!--
+    The "managed-bean" element represents a JavaBean, of a particular class,
+    that will be dynamically instantiated at runtime (by the default
+    VariableResolver implementation) if it is referenced as the first element
+    of a value reference expression, and no corresponding bean can be
+    identified in any scope.  In addition to the creation of the managed bean,
+    and the optional storing of it into the specified scope, the nested
+    managed-property elements can be used to initialize the contents of
+    settable JavaBeans properties of the created instance.
+-->
+<!ELEMENT managed-bean (description*, display-name*, icon*, managed-bean-name, managed-bean-class, managed-bean-scope, managed-property*)>
+
+
+<!--
+    The "managed-property" element represents an individual property of a
+    managed bean that will be configured to the specified value (or value set)
+    if the corresponding managed bean is automatically created.
+-->
+<!ELEMENT managed-property (description*, display-name*, icon*, property-name, property-class?, (map-entries|null-value|value|value-ref|values))>
+
+
+<!--
+    The "map-entry" element reprsents a single key-entry pair that
+    will be added to the computed value of a managed property of type
+    java.util.Map.
+-->
+<!ELEMENT map-entry (key, (null-value|value|value-ref)*)>
+
+
+<!--
+    The "map-entries' element represents a set of key-entry pairs that
+    will be added to the computed value of a managed property of type
+    java.util.Map.  In addition, the Java class types of the key and entry
+    values may be optionally declared.
+-->
+<!ELEMENT map-entries (key-class?, value-class?, map-entry*)>
+
+
+<!--
     The "message" element represents an individual localizable message,
     identified by a message identifier.  Message identifiers must be unique
     within the scope of the parent message resources instance.
@@ -157,19 +246,20 @@
 
 
 <!--
-    The "navigation-rule" element represents an individual decision rule
-    that will be utilized by the default NavigationHandler implementation
-    to make decisions on what component tree should be displayed next.
+    The "navigation-case" element describes a particular combination of
+    conditions that must match for this case to be executed, and the
+    tree id of the component tree that should be selected next.
 -->
-<!ELEMENT navigation-rule (from-tree-id?, from-action-ref?, from-outcome?, to-tree-id)>
+<!ELEMENT navigation-case (from-action-ref?, from-outcome?, to-tree-id)>
 
 
 <!--
-    The "navigation-rules" element represents a set of zero or more decision
-    rules that will be utilized by the default NavigationHandler implementation
-    to make decisions on what component tree should be displayed next.
+    The "navigation-rule" element represents an individual decision rule
+    that will be utilized by the default NavigationHandler implementation
+    to make decisions on what component tree should be displayed next,
+    based on the component tree id being processed.
 -->
-<!ELEMENT navigation-rules (navigation-rule*)>
+<!ELEMENT navigation-rule (from-tree-id?, navigation-case*)>
 
 
 <!--
@@ -182,6 +272,18 @@
     against that class via java.beans.Introspector.
 -->
 <!ELEMENT property        (description*, display-name*, icon*, property-name, property-class)>
+
+
+<!--
+    The "referenced-bean" element represents at design time the promise
+    that a Java object of the specified type will exist at runtime in some
+    scope, under the specified key.  This can be used by design time tools
+    to construct user interface dialogs based on the properties of the
+    specified class.  The presence or absence of a referenced bean
+    element has no impact on the JavaServer Faces runtime environment
+    inside a web application.
+-->
+<!ELEMENT referenced-bean (description*, display-name*, icon*, referenced-bean-name, referenced-bean-class)>
 
 
 <!--
@@ -223,6 +325,16 @@
 <!ELEMENT validator       (description*, display-name*, icon*, validator-id, validator-class, attribute*, property*)>
 
 
+<!--
+    The "values" element represents a set of initialization elements for
+    a managed property that is a Collection or an array.  In the former
+    case, the "value-class" element can optionally be used to declare the
+    Java type to which each value should be converted before adding it to
+    the Collection.
+-->
+<!ELEMENT values          (value-class?, (null-value|value|value-ref)*)>
+
+
 <!-- ==================== Subordinate Elements ============================ -->
 
 
@@ -232,14 +344,14 @@
     during the Invoke Application phase of the request processing lifecycle.
     It must be of type "ClassName".
 -->
-<!ELEMENT action-listener EMPTY>
+<!ELEMENT action-listener (#PCDATA)>
 
 
 <!--
     The "attribute-class" element represents the Java type of the value
     associated with this attribute name.  It must be of type "ClassName".
 -->
-<!ELEMENT attribute-class EMPTY>
+<!ELEMENT attribute-class (#PCDATA)>
 
 
 <!--
@@ -247,7 +359,7 @@
     corresponding value will be stored, in the generic attributes of the
     UIComponent we are related to.
 -->
-<!ELEMENT attribute-name  EMPTY>
+<!ELEMENT attribute-name  (#PCDATA)>
 
 
 <!--
@@ -255,14 +367,14 @@
     of a concrete UIComponent implementation class.  It must be of
     type "ClassName".
 -->
-<!ELEMENT component-class EMPTY>
+<!ELEMENT component-class (#PCDATA)>
 
 
 <!--
     The "component-type" element represents the name under which the
     corresponding UIComponent class should be registered.
 -->
-<!ELEMENT component-type  EMPTY>
+<!ELEMENT component-type  (#PCDATA)>
 
 
 <!--
@@ -270,14 +382,14 @@
     of a concrete Converter implementation class.  It must be of
     type "ClassName".
 -->
-<!ELEMENT converter-class EMPTY>
+<!ELEMENT converter-class (#PCDATA)>
 
 
 <!--
     The "converter-id" element represents the identifier under which the
     corresponding Converter class should be registered.
 -->
-<!ELEMENT converter-id    EMPTY>
+<!ELEMENT converter-id    (#PCDATA)>
 
 
 <!--
@@ -285,7 +397,7 @@
     it is nested in, optionally flagged with a language code using the
     "xml:lang" attribute.
 -->
-<!ELEMENT description     EMPTY>
+<!ELEMENT description     (#PCDATA)>
 <!ATTLIST description     xml:lang        %Language;      #IMPLIED>
 
 
@@ -294,7 +406,7 @@
     for the parent "message" element, optionally flagged with a language
     code using the "xml:lang" attribute.
 -->
-<!ELEMENT detail          EMPTY>
+<!ELEMENT detail          (#PCDATA)>
 <!ATTLIST detail          xml:lang        %Language;      #IMPLIED>
 
 
@@ -304,7 +416,7 @@
     displayed by tools, and optionally flagged with a language code using
     the "xml:lang" attribute.
 -->
-<!ELEMENT display-name    EMPTY>
+<!ELEMENT display-name    (#PCDATA)>
 <!ATTLIST display-name    xml:lang        %Language;      #IMPLIED>
 
 
@@ -317,7 +429,7 @@
 
     This value must be of type "ActionRef".
 -->
-<!ELEMENT from-action-ref EMPTY>
+<!ELEMENT from-action-ref (#PCDATA)>
 
 
 <!--
@@ -329,35 +441,74 @@
     not specified, this rule will be relevant no matter what the outcome
     value was.
 -->
-<!ELEMENT from-outcome    EMPTY>
+<!ELEMENT from-outcome    (#PCDATA)>
 
 
 <!--
-    The "from-tree" element contains the component tree identifier of
+    The "from-tree-id" element contains the component tree identifier of
     the tree for which the containing navigation rule is relevant.  If
     no "from-tree" element is specified, this rule applies to navigation
-    decisions on all component trees.  FIXME - decide whether this should
-    be a regular expression or some other sort of matching pattern.
+    decisions on all component trees.  If this element is not specified,
+    a value of "*" is assumed, meaning that this navigation rule applies
+    to all component trees.
 
-    This value must be of type "TreeId".
+    This value must be of type "TreeIdPattern".
 -->
-<!ELEMENT from-tree-id    EMPTY>
+<!ELEMENT from-tree-id    (#PCDATA)>
 
 
 <!--
-    The "icon" element contains "small-icon" and "large-icon" elements that
-    specify the resoruce paths for small and large GIF or JPG icon images
-    used to represent the parent element in a GUI tool.
+    The "key" element is the String representation of a map key that
+    will be stored in a managed property of type java.util.Map.  It must
+    be of type "ClassName".
 -->
-<!ELEMENT icon            (small-icon?, large-icon?)>
-<!ATTLIST icon            xml:lang        %Language;      #IMPLIED>
+<!ELEMENT key             (#PCDATA)>
+
+
+<!--
+    The "key-class" element defines the Java type to which each "key"
+    element in a set of "map-entry" elements will be converted to.  It
+    must be of type "ClassName".  If ommitted, "java.lang.String"
+    is assumed.
+-->
+<!ELEMENT key-class       (#PCDATA)>
 
 
 <!--
     The "large-icon" element contains the resource path to a large (32x32)
     icon image.  The image may be in either GIF or JPG format.
 -->
-<!ELEMENT large-icon      EMPTY>
+<!ELEMENT large-icon      (#PCDATA)>
+
+
+<!--
+    The "managed-bean-class" element represents the fully qualified class
+    name of the Java class that will be used to instantiate a new instance
+    if creation of the specified managed bean is requested.  It must be of
+    type "ClassName".
+
+    The specified class must conform to standard JavaBeans conventions.
+    In particular, it must have a public zero-arguments constructor, and
+    zero or more public property setters.
+-->
+<!ELEMENT managed-bean-class  (#PCDATA)>
+
+
+<!--
+    The "managed-bean-name" element represents the attribute name under
+    which a managed bean will be searched for, as well as stored (unless
+    the "managed-bean-scope" value is "none").  It must be of type
+    "Identifier".
+-->
+<!ELEMENT managed-bean-name (#PCDATA)>
+
+
+<!--
+    The "managed-bean-scope" element represents the scope into which a newly
+    created instance of the specified managed bean will be stored (unless
+    the value is "none").  It must be of type "ScopeOrNone".
+-->
+<!ELEMENT managed-bean-scope (#PCDATA)>
 
 
 <!--
@@ -365,14 +516,14 @@
     of a concrete Message implementation class.  It must be of
     type "ClassName".
 -->
-<!ELEMENT message-class   EMPTY>
+<!ELEMENT message-class   (#PCDATA)>
 
 
 <!--
     The "message-id" element represents the identifier under which the
     corresponding "message" should be registered.
 -->
-<!ELEMENT message-id      EMPTY>
+<!ELEMENT message-id      (#PCDATA)>
 
 
 <!--
@@ -380,14 +531,14 @@
     name of a concrete MessageResources implementation class.  It must be of
     type "ClassName".
 -->
-<!ELEMENT message-resources-class EMPTY>
+<!ELEMENT message-resources-class (#PCDATA)>
 
 
 <!--
     The "message-resources-id" element represents the identifier under which
     the corresponding MessageResources class should be registered.
 -->
-<!ELEMENT message-resources-id    EMPTY>
+<!ELEMENT message-resources-id    (#PCDATA)>
 
 
 <!--
@@ -397,21 +548,37 @@
     if the default ActionListener (provided by the JSF implementation) is used.
     It must be of type "ClassName".
 -->
-<!ELEMENT navigation-handler EMPTY>
+<!ELEMENT navigation-handler (#PCDATA)>
+
+
+<!--
+    The "null-value" element indicates that the managed property in which we
+    are nested will be explicitly set to null if our managed bean is
+    automatically created.  This is different from omitting the managed
+    property element entirely, which will cause no property setter to be
+    called for this property.
+
+    The "null-value" element can only be used when the associated
+    "property-class" identifies a Java class, not a Java primitive.
+-->
+<!ELEMENT null-value EMPTY>
 
 
 <!--
     The "property-class" element represents the Java type of the value
     associated with this property name.  It must be of type "JavaType".
+    If not specified, it can be inferred from existing classes; however,
+    this element should be specified if the configuration file is going
+    to be the source for generating the corresponding classes.
 -->
-<!ELEMENT property-class  EMPTY>
+<!ELEMENT property-class  (#PCDATA)>
 
 
 <!--
     The "property-name" element represents the JavaBeans property name
     under which the corresponding value may be stored.
 -->
-<!ELEMENT property-name   EMPTY>
+<!ELEMENT property-name   (#PCDATA)>
 
 
 <!--
@@ -420,14 +587,32 @@
     during the processing of value reference expressions.
     It must be of type "ClassName".
 -->
-<!ELEMENT property-resolver EMPTY>
+<!ELEMENT property-resolver (#PCDATA)>
+
+
+<!--
+    The "referenced-bean-class" element represents the fully qualified class
+    name of the Java class (either abstract or concrete) or Java interface
+    implemented by the corresponding referenced bean.  It must be of type
+    "ClassName".
+-->
+<!ELEMENT referenced-bean-class  (#PCDATA)>
+
+
+<!--
+    The "referenced-bean-name" element represents the attribute name under
+    which the corresponding referenced bean may be assumed to be stored,
+    in one of the scopes defined by the "Scope" type.  It must be of type
+    "Identifier".
+-->
+<!ELEMENT referenced-bean-name (#PCDATA)>
 
 
 <!--
     The "render-kit-id" element represents an identifier for the
     RenderKit represented by the parent "render-kit" element.
 -->
-<!ELEMENT render-kit-id   EMPTY>
+<!ELEMENT render-kit-id   (#PCDATA)>
 
 
 <!--
@@ -435,7 +620,7 @@
     of a concrete RenderKit implementation class.  It must be of
     type "ClassName".
 -->
-<!ELEMENT render-kit-class EMPTY>
+<!ELEMENT render-kit-class (#PCDATA)>
 
 
 <!--
@@ -443,28 +628,28 @@
     of a concrete Renderer implementation class.  It must be of
     type "ClassName".
 -->
-<!ELEMENT renderer-class  EMPTY>
+<!ELEMENT renderer-class  (#PCDATA)>
 
 
 <!--
     The "renderer-type" element represents an identifier for the
     Renderer represented by the parent "renderer" element.
 -->
-<!ELEMENT renderer-type   EMPTY>
+<!ELEMENT renderer-type   (#PCDATA)>
 
 
 <!--
     The "severity" element contains the severity level of the parent
     "message" element.  It must be of type "Severity".
 -->
-<!ELEMENT severity        EMPTY>
+<!ELEMENT severity        (#PCDATA)>
 
 
 <!--
     The "small-icon" element contains the resource path to a large (16x16)
     icon image.  The image may be in either GIF or JPG format.
 -->
-<!ELEMENT small-icon      EMPTY>
+<!ELEMENT small-icon      (#PCDATA)>
 
 
 <!--
@@ -472,7 +657,7 @@
     for the parent "message" element, optionally flagged with a language
     code using the "xml:lang" attribute.
 -->
-<!ELEMENT summary         EMPTY>
+<!ELEMENT summary         (#PCDATA)>
 <!ATTLIST summary         xml:lang        %Language;      #IMPLIED>
 
 
@@ -481,7 +666,7 @@
     the next component tree that should be displayed if this navigation
     rule is matched.  It must be of type "TreeId".
 -->
-<!ELEMENT to-tree-id      EMPTY>
+<!ELEMENT to-tree-id      (#PCDATA)>
 
 
 <!--
@@ -489,14 +674,42 @@
     of a concrete Validator implementation class.  It must be of
     type "ClassName".
 -->
-<!ELEMENT validator-class EMPTY>
+<!ELEMENT validator-class (#PCDATA)>
 
 
 <!--
     The "validator-id" element represents the identifier under which the
     corresponding Validator class should be registered.
 -->
-<!ELEMENT validator-id    EMPTY>
+<!ELEMENT validator-id    (#PCDATA)>
+
+
+<!--
+    The "value" element is the String representation of a literal
+    value to which a scalar managed property will be set.  It will be
+    converted as specified for the actual property type.
+-->
+<!ELEMENT value (#PCDATA)>
+
+
+<!--
+    The "value-class" element defines the Java type to which each
+    "value" element's value will be converted to, prior to adding it to
+    the "values" list for a managed property that is a Collection.
+    It must be of type "ClassName".  If ommitted, "java.lang.String"
+    is assumed.
+-->
+<!ELEMENT value-class (#PCDATA)>
+
+
+<!--
+    The "value-ref" element is a value reference expression that must be
+    evaluated (in the same context as the expression that caused the creation
+    of the managed bean we are nsted in) to acquire the value used to
+    configure this managed property.  It must be of type "ValueRef".
+-->
+<!ELEMENT value-ref (#PCDATA)>
+
 
 
 <!--
@@ -505,6 +718,6 @@
     during the processing of value reference expressions.
     It must be of type "ClassName".
 -->
-<!ELEMENT variable-resolver EMPTY>
+<!ELEMENT variable-resolver (#PCDATA)>
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.39 2003/03/18 21:29:10 eburns Exp $
+ * $Id: FacesContext.java,v 1.40 2003/04/29 18:51:38 eburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
 import javax.faces.tree.Tree;
+import javax.faces.application.Message;
 
 
 /**

@@ -1,5 +1,5 @@
 /*
- * $Id: TestTag.java,v 1.1 2003/03/13 22:02:38 craigmcc Exp $
+ * $Id: TestTag.java,v 1.2 2003/04/29 18:52:03 eburns Exp $
  */
 
 /*
@@ -51,8 +51,8 @@ public class TestTag extends FacesTag {
         this.rendersChildrenSet = false;
     }
 
-    public UIComponent createComponent() {
-        return (new TestComponent());
+    public String getComponentType() {
+        return ("TestComponent");
     }
 
     public String getRendererType() {

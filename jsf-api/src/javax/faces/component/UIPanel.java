@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.12 2003/03/13 01:11:58 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.13 2003/04/29 18:51:31 eburns Exp $
  */
 
 /*
@@ -21,12 +21,6 @@ public class UIPanel extends UIOutput {
     // ------------------------------------------------------- Static Variables
 
 
-    /**
-     * The component type of this {@link UIComponent} subclass.
-     */
-    public static final String TYPE = "javax.faces.component.UIPanel";
-
-
     // ----------------------------------------------------------- Constructors
 
 
@@ -43,14 +37,6 @@ public class UIPanel extends UIOutput {
 
 
     // ------------------------------------------------------------- Properties
-
-
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
-
 
     /**
      * <p>Return <code>true</code> to indicate that this component takes

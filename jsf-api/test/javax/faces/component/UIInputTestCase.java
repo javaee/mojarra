@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.8 2003/03/13 01:12:40 craigmcc Exp $
+ * $Id: UIInputTestCase.java,v 1.9 2003/04/29 18:51:52 eburns Exp $
  */
 
 /*
@@ -107,17 +107,6 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
 
 
     // ------------------------------------------------ Individual Test Methods
-
-
-    /**
-     * [3.1.1] Component Type.
-     */
-    public void testComponentType() {
-
-        assertEquals("componentType", UIInput.TYPE,
-                     component.getComponentType());
-
-    }
 
 
     /**

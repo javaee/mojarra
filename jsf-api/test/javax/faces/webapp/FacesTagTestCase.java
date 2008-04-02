@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTagTestCase.java,v 1.4 2003/04/29 18:13:09 eburns Exp $
+ * $Id: FacesTagTestCase.java,v 1.5 2003/04/29 18:52:03 eburns Exp $
  */
 
 /*
@@ -150,7 +150,6 @@ public class FacesTagTestCase extends TestCase {
         assertEquals("//ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
         reset();
-	com.sun.faces.util.DebugUtil.waitForDebugger();
         render();
 	System.out.println("1 text: " + text());
         assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA", text());

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItems.java,v 1.9 2003/03/13 01:11:59 craigmcc Exp $
+ * $Id: UISelectItems.java,v 1.10 2003/04/29 18:51:31 eburns Exp $
  */
 
 /*
@@ -47,20 +47,7 @@ public class UISelectItems extends UIOutput {
     // ------------------------------------------------------- Static Variables
 
 
-    /**
-     * The component type of this {@link UIComponent} subclass.
-     */
-    public static final String TYPE = "javax.faces.component.UISelectItems";
-
-
     // ------------------------------------------------------------- Properties
-
-
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
 
 
     /**

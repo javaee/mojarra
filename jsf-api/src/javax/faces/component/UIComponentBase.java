@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.50 2003/04/16 21:09:02 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.51 2003/04/29 18:51:30 eburns Exp $
  */
 
 /*
@@ -32,11 +32,7 @@ import javax.faces.validator.Validator;
 /**
  * <p><strong>UIComponentBase</strong> is a convenience base class that
  * implements the default concrete behavior of all methods defined by
- * {@link UIComponent} except <code>getComponentType()</code>.
- * Concrete subclasses of {@link UIComponentBase} must implement the
- * <code>getComponentType()</code> method.  Component types are used to
- * select the appropriate {@link Renderer} to be used for decoding and
- * encoding, if the <code>rendererType</code> property is non-null.</p>
+ * {@link UIComponent}.</p>
  *
  * <p>By default, this class defines <code>getRendersChildren()</code> to
  * return <code>false</code>.  Subclasses that wish to manage the rendering
@@ -262,10 +258,6 @@ public abstract class UIComponentBase implements UIComponent {
 	}
 
     }
-
-
-    public abstract String getComponentType();
-
 
     /**
      * <p>The converter identifier for this component.</p>

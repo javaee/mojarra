@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBooleanTestCase.java,v 1.7 2003/03/13 01:12:41 craigmcc Exp $
+ * $Id: UISelectBooleanTestCase.java,v 1.8 2003/04/29 18:51:54 eburns Exp $
  */
 
 /*
@@ -104,17 +104,6 @@ private class UISelectBooleanNamingContainer extends UISelectBoolean implements 
 
 
     // ------------------------------------------------ Individual Test Methods
-
-
-    /**
-     * [3.1.1] Component Type.
-     */
-    public void testComponentType() {
-
-        assertEquals("componentType", UISelectBoolean.TYPE,
-                     component.getComponentType());
-
-    }
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.25 2003/03/13 01:11:59 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.26 2003/04/29 18:51:32 eburns Exp $
  */
 
 /*
@@ -32,12 +32,6 @@ public class UISelectMany extends UISelectBase {
     // ------------------------------------------------------- Static Variables
 
 
-    /**
-     * The component type of this {@link UIComponent} subclass.
-     */
-    public static final String TYPE = "javax.faces.component.UISelectMany";
-
-
     // ----------------------------------------------------------- Constructors
 
 
@@ -54,14 +48,6 @@ public class UISelectMany extends UISelectBase {
 
 
     // ------------------------------------------------------------- Properties
-
-
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
-
 
     /**
      * <p>Return the currently selected items, or <code>null</code> if there

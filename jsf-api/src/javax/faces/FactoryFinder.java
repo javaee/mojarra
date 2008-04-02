@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.15 2003/03/13 01:11:51 craigmcc Exp $
+ * $Id: FactoryFinder.java,v 1.16 2003/04/29 18:51:24 eburns Exp $
  */
 
 /*
@@ -78,14 +78,6 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
-     * {@link javax.faces.convert.ConverterFactory} class name.</p>
-     */
-    public final static String CONVERTER_FACTORY =
-        "javax.faces.convert.ConverterFactory";
-
-
-    /**
-     * <p>The property name for the
      * {@link javax.faces.context.FacesContextFactory} class name.</p>
      */
     public final static String FACES_CONTEXT_FACTORY =
@@ -98,14 +90,6 @@ public final class FactoryFinder {
      */
     public final static String LIFECYCLE_FACTORY =
         "javax.faces.lifecycle.LifecycleFactory";
-
-
-    /**
-     * <p>The property name for the
-     * {@link javax.faces.context.MessageResourcesFactory} class name.</p>
-     */
-    public final static String MESSAGE_RESOURCES_FACTORY =
-        "javax.faces.context.MessageResourcesFactory";
 
 
     /**
@@ -148,10 +132,8 @@ public final class FactoryFinder {
      */
     private static String factoryNames[] = {
         APPLICATION_FACTORY,
-        CONVERTER_FACTORY,
         FACES_CONTEXT_FACTORY,
         LIFECYCLE_FACTORY,
-        MESSAGE_RESOURCES_FACTORY,
         RENDER_KIT_FACTORY,
         TREE_FACTORY,
     };

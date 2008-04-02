@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputTestCase.java,v 1.5 2003/03/13 01:12:41 craigmcc Exp $
+ * $Id: UIOutputTestCase.java,v 1.6 2003/04/29 18:51:52 eburns Exp $
  */
 
 /*
@@ -102,17 +102,6 @@ private class UIOutputNamingContainer extends UIOutput implements NamingContaine
 
 
     // ------------------------------------------------ Individual Test Methods
-
-
-    /**
-     * [3.1.1] Component Type.
-     */
-    public void testComponentType() {
-
-        assertEquals("componentType", UIOutput.TYPE,
-                     component.getComponentType());
-
-    }
 
 
     /**

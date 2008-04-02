@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.7 2003/03/13 01:12:46 craigmcc Exp $
+ * $Id: MockFacesContext.java,v 1.8 2003/04/29 18:52:01 eburns Exp $
  */
 
 /*
@@ -18,9 +18,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import javax.faces.FacesException;
+import javax.faces.application.Message;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.context.Message;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.FacesEvent;
