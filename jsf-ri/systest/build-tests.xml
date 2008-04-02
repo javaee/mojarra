@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.5 2003/05/16 19:09:27 craigmcc Exp $
+ $Id: build-tests.xml,v 1.6 2003/05/20 16:59:59 jvisvanathan Exp $
 -->
 
 
@@ -51,6 +51,9 @@
                 test.external,
                 test.managed,
                 test.message,
+                test.converter,
+                test.validator,
+                test.component,
                 test.navigation
                "/>
 
@@ -150,15 +153,36 @@
 
   </target>
 
-
-
   <target name="test.navigation"
    description="Test navigation handler rule processing">
 
   </target>
+  
+  <target name="test.converter"
+   description="Test Converter creation facility">
 
+    <!-- Test Converter creation -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/converter.jsp"
+      outContent="/converter.jsp PASSED"/>
+  </target>
+  
+  <target name="test.validator"
+   description="Test Validator creation facility">
 
+    <!-- Test validator creation -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/validator.jsp"
+      outContent="/validator.jsp PASSED"/>
+  </target>
+  
+  <target name="test.component"
+   description="Test Component creation facility">
 
-
+    <!-- Test Component creation -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/component.jsp"
+      outContent="/component.jsp PASSED"/>
+  </target>
 
 </project>

@@ -129,5 +129,25 @@
       <detail>This Is Custom2C Detail</detail>
     </message>
   </message-resources>
+  
+   <!-- validator -->
+  <validator>
+    <description>TestValidator Description</description>
+    <validator-id>TestValidator</validator-id>
+    <validator-class>com.sun.faces.systest.TestValidator</validator-class>
+  </validator>
+
+  <!-- converter -->
+  <converter>
+    <description>Test Converter</description>
+    <converter-id>TestConverter</converter-id>
+    <converter-class>com.sun.faces.systest.TestConverter</converter-class>
+  </converter>
+  
+  <!-- component -->
+  <component>
+    <component-type>TestComponent</component-type>
+    <component-class>com.sun.faces.systest.TestComponent</component-class>
+  </component>
 
 </faces-config>
