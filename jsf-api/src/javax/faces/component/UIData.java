@@ -5,8 +5,17 @@
 
 package javax.faces.component;
 
-import javax.el.ValueExpression;
+import java.io.IOException;
+import java.io.Serializable;
+import java.sql.ResultSet;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import javax.el.ELException;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -21,15 +30,6 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.ResultDataModel;
 import javax.faces.model.ResultSetDataModel;
 import javax.faces.model.ScalarDataModel;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.sql.ResultSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import javax.servlet.jsp.jstl.sql.Result;
 
 
@@ -1264,6 +1264,9 @@ public class UIData extends UIComponentBase
 class SavedState implements Serializable {
 
     private Object submittedValue;
+    private static final long serialVersionUID = 2920252657338389849L;
+
+
     Object getSubmittedValue() {
 	return (this.submittedValue);
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.21 2005/05/05 20:51:14 edburns Exp $
+ * $Id: ValidatorTag.java,v 1.22 2005/05/19 13:26:57 rlubke Exp $
  */
 
 /*
@@ -55,6 +55,12 @@ import javax.servlet.jsp.tagext.TagSupport;
  */
 
 public class ValidatorTag extends TagSupport {
+
+
+    // ---------------------------------------------------------- Static Members
+
+
+    private static final long serialVersionUID = -5562623615418158868L;
 
 
     // ------------------------------------------------------------- Attributes

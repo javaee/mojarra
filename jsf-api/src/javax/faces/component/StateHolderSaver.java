@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.10 2004/02/26 20:30:30 eburns Exp $
+ * $Id: StateHolderSaver.java,v 1.11 2005/05/19 13:26:56 rlubke Exp $
  */
 
 /*
@@ -9,19 +9,17 @@
 
 package javax.faces.component;
 
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-import javax.faces.component.StateHolder;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
 import java.io.Serializable;
+
+import javax.faces.context.FacesContext;
 
 /**
  * <p>Helper class for saving and restoring attached objects.</p>
  */
 class StateHolderSaver extends Object implements Serializable {
+
+    private static final long serialVersionUID = 6470180891722042701L;
+
     private String className = null;
     private Object savedState = null;
 

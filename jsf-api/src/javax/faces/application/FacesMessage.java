@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.11 2005/03/11 21:05:22 edburns Exp $
+ * $Id: FacesMessage.java,v 1.12 2005/05/19 13:26:56 rlubke Exp $
  */
 
 /*
@@ -146,6 +146,8 @@ public class FacesMessage implements Serializable {
      */
     public final static Map VALUES_MAP = 
 	Collections.unmodifiableMap(_MODIFIABLE_MAP);
+    
+    private static final long serialVersionUID = -1180773928220076822L;
     
 
     // ------------------------------------------------------------ Constructors

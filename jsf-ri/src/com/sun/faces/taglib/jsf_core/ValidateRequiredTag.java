@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateRequiredTag.java,v 1.12 2005/05/05 20:51:27 edburns Exp $
+ * $Id: ValidateRequiredTag.java,v 1.13 2005/05/19 13:27:00 rlubke Exp $
  */
 
 /*
@@ -22,12 +22,13 @@ import javax.el.ExpressionFactory;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ValidateRequiredTag.java,v 1.12 2005/05/05 20:51:27 edburns Exp $
+ * @version $Id: ValidateRequiredTag.java,v 1.13 2005/05/19 13:27:00 rlubke Exp $
  */
 
 public class ValidateRequiredTag extends ValidatorTag {
 
-   private static ValueExpression VALIDATOR_ID_EXPR = null;
+    private static final long serialVersionUID = -4925861676709072353L;
+    private static ValueExpression VALIDATOR_ID_EXPR = null;
 
 //
 // Constructors and Initializers    

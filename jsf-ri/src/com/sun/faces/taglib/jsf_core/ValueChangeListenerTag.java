@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.13 2005/05/16 20:16:32 rlubke Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.14 2005/05/19 13:27:00 rlubke Exp $
  */
 
 /*
@@ -57,6 +57,7 @@ public class ValueChangeListenerTag extends TagSupport {
 
     // ------------------------------------------------------------- Attributes
 
+    private static final long serialVersionUID = -212845116876281363L;
     private static final Log log =
         LogFactory.getLog(ValueChangeListenerTag.class);
 

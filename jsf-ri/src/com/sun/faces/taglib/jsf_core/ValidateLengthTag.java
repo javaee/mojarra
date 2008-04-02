@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLengthTag.java,v 1.13 2005/05/05 20:51:27 edburns Exp $
+ * $Id: ValidateLengthTag.java,v 1.14 2005/05/19 13:27:00 rlubke Exp $
  */
 
 /*
@@ -28,6 +28,7 @@ import com.sun.faces.util.Util;
 
 public class ValidateLengthTag extends MaxMinValidatorTag {
 
+    private static final long serialVersionUID = -3594596279980791500L;
     private static ValueExpression VALIDATOR_ID_EXPR = null;
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: MethodExpressionMethodBindingAdapter.java,v 1.1 2005/05/05 21:55:41 edburns Exp $
+ * $Id: MethodExpressionMethodBindingAdapter.java,v 1.2 2005/05/19 13:26:58 rlubke Exp $
  */
 
 /*
@@ -25,6 +25,8 @@ import java.io.Serializable;
  */
 
 @protection@ class MethodExpressionMethodBindingAdapter extends MethodExpression implements Serializable, StateHolder {
+
+    private static final long serialVersionUID = @serialVersionUID@;
 
     public MethodExpressionMethodBindingAdapter() {} // for StateHolder
 

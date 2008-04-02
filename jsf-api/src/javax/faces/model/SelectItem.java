@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.9 2005/03/22 22:38:08 edburns Exp $
+ * $Id: SelectItem.java,v 1.10 2005/05/19 13:26:56 rlubke Exp $
  */
 
 /*
@@ -22,6 +22,8 @@ import javax.faces.component.UISelectOne;
  */
 
 public class SelectItem implements Serializable {
+
+    private static final long serialVersionUID = 876782311414654999L;
 
 
     // ------------------------------------------------------------ Constructors

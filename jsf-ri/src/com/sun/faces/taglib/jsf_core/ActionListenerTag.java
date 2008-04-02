@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.20 2005/05/16 20:16:32 rlubke Exp $
+ * $Id: ActionListenerTag.java,v 1.21 2005/05/19 13:26:59 rlubke Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ public class ActionListenerTag extends TagSupport {
 
     // ------------------------------------------------------------- Attributes
 
-
+    private static final long serialVersionUID = -5222351612904952740L;
     private static final Log log = LogFactory.getLog(ActionListenerTag.class);
 
     /**

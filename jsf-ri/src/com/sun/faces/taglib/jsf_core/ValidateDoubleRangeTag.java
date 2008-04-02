@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateDoubleRangeTag.java,v 1.13 2005/05/05 20:51:27 edburns Exp $
+ * $Id: ValidateDoubleRangeTag.java,v 1.14 2005/05/19 13:26:59 rlubke Exp $
  */
 
 /*
@@ -28,7 +28,8 @@ import com.sun.faces.util.Util;
 
 public class ValidateDoubleRangeTag extends MaxMinValidatorTag {
 
-private static ValueExpression VALIDATOR_ID_EXPR = null;
+    private static final long serialVersionUID = 1677210040390032609L;
+    private static ValueExpression VALIDATOR_ID_EXPR = null;
 
 //
 // Instance Variables

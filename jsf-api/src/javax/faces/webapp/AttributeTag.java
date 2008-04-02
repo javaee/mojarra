@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.14 2005/05/05 20:51:13 edburns Exp $
+ * $Id: AttributeTag.java,v 1.15 2005/05/19 13:26:57 rlubke Exp $
  */
 
 /*
@@ -30,6 +30,12 @@ import javax.servlet.jsp.tagext.TagSupport;
  */
 
 public class AttributeTag extends TagSupport {
+
+
+    // ---------------------------------------------------------- Static Members
+
+
+    private static final long serialVersionUID = -7782950243436672334L;
 
 
     // ------------------------------------------------------------- Attributes

@@ -227,6 +227,23 @@ must exist.  This is necessary for the MessageFactory class.
       </fileset>
     </copy>
 
+    <replace file="${build.generate}/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
+             token="@serialVersionUID@"
+             value="6351778415298720238L"/>
+                                                                                                                          
+    <replace file="${build.generate}/com/sun/faces/application/MethodExpressionMethodBindingAdapter.java"
+             token="@serialVersionUID@"
+             value="5639227653537610567L"/>
+                                                                                                                          
+    <replace file="${build.generate}/com/sun/faces/application/ValueExpressionValueBindingAdapter.java"
+             token="@serialVersionUID@"
+             value="2990621816592041196L"/>
+                                                                                                                          
+    <replace file="${build.generate}/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
+             token="@serialVersionUID@"
+             value="7410146713650507654L"/>
+
+
   </target>
 
   <target name="check.taglib.generation.necessity" if="jsf-tools">

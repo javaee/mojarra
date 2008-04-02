@@ -308,6 +308,22 @@ jsf-api.jar.
           todir="${build.generate}/javax/faces/webapp"
           filtering="true"/>
 
+    <replace file="${build.generate}/javax/faces/component/MethodBindingMethodExpressionAdapter.java"
+             token="@serialVersionUID@"
+             value="7334926223014401689L"/>
+
+    <replace file="${build.generate}/javax/faces/component/MethodExpressionMethodBindingAdapter.java"
+             token="@serialVersionUID@"
+             value="-1822420567946048452L"/>
+
+    <replace file="${build.generate}/javax/faces/component/ValueExpressionValueBindingAdapter.java"
+             token="@serialVersionUID@"
+             value="2388977392466671243L"/>
+
+    <replace file="${build.generate}/javax/faces/component/ValueBindingValueExpressionAdapter.java"
+             token="@serialVersionUID@"
+             value="-8015491904782686906L"/>
+
   </target>
 
 

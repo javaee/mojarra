@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.13 2005/05/05 20:51:26 edburns Exp $
+ * $Id: ConvertNumberTag.java,v 1.14 2005/05/19 13:26:59 rlubke Exp $
  */
 
 /*
@@ -25,11 +25,12 @@ import com.sun.faces.util.Util;
  * <p>ConvertNumberTag is a ConverterTag implementation for
  * javax.faces.convert.NumberConverter</p>
  *
- * @version $Id: ConvertNumberTag.java,v 1.13 2005/05/05 20:51:26 edburns Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.14 2005/05/19 13:26:59 rlubke Exp $
  */
 
 public class ConvertNumberTag extends ConverterTag {
 
+    private static final long serialVersionUID = -2710405278792415110L;
     private static ValueExpression CONVERTER_ID_EXPR = null;
 
     //

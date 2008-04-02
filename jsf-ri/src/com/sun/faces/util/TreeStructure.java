@@ -1,5 +1,5 @@
 /*
- * $Id: TreeStructure.java,v 1.8 2004/10/12 14:39:55 rlubke Exp $
+ * $Id: TreeStructure.java,v 1.9 2005/05/19 13:27:00 rlubke Exp $
  */
 
 /*
@@ -9,13 +9,13 @@
 
 package com.sun.faces.util;
 
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 
 /**
  * TreeStructure is a class that represents the structure of a UIComponent
@@ -23,6 +23,8 @@ import java.util.Iterator;
  * of the component tree.
  */
 public class TreeStructure implements java.io.Serializable {
+
+    private static final long serialVersionUID = 8320767450484935667L;
 
     ArrayList children = null;
     HashMap facets = null;
