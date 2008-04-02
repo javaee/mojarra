@@ -1,5 +1,5 @@
 /*
- * $Id: BaseRenderer.java,v 1.1 2003/02/12 17:59:37 eburns Exp $
+ * $Id: BaseRenderer.java,v 1.2 2003/02/15 00:57:53 rkitain Exp $
  */
 
 /*
@@ -87,17 +87,34 @@ public abstract class BaseRenderer extends Renderer {
 	if (null != (result = (String) component.getAttribute("clientId"))) {
 	    return result;
 	}
+        Object facetParent = null;
+
 	NamingContainer closestContainer = null;
 	UIComponent containerComponent = component;
+
+        // check if its a facet (facets are not containers)
+        // this also checks if we start off with nested facets
+        facetParent = containerComponent.getAttribute(
+            UIComponent.FACET_PARENT_ATTR);
+        while (facetParent != null) {
+            containerComponent = (UIComponent) facetParent;
+            facetParent = containerComponent.getAttribute(
+                UIComponent.FACET_PARENT_ATTR);
+        }
 	
-	// Search for an ancestor that is a naming container
-	while (null != (containerComponent = 
-			containerComponent.getParent())) {
-	    if (containerComponent instanceof NamingContainer) {
-		closestContainer = (NamingContainer) containerComponent;
-		break;
-	    }
-	}
+        // Search for an ancestor that is a naming container
+        while (null != (containerComponent =
+                        containerComponent.getParent())) {
+            facetParent = containerComponent.getAttribute(
+                UIComponent.FACET_PARENT_ATTR);
+            if (facetParent != null) {
+                containerComponent = (UIComponent) facetParent;
+            }
+            if (containerComponent instanceof NamingContainer) {
+                closestContainer = (NamingContainer) containerComponent;
+                break;
+            }
+        }
 	
 	// If none is found, see if this is a naming container
 	if (null == closestContainer && component instanceof NamingContainer) {

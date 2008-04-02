@@ -1,5 +1,5 @@
 /*
- * $Id: ComponentsSetupListener.java,v 1.6 2003/02/15 00:34:14 eburns Exp $
+ * $Id: ComponentsSetupListener.java,v 1.7 2003/02/15 00:57:53 rkitain Exp $
  */
 /*
  *
@@ -104,6 +104,9 @@ public class ComponentsSetupListener implements ServletContextListener
         defaultRenderKit.addRenderer("MenuTree", new MenuTreeRenderer());
         defaultRenderKit.addRenderer("ResultSet", new ResultSetRenderer());
         defaultRenderKit.addRenderer("Area", new AreaRenderer());
+        defaultRenderKit.addRenderer("TabLabel", new TabLabelRenderer());
+        defaultRenderKit.addRenderer("Tab", new TabRenderer());
+        defaultRenderKit.addRenderer("Tabbed", new TabbedRenderer());
 
     }
 
