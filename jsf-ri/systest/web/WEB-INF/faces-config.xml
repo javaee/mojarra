@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE faces-config PUBLIC
+ "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+ "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+
+<faces-config>
+
+
+  <!-- Managed Bean #1, No Property Overrides -->
+  <managed-bean>
+    <managed-bean-name>test1</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+
+  <!-- Managed Bean #2, Primitive Property Overrides -->
+  <managed-bean>
+    <managed-bean-name>test2</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>booleanProperty</property-name>
+      <value>false</value>
+    </managed-property>
+    <managed-property>
+      <property-name>byteProperty</property-name>
+      <value>21</value>
+    </managed-property>
+    <managed-property>
+      <property-name>doubleProperty</property-name>
+      <value>321.54</value>
+    </managed-property>
+    <managed-property>
+      <property-name>floatProperty</property-name>
+      <value>21.43</value>
+    </managed-property>
+    <managed-property>
+      <property-name>intProperty</property-name>
+      <value>321</value>
+    </managed-property>
+    <managed-property>
+      <property-name>longProperty</property-name>
+      <value>54321</value>
+    </managed-property>
+    <managed-property>
+      <property-name>shortProperty</property-name>
+      <value>4321</value>
+    </managed-property>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <value>New String Value</value>
+    </managed-property>
+  </managed-bean>
+
+
+
+</faces-config>

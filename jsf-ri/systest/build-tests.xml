@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ********** JSF System Integration Test File ************************** -->
+
+
+<project name="JSF-RI-Systest-Execute" default="test" basedir=".">
+
+
+<!-- =========================== Configuration ============================ -->
+
+
+  <!-- SystestClient connection properties -->
+  <property name="context.path" value="/jsf-systest"/>
+  <property name="host"         value="localhost"/>
+  <property name="port"         value="8080"/>
+  <!-- Set 'protocol' to a zero length string to use HttpURLConnection -->
+  <property name="protocol"     value="HTTP/1.0"/>
+  <property name="golden.path"  value="${context.path}/golden"/>
+
+
+  <!-- SystestClient taskdef classpath -->
+  <path id="test.classpath">
+    <pathelement location="${ant.home}/lib/ant.jar"/>
+    <pathelement location="${basedir}/build/WEB-INF/classes"/>
+    <pathelement location="${basedir}/build/WEB-INF/lib/commons-logging.jar"/>
+  </path>
+
+
+  <!-- SystestClient taskdef declaration -->
+  <taskdef  name="tester"
+       classname="com.sun.faces.systest.ant.SystestClient">
+    <classpath refid="test.classpath" />
+  </taskdef>
+
+
+<!-- ======================== Test Execution ============================== -->
+
+
+  <target name="test"
+   description="Execute all tests against installed application"
+       depends="test.hello,
+                test.managed,
+                test.navigation
+               "/>
+
+
+  <target name="test.hello"
+   description="Basic Hello, World Tests">
+
+    <!-- Simple Non-Faces Response -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/hello.jsp" status="200"
+      outContent="/hello.jsp PASSED"/>
+
+    <!-- Simple Faces Response (Indirect) -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/facesResponse.jsp?responseTreeId=/hello.jsp"
+      outContent="/hello.jsp PASSED"/>
+
+    <!-- Simple Faces Response (Direct) -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/hello.jsp"
+      outContent="/hello.jsp PASSED"/>
+
+  </target>
+
+
+  <target name="test.managed"
+   description="Test managed bean creation facility">
+
+    <!-- Managed Bean Create #1 (No Property Setters) -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/managed01.jsp"
+      outContent="/managed01.jsp PASSED"/>
+
+    <!-- Managed Bean Create #2 (Primitive Property Setters) -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/managed02.jsp"
+      outContent="/managed02.jsp PASSED"/>
+
+  </target>
+
+
+
+  <target name="test.navigation"
+   description="Test navigation handler rule processing">
+
+  </target>
+
+
+
+
+
+</project>
