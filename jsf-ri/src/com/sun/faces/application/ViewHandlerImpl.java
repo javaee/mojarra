@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.4 2003/08/23 00:39:04 jvisvanathan Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.5 2003/08/25 15:18:36 eburns Exp $ 
  */ 
 
 
@@ -32,7 +32,7 @@ import javax.faces.application.StateManager.SerializedView;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.4 2003/08/23 00:39:04 jvisvanathan Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.5 2003/08/25 15:18:36 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -73,6 +73,15 @@ public class ViewHandlerImpl extends StateManager
         context.setViewRoot(viewRoot);
         viewRoot.setViewId(viewId);
         return viewRoot;
+    }
+
+    public UIViewRoot createView(FacesContext context, String viewId) {
+	UIViewRoot result = new UIViewRootBase();
+	result.setViewId(viewId);
+	// PENDING(): not sure if we should set the RenderKitId here.
+	// The UIViewRootBase ctor sets the renderKitId to the default
+	// one.
+	return result;
     }
     
     protected Object getComponentStateToSave(FacesContext context){

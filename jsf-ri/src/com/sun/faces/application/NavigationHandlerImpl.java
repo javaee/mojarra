@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.14 2003/08/23 00:39:03 jvisvanathan Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.15 2003/08/25 15:18:35 eburns Exp $
  */
 
 /*
@@ -23,6 +23,7 @@ import java.util.TreeSet;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIViewRoot;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ViewHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.component.base.UIViewRootBase;
 import javax.faces.component.UIViewRoot;
@@ -109,12 +110,12 @@ public class NavigationHandlerImpl extends NavigationHandler {
                     Util.getExceptionMessage(
                             Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        String newTreeId = getViewId(context, actionRef, outcome);
-        if (newTreeId != null) {
-            // PENDING (visvan) This needs to be fixed per discussion with Ed.
-             UIViewRoot newRoot = new UIViewRootBase();
-             newRoot.setViewId(newTreeId);
-             context.setViewRoot(newRoot);
+        String newViewId = getViewId(context, actionRef, outcome);
+        if (newViewId != null) {
+	    ViewHandler viewHandler = Util.getViewHandler(context);
+	    Assert.assert_it(null != viewHandler);
+	    UIViewRoot newRoot = viewHandler.createView(context, newViewId);
+	    context.setViewRoot(newRoot);
         }
     }
    
