@@ -12,7 +12,7 @@
 
   <property name="Name" value="JSF RI"/>
   <property name="name" value="jsf-ri"/>
-  <property name="version" value="20021224"/>
+  <property name="version" value="20030219"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -202,12 +202,12 @@
   <target name="all" depends="clean,prepare,compile,build.basic.war"
    description="Clean and compile all components"/>
 
-  <target name="dist" depends="jars">
+  <target name="prepare.dist" depends="jars">
     <mkdir dir="${dist.home}"/>
     <mkdir dir="${dist.home}/example"/>
     <mkdir dir="${dist.home}/lib"/>
 
-    <!-- Handle the top level files -->
+    <echo> Handle the top level files </echo>
     <copy file="README" todir="${dist.home}"/>
     <copy file="ReleaseNotes.html" todir="${dist.home}"/>
     <copy file="LICENSE.html" todir="${dist.home}"/>
@@ -215,15 +215,15 @@
     <copy file="LICENSE-MOZILLA.txt" todir="${dist.home}"/>
     <copy file="${spec.pdf}" tofile="${dist.home}/JSF_${version}.pdf"/>
 
-    <!-- Build the API Javadocs -->
+    <echo> Build the API Javadocs </echo>
     <ant dir="${jsf.api.home}" 
          antfile="${jsf.api.home}/build.xml" target="javadocs"/>
-    <!-- Copy the API Javadocs to the dist -->
+    <echo> Copy the API Javadocs to the dist </echo>
     <copy todir="${dist.home}/javadocs">
       <fileset dir="${jsf.api.home}/build/javadocs"/>
     </copy>
 
-    <!-- copy the necessary libs -->
+    <echo> copy the necessary libs </echo>
     <copy todir="${dist.home}/lib">
       <fileset dir="${lib.home}" includes="commons*.jar"/>
     </copy>
@@ -234,15 +234,39 @@
     <copy file="${build.home}/lib/${name}.jar" todir="${dist.home}/lib"/>
     <copy file="${conf.share.dir}/html_basic.tld" todir="${dist.home}/lib"/>
     <copy file="${conf.share.dir}/jsf_core.tld" todir="${dist.home}/lib"/>
+  </target>
 
-    <!-- Build the demos from the jsf-demo repository -->
-    <ant dir="${jsf.demo.home}" inheritAll="false"
-         antfile="${jsf.demo.home}/build.xml" target="clean"/>
-    <ant dir="${jsf.demo.home}" inheritAll="false" target="copyJarsToDemos"
+  <target name="dist.binary" depends="dist.source">
+    <echo> Build the demos from the jsf-demo repository </echo>
+    <ant dir="${jsf.demo.home}" inheritAll="false" target="build-all"
          antfile="${jsf.demo.home}/build.xml" />
 
-    <!-- copy the necessary examples -->
-    <!-- PENDING(jennifer): include cardemo here -->
+    <echo> copy the example war files to the zip area </echo>
+    <copy todir="${dist.home}/example" 
+          file="${jsf.demo.home}/components/build/components.war"/>
+    <copy todir="${dist.home}/example" 
+          file="${jsf.demo.home}/helloDuke/build/helloDuke.war"/>
+    <copy todir="${dist.home}/example" 
+          file="${jsf.demo.home}/guessNumber/build/guessNumber.war"/>
+    <copy todir="${dist.home}/example" 
+          file="${jsf.demo.home}/cardemo/build/cardemo.war"/>
+    <copy todir="${dist.home}/example" 
+          file="${jsf.demo.home}/nonjsp/dist/nonjsp.war"/>
+    <echo> copy the demo-components.jar </echo>
+    <copy todir="${dist.home}/example" 
+     file="${jsf.demo.home}/components/build/demo/WEB-INF/lib/demo-components.jar"/>
+  </target>
+
+  <target name="dist.source" depends="prepare.dist">
+
+    <echo> prepare to copy the demo source </echo>
+    <ant dir="${jsf.demo.home}" inheritAll="false"
+         antfile="${jsf.demo.home}/build.xml" target="clean"/>
+    <ant dir="${jsf.demo.home}" inheritAll="false"
+         antfile="${jsf.demo.home}/build.xml" target="copyJarsToDemos"/>
+    <echo> copy the demo-components.jar to the webapps that need it </echo>
+
+    <echo> copy the necessary examples </echo>
     <copy todir="${dist.home}/example/helloDuke" includeEmptyDirs="false">
       <fileset dir="${jsf.demo.home}/helloDuke"/>
     </copy>
@@ -259,7 +283,15 @@
       <fileset dir="${jsf.demo.home}/nonjsp"/>
     </copy>
 
-    <!-- create the zip file -->
+    <copy todir="${dist.home}/example/components" includeEmptyDirs="false">
+      <fileset dir="${jsf.demo.home}/components"/>
+    </copy>
+
+  </target>
+
+  <target name="dist" depends="dist.binary">
+
+    <echo> create the zip file </echo>
     <move todir="${basedir}/jsf-${version}">
       <fileset dir="dist"/>
     </move>
@@ -270,7 +302,6 @@
     <move todir="dist">
       <fileset dir="${basedir}/jsf-${version}"/>
     </move>
-
 
   </target>
 
