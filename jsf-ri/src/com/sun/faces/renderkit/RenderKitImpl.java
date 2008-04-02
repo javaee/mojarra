@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.40 2006/05/17 19:00:46 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.41 2006/05/18 22:36:37 rlubke Exp $
  */
 
 /*
@@ -31,16 +31,9 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-
+import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
-import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.render.ResponseStateManager;
@@ -49,15 +42,21 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <B>RenderKitImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.40 2006/05/17 19:00:46 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.41 2006/05/18 22:36:37 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -270,8 +269,8 @@ public class RenderKitImpl extends RenderKit {
         return new HtmlResponseWriter(writer, contentType, characterEncoding);
     }
 
-    private String[] contentTypeSplit(String contentTypeString) {
-        String [] result = contentTypeString.split(",");
+    private String[] contentTypeSplit(String contentTypeString) {        
+        String[] result = Util.split(contentTypeString, ",");
         for (int i = 0; i < result.length; i++) {
             int semicolon = result[i].indexOf(";");
             if (-1 != semicolon) {

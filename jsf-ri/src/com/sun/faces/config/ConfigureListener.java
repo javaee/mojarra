@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.74 2006/05/18 17:02:16 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.75 2006/05/18 22:36:37 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -476,8 +476,8 @@ public class ConfigureListener implements ServletContextListener {
             // the web application deployment descriptor
             String paths =
                   context.getInitParameter(FacesServlet.CONFIG_FILES_ATTR);
-            if (paths != null) {
-                String[] tokens = paths.trim().split(",");
+            if (paths != null) {                
+                String[] tokens = Util.split(paths.trim(), ",");
                 for (int i = 0; i < tokens.length; i++) {
 
                     url = getContextURLForPath(context, tokens[i].trim());

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.191 2006/05/17 19:00:50 rlubke Exp $
+ * $Id: Util.java,v 1.192 2006/05/18 22:36:37 rlubke Exp $
  */
 
 /*
@@ -64,6 +64,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,7 +77,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.191 2006/05/17 19:00:50 rlubke Exp $
+ * @version $Id: Util.java,v 1.192 2006/05/18 22:36:37 rlubke Exp $
  */
 
 public class Util {
@@ -119,6 +120,9 @@ public class Util {
      * Flag that enables/disables the html TLV.
      */
     private static boolean htmlTLVEnabled = true;
+    
+    private static final Map<String,Pattern> patternCache = 
+          new LRUMap<String,Pattern>(15);
 
 //
 // Instance Variables
@@ -990,6 +994,30 @@ public class Util {
             }
         }
         return result;
+    }
+
+    /**
+     * <p>A slightly more efficient version of 
+     * <code>String.split()</code> which caches
+     * the <code>Pattern</code>s in an LRUMap instead of
+     * creating a new <code>Pattern</code> on each
+     * invocation.</p>
+     * @param toSplit the string to split
+     * @param regex the regex used for splitting
+     * @return the result of <code>Pattern.spit(String, int)</code>
+     */
+    public static String[] split(String toSplit, String regex) {
+        Pattern pattern = patternCache.get(regex);
+        if (pattern == null) {
+            synchronized(patternCache) {
+                pattern = patternCache.get(regex);
+                if (pattern == null) {
+                    pattern = Pattern.compile(regex);
+                    patternCache.put(regex, pattern);
+                } 
+            }
+        }
+        return pattern.split(toSplit, 0);        
     }
 
 } // end of class Util

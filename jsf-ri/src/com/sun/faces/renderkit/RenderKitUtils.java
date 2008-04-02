@@ -27,12 +27,12 @@ package com.sun.faces.renderkit;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.model.SelectItem;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
@@ -41,16 +41,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.MessageUtils;
-import javax.el.ValueExpression;
+import com.sun.faces.util.Util;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -657,14 +654,14 @@ public class RenderKitUtils {
             return arrayAccept;
         // some helper variables
         String token = null;
-        StringBuffer typeSubType = null;
+        StringBuilder typeSubType = null;
         String type = null;
         String subtype = null;
         String level = null;
         String quality = null;
 
-        // Parse "types"
-        String[] types = accept.split(CONTENT_TYPE_DELIMITER);
+        // Parse "types"        
+        String[] types = Util.split(accept, CONTENT_TYPE_DELIMITER);
         int index = -1;
         for (int i=0; i<types.length; i++) {
             token = types[i].trim();
@@ -672,23 +669,23 @@ public class RenderKitUtils {
             // Check to see if our accept string contains the delimiter that is used
             // to add uniqueness to a type/subtype, and/or delimits a qualifier value:
             //    Example: text/html;level=1,text/html;level=2; q=.5
-            if (token.contains(";")) {
-                String[] typeParts = token.split(";");
-                typeSubType = new StringBuffer(typeParts[0].trim());
+            if (token.contains(";")) {                
+                String[] typeParts = Util.split(token, ";");
+                typeSubType = new StringBuilder(typeParts[0].trim());
                 for (int j=1; j<typeParts.length; j++) {
                     quality = "not set";
                     token = typeParts[j].trim();
                     // if "level" is present, make sure it gets included in the "type/subtype"
                     if (token.contains("level")) {
                         typeSubType.append(';').append(token);
-                        String[] levelParts = token.split("=");
+                        String[] levelParts = Util.split(token, "=");                        
                         level = levelParts[0].trim();
                         if (level.equalsIgnoreCase("level")) {
                             level = levelParts[1].trim();
                         }
                     } else {
                         quality = token;
-                        String[] qualityParts = quality.split("=");
+                        String[] qualityParts = Util.split(quality, "=");                       
                         quality = qualityParts[0].trim();
                         if (quality.equalsIgnoreCase("q")) {
                             quality = qualityParts[1].trim();
@@ -699,12 +696,12 @@ public class RenderKitUtils {
                     }
                 }
             } else {
-                typeSubType = new StringBuffer(token);
+                typeSubType = new StringBuilder(token);
                 quality = "not set"; // to identifiy that no quality was supplied
             }
             // now split type and subtype
-            if (typeSubType.indexOf(CONTENT_TYPE_SUBTYPE_DELIMITER) >= 0) {
-                String[] typeSubTypeParts = typeSubType.toString().split(CONTENT_TYPE_SUBTYPE_DELIMITER);
+            if (typeSubType.indexOf(CONTENT_TYPE_SUBTYPE_DELIMITER) >= 0) {               
+                String[] typeSubTypeParts = Util.split(typeSubType.toString(), CONTENT_TYPE_SUBTYPE_DELIMITER);
                 type = typeSubTypeParts[0].trim();
                 subtype = typeSubTypeParts[1].trim();
             } else {
