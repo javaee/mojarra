@@ -99,6 +99,16 @@
           **/jsf-demo/**, **/test-sqe/**" prefix="javaserverfaces_sources"/>
 
         </zip>
+        
+        <!-- create a special source bundle for GlassFish Java EE 5 docs -->
+        <mkdir dir="${basedir}/srctemp/jsf-1.2-javadoc-src/jsf-api/src"/>
+            <copy todir="${basedir}/srctemp/jsf-1.2-javadoc-src/jsf-api/src">
+                <fileset dir="${api.dir}/src" excludes="**/CVS/**"/>
+                <fileset dir="${api.dir}/build/generate" includes="**/javax/**"/>
+            </copy>
+            <jar destfile="${dist.dir}/glassfish-jsf-${impl.version}-src.jar"
+                 basedir="${basedir}/srctemp"/>
+        <delete dir="${basedir}/srctemp"/>
     </target>
 
    <target name="prepare.build.java.net" description="Build distribution files"
