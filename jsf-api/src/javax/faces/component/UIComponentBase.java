@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.131 2006/03/08 19:06:36 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.132 2006/03/20 19:20:27 rlubke Exp $
  */
 
 /*
@@ -1153,10 +1153,13 @@ public abstract class UIComponentBase extends UIComponent {
             Iterator kids = getChildren().iterator();
             while (kids.hasNext()) {
                 UIComponent kid = (UIComponent) kids.next();
-    	    Object currentState = childState[i++];
-    	    if (currentState == null) {
-    	        continue;
-    	    }
+                if (kid.isTransient()) {
+                    continue;
+                }
+                Object currentState = childState[i++];
+                if (currentState == null) {
+                    continue;
+                }
                 kid.processRestoreState(context, currentState);
             }
         }

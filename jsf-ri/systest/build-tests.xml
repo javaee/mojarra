@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.107 2006/03/20 18:21:38 rlubke Exp $
+ $Id: build-tests.xml,v 1.108 2006/03/20 19:20:28 rlubke Exp $
 -->
 
 <!--
@@ -669,6 +669,10 @@
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/component.jsp"
               outContent="/component.jsp PASSED"/>
+        
+        <jsf.tester             
+              request="${context.path}/faces/ProcessSaveRestoreStateTest.jsp"
+              status="200"/>
         
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
