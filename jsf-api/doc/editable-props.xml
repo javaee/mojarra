@@ -88,3 +88,15 @@
         <property-class>javax.faces.e.MethodBinding</property-class>
       </property>
 
+      <property>
+        <description>
+          Flag indicating that this component's value must be
+          converted and validated immediately (that is, during
+          Apply Request Values phase), rather than waiting
+          until Process Validations phase.
+        </description>
+        <display-name>Immediate Action</display-name>
+        <icon></icon>
+        <property-name>immediate</property-name>
+        <property-class>boolean</property-class>
+      </property>
