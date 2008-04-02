@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.32 2003/07/16 00:00:08 jvisvanathan Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.33 2003/07/29 16:25:23 rlubke Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import org.mozilla.util.Assert;
+
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIComponent;
@@ -38,24 +38,16 @@ public class Command_HyperlinkTag extends FacesTag
     //
 
     // Attribute Instance Variables
-
-    protected String href = null;
-    protected String label = null;
     protected String commandname = null;
     protected String image = null;
     protected String actionRef = null;
-    protected String action = null;
+
     
     // Relationship Instance Variables
 
     //
     // Constructors and Initializers    
     //
-
-    public Command_HyperlinkTag()
-    {
-        super();
-    }
 
     //
     // Class methods
@@ -64,51 +56,18 @@ public class Command_HyperlinkTag extends FacesTag
     // 
     // Accessors
     //
-    public String getCommandName() { 
-        return commandname; 
-    }
+
     public void setCommandName(String newCommandname) {
         ParameterCheck.nonNull(newCommandname);
         commandname = newCommandname;
-    }
-
-    public void setHref(String newHref) {
-	href = newHref;
-    }
-
-    public String getHref() {
-	return href;
-    }
-    
-    public String getLabel() { 
-        return label; 
-    }
-    public void setLabel(String newLabel) { 
-        label = newLabel;
     }
  
     public void setImage(String newImage) {
         image = newImage;
     }
-
-    public String getImage() {
-        return image;
-    }
     
     public void setActionRef(String newActionRef) {
         actionRef = newActionRef;
-    }
-
-    public String getActionRef() {
-        return actionRef;
-    }
-    
-    public void setAction(String newAction) {
-        action = newAction;
-    }
-
-    public String getAction() {
-        return action;
     }
 
     //
@@ -122,6 +81,8 @@ public class Command_HyperlinkTag extends FacesTag
         return "Command"; 
     }
 
+
+
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UICommand link = (UICommand) component;
@@ -132,14 +93,11 @@ public class Command_HyperlinkTag extends FacesTag
 	    link.setAction(action);
 	}
         if (null != label) {
-            component.setAttribute("label", label);
+            link.setValue(label);
         }
         if (null != image) {
-            component.setAttribute("image", image);
+            link.setAttribute("image", image);
         }
-        if (null != href) {
-	    component.setAttribute("href", href);
-	}
     }
 
     

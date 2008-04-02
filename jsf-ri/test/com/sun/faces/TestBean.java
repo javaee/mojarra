@@ -189,6 +189,16 @@ public class TestBean extends Object {
         this.mapProperty = mapProperty;
     }
 
+    protected String modelLabel = "model label";
+
+    public void setModelLabel(String modelLabel) {
+        this.modelLabel = modelLabel;
+    }
+
+    public String getModelLabel() {
+        return modelLabel;
+    }
+
 
     public static class InnerBean extends Object {
 

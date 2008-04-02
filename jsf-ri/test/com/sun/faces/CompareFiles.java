@@ -1,5 +1,5 @@
 /*
- * $Id: CompareFiles.java,v 1.6 2003/02/20 22:49:45 ofung Exp $
+ * $Id: CompareFiles.java,v 1.7 2003/07/29 16:25:55 rlubke Exp $
  */
 
 /*
@@ -25,6 +25,8 @@ public class CompareFiles {
      */
     public static boolean filesIdentical (String newFileName, String oldFileName, List oldLinesToIgnore) 
             throws IOException {
+        System.out.println("NEW FILE: " + newFileName);
+        System.out.println("OLD FILE: " + oldFileName);
 
         boolean same = true;
 
@@ -48,6 +50,10 @@ public class CompareFiles {
 	}
 
 	while (null != newLine && null != oldLine) {
+
+        System.out.println(newLine);
+        System.out.println(oldLine);
+
 	    if (!newLine.equals(oldLine)) {
 
 		if (null != oldLinesToIgnore) {

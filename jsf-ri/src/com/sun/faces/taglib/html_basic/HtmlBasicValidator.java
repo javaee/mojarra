@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicValidator.java,v 1.2 2003/03/13 23:01:31 eburns Exp $
+ * $Id: HtmlBasicValidator.java,v 1.3 2003/07/29 16:25:23 rlubke Exp $
  */
 
 /*
@@ -99,8 +99,8 @@ public class HtmlBasicValidator extends FacesValidator {
 
 	/*
 
-	* <p>set failed to true unless tag has a key, image, or label
-	* attribute</p>.
+	* <p>set failed to true unless tag has a key, image, imageKey, label,
+	* or valueRef attribute</p>.
 
 	* <p>PRECONDITION: qn is a command_button</p>
 
@@ -108,25 +108,30 @@ public class HtmlBasicValidator extends FacesValidator {
 
 	protected void handleCommandButton(String ns, String ln, 
 					   String qn, Attributes a) {
-	    boolean 
+	    boolean
 		hasKey = false,
 		hasImage = false,
-		hasLabel = false;
+		hasLabel = false,
+        hasValueRef = false;
 	    for (int i = 0; i < a.getLength(); i++) {
                 if (a.getQName(i).equals("key")) {
 		    hasKey = true;
                 }
-                if (a.getQName(i).equals("image")) {
+                if (a.getQName(i).equals("image") ||
+                    a.getQName(i).equals("imageKey")) {
 		    hasImage = true;
                 }
                 if (a.getQName(i).equals("label")) {
 		    hasLabel = true;
                 }
+            if (a.getQName(i).equals("valueRef")) {
+                hasValueRef = true;
+            }
 	    }
-	    if (failed = ((hasKey || hasImage || hasLabel) != true)) {
-		failureMessages.append(qn + " must have either key or label attributes\n");
+	    if (failed = ((hasKey || hasImage || hasLabel || hasValueRef ) != true)) {
+		failureMessages.append(qn + " must have either key, label, image, imageKey, or valueRef attributes\n");
 	    }
-	    
+
 	}
  
     }

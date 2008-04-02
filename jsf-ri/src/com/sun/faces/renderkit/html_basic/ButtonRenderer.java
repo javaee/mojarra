@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.51 2003/06/26 18:52:41 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.52 2003/07/29 16:25:21 rlubke Exp $
  */
 
 /*
@@ -13,35 +13,12 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.MissingResourceException;
-
+import javax.faces.component.UICommand;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UICommand;
-
-import javax.faces.component.UIForm;
-import javax.faces.component.UIForm;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
-
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.ConversionException;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import java.io.IOException;
-import javax.faces.component.UICommand;
-import com.sun.faces.RIConstants;
-import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 
 /**
@@ -50,14 +27,11 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.51 2003/06/26 18:52:41 jvisvanathan Exp $
- * 
- * @see	Blah
- * @see	Bloo
+ * @version $Id: ButtonRenderer.java,v 1.52 2003/07/29 16:25:21 rlubke Exp $
  *
  */
 
-public class ButtonRenderer extends HtmlBasicRenderer {
+public class ButtonRenderer extends BaseCommandRenderer {
     //
     // Protected Constants
     //
@@ -78,10 +52,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // Constructors and Initializers    
     //
-
-    public ButtonRenderer() {
-        super();
-    }
 
     //
     // Class methods
@@ -104,56 +74,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 	return label;
     }
 
-    /**
-
-    * @return the image src if this component is configured to display
-    * an image label, null otherwise.
-
-    */
-
-    protected String getImageSrc(FacesContext context,
-                                 UIComponent component) {
-        String result = (String) component.getAttribute("image");
- 
-        if (result == null) {
-            try {
-                result = getKeyAndLookupInBundle(context, component, 
-                    "imageKey");
-            } catch (MissingResourceException e) {
-                // Do nothing since the absence of a resource is not an
-                // error.
-            }
-        }
-        if (result == null) {
-            return result;
-        }
-
-        StringBuffer sb = new StringBuffer();
-        if (result.startsWith("/")) {
-            sb.append(context.getExternalContext().getRequestContextPath());
-        }
-        sb.append(result);
-        return (context.getExternalContext().encodeURL(sb.toString()));
-    }
-
-    protected String getLabel(FacesContext context,
-                              UIComponent component) throws IOException {
-        String result = null;
-
-        try {
-            result = getKeyAndLookupInBundle(context, component, "key");
-        }
-        catch (MissingResourceException e) {
-            // Do nothing since the absence of a resource is not an
-            // error.
-        }
-        if (null == result) {
-            result = (String) component.getAttribute("label");
-        }
-        return result;
-    }
-
-    
     //
     // Methods From Renderer
     //
@@ -214,27 +134,27 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
         String imageSrc = getImageSrc(context, component);
         String label = getLabel(context, component);            
-        if (imageSrc != null || label != null) {
-            writer.write("<input type=");
-            if (null != imageSrc) {
-                writer.write("\"image\" src=\"");
-                writer.write(imageSrc);
-                writer.write("\"");
-                writer.write(" name=\"");
-                writer.write(component.getClientId(context));
-                writer.write("\"");
-            } else {
-                writer.write("\"");
-                writer.write(type.toLowerCase());
-                writer.write("\"");
-                writer.write(" name=\"");
-                writer.write(component.getClientId(context));
-                writer.write("\"");
-                writer.write(" value=\"");
-                writer.write(padLabel(label));
-                writer.write("\"");
-            }
-        } 
+
+         writer.write("<input type=");
+         if (imageSrc != null) {
+             writer.write("\"image\" src=\"");
+             writer.write(imageSrc);
+             writer.write("\"");
+             writer.write(" name=\"");
+             writer.write(component.getClientId(context));
+             writer.write("\"");
+         } else {
+             writer.write("\"");
+             writer.write(type.toLowerCase());
+             writer.write("\"");
+             writer.write(" name=\"");
+             writer.write(component.getClientId(context));
+             writer.write("\"");
+             writer.write(" value=\"");
+             writer.write(padLabel(label));
+             writer.write("\"");
+         }
+
 
         writer.write(Util.renderPassthruAttributes(context, component));
         writer.write(Util.renderBooleanPassthruAttributes(context, component));

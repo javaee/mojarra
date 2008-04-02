@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.39 2003/07/16 00:00:08 jvisvanathan Exp $
+ * $Id: Command_ButtonTag.java,v 1.40 2003/07/29 16:25:23 rlubke Exp $
  */
 
 /*
@@ -34,22 +34,16 @@ public class Command_ButtonTag extends FacesTag
     //
 
     // Attribute Instance Variables
-
-    protected String label = null;
     protected String image = null;
     protected String actionRef = null;
-    protected String action = null;
-    
+    protected String imageKey = null;
+
     // Relationship Instance Variables
 
     //
     // Constructors and Initializers    
     //
 
-    public Command_ButtonTag()
-    {
-        super();
-    }
 
     //
     // Class methods
@@ -63,32 +57,6 @@ public class Command_ButtonTag extends FacesTag
         actionRef = newActionRef;
     }
 
-    public String getActionRef() {
-        return actionRef;
-    }
-    
-    public void setAction(String newAction) {
-        action = newAction;
-    }
-
-    public String getAction() {
-        return action;
-    }
-    
-    public void setType(String buttonType) {
-        type = buttonType;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getLabel() { return label; }
-    public void setLabel(String newLabel) {
-        label = newLabel;
-    }
-
-    public String getImage() { return image; }
     public void setImage(String newImage) {
         image = newImage;
     }
@@ -109,13 +77,13 @@ public class Command_ButtonTag extends FacesTag
         if (action != null ) {
 	    button.setAction(action);
 	}
-        
+
         if (null != type) {
             button.setAttribute("type", type);
         }
 
         if (null != label) {
-            button.setAttribute("label", label);
+            button.setValue(label);
         }
 
         if (null != image) {
