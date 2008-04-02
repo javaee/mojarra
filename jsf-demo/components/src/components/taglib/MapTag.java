@@ -39,60 +39,50 @@
 
 package components.taglib;
 
-import javax.faces.component.UIComponent;
-import javax.faces.webapp.FacesTag;
 
-import components.components.UIMap;
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.UIComponentTag;
 
 
 /**
  * This class is the tag handler that evaluates the <code>map</code>
- *  custom tag.
- *
+ * custom tag.
  */
  
-public class MapTag extends FacesTag
-{
-// Attribute Instance Variables
-
-       public String currentArea = null;
+public class MapTag extends UIComponentTag {
 
 
-//
-// Constructors and Initializers    
-//
-
-public MapTag()
-{
-    super();
-}
-
-// 
-// Accessor methods for the <code>map</code> tag attributes
-//
-
-
+    private String currentArea = null;
     public void setCurrentArea(String area) {
     	currentArea = area;
     }
 
-//
-// Sets the values of the properties of the <code>UIMap</code> component to the values 
-// specified in the tag.
-//
-	public void overrideProperties(UIComponent component) {
-		super.overrideProperties(component);
-		UIMap map = (UIMap) component;
-		if (null != currentArea) {
-		    map.setAttribute("currentArea", currentArea);
-		}
-	}    
 
-// Gets the renderer associated with this component    
-    	public String getRendererType() { return null; } 
+    public String getComponentType() {
+        return ("Map");
+    }
+
+
+    public String getRendererType() {
+        return (null);
+    }
+
+
+    public void release() {
+        super.release();
+        currentArea = null;
+    }
+
+
+    protected void overrideProperties(UIComponent component) {
+
+        super.overrideProperties(component);
+
+        if (currentArea != null) {
+            component.setAttribute("currentArea", currentArea);
+        }
+
+    }
+
     
-    	public String getComponentType() {
-        	return ("Map");
-    	}
-
-} // end of class
+}

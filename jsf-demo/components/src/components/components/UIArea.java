@@ -39,14 +39,8 @@
 package components.components;
 
 
-import java.io.IOException;
-import javax.faces.FacesException;
-import javax.faces.component.UIOutput;
-import javax.faces.context.FacesContext;
-import javax.faces.event.FacesEvent;
-import javax.faces.context.ResponseWriter;
+import javax.faces.component.base.UIOutputBase;
 
-import components.renderkit.Util;
 
 /**
  * This class represents the <code>UIArea</code> component, which corresponds
@@ -54,13 +48,7 @@ import components.renderkit.Util;
  * geometric regions of an image map. 
 */
 
-public class UIArea extends UIOutput {
+// PENDING(craigmcc) - just use UIOutputBase directly?
+public class UIArea extends UIOutputBase {
 
-    // Component type for this component
-    public static final String TYPE = "Area";
-
-    // Return our component type
-    public String getComponentType() {
-        return (TYPE);
-    }
 }

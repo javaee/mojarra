@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetTag.java,v 1.3 2003/04/30 06:31:27 eburns Exp $
+ * $Id: ResultSetTag.java,v 1.4 2003/08/25 21:39:41 craigmcc Exp $
  */
 
 /*
@@ -44,46 +44,12 @@ package components.taglib;
 
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPanel;
-import javax.faces.webapp.FacesBodyTag;
+import javax.faces.webapp.UIComponentBodyTag;
 import javax.servlet.jsp.JspException;
 
-public class ResultSetTag extends FacesBodyTag {
 
-
-    private String rowsPerPage = null;
-    public String getRowsPerPage()
-    {
-	return rowsPerPage;
-    }
-    
-    public void setRowsPerPage(String newRowsPerPage)
-    {
-	rowsPerPage = newRowsPerPage;
-    }
-
-    private String navFacetOrientation = null;
-    public String getNavFacetOrientation()
-    {
-	return navFacetOrientation;
-    }
-    
-    public void setNavFacetOrientation(String newNavFacetOrientation)
-    {
-	navFacetOrientation = newNavFacetOrientation;
-    }
-
-    private String scrollerControlsLocation = null;
-    public String getScrollerControlsLocation()
-    {
-	return scrollerControlsLocation;
-    }
-    
-    public void setScrollerControlsLocation(String newScrollerControlsLocation)
-    {
-	scrollerControlsLocation = newScrollerControlsLocation;
-    }
-
+// PENDING(craigmcc) -- Why a body tag?
+public class ResultSetTag extends UIComponentBodyTag {
 
 
     private String columnClasses = null;
@@ -104,6 +70,12 @@ public class ResultSetTag extends FacesBodyTag {
     }
 
 
+    private String navFacetOrientation = null;
+    public void setNavFacetOrientation(String navFacetOrientation) {
+	this.navFacetOrientation = navFacetOrientation;
+    }
+
+
     private String panelClass = null;
     public void setPanelClass(String panelClass) {
         this.panelClass = panelClass;
@@ -113,6 +85,20 @@ public class ResultSetTag extends FacesBodyTag {
     private String rowClasses = null;
     public void setRowClasses(String rowClasses) {
         this.rowClasses = rowClasses;
+    }
+
+
+    private int rowsPerPage = 0;
+    private boolean rowsPerPageSet = false;
+    public void setRowsPerPage(int rowsPerPage) {
+	this.rowsPerPage = rowsPerPage;
+        this.rowsPerPageSet = true;
+    }
+
+
+    private String scrollerControlsLocation = null;
+    public void setScrollerControlsLocation(String scrollerControlsLocation) {
+	this.scrollerControlsLocation = scrollerControlsLocation;
     }
 
 
@@ -131,48 +117,41 @@ public class ResultSetTag extends FacesBodyTag {
         this.columnClasses = null;
         this.footerClass = null;
         this.headerClass = null;
+        this.navFacetOrientation = null;
         this.panelClass = null;
         this.rowClasses = null;
+        this.rowsPerPage = 0;
+        this.rowsPerPageSet = false;
+        this.scrollerControlsLocation = null;
     }
 
 
     protected void overrideProperties(UIComponent component) {
+
         super.overrideProperties(component);
-        if ((columnClasses != null) &&
-            (component.getAttribute("columnClasses") == null)) {
+
+        if (columnClasses != null) {
             component.setAttribute("columnClasses", columnClasses);
         }
-        if ((footerClass != null) &&
-            (component.getAttribute("footerClass") == null)) {
+        if (footerClass != null) {
             component.setAttribute("footerClass", footerClass);
         }
-        if ((headerClass != null) &&
-            (component.getAttribute("headerClass") == null)) {
+        if (headerClass != null) {
             component.setAttribute("headerClass", headerClass);
         }
-        if ((panelClass != null) &&
-            (component.getAttribute("panelClass") == null)) {
-            component.setAttribute("panelClass", panelClass);
-        }
-        if ((rowClasses != null) &&
-            (component.getAttribute("rowClasses") == null)) {
-            component.setAttribute("rowClasses", rowClasses);
-        }
-        if ((rowsPerPage != null) &&
-            (component.getAttribute("rowsPerPage") == null)) {
-	    try {
-		component.setAttribute("rowsPerPage", 
-				       Integer.valueOf(rowsPerPage));
-	    }
-	    catch (NumberFormatException e) {
-	    }
-        }
-        if ((navFacetOrientation != null) &&
-            (component.getAttribute("navFacetOrientation") == null)) {
+        if (navFacetOrientation != null) {
             component.setAttribute("navFacetOrientation", navFacetOrientation);
         }
-        if ((scrollerControlsLocation != null) &&
-            (component.getAttribute("scrollerControlsLocation") == null)) {
+        if (panelClass != null) {
+            component.setAttribute("panelClass", panelClass);
+        }
+        if (rowClasses != null) {
+            component.setAttribute("rowClasses", rowClasses);
+        }
+        if (rowsPerPageSet) {
+            component.setAttribute("rowsPerPage", new Integer(rowsPerPage));
+        }
+        if (scrollerControlsLocation != null) {
             component.setAttribute("scrollerControlsLocation", 
 				   scrollerControlsLocation);
         }

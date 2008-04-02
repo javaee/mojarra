@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabLabelTag.java,v 1.3 2003/04/30 06:31:27 eburns Exp $
+ * $Id: PaneTabLabelTag.java,v 1.4 2003/08/25 21:39:41 craigmcc Exp $
  */
 
 /*
@@ -43,11 +43,8 @@
 package components.taglib;
 
 
-import components.components.PaneComponent;
-import java.io.IOException;
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.FacesTag;
-import javax.servlet.jsp.JspException;
+import javax.faces.webapp.UIComponentTag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -56,59 +53,62 @@ import org.apache.commons.logging.LogFactory;
  * This class creates a <code>PaneComponent</code> instance
  * that represents a tab button control on the tab pane.
  */
-public class PaneTabLabelTag extends FacesTag {
+public class PaneTabLabelTag extends UIComponentTag {
 
     private static Log log = LogFactory.getLog(PaneTabLabelTag.class);
 
-    protected String label = null;
-    protected String image = null;
-    protected String commandName = null;
 
-    public String getLabel() { return label; }
-    public void setLabel(String newLabel) {
-        label = newLabel;
+    private String commandName = null;
+    public void setCommandName(String newCommandName) {
+        commandName = newCommandName;
     }
 
-    public String getImage() { return image; }
+
+    private String image = null;
     public void setImage(String newImage) {
         image = newImage;
     }
 
-    public String getCommandName() { return commandName; }
-    public void setCommandName(String newCommandName) {
-        commandName = newCommandName;
+
+    private String label = null;
+    public void setLabel(String newLabel) {
+        label = newLabel;
     }
+
 
     public String getComponentType() {
         return ("Pane");
     }
 
+
     public String getRendererType() {
         return ("TabLabel");
     }
 
+
     public void release() {
         super.release();
-        this.label = null;
-        this.image = null;
         this.commandName = null;
+        this.image = null;
+        this.label = null;
     }
+
 
     protected void overrideProperties(UIComponent component) {
 
-        // Standard override processing
         super.overrideProperties(component);
 
-        PaneComponent pane = (PaneComponent)component;
+        if (commandName != null) {
+            component.setAttribute("commandName", commandName);
+        }
+        if (image != null) {
+            component.setAttribute("image", image);
+        }
+        if (label != null) {
+            component.setAttribute("label", label);
+        }
 
-        if (null == pane.getAttribute("label")) {
-            pane.setAttribute("label", getLabel());
-        }
-        if (null == pane.getAttribute("image")) {
-            pane.setAttribute("image", getImage());
-        }
-        if (null == pane.getAttribute("commandName")) {
-            pane.setAttribute("commandName", getCommandName());
-        }
     }
+
+
 }

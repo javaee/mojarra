@@ -1,5 +1,5 @@
 /*
- * $Id: PaneComponent.java,v 1.3 2003/03/27 19:43:31 jvisvanathan Exp $
+ * $Id: PaneComponent.java,v 1.4 2003/08/25 21:39:32 craigmcc Exp $
  */
 
 /*
@@ -42,13 +42,14 @@
 
 package components.components;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.base.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
@@ -67,19 +68,14 @@ public class PaneComponent extends UIComponentBase {
 
     private static Log log = LogFactory.getLog(PaneComponent.class);
 
+
     protected List listeners[] = null;
+
 
     // creates and adds a listener;
     public PaneComponent() {
         PaneSelectedListener listener = new PaneSelectedListener();
         addPaneSelectedListener(listener);    
-    }
-
-    // Component type for this component
-    public static final String TYPE = "PaneComponent";
-
-    public String getComponentType() {
-        return (TYPE);
     }
 
 
@@ -98,7 +94,6 @@ public class PaneComponent extends UIComponentBase {
             return (false);
         }
     }
-
     public void setSelected(boolean selected) {
         if (selected) {
             setAttribute("selected", Boolean.TRUE);
@@ -107,13 +102,14 @@ public class PaneComponent extends UIComponentBase {
         }
     }
 
+
     // Ignore update model requests
     public void updateModel(FacesContext context) {
     }
 
+
     // adds a listener
     public void addPaneSelectedListener(PaneSelectedListener listener) {
-
         if (listener == null) {
             throw new NullPointerException();
         }
@@ -127,7 +123,9 @@ public class PaneComponent extends UIComponentBase {
         listeners[ordinal].add(listener);
     }
 
-   // invokes listener method passing event as argument 
+
+    // PENDING(craigmcc) - reflect the "untangling broadcast" changes
+    // invokes listener method passing event as argument 
     public boolean broadcast(FacesEvent event, PhaseId phaseId)
         throws AbortProcessingException {
 
@@ -156,6 +154,8 @@ public class PaneComponent extends UIComponentBase {
         }
     }
 
+
+    // PENDING(craigmcc) - reflect the "untangling broadcast" changes
     protected void broadcast(PaneSelectedEvent event, List list) {
 
         if (list == null) {
@@ -168,6 +168,7 @@ public class PaneComponent extends UIComponentBase {
             listener.processPaneSelectedEvent(event);
         }
     }
+
 
     /**
      * <p>Faces Listener implementation which sets the selected tab
@@ -197,10 +198,10 @@ public class PaneComponent extends UIComponentBase {
             // to "unselected";
             UIComponent tabControl = findParentForRendererType(
                 source, "Tabbed");
-            int n = tabControl.getChildCount();
+            int n = tabControl.getChildren().size();
             for (int i = 0; i < n; i++) {
-                PaneComponent pane = (PaneComponent)tabControl.getChild(i);
-                if (pane.getComponentId().equals(id)) {
+                PaneComponent pane = (PaneComponent)tabControl.getChildren().get(i);
+                if (pane.getId().equals(id)) {
                     pane.setSelected(true);
                     paneSelected = true;
                 } else {
@@ -211,7 +212,7 @@ public class PaneComponent extends UIComponentBase {
             if (!paneSelected) {
                 log.warn("Cannot select pane for id=" + id + "," +
                      ", selecting first pane");
-                ((PaneComponent) tabControl.getChild(0)).setSelected(true);
+                ((PaneComponent) tabControl.getChildren().get(0)).setSelected(true);
             }
         }
     }
@@ -246,4 +247,6 @@ public class PaneComponent extends UIComponentBase {
         }
         return currentComponent;
     }
+
+
 }

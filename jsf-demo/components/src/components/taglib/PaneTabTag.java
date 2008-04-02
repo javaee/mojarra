@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabTag.java,v 1.3 2003/04/30 06:31:27 eburns Exp $
+ * $Id: PaneTabTag.java,v 1.4 2003/08/25 21:39:41 craigmcc Exp $
  */
 
 /*
@@ -43,11 +43,8 @@
 package components.taglib;
 
 
-import components.components.PaneComponent;
-import java.io.IOException;
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.FacesTag;
-import javax.servlet.jsp.JspException;
+import javax.faces.webapp.UIComponentTag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -56,37 +53,51 @@ import org.apache.commons.logging.LogFactory;
  * This class creates a <code>PaneComponent</code> instance
  * that represents an individual tab on the overall control.
  */
-public class PaneTabTag extends FacesTag {
+public class PaneTabTag extends UIComponentTag {
+
 
     private static Log log = LogFactory.getLog(PaneTabTag.class);
 
-    // The selected flag for this pane
+
     private boolean selected = false;
+    private boolean selectedSet = false;
     public void setSelected(boolean selected) {
         this.selected = selected;
+        selectedSet = true;
     }
+
 
     public String getComponentType() {
         return ("Pane");
     }
 
+
     public String getRendererType() {
         return ("Tab");
     }
 
+
     public void release() {
         super.release();
         this.selected = false;
+        this.selectedSet = false;
     }
+
 
     protected void overrideProperties(UIComponent component) {
 
-        // Standard override processing
         super.overrideProperties(component);
-        if (selected && getCreated() &&
-            !((PaneComponent) component).isSelected()) {
-            log.debug("OVERRIDING " + component.getComponentId());
-            component.setAttribute("selected", Boolean.TRUE);
+
+        if (selectedSet) {
+            log.debug("OVERRIDING " + component.getId());
+            if (selected) {
+                component.setAttribute("selected", Boolean.TRUE);
+            } else {
+                component.setAttribute("selected", Boolean.FALSE);
+            }
         }
+
     }
+
+
 }

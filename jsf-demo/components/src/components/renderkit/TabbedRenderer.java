@@ -1,5 +1,5 @@
 /*
- * $Id: TabbedRenderer.java,v 1.3 2003/04/30 06:31:22 eburns Exp $
+ * $Id: TabbedRenderer.java,v 1.4 2003/08/25 21:39:36 craigmcc Exp $
  */
 
 /*
@@ -81,7 +81,7 @@ public class TabbedRenderer extends BaseRenderer {
         throws IOException {
 
         if (log.isTraceEnabled()) {
-            log.trace("encodeBegin(" + component.getComponentId() + ")");
+            log.trace("encodeBegin(" + component.getId() + ")");
         }
 
         // Render the outer border and tabs of our owning table
@@ -102,7 +102,7 @@ public class TabbedRenderer extends BaseRenderer {
         throws IOException {
 
         if (log.isTraceEnabled()) {
-            log.trace("encodeChildren(" + component.getComponentId() + ")");
+            log.trace("encodeChildren(" + component.getId() + ")");
         }
 
     }
@@ -112,11 +112,11 @@ public class TabbedRenderer extends BaseRenderer {
         throws IOException {
 
         if (log.isTraceEnabled()) {
-            log.trace("encodeEnd(" + component.getComponentId() + ")");
+            log.trace("encodeEnd(" + component.getId() + ")");
         }
 
         // Ensure that exactly one of our child PaneComponents is selected
-        Iterator kids = component.getChildren();
+        Iterator kids = component.getChildren().iterator();
         PaneComponent firstPane = null;
         PaneComponent selectedPane = null;
         int n = 0;
@@ -157,7 +157,7 @@ public class TabbedRenderer extends BaseRenderer {
             percent = 100;
         }
             
-        kids = component.getChildren();
+        kids = component.getChildren().iterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (!(kid instanceof PaneComponent)) {
@@ -178,7 +178,7 @@ public class TabbedRenderer extends BaseRenderer {
             }
             writer.write(">");
 
-            UIComponent facet = (UIComponent)pane.getFacet("label");
+            UIComponent facet = (UIComponent) pane.getFacets().get("label");
             if (facet != null) {
                 if (pane.isSelected() && (selectedClass != null)) {
                     facet.setAttribute("paneTabLabelClass", selectedClass);

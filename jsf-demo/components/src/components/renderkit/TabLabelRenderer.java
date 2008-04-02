@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.8 2003/07/07 21:01:09 eburns Exp $
+ * $Id: TabLabelRenderer.java,v 1.9 2003/08/25 21:39:36 craigmcc Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ import org.apache.commons.beanutils.ConversionException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.8 2003/07/07 21:01:09 eburns Exp $
+ * @version $Id: TabLabelRenderer.java,v 1.9 2003/08/25 21:39:36 craigmcc Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -186,13 +186,6 @@ public class TabLabelRenderer extends BaseRenderer {
     //
     // Methods From Renderer
     //
-
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException("Null component type parameter");
-        }    
-        return (componentType.equals(PaneComponent.TYPE));
-    }
 
     public void decode(FacesContext context, UIComponent component) 
             throws IOException {

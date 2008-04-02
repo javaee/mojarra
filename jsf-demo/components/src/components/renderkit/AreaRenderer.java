@@ -65,16 +65,6 @@ public class AreaRenderer extends BaseRenderer {
         super();
        }
 
- // Returns true if this renderer can render the specified component
- // type.  This renderer supports only the <code>UIArea</code> component,
- // and so the <code>componentType</code> argument must be 
- // <code>UIArea.TYPE</code> 
-       public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException();
-        }    
-        return (componentType.equals(UIArea.TYPE));
-    }
 
 // Overrides the default behavior and takes no action.     
      public void encodeBegin(FacesContext context, UIComponent component) 
@@ -114,7 +104,7 @@ public class AreaRenderer extends BaseRenderer {
 	writer.write(" coords=\"");
 	writer.write(ia.getCoords());
 	writer.write("\" onclick=\"document.forms[0].selectedArea.value='");
-	writer.write(component.getComponentId());
+	writer.write(component.getId());
 	writer.write("'; document.forms[0].submit()\"");
 	writer.write(" onmouseover=\"");
 	writer.write("document.forms[0].mapImage.src='");

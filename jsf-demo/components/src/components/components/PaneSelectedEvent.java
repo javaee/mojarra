@@ -1,5 +1,5 @@
 /*
- * $Id: PaneSelectedEvent.java,v 1.2 2003/02/21 23:44:49 ofung Exp $
+ * $Id: PaneSelectedEvent.java,v 1.3 2003/08/25 21:39:32 craigmcc Exp $
  */
 
 /*
@@ -42,8 +42,11 @@
 
 package components.components;
 
+
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
+
 
 /**
  * A custom event which indicates the currently selected pane
@@ -51,25 +54,31 @@ import javax.faces.event.FacesEvent;
  */
 public class PaneSelectedEvent extends FacesEvent {
 
-    // The component id of the newly selected child pane
-    private String id = null;
 
     public PaneSelectedEvent(UIComponent component, String id) {
         super(component);
         this.id = id;
     }
 
+
+    // The component id of the newly selected child pane
+    private String id = null;
     public String getId() {
         return (this.id);
     }
 
+
     public String toString() {
-        StringBuffer sb = new StringBuffer("PaneSelectedEvent[compoundId=");
-        sb.append(getComponent().getComponentId());
-        sb.append(",id=");
+        StringBuffer sb = new StringBuffer("PaneSelectedEvent[id=");
         sb.append(id);
         sb.append("]");
         return (sb.toString());
     }
+
+
+    // PENDING(craigmcc)
+    public boolean isAppropriateListener(FacesListener listener) { return (false); }
+    public void processListener(FacesListener listener) { }
+
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetRenderer.java,v 1.5 2003/04/30 06:31:21 eburns Exp $
+ * $Id: ResultSetRenderer.java,v 1.6 2003/08/25 21:39:36 craigmcc Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ResultSetRenderer.java,v 1.5 2003/04/30 06:31:21 eburns Exp $
+ * @version $Id: ResultSetRenderer.java,v 1.6 2003/08/25 21:39:36 craigmcc Exp $
  *  
  */
 
@@ -177,13 +177,13 @@ public class ResultSetRenderer extends BaseRenderer {
 	// attach our hack Facet on the initial render, but not on
 	// postback
 	ResultSetControls scroller = 
-	    (ResultSetControls) component.getFacet(SCROLLER_COMPONENT);
+	    (ResultSetControls) component.getFacets().get(SCROLLER_COMPONENT);
 
 	if (null == scroller) {
-	    component.addFacet(SCROLLER_COMPONENT, scroller = 
-			       newResultSetScroller(component,
-						    (UIComponent) 
-						    component.getChild(0)));
+	    component.getFacets().put(SCROLLER_COMPONENT, scroller = 
+                                      newResultSetScroller(component,
+                                                           (UIComponent) 
+                                                           component.getChildren().get(0)));
 	}
 
         // Set up variables we will need
@@ -209,10 +209,10 @@ public class ResultSetRenderer extends BaseRenderer {
 	}
 
         // Process the table header (if any)
-        if (null != (facet = component.getFacet("header"))) {
+        if (null != (facet = (UIComponent) component.getFacets().get("header"))) {
             writer.write("<tr>\n");
 	    // If the header has kids, render them recursively
-	    if (null != (kids = facet.getChildren())) {
+	    if (null != (kids = facet.getChildren().iterator())) {
 		while (kids.hasNext()) {
 		    UIComponent kid = (UIComponent) kids.next();
 		    // write out the table header
@@ -242,11 +242,11 @@ public class ResultSetRenderer extends BaseRenderer {
         }
 	
 	// Make sure we have only one child
-	if (1 < component.getChildCount()) {
+	if (1 < component.getChildren().size()) {
 	    throw new IOException("ResultSetRenderer only prepared for one child");
 	}
 	
-	UIComponent group = (UIComponent) component.getChild(0);
+	UIComponent group = (UIComponent) component.getChildren().get(0);
 	String var = (String) group.getAttribute("var");
 	
 	Iterator rows = getIterator(context, scroller, group);
@@ -274,7 +274,7 @@ public class ResultSetRenderer extends BaseRenderer {
 	    
 	    // Process each column to be rendered
 	    columnStyle = 0;
-	    Iterator columns = group.getChildren();
+	    Iterator columns = group.getChildren().iterator();
 	    // number of columns will equal the total number of elements
 	    // in the iterator. No of rows will be equal to the number of
 	    // rows in the list bean.
@@ -304,10 +304,10 @@ public class ResultSetRenderer extends BaseRenderer {
 	}
 
         // Process the table footer (if any)
-        if (null != (facet = component.getFacet("footer"))) {
+        if (null != (facet = (UIComponent) component.getFacets().get("footer"))) {
             writer.write("<tr>\n");
 	    // If the footer has kids, render them recursively
-	    if (null != (kids = facet.getChildren())) {
+	    if (null != (kids = facet.getChildren().iterator())) {
 		while (kids.hasNext()) {
 		    UIComponent kid = (UIComponent) kids.next();
 		    // write out the table footer
@@ -373,7 +373,7 @@ public class ResultSetRenderer extends BaseRenderer {
         if (component.getRendersChildren()) {
             component.encodeChildren(context);
         } else {
-            Iterator kids = component.getChildren();
+            Iterator kids = component.getChildren().iterator();
             while (kids.hasNext()) {
                 UIComponent kid = (UIComponent) kids.next();
                 encodeRecursive(context, kid);

@@ -1,5 +1,5 @@
 /*
- * $Id: BaseRenderer.java,v 1.5 2003/04/30 06:31:21 eburns Exp $
+ * $Id: BaseRenderer.java,v 1.6 2003/08/25 21:39:35 craigmcc Exp $
  */
 
 /*
@@ -102,12 +102,12 @@ public abstract class BaseRenderer extends Renderer {
         if (null != closestContainer) {
 
             // If there is no componentId, generate one and store it
-            if (component.getComponentId() == null) {
+            if (component.getId() == null) {
                 // Don't call setComponentId() because it checks for
                 // uniqueness.  No need.
                 clientId = closestContainer.generateClientId();
             } else {
-                clientId = component.getComponentId();
+                clientId = component.getId();
             }
 
             // build the client side id
@@ -138,7 +138,7 @@ public abstract class BaseRenderer extends Renderer {
         // if the bundleName is null for this component, it might have
         // been set on the root component.
         if ( bundleName == null ) {
-            UIComponent root = context.getTree().getRoot();
+            UIComponent root = context.getViewRoot();
 
             bundleName = (String)root.getAttribute(BUNDLE_ATTR);
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: GraphComponent.java,v 1.3 2003/03/27 19:43:30 jvisvanathan Exp $
+ * $Id: GraphComponent.java,v 1.4 2003/08/25 21:39:32 craigmcc Exp $
  */
 
 /*
@@ -43,50 +43,47 @@
 package components.components;
 
 
+import components.model.Graph;
+import components.model.Node;
+import components.renderkit.Util;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
-
-import components.model.Graph;
-import components.model.Node;
-import components.renderkit.Util;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import javax.faces.FacesException;
+import javax.faces.component.base.UIOutputBase;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIOutput;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
  * Component wrapping a {@link Graph} object that is pointed at by the
- * local value or model reference expression.  This component supports
+ * local value or value reference expression.  This component supports
  * the processing of a {@link ActionEvent} that will toggle the expanded
  * state of the specified {@link Node} in the {@link Graph}.
  */
 
-public class GraphComponent extends UIOutput {
+public class GraphComponent extends UIOutputBase {
 
 
     private static Log log = LogFactory.getLog(GraphComponent.class);
 
-    // Component type for this component
-    public static final String TYPE = "GraphComponent";
 
     protected List listeners[] = null;
+
+
     public GraphComponent() {
         GraphListener listener = new GraphListener();
         addGraphListener(listener);    
     }   
     
 
+    // PENDING(craigmcc) - reflect the "untangling broadcast" changes
     // adds a listener
     public void addGraphListener(GraphListener listener) {
 
@@ -103,7 +100,9 @@ public class GraphComponent extends UIOutput {
         listeners[ordinal].add(listener);
     }
 
-   // invokes listener method passing event as argument 
+
+    // PENDING(craigmcc) - reflect the "untangling broadcast" changes
+    // invokes listener method passing event as argument 
     public boolean broadcast(FacesEvent event, PhaseId phaseId)
         throws AbortProcessingException {
 
@@ -130,8 +129,11 @@ public class GraphComponent extends UIOutput {
         } else {
             throw new IllegalArgumentException();
         }
+
     }
 
+
+    // PENDING(craigmcc) - reflect the "untangling broadcast" changes
     protected void broadcast(GraphEvent event, List list) {
 
         if (list == null) {
@@ -145,15 +147,7 @@ public class GraphComponent extends UIOutput {
         }
     }
 
-    // Return our component type
-    public String getComponentType() {
-        return (TYPE);
-    }
 
-    // Ignore update model requests
-    public void updateModel(FacesContext context) {
-    }
-    
     /**
      * <p>Faces Listener implementation which toggles the selected Node
      * in the GraphComponent;</p>

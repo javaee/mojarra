@@ -38,86 +38,63 @@
  
 package components.taglib;
 
-import javax.faces.component.UIComponent;
-import javax.faces.webapp.FacesTag;
 
 import components.components.UIArea;
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.UIComponentTag;
+
 
 /**
  * This class is the tag handler that evaluates the <code>area</code>
- *  custom tag.
- *
+ * custom tag.
  */
 
-public class AreaTag extends FacesTag
-{
+public class AreaTag extends UIComponentTag {
 
-    // Attribute Instance Variables
     
-    protected String onmouseover = null;
-    protected String onmouseout = null;
-    protected String valueRef = null;
-    
-    //
-    // Constructors and Initializers    
-    //
-
-    public AreaTag()
-    {
-        super();
-    }
-    // 
-    // Accessor methods for the <code>area</code> tag attributes
-    //
-   
-    public String getOnmouseover() {
-        return onmouseover;
+    private String onmouseout = null;
+    public void setOnmouseout(String newonmouseout) {
+        onmouseout = newonmouseout;
     }
 
+
+    private String onmouseover = null;
     public void setOnmouseover(String newonmouseover) {
         onmouseover = newonmouseover;
     }
 
-    public String getOnmouseout() {
-        return onmouseout;
-    }
 
-    public void setOnmouseout(String newonmouseout) {
-        onmouseout = newonmouseout;
-    }
-    
-    public String getValueRef()
-    {
-	return valueRef;
-    }
-    
-    public void setValueRef(String newValueRef)
-    {
+    private String valueRef = null;
+    public void setValueRef(String newValueRef) {
 	valueRef = newValueRef;
     }
 
-    //
-    // Sets the values of the properties of the <code>UIArea</code> component to the values 
-    // specified in the tag.
-    //
-    public void overrideProperties(UIComponent component) {
-        super.overrideProperties(component);
-        UIArea areaComp = (UIArea)component;
-        if(areaComp.getValueRef() == null && valueRef != null ) {
-            areaComp.setValueRef(valueRef);
-        }        
-        if(areaComp.getAttribute("onmouseover") == null) {
-            areaComp.setAttribute("onmouseover", getOnmouseover());
-        }    
-        if(areaComp.getAttribute("onmouseout") == null) {
-            areaComp.setAttribute("onmouseout", getOnmouseout());
-        }    
-    }
-    // Gets the renderer associated with this component    
-    public String getRendererType() { return "Area"; } 
 
     public String getComponentType() {
             return ("Area");
     }
 
-} // end of class
+    
+    public String getRendererType() {
+        return "Area";
+    } 
+    
+
+    protected void overrideProperties(UIComponent component) {
+
+        super.overrideProperties(component);
+
+        if (onmouseover != null) {
+            component.setAttribute("onmouseover", onmouseover);
+        }
+        if (onmouseout != null) {
+            component.setAttribute("onmouseout", onmouseout);
+        }
+        if (valueRef != null) {
+            ((UIArea) component).setValueRef(valueRef);
+        }
+
+    }
+
+
+}

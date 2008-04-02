@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuBarTag.java,v 1.5 2003/04/30 06:31:26 eburns Exp $
+ * $Id: GraphMenuBarTag.java,v 1.6 2003/08/25 21:39:40 craigmcc Exp $
  */
 
 /*
@@ -43,23 +43,31 @@
 package components.taglib;
 
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.webapp.FacesTag;
-import javax.servlet.jsp.JspException;
 import components.components.GraphComponent;
 import components.model.Graph;
-import javax.faces.context.FacesContext;
 import components.renderkit.Util;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
+import javax.faces.context.FacesContext;
+import javax.faces.webapp.UIComponentTag;
+
 
 /**
- * This class creates a <code>Graph</code> instance if there is no modelReference
- * attribute specified on the component, represented by this tag and
+ * This class creates a <code>Graph</code> instance if there is no
+ * valueRef attribute specified on the component, represented by this tag and
  * stores it against the attribute name "graph_menu" in session scope.
  */
-public class GraphMenuBarTag extends FacesTag {
+
+public class GraphMenuBarTag extends UIComponentTag {
+
 
     protected String action_listener = null;
+    public void setAction_listener(String action_listener) {
+        this.action_listener = action_listener;
+    }
+
+
+
     protected String graphClass = null;
     protected String selectedClass = null;
     protected String unselectedClass = null;
@@ -90,9 +98,6 @@ public class GraphMenuBarTag extends FacesTag {
         return (this.action_listener);
     }
 
-    public void setAction_listener(String action_listener) {
-        this.action_listener = action_listener;
-    }
 
     /**
      * The CSS style <code>class</code> to be applied to the text

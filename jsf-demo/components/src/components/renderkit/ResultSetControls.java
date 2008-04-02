@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.7 2003/08/12 18:22:12 eburns Exp $
+ * $Id: ResultSetControls.java,v 1.8 2003/08/25 21:39:36 craigmcc Exp $
  */
 
 /*
@@ -50,9 +50,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.component.UIOutput;
-import javax.faces.component.UIInput;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIComponent;
+import javax.faces.component.base.UIInputBase;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -64,14 +64,14 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.7 2003/08/12 18:22:12 eburns Exp $
+ * @version $Id: ResultSetControls.java,v 1.8 2003/08/25 21:39:36 craigmcc Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-class ResultSetControls extends UIInput {
+class ResultSetControls extends UIInputBase {
 
 //
 // Protected Constants
@@ -306,7 +306,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 
 	// render the facet pertaining to this widget type in the NORTH
 	// and WEST cases.
-        if (null != (facet = yourPanel.getFacet(facetName))) {
+        if (null != (facet = (UIComponent) yourPanel.getFacets().get(facetName))) {
 	    // If we're rendering a "go to the Nth page" link
 	    if (isPageNumber) {
 		// See if the user specified an orientation
@@ -333,7 +333,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 	    // The difference between NORTH and EAST is that NORTH
 	    // requires a <br>.
 	    if (facetOrientation == ResultSetRenderer.NORTH) {
-		writer.startElement("br");
+		writer.startElement("br", null); // PENDING(craigmcc)
 		writer.endElement("br");
 	    }
 	}
@@ -364,7 +364,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 	// output the facet in the EAST and SOUTH cases
 	if (null != facet) {
 	    if (facetOrientation == ResultSetRenderer.SOUTH) {
-		writer.startElement("br");
+		writer.startElement("br", null); // PENDING(craigmcc)
 		writer.endElement("br");
 	    }
 	    // The difference between SOUTH and WEST is that SOUTH

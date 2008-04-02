@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.6 2003/07/07 21:01:09 eburns Exp $
+ * $Id: MenuBarRenderer.java,v 1.7 2003/08/25 21:39:35 craigmcc Exp $
  */
 
 /*
@@ -86,16 +86,6 @@ public class MenuBarRenderer extends BaseRenderer {
     protected UIComponent component = null;
     protected FacesContext context = null;
     
-    public boolean supportsComponentType(UIComponent component) {
-        return (component instanceof GraphComponent);
-    }
-
-
-    public boolean supportsComponentType(String componentType) {
-        return (componentType.equals(GraphComponent.TYPE));
-    }
-
-
     public void decode(FacesContext context, UIComponent component)
         throws IOException {
             

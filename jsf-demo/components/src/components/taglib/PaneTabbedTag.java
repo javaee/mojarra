@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabbedTag.java,v 1.3 2003/04/30 06:31:27 eburns Exp $
+ * $Id: PaneTabbedTag.java,v 1.4 2003/08/25 21:39:41 craigmcc Exp $
  */
 
 /*
@@ -43,11 +43,8 @@
 package components.taglib;
 
 
-import components.components.PaneComponent;
-import java.io.IOException;
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.FacesTag;
-import javax.servlet.jsp.JspException;
+import javax.faces.webapp.UIComponentTag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -56,7 +53,7 @@ import org.apache.commons.logging.LogFactory;
  * This class creates a <code>PaneComponent</code> instance
  * that represents a the overall tabbed pane control.
  */
-public class PaneTabbedTag extends FacesTag {
+public class PaneTabbedTag extends UIComponentTag {
 
 
     private static Log log = LogFactory.getLog(PaneTabbedTag.class);
@@ -106,23 +103,22 @@ public class PaneTabbedTag extends FacesTag {
 
 
     protected void overrideProperties(UIComponent component) {
+
         super.overrideProperties(component);
-        if ((contentClass != null) &&
-            (component.getAttribute("contentClass") == null)) {
+
+        if (contentClass != null) {
             component.setAttribute("contentClass", contentClass);
         }
-        if ((paneClass != null) &&
-            (component.getAttribute("paneClass") == null)) {
+        if (paneClass != null) {
             component.setAttribute("paneClass", paneClass);
         }
-        if ((selectedClass != null) &&
-            (component.getAttribute("selectedClass") == null)) {
+        if (selectedClass != null) {
             component.setAttribute("selectedClass", selectedClass);
         }
-        if ((unselectedClass != null) &&
-            (component.getAttribute("unselectedClass") == null)) {
+        if (unselectedClass != null) {
             component.setAttribute("unselectedClass", unselectedClass);
         }
+
     }
 
 

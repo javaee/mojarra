@@ -1,5 +1,5 @@
 /*
- * $Id: TabRenderer.java,v 1.3 2003/04/30 06:31:22 eburns Exp $
+ * $Id: TabRenderer.java,v 1.4 2003/08/25 21:39:36 craigmcc Exp $
  */
 
 /*
@@ -87,7 +87,7 @@ public class TabRenderer extends BaseRenderer {
         throws IOException {
 
         if (log.isDebugEnabled()) {
-            log.debug("encodeBegin(" + component.getComponentId() + ")");
+            log.debug("encodeBegin(" + component.getId() + ")");
         }
 
     }
@@ -97,7 +97,7 @@ public class TabRenderer extends BaseRenderer {
         throws IOException {
 
         if (log.isDebugEnabled()) {
-            log.debug("encodeChildren(" + component.getComponentId() + ")");
+            log.debug("encodeChildren(" + component.getId() + ")");
         }
 
     }
@@ -107,11 +107,11 @@ public class TabRenderer extends BaseRenderer {
         throws IOException {
 
         if (log.isDebugEnabled()) {
-            log.debug("encodeEnd(" + component.getComponentId() + ")");
+            log.debug("encodeEnd(" + component.getId() + ")");
         }
 
         // Render our children only -- our parent has rendered ourself
-        Iterator kids = component.getChildren();
+        Iterator kids = component.getChildren().iterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             encodeRecursive(context, kid);
@@ -127,7 +127,7 @@ public class TabRenderer extends BaseRenderer {
         if (component.getRendersChildren()) {
             component.encodeChildren(context);
         } else {
-            Iterator kids = component.getChildren();
+            Iterator kids = component.getChildren().iterator();
             while (kids.hasNext()) {
                 UIComponent kid = (UIComponent) kids.next();
                 encodeRecursive(context, kid);

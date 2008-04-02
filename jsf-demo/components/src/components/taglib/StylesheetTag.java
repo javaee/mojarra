@@ -39,28 +39,25 @@
 package components.taglib;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.webapp.FacesTag;
-import javax.faces.component.UIGraphic;
+import javax.faces.webapp.UIComponentTag;
 
 
 /**
  * This class is the tag handler that evaluates the <code>stylesheet</code>
  * custom tag.
- *
  */
 
-public class StylesheetTag extends FacesTag {
+public class StylesheetTag extends UIComponentTag {
+
 
     private String path = null;
-
     public void setPath(String path) {
         this.path = path;
     }
 
 
     public String getComponentType() {
-        	return ("Output");
+        return ("Output");
     }
 
 
@@ -69,12 +66,14 @@ public class StylesheetTag extends FacesTag {
     }
 
 
-    public void overrideProperties(UIComponent component) {
+    protected void overrideProperties(UIComponent component) {
+
         super.overrideProperties(component);
-        if ((path != null) &&
-            (component.getAttribute("path") == null)) {
+
+        if (path != null) {
             component.setAttribute("path", path);
         }
+
     }
 
 

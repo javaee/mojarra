@@ -43,15 +43,13 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.faces.FacesException;
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.base.UICommandBase;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
-
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
-import javax.faces.component.UICommand;
 
 
 /**
@@ -61,58 +59,14 @@ import javax.faces.component.UICommand;
  * click on and mouse over, resulting in some client-side or server-side
  * action.  A <code>map</code> tag contains one or more <code>area</code>
  * tags, each corresponding to a "hot spot". 
-*/
+ */
 
+public class UIMap extends UICommandBase {
 
-public class UIMap extends UICommand {
 
     public UIMap() {
 	super();
 	setRendererType(null);
-    }
-
-
-
-   // Renders the beginning of the <code>map</code> tag.
-   public void encodeBegin(FacesContext context) throws IOException {
-
-   	if (context == null) {
-	    throw new NullPointerException();
-	}
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeEnd(context);
-            return;
-        }
-
-        ResponseWriter writer = context.getResponseWriter();
-	writer.write("<map name=\"");
-	writer.write(getComponentId());
-	writer.write("\">");
-   }
-
-    /**
-     * <p>Renders the <code>input</code> tag and the end of 
-     * the <code>map</code> tag.
-     */
-    public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeEnd(context);
-            return;
-        }
-
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("<input type=\"hidden\" name=\"selectedArea\"");
-        writer.write("\">");
-	writer.write("</map>");
-
     }
 
 
@@ -139,4 +93,53 @@ public class UIMap extends UICommand {
             context.addFacesEvent(new ActionEvent(this));
         }
     }
+
+
+   // Renders the beginning of the <code>map</code> tag.
+   public void encodeBegin(FacesContext context) throws IOException {
+
+   	if (context == null) {
+	    throw new NullPointerException();
+	}
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeEnd(context);
+            return;
+        }
+
+        // PENDING(craigmcc) - Use new ResponseWriter stuff
+        ResponseWriter writer = context.getResponseWriter();
+	writer.write("<map name=\"");
+	writer.write(getId());
+	writer.write("\">");
+
+   }
+
+
+    /**
+     * <p>Renders the <code>input</code> tag and the end of 
+     * the <code>map</code> tag.
+     */
+    public void encodeEnd(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeEnd(context);
+            return;
+        }
+
+        // PENDING(craigmcc) - Use new ResponseWriter stuff
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("<input type=\"hidden\" name=\"selectedArea\"");
+        writer.write("\">");
+	writer.write("</map>");
+
+    }
+
+
 }
