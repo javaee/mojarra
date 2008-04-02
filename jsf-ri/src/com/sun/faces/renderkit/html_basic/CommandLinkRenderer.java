@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.36 2005/08/26 15:27:13 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.37 2005/09/14 21:27:17 jayashri Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.ArrayList;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
@@ -65,9 +66,6 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
     //
     // Class Variables
     //
-
-    private static final String DID_RENDER_SCRIPT = RIConstants.FACES_PREFIX +
-	"didRenderScript";
 
     //
     // Instance Variables
@@ -281,10 +279,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             }
             return;
         }
-        // DID_RENDER_SCRIPT needs to be reset, otherwise this attribute
-        // will also be persisted which will cause the script to be not rendered
-        // during postback.
-        uiform.getAttributes().remove(DID_RENDER_SCRIPT);
+        
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
                     "End encoding component " + component.getId());
@@ -460,12 +455,10 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	if (null == myForm) {
             return;
 	}
-
 	// if the script content has already been rendered for this form
 	if (null != myForm.getAttributes().get(DID_RENDER_SCRIPT)){
 	    return;
 	}
-	    
 	String formName = myForm.getClientId(context);
 	writer.startElement("script", component);
 	writer.writeAttribute("type", "text/javascript", "type");
@@ -534,31 +527,42 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	if ((null == (keyVal = requestMap.get(keyName))) 
 	    ||
 	    (null != keyVal && !keyVal.equals(keyName))) {
+            
 	    writer.startElement("input", component);
 	    writer.writeAttribute("type", "hidden", null);
 	    writer.writeAttribute("name", fieldName, null);
 	    writer.endElement("input");
 	    // declare that we have rendered it
 	    requestMap.put(keyName, keyName);
-	    
-	    // PENDING(edburns): not sure if the JSFA59 back button problem
-	    // manifests itself with param children as well...
-	    
-	    // get UIParameter children...
-	    Param paramList[] = getParamList(context, component);
-	    for (int i = 0; i < paramList.length; i++) {
-		fieldName = paramList[i].getName();
-		keyName = RIConstants.FACES_PREFIX + fieldName;
-		if ((null != (keyVal = requestMap.get(keyName))) && 
-		    !keyVal.equals(keyName)) {
-		    writer.startElement("input", component);
-		    writer.writeAttribute("type", "hidden", null);
-		    writer.writeAttribute("name", fieldName, null);
-		    writer.endElement("input");
-		}
-	    }
-	    writeScriptContent(context, writer, component);
-	}
+        }
+        // PENDING(edburns): not sure if the JSFA59 back button problem
+        // manifests itself with param children as well...
+        ArrayList<String> renderedFields = null;
+        // get UIParameter children...
+        Param paramList[] = getParamList(context, component);
+        if (paramList != null && paramList.length > 0) {            
+            renderedFields = (ArrayList)requestMap.get(RENDERED_HIDDEN_FIELDS);           
+            if (renderedFields == null) {
+                renderedFields = new ArrayList();
+            }
+        }
+        // render any hidden fields that haven't been already for this form.
+        // Hidden fields should be rendered only once per form.
+        for (int i = 0; i < paramList.length; i++) {
+            fieldName = paramList[i].getName();            
+            keyName = RIConstants.FACES_PREFIX + fieldName;
+            int keyLocation = renderedFields.indexOf(keyName);
+            
+            if (keyLocation == -1) {
+                writer.startElement("input", component);
+                writer.writeAttribute("type", "hidden", null);
+                writer.writeAttribute("name", fieldName, null);
+                writer.endElement("input");
+                renderedFields.add(keyName);
+            }
+        }
+        requestMap.put(RENDERED_HIDDEN_FIELDS, renderedFields);
+	writeScriptContent(context, writer, component);
     }
 
     

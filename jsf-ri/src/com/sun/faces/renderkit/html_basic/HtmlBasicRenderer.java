@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.99 2005/08/26 15:27:15 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.100 2005/09/14 21:27:18 jayashri Exp $
  */
 
 /*
@@ -33,6 +33,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
@@ -93,6 +94,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     public static final String CLEAR_HIDDEN_FIELD_FN_NAME = 
          "clearFormHiddenParams";
+    static final String DID_RENDER_SCRIPT = RIConstants.FACES_PREFIX +
+	"didRenderScript";
+    static final String RENDERED_HIDDEN_FIELDS = RIConstants.FACES_PREFIX +
+	"renderedHiddenFields";
    
     public HtmlBasicRenderer() {
         super();

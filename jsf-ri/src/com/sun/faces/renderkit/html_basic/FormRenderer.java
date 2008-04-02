@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.91 2005/08/26 15:27:13 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.92 2005/09/14 21:27:18 jayashri Exp $
  */
 
 /*
@@ -207,6 +207,18 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.endElement("input");
 
         writer.endElement("form");
+        
+        // reset necessary attributes, otherwise they will be persisted 
+        // by the state saving logic, which will cause the script, hidden fields 
+        // to be not rendered during postback.
+        component.getAttributes().remove(DID_RENDER_SCRIPT);
+        
+        // reset necessary attributes set in request scope, so that it doesn't
+        // hang around when the next form in the page is processed. Otherwise
+        // any parameters with the same form will be ignored.
+        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
+        requestMap.remove(RENDERED_HIDDEN_FIELDS);
+        
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, "End encoding component " + component.getId());
         }
