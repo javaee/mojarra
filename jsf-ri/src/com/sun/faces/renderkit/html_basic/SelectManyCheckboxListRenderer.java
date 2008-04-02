@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.6 2003/02/20 22:49:02 ofung Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.7 2003/04/18 21:33:53 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyCheckboxListRenderer.java,v 1.6 2003/02/20 22:49:02 ofung Exp $
+ * @version $Id: SelectManyCheckboxListRenderer.java,v 1.7 2003/04/18 21:33:53 rkitain Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -118,7 +118,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             buff.append("\">");
             buff.append(curItem.getLabel());
             buff.append("<input name=\"");
-            buff.append(curComponent.getClientId(context));
+            buff.append(component.getClientId(context));
             buff.append("\" id=\"");
             buff.append(curComponent.getClientId(context));
             buff.append("\" value=\"");
