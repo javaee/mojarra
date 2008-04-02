@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.23 2004/02/26 20:31:08 eburns Exp $
+ * $Id: ResultSetDataModel.java,v 1.24 2004/04/06 16:10:31 eburns Exp $
  */
 
 /*
@@ -181,9 +181,14 @@ public class ResultSetDataModel extends DataModel {
      * described in the JavaDocs for <code>AbstractMap</code>, with the
      * following exceptions and specialized behavior:</p>
      * <ul>
+
      * <li>The <code>Map</code>, and any supporting objects it returns,
-     *     must perform all column name comparisons in a case-insensitive
-     *     manner.</li>
+     *     must perform all column name comparisons in a
+     *     case-insensitive manner.  This case-insensitivity must be
+     *     implemented using a case-insensitive <code>Comparator</code>,
+     *     such as
+     *     <code>String.String.CASE_INSENSITIVE_ORDER</code>.</li>
+
      * <li>The following methods must throw
      *     <code>UnsupportedOperationException</code>:  <code>clear()</code>,
      *     <code>remove()</code>.</li>

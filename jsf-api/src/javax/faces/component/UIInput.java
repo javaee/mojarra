@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.71 2004/04/02 21:35:48 eburns Exp $
+ * $Id: UIInput.java,v 1.72 2004/04/06 16:10:30 eburns Exp $
  */
 
 /*
@@ -645,8 +645,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     /**
      * <p>Convert the submitted value into a "local value" of the
-     * appropriate data type, if necessary, according to the following
-     * rules:
+     * appropriate data type, if necessary.  Employ the following
+     * algorithm to do so:</p>
      * <ul>
      * <li>If a <code>Renderer</code> is present, call
      *     <code>getConvertedValue()</code> to convert the submitted
