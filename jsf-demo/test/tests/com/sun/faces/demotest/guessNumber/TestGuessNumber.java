@@ -1,5 +1,5 @@
 /*
- * $Id: TestGuessNumber.java,v 1.4 2003/10/07 20:57:41 rlubke Exp $
+ * $Id: TestGuessNumber.java,v 1.5 2003/10/08 00:39:27 rlubke Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             HtmlForm form = (HtmlForm) forms.get(0);
             assertTrue(form != null);
             assertTrue(form.getIdAttribute().equals("helloForm"));
-            assertTrue(stripJsessionInfo(form.getActionAttribute()).equals("/jsf-guessNumber/guessnumber/greeting.jsp"));
+            assertTrue(stripJsessionInfo(form.getActionAttribute()).equals("/jsf-guessNumber/guess/greeting.jsp"));
             
             HtmlTextInput input = (HtmlTextInput) form.getInputByName("helloForm" + NamingContainer.SEPARATOR_CHAR + "userNo");
             assertTrue(input != null);
@@ -94,7 +94,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             HtmlForm back = (HtmlForm) forms1.get(0);
             assertTrue(back != null);
             assertTrue(back.getIdAttribute().equals("responseForm"));
-            assertTrue(stripJsessionInfo(back.getActionAttribute()).equals("/jsf-guessNumber/guessnumber/response.jsp"));
+            assertTrue(stripJsessionInfo(back.getActionAttribute()).equals("/jsf-guessNumber/guess/response.jsp"));
 
             greetingPage = (HtmlPage) back.submit("responseForm" + NamingContainer.SEPARATOR_CHAR + "back");
             assertTrue(greetingPage != null);            
