@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.100 2004/05/01 00:47:20 rkitain Exp $
+ * $Id: UIComponentBase.java,v 1.101 2004/06/16 00:06:55 jvisvanathan Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     /**
-     * <p>Each entry is an array of <code>PropertyDescriptor</code>s describing
+     * <p>Each entry is an map of <code>PropertyDescriptor</code>s describing
      * the properties of a concrete {@link UIComponent} implementation, keyed
      * by the corresponding <code>java.lang.Class</code>.</p>
      *
@@ -70,14 +70,35 @@ public abstract class UIComponentBase extends UIComponent {
      * references to the classes will eventually expire.</p>
      */
     private static WeakHashMap descriptors = new WeakHashMap();
-
-
+ 
+    /**
+     * Reference to the map of <code>PropertyDescriptor</code>s for this class
+     * in the <code>descriptors<code> <code>Map<code>.
+     */
+    private WeakHashMap pdMap = null; 
 
     /**
      * <p>An empty argument list to be passed to reflection methods.</p>
      */
     private static Object empty[] = new Object[0];
 
+    public UIComponentBase() {
+        synchronized(descriptors) {
+            pdMap = (WeakHashMap) descriptors.get(this.getClass());
+            if (pdMap != null) {
+                return;
+            } 
+            // load the property descriptors for this class.
+            PropertyDescriptor pd[] = getPropertyDescriptors();
+            if (pd != null) {
+                pdMap = new WeakHashMap(pd.length);
+                for (int i = 0; i < pd.length; i++) {
+                    pdMap.put(pd[i].getName(), pd[i]);    
+                }
+                descriptors.put(this.getClass(),pdMap);
+            }
+        }
+    }
 
     /**
      * <p>Return the <code>PropertyDescriptor</code> for the specified
@@ -89,15 +110,10 @@ public abstract class UIComponentBase extends UIComponent {
      * @exception FacesException if an introspection exception occurs
      */
     private PropertyDescriptor getPropertyDescriptor(String name) {
-
-        PropertyDescriptor pd[] = getPropertyDescriptors();
-        for (int i = 0; i < pd.length; i++) {
-            if (name.equals(pd[i].getName())) {
-                return (pd[i]);
-            }
+        if (pdMap != null) {
+            return ((PropertyDescriptor)pdMap.get(name));
         }
         return (null);
-
     }
 
 
@@ -109,22 +125,14 @@ public abstract class UIComponentBase extends UIComponent {
      * @exception FacesException if an introspection exception occurs
      */
     private PropertyDescriptor[] getPropertyDescriptors() {
-
-        synchronized (descriptors) {
-            PropertyDescriptor pd[] =
-                (PropertyDescriptor[]) descriptors.get(this.getClass());
-            if (pd == null) {
-                try {
-                    pd = Introspector.getBeanInfo(this.getClass()).
-                        getPropertyDescriptors();
-                } catch (IntrospectionException e) {
-                    throw new FacesException(e);
-                }
-                descriptors.put(this.getClass(), pd);
-            }
-            return (pd);
+        PropertyDescriptor[] pd = null;
+        try {
+            pd = Introspector.getBeanInfo(this.getClass()).
+                getPropertyDescriptors();
+        } catch (IntrospectionException e) {
+            throw new FacesException(e);
         }
-
+        return (pd);
     }
 
 
