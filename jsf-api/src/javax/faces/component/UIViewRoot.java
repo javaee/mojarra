@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.22 2004/01/21 19:28:09 craigmcc Exp $
+ * $Id: UIViewRoot.java,v 1.23 2004/01/22 22:19:43 craigmcc Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.RenderKit;
@@ -231,7 +232,11 @@ public class UIViewRoot extends UIComponentBase {
 		    FacesEvent event = (FacesEvent)
 			eventsForPhaseId.get(cursor);
 		    UIComponent source = event.getComponent();
-		    source.broadcast(event);
+                    try {
+                        source.broadcast(event);
+                    } catch (AbortProcessingException e) {
+                        ; // A "return" here would abort remaining events too
+                    }
 		    eventsForPhaseId.remove(cursor); // Stay at current position
 		}
 	    }
@@ -245,10 +250,15 @@ public class UIViewRoot extends UIComponentBase {
 		    FacesEvent event = 
 			(FacesEvent) eventsForPhaseId.get(cursor);
 		    UIComponent source = event.getComponent();
-		    source.broadcast(event);
+                    try {
+                        source.broadcast(event);
+                    } catch (AbortProcessingException e) {
+                        ; // A "return" here would abort remaining events too
+                    }
 		    eventsForPhaseId.remove(cursor); // Stay at current position
 		}
 	    }
+
 	    // true if we have any more ANY_PHASE events
 	    hasMoreAnyPhaseEvents = 
 		(null != (eventsForPhaseId = 

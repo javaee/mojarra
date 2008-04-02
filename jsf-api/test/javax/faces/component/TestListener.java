@@ -1,5 +1,5 @@
 /*
- * $Id: TestListener.java,v 1.4 2003/12/17 15:11:11 rkitain Exp $
+ * $Id: TestListener.java,v 1.5 2004/01/22 22:19:44 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.component;
 
 
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesListener;
 
 public class TestListener implements FacesListener {
@@ -27,7 +28,13 @@ public class TestListener implements FacesListener {
         this.id = id;
     }
 
+    public TestListener(String id, boolean abort) {
+        this.id = id;
+        this.abort = abort;
+    }
 
+
+    private boolean abort = false;
     private String fromId = null;
     private String id = null;
     private String toId = null;
@@ -47,6 +54,9 @@ public class TestListener implements FacesListener {
                 event.getComponent().queueEvent
                     (new TestEvent(event.getComponent(), toId));
             }
+        }
+        if (abort) {
+            throw new AbortProcessingException();
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.9 2003/12/17 15:11:15 rkitain Exp $
+ * $Id: UIViewRootTestCase.java,v 1.10 2004/01/22 22:19:45 craigmcc Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.validator.Validator;
 import javax.faces.context.FacesContext;
@@ -77,6 +78,32 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
 
     // ------------------------------------------------- Individual Test Methods
+
+
+    // Test AbortProcessingException support
+    public void testAbortProcessingException() {
+
+        // Register three listeners, with the second one set to abort
+        UIViewRoot root = new UIViewRoot();
+        root.addFacesListener
+            (new TestListener("a", false));
+        root.addFacesListener
+            (new TestListener("b", true));
+        root.addFacesListener
+            (new TestListener("c", false));
+
+        // Queue two event and check the results
+        TestListener.trace(null);
+        TestEvent event1 = new TestEvent(root, "1");
+        event1.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
+        root.queueEvent(event1);
+        TestEvent event2 = new TestEvent(root, "2");
+        event2.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
+        root.queueEvent(event2);
+        root.processDecodes(facesContext);
+        assertEquals("/a/1/b/1/a/2/b/2", TestListener.trace());
+
+    }
 
 
     // Test event queuing and dequeuing during broadcasting
