@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.9 2003/04/04 05:11:27 eburns Exp $
+ * $Id: UseFacesTag.java,v 1.10 2003/04/15 19:33:27 eburns Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import javax.faces.webapp.JspResponseWriter;
 import javax.servlet.jsp.JspWriter;
 import javax.faces.webapp.FacesBodyTag;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
 import javax.servlet.jsp.tagext.BodyTag;
@@ -44,14 +45,14 @@ import javax.servlet.jsp.tagext.BodyTag;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.9 2003/04/04 05:11:27 eburns Exp $
+ * @version $Id: UseFacesTag.java,v 1.10 2003/04/15 19:33:27 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class UseFacesTag extends BodyTagSupport
+public class UseFacesTag extends FacesBodyTag
 {
     //
     // Protected Constants
@@ -97,6 +98,7 @@ public class UseFacesTag extends BodyTagSupport
     // Methods from FacesBodyTag
     //
     public int doStartTag() throws JspException {
+	super.doStartTag();
         return BodyTag.EVAL_BODY_BUFFERED;
     }
     
@@ -187,8 +189,14 @@ public class UseFacesTag extends BodyTagSupport
     }    
     
     public UIComponent createComponent() {
-        return null;
+	UIComponent result = new UIOutput();
+	result.setRendered(false);
+        return result;
     }    
+
+    protected boolean isSuppressed() {
+	return true;
+    }
 
     public String getRendererType() {
         return null;

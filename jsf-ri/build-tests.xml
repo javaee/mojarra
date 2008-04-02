@@ -345,7 +345,6 @@
             <test name="com.sun.faces.util.TestUtil_messages"/>
             <test name="javax.faces.validator.RequiredValidatorTestCase"/>
             <test name="com.sun.faces.taglib.html_basic.TestHtmlBasicValidator"/>
-            <test name="com.sun.faces.taglib.jsf_core.TestCoreValidator"/>
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
             <!-- To run the following tests, comment last 3 tests, uncomment
@@ -357,6 +356,7 @@
 
 
 <!-- put non-running testcases here
+            <test name="com.sun.faces.taglib.jsf_core.TestCoreValidator"/>
             <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
