@@ -76,7 +76,7 @@
              <td>
 
 	      <h:command_hyperlink id="imageLink" action="success"
-                  image="/duke.gif">
+                  image="duke.gif">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_hyperlink>
 

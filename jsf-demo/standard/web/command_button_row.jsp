@@ -117,7 +117,7 @@
 
              <td>
                   <h:command_button id="button5" action="success"
-                      title="click to submit form" image="/duke.gif">
+                      title="click to submit form" image="duke.gif">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_button>
               </td>

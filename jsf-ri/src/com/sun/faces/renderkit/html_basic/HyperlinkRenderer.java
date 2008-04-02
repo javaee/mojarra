@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.57 2003/09/04 19:52:16 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.58 2003/09/10 21:54:10 horwat Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.57 2003/09/04 19:52:16 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.58 2003/09/10 21:54:10 horwat Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -134,21 +134,7 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-    }
 
-    public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-    }
-
-    public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
 	UICommand command = (UICommand) component;
 
         // suppress rendering if "rendered" property on the command is
@@ -194,6 +180,31 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
 
+    }
+
+    public void encodeChildren(FacesContext context, UIComponent component)
+        throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
+    }
+
+    public void encodeEnd(FacesContext context, UIComponent component)
+        throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+	UICommand command = (UICommand) component;
+
+        // suppress rendering if "rendered" property on the command is
+        // false.
+        if (!command.isRendered()) {
+            return;
+        }
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it( writer != null );
+
 	//Write Anchor inline elements
 
         //label text
@@ -211,6 +222,7 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         //Handle hidden fields
 
         //hidden clientId field
+	String clientId = command.getClientId(context);
 	writer.startElement("input", component);
 	writer.writeAttribute("type", "hidden", "type");
 	writer.writeAttribute("name", clientId, "clientId");
