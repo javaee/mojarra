@@ -1,5 +1,5 @@
 /*
- * $Id: RepeaterBean.java,v 1.2 2003/12/17 15:19:23 rkitain Exp $
+ * $Id: RepeaterBean.java,v 1.3 2003/12/24 20:45:21 craigmcc Exp $
  */
 
 /*
@@ -184,6 +184,37 @@ public class RepeaterBean {
 	scroll(list.size());
 	return (null);
 
+    }
+
+
+    /**
+     * <p>Delete any customers who have been checked from the list.</p>
+     */
+    public String delete() {
+
+        append("DELETE CHECKED button pressed");
+
+	// Delete customers for whom the checked field is selected
+        List removes = new ArrayList();
+        int n = data.getRowCount();
+        for (int i = 0; i < n; i++) {
+            data.setRowIndex(i);
+            if (checked.isSelected()) {
+                removes.add(data.getRowData());
+                checked.setSelected(false);
+                created.setSelected(false);
+            }
+        }
+        if (removes.size() > 0) {
+            List list = getCustomers();
+            Iterator remove = removes.iterator();
+            while (remove.hasNext()) {
+                list.remove(remove.next());
+            }
+        }
+
+	clear();
+	return (null);
     }
 
 

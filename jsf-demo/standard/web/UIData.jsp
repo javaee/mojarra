@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIData.jsp,v 1.8 2003/12/17 15:20:00 rkitain Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.9 2003/12/24 20:45:22 craigmcc Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -153,16 +153,28 @@
 
   </h:data_table>
 
-  <h:command_button        id="create"
+  <h:command_button        id="create1"
                     action="#{UIDataBean.create}"
                     immediate="true"
-                        value="Create New Row"
+                        value="Create New Row (immediate=true)"
                          type="SUBMIT"/>
 
-  <h:command_button        id="delete"
+  <h:command_button        id="create2"
+                    action="#{UIDataBean.create}"
+                    immediate="false"
+                        value="Create New Row (immediate=false)"
+                         type="SUBMIT"/>
+
+  <h:command_button        id="delete1"
                     action="#{UIDataBean.delete}"
                     immediate="true"
-                        value="Delete Checked"
+                        value="Delete Checked (immediate=true)"
+                         type="SUBMIT"/>
+
+  <h:command_button        id="delete2"
+                    action="#{UIDataBean.delete}"
+                    immediate="false"
+                        value="Delete Checked (immediate=false)"
                          type="SUBMIT"/>
 
   <h:command_button        id="first"

@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: repeater.jsp,v 1.2 2003/12/17 15:19:31 rkitain Exp $ --%>
+<%-- $Id: repeater.jsp,v 1.3 2003/12/24 20:45:21 craigmcc Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
@@ -116,8 +116,14 @@
 
   <h:command_button        id="create"
                     action="#{RepeaterBean.create}"
-                    immediate="true"
+                    immediate="false"
                         value="Create New Row"
+                         type="SUBMIT"/>
+
+  <h:command_button        id="delete"
+                    action="#{RepeaterBean.delete}"
+                    immediate="false"
+                        value="Delete Checked"
                          type="SUBMIT"/>
 
   <h:command_button        id="first"
