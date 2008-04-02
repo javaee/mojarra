@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.111 2006/07/25 21:06:04 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.112 2006/07/27 22:03:40 rlubke Exp $
  */
 
 /*
@@ -367,6 +367,40 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     public String convertClientId(FacesContext context, String clientId) {
         return clientId;
+    }
+
+
+    /**
+     * <p>Conditionally augment an id-reference value.</p>
+     * <p>If the <code>forValue</code> doesn't already include a generated
+     * suffix, but the id of the <code>fromComponent</code> does include a
+     * generated suffix, then append the suffix from the
+     * <code>fromComponent</code> to the <code>forValue</code>.
+     * Otherwise just return the <code>forValue</code> as is.</p>
+     *
+     * @param forValue      - the basic id-reference value.
+     * @param fromComponent - the component that holds the
+     *                      code>forValue</code>.
+     *
+     * @return the (possibly augmented) <code>forValue<code>.
+     */
+    protected String augmentIdReference(FacesContext context,
+                                        String forValue,
+                                        UIComponent fromComponent) {
+        int forSuffix = forValue.lastIndexOf(UIViewRoot.UNIQUE_ID_PREFIX);
+        if (forSuffix <= 0) {
+            // if the for-value doesn't already have a suffix present
+            String id = fromComponent.getId();
+            int idSuffix = id.lastIndexOf(UIViewRoot.UNIQUE_ID_PREFIX);
+            if (idSuffix > 0) {
+                // but the component's own id does have a suffix
+                logger.fine("Augmenting for attribute with " +
+                            id.substring(idSuffix) +
+                            " suffix from Id attribute");
+                forValue += id.substring(idSuffix);
+            }
+        }
+        return forValue;
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.61 2006/05/26 01:10:37 rlubke Exp $
+ * $Id: MessageRenderer.java,v 1.62 2006/07/27 22:03:40 rlubke Exp $
  */
 
 /*
@@ -154,6 +154,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
             return;
         }
 
+        clientId = augmentIdReference(context, clientId, component);
         messageIter = getMessageIter(context, clientId, component);
 
 

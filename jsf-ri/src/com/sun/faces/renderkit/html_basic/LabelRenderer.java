@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.44 2006/05/18 23:07:54 rlubke Exp $
+ * $Id: LabelRenderer.java,v 1.45 2006/07/27 22:03:40 rlubke Exp $
  */
 
 /*
@@ -120,6 +120,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         String forClientId = null;
         forValue = (String) component.getAttributes().get("for");
         if ( forValue != null ) {
+            forValue = augmentIdReference(context, forValue, component);
             forComponent = getForComponent(context, forValue, component);
             if (forComponent == null ) {
                 // it could that the component hasn't been created yet. So
