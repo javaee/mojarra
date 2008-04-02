@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageResourcesImpl.java,v 1.6 2003/05/14 22:46:35 eburns Exp $
+ * $Id: TestMessageResourcesImpl.java,v 1.7 2003/07/22 19:51:38 rkitain Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageResourcesImpl.java,v 1.6 2003/05/14 22:46:35 eburns Exp $
+ * @version $Id: TestMessageResourcesImpl.java,v 1.7 2003/07/22 19:51:38 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -146,6 +146,7 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
         msg = null;
       
         en_locale = new Locale("en", "us"); 
+        getFacesContext().setLocale(en_locale);
         msg = resources.getMessage(getFacesContext(),"MSG0003", "userId");
         assertTrue ( msg != null );
         assertTrue((msg.getSummary()).equals("'userId' field cannot be empty."));
