@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.12 2003/10/01 17:57:20 rlubke Exp $
+ * $Id: DateTimeConverter.java,v 1.13 2003/10/07 20:53:51 eburns Exp $
  */
 
 /*
@@ -281,7 +281,9 @@ public class DateTimeConverter implements Converter, StateHolder {
             // Create and configure the parser to be used
             DateFormat parser =
                 getDateFormat(context, locale);         
-            parser.setTimeZone(timeZone);            
+	    if (null != timeZone) {
+		parser.setTimeZone(timeZone);            
+	    }
 
             // Perform the requested parsing
             return (parser.parse(value));
@@ -319,8 +321,10 @@ public class DateTimeConverter implements Converter, StateHolder {
             // Create and configure the formatter to be used
             DateFormat formatter =
                 getDateFormat(context, locale);
-            formatter.setTimeZone(timeZone);            
-
+	    if (null != timeZone) {
+		formatter.setTimeZone(timeZone);            
+	    }
+	    
             // Perform the requested formatting
             return (formatter.format(value));
 
