@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.16 2003/09/30 15:43:38 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.17 2003/10/12 05:08:34 craigmcc Exp $
 
 -->
 
@@ -325,12 +325,34 @@
     "render-kit" element.
 
     Nested "attribute" elements identify generic component attributes that
-    are recognized by this renderer.  Nested "component-type" and
-    "component-class" elements identify supported component classes, by
-    their type identifiers or the implementation class name, respectively,
+    are recognized by this renderer.  Nested "supported-component-type" and
+    "supported-component-class" elements identify supported component classes,
+    by their type identifiers or the implementation class name, respectively,
     that are supported by this Renderer.
 -->
-<!ELEMENT renderer        (description*, display-name*, icon*, renderer-type, renderer-class, attribute*, component-type*, component-class*)>
+<!ELEMENT renderer        (description*, display-name*, icon*, renderer-type, renderer-class, attribute*, supported-component-type*, supported-component-class*)>
+
+
+<!--
+    The "supported-component-class" element identifies a component class that
+    is supported by the surrounding renderer, and the renderer attribute names
+    that are relevant for this component class.  If no "attribute-name"
+    subelements are listed, names from all of the "attribute" declarations for
+    the surrounding renderer shall be assumed.
+-->
+<!ELEMENT supported-component-class (component-class, attribute-name*)>
+    
+
+
+<!--
+    The "supported-component-type" element identifies a component type that
+    is supported by the surrounding renderer, and the renderer attribute names
+    that are relevant for this component type.  If no "attribute-name"
+    subelements are listed, names from all of the "attribute" declarations for
+    the surrounding renderer shall be assumed.
+-->
+<!ELEMENT supported-component-type (component-type, attribute-name*)>
+    
 
 
 <!--
