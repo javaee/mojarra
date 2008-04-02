@@ -339,6 +339,10 @@
       <fileset dir="${jsf.demo.home}/helloDuke"/>
     </copy>
 
+    <copy todir="${dist.home}/example/guessNumber">
+      <fileset dir="${jsf.demo.home}/guessNumber"/>
+    </copy>
+
     <!-- create the zip file -->
     <move todir="${basedir}/jsf-${version}">
       <fileset dir="dist"/>
