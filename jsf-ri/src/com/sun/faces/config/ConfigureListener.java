@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.66 2006/03/15 01:37:48 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.67 2006/03/20 22:04:18 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -362,26 +362,7 @@ public class ConfigureListener implements ServletRequestListener,
             }
         }
     
-    }
-    
-    private String getServletContextIdentifier(ServletContext context) {
-        Method method = null;
-        boolean hasGetContextPath = true;
-        try {
-            context.getClass().getDeclaredMethod("getContextPath", 
-                    (Class []) null);
-        } catch (SecurityException ex) {
-            hasGetContextPath = false;
-        } catch (NoSuchMethodException ex) {
-            hasGetContextPath = false;
-        }
-        if (hasGetContextPath) {
-            return context.getContextPath();
-        }
-        else {
-            return context.getServletContextName();
-        }
-    }
+    }      
 
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
@@ -1816,6 +1797,13 @@ public class ConfigureListener implements ServletRequestListener,
         return Boolean.valueOf(paramValue);
     }
 
+    private String getServletContextIdentifier(ServletContext context) {
+        if (context.getMajorVersion() == 2 && context.getMinorVersion() < 5) {
+            return context.getServletContextName();
+        } else {
+            return context.getContextPath();
+        }
+    }
 
     /**
      * <p>Return the URL for the given path.</p>

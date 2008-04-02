@@ -354,23 +354,7 @@
           <attribute name="Main-Class" 
                      value="com.sun.faces.tools.GlassfishUpdater" />
         </manifest>
-      </jar>
-     <jar destfile="${dist.dir}/jsf-sjsas9pebeta-updater-${impl.version}.jar">
-        <fileset dir="${basedir}/jsf-tools/build/classes"
-                 includes="com/sun/faces/tools/GlassfishUpdater.class,com/sun/faces/tools/AS9Updater.class" />
-        <fileset dir="${basedir}/jsf-api/build/lib/"
-                 includes="jsf-api.jar" />
-        <fileset dir="${basedir}/jsf-ri/build/lib/"
-                 includes="jsf-impl.jar" />
-        <fileset dir="${basedir}/lib/compiledJasper"
-                 includes="org/apache/jasper/compiler/TldLocationsCache.class" />
-        <fileset dir="${basedir}/legal/jsf-cddl"
-                 includes="BINARY_LICENSE.txt" />
-        <manifest>
-          <attribute name="Main-Class" 
-                     value="com.sun.faces.tools.AS9Updater" />
-        </manifest>
-      </jar>
+      </jar>    
     </target>
 
 </project>
