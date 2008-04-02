@@ -74,7 +74,7 @@ public class PackageValueChanged implements ValueChangedListener {
     public void processValueChanged(ValueChangedEvent vEvent) {
         try {
             log.debug("ValueChangedEvent processEvent");
-            String componentId = vEvent.getComponent().getComponentId();
+            String componentId = vEvent.getComponent().getId();
             // handle each valuechangedevent here
             FacesContext context = FacesContext.getCurrentInstance();
             String currentPrice;

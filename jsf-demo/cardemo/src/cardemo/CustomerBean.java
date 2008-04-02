@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.4 2003/06/03 19:03:16 jvisvanathan Exp $
+ * $Id: CustomerBean.java,v 1.5 2003/08/28 08:22:17 rkitain Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -42,7 +42,7 @@
 package cardemo;
 
 import java.util.*;
-import javax.faces.component.SelectItem;
+import javax.faces.model.SelectItem;
 import java.util.ResourceBundle;
 import javax.faces.context.FacesContext;
 

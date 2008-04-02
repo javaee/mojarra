@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.3 2003/06/03 19:03:17 jvisvanathan Exp $
+ * $Id: FormatValidator.java,v 1.4 2003/08/28 08:22:17 rkitain Exp $
  */
 
 /*
@@ -43,11 +43,11 @@
 package cardemo;
 
 import javax.faces.FactoryFinder;
-import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
-import javax.faces.context.MessageResources;
+import javax.faces.application.MessageResources;
 import javax.faces.validator.Validator;
 
 import java.util.ArrayList;
@@ -181,7 +181,7 @@ public class FormatValidator implements Validator {
     // 
     // Methods from Validator
     //
-    public void validate(FacesContext context, UIComponent component) {
+    public void validate(FacesContext context, UIInput component) {
         boolean valid = false;
         String value = null;
         if ((context == null) || (component == null)) {

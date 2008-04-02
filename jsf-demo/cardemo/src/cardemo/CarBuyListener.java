@@ -1,4 +1,8 @@
 /*
+ * $Id: CarBuyListener.java,v 1.1 2003/08/28 08:22:16 rkitain Exp $
+ */
+
+/*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
@@ -36,68 +40,43 @@
  * maintenance of any nuclear facility.
  */
 
+// CarBuyListener.java
 
 package cardemo;
 
-import java.util.Locale;
-import java.util.Hashtable;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionListener;
+import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
-import com.sun.faces.RIConstants;
-import javax.faces.tree.Tree;
-import javax.faces.tree.TreeFactory;
-import javax.faces.FactoryFinder;
+import javax.faces.event.ActionListener;
 
-import components.components.UIMap;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- * The listener interface for handling the ActionEvent generated
- * by the map component. 
+ * CarBuyListener handles the ActionEvent generated as a result
+ * of a "buy" action on command_button components of the car demo app.
  */
-public class ImageMapEventHandler implements ActionListener {
-
-    Hashtable localeTable = new Hashtable();
-
-    public ImageMapEventHandler ( ) {
-
-    	localeTable.put("NAmericas", Locale.ENGLISH);
-	localeTable.put("SAmericas", new Locale("es","es"));
-	localeTable.put("Germany", Locale.GERMAN);
-	localeTable.put("France", Locale.FRENCH); 	
-
-    }
-
-    // This listener will handle events after the phase specified
-    // as the return value;
-
-    public PhaseId getPhaseId() {
-        return PhaseId.ANY_PHASE;
-    }
-
-// Processes the event queued on the specified component.
-    public void processAction(ActionEvent event) {
-
-	UIMap map = (UIMap)event.getSource();
-	String value = (String) map.getAttribute("currentArea");
-	Locale curLocale = (Locale) localeTable.get(value);
-        if ( curLocale != null) { 
-            FacesContext context = FacesContext.getCurrentInstance();
-	    context.setLocale(curLocale);
-   
-            String treeId = "/Storefront.jsp";
-            TreeFactory treeFactory = (TreeFactory)
-            FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
-            Assert.assert_it(null != treeFactory);
-            context.setTree(treeFactory.getTree(context,treeId));
-        }
-    }
+public class CarBuyListener extends CarActionListener implements ActionListener {
     
-}
+    private static Log log = LogFactory.getLog(CarBuyListener.class);
+    
+    public CarBuyListener() {
+    }
+
+
+    // This listener will process events after the phase specified.
+    public PhaseId getPhaseId() {
+        return PhaseId.APPLY_REQUEST_VALUES;
+    }
+
+    public void processAction(ActionEvent event) {
+        log.debug("CarBuyListener.processAction");
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        // update the component state again based on the package selected.
+        // otherwise the checkboxes will appear unselected although the
+        // option has been selected if they are disabled due to the way
+        // checkboxes are handled by the browsers
+//        updateComponentState(context, event.getComponent());
+    }
+} // end of class CarBuyListener

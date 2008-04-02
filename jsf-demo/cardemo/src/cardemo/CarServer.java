@@ -1,5 +1,5 @@
 /*
- * $Id: CarServer.java,v 1.3 2003/06/02 17:04:56 jvisvanathan Exp $
+ * $Id: CarServer.java,v 1.4 2003/08/28 08:22:17 rkitain Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -52,7 +52,7 @@ import java.util.Collection;
 import java.util.MissingResourceException;
 import java.io.IOException;
 
-import javax.faces.component.SelectItem;
+import javax.faces.model.SelectItem;
 import javax.faces.context.FacesContext;
 import javax.faces.application.Action;
 

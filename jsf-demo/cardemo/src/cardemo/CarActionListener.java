@@ -1,5 +1,5 @@
 /*
- * $Id: CarActionListener.java,v 1.7 2003/06/02 17:04:53 jvisvanathan Exp $
+ * $Id: CarActionListener.java,v 1.8 2003/08/28 08:22:16 rkitain Exp $
  */
 
 /*
@@ -45,11 +45,11 @@
 package cardemo;
 
 import com.sun.faces.util.Util;
-import javax.faces.component.SelectItem;
+import javax.faces.model.SelectItem;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UISelectBoolean;
-import javax.faces.component.UICommand;
+import javax.faces.component.base.UICommandBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
@@ -85,71 +85,33 @@ public class CarActionListener implements ActionListener {
     }
 
     public void processAction(ActionEvent event) {
-        log.debug("CarActionListener.processAction : actionCommand : "+
-            event.getActionCommand());
+        log.debug("CarActionListener.processAction");
         FacesContext context = FacesContext.getCurrentInstance();
-        String actionCommand = event.getActionCommand();
 
-        if (actionCommand.equals("custom") || 
-            actionCommand.equals("standard") ||
-            actionCommand.equals("performance") || 
-            actionCommand.equals("deluxe")) {
-            processPackage(context, event);
-        } else if (actionCommand.equals("recalculate")) {
-            updateComponentState(context, event.getComponent());
-        } else if (actionCommand.equals("buy")) {
-            // update the component state again based on the package selected.
-            // otherwise the checkboxes will appear unselected although the
-            // option has been selected if they are disabled due to the way
-            // checkboxes are handled by the browsers
-            updateComponentState(context, event.getComponent());
-        } else {
-            processActionCommand(actionCommand);  
-            // if user has already selected a car, we need to reset the state of 
-            // the component. If the car is being chosen for the first time,this
-            // will be a no-op. But if a car is chosen and for some reason, if
-            // the user decides to start all over from StoreFront page, then we
-            // need to reset the package back to "Custom", so that old package
-            // selections are lost.
-            (Util.getValueBinding("CarServer.currentPackageName")).
-                    setValue(context, "Custom"); 
-            updateComponentState(context, event.getComponent());
-            changeButtonStyle("Custom", event.getComponent()); 
-        }
+	UIComponent component = event.getComponent();
+	String actionCommand = ((UICommandBase)component).getAction();
+        processActionCommand(actionCommand);  
+        // if user has already selected a car, we need to reset the state of 
+        // the component. If the car is being chosen for the first time,this
+        // will be a no-op. But if a car is chosen and for some reason, if
+        // the user decides to start all over from StoreFront page, then we
+        // need to reset the package back to "Custom", so that old package
+        // selections are lost.
+        (Util.getValueBinding("CarServer.currentPackageName")).
+            setValue(context, "Custom"); 
+        updateComponentState(context, event.getComponent());
+        changeButtonStyle("Custom", event.getComponent()); 
     }
 
-    /**
-     * Handles the selection of the particular package. Updates the state
-     * of the component representing different options and packages.
-     */
-    private void processPackage(FacesContext context, ActionEvent event) {
-        UIComponent component = event.getComponent();
-        int i = 0;
-        UIComponent foundComponent = null;
-        UIOutput uiOutput = null;
-        String value = null;
-        boolean packageChange = false;
-
-        String cmdName = event.getActionCommand();
-        // Note: Name of the Package resources file must match the key attribute
-        // of the UICommand component. The key was chosen so that it is not
-        // dependent in any locale
-        String packageKey = (String)component.getAttribute("key");
-        (Util.getValueBinding("CarServer.currentPackageName")).
-                setValue(context, packageKey);
-        updateComponentState(context, component);
-        changeButtonStyle(packageKey, component);
-    }    
-    
     /**
      * Updates the state of the component that represents different options
      * based on the the options being available or not for the selected
      * package
      */
     protected void updateComponentState(FacesContext context, 
-            UIComponent component) {
-         UIComponent foundComponent = null;
-         // get the available option for car package selected
+        UIComponent component) {
+        UIComponent foundComponent = null;
+        // get the available option for car package selected
         Properties packageProps = (Properties) 
         ((Util.getValueBinding("CarServer.currentPackage.packageProperties")).
                 getValue(context));

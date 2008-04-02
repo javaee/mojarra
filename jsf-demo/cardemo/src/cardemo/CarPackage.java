@@ -1,5 +1,5 @@
 /*
- * $Id: CarPackage.java,v 1.1 2003/06/02 17:04:56 jvisvanathan Exp $
+ * $Id: CarPackage.java,v 1.2 2003/08/28 08:22:17 rkitain Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -47,7 +47,7 @@ import java.io.*;
 import java.util.Properties;
 import java.util.Enumeration;
 
-import javax.faces.component.SelectItem;
+import javax.faces.model.SelectItem;
 import javax.faces.context.FacesContext;
 
 /**
