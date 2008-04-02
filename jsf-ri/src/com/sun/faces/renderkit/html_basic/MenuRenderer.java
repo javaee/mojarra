@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.81 2006/09/14 22:38:41 tony_robertson Exp $
+ * $Id: MenuRenderer.java,v 1.82 2006/10/03 21:24:00 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -36,14 +36,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
@@ -54,6 +46,16 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ConverterPropertyEditorBase;
 import com.sun.faces.renderkit.RenderKitUtils;
@@ -535,7 +537,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
 
         if (curItem.isEscape()) {
-            writer.writeText(curItem.getLabel(), component, "label");
+            String label = curItem.getLabel();
+            if (label == null) {
+                label = curItem.getValue().toString();
+            }
+            writer.writeText(label, component, "label");
         } else {
             writer.write(curItem.getLabel());
         }
