@@ -292,6 +292,11 @@ jsf-api.jar.
           todir="${build.generate}/javax/faces/validator"
           filtering="true"/>
 
+    <filter token="package" value="javax.faces.webapp"/>
+    <copy file="${jsf-tools.dir}/template-src/MessageFactory.java" 
+          todir="${build.generate}/javax/faces/webapp"
+          filtering="true"/>
+
   </target>
 
 
