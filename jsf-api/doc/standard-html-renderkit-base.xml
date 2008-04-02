@@ -1097,7 +1097,11 @@
       hiddenFieldName hidden fields.  Allow the form renderer to output
       an "input" element of "type" "hidden" for each of the nested
       UIParameter children, taking the name property (but not the value)
-      from each one in turn.</p>
+      from each one in turn.  If the "disabled" attribute is specified, 
+      do not render the HTML "a" anchor element or the "href" element.  
+      Instead, render a "span" element.  If the "styleClass" attribute 
+      is specified, render its value as the value of the "class" attribute 
+      on the "span".  Render any pass-through attributes on the "span".</p>
 
       </ul>]]>
             </description>
