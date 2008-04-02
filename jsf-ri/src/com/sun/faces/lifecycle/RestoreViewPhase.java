@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.5 2003/10/08 18:14:52 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.6 2003/10/13 18:08:47 rlubke Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.5 2003/10/08 18:14:52 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.6 2003/10/13 18:08:47 rlubke Exp $
  * 
  */
 
@@ -128,7 +128,7 @@ public class RestoreViewPhase extends Phase {
         }
         
         // It could be that this request was mapped using
-        // an extension mapping in which case there would be no
+        // a prefix mapping in which case there would be no
         // path_info.  Query the servlet path.
         if (viewId == null) {
             viewId = (String)

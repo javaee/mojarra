@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.4 2003/10/07 19:53:15 rlubke Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.5 2003/10/13 18:08:51 rlubke Exp $ 
  */ 
 
 
@@ -47,7 +47,7 @@ import java.util.Map;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.4 2003/10/07 19:53:15 rlubke Exp $  
+ * @version $Id: TestViewHandlerImpl.java,v 1.5 2003/10/13 18:08:51 rlubke Exp $  
  */ 
 
 
@@ -128,7 +128,7 @@ public void beginRender(WebRequest theRequest)
 }
     
     public void beginRender2(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", TEST_URI, null);
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
     }
     
    public void testGetViewIdPath() {
@@ -160,6 +160,7 @@ public void beginRender(WebRequest theRequest)
        // if getServletPath() returns "" then the viewId path returned should
        // be the same as what was passed.
        testRequest.setServletPath("");
+       testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
        String path = handler.getViewIdPath(facesContext, "/test.jsp");
        System.out.println("VIEW ID PATH 1: " + path);
        assertTrue(path.equals("/test.jsp"));
@@ -167,6 +168,8 @@ public void beginRender(WebRequest theRequest)
        // if getServletPath() returns a path prefix, then the viewId path
        // returned must have that path prefixed.
        testRequest.setServletPath("/faces");
+       testRequest.setPathInfo("/path/test.jsp");
+       testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
        path = handler.getViewIdPath(facesContext, "/path/test.jsp");
        System.out.println("VIEW ID PATH 2: " + path);
        assertTrue(path.equals("/faces/path/test.jsp"));
@@ -176,6 +179,8 @@ public void beginRender(WebRequest theRequest)
        // and the viewId passed has no extension, append the extension
        // to the provided viewId
        testRequest.setServletPath("/path/firstRequest.jsf");
+       testRequest.setPathInfo(null);
+       testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
        path = handler.getViewIdPath(facesContext, "/path/test");
        System.out.println("VIEW ID PATH 3: " + path);
        assertTrue(path.equals("/path/test.jsf"));
@@ -184,9 +189,21 @@ public void beginRender(WebRequest theRequest)
        // and the viewId passed has an extension, replace the extension with
        // the extension defined in the deployment descriptor
        testRequest.setServletPath("/path/firstRequest.jsf");
+       testRequest.setPathInfo(null);
+       testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
        path = handler.getViewIdPath(facesContext, "/path/t.est.jsp");
        System.out.println("VIEW ID PATH 4: " + path);
        assertTrue(path.equals("/path/t.est.jsf"));
+       
+       // if path info is null, the impl must check to see if 
+       // there is an exact match on the servlet path, if so, return
+       // the servlet path
+       testRequest.setServletPath("/faces");
+       testRequest.setPathInfo(null);
+       testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
+       path = handler.getViewIdPath(facesContext, "/path/t.est");
+       System.out.println("VIEW ID PATH 5: " + path);
+       assertTrue(path.equals("/faces/path/t.est"));
                      
     }
     
@@ -244,8 +261,8 @@ public void testRender()
 } 
     
     public void testRender2() {
-        // Change the viewID to end with .faces and make sure that
-        // the implementation changes .faces to .jsp and properly dispatches
+        // Change the viewID to end with .jsf and make sure that
+        // the implementation changes .jsf to .jsp and properly dispatches
         // the message.
         UIViewRoot newView = new UIViewRoot();
         newView.setViewId(TEST_URI);
@@ -343,6 +360,7 @@ public void testTransient()
     private class TestRequest extends HttpServletRequestWrapper {
         
         String servletPath;
+        String pathInfo;
         
         public TestRequest(HttpServletRequest request) {
             super(request);
@@ -354,6 +372,14 @@ public void testTransient()
         
         public void setServletPath(String servletPath) {
             this.servletPath = servletPath;            
+        }
+        
+        public String getPathInfo() {
+            return pathInfo;
+        }
+        
+        public void setPathInfo(String pathInfo) {
+            this.pathInfo = pathInfo;
         }
     }
     
