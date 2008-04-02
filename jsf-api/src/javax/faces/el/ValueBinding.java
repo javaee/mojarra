@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBinding.java,v 1.9 2004/02/04 23:38:12 ofung Exp $
+ * $Id: ValueBinding.java,v 1.10 2004/02/06 04:20:35 craigmcc Exp $
  */
 
 /*
@@ -20,9 +20,7 @@ import javax.faces.context.FacesContext;
  * expression.  An immutable {@link ValueBinding} for a particular value binding
  * can be acquired by calling the <code>createValueBinding()</code> method of
  * the {@link javax.faces.application.Application} instance for this web
- * application.  Implementations of {@link ValueBinding} are suitable for
- * caching the bindings for frequently accessed expressions, without requiring
- * per-request reparsing.</p>
+ * application.</p>
  */
 
 public abstract class ValueBinding {

@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBinding.java,v 1.6 2004/02/04 23:38:11 ofung Exp $
+ * $Id: MethodBinding.java,v 1.7 2004/02/06 04:20:33 craigmcc Exp $
  */
 
 /*
@@ -22,9 +22,7 @@ import javax.faces.context.FacesContext;
  * method binding expression can be acquired by calling the
  * <code>createMethodBinding()</code> method of the
  * {@link javax.faces.application.Application} instance for this web
- * application.  Implementations of {@link MethodBinding} are suitable for
- * caching the bindings for frequently accessed expressions, without requiring
- * per-request reparsing.</p>
+ * application.</p>
  */
 
 public abstract class MethodBinding {
