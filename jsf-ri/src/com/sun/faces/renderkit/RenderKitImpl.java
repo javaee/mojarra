@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.20 2004/05/10 19:56:05 jvisvanathan Exp $
+ * $Id: RenderKitImpl.java,v 1.21 2004/07/29 18:50:37 edburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.HashMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.20 2004/05/10 19:56:05 jvisvanathan Exp $
+ * @version $Id: RenderKitImpl.java,v 1.21 2004/07/29 18:50:37 edburns Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -56,10 +56,13 @@ public class RenderKitImpl extends RenderKit {
 // Relationship Instance Variables
 
     /**
-     * Keys are String rendererType, values are HtmlBasicRenderer instances
+     * Keys are String renderer family.  Values are HashMaps.  Nested
+     * HashMap keys are Strings for the rendererType, and values are the
+     * Renderer instances themselves.
      */
 
-    private HashMap renderers;
+    private HashMap rendererFamilies;
+
     private ResponseStateManager responseStateManager = null;
 //
 // Constructors and Initializers    
@@ -67,7 +70,7 @@ public class RenderKitImpl extends RenderKit {
 
     public RenderKitImpl() {
         super();
-        renderers = new HashMap();
+	rendererFamilies = new HashMap();
     }
 
 
@@ -93,9 +96,14 @@ public class RenderKitImpl extends RenderKit {
             throw new NullPointerException(message);
                 
         }
+	HashMap renderers = null;
 
-        synchronized (renderers) {
-            renderers.put(family + "|" + rendererType, renderer);
+        synchronized (rendererFamilies) {
+	    // PENDING(edburns): generics would be nice here.
+	    if (null == (renderers = (HashMap) rendererFamilies.get(family))) {
+		rendererFamilies.put(family, renderers = new HashMap());
+	    }
+            renderers.put(rendererType, renderer);
         }
     }
 
@@ -110,16 +118,15 @@ public class RenderKitImpl extends RenderKit {
             throw new NullPointerException(message);
         }
 
-        Util.doAssert(renderers != null);
+        Util.doAssert(rendererFamilies != null);
 
+	HashMap renderers = null;
         Renderer renderer = null;
-        StringBuffer sb = new StringBuffer(family);
-        sb.append("|");
-        sb.append(rendererType);
-        synchronized (renderers) {
-            renderer = (Renderer) renderers.get(sb.toString());
-        }
 
+	if (null != (renderers = (HashMap) rendererFamilies.get(family))) {
+	    renderer = (Renderer) renderers.get(rendererType);
+	}
+	
         return renderer;
     }
 
