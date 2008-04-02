@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.17 2003/09/17 19:01:19 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.18 2003/10/22 21:08:28 rlubke Exp $
  */
 
 /*
@@ -210,6 +210,11 @@ public class ValueBindingImpl extends ValueBinding
 
     public Object getValue(FacesContext context)
         throws PropertyNotFoundException {
+        if (context == null) {
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID)
+            );
+        }
 	Object result = null;
 
         if (log.isDebugEnabled()) {
