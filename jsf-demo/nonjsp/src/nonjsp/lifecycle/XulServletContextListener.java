@@ -60,11 +60,7 @@ import nonjsp.application.XulViewHandlerImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XulServletContextListener.java,v 1.3 2003/08/27 23:49:44 horwat Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id: XulServletContextListener.java,v 1.4 2003/10/07 20:57:41 rlubke Exp $ 
  */
 
 public class XulServletContextListener implements ServletContextListener

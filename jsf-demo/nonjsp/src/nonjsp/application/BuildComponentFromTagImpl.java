@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.3 2003/09/25 17:48:16 horwat Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.4 2003/10/07 20:57:39 rlubke Exp $
  */
 
 /*
@@ -44,28 +44,21 @@
 
 package nonjsp.application;
 
-import java.util.Hashtable;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
+import nonjsp.util.Util;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.mozilla.util.Assert;
+import org.mozilla.util.ParameterCheck;
+import org.xml.sax.Attributes;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
-import javax.faces.component.base.UIFormBase;
-import javax.faces.model.SelectItem;
 
-import org.xml.sax.Attributes;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import nonjsp.util.Util;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Hashtable;
 
 /**
  *
@@ -74,7 +67,7 @@ import org.apache.commons.logging.LogFactory;
  * Copy of com.sun.faces.tree.BuildComponentFromTagImpl in order to remove
  * demo dependancy on RI.
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.3 2003/09/25 17:48:16 horwat Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.4 2003/10/07 20:57:39 rlubke Exp $
  * 
  */
 

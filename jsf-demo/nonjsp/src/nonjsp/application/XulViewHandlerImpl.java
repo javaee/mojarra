@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.5 2003/09/26 20:02:02 horwat Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.6 2003/10/07 20:57:39 rlubke Exp $ 
  */ 
 
 
@@ -46,50 +46,38 @@
 
 package nonjsp.application; 
 
-import java.io.IOException; 
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.net.URL;
-
 import nonjsp.util.RIConstants;
-import nonjsp.util.Util;
-
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.application.ViewHandler; 
-import javax.faces.application.StateManager; 
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UINamingContainerBase;
-import javax.faces.component.base.UIViewRootBase;
-import javax.faces.context.FacesContext; 
-import javax.faces.context.ResponseWriter; 
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
-
-import javax.servlet.http.HttpServletRequest; 
-import javax.servlet.http.HttpServletResponse; 
-import javax.servlet.http.HttpSession; 
-import javax.servlet.ServletException; 
-import javax.servlet.RequestDispatcher; 
-
-import org.apache.commons.digester.RuleSetBase;
 import org.apache.commons.digester.Digester;
+import org.apache.commons.digester.RuleSetBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.impl.SimpleLog;
-
 import org.mozilla.util.Assert;
+
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.StateManager;
+import javax.faces.application.ViewHandler;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
 
 
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.5 2003/09/26 20:02:02 horwat Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.6 2003/10/07 20:57:39 rlubke Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -181,7 +169,7 @@ public class XulViewHandlerImpl implements ViewHandler {
         InputStream viewInput = null;
         RuleSetBase ruleSet = null;
 
-        root = new UIViewRootBase();
+        root = new UIViewRoot();
 
         if (null == viewId) {
             // PENDING(edburns): need name for default view
@@ -355,5 +343,11 @@ public class XulViewHandlerImpl implements ViewHandler {
     }
 
     public void writeState(FacesContext context) throws IOException {
+    }
+
+
+    public String getViewIdPath(FacesContext context, String viewId) {
+        // PENDING implementation
+        return "";
     }
 } 

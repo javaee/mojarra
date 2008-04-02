@@ -42,15 +42,14 @@ package cardemo;
 
 import components.components.AreaSelectedEvent;
 import components.components.AreaSelectedListener;
-import components.components.MapComponent;
+
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.component.base.UIViewRootBase;
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 
 
 
@@ -113,7 +112,7 @@ public class AreaSelectedHandler implements AreaSelectedListener {
             FacesContext context = FacesContext.getCurrentInstance();
             context.setLocale(curLocale);
 	    String viewId = "/Storefront.jsp";
-	    UIViewRootBase newView = new UIViewRootBase();
+	    UIViewRoot newView = new UIViewRoot();
 	    newView.setViewId(viewId);
 	    context.setViewRoot(newView);
 	}

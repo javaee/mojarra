@@ -1,5 +1,5 @@
 /*
- * $Id: CarActionListener.java,v 1.9 2003/09/25 17:48:02 horwat Exp $
+ * $Id: CarActionListener.java,v 1.10 2003/10/07 20:57:37 rlubke Exp $
  */
 
 /*
@@ -45,27 +45,19 @@
 package cardemo;
 
 import com.sun.faces.util.Util;
-import javax.faces.model.SelectItem;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.component.UISelectBoolean;
-import javax.faces.component.base.UICommandBase;
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ActionListener;
-import javax.faces.event.ValueChangedEvent;
-import javax.faces.el.ValueBinding;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ResourceBundle;
-import java.util.Properties;
-import java.util.Enumeration;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import javax.faces.component.UICommand;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectBoolean;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
+import javax.faces.event.PhaseId;
+
+import java.util.Enumeration;
+import java.util.Properties;
 
 /**
  * CarActionListener handles all the ActionEvents generated as a result
@@ -89,7 +81,7 @@ public class CarActionListener implements ActionListener {
         FacesContext context = FacesContext.getCurrentInstance();
 
 	UIComponent component = event.getComponent();
-	String actionCommand = ((UICommandBase)component).getAction();
+	String actionCommand = ((UICommand)component).getAction();
         processActionCommand(actionCommand);  
         // if user has already selected a car, we need to reset the state of 
         // the component. If the car is being chosen for the first time,this
