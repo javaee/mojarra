@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.22 2006/06/06 00:30:14 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.23 2006/07/12 22:51:38 rlubke Exp $
  */
 
 /*
@@ -30,10 +30,12 @@
 package javax.faces.webapp;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.render.ResponseStateManager;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -617,7 +619,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         }
 
         // Step 3 -- Calculate the component identifier for this component
-        String newId = createId();
+        String newId = createId(context, parentComponent);
         
         // Step 4 -- Create or return a facet with the specified name (if any)
         String facetName = getFacetName();
@@ -1462,7 +1464,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     /**
      * <p>Create the component identifier to be used for this component.</p>
      */
-    private String createId() throws JspException {
+    private String createId(FacesContext context, UIComponent parent) 
+    throws JspException {
 
 	if (this.id == null) {
 	    return getFacesJspId();
@@ -1476,6 +1479,28 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                 if (isNestedInIterator) {
                     this.id = generateIncrementedId(this.id);
                 } else {
+                    // verify whether or not this ID is unique within
+                    // it's closest naming container to prevent false
+                    // positives.
+                    if (parent != null) {
+                        UIComponent container = getNamingContainer(parent);                        
+                        if (container != null) { 
+                            UIComponent comp = container.findComponent(this.id);
+                            // This is somewhat of a HACK, but I don't see any
+                            // other way around it.  This logic works fine
+                            // when the view is first rendered, however, on a
+                            // post back, findComponent() will return true
+                            // since the tree was restored.  So check for the
+                            // saved state request parameter to determine if
+                            // this was a post-back or not.
+                            if (comp == null
+                                || context.getExternalContext()
+                                  .getRequestParameterMap().containsKey(
+                                  ResponseStateManager.VIEW_STATE_PARAM)) {
+                                return (this.id);
+                            }
+                        }
+                    }
                     StringWriter writer = new StringWriter(128);
                     printTree(context.getViewRoot(), this.id, writer, 0);
                     String msg = "Component ID '"
@@ -1739,6 +1764,25 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         } catch (IOException ex) {
             // ignore
         }
+    }
+    
+    /**
+     * <p>Private utilitity method for finding this
+     * <code>UIComponent</code>'s parent <code>NamingContainer</code>.
+     * This method may return <code>null</code> if there is not a
+     * parent <code>NamingContainer</code></p>
+     * 
+     * @return the parent <code>NamingContainer</code>
+     */
+    private UIComponent getNamingContainer(UIComponent component) {        
+        UIComponent namingContainer = component;
+        while (namingContainer != null) {
+            if (namingContainer instanceof NamingContainer) {
+                return namingContainer;
+            }
+            namingContainer = namingContainer.getParent();
+        }
+        return null;
     }
 
 }

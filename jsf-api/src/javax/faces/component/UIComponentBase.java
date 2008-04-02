@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.134 2006/06/12 23:26:50 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.135 2006/07/12 22:51:38 rlubke Exp $
  */
 
 /*
@@ -1404,18 +1404,19 @@ public abstract class UIComponentBase extends UIComponent {
         if (null == stateObj) {
             return null;
         }
-        Object result;
-        List stateList;
-
+        Object result;       
 
         if (stateObj instanceof List) {
-            stateList = (List) stateObj;
-            for (int i = 0, size = stateList.size(); i < size; i++) {
-                stateList.set(i,
-                              ((StateHolderSaver) stateList.get(i)).restore(
-                                    context));
+            List stateList = (List) stateObj;
+            List<Object> retList = new ArrayList<Object>(stateList.size());
+            for (Object item : stateList) {
+                try {
+                    retList.add(((StateHolderSaver) item).restore(context));    
+                } catch (ClassCastException cce) {
+                    throw new IllegalStateException("Unknown object type");
+                }  
             }
-            result = stateList;
+            result = retList;
         } else if (stateObj instanceof StateHolderSaver) {
             StateHolderSaver saver = (StateHolderSaver) stateObj;
             result = saver.restore(context);
