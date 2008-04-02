@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.71 2004/01/30 00:31:19 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.72 2004/02/03 00:52:23 jvisvanathan Exp $
  */
 
 /*
@@ -83,18 +83,21 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
 
     public void decode(FacesContext context, UIComponent component) {
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + 
-                component.getClientId(context));
-        }
-	if (context == null || component == null) {
+        if (context == null || component == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if (log.isTraceEnabled()) {
+            log.trace("Begin decoding component " + component.getId());
         }
         
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
+            if (log.isTraceEnabled()) {
+                log.trace("No decoding necessary since the component " + 
+                    component.getId() + " is disabled");
+            }
             return;
         } 
 
@@ -126,24 +129,27 @@ public class ButtonRenderer extends HtmlBasicRenderer {
                     " ActionEvent queued " + actionEvent);
         }
         if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + clientId);
+            log.trace("End decoding component " + component.getId());
         }
         return;
     }
     
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException  {
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + 
-                component.getClientId(context));
-        }
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + component.getId());
+        }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + component.getId() + 
+                " since rendered attribute is set to false ");
+            }
             return;
         }
         
@@ -186,8 +192,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 	}
         writer.endElement("input");
         if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + 
-                    component.getClientId(context));
+            log.trace("End encoding component " + component.getId());
         }
     }
     

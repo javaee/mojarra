@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.28 2004/01/30 21:49:20 craigmcc Exp $
+ * $Id: ImageRenderer.java,v 1.29 2004/02/03 00:52:26 jvisvanathan Exp $
  */
 
 /*
@@ -22,28 +22,26 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
 
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
  *  <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  *  ImageTag
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: ImageRenderer.java,v 1.28 2004/01/30 21:49:20 craigmcc Exp $
+ * @version $Id: ImageRenderer.java,v 1.29 2004/02/03 00:52:26 jvisvanathan Exp $
  * 
- *
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
-
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(ImageRenderer.class);
+    
     //
     // Class Variables
     //
@@ -98,9 +96,18 @@ public class ImageRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+        
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + component.getId());
+        }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + 
+                component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }
        
@@ -122,6 +129,9 @@ public class ImageRenderer extends HtmlBasicRenderer {
 	    writer.writeAttribute("alt", "", "alt");
 	}
 	writer.endElement("img");
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + component.getId());
+        }
     }
 
     private String src(FacesContext context, UIComponent component) {

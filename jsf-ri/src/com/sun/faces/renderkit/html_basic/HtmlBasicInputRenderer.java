@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.18 2004/01/27 21:04:25 eburns Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.19 2004/02/03 00:52:25 jvisvanathan Exp $
  */
 
 /*
@@ -24,6 +24,9 @@ import javax.faces.el.ValueBinding;
 
 import com.sun.faces.util.Util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  *
  *  <B>HtmlBasicInputRenderer</B> is a base class for implementing renderers 
@@ -34,7 +37,9 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
-
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(HtmlBasicInputRenderer.class);
+    
     //
     // Class Variables
     //
@@ -66,12 +71,20 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
     public void setSubmittedValue(UIComponent component, Object value) {
         if (component instanceof UIInput) {
             ((UIInput)component).setSubmittedValue(value);
+            if (log.isDebugEnabled()) {
+                log.debug("Set submitted value " + value + " on component " );
+            }
         }
+        
     }
 
     protected Object getValue(UIComponent component) {
         if (component instanceof ValueHolder ) {
-            return ((ValueHolder) component).getValue();
+            Object value = ((ValueHolder) component).getValue();
+            if (log.isDebugEnabled()) {
+                log.debug("component.getValue() returned " + value);
+            }
+            return value;
         }
 
         return null;
@@ -80,7 +93,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
 
     public Object getConvertedValue(FacesContext context, UIComponent component,
             Object submittedValue) throws ConverterException {
-        
+                
         String newValue = (String) submittedValue;
 	// if we have no local value, try to get the valueBinding.
 	ValueBinding valueBinding = component.getValueBinding("value");
@@ -100,6 +113,11 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             if ( converterType == null || 
                  converterType == String.class ||
                  converterType == Object.class) {
+                if (log.isDebugEnabled()) {
+                    log.debug("No conversion necessary for " + submittedValue 
+                    + "and converterType " + converterType + 
+                    " while decoding component " + component.getId());
+                }
                 return newValue;
             }
             // if getType returns a type for which we support a default
@@ -108,7 +126,16 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             try {
                 Application application = context.getApplication();
                 converter = application.createConverter(converterType);
+                if (log.isDebugEnabled()) {
+                    log.debug("Created converter " + converter + "of type " + 
+                        converterType + " while decoding component " + component.getId());
+                }
             } catch (Exception e) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Converter could not be instantiated for " + 
+                        converterType + " while " + 
+                        "decoding component " + component.getId());
+                }
                 return (null);
             }
 	} else if ( converter == null && valueBinding == null ) {
@@ -117,6 +144,12 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             // figuring out the type. So for the selectOne and
             // selectMany, converter has to be set if there is no
             // valueBinding attribute set on the component.
+            if (log.isDebugEnabled()) {
+                log.debug("No conversion necessary for " + submittedValue + 
+                    " while decoding component " + component.getId() + 
+                    "since there is no explicitly registered converter and " + 
+                    "component value is not bound to a model property ");
+            }
             return newValue;
         }
         
@@ -124,6 +157,10 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             result = converter.getAsObject(context, component, newValue);
 	    return result;
         } else {
+            if (log.isDebugEnabled()) {
+                log.debug("Unexpected Converter exception " + 
+                    " while decoding component " + component.getId());
+            }
             // throw converter exception.
              throw new ConverterException(Util.getExceptionMessage(
                 Util.CONVERSION_ERROR_MESSAGE_ID));

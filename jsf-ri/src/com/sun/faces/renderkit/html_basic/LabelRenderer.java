@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.23 2004/01/27 21:04:26 eburns Exp $
+ * $Id: LabelRenderer.java,v 1.24 2004/02/03 00:52:26 jvisvanathan Exp $
  */
 
 /*
@@ -18,10 +18,6 @@ import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-
-import com.sun.faces.util.Util;
-
-
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -77,6 +73,10 @@ public class LabelRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+        
+        if (log.isTraceEnabled()) {
+            log.trace("Begin decoding component " + component.getId());
+        }
 	ResponseWriter writer = null;
 	String 
 	    forValue = null,
@@ -86,6 +86,11 @@ public class LabelRenderer extends HtmlBasicRenderer {
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + 
+                component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }
         writer = context.getResponseWriter();
@@ -140,6 +145,9 @@ public class LabelRenderer extends HtmlBasicRenderer {
             ResponseWriter writer = context.getResponseWriter();
             Util.doAssert(writer != null );
 	    writer.endElement("label");
+        }
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + component.getId());
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.77 2004/01/27 21:04:25 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.78 2004/02/03 00:52:25 jvisvanathan Exp $
  */
 
 /*
@@ -62,7 +62,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
     //
     // Class Variables
     //
-    private static final Log log = LogFactory.getLog(MessagesRenderer.class);
+    private static final Log log = LogFactory.getLog(HtmlBasicRenderer.class);
    
 
     //
@@ -99,36 +99,53 @@ public abstract class HtmlBasicRenderer extends Renderer {
     }
     
     public void decode(FacesContext context, UIComponent component) {
-
+        
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+        if (log.isTraceEnabled()) {
+            log.trace("Begin decoding component " + component.getId());
+        } 
         UIInput uiInput = null;
         if ( component instanceof UIInput) {
             uiInput= (UIInput) component;
         } else {
             // decode needs to be invoked only for components that are
             // instances or subclasses of UIInput.
+            if (log.isTraceEnabled()) {
+                log.trace("No decoding necessary since the component " 
+                    + component.getId() + 
+                    " is not an instance or a sub class of UIInput");
+            } 
             return;
         }    
 
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
+            if (log.isTraceEnabled()) {
+                log.trace("No decoding necessary since the component " + 
+                    component.getId() + " is disabled");
+            } 
             return;
         } 
         
         String clientId = component.getClientId(context);
         Util.doAssert(clientId != null );
-        
         Map requestMap = context.getExternalContext().getRequestParameterMap();
 	// Don't overwrite the value unless you have to!
 	if (requestMap.containsKey(clientId)) {
 	    String newValue = (String)requestMap.get(clientId);
             setSubmittedValue(component, newValue);
+            if (log.isTraceEnabled()) {
+                log.trace("new value after decoding" + newValue);
+            }
 	}
+        if (log.isTraceEnabled()) {
+            log.trace("End decoding component " + component.getId());
+        }
      }
     
     public void encodeEnd(FacesContext context, UIComponent component) 
@@ -142,10 +159,18 @@ public abstract class HtmlBasicRenderer extends Renderer {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+       
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + component.getId());
+        } 
         
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }    
           
@@ -153,7 +178,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
         Util.doAssert(writer != null );
         
         currentValue = getCurrentValue(context, component);
-        // PENDING (visvan) here is where we'd hook in a buffer pooling scheme
+        if (log.isTraceEnabled()) {
+            log.trace("Value to be rendered " + currentValue);
+        }
         getEndTextToRender(context, component, currentValue);
     }
     

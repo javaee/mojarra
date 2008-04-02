@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.13 2004/01/31 06:59:37 eburns Exp $
+ * $Id: CommandLinkRenderer.java,v 1.14 2004/02/03 00:52:24 jvisvanathan Exp $
  */
 
 /*
@@ -76,19 +76,25 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
     //
 
     public void decode(FacesContext context, UIComponent component) {
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + 
-                component.getClientId(context));
-        }
+        
 	if (context == null || component == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+        
+        if (log.isTraceEnabled()) {
+            log.trace("Begin decoding component " + component.getId());
+        }
+        
 	UICommand command = (UICommand) component;
 
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
+            if (log.isTraceEnabled()) {
+                log.trace("No decoding necessary since the component " + 
+                    component.getId() + " is disabled");
+            }
             return;
         } 
 
@@ -111,7 +117,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
                     " ActionEvent queued " + actionEvent);
         }
         if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + clientId);
+            log.trace("End decoding component " + component.getId());
         }
 	return;
     }
@@ -134,19 +140,23 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
     private String clientId = null;
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + 
-                component.getClientId(context));
-        }
+        
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + component.getId());
+        }
+        
 	UICommand command = (UICommand) component;
 
         // suppress rendering if "rendered" property on the command is
         // false.
         if (!command.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
@@ -211,16 +221,20 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding children " + 
-                    component.getClientId(context));
-        }
+        
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding children " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }
 	Iterator kids = component.getChildren().iterator();
@@ -233,8 +247,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	    kid.encodeEnd(context);
 	}
         if (log.isTraceEnabled()) {
-            log.trace("End encoding children " + 
-                    component.getClientId(context));
+            log.trace("End encoding children " + component.getId());
         }
     }
 
@@ -249,6 +262,10 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         // suppress rendering if "rendered" property on the command is
         // false.
         if (!command.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
@@ -269,8 +286,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             FormRenderer.addNeededHiddenField(context, paramList[i].getName());
         }
         if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + 
-                    component.getClientId(context));
+            log.trace("End encoding component " + component.getId());
         }
 
 	return;

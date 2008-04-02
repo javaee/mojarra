@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.28 2004/01/30 00:31:20 jvisvanathan Exp $
+ * $Id: GridRenderer.java,v 1.29 2004/02/03 00:52:25 jvisvanathan Exp $
  */
 
 /*
@@ -77,18 +77,25 @@ public class GridRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-         if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + 
-                component.getClientId(context));
-        }
+        
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + 
+                component.getId());
+        }
+        
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " 
+                + component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }
         
@@ -154,18 +161,23 @@ public class GridRenderer extends HtmlBasicRenderer {
 
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding children " + 
-                    component.getClientId(context));
-        }
+        
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding children " + component.getId());
         }
 
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + 
+                component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }
 
@@ -231,8 +243,7 @@ public class GridRenderer extends HtmlBasicRenderer {
 	writer.endElement("tbody");
 	writer.writeText("\n", null);
         if (log.isTraceEnabled()) {
-            log.trace("End encoding children " + 
-                    component.getClientId(context));
+            log.trace("End encoding children " + component.getId());
         }
     }
 
@@ -247,6 +258,11 @@ public class GridRenderer extends HtmlBasicRenderer {
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + 
+                component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }
         // Render the ending of this panel
@@ -254,8 +270,7 @@ public class GridRenderer extends HtmlBasicRenderer {
 	writer.endElement("table");
 	writer.writeText("\n", null);
         if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + 
-                    component.getClientId(context));
+            log.trace("End encoding component " + component.getId());
         }
     }
 

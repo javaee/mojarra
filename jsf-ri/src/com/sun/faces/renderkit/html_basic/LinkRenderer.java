@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.5 2003/12/17 15:13:55 rkitain Exp $
+ * $Id: LinkRenderer.java,v 1.6 2004/02/03 00:52:26 jvisvanathan Exp $
  */
 
 /*
@@ -32,12 +32,8 @@ import com.sun.faces.util.Util;
 
 
 /**
- *
- *  <B>LinkRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: LinkRenderer.java,v 1.5 2003/12/17 15:13:55 rkitain Exp $
+ * <B>LinkRenderer</B> acts as superclass for CommandLinkRenderer and 
+ * OutputLinkRenderer.  
  */
 
 public class LinkRenderer extends HtmlBasicRenderer {

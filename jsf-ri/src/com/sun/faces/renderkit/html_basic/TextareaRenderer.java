@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.6 2004/01/31 06:59:37 eburns Exp $
+ * $Id: TextareaRenderer.java,v 1.7 2004/02/03 00:52:27 jvisvanathan Exp $
  */
 
 /*
@@ -28,14 +28,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /**
- *
- *  <B>TextareaRenderer</B> is a class that handles the rendering of the input
- *  TextAreaTag
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: TextareaRenderer.java,v 1.6 2004/01/31 06:59:37 eburns Exp $
- * 
+ * <B>TextareaRenderer</B> is a class that renders the current value of 
+ * <code>UIInput<code> component as a Textarea.
  */
 
 public class TextareaRenderer extends HtmlBasicInputRenderer {

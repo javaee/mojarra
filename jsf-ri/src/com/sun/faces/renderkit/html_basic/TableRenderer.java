@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.17 2004/01/31 06:59:37 eburns Exp $
+ * $Id: TableRenderer.java,v 1.18 2004/02/03 00:52:27 jvisvanathan Exp $
  */
 
 /*
@@ -55,6 +55,8 @@ import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>Render a {@link UIData} component as a two-dimensional table.</p>
@@ -62,6 +64,9 @@ import javax.faces.context.ResponseWriter;
 
 public class TableRenderer extends HtmlBasicRenderer {
 
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(ButtonRenderer.class);
+     
     public boolean getRendersChildren() {
 	return true;
     }
@@ -73,10 +78,18 @@ public class TableRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + component.getId());
+        }
 
         // suppress rendering if "rendered" property on the component is
         // false.
 	if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("No encoding necessary " + 
+                component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
 	    return;
 	}
 	UIData data = (UIData) component;
@@ -196,7 +209,15 @@ public class TableRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding children " + component.getId());
+        }
 	if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("No encoding necessary " + 
+                component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
 	    return;
 	}
 	UIData data = (UIData) component;
@@ -283,7 +304,10 @@ public class TableRenderer extends HtmlBasicRenderer {
 
 	// Clean up after ourselves
 	data.setRowIndex(-1);
-
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding children " + 
+                    component.getId());
+        }
     }
 
 
@@ -295,6 +319,11 @@ public class TableRenderer extends HtmlBasicRenderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 	if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("No encoding necessary " + 
+                component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
 	    return;
 	}
 	UIData data = (UIData) component;
@@ -304,6 +333,9 @@ public class TableRenderer extends HtmlBasicRenderer {
 	// Render the ending of this table
         writer.endElement("table");
         writer.writeText("\n", null);
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + component.getId());
+        }
 
     }
 

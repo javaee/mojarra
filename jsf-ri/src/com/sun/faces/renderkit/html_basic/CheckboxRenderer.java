@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.62 2004/01/30 00:31:19 jvisvanathan Exp $
+ * $Id: CheckboxRenderer.java,v 1.63 2004/02/03 00:52:24 jvisvanathan Exp $
  *
  */
 
@@ -86,13 +86,12 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
 
         Object convertedValue = null;
 
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + 
-                component.getClientId(context));
-        }
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if (log.isTraceEnabled()) {
+            log.trace("Begin decoding component " + component.getId());
         }
 
         // If the checkbox disabled, nothing would be sent in the
@@ -100,6 +99,10 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         // value of the checkbox, if it is disabled since its state
         // cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
+            if (log.isTraceEnabled()) {
+                log.trace("No decoding necessary since the component " + 
+                    component.getId() + " is disabled");
+            }
             return;
         } 
 
@@ -126,7 +129,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
             log.trace("new value after decoding" + newValue);
         }
         if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + clientId);
+            log.trace("End decoding component " + component.getId());
         }
     }
 

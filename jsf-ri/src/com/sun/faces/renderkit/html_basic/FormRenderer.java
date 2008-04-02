@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.72 2004/01/30 21:49:20 craigmcc Exp $
+ * $Id: FormRenderer.java,v 1.73 2004/02/03 00:52:24 jvisvanathan Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ public class FormRenderer extends HtmlBasicRenderer {
 	// 
         String clientId = component.getClientId(context);
         if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + clientId);
+            log.trace("Begin decoding component " + component.getId());
         }
         Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
         if (requestParameterMap.containsKey(clientId)) {
@@ -87,7 +87,7 @@ public class FormRenderer extends HtmlBasicRenderer {
 	    ((UIForm)component).setSubmitted(false);
 	}
         if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + clientId);
+            log.trace("End decoding component " + component.getId());
         }
     }
 
@@ -95,18 +95,23 @@ public class FormRenderer extends HtmlBasicRenderer {
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException{
         String styleClass = null;   
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + 
-                component.getClientId(context));
-        }
+        
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + 
+                component.getId());
+        }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + 
+                component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
@@ -157,6 +162,11 @@ public class FormRenderer extends HtmlBasicRenderer {
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + 
+                component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }
 	
@@ -179,8 +189,7 @@ public class FormRenderer extends HtmlBasicRenderer {
 
         writer.endElement("form");
         if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + 
-                    component.getClientId(context));
+            log.trace("End encoding component " + component.getId());
         }
     }
 
