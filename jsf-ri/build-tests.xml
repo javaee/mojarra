@@ -141,7 +141,7 @@
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/classes"
             debug="${compile.debug}"
-            includes="com/sun/faces/*.java,com/sun/faces/el/*.java,com/sun/faces/context/*.java,com/sun/faces/util/*.java"
+            includes="com/sun/faces/application/*.java,com/sun/faces/*.java,com/sun/faces/el/*.java,com/sun/faces/context/*.java,com/sun/faces/util/*.java"
             excludes="com/sun/faces/context/TestFacesContextImpl_EL.java,com/sun/faces/context/TestFacesContextImpl_Model.java"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">

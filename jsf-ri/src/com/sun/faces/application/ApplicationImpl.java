@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.2 2003/03/28 20:08:59 horwat Exp $
+ * $Id: ApplicationImpl.java,v 1.3 2003/03/28 21:02:04 horwat Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.event.PhaseId;
 
 import com.sun.faces.el.ValueBindingImpl;
+import com.sun.faces.el.VariableResolverImpl;
 
 import java.util.HashMap;
 
@@ -203,7 +204,8 @@ public class ApplicationImpl extends Application {
 
             FacesContext facesContext = FacesContext.getCurrentInstance();
             valueBinding = new ValueBindingImpl
-                (facesContext, variableResolver, propertyResolver);
+                (facesContext, (VariableResolverImpl) variableResolver, 
+                 propertyResolver);
             valueBindingMap.put(ref, valueBinding);
         }
 

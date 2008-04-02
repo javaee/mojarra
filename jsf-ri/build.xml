@@ -156,7 +156,7 @@
     <javac  srcdir="${source.home}"
            destdir="${build.home}/classes"
              debug="${compile.debug}"
-             includes="com/sun/faces/el/*.java,com/sun/faces/context/*.java,com/sun/faces/renderkit/html_basic/*.java,com/sun/faces/renderkit/*.java,com/sun/faces/lifecycle/*.java,com/sun/faces/tree/*.java,com/sun/faces/util/*.java,com/sun/faces/el/impl/**/*.java"
+             includes="com/sun/faces/application/*.java,com/sun/faces/el/*.java,com/sun/faces/context/*.java,com/sun/faces/renderkit/html_basic/*.java,com/sun/faces/renderkit/*.java,com/sun/faces/lifecycle/*.java,com/sun/faces/tree/*.java,com/sun/faces/util/*.java,com/sun/faces/el/impl/**/*.java"
        deprecation="${compile.deprecation}"
           optimize="${compile.optimize}">
       <classpath refid="compile.classpath"/>
