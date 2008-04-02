@@ -349,6 +349,7 @@ jsf-api.jar.
                 test.FactoryFinder2,
                 test.PhaseId,
                 test.component,
+                test.validator,
                 test.mock,
                 test.model,
                 test.webapp">
@@ -618,6 +619,21 @@ jsf-api.jar.
       <batchtest>
         <fileset    dir="${build.test}"
                includes="javax/faces/component/*TestCase.class"/>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="test.validator" depends="build.test">
+    <echo message="Running javax.faces.validator tests ..."/>
+    <junit printSummary="no" fork="yes"
+          haltonfailure="yes" haltonerror="yes">
+      <jvmarg line="${debug.jvm.args}"/>
+      <jvmarg line="${jcov.jvm.args}"/>
+      <classpath  refid="test.classpath"/>
+      <formatter   type="plain"      usefile="false"/>
+      <batchtest>
+        <fileset    dir="${build.test}"
+               includes="javax/faces/validator/*TestCase.class"/>
       </batchtest>
     </junit>
   </target>

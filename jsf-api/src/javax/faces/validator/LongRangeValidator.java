@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.34 2004/05/10 19:52:35 jvisvanathan Exp $
+ * $Id: LongRangeValidator.java,v 1.35 2004/05/12 02:00:45 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 
 
 /**
@@ -210,8 +211,10 @@ public class LongRangeValidator implements Validator, StateHolder {
 					   (context, component,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
-					    new Long(minimum),
-					    new Long(maximum) }));
+					    stringValue(component,
+							new Long(minimum)),
+					    stringValue(component,
+							new Long(maximum)) }));
 			
 		    }
 		    else {
@@ -219,7 +222,8 @@ public class LongRangeValidator implements Validator, StateHolder {
 					   (context, component,
 					    MAXIMUM_MESSAGE_ID,
 					    new Object[] {
-					    new Long(maximum) }));
+					    stringValue(component,
+							new Long(maximum)) }));
 		    }
                 }
                 if (minimumSet &&
@@ -229,8 +233,10 @@ public class LongRangeValidator implements Validator, StateHolder {
 					   (context, component,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
-				            new Double(minimum),
-					    new Double(maximum) }));
+				            stringValue(component,
+							new Long(minimum)),
+					    stringValue(component,
+							new Long(maximum)) }));
 			
 		    }
 		    else {
@@ -238,7 +244,8 @@ public class LongRangeValidator implements Validator, StateHolder {
 					   (context, component,
 					    MINIMUM_MESSAGE_ID,
 					    new Object[] {
-					    new Long(minimum) }));
+					    stringValue(component,
+							new Long(minimum)) }));
 		    }
                 }
             } catch (NumberFormatException e) {
@@ -285,6 +292,19 @@ public class LongRangeValidator implements Validator, StateHolder {
         }
 
     }
+
+    private String stringValue(UIComponent component, Long toConvert) {
+	String result = null;
+	Converter converter = null;
+	FacesContext context = FacesContext.getCurrentInstance();
+
+	converter = (Converter)
+	    context.getApplication().createConverter("javax.faces.Number");
+	result = converter.getAsString(context, component, toConvert);
+	return result;
+    }
+
+
 
 
     // ----------------------------------------------------- StateHolder Methods

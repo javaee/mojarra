@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.39 2004/05/10 19:52:34 jvisvanathan Exp $
+ * $Id: DoubleRangeValidator.java,v 1.40 2004/05/12 02:00:44 eburns Exp $
  */
 
 /*
@@ -13,8 +13,10 @@ package javax.faces.validator;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 
+import javax.faces.convert.Converter;
 
 /**
  * <p><strong>DoubleRangeValidator</strong> is a {@link Validator} that checks
@@ -211,8 +213,8 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 					   (context, component,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
-						new Double(minimum),
-						new Double(maximum) }));
+						stringValue(component, new Double(minimum)),
+						stringValue(component, new Double(maximum)) }));
 			
 		    }
 		    else {
@@ -220,7 +222,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 					   (context, component,
 					    MAXIMUM_MESSAGE_ID,
 					    new Object[] {
-				            new Double(maximum) }));
+				            stringValue(component, new Double(maximum)) }));
 		    }
                 }
                 if (minimumSet &&
@@ -230,8 +232,8 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 					   (context, component,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
-				            new Double(minimum),
-				            new Double(maximum) }));
+				            stringValue(component, new Double(minimum)),
+				            stringValue(component, new Double(maximum)) }));
 			
 		    }
 		    else {
@@ -239,7 +241,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 					   (context, component,
 					    MINIMUM_MESSAGE_ID,
 					    new Object[] {
-					    new Double(minimum) }));
+					    stringValue(component, new Double(minimum)) }));
 		    }
                 }
             } catch (NumberFormatException e) {
@@ -285,6 +287,17 @@ public class DoubleRangeValidator implements Validator, StateHolder {
             return (Double.parseDouble(attributeValue.toString()));
         }
 
+    }
+
+    private String stringValue(UIComponent component, Double toConvert) {
+	String result = null;
+	Converter converter = null;
+	FacesContext context = FacesContext.getCurrentInstance();
+
+	converter = (Converter)
+	    context.getApplication().createConverter("javax.faces.Number");
+	result = converter.getAsString(context, component, toConvert);
+	return result;
     }
 
 

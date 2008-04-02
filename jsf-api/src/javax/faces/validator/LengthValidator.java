@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.39 2004/05/10 19:52:35 jvisvanathan Exp $
+ * $Id: LengthValidator.java,v 1.40 2004/05/12 02:00:45 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
+import javax.faces.convert.Converter;
 
 /**
  * <p><strong>LengthValidator</strong> is a {@link Validator} that checks
@@ -195,7 +196,8 @@ public class LengthValidator implements Validator, StateHolder {
                                    (context, component,
                                     MAXIMUM_MESSAGE_ID,
                                     new Object[] {
-                                    new Integer(maximum) } ));
+                                    integerToString(component, 
+						    new Integer(maximum)) } ));
             }
             if (minimumSet &&
                 (converted.length() < minimum)) {
@@ -203,7 +205,8 @@ public class LengthValidator implements Validator, StateHolder {
                                    (context, component,
                                     MINIMUM_MESSAGE_ID,
                                     new Object[] {
-                                    new Integer(minimum) }));
+                                    integerToString(component,
+						    new Integer(minimum)) }));
             }
         }
 
@@ -244,6 +247,18 @@ public class LengthValidator implements Validator, StateHolder {
         }
 
     }
+
+    private String integerToString(UIComponent component, Integer toConvert) {
+	String result = null;
+	Converter converter = null;
+	FacesContext context = FacesContext.getCurrentInstance();
+
+	converter = (Converter)
+	    context.getApplication().createConverter("javax.faces.Number");
+	result = converter.getAsString(context, component, toConvert);
+	return result;
+    }
+
 
 
     // ----------------------------------------------------- StateHolder Methods

@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.21 2004/02/26 20:31:50 eburns Exp $
+ * $Id: MockApplication.java,v 1.22 2004/05/12 02:00:47 eburns Exp $
  */
 
 /*
@@ -48,6 +48,10 @@ public class MockApplication extends Application {
         addComponent("TestInput", "javax.faces.component.UIInput");
         addComponent("TestOutput", "javax.faces.component.UIOutput");
         addConverter("Integer", "javax.faces.convert.IntegerConverter");
+        addConverter("javax.faces.Number", 
+		     "javax.faces.convert.NumberConverter");
+        addConverter("javax.faces.Long", 
+		     "javax.faces.convert.LongConverter");
         addValidator("Length", "javax.faces.validator.LengthValidator");
     }
 
