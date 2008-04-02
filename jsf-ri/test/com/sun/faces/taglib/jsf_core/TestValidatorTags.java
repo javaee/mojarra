@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.33 2007/01/30 02:32:48 rlubke Exp $
+ * $Id: TestValidatorTags.java,v 1.34 2007/02/28 05:32:07 rlubke Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.33 2007/01/30 02:32:48 rlubke Exp $
+ * @version $Id: TestValidatorTags.java,v 1.34 2007/02/28 05:32:07 rlubke Exp $
  */
 
 public class TestValidatorTags extends JspFacesTestCase {
@@ -169,9 +169,8 @@ public class TestValidatorTags extends JspFacesTestCase {
             processValidations = new ProcessValidationsPhase(),
             applyRequestValues = new ApplyRequestValuesPhase();
 
-        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        page.setLocale(Locale.US);
-        page.setViewId(TEST_URI);
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), TEST_URI);
+        page.setLocale(Locale.US);       
         getFacesContext().setViewRoot(page);
 
         // This builds the tree, and usefaces saves it in the session
