@@ -1,5 +1,5 @@
 /*
- * $Id: EnumConverter.java,v 1.2 2006/05/09 20:18:47 rlubke Exp $
+ * $Id: EnumConverter.java,v 1.3 2006/05/10 19:38:51 rlubke Exp $
  */
 
 /*
@@ -124,14 +124,14 @@ public class EnumConverter implements Converter, StateHolder {
      *
      * @throws ConverterException {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
-     */ 
+     */
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
         }
-        
+
         // If the specified value is null or zero-length, return null
         if (value == null) {
             return (null);
@@ -140,26 +140,19 @@ public class EnumConverter implements Converter, StateHolder {
         if (value.length() < 1) {
             return (null);
         }
-        Object result = null;
-        
-        if(null != targetClass) {
-            try {
-                result = Enum.valueOf(targetClass, value);
-            } catch (IllegalArgumentException iae) {
-                // ignore
-            }
-           
-            if (null == result) {
-                throw new ConverterException(
-                      MessageFactory.getMessage(context, 
-                                                ENUM_ID, 
-                                                value, 
-                                                value,
-                                                MessageFactory.getLabel(context, 
-                                                                        component)));
-            }
+
+        try {
+            return Enum.valueOf(targetClass, value);
+        } catch (IllegalArgumentException iae) {
+            throw new ConverterException(
+                  MessageFactory.getMessage(context,
+                                            ENUM_ID,
+                                            value,
+                                            value,
+                                            MessageFactory.getLabel(context,
+                                                                    component)));
         }
-        return result;
+
     }
 
     /**
@@ -186,14 +179,9 @@ public class EnumConverter implements Converter, StateHolder {
         }
         
         // If the specified value is null, return a zero-length String
-        if (value == null) {
-            return "";
-        }       
-        
-        // given that we will return value.toString() no matter the outcome,
+        // Also, given that we will return value.toString() no matter the outcome,
         // just do it without any logic
-        
-        return value.toString();       
+        return ((value == null) ? "" : value.toString());                                             
                 
     }
     
