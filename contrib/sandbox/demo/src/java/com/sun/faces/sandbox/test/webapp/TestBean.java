@@ -24,7 +24,7 @@ import com.sun.faces.sandbox.model.FileHolderImpl;
 public class TestBean {
     protected YuiTree tree;
     protected Date date;
-    protected Date date2;
+    protected Date date2 = new Date(2005, 1, 1);
     protected FileHolder fileHolder = new FileHolderImpl();
     
     public TestBean() {
@@ -32,14 +32,15 @@ public class TestBean {
         YuiTreeNode node1 = new YuiTreeNode();
         YuiTreeNode node2 = new YuiTreeNode();
         YuiTreeNode node3 = new YuiTreeNode();
+        
         HtmlOutputText text1 = new HtmlOutputText(); text1.setValue("Text 1");
         HtmlOutputText text2 = new HtmlOutputText(); text2.setValue("Text 2");
         HtmlOutputText text3 = new HtmlOutputText(); text3.setValue("Text 3");
 
-        node1.getChildren().add(text1);
+        node1.getFacets().put("label", text1);
         node1.getChildren().add(node3);
-        node2.getChildren().add(text3);
-        node3.getChildren().add(text2);
+        node2.getFacets().put("label", text3);
+        node3.getFacets().put("label", text2);
 
         tree.getChildren().add(node1);
         tree.getChildren().add(node2);

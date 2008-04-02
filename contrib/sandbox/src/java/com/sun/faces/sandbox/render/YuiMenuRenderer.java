@@ -178,16 +178,12 @@ public class YuiMenuRenderer extends Renderer {
         String ctorArgs = buildConstructorArgs(component);
         String javaScript = "var oMenu_%%%JS_VAR%%% = new YUISF.Menu(\"%%%ID%%%\", {" + ctorArgs + "});";
         javaScript = javaScript.replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()) + "_1")
-            .replaceAll("%%%JS_VAR%%%", getJavascriptVar(component.getClientId(FacesContext.getCurrentInstance()) + "_1"));
+            .replaceAll("%%%JS_VAR%%%", 
+                    YuiRendererHelper.getJavascriptVar(component) + "_1");
         writer.writeText(javaScript , null);
         writer.endElement("script");
     }
     
-    // Return a JavaScript-friendly variable name
-    protected String getJavascriptVar(String name) {
-        return name.replaceAll(":", "_");
-    }
-
     /**
      * A helper method to create the constructor arguments for the JavaScript 
      * object instantiation.

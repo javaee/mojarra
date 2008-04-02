@@ -117,4 +117,11 @@ public class YuiRendererHelper {
         writer.endElement("script");
     }
 
+    /**
+     * Return a JavaScript-friendly variable name based on the clientId
+     */
+    public static String getJavascriptVar(UIComponent comp) {
+        return comp.getClientId(FacesContext.getCurrentInstance()).replaceAll(":", "_");
+    }
+
 }
