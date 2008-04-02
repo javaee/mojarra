@@ -22602,21 +22602,25 @@
       otherwise horizontally, in the table.  If any of the children are
       an instance of SelectItemGroup, render them as a nested table.
       Each of the children are ultimately rendererd as follows.  Render
-      a "label" element. Inside of the "label", render an "input" element
-      of "type" "checkbox" for each child component.  As an exception to
-      the general rules about how to handle the "id" attribute, render it
-      as an attribute on the outer "table" element, the value of which is the
-      <code>clientId</code> of the component per the rules at the beginning
-      of this specification.The "id" attribute must not be output on each "input"
-      element. The value of the current SelectItem is rendered as the value of
-      the "value" attribute.  If the value of the enclosing UISelectMany
+      an "input" element of "type" "checkbox" for each child component.
+      Render the "name" attribute on the "input" element with the value
+      of the <code>clientId</code> of the component.  Render an "id" 
+      attribute on the "input" element.  Each "id" value must be unique.
+      If the current SelectItem.isDisabled() returns true, render 
+      "disabled" as the value of the "disabled" attribute. 
+      Close out the "input" element.  Render a "label" element.  Render the 
+      "for" attribute of the "label" element whose value is the corresponding 
+      "input" element's "id" value.  Render any "style" as the "class" attribute 
+      on the "label" element.  Close out the starting "label" element and render 
+      the label value from SelectItem.getLabel().  Close out the "label" element.
+      As an exception to the general rules about how to handle the "id" attribute, 
+      render it as an attribute on the outer "table" element, the value of which 
+      is the <code>clientId</code> of the component per the rules at the beginning
+      of this specification.  The value of the current SelectItem is rendered as 
+      the value of the "value" attribute.  If the value of the enclosing UISelectMany
       matches the current value, render "checked" as the value of the
-      "checked" attribute.  If the current SelectItem.isDisabled()
-      returns true, render "disabled" as the value of the "disabled"
-      attribute.  Close out the "input" element and render the return
-      value from SelectItem.getLabel().  Close out the "label" element
-      and any other nested elements.  See the <a
-      href="javax.faces.SelectManyjavax.faces.Listbox.html#options">"Rendering
+      "checked" attribute.  See the 
+      <a href="javax.faces.SelectManyjavax.faces.Listbox.html#options">"Rendering
       the option elements" </a> specification for
       <code>ListboxRenderer</code> for more detail on how to render the
       "option" elements in this renderer.</p>
@@ -24649,23 +24653,30 @@
       value is "pageDirection", render the children elements
       vertically, otherwise horizontally, in the table.  If any of the
       children are an instance of SelectItemGroup, render them as a
-      nested table.  Render a "label" element.  Each of the children are
-      ultimately rendererd as an "input" element of "type" "radio". As an
-      exception to the general rules about how to handle the "id" attribute,
+      nested table.  Each of the children are ultimately rendered as follows.
+      Render an "input" element of "type" "radio" for each child component.
+      Render the "name" attribute on the "input" element with the value
+      of the <code>clientId</code> of the component.  Render an "id"
+      attribute on the "input" element.  Each "id" value must be unique.
+      If the current SelectItem.isDisabled() returns true, render
+      "disabled" as the value of the "disabled" attribute.
+      Close out the "input" element.  Render a "label" element.  Render the
+      "for" attribute of the "label" element whose value is the corresponding
+      "input" element's "id" value.  Render any "style" as the "class" attribute
+      on the "label" element.  Close out the starting "label" element and render
+      the label value from SelectItem.getLabel().  Close out the "label" element.
+      As an exception to the general rules about how to handle the "id" attribute,
       render it as an attribute on the outer "table" element, the value of which
       is the <code>clientId</code> of the component per the rules at the
-      beginning  of this specification.  The "id" attribute must not be
-      output on each "input" element.  Output the value of the "label"
-      attribute of the <code>SelectItem</code> after the "input"
-      element.  If the value of the currently rendered child is equal to
+      beginning  of this specification.
+      If the value of the currently rendered child is equal to
       the value of the parent UISelectOne, render an appropriate HTML
-      boolean value indicating "checked" for the enclosing "input".  If
-      the current SelectItem.isDisabled() returns true, render
-      "disabled" as the value of the "disabled" attribute.  See the <a
-      href="javax.faces.SelectManyjavax.faces.Listbox.html#options">"Rendering the option
+      boolean value indicating "checked" for the enclosing "input".
+      See the 
+      <a href="javax.faces.SelectManyjavax.faces.Listbox.html#options">"Rendering the option
       elements" </a> specification for <code>ListboxRenderer</code> for
       more detail on how to render the "option" elements in this
-      renderer.  Close out the "label" element. </p>
+      renderer.</p>
 
       </ul>]]></description>
       <component-family>javax.faces.SelectOne</component-family>
