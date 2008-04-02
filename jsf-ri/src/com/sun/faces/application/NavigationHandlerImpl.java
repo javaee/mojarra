@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.2 2003/04/04 18:16:06 eburns Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.3 2003/04/04 18:42:54 rkitain Exp $
  */
 
 /*
@@ -49,7 +49,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
     public void handleNavigation(FacesContext context, String actionRef, String outcome) {
 
         String treeId = context.getTree().getTreeId();
-        context = FacesContext.getCurrentInstance();
 
         NavigationConfig navConfig = (NavigationConfig)context.getExternalContext().getApplicationMap().
             get(RIConstants.NAVIGATION_CONFIG_ATTR);
@@ -57,9 +56,15 @@ public class NavigationHandlerImpl extends NavigationHandler {
             throw new RuntimeException(Util.getExceptionMessage(Util.NULL_CONFIGURATION_ERROR_MESSAGE_ID));
         }
 
-//PENDING(rogerk) This is only one case;  Thee will be more when the spec is fleshed out;
+//PENDING(rogerk) Some initial cases;  Thee will be more when the spec is fleshed out;
 
-        String newTreeId = navConfig.getTreeIdByPageActionOutcome(treeId, actionRef, outcome);
+        String newTreeId = null;
+
+        if (null == actionRef) {
+            newTreeId = navConfig.getTreeIdByPageOutcome(treeId, outcome);
+        } else { 
+            newTreeId = navConfig.getTreeIdByPageActionOutcome(treeId, actionRef, outcome);
+        }
 
         if (newTreeId != null) {
             TreeFactory treeFactory = (TreeFactory)

@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationConfig.java,v 1.2 2003/04/04 17:54:27 eburns Exp $
+ * $Id: NavigationConfig.java,v 1.3 2003/04/04 18:42:54 rkitain Exp $
  */
 
 /*
@@ -135,6 +135,21 @@ public class NavigationConfig {
 
     public ArrayList getNavigationList() {
        return navigationList;
+    }
+
+    public String getTreeIdByPageOutcome(String treeId, String outcome) {
+        String returnTree = null;
+        for (int i=0; i<navigationList.size(); i++) {
+            Navigation navigation = (Navigation)navigationList.get(i);
+            if (null != navigation.outcome && null != navigation.page &&
+                null == navigation.action) {
+                if (navigation.outcome.equals(outcome)) {
+                    returnTree = navigation.select;
+                    break;
+                }
+            }
+        }
+        return returnTree;
     }
 
     public String getTreeIdByPageActionOutcome(String treeId, String actionRef, String outcome) {
