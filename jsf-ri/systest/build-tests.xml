@@ -4,7 +4,7 @@
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.49 2004/04/17 02:01:37 eburns Exp $
+ $Id: build-tests.xml,v 1.50 2004/04/19 21:06:09 eburns Exp $
 -->
 
 
@@ -434,7 +434,7 @@
       status="200" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
-    	 request="${context.path}/jsp/tlvTest01.jsp"
+    	 request="${context.path}/faces/jsp/tlvTest01.jsp"
       status="200" failonerror="${failonerror}"/>
 
 
