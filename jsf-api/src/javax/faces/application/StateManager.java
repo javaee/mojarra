@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.2 2003/07/28 22:18:38 eburns Exp $
+ * $Id: StateManager.java,v 1.3 2003/07/28 22:39:45 craigmcc Exp $
  */
 
 /*
@@ -251,14 +251,14 @@ public abstract class StateManager {
      * {@link javax.faces.render.ResponseStateManager#writeState} to
      * cause the state to be saved to the response.</p>
      *
-     * @param context, the {@link FacesContext} for this tree.  This is
+     * @param context the {@link FacesContext} for this tree.  This is
      * used to obtain the {@link javax.faces.context.ResponseWriter} to
      * which to write the response, and the <code>treeId</code> of this
      * tree.
      *
      * @param content the rendered content of this component tree.  
      *
-     * @param SerializedTree the state of the rendered tree, obtained from
+     * @param state the state of the rendered tree, obtained from
      * {@link #getSerializedTree}.
      *
      */

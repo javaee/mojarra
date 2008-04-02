@@ -1,5 +1,5 @@
 /*
- * $Id: UIPage.java,v 1.2 2003/07/28 22:18:42 eburns Exp $
+ * $Id: UIPage.java,v 1.3 2003/07/28 22:39:46 craigmcc Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ public interface UIPage extends UIComponent, NamingContainer {
      * identifier, or <code>null</code> to disassociate this tree with
      * any specific {@link javax.faces.render.RenderKit} instance
      */
-    public void setRenderKitId(String newRenderKitId);
+    public void setRenderKitId(String renderKitId);
 
     /**
      * <p>Return the tree identifier for this tree.</p>

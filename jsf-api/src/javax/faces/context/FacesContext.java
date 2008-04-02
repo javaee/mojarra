@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.45 2003/07/28 22:18:50 eburns Exp $
+ * $Id: FacesContext.java,v 1.46 2003/07/28 22:39:46 craigmcc Exp $
  */
 
 /*
@@ -196,14 +196,14 @@ public abstract class FacesContext {
      * class that the handler calls), and only during the <em>Invoke
      * Application</em> phase of the request processing lifecycle.</p>
      *
-     * @param tree The new component tree
+     * @param root The new component tree root component
      *
      * @exception IllegalStateException if this method is called more than
      *  once without a call to <code>release()</code> in beween
      * @exception NullPointerException if <code>tree</code>
      *  is <code>null</code>
      */
-    public abstract void setRoot(UIPage newRoot);
+    public abstract void setRoot(UIPage root);
 
 
     // --------------------------------------------------------- Public Methods
