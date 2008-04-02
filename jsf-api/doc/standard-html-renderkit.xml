@@ -1807,8 +1807,7 @@
       otherwise horizontally, in the table.  If any of the children are
       an instance of SelectItemGroup, render them as a nested table.
       Each of the children are ultimately rendererd as follows.  Render
-      a "label" element with the "for" attribute being the clientId of
-      the component.  Inside of the "label", render an "input" element
+      a "label" element. Inside of the "label", render an "input" element
       of "type" "checkbox" for each child component.  As an exception to
       the general rules about how to handle the "id" attribute, render it
       as an attribute on the outer "table" element, the value of which is the 
@@ -2139,8 +2138,7 @@
       value is "pageDirection", render the children elements
       vertically, otherwise horizontally, in the table.  If any of the
       children are an instance of SelectItemGroup, render them as a
-      nested table.  Render a "label" element with the "for" attribute
-      being the clientId of the component.  Each of the children are
+      nested table.  Render a "label" element.  Each of the children are
       ultimately rendererd as an "input" element of "type" "radio". As an 
       exception to the general rules about how to handle the "id" attribute, 
       render it as an attribute on the outer "table" element, the value of which 
