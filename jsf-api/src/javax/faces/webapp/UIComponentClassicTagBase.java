@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.26 2006/10/03 21:18:58 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.27 2006/11/03 20:44:41 rlubke Exp $
  */
 
 /*
@@ -871,23 +871,41 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
 
     protected UIComponent createVerbatimComponentFromBodyContent() {
-	UIOutput verbatim = null;
-	String bodyContentString = null;
-	String trimString = null;
-	if (null != bodyContent && 
-	    null != (bodyContentString = bodyContent.getString()) &&
-	    0 < (trimString = bodyContent.getString().trim()).length()) {
-	    if (!(trimString.startsWith("<!--") && 
-		  trimString.endsWith("-->"))) {
-		verbatim = createVerbatimComponent();
-		verbatim.setValue(bodyContentString);
-		bodyContent.clearBody();
-	    }  else {
-                // clear body if bodyContent is just comments.
-                bodyContent.clearBody();    
+        UIOutput verbatim = null;
+        String bodyContentString = null;
+        String trimString = null;
+        if (null != bodyContent &&
+             null != (bodyContentString = bodyContent.getString()) &&
+             0 < (trimString = bodyContent.getString().trim()).length()) {
+            if (!(trimString.startsWith("<!--") &&
+                 trimString.endsWith("-->"))) {
+                verbatim = createVerbatimComponent();
+                verbatim.setValue(bodyContentString);
+                bodyContent.clearBody();
+            } else {
+                StringBuilder content = new StringBuilder();
+                int sIdx = trimString.indexOf("<!--");
+                int eIdx = trimString.indexOf("-->", sIdx);
+                while (sIdx >= 0 && eIdx >= 0) {
+                    if (sIdx == 0) {
+                        trimString = trimString.substring(eIdx + 3);
+                    } else {
+                        content.append(trimString.substring(0, sIdx));
+                        trimString = trimString.substring(eIdx + 3);
+                    }
+                    sIdx = trimString.indexOf("<!--");
+                    eIdx = trimString.indexOf("-->", sIdx);
+                }
+                content.append(trimString);
+                String result = content.toString();
+                if (result.trim().length() > 0) {
+                    verbatim = createVerbatimComponent();
+                    verbatim.setValue(content.toString());
+                }             
+                bodyContent.clearBody();
             }
-	}
-	return verbatim;
+        }
+        return verbatim;
     }
 
     /**
