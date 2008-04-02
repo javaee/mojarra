@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.41 2006/01/11 15:28:04 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.42 2006/01/13 19:06:14 rogerk Exp $
  */
 
 /*
@@ -37,11 +37,13 @@ import java.net.URL;
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -74,7 +76,7 @@ import java.util.logging.Logger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.41 2006/01/11 15:28:04 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.42 2006/01/13 19:06:14 rogerk Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -1265,7 +1267,14 @@ class RequestHeaderValuesMap extends BaseContextMap {
         if (key == RIConstants.IMMUTABLE_MARKER) {
             return RIConstants.IMMUTABLE_MARKER;
         }
-        return (request).getHeaders(key.toString());
+
+        List<String> valuesList = new ArrayList<String>();
+        Enumeration<String> valuesEnum = this.request.getHeaders(key.toString());
+        while (valuesEnum.hasMoreElements()) {
+            valuesList.add(valuesEnum.nextElement());
+        } 
+
+        return valuesList.toArray(new String[valuesList.size()]); 
     }
 
     public Set entrySet() {
@@ -1285,7 +1294,23 @@ class RequestHeaderValuesMap extends BaseContextMap {
             !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
             return false;
         }
-        return super.equals(obj);
+        Map objMap = (Map) obj;
+        Set thisKeySet = keySet();
+        Set objKeySet = keySet();
+                                                                                                                            
+        if (!thisKeySet.equals(objKeySet)) {
+            return false;
+        } else {
+            for (Object key : thisKeySet) {
+                Object[] thisVal = (Object[]) this.get(key);
+                Object[] objVal = (Object[]) objMap.get(key);
+                if (!(Arrays.equals(thisVal, objVal))) {
+                    return false;
+                }
+            }
+        }
+                                                                                                                            
+        return true;
     }
 
 
@@ -1310,15 +1335,15 @@ class RequestHeaderValuesMap extends BaseContextMap {
         // For each Map.Entry within this instance, compute
         // the hash for each value and compare against the
         // sum computed above.  Ensure that the number of elements
-        // in each enumeration is the same as well.
+        // in each string array is the same as well.
         for (Iterator i = entrySet().iterator(); i.hasNext();) {
             int thisHash = 0;
             int thisCount = 0;
             Map.Entry entry = (Map.Entry) i.next();
-            Enumeration thisMap = (Enumeration) entry.getValue();
+            String[] mapValues = (String[]) entry.getValue();
 
-            while (thisMap.hasMoreElements()) {
-                thisHash += thisMap.nextElement().hashCode();
+            for (int j=0; j< mapValues.length; j++) {
+                thisHash += mapValues[j].hashCode();
                 thisCount++;
             }
             if (thisCount == valCount && thisHash == valHash) {
@@ -1328,22 +1353,15 @@ class RequestHeaderValuesMap extends BaseContextMap {
         return false;
     }
 
-
-    // necessary to break the rules somewhat here as it couldn't be
-    // guaranteed that the hashCode of the Enumeration would
-    // be the same from call to call even if the underlying values contained
-    // within are the same.
     public int hashCode() {
-        int hashSum = 0;
-        for (Iterator i = entrySet().iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry) i.next();
-            hashSum += entry.getKey().hashCode();
-            for (Enumeration e = (Enumeration) entry.getValue();
-                 e.hasMoreElements();) {
-                hashSum += e.nextElement().hashCode();
-            }
+        int hashCode = 0;
+        for (Object o : entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
+            hashCode += entry.getKey().hashCode();
+            hashCode += 
+                (Arrays.hashCode((Object[]) entry.getValue()));
         }
-        return hashSum;
+        return hashCode;
     }
 
     // --------------------------------------------- Methods from BaseContextMap
