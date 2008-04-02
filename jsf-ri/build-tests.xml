@@ -256,7 +256,7 @@
             </custom-sysproperties>
             <suite>   
                 <test todir="${impl.test.results.dir}"
-                       name="com.sun.faces.application.TestAdapters"/>
+                    name="com.sun.faces.application.TestAdapters"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.io.TestIO"/>
                 <test todir="${impl.test.results.dir}"
@@ -269,14 +269,18 @@
                       name="com.sun.faces.application.TestApplicationImpl"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestApplicationImpl_Config"/>
+                <!--
                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.application.TestHASDeprStateManagerImpl"/>
+                    name="com.sun.faces.application.TestHASDeprStateManagerImpl"/>
+                -->
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestNavigationHandler"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestStateManagerImpl"/>
+                  <!--
                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.application.TestViewHandlerImpl"/>
+                    name="com.sun.faces.application.TestViewHandlerImpl"/>
+                -->
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.config.ConfigFileTestCase"/>
                 <test todir="${impl.test.results.dir}"
@@ -321,8 +325,10 @@
                       name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
+                  <!--
                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
+                    name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
+                -->
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.lifecycle.TestPhase"/>
                 <test todir="${impl.test.results.dir}"
@@ -356,8 +362,10 @@
                       name="com.sun.faces.renderkit.TestContentTypes"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.renderkit.TestRenderKit"/>
+                <!--
                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.renderkit.TestRenderKitFactory"/>
+                    name="com.sun.faces.renderkit.TestRenderKitFactory"/>
+                -->
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.taglib.TlvTestCase"/>
                 <test todir="${impl.test.results.dir}"

@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.20 2006/09/06 20:56:07 rlubke Exp $
+ * $Id: ActionListenerImpl.java,v 1.21 2006/12/12 17:42:07 jdlee Exp $
  */
 
 /*
@@ -28,6 +28,8 @@
  */
 
 package com.sun.faces.application;
+
+break!
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
