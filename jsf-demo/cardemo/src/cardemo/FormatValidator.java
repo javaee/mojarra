@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.4 2003/08/28 08:22:17 rkitain Exp $
+ * $Id: FormatValidator.java,v 1.5 2003/09/08 20:21:06 jvisvanathan Exp $
  */
 
 /*
@@ -49,6 +49,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
 import javax.faces.application.MessageResources;
 import javax.faces.validator.Validator;
+import javax.faces.component.StateHolder;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -87,7 +88,7 @@ import javax.faces.application.Application;
  * this verification in the business tier.
  */
 
-public class FormatValidator implements Validator {
+public class FormatValidator implements Validator, StateHolder {
 
 
     // ----------------------------------------------------- Manifest Constants
@@ -287,5 +288,30 @@ public class FormatValidator implements Validator {
 	
 	carResources = application.getMessageResources("carDemoResources");
         return (carResources);
+    }
+    
+    public Object getState(FacesContext context) {
+        Object values[] = new Object[2];
+        values[0] = formatPatterns;
+        values[1] = formatPatternsList;
+        return (values);
+    }
+
+
+    public void restoreState(FacesContext context, Object state) {
+        Object values[] = (Object[]) state;
+        formatPatterns = (String) values[0];
+        formatPatternsList = (ArrayList) values[1];
+    }
+
+
+    private boolean transientValue = false;
+    public boolean isTransient() {
+        return (this.transientValue);
+    }
+
+
+    public void setTransient(boolean transientValue) {
+        this.transientValue = transientValue;
     }
 }

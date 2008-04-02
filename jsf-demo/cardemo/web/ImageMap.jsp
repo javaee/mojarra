@@ -54,6 +54,7 @@
 	    scope="session" var="carDemoBundle"/>
 
 <f:view>
+    <h:form formName="helloForm">
     <table border="0" width="660" bgcolor="#4f4f72">
     <tbody>
       <tr> 
@@ -88,6 +89,6 @@
                             </TBODY>
                           </TABLE>
 
-
+</h:form>
 </f:view>
 </html>

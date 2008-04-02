@@ -51,7 +51,7 @@
 
   <fmt:setBundle basename="demo.model.Resources"
 	            scope="session" var="mapBundle"/>
-
+  <h:form formName="imageForm">
   <table>
 
     <tr><td>
@@ -140,4 +140,5 @@ nested within an <code>&lt;d:map&gt;</code> tag.</p>
 
 </body>
 </html>
+</h:form>
 </f:view>

@@ -48,7 +48,7 @@
     <hr>
     <f:view>
     <h:form  formName="outofstockForm" >
-        <p> <h:output_text id="stock_label" key="stockLabel" bundle="carDemoBundle"/>
+        <p> <h:output_text id="stockLabel" key="stockLabel" bundle="carDemoBundle"/>
         </p> 
         <p> <h:command_button id="reconfigure" key="configureButton" 
                 bundle="carDemoBundle" action="reconfigure"/> 

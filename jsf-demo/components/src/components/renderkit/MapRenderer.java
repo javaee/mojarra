@@ -97,9 +97,6 @@ public class MapRenderer extends BaseRenderer {
         MapComponent map = (MapComponent) component;
         ResponseWriter writer = context.getResponseWriter();
 
-        writer.startElement("form", map);
-        writer.writeAttribute("method", "post", null);
-        writer.writeURIAttribute("action", getURI(context), null);
         writer.startElement("map", map);
         writer.writeAttribute("name", map.getId(), "id");
 
@@ -142,7 +139,6 @@ public class MapRenderer extends BaseRenderer {
         writer.writeAttribute("name", getName(context, map), "clientId");
         writer.endElement("input");
         writer.endElement("map");
-        writer.endElement("form");
 
     }
 
