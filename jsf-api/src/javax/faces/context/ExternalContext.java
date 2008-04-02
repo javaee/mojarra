@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.21 2005/08/22 22:07:59 ofung Exp $
+ * $Id: ExternalContext.java,v 1.22 2005/09/28 15:12:03 edburns Exp $
  */
  
 /*
@@ -193,12 +193,16 @@ public abstract class ExternalContext {
     
 
     /**
-     * <p>Return a mutable <code>Map</code> representing the application scope
-     * attributes for the current application.  The returned <code>Map</code>
-     * must implement the entire contract for a modifiable map as described
-     * in the JavaDocs for <code>java.util.Map</code>.  Modifications
-     * made in the <code>Map</code> must cause the corresponding changes in
-     * the set of application scope attributes.</p>
+     * <p>Return a mutable <code>Map</code> representing the application
+     * scope attributes for the current application.  The returned
+     * <code>Map</code> must implement the entire contract for a
+     * modifiable map as described in the JavaDocs for
+     * <code>java.util.Map</code>.  Modifications made in the
+     * <code>Map</code> must cause the corresponding changes in the set
+     * of application scope attributes.  Particularly the
+     * <code>clear()</code>, <code>remove()</code>, <code>put()</code>,
+     * and <code>get()</code> operations must take the appropriate
+     * action on the underlying data structure.</p>
      *
      * <p><em>Servlet:</em>  This must be the set of attributes available via
      * the <code>javax.servlet.ServletContext</code> methods
@@ -467,12 +471,16 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Return a mutable <code>Map</code> representing the request scope
-     * attributes for the current application.  The returned <code>Map</code>
-     * must implement the entire contract for a modifiable map as described
-     * in the JavaDocs for <code>java.util.Map</code>.  Modifications
-     * made in the <code>Map</code> must cause the corresponding changes in
-     * the set of request scope attributes.</p>
+     * <p>Return a mutable <code>Map</code> representing the request
+     * scope attributes for the current application.  The returned
+     * <code>Map</code> must implement the entire contract for a
+     * modifiable map as described in the JavaDocs for
+     * <code>java.util.Map</code>.  Modifications made in the
+     * <code>Map</code> must cause the corresponding changes in the set
+     * of request scope attributes.  Particularly the
+     * <code>clear()</code>, <code>remove()</code>, <code>put()</code>,
+     * and <code>get()</code> operations must take the appropriate
+     * action on the underlying data structure.</p>
      *
      * <p><em>Servlet:</em>  This must be the set of attributes available via
      * the <code>javax.servlet.ServletRequest</code> methods
@@ -763,14 +771,19 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Return a mutable <code>Map</code> representing the session scope
-     * attributes for the current application.  The returned <code>Map</code>
-     * must implement the entire contract for a modifiable map as described
-     * in the JavaDocs for <code>java.util.Map</code>.  Modifications
-     * made in the <code>Map</code> must cause the corresponding changes in
-     * the set of session scope attributes.  Accessing attributes via this
-     * <code>Map</code> must cause the creation of a session associated with
-     * the current request, if such a session does not already exist.</p>
+     * <p>Return a mutable <code>Map</code> representing the session
+     * scope attributes for the current application.  The returned
+     * <code>Map</code> must implement the entire contract for a
+     * modifiable map as described in the JavaDocs for
+     * <code>java.util.Map</code>.  Modifications made in the
+     * <code>Map</code> must cause the corresponding changes in the set
+     * of session scope attributes.  Particularly the
+     * <code>clear()</code>, <code>remove()</code>, <code>put()</code>,
+     * and <code>get()</code> operations must take the appropriate
+     * action on the underlying data structure.  Accessing attributes
+     * via this <code>Map</code> must cause the creation of a session
+     * associated with the current request, if such a session does not
+     * already exist.</p>
      *
      * <p><em>Servlet:</em>  This must be the set of attributes available via
      * the <code>javax.servlet.http.HttpServletSession</code> methods
