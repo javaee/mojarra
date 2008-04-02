@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.78 2003/03/17 23:16:37 eburns Exp $
+ * $Id: UIComponent.java,v 1.79 2003/04/16 21:09:01 eburns Exp $
  */
 
 /*
@@ -262,11 +262,18 @@ public interface UIComponent extends Serializable {
      * identifier, the identifier is added to the namespace of the
      * closest ancestor that is a naming container.</p>
      *
+     * <p>It <em>is</em> valid for a component to have a null component
+     * identifier or a component identifier that is the empty
+     * string.</p>
+     *
+     *
      * @param component {@link UIComponent} to be added
      *
-     * @exception IllegalArgumentException if the component identifier
+     * @exception IllegalStateException if the component identifier
      *  of the new component is non-null, and is not unique in the
      *  namespace of the closest ancestor that is a naming container.
+     * @exception IllegalArgumentException if the component is null.
+
      * @exception NullPointerException if <code>component</code>
      *  is <code>null</code>
      */
@@ -281,13 +288,18 @@ public interface UIComponent extends Serializable {
      * identifier, the identifier is added to the namespace of the
      * closest ancestor that is a naming container.</p>
      *
+     * <p>It <em>is</em> valid for a component to have a null component
+     * identifier or a component identifier that is the empty
+     * string.</p>
+     *
      * @param index Zero-relative index at which to add this
      *  {@link UIComponent}
      * @param component The {@link UIComponent} to be added
      *
-     * @exception IllegalArgumentException if the component identifier
+     * @exception IllegalStateException if the component identifier
      *  of the new component is non-null, and is not unique in the
      *  namespace of the closest ancestor that is a naming container.
+     * @exception IllegalArgumentException if the component is null.
      * @exception IndexOutOfBoundsException if the index is out of range
      *  ((index < 0) || (index &gt; size()))
      * @exception NullPointerException if <code>component</code> is null

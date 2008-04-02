@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.49 2003/04/08 14:48:09 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.50 2003/04/16 21:09:02 eburns Exp $
  */
 
 /*
@@ -381,16 +381,32 @@ public abstract class UIComponentBase implements UIComponent {
      * @param componentId The proposed component id to check for validity
      *
      * @exception IllegalArgumentException if <code>componentId</code>
-     *  is <code>null</code> or contains invalid characters
+     * contains invalid characters.
      */
     private void validateComponentId(String componentId) {
 
-	if (null == componentId) {
+	// PENDING(edburns): if the page author can assure us that all
+	// the ids are valid, we could turn this off as a performance
+	// enhancement.
+
+	int i = 0, len;
+	char [] chars = null;
+	if (null == componentId || 0 == (len = componentId.length())) {
 	    return;
 	}
+	chars = componentId.toCharArray();
 
-	// PENDING(edburns): here is where we check that the componentId
-	// contains nothing but valid chars.
+	if (!Character.isLetter(chars[0])) {
+	    throw new IllegalArgumentException();
+	}
+	
+	for (i = 1; i < len; i++) {
+	    if (!Character.isLetterOrDigit(chars[i])) {
+		if ('-' != chars[i] && '_' != chars[i]) {
+		    throw new IllegalArgumentException();
+		}
+	    }
+	}		
 
     }
             

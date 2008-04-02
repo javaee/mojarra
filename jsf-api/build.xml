@@ -63,6 +63,8 @@
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-beanutils.jar}"/>
     <pathelement location="${xerces.jar}"/>
+    <pathelement location="${sax.jar}"/>
+    <pathelement location="${jaxp-api.jar}"/>
   </path>
 
   <property name="test.factory"
