@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.76 2003/03/13 01:11:57 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.77 2003/03/14 01:40:01 craigmcc Exp $
  */
 
 /*
@@ -41,14 +41,6 @@ public interface UIComponent extends Serializable {
 
 
     // ----------------------------------------------------- Manifest Constants
-
-
-    /**
-     * <p>For {@link UIComponent}s that are facets, the attribute name under
-     * which the owning {@link UIComponent} is stored.</p>
-     */ 
-    public static final String FACET_PARENT_ATTR =
-        "javax.faces.component.FacetParent";
 
 
     /**
@@ -404,12 +396,10 @@ public interface UIComponent extends Serializable {
     /**
      * <p>Add the specified {@link UIComponent} as a facet
      * associated with the name specified by the <code>facetName</code>
-     * argument, replacing any previous facet with that name.</p>
-
-     * <p>This method causes the {@link #FACET_PARENT_ATTR}
-     * attribute of the specified facet to be set to
-     * this {@link UIComponent} instance. </p>
-
+     * argument, replacing any previous facet with that name.  The
+     * newly added <code>facet</code> will have its <code>parent</code>
+     * property set to this component.</p>
+     *
      * @param facetName The name of this facet
      * @param facet The new facet {@link UIComponent}
      *
@@ -450,11 +440,9 @@ public interface UIComponent extends Serializable {
 
     /**
      * <p>Remove the facet {@link UIComponent} associated with the
-     * specified name, if there is one.</p>
-
-     * <p>This method causes the {@link #FACET_PARENT_ATTR}
-     * attribute of the specified facet to be cleared. </p>
-
+     * specified name, if there is one.  The removed <code>facet</code>
+     * will have its <code>parent</code> property cleared.</p>
+     *
      * @param name Name of the facet to be removed
      *
      * @exception NullPointerException if <code>name</code>
@@ -462,6 +450,7 @@ public interface UIComponent extends Serializable {
      */
     public void removeFacet(String name);
     
+
     /**
      * <p>Return an <code>Iterator</code> over the facet followed by child
      * {@link UIComponent}s of this {@link UIComponent}.

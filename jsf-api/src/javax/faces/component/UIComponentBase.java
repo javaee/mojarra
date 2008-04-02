@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.47 2003/03/13 01:11:57 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.48 2003/03/14 01:40:01 craigmcc Exp $
  */
 
 /*
@@ -559,14 +559,27 @@ public abstract class UIComponentBase implements UIComponent {
         if (!isChildrenAllocated()) {
             return;
         }
-        children.clear();
+        int n = children.size();
+        for (int i = 0; i < n; i++) {
+            ((UIComponent) children.get(i)).setParent(null);
+        }
+        children = null;
 
     }
 
 
     public boolean containsChild(UIComponent component) {
 
-        return (component.getParent() == this);
+        if (!isChildrenAllocated()) {
+            return (false);
+        }
+        int n = children.size();
+        for (int i = 0; i < n; i++) {
+            if ((UIComponent) children.get(i) == component) {
+                return (true);
+            }
+        }
+        return (false);
 
     }
 
@@ -675,17 +688,22 @@ public abstract class UIComponentBase implements UIComponent {
         if (null == facet || null == facetName) {
             throw new NullPointerException();
         }
-	facet.setAttribute(FACET_PARENT_ATTR, this);
+        UIComponent current = (UIComponent) getFacets().get(facetName);
+        if (current != null) {
+            current.setParent(null);
+        }
         getFacets().put(facetName, facet);
+        facet.setParent(this);
 
     }
 
 
     public void clearFacets() {
 
-	// PENDING(edburns): do we need to clear the FACET_PARENT_ATTR
-	// attribute of each of the facets?  This would cost some time.
-
+        Iterator facetNames = getFacetNames();
+        while (facetNames.hasNext()) {
+            getFacet((String) facetNames.next()).setParent(null);
+        }
         facets = null;
 
     }
@@ -719,7 +737,7 @@ public abstract class UIComponentBase implements UIComponent {
 	UIComponent facet = null;
         if (facets != null) {
 	    if (null != (facet = (UIComponent) facets.remove(name))) {
-		facet.setAttribute(FACET_PARENT_ATTR, null);
+		facet.setParent(null);
 	    }
         }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.26 2003/03/13 01:12:39 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.27 2003/03/14 01:40:02 craigmcc Exp $
  */
 
 /*
@@ -403,37 +403,35 @@ public class UIComponentTestCase extends TestCase {
 
         // Add facets one at a time and check the count
         component.addFacet("test1", test1);
-	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     test1.getAttribute(UIComponent.FACET_PARENT_ATTR), 
-		     component);
+        assertTrue("facet test1 added",
+                   test1 == component.getFacet("test1"));
+	assertTrue("facet test1 parent",
+                   component == test1.getParent());
         checkFacetCount(component, 1);
         component.addFacet("test2", test2);
-	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     test2.getAttribute(UIComponent.FACET_PARENT_ATTR), 
-		     component);
+        assertTrue("facet test2 added",
+                   test2 == component.getFacet("test2"));
+	assertTrue("facet test2 parent",
+                   component == test2.getParent());
         checkFacetCount(component, 2);
         component.addFacet("test3", test3);
-	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     test3.getAttribute(UIComponent.FACET_PARENT_ATTR), 
-		     component);
+        assertTrue("facet test3 added",
+                   test3 == component.getFacet("test3"));
+	assertTrue("facet test3 parent",
+                   component == test3.getParent());
         checkFacetCount(component, 3);
-
-        // All added facets must be individually retrievable
-        facet = component.getFacet("test1");
-        assertEquals("test1 returned", test1, facet);
-        facet = component.getFacet("test2");
-        assertEquals("test2 returned", test2, facet);
-        facet = component.getFacet("test3");
-        assertEquals("test3 returned", test3, facet);
 
         // Replace an existing facet
-
         component.addFacet("test3", test3dup);
-	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     test3dup.getAttribute(UIComponent.FACET_PARENT_ATTR), 
-		     component);
-	// Note that this doesn't throw any exception
+        assertTrue("facet test3 replaced",
+                   test3dup == component.getFacet("test3"));
+        assertTrue("facet test3 new parent",
+                   component == test3dup.getParent());
+        assertTrue("facet test3 old parent",
+                   null == test3.getParent());
         checkFacetCount(component, 3);
+
+	// Note that this doesn't throw any exception
         facet = component.getFacet("test1");
         assertEquals("test1 returned", test1, facet);
         facet = component.getFacet("test2");
@@ -443,9 +441,8 @@ public class UIComponentTestCase extends TestCase {
 
         // Remove a facet
         component.removeFacet("test2");
-	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     test2.getAttribute(UIComponent.FACET_PARENT_ATTR), 
-		     null);
+        assertTrue("facet test2 no parent",
+                   null == test2.getParent());
         checkFacetCount(component, 2);
         facet = component.getFacet("test1");
         assertEquals("test1 returned", test1, facet);
@@ -718,19 +715,10 @@ public class UIComponentTestCase extends TestCase {
 
         // Add facets and children one at a time.
         testComponent.addFacet("facet1", facet1);
-	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     facet1.getAttribute(UIComponent.FACET_PARENT_ATTR), 
-		     testComponent);
         testComponent.addChild(child1);
         testComponent.addFacet("facet2", facet2);
-	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     facet2.getAttribute(UIComponent.FACET_PARENT_ATTR), 
-		     testComponent);
         testComponent.addChild(child2);
         testComponent.addFacet("facet3", facet3);
-	assertEquals("facet.getAttribute(\"facetParent\") returned", 
-		     facet3.getAttribute(UIComponent.FACET_PARENT_ATTR), 
-		     testComponent);
         testComponent.addChild(child3);
 
         // make sure the facets and children are returned in the correct order.
