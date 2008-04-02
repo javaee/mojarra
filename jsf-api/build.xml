@@ -6,10 +6,10 @@
 -->
 
 
-<!-- 
+<!--
   =======================================================================
-    JSF-API build file                                                      
-  ======================================================================= 
+    JSF-API build file
+  =======================================================================
 -->
 <project name="JSF-API" default="main" basedir=".">
 
@@ -18,7 +18,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="20030121"/>
+  <property name="version"          value="20030203"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -64,26 +64,26 @@
   </path>
 
 
-  <!-- 
+  <!--
        ===================================================================
-         Prepare the build              
-       =================================================================== 
+         Prepare the build
+       ===================================================================
   -->
   <target name="prepare">
     <tstamp />
   </target>
 
 
-  <!-- 
+  <!--
        ===================================================================
          Build the API code
-       =================================================================== 
+       ===================================================================
   -->
   <target name="build" depends="prepare">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.classes}"/>
     <mkdir dir="${build.lib}"/>
-    
+
     <javac srcdir="${src.dir}"
            destdir="${build.classes}"
            debug="${debug}"
@@ -91,7 +91,7 @@
            optimize="${optimize}" >
       <classpath refid="compile.classpath" />
     </javac>
-    
+
     <copy todir="${build.classes}">
       <fileset dir="${src.dir}">
         <exclude name="**/*.java" />
@@ -101,15 +101,15 @@
   </target>
 
 
-  <!-- 
+  <!--
        ===================================================================
          Build the test code
-       =================================================================== 
+       ===================================================================
   -->
   <target name="build.test" depends="build">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.test}"/>
-    
+
     <javac srcdir="${test.dir}"
            destdir="${build.test}"
            debug="${debug}"
@@ -117,7 +117,7 @@
            optimize="${optimize}" >
       <classpath refid="test.classpath" />
     </javac>
-    
+
     <copy todir="${build.test}">
       <fileset dir="${test.dir}">
         <exclude name="**/*.java" />
@@ -127,10 +127,10 @@
   </target>
 
 
-  <!-- 
-       =================================================================== 
+  <!--
+       ===================================================================
          Test targets
-       =================================================================== 
+       ===================================================================
   -->
 
   <!-- FIXME - Need test cases for
@@ -286,16 +286,16 @@
     </java>
   </target>
 
-  
-  <!-- 
-       =================================================================== 
+
+  <!--
+       ===================================================================
          Create the jars
-       =================================================================== 
+       ===================================================================
   -->
   <target name="jars" depends="build">
 
-    <jar jarfile="${build.lib}/${name}.jar" 
-         basedir="${build.classes}" > 
+    <jar jarfile="${build.lib}/${name}.jar"
+         basedir="${build.classes}" >
     </jar>
 
   </target>
@@ -308,12 +308,12 @@
   -->
   <target name="clean" description="Clean build directory">
     <delete dir="${build.dir}" />
-    <delete> 
+    <delete>
       <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
     </delete>
     <delete dir="${dist.dir}"/>
-  </target> 
+  </target>
 
 
   <!--
@@ -322,22 +322,22 @@
        ===================================================================
   -->
   <target name="allclean" depends="clean">
-  </target> 
+  </target>
 
 
-  <!-- 
+  <!--
        ===================================================================
-         Create the API documentation                             
-       =================================================================== 
+         Create the API documentation
+       ===================================================================
   -->
-  
+
   <target name="javadoc_check">
     <uptodate property="javadoc.notrequired" targetfile="${build.javadocs}/packages.html" >
         <srcfiles dir= "${src.dir}" includes="**/*.java"/>
     </uptodate>
   </target>
 
-  <target name="javadocs" depends="prepare, javadoc_check" 
+  <target name="javadocs" depends="prepare, javadoc_check"
           unless="javadoc.notrequired"
           description="Create the JavaDoc API documentation">
     <mkdir dir="${build.javadocs}"/>
@@ -352,21 +352,21 @@
       <classpath refid="compile.classpath"/>
     </javadoc>
   </target>
-  
 
-  <!-- 
-       =================================================================== 
+
+  <!--
+       ===================================================================
          Main target
-       =================================================================== 
+       ===================================================================
   -->
   <target name="main" depends="jars"
    description="Compile API classes and build JAR file"/>
 
 
-  <!-- 
-       =================================================================== 
+  <!--
+       ===================================================================
          Distributions target
-       =================================================================== 
+       ===================================================================
   -->
   <target name="dist" depends="main,javadocs"
    description="Build distribution files">
@@ -394,10 +394,10 @@
   </target>
 
 
-  <!-- 
-       =================================================================== 
+  <!--
+       ===================================================================
          Issues list
-       =================================================================== 
+       ===================================================================
   -->
   <target name="issues"
    description="Generate outstanding issues list">

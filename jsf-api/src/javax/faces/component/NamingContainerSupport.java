@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerSupport.java,v 1.1 2003/02/03 22:57:46 craigmcc Exp $
+ * $Id: NamingContainerSupport.java,v 1.2 2003/02/04 19:56:14 craigmcc Exp $
  */
 
 /*
@@ -19,6 +19,35 @@ import java.io.Serializable;
  * <p><strong>NamingContainerSupport</strong> is a utility class that may be
  * utilized by {@link UIComponent}s that implement {@link NamingContainer} to
  * delegate naming container management methods.</p>
+ *
+ * <p>Typical usage in a {@link UIComponent} implementation
+ * class would be:</p>
+ * <pre>
+ *   public class MyComponent extends UIComponentBase
+ *     implements NamingContainer {
+ *
+ *       private NamingContainerSupport ncs = new NamingContainerSupport();
+ *
+ *       ...
+ *
+ *       public void addComponentToNamespace(UIComponent component) {
+ *           ncs.addComponentToNamespace(component);
+ *       }
+ *
+ *       public void removeComponentFromNamespace(UIComponent component) {
+ *           ncs.removeComponentFromNamespace(component);
+ *       }
+ *
+ *       public UIComponent findComponentInNamespace(String name) {
+ *           return ncs.findComponentInNamespace(name);
+ *       }
+ *
+ *       public String generateClientId() {
+ *           return ncs.generateClientId();
+ *       }
+ *
+ *   }
+ * </pre>
  */
 
 public class NamingContainerSupport implements NamingContainer, Serializable {
@@ -52,7 +81,7 @@ public class NamingContainerSupport implements NamingContainer, Serializable {
 
 
     public void addComponentToNamespace(UIComponent component) {
-	
+
         // Validate our parameter
         if (component == null) {
             throw new NullPointerException();
@@ -72,7 +101,7 @@ public class NamingContainerSupport implements NamingContainer, Serializable {
 	    throw new IllegalStateException(key);
 	}
 	namespace.put(key, component);
-	
+
     }
 
 
@@ -91,7 +120,7 @@ public class NamingContainerSupport implements NamingContainer, Serializable {
         if (namespace != null) {
             namespace.remove(key);
         }
-	
+
     }
 
     public UIComponent findComponentInNamespace(String name) {

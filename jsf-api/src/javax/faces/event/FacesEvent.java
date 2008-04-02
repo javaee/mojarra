@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.2 2002/09/20 02:30:17 craigmcc Exp $
+ * $Id: FacesEvent.java,v 1.3 2003/02/04 19:56:14 craigmcc Exp $
  */
 
 /*
@@ -17,18 +17,9 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p><strong>FacesEvent</strong> is the base class for user interface and
- * application events that can be fired by {@link UIComponent}s.  They are
- * used for the following purposes:</p>
- * <ul>
- * <li>Components that notice state changes during the <em>Apply Request
- *     Values</em> phase of the request processing lifecycle can queue
- *     events to other components, to be processed later during the
- *     <em>Handle Request Events</em> phase.</li>
- * <li>Components during any phase prior to the <em>Invoke Application</em>
- *     phase can queue events in the {@link FacesContext}, to be
- *     processed by the application during the <em>Invoke Application</em>
- *     phase.</li>
- * </ul>
+ * application events that can be fired by {@link UIComponent}s.  Concrete
+ * event classes must subclass {@link FacesEvent} in order to be supported
+ * by the request processing lifecycle.</p>
  */
 
 public class FacesEvent extends EventObject {
