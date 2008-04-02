@@ -1,5 +1,5 @@
 /*
- * $Id: TimeConverter.java,v 1.2 2003/02/20 22:48:44 ofung Exp $
+ * $Id: TimeConverter.java,v 1.3 2003/03/21 23:22:02 rkitain Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -36,18 +37,16 @@ public class TimeConverter extends DateConverter {
 
     protected Date parseDate(FacesContext context, UIComponent component, 
         String newValue) throws ParseException {
-        FormatPool formatPool = null;
-        formatPool = (FormatPool)
-            context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+        Map applicationMap = context.getExternalContext().getApplicationMap();
+        FormatPool formatPool = (FormatPool)applicationMap.get(RIConstants.FORMAT_POOL);
         Assert.assert_it(null != formatPool);
         return formatPool.timeFormat_parse(context, component, newValue);
     }
 
     protected String formatDate(FacesContext context, UIComponent component, 
         Date dateValue) {
-        FormatPool formatPool = null;
-        formatPool = (FormatPool)
-            context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+        Map applicationMap = context.getExternalContext().getApplicationMap();
+        FormatPool formatPool = (FormatPool)applicationMap.get(RIConstants.FORMAT_POOL);
         Assert.assert_it(null != formatPool);
         return formatPool.timeFormat_format(context, component, dateValue);
     }

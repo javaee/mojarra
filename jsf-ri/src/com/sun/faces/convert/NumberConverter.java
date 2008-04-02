@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.4 2003/03/21 18:28:43 jvisvanathan Exp $
+ * $Id: NumberConverter.java,v 1.5 2003/03/21 23:22:02 rkitain Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
+import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -49,9 +50,8 @@ public class NumberConverter implements Converter {
         }
 
         newValue = newValue.trim();
-        // get FormatPool Instance from ServletContext
-        FormatPool formatPool = (FormatPool)
-            context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+        Map applicationMap = context.getExternalContext().getApplicationMap();
+        FormatPool formatPool = (FormatPool)applicationMap.get(RIConstants.FORMAT_POOL);
         Assert.assert_it(null != formatPool);
 
         try {
@@ -61,7 +61,7 @@ public class NumberConverter implements Converter {
             throw new ConverterException(pe.getMessage());
         }
 
-        // if valueRef is null, store value as Number.
+        // if modelReference is null, store value as Number.
        if ( component instanceof UIInput) {
             valueRef = ((UIInput)component).getValueRef();
         }
@@ -135,8 +135,8 @@ public class NumberConverter implements Converter {
     private String formatNumber(FacesContext context, UIComponent component, 
         Number numberValue) {
         FormatPool formatPool = null;
-        formatPool = (FormatPool)
-            context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+        Map applicationMap = context.getExternalContext().getApplicationMap();
+        formatPool = (FormatPool)applicationMap.get(RIConstants.FORMAT_POOL);
         Assert.assert_it(null != formatPool);
         return formatPool.numberFormat_format(context, component, numberValue);
     }

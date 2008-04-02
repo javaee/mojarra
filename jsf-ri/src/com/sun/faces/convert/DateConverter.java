@@ -1,5 +1,5 @@
 /*
- * $Id: DateConverter.java,v 1.3 2003/03/19 21:16:29 jvisvanathan Exp $
+ * $Id: DateConverter.java,v 1.4 2003/03/21 23:22:01 rkitain Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -103,8 +104,8 @@ public class DateConverter implements Converter {
     protected Date parseDate(FacesContext context, UIComponent component, 
         String newValue) throws ParseException {
         FormatPool formatPool = null;
-        formatPool = (FormatPool)
-            context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+        Map applicationMap = context.getExternalContext().getApplicationMap();
+        formatPool = (FormatPool)applicationMap.get(RIConstants.FORMAT_POOL);
         Assert.assert_it(null != formatPool);
         return formatPool.dateFormat_parse(context, component, newValue);
     }
@@ -112,8 +113,8 @@ public class DateConverter implements Converter {
     protected String formatDate(FacesContext context, UIComponent component, 
         Date dateValue) {
         FormatPool formatPool = null;
-        formatPool = (FormatPool)
-            context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+        Map applicationMap = context.getExternalContext().getApplicationMap();
+        formatPool = (FormatPool)applicationMap.get(RIConstants.FORMAT_POOL);
         Assert.assert_it(null != formatPool);
         return formatPool.dateFormat_format(context, component, dateValue);
     }
