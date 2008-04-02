@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.9 2003/10/17 00:01:10 jvisvanathan Exp $
+ * $Id: ViewTag.java,v 1.10 2003/10/17 01:59:17 jvisvanathan Exp $
  */
 
 /*
@@ -26,6 +26,8 @@ import javax.servlet.jsp.tagext.BodyContent;
 import java.io.IOException;
 import java.util.Locale;
 
+import javax.servlet.jsp.jstl.core.Config;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -39,7 +41,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.9 2003/10/17 00:01:10 jvisvanathan Exp $
+ * @version $Id: ViewTag.java,v 1.10 2003/10/17 01:59:17 jvisvanathan Exp $
  * 
  *
  */
@@ -243,8 +245,15 @@ public class ViewTag extends UIComponentBodyTag
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
 	if (null != locale) {
-           ((UIViewRoot)component).setLocale(Util.getLocaleFromString(locale));
-	}
+            Locale viewLocale = Util.getLocaleFromString(locale);
+           ((UIViewRoot)component).setLocale(viewLocale);
+           // update the JSTL locale attribute in request scope so that JSTL
+           // picks up the locale from viewRoot. This attribute must be updated
+           // before the JSTL setBundle tag is called because that is when the
+           // new LocalizationContext object is created based on the locale.
+           Config.set((ServletRequest) context.getExternalContext().getRequest(), 
+                Config.FMT_LOCALE, viewLocale);
+        }
     }
 
 
