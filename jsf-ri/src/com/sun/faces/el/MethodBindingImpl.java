@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBindingImpl.java,v 1.5 2004/02/26 20:32:39 eburns Exp $
+ * $Id: MethodBindingImpl.java,v 1.6 2004/04/06 15:58:17 eburns Exp $
  */
 
 /*
@@ -142,7 +142,7 @@ public class MethodBindingImpl extends MethodBinding implements StateHolder {
             log.debug("Method return type:" + returnType.getName());
         }
         if ("void".equals(returnType.getName())) {
-            return (null);
+            return (Void.class);
         } else {
             return (returnType);
         }

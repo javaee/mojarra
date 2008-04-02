@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBinding.java,v 1.8 2004/02/26 20:30:55 eburns Exp $
+ * $Id: MethodBinding.java,v 1.9 2004/04/06 15:58:16 eburns Exp $
  */
 
 /*
@@ -51,9 +51,7 @@ public abstract class MethodBinding {
 
     /**
      * <p>Return the Java class representing the return type from the
-     * method identified by this method binding expression.  If the
-     * identified method has a return type of <code>void</code>, return
-     * <code>null</code> instead.</p>
+     * method identified by this method binding expression.  </p>
      *
      * @param context {@link FacesContext} for the current request
      *
