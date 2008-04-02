@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.64 2004/12/02 18:42:25 rogerk Exp $
+ $Id: build-tests.xml,v 1.65 2005/02/08 19:23:48 rlubke Exp $
 -->
 
 <!--
@@ -35,7 +35,6 @@
   <property name="golden.path"  value="${context.path}/golden"/>
   <property name="ignore.path"  value="${context.path}/ignore"/>
   <property name="local.golden.path" value="${basedir}/web/golden"/>
-  <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.2.3"/>
 
   <!-- Test results directory -->
   <property name="test.results.dir" value="../testresults"/>
@@ -65,12 +64,7 @@
     <pathelement location="../src"/>
     <pathelement location="${basedir}/build/WEB-INF/classes"/>
     <fileset dir="${htmlunit.home}/lib">
-        <include name="htmlunit-1.2.3.jar"/>
-        <include name="commons-httpclient-2.0-beta2.jar"/>
-        <include name="xmlParserAPIs-2.2.1.jar"/>
-        <include name="commons-logging-1.0.2.jar"/>
-        <include name="xercesImpl-2.4.0.jar"/>
-        <include name="nekohtml-0.7.7.jar"/>
+        <include name="*.jar"/>
     </fileset>
   </path>
 

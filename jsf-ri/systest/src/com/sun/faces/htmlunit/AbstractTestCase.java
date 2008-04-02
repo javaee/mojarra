@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestCase.java,v 1.9 2004/07/29 16:37:26 edburns Exp $
+ * $Id: AbstractTestCase.java,v 1.10 2005/02/08 19:23:48 rlubke Exp $
  */
 
 /*
@@ -124,14 +124,15 @@ public abstract class AbstractTestCase extends TestCase {
      */
     protected String getBodyText(HtmlPage page) {
 
-        // The page itself corresponds to the <html> element
-        Iterator topIterator = page.getChildElements().iterator();
-        while (topIterator.hasNext()) {
-            HtmlElement topElement = (HtmlElement) topIterator.next();
-            if (topElement instanceof HtmlBody) {
-                return (topElement.asText());
+        Object body =
+            page.getDocumentElement().getHtmlElementsByTagName("body").get(0);
+
+        if (body != null) {
+            if (body instanceof HtmlBody) {
+                return (((HtmlBody) body).asText());
             }
         }
+
         fail("This page does not have a <body> element");
         return (null); // To satisfy the compiler
 
@@ -292,6 +293,20 @@ public abstract class AbstractTestCase extends TestCase {
 
     }
 
+
+    /**
+     * <p>Added to compensate for changes in the HtmlUnit 1.4 API.</p>
+     * @see #getAllElementsOfGivenClass(com.gargoylesoftware.htmlunit.html.HtmlElement, java.util.List, Class)
+     */
+    protected List getAllElementsOfGivenClass(HtmlPage root, List list,
+                                              Class matchClass) {
+
+        return getAllElementsOfGivenClass(root.getDocumentElement(),
+                                          list,
+                                          matchClass);
+
+    }
+
     /**
      * Depth first search from root to find all children that are
      * instances of HtmlInput.  Add them to the list.
@@ -324,7 +339,7 @@ public abstract class AbstractTestCase extends TestCase {
 	int i;
 	HtmlInput result = null;
 	
-	list = getAllElementsOfGivenClass(root, null, HtmlInput.class); 
+	list = getAllElementsOfGivenClass(root, null, HtmlInput.class);
 	for (i = 0; i < list.size(); i++) {
 	    result = (HtmlInput) list.get(i);
 	    if (-1 != result.getIdAttribute().indexOf(id)) {
@@ -343,7 +358,7 @@ public abstract class AbstractTestCase extends TestCase {
 	int i, hitCount = 0;
 	HtmlInput result = null;
 	
-	list = getAllElementsOfGivenClass(root, null, HtmlInput.class); 
+	list = getAllElementsOfGivenClass(root, null, HtmlInput.class);
 	for (i = 0; i < list.size(); i++) {
 	    result = (HtmlInput) list.get(i);
 	    if (-1 != result.getIdAttribute().indexOf(id) &&

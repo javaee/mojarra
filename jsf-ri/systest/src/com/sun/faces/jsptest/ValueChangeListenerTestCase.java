@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTestCase.java,v 1.4 2004/12/16 17:56:39 edburns Exp $
+ * $Id: ValueChangeListenerTestCase.java,v 1.5 2005/02/08 19:23:49 rlubke Exp $
  */
 
 /*
@@ -9,23 +9,16 @@
 
 package com.sun.faces.jsptest;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import java.util.List;
+
+import com.sun.faces.htmlunit.AbstractTestCase;
+
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.util.List;
-
-import javax.faces.component.NamingContainer;
 
 /**
  * <p>Test that invalid values don't cause valueChangeEvents to occur.</p>
@@ -129,12 +122,15 @@ public class ValueChangeListenerTestCase extends AbstractTestCase {
 
 	for (int i = 0; i < list.size(); i++) {
 	    span = (HtmlSpan) list.get(i);
-	    if (-1 != span.asXml().indexOf("dir=\"LTR\" lang=\"en\"")) {
-		hasMessagesContent = true;
+        System.out.println("SPAN: " + span.asXml());
+	    if (-1 != span.asXml().indexOf("dir=\"LTR\"")
+            && span.asXml().indexOf("lang=\"en\"") != -1) {
+            hasMessagesContent = true;
 	    }
-	    if (-1 != span.asXml().indexOf("dir=\"RTL\" lang=\"de\"")) {
-		hasMessageContent = true;
-	    }
+	    if (-1 != span.asXml().indexOf("dir=\"RTL\"")
+            && span.asXml().indexOf("lang=\"de\"") != -1) {
+            hasMessageContent = true;
+        }
 	}
 	assertTrue(hasMessagesContent && hasMessageContent);
 	
