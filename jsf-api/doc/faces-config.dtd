@@ -8,7 +8,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: faces-config.dtd,v 1.7 2003/04/30 17:38:57 craigmcc Exp $
+    $Id: faces-config.dtd,v 1.8 2003/05/02 21:25:31 craigmcc Exp $
 
 -->
 
@@ -83,7 +83,7 @@
     A "Severity" is the message severity level associated with a parent
     "message" element.
 -->
-<!ENTITY % SEVERITY "(FATAL|ERROR|WARN|INFO)">
+<!ENTITY % Severity "(fatal|error|warn|info)">
 
 
 <!--
@@ -229,12 +229,14 @@
 
     If no nested "message-class" element is specified, the JSF implementation
     must provide a suitable default.
+
+    If no "severity" element is provided, "error" is assumed.
 -->
 <!ELEMENT message         (message-id, message-class?, summary*, detail*, severity?)>
 
 
 <!--
-    The "message-resources" element represents a set of "messages" elements
+    The "message-resources" element represents a set of "message" elements
     for localizable messages related to a particular message resources id.
     Message resources identifiers must be unique within the entire web
     application.
@@ -242,7 +244,7 @@
     If no nested "message-resources-class" element is specified, the
     JSF implementation must provide a suitable default.
 -->
-<!ELEMENT message-resources (description*, display-name*, icon*, message-resources-id, message-resources-class?)>
+<!ELEMENT message-resources (description*, display-name*, icon*, message-resources-id, message-resources-class?, message*)>
 
 
 <!--
