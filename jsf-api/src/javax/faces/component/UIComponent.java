@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.105 2003/10/12 19:51:29 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.106 2003/10/18 02:18:59 craigmcc Exp $
  */
 
 /*
@@ -574,7 +574,11 @@ public abstract class UIComponent implements StateHolder {
      * <li>Call the <code>processDecodes()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>Call the <code>decode()</code> method of this component.</li>
+     * <li>Call the <code>decode()</code> method of this component,
+     *     if this component's <code>rendered</code> property is
+     *     <code>true</code> and it is not nested in a parent component
+     *     whose <code>rendersChildren</code> property is <code>true</code>
+     *     but whose <code>rendered</code> property is <code>false</code>.</li>
      * <li>If a <code>RuntimeException</code> is thrown during
      *     decode processing, call {@link FacesContext#renderResponse}
      *     and re-throw the exception.</li>
@@ -598,7 +602,11 @@ public abstract class UIComponent implements StateHolder {
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
      * <li>If the current component is an {@link UIInput}, call its
-     *     <code>validate()</code> method.</li>
+     *     <code>validate()</code> method, if this component's
+     *     <code>rendered</code> property is <code>true</code> and it is
+     *     not nested in a parent component whose <code>rendersChildren</code>
+     *     property is <code>true</code> but whose <code>rendered</code>
+     *     property is <code>false</code>.</li>
      * <li>If the <code>isValid()</code> method of this component returns
      *     <code>false</code>, call the <code>renderResponse()</code> method
      *     on the {@link FacesContext} instance for this request.</li>
@@ -625,7 +633,11 @@ public abstract class UIComponent implements StateHolder {
      * <li>Call the <code>processUpdates()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>Call the <code>updateModel()</code> method of this component.</li>
+     * <li>Call the <code>updateModel()</code> method of this component,
+     *     if this component's <code>rendered</code> property is
+     *     <code>true</code> and it is not nested in a parent component
+     *     whose <code>rendersChildren</code> property is <code>true</code>
+     *     but whose <code>rendered</code> property is <code>false</code>.</li>
      * <li>If the <code>valid</code> property of this {@link UIComponent}
      *     is now <code>false</code>, call
      *     <code>FacesContext.renderResponse()</code>
