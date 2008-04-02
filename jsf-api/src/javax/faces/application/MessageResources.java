@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResources.java,v 1.2 2003/09/09 21:15:27 craigmcc Exp $
+ * $Id: MessageResources.java,v 1.3 2003/10/16 19:44:25 rlubke Exp $
  */
 
 /*
@@ -27,7 +27,8 @@ import javax.faces.context.FacesContext;
  *
  * <p>The various <code>getMessage()</code> methods create a localized
  * message by consulting the <code>locale</code> property of the
- * {@link FacesContext} instance that is passed as a parameter, and using
+ * {@link javax.faces.component.UIViewRoot} instance associated
+ * with the {@link FacesContext} that is passed as a parameter, and using
  * that to construct (if necessary) and return a {@link Message} instance
  * whose <code>detail</code> and <code>summary</code> properties have been
  * localized for the specified locale.  If no localized text for the specified
