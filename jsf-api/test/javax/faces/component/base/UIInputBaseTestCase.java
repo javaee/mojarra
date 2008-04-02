@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBaseTestCase.java,v 1.6 2003/08/22 14:03:26 eburns Exp $
+ * $Id: UIInputBaseTestCase.java,v 1.7 2003/09/09 20:51:27 eburns Exp $
  */
 
 /*
@@ -27,6 +27,7 @@ import javax.faces.validator.DoubleRangeValidator;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.LongRangeValidator;
 import javax.faces.validator.StringRangeValidator;
+import javax.faces.TestUtil;
 
 
 /**
@@ -488,9 +489,8 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
 	    input2 = (UIInputSub) comp2;
 	if (super.propertiesAreEqual(context, comp1, comp2)) {
 	    // if their not both null, or not the same string
-	    if (!((null == input1.getPrevious() && 
-		   null == input2.getPrevious()) ||
-		(input1.getPrevious().equals(input2.getPrevious())))) {
+	    if (!TestUtil.equalsWithNulls(input1.getPrevious(),
+					  input2.getPrevious())) {
 		return false;
 	    }	 
 	    if (input1.isRequired() != input2.isRequired()) {

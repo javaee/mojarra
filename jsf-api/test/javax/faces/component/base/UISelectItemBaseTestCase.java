@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBaseTestCase.java,v 1.4 2003/08/30 00:31:42 craigmcc Exp $
+ * $Id: UISelectItemBaseTestCase.java,v 1.5 2003/09/09 20:51:28 eburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
+import javax.faces.TestUtil;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -240,21 +241,18 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 		selectItem1 = (UISelectItem) comp1,
 		selectItem2 = (UISelectItem) comp2;
 	    // if their not both null, or not the same string
-	    if (!((null == selectItem1.getItemLabel() && 
-		   null == selectItem2.getItemLabel()) ||
-		(selectItem1.getItemLabel().equals(selectItem2.getItemLabel())))) {
+	    if (!TestUtil.equalsWithNulls(selectItem1.getItemLabel(),
+					  selectItem2.getItemLabel())) {
 		return false;
 	    }
 	    // if their not both null, or not the same string
-	    if (!((null == selectItem1.getItemDescription() && 
-		   null == selectItem2.getItemDescription()) ||
-		(selectItem1.getItemDescription().equals(selectItem2.getItemDescription())))) {
+	    if (!TestUtil.equalsWithNulls(selectItem1.getItemDescription(),
+					  selectItem2.getItemDescription())) {
 		return false;
 	    }
 	    // if their not both null, or not the same string
-	    if (!((null == selectItem1.getItemValue() && 
-		   null == selectItem2.getItemValue()) ||
-		(selectItem1.getItemValue().equals(selectItem2.getItemValue())))) {
+	    if (!TestUtil.equalsWithNulls(selectItem1.getItemValue(),
+					  selectItem2.getItemValue())) {
 		return false;
 	    }
 	}

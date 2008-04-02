@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBaseTestCase.java,v 1.8 2003/09/05 19:35:31 eburns Exp $
+ * $Id: UIOutputBaseTestCase.java,v 1.9 2003/09/09 20:51:28 eburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.LongConverter;
 import javax.faces.convert.ShortConverter;
+import javax.faces.TestUtil;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -181,15 +182,13 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 		output1 = (UIOutput) comp1,
 		output2 = (UIOutput) comp2;
 	    // if their not both null, or not the same string
-	    if (!((null == output1.getValueRef() && 
-		   null == output2.getValueRef()) ||
-		(output1.getValueRef().equals(output2.getValueRef())))) {
+	    if (!TestUtil.equalsWithNulls(output1.getValueRef(),
+					  output2.getValueRef())) {
 		return false;
 	    }
 	    // if their not both null, or not the same string
-	    if (!((null == output1.getValue() && 
-		   null == output2.getValue()) ||
-		(output1.getValue().equals(output2.getValue())))) {
+	    if (!TestUtil.equalsWithNulls(output1.getValue(),
+					  output2.getValue())) {
 		return false;
 	    }
 	}

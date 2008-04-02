@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.12 2003/09/04 03:52:53 eburns Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.13 2003/09/09 20:51:26 eburns Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import javax.faces.component.UICommand;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
+import javax.faces.TestUtil;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -433,21 +434,13 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
                 return false;
             }
 	    // if their not both null, or not the same string
-	    if (!((null == command1.getAction() && 
-		   null == command2.getAction()) ||
-		(command1.getAction().equals(command2.getAction())))) {
+	    if (!TestUtil.equalsWithNulls(command1.getAction(),
+					  command2.getAction())) {
 		return false;
 	    }
 	    // if their not both null, or not the same string
-	    if (!((null == command1.getActionRef() && 
-		   null == command2.getActionRef()) ||
-		(command1.getActionRef().equals(command2.getActionRef())))) {
-		return false;
-	    }
-	    // if their not both null, or not the same string
-	    if (!((null == command1.getActionRef() && 
-		   null == command2.getActionRef()) ||
-		(command1.getActionRef().equals(command2.getActionRef())))) {
+	    if (!TestUtil.equalsWithNulls(command1.getActionRef(),
+					  command2.getActionRef())) {
 		return false;
 	    }
 	    

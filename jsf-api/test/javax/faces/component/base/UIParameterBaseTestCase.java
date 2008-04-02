@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterBaseTestCase.java,v 1.3 2003/08/30 00:31:42 craigmcc Exp $
+ * $Id: UIParameterBaseTestCase.java,v 1.4 2003/09/09 20:51:28 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
+import javax.faces.TestUtil;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -190,9 +191,8 @@ public class UIParameterBaseTestCase extends ValueHolderTestCaseBase {
 	    param2 = (UIParameterBase) comp2;
 	if (super.propertiesAreEqual(context, comp1, comp2)) {
 	    // if their not both null, or not the same string
-	    if (!((null == param1.getName() && 
-		   null == param2.getName()) ||
-		(param1.getName().equals(param2.getName())))) {
+	    if (!TestUtil.equalsWithNulls(param1.getName(),
+					  param2.getName())) {
 		return false;
 	    }
 	}

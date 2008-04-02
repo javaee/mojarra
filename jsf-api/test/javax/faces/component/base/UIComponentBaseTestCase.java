@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.11 2003/09/02 03:12:58 eburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.12 2003/09/09 20:51:27 eburns Exp $
  */
 
 /*
@@ -31,6 +31,7 @@ import javax.faces.mock.MockRenderKitFactory;
 import javax.faces.mock.MockServletConfig;
 import javax.faces.mock.MockServletContext;
 import javax.faces.mock.MockApplication;
+import javax.faces.TestUtil;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.Validator;
@@ -414,30 +415,25 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 			       UIComponent comp1,
 			       UIComponent comp2) {
 	// if they're not both null, or not the same string
-	if (!((null == comp1.getClientId(context) && 
-	     null == comp2.getClientId(context)) ||
-	    (comp1.getClientId(context).equals(comp2.getClientId(context))))) {
+	if (!TestUtil.equalsWithNulls(comp1.getClientId(context),
+				      comp2.getClientId(context))) {
 	    return false;
 	}
 	// if they're not both null, or not the same string
-	if (!((null == comp1.getId() && 
-	     null == comp2.getId()) ||
-	    (comp1.getId().equals(comp2.getId())))) {
+	if (!TestUtil.equalsWithNulls(comp1.getId(), comp2.getId())) {
 	    return false;
 	}
 	// if they're not both null, or not the same string
-	if (!((null == comp1.getComponentRef() && 
-	     null == comp2.getComponentRef()) ||
-	    (comp1.getComponentRef().equals(comp2.getComponentRef())))) {
+	if (!TestUtil.equalsWithNulls(comp1.getComponentRef(),
+				      comp2.getComponentRef())) {
 	    return false;
 	}
 	if (comp1.isRendered() != comp2.isRendered()) {
 	    return false;
 	}
 	// if they're not both null, or not the same string
-	if (!((null == comp1.getRendererType() && 
-	     null == comp2.getRendererType()) ||
-	    (comp1.getRendererType().equals(comp2.getRendererType())))) {
+	if (!TestUtil.equalsWithNulls(comp1.getRendererType(), 
+				      comp2.getRendererType())) {
 	    return false;
 	}
 	if (comp1.isTransient() != comp2.isTransient()) {
@@ -461,8 +457,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	    val1 = comp1.getAttribute(attrName);
 	    val2 = comp2.getAttribute(attrName);
 	    // if they're not both null, or not the same string
-	    if (!((null == val1 &&  null == val2) ||
-		  (val1.equals(val2)))) {
+	    if (!TestUtil.equalsWithNulls(val1, val2)) {
 		return false;
 	    }
 	}
@@ -473,9 +468,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	    attrName = (String) attrNames.next();
 	    val1 = comp1.getAttribute(attrName);
 	    val2 = comp2.getAttribute(attrName);
-	    // if they're not both null, or not the same string
-	    if (!((null == val1 &&  null == val2) ||
-		  (val1.equals(val2)))) {
+	    if (!TestUtil.equalsWithNulls(val1, val2)) {
 		return false;
 	    }
 	}

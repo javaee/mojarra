@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootBaseTestCase.java,v 1.1 2003/08/22 14:03:27 eburns Exp $
+ * $Id: UIViewRootBaseTestCase.java,v 1.2 2003/09/09 20:51:28 eburns Exp $
  */
 
 /*
@@ -26,6 +26,7 @@ import javax.faces.mock.MockHttpServletRequest;
 import javax.faces.mock.MockHttpServletResponse;
 import javax.faces.mock.MockLifecycle;
 import javax.faces.mock.MockServletContext;
+import javax.faces.TestUtil;
 
 /**
  * <p>Test case for the <strong>javax.faces.base.UIViewRootBase</strong>
@@ -139,15 +140,13 @@ public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
 		page1 = (UIViewRootBase) comp1,
 		page2 = (UIViewRootBase) comp2;
 	    // if their not both null, or not the same string
-	    if (!((null == page1.getViewId() && 
-		   null == page2.getViewId()) ||
-		(page1.getViewId().equals(page2.getViewId())))) {
+	    if (!TestUtil.equalsWithNulls(page1.getViewId(),
+					  page2.getViewId())) {
 		return false;
 	    }
 	    // if their not both null, or not the same string
-	    if (!((null == page1.getRenderKitId() && 
-		   null == page2.getRenderKitId()) ||
-		(page1.getRenderKitId().equals(page2.getRenderKitId())))) {
+	    if (!TestUtil.equalsWithNulls(page1.getRenderKitId(),
+					  page2.getRenderKitId())) {
 		return false;
 	    }
 	}

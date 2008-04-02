@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.1 2003/08/30 00:31:43 craigmcc Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.2 2003/09/09 20:51:29 eburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.LongConverter;
 import javax.faces.convert.ShortConverter;
+import javax.faces.TestUtil;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -291,15 +292,13 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 		valueHolder1 = (ValueHolder) comp1,
 		valueHolder2 = (ValueHolder) comp2;
 	    // if their not both null, or not the same string
-	    if (!((null == valueHolder1.getValueRef() && 
-		   null == valueHolder2.getValueRef()) ||
-		(valueHolder1.getValueRef().equals(valueHolder2.getValueRef())))) {
+	    if (!TestUtil.equalsWithNulls(valueHolder1.getValueRef(),
+					  valueHolder2.getValueRef())) {
 		return false;
 	    }
 	    // if their not both null, or not the same string
-	    if (!((null == valueHolder1.getValue() && 
-		   null == valueHolder2.getValue()) ||
-		(valueHolder1.getValue().equals(valueHolder2.getValue())))) {
+	    if (!TestUtil.equalsWithNulls(valueHolder1.getValue(),
+					  valueHolder2.getValue())) {
 		return false;
 	    }
             // Are they the same class?

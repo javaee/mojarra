@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.1 2003/07/31 12:22:25 eburns Exp $
+ * $Id: TestUtil.java,v 1.2 2003/09/09 20:51:26 eburns Exp $
  */
 
 /*
@@ -34,6 +34,29 @@ public class TestUtil extends Object {
 				   e.getMessage());
 	    }
 	}
+    }
+
+    /**
+     * <p>If both args are <code>null</code>, return
+     * <code>true</code>.</p>
+     *
+     * <p>If both args are <code>non-null</code>, return
+     * s1.equals(s2)</p>.
+     *
+     * <p>Otherwise, return <code>false</code>.</p>
+     *
+     */
+
+    public static boolean equalsWithNulls(Object s1, Object s2) {
+	if (null == s1 && null == s2) {
+	    return true;
+	}
+
+	if (null != s1 && null != s2) {
+	    return s1.equals(s2);
+	}
+
+	return false;
     }
 
 
