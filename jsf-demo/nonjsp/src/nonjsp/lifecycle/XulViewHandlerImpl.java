@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.5 2003/05/15 22:26:38 rkitain Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.6 2003/05/15 22:38:30 rkitain Exp $ 
  */ 
 
 
@@ -75,7 +75,7 @@ import org.apache.commons.logging.LogFactory;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.5 2003/05/15 22:26:38 rkitain Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.6 2003/05/15 22:38:30 rkitain Exp $ 
  * 
  * @see javax.faces.lifecycle.ViewHandler 
  * 
@@ -113,7 +113,7 @@ public class XulViewHandlerImpl implements ViewHandler {
         createFooter(context);
 
         log.trace("Save the tree and locale in the session");
-        Map sessionMap = Util.getSessionMap(context);
+        Map sessionMap = getSessionMap(context);
         sessionMap.put(RIConstants.REQUEST_LOCALE, context.getLocale());
         sessionMap.put(RIConstants.FACES_TREE, context.getTree());
 
@@ -181,6 +181,18 @@ public class XulViewHandlerImpl implements ViewHandler {
         }
         component.encodeEnd(context);
 
+    }
+
+    private Map getSessionMap(FacesContext context) {
+        if (context == null) {
+            context = FacesContext.getCurrentInstance();
+        }
+        Map sessionMap = context.getExternalContext().getSessionMap();
+        if (sessionMap == null) {
+            context.getExternalContext().getSession(true);
+            sessionMap = context.getExternalContext().getSessionMap();
+        }
+        return sessionMap;
     }
 
 } 
