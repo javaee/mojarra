@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.43 2004/04/02 21:35:50 eburns Exp $
+ * $Id: UISelectOne.java,v 1.44 2004/04/19 17:07:52 eburns Exp $
  */
 
 /*
@@ -99,7 +99,7 @@ public class UISelectOne extends UIInput {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void validateValue(FacesContext context, Object value) {
+    protected void validateValue(FacesContext context, Object value) {
 
         // Skip validation if it is not necessary
         super.validateValue(context, value);
