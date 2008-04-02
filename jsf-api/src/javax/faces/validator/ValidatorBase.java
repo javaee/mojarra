@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.15 2003/07/16 23:11:04 craigmcc Exp $
+ * $Id: ValidatorBase.java,v 1.16 2003/08/01 18:05:50 craigmcc Exp $
  */
 
 /*
@@ -97,85 +97,6 @@ abstract class ValidatorBase implements Validator {
 	    }
         }
         return (resources);
-
-    }
-
-
-    /**
-     * <p>Return the specified attribute value, converted to a
-     * <code>double</code>.</p>
-     *
-     * @param attributeValue The attribute value to be converted
-     *
-     * @exception NumberFormatException if conversion is not possible
-     */
-    protected double doubleValue(Object attributeValue)
-        throws NumberFormatException {
-
-        if (attributeValue instanceof Float) {
-            return ( ((Float) attributeValue).doubleValue() );
-        } else if (attributeValue instanceof Double) {
-            return ( ((Double) attributeValue).doubleValue() );
-        } else if (attributeValue instanceof Byte) {
-            return ( ((Byte) attributeValue).doubleValue() );
-        } else if (attributeValue instanceof Short) { 
-            return ( ((Short) attributeValue).doubleValue() );
-        } else if (attributeValue instanceof Integer) {
-            return ( ((Integer) attributeValue).doubleValue() );
-        } else if (attributeValue instanceof Long) {
-            return ( ((Long) attributeValue).doubleValue() );
-        } else {
-            return (Double.parseDouble(attributeValue.toString()));
-        }
-
-    }
-
-
-    /**
-     * <p>Return the specified attribute value, converted to a
-     * <code>long</code>.</p>
-     *
-     * @param attributeValue The attribute value to be converted
-     *
-     * @exception NumberFormatException if conversion is not possible
-     */
-    protected long longValue(Object attributeValue)
-        throws NumberFormatException {
-
-        if (attributeValue instanceof Byte) {
-            return ( ((Byte) attributeValue).longValue() );
-        } else if (attributeValue instanceof Short) { 
-            return ( ((Short) attributeValue).longValue() );
-        } else if (attributeValue instanceof Integer) {
-            return ( ((Integer) attributeValue).longValue() );
-        } else if (attributeValue instanceof Long) {
-            return ( ((Long) attributeValue).longValue() );
-        } else if (attributeValue instanceof Double) {
-            return ( ((Double) attributeValue).longValue() );
-        } else if (attributeValue instanceof Float) {
-            return ( ((Float) attributeValue).longValue() );
-        } else {
-            return (Long.parseLong(attributeValue.toString()));
-        }
-
-    }
-
-
-    /**
-     * <p>Return the specified attribute value, converted to a
-     * <code>String</code>.</p>
-     *
-     * @param attributeValue The attribute value to be converted
-     */
-    protected String stringValue(Object attributeValue) {
-
-        if (attributeValue == null) {
-            return (null);
-        } else if (attributeValue instanceof String) {
-            return ((String) attributeValue);
-        } else {
-            return (attributeValue.toString());
-        }
 
     }
 

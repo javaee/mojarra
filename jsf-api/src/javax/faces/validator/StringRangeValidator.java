@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.16 2003/07/28 22:19:05 eburns Exp $
+ * $Id: StringRangeValidator.java,v 1.17 2003/08/01 18:05:50 craigmcc Exp $
  */
 
 /*
@@ -268,6 +268,7 @@ public class StringRangeValidator extends ValidatorBase implements StateHolder {
 
     }
 
+
     public boolean equals(Object otherObj) {
 	if (!(otherObj instanceof StringRangeValidator)) {
 	    return false;
@@ -277,6 +278,29 @@ public class StringRangeValidator extends ValidatorBase implements StateHolder {
 		&&
 		maximumSet == other.maximumSet && minimumSet == other.minimumSet);
     }
+
+
+    // -------------------------------------------------------- Private Methods
+
+
+    /**
+     * <p>Return the specified attribute value, converted to a
+     * <code>String</code>.</p>
+     *
+     * @param attributeValue The attribute value to be converted
+     */
+    private String stringValue(Object attributeValue) {
+
+        if (attributeValue == null) {
+            return (null);
+        } else if (attributeValue instanceof String) {
+            return ((String) attributeValue);
+        } else {
+            return (attributeValue.toString());
+        }
+
+    }
+
 
     // ------------------------------------------ methods from StateHolder
     private static String STR_SEP = "[javax.faces]";

@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.20 2003/07/28 22:19:05 eburns Exp $
+ * $Id: LengthValidator.java,v 1.21 2003/08/01 18:05:50 craigmcc Exp $
  */
 
 /*
@@ -222,6 +222,7 @@ public class LengthValidator extends ValidatorBase implements StateHolder {
 
     // --------------------------------------------------------- Public Methods
 
+
     public void validate(FacesContext context, UIInput component) {
 
         if ((context == null) || (component == null)) {
@@ -252,6 +253,7 @@ public class LengthValidator extends ValidatorBase implements StateHolder {
 
     }
 
+
     public boolean equals(Object otherObj) {
 	if (!(otherObj instanceof LengthValidator)) {
 	    return false;
@@ -260,6 +262,29 @@ public class LengthValidator extends ValidatorBase implements StateHolder {
 	return (maximum == other.maximum && minimum == other.minimum &&
 		maximumSet == other.maximumSet && minimumSet == other.minimumSet);
     }
+
+
+    // -------------------------------------------------------- Private Methods
+
+
+    /**
+     * <p>Return the specified attribute value, converted to a
+     * <code>String</code>.</p>
+     *
+     * @param attributeValue The attribute value to be converted
+     */
+    private String stringValue(Object attributeValue) {
+
+        if (attributeValue == null) {
+            return (null);
+        } else if (attributeValue instanceof String) {
+            return ((String) attributeValue);
+        } else {
+            return (attributeValue.toString());
+        }
+
+    }
+
 
     // ------------------------------------------ methods from StateHolder
     

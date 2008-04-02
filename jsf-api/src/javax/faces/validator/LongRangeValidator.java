@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.13 2003/07/28 22:19:05 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.14 2003/08/01 18:05:50 craigmcc Exp $
  */
 
 /*
@@ -268,6 +268,7 @@ public class LongRangeValidator extends ValidatorBase implements StateHolder {
 
     }
 
+
     public boolean equals(Object otherObj) {
 	if (!(otherObj instanceof LongRangeValidator)) {
 	    return false;
@@ -276,6 +277,30 @@ public class LongRangeValidator extends ValidatorBase implements StateHolder {
 	return (maximum == other.maximum && minimum == other.minimum &&
 		maximumSet == other.maximumSet && minimumSet == other.minimumSet);
     }
+
+
+    // -------------------------------------------------------- Private Methods
+
+
+    /**
+     * <p>Return the specified attribute value, converted to a
+     * <code>long</code>.</p>
+     *
+     * @param attributeValue The attribute value to be converted
+     *
+     * @exception NumberFormatException if conversion is not possible
+     */
+    private long longValue(Object attributeValue)
+        throws NumberFormatException {
+
+        if (attributeValue instanceof Number) {
+            return ( ((Number) attributeValue).longValue() );
+        } else {
+            return (Long.parseLong(attributeValue.toString()));
+        }
+
+    }
+
 
     // ------------------------------------------ methods from StateHolder
     

@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.18 2003/07/28 22:19:05 eburns Exp $
+ * $Id: DoubleRangeValidator.java,v 1.19 2003/08/01 18:05:50 craigmcc Exp $
  */
 
 /*
@@ -268,6 +268,7 @@ public class DoubleRangeValidator extends ValidatorBase implements StateHolder {
 
     }
 
+
     public boolean equals(Object otherObj) {
 	if (!(otherObj instanceof DoubleRangeValidator)) {
 	    return false;
@@ -276,6 +277,31 @@ public class DoubleRangeValidator extends ValidatorBase implements StateHolder {
 	return (maximum == other.maximum && minimum == other.minimum &&
 		maximumSet == other.maximumSet && minimumSet == other.minimumSet);
     }
+
+
+    // -------------------------------------------------------- Private Methods
+
+
+    /**
+     * <p>Return the specified attribute value, converted to a
+     * <code>double</code>.</p>
+     *
+     * @param attributeValue The attribute value to be converted
+     *
+     * @exception NumberFormatException if conversion is not possible
+     */
+    private double doubleValue(Object attributeValue)
+        throws NumberFormatException {
+
+        if (attributeValue instanceof Number) {
+            return ( ((Number) attributeValue).doubleValue() );
+        } else {
+            return (Double.parseDouble(attributeValue.toString()));
+        }
+
+    }
+
+
 
     // ------------------------------------------ methods from StateHolder
     
