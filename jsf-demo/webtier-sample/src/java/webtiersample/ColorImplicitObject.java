@@ -104,15 +104,16 @@ public class ColorImplicitObject {
                 throw new RuntimeException("Could not load rgb.txt", e);
             }
         }
-    }
+    }    
 
-    /**
-     * Color whose red property has been specified (e.g. ${Color[100]})
-     */
-    public static class ColorR {
+    public static class ColorRGB {
+        
         private int red;
+        private int green;
+        private int blue;
 
-        public ColorR(int red) {
+        public ColorRGB(int red, int green, int blue) {
+           
             // Handle low or high values robustly.
             if (red < 0) {
                 red = 0;
@@ -121,32 +122,7 @@ public class ColorImplicitObject {
                 red = 255;
             }
             this.red = red;
-        }
-
-        public int getRed() {
-            return red;
-        }
-
-        public void setRed(int r) {
-            red = r;
-        }
-
-        public String toString() {
-            return "Color(" + red + ", ?, ?)";
-        }
-    }
-
-    /**
-     * Color whose red and green properties have been specified (e.g.
-     * ${Color[100][150]})
-     */
-    public static class ColorRG
-        extends ColorR {
-        private int green;
-
-        public ColorRG(int red, int green) {
-            super(red);
-            // Handle low or high values robustly.
+            
             if (green < 0) {
                 green = 0;
             }
@@ -154,47 +130,42 @@ public class ColorImplicitObject {
                 green = 255;
             }
             this.green = green;
-        }
-
-        public int getGreen() {
-            return green;
-        }
-
-        public void setGreen(int g) {
-            green = g;
-        }
-
-        public String toString() {
-            return "Color(" + getRed() + ", " + green + ", ?)";
-        }
-    }
-
-    public static class ColorRGB
-        extends ColorRG {
-        private int blue;
-
-        public ColorRGB(int red, int green, int blue) {
-            super(red, green);
-            // Handle low or high values robustly.
+            
             if (blue < 0) {
                 blue = 0;
             }
             if (blue > 255) {
                 blue = 255;
             }
-            this.blue = blue;
+            this.blue = blue;                        
+        }
+
+        public int getRed() {
+            return red;
+        }
+
+        public void setRed(int red) {
+            this.red = red;
+        }
+
+        public int getGreen() {
+            return green;
+        }
+
+        public void setGreen(int green) {
+            this.green = green;
         }
 
         public int getBlue() {
             return blue;
         }
 
-        public void setBlue(int b) {
-            blue = b;
+        public void setBlue(int blue) {
+            this.blue = blue;
         }
 
         public java.awt.Color getColor() {
-            return new java.awt.Color(getRed(), getGreen(), getBlue());
+            return new java.awt.Color(red, green, blue);
         }
 
         public ColorRGB getDarker() {
@@ -208,8 +179,8 @@ public class ColorImplicitObject {
         }
 
         public String getHex() {
-            return "#" + toHex(getRed()) + toHex(getGreen()) +
-                   toHex(getBlue());
+            return "#" + toHex(getRed()) + toHex(green) +
+                   toHex(blue);
         }
 
         private String toHex(int i) {
@@ -223,7 +194,7 @@ public class ColorImplicitObject {
         }
 
         public String toString() {
-            return "Color(" + getRed() + ", " + getGreen() + ", " + blue + ")";
+            return "Color(" + red + ", " + green + ", " + blue + ')';
         }
     }
 }
