@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigMessage.java,v 1.2 2003/05/18 20:54:44 eburns Exp $
+ * $Id: ConfigMessage.java,v 1.3 2003/07/22 19:44:39 rkitain Exp $
  */
 
 /*
@@ -10,10 +10,12 @@
 package com.sun.faces.config;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Collections;
 
 import javax.faces.application.Message;
+import javax.faces.context.FacesContext;
 
 /**
  * <p>Config Bean for a Message.</p>
@@ -55,6 +57,16 @@ public class ConfigMessage extends ConfigFeature {
     public void addSummary(String language, String summary) {
 	if (null == summaries) {
 	    summaries = new HashMap();
+	}
+	if (language == null) {
+	    Locale locale = null;
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    if (context != null) {
+                locale = context.getLocale();
+	    } else {
+		locale = Locale.getDefault();
+            }
+	    language = locale.getLanguage();
 	}
 	summaries.put(language, summary);
     }

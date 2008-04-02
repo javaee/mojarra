@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.14 2003/07/08 15:38:30 eburns Exp $
+ * $Id: ConfigListener.java,v 1.15 2003/07/22 19:44:39 rkitain Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -112,7 +112,6 @@ public class ConfigListener implements ServletContextListener
     {
 	ServletContext servletContext = e.getServletContext();
         configParser = new ConfigParser(servletContext);
-	ConfigBase configBase = null;
 	String initParamFileList = null;
 	InputStream jarInputStream = null;
 	
@@ -124,8 +123,7 @@ public class ConfigListener implements ServletContextListener
             log.debug("Loading JSF_RI_CONFIG configuration resources from " +
                       RIConstants.JSF_RI_CONFIG);
         }
-        configBase = configParser.parseConfig(jarInputStream);
-	Assert.assert_it(null != configBase);
+        configParser.parseConfig(jarInputStream);
 	// It's an error if this doesn't load.
         if (log.isDebugEnabled()) {
             log.debug("Loading JSF_RI_CONFIG completed");
@@ -133,7 +131,7 @@ public class ConfigListener implements ServletContextListener
 
 	// Step 1: scan the META-INF directory of all jar files in
 	// "/WEB-INF/lib" for "faces-config.xml" files.
-	scanJarsForConfigFile(servletContext, configParser, configBase);
+	scanJarsForConfigFile(servletContext, configParser);
 
 	// Step 2. If the init parameter exists, load the config from
 	// there
@@ -151,9 +149,7 @@ public class ConfigListener implements ServletContextListener
                         if (log.isDebugEnabled()) {
                             log.debug("Trying to load application file " + cur);
                         }
-			configBase = configParser.parseConfig(cur,
-							      servletContext,
-							      configBase);
+			configParser.parseConfig(cur, servletContext);
                         if (log.isDebugEnabled()) {
                             log.debug("Application file " + cur + " loaded");
                         }
@@ -172,9 +168,8 @@ public class ConfigListener implements ServletContextListener
                 if (log.isDebugEnabled()) {
                     log.debug("Trying to default configuration file");
                 }
-		configBase = configParser.parseConfig("/WEB-INF/faces-config.xml",
-						      servletContext,
-						      configBase);
+		configParser.parseConfig("/WEB-INF/faces-config.xml",
+						      servletContext);
                 if (log.isDebugEnabled()) {
                     log.debug("Default configuration file loaded");
                 }
@@ -186,18 +181,12 @@ public class ConfigListener implements ServletContextListener
 	}	
 
 
-	// Store the ConfigBase in the Application's AppConfig.
         ApplicationFactory aFactory = 
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = 
 	    (ApplicationImpl)aFactory.getApplication();
-        application.getAppConfig().setConfigBase(configBase);
 
-        servletContext.setAttribute(RIConstants.CONFIG_ATTR, 
-					   configBase);
-        if (log.isTraceEnabled()) {
-            log.trace("CONFIG BASE SET IN CONTEXT...");
-        }
+        servletContext.setAttribute(RIConstants.CONFIG_ATTR, new Boolean(true)); 
     }
 
     public void contextDestroyed(ServletContextEvent e) {  
@@ -216,14 +205,10 @@ public class ConfigListener implements ServletContextListener
      *
      * <p>For each jar, look for a file called
      * "/META-INF/faces-config.xml".  If that file is present, parse it
-     * into the argument configBase.</p>
-     *
-     *
      */
 
     protected void scanJarsForConfigFile(ServletContext servletContext, 
-                                         ConfigParser configParser, 
-                                         ConfigBase configBase) {
+                                         ConfigParser configParser) {
 
         Set jarSet = servletContext.getResourcePaths("/WEB-INF/lib/");
         if (jarSet == null) {
@@ -235,8 +220,7 @@ public class ConfigListener implements ServletContextListener
             if (!jarPath.endsWith(".jar")) {
                 continue;
             }
-            scanJarForConfigFile(servletContext, configParser,
-                                 configBase, jarPath);
+            scanJarForConfigFile(servletContext, configParser, jarPath);
         }
 
     }
@@ -244,18 +228,15 @@ public class ConfigListener implements ServletContextListener
 
     /**
      * <p>Scan the specified JAR file for a "/META-INF/faces-config.xml"
-     * resource.  If such a resource is found, parse it into the
-     * specified <code>configBase</code>.</p>
+     * resource.  If such a resource is found, parse it.
      *
      * @param servletContext The <code>ServletContext</code> for the
      *  current web application
      * @param configParser Parser for processing configuration resources
-     * @param configBase Base configuration object for storing parsed data
      * @param jarPath Context-relative resource path to the JAR file to check
      */
     protected void scanJarForConfigFile(ServletContext servletContext,
                                         ConfigParser configParser,
-                                        ConfigBase configBase,
                                         String jarPath) {
 
         // Calculate a URL for the config resource (if it exists) in this JAR
@@ -301,7 +282,7 @@ public class ConfigListener implements ServletContextListener
                 log.debug("Parsing application configuration resource " +
                           resourceURL.toExternalForm());
             }
-            configBase = configParser.parseConfig(source, configBase);
+            configParser.parseConfig(source);
             if (log.isDebugEnabled()) {
                 log.debug("Finished application configuration resource " +
                           resourceURL.toExternalForm());

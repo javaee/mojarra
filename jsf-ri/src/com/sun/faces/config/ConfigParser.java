@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.19 2003/07/08 15:38:30 eburns Exp $
+ * $Id: ConfigParser.java,v 1.20 2003/07/22 19:44:39 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,9 @@ package com.sun.faces.config;
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.NavigationHandlerImpl;
+import com.sun.faces.context.MessageCatalog;
+import com.sun.faces.context.MessageResourcesImpl;
+import com.sun.faces.context.MessageTemplate;
 import com.sun.faces.util.Util;
 
 import java.io.File;
@@ -22,11 +25,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Message;
+import javax.faces.application.MessageImpl;
+import javax.faces.context.FacesContext;
+import javax.faces.context.MessageResources;
 import javax.faces.application.NavigationHandler;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
@@ -92,59 +100,18 @@ public class ConfigParser {
 
     /**
      *
-     * <p>Create a brand new ConfigBase object, clearing the existing
-     * configuration, and populate it from the specified InputStream.</p>
+     * <p>Parse the input stream.</p>
      */
 
-    protected ConfigBase parseConfig(InputStream input) { 
-	ConfigBase base = new ConfigBase();
+    protected void parseConfig(InputStream input) { 
         ApplicationFactory aFactory = 
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = 
 	    (ApplicationImpl)aFactory.getApplication();
-        application.getAppConfig().reset();
 	
-	base = this.parseConfig(input, base);
-	return base;
-    }
-
-    /**
-
-    * <p>Add to the configuration of the specified ConfigBase with the
-    * config information at the specified configPath.</p>
-
-    */
-
-    // Parse the configuration file at the specified path; 
-    protected ConfigBase parseConfig(String configPath, 
-				     ServletContext servletContext, 
-				     ConfigBase base) { 
-        InputStream input = null;
-
-        try {
-            input = servletContext.getResourceAsStream(configPath);
-        } catch (Throwable t) {
-            Object[] obj = new Object[1];
-            obj[0] = configPath;
-            throw new RuntimeException(Util.getExceptionMessage(
-                Util.ERROR_OPENING_FILE_ERROR_MESSAGE_ID, obj));
-        }
-	base = this.parseConfig(input, base);
-
-        return base;
-    }
-
-    /**
-
-    * <p>Add to the configuration of the specified ConfigBase with the
-    * config information at the specified InputStream.</p>
-
-    */
-    protected ConfigBase parseConfig(InputStream input, ConfigBase base) {
-        try {
+	try {
             digester.clear();
-            digester.push(base);
-            base = (ConfigBase) digester.parse(input);
+            digester.parse(input);
         } catch (Throwable t) {
             Object[] obj = new Object[1];
             obj[0] = input.toString(); 
@@ -156,21 +123,40 @@ public class ConfigParser {
             input.close();
         } catch(Throwable t) {
         }
-	
-        return base;
+    }
+
+    /**
+
+    * <p>Add to the configuration the
+    * config information at the specified configPath.</p>
+
+    */
+
+    // Parse the configuration file at the specified path; 
+    protected void parseConfig(String configPath, 
+				     ServletContext servletContext) {
+        InputStream input = null;
+
+        try {
+            input = servletContext.getResourceAsStream(configPath);
+        } catch (Throwable t) {
+            Object[] obj = new Object[1];
+            obj[0] = configPath;
+            throw new RuntimeException(Util.getExceptionMessage(
+                Util.ERROR_OPENING_FILE_ERROR_MESSAGE_ID, obj));
+        }
+	this.parseConfig(input);
     }
 
     /*
-*
-    * <p>Add to the configuration of the specified ConfigBase with the
-    * config information at the specified InputSource.</p>
-
-    */
-    protected ConfigBase parseConfig(InputSource input, ConfigBase base) {
+     *
+     * <p>Add to the configuration the
+     * config information at the specified InputSource.</p>
+     */
+    protected void parseConfig(InputSource input) {
         try {
             digester.clear();
-            digester.push(base);
-            base = (ConfigBase) digester.parse(input);
+            digester.parse(input);
         } catch (Throwable t) {
             Object[] obj = new Object[1];
             obj[0] = input.toString(); 
@@ -182,8 +168,6 @@ public class ConfigParser {
             input.getByteStream().close();
         } catch(Throwable t) {
         }
-	
-        return base;
     }
 
     // Create a Digester instance with no rules yet
@@ -209,7 +193,6 @@ public class ConfigParser {
 
 
     // Configure the matching rules for the specified Digester instance
-    // Rules assume that a ConfigBase bean is pushed on the stack first
     protected void configureRules(Digester digester) {
 
         configureRulesApplication(digester);
@@ -305,12 +288,16 @@ public class ConfigParser {
         String prefix = "faces-config/message-resources";
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigMessageResources");
-        digester.addSetNext(prefix, "addMessageResources", "com.sun.faces.config.ConfigMessageResources");
         digester.addCallMethod(prefix + "/message-resources-id",
                                "setMessageResourcesId", 0);
         digester.addCallMethod(prefix + "/message-resources-class",
                                "setMessageResourcesClass", 0);
 	configureRulesMessage(digester);
+
+        // This custom rule will add message resource info to the Application instance;
+        //
+        MessageResourceRule mrRule = new MessageResourceRule();
+        digester.addRule(prefix, mrRule);
     }
 
     protected void configureRulesMessage(Digester digester) {
@@ -525,9 +512,10 @@ public class ConfigParser {
     }
 }
 
-// These specialized rules set the appropriate value category (value,value-ref,null-value,value-class)
-// on the managed bean property value object;
- 
+/**
+ * These specialized rules set the appropriate value category (value,value-ref,
+ * null-value,value-class)  on the managed bean property value object;
+ */
 final class ConfigManagedBeanPropertyValueRule extends Rule {
     public ConfigManagedBeanPropertyValueRule() {
         super();
@@ -568,8 +556,10 @@ final class ConfigManagedBeanPropertyValueNullRule extends Rule {
     }
 }
 
-// These specialized rules set the appropriate value category (value,value-ref,null-value)
-// on the managed bean property map object;
+/**
+ * These specialized rules set the appropriate value category (value,value-ref,null-value)
+ * on the managed bean property map object;
+ */
 
 final class ConfigManagedPropertyMapValueRule extends Rule {
     public ConfigManagedPropertyMapValueRule() {
@@ -601,6 +591,10 @@ final class ConfigManagedPropertyMapNullRule extends Rule {
     }
 }
 
+/**
+ * This rule adds a <code>componentType</code>,<code>componentClass</code>
+ * mapping to the <code>Application</code> instance's internal map.
+ */
 final class ComponentsRule extends Rule {
     public ComponentsRule() {
         super();
@@ -611,10 +605,14 @@ final class ComponentsRule extends Rule {
            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application =
            (ApplicationImpl)aFactory.getApplication();
-       application.addComponent(cc.getComponentType(), cc.getComponentClass());
+        application.addComponent(cc.getComponentType(), cc.getComponentClass());
     }
 }
 
+/**
+ * This rule adds a <code>converterId</code>,<code>converterClass</code>
+ * mapping to the <code>Application</code> instance's internal map.
+ */
 final class ConvertersRule extends Rule {
     public ConvertersRule() {
        super();
@@ -629,6 +627,10 @@ final class ConvertersRule extends Rule {
     }
 }
 
+/**
+ * This rule adds a <code>validatorId</code>,<code>validatorClass</code>
+ * mapping to the <code>Application</code> instance's internal map.
+ */
 final class ValidatorsRule extends Rule {
     public ValidatorsRule() {
        super();
@@ -643,6 +645,10 @@ final class ValidatorsRule extends Rule {
     }
 }
 
+/**
+ * This rule creates a <code>ManagedBeanFactory</code> instance
+ * and adds it to the <code>Application</code> implementation.
+ */
 final class ManagedBeansRule extends Rule {
     public ManagedBeansRule() {
         super();
@@ -658,9 +664,10 @@ final class ManagedBeansRule extends Rule {
     }
 }
 
-// This rule sets the Application's Action Listener / Navigation Handler /
-// PropertyResolver / VariableResolver instances;
-//
+/**
+ * This rule sets the Application's Action Listener / Navigation Handler /
+ * PropertyResolver / VariableResolver instances;
+ */
 final class ApplicationRule extends Rule {
 
     protected static Log log = LogFactory.getLog(ConfigParser.class);
@@ -719,13 +726,12 @@ final class ApplicationRule extends Rule {
         }
 	return returnObject;
     }
-	        
-	    
 }
 
-// This rule gets the Navigation Handler instance from the Application instance.
-// Then it sets Navigation Case info in the Navigation Handler instance...
-//
+/**
+ * This rule gets the Navigation Handler instance from the Application instance.
+ * Then it sets Navigation Case info in the Navigation Handler instance...
+ */
 final class NavigationCaseRule extends Rule {
 
     protected static Log log = LogFactory.getLog(ConfigParser.class);
@@ -750,6 +756,16 @@ final class NavigationCaseRule extends Rule {
     }
 }
 
+/**
+ *  This rule gets a <code>RenderKit</code> instance using the
+ *  <code>RenderKitFactory</code> with the <code>RenderKitId</code>
+ *  from the <code>ConfigRenderKit</code> instance.  It extracts
+ *  <code>ConfigRenderer</code> instances and uses the information
+ *  to create <code>Renderer</code> instances.  The <code>Renderer</code>
+ *  instances are added to the <code>RenderKit</code>.
+ *  This rule executes when the ending <code></render-kit></faces-config></code>
+ *  XML element is encountered.
+ */
 final class RenderKitRule extends Rule {
 
     protected static Log log = LogFactory.getLog(ConfigParser.class);
@@ -782,7 +798,99 @@ final class RenderKitRule extends Rule {
                 throw new FacesException(e);
             }
         }
-	RenderKit myRenderKit = renderKitFactory.getRenderKit("DEFAULT");
-	Renderer myRenderer = myRenderKit.getRenderer("Form");
+    }
+}
+
+/**
+ * This rule performs the following functionality for 
+ * <code>MessageResource</code> handling:
+ *     1. gets the <code>ConfigMessageResources</code> instance from the
+ *        Digester stack.
+ *     2. Uses the <code>messageResourcesId</code> to get a 
+ *        <code>MessageResources</code> instance from the <code>Application</code>
+ *        implementation.
+ *     3. Iterates through each of the <code>ConfigMessage</code> instances
+ *        (contained in <code>ConfigMessageResources</code>, and creates a 
+ *        <code>MessageTemplate</code> instance.
+ *     4. Each <code>MessageTemplate</code> is added to a <code>MessageCatalog</code>
+ *        based on <code>Locale</code>.
+ *  This rule executes when the ending <code></message-resources></faces-config></code>
+ *  XML element is encountered.
+ */
+final class MessageResourceRule extends Rule {
+
+    protected static Log log = LogFactory.getLog(ConfigParser.class);
+
+    public MessageResourceRule() {
+        super();
+    }
+    public void end() throws Exception {
+        ApplicationFactory aFactory =
+            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application =
+            (ApplicationImpl)aFactory.getApplication();
+	ConfigMessageResources mr = (ConfigMessageResources)digester.peek();
+	String messageResourcesId = mr.getMessageResourcesId();
+	Assert.assert_it(null != messageResourcesId);
+        MessageResources messageResources = application.getMessageResources(messageResourcesId);
+	if (messageResources instanceof MessageResourcesImpl) {
+	    //
+	    // Iterate through each ConfigMessage and create a MessageTemplate;
+	    // For each ConfigMessage, determine the language for summary and detail,
+	    // and catalog the message by language.
+	    //
+	    Map messages = mr.getMessages();
+	    Iterator iter = messages.keySet().iterator();
+	    while (iter.hasNext()) {
+                ConfigMessage configMessage = (ConfigMessage)messages.get((String)iter.next());
+		String messageClazz = configMessage.getMessageClass();
+		if (messageClazz ==null) {
+		    messageClazz = MessageImpl.class.getName();
+		}
+		MessageTemplate messageTemplate = null;
+		if (messageClazz.equals(MessageImpl.class.getName())) {
+		    Map summaries = configMessage.getSummaries();
+		    Map details = configMessage.getDetails();
+	            Iterator langIter = summaries.keySet().iterator();
+		    Locale locale = null;
+		    //
+		    // Determine the Locale..  If no langage is specified in the config
+		    // file, attempt to get it from FacesContext;
+		    //
+		    while (langIter.hasNext()) {
+			String language = (String)langIter.next();
+			Assert.assert_it(null != language);
+			locale = new Locale(language);
+		        messageTemplate = new MessageTemplate();
+			messageTemplate.setMessageId(configMessage.getMessageId());
+			messageTemplate.setLocale(locale);
+			messageTemplate.setSummary((String)summaries.get(language));
+			messageTemplate.setDetail((String)details.get(language));
+			//
+			// Default to ERROR if not in config file..
+			//
+			if (configMessage.getSeverity() > 0) { 
+			    messageTemplate.setSeverity(configMessage.getSeverity());
+			} else {
+			    messageTemplate.setSeverity(Message.SEVERITY_ERROR);
+			}
+			//
+			// See if a catalog exists for the locale, and if it does,
+			// use it to add the message - otherwise, create the catalog 
+			// first.
+			//
+                        MessageCatalog catalog = 
+			    ((MessageResourcesImpl)messageResources).findCatalog(locale);
+			if (catalog == null) {
+			    catalog = new MessageCatalog(locale);
+			    catalog.addMessage(messageTemplate);
+			    ((MessageResourcesImpl)messageResources).addCatalog(locale, catalog);
+			} else {
+			    catalog.addMessage(messageTemplate);
+			}
+		    }
+		}
+            }
+	}
     }
 }
