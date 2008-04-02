@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.2 2003/07/14 23:28:02 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.3 2003/07/20 00:41:49 craigmcc Exp $
  */
 
 /*
@@ -16,10 +16,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.faces.FactoryFinder;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
@@ -27,12 +30,16 @@ import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import javax.faces.mock.MockExternalContext;
 import javax.faces.mock.MockFacesContext;
 import javax.faces.mock.MockHttpServletRequest;
 import javax.faces.mock.MockHttpServletResponse;
 import javax.faces.mock.MockHttpSession;
 import javax.faces.mock.MockJspWriter;
+import javax.faces.mock.MockLifecycle;
 import javax.faces.mock.MockPageContext;
+import javax.faces.mock.MockRenderKit;
+import javax.faces.mock.MockRenderKitFactory;
 import javax.faces.mock.MockServlet;
 import javax.faces.mock.MockServletConfig;
 import javax.faces.mock.MockServletContext;
@@ -49,7 +56,9 @@ public class UIComponentTagTestCase extends TestCase {
 
 
     protected MockServletConfig       config = null;
+    protected MockExternalContext     externalContext = null;
     protected MockFacesContext        facesContext = null;
+    protected MockLifecycle           lifecycle = null;
     protected MockPageContext         pageContext = null;
     protected MockHttpServletRequest  request = null;
     protected MockHttpServletResponse response = null;
@@ -98,11 +107,20 @@ public class UIComponentTagTestCase extends TestCase {
                                true, 1024, true);
 
         // Set up Faces API Objects
-        facesContext = new MockFacesContext();
-        facesContext.setServletContext(servletContext);
-        facesContext.setServletRequest(request);
-        facesContext.setServletResponse(response);
+        externalContext =
+            new MockExternalContext(servletContext, request, response);
+        lifecycle = new MockLifecycle();
+        facesContext = new MockFacesContext(externalContext, lifecycle);
         facesContext.setTree(new MockTree(new TestNamingContainer()));
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = new MockRenderKit();
+        try {
+            renderKitFactory.addRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT,
+                                          renderKit);
+        } catch (IllegalArgumentException e) {
+            ;
+        }
 
     }
 
@@ -122,7 +140,9 @@ public class UIComponentTagTestCase extends TestCase {
     public void tearDown() {
 
         config = null;
+        externalContext = null;
         facesContext = null;
+        lifecycle = null;
         pageContext = null;
         request = null;
         response = null;

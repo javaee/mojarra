@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.6 2003/06/20 23:28:50 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.7 2003/07/20 00:41:43 craigmcc Exp $
  */
 
 /*
@@ -19,8 +19,11 @@ import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import javax.faces.mock.MockExternalContext;
 import javax.faces.mock.MockFacesContext;
 import javax.faces.mock.MockHttpServletRequest;
+import javax.faces.mock.MockHttpServletResponse;
+import javax.faces.mock.MockLifecycle;
 import javax.faces.mock.MockServletContext;
 
 
@@ -35,9 +38,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     // ----------------------------------------------------- Instance Variables
 
 
-    /**
-     * The mock FacesContext to use in our tests.
-     */
     protected FacesContext context = null;
 
 
@@ -63,11 +63,12 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public void setUp() {
 
         super.setUp();
-        context = new MockFacesContext();
-        ((MockFacesContext) context).setServletContext
-            (new MockServletContext());
-        ((MockFacesContext) context).setServletRequest
-            (new MockHttpServletRequest());
+        MockExternalContext econtext = new MockExternalContext
+            (new MockServletContext(),
+             new MockHttpServletRequest(),
+             new MockHttpServletResponse());
+        MockLifecycle lifecycle = new MockLifecycle();
+        context = new MockFacesContext(econtext, lifecycle);
 
     }
 

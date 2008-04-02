@@ -377,6 +377,8 @@
       <jvmarg line="${debug.jvm.args}"/>
       <sysproperty key="javax.faces.application.ApplicationFactory"
                  value="javax.faces.mock.MockApplicationFactory"/>
+      <sysproperty key="javax.faces.application.RenderKitFactory"
+                 value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.webapp.UIComponentTagTestCase"/>
       <classpath refid="test.classpath"/>
     </java>

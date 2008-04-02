@@ -1,5 +1,5 @@
 /*
- * $Id: MockHttpServletResponse.java,v 1.2 2003/04/29 18:13:05 eburns Exp $
+ * $Id: MockHttpServletResponse.java,v 1.3 2003/07/20 00:41:45 craigmcc Exp $
  */
 
 /*
@@ -22,6 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 // Mock Object for HttpServletResponse (Version 2.3)
 public class MockHttpServletResponse implements HttpServletResponse {
 
+
+
+    private String encoding = "ISO-8859-1";
 
 
     // -------------------------------------------- HttpServletResponse Methods
@@ -126,7 +129,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
 
     public String getCharacterEncoding() {
-        throw new UnsupportedOperationException();
+        return (this.encoding);
     }
 
     public String getContentType() {
@@ -168,7 +171,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
     }
 
     public void setCharacterEncoding(String charset) {
-        throw new UnsupportedOperationException();
+        this.encoding = charset;
     }
 
     public void setContentLength(int length) {
