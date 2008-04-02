@@ -10,7 +10,7 @@
 
     <xsd:annotation>
         <xsd:documentation>
-            $Id: web-facesconfig_1_2.xsd,v 1.4 2005/06/09 18:42:37 edburns Exp $
+            $Id: web-facesconfig_1_2.xsd,v 1.5 2005/06/17 12:29:11 edburns Exp $
         </xsd:documentation>
     </xsd:annotation>
 
@@ -186,12 +186,38 @@
                          type="j2ee:faces-config-lifecycleType"/>
             <xsd:element name="validator"
                          type="j2ee:faces-config-validatorType"/>
+            <xsd:element name="faces-config-extension"
+                         type="j2ee:faces-config-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
         </xsd:choice>
             <xsd:attribute name = "id" type = "xsd:ID"/>
             <xsd:attribute name="version"
                 type="j2ee:faces-config-versionType"
                 use="required"/>
     </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name = "faces-config-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                Extension element for faces-config.  It may contain
+                implementation specific content.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
 
     <!-- **************************************************** -->
 
@@ -336,9 +362,35 @@
             </xsd:element>
             <xsd:element name="locale-config"
                          type="j2ee:faces-config-locale-configType"/>
+            <xsd:element name="application-extension"
+                         type="j2ee:faces-config-application-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
             </xsd:choice>
         <xsd:attribute name = "id" type = "xsd:ID"/>
     </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name = "faces-config-application-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                Extension element for application.  It may contain
+                implementation specific content.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
 
     <!-- **************************************************** -->
 
@@ -408,9 +460,35 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
+            <xsd:element name="factory-extension"
+                         type="j2ee:faces-config-factory-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
         </xsd:choice>
         <xsd:attribute name = "id" type = "xsd:ID"/>
     </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name = "faces-config-factory-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                Extension element for factory.  It may contain
+                implementation specific content.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
 
     <!-- **************************************************** -->
 
@@ -806,14 +884,67 @@
             <xsd:element name="attribute"
                          type="j2ee:faces-config-attributeType"
                          minOccurs="0"
-                         maxOccurs="unbounded"/>
+                         maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                       Nested "attribute" elements identify generic
+                       attributes that may be configured on the
+                       corresponding UIComponent in order to affect the
+                       operation of the Converter.  This attribute is
+                       primarily for design-time tools and is not
+                       specified to have any meaning at runtime.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
             <xsd:element name="property"
                          type="j2ee:faces-config-propertyType"
+                         minOccurs="0"
+                         maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                       Nested "property" elements identify JavaBeans
+                       properties of the Converter implementation class
+                       that may be configured to affect the operation of
+                       the Converter.  This attribute is primarily for
+                       design-time tools and is not specified to have
+                       any meaning at runtime.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="converter-extension"
+                         type="j2ee:faces-config-converter-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name = "faces-config-converter-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                Extension element for converter.  It may contain
+                implementation specific content.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+
 
     <!-- **************************************************** -->
 
@@ -844,10 +975,37 @@
                     </xsd:documentation>
             </xsd:annotation>                
             </xsd:element>
+            <xsd:element name="lifecycle-extension"
+                         type="j2ee:faces-config-lifecycle-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
+
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
 
     </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name = "faces-config-lifecycle-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                Extension element for lifecycle.  It may contain
+                implementation specific content.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
     
     <!-- **************************************************** -->
     
@@ -966,9 +1124,35 @@
                 <xsd:element name="list-entries"
                              type="j2ee:faces-config-list-entriesType"/>
             </xsd:choice>
+            <xsd:element name="managed-bean-extension"
+                         type="j2ee:faces-config-managed-bean-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name = "faces-config-managed-bean-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                Extension element for managed-bean.  It may contain
+                implementation specific content.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
 
     <!-- **************************************************** -->
     
@@ -1205,9 +1389,35 @@
                          type="j2ee:faces-config-navigation-caseType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
+            <xsd:element name="navigation-rule-extension"
+                         type="j2ee:faces-config-navigation-rule-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name = "faces-config-navigation-rule-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                Extension element for navigation-rule.  It may contain
+                implementation specific content.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
 
     <!-- **************************************************** -->
 
@@ -1421,6 +1631,10 @@
                          type="j2ee:faces-config-rendererType"
                          minOccurs="0" 
                          maxOccurs="unbounded"/>
+            <xsd:element name="render-kit-extension"
+                         type="j2ee:faces-config-render-kit-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
@@ -1522,6 +1736,28 @@
 
     <!-- **************************************************** -->
 
+    <xsd:complexType name="faces-config-render-kit-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                Extension element for render-kit.  It may contain
+                implementation specific content.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+
+    <!-- **************************************************** -->
+
     <xsd:complexType name="faces-config-suggested-valueType">
         <xsd:annotation>
             <xsd:documentation>
@@ -1611,13 +1847,65 @@
             <xsd:element name="attribute"
                          type="j2ee:faces-config-attributeType"
                          minOccurs="0" 
-                         maxOccurs="unbounded"/>
+                         maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        
+                       Nested "attribute" elements identify generic
+                       attributes that may be configured on the
+                       corresponding UIComponent in order to affect the
+                       operation of the Validator.  This attribute is
+                       primarily for design-time tools and is not
+                       specified to have any meaning at runtime.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+
+            </xsd:element>
             <xsd:element name="property"
                          type="j2ee:faces-config-propertyType"
                          minOccurs="0" 
+                         maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                       Nested "property" elements identify JavaBeans
+                       properties of the Validator implementation class
+                       that may be configured to affect the operation of
+                       the Validator.  This attribute is primarily for
+                       design-time tools and is not specified to have
+                       any meaning at runtime.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="validator-extension"
+                         type="j2ee:faces-config-converter-validator-extensionType"
+                         minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name = "faces-config-validator-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                Extension element for validator.  It may contain
+                implementation specific content.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
 
     <!-- **************************************************** -->
