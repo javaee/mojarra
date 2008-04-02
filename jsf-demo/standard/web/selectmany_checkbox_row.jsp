@@ -46,6 +46,7 @@
                                                 <td><h:message id="Error3" for="checklistmodel"/></td>
 					</tr>
 
+
 					<tr>
 						<td>Multi-select checklistmodel with options of the type java.lang.Long:</td>
 						<td><h:selectManyCheckbox id="checkLonglistmodel"
@@ -57,15 +58,27 @@
                                                 <td><h:message id="Error4" for="checkLonglistmodel"/></td>
 					</tr>
 
-					<tr>
-						<td>Multi-select checklistmodelGroup:</td>
-						<td><h:selectManyCheckbox id="checklistmodelGroup"
-							value="#{LoginBean.currentOptions}">
-							<f:selectItems id="checklistmodelitemsGroup"
-								value="#{LoginBean.optionsGroup}" />
-						</h:selectManyCheckbox></td>
-                                                <td><h:message id="Error5" for="checklistmodelGroup"/></td>
-				</tr>
+
+<tr>
+
+  <td>
+    <h:outputText             id="checklistmodelGroupLabel"
+                           value="Multi-select checkbox list:"/>
+  </td>
+
+  <td>
+    <h:selectManyCheckbox     id="checklistmodelGroup"
+                           value="#{LoginBean.currentOptions}">
+      <f:selectItems          id="checklistmodelitemsGroup"
+                           value="#{LoginBean.optionsGroup}" />
+    </h:selectManyCheckbox>
+  </td>
+
+  <td>
+    <h:message                id="Error5" for="checklistmodelGroup"/>
+  </td>
+
+</tr>
 
 <tr>
 
@@ -75,10 +88,14 @@
   </td>
 
   <td>
-    <h:selectManyCheckbox    id="disabledsCheckbox"
+    <h:selectManyCheckbox     id="disabledsCheckbox"
                            value="#{SelectItemsData.disabled}">
       <f:selectItems       value="#{SelectItemsData.disableds}"/>
     </h:selectManyCheckbox>
+  </td>
+
+  <td>
+    <h:message               for="disabledsCheckbox"/>
   </td>
 
 </tr>
@@ -96,6 +113,10 @@
                            value="#{SelectItemsData.nested}">
       <f:selectItems       value="#{SelectItemsData.nesteds}"/>
     </h:selectManyCheckbox>
+  </td>
+
+  <td>
+    <h:message               for="nestedssCheckbox"/>
   </td>
 
 </tr>
