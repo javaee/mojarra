@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.80 2006/05/31 17:22:30 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.81 2006/08/02 17:47:59 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -854,8 +854,8 @@ public class ConfigureListener implements ServletContextListener {
                               config[i].getConverterForClass() + ',' +
                               config[i].getConverterClass() + ')');
                 }
-                Class clazz = Util.getCurrentLoader(this).loadClass
-                    (config[i].getConverterForClass());
+                Class clazz = Util.loadClass(config[i].getConverterForClass(),
+                                             this);
                 application.addConverter(clazz,
                                          config[i].getConverterClass());
             }
