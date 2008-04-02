@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.14 2003/09/16 23:12:26 eburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.15 2003/09/19 22:44:58 craigmcc Exp $
  */
 
 /*
@@ -253,6 +253,60 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
 
+    // Test reconnecting a child or facet to a different component
+    public void testComponentReconnect() {
+
+        UIComponent parent1 = new TestComponent();
+        UIComponent parent2 = new TestComponent();
+
+        // Reconnect an existing child as a child
+        checkChildCount(parent1, 0);
+        checkChildCount(parent2, 0);
+        parent1.getChildren().add(component);
+        checkChildCount(parent1, 1);
+        checkChildCount(parent2, 0);
+        checkChildPresent(parent1, component, 0);
+        parent2.getChildren().add(component);
+        checkChildCount(parent1, 0);
+        checkChildCount(parent2, 1);
+        checkChildPresent(parent2, component, 0);
+        parent2.getChildren().clear();
+        checkChildCount(parent1, 0);
+        checkChildCount(parent2, 0);
+
+        // Reconnect an existing child as a facet
+        checkChildCount(parent1, 0);
+        checkFacetCount(parent2, 0);
+        parent1.getChildren().add(component);
+        checkChildCount(parent1, 1);
+        checkFacetCount(parent2, 0);
+        checkChildPresent(parent1, component, 0);
+        parent2.getFacets().put("facet", component);
+        checkChildCount(parent1, 0);
+        checkFacetCount(parent2, 1);
+        checkFacetPresent(parent2, "facet", component);
+        parent2.getFacets().clear();
+        checkChildCount(parent1, 0);
+        checkFacetCount(parent2, 0);
+
+        // Reconnect an existing facet as a child
+        checkFacetCount(parent1, 0);
+        checkChildCount(parent2, 0);
+        parent1.getFacets().put("facet", component);
+        checkFacetCount(parent1, 1);
+        checkChildCount(parent2, 0);
+        checkFacetPresent(parent1, "facet", component);
+        parent2.getChildren().add(component);
+        checkFacetCount(parent1, 0);
+        checkChildCount(parent2, 1);
+        checkChildPresent(parent2, component, 0);
+        parent2.getChildren().clear();
+        checkFacetCount(parent1, 0);
+        checkChildCount(parent2, 0);
+
+    }
+
+
     // Test removing components from our naming container.
     public void testComponentRemoval() {
 
@@ -309,6 +363,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         kidItr = testComponent.getFacetsAndChildren();
         assertTrue(!kidItr.hasNext());
     }
+
 
     public void testStateHolder() throws Exception {
 

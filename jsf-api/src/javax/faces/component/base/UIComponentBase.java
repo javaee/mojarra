@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.18 2003/09/19 22:08:31 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.19 2003/09/19 22:44:57 craigmcc Exp $
  */
 
 /*
@@ -483,6 +483,7 @@ public abstract class UIComponentBase implements UIComponent {
                         } else {
                             UIComponent child =
                                 (UIComponent) element;
+                            eraseParent(child);
                             addRecursive(getNamingContainer(), child);
                             child.setParent(UIComponentBase.this);
                             super.add(index, child);
@@ -497,6 +498,7 @@ public abstract class UIComponentBase implements UIComponent {
                         } else {
                             UIComponent child =
                                 (UIComponent) element;
+                            eraseParent(child);
                             addRecursive(getNamingContainer(), child);
                             child.setParent(UIComponentBase.this);
                             return (super.add(element));
@@ -614,6 +616,7 @@ public abstract class UIComponentBase implements UIComponent {
                         } else {
                             UIComponent child =
                                 (UIComponent) element;
+                            eraseParent(child);
                             String id = child.getId();
                             validateId(id);
                             NamingContainer naming = getNamingContainer();
@@ -692,6 +695,44 @@ public abstract class UIComponentBase implements UIComponent {
         } else {
             return (0);
         }
+
+    }
+
+
+    /**
+     * <p>If the specified {@link UIComponent} has a non-null parent,
+     * remove it as a child or facet (as appropriate) of that parent.
+     * As a result, the <code>parent</code> property will always be
+     * <code>null</code> when this method returns.</p>
+     *
+     * @param component {@link UIComponent} to have any parent erased
+     */
+    private void eraseParent(UIComponent component) {
+
+        UIComponent parent = component.getParent();
+        if (parent == null) {
+            return;
+        }
+        List children = parent.getChildren();
+        int index = children.indexOf(component);
+        if (index >= 0) {
+            children.remove(index);
+            return;
+        } else {
+            Map facets = parent.getFacets();
+            Iterator entries = facets.entrySet().iterator();
+            while (entries.hasNext()) {
+                Map.Entry entry = (Map.Entry) entries.next();
+                if (entry.getValue() == component) {
+                    entries.remove();
+                    return;
+                }
+            }
+        }
+
+        // Throw an exception for the "cannot happen" case
+        throw new IllegalStateException("Parent was not null, " +
+                                        "but this component not related");
 
     }
 
@@ -816,6 +857,7 @@ public abstract class UIComponentBase implements UIComponent {
                             previous.setParent(null);
                         }
                         UIComponent current = (UIComponent) value;
+                        eraseParent(current);
                         current.setParent(UIComponentBase.this);
                         return (super.put(key, value));
                     }
