@@ -134,11 +134,6 @@
   </component>
 
   <component>
-    <component-type>PanelData</component-type>
-    <component-class>javax.faces.component.html.HtmlPanelData</component-class>
-  </component>
-  
-  <component>
     <component-type>PanelGrid</component-type>
     <component-class>javax.faces.component.html.HtmlPanelGrid</component-class>
   </component>
