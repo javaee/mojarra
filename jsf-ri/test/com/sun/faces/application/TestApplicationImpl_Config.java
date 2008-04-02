@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.9 2003/06/27 01:09:55 jvisvanathan Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.10 2003/07/22 19:50:49 rkitain Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.9 2003/06/27 01:09:55 jvisvanathan Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.10 2003/07/22 19:50:49 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -290,7 +290,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
     public void testMessageResorucesPositive() {
 	MessageResourcesImpl 
 	    newMessageResourcesImpl = null,
-	    testMessageResoruces = new MessageResourcesImpl();
+	    testMessageResoruces = new MessageResourcesImpl("Foo");
 	MessageResources rsrc = null;
 	
 	// runtime addition
@@ -304,32 +304,11 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	// built-in MessageResources
 	assertTrue(null != (rsrc = application.getMessageResources(MessageResources.FACES_API_MESSAGES)));
 	assertTrue(rsrc instanceof MessageResources);
-	validateMessages(rsrc, MessageResources.FACES_API_MESSAGES);
+	Object params[] = new Object[1];
+        assertTrue(null != ((MessageResourcesImpl)rsrc).getMessage("javax.faces.validator.DoubleRangeValidator.LIMIT",params));
 	assertTrue(null != (rsrc = application.getMessageResources(MessageResources.FACES_IMPL_MESSAGES)));
 	assertTrue(rsrc instanceof MessageResources);
-	validateMessages(rsrc, MessageResources.FACES_IMPL_MESSAGES);
-    }
-
-    protected void validateMessages(MessageResources rsrc, String id) {
-	// get the list of messages from the ConfigMessageResources
-	ConfigBase yourBase = application.getAppConfig().getConfigBase();
-	ConfigMessageResources rsrcBean = (ConfigMessageResources)
-	    yourBase.getMessageResources().get(id);
-	Iterator messageIter = rsrcBean.getMessages().keySet().iterator();
-	Message curMessage = null;
-	String curMessageId = null;
-	assertTrue(null != messageIter);
-	int i = 0;
-	while (messageIter.hasNext() && i < 5) {
-	    curMessageId = (String) messageIter.next();
-	    System.out.println("Getting message: " + curMessageId + " ");
-	    System.out.flush();
-	    assertTrue(null != (curMessage = 
-				rsrc.getMessage(getFacesContext(),curMessageId)));
-	    System.out.println("ok.");
-	    System.out.flush();
-	    i++;
-	}
+        assertTrue(null != ((MessageResourcesImpl)rsrc).getMessage("com.sun.faces.NULL_PARAMETERS_ERROR",params));
     }
 
     public void testMessageResourcesNegative() {
@@ -347,15 +326,14 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(exceptionThrown);
 
 	// non-existent mapping
-	exceptionThrown = false;
+	// make sure an instance got created..
 	try {
 	    application.getMessageResources("Joebob");
 	}
 	catch (FacesException e) {
-	    exceptionThrown = true;
+	    assertTrue(false);
 	}
-	assertTrue(exceptionThrown);
-	
+        assertTrue(null != application.getMessageResources("Joebob"));	
     }
 
     public void testGetMessageResourcesIds() {

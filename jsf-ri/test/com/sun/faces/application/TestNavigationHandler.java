@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.4 2003/07/08 15:38:42 eburns Exp $
+ * $Id: TestNavigationHandler.java,v 1.5 2003/07/22 19:50:49 rkitain Exp $
  */
 
 /*
@@ -12,7 +12,6 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.ConfigBase;
 import com.sun.faces.config.ConfigListener;
 import com.sun.faces.config.ConfigNavigationCase;
 import com.sun.faces.tree.SimpleTreeImpl;
@@ -55,7 +54,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.4 2003/07/08 15:38:42 eburns Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.5 2003/07/22 19:50:49 rkitain Exp $
  * 
  */
 
@@ -99,7 +98,7 @@ public class TestNavigationHandler extends ServletFacesTestCase
 // General Methods
 //
     private void loadConfigFile() {
-	ConfigBase cbase = loadFromInitParam("WEB-INF/faces-navigation.xml");
+	loadFromInitParam("WEB-INF/faces-navigation.xml");
     }
 
     private void loadTestResultList() {
