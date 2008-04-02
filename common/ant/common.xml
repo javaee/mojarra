@@ -91,7 +91,7 @@
 
     <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">
-        <pathelement location="${junit.home}/junit.jar}"/>
+        <pathelement location="${junit.home}/junit.jar"/>
     </path>
 
     <path id="jsf.test.jar.classpath">
