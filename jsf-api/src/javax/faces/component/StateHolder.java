@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolder.java,v 1.3 2003/08/02 05:11:32 eburns Exp $
+ * $Id: StateHolder.java,v 1.4 2003/08/21 15:26:05 eburns Exp $
  */
 
 /*
@@ -24,6 +24,8 @@ import javax.faces.context.FacesContext;
  * In other words, if there is an ineritance hierarchy, it is not
  * permissable to have the {@link #getState} and {@link #restoreState}
  * methods reside at different levels of the hierarchy.</p>
+ *
+ * <p>An implementor must have a public no-args constructor.</p>
  *
  */
 

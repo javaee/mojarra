@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBase.java,v 1.4 2003/08/15 17:23:44 craigmcc Exp $
+ * $Id: UIOutputBase.java,v 1.5 2003/08/21 15:26:06 eburns Exp $
  */
 
 /*
@@ -19,6 +19,9 @@ import javax.faces.el.ValueBinding;
 
 import java.io.Serializable;
 import java.io.IOException;
+
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * <p><strong>UIOutputBase</strong> is a convenience base class that
@@ -139,7 +142,14 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
 	Object [] myState = (Object []) state[THIS_INDEX];
         valueRef = (String) myState[ATTRS_INDEX];
 	value = myState[VALUE_INDEX];
-	converter = (Converter) myState[CONVERTER_INDEX];
+	// restore the converter
+	List [] converterList = context.getApplication().getViewHandler().
+	    getStateManager().restoreAttachedObjectState(context, 
+							 myState[CONVERTER_INDEX]);
+	if (null != converterList) {
+	    converter = (Converter) ((List)converterList[0]).get(0);
+	}
+
 	super.restoreState(context, state[SUPER_INDEX]);
     }
 
@@ -159,7 +169,14 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
 	if (value instanceof Serializable) {
 	    myState[VALUE_INDEX] = value;
 	}
-        myState[CONVERTER_INDEX] = converter;
+	if (null != converter) {
+	    List [] converterList = new List[1];
+	    List theConverter = new ArrayList(1);
+	    theConverter.add(converter);
+	    converterList[0] = theConverter;
+
+	    myState[CONVERTER_INDEX] = context.getApplication().getViewHandler().getStateManager().getAttachedObjectState(context, this, "converter", converterList);
+	}
 	result[THIS_INDEX] = myState;
 	result[SUPER_INDEX] = superState;
 	return result;

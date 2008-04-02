@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBaseTestCase.java,v 1.5 2003/08/15 17:23:51 craigmcc Exp $
+ * $Id: UIOutputBaseTestCase.java,v 1.6 2003/08/21 15:26:07 eburns Exp $
  */
 
 /*
@@ -15,7 +15,9 @@ import java.util.Iterator;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.component.StateHolder;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 import javax.faces.convert.LongConverter;
 import javax.faces.convert.ShortConverter;
 import junit.framework.TestCase;
@@ -274,7 +276,7 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
 	preSave.setId("output");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
-	preSave.setConverter(new ShortConverter());
+	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
 	state = preSave.getState(facesContext);
 	assertTrue(null != state);
@@ -316,5 +318,51 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
 	return true;
     }
 
+public static class StateSavingConverter extends Object implements Converter, StateHolder {
+	protected String state = null;
+
+	public StateSavingConverter(String newState) {
+	    state = newState;
+	}
+
+	public StateSavingConverter() {
+	}
+	
+	public Object getAsObject(FacesContext context, UIComponent component,
+				  String value) throws ConverterException {
+	    return this.getClass().getName();
+	}
+
+	public String getAsString(FacesContext context, UIComponent component,
+				  Object value) throws ConverterException {
+	    return this.getClass().getName();
+	}
+
+	public Object getState(FacesContext context) {
+	    return state;
+	}
+
+	public void restoreState(FacesContext context, Object newState) throws IOException {
+	    state = (String) newState;
+	}
+
+	public boolean isTransient() { return false; }
+
+	public void setTransient(boolean newTransientValue) {}
+
+	public boolean equals(Object otherObj) {
+	    if (!(otherObj instanceof StateSavingConverter)) {
+		return false;
+	    }
+	    StateSavingConverter other = (StateSavingConverter) otherObj;
+	    // if not both null, or not the same string
+	    if (!((null == this.state && null == other.state) ||
+		(this.state.equals(other.state)))) {
+		return false;
+	    }	 
+	    return true;
+	}
+	    
+    }
 
 }
