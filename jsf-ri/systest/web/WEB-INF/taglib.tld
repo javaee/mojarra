@@ -21,6 +21,28 @@
     Tag library containing component tags for the systest suite.
   </description>
 
+  <tag>
+                                                                                                                           
+    <name>converter</name>
+    <tag-class>javax.faces.webapp.ConverterTag</tag-class>
+    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+    <body-content>empty</body-content>
+    <description>
+      Register a named Converter instance on the UIComponent
+      associated with the closest parent UIComponent custom action.
+    </description>
+                                                                                                                           
+    <attribute>
+      <name>converterId</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Converter identifier of the Converter instance to be
+        created and registered.
+      </description>
+    </attribute>
+                                                                                                                           
+  </tag>
 
   <tag>
 

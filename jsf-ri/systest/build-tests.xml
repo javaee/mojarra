@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.121 2006/08/17 21:25:13 rogerk Exp $
+ $Id: build-tests.xml,v 1.122 2006/08/25 19:37:52 rogerk Exp $
 -->
 
 <!--
@@ -133,6 +133,7 @@
                 test.converter03,
                 test.converter04,
                 test.converter05,
+                test.converter06,
                 test.enum-converter-1,
                 test.validator,
                 test.validator01,
@@ -637,6 +638,14 @@
               request="${context.path}/faces/converter05.jsp"
               recordGolden="${local.golden.path}/standard/converter05.txt"
               golden="${golden.path}/standard/converter05.txt"/>
+    </target>
+
+    <target name="test.converter06">
+        <jsf.tester
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/faces/converter06.jsp"
+              recordGolden="${local.golden.path}/standard/converter06.txt"
+              golden="${golden.path}/standard/converter06.txt"/>
     </target>
 
     <target name="test.enum-converter-1"
