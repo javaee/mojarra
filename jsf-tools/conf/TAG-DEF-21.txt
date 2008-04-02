@@ -64,4 +64,39 @@
                 java.lang.String
             </type>
         </attribute>
+        <attribute>
+          <description>
+            Space-separated list of CSS style class(es) that will be applied to any column footer generated for this table.
+          </description>
+          <name>
+              footerClass
+          </name>
+          <required>
+              false
+          </required>
+          <rtexprvalue>
+              false
+          </rtexprvalue>
+          <type>
+              java.lang.String
+          </type>
+        </attribute>
+        <attribute>
+          <description>
+            Space-separated list of CSS style class(es) that will be applied to any column header generated for this table.
+          </description>
+          <name>
+              headerClass
+          </name>
+          <required>
+              false
+          </required>
+          <rtexprvalue>
+              false
+          </rtexprvalue>
+          <type>
+              java.lang.String
+          </type>
+        </attribute>
+
     </tag>
