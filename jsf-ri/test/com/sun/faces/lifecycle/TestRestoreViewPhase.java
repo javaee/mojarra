@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.4 2003/08/27 19:33:17 jvisvanathan Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.5 2003/09/26 20:00:41 horwat Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.4 2003/08/27 19:33:17 jvisvanathan Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.5 2003/09/26 20:00:41 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -178,7 +178,7 @@ public void testReconstituteRequestSubmit()
     assertTrue(getFacesContext().getViewRoot().getViewId().equals(TEST_URI));
     root = getFacesContext().getViewRoot();
     // components should exist.
-    assertTrue((root.getChildren().size()) == 1);
+    assertTrue(root.getChildCount() == 1);
     assertTrue(basicForm == root.findComponent("basicForm")); 
     assertTrue(userName == basicForm.findComponent("userName"));
     getFacesContext().setViewRoot(null);

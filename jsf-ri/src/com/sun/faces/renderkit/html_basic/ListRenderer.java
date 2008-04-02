@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.18 2003/09/24 23:16:41 horwat Exp $
+ * $Id: ListRenderer.java,v 1.19 2003/09/26 20:00:38 horwat Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.18 2003/09/24 23:16:41 horwat Exp $
+ * @version $Id: ListRenderer.java,v 1.19 2003/09/26 20:00:38 horwat Exp $
  *  
  */
 
@@ -135,7 +135,7 @@ public class ListRenderer extends HtmlBasicRenderer {
 	Iterator kids = null;
 
         // Process the table header (if any)
-        if (null != (facet = (UIComponent) component.getFacets().get("header"))) {
+        if (null != (facet = (UIComponent) component.getFacet("header"))) {
 	    writer.startElement("tr", facet);
 	    writer.startElement("thead", facet);
 	    writer.writeText("\n", null);
@@ -232,7 +232,7 @@ public class ListRenderer extends HtmlBasicRenderer {
 	writer.endElement("tbody");
 
         // Process the table footer (if any)
-        if (null != (facet = (UIComponent) component.getFacets().get("footer"))) {
+        if (null != (facet = (UIComponent) component.getFacet("footer"))) {
 	    writer.startElement("tr", facet);
 	    writer.startElement("tfoot", facet);
 	    writer.writeText("\n", null);

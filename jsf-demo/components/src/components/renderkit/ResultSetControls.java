@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.14 2003/09/25 17:48:05 horwat Exp $
+ * $Id: ResultSetControls.java,v 1.15 2003/09/26 20:02:00 horwat Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.14 2003/09/25 17:48:05 horwat Exp $
+ * @version $Id: ResultSetControls.java,v 1.15 2003/09/26 20:02:00 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -302,7 +302,7 @@ public ResultSetControls() {
 
 	// render the facet pertaining to this widget type in the NORTH
 	// and WEST cases.
-        if (null != (facet = (UIComponent) getPanel().getFacets().get(facetName))) {
+        if (null != (facet = (UIComponent) getPanel().getFacet(facetName))) {
 	    // If we're rendering a "go to the Nth page" link
 	    if (isPageNumber) {
 		// See if the user specified an orientation

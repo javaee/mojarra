@@ -1,5 +1,5 @@
 /*
- * $Id: TabbedRenderer.java,v 1.5 2003/09/25 17:48:06 horwat Exp $
+ * $Id: TabbedRenderer.java,v 1.6 2003/09/26 20:02:01 horwat Exp $
  */
 
 /*
@@ -177,7 +177,7 @@ public class TabbedRenderer extends BaseRenderer {
             }
             writer.write(">");
 
-            UIComponent facet = (UIComponent) pane.getFacets().get("label");
+            UIComponent facet = (UIComponent) pane.getFacet("label");
             if (facet != null) {
                 if (pane.isSelected() && (selectedClass != null)) {
                     facet.getAttributes().put("paneTabLabelClass", selectedClass);

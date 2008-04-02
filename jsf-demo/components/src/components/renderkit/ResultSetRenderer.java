@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetRenderer.java,v 1.9 2003/09/25 17:48:05 horwat Exp $
+ * $Id: ResultSetRenderer.java,v 1.10 2003/09/26 20:02:00 horwat Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ResultSetRenderer.java,v 1.9 2003/09/25 17:48:05 horwat Exp $
+ * @version $Id: ResultSetRenderer.java,v 1.10 2003/09/26 20:02:00 horwat Exp $
  *  
  */
 
@@ -176,7 +176,7 @@ public class ResultSetRenderer extends BaseRenderer {
 	// attach our hack Facet on the initial render, but not on
 	// postback
 	ResultSetControls scroller = 
-	    (ResultSetControls) component.getFacets().get(SCROLLER_COMPONENT);
+	    (ResultSetControls) component.getFacet(SCROLLER_COMPONENT);
 
 	if (null == scroller) {
 	    component.getFacets().put(SCROLLER_COMPONENT, scroller = 
@@ -208,7 +208,7 @@ public class ResultSetRenderer extends BaseRenderer {
 	}
 
         // Process the table header (if any)
-        if (null != (facet = (UIComponent) component.getFacets().get("header"))) {
+        if (null != (facet = (UIComponent) component.getFacet("header"))) {
             writer.write("<tr>\n");
 	    // If the header has kids, render them recursively
 	    if (null != (kids = facet.getChildren().iterator())) {
@@ -241,7 +241,7 @@ public class ResultSetRenderer extends BaseRenderer {
         }
 	
 	// Make sure we have only one child
-	if (1 < component.getChildren().size()) {
+	if (1 < component.getChildCount()) {
 	    throw new IOException("ResultSetRenderer only prepared for one child");
 	}
 	
@@ -303,7 +303,7 @@ public class ResultSetRenderer extends BaseRenderer {
 	}
 
         // Process the table footer (if any)
-        if (null != (facet = (UIComponent) component.getFacets().get("footer"))) {
+        if (null != (facet = (UIComponent) component.getFacet("footer"))) {
             writer.write("<tr>\n");
 	    // If the footer has kids, render them recursively
 	    if (null != (kids = facet.getChildren().iterator())) {

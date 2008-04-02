@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.18 2003/09/24 23:16:35 horwat Exp $
+ * $Id: GridRenderer.java,v 1.19 2003/09/26 20:00:38 horwat Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.18 2003/09/24 23:16:35 horwat Exp $
+ * @version $Id: GridRenderer.java,v 1.19 2003/09/26 20:00:38 horwat Exp $
  *  
  */
 
@@ -129,7 +129,7 @@ public class GridRenderer extends HtmlBasicRenderer {
 	UIComponent facet = null;
 	Iterator kids = null;
 
-	if (null != (facet = (UIComponent) component.getFacets().get("header"))) {
+	if (null != (facet = (UIComponent) component.getFacet("header"))) {
 	    
 	    if (headerClass != null) {
 		writer.startElement("tr", facet);
@@ -190,7 +190,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         }
 	writer.endElement("tbody");
 
-	if (null != (facet = (UIComponent) component.getFacets().get("footer"))) {
+	if (null != (facet = (UIComponent) component.getFacet("footer"))) {
 
 	    if (footerClass != null) {
 		writer.startElement("tr", facet);

@@ -1,5 +1,5 @@
 /*
- * $Id: PaneComponent.java,v 1.7 2003/09/16 00:30:34 jvisvanathan Exp $
+ * $Id: PaneComponent.java,v 1.8 2003/09/26 20:02:00 horwat Exp $
  */
 
 /*
@@ -126,7 +126,7 @@ public class PaneComponent extends UIComponentBase {
             // to "unselected";
             UIComponent tabControl = findParentForRendererType(
                 source, "Tabbed");
-            int n = tabControl.getChildren().size();
+            int n = tabControl.getChildCount();
             for (int i = 0; i < n; i++) {
                 PaneComponent pane = (PaneComponent)tabControl.getChildren().get(i);
                 if (pane.getId().equals(id)) {

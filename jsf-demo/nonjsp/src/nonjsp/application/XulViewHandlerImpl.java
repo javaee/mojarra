@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.4 2003/09/15 22:12:38 eburns Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.5 2003/09/26 20:02:02 horwat Exp $ 
  */ 
 
 
@@ -89,7 +89,7 @@ import org.mozilla.util.Assert;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.4 2003/09/15 22:12:38 eburns Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.5 2003/09/26 20:02:02 horwat Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -303,13 +303,8 @@ public class XulViewHandlerImpl implements ViewHandler {
     private void renderResponse(FacesContext context) throws IOException {
 
         UIComponent root = context.getViewRoot();
-        int n = 0;
-        List children = root.getChildren();
-        if (children != null) {
-            n = children.size();
-        }
         if (log.isTraceEnabled()) {
-            log.trace("Rendering " + root + " with " + n + " children");
+            log.trace("Rendering " + root + " with " + root.getChildCount() + " children");
         }
         renderResponse(context, root);
 
