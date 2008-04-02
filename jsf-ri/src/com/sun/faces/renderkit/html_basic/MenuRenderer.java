@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.82 2006/10/03 21:24:00 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.83 2006/11/17 17:37:06 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -151,7 +151,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
           throws ConverterException {
 
         Object convertedValue = null;
-        if (newValue == RIConstants.NO_VALUE) {
+        if (RIConstants.NO_VALUE.equals(newValue)) {
             return null;
         }
         if (newValue == null) {
