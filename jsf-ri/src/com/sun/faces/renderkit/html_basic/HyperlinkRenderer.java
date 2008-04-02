@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.36 2003/02/08 01:21:43 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.37 2003/02/18 20:18:35 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.36 2003/02/08 01:21:43 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.37 2003/02/18 20:18:35 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -123,9 +123,9 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
 	UIForm form = getMyForm(context, command);
 
         if (null == (formName = (String) form.currentValue(context))) {
-            // PENDING (visvan) log error
-            //log.error("Button[" + component.getClientId() +
-            //          "] not nested in a form");
+	    addGenericErrorMessage(context, component, 
+				   Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,
+				   "formName");
             command.setValid(false);
             return;
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.42 2003/01/21 23:23:17 rkitain Exp $
+ * $Id: ButtonRenderer.java,v 1.43 2003/02/18 20:18:34 eburns Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.42 2003/01/21 23:23:17 rkitain Exp $
+ * @version $Id: ButtonRenderer.java,v 1.43 2003/02/18 20:18:34 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -212,9 +212,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             parent = parent.getParent();
         }
         if (formName == null) {
-            // PENDING (visvan) log error
-            //log.error("Button[" + component.getClientId() +
-            //          "] not nested in a form");
+	    addGenericErrorMessage(context, component, 
+				   Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,
+				   "formName");
             component.setValid(false);
             return;
         }
