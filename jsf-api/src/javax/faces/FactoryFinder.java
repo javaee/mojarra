@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.29 2006/06/06 19:59:48 rlubke Exp $
+ * $Id: FactoryFinder.java,v 1.30 2006/08/25 09:50:15 tony_robertson Exp $
  */
 
 /*
@@ -179,7 +179,7 @@ public final class FactoryFinder {
      *
      * </ol>
      */
-    private static HashMap applicationMaps = new HashMap();
+    private static Map<ClassLoader,Map<String,Object>> applicationMaps = new HashMap<ClassLoader,Map<String,Object>>();
 
 
     /**
@@ -197,7 +197,7 @@ public final class FactoryFinder {
      * <p>Map of Class instances for the our factoryNames.</p>
      */
 
-    private static Map factoryClasses = null;
+    private static Map<String,Class> factoryClasses = null;
 
     private static final Logger LOGGER =
         Logger.getLogger("javax.faces", "javax.faces.LogStrings");
@@ -238,7 +238,7 @@ public final class FactoryFinder {
         ClassLoader classLoader = getClassLoader();
 
         synchronized (applicationMaps) {
-	    Map appMap = getApplicationMap();
+	    Map<String,Object> appMap = getApplicationMap();
 	    // assert(null != appMap);
 	    
             Object 
@@ -294,7 +294,7 @@ public final class FactoryFinder {
 				  String implName) {
 	validateFactoryName(factoryName);
 	Object previouslySetFactories = null;
-	Map appMap = null;
+	Map<String,Object> appMap = null;
 	synchronized (applicationMaps) {
 	    appMap = getApplicationMap();
 	    // assert(null != appMap);
@@ -313,11 +313,11 @@ public final class FactoryFinder {
 	    }
 	    else {
 		// No.  Create a List for this FactoryName.
-		previouslySetFactories = new ArrayList();
+		previouslySetFactories = new ArrayList<String>();
 		appMap.put(factoryName, previouslySetFactories);
 	    }
 	    // Put this at the beginning of the list.
-	    ((List)previouslySetFactories).add(0, implName);
+	    (TypedCollections.dynamicallyCastList((List)previouslySetFactories, String.class)).add(0, implName);
 	}
     }
 
@@ -600,7 +600,7 @@ public final class FactoryFinder {
     private static Class getFactoryClass(ClassLoader classLoader,
 					 String factoryClassName) {
 	if (null == factoryClasses) {
-	    factoryClasses = new HashMap(factoryNames.length);
+	    factoryClasses = new HashMap<String,Class>(factoryNames.length);
 	    factoryClasses.put(APPLICATION_FACTORY,
 			       javax.faces.application.ApplicationFactory.class);
 	    factoryClasses.put(FACES_CONTEXT_FACTORY,
@@ -610,7 +610,7 @@ public final class FactoryFinder {
 	    factoryClasses.put(RENDER_KIT_FACTORY,
 			       javax.faces.render.RenderKitFactory.class);
 	}
-	return ((Class) factoryClasses.get(factoryClassName));
+	return factoryClasses.get(factoryClassName);
     }
 
     /**
@@ -619,16 +619,16 @@ public final class FactoryFinder {
      *
      */ 
 
-    private static Map getApplicationMap() {
+    private static Map<String,Object> getApplicationMap() {
         // Identify the web application class loader
         ClassLoader classLoader = getClassLoader();
-	Map result = null;
+	Map<String,Object> result = null;
 	
 	// Return any previously instantiated factory instance (of the
 	// specified name) for this web application
-	result = (HashMap) applicationMaps.get(classLoader);
+	result = applicationMaps.get(classLoader);
 	if (result == null) {
-	    result = new HashMap();
+	    result = new HashMap<String,Object>();
 	    applicationMaps.put(classLoader, result);
 	}
 	return result;

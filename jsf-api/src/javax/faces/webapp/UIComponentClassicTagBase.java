@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.24 2006/07/31 23:01:28 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.25 2006/08/25 09:50:18 tony_robertson Exp $
  */
 
 /*
@@ -241,7 +241,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <p>The <code>List</code> of facet names created or located by nested
      * {@link UIComponentTag}s while processing the current request.</p>
      */
-    private List createdFacets = null;
+    private List<String> createdFacets = null;
 
 
     /**
@@ -696,7 +696,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     protected void addFacet(String name) {
 
         if (createdFacets == null) {
-            createdFacets = new ArrayList();
+            createdFacets = new ArrayList<String>();
         }
         createdFacets.add(name);
 
@@ -728,8 +728,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
         Map<String,Object> requestMap = 
               context.getExternalContext().getRequestMap();
-        List<UIComponentClassicTagBase> list = (List<UIComponentClassicTagBase>) 
-              requestMap.get(COMPONENT_TAG_STACK_ATTR);
+        List<UIComponentClassicTagBase> list = TypedCollections.dynamicallyCastList((List) 
+              requestMap.get(COMPONENT_TAG_STACK_ATTR), UIComponentClassicTagBase.class);
         if (list == null) {
             list = new ArrayList<UIComponentClassicTagBase>();
             requestMap.put(COMPONENT_TAG_STACK_ATTR, list);
@@ -751,8 +751,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     private void removeOldChildren() {
 
         // Remove old children that are no longer present
-        List oldList =
-            (List) component.getAttributes().get(JSP_CREATED_COMPONENT_IDS);
+        List<String> oldList = TypedCollections.dynamicallyCastList(
+            (List) component.getAttributes().get(JSP_CREATED_COMPONENT_IDS), String.class);
         if (oldList != null && oldList.size() > 0) {
 
             if (createdComponents != null) {
@@ -811,8 +811,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     private void removeOldFacets() {
 
         // Remove old facets that are no longer present
-        List oldList =
-            (List) component.getAttributes().get(JSP_CREATED_FACET_NAMES);
+        List<String> oldList = TypedCollections.dynamicallyCastList(
+            (List) component.getAttributes().get(JSP_CREATED_FACET_NAMES), String.class);
         if (oldList != null) {
 
             if (createdFacets != null) {
@@ -975,7 +975,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 	if (null == parent) {
 	    return;
 	}
-	List children = parent.getChildren();
+	List<UIComponent> children = parent.getChildren();
 	indexOfComponentInParent = children.indexOf(component);
 	if (children.size() - 1 == indexOfComponentInParent) {
 	    children.add(verbatim);
@@ -1033,14 +1033,15 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 	}
 
         parentTag = getParentUIComponentClassicTagBase(pageContext);
-        Map requestMap = context.getExternalContext().getRequestMap();
-        Map componentIds = null;
+        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
+        Map<String,UIComponentTagBase> componentIds = null;
         if (parentTag == null) {
             // create the map if we're the top level UIComponentTag
-            componentIds = new HashMap();
+            componentIds = new HashMap<String,UIComponentTagBase>();
             requestMap.put(GLOBAL_ID_VIEW, componentIds); 
         } else {
-            componentIds = (Map) requestMap.get(GLOBAL_ID_VIEW);
+            componentIds = TypedCollections.dynamicallyCastMap((Map)
+        	requestMap.get(GLOBAL_ID_VIEW), String.class, UIComponentTagBase.class);
         }
 
         // If we're not inside of a facet, and if we are inside of a
@@ -1079,7 +1080,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         String clientId = null;
         if (this.id != null) {
             clientId = component.getClientId(context);
-            tagInstance = (componentIds.get(clientId) == this ? this : null);
+            if (componentIds.get(clientId) == this)
+                tagInstance = this;
         }
 
         // If we have a tag instance, then, most likely, a tag handler
@@ -1447,7 +1449,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * @return String <code>id</code> with a counter appended to it.
      */
     private String generateIncrementedId (String componentId) {
-        Map requestMap = getFacesContext().getExternalContext().getRequestMap();
+        Map<String,Object> requestMap = getFacesContext().getExternalContext().getRequestMap();
         Integer serialNum = (Integer) requestMap.get(componentId);
         if (null == serialNum) {
             serialNum = new Integer(1);
@@ -1565,8 +1567,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     private void updatePreviousJspIdAndIteratorStatus(String id) {
         Set<String> previousJspIdSet = null;
        
-        if (null == (previousJspIdSet = (Set<String>)
-            pageContext.getRequest().getAttribute(PREVIOUS_JSP_ID_SET))) {
+        if (null == (previousJspIdSet = TypedCollections.dynamicallyCastSet((Set)
+            pageContext.getRequest().getAttribute(PREVIOUS_JSP_ID_SET), String.class))) {
             pageContext.getRequest().setAttribute(PREVIOUS_JSP_ID_SET, 
                     previousJspIdSet = new HashSet<String>());
         }

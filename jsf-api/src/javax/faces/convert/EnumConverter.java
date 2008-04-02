@@ -1,5 +1,5 @@
 /*
- * $Id: EnumConverter.java,v 1.4 2006/08/17 21:23:42 rogerk Exp $
+ * $Id: EnumConverter.java,v 1.5 2006/08/25 09:50:17 tony_robertson Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ public class EnumConverter implements Converter, StateHolder {
     }
     
     public EnumConverter(Class targetClass) {
-        this.targetClass = targetClass;
+        this.targetClass = (Class<? extends Enum>) targetClass;
     }
 
     // ------------------------------------------------------ Manifest Constants
@@ -94,7 +94,7 @@ public class EnumConverter implements Converter, StateHolder {
                                                                                
     // ----------------------------------------------------- Converter Methods
     
-    private Class targetClass;
+    private Class<? extends Enum> targetClass;
 
 
     /**
@@ -213,7 +213,7 @@ public class EnumConverter implements Converter, StateHolder {
     // ----------------------------------------------------------- StateHolder
 
     public void restoreState(FacesContext facesContext, Object object) {
-        this.targetClass = (Class) object;
+        this.targetClass = (Class<? extends Enum>) object;
     }
 
     public Object saveState(FacesContext facesContext) {

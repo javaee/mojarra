@@ -269,14 +269,20 @@
     <target name="copy.template.sources"
             description="Copy template sources from ${tools.dir}/template-source">
 
-        <mkdir dir="${build.generate.dir}/javax/faces/component"/>
         <filter token="protection" value=""/>
+
+        <filter token="package" value="javax.faces"/>
+        <copy file="${tools.dir}/template-src/TypedCollections.java"
+              todir="${build.generate.dir}/javax/faces"
+              filtering="true"/>
 
         <filter token="package" value="javax.faces.component"/>
         <copy file="${tools.dir}/template-src/MessageFactory.java"
               todir="${build.generate.dir}/javax/faces/component"
               filtering="true"/>
-
+        <copy file="${tools.dir}/template-src/TypedCollections.java"
+              todir="${build.generate.dir}/javax/faces/component"
+              filtering="true"/>
         <copy todir="${build.generate.dir}/javax/faces/component"
               filtering="true">
             <fileset dir="${basedir}/template-src">
@@ -296,6 +302,9 @@
 
         <filter token="package" value="javax.faces.webapp"/>
         <copy file="${tools.dir}/template-src/MessageFactory.java"
+              todir="${build.generate.dir}/javax/faces/webapp"
+              filtering="true"/>
+        <copy file="${tools.dir}/template-src/TypedCollections.java"
               todir="${build.generate.dir}/javax/faces/webapp"
               filtering="true"/>
 

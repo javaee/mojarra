@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.136 2006/08/07 14:28:56 rogerk Exp $
+ * $Id: UIComponentBase.java,v 1.137 2006/08/25 09:50:15 tony_robertson Exp $
  */
 
 /*
@@ -934,17 +934,17 @@ public abstract class UIComponentBase extends UIComponent {
                 java.lang.reflect.Array.newInstance(clazz, 0));
         }
 
-        List results = new ArrayList();
+        List<FacesListener> results = new ArrayList<FacesListener>();
 	Iterator<FacesListener> items = listeners.iterator();
 	while (items.hasNext()) {
 	    FacesListener item = items.next();
-	    if (clazz.isAssignableFrom(item.getClass())) {
+	    if (((Class<?>)clazz).isAssignableFrom(item.getClass())) {
 		results.add(item);
 	    }
 	}
 	
-        return ((FacesListener[]) results.toArray
-                ((Object []) java.lang.reflect.Array.newInstance(clazz, 
+        return (results.toArray
+                ((FacesListener []) java.lang.reflect.Array.newInstance(clazz, 
 								 results.size())));
 
     }
@@ -1269,7 +1269,8 @@ public abstract class UIComponentBase extends UIComponent {
         // we need to get the map that knows how to handle attribute/property 
         // transparency before we restore its values.        
         if ( values[0] != null ) {
-            attributes = new AttributesMap((Map) values[0]);
+            attributes = new AttributesMap(
+                TypedCollections.dynamicallyCastMap((Map) values[0], String.class, Object.class));
         }
         bindings = restoreBindingsState(context, values[1]);
         clientId = (String) values[2];
@@ -1277,9 +1278,9 @@ public abstract class UIComponentBase extends UIComponent {
         rendered = ((Boolean) values[4]).booleanValue();
         renderedSet = ((Boolean) values[5]).booleanValue();
         rendererType = (String) values[6];
-        List restoredListeners = null;
-        if (null != (restoredListeners = (List)
-                     restoreAttachedState(context, values[7]))) {
+        List<FacesListener> restoredListeners = null;
+        if (null != (restoredListeners = TypedCollections.dynamicallyCastList((List)
+                     restoreAttachedState(context, values[7]), FacesListener.class))) {
             // if there were some listeners registered prior to this
             // method being invoked, merge them with the list to be
             // restored.
@@ -1354,15 +1355,11 @@ public abstract class UIComponentBase extends UIComponent {
             return null;
         }
         Object result = null;
-        List
-            attachedList = null,
-            resultList = null;
-        Iterator listIter = null;
 
         if (attachedObject instanceof List) {
-            attachedList = (List) attachedObject;
-            resultList = new ArrayList(attachedList.size());
-            listIter = attachedList.iterator();
+            List attachedList = (List) attachedObject;
+            List<StateHolderSaver> resultList = new ArrayList<StateHolderSaver>(attachedList.size());
+            Iterator listIter = attachedList.iterator();
 	    Object cur = null;
             while (listIter.hasNext()) {
 		if (null != (cur = listIter.next())) {
@@ -1431,7 +1428,7 @@ public abstract class UIComponentBase extends UIComponent {
         return result;
     }
 
-    private Map restoreBindingsState(FacesContext context, Object state) {
+    private Map<String,ValueExpression> restoreBindingsState(FacesContext context, Object state) {
 
 	if (state == null) {
 	    return (null);
@@ -1439,10 +1436,10 @@ public abstract class UIComponentBase extends UIComponent {
 	Object values[] = (Object[]) state;
 	String names[] = (String[]) values[0];
 	Object states[] = (Object[]) values[1];
-	Map<String,Object> bindings = new HashMap<String,Object>(names.length);
+	Map<String,ValueExpression> bindings = new HashMap<String,ValueExpression>(names.length);
 	for (int i = 0; i < names.length; i++) {
 	    bindings.put(names[i],
-			 restoreAttachedState(context, states[i]));
+			 (ValueExpression) restoreAttachedState(context, states[i]));
 	}
 	return (bindings);
 
@@ -1476,13 +1473,13 @@ public abstract class UIComponentBase extends UIComponent {
     private final static Object[] EMPTY_ARRAY = new Object[0];
     
     // Empty iterator for short circuiting operations
-    private final static Iterator EMPTY_ITERATOR = new Iterator() {
+    private final static Iterator<UIComponent> EMPTY_ITERATOR = new Iterator<UIComponent>() {
     
         public void remove() {
             throw new UnsupportedOperationException();
         }
     
-        public Object next() {
+        public UIComponent next() {
             throw new NoSuchElementException("Empty Iterator");
         }
     
@@ -1504,9 +1501,9 @@ public abstract class UIComponentBase extends UIComponent {
     //     has a nice side effect in state saving since we no
     //     longer need to duplicate the map, we just provide the
     //     private 'attributes' map directly to the state saving process.
-    private class AttributesMap implements Map, Serializable {
+    private class AttributesMap implements Map<String, Object>, Serializable {
         
-        private Map attributes;
+        private Map<String, Object> attributes;
         
         // -------------------------------------------------------- Constructors
         
@@ -1572,14 +1569,9 @@ public abstract class UIComponentBase extends UIComponent {
             return (null);
         }
 
-        public Object put(Object keyValue, Object value) {
+        public Object put(String keyValue, Object value) {
             if (keyValue == null) {
                 throw new NullPointerException();
-            }
-            
-            if (!(keyValue instanceof String)) {
-                // PENDING i18n
-                throw new ClassCastException("Key must be a String");
             }
 
             String key = keyValue.toString();
@@ -1619,7 +1611,7 @@ public abstract class UIComponentBase extends UIComponent {
             }
         }
 
-        public void putAll(Map map) {
+        public void putAll(Map<? extends String, ? extends Object> map) {
             if (map == null) {
                 throw new NullPointerException();
             }
@@ -1667,22 +1659,22 @@ public abstract class UIComponentBase extends UIComponent {
             }
         }
 
-        public Set keySet() {
-            return (attributes != null
-                    ? attributes.keySet()
-                    : Collections.EMPTY_SET);
+        public Set<String> keySet() {
+            if (attributes != null)
+        	return attributes.keySet();
+            return Collections.emptySet();
         }
 
-        public Collection values() {
-            return (attributes != null
-                    ? attributes.values()
-                    : Collections.EMPTY_LIST);
+        public Collection<Object> values() {
+            if (attributes != null)
+        	return attributes.values();
+            return Collections.emptyList();
         }
 
-        public Set entrySet() {
-            return (attributes != null
-                    ? attributes.entrySet()
-                    : Collections.EMPTY_SET);
+        public Set<Entry<String,Object>> entrySet() {
+            if (attributes != null)
+        	return attributes.entrySet();
+            return Collections.emptySet();
         }
         
         Map getBackingAttributes() {
@@ -1736,7 +1728,7 @@ public abstract class UIComponentBase extends UIComponent {
         }
         
         private void initMap() {
-            attributes = new HashMap(8);
+            attributes = new HashMap<String,Object>(8);
         }
     }
 
@@ -2087,7 +2079,7 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         Iterator<String> keySetIterator() {
-            return ((new ArrayList(super.keySet())).iterator());
+            return ((new ArrayList<String>(super.keySet())).iterator());
         }
 
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.46 2006/07/31 22:15:26 rlubke Exp $
+ * $Id: UIViewRoot.java,v 1.47 2006/08/25 09:50:16 tony_robertson Exp $
  */
 
 /*
@@ -347,7 +347,7 @@ public class UIViewRoot extends UIComponentBase {
      * <strong>NOT</strong> part of the state that is saved and restored
      * for this component.</p>
      */
-    private transient List events[] = null;
+    private transient List<List<FacesEvent>> events = null;
 
 
     /**
@@ -371,12 +371,13 @@ public class UIViewRoot extends UIComponentBase {
               len = 0;
         // We are a UIViewRoot, so no need to check for the ISE
         if (events == null) {
-            events = new List[len = PhaseId.VALUES.size()];
+            List<List<FacesEvent>> events = new ArrayList<List<FacesEvent>>(len = PhaseId.VALUES.size());
             for (i = 0; i < len; i++) {
-                events[i] = new ArrayList<FacesEvent>(5);
+                events.add(new ArrayList<FacesEvent>(5));
             }
+            this.events = events;
         }
-        events[event.getPhaseId().getOrdinal()].add(event);
+        events.get(event.getPhaseId().getOrdinal()).add(event);
     }
 
 
@@ -397,7 +398,7 @@ public class UIViewRoot extends UIComponentBase {
               hasMoreAnyPhaseEvents = true,
               hasMoreCurrentPhaseEvents = true;
 
-        eventsForPhaseId = events[PhaseId.ANY_PHASE.getOrdinal()];
+        eventsForPhaseId = events.get(PhaseId.ANY_PHASE.getOrdinal());
 
         // keep iterating till we have no more events to broadcast.
         // This is necessary for events that cause other events to be
@@ -408,10 +409,9 @@ public class UIViewRoot extends UIComponentBase {
             if (null != eventsForPhaseId) {
                 // We cannot use an Iterator because we will get
                 // ConcurrentModificationException errors, so fake it
-                int cursor = 0;
-                while (cursor < eventsForPhaseId.size()) {
+                while (!eventsForPhaseId.isEmpty()) {
                     FacesEvent event =
-                          eventsForPhaseId.get(cursor);
+                          eventsForPhaseId.get(0);
                     UIComponent source = event.getComponent();
                     try {
                         source.broadcast(event);
@@ -433,39 +433,35 @@ public class UIViewRoot extends UIComponentBase {
                             LOGGER.log(Level.SEVERE, e.toString(), e);
                         }
                     }
-                    eventsForPhaseId.remove(cursor); // Stay at current position
+                    eventsForPhaseId.remove(0); // Stay at current position
                 }
             }
 
             // then broadcast the events for this phase.
-            if (null != (eventsForPhaseId = events[phaseId.getOrdinal()])) {
+            if (null != (eventsForPhaseId = events.get(phaseId.getOrdinal()))) {
                 // We cannot use an Iterator because we will get
                 // ConcurrentModificationException errors, so fake it
-                int cursor = 0;
-                while (cursor < eventsForPhaseId.size()) {
-                    FacesEvent event =
-                          eventsForPhaseId.get(cursor);
+                while (!eventsForPhaseId.isEmpty()) {
+                    FacesEvent event = eventsForPhaseId.get(0);
                     UIComponent source = event.getComponent();
                     try {
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
                         ; // A "return" here would abort remaining events too
                     }
-                    eventsForPhaseId.remove(cursor); // Stay at current position
+                    eventsForPhaseId.remove(0); // Stay at current position
                 }
             }
 
             // true if we have any more ANY_PHASE events
             hasMoreAnyPhaseEvents =
                   (null != (eventsForPhaseId =
-                        events[PhaseId.ANY_PHASE.getOrdinal()])) &&
-                                                                 eventsForPhaseId
-                                                                       .size()
-                                                                 > 0;
+                        events.get(PhaseId.ANY_PHASE.getOrdinal()))) &&
+                        !eventsForPhaseId.isEmpty();
             // true if we have any more events for the argument phaseId
             hasMoreCurrentPhaseEvents =
-                  (null != events[phaseId.getOrdinal()]) &&
-                  events[phaseId.getOrdinal()].size() > 0;
+                  (null != events.get(phaseId.getOrdinal())) &&
+                  !events.get(phaseId.getOrdinal()).isEmpty();
 
         } while (hasMoreAnyPhaseEvents || hasMoreCurrentPhaseEvents);
 
@@ -502,8 +498,7 @@ public class UIViewRoot extends UIComponentBase {
         // or if there is a response complete signal.
         if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
-                for (int i = 0; i < PhaseId.VALUES.size(); i++) {
-                    List<FacesEvent> eventList = events[i];
+                for (List<FacesEvent> eventList : events) {
                     if (eventList != null) {
                         eventList.clear();
                     }
@@ -671,8 +666,7 @@ public class UIViewRoot extends UIComponentBase {
         // or if there is a response complete signal.
         if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
-                for (int i = 0; i < PhaseId.VALUES.size(); i++) {
-                    List<FacesEvent> eventList = events[i];
+                for (List<FacesEvent> eventList : events) {
                     if (eventList != null) {
                         eventList.clear();
                     }
@@ -716,8 +710,7 @@ public class UIViewRoot extends UIComponentBase {
         // or if there is a response complete signal.
         if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
-                for (int i = 0; i < PhaseId.VALUES.size(); i++) {
-                    List eventList = events[i];
+                for (List<FacesEvent> eventList : events) {
                     if (eventList != null) {
                         eventList.clear();
                     }
@@ -762,8 +755,7 @@ public class UIViewRoot extends UIComponentBase {
         // or if there is a response complete signal.
         if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
-                for (int i = 0; i < PhaseId.VALUES.size(); i++) {
-                    List eventList = events[i];
+                for (List<FacesEvent> eventList : events) {
                     if (eventList != null) {
                         eventList.clear();
                     }
@@ -932,8 +924,8 @@ public class UIViewRoot extends UIComponentBase {
               (MethodExpression) restoreAttachedState(context, values[5]);
         afterPhase =
               (MethodExpression) restoreAttachedState(context, values[6]);
-        phaseListeners = (List) restoreAttachedState(context, values[7]);
-
+        phaseListeners = TypedCollections.dynamicallyCastList((List)
+              restoreAttachedState(context, values[7]), PhaseListener.class);
     }
 
 

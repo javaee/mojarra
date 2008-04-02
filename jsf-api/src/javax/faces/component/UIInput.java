@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.86 2006/06/05 21:14:26 rlubke Exp $
+ * $Id: UIInput.java,v 1.87 2006/08/25 09:50:16 tony_robertson Exp $
  */
 
 /*
@@ -1255,11 +1255,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         valid = ((Boolean) values[10]).booleanValue();
         immediate = ((Boolean) values[11]).booleanValue();
         immediateSet = ((Boolean) values[12]).booleanValue();
-	List restoredValidators = null;
+	List<Validator> restoredValidators = null;
 	Iterator<Validator> iter = null;
 
-	if (null != (restoredValidators = (List) 
-		     restoreAttachedState(context, values[13]))) {
+	if (null != (restoredValidators = TypedCollections.dynamicallyCastList((List) 
+		     restoreAttachedState(context, values[13]), Validator.class))) {
 	    // if there were some validators registered prior to this
 	    // method being invoked, merge them with the list to be
 	    // restored.

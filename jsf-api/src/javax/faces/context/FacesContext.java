@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.68 2006/02/24 18:05:04 edburns Exp $
+ * $Id: FacesContext.java,v 1.69 2006/08/25 09:50:17 tony_robertson Exp $
  */
 
 /*
@@ -379,8 +379,8 @@ public abstract class FacesContext {
      * <p>The <code>ThreadLocal</code> variable used to record the
      * {@link FacesContext} instance for each processing thread.</p>
      */
-    private static ThreadLocal instance = new ThreadLocal() {
-            protected Object initialValue() { return (null); }
+    private static ThreadLocal<FacesContext> instance = new ThreadLocal<FacesContext>() {
+            protected FacesContext initialValue() { return (null); }
         };
 
 
@@ -390,7 +390,7 @@ public abstract class FacesContext {
      */
     public static FacesContext getCurrentInstance() {
 
-        return ((FacesContext) instance.get());
+        return (instance.get());
 
     }
 

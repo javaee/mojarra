@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.14 2005/12/05 16:42:41 edburns Exp $
+ * $Id: FacesMessage.java,v 1.15 2006/08/25 09:50:15 tony_robertson Exp $
  */
 
 /*
@@ -151,7 +151,7 @@ public class FacesMessage implements Serializable {
     public static final List VALUES = 
 	Collections.unmodifiableList(Arrays.asList(values));
 
-    private static Map _MODIFIABLE_MAP = new HashMap();
+    private static Map<String,Severity> _MODIFIABLE_MAP = new HashMap<String,Severity>();
     
     static {
 	for (int i = 0, len = values.length; i < len; i++) {

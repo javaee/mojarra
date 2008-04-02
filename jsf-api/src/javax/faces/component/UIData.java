@@ -154,7 +154,7 @@ public class UIData extends UIComponentBase
      * the <code>rowIndex</code> value of the parent, per-row state
      * information is actually preserved.</p>
      */
-    private Map saved = new HashMap();
+    private Map<String,SavedState> saved = new HashMap<String,SavedState>();
 
 
     /**
@@ -419,7 +419,7 @@ public class UIData extends UIComponentBase
 
         // Clear or expose the current row data as a request scope attribute
         if (var != null) {
-            Map requestMap =
+            Map<String,Object> requestMap =
                 getFacesContext().getExternalContext().getRequestMap();
             if (rowIndex == -1) {
                 oldVar = requestMap.remove(var);
@@ -550,7 +550,7 @@ public class UIData extends UIComponentBase
         rowIndex = ((Integer) values[3]).intValue();
         rows = ((Integer) values[4]).intValue();
 	rowsSet = ((Boolean) values[5]).booleanValue();
-        saved = (Map) values[6];
+        saved = TypedCollections.dynamicallyCastMap((Map) values[6], String.class, SavedState.class);
         value = values[7];
         var = (String) values[8];
 
@@ -873,7 +873,7 @@ public class UIData extends UIComponentBase
 
 	setDataModel(null); // re-evaluate even with server-side state saving
         if (!keepSaved(context)) {
-            saved = new HashMap();
+            saved = new HashMap<String,SavedState>();
         }
         super.encodeBegin(context);
 
@@ -928,7 +928,7 @@ public class UIData extends UIComponentBase
 
 	setDataModel(null); // Re-evaluate even with server-side state saving
 	if (null == saved || !keepSaved(context)) {
-	    saved = new HashMap(); // We don't need saved state here
+	    saved = new HashMap<String,SavedState>(); // We don't need saved state here
 	}
 
 	iterate(context, PhaseId.APPLY_REQUEST_VALUES);
