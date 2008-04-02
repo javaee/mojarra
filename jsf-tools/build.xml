@@ -192,7 +192,7 @@ necessary to generate required classes.
   <target name="check.generation.necessity" if="standard-html-renderkit-impl">
     <uptodate property="skip.generation"
               targetfile="${build.generate}/last-generation">
-       <srcfiles dir="${basedir}/doc">
+       <srcfiles dir="${jsf-api.dir}/doc">
          <include name="*.xml"/>               
        </srcfiles>
     </uptodate>
