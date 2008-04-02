@@ -44,6 +44,11 @@
 
 
 <web-app>
+    <description>
+        JavaServer Faces Car Demo Sample Application
+    </description>
+    <display-name>JavaServer Faces Car Demo Sample Application</display-name>
+
     <context-param>
         <param-name>saveStateInClient</param-name>
         <param-value>false</param-value>

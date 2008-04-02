@@ -44,6 +44,11 @@
 
 
 <web-app>
+    <description>
+        JavaServer Faces Hello Duke Sample Application
+    </description>
+    <display-name>JavaServer Faces Hello Duke Sample Application</display-name>
+
     <context-param>
         <param-name>saveStateInClient</param-name>
         <param-value>false</param-value>

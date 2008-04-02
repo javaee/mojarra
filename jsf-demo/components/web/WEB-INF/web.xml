@@ -44,6 +44,11 @@
 
 
 <web-app>
+    <description>
+        JavaServer Faces Custom Components
+    </description>
+    <display-name>JavaServer Faces Custom Components</display-name>
+
     <context-param>
         <param-name>saveStateInClient</param-name>
         <param-value>false</param-value>

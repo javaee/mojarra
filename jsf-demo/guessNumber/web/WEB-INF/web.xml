@@ -44,6 +44,11 @@
 
 
 <web-app>
+    <description>
+        JavaServer Faces Guess Number Sample Application
+    </description>
+    <display-name>JavaServer Faces Guess Number Sample Application</display-name>
+
     <context-param>
         <param-name>saveStateInClient</param-name>
         <param-value>false</param-value>
