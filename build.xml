@@ -37,6 +37,8 @@
   
   <property name="installer.home"    
       value="${tomcat.home}/../installer/"/>
+  <property name="javanettasks.home"    
+      value="${installer.home}/javanettasks-1.0.3-SNAPSHOT"/>
 
 <!-- ************ Compiler Defaults *************************************** -->
 
@@ -164,7 +166,7 @@
       description="update nightly build" >
   <taskdef resource="org/kohsuke/javanettasks.properties">
     <classpath>
-      <fileset dir="${installer.home}/javanettasks-1.0.2-SNAPSHOT/lib" includes="*.jar"/>
+      <fileset dir="${javanettasks.home}/lib" includes="*.jar"/>
     </classpath>
   </taskdef>
   
@@ -182,7 +184,7 @@
       description="update weekly build" >
   <taskdef resource="org/kohsuke/javanettasks.properties">
     <classpath>
-      <fileset dir="${installer.home}/javanettasks-1.0.2-SNAPSHOT/lib" includes="*.jar"/>
+      <fileset dir="${javanettasks.home}/lib" includes="*.jar"/>
     </classpath>
   </taskdef>
   
