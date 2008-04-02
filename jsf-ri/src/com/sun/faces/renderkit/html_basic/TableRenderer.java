@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.39 2006/10/03 23:32:08 rlubke Exp $
+ * $Id: TableRenderer.java,v 1.40 2006/10/13 16:19:24 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Collections;
 import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
@@ -114,9 +115,11 @@ public class TableRenderer extends HtmlBasicRenderer {
             writer.endElement("caption");
         }
 
+        // get all of the columns
+        List<UIColumn> columns = getColumns(data);
         // Render the header facets (if any)
         UIComponent header = getFacet(data, "header");
-        int headerFacets = getFacetCount(data, "header");
+        int headerFacets = getFacetCount("header", columns);
         String headerClass = (String) data.getAttributes().get("headerClass");
         if ((header != null) || (headerFacets > 0)) {
             writer.startElement("thead", data);
@@ -128,7 +131,7 @@ public class TableRenderer extends HtmlBasicRenderer {
             if (headerClass != null) {
                 writer.writeAttribute("class", headerClass, "headerClass");
             }
-            writer.writeAttribute("colspan", "" + getColumnCount(data), null);
+            writer.writeAttribute("colspan", "" + columns.size(), null);
             writer.writeAttribute("scope", "colgroup", null);
             encodeRecursive(context, header);
             writer.endElement("th");
@@ -138,9 +141,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         if (headerFacets > 0) {
             writer.startElement("tr", data);
             writer.writeText("\n", component, null);
-            Iterator<UIColumn> columns = getColumns(data);
-            while (columns.hasNext()) {
-                UIColumn column = columns.next();
+            for (UIColumn column: columns) {
                 String columnHeaderClass =
                       (String) column.getAttributes().get("headerClass");
                 writer.startElement("th", column);
@@ -168,7 +169,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 
         // Render the footer facets (if any)
         UIComponent footer = getFacet(data, "footer");
-        int footerFacets = getFacetCount(data, "footer");
+        int footerFacets = getFacetCount("footer", columns);
         String footerClass = (String) data.getAttributes().get("footerClass");
         if ((footer != null) || (footerFacets > 0)) {
             writer.startElement("tfoot", data);
@@ -180,7 +181,7 @@ public class TableRenderer extends HtmlBasicRenderer {
             if (footerClass != null) {
                 writer.writeAttribute("class", footerClass, "footerClass");
             }
-            writer.writeAttribute("colspan", "" + getColumnCount(data), null);
+            writer.writeAttribute("colspan", "" + columns.size(), null);
             encodeRecursive(context, footer);
             writer.endElement("td");
             writer.endElement("tr");
@@ -189,9 +190,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         if (footerFacets > 0) {
             writer.startElement("tr", data);
             writer.writeText("\n", component, null);
-            Iterator<UIColumn> columns = getColumns(data);
-            while (columns.hasNext()) {
-                UIColumn column = columns.next();
+            for (UIColumn column : columns) {
                 String columnFooterClass =
                       (String) column.getAttributes().get("footerClass");
                 writer.startElement("td", column);
@@ -248,13 +247,10 @@ public class TableRenderer extends HtmlBasicRenderer {
 
         // Set up variables we will need
         String columnClasses[] = getColumnClasses(data);
-        int columnStyle = 0;
-        int columnStyles = columnClasses.length;
+        int numColumnClasses = columnClasses.length;
         String rowClasses[] = getRowClasses(data);
-        int rowStyles = rowClasses.length;
+        int numRowClasses = rowClasses.length;
         ResponseWriter writer = context.getResponseWriter();
-        Iterator kids = null;
-        Iterator<UIComponent> grandkids = null;
 
         // Iterate over the rows of data that are provided
         int processed = 0;
@@ -278,38 +274,41 @@ public class TableRenderer extends HtmlBasicRenderer {
 
             // Render the beginning of this row
             writer.startElement("tr", data);
-            if (rowStyles > 0) {
+            if (numRowClasses > 0) {
                 writer.writeAttribute("class", rowClasses[rowStyle++],
                                       "rowClasses");
-                if (rowStyle >= rowStyles) {
+                if (rowStyle >= numRowClasses) {
                     rowStyle = 0;
                 }
             }
             writer.writeText("\n", component, null);
 
             // Iterate over the child UIColumn components for each row
-            columnStyle = 0;
-            kids = getColumns(data);
-            while (kids.hasNext()) {
-
-                // Identify the next renderable column
-                UIColumn column = (UIColumn) kids.next();
+            int columnStyleIdx = 0;
+            List<UIColumn> columns = getColumns(data);
+            int numberOfColumns = columns.size();
+            int numColClassesToRender = 0;            
+            if (numberOfColumns > numColumnClasses) {
+                numColClassesToRender = (numColumnClasses - 1);
+            } else if (numberOfColumns < numColumnClasses) {
+                numColClassesToRender = (numberOfColumns - 1);
+            } else if (numberOfColumns == numColumnClasses) {
+                numColClassesToRender = (numberOfColumns -1);
+            }
+            for (UIColumn column : columns) {
 
                 // Render the beginning of this cell
                 writer.startElement("td", column);
-                if (columnStyles > 0) {
-                    writer.writeAttribute("class", columnClasses[columnStyle++],
-                                          "columnClasses");
-                    if (columnStyle >= columnStyles) {
-                        columnStyle = 0;
-                    }
+                if (numColClassesToRender >= 0 && columnStyleIdx <= numColClassesToRender) {
+                    writer.writeAttribute("class", columnClasses[columnStyleIdx++],
+                                          "columnClasses");                    
                 }
 
                 // Render the contents of this cell by iterating over
                 // the kids of our kids
-                grandkids = getChildren(column);
-                while (grandkids.hasNext()) {
-                    encodeRecursive(context, grandkids.next());
+                for (Iterator<UIComponent> gkids = getChildren(column);
+                     gkids.hasNext(); ) {
+                    encodeRecursive(context, gkids.next());
                 }
 
                 // Render the ending of this cell
@@ -387,6 +386,7 @@ public class TableRenderer extends HtmlBasicRenderer {
      * may not have a stylesheet.</p>
      *
      * @param data {@link UIData} component being rendered
+     * @return an array of column classes
      */
     private String[] getColumnClasses(UIData data) {
 
@@ -413,42 +413,27 @@ public class TableRenderer extends HtmlBasicRenderer {
 
 
     /**
-     * <p>Return the number of child <code>UIColumn</code> components
-     * that are nested in the specified {@link UIData}.</p>
-     *
-     * @param data {@link UIData} component being analyzed
-     */
-    private int getColumnCount(UIData data) {
-
-        int columns = 0;
-        Iterator kids = getColumns(data);
-        while (kids.hasNext()) {
-            kids.next();
-            columns++;
-        }
-        return (columns);
-
-    }
-
-
-    /**
      * <p>Return an Iterator over the <code>UIColumn</code> children
      * of the specified <code>UIData</code> that have a
      * <code>rendered</code> property of <code>true</code>.</p>
      *
      * @param data <code>UIData</code> for which to extract children
+     * @return the List of all UIColumn children
      */
-    private Iterator<UIColumn> getColumns(UIData data) {
+    private List<UIColumn> getColumns(UIData data) {
 
-        List<UIColumn> results = new ArrayList<UIColumn>();
-        Iterator<UIComponent> kids = data.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = kids.next();
-            if ((kid instanceof UIColumn) && kid.isRendered()) {
-                results.add((UIColumn) kid);
+        int childCount = data.getChildCount();
+        if (childCount > 0) {
+            List<UIColumn> results = new ArrayList<UIColumn>(childCount);
+            for (UIComponent kid : data.getChildren()) {
+                if ((kid instanceof UIColumn) && kid.isRendered()) {
+                    results.add((UIColumn) kid);
+                }
             }
+            return results;
+        } else {
+            return Collections.emptyList();
         }
-        return (results.iterator());
 
     }
 
@@ -458,17 +443,19 @@ public class TableRenderer extends HtmlBasicRenderer {
      * nested in the specified <code>UIData</code> that have a facet with
      * the specified name.</p>
      *
-     * @param data <code>UIData</code> component being analyzed
      * @param name Name of the facet being analyzed
+     * @param columns the columns to search
+     * @return the number of columns associated with the specified
+     *  Facet name
      */
-    private int getFacetCount(UIData data, String name) {
+    private int getFacetCount(String name, List<UIColumn> columns) {
 
         int n = 0;
-        Iterator kids = getColumns(data);
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            if (getFacet(kid, name) != null) {
-                n++;
+        if (!columns.isEmpty()) {
+            for (UIColumn column : columns) {
+                if (getFacet(column, name) != null) {
+                    n++;
+                }
             }
         }
         return (n);
@@ -482,6 +469,7 @@ public class TableRenderer extends HtmlBasicRenderer {
      * may not have a stylesheet.</p>
      *
      * @param data {@link UIData} component being rendered
+     * @return an array of row classes
      */
     private String[] getRowClasses(UIData data) {
 

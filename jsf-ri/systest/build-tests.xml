@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.125 2006/10/06 19:09:23 rogerk Exp $
+ $Id: build-tests.xml,v 1.126 2006/10/13 16:19:25 rlubke Exp $
 -->
 
 <!--
@@ -759,6 +759,9 @@
         <jsf.tester
               request="${context.path}/faces/standard/autocomplete.jsp"
               golden="${golden.path}/standard/autocomplete.txt"/>
+        <jsf.tester
+            request="${context.path}/faces/standard/dtablecolumnclasses.jsp"
+            golden="${golden.path}/standard/dtablecolumnclasses.txt"/>
         
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
