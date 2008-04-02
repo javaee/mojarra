@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.2 2003/03/24 19:45:37 eburns Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.3 2003/04/01 15:26:56 eburns Exp $
  */
 
 /*
@@ -16,15 +16,18 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.TestBean;
 
 import org.apache.cactus.WebRequest;
 
 import javax.faces.el.PropertyResolver;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIOutput;
+import javax.faces.context.ExternalContext;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  *
@@ -32,7 +35,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.2 2003/03/24 19:45:37 eburns Exp $
+ * @version $Id: TestPropertyResolverImpl.java,v 1.3 2003/04/01 15:26:56 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -500,5 +503,40 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
 
     }
 
+    public void testReadOnlyObject() {
+	ExternalContext ec = getFacesContext().getExternalContext();
 
+	// these are mutable Maps
+	assertTrue(!resolver.isReadOnly(ec.getApplicationMap(), "hello"));
+	assertTrue(!resolver.isReadOnly(ec.getSessionMap(), "hello"));
+	assertTrue(!resolver.isReadOnly(ec.getRequestMap(), "hello"));
+	
+	// these are immutable Maps
+	assertTrue(resolver.isReadOnly(ec.getRequestParameterMap(), "hello"));
+	assertTrue(resolver.isReadOnly(ec.getRequestParameterValuesMap(), 
+				       "hello"));
+	assertTrue(resolver.isReadOnly(ec.getRequestHeaderMap(), "hello"));
+	assertTrue(resolver.isReadOnly(ec.getRequestHeaderValuesMap(), 
+				       "hello"));
+	assertTrue(resolver.isReadOnly(ec.getRequestCookieMap(), "hello"));
+	assertTrue(resolver.isReadOnly(ec.getInitParameterMap(), "hello"));
+
+	UINamingContainer root = new UINamingContainer() {
+                public String getComponentType() { return "root"; }
+            };
+	assertTrue(resolver.isReadOnly(root, "hello"));
+	
+	TestBean testBean = (TestBean) ec.getSessionMap().get("TestBean");
+	assertTrue(resolver.isReadOnly(testBean, "readOnly"));
+	assertTrue(!resolver.isReadOnly(testBean, "one"));
+    }
+
+    public void testReadOnlyIndex() {
+	// PENDING(edburns): implement readonly index tests.
+    }
+    
+    public void testType() {
+	// PENDING(edburns): implement type tests
+    }
+    
 } // end of class TestPropertyResolverImpl

@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.3 2003/03/31 21:16:29 rkitain Exp $
+ * $Id: TestValueBindingImpl.java,v 1.4 2003/04/01 15:26:57 eburns Exp $
  */
 
 /*
@@ -24,6 +24,9 @@ import org.apache.cactus.WebRequest;
 
 import javax.servlet.http.Cookie;
 
+import javax.faces.el.PropertyNotFoundException;
+import javax.faces.component.UINamingContainer;
+
 import java.util.Enumeration;
 
 /**
@@ -32,7 +35,7 @@ import java.util.Enumeration;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.3 2003/03/31 21:16:29 rkitain Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.4 2003/04/01 15:26:57 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -244,14 +247,148 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	// PENDING(edburns): test set with implicit objects.
 	
     }
-
-    public void testReadOnly() {
-	// PENDING(edburns): implement read only tests
-    }
-
-    public void testType() {
-	// PENDING(edburns): implement type tests
-    }
     
+    public void testGetLastSegment() {
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
+							     new PropertyResolverImpl());
+	valueBinding.setRef("a.b.c");
+	assertTrue(valueBinding.getLastSegment().equals("c"));
 
+	valueBinding.setRef("a[1].b.c");
+	assertTrue(valueBinding.getLastSegment().equals("c"));
+
+	valueBinding.setRef("a[1]");
+	assertTrue(valueBinding.getLastSegment().equals("[1]"));
+
+	valueBinding.setRef("a[\"1\"]");
+	assertTrue(valueBinding.getLastSegment().equals("[\"1\"]"));
+
+	valueBinding.setRef("a[0].b[\"1\"]");
+	assertTrue(valueBinding.getLastSegment().equals("[\"1\"]"));
+
+	valueBinding.setRef("a");
+	assertTrue(valueBinding.getLastSegment().equals("a"));
+
+	valueBinding.setRef("foo");
+	assertTrue(valueBinding.getLastSegment().equals("foo"));
+
+	boolean exceptionThrown = false ;
+	try {
+	    valueBinding.setRef("a[");
+	    valueBinding.getLastSegment();
+	}
+	catch (PropertyNotFoundException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	exceptionThrown = false ;
+	try {
+	    valueBinding.setRef("apple][");
+	    valueBinding.getLastSegment();
+	}
+	catch (PropertyNotFoundException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	exceptionThrown = false ;
+	try {
+	    valueBinding.setRef("a.");
+	    valueBinding.getLastSegment();
+	}
+	catch (PropertyNotFoundException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+    }
+
+    public void testStripQuotesIfNecessary() {
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
+							     new PropertyResolverImpl());
+	assertTrue(valueBinding.stripQuotesIfNecessary("\"hasQuotes\"").equals("hasQuotes"));
+	assertTrue(valueBinding.stripQuotesIfNecessary("\"openQuote").equals("\"openQuote"));
+	assertTrue(valueBinding.stripQuotesIfNecessary("\'singleQuotes\'").equals("singleQuotes"));
+	assertTrue(valueBinding.stripQuotesIfNecessary("endQuote\'").equals("endQuote\'"));
+    }
+
+    public void testReadOnly_singleCase() {
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
+							     new PropertyResolverImpl());
+
+	// these are mutable Maps
+	valueBinding.setRef("applicationScope");
+	assertTrue(!valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("sessionScope");
+	assertTrue(!valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("requestScope");
+	assertTrue(!valueBinding.isReadOnly(getFacesContext()));
+	
+	// these are immutable Maps
+	valueBinding.setRef("param");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("paramValues");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("header");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("headerValues");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("cookie");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("initParam");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+    }
+
+    public void testReadOnly_multipleCase() {
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
+							     new PropertyResolverImpl());
+
+	// these are mutable Maps
+	valueBinding.setRef("applicationScope.value");
+	assertTrue(!valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("sessionScope.value");
+	assertTrue(!valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("requestScope.value");
+	assertTrue(!valueBinding.isReadOnly(getFacesContext()));
+	
+	// these are immutable Maps
+	valueBinding.setRef("param.value");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("paramValues.value");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("header.value");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("headerValues.value");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("cookie.value");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("initParam.value");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+
+	// tree
+	// create a dummy root for the tree.
+	UINamingContainer root = new UINamingContainer() {
+                public String getComponentType() { return "root"; }
+            };
+	root.setComponentId("root");
+	getFacesContext().setTree(new com.sun.faces.tree.SimpleTreeImpl(getFacesContext(), root, "newTree"));
+	valueBinding.setRef("tree.root");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	
+	TestBean testBean = (TestBean) getFacesContext().getExternalContext().getSessionMap().get("TestBean");
+	assertTrue(null != testBean);
+	valueBinding.setRef("TestBean.readOnly");
+	assertTrue(valueBinding.isReadOnly(getFacesContext()));
+	valueBinding.setRef("TestBean.one");
+	assertTrue(!valueBinding.isReadOnly(getFacesContext()));
+
+	InnerBean inner = new InnerBean();
+	testBean.setInner(inner);
+	valueBinding.setRef("TestBean[\"inner\"].customers[1]");
+	assertTrue(!valueBinding.isReadOnly(getFacesContext()));
+
+
+    }
+	
 } // end of class TestValueBindingImpl

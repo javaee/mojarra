@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.3 2003/03/27 07:35:34 rkitain Exp $
+ * $Id: ExternalContextImpl.java,v 1.4 2003/04/01 15:26:52 eburns Exp $
  */
 
 /*
@@ -526,6 +526,9 @@ class RequestParameterMap implements Map {
         if (key == null) {
             throw new NullPointerException();
         }
+	if (key == RIConstants.IMMUTABLE_MARKER) {
+	    return RIConstants.IMMUTABLE_MARKER;
+	}
         return request.getParameter(key.toString());
     }
 
@@ -589,6 +592,9 @@ class RequestParameterValuesMap implements Map {
         if (key == null) {
             throw new NullPointerException();
         }
+	if (key == RIConstants.IMMUTABLE_MARKER) {
+	    return RIConstants.IMMUTABLE_MARKER;
+	}
         return request.getParameterValues(key.toString());
     }
 
@@ -652,6 +658,9 @@ class RequestHeaderMap implements Map {
         if (key == null) {
             throw new NullPointerException();
         }
+	if (key == RIConstants.IMMUTABLE_MARKER) {
+	    return RIConstants.IMMUTABLE_MARKER;
+	}
         return ((HttpServletRequest)request).getHeader(key.toString());
     }
 
@@ -715,6 +724,9 @@ class RequestHeaderValuesMap implements Map {
         if (key == null) {
             throw new NullPointerException();
         }
+	if (key == RIConstants.IMMUTABLE_MARKER) {
+	    return RIConstants.IMMUTABLE_MARKER;
+	}
         return ((HttpServletRequest)request).getHeaders(key.toString());
     }
 
@@ -787,6 +799,9 @@ class RequestCookieMap implements Map {
         if (key == null) {
             throw new NullPointerException();
         }
+	if (key == RIConstants.IMMUTABLE_MARKER) {
+	    return RIConstants.IMMUTABLE_MARKER;
+	}
 	if (null == cookies) {
 	    return null;
 	}
@@ -866,6 +881,9 @@ class InitParameterMap implements Map {
         if (key == null) {
             throw new NullPointerException();
         }
+	if (key == RIConstants.IMMUTABLE_MARKER) {
+	    return RIConstants.IMMUTABLE_MARKER;
+	}
         String keyString = key.toString();
         return servletContext.getInitParameter(keyString);
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.28 2003/03/12 19:50:04 rkitain Exp $
+ * $Id: RIConstants.java,v 1.29 2003/04/01 15:26:51 eburns Exp $
  */
 
 /*
@@ -83,5 +83,15 @@ public class RIConstants {
      * required classes for the Faces RI.</p>
      */
     public static final String HAS_REQUIRED_CLASSES_ATTR = "com.sun.faces.HasRequiredClasses";
+
+    /**
+
+    * <p>Used in resolveVariable to mark immutable maps.</p>
+
+    */
+    
+    public static final String IMMUTABLE_MARKER = 
+	"com.sun.faces.IMMUTABLE";
+
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.2 2003/03/24 19:45:28 eburns Exp $
+ * $Id: PropertyResolverImpl.java,v 1.3 2003/04/01 15:26:53 eburns Exp $
  */
 
 /*
@@ -21,6 +21,8 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
+
+import com.sun.faces.RIConstants;
 
 
 /**
@@ -141,18 +143,22 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,String)
     public boolean isReadOnly(Object base, String name) {
+	boolean result = false;
 
         if ((base == null) || (name == null)) {
             throw new NullPointerException();
         }
         if (base instanceof Map) {
-            return (false); // No way to know for sure
+	    // this marker is set in ExternalContextImpl when the Map is
+	    // created.
+	    result = RIConstants.IMMUTABLE_MARKER == 
+		((Map)base).get(RIConstants.IMMUTABLE_MARKER);
         } else if (base instanceof UIComponent) {
-            return (true);
+            result = true;
         } else {
-            return (descriptor(base, name).getWriteMethod() == null);
+            result = (descriptor(base, name).getWriteMethod() == null);
         }
-
+	return result;
     }
 
 

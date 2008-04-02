@@ -182,4 +182,8 @@ public void setNicknames(Map newNicknames) {
 
 }
 
+public String getReadOnly() {
+    return "readOnly";
+}
+
 }
