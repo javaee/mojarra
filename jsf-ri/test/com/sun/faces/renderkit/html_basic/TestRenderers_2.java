@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.36 2003/01/24 18:23:45 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.37 2003/02/07 00:18:11 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.36 2003/01/24 18:23:45 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.37 2003/02/07 00:18:11 eburns Exp $
  * 
  *
  */
@@ -81,11 +81,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public String [] getLinesToIgnore() {
         String[] lines =  {
-//	    "<a href=\"/test/faces;jsessionid=4573B0C6B316F9D0D252D46330E31063?action=command&name=HyperlinkRenderer&tree=treeId\">HyperlinkRenderer</a>",
-	    "<img src=\"\">",
-	    "<img src=\";jsessionid=614035E9A2D45743F4E803A0B536E386\">",
-	    "<img src=\";jsessionid=614035E9A2D45743F4E803A0B536E386\">",
-	    "<img id=\"my_graphic_image\" src=\"/test/nonModelReferenceImage.gif;jsessionid=9204B23BBE1038AA96ECCFADB275784D\"><img id=\"id0\" src=\"/test/foo/modelReferenceImage.gif;jsessionid=9204B23BBE1038AA96ECCFADB275784D\">"
+	    "<img id=\"my_graphic_image\" src=\"/test/nonModelReferenceImage.gif;jsessionid=5F5887873AE76FDF5F7FCAA50AF369B1\"><img id=\"id0\" src=\"/test/foo/modelReferenceImage.gif;jsessionid=5F5887873AE76FDF5F7FCAA50AF369B1\">"
 };
         return lines;
     }   

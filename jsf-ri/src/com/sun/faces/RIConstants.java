@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.23 2003/02/04 20:54:18 visvan Exp $
+ * $Id: RIConstants.java,v 1.24 2003/02/07 00:18:08 eburns Exp $
  */
 
 /*
@@ -66,6 +66,9 @@ public class RIConstants {
 
     public static final String FORMAT_POOL = "com.sun.faces.renderkit.FormatPool";
     public static final String FACES_LOCALE = "FacesLocale";
+
+    public final static String FORM_NUMBER_ATTR = FACES_PREFIX +
+	"FormNumber";
 
     /**
      * <p>Phase identifier for <em>Reconstitute Request Tree</em>.</p>

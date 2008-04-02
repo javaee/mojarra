@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.40 2003/01/21 23:23:18 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.41 2003/02/07 00:18:09 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.40 2003/01/21 23:23:18 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.41 2003/02/07 00:18:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -121,6 +121,33 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.write(Util.renderBooleanPassthruAttributes(context, 
                 component));
         writer.write(">");
+	updateFormNumber(context, component);
+    }
+
+    /**
+
+    * This method keeps track of the number of forms in a page.  This is
+    * necessary for any renderer that needs to use Javascript, as in,
+    * document.forms[N].
+
+    */
+
+    protected int updateFormNumber(FacesContext context, 
+				   UIComponent component) {
+	HttpServletRequest request = (HttpServletRequest) 
+	    context.getServletRequest();
+	int numForms = 0;
+	Integer formsInt = null;
+	// find out the current number of forms in the page.
+	if (null != (formsInt = (Integer) 
+		     request.getAttribute(RIConstants.FORM_NUMBER_ATTR))) {
+	    numForms = formsInt.intValue();
+	}
+	component.setAttribute(RIConstants.FORM_NUMBER_ATTR, 
+			       formsInt = new Integer(numForms));
+	request.setAttribute(RIConstants.FORM_NUMBER_ATTR, 
+			     formsInt = new Integer(++numForms));
+	return numForms;
     }
     
     /**

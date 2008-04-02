@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.22 2003/01/21 23:23:28 rkitain Exp $
+ * $Id: TestRenderers_1.java,v 1.23 2003/02/07 00:18:11 eburns Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.22 2003/01/21 23:23:28 rkitain Exp $
+ * @version $Id: TestRenderers_1.java,v 1.23 2003/02/07 00:18:11 eburns Exp $
  * 
  *
  */
@@ -108,7 +108,7 @@ public class TestRenderers_1 extends JspFacesTestCase
     public String [] getLinesToIgnore() {
         String[] lines =  {
 
-	    "<form method=\"post\" action=\"/test/facestreeId;jsessionid=575D6C6F09D1D27971C8F7DB81991DF6\">"
+	    "<form method=\"post\" action=\"/test/facestreeId;jsessionid=428000A9A343A01F7BBB2F460FDE5EC0\">"
 };
         return lines;
     }    
@@ -133,7 +133,9 @@ public class TestRenderers_1 extends JspFacesTestCase
 	        public String getComponentType() { return "root"; } 
 	    };
             root.setComponentId("root");
-            verifyFormRenderer(root);
+	    // Call this twice to test the multiple forms in a page logic.
+            verifyFormRenderer(root, 0);
+            verifyFormRenderer(root, 1);
             verifyRadioRenderer(root);
             verifyButtonRenderer(root);
 
@@ -146,13 +148,14 @@ public class TestRenderers_1 extends JspFacesTestCase
         }
     }
     
-    public void verifyFormRenderer(UIComponent root) throws IOException {
+    public void verifyFormRenderer(UIComponent root, 
+				   int expectedFormNumber) throws IOException {
          boolean result = false;
          
         // Test FormRenderer.
         System.out.println("Testing FormRenderer");
         UIComponent uiForm = new UIForm();
-        uiForm.setComponentId("formRenderer");
+        uiForm.setComponentId("formRenderer" + expectedFormNumber);
         uiForm.setValue("FormRenderer");
         root.addChild(uiForm);
 
@@ -189,7 +192,12 @@ public class TestRenderers_1 extends JspFacesTestCase
 
         result = formRenderer.supportsComponentType(uiForm); 
         assertTrue(result);
-        
+	
+	// test that our form number is correct.
+	Integer formNumber = (Integer)
+	    uiForm.getAttribute(RIConstants.FORM_NUMBER_ATTR);
+	assertTrue(null != formNumber);
+	assertTrue(formNumber.intValue() == expectedFormNumber);
     }
     
     public void verifyButtonRenderer(UIComponent root) throws IOException {

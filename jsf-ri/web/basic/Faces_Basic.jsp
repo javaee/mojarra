@@ -169,6 +169,18 @@
 
       </TR>
 
+      <TR>
+
+	<TD>
+
+	      <h:command_hyperlink commandName="login" 
+                                   label="Link that behaves like a button" />
+
+	</TD>
+
+      </TR>
+
+
 
       <TR>
 
