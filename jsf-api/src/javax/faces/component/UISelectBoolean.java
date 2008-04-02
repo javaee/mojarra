@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.33 2004/01/27 23:10:13 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.34 2004/01/29 03:45:50 eburns Exp $
  */
 
 /*
@@ -19,8 +19,8 @@ import javax.faces.el.ValueBinding;
  * It is most commonly rendered as a checkbox.</p>
  *
  * <p>By default, the <code>rendererType</code> property must be set to
- * "<code>Checkbox</code>".  This value can be changed by calling the
- * <code>setRendererType()</code> method.</p>
+ * "<code>javax.faces.Checkbox</code>".  This value can be changed by
+ * calling the <code>setRendererType()</code> method.</p>
  */
 
 public class UISelectBoolean extends UIInput {

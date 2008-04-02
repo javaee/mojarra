@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.38 2004/01/27 20:29:21 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.39 2004/01/29 03:45:50 eburns Exp $
  */
 
 /*
@@ -27,8 +27,8 @@ import javax.faces.model.SelectItem;
  * radio buttons.</p>
  *
  * <p>By default, the <code>rendererType</code> property is set to
- * "<code>Menu</code>".  This value can be changed by calling the
- * <code>setRendererType()</code> method.</p>
+ * "<code>javax.faces.Menu</code>".  This value can be changed by
+ * calling the <code>setRendererType()</code> method.</p>
  */
 
 public class UISelectOne extends UIInput {

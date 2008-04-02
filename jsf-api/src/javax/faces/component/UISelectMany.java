@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.45 2004/01/27 23:10:13 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.46 2004/01/29 03:45:50 eburns Exp $
  */
 
 /*
@@ -31,8 +31,8 @@ import javax.faces.model.SelectItem;
  * checkboxes.</p>
  *
  * <p>By default, the <code>rendererType</code> property must be set to
- * "<code>Listbox</code>".  This value can be changed by calling the
- * <code>setRendererType()</code> method.</p>
+ * "<code>javax.faces.Listbox</code>".  This value can be changed by
+ * calling the <code>setRendererType()</code> method.</p>
  *
  * <p>The {@link javax.faces.render.Renderer} for this component must
  * perform the following logic on <code>getConvertedValue()</code>:</p>

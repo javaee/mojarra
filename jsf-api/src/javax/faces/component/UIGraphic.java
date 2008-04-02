@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.35 2004/01/27 23:10:12 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.36 2004/01/29 03:45:49 eburns Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.el.ValueBinding;
  * it is for display purposes only.</p>
  *
  * <p>By default, the <code>rendererType</code> property must be set to
- * "<code>Image</code>".  This value can be changed by calling the
+ * "<code>javax.faces.Image</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 

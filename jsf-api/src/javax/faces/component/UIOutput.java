@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.47 2004/01/29 01:08:20 rkitain Exp $
+ * $Id: UIOutput.java,v 1.48 2004/01/29 03:45:50 eburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.faces.el.ValueBinding;
  * </ul>
  *
  * <p>By default, the <code>rendererType</code> property must be set to
- * "<code>Text</code>".  This value can be changed by calling the
+ * "<code>javax.faces.Text</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 

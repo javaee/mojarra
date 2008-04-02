@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.40 2004/01/27 20:29:17 craigmcc Exp $
+ * $Id: UIForm.java,v 1.41 2004/01/29 03:45:49 eburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.context.FacesContext;
  * submitted.</p>
  *
  * <p>By default, the <code>rendererType</code> property must be set to
- * "<code>Form</code>".  This value can be changed by calling the
+ * "<code>javax.faces.Form</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 

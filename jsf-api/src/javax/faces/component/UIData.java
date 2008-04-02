@@ -77,7 +77,7 @@ import javax.servlet.jsp.jstl.sql.Result;
  * renderers associated with this component.</p>
  *
  * <p>By default, the <code>rendererType</code> property is set to
- * <code>Table</code>.  This value can be changed by calling the
+ * <code>javax.faces.Table</code>.  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 

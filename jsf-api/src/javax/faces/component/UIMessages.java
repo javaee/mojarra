@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessages.java,v 1.11 2004/01/27 20:29:18 craigmcc Exp $
+ * $Id: UIMessages.java,v 1.12 2004/01/29 03:45:49 eburns Exp $
  */
 
 /*
@@ -18,6 +18,11 @@ import javax.faces.el.ValueBinding;
  * user.</p>
  *
  * <p>This component supports the <code>Messages</code> renderer-type.</p>
+ *
+ * <p>By default, the <code>rendererType</code> property must be set to
+ * "<code>javax.faces.Messages</code>".  This value can be changed by
+ * calling the <code>setRendererType()</code> method.</p>
+ *
  * 
  */
 

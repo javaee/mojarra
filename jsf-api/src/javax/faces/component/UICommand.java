@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.66 2004/01/27 20:29:15 craigmcc Exp $
+ * $Id: UICommand.java,v 1.67 2004/01/29 03:45:48 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.List;
  * </ol>
  * </p>
  * <p>By default, the <code>rendererType</code> property must be set to
- * "<code>Button</code>".  This value can be changed by calling the
+ * "<code>javax.faces.Button</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 
