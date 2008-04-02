@@ -73,6 +73,8 @@
     <property name="logging.jar" value="${sandbox.dependency.base.dir}/commons-logging-${logging.version}.jar"/>
     <property name="facelets.jar" value="${sandbox.dependency.base.dir}/jsf-facelets-${facelets.version}.jar"/>
     <property name="shale.remoting.jar" value="${sandbox.dependency.base.dir}/shale-remoting-${shale.remoting.version}.jar"/>
+	<property name="jsftemplating.jar" value="${sandbox.dependency.base.dir}/jsftemplating.jar"/>
+	<property name="jsftemplating.dt.jar" value="${sandbox.dependency.base.dir}/jsftemplating-dt.jar"/>
 
     <property name="name" value="jsf-ri-sandbox"/>
     <property name="sb.impl.version" value="0.1"/>
@@ -196,6 +198,26 @@
                      usetimestamp="true"/>
             </then>
         </if>
+        <!-- JSFTemplating -->
+        <if>
+            <not>
+				<and>
+					<available file="${jsftemplating.jar}" property="ignored"/>
+					<available file="${jsftemplating.dt.jar}" property="ignored"/>
+				</and>
+            </not>
+            <then>
+                <get src="https://jsftemplating.dev.java.net/files/documents/5015/50893/jsftemplating.jar"
+                     dest="${jsftemplating.jar}"
+                     usetimestamp="true"/>
+                <get src="https://jsftemplating.dev.java.net/files/documents/5015/50895/jsftemplating-dt.jar"
+                     dest="${jsftemplating.dt.jar}"
+                     usetimestamp="true"/>
+					 
+            </then>
+        </if>
+		
+		
     </target>
 
     <target name="compile" depends="prepare,update" description="Just compile the classes">

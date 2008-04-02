@@ -27,7 +27,9 @@ import com.sun.faces.sandbox.util.YuiConstants;
 public class YuiRendererHelper {
     protected static Map<String, String> cssClasses;
     protected static Map<String, String> imageVars;
-    
+    protected static String YUI_HELPER_JS_RENDERED = "YUI_HELPER_JS";
+    protected static String YUI_HELPER_CSS_RENDERED = "YUI_HELPER_CSS";
+
     protected static Map<String, String> getCssClasses() {
         if (cssClasses == null) {
             cssClasses = new HashMap<String, String>();
@@ -43,7 +45,7 @@ public class YuiRendererHelper {
             cssClasses.put(".ygtvlph", YuiConstants.YUI_ROOT + "assets/lph.gif");
             cssClasses.put(".ygtvloading", YuiConstants.YUI_ROOT + "assets/loading.gif");
             cssClasses.put(".ygtvdepthcell", YuiConstants.YUI_ROOT + "assets/vline.gif");
-            
+
             cssClasses.put("div.yuimenu div.topscrollbar, div.yuimenu div.bottomscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
             cssClasses.put("div.yuimenu div.topscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
             cssClasses.put("div.yuimenu div.topscrollbar_disabled", YuiConstants.YUI_ROOT + "assets/map.gif");
@@ -51,18 +53,18 @@ public class YuiRendererHelper {
             cssClasses.put("div.yuimenu div.bottomscrollbar_disabled", YuiConstants.YUI_ROOT + "assets/map.gif");
             cssClasses.put("div.yuimenu li.hassubmenu em.submenuindicator, div.yuimenubar li.hassubmenu em.submenuindicator", YuiConstants.YUI_ROOT + "assets/map.gif");
             cssClasses.put("div.yuimenu li.checked em.checkedindicator", YuiConstants.YUI_ROOT + "assets/map.gif");
-            
+
             cssClasses.put(".yui-calendar .calnavleft", YuiConstants.YUI_ROOT + "assets/callt.gif");
             cssClasses.put(".yui-calendar .calnavright", YuiConstants.YUI_ROOT + "assets/calrt.gif");
         }
-        
+
         return cssClasses;
     }
-    
+
     protected static Map<String, String> getImageVars() {
         if (imageVars == null) {
             imageVars = new HashMap<String, String>();
-//            imageVars.put("YAHOO.widget.MenuItem.prototype.IMG_ROOT", "");
+//          imageVars.put("YAHOO.widget.MenuItem.prototype.IMG_ROOT", "");
             imageVars.put("YAHOO.widget.MenuItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH", 
                     YuiConstants.YUI_ROOT + "assets/menuarorght8_nrm_1.gif");
             imageVars.put("YAHOO.widget.MenuItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH", 
@@ -93,28 +95,34 @@ public class YuiRendererHelper {
         }
         return imageVars;
     }
-    
+
     public static void renderSandboxStylesheet(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
-        writer.startElement("style", comp);
-        writer.writeAttribute("type", "text/css", "type");
-        for (Map.Entry<String, String> cssClass : getCssClasses().entrySet()) {
-            writer.write(cssClass.getKey() + " {background-image:url(" + 
-                    Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, cssClass.getValue()) +
+        if (!hasResourceBeenRendered(context, YUI_HELPER_CSS_RENDERED)) {
+            writer.startElement("style", comp);
+            writer.writeAttribute("type", "text/css", "type");
+            for (Map.Entry<String, String> cssClass : getCssClasses().entrySet()) {
+                writer.write(cssClass.getKey() + " {background-image:url(" + 
+                        Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, cssClass.getValue()) +
                     ");}\n");
+            }
+            writer.endElement("style");
+            setResourceAsRendered(context, YUI_HELPER_CSS_RENDERED);
         }
-        writer.endElement("style");
     }
-    
+
     public static void renderSandboxJavaScript(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
-        writer.startElement("script", comp);
-        writer.writeAttribute("type", "text/javascript", "type");
-        writer.write("YAHOO.widget.MenuItem.prototype.IMG_ROOT = \"\";");
-        for (Map.Entry<String, String> var : getImageVars().entrySet()) {
-            writer.write(var.getKey() + " = \"" + 
-                    Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, var.getValue()) +
+        if (!hasResourceBeenRendered(context, YUI_HELPER_JS_RENDERED)) {
+            writer.startElement("script", comp);
+            writer.writeAttribute("type", "text/javascript", "type");
+            writer.write("YAHOO.widget.MenuItem.prototype.IMG_ROOT = \"\";");
+            for (Map.Entry<String, String> var : getImageVars().entrySet()) {
+                writer.write(var.getKey() + " = \"" + 
+                        Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, var.getValue()) +
                     "\";");
+            }
+            writer.endElement("script");
+            setResourceAsRendered(context, YUI_HELPER_JS_RENDERED);
         }
-        writer.endElement("script");
     }
 
     /**
@@ -124,4 +132,23 @@ public class YuiRendererHelper {
         return comp.getClientId(FacesContext.getCurrentInstance()).replaceAll(":", "_");
     }
 
+    /**
+     * @param context the <code>FacesContext</code> for the current request
+     *
+     * @return <code>true</code> If the YUI JS and CSS overrides have been rendered
+     */
+    private static boolean hasResourceBeenRendered(FacesContext context, String key) {
+        return (context.getExternalContext().getRequestMap().get(key) != null);
+    }
+
+
+    /**
+     * <p>Set a flag to indicate that the YUI JS and CSS overrides have been rendered
+     *
+     * @param context the <code>FacesContext</code> of the current request
+     */
+    @SuppressWarnings("unchecked")
+    private static void setResourceAsRendered(FacesContext context, String key) {
+        context.getExternalContext().getRequestMap().put(key, Boolean.TRUE);
+    }
 }
