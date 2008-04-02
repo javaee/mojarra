@@ -28,7 +28,7 @@
 <table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" BGCOLOR="#FFFFFF" >
 <tr>
 <td VALIGN=TOP WIDTH="100%">
-<h:graphic_image id="cardemo_img" url="cardemo.jpg" /></td>
+<h:graphic_image id="cardemo_img" url="/cardemo.jpg" /></td>
 </tr>
 
 <tr>

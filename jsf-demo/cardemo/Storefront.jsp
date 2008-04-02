@@ -35,12 +35,12 @@
 			<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 				<TR>
 					<TD WIDTH="820">
-					<h:graphic_image id="cardemo_img" url="cardemo.jpg" /><BR>
+					<h:graphic_image id="cardemo_img" url="/cardemo.jpg" /><BR>
 						
 						<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="6" WIDTH="660" BGCOLOR="white">
 							<TR>
 								<TD WIDTH="50%" VALIGN="TOP">
-								<h:graphic_image id="jalopy" url="150x126_Jalopy.jpg" /><B><FONT
+								<h:graphic_image id="jalopy" url="/150x126_Jalopy.jpg" /><B><FONT
 									SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
                                                                         <h:output_text 	id="car1title" 
 												modelReference="CarServer.car1Title"
@@ -60,7 +60,7 @@
 									
                                                                         </TD>
 								<TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
-								<h:graphic_image id="roadster" url="150x126_Roadster.jpg" /><B><FONT SIZE="4" COLOR="#330066"
+								<h:graphic_image id="roadster" url="/150x126_Roadster.jpg" /><B><FONT SIZE="4" COLOR="#330066"
 									FACE="Arial, Helvetica">
 									<h:output_text 	id="car2Title"  
 												modelReference="CarServer.car2Title" 
@@ -87,7 +87,7 @@
 							</TR>
 							<TR>
 								<TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
-								<h:graphic_image id="luxury" url="150x126_Luxury.jpg" /><B>
+								<h:graphic_image id="luxury" url="/150x126_Luxury.jpg" /><B>
 								<FONT SIZE="4" COLOR="#330066"FACE="Arial, Helvetica">
 								<h:output_text 	id="car3Title"  
 											modelReference="CarServer.car3Title" 
@@ -106,7 +106,7 @@
 											commandName="more3"/>
 								 </TD>
 								<TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
-								<h:graphic_image id="suv" url="150x126_SUV.jpg" /><B>
+								<h:graphic_image id="suv" url="/150x126_SUV.jpg" /><B>
 								<FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
 								<h:output_text 	id="car4Title"  
 												modelReference="CarServer.car4Title"

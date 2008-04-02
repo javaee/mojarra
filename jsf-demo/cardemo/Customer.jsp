@@ -24,7 +24,7 @@
 <h:form id="CustomerForm" formName="CustomerForm" modelReference="CustomerBean" >
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
 <tr>
-<td VALIGN=TOP WIDTH="100%"><img SRC="cardemo.jpg" BORDER=0 height=60 width=660
+<td VALIGN=TOP WIDTH="100%"><img SRC="/cardemo/cardemo.jpg" BORDER=0 height=60 width=660
 align=BOTTOM></td>
 </tr>
 </table>
@@ -71,7 +71,7 @@ align=BOTTOM></td>
       <td valign="top">
         <h:input_text id="middleInitial" size="1" maxlength="1" 
             modelReference="CustomerBean.middleInitial" > 
-            <f:validate_stringrange minimum="A" maximum="z"/> 
+            <f:validate_stringrange minimum="A" maximum="z"/> 
         </h:input_text>
         <h:output_errors id="mIError" compoundId="/CustomerForm/middleInitial"/> 
         <br>
@@ -187,7 +187,7 @@ align=BOTTOM></td>
                         size="5">
         <f:validate_longrange minimum="10000" maximum="99999" /> 
       </h:input_number>
-      <h:output_errors id="zipError" compoundId="/CustomerForm/zip" />    
+      <h:output_errors id="zipError" compoundId="/CustomerForm/zip" />    
             <br>
       </td>
     </tr>
@@ -246,7 +246,7 @@ align=BOTTOM></td>
 
 <hr WIDTH="100%">
 <p>
-<h:graphic_image id="duke" url="duke.gif" /> Thanks
+<h:graphic_image id="duke" url="/duke.gif" /> Thanks
 for stopping by.
 <br>
 </h:form>

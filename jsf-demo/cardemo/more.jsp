@@ -30,7 +30,7 @@
 						<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" BGCOLOR="white">
 							<TR>
 								<TD WIDTH="100%" VALIGN="TOP">
-								<h:graphic_image id="cardemo" url="cardemo.jpg" /></TD>
+								<h:graphic_image id="cardemo" url="/cardemo.jpg" /></TD>
 							</TR>
 							<TR>
 								<TD WIDTH="100%">
@@ -49,11 +49,11 @@
                                                                         </FONT><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
                                                                         <h:output_text 	id="basePrice"  
 											value="Base Price"
-											key="basePriceLabel"/>
+											key="basePriceLabel"/>
                                                                         </FONT></B><FONT FACE="Arial, Helvetica"> 
                                                                         <h:output_text 	id="currentCarBasePrice"  
 											modelReference="CurrentOptionServer.carBasePrice"
-											key="currentCarBasePriceLabel"/>
+											key="currentCarBasePriceLabel"/>
 									<BR>
 									</FONT><B>
 									<FONT COLOR="#93B629" FACE="Arial, Helvetica">
@@ -64,7 +64,7 @@
 									<FONT FACE="Arial, Helvetica">
 									<h:output_text 	id="currentCarPrice"  
 											modelReference="CurrentOptionServer.carCurrentPrice"
-											key="currentCarPriceLabel"/><BR>
+											key="currentCarPriceLabel"/><BR>
                                                                         <BR>
                                                                         <h:command_button id="buy1" commandName="buy" label="Buy" />
                                                                         </TD></FONT></TD>

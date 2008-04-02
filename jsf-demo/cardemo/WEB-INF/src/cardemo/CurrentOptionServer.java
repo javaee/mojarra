@@ -1,5 +1,5 @@
 /*
- * $Id: CurrentOptionServer.java,v 1.2 2002/10/07 22:53:05 jball Exp $
+ * $Id: CurrentOptionServer.java,v 1.3 2002/10/10 17:28:09 jvisvanathan Exp $
  */
 
 /*
@@ -124,7 +124,7 @@ public class CurrentOptionServer extends Object {
         	       throw new RuntimeException("Error Opening File:"+optionsOne);
 	            }
 		    carProps.load(in);
-                    setCarImage("200x168_Jalopy.jpg");
+                    setCarImage("/200x168_Jalopy.jpg");
                     break;
                     
                 case 2:
@@ -136,7 +136,7 @@ public class CurrentOptionServer extends Object {
         	       throw new RuntimeException("Error Opening File:"+optionsTwo);
 	            }
 		    carProps.load(in);
-                    setCarImage("200x168_Roadster.jpg");
+                    setCarImage("/200x168_Roadster.jpg");
                     break;
                     
                 case 3:
@@ -148,7 +148,7 @@ public class CurrentOptionServer extends Object {
         	       throw new RuntimeException("Error Opening File:"+optionsThree);
 	            }
 		    carProps.load(in);
-                    setCarImage("200x168_Luxury.jpg");
+                    setCarImage("/200x168_Luxury.jpg");
                     break;
                                         
                 case 4:
@@ -160,7 +160,7 @@ public class CurrentOptionServer extends Object {
         	       throw new RuntimeException("Error Opening File:"+optionsFour);
 	            }
 		    carProps.load(in);
-                    setCarImage("200x168_SUV.jpg");
+                    setCarImage("/200x168_SUV.jpg");
                     break;
                                         
 

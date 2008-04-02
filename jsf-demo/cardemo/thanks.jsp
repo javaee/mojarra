@@ -25,7 +25,7 @@
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
 <tr>
 <td VALIGN=TOP WIDTH="100%">
-<h:graphic_image id="cardemo_img" url="cardemo.jpg" /></td>
+<h:graphic_image id="cardemo_img" url="/cardemo.jpg" /></td>
 </tr>
 
 <tr>
