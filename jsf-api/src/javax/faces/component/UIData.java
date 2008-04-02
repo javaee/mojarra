@@ -376,8 +376,8 @@ public class UIData extends UIComponentBase
         // Update to the new row index
         int previous = this.rowIndex;
         this.rowIndex = rowIndex;
-        DataModel model = getDataModel();
-        model.setRowIndex(rowIndex);
+        DataModel localModel = getDataModel();
+        localModel.setRowIndex(rowIndex);
 
         // Clear or expose the current row data as a request scope attribute
         if (var != null) {
@@ -540,7 +540,7 @@ public class UIData extends UIComponentBase
      * @param value the new value
      */
     public void setValue(Object value) {
-        this.model = null;
+	setDataModel(null);
         this.value = value;
 
     }
@@ -570,7 +570,7 @@ public class UIData extends UIComponentBase
     public void setValueBinding(String name, ValueBinding binding) {
         
         if ("value".equals(name)) {
-            this.model = null;
+            setDataModel(null);
         } else if ("var".equals(name) || "rowIndex".equals(name)) {
             throw new IllegalArgumentException();
         }
@@ -674,7 +674,7 @@ public class UIData extends UIComponentBase
      */
     public void encodeBegin(FacesContext context) throws IOException {
 
-        model = null; // Rre-evaluate even with server-side state saving
+	setDataModel(null); // re-evaluate even with server-side state saving
         if (!keepSaved(context)) {
             saved = new HashMap();
         }
@@ -729,7 +729,7 @@ public class UIData extends UIComponentBase
             return;
         }
 
-        model = null; // Re-evaluate even with server-side state saving
+	setDataModel(null); // Re-evaluate even with server-side state saving
 	if (null == saved || !keepSaved(context)) {
 	    saved = new HashMap(); // We don't need saved state here
 	}
@@ -781,7 +781,7 @@ public class UIData extends UIComponentBase
             return;
         }
 	if (isNestedWithinUIData()) {
-	    model = null;
+	    setDataModel(null);
 	}
 	iterate(context, PhaseId.PROCESS_VALIDATIONS);
         // This is not a EditableValueHolder, so no further processing is required
@@ -830,7 +830,7 @@ public class UIData extends UIComponentBase
             return;
         }
 	if (isNestedWithinUIData()) {
-	    model = null;
+            setDataModel(null);
 	}
 	iterate(context, PhaseId.UPDATE_MODEL_VALUES);
         // This is not a EditableValueHolder, so no further processing is required
@@ -838,14 +838,22 @@ public class UIData extends UIComponentBase
     }
 
 
-    // --------------------------------------------------------- Private Methods
+    // --------------------------------------------------------- Protected Methods
 
 
     /**
-     * <p>Return the {@link DataModel} object representing the data objects
-     * that we will iterate over in this component's rendering.</p>
+     * <p>Return the internal {@link DataModel} object representing the
+     * data objects that we will iterate over in this component's
+     * rendering.</p>
+     *
+     * <p>If the model has been cached by a previous call to {@link
+     * #setDataModel}, return it.  Otherwise call {@link #getValue}.  If
+     * the result is null, create an empty {@link ListDataModel} and
+     * return it.  If the result is an instance of {@link DataModel},
+     * return it.  Otherwise, adapt the result as described in {@link
+     * #getValue} and return it.</p>
      */
-    private DataModel getDataModel() {
+    protected DataModel getDataModel() {
 
         // Return any previously cached DataModel instance
         if (this.model != null) {
@@ -855,23 +863,49 @@ public class UIData extends UIComponentBase
         // Synthesize a DataModel around our current value if possible
         Object current = getValue();
         if (current == null) {
-            this.model = new ListDataModel(Collections.EMPTY_LIST);
+            setDataModel(new ListDataModel(Collections.EMPTY_LIST));
         } else if (current instanceof DataModel) {
-            this.model = (DataModel) current;
+            setDataModel((DataModel) current);
         } else if (current instanceof List) {
-            this.model = new ListDataModel((List) current);
+            setDataModel(new ListDataModel((List) current));
         } else if (Object[].class.isAssignableFrom(current.getClass())) {
-            this.model = new ArrayDataModel((Object[]) current);
+            setDataModel(new ArrayDataModel((Object[]) current));
         } else if (current instanceof ResultSet) {
-            this.model = new ResultSetDataModel((ResultSet) current);
+            setDataModel(new ResultSetDataModel((ResultSet) current));
         } else if (current instanceof Result) {
-            this.model = new ResultDataModel((Result) current);
+            setDataModel(new ResultDataModel((Result) current));
         } else {
-            this.model = new ScalarDataModel(current);
+            setDataModel(new ScalarDataModel(current));
         }
 	return (model);
 
     }
+
+    /**
+     * <p>Set the internal DataModel.  This <code>UIData</code> instance
+     * must use the given {@link DataModel} as its internal value
+     * representation from now until the next call to
+     * <code>setDataModel</code>.  If the given <code>DataModel</code>
+     * is <code>null</code>, the internal <code>DataModel</code> must be
+     * reset in a manner so that the next call to {@link #getDataModel}
+     * causes lazy instantion of a newly refreshed
+     * <code>DataModel</code>.</p>
+     *
+     * <p>Subclasses might call this method if they either want to
+     * restore the internal <code>DataModel</code> during the
+     * <em>Restore View</em> phase or if they want to explicitly refresh
+     * the current <code>DataModel</code> for the <em>Render
+     * Response</em> phase.</p>
+     *
+     * @param dataModel the new <code>DataModel</code> or
+     * <code>null</code> to cause the model to be refreshed.
+     */
+
+    protected void setDataModel(DataModel dataModel) {
+	this.model = dataModel;
+    }
+
+    // ---------------------------------------------------- Private Methods
 
 
     /**
