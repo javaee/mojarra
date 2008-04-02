@@ -397,9 +397,15 @@
     <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>empty</body-content>
     <description>
-      Load a resource bundle localized for the Locale
-      of the current view, and expose it (as a Map) in
-      the request attributes of the current request.
+      Load a resource bundle localized for the Locale of the current
+      view, and expose it as a java.util.Map in the request attributes
+      of the current request under the key specified by the value of the
+      "var" attribute of this tag.  The Map must behave such that if a
+      get() call is made for a key that does not exist in the Map, the
+      literal string ???KEY??? is returned from the Map, where KEY is
+      the key being looked up in the Map, instead of a
+      MissingResourceException being thrown.  If the ResourceBundle does
+      not exist, a JspException must be thrown.
     </description>
 
     <attribute>
