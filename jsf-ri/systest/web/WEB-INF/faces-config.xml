@@ -65,32 +65,32 @@
     <message>
       <message-id>Custom1A</message-id>
       <summary>This Is Custom1A Summary</summary>
-      <detail>This Is Custom1A Detail</summary>
+      <detail>This Is Custom1A Detail</detail>
     </message>
     <message>
       <message-id>Custom1B</message-id>
       <summary>This Is Custom1B Summary</summary>
-      <detail>This Is Custom1B Detail</summary>
+      <detail>This Is Custom1B Detail</detail>
     </message>
     <message>
       <message-id>Custom1B</message-id>
       <summary>This Is Custom1B Summary</summary>
-      <detail>This Is Custom1B Detail</summary>
+      <detail>This Is Custom1B Detail</detail>
     </message>
     <message xml:lang="en">
       <message-id>Custom1B</message-id>
       <summary>This Is Custom1B Summary (en)</summary>
-      <detail>This Is Custom1B Detail (en)</summary>
+      <detail>This Is Custom1B Detail (en)</detail>
     </message>
     <message xml:lang="fr">
       <message-id>Custom1B</message-id>
       <summary>This Is Custom1B Summary (fr)</summary>
-      <detail>This Is Custom1B Detail (fr)</summary>
+      <detail>This Is Custom1B Detail (fr)</detail>
     </message>
     <message>
       <message-id>Custom1C</message-id>
       <summary>This Is Custom1C Summary</summary>
-      <detail>This Is Custom1C Detail</summary>
+      <detail>This Is Custom1C Detail</detail>
     </message>
   </message-resources>
 
@@ -100,36 +100,36 @@
     <message>
       <message-id>Custom2A</message-id>
       <summary>This Is Custom2A Summary</summary>
-      <detail>This Is Custom2A Detail</summary>
+      <detail>This Is Custom2A Detail</detail>
     </message>
     <message>
       <message-id>Custom2B</message-id>
       <summary>This Is Custom2B Summary</summary>
-      <detail>This Is Custom2B Detail</summary>
+      <detail>This Is Custom2B Detail</detail>
     </message>
-  <message-resources>
+  </message-resources>
 
   <message-resources>
     <message-resources-id>Custom2</message-resources-id>
     <message>
       <message-id>Custom2B</message-id>
       <summary>This Is Custom2B Summary</summary>
-      <detail>This Is Custom2B Detail</summary>
+      <detail>This Is Custom2B Detail</detail>
     </message>
     <message xml:lang="en">
       <message-id>Custom2B</message-id>
       <summary>This Is Custom2B Summary (en)</summary>
-      <detail>This Is Custom2B Detail (en)</summary>
+      <detail>This Is Custom2B Detail (en)</detail>
     </message>
     <message xml:lang="fr">
       <message-id>Custom2B</message-id>
       <summary>This Is Custom2B Summary (fr)</summary>
-      <detail>This Is Custom2B Detail (fr)</summary>
+      <detail>This Is Custom2B Detail (fr)</detail>
     </message>
     <message>
       <message-id>Custom2C</message-id>
       <summary>This Is Custom2C Summary</summary>
-      <detail>This Is Custom2C Detail</summary>
+      <detail>This Is Custom2C Detail</detail>
     </message>
   </message-resources>
 

@@ -33,7 +33,7 @@
 
   // Acquire the MessageResources bundle
   MessageResources mr =
-    appl.getMessageResources("Custom2A");
+    appl.getMessageResources("Custom2");
   if (mr == null) {
     out.println("/message04.jsp FAILED - No MessageResources returned");
     return;
