@@ -4,8 +4,14 @@ Building, Deploying And Running The Multiple Renderkits Demo
 
 REQUIREMENTS:
 
- - Mozilla browser with SVG support - FireFox - the demo uses
-   XMLHttpRequest.
+ - Mozilla browser with SVG support - Firefox - the demo uses
+   XMLHttpRequest.  Until there is better SVG support in Firefox,
+   you should use the "next generation" Firefox builds - under the 
+   "deerpark" project.  
+   See: http://www.mozilla.org/projects/svg/faq.html
+   And here is where you can get a deer park alpha 2 build:
+       http://www.mozilla.org/projects/deerpark/releases/alpha2.html
+   
  - JSP 1.2 container
 
 BUILDING:
