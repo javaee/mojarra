@@ -78,7 +78,7 @@
   
   <property name="Name" value="JSF Demos"/>
   <property name="name" value="jsf-demo"/>
-  <property name="version" value="20031214_BETA"/>
+  <property name="version" value="20031224"/>
   
   <property name="build.home" value="${basedir}/build"/>
 
