@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigRenderKit.java,v 1.2 2003/05/05 23:31:32 craigmcc Exp $
+ * $Id: ConfigRenderKit.java,v 1.3 2003/10/06 19:26:52 rkitain Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ public class ConfigRenderKit extends ConfigFeature {
     }
 
     private String renderKitClass =
-        "com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit";
+        "com.sun.faces.renderkit.RenderKitImpl";
     public String getRenderKitClass() {
         return (this.renderKitClass);
     }

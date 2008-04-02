@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.37 2003/09/26 14:26:49 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.38 2003/10/06 19:26:52 rkitain Exp $
  */
 
 /*
@@ -11,10 +11,10 @@ package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationImpl;
-import com.sun.faces.application.NavigationHandlerImpl;
 import com.sun.faces.application.MessageCatalog;
 import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.application.MessageTemplate;
+import com.sun.faces.application.NavigationHandlerImpl;
 import com.sun.faces.util.Util;
 
 import java.io.InputStream;
@@ -25,13 +25,13 @@ import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Message;
 import javax.faces.application.MessageImpl;
 import javax.faces.application.MessageResources;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
-import javax.faces.application.Application;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
@@ -53,12 +53,12 @@ import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.BooleanConverter;
 import org.apache.commons.beanutils.converters.ByteConverter;
-import org.apache.commons.beanutils.converters.ShortConverter;
 import org.apache.commons.beanutils.converters.CharacterConverter;
-import org.apache.commons.beanutils.converters.IntegerConverter;
 import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.beanutils.converters.FloatConverter;
+import org.apache.commons.beanutils.converters.IntegerConverter;
 import org.apache.commons.beanutils.converters.LongConverter;
+import org.apache.commons.beanutils.converters.ShortConverter;
 import org.mozilla.util.Assert;
 
 import org.xml.sax.Attributes;
@@ -1010,8 +1010,15 @@ final class RenderKitRule extends Rule {
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	String renderKitId = cr.getRenderKitId();
-        RenderKit renderKit =
-            renderKitFactory.getRenderKit(renderKitId);
+	RenderKit renderKit = null;
+        String renderKitClass = cr.getRenderKitClass();
+        try {
+            Class renderKitClazz = Util.loadClass(renderKitClass, this);
+            renderKit = (RenderKit)renderKitClazz.newInstance();
+            renderKitFactory.addRenderKit(renderKitId, renderKit);
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
         Map renderersMap = cr.getRenderers();
         Iterator rendererIds = renderersMap.keySet().iterator();
         while (rendererIds.hasNext()) {
