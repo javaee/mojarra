@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.60 2004/04/07 17:22:10 eburns Exp $
+ * $Id: RIConstants.java,v 1.61 2004/04/20 18:27:22 eburns Exp $
  */
 
 /*
@@ -112,6 +112,19 @@ public class RIConstants {
         FACES_PREFIX + "resources.Resources";
 
     public static final Object NO_VALUE = new String();
+
+    private static boolean htmlTLVActive = false;
+
+    public static final String ENABLE_HTML_TLV = FACES_PREFIX + 
+	"enableHtmlTagLibValidator";
+    
+    public static boolean isHtmlTagLibValidatorActive() {
+	return htmlTLVActive;
+    }
+
+    public static void setHtmlTagLibValidatorActive(boolean state) {
+	htmlTLVActive = state;
+    }
 
 
 }

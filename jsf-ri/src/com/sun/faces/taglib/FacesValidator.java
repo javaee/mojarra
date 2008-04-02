@@ -1,5 +1,5 @@
 /*
- * $Id: FacesValidator.java,v 1.11 2004/02/26 20:33:11 eburns Exp $
+ * $Id: FacesValidator.java,v 1.12 2004/04/20 18:27:24 eburns Exp $
  */
 
 /*
@@ -153,6 +153,11 @@ public abstract class FacesValidator extends TagLibraryValidator {
         init();
     }
 
+    /**
+     * <p>Subclass override.  If it returns null, the subclass is
+     * telling us: do not validate.</p>
+     */
+
 
     protected abstract DefaultHandler getSAXHandler();
 
@@ -178,6 +183,12 @@ public abstract class FacesValidator extends TagLibraryValidator {
 
 // get a handler
             DefaultHandler h = getSAXHandler();
+
+	    // if the subclass doesn't want validation to ocurr
+	    if (null == h) {
+		// don't validate
+		return result;
+	    }
 
             // parse the page
             SAXParserFactory f = SAXParserFactory.newInstance();

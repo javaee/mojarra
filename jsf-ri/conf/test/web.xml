@@ -17,6 +17,10 @@
         <param-value>server</param-value>
     </context-param>
     <context-param>
+        <param-name>com.sun.faces.enableHtmlTagLibValidator</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
         <param-name>com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION</param-name>
         <param-value>15</param-value>
     </context-param>

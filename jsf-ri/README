@@ -18,136 +18,19 @@ distribution in your WEB-INF/lib directory in your webapp.
 Major changes/features in this release:
 =======================================
 
-There have been a few significant changes since the Beta Relase of
-JavaServer(tm) Faces Technology.
+Here are the changes since the 1.0 release
 
-* The tag names for all tags in the jsf_core and html_basic TLDs have
-  been changed to be CamelCase (http://en.wikipedia.org/wiki/CamelCase)
-  with the first letter being lower case.  For example, <h:input_text>
-  becomes <h:inputText>.  All attributes that are passed through to
-  straight to the rendered markup are all lowercase, for example,
-  <h:commandButton onblur="foo()" /> All attributes that are interpreted
-  by the Renderer itself are CamelCase with the first letter being lower
-  case.
+* Tag Library Validation in the html_basic taglib is disabled by
+  default.  To enable it set the
+  "com.sun.faces.enableHtmlTagLibValidator" ServletContext init param to
+  true in your web.xml, like this:
 
-* The names for the following entities in the application configuration
-  resources file have changed to be prefixed with javax.faces to denote
-  that these are reserved names:
-
-  component-type, component-family, renderer-type, converter-id,
-  validator-id
-
-* Change how renderers are looked up.  Every component now has two
-  properties to locate an appropriate Renderer: componentFamily, and
-  rendererType.  This change allows a clean separation for components
-  that can have multiple renderer types, such as UICommand with Link or
-  Button renderers, or renderer types that can handle multiple
-  components, such as the text renderer rendering UIOutput or UIInput
-  components.  The signature for RenderKit.getRenderer() has changed.
+    <context-param>
+        <param-name>com.sun.faces.enableHtmlTagLibValidator</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
 
-  Please see the javadocs for more information.
-
-* As with the objects created by the FacesFactory, now the following
-  objects that can be over-ridden in the <application> element can take
-  advantage of the decorator pattern to allow your custom implementation
-  to have access to the implementation previously filling that role:
-
-  action-listener, navigation-handler, view-handler, state-manager,
-  property-resolver, variable-resolver
-
-  In order to take advantage of this facility, your custom
-  implementation must have a public constructor that takes the
-  appropriate class you are trying to override.
-
-* the render-kit-id for the default RenderKit is now HTML_BASIC
-
-* The Standard HTML RenderKit specification is now documented.  Please
-  see the "renderkitdocs" directory in the binary distribution.
-
-* Support for an app to use a non standard render-kit.
-
-  default-render-kit-id is an optional sub-element of the <application>
-  element.  Setting this element in your application configuration
-  resources file will cause your RenderKit to be used instead of the
-  HTML_BASIC render-kit.  This change caused several changes in methods
-  in ViewHandler and StateManager.  Please see the javadocs for details.
-
-  The "renderKitId" attribute has been removed from the <f:view> tag.
-
-* a validator signals that validation has failed by throwing an
-  ValidationException.  Also, the signature for Validator.validate() has
-  changed.
-
-  Please see the javadocs for more information.
-
-* Changes in value handling, validation, and timing of Conversion
-
-  Please see section 2.5.1 for a brief holistic description of this
-  process.  Note that This change only impacts faces implementation
-  providers and advanced custom component authors.  These changes are 
-  transparent to page authors.
-
-  Remove the class ConvertibleValueHolder.  Note that anything that has
-  a value that could possibly be interesting to the model tier is liable
-  for conversion.  Thus, the notion of having a converter has been moved
-  up to the root ValueHolder interface.
-
-  Introduce interface EditableValueHolder extends ValueHolder.  This
-  defines the contract for things that are have values that can be
-  changed by the user.  As such, it supports listeners and validators.
-
-* The checked attribute on selectBooleanCheckbox is now replaced by the
-  value attribute.
-
-* The "method" and "action" attributes have been removed from <h:form>
-  since their values must be constrained by the implementation.
-
-* The "onclick" attribute has been removed from <h:commandLink>, since
-  the renderer generates this attribute to allow the component to look
-  like a hyperlink, but function like a button.
-
-* Allowing mixed literals and EL in a JSF EL expression.  Allow full JSP
-  2.0 eval syntax and operators in JSF EL.
-
-* JSF has been tested and is know to work with Tiles.
-
-* ValueBinding instances are no longer cached in the application.  This
-  means Application.getValueBinding() has been replaced with
-  Application.createValueBinding().
-
-* If the setId() method has manually been called on the component, the renderer
-  will generate an "id" attribute in the rendered markup, the value of
-  which is obtained from the getClientId() method on the component.
-
-* UICommand doesn't add the default ActionListener to itself, it just
-  calls Application.getActionListener().
-
-* When using <f:loadBundle> trying to access a resource that happens to
-  be missing from the ResourceBundle yields ???key???.
-
-* UIMessage changes
-
-    UIMessages no longer has a "for" property
-
-    The default values for showSummary and showDetail for UIMessage and
-    UIMessages are as follows:
-
-                    UIMessage     UIMessages
-      showSummary     false         true
-      showDetail      true          false
-
-    This flips the defaults for UIMessage, and means that if you use
-    UIMessages up top and UIMessage next to the component, you'll get a
-    summary of all error messages up top, and detailed explanations
-    below.
-
-    Modified FacesMessage such that the "detail" property will be the
-    same as the "summary" property unless it was set to something
-    explicitly different.  
-
-* StateManager is now a property of the Application, rather than the
-  RenderKit.  It also can be configurable in the faces-config.xml
 
 Logging support and configuration steps
 =======================================

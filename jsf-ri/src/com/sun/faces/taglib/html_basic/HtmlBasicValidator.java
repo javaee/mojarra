@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicValidator.java,v 1.8 2004/02/26 20:33:14 eburns Exp $
+ * $Id: HtmlBasicValidator.java,v 1.9 2004/04/20 18:27:25 eburns Exp $
  */
 
 /*
@@ -14,6 +14,9 @@ import com.sun.faces.taglib.ValidatorInfo;
 import com.sun.faces.util.Util;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
+
+import com.sun.faces.RIConstants;
+
 
 /**
  * <p>Top level validator for the html_basic tld</p>
@@ -55,6 +58,14 @@ public class HtmlBasicValidator extends FacesValidator {
 
 
     protected DefaultHandler getSAXHandler() {
+	// don't run the TLV if we're in designTime, or the RIConstants
+	// says not to.
+	
+	if (java.beans.Beans.isDesignTime() || 
+	    !RIConstants.isHtmlTagLibValidatorActive()) {
+	    return null;
+	}
+	
         DefaultHandler h = new HtmlBasicValidatorHandler();
         return h;
     }

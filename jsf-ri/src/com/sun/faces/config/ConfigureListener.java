@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.12 2004/04/08 22:54:44 eburns Exp $
+ * $Id: ConfigureListener.java,v 1.13 2004/04/20 18:27:23 eburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
@@ -149,6 +149,15 @@ public class ConfigureListener implements ServletContextListener {
 	catch (Exception e) {
 	    if (log.isDebugEnabled()) {
 		log.debug("Can't query for test environment");
+	    }
+	}
+
+	// see if we need to disable our TLValidator
+	String enableHtmlTLValidator = null;
+	if (null != (enableHtmlTLValidator = 
+		     context.getInitParameter(RIConstants.ENABLE_HTML_TLV))) {
+	    if (enableHtmlTLValidator.toString().equals("true")) {
+		RIConstants.setHtmlTagLibValidatorActive(true);
 	    }
 	}
         URL url = null;
