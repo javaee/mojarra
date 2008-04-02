@@ -116,7 +116,7 @@
   </td>
 
   <td>
-    <h:message               for="nestedssCheckbox"/>
+    <h:message               for="nestedsCheckbox"/>
   </td>
 
 </tr>

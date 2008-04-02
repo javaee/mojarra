@@ -3,9 +3,14 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UISelectMany.jsp,v 1.6 2004/02/05 16:25:20 rlubke Exp $ --%>
+<%-- $Id: UISelectMany.jsp,v 1.7 2004/02/06 06:43:44 craigmcc Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+
+
 <html>
   <head>
     <title>UISelectMany</title>
@@ -15,9 +20,6 @@
 
     <h1>UISelectMany</h1>
 
-    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-
      <f:loadBundle basename="standard.Resources" var="standardBundle"/>
 
      <jsp:useBean id="LoginBean" class="standard.LoginBean" scope="session" />
@@ -25,8 +27,7 @@
 
        <p>Form is rendered after this.</p>
      
-       <h:form id="standardRenderKitForm" 
-                  >
+       <h:form id="standardRenderKitForm">
 
          <h:commandButton id="standardRenderKitSubmit" 
              action="success"
@@ -44,6 +45,8 @@
            <%@ include file="selectmany_listbox_row.jsp" %>
 
            <%@ include file="selectmany_checkbox_row.jsp" %>
+
+           <%@ include file="selectmany_nonstring_row.jsp" %>
 
          </table>
 
