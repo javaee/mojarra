@@ -91,8 +91,6 @@
 
     <ant target="clean" dir="nonjsp"/>
 
-    <ant target="clean" dir="imageMapRender"/>
-
   </target>
 
   <target name="prepare.build" >
@@ -118,7 +116,6 @@
     <ant dir="${basedir}/cardemo"/>
     <ant dir="${basedir}/helloDuke"/>
     <ant dir="${basedir}/guessNumber"/>
-    <ant dir="${basedir}/imageMapRender"/>
     <ant dir="${basedir}/nonjsp"/>
 
   </target>
