@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.11 2003/07/29 00:42:34 craigmcc Exp $
+ * $Id: MockFacesContext.java,v 1.12 2003/08/22 14:03:29 eburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import java.util.Map;
 import javax.faces.application.Application;
 import javax.faces.application.Message;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
@@ -158,11 +158,11 @@ public class MockFacesContext extends FacesContext {
 
 
     // root
-    private UIPage root = null;
-    public UIPage getRoot() {
+    private UIViewRoot root = null;
+    public UIViewRoot getViewRoot() {
         return (this.root);
     }
-    public void setRoot(UIPage root) {
+    public void setViewRoot(UIViewRoot root) {
         this.root = root;
     }
 

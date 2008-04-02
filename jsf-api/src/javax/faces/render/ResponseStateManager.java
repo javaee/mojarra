@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.4 2003/08/02 05:11:34 eburns Exp $
+ * $Id: ResponseStateManager.java,v 1.5 2003/08/22 14:03:20 eburns Exp $
  */
 
 /*
@@ -35,8 +35,8 @@ public abstract class ResponseStateManager {
     * only interpreted by this <code>ResponseStateManager</code>
     * implementation, to be immediately written to the
     * <code>ResponseWriter</code> for this request.  This marker
-    * encapsulates the state of the tree.  This method must be called
-    * once per <code>UIForm</code> instance in the tree.</p>
+    * encapsulates the state of the view.  This method must be called
+    * once per <code>UIForm</code> instance in the view.</p>
 
     */
 
@@ -72,18 +72,18 @@ public abstract class ResponseStateManager {
     */
 
     public abstract Object getTreeStructureToRestore(FacesContext context, 
-						     String treeId);
+						     String viewId);
 
     /**
 
     * <p>The implementation must inspect the current requst and return
-    * the tree state Object passed to it on a previous invocation of
-    * <code>writeState()</code>.</p>
+    * the component state Object passed to it on a previous invocation
+    * of <code>writeState()</code>.</p>
 
-    * @return the tree Object string passed in to
+    * @return the component state Object passed in to
     * <code>writeState</code>.
 
     */
 
-    public abstract Object getTreeStateToRestore(FacesContext context);
+    public abstract Object getComponentStateToRestore(FacesContext context);
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIPageBase.java,v 1.3 2003/07/29 16:38:04 eburns Exp $
+ * $Id: UIViewRootBase.java,v 1.1 2003/08/22 14:03:15 eburns Exp $
  */
 
 /*
@@ -9,16 +9,16 @@
 
 package javax.faces.component.base;
 
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 import java.io.IOException;
 
-public class UIPageBase extends UINamingContainerBase implements UIPage {
+public class UIViewRootBase extends UINamingContainerBase implements UIViewRoot {
 
     // -------------------------------------------------------- Constructors
 
-    public UIPageBase() { 
+    public UIViewRootBase() { 
 	setRendererType(null);
     }
 
@@ -34,14 +34,14 @@ public class UIPageBase extends UINamingContainerBase implements UIPage {
 	renderKitId = newRenderKitId;
     }
 
-    private String treeId = null;
+    private String viewId = null;
 
-    public String getTreeId() {
-	return treeId;
+    public String getViewId() {
+	return viewId;
     }
 
-    public void setTreeId(String newTreeId) {
-	treeId = newTreeId;
+    public void setViewId(String newViewId) {
+	viewId = newViewId;
     }
 
     // --------------------------------------------- methods from StateHolder
@@ -55,9 +55,9 @@ public class UIPageBase extends UINamingContainerBase implements UIPage {
 	if (renderKitId.equals("null")) {
 	    renderKitId = null;
 	}
-	treeId = stateStr.substring(i + STATE_SEP_LEN);
-	if (treeId.equals("null")) {
-	    treeId = null;
+	viewId = stateStr.substring(i + STATE_SEP_LEN);
+	if (viewId.equals("null")) {
+	    viewId = null;
 	}
 
 	super.restoreState(context, state[SUPER_INDEX]);
@@ -66,7 +66,7 @@ public class UIPageBase extends UINamingContainerBase implements UIPage {
     public Object getState(FacesContext context) {
 	Object superState = super.getState(context);
 	Object [] result = new Object[2];
-	result[THIS_INDEX] = renderKitId + STATE_SEP + treeId;
+	result[THIS_INDEX] = renderKitId + STATE_SEP + viewId;
 	result[SUPER_INDEX] = superState;
 	return result;
     }

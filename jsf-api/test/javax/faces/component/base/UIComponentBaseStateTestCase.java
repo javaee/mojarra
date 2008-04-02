@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseStateTestCase.java,v 1.2 2003/08/15 17:23:51 craigmcc Exp $
+ * $Id: UIComponentBaseStateTestCase.java,v 1.3 2003/08/22 14:03:25 eburns Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentTestCase;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.LongConverter;
 import javax.faces.event.FacesEvent;
@@ -75,21 +75,21 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
     // ------------------------------------------------- Individual Test Methods
 
     public void testProcessState() {
-	UIPageBase root1 = createTestTree();
-	UIPageBase root2 = createTestTree();
+	UIViewRootBase root1 = createTestView();
+	UIViewRootBase root2 = createTestView();
 
-	assertTrue(verifyTestTreesAreEqual(root1, root2));
+	assertTrue(verifyTestViewsAreEqual(root1, root2));
 
-	applyAttributesToTestTree(root1);
+	applyAttributesToTestView(root1);
 	try {
-	    Object treeState = root1.processGetState(facesContext);
-	    root2.processRestoreState(facesContext, treeState);
+	    Object componentState = root1.processGetState(facesContext);
+	    root2.processRestoreState(facesContext, componentState);
 	 
 	}
 	catch (Throwable t) {
 	    assertTrue(false);
 	}
-	assertTrue(verifyTestTreesAreEqual(root1, root2));
+	assertTrue(verifyTestViewsAreEqual(root1, root2));
     }
 
     // --------------------------------------------------------- Support Methods
@@ -97,11 +97,11 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
     /**
      *
      * @return a UIComponent tree consisting of
-     * UIPage(UIForm(UIInput,UIInput,UIOutput,UICommand))
+     * UIViewRoot(UIForm(UIInput,UIInput,UIOutput,UICommand))
      */
 
-    protected UIPageBase createTestTree() {
-	UIPageBase root = new UIPageBase();
+    protected UIViewRootBase createTestView() {
+	UIViewRootBase root = new UIViewRootBase();
 	root.setRendererType(null);
 	UIFormBase form = new UIFormBase();
 	form.setRendererType(null);
@@ -125,8 +125,8 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	return root;
     }
 
-    protected void applyAttributesToTestTree(UIPageBase root) {
-	root.setTreeId("treeId");
+    protected void applyAttributesToTestView(UIViewRootBase root) {
+	root.setViewId("viewId");
 	root.setId("page");
 	root.setRenderKitId("renderKitId");
 	UIFormBase form = (UIFormBase) root.getChildren().get(0);
@@ -176,9 +176,9 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	selectItem.setItemDescription("description");
     }
 
-    protected boolean verifyTestTreesAreEqual(UIPageBase root1, 
-					      UIPageBase root2) {
-	UIPageBaseTestCase pageBaseTester = new UIPageBaseTestCase("temp");
+    protected boolean verifyTestViewsAreEqual(UIViewRootBase root1, 
+					      UIViewRootBase root2) {
+	UIViewRootBaseTestCase pageBaseTester = new UIViewRootBaseTestCase("temp");
 	UIInputBaseTestCase inputBaseTester = new UIInputBaseTestCase("temp");
 	UIOutputBaseTestCase outputBaseTester = new UIOutputBaseTestCase("temp");
 	UICommandBaseTestCase commandBaseTester = new UICommandBaseTestCase("temp");

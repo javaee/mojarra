@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.12 2003/08/18 16:38:27 eburns Exp $
+ * $Id: Validator.java,v 1.13 2003/08/22 14:03:21 eburns Exp $
  */
 
 /*
@@ -18,10 +18,10 @@ import javax.faces.application.Message;
 
 
 /**
- * <p>A <strong>Validator</strong> implementation is a class that can perform
- * validation (correctness checks) on a {@link UIInput}.  Zero or more
- * <code>Validator</code>s can be associated with each {@link UIInput}
- * in the component tree, and are called during the <em>Process
+ * <p>A <strong>Validator</strong> implementation is a class that can
+ * perform validation (correctness checks) on a {@link UIInput}.  Zero
+ * or more <code>Validator</code>s can be associated with each {@link
+ * UIInput} in the view, and are called during the <em>Process
  * Validations</em> phase of the request processing lifecycle.</p>
  *
  * <p>Individual {@link Validator}s should examine the component that
@@ -38,10 +38,11 @@ import javax.faces.application.Message;
  * class.  For example, a range check {@link Validator} might support
  * configuration of the minimum and maximum values to be used.</p>
  *
- * <p>{@link Validator} implementations must have a zero-arguments public
- * constructor.  In addition, if the {@link Validator} class wishes to have
- * configuration property values saved and restored with the component tree,
- * the implementation must also implement {@link StateHolder}.</p>
+ * <p>{@link Validator} implementations must have a zero-arguments
+ * public constructor.  In addition, if the {@link Validator} class
+ * wishes to have configuration property values saved and restored with
+ * the view, the implementation must also implement {@link
+ * StateHolder}.</p>
  */
 
 public interface Validator {

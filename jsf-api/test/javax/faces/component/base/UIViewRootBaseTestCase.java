@@ -1,5 +1,5 @@
 /*
- * $Id: UIPageBaseTestCase.java,v 1.3 2003/07/31 12:22:28 eburns Exp $
+ * $Id: UIViewRootBaseTestCase.java,v 1.1 2003/08/22 14:03:27 eburns Exp $
  */
 
 /*
@@ -15,7 +15,7 @@ import javax.faces.event.FacesEvent;
 import javax.faces.validator.Validator;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -28,11 +28,11 @@ import javax.faces.mock.MockLifecycle;
 import javax.faces.mock.MockServletContext;
 
 /**
- * <p>Test case for the <strong>javax.faces.base.UIPageBase</strong>
+ * <p>Test case for the <strong>javax.faces.base.UIViewRootBase</strong>
  * concrete class.</p>
  */
 
-public class UIPageBaseTestCase extends UIComponentBaseTestCase {
+public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
 
 
     // ----------------------------------------------------- Instance Variables
@@ -47,7 +47,7 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
      *
      * @param name Name of the test case
      */
-    public UIPageBaseTestCase(String name) {
+    public UIViewRootBaseTestCase(String name) {
         super(name);
     }
 
@@ -59,7 +59,7 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
      */
     public static Test suite() {
 
-        return (new TestSuite(UIPageBaseTestCase.class));
+        return (new TestSuite(UIViewRootBaseTestCase.class));
 
     }
 
@@ -77,15 +77,15 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
 
     public void testStateHolder() {
         UIComponent testParent = new TestComponentNamingContainer("root");
-	UIPageBase
+	UIViewRootBase
 	    preSave = null,
 	    postSave = null;
 	Object state = null;
 
-	// test page with treeId and no renderKitId
+	// test page with viewId and no renderKitId
 	testParent.getChildren().clear();
-	preSave = new UIPageBase();
-	preSave.setTreeId("treeId");
+	preSave = new UIViewRootBase();
+	preSave.setViewId("viewId");
 	preSave.setId("page");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
@@ -93,8 +93,8 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIPageBase();
-	postSave.setId("newTreeId");
+	postSave = new UIViewRootBase();
+	postSave.setId("newViewId");
 	testParent.getChildren().add(postSave);
 	try {
 	    postSave.restoreState(facesContext, state);
@@ -104,10 +104,10 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
 	}
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test page with treeId and renderKitId
+	// test page with viewId and renderKitId
 	testParent.getChildren().clear();
-	preSave = new UIPageBase();
-	preSave.setTreeId("treeId");
+	preSave = new UIViewRootBase();
+	preSave.setViewId("viewId");
 	preSave.setId("page");
 	preSave.setRenderKitId("renderKitId");
 	preSave.setRendererType(null); // necessary: we have no renderkit
@@ -116,8 +116,8 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
-	postSave = new UIPageBase();
-	postSave.setId("newTreeId1");
+	postSave = new UIViewRootBase();
+	postSave.setId("newViewId1");
 	testParent.getChildren().add(postSave);
 	try {
 	    postSave.restoreState(facesContext, state);
@@ -135,13 +135,13 @@ public class UIPageBaseTestCase extends UIComponentBaseTestCase {
 			       UIComponent comp1,
 			       UIComponent comp2) {
 	if (super.propertiesAreEqual(context, comp1, comp2)) {
-	    UIPageBase 
-		page1 = (UIPageBase) comp1,
-		page2 = (UIPageBase) comp2;
+	    UIViewRootBase 
+		page1 = (UIViewRootBase) comp1,
+		page2 = (UIViewRootBase) comp2;
 	    // if their not both null, or not the same string
-	    if (!((null == page1.getTreeId() && 
-		   null == page2.getTreeId()) ||
-		(page1.getTreeId().equals(page2.getTreeId())))) {
+	    if (!((null == page1.getViewId() && 
+		   null == page2.getViewId()) ||
+		(page1.getViewId().equals(page2.getViewId())))) {
 		return false;
 	    }
 	    // if their not both null, or not the same string

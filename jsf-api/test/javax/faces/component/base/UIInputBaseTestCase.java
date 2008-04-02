@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBaseTestCase.java,v 1.5 2003/07/31 12:22:27 eburns Exp $
+ * $Id: UIInputBaseTestCase.java,v 1.6 2003/08/22 14:03:26 eburns Exp $
  */
 
 /*
@@ -210,7 +210,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
 
         // Fire events and evaluate results
         TestValueChangedListener.trace(null);
-        assertTrue(input.broadcast(event, PhaseId.RESTORE_COMPONENT_TREE));
+        assertTrue(input.broadcast(event, PhaseId.RESTORE_VIEW));
         assertTrue(input.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
         assertTrue(!input.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
         assertTrue(!input.broadcast(event, PhaseId.UPDATE_MODEL_VALUES));

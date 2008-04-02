@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.7 2003/07/31 12:22:27 eburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.8 2003/08/22 14:03:26 eburns Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentTestCase;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.mock.MockExternalContext;
@@ -97,9 +97,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
             new MockExternalContext(servletContext, request, response);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
-	UIPageBase root = new UIPageBase();
-	root.setTreeId("/treeId");
-        facesContext.setRoot(root);
+	UIViewRootBase root = new UIViewRootBase();
+	root.setViewId("/viewId");
+        facesContext.setViewRoot(root);
         ApplicationFactory applicationFactory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (MockApplication) applicationFactory.getApplication();
@@ -150,7 +150,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     // Test lifecycle management methods
     public void testLifecycleManagement() {
 
-        // Establish a component tree with multiple facets and children
+        // Establish a view with multiple facets and children
         UIComponent facet1 = new TestComponent("f1");
         UIComponent facet2 = new TestComponent("f2");
         UIComponent facet3 = new TestComponent("f3");

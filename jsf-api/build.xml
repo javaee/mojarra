@@ -18,7 +18,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="20030818"/>
+  <property name="version"          value="20030822"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -206,7 +206,7 @@
                 test.UIInputBase,
                 test.UINamingContainerBase,
                 test.UIOutputBase,
-                test.UIPageBase,
+                test.UIViewRoot,
                 test.UIPanelBase,
                 test.UIParameterBase,
                 test.UISelectBooleanBase,
@@ -343,8 +343,8 @@
     </java>
   </target>
 
-  <target name="test.UIPageBase" depends="build.test">
-    <echo message="Running UIPageBase tests ..."/>
+  <target name="test.UIViewRoot" depends="build.test">
+    <echo message="Running UIViewRoot tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
@@ -352,7 +352,7 @@
                  value="javax.faces.mock.MockApplicationFactory"/>
       <sysproperty key="javax.faces.render.RenderKitFactory"
                  value="javax.faces.mock.MockRenderKitFactory"/>
-      <arg value="javax.faces.component.base.UIPageBaseTestCase"/>
+      <arg value="javax.faces.component.base.UIViewRootBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>

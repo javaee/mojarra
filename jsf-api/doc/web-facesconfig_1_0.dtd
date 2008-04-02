@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.5 2003/08/14 18:16:59 craigmcc Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.6 2003/08/22 14:03:05 eburns Exp $
 
 -->
 
@@ -92,24 +92,24 @@
 
 
 <!--
-    A "TreeIdPattern" is a pattern for matching component tree identifiers
-    in order to determine whether a particular navigation rule should be
+    A "ViewIdPattern" is a pattern for matching view identifiers in
+    order to determine whether a particular navigation rule should be
     fired.  It must contain one of the following values:
 
-    - The exact match for a component tree identifier that is recognized
-      by the the TreeFactory implementation being used (such as "/index.jsp"
-      if you are using the default TreeFactory).
+    - The exact match for a view identifier that is recognized
+      by the the ViewHandler implementation being used (such as
+      "/index.jsp" if you are using the default ViewHandler).
 
-    - A proper prefix of a component tree identifier, plus a trailing "*"
-      character.  This pattern indicates that all component tree identifiers
-      that match the portion of the pattern up to the asterisk will match
-      the surrounding rule.  When more than one match exists, the match
-      with the longest pattern is selected.
+    - A proper prefix of a view identifier, plus a trailing "*"
+      character.  This pattern indicates that all view identifiers that
+      match the portion of the pattern up to the asterisk will match the
+      surrounding rule.  When more than one match exists, the match with
+      the longest pattern is selected.
 
     - An "*" character, which means that this pattern applies to all
-      component tree identifiers.
+      view identifiers.
 -->
-<!ENTITY % TreeIdPattern "CDATA">
+<!ENTITY % ViewIdPattern "CDATA">
 
 
 <!--
@@ -255,18 +255,18 @@
 <!--
     The "navigation-case" element describes a particular combination of
     conditions that must match for this case to be executed, and the
-    tree id of the component tree that should be selected next.
+    view id of the component tree that should be selected next.
 -->
-<!ELEMENT navigation-case (description*, display-name*, icon*, from-action-ref?, from-outcome?, to-tree-id)>
+<!ELEMENT navigation-case (description*, display-name*, icon*, from-action-ref?, from-outcome?, to-view-id)>
 
 
 <!--
     The "navigation-rule" element represents an individual decision rule
-    that will be utilized by the default NavigationHandler implementation
-    to make decisions on what component tree should be displayed next,
-    based on the component tree id being processed.
+    that will be utilized by the default NavigationHandler
+    implementation to make decisions on what view should be displayed
+    next, based on the view id being processed.
 -->
-<!ELEMENT navigation-rule (description*, display-name*, icon*, from-tree-id?, navigation-case*)>
+<!ELEMENT navigation-rule (description*, display-name*, icon*, from-view-id?, navigation-case*)>
 
 
 <!--
@@ -460,16 +460,16 @@
 
 
 <!--
-    The "from-tree-id" element contains the component tree identifier of
-    the tree for which the containing navigation rule is relevant.  If
-    no "from-tree" element is specified, this rule applies to navigation
-    decisions on all component trees.  If this element is not specified,
-    a value of "*" is assumed, meaning that this navigation rule applies
-    to all component trees.
+    The "from-view-id" element contains the view identifier of the view
+    for which the containing navigation rule is relevant.  If no
+    "from-view" element is specified, this rule applies to navigation
+    decisions on all views.  If this element is not specified, a value
+    of "*" is assumed, meaning that this navigation rule applies to all
+    views.
 
-    This value must be of type "TreeIdPattern".
+    This value must be of type "ViewIdPattern".
 -->
-<!ELEMENT from-tree-id    (#PCDATA)>
+<!ELEMENT from-view-id    (#PCDATA)>
 
 
 <!--
@@ -569,9 +569,9 @@
 
     The "view-handler" element contains the fully qualified class name
     of the concrete ViewHandler implementation class that will be called
-    during the Restore Component Tree and Render Response phases of the
-    request processing lifecycle.  The faces implementation must provide
-    a default implementation of this class
+    during the Restore View and Render Response phases of the request
+    processing lifecycle.  The faces implementation must provide a
+    default implementation of this class
 -->
 <!ELEMENT view-handler (#PCDATA)>
 
@@ -686,11 +686,11 @@
 
 
 <!--
-    The "to-tree" element contains the component tree identifier of
-    the next component tree that should be displayed if this navigation
-    rule is matched.  It must be of type "TreeId".
+    The "to-view" element contains the view identifier of the next view
+    that should be displayed if this navigation rule is matched.  It
+    must be of type "ViewId".
 -->
-<!ELEMENT to-tree-id      (#PCDATA)>
+<!ELEMENT to-view-id      (#PCDATA)>
 
 
 <!--

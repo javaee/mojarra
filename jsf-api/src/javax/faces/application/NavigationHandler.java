@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandler.java,v 1.4 2003/06/24 16:52:13 craigmcc Exp $
+ * $Id: NavigationHandler.java,v 1.5 2003/08/22 14:03:07 eburns Exp $
  */
 
 /*
@@ -15,9 +15,9 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p>A <strong>NavigationHandler</strong> is passed the outcome string
- * returned by an {@link Action} invoked for this application, and will use
- * this (along with related state information) to choose the component tree
- * to be displayed next.</p>
+ * returned by an {@link Action} invoked for this application, and will
+ * use this (along with related state information) to choose the view to
+ * be displayed next.</p>
  *
  * <p>The behavior requirements for the default implementation have not
  * yet been defined by the JSR-127 expert group, but will be documented here

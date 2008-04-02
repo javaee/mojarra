@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContext.java,v 1.3 2003/03/22 01:09:33 eburns Exp $
+ * $Id: ExternalContext.java,v 1.4 2003/08/22 14:03:17 eburns Exp $
  */
  
 /*
@@ -316,7 +316,7 @@ public abstract class ExternalContext {
       * case of servlets, this is done via "forward", but for
       * portlets, it must use "include".</p>
       *
-      * @param requestURI The input URI of the request tree.
+      * @param requestURI The input URI of the request view.
       */
 
     public abstract void dispatchMessage(String requestURI) throws IOException, FacesException;

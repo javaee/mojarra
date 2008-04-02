@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.6 2003/08/03 22:54:55 eburns Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.7 2003/08/22 14:03:24 eburns Exp $
  */
 
 /*
@@ -171,7 +171,7 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 
         // Fire events and evaluate results
         TestActionListener.trace(null);
-        assertTrue(command.broadcast(event, PhaseId.RESTORE_COMPONENT_TREE));
+        assertTrue(command.broadcast(event, PhaseId.RESTORE_VIEW));
         assertTrue(command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
         assertTrue(!command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
         assertTrue(!command.broadcast(event, PhaseId.UPDATE_MODEL_VALUES));

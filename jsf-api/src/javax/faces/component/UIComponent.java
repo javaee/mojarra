@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.89 2003/08/18 16:38:21 eburns Exp $
+ * $Id: UIComponent.java,v 1.90 2003/08/22 14:03:10 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.render.Renderer;
  * <p><strong>UIComponent</strong> is the base interface for all user interface
  * components in JavaServer Faces.  The set of {@link UIComponent} instances
  * associated with a particular request and response are organized into a
- * component tree under a root {@link UIComponent} that represents
+ * component tree under a {@link UIViewRoot} that represents
  * the entire content of the request or response.</p>
  *
  * <p>For the convenience of component developers,
@@ -625,7 +625,7 @@ public interface UIComponent extends StateHolder {
 
     /**
      * <p>Perform the component tree processing required by the
-     * <em>Restore Component Tree</em> phase of the request processing
+     * <em>Restore View</em> phase of the request processing
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>
      * <ul>

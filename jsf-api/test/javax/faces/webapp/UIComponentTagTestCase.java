@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.8 2003/07/29 16:38:06 eburns Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.9 2003/08/22 14:03:31 eburns Exp $
  */
 
 /*
@@ -21,8 +21,8 @@ import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPage;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.render.RenderKit;
@@ -117,9 +117,9 @@ public class UIComponentTagTestCase extends TestCase {
             new MockExternalContext(servletContext, request, response);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
-	UIPageBase root = new UIPageBase();
-	root.setTreeId("/root");
-        facesContext.setRoot(root);
+	UIViewRootBase root = new UIViewRootBase();
+	root.setViewId("/root");
+        facesContext.setViewRoot(root);
         ApplicationFactory applicationFactory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (MockApplication) applicationFactory.getApplication();
@@ -459,7 +459,7 @@ public class UIComponentTagTestCase extends TestCase {
     // Return a String of all the component ids in treewalk order
     protected String tree() {
 
-        UIComponent component = facesContext.getRoot();
+        UIComponent component = facesContext.getViewRoot();
         StringBuffer sb = new StringBuffer();
         tree(component, sb);
         return (sb.toString());
@@ -499,7 +499,7 @@ public class UIComponentTagTestCase extends TestCase {
     // Verify the characteristics of a component with id "B2"
     protected void verifyB2() {
 
-        UIComponent b2c = facesContext.getRoot().findComponent("B2");
+        UIComponent b2c = facesContext.getViewRoot().findComponent("B2");
         assertNotNull("B2 component exists", b2c);
         assertEquals("B2 component id", "B2", b2c.getId());
         assertEquals("B2 child count", 2,

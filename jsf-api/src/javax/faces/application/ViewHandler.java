@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.5 2003/08/07 18:03:19 eburns Exp $
+ * $Id: ViewHandler.java,v 1.6 2003/08/22 14:03:08 eburns Exp $
  */
 
 /*
@@ -12,14 +12,14 @@ package javax.faces.application;
 import java.io.IOException;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 
 
 /**
  * <p><strong>ViewHandler</strong> is the pluggablity mechanism for
  * allowing implementations of or applications using the JavaServer
  * Faces specification to provide their own handling of the activities
- * in the <em>Render Response</em> and <em>Restore Component Tree</em>
+ * in the <em>Render Response</em> and <em>Restore View</em>
  * phases of the request processing lifecycle.  This allows for
  * implementations to support different response generation
  * technologies, and state saving/restoring approaches.  JSF
@@ -37,7 +37,7 @@ import javax.faces.component.UIPage;
  * provided by the JSF implementation, which will be utilized unless
  * <code>setViewHandler()</code> is called to establish a different one.
  * During <em>Render Response</em>, this default instance will treat the
- * <code>treeId</code> property of the response component tree as a
+ * <code>viewId</code> property of the response view as a
  * context-relative path (after prefixing it with a slash), and will
  * perform a {@link javax.faces.context.ExternalContext#dispatchMessage}
  * call to that path.</p>
@@ -51,7 +51,7 @@ public interface ViewHandler {
 
     /**
      * <p>Perform whatever actions are required to render the response
-     * component tree to the <code>ServletResponse</code> associated
+     * view to the <code>ServletResponse</code> associated
      * with the specified {@link FacesContext}.  Also perform required
      * actions to save the state of the response between requests, using
      * the {@link StateManager}.  This method is responsible for
@@ -71,31 +71,30 @@ public interface ViewHandler {
         throws IOException, FacesException;
 
     /**
-     * <p>Perform whatever actions are required to restore the component
-     * tree associated with the specified {@link FacesContext} and
-     * treeId.  This method may call through to {@link
-     * StateManager#restoreTree}.</p>
+     * <p>Perform whatever actions are required to restore the view
+     * associated with the specified {@link FacesContext} and viewId.
+     * This method may call through to {@link StateManager#getView}.</p>
      *
-     * <p>This method must be called from the <em>Restore Component
-     * Tree</em> phase of the request processing lifecycle.</p>
+     * <p>This method must be called from the <em>Restore View</em>
+     * phase of the request processing lifecycle.</p>
      *
-     * <p>This method must cause the new <code>UIPage</code> to be
+     * <p>This method must cause the new <code>UIViewRoot</code> to be
      * stored in the <code>FacesContext</code> as the new root.</p>
      *
      * <p>If this is an initial request - usually marked by a lack of
-     * available state for this tree - <code>restoreView()</code> must
+     * available state for this view - <code>restoreView()</code> must
      * call <code>FacesContext.renderResponse()</code> to cause the
-     * intervening phases between <em>Restore Component Tree</em> and
-     * <em>Render Response</em> to be skipped.<p>
+     * intervening phases between <em>Restore View</em> and <em>Render
+     * Response</em> to be skipped.<p>
      *
      * @param context {@link FacesContext} for the current request
-     * @param treeId the tree identifier for the current request
+     * @param viewId the view identifier for the current request
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      * @exception FacesException if a servlet error occurs
      */
-    public UIPage restoreView(FacesContext context, String treeId);
+    public UIViewRoot restoreView(FacesContext context, String viewId);
 
     /**
      * @return the {@link StateManager} instance for this

@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.4 2003/08/07 18:03:22 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.5 2003/08/22 14:03:30 eburns Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.Reader;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.StateManager;
 
@@ -25,7 +25,7 @@ public class MockViewHandler extends Object implements ViewHandler {
     public void renderView(FacesContext context)
         throws IOException, FacesException {}
 
-    public UIPage restoreView(FacesContext context, String treeId) {
+    public UIViewRoot restoreView(FacesContext context, String viewId) {
 	return null;
     }
 
@@ -35,18 +35,18 @@ public class MockViewHandler extends Object implements ViewHandler {
 		    protected Object getTreeStructureToSave(FacesContext context) {
 			return null;
 		    }
-		    protected Object getTreeStateToSave(FacesContext context) {
+		    protected Object getComponentStateToSave(FacesContext context) {
 			return null;
 		    }
-		    public boolean restoreTree(FacesContext context, String treeId) throws IOException { return true; }
+		    public boolean getView(FacesContext context, String viewId) throws IOException { return true; }
 		    public void writeStateMarker(FacesContext context) throws IOException {}
-		    public void saveTree(FacesContext context, Reader content, 
-			SerializedTree state) {}
+		    public void saveView(FacesContext context, Reader content, 
+			SerializedView state) {}
 		    protected boolean restoreTreeStructure(FacesContext context, 
-							   String treeId) {
+							   String viewId) {
 			return false;
 		    }
-		    protected void restoreTreeState(FacesContext context) throws IOException {}
+		    protected void restoreComponentState(FacesContext context) throws IOException {}
 		};
 	}
 	return stateManager;

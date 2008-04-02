@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.13 2003/08/18 22:45:26 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.14 2003/08/22 14:03:23 eburns Exp $
  */
 
 /*
@@ -250,7 +250,7 @@ public abstract class UIComponentTag implements Tag {
      *     with the current {@link FacesContext}.  This ensures that encoded
      *     output from the components is routed through the
      *     <code>JspWriter</code> for the current page.</li>
-     * <li>Locate the component (in the component tree) corresponding
+     * <li>Locate the component (in the view) corresponding
      *     to this tag, creating a new one if necesary.</li>
      * <li>Override the attributes of the associated component with values
      *     set in our custom tag attributes, if values for the corresponding
@@ -422,10 +422,10 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
-     * <p>Find and return the {@link UIComponent}, from the component
-     * tree, that corresponds to this tag handler instance.  If there
-     * is no such {@link UIComponent}, perform the following algorithm
-     * to create one that can be returned:</p>
+     * <p>Find and return the {@link UIComponent}, from the view, that
+     * corresponds to this tag handler instance.  If there is no such
+     * {@link UIComponent}, perform the following algorithm to create
+     * one that can be returned:</p>
      * <ul>
      * <li>If this tag has no <code>componentRef</code> attribute value,
      *     call <code>Application.createComponent(String)</code>,
@@ -462,7 +462,7 @@ public abstract class UIComponentTag implements Tag {
         } else {
 	    // If there is no parent tag, this tag must be the root.
 	    thisTagIsRoot = true;
-            parentComponent = context.getRoot();
+            parentComponent = context.getViewRoot();
             parentCreated = parentComponent.getChildren().size() < 1;
         }
 
@@ -531,7 +531,7 @@ public abstract class UIComponentTag implements Tag {
             } else {
 		// The only case where parentTag == null is the root
 		// tag, therefore, the component is the rootComponent.
-                component = context.getRoot();
+                component = context.getViewRoot();
             }
             // PENDING - what if it's not there?
 
@@ -658,7 +658,7 @@ public abstract class UIComponentTag implements Tag {
      * if the specified {@link UIComponent} was in fact created during
      * the execution of this tag handler instance, and this call will occur
      * <strong>BEFORE</strong> the {@link UIComponent} is added to
-     * the component tree.</p>
+     * the view.</p>
      *
      * <p>Tag subclasses that want to support additional override properties
      * must ensure that the base class <code>overrideProperties()</code>
@@ -724,7 +724,7 @@ public abstract class UIComponentTag implements Tag {
 	    RenderKitFactory renderFactory = (RenderKitFactory)
 		FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	    RenderKit renderKit = 
-		renderFactory.getRenderKit(context.getRoot().getRenderKitId());
+		renderFactory.getRenderKit(context.getViewRoot().getRenderKitId());
 	    ServletResponse response = (ServletResponse)
 		context.getExternalContext().getResponse();
             writer = 

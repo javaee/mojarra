@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.9 2003/08/15 17:23:41 craigmcc Exp $
+ * $Id: Application.java,v 1.10 2003/08/22 14:03:07 eburns Exp $
  */
 
 /*
@@ -55,9 +55,10 @@ public abstract class Application {
     /**
      * <p>Return the {@link ActionListener} that will be the default
      * {@link ActionListener} to be registered with relevant components
-     * during the <em>Restore Component Tree</em> phase of the
-     * request processing lifecycle.  The default implementation will
-     * perform the following functions:</p>
+     * during the <em>Restore View</em> phase of the request processing
+     * lifecycle.  The default implementation will perform the following
+     * functions:</p>
+     *
      * <ul>
      * <li>The <code>getPhaseId()</code> method of this listener instance
      *     must return <code>PhaseId.INVOKE_APPLICATION</code>.</li>
@@ -77,11 +78,11 @@ public abstract class Application {
 
 
     /**
-     * <p>Replace the default {@link ActionListener} that will be registered
-     * with relevant components during the <em>Restore Component Tree</em>
-     * phase of the request processing lifecycle.  This
-     * listener must return <code>PhaseId.INVOKE_APPLICATION</code> from its
-     * <code>getPhaseId()</code> method.</p>
+     * <p>Replace the default {@link ActionListener} that will be
+     * registered with relevant components during the <em>Restore
+     * View</em> phase of the request processing lifecycle.  This
+     * listener must return <code>PhaseId.INVOKE_APPLICATION</code> from
+     * its <code>getPhaseId()</code> method.</p>
      *
      * @param listener The new {@link ActionListener}
      *
@@ -186,16 +187,16 @@ public abstract class Application {
 
     /**
      * <p>Return the {@link ViewHandler} instance that will be utilized
-     * during the <em>Render Response</em> and <em>Restore Component
-     * Tree</em> phases of the request processing lifecycle.</p>
+     * during the <em>Render Response</em> and <em>Restore View</em>
+     * phases of the request processing lifecycle.</p>
      */
     public abstract ViewHandler getViewHandler();
 
 
     /**
      * <p>Set the {@link ViewHandler} instance that will be utilized
-     * during the <em>Render Response</em> and <em>Restore Component
-     * Tree</em> phases of the request processing lifecycle.</p>
+     * during the <em>Render Response</em> and <em>Restore View</em>
+     * phases of the request processing lifecycle.</p>
      *
      * @param handler The new {@link ViewHandler} instance
      *

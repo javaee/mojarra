@@ -1,5 +1,5 @@
 /*
- * $Id: Message.java,v 1.2 2003/04/29 18:51:25 eburns Exp $
+ * $Id: Message.java,v 1.3 2003/08/22 14:03:07 eburns Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ package javax.faces.application;
 /**
  * <p><strong>Message</strong> represents a single validation (or other)
  * message, which is typically associated with a particular component in
- * the component tree.</p>
+ * the view.</p>
  */
 
 public interface Message {

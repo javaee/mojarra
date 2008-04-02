@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.46 2003/07/28 22:39:46 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.47 2003/08/22 14:03:17 eburns Exp $
  */
 
 /*
@@ -15,7 +15,7 @@ import java.util.Locale;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.event.FacesEvent;
 import javax.faces.application.Message;
 
@@ -187,7 +187,7 @@ public abstract class FacesContext {
      * <p>Return the root component that is associated with the this request.
      * </p>
      */
-    public abstract UIPage getRoot();
+    public abstract UIViewRoot getViewRoot();
 
 
     /**
@@ -196,14 +196,14 @@ public abstract class FacesContext {
      * class that the handler calls), and only during the <em>Invoke
      * Application</em> phase of the request processing lifecycle.</p>
      *
-     * @param root The new component tree root component
+     * @param root The new component {@link UIViewRoot} component
      *
      * @exception IllegalStateException if this method is called more than
      *  once without a call to <code>release()</code> in beween
-     * @exception NullPointerException if <code>tree</code>
+     * @exception NullPointerException if <code>root</code>
      *  is <code>null</code>
      */
-    public abstract void setRoot(UIPage root);
+    public abstract void setViewRoot(UIViewRoot root);
 
 
     // --------------------------------------------------------- Public Methods
