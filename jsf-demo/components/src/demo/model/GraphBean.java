@@ -1,5 +1,5 @@
 /*
- * $Id: GraphBean.java,v 1.2 2003/12/17 15:19:23 rkitain Exp $
+ * $Id: GraphBean.java,v 1.3 2004/02/04 01:41:36 eburns Exp $
  */
 
 /*
@@ -74,19 +74,19 @@ public class GraphBean {
           Node root = new Node("Menu 2", "Menu", null, null, false, true);
           menuGraph = new Graph(root);
 
-          Node file = new Node("File", "File 2", "/demo-test.jsf", null, true, true);
+          Node file = new Node("File", "File 2", "/demo-test.faces", null, true, true);
           root.addChild(file);
-          file.addChild(new Node("File-New", "New 2", "/demo-test.jsf", null, true, false));
-          file.addChild(new Node("File-Open", "Open 2", "/demo-test.jsf", null, true, false));
-          Node close = new Node("File-Close", "Close 2", "/demo-test.jsf", null, false, false);
+          file.addChild(new Node("File-New", "New 2", "/demo-test.faces", null, true, false));
+          file.addChild(new Node("File-Open", "Open 2", "/demo-test.faces", null, true, false));
+          Node close = new Node("File-Close", "Close 2", "/demo-test.faces", null, false, false);
           file.addChild(close);
-          file.addChild(new Node("File-Exit", "Exit 2", "/demo-test.jsf", null, true, false));
+          file.addChild(new Node("File-Exit", "Exit 2", "/demo-test.faces", null, true, false));
 
-          Node edit = new Node("Edit", "Edit 2", "/demo-test.jsf", null, true, false);
+          Node edit = new Node("Edit", "Edit 2", "/demo-test.faces", null, true, false);
           root.addChild(edit);
-          edit.addChild(new Node("Edit-Cut", "Cut 2", "/demo-test.jsf", null, true, false));
-          edit.addChild(new Node("Edit-Copy", "Copy 2","/demo-test.jsf", null, true, false));
-          edit.addChild(new Node("Edit-Paste", "Paste 2", "/demo-test.jsf", null, false, false));
+          edit.addChild(new Node("Edit-Cut", "Cut 2", "/demo-test.faces", null, true, false));
+          edit.addChild(new Node("Edit-Copy", "Copy 2","/demo-test.faces", null, true, false));
+          edit.addChild(new Node("Edit-Paste", "Paste 2", "/demo-test.faces", null, false, false));
 
           menuGraph.setSelected(close);
       }
@@ -103,19 +103,19 @@ public class GraphBean {
           Node root = new Node("Menu 4", "Menu 4", null, null, false, true);
           treeGraph = new Graph(root);
 
-          Node file = new Node("File", "File 4", "/demo-test.jsf", null, true, true);
+          Node file = new Node("File", "File 4", "/demo-test.faces", null, true, true);
           root.addChild(file);
-          file.addChild(new Node("File-New", "New 4", "/demo-test.jsf", null, true, false));
-          file.addChild(new Node("File-Open", "Open 4", "/demo-test.jsf", null, true, false));
-          Node close = new Node("File-Close", "Close 4", "/demo-test.jsf", null, false, false);
+          file.addChild(new Node("File-New", "New 4", "/demo-test.faces", null, true, false));
+          file.addChild(new Node("File-Open", "Open 4", "/demo-test.faces", null, true, false));
+          Node close = new Node("File-Close", "Close 4", "/demo-test.faces", null, false, false);
           file.addChild(close);
-          file.addChild(new Node("File-Exit", "Exit 4", "/demo-test.jsf", null, true, false));
+          file.addChild(new Node("File-Exit", "Exit 4", "/demo-test.faces", null, true, false));
 
-          Node edit = new Node("Edit", "Edit 4", "/demo-test.jsf", null, true, false);
+          Node edit = new Node("Edit", "Edit 4", "/demo-test.faces", null, true, false);
           root.addChild(edit);
-          edit.addChild(new Node("Edit-Cut", "Cut 4", "/demo-test.jsf", null, true, false));
-          edit.addChild(new Node("Edit-Copy", "Copy 4","/demo-test.jsf", null, true, false));
-          edit.addChild(new Node("Edit-Paste", "Paste 4", "/demo-test.jsf", null, false, false));
+          edit.addChild(new Node("Edit-Cut", "Cut 4", "/demo-test.faces", null, true, false));
+          edit.addChild(new Node("Edit-Copy", "Copy 4","/demo-test.faces", null, true, false));
+          edit.addChild(new Node("Edit-Paste", "Paste 4", "/demo-test.faces", null, false, false));
 
           treeGraph.setSelected(close);
       }

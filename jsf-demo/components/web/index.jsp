@@ -88,7 +88,7 @@ Faces technology.</p>
 
 </td>
 
-<td><a href="imagemap.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+<td><a href="imagemap.faces"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
 
 </tr>
@@ -115,7 +115,7 @@ Faces technology.</p>
 <a href="ShowSource.jsp?filename=/src/demo/model/GraphBean.java">demo/model/GraphBean.java</a>
 </td>
 
-<td><a href="menu.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+<td><a href="menu.faces"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
 
 </tr>
@@ -134,7 +134,7 @@ Faces technology.</p>
 <a href="ShowSource.jsp?filename=/src/demo/model/RepeaterBean.java">demo/model/RepeaterBean.java</a><br>
 </td>
 
-<td><a href="repeater.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+<td><a href="repeater.faces"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
 
 </tr>
@@ -153,7 +153,7 @@ Faces technology.</p>
 <a href="ShowSource.jsp?filename=/src/demo/model/ResultSetBean.java">demo/model/ResultSetBean.java</a>
 </td>
 
-<td><a href="result-set.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+<td><a href="result-set.faces"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
 
 </tr>
@@ -177,7 +177,7 @@ Faces technology.</p>
 <a href="ShowSource.jsp?filename=/src/components/renderkit/TabbedRenderer.java">components/renderkit/TabbedRenderer.java</a><br>
 </td>
 
-<td><a href="tabbedpanes.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+<td><a href="tabbedpanes.faces"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
 
 </tr>

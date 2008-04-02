@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponents.java,v 1.12 2003/12/19 23:59:57 jvisvanathan Exp $
+ * $Id: TestComponents.java,v 1.13 2004/02/04 01:41:40 eburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ public class TestComponents extends HtmlUnitTestCase {
 	HtmlArea area = null;
 	String onClick = null;
 	ScriptResult result = null;    
-	mapPage = accessAppAndGetPage("imagemap.jsf");
+	mapPage = accessAppAndGetPage("imagemap.faces");
 	
 	for (int i = 0, len = welcomeTexts.length; i < len; i++) {        
 	    form = (HtmlForm) mapPage.getAllForms().get(0);     
@@ -76,7 +76,7 @@ public class TestComponents extends HtmlUnitTestCase {
     }
 
     public void testTree() throws Exception {
-	HtmlPage page = accessAppAndGetPage("menu.jsf");
+	HtmlPage page = accessAppAndGetPage("menu.faces");
 	assertNotNull(page);
 	page = executeTreeTest(page, "2");
 	page = executeTreeTest(page, "3");
@@ -88,7 +88,7 @@ public class TestComponents extends HtmlUnitTestCase {
     }
 
     public void testResultSet() throws Exception {
-	HtmlPage page = accessAppAndGetPage("result-set.jsf");
+	HtmlPage page = accessAppAndGetPage("result-set.faces");
 	HtmlAnchor anchor = null;
 	assertNotNull(page);
 	page = executeResultSet(page, "2", "3");
@@ -101,7 +101,7 @@ public class TestComponents extends HtmlUnitTestCase {
     }
 
     public void testTabbedPane() throws Exception {
-        HtmlPage page = accessAppAndGetPage("tabbedpanes.jsf");
+        HtmlPage page = accessAppAndGetPage("tabbedpanes.faces");
 	assertNotNull(page);
 	//tab 1
 	page= executeTabbedPane(page, "_id0:_id2");

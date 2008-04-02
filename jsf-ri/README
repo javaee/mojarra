@@ -350,11 +350,34 @@ well as logging for rest of the RI will be done in a future release.
 Known Issues With This Release
 ==============================
 
+* When authoring a page that uses a UISelectOne component that is backed
+  by a value reference expression that points to a primitive type, a
+  default selected value default selected value must be included in the
+  configured values for the component.  This is because there is no way
+  to express "null" using primitive values.  Remember, you can't use "0"
+  to express null, because "0" is a valid value.
+
+* the value of javax.faces.component.NamingContainer.SEPARATOR_CHAR is
+  ':'.  This means that the client id for components will be something
+  like "form:checkbox1".  The use of the ':' character in the id causes
+  problems for CSS stylesheets that try to apply style to components
+  using their id.  The workaround is to use the CSS "class" concept to
+  apply style to a component.
+
 * When saving state on the server, there is no way for the server to
   know that a view has expired.  Thus, if the JSP page changes between
   requests, it's possible there will be inconsistencies between the
   restored tree and the JSP page.  Therefore, if you change the JSP
   page, you need to re-start the browser so that the session is lost.
+
+  In related news, the number of views saved in the session when the
+  application is configured to save state in the server is configurable
+  by the RI init context parameter
+  "com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION" without quotes.  This is a
+  non-standard feature, so don't count on it.
+
+* Don't use the '.' character in ResourceBundle keys for use in Faces.
+  This character is a reserved character in the JSF EL.
 
 * When deploying on a non-JWSDP container, you must include all the
   dependent jars in your webapp's WEB-INF/lib directory.  It's possible
@@ -387,22 +410,6 @@ Known Issues With This Release
   This class doesn't properly deal with conversion for primitives.
   Workaround: use wrapper classes instead of primitives for model objects.
 
-* <h:message> ignores locale set in <f:view>
-
-    My system locale is French and if I do this...
-    <f:view locale='en'>
-
-        <h:output_text value='#{msgs.namePrompt}'/>
-        <h:input_text id='name' value='#{user.name}'/>
-
-        <h:message for='name'/>
-
-    </f:view>
-
-    <h:output_text> retrieves its output from my English resource bundle
-    (as it should), but <h:message> stubbornly produces its error message
-    in French (as it should not).
-
 * Renderers in the Standard HTML RenderKit are fragile in terms of their
   support for rendered="false" on children and facets.  Specific known issues
   include:
@@ -414,13 +421,163 @@ Known Issues With This Release
 
 * The non-jsp demo does not deploy under tomcat 4.1.29.  
 
+Major changes
+==============
+
+* prefix named things with javax.faces
+
+* Change how renderers are looked up.  Every component now has two
+  properties to locate an appropriate Renderer: componentFamily, and
+  rendererType.  This change allows a clean separation for components
+  that can have multiple renderer types, such as UICommand with Link or
+  Button renderers, or renderer types that can handle multiple
+  components, such as the text renderer rendering UIOutput or UIInput
+  components.
+
+  RenderKit.getRenderer() is now:
+
+  public abstract Renderer getRenderer(String family, String rendererType);
+
+  Please see the javadocs for more information.
+
+* the render-kit-id for the default RenderKit is not HTML_BASIC
+
+* a validator signals that validation has failed by throwning an
+  ValidationException.  Also, the signature for Validator.validate() has
+  changed.
+
+* JSFA162
+
+* Change in value handling, validation, and timing of Conversion
+
+  => PENDING(edburns): move this into a new sub-section in 2.5 of the spec.
+
+  This change only impacts faces implementation providers and advanced
+  custom component authors.  This changes is transparent to page authors.
+
+  Remove the class ConvertibleValueHolder.  Note that anything that has
+  a value that could possibly be interesting to the model tier is liable
+  for conversion.  Thus, the notion of having a converter has been moved
+  up to the root ValueHolder interface.
+
+  Introduce interface EditableValueHolder extends ValueHolder.  This
+  defines the contract for things that are have values that can be
+  changed by the user.  As such, it supports listeners and validators. 
+
+  => Please see PENDING(edburns): add getConvertedValue() to Renderer
+  description in spec.
+
+  Here's how values get moved from the page (after entry by the user,
+  for example) to the components, and possibly to the model tier.  This
+  description assumes the JSP/HTTP case, where all components have
+  Renderers.
+
+    Apply Request Values Phase
+
+      The user presses a button that causes a form submit to occurr.
+      This causes the state of the form to be sent as name=value pairs
+      in the POST data of the request.  The faces request processing
+      lifecycle is entered, and eventually we come to the Apply Request
+      Values phase.  In this phase, the decode() method for each
+      renderer for each component in the view is called.  The renderer
+      takes the value from the request and passes it to the
+      setSubmittedValue of the component, which is, of course, an
+      instance of EditableValueHolder.  If the component has the
+      "immediate" property set to true, we execute validation
+      immediately after decoding.  See below for what happens when we
+      execute validation.
+
+    Process Validators Phase
+
+      If the immediate property is not set, we execute validation
+
+    Executing Validation
+
+      Please see the javadocs for UIInput.validate() for more details,
+      but basically, this method gets the submitted value from the
+      component (set during Apply Request Values), gets renderer for the
+      component and calls its getConvertedValue(), passing the submitted
+      value.  If a conversion error occurs, it is dealt with as
+      described in the spec.  Otherwise, all validators attached to the
+      component are asked to validate the converted value.  If any
+      validation errors occur, they are dealt with as described in the
+      spec.  The converted value is pushed into the component's
+      setValue() method, and a ValueChangeEvent is fired if the value
+      has changed).
+
+    Update Model Values Phase
+
+      For each UIInput component in the view, its updateModel() method
+      is called.  This method only takes action if a local value was set
+      when validation executed.  If the page author configured this
+      component to push its value to the model tier, this pushing
+      happens here.  Any errors that occurr as a result of the attempt
+      to push the value to the model tier are dealt with as described in
+      the spec.
+
+* camelCasing of tags
+
+* removal of "method" and "action" attrs from <h:form>  
+
+* removal of "onclick" for <h:commandLink>.
+
+* Allowing mixed literals and EL in a JSF EL expression.  Allow full JSP
+  2.0 eval syntax and operators in JSF EL.
+
+* JSF Works with Tiles.
+
+* ValueBinding instances are no longer cached in the application.  This
+  means Application.getValueBinding() has been replaced with
+  Application.createValueBinding().
+
+* generation of "id" attribute in rendered markup.
+
+* ValueHolder re-shuffling
+
+* UICommand doesn't add the default ActionListener to itself, it just
+  calls Application.getActionListener().
+
+* When using <f:loadBundle> trying to access a resource that happens to
+  be missing from the ResourceBundle yields ???key???.
+
+* UIMessage changes
+
+    UIMessages no longer has a "for" property
+
+    > 3. Change the defaults of "showSummary" and "showDetail" to be:
+    >
+    >                 UIMessage     UIMessages
+    >   showSummary     false         true
+    >   showDetail      true          false
+    >
+    >   Relative to the current spec, this flips the defaults for UIMessage,
+    >   and means that if you use UIMessages up top and UIMessage next to
+    >   the component, you'll get a summary of all error messages up top,
+    >   and detailed explanations below.
+    >
+    Done.
+
+    >   This proposal does imply that developers (including the spec) should
+    >   be providing both summaries and details for their error messages.
+    >
+    Modified FacesMessage such that the "detail" property will be the same
+    as the "summary" property unless it was set to something explicitly
+    different.  This seems more user friendly to me.
+
+* StateManager is now a property of the Application, rather than the
+  RenderKit.  It also can be configurable in the faces-config.xml
+
+* Decorator pattern for things in the application.  In addition to what
+  you have in the FacesConfig.xml
+
+  
 * Some web containers don't follow the Servlet 2.3 Spec rule of calling
   ServletContextListeners listeners defined in tld files in the META-INF
   directory of a jar. Running a faces webapp in such a container
   requires you to manually declare the ServletContextListener.  The
   listener-class you need to specify is
 
-  com.sun.faces.config.ConfigListener
+  com.sun.faces.config.ConfigureListener
 
 
 
