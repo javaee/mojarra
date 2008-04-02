@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.2 2003/01/16 20:24:21 craigmcc Exp $
+ * $Id: PhaseId.java,v 1.3 2003/01/22 19:12:12 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.event;
 
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.List;
  * <code>getPhase()</code> method of the {@link FacesListener} interface.
  */
 
-public class PhaseId implements Serializable {
+public class PhaseId {
 
 
     // ----------------------------------------------------------- Constructors
