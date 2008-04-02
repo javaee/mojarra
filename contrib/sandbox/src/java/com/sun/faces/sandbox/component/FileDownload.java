@@ -115,7 +115,7 @@ public class FileDownload extends UIOutput {
             return this.data;
         }
         ValueBinding _vb = getValueBinding("data");
-        return (_vb != null) ? (String) _vb.getValue(getFacesContext()) : null;
+        return (_vb != null) ? (Object) _vb.getValue(getFacesContext()) : null;
     }
     public String getWidth() {
         if (null != this.width) {

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.2 2006/12/14 19:18:11 jdlee Exp $
+ * $Id: Util.java,v 1.3 2007/01/05 22:33:43 jdlee Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.2 2006/12/14 19:18:11 jdlee Exp $
+ * @version $Id: Util.java,v 1.3 2007/01/05 22:33:43 jdlee Exp $
  */
 
 public class Util {      
@@ -653,7 +653,7 @@ public class Util {
         if (obj instanceof HttpServletRequest ) {
             HttpServletRequest req = (HttpServletRequest )obj;
             baseUrl = req.getScheme() + "://" + req.getServerName() +
-                ":" + req.getServerPort() + "/" + req.getContextPath() + "/";
+                ":" + req.getServerPort() + req.getContextPath();
         }
         
         return baseUrl;

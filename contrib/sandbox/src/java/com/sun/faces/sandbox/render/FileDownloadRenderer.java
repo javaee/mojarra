@@ -33,7 +33,7 @@ public class FileDownloadRenderer extends Renderer {
         }
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         request.getSession().setAttribute("HtmlDownload-" + dl.getClientId(context), dl);
-//      super.encodeEnd(arg0, arg1);
+        super.encodeEnd(context, comp);
     }
 
     protected void renderInline(FacesContext context, FileDownload comp) throws IOException {
@@ -86,7 +86,7 @@ public class FileDownloadRenderer extends Renderer {
         String uri = "";
         String mapping = Util.getFacesMapping(context);
         if (Util.isPrefixMapped(mapping)) {
-            uri = "/" + FileDownload.DOWNLOAD_URI + "." + mapping;
+            uri = Util.getAppBaseUrl(context) + mapping + "/" + FileDownload.DOWNLOAD_URI;
         } else {
             uri = FileDownload.DOWNLOAD_URI + mapping;
         }
