@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.27 2003/03/11 05:37:54 rkitain Exp $
+ * $Id: RIConstants.java,v 1.28 2003/03/12 19:50:04 rkitain Exp $
  */
 
 /*
@@ -70,41 +70,7 @@ public class RIConstants {
     public final static String FORM_NUMBER_ATTR = FACES_PREFIX +
 	"FormNumber";
 
-    /**
-     * <p>Phase identifier for <em>Reconstitute Request Tree</em>.</p>
-     */
-    public static final int RECONSTITUTE_COMPONENT_TREE_PHASE = 0;
-
-
-    /**
-     * <p>Phase identifier for <em>Apply Request Values</em>.</p>
-     */
-    public static final int APPLY_REQUEST_VALUES_PHASE = 10;
-
-
-    /**
-     * <p>Phase identifier for <em>Process Validations</em>.</p>
-     */
-    public static final int PROCESS_VALIDATIONS_PHASE = 20;
-
-
-    /**
-     * <p>Phase identifier for <em>Update Model Values</em>.</p>
-     */
-    public static final int UPDATE_MODEL_VALUES_PHASE = 30;
-
-
-    /**
-     * <p>Phase identifier for <em>Invoke Application</em>.</p>
-     */
-    public static final int INVOKE_APPLICATION_PHASE = 40;
-
     public static final String ELEVALUATOR = "org.apache.taglibs.standard.jstl_el.jstl.ELEvaluator";
-
-    /**
-     * <p>Phase identifier for <em>Render Response</em>.</p>
-     */
-    public static final int RENDER_RESPONSE_PHASE = 50;    
 
     /**
      * <p>String identifer for <em>bundle attribute.</em>.</p>
