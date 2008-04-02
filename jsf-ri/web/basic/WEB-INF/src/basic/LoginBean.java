@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.12 2002/09/14 17:22:18 edburns Exp $
+ * $Id: LoginBean.java,v 1.13 2002/09/17 00:08:59 rkitain Exp $
  */
 
 /*
@@ -219,10 +219,10 @@ public class LoginBean {
     public void setCurrentOptions(Object []newCurrentOptions)
     {
 	int len = 0;
-	if (null == newCurrentOptions && 
-	    (len = newCurrentOptions.length) > 0) {
-	    return;
-	}
+        if (null == newCurrentOptions ||
+            (len = newCurrentOptions.length) == 0) {
+            return;
+        }
 	currentOptions.clear();
 	currentOptions = new ArrayList(len);
 	for (int i = 0; i < len; i++) {
