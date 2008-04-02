@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.10 2004/01/06 23:02:44 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.11 2004/01/27 20:14:15 eburns Exp $
  */
 
 /*

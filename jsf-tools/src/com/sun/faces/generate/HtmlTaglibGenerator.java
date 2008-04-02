@@ -5,12 +5,29 @@
 
 package com.sun.faces.generate;
 
+import com.sun.faces.config.beans.AttributeBean;
+import com.sun.faces.config.beans.ComponentBean;
+import com.sun.faces.config.beans.DescriptionBean;
+import com.sun.faces.config.beans.FacesConfigBean;
+import com.sun.faces.config.beans.PropertyBean;
+import com.sun.faces.config.beans.RendererBean;
+import com.sun.faces.config.beans.RenderKitBean;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
+import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -18,64 +35,414 @@ import org.apache.commons.logging.LogFactory;
  * This class generates tag handler class code that is special to the "html_basic"
  * package.
  */
-public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenerator {
+public class HtmlTaglibGenerator extends AbstractGenerator {
 
+    // -------------------------------------------------------- Static Variables
+    
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(GenerateTaglib.class);
+    protected static Log log = LogFactory.getLog(HtmlTaglibGenerator.class);
 
-    // This List will hold component property names which are "value binding [VB] enabled;
-    //
-    private List valueBindingEnabledProperties = null;
+    // StringBuffer containing the copyright material
+    private static String copyright;
 
-    // This List holds component property names which are "method
-    // binding enabled"
-    private List methodBindingEnabledProperties = null;
+    // The directory into which the output will be generated
+    private static File directory;
 
-    // A component in these lists signifies that the component is a ValueHolder or
-    // ConvertibleValueHolder;  This is used to determine if we generate ValueHolder
-    // ConvertibleValueHolder code in "setProperties" method;
-    //
-    private List convertibleValueHolderComponents;
+    // Base object of the configuration beans
+    private static FacesConfigBean fcb;
 
-    // global defaults for html basic tld.  They should be read from config
-    // file.
-    //
-    public static final String TAGCLASSPATH = "com.sun.faces.taglib.html_basic";
-    public static final String TEICLASS = "com.sun.faces.taglib.FacesTagExtraInfo";
-    public static final String BODYCONTENT = "JSP";
-    public static final String REQUIRED = "false";
-    public static final String RTEXPRVALUE = "false";
+    // The Writer for each component class to be generated
+    private static Writer writer;
 
-    public HtmlTaglibGenerator() {
-	convertibleValueHolderComponents = new ArrayList();
-	convertibleValueHolderComponents.add("UIOutput");
-	convertibleValueHolderComponents.add("UIInput");
-	convertibleValueHolderComponents.add("UISelectMany");
-	convertibleValueHolderComponents.add("UISelectOne");
+    private static final String DEFAULT_RENDERKIT_ID = "DEFAULT";
 
-	valueBindingEnabledProperties = new ArrayList();
-	valueBindingEnabledProperties.add("immediate");
-	valueBindingEnabledProperties.add("value");
-	valueBindingEnabledProperties.add("first");
-	valueBindingEnabledProperties.add("rows");
-	valueBindingEnabledProperties.add("rowIndex");
-	valueBindingEnabledProperties.add("required");
-	valueBindingEnabledProperties.add("for");
-	valueBindingEnabledProperties.add("showDetail");
-	valueBindingEnabledProperties.add("showSummary");
-	valueBindingEnabledProperties.add("globalOnly");
-	valueBindingEnabledProperties.add("converter");
-	valueBindingEnabledProperties.add("URL");
+    private static String renderKitId = DEFAULT_RENDERKIT_ID;
 
-	methodBindingEnabledProperties = new ArrayList();
-	methodBindingEnabledProperties.add("action");
-	methodBindingEnabledProperties.add("actionListener");
-	methodBindingEnabledProperties.add("validator");
-	methodBindingEnabledProperties.add("valueChangeListener");
+    // Defaults
+    private static final String TAGCLASSPATH = "com.sun.faces.taglib.html_basic";
+    private static final String TEICLASS = "com.sun.faces.taglib.FacesTagExtraInfo";
+    private static final String BODYCONTENT = "JSP";
+    private static final String REQUIRED = "false";
+    private static final String RTEXPRVALUE = "false";
 
+    // Maps used for generatng TLD and Tag Classes
+    private static SortedMap componentsByComponentFamily;
+    private static SortedMap renderersByComponentFamily;
+    private static ComponentBean component = null;
+    private static RendererBean renderer = null;
+
+    // Tag Handler Class Name
+    private static String tagClassName = null;
+
+    // String containing optional tag definitions loaded from external file.
+    // Currently "column" is the only tag existing in this file, because it
+    // is a tag wth no renderer.
+    private static String tagDef;
+
+    // SPECIAL - Body Tags 
+    private static List bodyTags = new ArrayList();
+    static {
+        bodyTags.add("CommandLinkTag");
+	bodyTags.add("OutputLinkTag");
     }
 
-    // Not that the following methods simply return a global default value now.  When we
+    // SPECIAL - Components in this List are either a ValueHolder or
+    // ConvertibleValueHolder;  This is used to determine if we generate ValueHolder
+    // ConvertibleValueHolder code in "setProperties" method;
+    private static List convertibleValueHolderComponents = new ArrayList();
+    static {
+        convertibleValueHolderComponents.add("UIOutput");
+        convertibleValueHolderComponents.add("UIInput");
+        convertibleValueHolderComponents.add("UISelectMany");
+        convertibleValueHolderComponents.add("UISelectOne");
+    }
+
+    // SPECIAL - Value Binding Enabled Component Property Names
+    private static List valueBindingEnabledProperties = new ArrayList();
+    static {
+        valueBindingEnabledProperties.add("immediate");
+        valueBindingEnabledProperties.add("value");
+        valueBindingEnabledProperties.add("first");
+        valueBindingEnabledProperties.add("rows");
+        valueBindingEnabledProperties.add("rowIndex");
+        valueBindingEnabledProperties.add("required");
+        valueBindingEnabledProperties.add("for");
+        valueBindingEnabledProperties.add("showDetail");
+        valueBindingEnabledProperties.add("showSummary");
+        valueBindingEnabledProperties.add("globalOnly");
+        valueBindingEnabledProperties.add("converter");
+        valueBindingEnabledProperties.add("url");
+    }
+    
+    // SPECIAL - Method Binding Enabled Component Property Names
+    private static List methodBindingEnabledProperties = new ArrayList();
+    static {
+        methodBindingEnabledProperties = new ArrayList();
+        methodBindingEnabledProperties.add("action");
+        methodBindingEnabledProperties.add("actionListener");
+        methodBindingEnabledProperties.add("validator");
+        methodBindingEnabledProperties.add("valueChangeListener");
+    }
+
+    /**
+     * The XML header for the TLD file.
+     */
+    private static void xmlHeader() throws Exception {
+        writer.write("<?xml version="+'"'+"1.0"+'"'+" encoding="+'"'+"ISO-8859-1"+'"'+" ?>\n\n");
+    }
+
+    /**
+     * <p>Load the copyright text for the top of each Java source file and TLD file.</p>
+     *
+     * @param path Pathname of the copyright file
+     */
+    private static void copyright(String path) throws Exception {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Loading copyright text from '" + path + "'");
+        }
+        StringBuffer sb = new StringBuffer();
+        BufferedReader reader =
+            new BufferedReader(new FileReader(path));
+        int ch;
+        while ((ch = reader.read()) >= 0) {
+            sb.append((char) ch);
+        }
+        reader.close();
+        if (log.isDebugEnabled()) {
+            log.debug("  Copyright text contains " + sb.length() +
+                      " characters");
+        }
+        copyright = sb.toString();
+    }
+
+    /**
+     * Copyright
+     */
+    private static void copyright() throws Exception {
+        writer.write(copyright+"\n\n");
+    }
+
+    /**
+     * TLD DOCTYPE
+     */
+    private static void tldDocType() throws Exception {
+        writer.write("<!DOCTYPE taglib\n");
+	writer.write("PUBLIC "+'"'+"-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"+'"'+'\n');
+	writer.write('"'+"http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd"+'"'+">\n\n");
+    }
+
+    /**
+     * The description element for this TLD.
+     */
+    private static void tldDescription() throws Exception {
+	writer.write("<taglib>\n\n");
+	writer.write("<!-- ============== Tag Library Description Elements ============= -->\n\n");
+        writer.write("<tlib-version>1.0</tlib-version>\n<jsp-version>1.2</jsp-version>\n");
+	writer.write("<short-name>h</short-name>\n");
+	writer.write("<uri>http://java.sun.com/jsf/html</uri>\n");
+	writer.write("<description>\n");
+	writer.write("  This tag library contains JavaServer Faces component tags for all\n");
+	writer.write("  UIComponent + HTML RenderKit Renderer combinations defined in the\n");
+	writer.write("  JavaServer Faces Specification.\n");
+	writer.write("</description>\n\n");
+    }
+
+    /**
+     * The validator for this TLD.
+     */
+    private static void tldValidator() throws Exception {
+        writer.write("<!-- ============== Tag Library Validator ============= -->\n\n");
+	writer.write("<validator>\n  <validator-class>\n");
+	writer.write("    com.sun.faces.taglib.html_basic.HtmlBasicValidator\n");
+	writer.write("  </validator-class>\n</validator>\n\n");
+    }
+
+    /**
+     * The tags for this TLD.
+     */
+    private static void tldTags() throws Exception {
+	writer.write("<!-- ===================== HTML 4.0 basic tags ====================== -->\n\n");
+	componentsByComponentFamily = getComponentFamilyComponentMap();
+	renderersByComponentFamily = getComponentFamilyRendererMap(renderKitId);
+
+	Iterator 
+	    rendererIter = null,
+	    keyIter = renderersByComponentFamily.keySet().iterator();
+	String componentFamily = null;
+	String rendererType = null;
+	List renderers = null;
+	DescriptionBean description = null;
+	String descriptionText = null;
+	String tagName = null;
+	while (keyIter.hasNext()) {
+	    componentFamily = (String) keyIter.next();
+	    renderers = (List)renderersByComponentFamily.get(componentFamily);
+	    rendererIter = renderers.iterator();
+	    while (rendererIter.hasNext()) {
+                renderer = (RendererBean) rendererIter.next();
+		rendererType = renderer.getRendererType();
+		writer.write("  <tag>\n");
+		tagName = makeTldTagName(strip(componentFamily),
+					 strip(rendererType));
+		if (tagName == null) {
+		    throw new IllegalStateException("Could not determine tag name");
+		}
+		writer.write("    <name>"+tagName+"</name>\n");
+		if (makeTagClassName(strip(componentFamily), strip(rendererType)) == null) {
+		    throw new IllegalStateException("Could not determine tag class name");
+		}
+		writer.write("    <tag-class>"+getTagClassPath(tagName)+"."+
+			     makeTagClassName(strip(componentFamily), strip(rendererType))+"</tag-class>\n");
+		writer.write("    <tei-class>"+getTeiClass(tagName)+"</tei-class>\n");
+		writer.write("    <body-content>"+getBodyContent(tagName)+"</body-content>\n");
+		description = renderer.getDescription("");
+		if (description != null) {
+		    descriptionText = description.getDescription();
+		    writer.write("    <description>\n");
+		    if (descriptionText != null) {
+		        if (descriptionText.indexOf("<") < 0) {
+			    writer.write("      "+descriptionText+"\n");
+			} else {
+		            writer.write("      <![CDATA["+descriptionText+"]]>\n");
+			}
+		    }
+		    writer.write("    </description>\n");
+		}
+
+		// Generate tag attributes
+		//
+
+		// Component Properties first...
+		//
+		component = (ComponentBean)componentsByComponentFamily.get(componentFamily);
+		
+		PropertyBean[] properties = component.getProperties();
+		PropertyBean property = null;
+		for (int i = 0, len = properties.length; i < len; i++) {
+		    if (null == (property = properties[i])) {
+		        continue;
+		    }
+		    if (!property.isTagAttribute()) {
+		        continue;
+		    }
+		    writer.write("    <attribute>\n");
+		    writer.write("      <name>"+property.getPropertyName()+"</name>\n");
+		    if (property.isRequired()) {
+		        writer.write("      <required>true</required>\n");
+		    } else {
+		        writer.write("      <required>false</required>\n");
+		    }
+		    writer.write("      <rtexprvalue>"+
+                        getRtexprvalue(tagName, property.getPropertyName())+
+			"</rtexprvalue>\n");
+		    description = property.getDescription("");
+		    if (description != null) {
+		        descriptionText = description.getDescription();
+		        writer.write("      <description>\n");
+		        if (descriptionText != null) {
+		            if (descriptionText.indexOf("<") < 0) {
+			        writer.write("      "+descriptionText+"\n");
+			    } else {
+		                writer.write("      <!CDATA["+descriptionText+"]]>\n");
+			    }
+			}
+		        writer.write("      </description>\n");
+	            }
+		    writer.write("    </attribute>\n");
+		}
+		
+		// Renderer Attributes Next...
+		//
+		AttributeBean[] attributes = renderer.getAttributes();
+		AttributeBean attribute = null;
+		for (int i = 0, len = attributes.length; i < len; i++) {
+		    if (null == (attribute = attributes[i])) {
+		        continue;
+		    }
+		    if (!attribute.isTagAttribute()) {
+		        continue;
+		    }
+		    writer.write("    <attribute>\n");
+		    writer.write("      <name>"+attribute.getAttributeName()+"</name>\n");
+		    if (attribute.isRequired()) {
+		        writer.write("      <required>true</required>\n");
+		    } else {
+		        writer.write("      <required>false</required>\n");
+		    }
+		    writer.write("      <rtexprvalue>"+
+                        getRtexprvalue(tagName, attribute.getAttributeName())+
+			"</rtexprvalue>\n");
+		    description = attribute.getDescription("");
+		    if (description != null) {
+		        descriptionText = description.getDescription();
+		        writer.write("      <description>\n");
+		        if (descriptionText != null) {
+		            if (descriptionText.indexOf("<") < 0) {
+			        writer.write("      "+descriptionText+"\n");
+			    } else {
+		                writer.write("      <!CDATA["+descriptionText+"]]>\n");
+			    }
+			}
+		        writer.write("      </description>\n");
+		    }
+		    writer.write("    </attribute>\n");
+		}
+
+		// SPECIAL: "Binding" needs to exist on every tag..
+		writer.write("    <attribute>\n");
+		writer.write("      <name>binding</name>\n");
+		writer.write("      <required>false</required>\n");
+		writer.write("      <rtexprvalue>false</rtexprvalue>\n");
+		writer.write("      <description>\n");
+		writer.write("         The value binding expression linking this component to a property in a backing bean\n");
+		writer.write("      </description>\n");
+		writer.write("    </attribute>\n");
+
+	        writer.write("  </tag>\n");
+	    }
+	}
+
+	//Include any other tags defined in the optional tag definition file.
+	//These might be tags that were not picked up because they have no renderer
+	//- for example "column".
+	if (tagDef != null) {
+	    writer.write(tagDef);
+	}
+
+	writer.write("</taglib>");
+    }
+
+    /**
+     * <p>Load any additional tag definitions from the specified 
+     * file.  This file might include tags such as "column" which
+     * have no renderer, but need to be generated into the 
+     * TLD file.</p>
+     *
+     * @param path Pathname of the tag definition file
+     */
+    private static void loadOptionalTags(String path) throws Exception {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Loading optional tag text from '" + path + "'");
+        }
+        StringBuffer sb = new StringBuffer();
+        BufferedReader reader =
+            new BufferedReader(new FileReader(path));
+        int ch;
+        while ((ch = reader.read()) >= 0) {
+            sb.append((char) ch);
+        }
+        reader.close();
+        if (log.isDebugEnabled()) {
+            log.debug("  Optional tag text contains " + sb.length() +
+                      " characters");
+        }
+        tagDef = sb.toString();
+    }
+
+    /**
+     * Build the tag name from componentFamily and rendererType.  The name will
+     * be "camel case".
+     *
+     * @param componentFamily the component family
+     * @param rendererType the renderer type
+     */
+    private static String makeTldTagName(String componentFamily, String rendererType) {
+	if (componentFamily == null) {
+	    return null;
+	}
+        String tagName = componentFamily.toLowerCase();
+	if (rendererType == null) {
+	    return tagName;
+	}
+	if (componentFamily.equals(rendererType)) {
+	    return tagName;
+	}
+	if (rendererType != null) {
+	    tagName = tagName + rendererType;
+	}
+	return tagName;
+    }
+
+    /**
+     * Build the tag handler class name from componentFamily and rendererType.
+     *
+     * @param componentFamily the component family
+     * @param rendererType the renderer type
+     */
+    private static String makeTagClassName(String componentFamily, String rendererType) {
+        if (componentFamily == null) {
+	    return null;
+	}
+	String tagClassName = componentFamily;
+	if (rendererType != null) {
+	    if (!componentFamily.equals(rendererType)) {
+	        tagClassName = tagClassName + rendererType;
+	    }
+	}
+	return tagClassName+"Tag";
+    }
+
+    /**
+     * <p>Create directories as needed to contain the output. 
+     *
+     * @param path Pathname to the base directory
+     */
+    private static void directories(String path, boolean classesDir) throws Exception {
+
+        directory = new File(path);
+	if (classesDir) {
+	    directory = new File(path, "com/sun/faces/taglib/html_basic");
+	}
+        if (log.isDebugEnabled()) {
+            log.debug("Creating output directory " +
+                      directory.getAbsolutePath());
+        }
+        directory.mkdirs();
+    }
+
+    // Note that the following methods simply return a global default value now.  When we
     // set up the class path, tag extra info, required, rtexprValue, bodycontext to be
     // configurable, then we can retrieve that info using the args.
     //
@@ -83,42 +450,28 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     /**
      * Return the class path for the given tag.
      */
-    public String getTagClassPath(String tagName) {
+    private static String getTagClassPath(String tagName) {
         return TAGCLASSPATH;
     }
 
     /**
      * Return the tag extra info information (if any) for a given tag.
      */
-    public String getTeiClass(String tagName) {
+    private static String getTeiClass(String tagName) {
         return TEICLASS;
     }
 
     /**
      * Return the tag body content information (if any) for a given tag.
      */
-    public String getBodyContent(String tagName) {
+    private static String getBodyContent(String tagName) {
         return BODYCONTENT;
-    }
-
-    /**
-     * Return the "required" element value for the tag attribute.
-     */
-    public String getRequired(String tagName, String attributeName, 
-			      String tagAttributeStatus) {
-	String result = REQUIRED;
-	if (null != tagAttributeStatus &&
-	    tagAttributeStatus.equals("required")) {
-	    result = "true";
-	}
-	    
-        return result;
     }
 
     /**
      * Return the "rtexprvalue" element value for the tag attribute.
      */
-    public String getRtexprvalue(String tagName, String attributeName) {
+    private static String getRtexprvalue(String tagName, String attributeName) {
         return RTEXPRVALUE;
     }
 
@@ -127,596 +480,672 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     //
 
     /**
-     * Generate any import statements when generating tag classes.
+     * Generate copyright, package declaration, import statements,
+     * class declaration.
      */
-    public String getImportInfo() {
-        StringBuffer sb = new StringBuffer();
-	sb.append("import com.sun.faces.util.*;\n");
-	sb.append("import javax.faces.component.*;\n");
-	sb.append("import javax.faces.context.FacesContext;\n");
-	sb.append("import javax.faces.event.ActionEvent;\n");
-	sb.append("import javax.faces.event.ValueChangeEvent;\n");
-	sb.append("import javax.faces.convert.Converter;\n");
-	sb.append("import javax.faces.el.ValueBinding;\n");
-	sb.append("import javax.faces.el.MethodBinding;\n");
-	sb.append("import javax.faces.webapp.UIComponentTag;\n");
-	sb.append("import javax.servlet.jsp.JspException;\n");
-	sb.append("import org.apache.commons.logging.*;\n");
-	return sb.toString();
-    }
+    private static void tagHandlerPrefix() throws Exception {
 
-    /**
-     * Generate class declaration statement. 
-     */
-    public String getClassDeclaration(String tagName) {
-        return "public class "+tagName+" extends UIComponentTag {";
-    }
+        // Generate the copyright information
+        writer.write(copyright);
 
-    /**
-     * Generate instance variables
-     */
-    public String generateIvars(List attributeNames, String type, Map generated) {
-        StringBuffer result = new StringBuffer(40000);
-	if (attributeNames != null) {
-	    String info = generateIvarsFromAttributes(attributeNames, type, generated);
-	    if (info != null) {
-	        result.append(info);
-	    }
-	}
-	return result.toString();
-    }
+        // Generate the package declaration
+        writer.write("\npackage com.sun.faces.taglib.html_basic;\n");
+        writer.write("\n\n");
 
-    /**
-     * Generate accessor methods
-     */
-    public String generateAccessorMethods(List attributeNames, String type, Map generated) {
-        StringBuffer result = new StringBuffer(40000);
-	if (attributeNames != null) {
-	    String info = generateAccessorMethodsFromAttributes(attributeNames, type, generated);
-	    if (info != null) {
-	        result.append(info);
-	    }
-	}
-	return result.toString();
-    }
+        // Generate the imports
+	writer.write("import com.sun.faces.taglib.BaseComponentBodyTag;\n");
+        writer.write("import com.sun.faces.util.Util;\n");
+        writer.write("import javax.faces.component.UIComponent;\n");
+	writer.write("import javax.faces.component.UI" +
+		     strip(component.getComponentType())+";\n");
+        writer.write("import javax.faces.context.FacesContext;\n");
+        writer.write("import javax.faces.event.ActionEvent;\n");
+        writer.write("import javax.faces.event.ValueChangeEvent;\n");
+        writer.write("import javax.faces.convert.Converter;\n");
+        writer.write("import javax.faces.el.ValueBinding;\n");
+        writer.write("import javax.faces.el.MethodBinding;\n");
+        writer.write("import javax.faces.webapp.UIComponentTag;\n");
+        writer.write("import javax.servlet.jsp.JspException;\n");
+        writer.write("import org.apache.commons.logging.Log;\n");
+        writer.write("import org.apache.commons.logging.LogFactory;\n");
+        writer.write("\n\n");
 
-    /**
-     * Generate general methods that may be used in the tag handler (ex: setProperties);
-     */
-    public String generateGeneralMethods(List rendererAttributeNames, 
-	List componentAttributeNames, String rendererType, String componentRendererType) {
-        StringBuffer result = new StringBuffer(40000);
-	String info = null;
-	String componentType = determineComponentType(componentRendererType, rendererType);
-
-	result.append("    //\n    // General Methods\n    //\n");
-	result.append("    public String getRendererType() { return ");
-	result.append("\""+rendererType+"\"; }\n");
-	result.append("    public String getComponentType() { return ");
-	result.append("\""+componentRendererType+"\"; }\n\n");
-
-	result.append("    protected void setProperties(UIComponent component) {\n");
-	result.append("        super.setProperties(component);\n");
-	String component = "UI"+componentType;
-	result.append("        "+component+" "+componentType.toLowerCase()+
-	    " = (UI"+componentType+ ")component;\n\n");
-	if (convertibleValueHolderComponents.contains(component)) {
-	    result.append("      if (converter != null) {\n");
-	    result.append("          if (isValueReference(converter)) {\n");
-	    result.append("                    ValueBinding vb = \n");
-	    result.append("                        Util.getValueBinding(converter);\n");
-	    result.append("                "+componentType.toLowerCase()+".setValueBinding(");
-	    result.append("\""+"converter\", vb);\n"); 
-	    result.append("          } else {\n"); 
-            result.append("              Converter _converter = FacesContext.getCurrentInstance().getApplication().createConverter(converter);\n");
-	    result.append("              " + componentType.toLowerCase() + ".setConverter(_converter);\n");
-	    result.append("          }\n");
-	    result.append("      }\n\n");
-	}
-
-	Map generated = new HashMap();
-	info = generateOverrideMethodFromAttributes(rendererAttributeNames, rendererType, 
-	    componentRendererType, "renderer", generated);
-	if (info != null) {
-	    result.append(info);
-	}
-	info = generateOverrideMethodFromAttributes(componentAttributeNames, rendererType,
-	    componentRendererType, "binding", generated);
-	if (info != null) {
-	    result.append(info);
-	}
-	result.append("    }\n\n");
-
-	// generate TagSupport Methods
-	//
-	info = generateTagSupportMethods();
-	if (info != null) {
-	    result.append(info);
-	}
-	return result.toString();
-    }
-
-    /**
-     * Generate general methods that may be used in the tag handler (ex: setProperties);
-     * This method designed to handle generation based on component type only.  It is used
-     * when generating tag class information from components not associated with any renderer.
-     */
-    public String generateGeneralMethods(List componentAttributeNames, String componentType) {
-        StringBuffer result = new StringBuffer(40000);
-	String info = null;
-
-	result.append("    //\n    // General Methods\n    //\n");
-	result.append("    public String getRendererType() { return null; }\n");
-	result.append("    public String getComponentType() { return ");
-	result.append("\""+componentType+"\"; }\n\n");
-
-	result.append("    protected void setProperties(UIComponent component) {\n");
-	result.append("        super.setProperties(component);\n");
-	String component = "UI"+componentType;
-	result.append("        "+component+" "+componentType.toLowerCase()+
-	    " = (UI"+componentType+ ")component;\n\n");
-	if (convertibleValueHolderComponents.contains(component)) {
-	    result.append("        if (converter != null) {\n");
-	    result.append("            if (isValueReference(converter)) {\n");
-	    result.append("                    ValueBinding vb = \n");
-	    result.append("                        Util.getValueBinding(converter);\n");
-	    result.append("                "+componentType.toLowerCase()+".setValueBinding(");
-	    result.append("\""+"converter\", vb);\n"); 
-	    result.append("            } else {\n"); 
-            result.append("                Converter _converter = FacesContext.getCurrentInstance().getApplication().createConverter(converter);\n");
-	    result.append("                "+componentType.toLowerCase()+".setConverter(_converter);\n");
-	    result.append("            }\n");
-	    result.append("        }\n\n");
-	}
-
-	info = generateOverrideMethodFromAttributes(componentAttributeNames, componentType);
-	if (info != null) {
-	    result.append(info);
-	}
-
-	result.append("    }\n\n");
+        // Generate the class JavaDocs (if any)
+        DescriptionBean db = component.getDescription("");
+        if (db != null) {
+            String description = db.getDescription();
+            if (description == null) {
+                description = "";
+            }
+            description = description.trim();
+            if (description.length() > 0) {
+                writer.write("/**\n");
+                description(description, writer, 1);
+                writer.write(" */\n");
+            }
+        }
 	
-	// generate TagSupport Methods
+        // Generate the class declaration
+        writer.write("public class ");
+        writer.write(tagClassName);
+        writer.write(" extends ");
+	if (isBodyTag()) {
+	    writer.write("BaseComponentBodyTag");
+	} else {
+	    writer.write("UIComponentTag");
+	}
+        writer.write(" {\n\n\n");
+
+	// Generate Log declaration
+	writer.write("    public static Log log = LogFactory.getLog("+tagClassName+".class);\n\n");
+    }
+
+    /**
+     * Generate Tag Handler instance variables from component properties
+     * and renderer attributes.
+     */
+    private static void tagHandlerIvars() throws Exception {
+
+	writer.write("    //\n    // Instance Variables\n    //\n\n");
+
+	// Generate from component properties
 	//
-	info = generateTagSupportMethods();
-	if (info != null) {
-	    result.append(info);
+        PropertyBean[] properties = component.getProperties();
+	PropertyBean property = null;
+	String propertyName = null;
+	String propertyType = null;
+	String ivar = null;
+        for (int i = 0, len = properties.length; i < len; i++) {
+            if (null == (property = properties[i])) {
+                continue;
+            }
+    	    if (!property.isTagAttribute()) {
+                continue;
+            }
+	    propertyName = property.getPropertyName();
+	    propertyType = property.getPropertyClass();
+
+	    // SPECIAL - Don't generate these properties 
+	    if (propertyName.equals("binding") ||
+		propertyName.equals("id") ||
+		propertyName.equals("rendered")) {
+		continue;
+	    }
+
+	    ivar = mangle(propertyName);
+	    if (valueBindingEnabledProperties.contains(propertyName) ||
+		methodBindingEnabledProperties.contains(propertyName)) {
+                writer.write("    private java.lang.String " + ivar + ";\n");
+	    } else {
+	        writer.write("    private " + propertyType + " " + ivar + ";\n");
+		if (primitive(propertyType)) {
+		    writer.write(" = "+(String)defaults.get(propertyType)+";\n");
+		}
+	    }
 	}
 
-	return result.toString();
+	writer.write("\n");
+
+	// Generate from renderer attributes..
+	//
+        AttributeBean[] attributes = renderer.getAttributes();
+	AttributeBean attribute = null;
+	String attributeName = null;
+	String attributeType = null;
+        for (int i = 0, len = attributes.length; i < len; i++) {
+            if (null == (attribute = attributes[i])) {
+                continue;
+            }
+    	    if (!attribute.isTagAttribute()) {
+                continue;
+            }
+	    attributeName = attribute.getAttributeName();
+	    attributeType = attribute.getAttributeClass();
+
+	    ivar = mangle(attributeName);
+            writer.write("    private java.lang.String " + ivar + ";\n");
+	}
+	writer.write("\n");
     }
 
-    public String generateGlobalAttributes() {
-	return ("");
+    /**
+     * Generate Tag Handler setter methods from component properties
+     * and renderer attributes.
+     */
+    private static void tagHandlerSetterMethods() throws Exception {
+
+	writer.write("    //\n    // Setter Methods\n    //\n\n");
+
+	// Generate from component properties
+	//
+        PropertyBean[] properties = component.getProperties();
+	PropertyBean property = null;
+	String propertyName = null;
+	String propertyType = null;
+	String setVar = null;
+	String ivar = null;
+        for (int i = 0, len = properties.length; i < len; i++) {
+            if (null == (property = properties[i])) {
+                continue;
+            }
+    	    if (!property.isTagAttribute()) {
+                continue;
+            }
+	    propertyName = property.getPropertyName();
+	    propertyType = property.getPropertyClass();
+
+	    // SPECIAL - Don't generate these properties 
+	    if (propertyName.equals("binding") ||
+		propertyName.equals("id") ||
+		propertyName.equals("rendered")) {
+		continue;
+	    }
+	    ivar = mangle(propertyName);
+	    setVar = capitalize(propertyName);
+	    writer.write("    public void set" + setVar + "(");
+	    if (valueBindingEnabledProperties.contains(propertyName) ||
+		methodBindingEnabledProperties.contains(propertyName)) {
+		writer.write("java.lang.String " + ivar + ") {\n");
+	    } else {
+		writer.write(propertyType + " " + ivar + ") {\n");
+	    }
+            writer.write("        this." + ivar + " = " + ivar + ";\n");
+            writer.write("    }\n\n");
+	}
+
+	// Generate from renderer attributes..
+	//
+        AttributeBean[] attributes = renderer.getAttributes();
+	AttributeBean attribute = null;
+	String attributeName = null;
+	String attributeType = null;
+        for (int i = 0, len = attributes.length; i < len; i++) {
+            if (null == (attribute = attributes[i])) {
+                continue;
+            }
+    	    if (!attribute.isTagAttribute()) {
+                continue;
+            }
+	    attributeName = attribute.getAttributeName();
+	    attributeType = attribute.getAttributeClass();
+
+	    ivar = mangle(attributeName);
+            setVar = capitalize(attributeName);
+            writer.write("    public void set" + setVar + "(");
+            writer.write("java.lang.String " + ivar + ") {\n");
+            writer.write("        this." + ivar + " = " + ivar + ";\n");
+            writer.write("    }\n\n");
+	}
+	writer.write("\n");    
+    }
+ 
+    /**
+     * Generate Tag Handler general methods from component properties
+     * and renderer attributes.
+     */
+    private static void tagHandlerGeneralMethods() throws Exception {
+
+	writer.write("    //\n    // General Methods\n    //\n\n");
+
+	String componentType = component.getComponentType();
+	String rendererType = renderer.getRendererType();
+	writer.write("    public String getRendererType() { return ");
+        writer.write("\""+rendererType+"\"; }\n");
+	writer.write("    public String getComponentType() { return ");
+	if (componentType.equals(rendererType)) {
+	    writer.write("\"javax.faces.Html" + strip(componentType) + "\"; }\n");
+	} else {
+	    writer.write("\"javax.faces.Html" + strip(componentType) + strip(rendererType) + "\"; }\n");
+	}
+        writer.write("\n");
+        writer.write("    protected void setProperties(UIComponent component) {\n");
+        writer.write("        super.setProperties(component);\n");
+        String uicomponent = "UI"+strip(componentType);
+        writer.write("        "+uicomponent+" "+strip(componentType).toLowerCase()+
+		     " = (UI"+strip(componentType)+ ")component;\n\n");
+        if (convertibleValueHolderComponents.contains(uicomponent)) {
+            writer.write("        if (converter != null) {\n");
+            writer.write("            if (isValueReference(converter)) {\n");
+            writer.write("                      ValueBinding vb = \n");
+            writer.write("                          Util.getValueBinding(converter);\n");
+            writer.write("                  "+strip(componentType).toLowerCase()+".setValueBinding(");
+            writer.write("\""+"converter\", vb);\n");
+            writer.write("            } else {\n");
+            writer.write("                Converter _converter = FacesContext.getCurrentInstance().\n");          
+	    writer.write("                    getApplication().createConverter(converter);\n"); 
+            writer.write("                " + strip(componentType).toLowerCase() + ".setConverter(_converter);\n");
+
+            writer.write("            }\n");
+            writer.write("        }\n\n");
+        }
+
+	// Generate "setProperties" method contents from component properties
+	//
+        PropertyBean[] properties = component.getProperties();
+	PropertyBean property = null;
+	String propertyName = null;
+	String propertyType = null;
+	String ivar = null;
+	String vbKey = null;
+        for (int i = 0, len = properties.length; i < len; i++) {
+            if (null == (property = properties[i])) {
+                continue;
+            }
+    	    if (!property.isTagAttribute()) {
+                continue;
+            }
+	    propertyName = property.getPropertyName();
+	    propertyType = property.getPropertyClass();
+
+	    // SPECIAL - Don't generate these properties 
+	    if (propertyName.equals("binding") ||
+		propertyName.equals("id") ||
+		propertyName.equals("rendered") ||
+		propertyName.equals("converter")) {
+		continue;
+	    }
+	    ivar = mangle(propertyName);
+	    vbKey = ivar;
+
+	    if (valueBindingEnabledProperties.contains(propertyName)) {
+                writer.write("        if ("+ivar+" != null) {\n");
+                writer.write("            if (isValueReference("+ivar+")) {\n");
+                writer.write("                ValueBinding vb = ");
+                writer.write("Util.getValueBinding("+ivar+");\n");
+
+                writer.write("                "+strip(componentType).toLowerCase());
+                writer.write(".setValueBinding(\""+vbKey+"\", vb);\n");
+                writer.write("            } else {\n");
+		if (primitive(propertyType)) {
+	            writer.write("                "+propertyType+" _"+ivar+" ");
+                    writer.write("= new "+wrappers.get(propertyType));
+                    writer.write("("+ivar+")."+propertyType+"Value();\n");
+                    writer.write("                "+strip(componentType).toLowerCase()+
+                        ".set" + capitalize(propertyName) + "(_" + ivar + ");\n");
+                } else {
+                    writer.write("                "+strip(componentType).toLowerCase()+
+		        ".set" + capitalize(propertyName) + "(" + ivar + ");\n");
+                }
+                writer.write("            }\n");
+                writer.write("        }\n");
+	    } else if (methodBindingEnabledProperties.contains(propertyName)) {
+                if (ivar.equals("action")) {
+                    writer.write("        if ("+ivar+" != null) {\n");
+                    writer.write("            if (isValueReference("+ivar+")) {\n");
+                    writer.write("                MethodBinding vb = FacesContext.getCurrentInstance().");
+                    writer.write("getApplication().createMethodBinding("+ivar+", null);\n");
+                    writer.write("                "+strip(componentType).toLowerCase());
+                    writer.write(".setAction(vb);\n");
+                    writer.write("            } else {\n");
+                    writer.write("                final String outcome = " + ivar + ";\n");
+                    writer.write("                MethodBinding vb = Util.createConstantMethodBinding("+ivar+");\n");
+                    writer.write("                "+strip(componentType).toLowerCase()+".setAction(vb);\n");
+                    writer.write("            }\n");
+                    writer.write("        }\n");
+                } else {
+                    HashMap signatureMap = new HashMap(3);
+                    signatureMap.put("actionListener", 
+		        "Class args[] = { ActionEvent.class };");
+                    signatureMap.put("validator",
+                        "Class args[] = { FacesContext.class, UIComponent.class, Object.class };");
+                    signatureMap.put("valueChangeListener",
+                        "Class args[] = { ValueChangeEvent.class };");
+                    writer.write("        if ("+ivar+" != null) {\n");
+                    writer.write("            if (isValueReference("+ivar+")) {\n");
+                    writer.write("                " + signatureMap.get(ivar) + "\n");
+                    writer.write("                MethodBinding vb = FacesContext.getCurrentInstance().");
+                    writer.write("getApplication().createMethodBinding("+ivar+", args);\n");
+                    writer.write("                "+strip(componentType).toLowerCase());
+                    writer.write(".set" + capitalize(ivar) + "(vb);\n");
+                    writer.write("            } else {\n");
+                    writer.write("              Object params [] = {" + ivar + "};\n");
+                    writer.write("              throw new javax.faces.FacesException(Util.getExceptionMessage(Util.INVALID_EXPRESSION_ID, params));\n");
+                    writer.write("            }\n");
+                    writer.write("            }\n");
+                } 
+	    } else {
+                writer.write("        "+strip(componentType).toLowerCase()+".set" +
+                    capitalize(propertyName) + "(" + ivar + ");\n");
+	    }
+	}
+
+	// Generate "setProperties" method contents from renderer attributes 
+	//
+        AttributeBean[] attributes = renderer.getAttributes();
+	AttributeBean attribute = null;
+	String attributeName = null;
+	String attributeType = null;
+	ivar = null;
+	vbKey = null;
+        for (int i = 0, len = attributes.length; i < len; i++) {
+            if (null == (attribute = attributes[i])) {
+                continue;
+            }
+    	    if (!attribute.isTagAttribute()) {
+                continue;
+            }
+	    attributeName = attribute.getAttributeName();
+	    attributeType = attribute.getAttributeClass();
+
+	    ivar = mangle(attributeName);
+	    vbKey = ivar;
+
+	    writer.write("        if ("+ivar+" != null) {\n");
+            writer.write("            if (isValueReference("+ivar+")) {\n");
+	    writer.write("                ValueBinding vb = ");
+	    writer.write("Util.getValueBinding("+ivar+");\n");
+            writer.write("                "+strip(componentType).toLowerCase());
+	    if (ivar.equals("_for")) {
+	        writer.write(".setValueBinding(\""+"_"+vbKey+"\", vb);\n");
+	    } else {
+	        writer.write(".setValueBinding(\""+vbKey+"\", vb);\n");
+	    }
+	    writer.write("            } else {\n");
+	    if (primitive(attributeType)) {
+	        writer.write("                "+attributeType+" _"+ivar+" ");
+		writer.write("= new "+wrappers.get(attributeType));
+		writer.write("("+ivar+")."+attributeType+"Value();\n");
+		if (attributeType.equals("boolean")) {
+		    writer.write("                "+strip(componentType).toLowerCase()+
+			".getAttributes().put(\""+ivar+"\", ");
+		    writer.write("_"+ivar+" ? Boolean.TRUE : Boolean.FALSE);\n");
+		} else {
+		    writer.write("                if (_"+ivar+" != ");
+		    writer.write(defaults.get(attributeType)+") {\n");
+		    writer.write("                    "+strip(componentType).toLowerCase()+
+		        ".getAttributes().put(\""+ivar+"\", new ");
+		    writer.write(wrappers.get(attributeType)+"(_"+ivar+"));\n");
+		    writer.write("                }\n");
+		}
+	    } else {
+	        if (ivar.equals("bundle")) {
+		    writer.write("                "+strip(componentType).toLowerCase()+
+			".getAttributes().put(com.sun.faces.RIConstants.BUNDLE_ATTR, ");
+		} else if (ivar.equals("_for")) {
+		    writer.write("                "+strip(componentType).toLowerCase()+
+			".getAttributes().put(\"for\", ");
+		} else {
+		    writer.write("                "+strip(componentType).toLowerCase()+
+			".getAttributes().put(\""+ivar+"\", ");
+		}
+		writer.write(ivar+");\n");
+	    }
+	    writer.write("            }\n");
+	    writer.write("        }\n");
+	}
+	writer.write("    }\n\n");
     }
 
-
-    public void setParser(ConfigParser parser) {
-        this.parser = parser;
+    /**
+     * Generate Tag Handler support methods
+     */
+    private static void tagHandlerSupportMethods() throws Exception {
+        writer.write("    //\n    // Methods From TagSupport\n    //\n\n");
+	writer.write("    public int doStartTag() throws JspException {\n");
+	writer.write("        int rc = 0;\n");
+	writer.write("        try {\n");
+	writer.write("            rc = super.doStartTag();\n");
+	writer.write("        } catch (JspException e) {\n");
+	writer.write("            if (log.isDebugEnabled()) {\n");
+	writer.write("                log.debug(getDebugString(), e);\n");
+	writer.write("            }\n");
+	writer.write("            throw e;\n");
+	writer.write("        } catch (Throwable t) {\n");
+	writer.write("            if (log.isDebugEnabled()) {\n");
+	writer.write("                log.debug(getDebugString(), t);\n");
+	writer.write("            }\n");
+	writer.write("            throw new JspException(t);\n");
+	writer.write("        }\n");
+	writer.write("        return rc;\n");
+	writer.write("    }\n\n");
+	writer.write("    public int doEndTag() throws JspException {\n");
+	writer.write("        int rc = 0;\n");
+	writer.write("        try {\n");
+	writer.write("            rc = super.doEndTag();\n");
+	writer.write("        } catch (JspException e) {\n");
+	writer.write("            if (log.isDebugEnabled()) {\n");
+	writer.write("                log.debug(getDebugString(), e);\n");
+	writer.write("            }\n");
+	writer.write("            throw e;\n");
+	writer.write("        } catch (Throwable t) {\n");
+	writer.write("            if (log.isDebugEnabled()) {\n");
+	writer.write("                log.debug(getDebugString(), t);\n");
+	writer.write("            }\n");
+	writer.write("            throw new JspException(t);\n");
+	writer.write("        }\n");
+	writer.write("        return rc;\n");
+	writer.write("    }\n\n");
     }
 
-    public ConfigParser getParser() {
-        return parser;
+    /**
+     * Generate remaining Tag Handler methods 
+     */
+    private static void tagHandlerSuffix() throws Exception {
+
+        // generate general purpose method used in logging.
+        //
+        writer.write("    public String getDebugString() {\n");
+        String res = "\"id: \"+this.getId()+\" class: \"+this.getClass().getName()";
+        writer.write("        String result = "+res+";\n");
+        writer.write("        return result;\n");
+        writer.write("    }\n\n");
+
+        writer.write("}\n");
     }
 
     //
     // Helper methods
     //
+    //
 
     /**
-     * Generate instance variables from a List of attribute names, the type (component.renderer).
-     * The "generated" Map contains attribute name|attribute type mappings, and is used to
-     * ensure we don't use the same attribute for generation more than once.
+     * Is the tag handler we're building a body tag variety?
      */
-    private String generateIvarsFromAttributes(List attributeNames, String type, Map generated) {
-        String attributeName = null;
-	String attributeClass = null;
-        StringBuffer result = new StringBuffer(40000);
-	result.append("\n\n    //\n    // Instance Variables\n    //\n");
-	for (int i=0; i<attributeNames.size(); i++) {
-	    attributeName = (String)attributeNames.get(i);
-	    
-	    // these are already handled in javax.faces.webapp.UIComponentTag
-	    //
-	    if (attributeName.equals("binding") ||
-		attributeName.equals("rendered")) {
-		continue;
-	    }
-	    boolean isRendererAttribute = false; 
-	    attributeClass = getParser().getRendererAttributeClass(type, attributeName);
-	    if (attributeClass != null) {
-	        isRendererAttribute = true;
-	    } else {
-	        attributeClass = getParser().getComponentPropertyClass(type, attributeName);
-	        if (attributeClass == null) {
-	            throw new IllegalStateException("Can't find attribute class for type:"+
-		        type+" and attribute name:"+attributeName);
-		}
-	        isRendererAttribute = false;
-	    }
-	    // check if we've already generated the same attribute name
-	    //
-	    String attrType = (String)generated.get(attributeName);
-	    if (attrType != null) {
-	        if (attrType.equals(attributeClass)) {
-		    continue;
-		} else {
-		    throw new IllegalStateException("Already generated attribute name:"+
-		        attributeName+" but with the type:"+attrType+
-			" for type:"+type);
-		}
-	    }
-
-	    String ivar = generateIvar(attributeName);
-
-	    // don't generate an Ivar for those things that are already
-	    // ivars in UIComponentTag.
-	    if (!(attributeName.equals("binding") ||
-		  attributeName.equals("id") || 
-		  attributeName.equals("override") ||
-		  attributeName.equals("rendered"))) {
-		
-		// if the attribute is a renderer attribute, or if it's a component
-		// property which is value binding enabled - then we just generate
-		// "String" types.
-		//
-		if (isRendererAttribute) {
-		    result.append("    private java.lang.String "+ivar);
-		} else if (valueBindingEnabledProperties.contains(attributeName) || 
-			   methodBindingEnabledProperties.contains(attributeName)) {
-		    result.append("    private java.lang.String "+ivar);
-		} else {
-		    result.append("    private "+attributeClass+" "+ivar);
-		    // if it's a primitive
-		    if (isPrimitive(attributeClass)) {
-		        // assign the default value
-		        result.append(" = "+(String)defaultPrimitiveValues.get(attributeClass));
-	            }
-		}
-		result.append(";\n");
-	    }
-	    
-	    generated.put(attributeName, attributeClass);
-		    
-        }	
-
-	return result.toString();
-    }
-
-    /**
-     * Generate accessor methods from a List of attribute names, the type (component.renderer).
-     * The "generated" Map contains attribute name|attribute type mappings, and is used to
-     * ensure we don't use the same attribute for generation more than once.
-     */
-    private String generateAccessorMethodsFromAttributes(List attributeNames, String type,
-	Map generated) {
-        String attributeName = null;
-	String attributeClass = null;
-        StringBuffer result = new StringBuffer(40000);
-	result.append("\n\n    //\n    // Setter Methods\n    //\n");
-	for (int i=0; i<attributeNames.size(); i++) {
-	    attributeName = (String)attributeNames.get(i);
-	    if (attributeName.equals("binding") || attributeName.equals("id") ||
-		attributeName.equals("rendered")) {
-		continue;
-	    }
-	    boolean isRendererAttribute = false;
-	    attributeClass = getParser().getRendererAttributeClass(type, attributeName);
-	    if (attributeClass != null) {
-	        isRendererAttribute = true;
-	    } else {
-	        attributeClass = getParser().getComponentPropertyClass(type, attributeName);
-	        if (attributeClass == null) {
-	            throw new IllegalStateException("Can't find attribute class for type:"+
-		        type+":attribute name:"+attributeName);
-	        }
-	        isRendererAttribute = false;
-	    } 
-	    // check if we have already generated the same attribute name
-	    //
-	    String attrType = (String)generated.get(attributeName);
-	    if (attrType != null) {
-	        if (attrType.equals(attributeClass)) {
-		    continue;
-		} else {
-		    throw new IllegalStateException("Already generated attribute name:"+
-		        attributeName+" but with the type:"+attrType+
-			" for type:"+type);
-		}
-	    }
-	    String ivar = generateIvar(attributeName);
-	    
-	    // setter
-	    String setWhat = attributeName;
-	    if (isAllUpperCase(setWhat)) {
-		setWhat = attributeName.toLowerCase();
-	    }
-	    setWhat = Character.toUpperCase(setWhat.charAt(0)) +
-		setWhat.substring(1);
-	    result.append("    public void set" + setWhat + "(");
-	    if (isRendererAttribute) {
-	        result.append("java.lang.String " + ivar + ") {\n");
-	    } else if (valueBindingEnabledProperties.contains(attributeName) ||
-		       methodBindingEnabledProperties.contains(attributeName)) {
-	        result.append("java.lang.String " + ivar + ") {\n");
-	    } else {
-		result.append(attributeClass + " " + ivar + ") {\n");
-	    }
-	    result.append("        this." + ivar + " = " + ivar + ";\n");
-	    result.append("    }\n\n");
-
-	    generated.put(attributeName, attributeClass);
-        }	
-	return result.toString();
-    }
-
-    /**
-     * Generate set property method from a List of attribute names, 
-     * the type (component.renderer).
-     * The "generated" Map contains attribute name|attribute type mappings, and is used to
-     * ensure we don't use the same attribute for generation more than once.
-     */
-    private String generateOverrideMethodFromAttributes(List attributeNames, String rendererType,
-	String componentRendererType, String metaType, Map generated) {
-        String attributeName = null;
-	String attributeClass = null;
-        StringBuffer result = new StringBuffer(40000);
-
-
-	for (int i=0; i<attributeNames.size(); i++) {
-	    attributeName = (String)attributeNames.get(i);
-	    if (metaType.equals("renderer")) {
-	        attributeClass = getParser().getRendererAttributeClass(rendererType, attributeName);
-	    } else {
-	        attributeClass = getParser().getComponentPropertyClass(componentRendererType, 
-		    attributeName);
-	    }
-	    // check if we've already generated the same attribute name
-	    //
-	    String attrType = (String)generated.get(attributeName);
-	    if (attrType != null) {
-	        if (attrType.equals(attributeClass)) {
-		    continue;
-		} else {
-		    throw new IllegalStateException("Already generated attribute name:"+
-		        attributeName+" but with the type:"+attrType+
-			" for:"+rendererType+":"+componentRendererType);
-		}
-	    }
-	    String ivar = generateIvar(attributeName);
-	    String componentType = determineComponentType(componentRendererType, rendererType);
-            String vbKey = ivar;
-	    if (ivar.equals("URL")) {
-	        vbKey = "value";
-	    }
-	    if (metaType.equals("renderer")) {
-	        result.append("        if ("+ivar+" != null) {\n");
-		result.append("            if (isValueReference("+ivar+")) {\n");
-		result.append("                ValueBinding vb = ");
-		result.append("Util.getValueBinding("+ivar+");\n");
-                result.append("                "+componentType.toLowerCase());
-		if (ivar.equals("_for")) {
-	            result.append(".setValueBinding(\""+"_"+vbKey+"\", vb);\n");
-		} else {
-		    result.append(".setValueBinding(\""+vbKey+"\", vb);\n");
-		}
-		result.append("            } else {\n");
-		if (isPrimitive(attributeClass)) {
-		    result.append("                "+attributeClass+" _"+ivar+" ");
-		    result.append("= new "+wrappersForNumbers.get(attributeClass));
-		    result.append("("+ivar+")."+attributeClass+"Value();\n");
-		    if (attributeClass.equals("boolean")) {
-			result.append("                "+componentType.toLowerCase()+
-				      ".getAttributes().put(\""+ivar+"\", ");
-			result.append("_"+ivar+" ? Boolean.TRUE : Boolean.FALSE);\n");
-		    } else {
-		        result.append("                if (_"+ivar+" != ");
-		        result.append(defaultPrimitiveValues.get(attributeClass)+") {\n");
-		        result.append("                    "+componentType.toLowerCase()+
-		            ".getAttributes().put(\""+ivar+"\", new ");
-		        result.append(wrappersForNumbers.get(attributeClass)+"(_"+ivar+"));\n");
-		        result.append("                }\n");
-		    }
-		} else {
-		    if (ivar.equals("bundle")) {
-			result.append("                "+componentType.toLowerCase()+
-				      ".getAttributes().put(com.sun.faces.RIConstants.BUNDLE_ATTR, ");
-		    }
-		    else if (ivar.equals("_for")) {
-			result.append("                "+componentType.toLowerCase()+
-				      ".getAttributes().put(\"for\", ");
-		    }
-		    else {
-			result.append("                "+componentType.toLowerCase()+
-				      ".getAttributes().put(\""+ivar+"\", ");
-		    }
-		    result.append(ivar+");\n");
-		}
-		result.append("            }\n");
-		result.append("        }\n");
-	    } else {
-	        if (attributeName.equals("id") || 
-		    attributeName.equals("binding") ||
-		    attributeName.equals("rendered") ||
-                    attributeName.equals("converter")) {
-		    continue;
-		}
-	        if (valueBindingEnabledProperties.contains(attributeName)) {
-	            result.append("        if ("+ivar+" != null) {\n");
-		    result.append("            if (isValueReference("+ivar+")) {\n");
-		    result.append("                ValueBinding vb = ");
-		    result.append("Util.getValueBinding("+ivar+");\n");
-                    result.append("                "+componentType.toLowerCase());
-		    result.append(".setValueBinding(\""+vbKey+"\", vb);\n");
-		    result.append("            } else {\n");
-		    if (isPrimitive(attributeClass)) {
-		        result.append("                "+attributeClass+" _"+ivar+" ");
-		        result.append("= new "+wrappersForNumbers.get(attributeClass));
-		        result.append("("+ivar+")."+attributeClass+"Value();\n");
-			result.append("                "+componentType.toLowerCase()+
-			    ".set"+Character.toUpperCase(attributeName.charAt(0)) +
-			    attributeName.substring(1) + "(_" + ivar + ");\n");
-		    } else {
-	                result.append("                "+componentType.toLowerCase()+".set" + 
-		            Character.toUpperCase(attributeName.charAt(0)) +
-		            attributeName.substring(1) + "(" + ivar + ");\n");
-		    }
-		    result.append("            }\n");
-		    result.append("        }\n");
-	        }
-		else if (methodBindingEnabledProperties.contains(attributeName)) {
-		    generateMethodBindingSetter(ivar, attributeName, 
-						componentType, result);
-		}
-		else {
-	            result.append("        "+componentType.toLowerCase()+".set" + 
-		        Character.toUpperCase(attributeName.charAt(0)) +
-		        attributeName.substring(1) + "(" + ivar + ");\n");
-		}
-	    }
-	    generated.put(attributeName, attributeClass);
-        }	
-	return result.toString();
-    }
-
-    /**
-     * Overloaded method to deal with component types only.
-     */
-    private String generateOverrideMethodFromAttributes(List attributeNames, String componentType) {
-        String attributeName = null;
-	String attributeClass = null;
-        StringBuffer result = new StringBuffer(40000);
-
-
-	for (int i=0; i<attributeNames.size(); i++) {
-	    attributeName = (String)attributeNames.get(i);
-	    attributeClass = getParser().getComponentPropertyClass(componentType, attributeName);
-	    String ivar = generateIvar(attributeName);
-	    String vbKey = ivar;
-	    if (ivar.equals("URL")) {
-	        vbKey = "value";
-	    }
-
-	    if (attributeName.equals("binding") || attributeName.equals("id") ||
-	        attributeName.equals("rendered") || attributeName.equals("converter")) {
-		continue;
-	    }
-	    if (valueBindingEnabledProperties.contains(attributeName)) {
-	        result.append("        if ("+ivar+" != null) {\n");
-	        result.append("            if (isValueReference("+ivar+")) {\n");
-		result.append("                ValueBinding vb = ");
-		result.append("Util.getValueBinding("+ivar+");\n");
-                result.append("                "+componentType.toLowerCase());
-		result.append(".setValueBinding(\""+vbKey+"\", vb);\n");
-		result.append("            } else {\n");
-		if (isPrimitive(attributeClass)) {
-		    result.append("                "+attributeClass+" _"+ivar+" ");
-		    result.append("= new "+wrappersForNumbers.get(attributeClass));
-		    result.append("("+ivar+")."+attributeClass+"Value();\n");
-		    result.append("                "+componentType.toLowerCase()+
-		        ".set"+Character.toUpperCase(attributeName.charAt(0)) +
-		        attributeName.substring(1) + "(_" + ivar + ");\n");
-		} else {
-	            result.append("                "+componentType.toLowerCase()+".set" + 
-		        Character.toUpperCase(attributeName.charAt(0)) +
-		        attributeName.substring(1) + "(" + ivar + ");\n");
-		}
-		result.append("            }\n");
-		result.append("        }\n");
-	    } else {
-	        result.append("        "+componentType.toLowerCase()+".set" + 
-		    Character.toUpperCase(attributeName.charAt(0)) +
-		    attributeName.substring(1) + "(" + ivar + ");\n");
-	    }
-        }	
-	return result.toString();
-    }
-
-    private String generateTagSupportMethods() {
-        StringBuffer result = new StringBuffer(20000);
-        result.append("    //\n    // Methods From TagSupport\n    //\n\n");
-	result.append("    public int doStartTag() throws JspException {\n");
-	result.append("        int rc = 0;\n");
-	result.append("        try {\n");
-	result.append("            rc = super.doStartTag();\n");
-	result.append("        } catch (JspException e) {\n");
-	result.append("            if (log.isDebugEnabled()) {\n");
-	result.append("                log.debug(getDebugString(), e);\n");
-	result.append("            }\n");
-	result.append("            throw e;\n");
-	result.append("        } catch (Throwable t) {\n");
-	result.append("            if (log.isDebugEnabled()) {\n");
-	result.append("                log.debug(getDebugString(), t);\n");
-	result.append("            }\n");
-	result.append("            throw new JspException(t);\n");
-	result.append("        }\n");
-	result.append("        return rc;\n");
-	result.append("    }\n\n");
-	result.append("    public int doEndTag() throws JspException {\n");
-	result.append("        int rc = 0;\n");
-	result.append("        try {\n");
-	result.append("            rc = super.doEndTag();\n");
-	result.append("        } catch (JspException e) {\n");
-	result.append("            if (log.isDebugEnabled()) {\n");
-	result.append("                log.debug(getDebugString(), e);\n");
-	result.append("            }\n");
-	result.append("            throw e;\n");
-	result.append("        } catch (Throwable t) {\n");
-	result.append("            if (log.isDebugEnabled()) {\n");
-	result.append("                log.debug(getDebugString(), t);\n");
-	result.append("            }\n");
-	result.append("            throw new JspException(t);\n");
-	result.append("        }\n");
-	result.append("        return rc;\n");
-	result.append("    }\n\n");
-
-	return result.toString();
-    }
-
-    protected Log getLog() {
-	return log;
-    }
-
-    private void generateMethodBindingSetter(String ivar, 
-					     String attributeName, 
-					     String componentType, 
-					     StringBuffer result) {
-	// special case this, we need to generate a
-	// MethodBinding instance inner class.
-	if (ivar.equals("action")) {
-	    result.append("        if ("+ivar+" != null) {\n");
-	    result.append("            if (isValueReference("+ivar+")) {\n");
-	    result.append("                MethodBinding vb = FacesContext.getCurrentInstance().");
-	    result.append("getApplication().createMethodBinding("+ivar+", null);\n");
-	    result.append("                "+componentType.toLowerCase());
-	    result.append(".setAction(vb);\n");
-	    result.append("            } else {\n");
-	    result.append("                final String outcome = " + ivar + ";\n");
-	    result.append("                MethodBinding vb = Util.createConstantMethodBinding("+ivar+");\n");
-	    result.append("                "+componentType.toLowerCase()+".setAction(vb);\n");
-	    result.append("            }\n");
-	    result.append("        }\n");
+    private static boolean isBodyTag() {
+        if (bodyTags.contains(tagClassName)) {
+	    return true;
+	} else {
+	    return false;
 	}
-	else {
-	    HashMap signatureMap = new HashMap(3);
-	    signatureMap.put("actionListener",
-			     "Class args[] = { ActionEvent.class };");
-	    signatureMap.put("validator",
-			     "Class args[] = { FacesContext.class, UIComponent.class, Object.class };");
-	    signatureMap.put("valueChangeListener",
-			     "Class args[] = { ValueChangeEvent.class };");
-	    result.append("        if ("+ivar+" != null) {\n");
-	    result.append("            if (isValueReference("+ivar+")) {\n");
-	    result.append("                " + signatureMap.get(ivar) + "\n");
-	    result.append("                MethodBinding vb = FacesContext.getCurrentInstance().");
-	    result.append("getApplication().createMethodBinding("+ivar+", args);\n");
-	    result.append("                "+componentType.toLowerCase());
-	    result.append(".set" + Character.toUpperCase(ivar.charAt(0)) + ivar.substring(1) + "(vb);\n");
-	    result.append("            } else {\n");
-	    result.append("              Object params [] = {" + ivar + "};\n");
-	    result.append("              throw new javax.faces.FacesException(Util.getExceptionMessage(Util.INVALID_EXPRESSION_ID, params));\n");
-	    result.append("            }\n");
-	    result.append("        }\n");
+    }
+
+    /**
+     *
+     * @return a SortedMap, where the keys are component-family String
+     * entries, and the values are {@link RendererBean} instances
+     */
+    private static SortedMap getComponentFamilyRendererMap(String rkId) 
+	throws IllegalStateException {
+	RenderKitBean renderKit = null;
+	RendererBean [] renderers = null;
+	RendererBean renderer = null;
+	TreeMap result = null;
+	ArrayList list = null;
+	String componentFamily = null;
+
+	if (null == (renderKit = fcb.getRenderKit(rkId))) {
+	    RenderKitBean [] kits = null;
+	    if (null == (kits = fcb.getRenderKits())) {
+		throw new IllegalStateException("no RenderKits");
+	    }
+	    if (null == (renderKit = kits[0])) {
+		throw new IllegalStateException("no RenderKits");
+	    }
 	}
+
+	if (null == (renderers = renderKit.getRenderers())) {
+	    throw new IllegalStateException("no Renderers");
+	}
+
+	result = new TreeMap();
+	
+	for (int i = 0, len = renderers.length; i < len; i++) {
+	    if (null == (renderer = renderers[i])) {
+		throw new IllegalStateException("no Renderer");
+	    }
+	    // if this is the first time we've encountered this
+	    // componentFamily
+	    if (null == (list = (ArrayList)
+			 result.get(componentFamily = 
+				    renderer.getComponentFamily()))) {
+		// create a list for it
+		list = new ArrayList();
+		list.add(renderer);
+		result.put(componentFamily, list);
+	    }
+	    else {
+		list.add(renderer);
+	    }
+	}
+	return result;
+    }
+
+    /**
+     * @return a SortedMap, where the keys are component-family String
+     * entries, and the values are {@link ComponentBean} instances
+     * Only include components that do not have a base component type.
+     */
+    private static SortedMap getComponentFamilyComponentMap() 
+        throws IllegalStateException {
+	TreeMap result = new TreeMap();
+	ComponentBean[] components = fcb.getComponents();
+	for (int i = 0, len = components.length; i < len; i++) {
+	    if (null == (component = components[i])) {
+	        throw new IllegalStateException("No Components Found");
+	    }
+	    if (component.getBaseComponentType() != null) {
+	        continue;
+	    }
+	    String componentFamily = component.getComponentFamily();
+	    String componentType = component.getComponentType();
+	    result.put(componentFamily, component);
+	}
+	return result;
+    }
+
+
+    /**
+     * Generate the TLD file.
+     */
+    private static void generateTld() throws Exception {
+        // Create and open a Writer for generating our output
+        File file = new File(directory, "html_basic.tld");
+        writer = new BufferedWriter(new FileWriter(file));
+
+	// Generate each section of the TLD consecutively
+	xmlHeader();
+	// copyright();
+	tldDocType();
+	tldDescription();
+	tldValidator();
+	tldTags();
+
+        // Flush and close the Writer 
+        writer.flush();
+        writer.close();
+    }
+
+    /**
+     * Generate the tag handler class files.
+     */
+    private static void generateTagClasses() throws Exception {
+	Iterator 
+	    rendererIter = null,
+	    keyIter = renderersByComponentFamily.keySet().iterator();
+	String componentFamily = null;
+	String rendererType = null;
+	List renderers = null;
+	while (keyIter.hasNext()) {
+	    componentFamily = (String) keyIter.next();
+	    renderers = (List)renderersByComponentFamily.get(componentFamily);
+            component = (ComponentBean)componentsByComponentFamily.get(componentFamily);
+	    rendererIter = renderers.iterator();
+	    while (rendererIter.hasNext()) {
+                renderer = (RendererBean) rendererIter.next();
+		rendererType = renderer.getRendererType();
+                if ((tagClassName = makeTagClassName(strip(componentFamily), strip(rendererType))) == null) {
+		    throw new IllegalStateException("Could not determine tag class name");
+		}
+                if (log.isInfoEnabled()) {
+                    log.info("Generating " + tagClassName + "...");
+                }
+                File file = new File(directory, tagClassName + ".java");
+                writer = new BufferedWriter(new FileWriter(file));
+
+		tagHandlerPrefix();
+		tagHandlerIvars();
+		tagHandlerSetterMethods();
+		tagHandlerGeneralMethods();
+		tagHandlerSupportMethods();
+		tagHandlerSuffix();
+	    
+                // Flush and close the Writer 
+                writer.flush();
+                writer.close();
+            }	
+	}
+    }
+
+
+
+    private static final String PREFIX = "javax.faces.";
+
+    /**
+     * <p>Strip any "javax.faces." prefix from the beginning of the specified
+     * identifier, and return it.</p>
+     *
+     * @param identifier Identifier to be stripped
+     */
+    private static String strip(String identifier) {
+	if (identifier.startsWith(PREFIX)) {
+	    return (identifier.substring(PREFIX.length()));
+	} else {
+	    return (identifier);
+	}
+    }
+
+
+    /**
+     * Main routine.
+     */
+    public static void main(String args[]) throws Exception {
+
+        try {
+            // Perform setup operations
+            if (log.isDebugEnabled()) {
+                log.debug("Processing command line options");
+            }
+            Map options = options(args);
+            String dtd = (String) options.get("--dtd");
+            if (log.isDebugEnabled()) {
+                log.debug("Configuring digester instance with DTD '" +
+                          dtd + "'");
+            }
+            copyright((String) options.get("--copyright"));
+            directories((String) options.get("--tlddir"), false);
+            Digester digester = digester(dtd, false, true, false);
+            String config = (String) options.get("--config");
+	    loadOptionalTags((String) options.get("--tagdef"));
+            if (log.isDebugEnabled()) {
+                log.debug("Parsing configuration file '" + config + "'");
+            }
+            digester.push(new FacesConfigBean());
+            fcb = parse(digester, config);
+            if (log.isInfoEnabled()) {
+                log.info("Generating Tag Library Descriptor file");
+            }
+
+	    // Generate TLD File
+	    generateTld();
+
+	    // Generate Tag Handler Classes
+            directories((String) options.get("--dir"), true);
+	    generateTagClasses();
+
+	} catch(Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+	}
+	System.exit(0);
     }
 }

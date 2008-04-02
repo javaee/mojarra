@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.3 2003/12/17 15:16:39 rkitain Exp $
+ * $Id: MessageFactory.java,v 1.4 2004/01/27 20:14:24 eburns Exp $
  */
 
 /*
@@ -20,7 +20,9 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
@@ -224,7 +226,13 @@ import java.io.IOException;
     }                                       
 
     protected static Application getApplication() {
-        return (FacesContext.getCurrentInstance().getApplication());
+	FacesContext context = FacesContext.getCurrentInstance();
+	if (context != null) {
+	    return (FacesContext.getCurrentInstance().getApplication());
+	}
+	ApplicationFactory afactory = (ApplicationFactory)
+	    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+	return (afactory.getApplication());
     }
 
     protected static ClassLoader getCurrentLoader(Object fallbackClass) {

@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateTaglib.java,v 1.9 2004/01/17 05:22:42 craigmcc Exp $
+ * $Id: GenerateTaglib.java,v 1.10 2004/01/27 20:14:15 eburns Exp $
  */
 
 /*
@@ -685,6 +685,7 @@ public class GenerateTaglib extends GenerateTagBase {
 	    result.append("        return result;\n");
 	    result.append("    }\n\n");
 
+
 	    result.append("}\n\n");
 
             //
@@ -758,6 +759,7 @@ public class GenerateTaglib extends GenerateTagBase {
 	// Here's where you could evaluate a command line arg which says which
 	// tag library generator implementation to use.
 	//
+/*
 	HtmlTaglibGenerator tagLibGenerator = new HtmlTaglibGenerator();
 	GenerateTaglib me = new GenerateTaglib(tagLibGenerator);
 	me.init(absolutePathToConfigFile, absolutePathToEntityDeclarationsFile,
@@ -765,6 +767,7 @@ public class GenerateTaglib extends GenerateTagBase {
 		absolutePathToTldOutputDir, absolutePathToOutputDir);
 	me.generateTld();
 	me.generateClasses();
+*/
     }
 
 

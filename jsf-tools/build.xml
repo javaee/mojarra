@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0"?>
 
 <!--
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
@@ -46,20 +46,28 @@
   <property name="commons-beanutils.jar" 
             value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
   <property name="xerces.jar" value="${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar"/>
+  <property name="dom.jar" value="${tomcat.home}/jaxp/lib/endorsed/dom.jar"/>
   <property name="sax.jar" value="${tomcat.home}/jaxp/lib/endorsed/sax.jar"/>
-  <property name="sax.jar" value="${tomcat.home}/jaxp/lib/jaxp-api.jar"/>
+  <property name="jaxp-api.jar" value="${tomcat.home}/jaxp/lib/jaxp-api.jar"/>
 
-  <property name="build.dir"        value="build"/>
+  <property name="build.dir"        value="${basedir}/build"/>
   <property name="build.classes"    value="${build.dir}/classes"/>
   <property name="build.lib"        value="${build.dir}/lib"/>
+  <property name="build.temp"       value="${build.dir}/temp"/>
   <property name="build.test"       value="${build.dir}/test"/>
   <property name="build.generate"   value="${build.dir}/generate"/>
+  <property name="build.generate.facesdoc" value="${build.dir}/generate/facesdoc"/>
   <property name="build.generate.tld"   value="${build.dir}/generate/conf/share"/>
   <property name="build.javadocs"   value="${build.dir}/javadocs"/>
   <property name="build.mifdocs"    value="${build.dir}/mifdocs"/>
   <property name="javadoc.private"  value="false"/>
   <property name="javadoc.protected"  value="true"/>
 
+  <!-- Default commons logging configuration settings -->
+  <property name="log.impl"         value="org.apache.commons.logging.impl.SimpleLog"/>
+  <property name="log.level"        value="info"/> <!-- Generator -->
+  <property name="log.digester"     value="info"/> <!-- Digester main -->
+  <property name="log.sax"          value="info"/> <!-- SAX events -->
 
   <!-- Default value for debugging arguments is no.  Override in
        build.properties -->
@@ -98,7 +106,14 @@
     <mkdir dir="${build.classes}"/>
     <mkdir dir="${build.lib}"/>
     <mkdir dir="${build.generate}"/>
+    <mkdir dir="${build.generate.facesdoc}"/>
     <mkdir dir="${build.generate.tld}"/>
+    <mkdir     dir="${build.temp}"/>
+    <copy    todir="${build.temp}">
+      <fileset dir="${jsf-api.dir}/doc" includes="*.xml"/>
+    </copy>
+    <copy    todir="${build.temp}"
+              file="${standard-html-renderkit-impl}"/>
   </target>
 
   <target name="set.required-properties" 
@@ -159,27 +174,103 @@ necessary to generate required classes.
     <touch file="${build.generate}/last-generation"/>
   </target>
 
-  <target name="generate.taglib" depends="tools,check.taglib.generation.necessity"
-          if="standard-html-renderkit-impl" unless="skip.taglib.generation">
+  <target         name="props"
+           description="Display resolved JAR file properties">
 
-    <copy todir="${build.classes}"
-          file="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd"/>
+    <echo      message="commons-beanutils.jar =   ${commons-beanutils.jar}"/>
+    <echo      message="commons-collections.jar = ${commons-collections.jar}"/>
+    <echo      message="commons-digester.jar =    ${commons-digester.jar}"/>
+    <echo      message="commons-logging.jar =     ${commons-logging.jar}"/>
+    <echo      message="dom.jar =                 ${dom.jar}"/>
+    <echo      message="jaxp-api.jar =            ${jaxp-api.jar}"/>
+    <echo      message="jsp.jar =                 ${jsp.jar}"/>
+    <echo      message="junit.jar =               ${junit.jar}"/>
+    <echo      message="sax.jar =                 ${sax.jar}"/>
+    <echo      message="servlet.jar =             ${servlet.jar}"/>
+    <echo      message="xerces.jar =              ${xerces.jar}"/>
+
+  </target>
+
+  <target           name="generate.html"
+                 depends="tools"
+                      if="standard-html-renderkit-impl"
+                  unless="skip.generation">
+
+    <java           fork="yes"
+               classname="com.sun.faces.generate.HtmlComponentGenerator">
+
+
+      <classpath   refid="compile.classpath"/>
+      <classpath   refid="run.classpath"/>
+
+      <sysproperty   key="java.endorsed.dirs"
+                   value="${tomcat.home}/jaxp/lib/endorsed"/>
+
+      <sysproperty   key="org.apache.commons.logging.Log"
+                   value="${log.impl}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.defaultlog"
+                   value="info"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.com.sun.faces"
+                   value="${log.level}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester"
+                   value="${log.digester}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester.sax"
+                   value="${log.sax}"/>
+
+      <arg         value="--config"/>
+      <arg         value="${build.temp}/standard-html-renderkit.xml"/>
+      <arg         value="--dir"/>
+      <arg         value="${build.generate}"/>
+      <arg         value="--dtd"/>
+      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd"/>
+      <arg         value="--copyright"/>
+      <arg         value="${basedir}/COPYRIGHT"/>
+
+    </java>
+
+  </target>
+
+
+  <target    name="generate.taglib" 
+          depends="tools"
+               if="standard-html-renderkit-impl" 
+           unless="skip.taglib.generation">
 
     <java fork="yes" 
-	  classname="com.sun.faces.generate.GenerateTaglib">
+	  classname="com.sun.faces.generate.HtmlTaglibGenerator">
+
       <!-- <jvmarg line="${debug.jvm.args}"/> --> 
       <classpath refid="compile.classpath" />
       <classpath refid="run.classpath" />
-      <arg value="-f"/> <arg path="${standard-html-renderkit}"/>
-      <arg value="-e"/> <arg path="${standard-html-renderkit-impl}"/>
-      <arg value="-a"/> <arg path="${build.generate.tld}"/>
-      <arg value="-d"/> <arg path="${build.generate}"/>
-      <arg value="-c"/> <arg path="${basedir}/COPYRIGHT"/>
-      <arg value="-b"/> <arg path="${basedir}/TLD-TOP"/>
+
+      <sysproperty   key="java.endorsed.dirs"
+                   value="${tomcat.home}/jaxp/lib/endorsed"/>
+
+      <sysproperty   key="org.apache.commons.logging.Log"
+                   value="${log.impl}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.defaultlog"
+                   value="info"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.com.sun.faces"
+                   value="${log.level}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester"
+                   value="${log.digester}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester.sax"
+                   value="${log.sax}"/>
+
+      <arg         value="--config"/>
+      <arg         value="${build.temp}/standard-html-renderkit.xml"/>
+      <arg         value="--tlddir"/>
+      <arg         value="${build.generate.tld}"/>
+      <arg         value="--dir"/>
+      <arg         value="${build.generate}"/>
+      <arg         value="--dtd"/>
+      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd"/>
+      <arg         value="--copyright"/>
+      <arg         value="${basedir}/COPYRIGHT"/>
+      <arg         value="--tagdef"/>
+      <arg         value="${basedir}/TAG-DEF"/>
+
     </java>
-
-
-    <touch file="${build.generate}/last-taglib-generation"/>
 
   </target>
 
@@ -303,23 +394,41 @@ necessary to generate required classes.
 
   </xmlcatalog>
 
-  <target name="docs" depends="prepare.generate">
-    <copy todir="${build.classes}">
-      <fileset dir="${jsf-api.dir}/doc" includes="**/*.xml" />
-    </copy>
+  <target name="docs" depends="prepare.generate,tools" 
+                      if="standard-html-renderkit-impl"
+                  unless="skip.generation">
 
-    <copy todir="${build.classes}" file="${standard-html-renderkit-impl}"/>
+    <java           fork="yes"
+        classname="com.sun.faces.generate.RenderKitSpecificationGenerator">
+      <jvmarg line="${debug.jvm.args}"/>
+      <classpath   refid="compile.classpath"/>
+      <classpath   refid="run.classpath"/>
 
-    <style style="doc/standard-html-renderkit-specification.xsl"
-          in="${build.classes}/standard-html-renderkit.xml"
-          out="${build.generate}/standard-html-renderkit-specification.html">
-      <xmlcatalog refid="standard-renderkit" />
-    </style>
+      <sysproperty   key="java.endorsed.dirs"
+                   value="${tomcat.home}/jaxp/lib/endorsed"/>
+      <sysproperty   key="org.apache.commons.logging.Log"
+                   value="${log.impl}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.defaultlog"
+                   value="info"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.com.sun.faces"
+                   value="${log.level}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester"
+                   value="${log.digester}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester.sax"
+                   value="${log.sax}"/>
 
-    <style style="doc/catalog.xsl"
-          in="doc/record-catalog.xml"
-          out="${build.generate}/catalog.txt">
-    </style>
+      <arg         value="--config"/>
+      <arg         value="${build.temp}/standard-html-renderkit.xml"/>
+      <arg         value="--dir"/>
+      <arg         value="${build.generate.facesdoc}"/>
+      <arg         value="--dtd"/>
+      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd"/>
+      <arg         value="--copyright"/>
+      <arg         value="${basedir}/COPYRIGHT"/>
+
+    </java>
+
+    <touch file="${build.generate}/last-generation"/>
 
 
   </target>
