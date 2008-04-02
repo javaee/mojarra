@@ -290,23 +290,27 @@
 
   <target name="update.glassfish">
     <mkdir dir="${basedir}/build" />
-    <mkdir dir="${basedir}/build/jsf-api" />
-    <unjar dest="${basedir}/build/jsf-api" 
-           src="${basedir}/jsf-api/build/lib/jsf-api.jar"/>
-    <delete dir="${basedir}/build/jsf-api/META-INF" />
+    <mkdir dir="${basedir}/build/javaee" />
+    <unjar dest="${basedir}/build/javaee" 
+           src="${javaee.jar}"/>
     <delete>
-      <fileset dir="${basedir}/build/jsf-api">
-        <include name="**/*.html" />
-        <include name="**/*.jpg" />
-        <include name="**/*.gif" />
+      <fileset dir="${basedir}/build/javaee/javax/faces">
+        <include name="**/*.*" />
       </fileset>
     </delete>
-    <jar update="true" destfile="${javaee.jar}">
-      <fileset dir="${basedir}/build/jsf-api">
+    <jar destfile="${javaee.jar}">
+      <fileset dir="${basedir}/build/javaee">
         <include name="**/*.*" />
       </fileset>
     </jar>
+    <antcall target="copy.jars"/>
+  </target>
+
+  <target name="copy.jars">
     <copy file="${basedir}/jsf-ri/build/lib/jsf-impl.jar" 
           todir="${tomcat.home}/lib" />
+    <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar" 
+          todir="${tomcat.home}/lib" />
   </target>
+
 </project>
